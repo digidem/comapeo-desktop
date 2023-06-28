@@ -15,6 +15,7 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css}\"",
     "lint": "tsc"
   },
   "devDependencies": {
@@ -31,6 +32,7 @@
     "@vitejs/plugin-react": "^4.0.1",
     "electron": "25.2.0",
     "patch-package": "^7.0.0",
+    "prettier": "^2.8.8",
     "typescript": "^5.1.5",
     "vite-plugin-node-polyfills": "^0.9.0"
   },
@@ -38,5 +40,9 @@
     "electron-squirrel-startup": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
   }
 }
