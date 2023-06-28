@@ -9,7 +9,7 @@
     "email": "andrewchou@fastmail.com"
   },
   "license": "MIT",
-  "main": ".vite/build/main.js",
+  "main": ".vite/build/index.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
