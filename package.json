@@ -1,0 +1,34 @@
+{
+  "name": "mapeo-desktop-next",
+  "productName": "mapeo-desktop-next",
+  "version": "1.0.0",
+  "description": "The next version of Mapeo Desktop",
+  "keywords": [],
+  "author": {
+    "name": "Andrew Chou",
+    "email": "andrewchou@fastmail.com"
+  },
+  "license": "MIT",
+  "main": ".vite/build/main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.2.1",
+    "@electron-forge/maker-deb": "^6.2.1",
+    "@electron-forge/maker-rpm": "^6.2.1",
+    "@electron-forge/maker-squirrel": "^6.2.1",
+    "@electron-forge/maker-zip": "^6.2.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
+    "@electron-forge/plugin-vite": "^6.2.1",
+    "electron": "25.2.0",
+    "patch-package": "^7.0.0",
+    "vite-plugin-node-polyfills": "^0.9.0"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0"
+  }
+}
