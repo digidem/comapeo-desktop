@@ -1,5 +1,10 @@
-import { app, BrowserWindow } from 'electron'
 import path from 'path'
+import {
+  BrowserWindow,
+  MessageChannelMain,
+  app,
+  utilityProcess,
+} from 'electron'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -16,6 +21,11 @@ const createWindow = () => {
     },
   })
 
+  // mapeo core background process
+  const mapeoCoreService = utilityProcess.fork(
+    path.join(__dirname, 'mapeo-core.js')
+  )
+
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL)
@@ -24,6 +34,20 @@ const createWindow = () => {
       path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
     )
   }
+
+  // We can't use ipcMain.handle() here, because the reply needs to transfer a
+  // MessagePort.
+  // Listen for message sent from the top-level frame
+  mainWindow.webContents.ipc.on('request-mapeo-port', (event) => {
+    // Create a new channel ...
+    const { port1, port2 } = new MessageChannelMain()
+    // ... send one end to the worker ...
+    mapeoCoreService.postMessage({ message: 'new-client' }, [port1])
+    // ... and the other end to the main window.
+    event.senderFrame.postMessage('provide-mapeo-port', null, [port2])
+    // Now the main window and the worker can communicate with each other
+    // without going through the main process!
+  })
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools()

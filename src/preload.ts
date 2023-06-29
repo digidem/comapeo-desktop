@@ -1,3 +1,22 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 console.log('THIS IS THE PRELOAD')
+
+const { contextBridge, ipcRenderer } = require('electron')
+
+// We need to wait until the main world is ready to receive the message before
+// sending the port. We create this promise in the preload so it's guaranteed
+// to register the onload listener before the load event is fired.
+const windowLoaded = new Promise((resolve) => {
+  window.onload = resolve
+})
+
+contextBridge.exposeInMainWorld('runtime', {
+  init() {
+    ipcRenderer.send('request-mapeo-port')
+    ipcRenderer.once('provide-mapeo-port', async (event) => {
+      await windowLoaded
+      window.postMessage('mapeo-port', '*', event.ports)
+    })
+  },
+})
