@@ -34,7 +34,7 @@ function setupIntl() {
 function setupServices(window: BrowserWindow) {
   // mapeo core background process
   const mapeoCoreService = utilityProcess.fork(
-    path.join(__dirname, 'mapeo-core.js')
+    path.join(__dirname, 'service/mapeo-core.js')
   )
 
   // We can't use ipcMain.handle() here, because the reply needs to transfer a
@@ -57,7 +57,7 @@ function createMainWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'preload/main-window.js'),
     },
   })
 

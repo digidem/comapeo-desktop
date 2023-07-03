@@ -1,0 +1,17 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "lib": [
+            "ESNext",
+        ],
+        "types": [
+            "electron"
+        ]
+    },
+    "include": [
+        "**/*.js",
+        "**/*.d.ts",
+        "../shared.ts"
+    ],
+}

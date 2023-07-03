@@ -1,8 +1,4 @@
-// See the Electron documentation for details on how to use preload scripts:
-// https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
-console.log('THIS IS THE PRELOAD')
-
-const { contextBridge, ipcRenderer } = require('electron')
+import { contextBridge, ipcRenderer } from 'electron'
 
 // We need to wait until the main world is ready to receive the message before
 // sending the port. We create this promise in the preload so it's guaranteed

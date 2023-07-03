@@ -1,7 +1,6 @@
 import { createIntl, createIntlCache, IntlShape } from '@formatjs/intl'
 import { TypedEmitter } from 'tiny-typed-emitter'
 import { app } from 'electron'
-
 import { logger } from './logger'
 import { store } from './store'
 
@@ -9,13 +8,13 @@ const messages = {
   en: require('../../messages/main/en.json'),
 }
 
-// defaultLocale is the default local of the app, not the user's locale.
+// defaultLocale is the default locale of the app, not the user's locale.
 export class Intl extends TypedEmitter<{
   'locale:change': (locale: string) => void
 }> {
   static cache = createIntlCache()
 
-  #intl: ReturnType<typeof createIntl>
+  #intl: IntlShape<string>
 
   constructor(defaultLocale = 'en') {
     super()
@@ -28,6 +27,7 @@ export class Intl extends TypedEmitter<{
       {
         locale,
         defaultLocale: 'en',
+        // @ts-expect-error
         messages: messages[locale],
       },
       Intl.cache
