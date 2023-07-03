@@ -1,4 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { FormattedMessage, defineMessages } from 'react-intl'
+
+const m = defineMessages({
+  create: {
+    id: 'create',
+    defaultMessage: 'Create',
+  },
+  delete: {
+    id: 'delete',
+    defaultMessage: 'Delete',
+  },
+})
 
 export function Home() {
   const queryClient = useQueryClient()
@@ -31,11 +43,12 @@ export function Home() {
 
   return (
     <div>
+      <h1></h1>
       <button onClick={() => addObservationMutation.mutate('andrew')}>
-        Create
+        <FormattedMessage {...m.create} />
       </button>
       <button onClick={() => deleteObservationMutation.mutate('andrew')}>
-        Delete
+        <FormattedMessage {...m.delete} />
       </button>
       <ul>
         {data.map((observation, index) => (

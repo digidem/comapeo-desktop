@@ -1,0 +1,8 @@
+{
+  "create": {
+    "message": "Create"
+  },
+  "delete": {
+    "message": "Delete"
+  }
+}

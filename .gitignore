@@ -90,3 +90,9 @@ typings/
 
 # Electron-Forge
 out/
+
+# Ignore the data directory used by the main process to store userData in development
+data/
+
+# Ignore the translations directory used by the renderer for internationalization
+translations/

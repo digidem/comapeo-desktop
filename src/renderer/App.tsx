@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import type { MapeoCoreApi } from '../shared'
 import { Home } from './components/Home'
+import { IntlProvider } from './contexts/IntlProvider'
 
 const queryClient = new QueryClient()
 
@@ -11,9 +12,11 @@ export function App() {
   const status = useInit()
   if (status !== 'ready') return null
   return (
-    <QueryClientProvider client={queryClient}>
-      <Home />
-    </QueryClientProvider>
+    <IntlProvider>
+      <QueryClientProvider client={queryClient}>
+        <Home />
+      </QueryClientProvider>
+    </IntlProvider>
   )
 }
 

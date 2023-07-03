@@ -11,7 +11,8 @@ const windowLoaded = new Promise((resolve) => {
   window.onload = resolve
 })
 
-contextBridge.exposeInMainWorld('runtime', {
+export const runtimeApi = {
+  // Setup
   init() {
     ipcRenderer.send('request-mapeo-port')
     ipcRenderer.once('provide-mapeo-port', async (event) => {
@@ -19,4 +20,15 @@ contextBridge.exposeInMainWorld('runtime', {
       window.postMessage('mapeo-port', '*', event.ports)
     })
   },
-})
+  // Locale
+  async getLocale() {
+    const locale = await ipcRenderer.invoke('locale:get')
+    if (typeof locale !== 'string') throw Error('Locale must be a string')
+    return locale
+  },
+  updateLocale(l: string) {
+    ipcRenderer.send('locale:update', l)
+  },
+}
+
+contextBridge.exposeInMainWorld('runtime', runtimeApi)
