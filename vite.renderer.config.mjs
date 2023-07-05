@@ -13,7 +13,7 @@ export default defineConfig({
       ],
       // Whether to polyfill specific globals.
       globals: {
-        Buffer: true, // can also be 'build', 'dev', or false
+        process: true,
       },
       // Whether to polyfill `node:` protocol imports.
       protocolImports: true,
