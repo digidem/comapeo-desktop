@@ -32,7 +32,7 @@ module.exports = {
             config: 'vite.main.config.mjs',
           },
           {
-            entry: 'src/service/mapeo-core.js',
+            entry: 'src/service/mapeo-core.ts',
             config: 'vite.service.config.mjs',
           },
           {

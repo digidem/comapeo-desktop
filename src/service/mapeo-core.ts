@@ -1,29 +1,20 @@
-// @ts-check
 import { createServer } from 'rpc-reflector'
 import { TypedEmitter } from 'tiny-typed-emitter'
 
-/**
- * @extends {TypedEmitter<import('../shared.ts').MapeoCoreApiEvents>}
- */
-class FakeMapeo extends TypedEmitter {
+import type { MapeoCoreApiEvents } from '../shared'
+
+class FakeMapeo extends TypedEmitter<MapeoCoreApiEvents> {
   #observations = new Set(['Doc', 'Grumpy', 'Happy'])
   getObservations() {
     return Array.from(this.#observations)
   }
-  /**
-   *
-   * @param {string} name
-   */
-  createObservation(name) {
+
+  createObservation(name: string) {
     this.#observations.add(name)
     this.emit('update', Array.from(this.#observations))
   }
 
-  /**
-   *
-   * @param {string} name
-   */
-  deleteObservation(name) {
+  deleteObservation(name: string) {
     this.#observations.delete(name)
     this.emit('update', Array.from(this.#observations))
   }
