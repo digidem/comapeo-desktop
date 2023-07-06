@@ -22,6 +22,7 @@ export default defineConfig({
     react(),
     typescript({
       tsconfig: './src/renderer/tsconfig.json',
+      noForceEmit: true,
     }),
   ],
 })

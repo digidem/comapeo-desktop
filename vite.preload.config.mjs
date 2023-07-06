@@ -9,6 +9,7 @@ export default defineConfig({
   plugins: [
     typescript({
       tsconfig: './src/preload/tsconfig.json',
+      noForceEmit: true,
     }),
   ],
 })

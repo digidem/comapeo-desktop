@@ -11,6 +11,7 @@ export default defineConfig({
   plugins: [
     typescript({
       tsconfig: './src/main/tsconfig.json',
+      noForceEmit: true,
     }),
   ],
 })
