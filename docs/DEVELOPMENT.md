@@ -43,7 +43,7 @@ After cloning the repo locally. Run the following commands to get started:
 
 ```sh
 npm install                # Install dependencies
-npm run build:translations # Extract and compile the translation strings by the renderer
+npm run build:translations # Extract and compile the translation strings used by the renderer
 npm start                  # Build the app in development mode and start the development server
 ```
 
