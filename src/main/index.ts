@@ -13,7 +13,16 @@ if (require('electron-squirrel-startup')) {
 
 // We set the userData path to a local directory in development to avoid issues if the production app is already installed
 if (import.meta.env.DEV) {
-  const devUserDataPath = path.resolve(__dirname, '../../data')
+  let devUserDataPath: string
+
+  if (process.env.USER_DATA_DIR) {
+    devUserDataPath = path.isAbsolute(process.env.USER_DATA_DIR)
+      ? path.resolve(process.env.USER_DATA_DIR)
+      : path.resolve(__dirname, '../../', process.env.USER_DATA_DIR)
+  } else {
+    devUserDataPath = path.resolve(__dirname, '../../data')
+  }
+
   app.setPath('userData', devUserDataPath)
 }
 
