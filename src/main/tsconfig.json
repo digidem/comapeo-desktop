@@ -1,16 +1,9 @@
 {
-    "extends": "../../tsconfig.base.json",
-    "compilerOptions": {
-        "target": "ESNext",
-        "module": "ESNext",
-        "lib": [
-            "ESNext",
-        ],
-    },
-    "include": [
-        "**/*.js",
-        "**/*.ts",
-        "**/*.d.ts",
-        "../shared.ts"
-    ],
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["ESNext"]
+  },
+  "include": ["**/*.js", "**/*.ts", "**/*.d.ts", "../shared.ts"]
 }

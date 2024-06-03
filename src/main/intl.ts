@@ -1,6 +1,7 @@
 import { createIntl, createIntlCache, IntlShape } from '@formatjs/intl'
-import { TypedEmitter } from 'tiny-typed-emitter'
 import { app } from 'electron'
+import { TypedEmitter } from 'tiny-typed-emitter'
+
 import { logger } from './logger'
 import { store } from './store'
 
@@ -30,7 +31,7 @@ export class Intl extends TypedEmitter<{
         // @ts-expect-error
         messages: messages[locale],
       },
-      Intl.cache
+      Intl.cache,
     )
   }
 
@@ -42,7 +43,7 @@ export class Intl extends TypedEmitter<{
     if (newLocale.length !== 2) {
       logger.error(
         'Tried to set locale and failed, must be a 2 character string',
-        newLocale
+        newLocale,
       )
       return
     }

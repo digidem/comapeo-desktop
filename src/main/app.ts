@@ -1,11 +1,12 @@
 import path from 'node:path'
 import {
-  BrowserWindow,
-  MessageChannelMain,
   app,
-  utilityProcess,
+  BrowserWindow,
   ipcMain,
+  MessageChannelMain,
+  utilityProcess,
 } from 'electron'
+
 import { getSystemLocale, intl } from './intl'
 import { logger } from './logger'
 
@@ -34,7 +35,7 @@ function setupIntl() {
 function setupServices(window: BrowserWindow) {
   // mapeo core background process
   const mapeoCoreService = utilityProcess.fork(
-    path.join(__dirname, 'service/mapeo-core.js')
+    path.join(__dirname, 'service/mapeo-core.js'),
   )
 
   // We can't use ipcMain.handle() here, because the reply needs to transfer a
@@ -65,7 +66,7 @@ function createMainWindow() {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL)
   } else {
     mainWindow.loadFile(
-      path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
+      path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`),
     )
   }
 

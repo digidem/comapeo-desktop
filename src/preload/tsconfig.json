@@ -1,20 +1,10 @@
 {
-    "extends": "../../tsconfig.base.json",
-    "compilerOptions": {
-        "moduleResolution": "node",
-        "lib": [
-            "ESNext",
-            "DOM",
-        ],
-        "types": [
-            "electron",
-        ],
-        "allowJs": true,
-    },
-    "include": [
-        "**/*.js",
-        "**/*.ts",
-        "**/*.d.ts",
-        "../shared.ts"
-    ],
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "lib": ["ESNext", "DOM"],
+    "types": ["electron"],
+    "allowJs": true
+  },
+  "include": ["**/*.js", "**/*.ts", "**/*.d.ts", "../shared.ts"]
 }

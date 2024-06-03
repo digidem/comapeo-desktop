@@ -1,31 +1,27 @@
 {
-    "compilerOptions": {
-        "target": "ESNext",
-        "useDefineForClassFields": true,
-        "skipLibCheck": true,
-        "types": [
-            "vite/client"
-        ],
-        /* Bundler mode */
-        "moduleResolution": "bundler",
-        "allowImportingTsExtensions": true,
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "noEmit": true,
-        "esModuleInterop": true,
-        /* Linting */
-        "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true,
-        "allowJs": true,
-    },
-    "exclude": [
-        "node_modules"
-    ],
-    "references": [
-        {
-            "path": "./tsconfig.vite.json"
-        }
-    ],
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "skipLibCheck": true,
+    "types": ["vite/client"],
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowJs": true
+  },
+  "exclude": ["node_modules"],
+  "references": [
+    {
+      "path": "./tsconfig.vite.json"
+    }
+  ]
 }

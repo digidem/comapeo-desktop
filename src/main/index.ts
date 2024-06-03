@@ -1,5 +1,4 @@
 #!/usr/bin/env electron
-
 import path from 'node:path'
 import { app } from 'electron'
 

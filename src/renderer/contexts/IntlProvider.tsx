@@ -1,17 +1,15 @@
 import {
+  createContext,
+  useCallback,
+  useContext,
   useState,
   type PropsWithChildren,
-  useCallback,
-  createContext,
-  useContext,
 } from 'react'
 import { IntlProvider as ReactIntlProvider } from 'react-intl'
 
-import en from '../../../translations/en.json'
+import en from '../../../translations/renderer/en.json'
 
-const messages = {
-  en,
-}
+const messages = { en }
 
 type SupportedLocale = keyof typeof messages
 

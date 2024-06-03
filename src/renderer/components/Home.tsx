@@ -1,5 +1,5 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { FormattedMessage, defineMessages } from 'react-intl'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { defineMessages, FormattedMessage } from 'react-intl'
 
 const m = defineMessages({
   create: {
@@ -35,7 +35,7 @@ export function Home() {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['observations'] })
       },
-    }
+    },
   )
 
   if (status === 'loading') return <span>Loading...</span>
