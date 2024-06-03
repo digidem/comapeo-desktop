@@ -1,4 +1,4 @@
-import type { ClientApi } from 'rpc-reflector/dist/client'
+import type { ClientApi } from 'rpc-reflector'
 
 import { runtimeApi } from '../preload/main-window'
 import type { MapeoCoreApi } from '../shared'

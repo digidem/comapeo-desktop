@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createClient } from 'rpc-reflector'
+import createClient from 'rpc-reflector/client'
 
 import type { MapeoCoreApi } from '../shared'
 import { Home } from './components/Home'
