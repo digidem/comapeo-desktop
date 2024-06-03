@@ -1,4 +1,5 @@
 import path from 'node:path'
+import { defineMessages } from '@formatjs/intl'
 import {
   app,
   BrowserWindow,
@@ -9,6 +10,13 @@ import {
 
 import { getSystemLocale, intl } from './intl'
 import { logger } from './logger'
+
+const menuMessages = defineMessages({
+  importConfig: {
+    id: 'main.app.importConfig',
+    defaultMessage: 'Import Config',
+  },
+})
 
 function setupIpc() {
   ipcMain.handle('locale:get', (_event) => {

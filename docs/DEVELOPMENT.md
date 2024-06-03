@@ -43,8 +43,7 @@ After cloning the repo locally. Run the following commands to get started:
 
 ```sh
 npm install                # Install dependencies
-npm run build:translations # Extract and compile the translation strings used by the renderer
-npm start                  # Build the app in development mode and start the development server
+npm start                  # Build translations, then build the app in development mode and start the development server
 ```
 
 ### Helpful tips about workflow
@@ -65,23 +64,21 @@ npm start                  # Build the app in development mode and start the dev
 
 ## Translations
 
-The `messages/` directory contains the translation strings used by the app.
+The `messages/` directory contains the translation strings used by the app. Within this directory are directories for the main process (`messages/main/`) and renderer process (`messages/renderer/`). Messages found in `messages/main/` are typically needed for translating text that lives in native UI (e.g. the menu bar), whereas messages in `messages/renderer/` are needed for translating text that's used in the rendered web app.
 
-- For the main process: update the relevant file(s) in `messages/main/`.
-- For the renderer process: run `npm run intl:translations`, which will extract the detected messages into the `main/renderer/` directory and then compile that directory into the `translations/` directory.
-
-The `translations/` directory contains the translations formatted for usage by `react-intl` in the renderer process. You should not need to touch this directory.
+In order to update translations, run `npm run intl:translations`, which will extract messages and place them in the relevant `messages/` directory and then compile those messages into translated strings and place them in the `translations/` directory.
 
 ### Translations workflow
 
 - For the main process:
 
-  1. Update the appropriate locale file in `messages/main/` with the relevant messages (most likely `en.json`)
+  1. Use `defineMessage` (or `defineMessages`) from `@formatjs/intl` to create messages and use in the main process code
+  2. Run npm run `intl:translations:main` (or`npm run intl:translations`)
 
 - For the renderer process:
 
-  1. Use `defineMessage` (or `defineMessages`) from `react-intl` to create messages and use in the app code
-  2. Run `npm run intl:translations`
+  1. Use `defineMessage` (or `defineMessages`) from `react-intl` to create messages and use in the renderer process code
+  2. Run npm run `intl:translations:renderer` (or`npm run intl:translations`)
 
 ## Building the app
 

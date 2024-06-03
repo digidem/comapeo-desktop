@@ -1,1 +1,5 @@
-{}
+{
+  "main.app.importConfig": {
+    "message": "Import Config"
+  }
+}
