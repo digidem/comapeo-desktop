@@ -23,22 +23,25 @@ export function Home() {
     queryFn: () => window.mapeo.getObservations(),
   })
 
-  const addObservationMutation = useMutation(window.mapeo.createObservation, {
+  const addObservationMutation = useMutation({
+    mutationFn: (name: string) => {
+      return window.mapeo.createObservation(name)
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['observations'] })
     },
   })
 
-  const deleteObservationMutation = useMutation(
-    window.mapeo.deleteObservation,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['observations'] })
-      },
+  const deleteObservationMutation = useMutation({
+    mutationFn: (name: string) => {
+      return window.mapeo.deleteObservation(name)
     },
-  )
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['observations'] })
+    },
+  })
 
-  if (status === 'loading') return <span>Loading...</span>
+  if (status === 'pending') return <span>Loading...</span>
   if (status === 'error') return <span>Error: {error.message}</span>
 
   return (
