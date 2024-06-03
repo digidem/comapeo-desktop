@@ -6,7 +6,7 @@ import { logger } from './logger'
 import { store } from './store'
 
 const messages = {
-  en: require('../../messages/main/en.json'),
+  en: require('../../translations/main/en.json'),
 }
 
 // defaultLocale is the default locale of the app, not the user's locale.
