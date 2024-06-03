@@ -18,7 +18,6 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "format": "prettier . --write",
-    "lint": "tsc",
     "patch-package": "patch-package",
     "tsc:main": "tsc -p src/main/tsconfig.json",
     "tsc:service": "tsc -p src/service/tsconfig.json",
