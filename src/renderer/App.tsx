@@ -26,7 +26,11 @@ function useInit() {
   useEffect(() => {
     window.runtime.init()
 
-    window.onmessage = async (event) => {
+    function onUpdate(obs: Array<string>) {
+      console.log('observations updated:', JSON.stringify(obs))
+    }
+
+    async function onWindowMessage(event: MessageEvent) {
       // event.source === window means the message is coming from the preload
       // script, as opposed to from an <iframe> or other source.
       if (event.source === window && event.data === 'mapeo-port') {
@@ -39,12 +43,17 @@ function useInit() {
 
         port.start()
 
-        window.mapeo.on('update', (obs) => {
-          console.log('observations updated:', JSON.stringify(obs))
-        })
+        window.mapeo.on('update', onUpdate)
 
         setStatus('ready')
       }
+    }
+
+    window.addEventListener('message', onWindowMessage)
+
+    return () => {
+      window.removeEventListener('message', onWindowMessage)
+      window.mapeo.off('update', onUpdate)
     }
   }, [])
 
