@@ -26,7 +26,11 @@ const mapeo = new FakeMapeo()
 // or if the main window reloads.
 process.parentPort.on('message', (event) => {
   const [port] = event.ports
-  // @ts-expect-error
-  const { close } = createServer(mapeo, port)
+
+  // Shouldn't happen but maybe log error?
+  if (!port) return
+
+  createServer(mapeo, port)
+
   port.start()
 })

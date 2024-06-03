@@ -32,6 +32,9 @@ function useInit() {
       if (event.source === window && event.data === 'mapeo-port') {
         const [port] = event.ports
 
+        // Shouldn't happen but maybe log error?
+        if (!port) return
+
         window.mapeo = createClient<MapeoCoreApi>(port)
 
         port.start()
