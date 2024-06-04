@@ -96,3 +96,6 @@ data/
 
 # Ignore the translations directory used by the renderer for internationalization
 translations/
+
+# Ignore vscode settings (for now)
+.vscode/
