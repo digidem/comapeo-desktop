@@ -4,12 +4,5 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx"
   },
-  "include": [
-    "**/*.js",
-    "**/*.ts",
-    "**/*.jsx",
-    "**/*.tsx",
-    "**/*.d.ts",
-    "../shared.ts"
-  ]
+  "include": ["**/*.js", "**/*.ts", "**/*.jsx", "**/*.tsx", "**/*.d.ts"]
 }

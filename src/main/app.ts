@@ -11,7 +11,7 @@ import {
 import { getSystemLocale, intl } from './intl'
 import { logger } from './logger'
 
-const menuMessages = defineMessages({
+const _menuMessages = defineMessages({
   importConfig: {
     id: 'main.app.importConfig',
     defaultMessage: 'Import Config',

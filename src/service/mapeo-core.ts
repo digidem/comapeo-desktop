@@ -1,7 +1,17 @@
 import { createServer } from 'rpc-reflector'
 import { TypedEmitter } from 'tiny-typed-emitter'
 
-import type { MapeoCoreApiEvents } from '../shared'
+export type Observation = string
+
+export interface MapeoCoreApiEvents {
+  update: (observations: Observation[]) => void
+}
+
+export interface MapeoCoreApi extends TypedEmitter<MapeoCoreApiEvents> {
+  getObservations(): Array<Observation>
+  createObservation(name: string): void
+  deleteObservation(name: string): void
+}
 
 class FakeMapeo extends TypedEmitter<MapeoCoreApiEvents> {
   #observations = new Set(['Doc', 'Grumpy', 'Happy'])

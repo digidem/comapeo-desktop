@@ -15,7 +15,7 @@ type SupportedLocale = keyof typeof messages
 
 const LocaleContext = createContext<(locale: SupportedLocale) => void>(() => {})
 
-export function IntlProvider({ children }: PropsWithChildren<{}>) {
+export function IntlProvider({ children }: PropsWithChildren) {
   const [locale, setLocale] = useState<SupportedLocale>('en')
 
   const updateLocale = useCallback((l: SupportedLocale) => {

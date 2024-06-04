@@ -6,6 +6,7 @@
   - [Processes](#processes)
   - [Electron Runtime](#electron-runtime)
 - [Developing locally](#developing-locally)
+  - [Editor setup](#editor-setup)
   - [Helpful tips about workflow](#helpful-tips-about-workflow)
   - [Helpful tips about configuration](#helpful-tips-about-configuration)
 - [Translations](#translations)
@@ -45,6 +46,16 @@ After cloning the repo locally. Run the following commands to get started:
 npm install                # Install dependencies
 npm start                  # Build translations, then build the app in development mode and start the development server
 ```
+
+### Editor setup
+
+- VSCode: if you're using the [ESLint VSCode plugin](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint), you should add the following to your settings so that the ESLint configuration is detected properly:
+
+  ```json
+  {
+    "eslint.experimental.useFlatConfig": true
+  }
+  ```
 
 ### Helpful tips about workflow
 

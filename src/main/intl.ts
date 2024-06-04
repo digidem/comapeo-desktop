@@ -59,7 +59,7 @@ export class Intl extends TypedEmitter<{
   load() {
     try {
       return store.get('locale')
-    } catch (err) {
+    } catch (_err) {
       logger.error('Failed to load locale from app settings')
       return null
     }

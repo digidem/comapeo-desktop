@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import createClient from 'rpc-reflector/client'
 
-import type { MapeoCoreApi } from '../shared'
+import type { MapeoCoreApi } from '../service/mapeo-core'
 import { Home } from './components/Home'
 import { IntlProvider } from './contexts/IntlProvider'
 
@@ -30,7 +30,7 @@ function useInit() {
       console.log('observations updated:', JSON.stringify(obs))
     }
 
-    async function onWindowMessage(event: MessageEvent) {
+    function onWindowMessage(event: MessageEvent) {
       // event.source === window means the message is coming from the preload
       // script, as opposed to from an <iframe> or other source.
       if (event.source === window && event.data === 'mapeo-port') {
