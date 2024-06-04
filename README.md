@@ -1,4 +1,4 @@
-# Mapeo Desktop Next
+# CoMapeo Desktop
 
 Scaffolded using https://www.electronforge.io/templates/vite.
 

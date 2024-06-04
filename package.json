@@ -1,9 +1,8 @@
 {
-  "name": "mapeo-desktop-next",
-  "productName": "mapeo-desktop-next",
+  "name": "comapeo-desktop",
   "private": true,
   "version": "1.0.0",
-  "description": "The next version of Mapeo Desktop",
+  "description": "Desktop application for CoMapeo",
   "keywords": [],
   "author": {
     "name": "Andrew Chou",
