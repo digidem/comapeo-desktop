@@ -9,7 +9,8 @@
     "email": "andrewchou@fastmail.com"
   },
   "license": "GPL-3.0",
-  "main": ".vite/build/index.js",
+  "type": "module",
+  "main": "./.vite/build/main/index.js",
   "scripts": {
     "postinstall": "patch-package",
     "prestart": "npm run intl:translations",

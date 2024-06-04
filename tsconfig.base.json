@@ -5,6 +5,7 @@
     "skipLibCheck": true,
     "types": ["vite/client"],
     /* Bundler mode */
+    "module": "Preserve",
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,

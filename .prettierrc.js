@@ -1,7 +1,7 @@
 // @ts-check
 
 /** @type {import("@ianvs/prettier-plugin-sort-imports").PrettierConfig} */
-module.exports = {
+export default {
   semi: false,
   singleQuote: true,
   plugins: ['@ianvs/prettier-plugin-sort-imports'],

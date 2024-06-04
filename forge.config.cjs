@@ -28,21 +28,21 @@ module.exports = {
         {
           // `entry` is just an alias for `build.lib.entry` in the corresponding file of `config`.
           entry: 'src/main/index.ts',
-          config: 'vite.main.config.mjs',
+          config: 'vite.main.config.js',
         },
         {
           entry: 'src/service/mapeo-core.ts',
-          config: 'vite.service.config.mjs',
+          config: 'vite.service.config.js',
         },
         {
           entry: 'src/preload/main-window.ts',
-          config: 'vite.preload.config.mjs',
+          config: 'vite.preload.config.js',
         },
       ],
       renderer: [
         {
           name: 'main_window',
-          config: 'vite.renderer.config.mjs',
+          config: 'vite.renderer.config.js',
         },
       ],
     }),

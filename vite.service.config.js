@@ -10,6 +10,8 @@ export default defineConfig({
   },
   build: {
     outDir: '.vite/build/service',
+    lib: { formats: ['es'] },
+    rollupOptions: { output: { format: 'es' } },
   },
   plugins: [
     typescript({

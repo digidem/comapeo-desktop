@@ -8,6 +8,11 @@ export default defineConfig({
     browserField: false,
     mainFields: ['module', 'jsnext:main', 'jsnext'],
   },
+  build: {
+    outDir: '.vite/build/main',
+    lib: { formats: ['es'] },
+    rollupOptions: { output: { format: 'es' } },
+  },
   plugins: [
     typescript({
       tsconfig: './src/main/tsconfig.json',

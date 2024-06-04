@@ -2,11 +2,12 @@ import { createIntl, createIntlCache, IntlShape } from '@formatjs/intl'
 import { app } from 'electron'
 import { TypedEmitter } from 'tiny-typed-emitter'
 
+import enTranslations from '../../translations/main/en.json'
 import { logger } from './logger'
 import { store } from './store'
 
 const messages = {
-  en: require('../../translations/main/en.json'),
+  en: enTranslations,
 }
 
 // defaultLocale is the default locale of the app, not the user's locale.

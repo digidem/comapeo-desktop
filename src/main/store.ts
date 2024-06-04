@@ -1,5 +1,6 @@
-import path from 'node:path'
 import Store from 'electron-store'
+
+import { getUserDataPath, isDevMode } from './utils'
 
 export const store = new Store<{
   projectName: string
@@ -7,7 +8,7 @@ export const store = new Store<{
   configName: string
   locale: string
 }>({
-  cwd: import.meta.env.DEV ? path.resolve(__dirname, '../../data') : undefined,
+  cwd: isDevMode() ? getUserDataPath() : undefined,
   schema: {
     projectName: {
       type: 'string',
