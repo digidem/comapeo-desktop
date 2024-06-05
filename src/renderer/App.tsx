@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import createClient from 'rpc-reflector/client'
 
-import type { MapeoCoreApi } from '../service/mapeo-core'
+import type { MapeoCoreApi } from '../service/core'
 import { Home } from './components/Home'
 import { IntlProvider } from './contexts/IntlProvider'
 

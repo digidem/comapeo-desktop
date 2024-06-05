@@ -32,7 +32,7 @@ export default {
           config: 'vite.main.config.js',
         },
         {
-          entry: 'src/service/mapeo-core.ts',
+          entry: 'src/service/core.ts',
           config: 'vite.service.config.js',
         },
         {

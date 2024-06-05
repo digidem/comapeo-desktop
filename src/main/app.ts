@@ -44,7 +44,7 @@ function setupIntl() {
 function setupServices(window: BrowserWindow) {
   // mapeo core background process
   const mapeoCoreService = utilityProcess.fork(
-    path.resolve(import.meta.dirname, '../service/mapeo-core.js'),
+    path.resolve(import.meta.dirname, '../service/core.js'),
   )
 
   // We can't use ipcMain.handle() here, because the reply needs to transfer a
