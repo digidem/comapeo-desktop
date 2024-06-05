@@ -1,12 +1,11 @@
 import path from 'node:path'
-import { app } from 'electron'
 
 export function isDevMode() {
   return import.meta.env.DEV
 }
 
-export function getUserDataPath() {
-  if (!isDevMode()) return app.getPath('userData')
+export function getDevUserDataPath() {
+  if (!isDevMode()) throw new Error('Should only be called in dev mode')
 
   // We use a local directory in development to avoid issues if the production app is already installed
   if (process.env.USER_DATA_DIR) {

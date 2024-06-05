@@ -10,6 +10,7 @@ import {
 
 import { getSystemLocale, intl } from './intl'
 import { logger } from './logger'
+import { getDevUserDataPath, isDevMode } from './utils'
 
 const _menuMessages = defineMessages({
   importConfig: {
@@ -87,6 +88,11 @@ function createMainWindow() {
 }
 
 export async function start() {
+  // Set userData to alternative location if in development mode (to avoid conflicts/overriding production installation)
+  if (isDevMode()) {
+    app.setPath('userData', getDevUserDataPath())
+  }
+
   // Quit when all windows are closed, except on macOS. There, it's common
   // for applications and their menu bar to stay active until the user quits
   // explicitly with Cmd + Q.

@@ -1,9 +1,9 @@
 import Store from 'electron-store'
 
-import { getUserDataPath, isDevMode } from './utils'
+import { getDevUserDataPath, isDevMode } from './utils'
 
 export const store = new Store<{ locale: string }>({
-  cwd: isDevMode() ? getUserDataPath() : undefined,
+  cwd: isDevMode() ? getDevUserDataPath() : undefined,
   schema: {
     locale: {
       type: 'string',
