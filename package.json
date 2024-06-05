@@ -5,8 +5,18 @@
   "description": "Desktop application for CoMapeo",
   "keywords": [],
   "author": {
-    "name": "Andrew Chou",
-    "email": "andrewchou@fastmail.com"
+    "name": "Digital Democracy",
+    "email": "info@ddem.us"
+  },
+  "contributors": [
+    {
+      "name": "Andrew Chou",
+      "email": "andrewchou@fastmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/digidem/comapeo-desktop.git"
   },
   "license": "GPL-3.0",
   "type": "module",
