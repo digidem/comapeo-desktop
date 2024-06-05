@@ -15,11 +15,6 @@ if (require('electron-squirrel-startup')) {
 
 app.setPath('userData', getUserDataPath())
 
-// TODO: Ideally can use top-level await here
-;(async () => {
-  try {
-    await start()
-  } catch (err) {
-    logger.error(err)
-  }
-})()
+start().catch((err) => {
+  logger.error(err)
+})

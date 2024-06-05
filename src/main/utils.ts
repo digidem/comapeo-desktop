@@ -12,8 +12,8 @@ export function getUserDataPath() {
   if (process.env.USER_DATA_DIR) {
     return path.isAbsolute(process.env.USER_DATA_DIR)
       ? path.resolve(process.env.USER_DATA_DIR)
-      : path.resolve(import.meta.dirname, '../../', process.env.USER_DATA_DIR)
+      : path.resolve(VITE_PROJECT_ROOT, process.env.USER_DATA_DIR)
   } else {
-    return path.resolve(import.meta.dirname, '../../data')
+    return path.resolve(VITE_PROJECT_ROOT, 'data')
   }
 }

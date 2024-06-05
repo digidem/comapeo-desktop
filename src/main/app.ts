@@ -76,7 +76,7 @@ function createMainWindow() {
     mainWindow.loadFile(
       path.join(
         import.meta.dirname,
-        `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`,
+        `../../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`,
       ),
     )
   }
