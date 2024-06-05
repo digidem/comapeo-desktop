@@ -1,15 +1,15 @@
 // @ts-check
 
-const { MakerDeb } = require('@electron-forge/maker-deb')
-const { MakerRpm } = require('@electron-forge/maker-rpm')
-const { MakerSquirrel } = require('@electron-forge/maker-squirrel')
-const { MakerZIP } = require('@electron-forge/maker-zip')
-const { FusesPlugin } = require('@electron-forge/plugin-fuses')
-const { VitePlugin } = require('@electron-forge/plugin-vite')
-const { FuseV1Options, FuseVersion } = require('@electron/fuses')
+import { MakerDeb } from '@electron-forge/maker-deb'
+import { MakerRpm } from '@electron-forge/maker-rpm'
+import { MakerSquirrel } from '@electron-forge/maker-squirrel'
+import { MakerZIP } from '@electron-forge/maker-zip'
+import { FusesPlugin } from '@electron-forge/plugin-fuses'
+import { VitePlugin } from '@electron-forge/plugin-vite'
+import { FuseV1Options, FuseVersion } from '@electron/fuses'
 
 /** @type {import('@electron-forge/shared-types').ForgeConfig} */
-module.exports = {
+export default {
   packagerConfig: {
     asar: true,
     name: 'CoMapeo',

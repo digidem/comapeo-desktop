@@ -69,7 +69,7 @@ npm start                  # Build translations, then build the app in developme
 
 ### Helpful tips about configuration
 
-- The most helpful starting point is at [`forge.config.js`](/forge.config.cjs). This defines the configuration used by Electron Forge and its Vite plugin. If you need to make updates to how various JS bundles are created, find the appropriate Vite config mapping in that file and update the config of interest.
+- The most helpful starting point is at [`forge.config.js`](/forge.config.js). This defines the configuration used by Electron Forge and its Vite plugin. If you need to make updates to how various JS bundles are created, find the appropriate Vite config mapping in that file and update the config of interest.
 - The TypeScript setup is a little clunky right now. The main challenge is that each of the processes have different runtime environments. There doesn't seem to be a straightfoward way to configure the project to be aware of all of the nuances of Electron's processes, so instead we define a TypeScript configuration for each process and stick a tsconfig file in each one, which is then used by the appropriate Vite configuration.
   - _NOTE: there's probably a much better way of setting this up - Andrew welcomes any input and changes to it_
 
