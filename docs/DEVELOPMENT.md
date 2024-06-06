@@ -40,6 +40,8 @@ For example, in [`src/preload/main-window.ts`](../src/preload/main-window.ts), w
 
 ## Developing locally
 
+Make sure you have the desired Node version installed. For this project we encourage using the version that's specified in [`.nvmrc`](../.nvmrc) (or [`.tool-versions`](../.tool-versions)) file. We recommend using a proper version management tool to install and manage Node versions, such as [nvm](https://github.com/nvm-sh/nvm), [fnm](https://github.com/Schniz/fnm), [asdf](https://asdf-vm.com/), or [mise](https://mise.jdx.dev/).
+
 After cloning the repo locally. Run the following commands to get started:
 
 ```sh
