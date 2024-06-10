@@ -9,7 +9,11 @@ export const builtins = [
   ...builtinModules.map((m) => [m, `node:${m}`]).flat(),
 ]
 
-export const external = [...builtins, ...Object.keys(pkg.dependencies || {})]
+export const external = [
+  ...builtins,
+  ...Object.keys(pkg.dependencies || {}),
+  '@mapeo/core/drizzle',
+]
 
 /**
  * @param {import('vite').ConfigEnv<'build'>} env
