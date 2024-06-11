@@ -1,5 +1,6 @@
 import assert from 'assert'
 import { mkdirSync } from 'node:fs'
+import { createRequire } from 'node:module'
 import path from 'node:path'
 import { parseArgs } from 'node:util'
 import {
@@ -18,6 +19,16 @@ import {
   DEFAULT_CONFIG_PATH,
   FALLBACK_MAP_DIRECTORY,
 } from '../main/paths.ts'
+
+// Patching due to issues with sodium-native in more recent versions of Electron due to removal of APIs that the module relies on.
+// Replaces the usage of SecureBuffer in sodium's malloc with just a normal Buffer, which may have security implications.
+// https://github.com/sodium-friends/sodium-native/issues/185
+const require = createRequire(import.meta.url)
+const sodium = require('sodium-native')
+sodium.sodium_malloc = function sodium_malloc_monkey_patched(n: number) {
+  return Buffer.alloc(n)
+}
+sodium.sodium_free = function sodium_free_monkey_patched() {}
 
 const DEFAULT_ONLINE_MAP_STYLE_URL = `https://api.mapbox.com/styles/v1/mapbox/outdoors-v11?access_token=${import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}`
 
@@ -203,7 +214,6 @@ function initializeCore({
     defaultOnlineStyleUrl: DEFAULT_ONLINE_MAP_STYLE_URL,
   })
 
-  // TODO: Currently failing (https://github.com/digidem/comapeo-desktop/issues/15)
   const manager = new MapeoManager({
     rootKey: Buffer.from(rootKey),
     dbFolder: databaseDirectory,
