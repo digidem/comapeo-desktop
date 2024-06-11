@@ -1,4 +1,4 @@
-import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { defineMessages } from '@formatjs/intl'
 import {
   app,
@@ -14,7 +14,6 @@ import type {
 } from '../service/core.ts'
 import { getSystemLocale, intl } from './intl'
 import { logger } from './logger'
-import { CORE_SERVICE_PATH, MAIN_WINDOW_RENDERER_PATH } from './paths.ts'
 import { getDevUserDataPath, isDevMode } from './utils'
 
 const _menuMessages = defineMessages({
@@ -23,6 +22,14 @@ const _menuMessages = defineMessages({
     defaultMessage: 'Import Config',
   },
 })
+
+const CORE_SERVICE_PATH = fileURLToPath(
+  import.meta.resolve('../service/core.js'),
+)
+
+const MAIN_WINDOW_PRELOAD_PATH = fileURLToPath(
+  import.meta.resolve('../preload/main-window.js'),
+)
 
 function setupIpc() {
   ipcMain.handle('locale:get', (_event) => {
@@ -78,15 +85,19 @@ function createMainWindow() {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    webPreferences: {
-      preload: path.resolve(import.meta.dirname, '../preload/main-window.js'),
-    },
+    webPreferences: { preload: MAIN_WINDOW_PRELOAD_PATH },
   })
 
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL)
   } else {
-    mainWindow.loadFile(MAIN_WINDOW_RENDERER_PATH)
+    mainWindow.loadFile(
+      fileURLToPath(
+        import.meta.resolve(
+          `../../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`,
+        ),
+      ),
+    )
   }
 
   mainWindow.webContents.openDevTools()

@@ -2,6 +2,7 @@ import assert from 'assert'
 import { mkdirSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 import {
   FastifyController,
@@ -14,12 +15,6 @@ import { createMapeoServer } from '@mapeo/ipc'
 import Fastify from 'fastify'
 import * as v from 'valibot'
 
-import {
-  DATABASE_MIGRATIONS_DIRECTORY,
-  DEFAULT_CONFIG_PATH,
-  FALLBACK_MAP_DIRECTORY,
-} from '../main/paths.ts'
-
 // Patching due to issues with sodium-native in more recent versions of Electron due to removal of APIs that the module relies on.
 // Replaces the usage of SecureBuffer in sodium's malloc with just a normal Buffer, which may have security implications.
 // https://github.com/sodium-friends/sodium-native/issues/185
@@ -29,6 +24,20 @@ sodium.sodium_malloc = function sodium_malloc_monkey_patched(n: number) {
   return Buffer.alloc(n)
 }
 sodium.sodium_free = function sodium_free_monkey_patched() {}
+
+const DATABASE_MIGRATIONS_DIRECTORY = fileURLToPath(
+  import.meta.resolve('@mapeo/core/drizzle'),
+)
+
+const DEFAULT_CONFIG_PATH = fileURLToPath(
+  import.meta.resolve(
+    '@mapeo/default-config/dist/mapeo-default-config.mapeoconfig',
+  ),
+)
+
+const FALLBACK_MAP_DIRECTORY = path.dirname(
+  fileURLToPath(import.meta.resolve('mapeo-offline-map')),
+)
 
 const DEFAULT_ONLINE_MAP_STYLE_URL = `https://api.mapbox.com/styles/v1/mapbox/outdoors-v11?access_token=${import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}`
 
