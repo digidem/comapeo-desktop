@@ -69,5 +69,5 @@ export default tseslint.config(
     },
   },
   // Global ignores
-  { ignores: ['.prettierrc.js', '.vite', '*.config.*js'] },
+  { ignores: ['.prettierrc.js', '.vite', '*.config.*js', 'out'] },
 )
