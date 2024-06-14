@@ -4,6 +4,7 @@
 export default {
   semi: false,
   singleQuote: true,
+  arrowParens: 'always',
   plugins: ['@ianvs/prettier-plugin-sort-imports'],
   // Mostly inspired by examples from https://github.com/IanVS/prettier-plugin-sort-imports?tab=readme-ov-file#importorder
   importOrder: [
