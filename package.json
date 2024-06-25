@@ -87,9 +87,9 @@
     "vite": "^5.3.1"
   },
   "dependencies": {
-    "@mapeo/core": "9.0.0-alpha.9",
+    "@mapeo/core": "9.0.0-alpha.11",
     "@mapeo/default-config": "^4.0.0-alpha.2",
-    "@mapeo/ipc": "0.5.0",
+    "@mapeo/ipc": "0.6.0",
     "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^10.0.0",
     "fastify": "^4.28.0",
@@ -102,7 +102,7 @@
     "valibot": "^0.35.0"
   },
   "// TODO": [
-    "Don't use overrides for better-sqlite3. Upgrade it in @mapeo/core"
+    "Move to normal deps once @mapeo/core depends on @mapeo-sqlite-indexer@1.0.0-alpha.10"
   ],
   "overrides": {
     "better-sqlite3": "11.0.0"
