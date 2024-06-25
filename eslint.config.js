@@ -1,7 +1,8 @@
 // @ts-check
 
+// import reactRecommended from 'eslint-plugin-react/configs/recommended.js'
+import react from '@eslint-react/eslint-plugin'
 import eslint from '@eslint/js'
-import reactRecommended from 'eslint-plugin-react/configs/recommended.js'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
@@ -37,12 +38,8 @@ export default tseslint.config(
   },
   // React
   {
-    files: ['src/renderer/**/*'],
-    extends: [reactRecommended],
-    settings: { react: { version: 'detect' } },
-    rules: {
-      'react/react-in-jsx-scope': 0,
-    },
+    files: ['src/renderer/**/*.{js,ts,jsx,tsx}'],
+    ...react.configs.recommended,
   },
   // Applies to browser-like contexts
   {
