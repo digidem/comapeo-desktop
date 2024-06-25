@@ -99,7 +99,7 @@
     "react-intl": "^6.6.8",
     "sodium-native": "^4.1.1",
     "tiny-typed-emitter": "^2.1.0",
-    "valibot": "^0.32.0"
+    "valibot": "^0.35.0"
   },
   "// TODO": [
     "Don't use overrides for better-sqlite3. Upgrade it in @mapeo/core"
