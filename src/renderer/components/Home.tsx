@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { defineMessages, FormattedMessage } from 'react-intl'
 
+import { Button } from './Button.tsx'
+
 const m = defineMessages({
   create: {
     id: 'create',
@@ -47,12 +49,20 @@ export function Home() {
   return (
     <div>
       <h1></h1>
-      <button onClick={() => addObservationMutation.mutate('andrew')}>
+      <Button
+        onClick={() => addObservationMutation.mutate('andrew')}
+        customColor="ComapeoBlue"
+      >
         <FormattedMessage {...m.create} />
-      </button>
-      <button onClick={() => deleteObservationMutation.mutate('andrew')}>
+      </Button>
+      <Button
+        onClick={() => deleteObservationMutation.mutate('andrew')}
+        customColor="dark"
+        customVariant="text"
+        size="large"
+      >
         <FormattedMessage {...m.delete} />
-      </button>
+      </Button>
       <ul>
         {data.map((observation, index) => (
           <li key={`${observation}-${index}`}>{observation}</li>

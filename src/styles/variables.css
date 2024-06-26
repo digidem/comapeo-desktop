@@ -1,0 +1,27 @@
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --comapeo-blue: #0066ff;
+  --comapeo-dark-blue: #050f77;
+  --medium-blue: #2752d1;
+  --dark-blue: #17317c;
+  --blue-grey: #ccccd6;
+  --new-dark-grey: #757575;
+  --dark-grey: #333333;
+  --light-blue: #4288f3;
+  --very-light-blue: #ccffff;
+  --very-light-green: #ccffcc;
+  --dark-magenta: #80002a;
+  --magenta: #e2003f;
+  --dark-mango: #ed6109;
+  --mango: #ff9933;
+  --medium-grey: #666666;
+  --light-grey: #ceced6;
+  --very-light-grey: #ededed;
+  --charcoal: #1f1f1f;
+  --green: #7afa4c;
+  --red: #bc271a;
+  --dark-orange: #e86826;
+  --sync-background: #2348b2;
+  --gps-modal-text: rgb(40, 40, 40);
+}
