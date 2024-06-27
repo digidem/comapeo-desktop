@@ -3,6 +3,8 @@ import { useMemo } from 'react'
 import {
   Button as MuiButton,
   ButtonProps as MuiButtonProps,
+  SxProps,
+  Theme,
 } from '@mui/material'
 import { MessageDescriptor, useIntl } from 'react-intl'
 
@@ -18,10 +20,11 @@ interface CustomButtonProps {
   size?: Size
   testID?: string
   customVariant?: Variant
+  sx?: SxProps<Theme>
 }
 
 export const Button: React.FC<
-  CustomButtonProps & Omit<MuiButtonProps, 'color' | 'variant'>
+  CustomButtonProps & Omit<MuiButtonProps, 'variant'>
 > = ({
   children,
   customColor = 'dark',
@@ -30,6 +33,7 @@ export const Button: React.FC<
   size = 'medium',
   testID,
   customVariant = 'contained',
+  sx,
   ...rest
 }) => {
   const intl = useIntl()
@@ -42,69 +46,53 @@ export const Button: React.FC<
     } else return children
   }, [children, intl])
 
-  const sxStyles = useMemo(() => {
-    const baseStyles = {
-      borderRadius: 30,
-      alignSelf: 'center',
-      overflow: 'hidden',
-    }
-
-    if (customVariant === 'contained') {
-      return {
-        ...baseStyles,
-        backgroundColor:
-          customColor === 'ComapeoBlue'
-            ? 'var(--comapeo-blue)'
-            : customColor === 'dark'
-              ? 'var(--black)'
-              : 'var(--white)',
-        color:
-          customColor === 'ComapeoBlue' || customColor === 'dark'
-            ? 'var(--white)'
-            : 'var(--black)',
-      }
-    }
-
-    if (customVariant === 'outlined') {
-      return {
-        ...baseStyles,
-        borderColor:
-          customColor === 'ComapeoBlue'
-            ? 'var(--comapeo-blue)'
-            : customColor === 'dark'
-              ? 'var(--black)'
-              : 'var(--white)',
-        color:
-          customColor === 'ComapeoBlue'
-            ? 'var(--comapeo-blue)'
-            : customColor === 'dark'
-              ? 'var(--black)'
-              : 'var(--white)',
-        borderWidth: '1.5px',
-      }
-    }
-
-    if (customVariant === 'text') {
-      return {
-        ...baseStyles,
-        color:
-          customColor === 'ComapeoBlue'
-            ? 'var(--comapeo-blue)'
-            : customColor === 'dark'
-              ? 'var(--black)'
-              : 'var(--white)',
-        fontWeight: '700',
-        letterSpacing: 0.5,
-        fontSize: 16,
-      }
-    }
-
-    return baseStyles
-  }, [customColor, customVariant])
+  const defaultStyles: SxProps = {
+    borderRadius: 30,
+    alignSelf: 'center',
+    overflow: 'hidden',
+    ...(customVariant === 'contained' && {
+      backgroundColor:
+        customColor === 'ComapeoBlue'
+          ? 'var(--comapeo-blue)'
+          : customColor === 'dark'
+            ? 'var(--black)'
+            : 'var(--white)',
+      color:
+        customColor === 'ComapeoBlue' || customColor === 'dark'
+          ? 'var(--white)'
+          : 'var(--black)',
+    }),
+    ...(customVariant === 'outlined' && {
+      borderColor:
+        customColor === 'ComapeoBlue'
+          ? 'var(--comapeo-blue)'
+          : customColor === 'dark'
+            ? 'var(--black)'
+            : 'var(--white)',
+      color:
+        customColor === 'ComapeoBlue'
+          ? 'var(--comapeo-blue)'
+          : customColor === 'dark'
+            ? 'var(--black)'
+            : 'var(--white)',
+      borderWidth: '1.5px',
+    }),
+    ...(customVariant === 'text' && {
+      color:
+        customColor === 'ComapeoBlue'
+          ? 'var(--comapeo-blue)'
+          : customColor === 'dark'
+            ? 'var(--black)'
+            : 'var(--white)',
+      fontWeight: '700',
+      letterSpacing: 0.5,
+      fontSize: 16,
+    }),
+  }
 
   return (
     <MuiButton
-      sx={sxStyles}
+      sx={{ ...defaultStyles, ...sx }}
       variant={customVariant}
       disabled={disabled}
       onClick={onClick}

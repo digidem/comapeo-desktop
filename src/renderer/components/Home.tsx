@@ -57,9 +57,11 @@ export function Home() {
       </Button>
       <Button
         onClick={() => deleteObservationMutation.mutate('andrew')}
-        customColor="dark"
-        customVariant="text"
         size="large"
+        sx={{
+          backgroundColor: 'red',
+          color: 'white',
+        }}
       >
         <FormattedMessage {...m.delete} />
       </Button>
