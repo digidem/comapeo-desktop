@@ -6,7 +6,7 @@ import createClient from 'rpc-reflector/client'
 import type { MapeoCoreApi } from '../service/core'
 import { Home } from './components/Home'
 import { IntlProvider } from './contexts/IntlProvider'
-import theme from './Theme'
+import { theme } from './Theme'
 
 const queryClient = new QueryClient()
 

@@ -47,16 +47,16 @@ export function Home() {
   if (status === 'error') return <Typography>Error: {error.message}</Typography>
 
   return (
-    <Box p={theme.customSpacing.medium}>
+    <Box p={theme.spacing(8)}>
       <Typography variant="h1" gutterBottom>
         Observations
       </Typography>
-      <Box mb={theme.customSpacing.small}>
+      <Box mb={theme.spacing(8)}>
         <Button
           variant="contained"
           color="primary"
           onClick={() => addObservationMutation.mutate('andrew')}
-          sx={{ marginRight: theme.customSpacing.small }}
+          sx={{ marginRight: theme.spacing(16) }}
         >
           <FormattedMessage {...m.create} />
         </Button>

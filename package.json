@@ -88,6 +88,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@fontsource-variable/rubik": "^5.0.22",
     "@mui/icons-material": "^5.15.21",
     "@mui/material": "^5.15.21",
     "electron-squirrel-startup": "^1.0.1",
