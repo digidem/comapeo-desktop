@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
+import { CssBaseline, ThemeProvider } from '@mui/material'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import createClient from 'rpc-reflector/client'
 
 import type { MapeoCoreApi } from '../service/core'
 import { Home } from './components/Home'
 import { IntlProvider } from './contexts/IntlProvider'
+import theme from './Theme'
 
 const queryClient = new QueryClient()
 
@@ -14,7 +16,10 @@ export function App() {
   return (
     <IntlProvider>
       <QueryClientProvider client={queryClient}>
-        <Home />
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Home />
+        </ThemeProvider>
       </QueryClientProvider>
     </IntlProvider>
   )

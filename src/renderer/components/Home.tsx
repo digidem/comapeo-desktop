@@ -1,3 +1,4 @@
+import { Box, Button, Typography, useTheme } from '@mui/material'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { defineMessages, FormattedMessage } from 'react-intl'
 
@@ -13,6 +14,7 @@ const m = defineMessages({
 })
 
 export function Home() {
+  const theme = useTheme()
   const queryClient = useQueryClient()
 
   const { status, data, error } = useQuery<
@@ -41,23 +43,40 @@ export function Home() {
     },
   })
 
-  if (status === 'pending') return <span>Loading...</span>
-  if (status === 'error') return <span>Error: {error.message}</span>
+  if (status === 'pending') return <Typography>Loading...</Typography>
+  if (status === 'error') return <Typography>Error: {error.message}</Typography>
 
   return (
-    <div>
-      <h1></h1>
-      <button onClick={() => addObservationMutation.mutate('andrew')}>
-        <FormattedMessage {...m.create} />
-      </button>
-      <button onClick={() => deleteObservationMutation.mutate('andrew')}>
-        <FormattedMessage {...m.delete} />
-      </button>
-      <ul>
-        {data.map((observation, index) => (
-          <li key={`${observation}-${index}`}>{observation}</li>
-        ))}
-      </ul>
-    </div>
+    <Box p={theme.customSpacing.medium}>
+      <Typography variant="h1" gutterBottom>
+        Observations
+      </Typography>
+      <Box mb={theme.customSpacing.small}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => addObservationMutation.mutate('andrew')}
+          sx={{ marginRight: theme.customSpacing.small }}
+        >
+          <FormattedMessage {...m.create} />
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => deleteObservationMutation.mutate('andrew')}
+        >
+          <FormattedMessage {...m.delete} />
+        </Button>
+      </Box>
+      <Box>
+        <ul>
+          {data?.map((observation, index) => (
+            <li key={`${observation}-${index}`}>
+              <Typography variant="body1">{observation}</Typography>
+            </li>
+          ))}
+        </ul>
+      </Box>
+    </Box>
   )
 }
