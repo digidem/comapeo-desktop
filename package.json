@@ -87,9 +87,9 @@
     "vite": "^5.3.1"
   },
   "dependencies": {
-    "@mapeo/core": "9.0.0-alpha.11",
+    "@mapeo/core": "9.0.0-alpha.12",
     "@mapeo/default-config": "^4.0.0-alpha.2",
-    "@mapeo/ipc": "0.6.0",
+    "@mapeo/ipc": "0.7.0",
     "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^10.0.0",
     "fastify": "^4.28.0",
