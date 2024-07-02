@@ -1,4 +1,4 @@
-import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { defineMessages } from '@formatjs/intl'
 import {
   app,
@@ -8,6 +8,10 @@ import {
   utilityProcess,
 } from 'electron'
 
+import type {
+  ProcessArgs as CoreProcessArgs,
+  NewClientMessage,
+} from '../service/core.ts'
 import { getSystemLocale, intl } from './intl'
 import { logger } from './logger'
 import { getDevUserDataPath, isDevMode } from './utils'
@@ -18,6 +22,14 @@ const _menuMessages = defineMessages({
     defaultMessage: 'Import Config',
   },
 })
+
+const CORE_SERVICE_PATH = fileURLToPath(
+  import.meta.resolve('../service/core.js'),
+)
+
+const MAIN_WINDOW_PRELOAD_PATH = fileURLToPath(
+  import.meta.resolve('../preload/main-window.js'),
+)
 
 function setupIpc() {
   ipcMain.handle('locale:get', (_event) => {
@@ -42,23 +54,30 @@ function setupIntl() {
 }
 
 function setupServices(window: BrowserWindow) {
-  // mapeo core background process
+  // TODO: Gotta store this key using safeStorage?
+  const rootKey = Buffer.from(import.meta.env.VITE_ROOT_KEY, 'hex')
+
+  const flags: CoreProcessArgs = {
+    rootKey: rootKey.toString('hex'),
+    storageDirectory: app.getPath('userData'),
+  }
+
   const mapeoCoreService = utilityProcess.fork(
-    path.resolve(import.meta.dirname, '../service/core.js'),
+    CORE_SERVICE_PATH,
+    Object.entries(flags).map(([flag, value]) => `--${flag}=${value}`),
+    { serviceName: `Mapeo Core Utility Process` },
   )
 
-  // We can't use ipcMain.handle() here, because the reply needs to transfer a
-  // MessagePort.
-  // Listen for message sent from the top-level frame
+  const newClientMessage: NewClientMessage = {
+    type: 'core:new-client',
+    payload: { clientId: `window-${Date.now()}` },
+  }
+
+  // We can't use ipcMain.handle() here, because the reply needs to transfer a MessagePort.
   window.webContents.ipc.on('request-mapeo-port', (event) => {
-    // Create a new channel ...
     const { port1, port2 } = new MessageChannelMain()
-    // ... send one end to the worker ...
-    mapeoCoreService.postMessage({ message: 'new-client' }, [port1])
-    // ... and the other end to the main window.
+    mapeoCoreService.postMessage(newClientMessage, [port1])
     event.senderFrame.postMessage('provide-mapeo-port', null, [port2])
-    // Now the main window and the worker can communicate with each other
-    // without going through the main process!
   })
 }
 
@@ -66,18 +85,17 @@ function createMainWindow() {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    webPreferences: {
-      preload: path.resolve(import.meta.dirname, '../preload/main-window.js'),
-    },
+    webPreferences: { preload: MAIN_WINDOW_PRELOAD_PATH },
   })
 
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL)
   } else {
     mainWindow.loadFile(
-      path.join(
-        import.meta.dirname,
-        `../../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`,
+      fileURLToPath(
+        import.meta.resolve(
+          `../../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`,
+        ),
       ),
     )
   }

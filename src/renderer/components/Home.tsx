@@ -1,6 +1,7 @@
 import { Box, Button, Typography, useTheme } from '@mui/material'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { defineMessages, FormattedMessage } from 'react-intl'
+
+import { useAllProjects, useCreateProject } from '../queries/projects'
 
 const m = defineMessages({
   create: {
@@ -15,36 +16,13 @@ const m = defineMessages({
 
 export function Home() {
   const theme = useTheme()
-  const queryClient = useQueryClient()
+  const allProjectsQuery = useAllProjects()
+  const createProjectMutation = useCreateProject()
 
-  const { status, data, error } = useQuery<
-    Awaited<ReturnType<typeof window.mapeo.getObservations>>,
-    Error
-  >({
-    queryKey: ['observations'],
-    queryFn: () => window.mapeo.getObservations(),
-  })
-
-  const addObservationMutation = useMutation({
-    mutationFn: (name: string) => {
-      return window.mapeo.createObservation(name)
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['observations'] })
-    },
-  })
-
-  const deleteObservationMutation = useMutation({
-    mutationFn: (name: string) => {
-      return window.mapeo.deleteObservation(name)
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['observations'] })
-    },
-  })
-
-  if (status === 'pending') return <Typography>Loading...</Typography>
-  if (status === 'error') return <Typography>Error: {error.message}</Typography>
+  if (allProjectsQuery.status === 'pending')
+    return <Typography>Loading...</Typography>
+  if (allProjectsQuery.status === 'error')
+    return <Typography>Error: {allProjectsQuery.error.message}</Typography>
 
   return (
     <Box p={theme.spacing(8)}>
@@ -55,24 +33,22 @@ export function Home() {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => addObservationMutation.mutate('andrew')}
+          onClick={() => createProjectMutation.mutate(`project-${Date.now()}`)}
           sx={{ marginRight: theme.spacing(16) }}
         >
           <FormattedMessage {...m.create} />
         </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => deleteObservationMutation.mutate('andrew')}
-        >
-          <FormattedMessage {...m.delete} />
+        <Button variant="contained" color="secondary">
+          A Button!
         </Button>
       </Box>
       <Box>
         <ul>
-          {data?.map((observation, index) => (
-            <li key={`${observation}-${index}`}>
-              <Typography variant="body1">{observation}</Typography>
+          {allProjectsQuery.data.map((project) => (
+            <li key={project.projectId}>
+              <Typography variant="body1">
+                {project.name || 'No name'}
+              </Typography>
             </li>
           ))}
         </ul>
