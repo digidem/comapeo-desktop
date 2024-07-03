@@ -1,5 +1,4 @@
-import { Box, Button, Typography, useTheme } from '@mui/material'
-import Grid from '@mui/material/Grid'
+import { Box, Button, Grid, Typography, useTheme } from '@mui/material'
 import { defineMessages, FormattedMessage } from 'react-intl'
 
 import { useAllProjects, useCreateProject } from '../queries/projects'
