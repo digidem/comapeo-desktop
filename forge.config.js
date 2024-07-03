@@ -2,6 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { MakerDeb } from '@electron-forge/maker-deb'
+import { MakerDMG } from '@electron-forge/maker-dmg'
 import { MakerRpm } from '@electron-forge/maker-rpm'
 import { MakerSquirrel } from '@electron-forge/maker-squirrel'
 import { MakerZIP } from '@electron-forge/maker-zip'
@@ -177,17 +178,39 @@ if (ASAR_ENABLED) {
 	plugins.push(new AutoUnpackNativesPlugin({}))
 }
 
+/** @type {ForgeConfig} */
 export default {
 	packagerConfig: {
 		asar: ASAR_ENABLED,
 		name: 'CoMapeo Desktop',
+		icon: './assets/icon',
 	},
 	rebuildConfig: {},
 	makers: [
-		new MakerSquirrel({}),
+		new MakerSquirrel({
+			setupIcon: './assets/icon.ico',
+		}),
+		new MakerDMG(
+			// @ts-expect-error Incorrect TS typings (https://github.com/electron/forge/issues/3712)
+			{
+				icon: './assets/icon.icns',
+			},
+		),
 		new MakerZIP({}, ['darwin']),
-		new MakerDeb({}, ['linux']),
-		new MakerRpm({}, ['linux']),
+		new MakerDeb(
+			{
+				options: {
+					icon: './assets/icon.png',
+				},
+			},
+			['linux'],
+		),
+		new MakerRpm(
+			{
+				options: { icon: './assets/icon.png' },
+			},
+			['linux'],
+		),
 	],
 	plugins,
 }
