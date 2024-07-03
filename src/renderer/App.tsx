@@ -10,15 +10,15 @@ const queryClient = new QueryClient()
 
 export function App() {
   return (
-    <IntlProvider>
-      <QueryClientProvider client={queryClient}>
-        <ApiProvider>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <IntlProvider>
+        <QueryClientProvider client={queryClient}>
+          <ApiProvider>
             <Home />
-          </ThemeProvider>
-        </ApiProvider>
-      </QueryClientProvider>
-    </IntlProvider>
+          </ApiProvider>
+        </QueryClientProvider>
+      </IntlProvider>
+    </ThemeProvider>
   )
 }

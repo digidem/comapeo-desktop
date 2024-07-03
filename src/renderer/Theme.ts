@@ -1,11 +1,11 @@
 import { createTheme } from '@mui/material/styles'
 
 import {
-  CoMAPEO_BLUE,
-  DARK_CoMAPEO_BLUE,
+  COMAPEO_BLUE,
+  DARK_COMAPEO_BLUE,
   DARK_ORANGE,
   GREEN,
-  LIGHT_CoMAPEO_BLUE,
+  LIGHT_COMAPEO_BLUE,
   ORANGE,
   RED,
 } from './colors'
@@ -44,9 +44,9 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: CoMAPEO_BLUE,
-      dark: DARK_CoMAPEO_BLUE,
-      light: LIGHT_CoMAPEO_BLUE,
+      main: COMAPEO_BLUE,
+      dark: DARK_COMAPEO_BLUE,
+      light: LIGHT_COMAPEO_BLUE,
     },
     secondary: {
       main: ORANGE,
