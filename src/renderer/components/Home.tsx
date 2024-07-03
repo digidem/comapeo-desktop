@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@mui/material'
+import { Box, Grid, Typography, useTheme } from '@mui/material'
 import { defineMessages, FormattedMessage } from 'react-intl'
 
 import { useAllProjects, useCreateProject } from '../queries/projects'
@@ -16,6 +16,7 @@ const m = defineMessages({
 })
 
 export function Home() {
+  const theme = useTheme()
   const allProjectsQuery = useAllProjects()
   const createProjectMutation = useCreateProject()
 
@@ -29,7 +30,7 @@ export function Home() {
       <Typography variant="h1" gutterBottom>
         CoMapeo Desktop
       </Typography>
-      <Grid container alignItems="center" spacing={2} direction="row">
+      <Grid container alignItems="center" spacing={2} wrap="nowrap">
         <Grid item>
           <Button
             name="create-project"
@@ -48,6 +49,11 @@ export function Home() {
         <Grid item>
           <Button variant="text" color="success">
             A Text Button!
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button sx={{ backgroundColor: theme.palette.primary.dark }}>
+            Style override
           </Button>
         </Grid>
       </Grid>

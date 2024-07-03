@@ -11,6 +11,7 @@ interface CustomButtonProps extends Omit<MuiButtonProps, 'children'> {
   variant?: 'contained' | 'outlined' | 'text'
   testID?: string
   size?: 'medium' | 'large'
+  sx?: MuiButtonProps['sx']
 }
 
 export const Button: React.FC<CustomButtonProps> = ({ children, ...props }) => {
@@ -22,6 +23,8 @@ export const Button: React.FC<CustomButtonProps> = ({ children, ...props }) => {
       : children
 
   return (
-    <MuiButton {...props}>{translatedContent as React.ReactNode}</MuiButton>
+    <MuiButton {...props} sx={props.sx}>
+      {translatedContent as React.ReactNode}
+    </MuiButton>
   )
 }
