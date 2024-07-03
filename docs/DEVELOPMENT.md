@@ -42,7 +42,24 @@ For example, in [`src/preload/main-window.ts`](../src/preload/main-window.ts), w
 
 Make sure you have the desired Node version installed. For this project we encourage using the version that's specified in [`.nvmrc`](../.nvmrc) (or [`.tool-versions`](../.tool-versions)) file. We recommend using a proper version management tool to install and manage Node versions, such as [nvm](https://github.com/nvm-sh/nvm), [fnm](https://github.com/Schniz/fnm), [asdf](https://asdf-vm.com/), or [mise](https://mise.jdx.dev/).
 
-After cloning the repo locally, run the following commands to get started:
+### Environment variables
+
+Create a copy of the [`.env.template`](../.env.template) and call it `.env`.
+
+- `VITE_ROOT_KEY`: This is a hacky and insufficient workaround for storing an encryption key (see https://github.com/digidem/comapeo-desktop/issues/25). In order to generate a valid value, you can run the following Node code (e.g. in a REPL or as a script) and copy the value that's logged (omit any quotation marks when inserting it into the env file):
+
+  ```js
+  const crypto = require('node:crypto')
+  console.log(crypto.randomBytes(16).toString('hex'))
+  ```
+
+  _**This will eventually be removed from this file.**_
+
+- `VITE_MAPBOX_ACCESS_TOKEN`: A public access token from Mapbox ([documentation](https://docs.mapbox.com/help/getting-started/access-tokens/)) that allows the app to access online map styles. Reach out to the team or create your own.
+
+### Running the app
+
+Run the following commands to start the app:
 
 ```sh
 npm install                # Install dependencies
