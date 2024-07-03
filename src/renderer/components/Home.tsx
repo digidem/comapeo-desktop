@@ -1,4 +1,5 @@
 import { Box, Button, Typography, useTheme } from '@mui/material'
+import Grid from '@mui/material/Grid'
 import { defineMessages, FormattedMessage } from 'react-intl'
 
 import { useAllProjects, useCreateProject } from '../queries/projects'
@@ -25,24 +26,35 @@ export function Home() {
     return <Typography>Error: {allProjectsQuery.error.message}</Typography>
 
   return (
-    <Box p={theme.spacing(8)}>
+    <Box p={theme.spacing(6)}>
       <Typography variant="h1" gutterBottom>
-        Observations
+        CoMapeo Desktop
       </Typography>
-      <Box mb={theme.spacing(8)}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => createProjectMutation.mutate(`project-${Date.now()}`)}
-          sx={{ marginRight: theme.spacing(16) }}
-        >
-          <FormattedMessage {...m.create} />
-        </Button>
-        <Button variant="contained" color="secondary">
-          A Button!
-        </Button>
-      </Box>
-      <Box>
+      <Grid container alignItems="center" spacing={2}>
+        <Grid item>
+          <Typography variant="h6" component="label" htmlFor="create-project">
+            Create project
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            name="create-project"
+            onClick={() =>
+              createProjectMutation.mutate(`project-${Date.now()}`)
+            }
+          >
+            <FormattedMessage {...m.create} />
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button variant="contained" color="secondary">
+            Another Button!
+          </Button>
+        </Grid>
+      </Grid>
+      <Box mt={2}>
         <ul>
           {allProjectsQuery.data.map((project) => (
             <li key={project.projectId}>
