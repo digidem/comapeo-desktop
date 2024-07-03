@@ -58,6 +58,20 @@ export function Home() {
         </Grid>
       </Grid>
       <Box mt={2}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Button
+              size="fullWidth"
+              color="primary"
+              variant="contained"
+              onClick={() => alert('Full Width Button Clicked')}
+            >
+              Full Width Button
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+      <Box mt={2}>
         <ul>
           {allProjectsQuery.data.map((project) => (
             <li key={project.projectId}>

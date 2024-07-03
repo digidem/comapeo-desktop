@@ -27,8 +27,8 @@ const theme = createTheme({
       fontSize: '1rem',
     },
     button: {
-      fontSize: '0.875rem',
-      fontWeight: 600,
+      fontSize: '1rem',
+      fontWeight: 700,
     },
     caption: {
       fontSize: '0.75rem',
@@ -69,17 +69,21 @@ const theme = createTheme({
           ...(ownerState.variant === 'outlined' && {
             borderColor: '#EEEEEE',
             borderWidth: 2,
+            '&:hover': {
+              borderWidth: 2,
+            },
+            '&:focus': {
+              borderWidth: 2,
+            },
           }),
           ...(ownerState.variant === 'contained' && {
             backgroundColor: COMAPEO_BLUE,
           }),
           borderRadius: 30,
           textTransform: 'none',
-          alignSelf: 'center',
-          overflow: 'hidden',
-          fontWeight: 700,
-          letterSpacing: 0.5,
-          fontSize: '1rem',
+          ...(ownerState.fullWidth && {
+            width: '100%',
+          }),
         }),
       },
     },

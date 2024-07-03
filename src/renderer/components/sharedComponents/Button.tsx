@@ -1,30 +1,39 @@
-import React from 'react'
+import { PropsWithChildren } from 'react'
 import {
   Button as MuiButton,
   ButtonProps as MuiButtonProps,
 } from '@mui/material'
-import { MessageDescriptor, useIntl } from 'react-intl'
 
-interface CustomButtonProps extends Omit<MuiButtonProps, 'children'> {
-  children: React.ReactNode | MessageDescriptor
+type CustomButtonProps = PropsWithChildren<{
+  name?: string
+  className?: string
   color?: 'primary' | 'secondary' | 'success' | 'error'
-  variant?: 'contained' | 'outlined' | 'text'
+  size?: 'medium' | 'large' | 'fullWidth'
   testID?: string
-  size?: 'medium' | 'large'
+  variant?: 'contained' | 'outlined' | 'text'
   sx?: MuiButtonProps['sx']
-}
+  onClick?: MuiButtonProps['onClick']
+}>
 
-export const Button: React.FC<CustomButtonProps> = ({ children, ...props }) => {
-  const { formatMessage } = useIntl()
-
-  const translatedContent =
-    children && typeof children === 'object' && 'id' in children
-      ? formatMessage(children as MessageDescriptor)
-      : children
-
+export const Button = ({
+  children,
+  testID,
+  size = 'medium',
+  color = 'primary',
+  variant = 'contained',
+  ...props
+}: CustomButtonProps) => {
+  const propsBasedOnSize = size === 'fullWidth' ? { fullWidth: true } : { size }
   return (
-    <MuiButton {...props} sx={props.sx}>
-      {translatedContent as React.ReactNode}
+    <MuiButton
+      color={color}
+      variant={variant}
+      sx={props.sx}
+      data-testid={testID}
+      {...propsBasedOnSize}
+      onClick={props.onClick}
+    >
+      {children}
     </MuiButton>
   )
 }
