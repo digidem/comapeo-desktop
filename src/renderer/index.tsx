@@ -4,7 +4,6 @@ import './index.css'
 
 import { App } from './App'
 
-// @ts-expect-error
-const root = createRoot(document.getElementById('app'))
+const root = createRoot(document.getElementById('app') as HTMLElement)
 
 root.render(<App />)
