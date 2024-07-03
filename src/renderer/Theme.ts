@@ -59,6 +59,31 @@ const theme = createTheme({
       main: RED,
     },
   },
+  components: {
+    MuiButton: {
+      defaultProps: {
+        variant: 'contained',
+      },
+      styleOverrides: {
+        root: ({ ownerState }) => ({
+          ...(ownerState.variant === 'outlined' && {
+            borderColor: '#EEEEEE',
+            borderWidth: 2,
+          }),
+          ...(ownerState.variant === 'contained' && {
+            backgroundColor: COMAPEO_BLUE,
+          }),
+          borderRadius: 30,
+          textTransform: 'none',
+          alignSelf: 'center',
+          overflow: 'hidden',
+          fontWeight: 700,
+          letterSpacing: 0.5,
+          fontSize: '1rem',
+        }),
+      },
+    },
+  },
 })
 
 export { theme }
