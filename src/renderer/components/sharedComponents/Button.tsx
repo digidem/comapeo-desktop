@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react'
+import { MouseEventHandler, PropsWithChildren } from 'react'
 import {
   Button as MuiButton,
   ButtonProps as MuiButtonProps,
@@ -12,7 +12,7 @@ type CustomButtonProps = PropsWithChildren<{
   testID?: string
   variant?: 'contained' | 'outlined' | 'text'
   sx?: MuiButtonProps['sx']
-  onClick?: MuiButtonProps['onClick']
+  onClick?: MouseEventHandler<HTMLButtonElement>
 }>
 
 export const Button = ({
