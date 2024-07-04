@@ -1,8 +1,8 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material'
 import { defineMessages, FormattedMessage } from 'react-intl'
 
+import { Button } from '../components/Button.tsx'
 import { useAllProjects, useCreateProject } from '../queries/projects'
-import { Button } from './sharedComponents/Button'
 
 const m = defineMessages({
   create: {
@@ -62,7 +62,7 @@ export function Home() {
           <Grid item xs={12}>
             <Button
               size="fullWidth"
-              color="primary"
+              color="success"
               variant="contained"
               onClick={() => alert('Full Width Button Clicked')}
             >

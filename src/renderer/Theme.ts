@@ -76,14 +76,8 @@ const theme = createTheme({
               borderWidth: 2,
             },
           }),
-          ...(ownerState.variant === 'contained' && {
-            backgroundColor: COMAPEO_BLUE,
-          }),
           borderRadius: 30,
           textTransform: 'none',
-          ...(ownerState.fullWidth && {
-            width: '100%',
-          }),
         }),
       },
     },
