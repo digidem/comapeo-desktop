@@ -1,7 +1,8 @@
-import { Box, Grid, Typography, useTheme } from '@mui/material'
+import { Box, Grid, useTheme } from '@mui/material'
 import { defineMessages, FormattedMessage } from 'react-intl'
 
-import { Button } from '../components/Button.tsx'
+import { Button } from '../components/Button'
+import { Text } from '../components/Text.tsx'
 import { useAllProjects, useCreateProject } from '../queries/projects'
 
 const m = defineMessages({
@@ -21,15 +22,21 @@ export function Home() {
   const createProjectMutation = useCreateProject()
 
   if (allProjectsQuery.status === 'pending')
-    return <Typography>Loading...</Typography>
+    return <Text variant="button">Loading...</Text>
   if (allProjectsQuery.status === 'error')
-    return <Typography>Error: {allProjectsQuery.error.message}</Typography>
+    return <Text variant="button">Error: {allProjectsQuery.error.message}</Text>
 
   return (
     <div>
-      <Typography variant="h1" gutterBottom>
+      <Text kind="title" gutterBottom>
         CoMapeo Desktop
-      </Typography>
+      </Text>
+      <Text
+        kind="subtitle"
+        style={{ color: 'tomato', marginTop: 3, marginBottom: 3 }}
+      >
+        An Awana Digital Product
+      </Text>
       <Grid container alignItems="center" spacing={2} wrap="nowrap">
         <Grid item>
           <Button
@@ -43,17 +50,17 @@ export function Home() {
         </Grid>
         <Grid item>
           <Button variant="outlined" color="secondary">
-            An Outlined Button!
+            <Text variant="button">An Outlined Button!</Text>
           </Button>
         </Grid>
         <Grid item>
           <Button variant="text" color="success">
-            A Text Button!
+            <Text variant="button">A Text Button!</Text>
           </Button>
         </Grid>
         <Grid item>
           <Button sx={{ backgroundColor: theme.palette.primary.dark }}>
-            Style override
+            <Text variant="button">Style override</Text>
           </Button>
         </Grid>
       </Grid>
@@ -66,7 +73,7 @@ export function Home() {
               variant="contained"
               onClick={() => alert('Full Width Button Clicked')}
             >
-              Full Width Button
+              <Text variant="button">Full Width Button</Text>
             </Button>
           </Grid>
         </Grid>
@@ -75,9 +82,7 @@ export function Home() {
         <ul>
           {allProjectsQuery.data.map((project) => (
             <li key={project.projectId}>
-              <Typography variant="body1">
-                {project.name || 'No name'}
-              </Typography>
+              <Text kind="body">{project.name || 'No name'}</Text>
             </li>
           ))}
         </ul>
