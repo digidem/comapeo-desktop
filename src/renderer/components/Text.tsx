@@ -1,4 +1,3 @@
-// Text.tsx
 import * as React from 'react'
 import { PropsWithChildren } from 'react'
 import Typography, { TypographyProps } from '@mui/material/Typography'

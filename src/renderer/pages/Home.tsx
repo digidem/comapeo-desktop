@@ -31,10 +31,7 @@ export function Home() {
       <Text kind="title" gutterBottom>
         CoMapeo Desktop
       </Text>
-      <Text
-        kind="subtitle"
-        style={{ color: 'tomato', marginTop: 3, marginBottom: 3 }}
-      >
+      <Text kind="subtitle" color="tomato" style={{ margin: 10 }}>
         An Awana Digital Product
       </Text>
       <Grid container alignItems="center" spacing={2} wrap="nowrap">
