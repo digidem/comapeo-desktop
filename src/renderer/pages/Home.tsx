@@ -1,6 +1,7 @@
-import { Box, Button, Grid, Typography, useTheme } from '@mui/material'
+import { Box, Grid, Typography, useTheme } from '@mui/material'
 import { defineMessages, FormattedMessage } from 'react-intl'
 
+import { Button } from '../components/Button.tsx'
 import { useAllProjects, useCreateProject } from '../queries/projects'
 
 const m = defineMessages({
@@ -25,20 +26,13 @@ export function Home() {
     return <Typography>Error: {allProjectsQuery.error.message}</Typography>
 
   return (
-    <Box p={theme.spacing(6)}>
+    <div>
       <Typography variant="h1" gutterBottom>
         CoMapeo Desktop
       </Typography>
-      <Grid container alignItems="center" spacing={2}>
-        <Grid item>
-          <Typography variant="h6" component="label" htmlFor="create-project">
-            Create project
-          </Typography>
-        </Grid>
+      <Grid container alignItems="center" spacing={2} wrap="nowrap">
         <Grid item>
           <Button
-            variant="contained"
-            color="primary"
             name="create-project"
             onClick={() =>
               createProjectMutation.mutate(`project-${Date.now()}`)
@@ -48,11 +42,35 @@ export function Home() {
           </Button>
         </Grid>
         <Grid item>
-          <Button variant="contained" color="secondary">
-            Another Button!
+          <Button variant="outlined" color="secondary">
+            An Outlined Button!
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button variant="text" color="success">
+            A Text Button!
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button sx={{ backgroundColor: theme.palette.primary.dark }}>
+            Style override
           </Button>
         </Grid>
       </Grid>
+      <Box mt={2}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Button
+              size="fullWidth"
+              color="success"
+              variant="contained"
+              onClick={() => alert('Full Width Button Clicked')}
+            >
+              Full Width Button
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
       <Box mt={2}>
         <ul>
           {allProjectsQuery.data.map((project) => (
@@ -64,6 +82,6 @@ export function Home() {
           ))}
         </ul>
       </Box>
-    </Box>
+    </div>
   )
 }

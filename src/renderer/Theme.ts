@@ -27,8 +27,8 @@ const theme = createTheme({
       fontSize: '1rem',
     },
     button: {
-      fontSize: '0.875rem',
-      fontWeight: 600,
+      fontSize: '1rem',
+      fontWeight: 700,
     },
     caption: {
       fontSize: '0.75rem',
@@ -57,6 +57,29 @@ const theme = createTheme({
     },
     error: {
       main: RED,
+    },
+  },
+  components: {
+    MuiButton: {
+      defaultProps: {
+        variant: 'contained',
+      },
+      styleOverrides: {
+        root: ({ ownerState }) => ({
+          ...(ownerState.variant === 'outlined' && {
+            borderColor: '#EEEEEE',
+            borderWidth: 2,
+            '&:hover': {
+              borderWidth: 2,
+            },
+            '&:focus': {
+              borderWidth: 2,
+            },
+          }),
+          borderRadius: 30,
+          textTransform: 'none',
+        }),
+      },
     },
   },
 })
