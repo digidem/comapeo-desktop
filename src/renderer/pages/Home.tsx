@@ -22,16 +22,14 @@ export function Home() {
   const createProjectMutation = useCreateProject()
 
   if (allProjectsQuery.status === 'pending')
-    return <Text variant="button">Loading...</Text>
+    return <Text kind="body">Loading...</Text>
   if (allProjectsQuery.status === 'error')
-    return <Text variant="button">Error: {allProjectsQuery.error.message}</Text>
+    return <Text kind="body">Error: {allProjectsQuery.error.message}</Text>
 
   return (
     <div>
-      <Text kind="title" gutterBottom>
-        CoMapeo Desktop
-      </Text>
-      <Text kind="subtitle" color="tomato" style={{ margin: 10 }}>
+      <Text kind="title">CoMapeo Desktop</Text>
+      <Text kind="subtitle" style={{ margin: 10 }}>
         An Awana Digital Product
       </Text>
       <Grid container alignItems="center" spacing={2} wrap="nowrap">
@@ -47,17 +45,17 @@ export function Home() {
         </Grid>
         <Grid item>
           <Button variant="outlined" color="secondary">
-            <Text variant="button">An Outlined Button!</Text>
+            An Outlined Button!
           </Button>
         </Grid>
         <Grid item>
           <Button variant="text" color="success">
-            <Text variant="button">A Text Button!</Text>
+            A Typography Button!
           </Button>
         </Grid>
         <Grid item>
           <Button sx={{ backgroundColor: theme.palette.primary.dark }}>
-            <Text variant="button">Style override</Text>
+            Style override
           </Button>
         </Grid>
       </Grid>
@@ -70,7 +68,7 @@ export function Home() {
               variant="contained"
               onClick={() => alert('Full Width Button Clicked')}
             >
-              <Text variant="button">Full Width Button</Text>
+              Full Width Button
             </Button>
           </Grid>
         </Grid>

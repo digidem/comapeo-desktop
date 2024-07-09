@@ -1,44 +1,99 @@
-import * as React from 'react'
-import { PropsWithChildren } from 'react'
-import Typography, { TypographyProps } from '@mui/material/Typography'
+import { CSSProperties, PropsWithChildren } from 'react'
+import Typography from '@mui/material/Typography'
 
-type BaseProps = PropsWithChildren &
-  TypographyProps & { style?: React.CSSProperties }
+type BaseProps = PropsWithChildren<{
+  align?: Extract<
+    CSSProperties['textAlign'],
+    'inherit' | 'left' | 'center' | 'right' | 'justify'
+  >
+  bold?: boolean
+  className?: string
+  id?: string
+  italic?: boolean
+  style?: CSSProperties
+  underlined?: boolean
+}>
 
-export function TitleText({ children, style, ...otherProps }: BaseProps) {
+export function TitleText({
+  align,
+  bold,
+  children,
+  className,
+  italic,
+  style,
+  underlined,
+}: BaseProps) {
   return (
-    <Typography variant="h1" style={style} {...otherProps}>
+    <Typography
+      variant="h1"
+      align={align}
+      style={{
+        ...style,
+        fontWeight: bold ? 'bold' : undefined,
+        fontStyle: italic ? 'italic' : undefined,
+        textDecoration: underlined ? 'underline' : undefined,
+      }}
+      className={className}
+    >
       {children}
     </Typography>
   )
 }
 
-export function BodyText({ children, style, ...otherProps }: BaseProps) {
+export function BodyText({
+  align,
+  bold,
+  children,
+  className,
+  italic,
+  style,
+  underlined,
+}: BaseProps) {
   return (
-    <Typography variant="body1" style={style} {...otherProps}>
+    <Typography
+      variant="body1"
+      style={{
+        ...style,
+        fontWeight: bold ? 'bold' : undefined,
+        fontStyle: italic ? 'italic' : undefined,
+        textDecoration: underlined ? 'underline' : undefined,
+      }}
+      align={align}
+      className={className}
+    >
       {children}
     </Typography>
   )
 }
 
-export function DescriptionText({ children, style, ...otherProps }: BaseProps) {
+export function SubtitleText({
+  align,
+  bold,
+  children,
+  className,
+  italic,
+  style,
+  underlined,
+}: BaseProps) {
   return (
-    <Typography variant="body2" style={style} {...otherProps}>
-      {children}
-    </Typography>
-  )
-}
-
-export function SubtitleText({ children, style, ...otherProps }: BaseProps) {
-  return (
-    <Typography variant="subtitle1" style={style} {...otherProps}>
+    <Typography
+      variant="subtitle1"
+      style={{
+        ...style,
+        fontWeight: bold ? 'bold' : undefined,
+        fontStyle: italic ? 'italic' : undefined,
+        textDecoration: underlined ? 'underline' : undefined,
+      }}
+      align={align}
+      className={className}
+    >
       {children}
     </Typography>
   )
 }
 
 type TextProps = BaseProps & {
-  kind?: 'title' | 'body' | 'description' | 'subtitle'
+  kind: 'title' | 'body' | 'subtitle'
 }
 
 export function Text({ children, kind, style, ...otherProps }: TextProps) {
@@ -55,12 +110,6 @@ export function Text({ children, kind, style, ...otherProps }: TextProps) {
           {children}
         </BodyText>
       )
-    case 'description':
-      return (
-        <DescriptionText style={style} {...otherProps}>
-          {children}
-        </DescriptionText>
-      )
     case 'subtitle':
       return (
         <SubtitleText style={style} {...otherProps}>
@@ -68,10 +117,6 @@ export function Text({ children, kind, style, ...otherProps }: TextProps) {
         </SubtitleText>
       )
     default:
-      return (
-        <Typography style={style} {...otherProps}>
-          {children}
-        </Typography>
-      )
+      throw new Error(`Invalid 'kind' prop value: ${kind}`)
   }
 }
