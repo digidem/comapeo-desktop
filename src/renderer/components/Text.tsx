@@ -93,10 +93,15 @@ export function SubtitleText({
 }
 
 type TextProps = BaseProps & {
-  kind: 'title' | 'body' | 'subtitle'
+  kind?: 'title' | 'body' | 'subtitle'
 }
 
-export function Text({ children, kind, style, ...otherProps }: TextProps) {
+export function Text({
+  children,
+  kind = 'body',
+  style,
+  ...otherProps
+}: TextProps) {
   switch (kind) {
     case 'title':
       return (

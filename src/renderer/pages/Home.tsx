@@ -21,10 +21,9 @@ export function Home() {
   const allProjectsQuery = useAllProjects()
   const createProjectMutation = useCreateProject()
 
-  if (allProjectsQuery.status === 'pending')
-    return <Text kind="body">Loading...</Text>
+  if (allProjectsQuery.status === 'pending') return <Text>Loading...</Text>
   if (allProjectsQuery.status === 'error')
-    return <Text kind="body">Error: {allProjectsQuery.error.message}</Text>
+    return <Text>Error: {allProjectsQuery.error.message}</Text>
 
   return (
     <div>
@@ -77,7 +76,7 @@ export function Home() {
         <ul>
           {allProjectsQuery.data.map((project) => (
             <li key={project.projectId}>
-              <Text kind="body">{project.name || 'No name'}</Text>
+              <Text>{project.name || 'No name'}</Text>
             </li>
           ))}
         </ul>
