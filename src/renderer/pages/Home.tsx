@@ -30,11 +30,7 @@ export function Home() {
       <Text kind="title" italic>
         CoMapeo Desktop
       </Text>
-      <Text
-        kind="subtitle"
-        style={{ margin: 10, textDecoration: 'underline' }}
-        bold
-      >
+      <Text kind="subtitle" style={{ margin: 10 }} underline>
         An Awana Digital Product
       </Text>
       <Grid container alignItems="center" spacing={2} wrap="nowrap">
@@ -82,9 +78,7 @@ export function Home() {
         <ul>
           {allProjectsQuery.data.map((project) => (
             <li key={project.projectId}>
-              <Text style={{ fontStyle: 'italic' }} bold>
-                {project.name || 'No name'}
-              </Text>
+              <Text bold>{project.name || 'No name'}</Text>
             </li>
           ))}
         </ul>

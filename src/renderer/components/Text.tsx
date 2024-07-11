@@ -10,17 +10,6 @@ const kindToVariant: { [k in Kind]: Variant } = {
   body: 'body1',
 } as const
 
-const getTextStyles = (
-  underline?: boolean,
-  bold?: boolean,
-  italic?: boolean,
-  style?: CSSProperties,
-) => ({
-  textDecoration: underline ? 'underline' : style?.textDecoration,
-  fontWeight: bold ? 'bold' : style?.fontWeight,
-  fontStyle: italic ? 'italic' : style?.fontStyle,
-})
-
 type BaseProps = PropsWithChildren<{
   align?: Extract<
     CSSProperties['textAlign'],
@@ -46,14 +35,14 @@ export function Text({
   underline,
   ...otherProps
 }: TextProps) {
-  const textStyles = getTextStyles(underline, bold, italic, style)
-
   return (
     <Typography
       variant={kindToVariant[kind]}
+      fontWeight={bold ? 'bold' : undefined}
+      fontStyle={italic ? 'italic' : undefined}
       style={{
         ...style,
-        ...textStyles,
+        textDecoration: underline ? 'underline' : undefined,
       }}
       {...otherProps}
     />
