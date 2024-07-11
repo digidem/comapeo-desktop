@@ -41,8 +41,8 @@ export function Text({
       fontWeight={bold ? 'bold' : undefined}
       fontStyle={italic ? 'italic' : undefined}
       style={{
-        ...style,
         textDecoration: underline ? 'underline' : undefined,
+        ...style,
       }}
       {...otherProps}
     />
