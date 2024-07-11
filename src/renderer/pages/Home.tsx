@@ -2,7 +2,7 @@ import { Box, Grid, useTheme } from '@mui/material'
 import { defineMessages, FormattedMessage } from 'react-intl'
 
 import { Button } from '../components/Button'
-import { Text } from '../components/Text.tsx'
+import { Text } from '../components/Text'
 import { useAllProjects, useCreateProject } from '../queries/projects'
 
 const m = defineMessages({
@@ -27,8 +27,14 @@ export function Home() {
 
   return (
     <div>
-      <Text kind="title">CoMapeo Desktop</Text>
-      <Text kind="subtitle" style={{ margin: 10 }}>
+      <Text kind="title" italic>
+        CoMapeo Desktop
+      </Text>
+      <Text
+        kind="subtitle"
+        style={{ margin: 10, textDecoration: 'underline' }}
+        bold
+      >
         An Awana Digital Product
       </Text>
       <Grid container alignItems="center" spacing={2} wrap="nowrap">
@@ -76,7 +82,9 @@ export function Home() {
         <ul>
           {allProjectsQuery.data.map((project) => (
             <li key={project.projectId}>
-              <Text>{project.name || 'No name'}</Text>
+              <Text style={{ fontStyle: 'italic' }} bold>
+                {project.name || 'No name'}
+              </Text>
             </li>
           ))}
         </ul>
