@@ -1,8 +1,5 @@
-import { MouseEventHandler, PropsWithChildren } from 'react'
-import {
-  Button as MuiButton,
-  ButtonProps as MuiButtonProps,
-} from '@mui/material'
+import { CSSProperties, MouseEventHandler, PropsWithChildren } from 'react'
+import { Button as MuiButton } from '@mui/material'
 
 type CustomButtonProps = PropsWithChildren<{
   name?: string
@@ -11,7 +8,7 @@ type CustomButtonProps = PropsWithChildren<{
   size?: 'medium' | 'large' | 'fullWidth'
   testID?: string
   variant?: 'contained' | 'outlined' | 'text'
-  sx?: MuiButtonProps['sx']
+  style?: CSSProperties
   onClick?: MouseEventHandler<HTMLButtonElement>
 }>
 
@@ -21,6 +18,7 @@ export const Button = ({
   size = 'medium',
   color = 'primary',
   variant = 'contained',
+  style,
   ...props
 }: CustomButtonProps) => {
   const propsBasedOnSize = size === 'fullWidth' ? { fullWidth: true } : { size }
@@ -28,7 +26,7 @@ export const Button = ({
     <MuiButton
       color={color}
       variant={variant}
-      sx={props.sx}
+      style={style}
       data-testid={testID}
       {...propsBasedOnSize}
       onClick={props.onClick}

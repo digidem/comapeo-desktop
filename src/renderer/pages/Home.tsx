@@ -52,7 +52,7 @@ export function Home() {
           </Button>
         </Grid>
         <Grid item>
-          <Button sx={{ backgroundColor: theme.palette.primary.dark }}>
+          <Button style={{ backgroundColor: theme.palette.primary.dark }}>
             Style override
           </Button>
         </Grid>
