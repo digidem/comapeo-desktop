@@ -7,3 +7,4 @@ export const DARK_ORANGE = '#E86826'
 
 export const GREEN = '#59A553'
 export const RED = '#D92222'
+export const BLACK = '#000000'

@@ -1,7 +1,8 @@
-import { Box, Grid, Typography, useTheme } from '@mui/material'
+import { Box, Grid, useTheme } from '@mui/material'
 import { defineMessages, FormattedMessage } from 'react-intl'
 
-import { Button } from '../components/Button.tsx'
+import { Button } from '../components/Button'
+import { Text } from '../components/Text'
 import { useAllProjects, useCreateProject } from '../queries/projects'
 
 const m = defineMessages({
@@ -20,16 +21,18 @@ export function Home() {
   const allProjectsQuery = useAllProjects()
   const createProjectMutation = useCreateProject()
 
-  if (allProjectsQuery.status === 'pending')
-    return <Typography>Loading...</Typography>
+  if (allProjectsQuery.status === 'pending') return <Text>Loading...</Text>
   if (allProjectsQuery.status === 'error')
-    return <Typography>Error: {allProjectsQuery.error.message}</Typography>
+    return <Text>Error: {allProjectsQuery.error.message}</Text>
 
   return (
     <div>
-      <Typography variant="h1" gutterBottom>
+      <Text kind="title" italic>
         CoMapeo Desktop
-      </Typography>
+      </Text>
+      <Text kind="subtitle" style={{ margin: 10 }} underline>
+        An Awana Digital Product
+      </Text>
       <Grid container alignItems="center" spacing={2} wrap="nowrap">
         <Grid item>
           <Button
@@ -48,7 +51,7 @@ export function Home() {
         </Grid>
         <Grid item>
           <Button variant="text" color="success">
-            A Text Button!
+            A Typography Button!
           </Button>
         </Grid>
         <Grid item>
@@ -75,9 +78,7 @@ export function Home() {
         <ul>
           {allProjectsQuery.data.map((project) => (
             <li key={project.projectId}>
-              <Typography variant="body1">
-                {project.name || 'No name'}
-              </Typography>
+              <Text bold>{project.name || 'No name'}</Text>
             </li>
           ))}
         </ul>
