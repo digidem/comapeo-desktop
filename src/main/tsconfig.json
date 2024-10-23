@@ -1,7 +1,7 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "lib": ["ESNext"]
-  },
-  "include": ["**/*.js", "**/*.ts", "**/*.d.ts"]
+	"extends": ["../../tsconfig.json"],
+	"compilerOptions": {
+		"module": "NodeNext"
+	},
+	"include": ["**/*.js", "**/*.ts"]
 }

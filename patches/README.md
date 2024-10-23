@@ -3,9 +3,9 @@
 These patches use [patch-package](https://github.com/ds300/patch-package) to update dependencies which have unpublished
 fixes.
 
-## @mapeo/ipc
+## @comapeo/ipc
 
-### [Change imports to avoid calling unavailable code](./@mapeo+ipc+0.5.0+001+fix-client-server-import.patch)
+### [Change imports to avoid calling unavailable code](./@comapeo+ipc+2.0.2+001+fix-client-server-import.patch)
 
 There was an error while running app via Expo because of exports in `rpc-reflector` package. To remove this patch, `rpc-reflector` would need to be updated not to use `encode-decode.js` file which indirect usage results in errors.
 
