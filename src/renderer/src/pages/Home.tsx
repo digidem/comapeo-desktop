@@ -1,4 +1,4 @@
-import { Box, Grid, useTheme } from '@mui/material'
+import { Box, Grid2 as Grid, useTheme } from '@mui/material'
 import { defineMessages, FormattedMessage } from 'react-intl'
 
 import { Button } from '../components/Button'
@@ -34,7 +34,7 @@ export function Home() {
 				An Awana Digital Product
 			</Text>
 			<Grid container alignItems="center" spacing={2} wrap="nowrap">
-				<Grid item>
+				<Grid>
 					<Button
 						name="create-project"
 						onClick={() =>
@@ -44,17 +44,17 @@ export function Home() {
 						<FormattedMessage {...m.create} />
 					</Button>
 				</Grid>
-				<Grid item>
+				<Grid>
 					<Button variant="outlined" color="secondary">
 						An Outlined Button!
 					</Button>
 				</Grid>
-				<Grid item>
+				<Grid>
 					<Button variant="text" color="success">
 						A Typography Button!
 					</Button>
 				</Grid>
-				<Grid item>
+				<Grid>
 					<Button style={{ backgroundColor: theme.palette.primary.dark }}>
 						Style override
 					</Button>
@@ -62,7 +62,7 @@ export function Home() {
 			</Grid>
 			<Box mt={2}>
 				<Grid container spacing={2}>
-					<Grid item xs={12}>
+					<Grid size={{ xs: 12 }}>
 						<Button
 							size="fullWidth"
 							color="success"
