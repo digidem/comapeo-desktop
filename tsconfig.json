@@ -12,7 +12,7 @@
 		"strict": true,
 		"noUncheckedIndexedAccess": true,
 		"noFallthroughCasesInSwitch": true,
-		"noUnusedLocals": true,
+		"noUnusedLocals": false, // May want to enable but we let typescript-eslint handle checking this since it can be more granular
 		"noImplicitOverride": true,
 		"module": "preserve",
 		"noEmit": true,
