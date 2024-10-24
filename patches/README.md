@@ -21,3 +21,7 @@ There was an error while running app via Expo because of exports in `rpc-reflect
 
 There was an error while running app via Expo because of `duplex` method call in `rpc-reflector` package.
 As this feature is not used in CoMapeo, this can be safely hardcoded to `false`. To remove this patch, `rpc-reflector` would need to be updated to account for this bug.
+
+### [Use type imports in types-only file](./rpc-reflector+1.3.11+002+fix-verbatim-module-syntax-issues.patch)
+
+Was running into an issue where TS was complaining about the type of imports being used in the offending files. This is partially fixed with [this commit](https://github.com/digidem/rpc-reflector/commit/e7c1becbc6fa7c9c1345b99ca20fc3331dc756af) (not yet published though) and fully fixed once [this](https://github.com/digidem/rpc-reflector/pull/22) is merged and published.
