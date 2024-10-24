@@ -1,4 +1,8 @@
-import { CSSProperties, MouseEventHandler, PropsWithChildren } from 'react'
+import {
+	type CSSProperties,
+	type MouseEventHandler,
+	type PropsWithChildren,
+} from 'react'
 import { Button as MuiButton } from '@mui/material'
 
 type CustomButtonProps = PropsWithChildren<{

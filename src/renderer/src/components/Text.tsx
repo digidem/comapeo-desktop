@@ -1,4 +1,4 @@
-import { CSSProperties, PropsWithChildren } from 'react'
+import { type CSSProperties, type PropsWithChildren } from 'react'
 import { type Variant } from '@mui/material/styles/createTypography'
 import Typography from '@mui/material/Typography'
 
