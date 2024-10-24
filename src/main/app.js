@@ -6,15 +6,17 @@ import {
 	BrowserWindow,
 	ipcMain,
 	MessageChannelMain,
+	safeStorage,
 	utilityProcess,
 } from 'electron'
 
-import { getSystemLocale, intl } from './intl.js'
+import { getSystemLocale, Intl } from './intl.js'
 import { logger } from './logger.js'
-import { getDevUserDataPath, isDevMode } from './utils.js'
+import { isDevMode } from './utils.js'
 
 /**
  * @import { ProcessArgs as CoreProcessArgs, NewClientMessage } from './service/core.js'
+ * @import { ConfigStore } from './config-store.js'
  */
 
 const _menuMessages = defineMessages({
@@ -32,7 +34,70 @@ const MAIN_WINDOW_PRELOAD_PATH = fileURLToPath(
 	new URL('../preload/main-window.js', import.meta.url),
 )
 
-function setupIpc() {
+/**
+ * @param {Object} opts
+ * @param {ConfigStore} opts.configStore
+ *
+ * @returns {Promise<void>}
+ */
+export async function start({ configStore }) {
+	// Quit when all windows are closed, except on macOS. There, it's common
+	// for applications and their menu bar to stay active until the user quits
+	// explicitly with Cmd + Q.
+	app.on('window-all-closed', () => {
+		if (process.platform !== 'darwin') {
+			app.quit()
+		}
+	})
+
+	app.on('activate', () => {
+		// On OS X it's common to re-create a window in the app when the
+		// dock icon is clicked and there are no other windows open.
+		if (BrowserWindow.getAllWindows().length === 0) {
+			createMainWindow()
+		}
+	})
+
+	const intl = setupIntl({ configStore })
+
+	setupIpc({ intl })
+
+	await app.whenReady()
+
+	const mainWindow = createMainWindow()
+
+	const rootKey = loadRootKey({ configStore })
+
+	setupServices({ rootKey, window: mainWindow })
+}
+
+/**
+ * @param {Object} opts
+ * @param {ConfigStore} opts.configStore
+ *
+ * @returns {Intl}
+ */
+function setupIntl({ configStore }) {
+	const intl = new Intl({
+		configStore,
+	})
+
+	let locale = intl.load()
+
+	if (!locale) {
+		locale = getSystemLocale()
+		logger.info('Using system locale', locale)
+		intl.updateLocale(locale)
+	}
+
+	return intl
+}
+
+/**
+ * @param {Object} opts
+ * @param {Intl} opts.intl
+ */
+function setupIpc({ intl }) {
 	ipcMain.handle('locale:get', (_event) => {
 		logger.debug('Locale is', intl.locale)
 		return intl.locale
@@ -51,35 +116,22 @@ function setupIpc() {
 	)
 }
 
-function setupIntl() {
-	let locale = intl.load()
-
-	if (!locale) {
-		locale = getSystemLocale()
-		logger.info('Using system locale', locale)
-		intl.updateLocale(locale)
-	}
-}
-
 /**
- * @param {BrowserWindow} window
+ * @param {Object} opts
+ * @param {string} opts.rootKey
+ * @param {BrowserWindow} opts.window
  */
-function setupServices(window) {
-	// TODO: Gotta store this key using safeStorage?
-	const rootKey = process.env.ROOT_KEY
-		? Buffer.from(process.env.ROOT_KEY, 'hex')
-		: randomBytes(16).toString('hex')
-
+function setupServices({ rootKey, window }) {
 	/** @type {CoreProcessArgs} */
 	const flags = {
-		rootKey: rootKey.toString('hex'),
+		rootKey,
 		storageDirectory: app.getPath('userData'),
 	}
 
-	const mapeoCoreService = utilityProcess.fork(
+	const coreService = utilityProcess.fork(
 		CORE_SERVICE_PATH,
 		Object.entries(flags).map(([flag, value]) => `--${flag}=${value}`),
-		{ serviceName: `Mapeo Core Utility Process` },
+		{ serviceName: `CoMapeo Core Utility Process` },
 	)
 
 	/** @type {NewClientMessage} */
@@ -91,7 +143,7 @@ function setupServices(window) {
 	// We can't use ipcMain.handle() here, because the reply needs to transfer a MessagePort.
 	window.webContents.ipc.on('request-comapeo-port', (event) => {
 		const { port1, port2 } = new MessageChannelMain()
-		mapeoCoreService.postMessage(newClientMessage, [port1])
+		coreService.postMessage(newClientMessage, [port1])
 		event.senderFrame.postMessage('provide-comapeo-port', null, [port2])
 	})
 }
@@ -116,35 +168,36 @@ function createMainWindow() {
 	return mainWindow
 }
 
-export async function start() {
-	// Set userData to alternative location if in development mode (to avoid conflicts/overriding production installation)
-	if (isDevMode()) {
-		app.setPath('userData', getDevUserDataPath())
+/**
+ * @param {Object} opts
+ * @param {ConfigStore} opts.configStore
+ *
+ * @returns {string} Root key as hexidecimal string
+ */
+function loadRootKey({ configStore }) {
+	const canEncrypt = safeStorage.isEncryptionAvailable()
+
+	const storedRootKey = configStore.get('rootKey')
+
+	if (!storedRootKey) {
+		const rootKey = randomBytes(16).toString('hex')
+
+		if (canEncrypt) {
+			configStore.set(
+				'rootKey',
+				safeStorage.encryptString(rootKey).toString('hex'),
+			)
+		} else {
+			configStore.set('rootKey', rootKey)
+		}
+
+		return rootKey
 	}
 
-	// Quit when all windows are closed, except on macOS. There, it's common
-	// for applications and their menu bar to stay active until the user quits
-	// explicitly with Cmd + Q.
-	app.on('window-all-closed', () => {
-		if (process.platform !== 'darwin') {
-			app.quit()
-		}
-	})
+	// TODO: Consumer needs to handle case when decryption fails?
+	const rootKey = canEncrypt
+		? safeStorage.decryptString(Buffer.from(storedRootKey, 'hex'))
+		: storedRootKey
 
-	app.on('activate', () => {
-		// On OS X it's common to re-create a window in the app when the
-		// dock icon is clicked and there are no other windows open.
-		if (BrowserWindow.getAllWindows().length === 0) {
-			createMainWindow()
-		}
-	})
-
-	setupIntl()
-	setupIpc()
-
-	await app.whenReady()
-
-	const mainWindow = createMainWindow()
-
-	setupServices(mainWindow)
+	return rootKey
 }

@@ -12,10 +12,14 @@ import { FuseV1Options, FuseVersion } from '@electron/fuses'
 import { build } from 'vite'
 
 /**
+ * @import { ForgeConfig, ForgeHookFn } from '@electron-forge/shared-types'
+ */
+
+/**
  * @extends {PluginBase<{}>}
  */
-class PackageRendererPlugin extends PluginBase {
-	name = 'comapeo-package-renderer'
+class CoMapeoDesktopForgePlugin extends PluginBase {
+	name = 'comapeo-desktop'
 
 	/**
 	 * @param {{}} config
@@ -23,18 +27,43 @@ class PackageRendererPlugin extends PluginBase {
 	constructor(config) {
 		super(config)
 	}
+
 	/**
 	 * @override
+	 * @type {PluginBase<{}>['getHooks']}
 	 */
 	getHooks() {
 		return {
+			readPackageJson: [this.#addAppEnvToPackageJson],
+			resolveForgeConfig: [this.#updatePackagerConfig],
+			postStart: [this.#hookViteDevServer],
 			prePackage: [this.#buildRender],
 			packageAfterCopy: [this.#moveBuiltRender],
-			readPackageJson: [this.#addAppEnvToPackageJson],
 		}
 	}
 
-	/** @type {import('@electron-forge/shared-types').ForgeMutatingHookFn<'readPackageJson'>} */
+	/**
+	 * @override
+	 * @type {PluginBase<{}>['startLogic']}
+	 */
+	async startLogic(_opts) {
+		// TODO: Start vite dev server here. Hook into forge start process in postStart hook
+		return false
+	}
+
+	/**
+	 * @type {ForgeHookFn<'postStart'>}
+	 */
+	async #hookViteDevServer(_forgeConfig, _appProcess) {
+		// TODO: Hook vite dev server process into the appProcess lifecycle (e.g. 'close' event)
+	}
+
+	/**
+	 * Kind of a lazy way of defining env-variable configuration for the app when packaged.
+	 * Might re-consider and use a proper env file loader approach instead.
+	 *
+	 * @type {ForgeHookFn<'readPackageJson'>}
+	 */
 	async #addAppEnvToPackageJson(forgeConfig, packageJson) {
 		packageJson.appEnv = {
 			prod: true,
@@ -44,14 +73,56 @@ class PackageRendererPlugin extends PluginBase {
 		return packageJson
 	}
 
-	/** @type {import('@electron-forge/shared-types').ForgeSimpleHookFn<'prePackage'>} */
+	/**
+	 * Updates `packagerConfig.ignore` to exclude unnecessary files and directories from the final package output.
+	 *
+	 * @type {ForgeHookFn<'resolveForgeConfig'>}
+	 */
+	async #updatePackagerConfig(forgeConfig) {
+		const existingIgnores = forgeConfig.packagerConfig.ignore
+
+		const ignoresToAppend = [
+			// Unnecessary directories
+			/^\/(messages|data|docs|\.husky)/,
+		]
+
+		if (existingIgnores) {
+			if (typeof existingIgnores === 'function') {
+				throw new Error(
+					'Cannot override `packagerConfig.ignores` since it is a function',
+				)
+			}
+
+			forgeConfig.packagerConfig.ignore = [
+				...(Array.isArray(existingIgnores)
+					? existingIgnores
+					: [existingIgnores]),
+				...ignoresToAppend,
+			]
+		} else {
+			forgeConfig.packagerConfig.ignore = [...ignoresToAppend]
+		}
+
+		return forgeConfig
+	}
+
+	/**
+	 * Builds the renderer app with Vite (similar to `npm run vite:build`).
+	 *
+	 * @type {ForgeHookFn<'prePackage'>}
+	 */
 	async #buildRender() {
 		await build({
 			root: fileURLToPath(new URL('./src/renderer', import.meta.url)),
 		})
 	}
 
-	/** @type {import('@electron-forge/shared-types').ForgeSimpleHookFn<'packageAfterCopy'>} */
+	/**
+	 * Moves the built renderer app from Vite's build output directory (usually `/dist/`) into the appropriate
+	 * packaged app directory (`/<buildPath>/src/renderer/`).
+	 *
+	 * @type {ForgeHookFn<'packageAfterCopy'>}
+	 */
 	async #moveBuiltRender(_config, buildPath) {
 		const outPath = path.join(buildPath, './src/renderer')
 
@@ -67,15 +138,11 @@ class PackageRendererPlugin extends PluginBase {
 	}
 }
 
-/** @type {import('@electron-forge/shared-types').ForgeConfig} */
+/** @type {ForgeConfig} */
 export default {
 	packagerConfig: {
-		// TODO: Electron does some fs mangling to work in asar. Setting this to false (and having the app code set the process.noAsar)
-		// doesn't seem to work when running the packaged app.
 		asar: true,
 		name: 'CoMapeo Desktop',
-		// TODO: may need to disable pruning depending on how deps are resolved
-		// prune: false,
 	},
 	rebuildConfig: {},
 	makers: [
@@ -85,10 +152,9 @@ export default {
 		new MakerRpm({}, ['linux']),
 	],
 	plugins: [
-		new PackageRendererPlugin({}),
+		new CoMapeoDesktopForgePlugin({}),
 		// Can only be used when packagerConfig.asar is enabled
 		new AutoUnpackNativesPlugin({}),
-		// new AutoUnpackNativesPlugin({}),
 		// Fuses are used to enable/disable various Electron functionality
 		// at package time, before code signing the application
 		new FusesPlugin({
@@ -102,3 +168,10 @@ export default {
 		}),
 	],
 }
+
+/**
+ * TODO: Remaining items to address:
+ *
+ * - Set up build identifiers (https://www.electronforge.io/config/configuration#build-identifiers)
+ * - More thorough `packagerConfig.ignore` setting
+ */

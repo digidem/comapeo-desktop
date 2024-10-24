@@ -1,11 +1,30 @@
+import { fileURLToPath } from 'node:url'
 import react from '@eslint-react/eslint-plugin'
+import { includeIgnoreFile } from '@eslint/compat'
 import js from '@eslint/js'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
 	js.configs.recommended,
-	...tseslint.configs.recommended,
+	{
+		extends: tseslint.configs.recommended,
+		rules: {
+			// Allow unused vars if prefixed with `_` (https://typescript-eslint.io/rules/no-unused-vars/)
+			'@typescript-eslint/no-unused-vars': [
+				'error',
+				{
+					args: 'all',
+					argsIgnorePattern: '^_',
+					caughtErrors: 'all',
+					caughtErrorsIgnorePattern: '^_',
+					destructuredArrayIgnorePattern: '^_',
+					varsIgnorePattern: '^_',
+					ignoreRestSiblings: true,
+				},
+			],
+		},
+	},
 	// Preload environment
 	{
 		files: ['src/preload/**/*'],
@@ -54,5 +73,5 @@ export default tseslint.config(
 		},
 	},
 	// Global ignores
-	{ ignores: ['out'] },
+	includeIgnoreFile(fileURLToPath(new URL('.gitignore', import.meta.url))),
 )

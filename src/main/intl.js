@@ -4,8 +4,10 @@ import { app } from 'electron'
 import { TypedEmitter } from 'tiny-typed-emitter'
 
 import { logger } from './logger.js'
-import { store } from './store.js'
 
+/**
+ * @import { ConfigStore } from './config-store.js'
+ */
 const require = createRequire(import.meta.url)
 
 const enTranslations = require('../../translations/main/en.json')
@@ -24,11 +26,22 @@ const messages = {
 export class Intl extends TypedEmitter {
 	static cache = createIntlCache()
 
+	/** @type {ConfigStore} */
+	#config
+
 	/** @type {IntlShape<string>} */
 	#intl
 
-	constructor(defaultLocale = 'en') {
+	/**
+	 *
+	 * @param {Object} opts
+	 * @param {ConfigStore} opts.configStore
+	 * @param {string} [opts.defaultLocale='en']
+	 *
+	 */
+	constructor({ configStore, defaultLocale = 'en' }) {
 		super()
+		this.#config = configStore
 		this.#intl = this.#createIntl(defaultLocale)
 		logger.info('Locale', this.#intl.locale)
 	}
@@ -69,12 +82,12 @@ export class Intl extends TypedEmitter {
 	}
 
 	save(locale = this.#intl.locale) {
-		store.set('locale', locale)
+		this.#config.set('locale', locale)
 	}
 
 	load() {
 		try {
-			return store.get('locale')
+			return this.#config.get('locale')
 		} catch (_err) {
 			logger.error('Failed to load locale from app settings')
 			return null
@@ -91,8 +104,6 @@ export class Intl extends TypedEmitter {
 		return this.#intl.formatMessage(...args)
 	}
 }
-
-export const intl = new Intl('en')
 
 // We only support generalized locales for now (i.e., no difference between
 // Spanish/Espana and Spanish/Latin America)
