@@ -59,21 +59,24 @@ const NewClientMessageSchema = v.object({
 
 /**
  * @typedef {v.InferInput<typeof ProcessArgsSchema>} ProcessArgs
+ *
  * @typedef {v.InferInput<typeof NewClientMessageSchema>} NewClientMessage
+ *
  * @typedef {Map<Electron.MessagePortMain, { close: () => void }>} PortToIpcMap
- * @typedef {
- *  | {
- *    status: 'active'
- *    fastifyController: FastifyController
- *    manager: MapeoManager
- *    servers: PortToIpcMap
- *   }
- * | {
- *    status: 'idle'
- *    fastifyController: null
- *    manager: null
- *    servers: PortToIpcMap
- *   } } State
+ *
+ *
+ * @typedef {{
+ * 			status: 'active'
+ * 			fastifyController: FastifyController
+ * 			manager: MapeoManager
+ * 			servers: PortToIpcMap
+ * 	  }
+ * 	| {
+ * 			status: 'idle'
+ * 			fastifyController: null
+ * 			manager: null
+ * 			servers: PortToIpcMap
+ * 	  }} State
  */
 
 /** @type {State} */
@@ -242,7 +245,6 @@ class MessagePortLike {
 	}
 
 	/**
-	 *
 	 * @param {'message'} event
 	 * @param {() => void} listener
 	 */
@@ -251,7 +253,6 @@ class MessagePortLike {
 	}
 
 	/**
-	 *
 	 * @param {'message'} event
 	 * @param {() => void} listener
 	 */

@@ -1,11 +1,11 @@
 import Store from 'electron-store'
 
 /**
- * @typedef {Store<{locale: string, rootKey?: string}>} ConfigStore
+ * @typedef {Store<{ locale: string; rootKey?: string }>} ConfigStore
  */
 
 /**
- * @returns { ConfigStore }
+ * @returns {ConfigStore}
  */
 export function createConfigStore() {
 	// @ts-expect-error Not sure how to get type inference from electron-store

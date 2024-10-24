@@ -12,7 +12,7 @@ import { FuseV1Options, FuseVersion } from '@electron/fuses'
 import { build } from 'vite'
 
 /**
- * @import { ForgeConfig, ForgeHookFn } from '@electron-forge/shared-types'
+ * @import {ForgeConfig, ForgeHookFn} from '@electron-forge/shared-types'
  */
 
 /**
@@ -29,8 +29,8 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	}
 
 	/**
-	 * @override
 	 * @type {PluginBase<{}>['getHooks']}
+	 * @override
 	 */
 	getHooks() {
 		return {
@@ -43,8 +43,8 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	}
 
 	/**
-	 * @override
 	 * @type {PluginBase<{}>['startLogic']}
+	 * @override
 	 */
 	async startLogic(_opts) {
 		// TODO: Start vite dev server here. Hook into forge start process in postStart hook
@@ -59,8 +59,9 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	}
 
 	/**
-	 * Kind of a lazy way of defining env-variable configuration for the app when packaged.
-	 * Might re-consider and use a proper env file loader approach instead.
+	 * Kind of a lazy way of defining env-variable configuration for the app when
+	 * packaged. Might re-consider and use a proper env file loader approach
+	 * instead.
 	 *
 	 * @type {ForgeHookFn<'readPackageJson'>}
 	 */
@@ -74,7 +75,8 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	}
 
 	/**
-	 * Updates `packagerConfig.ignore` to exclude unnecessary files and directories from the final package output.
+	 * Updates `packagerConfig.ignore` to exclude unnecessary files and
+	 * directories from the final package output.
 	 *
 	 * @type {ForgeHookFn<'resolveForgeConfig'>}
 	 */
@@ -118,8 +120,9 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	}
 
 	/**
-	 * Moves the built renderer app from Vite's build output directory (usually `/dist/`) into the appropriate
-	 * packaged app directory (`/<buildPath>/src/renderer/`).
+	 * Moves the built renderer app from Vite's build output directory (usually
+	 * `/dist/`) into the appropriate packaged app directory
+	 * (`/<buildPath>/src/renderer/`).
 	 *
 	 * @type {ForgeHookFn<'packageAfterCopy'>}
 	 */
@@ -172,6 +175,7 @@ export default {
 /**
  * TODO: Remaining items to address:
  *
- * - Set up build identifiers (https://www.electronforge.io/config/configuration#build-identifiers)
+ * - Set up build identifiers
+ *   (https://www.electronforge.io/config/configuration#build-identifiers)
  * - More thorough `packagerConfig.ignore` setting
  */

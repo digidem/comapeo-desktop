@@ -1,13 +1,13 @@
 // TODO: Implement useful logger things
 class Logger {
 	/**
-	 * @param  {...any} args
+	 * @param {...any} args
 	 */
 	info(...args) {
 		console.log(...args)
 	}
 	/**
-	 * @param  {...any} args
+	 * @param {...any} args
 	 */
 	error(...args) {
 		if (args[0] instanceof Error) {
@@ -17,7 +17,7 @@ class Logger {
 		}
 	}
 	/**
-	 * @param  {...any} args
+	 * @param {...any} args
 	 */
 	warn(...args) {
 		console.warn(...args)

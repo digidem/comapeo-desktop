@@ -6,7 +6,13 @@ export default {
 	singleQuote: true,
 	arrowParens: 'always',
 	trailingComma: 'all',
-	plugins: ['@ianvs/prettier-plugin-sort-imports'],
+	plugins: [
+		'@ianvs/prettier-plugin-sort-imports',
+		'./node_modules/prettier-plugin-jsdoc/dist/index.js',
+	],
+	/**
+	 * Configuration @ianvs/prettier-plugin-sort-imports
+	 */
 	// Mostly inspired by examples from https://github.com/IanVS/prettier-plugin-sort-imports?tab=readme-ov-file#importorder
 	importOrder: [
 		'<BUILT_IN_MODULES>',
@@ -20,4 +26,8 @@ export default {
 	importOrderTypeScriptVersion: '5.6.3',
 	// TODO: Uncomment when a release newer than 4.3.1 is out
 	// importOrderCaseSensitive: true,
+	/**
+	 * Configuration for prettier-plugin-jsdoc
+	 */
+	jsdocCommentLineStrategy: 'keep',
 }

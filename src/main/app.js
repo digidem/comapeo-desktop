@@ -15,8 +15,8 @@ import { logger } from './logger.js'
 import { isDevMode } from './utils.js'
 
 /**
- * @import { ProcessArgs as CoreProcessArgs, NewClientMessage } from './service/core.js'
- * @import { ConfigStore } from './config-store.js'
+ * @import {ProcessArgs as CoreProcessArgs, NewClientMessage} from './service/core.js'
+ * @import {ConfigStore} from './config-store.js'
  */
 
 const _menuMessages = defineMessages({
@@ -37,7 +37,6 @@ const MAIN_WINDOW_PRELOAD_PATH = fileURLToPath(
 /**
  * @param {Object} opts
  * @param {ConfigStore} opts.configStore
- *
  * @returns {Promise<void>}
  */
 export async function start({ configStore }) {
@@ -74,7 +73,6 @@ export async function start({ configStore }) {
 /**
  * @param {Object} opts
  * @param {ConfigStore} opts.configStore
- *
  * @returns {Intl}
  */
 function setupIntl({ configStore }) {
@@ -106,7 +104,7 @@ function setupIpc({ intl }) {
 	ipcMain.handle(
 		'locale:update',
 		/**
-		 * @param {*} _event
+		 * @param {any} _event
 		 * @param {string} locale
 		 */
 		(_event, locale) => {
@@ -171,7 +169,6 @@ function createMainWindow() {
 /**
  * @param {Object} opts
  * @param {ConfigStore} opts.configStore
- *
  * @returns {string} Root key as hexidecimal string
  */
 function loadRootKey({ configStore }) {

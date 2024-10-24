@@ -6,14 +6,14 @@ import { TypedEmitter } from 'tiny-typed-emitter'
 import { logger } from './logger.js'
 
 /**
- * @import { ConfigStore } from './config-store.js'
+ * @import {ConfigStore} from './config-store.js'
  */
 const require = createRequire(import.meta.url)
 
 const enTranslations = require('../../translations/main/en.json')
 
 /**
- * @import { IntlShape } from '@formatjs/intl'
+ * @import {IntlShape} from '@formatjs/intl'
  */
 
 const messages = {
@@ -33,11 +33,9 @@ export class Intl extends TypedEmitter {
 	#intl
 
 	/**
-	 *
 	 * @param {Object} opts
 	 * @param {ConfigStore} opts.configStore
-	 * @param {string} [opts.defaultLocale='en']
-	 *
+	 * @param {string} [opts.defaultLocale='en'] Default is `'en'`
 	 */
 	constructor({ configStore, defaultLocale = 'en' }) {
 		super()
@@ -96,7 +94,6 @@ export class Intl extends TypedEmitter {
 
 	// Exposing mostly for convenience of usage
 	/**
-	 *
 	 * @param {Parameters<IntlShape['formatMessage']>} args
 	 * @returns
 	 */
