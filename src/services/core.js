@@ -9,6 +9,10 @@ import { createMapeoServer } from '@comapeo/ipc'
 import Fastify from 'fastify'
 import * as v from 'valibot'
 
+/**
+ * @import {MessagePortMain} from 'electron'
+ */
+
 // Patching due to issues with sodium-native in more recent versions of Electron due to removal of APIs that the module relies on.
 // Replaces the usage of SecureBuffer in sodium's malloc with just a normal Buffer, which may have security implications.
 // https://github.com/sodium-friends/sodium-native/issues/185
@@ -62,8 +66,7 @@ const NewClientMessageSchema = v.object({
  *
  * @typedef {v.InferInput<typeof NewClientMessageSchema>} NewClientMessage
  *
- * @typedef {Map<Electron.MessagePortMain, { close: () => void }>} PortToIpcMap
- *
+ * @typedef {Map<MessagePortMain, { close: () => void }>} PortToIpcMap
  *
  * @typedef {{
  * 			status: 'active'

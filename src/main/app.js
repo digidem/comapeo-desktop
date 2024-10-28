@@ -15,7 +15,7 @@ import { logger } from './logger.js'
 import { isDevMode } from './utils.js'
 
 /**
- * @import {ProcessArgs as CoreProcessArgs, NewClientMessage} from './service/core.js'
+ * @import {ProcessArgs as CoreProcessArgs, NewClientMessage} from '../services/core.js'
  * @import {ConfigStore} from './config-store.js'
  */
 
@@ -27,7 +27,7 @@ const _menuMessages = defineMessages({
 })
 
 const CORE_SERVICE_PATH = fileURLToPath(
-	import.meta.resolve('./service/core.js'),
+	import.meta.resolve('../services/core.js'),
 )
 
 const MAIN_WINDOW_PRELOAD_PATH = fileURLToPath(

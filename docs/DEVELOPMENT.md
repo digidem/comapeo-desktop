@@ -20,6 +20,10 @@ The following directories can be found in `src/` and approximately represent the
 
 - `main/`: Code that runs Electron's [main process](https://www.electronjs.org/docs/latest/tutorial/process-model#the-main-process)
   - has access to Node
+  - has direct access to Electron APIs
+- `services/`: Code that is spawned and coordinated by Electron's main process, usually as a [`utilityProcess`](https://www.electronjs.org/docs/latest/api/utility-process).
+  - has access to Node
+  - does not have direct access to Electron APIs.
 - `preload/`: Code that is injected as [preload scripts](https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts) into the renderer windows created by the main process
   - has access to browser APIs and [some Electron and Node APIs](https://www.electronjs.org/docs/latest/tutorial/sandbox#preload-scripts)
 - `renderer/`: Code that runs in Electron's [renderer process](https://www.electronjs.org/docs/latest/tutorial/process-model#the-renderer-process)
