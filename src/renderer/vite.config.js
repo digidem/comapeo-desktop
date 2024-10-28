@@ -7,7 +7,7 @@ const PROJECT_ROOT_DIR = fileURLToPath(new URL('../../', import.meta.url))
 
 export default defineConfig((configEnv) => {
 	return {
-		root: import.meta.url,
+		root: path.dirname(fileURLToPath(import.meta.url)),
 		envDir: PROJECT_ROOT_DIR,
 		server: {
 			strictPort: true,
