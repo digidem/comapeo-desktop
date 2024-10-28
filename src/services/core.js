@@ -232,11 +232,11 @@ function initializeCore({ rootKey, storageDirectory }) {
 // Needed to account for type limitation in @comapeo/ipc: https://github.com/digidem/comapeo-ipc/blob/17e9a4e386c1bfd880f5a0f1c9f2b02ca712fe44/src/lib/sub-channel.js#L16
 // Electron.MessagePortMain more closely follows Node's event listener interface, which uses on/off and addListener/removeListener
 class MessagePortLike {
-	/** @type {Electron.MessagePortMain} */
+	/** @type {MessagePortMain} */
 	#port
 
 	/**
-	 * @param {Electron.MessagePortMain} port
+	 * @param {MessagePortMain} port
 	 */
 	constructor(port) {
 		this.#port = port
