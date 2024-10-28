@@ -9,6 +9,13 @@ import { getDevUserDataPath, isDevMode } from './utils.js'
 
 const require = createRequire(import.meta.url)
 
+const packageJson = require('../../package.json')
+
+// @ts-expect-error Not worth trying to make TS happy
+if (packageJson.asar === false) {
+	process.noAsar = true
+}
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
 	app.quit()

@@ -1,4 +1,4 @@
-import assert from 'assert'
+import assert from 'node:assert'
 import { mkdirSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import path from 'node:path'

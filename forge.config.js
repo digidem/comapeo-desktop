@@ -67,7 +67,6 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	 */
 	async #addAppEnvToPackageJson(forgeConfig, packageJson) {
 		packageJson.appEnv = {
-			prod: true,
 			asar: forgeConfig.packagerConfig.asar,
 		}
 
@@ -121,8 +120,8 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 
 	/**
 	 * Moves the built renderer app from Vite's build output directory (usually
-	 * `/dist/`) into the appropriate packaged app directory
-	 * (`/<buildPath>/src/renderer/`).
+	 * `/dist/`) into the appropriate packaged app
+	 * directory(`/<buildPath>/src/renderer/`).
 	 *
 	 * @type {ForgeHookFn<'packageAfterCopy'>}
 	 */
@@ -140,11 +139,39 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 		await fs.rename(path.join(buildPath, './dist/renderer'), outPath)
 	}
 }
+/**
+ * TODO: Remaining items to address:
+ *
+ * - Set up build identifiers
+ *   (https://www.electronforge.io/config/configuration#build-identifiers)
+ * - More thorough `packagerConfig.ignore` setting
+ */
 
-/** @type {ForgeConfig} */
+const NO_ASAR = !!process.env.NO_ASAR
+
+/** @type {ForgeConfig['plugins']} */
+const plugins = [
+	new CoMapeoDesktopForgePlugin({}),
+	// Fuses are used to enable/disable various Electron functionality
+	// at package time, before code signing the application
+	new FusesPlugin({
+		version: FuseVersion.V1,
+		[FuseV1Options.RunAsNode]: false,
+		[FuseV1Options.EnableCookieEncryption]: true,
+		[FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
+		[FuseV1Options.EnableNodeCliInspectArguments]: false,
+		[FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
+		[FuseV1Options.OnlyLoadAppFromAsar]: !NO_ASAR,
+	}),
+]
+
+if (!NO_ASAR) {
+	plugins.push(new AutoUnpackNativesPlugin({}))
+}
+
 export default {
 	packagerConfig: {
-		asar: true,
+		asar: !NO_ASAR,
 		name: 'CoMapeo Desktop',
 	},
 	rebuildConfig: {},
@@ -154,28 +181,5 @@ export default {
 		new MakerDeb({}, ['linux']),
 		new MakerRpm({}, ['linux']),
 	],
-	plugins: [
-		new CoMapeoDesktopForgePlugin({}),
-		// Can only be used when packagerConfig.asar is enabled
-		new AutoUnpackNativesPlugin({}),
-		// Fuses are used to enable/disable various Electron functionality
-		// at package time, before code signing the application
-		new FusesPlugin({
-			version: FuseVersion.V1,
-			[FuseV1Options.RunAsNode]: false,
-			[FuseV1Options.EnableCookieEncryption]: true,
-			[FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
-			[FuseV1Options.EnableNodeCliInspectArguments]: false,
-			[FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
-			[FuseV1Options.OnlyLoadAppFromAsar]: true,
-		}),
-	],
+	plugins,
 }
-
-/**
- * TODO: Remaining items to address:
- *
- * - Set up build identifiers
- *   (https://www.electronforge.io/config/configuration#build-identifiers)
- * - More thorough `packagerConfig.ignore` setting
- */
