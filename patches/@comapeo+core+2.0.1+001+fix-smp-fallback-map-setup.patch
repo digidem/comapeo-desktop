@@ -1,0 +1,21 @@
+diff --git a/node_modules/@comapeo/core/src/fastify-plugins/maps.js b/node_modules/@comapeo/core/src/fastify-plugins/maps.js
+index d3df66e..b53baad 100644
+--- a/node_modules/@comapeo/core/src/fastify-plugins/maps.js
++++ b/node_modules/@comapeo/core/src/fastify-plugins/maps.js
+@@ -86,13 +86,14 @@ export async function plugin(fastify, opts) {
+     })
+   }
+ 
+-  const fallbackMapReader = new ReaderWatch(opts.fallbackMapPath)
++  // const fallbackMapReader = new ReaderWatch(opts.fallbackMapPath)
+ 
+   fastify.addHook('onClose', () => fallbackMapReader.close().catch(noop))
+ 
+   fastify.register(SMPServerPlugin, {
+     prefix: FALLBACK_MAP_PREFIX,
+-    reader: fallbackMapReader,
++    // reader: fallbackMapReader,
++    filepath: opts.fallbackMapPath,
+   })
+ 
+   fastify.get('/style.json', async (_request, reply) => {
