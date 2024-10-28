@@ -1,6 +1,6 @@
-import { MapeoClientApi } from '@comapeo/ipc'
+import { type MapeoClientApi } from '@comapeo/ipc'
 
-import { type RuntimeApi } from '../preload/main-window/runtime'
+import { type RuntimeApi } from '../preload/runtime'
 
 declare global {
 	// Make changes here whenever you expose new things in the preload/ using exposeInMainWorld
