@@ -8,8 +8,6 @@ import { theme } from './Theme'
 
 const queryClient = new QueryClient()
 
-console.log(import.meta.env.VITE_MAPBOX_ACCESS_TOKEN)
-
 export function App() {
 	return (
 		<ThemeProvider theme={theme}>

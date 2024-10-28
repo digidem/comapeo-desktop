@@ -1,9 +1,9 @@
 /// <reference types="vite/client" />
 
-interface ImportMetaEnv {
-	readonly VITE_MAPBOX_ACCESS_TOKEN: string
-}
+// interface ImportMetaEnv {
+// 	// Define any renderer-exposed environment variables
+// }
 
-interface ImportMeta {
-	readonly env: ImportMetaEnv
-}
+// interface ImportMeta {
+// 	readonly env: ImportMetaEnv
+// }
