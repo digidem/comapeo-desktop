@@ -30,4 +30,6 @@ export default {
 	 * Configuration for prettier-plugin-jsdoc
 	 */
 	jsdocCommentLineStrategy: 'keep',
+	jsdocAddDefaultToDescription: false,
+	jsdocSeparateReturnsFromParam: true,
 }

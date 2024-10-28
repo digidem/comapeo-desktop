@@ -37,6 +37,7 @@ const MAIN_WINDOW_PRELOAD_PATH = fileURLToPath(
 /**
  * @param {Object} opts
  * @param {ConfigStore} opts.configStore
+ *
  * @returns {Promise<void>}
  */
 export async function start({ configStore }) {
@@ -73,6 +74,7 @@ export async function start({ configStore }) {
 /**
  * @param {Object} opts
  * @param {ConfigStore} opts.configStore
+ *
  * @returns {Intl}
  */
 function setupIntl({ configStore }) {
@@ -169,6 +171,7 @@ function createMainWindow() {
 /**
  * @param {Object} opts
  * @param {ConfigStore} opts.configStore
+ *
  * @returns {string} Root key as hexidecimal string
  */
 function loadRootKey({ configStore }) {

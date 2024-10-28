@@ -185,6 +185,7 @@ process.parentPort.on('message', (event) => {
  * @param {Object} opts
  * @param {Buffer} opts.rootKey
  * @param {string} opts.storageDirectory
+ *
  * @returns
  */
 function initializeCore({ rootKey, storageDirectory }) {

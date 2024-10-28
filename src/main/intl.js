@@ -95,6 +95,7 @@ export class Intl extends TypedEmitter {
 	// Exposing mostly for convenience of usage
 	/**
 	 * @param {Parameters<IntlShape['formatMessage']>} args
+	 *
 	 * @returns
 	 */
 	formatMessage(...args) {
