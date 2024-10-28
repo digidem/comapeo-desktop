@@ -13,10 +13,11 @@ import * as v from 'valibot'
  * @import {MessagePortMain} from 'electron'
  */
 
+const require = createRequire(import.meta.url)
+
 // Patching due to issues with sodium-native in more recent versions of Electron due to removal of APIs that the module relies on.
 // Replaces the usage of SecureBuffer in sodium's malloc with just a normal Buffer, which may have security implications.
 // https://github.com/holepunchto/sodium-native/issues/185
-const require = createRequire(import.meta.url)
 const sodium = require('sodium-native')
 
 /**
