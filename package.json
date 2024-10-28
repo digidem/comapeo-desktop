@@ -41,6 +41,7 @@
 		"lint:format": "prettier --cache --check .",
 		"lint": "npm-run-all --print-label --parallel lint:*",
 		"types:main": "tsc -p src/main/tsconfig.json",
+		"types:services": "tsc -p src/services/tsconfig.json",
 		"types:preload": "tsc -p src/preload/tsconfig.json",
 		"types:renderer": "tsc -p src/renderer/tsconfig.json",
 		"types": "npm-run-all --print-label --parallel --continue-on-error types:*",
