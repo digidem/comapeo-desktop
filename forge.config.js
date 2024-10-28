@@ -141,13 +141,6 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 		await fs.rename(path.join(buildPath, './dist/renderer'), outPath)
 	}
 }
-/**
- * TODO: Remaining items to address:
- *
- * - Set up build identifiers
- *   (https://www.electronforge.io/config/configuration#build-identifiers)
- * - More thorough `packagerConfig.ignore` setting
- */
 
 /** @type {boolean} */
 let ASAR_ENABLED
