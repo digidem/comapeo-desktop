@@ -45,9 +45,7 @@ Make sure you have the desired Node version installed. For this project we encou
 
 ### Environment variables
 
-Create a copy of the [`.env.template`](../.env.template) and call it `.env`.
-
-- `MAPBOX_ACCESS_TOKEN`: A public access token from Mapbox ([documentation](https://docs.mapbox.com/help/getting-started/access-tokens/)) that allows the app to access online map styles. Reach out to the team or create your own.
+Create a copy of the [`.env.template`](../.env.template) and call it `.env`. At the moment, we do not make use of this, but this will most likely change soon.
 
 ### Running the app
 
