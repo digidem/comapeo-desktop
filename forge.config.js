@@ -149,7 +149,20 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
  * - More thorough `packagerConfig.ignore` setting
  */
 
-const NO_ASAR = !!process.env.NO_ASAR
+/** @type {boolean} */
+let ASAR_ENABLED
+
+if (process.env.ASAR) {
+	if (process.env.ASAR === 'true') {
+		ASAR_ENABLED = true
+	} else if (process.env.ASAR === 'false') {
+		ASAR_ENABLED = false
+	} else {
+		throw new Error("ASAR env variable must be 'true' or 'false'")
+	}
+} else {
+	ASAR_ENABLED = true
+}
 
 /** @type {ForgeConfig['plugins']} */
 const plugins = [
@@ -163,17 +176,17 @@ const plugins = [
 		[FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
 		[FuseV1Options.EnableNodeCliInspectArguments]: false,
 		[FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
-		[FuseV1Options.OnlyLoadAppFromAsar]: !NO_ASAR,
+		[FuseV1Options.OnlyLoadAppFromAsar]: ASAR_ENABLED,
 	}),
 ]
 
-if (!NO_ASAR) {
+if (ASAR_ENABLED) {
 	plugins.push(new AutoUnpackNativesPlugin({}))
 }
 
 export default {
 	packagerConfig: {
-		asar: !NO_ASAR,
+		asar: ASAR_ENABLED,
 		name: 'CoMapeo Desktop',
 	},
 	rebuildConfig: {},
