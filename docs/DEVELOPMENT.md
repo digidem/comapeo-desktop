@@ -18,15 +18,15 @@
 
 The following directories can be found in `src/` and approximately represent the Electron processes of interest:
 
-- `main/`: Code that runs Electron's [main process](https://www.electronjs.org/docs/latest/tutorial/process-model#the-main-process)
+- [`main/`](../src/main/): Code that runs Electron's [main process](https://www.electronjs.org/docs/latest/tutorial/process-model#the-main-process).
   - has access to Node
   - has direct access to Electron APIs
-- `services/`: Code that is spawned and coordinated by Electron's main process, usually as a [`utilityProcess`](https://www.electronjs.org/docs/latest/api/utility-process).
+- [`services/`](../src/services): Code that is spawned and coordinated by Electron's main process, usually as a [`utilityProcess`](https://www.electronjs.org/docs/latest/api/utility-process).
   - has access to Node
   - does not have direct access to Electron APIs.
-- `preload/`: Code that is injected as [preload scripts](https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts) into the renderer windows created by the main process
+- [`preload/`](../src/preload/): Code that is injected as [preload scripts](https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts) into the renderer windows created by the main process.
   - has access to browser APIs and [some Electron and Node APIs](https://www.electronjs.org/docs/latest/tutorial/sandbox#preload-scripts)
-- `renderer/`: Code that runs in Electron's [renderer process](https://www.electronjs.org/docs/latest/tutorial/process-model#the-renderer-process)
+- [`renderer/`](../src/renderer/): Code that runs in Electron's [renderer process](https://www.electronjs.org/docs/latest/tutorial/process-model#the-renderer-process).
   - has access to browser APIs
 
 ### Electron Runtime
@@ -41,13 +41,13 @@ For example, in [`src/preload/main-window.js`](../src/preload/main-window.js), w
 
 ## Developing locally
 
-Make sure you have the desired Node version installed. For this project we encourage using the version that's specified in [`.nvmrc`](../.nvmrc) (or [`.tool-versions`](../.tool-versions)) file. We recommend using a proper version management tool to install and manage Node versions, such as [nvm](https://github.com/nvm-sh/nvm), [fnm](https://github.com/Schniz/fnm), [asdf](https://asdf-vm.com/), or [mise](https://mise.jdx.dev/).
+Make sure you have the desired Node version installed. For this project we encourage using the version that's specified in the [`.nvmrc`](../.nvmrc) (or [`.tool-versions`](../.tool-versions)) file. We recommend using a proper version management tool to install and manage Node versions, such as [nvm](https://github.com/nvm-sh/nvm), [fnm](https://github.com/Schniz/fnm), [asdf](https://asdf-vm.com/), or [mise](https://mise.jdx.dev/).
 
 ### Environment variables
 
 Create a copy of the [`.env.template`](../.env.template) and call it `.env`.
 
-- `VITE_MAPBOX_ACCESS_TOKEN`: A public access token from Mapbox ([documentation](https://docs.mapbox.com/help/getting-started/access-tokens/)) that allows the app to access online map styles. Reach out to the team or create your own.
+- `MAPBOX_ACCESS_TOKEN`: A public access token from Mapbox ([documentation](https://docs.mapbox.com/help/getting-started/access-tokens/)) that allows the app to access online map styles. Reach out to the team or create your own.
 
 ### Running the app
 
@@ -106,3 +106,5 @@ The [Electron Forge docs](https://www.electronforge.io/) are pretty informative 
 All commands place the built assets in the `out/` directory.
 
 If you're running into an error with any of the Forge-related commands but not seeing any output in the console, you probably have to prefix the command with `DEBUG=electron-forge` e.g. `DEBUG=electron-forge npm run forge:package`.
+
+By default, we package the app in the [ASAR](https://github.com/electron/asar) format. However, it can be helpful to avoid doing that for debugging purposes (e.g. building locally), in which case you can specify a `NO_ASAR` env variable when running the relevant Forge command e.g. `NO_ASAR=true npm run forge:package`.
