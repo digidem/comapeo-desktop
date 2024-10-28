@@ -84,9 +84,9 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 
 		const ignoresToAppend = [
 			// Unnecessary directories
-			/^\/(messages|data|docs|\.husky|patches)/,
+			/^\/(messages|data|docs|\.husky|patches|\.github)/,
 			// Unecessary files
-			/^\/(\.env\.template|.eslintcache|\.gitignore|.*\.config\.js|\.prettier.*|\.nvmrc)/,
+			/^\/(\.env\.template|.eslintcache|\.gitignore|.*\.config\.js|\.prettier.*|\.nvmrc|\.tool-versions)/,
 		]
 
 		if (existingIgnores) {
