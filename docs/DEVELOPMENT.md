@@ -60,7 +60,7 @@ npm start                  # Build translations, then build the app in developme
 
 - Changes in the `src/renderer/` should immediately automatically be reflected in the app
 - Changes in the `src/preload/` require the window to be refreshed to be reflected in the relevant window. Either go to the `View > Reload` menu option or use the keyboard shortcut (e.g. <kbd>CMD + R</kbd> on macOS, <kbd>CTRL + R</kbd> on Linux, Windows)
-- Changes to `src/main/` require restarting the app. You can either:
+- Changes to `src/main/` or `src/services/` require restarting the app. You can either:
   1. Stop the process that is running `npm start` and rerun it.
   2. Type <kbd>R + S + Enter</kbd> in the process that is running `npm start`, which tells Forge to restart the main process.
 - In development, the `userData` directory is set to the `data/` directory by default. This provides the following benefits:
@@ -68,6 +68,7 @@ npm start                  # Build translations, then build the app in developme
   - Easier to debug because you don't have to spend as much time to figure out which directory to look at (it changes based on operating system)
 - If you want to change the `userData` directory, define an environment variable called `USER_DATA_PATH` that can be used when calling `npm start`. For example, running `USER_DATA_PATH=./my_data npm start` will create a `my_data` directory relative to the project root. This is useful for creating different "profiles" and isolating data for the purpose of testing features or reproducing bugs
 - **If you are installing a package that is only going to be used by code the renderer (e.g. a React component library), you most likely should install it as a dev dependency instead of a direct dependency**. This differs from typical development workflows you see elsewhere, but the reasoning is that during the packaging stage of the app, [`@electron/packager`](https://github.com/electron/packager) avoids copying dev dependencies found in the `node_modules` directory. Since we bundle our renderer code, we do not need to copy over these dependencies, which results in a significant decrease in disk space occupied by the app.
+- We use [`debug`](https://github.com/debug-js/debug) for much of our logging in the main process. In order to see them, you can specify the `DEBUG` environment variable when running the app e.g. `DEBUG=comapeo:* npm start`.
 
 ### Helpful tips about configuration
 
@@ -106,4 +107,4 @@ All commands place the built assets in the `out/` directory.
 
 If you're running into an error with any of the Forge-related commands but not seeing any output in the console, you probably have to prefix the command with `DEBUG=electron-forge` e.g. `DEBUG=electron-forge npm run forge:package`.
 
-By default, we package the app in the [ASAR](https://github.com/electron/asar) format. However, it can be helpful to avoid doing that for debugging purposes (e.g. building locally), in which case you can specify a `ASAR=true` env variable when running the relevant Forge command e.g. `ASAR=true npm run forge:package`.
+By default, we package the app in the [ASAR](https://github.com/electron/asar) format. However, it can be helpful to avoid doing that for debugging purposes (e.g. building locally), in which case you can specify a `ASAR=true` environment variable when running the relevant Forge command e.g. `ASAR=true npm run forge:package`.
