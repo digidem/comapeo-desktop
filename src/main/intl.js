@@ -1,10 +1,10 @@
 import { createRequire } from 'node:module'
 import { createIntl, createIntlCache } from '@formatjs/intl'
-import { app } from 'electron'
+import debug from 'debug'
+import { app } from 'electron/main'
 import { TypedEmitter } from 'tiny-typed-emitter'
 
-import { logger } from './logger.js'
-
+const log = debug('comapeo:main:intl')
 /**
  * @import {ConfigStore} from './config-store.js'
  */
@@ -41,7 +41,7 @@ export class Intl extends TypedEmitter {
 		super()
 		this.#config = configStore
 		this.#intl = this.#createIntl(defaultLocale)
-		logger.info('Locale', this.#intl.locale)
+		log('Locale', this.#intl.locale)
 	}
 
 	/**
@@ -68,13 +68,13 @@ export class Intl extends TypedEmitter {
 	 */
 	updateLocale(newLocale) {
 		if (newLocale.length !== 2) {
-			logger.error(
+			log(
 				'Tried to set locale and failed, must be a 2 character string',
 				newLocale,
 			)
 			return
 		}
-		logger.info('Changing locale to', newLocale)
+		log('Changing locale to', newLocale)
 		this.#intl = this.#createIntl(newLocale)
 		this.emit('locale:change', newLocale)
 	}
@@ -87,7 +87,7 @@ export class Intl extends TypedEmitter {
 		try {
 			return this.#config.get('locale')
 		} catch (_err) {
-			logger.error('Failed to load locale from app settings')
+			log('Failed to load locale from app settings')
 			return null
 		}
 	}

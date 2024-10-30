@@ -6,8 +6,11 @@ import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 import { FastifyController, MapeoManager } from '@comapeo/core'
 import { createMapeoServer } from '@comapeo/ipc'
+import debug from 'debug'
 import Fastify from 'fastify'
 import * as v from 'valibot'
+
+const log = debug('comapeo:services:core')
 
 /**
  * @import {MessagePortMain} from 'electron'
@@ -66,20 +69,26 @@ const NewClientMessageSchema = v.object({
  * @typedef {v.InferInput<typeof ProcessArgsSchema>} ProcessArgs
  *
  * @typedef {v.InferInput<typeof NewClientMessageSchema>} NewClientMessage
- *
- * @typedef {Map<MessagePortMain, { close: () => void }>} PortToIpcMap
- *
+ */
+
+/**
+ * @private
+ * @typedef {WeakSet<MessagePortMain>} ConnectedClientPorts
+ */
+
+/**
+ * @private
  * @typedef {{
  * 			status: 'active'
  * 			fastifyController: FastifyController
  * 			manager: MapeoManager
- * 			servers: PortToIpcMap
+ * 			clientPorts: ConnectedClientPorts
  * 	  }
  * 	| {
  * 			status: 'idle'
  * 			fastifyController: null
  * 			manager: null
- * 			servers: PortToIpcMap
+ * 			clientPorts: ConnectedClientPorts
  * 	  }} State
  */
 
@@ -88,7 +97,7 @@ let state = {
 	status: 'idle',
 	fastifyController: null,
 	manager: null,
-	servers: new Map(),
+	clientPorts: new WeakSet(),
 }
 
 const { values } = parseArgs({
@@ -120,12 +129,13 @@ state = {
 // We might get multiple clients, for instance if there are multiple windows,
 // or if the main window reloads.
 process.parentPort.on('message', (event) => {
+	log('RECEIVED EVENT', event)
 	const [port] = event.ports
 
 	assert(port)
 
 	if (!v.is(NewClientMessageSchema, event.data)) {
-		console.log(`Unrecognized message: ${JSON.stringify(event)}`)
+		log(`Unrecognized message: ${JSON.stringify(event)}`)
 		return
 	}
 
@@ -133,14 +143,15 @@ process.parentPort.on('message', (event) => {
 
 	switch (data.type) {
 		case 'core:new-client': {
-			if (state.servers.has(port)) {
-				console.log(
+			if (state.clientPorts.has(port)) {
+				log(
 					`Ignoring 'core:new-client' message because message port already initialized`,
 				)
 				return
 			}
 
 			switch (state.status) {
+				// Initialize core and set up the RPC connection
 				case 'idle': {
 					const { manager, fastifyController } = initializeCore({
 						rootKey,
@@ -150,18 +161,21 @@ process.parentPort.on('message', (event) => {
 					const server = createMapeoServer(manager, new MessagePortLike(port))
 
 					port.on('close', () => {
+						log(`Port associated with client ${data.payload.clientId} closed`)
 						server.close()
-						state.servers.delete(port)
+						state.clientPorts.delete(port)
 					})
 
 					state = {
 						status: 'active',
 						manager,
 						fastifyController,
-						servers: new Map([[port, server]]),
+						clientPorts: new WeakSet([port]),
 					}
+
 					break
 				}
+				// Create another RPC connection
 				case 'active': {
 					const server = createMapeoServer(
 						state.manager,
@@ -169,11 +183,13 @@ process.parentPort.on('message', (event) => {
 					)
 
 					port.on('close', () => {
+						log(`Port associated with client ${data.payload.clientId} closed`)
 						server.close()
-						state.servers.delete(port)
+						state.clientPorts.delete(port)
 					})
 
-					state.servers.set(port, server)
+					state.clientPorts.add(port)
+
 					break
 				}
 			}
@@ -189,8 +205,6 @@ process.parentPort.on('message', (event) => {
  * @param {Object} opts
  * @param {Buffer} opts.rootKey
  * @param {string} opts.storageDirectory
- *
- * @returns
  */
 function initializeCore({ rootKey, storageDirectory }) {
 	const databaseDirectory = path.join(storageDirectory, DB_DIR_NAME)
@@ -200,6 +214,7 @@ function initializeCore({ rootKey, storageDirectory }) {
 	)
 	const customMapsDirectory = path.join(storageDirectory, CUSTOM_MAPS_DIR_NAME)
 
+	// TODO: Namespace directories by root key (or some derivation of it?)
 	mkdirSync(coreStorageDirectory, { recursive: true })
 	mkdirSync(databaseDirectory, { recursive: true })
 	mkdirSync(customMapsDirectory, { recursive: true })
@@ -224,7 +239,7 @@ function initializeCore({ rootKey, storageDirectory }) {
 	})
 
 	// Don't await, methods that use the server will await this internally
-	fastifyController.start()
+	fastifyController.start().catch(noop)
 
 	return { manager, fastifyController }
 }
@@ -265,3 +280,5 @@ class MessagePortLike {
 		this.#port.removeListener(event, listener)
 	}
 }
+
+function noop() {}
