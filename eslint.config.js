@@ -57,7 +57,7 @@ export default tseslint.config(
 	},
 	// Node or Node-like processes
 	{
-		files: ['*.config.js', 'src/main/**/*', 'src/services/**/*'],
+		files: ['**/*.config.js', 'src/main/**/*', 'src/services/**/*'],
 		languageOptions: {
 			globals: {
 				...globals.node,
