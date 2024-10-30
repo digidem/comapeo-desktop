@@ -10,11 +10,16 @@ import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-nati
 import { PluginBase } from '@electron-forge/plugin-base'
 import { FusesPlugin } from '@electron-forge/plugin-fuses'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
-import { build } from 'vite'
+import { build, createServer } from 'vite'
 
 /**
  * @import {ForgeConfig, ForgeHookFn} from '@electron-forge/shared-types'
+ * @import {ViteDevServer} from 'vite'
  */
+
+const RENDERER_VITE_CONFIG_PATH = fileURLToPath(
+	new URL('./src/renderer/vite.config.js', import.meta.url),
+)
 
 /**
  * @extends {PluginBase<{}>}
@@ -22,11 +27,23 @@ import { build } from 'vite'
 class CoMapeoDesktopForgePlugin extends PluginBase {
 	name = 'comapeo-desktop'
 
+	/** @type {ViteDevServer | null} */
+	#viteDevServer = null
+
 	/**
 	 * @param {{}} config
 	 */
 	constructor(config) {
 		super(config)
+
+		process.on('exit', () => {
+			this.#cleanUpVite()
+		})
+
+		process.on('SIGINT', () => {
+			this.#cleanUpVite()
+			process.exit()
+		})
 	}
 
 	/**
@@ -44,19 +61,48 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	}
 
 	/**
+	 * Starts the Vite dev server as part of the `forge start` command
+	 *
 	 * @type {PluginBase<{}>['startLogic']}
 	 * @override
 	 */
-	async startLogic(_opts) {
-		// TODO: Start vite dev server here. Hook into forge start process in postStart hook
-		return false
+	startLogic = async (_opts) => {
+		if (this.#viteDevServer) return false
+
+		return {
+			result: false,
+			tasks: [
+				{
+					title: 'Start Vite dev server',
+					task: async () => {
+						const server = await createServer({
+							configFile: RENDERER_VITE_CONFIG_PATH,
+						})
+
+						try {
+							await server.listen()
+							server.printUrls()
+							this.#viteDevServer = server
+						} catch {
+							console.log('Vite dev server already running.')
+						}
+					},
+				},
+			],
+		}
 	}
 
 	/**
+	 * Coordinates Vite with the Electron app process
+	 *
 	 * @type {ForgeHookFn<'postStart'>}
 	 */
-	async #hookViteDevServer(_forgeConfig, _appProcess) {
-		// TODO: Hook vite dev server process into the appProcess lifecycle (e.g. 'close' event)
+	#hookViteDevServer = async (_forgeConfig, appProcess) => {
+		appProcess.on('exit', () => {
+			if (appProcess.restarted) return
+			this.#cleanUpVite()
+			process.exit()
+		})
 	}
 
 	/**
@@ -117,7 +163,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	 */
 	async #buildRender() {
 		await build({
-			root: fileURLToPath(new URL('./src/renderer', import.meta.url)),
+			configFile: RENDERER_VITE_CONFIG_PATH,
 		})
 	}
 
@@ -140,6 +186,13 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 
 		await fs.mkdir(outPath)
 		await fs.rename(path.join(buildPath, './dist/renderer'), outPath)
+	}
+
+	#cleanUpVite = () => {
+		if (!this.#viteDevServer) return
+
+		this.#viteDevServer.close()
+		this.#viteDevServer = null
 	}
 }
 

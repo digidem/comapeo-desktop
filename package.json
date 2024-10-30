@@ -23,9 +23,8 @@
 	"main": "src/main/index.js",
 	"scripts": {
 		"postinstall": "patch-package",
-		"prestart": "npm run intl:translations",
-		"start": "npm-run-all --print-label --parallel vite:dev forge:start",
 		"prepare": "husky",
+		"start": "npm-run-all --print-label intl:translations forge:start",
 		"forge:start": "electron-forge start",
 		"forge:package": "electron-forge package",
 		"forge:make": "electron-forge make",
