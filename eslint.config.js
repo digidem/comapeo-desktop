@@ -10,6 +10,7 @@ export default tseslint.config(
 	{
 		extends: tseslint.configs.recommended,
 		rules: {
+			'@typescript-eslint/array-type': ['warn', { default: 'generic' }],
 			// Allow unused vars if prefixed with `_` (https://typescript-eslint.io/rules/no-unused-vars/)
 			'@typescript-eslint/no-unused-vars': [
 				'error',
