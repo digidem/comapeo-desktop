@@ -129,7 +129,6 @@ state = {
 // We might get multiple clients, for instance if there are multiple windows,
 // or if the main window reloads.
 process.parentPort.on('message', (event) => {
-	log('RECEIVED EVENT', event)
 	const [port] = event.ports
 
 	assert(port)
