@@ -188,6 +188,7 @@ function initMainWindow({ appMode, services }) {
 		mainWindow.loadURL('http://localhost:5173/')
 		mainWindow.webContents.openDevTools({
 			mode: 'detach',
+			activate: false,
 		})
 	} else {
 		mainWindow.loadFile(
