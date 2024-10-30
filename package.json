@@ -24,7 +24,7 @@
 	"scripts": {
 		"postinstall": "patch-package",
 		"prepare": "husky",
-		"start": "npm-run-all --print-label intl:translations forge:start",
+		"start": "npm-run-all intl:translations forge:start",
 		"forge:start": "electron-forge start",
 		"forge:package": "electron-forge package",
 		"forge:make": "electron-forge make",
