@@ -24,7 +24,7 @@ export default defineConfig((configEnv) => {
 		// because the file is statically loaded (not via server)
 		base: configEnv.command === 'build' ? './' : undefined,
 		build: {
-			outDir: path.resolve(PROJECT_ROOT_DIR, 'dist/renderer'),
+			outDir: path.join(PROJECT_ROOT_DIR, 'dist/renderer'),
 			emptyOutDir: true,
 		},
 		plugins: [react()],
