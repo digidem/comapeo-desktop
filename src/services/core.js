@@ -43,17 +43,13 @@ const DEFAULT_CONFIG_PATH = fileURLToPath(
 	),
 )
 
-// TODO: Read from env or something
-const MAP_ACCESS_TOKEN =
-	'pk.eyJ1IjoiZGlnaWRlbSIsImEiOiJjbHgzbTU5aDYweGVwMmtwdGV1bWgxMmJ2In0.dwyVZFnVvqrCqXicHsvE6Q'
-const DEFAULT_ONLINE_MAP_STYLE_URL = `https://api.mapbox.com/styles/v1/mapbox/outdoors-v11?access_token=${MAP_ACCESS_TOKEN}`
-
 // Do not touch these!
 const DB_DIR_NAME = 'sqlite-dbs'
 const CORE_STORAGE_DIR_NAME = 'core-storage'
 const CUSTOM_MAPS_DIR_NAME = 'maps'
 
 const ProcessArgsSchema = v.object({
+	onlineStyleUrl: v.pipe(v.string(), v.url()),
 	rootKey: v.pipe(v.string(), v.hexadecimal()),
 	storageDirectory: v.string(),
 })
@@ -103,6 +99,7 @@ let state = {
 const { values } = parseArgs({
 	strict: true,
 	options: {
+		onlineStyleUrl: { type: 'string' },
 		rootKey: { type: 'string' },
 		storageDirectory: { type: 'string' },
 	},
@@ -115,6 +112,7 @@ const rootKey = Buffer.from(parsedProcessArgs.rootKey, 'hex')
 assert(rootKey.byteLength === 16, 'Root key must be 16 bytes')
 
 const { manager, fastifyController } = initializeCore({
+	onlineStyleUrl: parsedProcessArgs.onlineStyleUrl,
 	rootKey,
 	storageDirectory: parsedProcessArgs.storageDirectory,
 })
@@ -153,6 +151,7 @@ process.parentPort.on('message', (event) => {
 				// Initialize core and set up the RPC connection
 				case 'idle': {
 					const { manager, fastifyController } = initializeCore({
+						onlineStyleUrl: parsedProcessArgs.onlineStyleUrl,
 						rootKey,
 						storageDirectory: parsedProcessArgs.storageDirectory,
 					})
@@ -202,10 +201,11 @@ process.parentPort.on('message', (event) => {
 
 /**
  * @param {Object} opts
+ * @param {string} opts.onlineStyleUrl
  * @param {Buffer} opts.rootKey
  * @param {string} opts.storageDirectory
  */
-function initializeCore({ rootKey, storageDirectory }) {
+function initializeCore({ onlineStyleUrl, rootKey, storageDirectory }) {
 	const databaseDirectory = path.join(storageDirectory, DB_DIR_NAME)
 	const coreStorageDirectory = path.join(
 		storageDirectory,
@@ -232,7 +232,7 @@ function initializeCore({ rootKey, storageDirectory }) {
 		),
 		fastify,
 		defaultConfigPath: DEFAULT_CONFIG_PATH,
-		defaultOnlineStyleUrl: DEFAULT_ONLINE_MAP_STYLE_URL,
+		defaultOnlineStyleUrl: onlineStyleUrl,
 		// TODO: Specify
 		// customMapPath: undefined
 	})

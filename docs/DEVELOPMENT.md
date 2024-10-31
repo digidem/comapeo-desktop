@@ -45,7 +45,9 @@ Make sure you have the desired Node version installed. For this project we encou
 
 ### Environment variables
 
-Create a copy of the [`.env.template`](../.env.template) and call it `.env`. At the moment, we do not make use of this, but this will most likely change soon.
+Create a copy of the [`.env.template`](../.env.template) and call it `.env` and update following variables:
+
+- `ONLINE_STYLE_URL`: Full URL that points to a compatible map's StyleJSON
 
 ### Running the app
 
@@ -104,6 +106,8 @@ The [Electron Forge docs](https://www.electronforge.io/) are pretty informative 
 - `npm run forge:publish`: upload the distributable to some cloud storage for distribution.
 
 All commands place the built assets in the `out/` directory.
+
+Our build process requires a `.env.production` file to exist at the project root in order for these commands to work. Usually this file will be generated as a prerequisite to packaging the app (e.g. in continuous deployment environments like GitHub Actions). If you are just debugging locally, you can create a copy of your `.env` file and call it `.env.production` in order to avoid errors at build time.
 
 If you're running into an error with any of the Forge-related commands but not seeing any output in the console, you probably have to prefix the command with `DEBUG=electron-forge` e.g. `DEBUG=electron-forge npm run forge:package`.
 

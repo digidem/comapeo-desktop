@@ -6,16 +6,17 @@ import { app } from 'electron/main'
 
 import { start } from './app.js'
 import { createConfigStore } from './config-store.js'
-import { getAppMode } from './utils.js'
+import { getAppEnv, getAppMode } from './utils.js'
+
+import 'dotenv/config'
 
 const require = createRequire(import.meta.url)
 
-const packageJson = require('../../package.json')
-
 const log = debug('comapeo:main:index')
 
-// @ts-expect-error Not worth trying to make TS happy
-if (packageJson.asar === false) {
+const appEnv = getAppEnv()
+
+if (appEnv.asar === false) {
 	process.noAsar = true
 }
 
@@ -33,12 +34,12 @@ if (appMode === 'development') {
 	/** @type {string} */
 	let userDataPath
 
-	if (process.env.USER_DATA_PATH) {
-		userDataPath = path.isAbsolute(process.env.USER_DATA_PATH)
-			? path.resolve(process.env.USER_DATA_PATH)
-			: path.resolve(appPath, process.env.USER_DATA_PATH)
+	if (appEnv.userDataPath) {
+		userDataPath = path.isAbsolute(appEnv.userDataPath)
+			? path.resolve(appEnv.userDataPath)
+			: path.resolve(appPath, appEnv.userDataPath)
 	} else {
-		userDataPath = path.resolve(appPath, 'data')
+		userDataPath = path.join(appPath, 'data')
 	}
 
 	app.setPath('userData', userDataPath)
@@ -47,6 +48,7 @@ if (appMode === 'development') {
 const configStore = createConfigStore()
 
 start({
+	appEnv,
 	appMode,
 	configStore,
 })

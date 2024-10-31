@@ -12,6 +12,8 @@ import { FusesPlugin } from '@electron-forge/plugin-fuses'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
 import { build, createServer } from 'vite'
 
+import 'dotenv/config'
+
 /**
  * @import {ForgeConfig, ForgeHookFn} from '@electron-forge/shared-types'
  * @import {ViteDevServer} from 'vite'
@@ -19,6 +21,10 @@ import { build, createServer } from 'vite'
 
 const RENDERER_VITE_CONFIG_PATH = fileURLToPath(
 	new URL('./src/renderer/vite.config.js', import.meta.url),
+)
+
+const PRODUCTION_ENV_FILE_PATH = fileURLToPath(
+	new URL('./.env.production', import.meta.url),
 )
 
 /**
@@ -52,7 +58,6 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	 */
 	getHooks() {
 		return {
-			readPackageJson: [this.#addAppEnvToPackageJson],
 			resolveForgeConfig: [this.#updatePackagerConfig],
 			postStart: [this.#hookViteDevServer],
 			prePackage: [this.#buildRender],
@@ -106,21 +111,6 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	}
 
 	/**
-	 * Kind of a lazy way of defining env-variable configuration for the app when
-	 * packaged. Might re-consider and use a proper env file loader approach
-	 * instead.
-	 *
-	 * @type {ForgeHookFn<'readPackageJson'>}
-	 */
-	async #addAppEnvToPackageJson(forgeConfig, packageJson) {
-		packageJson.appEnv = {
-			asar: forgeConfig.packagerConfig.asar,
-		}
-
-		return packageJson
-	}
-
-	/**
 	 * Updates `packagerConfig.ignore` to exclude unnecessary files and
 	 * directories from the final package output.
 	 *
@@ -131,9 +121,15 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 
 		const ignoresToAppend = [
 			// Unnecessary directories
-			/^\/(messages|data|docs|\.husky|patches|\.github)/,
-			// Unecessary files
-			/^\/(\.env\.template|.eslintcache|\.gitignore|.*\.config\.js|\.prettier.*|\.nvmrc|\.tool-versions)/,
+			/^\/(\.github|\.husky|assets|data|docs|messages|patches)/,
+			// Unnecessary files
+			/^\/\.env/,
+			/^\/.*\.config\.js$/,
+			/^\/\.eslintcache$/,
+			/^\/\.gitignore$/,
+			/^\/\.nvmrc$/,
+			/^\/\.prettierignore$/,
+			/^\/\.tool-versions$/,
 		]
 
 		if (existingIgnores) {
@@ -184,8 +180,20 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 			// no-op if out path doesn't exist
 		}
 
-		await fs.mkdir(outPath)
+		await fs.mkdir(outPath, { recursive: true })
 		await fs.rename(path.join(buildPath, './dist/renderer'), outPath)
+
+		try {
+			await fs.copyFile(
+				PRODUCTION_ENV_FILE_PATH,
+				path.join(buildPath, '.env.production'),
+			)
+		} catch (err) {
+			throw new Error(
+				'Failed to copy over production env file. Confirm that it is present.',
+				{ cause: err },
+			)
+		}
 	}
 
 	#cleanUpVite = () => {
