@@ -45,9 +45,9 @@ Make sure you have the desired Node version installed. For this project we encou
 
 ### Environment variables
 
-Create a copy of the [`.env.template`](../.env.template) and call it `.env` and update following variables:
+Create a copy of the [`.env.template`](../.env.template) and call it `.env`. Update the following variables:
 
-- `ONLINE_STYLE_URL`: Full URL that points to a compatible map's StyleJSON
+- `ONLINE_STYLE_URL`: Full URL that points to a compatible map's StyleJSON.
 
 ### Running the app
 
