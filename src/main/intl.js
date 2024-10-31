@@ -5,6 +5,7 @@ import { app } from 'electron/main'
 import { TypedEmitter } from 'tiny-typed-emitter'
 
 const log = debug('comapeo:main:intl')
+
 /**
  * @import {ConfigStore} from './config-store.js'
  */
@@ -40,8 +41,8 @@ export class Intl extends TypedEmitter {
 	constructor({ configStore, defaultLocale = 'en' }) {
 		super()
 		this.#config = configStore
-		this.#intl = this.#createIntl(defaultLocale)
-		log('Locale', this.#intl.locale)
+		this.#intl = this.#createIntl(this.#config.get('locale', defaultLocale))
+		log('Locale set to', this.#intl.locale)
 	}
 
 	/**
@@ -51,7 +52,7 @@ export class Intl extends TypedEmitter {
 		return createIntl(
 			{
 				locale,
-				defaultLocale: 'en',
+				defaultLocale: locale,
 				// @ts-expect-error Ideally assert locale is supported first
 				messages: messages[locale],
 			},
@@ -96,10 +97,11 @@ export class Intl extends TypedEmitter {
 	/**
 	 * @param {Parameters<IntlShape['formatMessage']>} args
 	 *
-	 * @returns
+	 * @returns {string}
 	 */
 	formatMessage(...args) {
-		return this.#intl.formatMessage(...args)
+		const result = this.#intl.formatMessage(...args)
+		return Array.isArray(result) ? result.join() : result
 	}
 }
 
