@@ -8,6 +8,7 @@ import tseslint from 'typescript-eslint'
 export default tseslint.config(
 	js.configs.recommended,
 	{
+		name: 'typescript',
 		extends: tseslint.configs.recommended,
 		rules: {
 			'@typescript-eslint/array-type': ['warn', { default: 'generic' }],
@@ -28,6 +29,7 @@ export default tseslint.config(
 	},
 	// Preload environment
 	{
+		name: 'electron-preload',
 		files: ['src/preload/**/*'],
 		languageOptions: {
 			globals: {
@@ -48,6 +50,7 @@ export default tseslint.config(
 	},
 	// Renderer process
 	{
+		name: 'electron-renderer',
 		files: ['src/renderer/**/*'],
 		...react.configs.recommended,
 		languageOptions: {
@@ -57,6 +60,7 @@ export default tseslint.config(
 	},
 	// Node or Node-like processes
 	{
+		name: 'node',
 		files: ['**/*.config.js', 'src/main/**/*', 'src/services/**/*'],
 		languageOptions: {
 			globals: {
@@ -68,6 +72,7 @@ export default tseslint.config(
 	},
 	// Applies to all contexts
 	{
+		name: 'shared',
 		languageOptions: {
 			ecmaVersion: 2022,
 			sourceType: 'module',
