@@ -1,6 +1,6 @@
 import { type CSSProperties, type PropsWithChildren } from 'react'
-import { type Variant } from '@mui/material/styles/createTypography'
 import Typography from '@mui/material/Typography'
+import { type Variant } from '@mui/material/styles/createTypography'
 
 type Kind = 'title' | 'subtitle' | 'body'
 

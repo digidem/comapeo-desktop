@@ -24,8 +24,7 @@ export default {
 		'.css$',
 	],
 	importOrderTypeScriptVersion: '5.6.3',
-	// TODO: Uncomment when a release newer than 4.3.1 is out
-	// importOrderCaseSensitive: true,
+	importOrderCaseSensitive: true,
 	/**
 	 * Configuration for prettier-plugin-jsdoc
 	 */

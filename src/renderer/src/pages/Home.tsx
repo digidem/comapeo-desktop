@@ -1,5 +1,5 @@
 import { Box, Grid2 as Grid, useTheme } from '@mui/material'
-import { defineMessages, FormattedMessage } from 'react-intl'
+import { FormattedMessage, defineMessages } from 'react-intl'
 
 import { Button } from '../components/Button'
 import { Text } from '../components/Text'

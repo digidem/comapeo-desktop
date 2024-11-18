@@ -3,15 +3,15 @@ import { fileURLToPath } from 'node:url'
 import { defineMessages } from '@formatjs/intl'
 import debug from 'debug'
 import {
-	app,
 	BrowserWindow,
-	ipcMain,
 	MessageChannelMain,
+	app,
+	ipcMain,
 	safeStorage,
 	utilityProcess,
 } from 'electron/main'
 
-import { getSystemLocale, Intl } from './intl.js'
+import { Intl, getSystemLocale } from './intl.js'
 
 const log = debug('comapeo:main:app')
 
