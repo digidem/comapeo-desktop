@@ -223,7 +223,7 @@ function initMainWindow({ appMode, services }) {
 			},
 			[port1],
 		)
-		event.senderFrame.postMessage('provide-comapeo-port', null, [port2])
+		event.senderFrame?.postMessage('provide-comapeo-port', null, [port2])
 	})
 
 	APP_STATE.browserWindows.set(mainWindow, {
