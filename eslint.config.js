@@ -50,9 +50,9 @@ export default tseslint.config(
 	},
 	// Renderer process
 	{
+		...react.configs['recommended-typescript'],
 		name: 'electron-renderer',
 		files: ['src/renderer/**/*'],
-		...react.configs.recommended,
 		languageOptions: {
 			globals: { ...globals.browser },
 			parser: tseslint.parser,
