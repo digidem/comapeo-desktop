@@ -1,5 +1,6 @@
 import * as path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
@@ -27,6 +28,6 @@ export default defineConfig((configEnv) => {
 			outDir: path.join(PROJECT_ROOT_DIR, 'dist/renderer'),
 			emptyOutDir: true,
 		},
-		plugins: [react()],
+		plugins: [TanStackRouterVite(), react()],
 	}
 })
