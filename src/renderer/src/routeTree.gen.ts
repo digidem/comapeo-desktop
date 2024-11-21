@@ -10,7 +10,7 @@
 
 // Import Routes
 
-import { Route as HomeImport } from './routes/Home'
+import { Route as MapImport } from './routes/Map'
 import { Route as WelcomeImport } from './routes/Welcome'
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
@@ -23,9 +23,9 @@ const WelcomeRoute = WelcomeImport.update({
 	getParentRoute: () => rootRoute,
 } as any)
 
-const HomeRoute = HomeImport.update({
-	id: '/Home',
-	path: '/Home',
+const MapRoute = MapImport.update({
+	id: '/Map',
+	path: '/Map',
 	getParentRoute: () => rootRoute,
 } as any)
 
@@ -46,11 +46,11 @@ declare module '@tanstack/react-router' {
 			preLoaderRoute: typeof IndexImport
 			parentRoute: typeof rootRoute
 		}
-		'/Home': {
-			id: '/Home'
-			path: '/Home'
-			fullPath: '/Home'
-			preLoaderRoute: typeof HomeImport
+		'/Map': {
+			id: '/Map'
+			path: '/Map'
+			fullPath: '/Map'
+			preLoaderRoute: typeof MapImport
 			parentRoute: typeof rootRoute
 		}
 		'/Welcome': {
@@ -67,41 +67,41 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
 	'/': typeof IndexRoute
-	'/Home': typeof HomeRoute
+	'/Map': typeof MapRoute
 	'/Welcome': typeof WelcomeRoute
 }
 
 export interface FileRoutesByTo {
 	'/': typeof IndexRoute
-	'/Home': typeof HomeRoute
+	'/Map': typeof MapRoute
 	'/Welcome': typeof WelcomeRoute
 }
 
 export interface FileRoutesById {
 	__root__: typeof rootRoute
 	'/': typeof IndexRoute
-	'/Home': typeof HomeRoute
+	'/Map': typeof MapRoute
 	'/Welcome': typeof WelcomeRoute
 }
 
 export interface FileRouteTypes {
 	fileRoutesByFullPath: FileRoutesByFullPath
-	fullPaths: '/' | '/Home' | '/Welcome'
+	fullPaths: '/' | '/Map' | '/Welcome'
 	fileRoutesByTo: FileRoutesByTo
-	to: '/' | '/Home' | '/Welcome'
-	id: '__root__' | '/' | '/Home' | '/Welcome'
+	to: '/' | '/Map' | '/Welcome'
+	id: '__root__' | '/' | '/Map' | '/Welcome'
 	fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
 	IndexRoute: typeof IndexRoute
-	HomeRoute: typeof HomeRoute
+	MapRoute: typeof MapRoute
 	WelcomeRoute: typeof WelcomeRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
 	IndexRoute: IndexRoute,
-	HomeRoute: HomeRoute,
+	MapRoute: MapRoute,
 	WelcomeRoute: WelcomeRoute,
 }
 
@@ -116,15 +116,15 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/Home",
+        "/Map",
         "/Welcome"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/Home": {
-      "filePath": "Home.tsx"
+    "/Map": {
+      "filePath": "Map.tsx"
     },
     "/Welcome": {
       "filePath": "Welcome.tsx"
