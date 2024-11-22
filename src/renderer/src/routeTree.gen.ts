@@ -10,9 +10,10 @@
 
 // Import Routes
 
-import { Route as MapImport } from './routes/Map'
-import { Route as MapTab1Import } from './routes/Map/tab1'
 import { Route as WelcomeImport } from './routes/Welcome'
+import { Route as MapMapImport } from './routes/_Map/_Map'
+import { Route as MapMapTab1Import } from './routes/_Map/_Map.tab1'
+import { Route as MapMapTab2Import } from './routes/_Map/_Map.tab2'
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 
@@ -24,22 +25,27 @@ const WelcomeRoute = WelcomeImport.update({
 	getParentRoute: () => rootRoute,
 } as any)
 
-const MapRoute = MapImport.update({
-	id: '/Map',
-	path: '/Map',
-	getParentRoute: () => rootRoute,
-} as any)
-
 const IndexRoute = IndexImport.update({
 	id: '/',
 	path: '/',
 	getParentRoute: () => rootRoute,
 } as any)
 
-const MapTab1Route = MapTab1Import.update({
+const MapMapRoute = MapMapImport.update({
+	id: '/_Map/_Map',
+	getParentRoute: () => rootRoute,
+} as any)
+
+const MapMapTab2Route = MapMapTab2Import.update({
+	id: '/tab2',
+	path: '/tab2',
+	getParentRoute: () => MapMapRoute,
+} as any)
+
+const MapMapTab1Route = MapMapTab1Import.update({
 	id: '/tab1',
 	path: '/tab1',
-	getParentRoute: () => MapRoute,
+	getParentRoute: () => MapMapRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -53,13 +59,6 @@ declare module '@tanstack/react-router' {
 			preLoaderRoute: typeof IndexImport
 			parentRoute: typeof rootRoute
 		}
-		'/Map': {
-			id: '/Map'
-			path: '/Map'
-			fullPath: '/Map'
-			preLoaderRoute: typeof MapImport
-			parentRoute: typeof rootRoute
-		}
 		'/Welcome': {
 			id: '/Welcome'
 			path: '/Welcome'
@@ -67,69 +66,95 @@ declare module '@tanstack/react-router' {
 			preLoaderRoute: typeof WelcomeImport
 			parentRoute: typeof rootRoute
 		}
-		'/Map/tab1': {
-			id: '/Map/tab1'
+		'/_Map/_Map': {
+			id: '/_Map/_Map'
+			path: ''
+			fullPath: ''
+			preLoaderRoute: typeof MapMapImport
+			parentRoute: typeof rootRoute
+		}
+		'/_Map/_Map/tab1': {
+			id: '/_Map/_Map/tab1'
 			path: '/tab1'
-			fullPath: '/Map/tab1'
-			preLoaderRoute: typeof MapTab1Import
-			parentRoute: typeof MapImport
+			fullPath: '/tab1'
+			preLoaderRoute: typeof MapMapTab1Import
+			parentRoute: typeof MapMapImport
+		}
+		'/_Map/_Map/tab2': {
+			id: '/_Map/_Map/tab2'
+			path: '/tab2'
+			fullPath: '/tab2'
+			preLoaderRoute: typeof MapMapTab2Import
+			parentRoute: typeof MapMapImport
 		}
 	}
 }
 
 // Create and export the route tree
 
-interface MapRouteChildren {
-	MapTab1Route: typeof MapTab1Route
+interface MapMapRouteChildren {
+	MapMapTab1Route: typeof MapMapTab1Route
+	MapMapTab2Route: typeof MapMapTab2Route
 }
 
-const MapRouteChildren: MapRouteChildren = {
-	MapTab1Route: MapTab1Route,
+const MapMapRouteChildren: MapMapRouteChildren = {
+	MapMapTab1Route: MapMapTab1Route,
+	MapMapTab2Route: MapMapTab2Route,
 }
 
-const MapRouteWithChildren = MapRoute._addFileChildren(MapRouteChildren)
+const MapMapRouteWithChildren =
+	MapMapRoute._addFileChildren(MapMapRouteChildren)
 
 export interface FileRoutesByFullPath {
 	'/': typeof IndexRoute
-	'/Map': typeof MapRouteWithChildren
 	'/Welcome': typeof WelcomeRoute
-	'/Map/tab1': typeof MapTab1Route
+	'': typeof MapMapRouteWithChildren
+	'/tab1': typeof MapMapTab1Route
+	'/tab2': typeof MapMapTab2Route
 }
 
 export interface FileRoutesByTo {
 	'/': typeof IndexRoute
-	'/Map': typeof MapRouteWithChildren
 	'/Welcome': typeof WelcomeRoute
-	'/Map/tab1': typeof MapTab1Route
+	'': typeof MapMapRouteWithChildren
+	'/tab1': typeof MapMapTab1Route
+	'/tab2': typeof MapMapTab2Route
 }
 
 export interface FileRoutesById {
 	__root__: typeof rootRoute
 	'/': typeof IndexRoute
-	'/Map': typeof MapRouteWithChildren
 	'/Welcome': typeof WelcomeRoute
-	'/Map/tab1': typeof MapTab1Route
+	'/_Map/_Map': typeof MapMapRouteWithChildren
+	'/_Map/_Map/tab1': typeof MapMapTab1Route
+	'/_Map/_Map/tab2': typeof MapMapTab2Route
 }
 
 export interface FileRouteTypes {
 	fileRoutesByFullPath: FileRoutesByFullPath
-	fullPaths: '/' | '/Map' | '/Welcome' | '/Map/tab1'
+	fullPaths: '/' | '/Welcome' | '' | '/tab1' | '/tab2'
 	fileRoutesByTo: FileRoutesByTo
-	to: '/' | '/Map' | '/Welcome' | '/Map/tab1'
-	id: '__root__' | '/' | '/Map' | '/Welcome' | '/Map/tab1'
+	to: '/' | '/Welcome' | '' | '/tab1' | '/tab2'
+	id:
+		| '__root__'
+		| '/'
+		| '/Welcome'
+		| '/_Map/_Map'
+		| '/_Map/_Map/tab1'
+		| '/_Map/_Map/tab2'
 	fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
 	IndexRoute: typeof IndexRoute
-	MapRoute: typeof MapRouteWithChildren
 	WelcomeRoute: typeof WelcomeRoute
+	MapMapRoute: typeof MapMapRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
 	IndexRoute: IndexRoute,
-	MapRoute: MapRouteWithChildren,
 	WelcomeRoute: WelcomeRoute,
+	MapMapRoute: MapMapRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -143,25 +168,30 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/Map",
-        "/Welcome"
+        "/Welcome",
+        "/_Map/_Map"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/Map": {
-      "filePath": "Map.tsx",
-      "children": [
-        "/Map/tab1"
-      ]
-    },
     "/Welcome": {
       "filePath": "Welcome.tsx"
     },
-    "/Map/tab1": {
-      "filePath": "Map/tab1.tsx",
-      "parent": "/Map"
+    "/_Map/_Map": {
+      "filePath": "_Map/_Map.tsx",
+      "children": [
+        "/_Map/_Map/tab1",
+        "/_Map/_Map/tab2"
+      ]
+    },
+    "/_Map/_Map/tab1": {
+      "filePath": "_Map/_Map.tab1.tsx",
+      "parent": "/_Map/_Map"
+    },
+    "/_Map/_Map/tab2": {
+      "filePath": "_Map/_Map.tab2.tsx",
+      "parent": "/_Map/_Map"
     }
   }
 }
