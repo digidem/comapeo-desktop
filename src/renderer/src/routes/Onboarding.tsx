@@ -142,7 +142,7 @@ function OnboardingComponent() {
 			<ContentWrapper>
 				<LeftSection>
 					<LogoSection>
-						<CoMapeoTextAsSVG width={300} height="auto" />
+						<CoMapeoTextAsSVG width={300} height={70} />
 						<DesktopText>Desktop</DesktopText>
 					</LogoSection>
 					<MainText>{formatMessage(m.mapWorldTogether)}</MainText>
