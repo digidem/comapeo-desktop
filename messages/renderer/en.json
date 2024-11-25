@@ -1,2 +1,20 @@
 {
+  "screens.IntroToCoMapeo.collaborate": {
+    "message": "Collaborate with others"
+  },
+  "screens.IntroToCoMapeo.designedFor": {
+    "message": "Designed with and for Indigenous peoples & frontline communities"
+  },
+  "screens.IntroToCoMapeo.getStarted": {
+    "message": "Get Started"
+  },
+  "screens.IntroToCoMapeo.mapAnywhere": {
+    "message": "Map anywhere and everywhere"
+  },
+  "screens.IntroToCoMapeo.ownData": {
+    "message": "Own and control your data"
+  },
+  "screens.IntroToCoMapeo.viewAndManage": {
+    "message": "View and manage observations in CoMapeo Mobile Projects."
+  }
 }
