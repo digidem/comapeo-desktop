@@ -6,11 +6,11 @@ import { CORNFLOWER_BLUE, DARK_COMAPEO_BLUE, WHITE } from '../colors'
 import { Button } from '../components/Button'
 import { Text } from '../components/Text'
 import CoMapeoTextAsSVG from '../images/CoMapeoText.svg'
-import LockedWithKey from '../images/LockedWithKey.svg'
-import MobilePhoneWithArrow from '../images/MobilePhoneWithArrow.svg'
-import RaisedFistMediumSkinTone from '../images/RaisedFistMediumSkinTone.svg'
 import TopoBackground from '../images/TopoLogo.svg'
-import WorldMap from '../images/WorldMap.svg'
+import Calling from '../images/calling.png'
+import LockedWithKey from '../images/closed_lock_with_key.png'
+import RaisedFistMediumSkinTone from '../images/raised_fist_medium_skin_tone.png'
+import WorldMap from '../images/world_map.png'
 
 export const Route = createFileRoute('/Onboarding')({
 	component: OnboardingComponent,
@@ -151,19 +151,19 @@ function OnboardingComponent() {
 				<RightSection>
 					<TextBox>
 						<TextItem>
-							<WorldMap width={24} height={24} />
+							<img src={WorldMap} alt="World Map" width={24} height={24} />
 							<StyledText>{formatMessage(m.mapAnywhere)}</StyledText>
 						</TextItem>
 						<TextItem>
-							<MobilePhoneWithArrow width={24} height={24} />
+							<img src={Calling} width={24} height={24} />
 							<StyledText>{formatMessage(m.collaborate)}</StyledText>
 						</TextItem>
 						<TextItem>
-							<LockedWithKey width={24} height={24} />
+							<img src={LockedWithKey} width={24} height={24} />
 							<StyledText>{formatMessage(m.ownData)}</StyledText>
 						</TextItem>
 						<TextItem>
-							<RaisedFistMediumSkinTone width={36} height={36} />
+							<img src={RaisedFistMediumSkinTone} width={24} height={24} />
 							<StyledText>{formatMessage(m.designedFor)}</StyledText>
 						</TextItem>
 					</TextBox>
