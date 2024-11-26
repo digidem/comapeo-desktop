@@ -65,3 +65,6 @@ translations/
 
 # Built renderer-code during Forge packaging process
 dist/
+
+# Vite build directory
+.vite/build/

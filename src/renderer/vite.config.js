@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
+import svgr from 'vite-plugin-svgr'
 
 const PROJECT_ROOT_DIR = fileURLToPath(new URL('../../', import.meta.url))
 
@@ -28,6 +29,15 @@ export default defineConfig((configEnv) => {
 			outDir: path.join(PROJECT_ROOT_DIR, 'dist/renderer'),
 			emptyOutDir: true,
 		},
-		plugins: [TanStackRouterVite(), react()],
+		plugins: [
+			TanStackRouterVite(),
+			react(),
+			svgr({
+				include: '**/*.svg',
+				svgrOptions: {
+					icon: true,
+				},
+			}),
+		],
 	}
 })

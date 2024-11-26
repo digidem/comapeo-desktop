@@ -9,11 +9,18 @@ export const Route = createFileRoute('/')({
 
 function RouteComponent() {
 	const router = useRouter()
+	const hasCreatedDeviceName = false
 	// determine if user has created a device name
 	// if they do have a device name, navigate to Map
 	// Otherwise navigate to Welcome
+	React.useEffect(() => {
+		if (!hasCreatedDeviceName) {
+			router.navigate({ to: '/Onboarding' })
+		} else {
+			router.navigate({ to: '/tab1' })
+		}
+	}, [hasCreatedDeviceName])
 
-	router.navigate({ to: '/Welcome' })
 	return (
 		<Box sx={{ display: 'flex' }}>
 			<CircularProgress />

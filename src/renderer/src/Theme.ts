@@ -13,7 +13,7 @@ import {
 const theme = createTheme({
 	typography: {
 		fontFamily: 'Rubik, sans-serif',
-		fontSize: 16,
+		fontSize: 12,
 		body1: {
 			fontSize: '1rem',
 		},
@@ -77,7 +77,7 @@ const theme = createTheme({
 							borderWidth: 2,
 						},
 					}),
-					borderRadius: 30,
+					borderRadius: 4,
 					textTransform: 'none',
 				}),
 			},
