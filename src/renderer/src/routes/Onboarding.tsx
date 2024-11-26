@@ -2,10 +2,9 @@ import { styled } from '@mui/material/styles'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { CORNFLOWER_BLUE, DARK_COMAPEO_BLUE, WHITE } from '../colors'
+import { CORNFLOWER_BLUE, DARK_COMAPEO_BLUE, ORANGE, WHITE } from '../colors'
 import { Button } from '../components/Button'
 import { Text } from '../components/Text'
-import CoMapeoTextAsSVG from '../images/CoMapeoText.svg'
 import TopoBackground from '../images/TopoLogo.svg'
 import Calling from '../images/calling.png'
 import LockedWithKey from '../images/closed_lock_with_key.png'
@@ -67,7 +66,7 @@ const Background = styled(TopoBackground)({
 const ContentWrapper = styled('div')({
 	display: 'grid',
 	gridTemplateColumns: '1fr 2fr 2fr 1fr',
-	columnGap: '32px',
+	columnGap: 32,
 	alignItems: 'center',
 	width: '100%',
 	height: '60%',
@@ -76,14 +75,14 @@ const ContentWrapper = styled('div')({
 
 const LeftSection = styled('div')({
 	gridColumn: 2,
-	paddingLeft: '32px',
-	maxHeight: '189px',
+	paddingLeft: 32,
+	maxHeight: 189,
 })
 
 const RightSection = styled('div')({
 	gridColumn: 3,
-	maxWidth: '400px',
-	paddingLeft: '32px',
+	maxWidth: 400,
+	paddingLeft: 32,
 })
 
 const LogoSection = styled('div')({
@@ -91,34 +90,47 @@ const LogoSection = styled('div')({
 	flexDirection: 'column',
 })
 
+const LogoText = styled(Text)({
+	fontSize: 64,
+})
+
+const Co = styled('span')({
+	color: ORANGE,
+	fontWeight: 500,
+})
+
+const Mapeo = styled('span')({
+	color: WHITE,
+	fontWeight: 700,
+})
+
 const DesktopText = styled(Text)(() => ({
 	color: CORNFLOWER_BLUE,
 	fontSize: 64,
 	fontWeight: 500,
-	width: '300px',
-	marginTop: -20,
+	marginTop: -24,
 }))
 
 const MainText = styled(Text)(() => ({
 	color: WHITE,
-	fontSize: '16px',
+	fontSize: 16,
 	fontWeight: 500,
 	marginTop: 12,
-	maxWidth: '300px',
+	maxWidth: 300,
 }))
 
 const TextBox = styled('div')({
 	width: '100%',
-	maxWidth: '300px',
+	maxWidth: 300,
 	padding: '32px 24px',
 	borderWidth: 1,
 	borderColor: WHITE,
 	borderStyle: 'solid',
-	borderRadius: '4px',
+	borderRadius: 4,
 	backgroundColor: 'rgba(0, 0, 0, 0.5)',
 	display: 'flex',
 	flexDirection: 'column',
-	gap: '16px',
+	gap: 16,
 })
 
 const TextItem = styled('div')({
@@ -142,7 +154,10 @@ function OnboardingComponent() {
 			<ContentWrapper>
 				<LeftSection>
 					<LogoSection>
-						<CoMapeoTextAsSVG width={300} height={70} />
+						<LogoText>
+							<Co>Co</Co>
+							<Mapeo>Mapeo</Mapeo>
+						</LogoText>
 						<DesktopText>Desktop</DesktopText>
 					</LogoSection>
 					<MainText>{formatMessage(m.mapWorldTogether)}</MainText>
