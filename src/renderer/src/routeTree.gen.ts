@@ -13,8 +13,9 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as MapTabsMapImport } from './routes/(MapTabs)/_Map'
 import { Route as MapTabsMapTab1Import } from './routes/(MapTabs)/_Map.tab1'
 import { Route as MapTabsMapTab2Import } from './routes/(MapTabs)/_Map.tab2'
-import { Route as OnboardingImport } from './routes/Onboarding'
-import { Route as OnboardingDataPrivacyImport } from './routes/Onboarding.DataPrivacy'
+import { Route as OnboardingDataPrivacyImport } from './routes/Onboarding/DataPrivacy'
+import { Route as OnboardingNextStepImport } from './routes/Onboarding/NextStep'
+import { Route as OnboardingIndexImport } from './routes/Onboarding/index'
 import { Route as WelcomeImport } from './routes/Welcome'
 // Import Routes
 
@@ -38,22 +39,28 @@ const WelcomeRoute = WelcomeImport.update({
 	getParentRoute: () => rootRoute,
 } as any)
 
-const OnboardingRoute = OnboardingImport.update({
-	id: '/Onboarding',
-	path: '/Onboarding',
-	getParentRoute: () => rootRoute,
-} as any)
-
 const IndexRoute = IndexImport.update({
 	id: '/',
 	path: '/',
 	getParentRoute: () => rootRoute,
 } as any)
 
+const OnboardingIndexRoute = OnboardingIndexImport.update({
+	id: '/Onboarding/',
+	path: '/Onboarding/',
+	getParentRoute: () => rootRoute,
+} as any)
+
+const OnboardingNextStepRoute = OnboardingNextStepImport.update({
+	id: '/Onboarding/NextStep',
+	path: '/Onboarding/NextStep',
+	getParentRoute: () => rootRoute,
+} as any)
+
 const OnboardingDataPrivacyRoute = OnboardingDataPrivacyImport.update({
-	id: '/DataPrivacy',
-	path: '/DataPrivacy',
-	getParentRoute: () => OnboardingRoute,
+	id: '/Onboarding/DataPrivacy',
+	path: '/Onboarding/DataPrivacy',
+	getParentRoute: () => rootRoute,
 } as any)
 
 const MapTabsMapRoute = MapTabsMapImport.update({
@@ -84,13 +91,6 @@ declare module '@tanstack/react-router' {
 			preLoaderRoute: typeof IndexImport
 			parentRoute: typeof rootRoute
 		}
-		'/Onboarding': {
-			id: '/Onboarding'
-			path: '/Onboarding'
-			fullPath: '/Onboarding'
-			preLoaderRoute: typeof OnboardingImport
-			parentRoute: typeof rootRoute
-		}
 		'/Welcome': {
 			id: '/Welcome'
 			path: '/Welcome'
@@ -114,10 +114,24 @@ declare module '@tanstack/react-router' {
 		}
 		'/Onboarding/DataPrivacy': {
 			id: '/Onboarding/DataPrivacy'
-			path: '/DataPrivacy'
+			path: '/Onboarding/DataPrivacy'
 			fullPath: '/Onboarding/DataPrivacy'
 			preLoaderRoute: typeof OnboardingDataPrivacyImport
-			parentRoute: typeof OnboardingImport
+			parentRoute: typeof rootRoute
+		}
+		'/Onboarding/NextStep': {
+			id: '/Onboarding/NextStep'
+			path: '/Onboarding/NextStep'
+			fullPath: '/Onboarding/NextStep'
+			preLoaderRoute: typeof OnboardingNextStepImport
+			parentRoute: typeof rootRoute
+		}
+		'/Onboarding/': {
+			id: '/Onboarding/'
+			path: '/Onboarding'
+			fullPath: '/Onboarding'
+			preLoaderRoute: typeof OnboardingIndexImport
+			parentRoute: typeof rootRoute
 		}
 		'/(MapTabs)/_Map/tab1': {
 			id: '/(MapTabs)/_Map/tab1'
@@ -137,18 +151,6 @@ declare module '@tanstack/react-router' {
 }
 
 // Create and export the route tree
-
-interface OnboardingRouteChildren {
-	OnboardingDataPrivacyRoute: typeof OnboardingDataPrivacyRoute
-}
-
-const OnboardingRouteChildren: OnboardingRouteChildren = {
-	OnboardingDataPrivacyRoute: OnboardingDataPrivacyRoute,
-}
-
-const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
-	OnboardingRouteChildren,
-)
 
 interface MapTabsMapRouteChildren {
 	MapTabsMapTab1Route: typeof MapTabsMapTab1Route
@@ -177,18 +179,20 @@ const MapTabsRouteWithChildren =
 
 export interface FileRoutesByFullPath {
 	'/': typeof MapTabsMapRouteWithChildren
-	'/Onboarding': typeof OnboardingRouteWithChildren
 	'/Welcome': typeof WelcomeRoute
 	'/Onboarding/DataPrivacy': typeof OnboardingDataPrivacyRoute
+	'/Onboarding/NextStep': typeof OnboardingNextStepRoute
+	'/Onboarding': typeof OnboardingIndexRoute
 	'/tab1': typeof MapTabsMapTab1Route
 	'/tab2': typeof MapTabsMapTab2Route
 }
 
 export interface FileRoutesByTo {
 	'/': typeof MapTabsMapRouteWithChildren
-	'/Onboarding': typeof OnboardingRouteWithChildren
 	'/Welcome': typeof WelcomeRoute
 	'/Onboarding/DataPrivacy': typeof OnboardingDataPrivacyRoute
+	'/Onboarding/NextStep': typeof OnboardingNextStepRoute
+	'/Onboarding': typeof OnboardingIndexRoute
 	'/tab1': typeof MapTabsMapTab1Route
 	'/tab2': typeof MapTabsMapTab2Route
 }
@@ -196,11 +200,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
 	__root__: typeof rootRoute
 	'/': typeof IndexRoute
-	'/Onboarding': typeof OnboardingRouteWithChildren
 	'/Welcome': typeof WelcomeRoute
 	'/(MapTabs)': typeof MapTabsRouteWithChildren
 	'/(MapTabs)/_Map': typeof MapTabsMapRouteWithChildren
 	'/Onboarding/DataPrivacy': typeof OnboardingDataPrivacyRoute
+	'/Onboarding/NextStep': typeof OnboardingNextStepRoute
+	'/Onboarding/': typeof OnboardingIndexRoute
 	'/(MapTabs)/_Map/tab1': typeof MapTabsMapTab1Route
 	'/(MapTabs)/_Map/tab2': typeof MapTabsMapTab2Route
 }
@@ -209,27 +214,30 @@ export interface FileRouteTypes {
 	fileRoutesByFullPath: FileRoutesByFullPath
 	fullPaths:
 		| '/'
-		| '/Onboarding'
 		| '/Welcome'
 		| '/Onboarding/DataPrivacy'
+		| '/Onboarding/NextStep'
+		| '/Onboarding'
 		| '/tab1'
 		| '/tab2'
 	fileRoutesByTo: FileRoutesByTo
 	to:
 		| '/'
-		| '/Onboarding'
 		| '/Welcome'
 		| '/Onboarding/DataPrivacy'
+		| '/Onboarding/NextStep'
+		| '/Onboarding'
 		| '/tab1'
 		| '/tab2'
 	id:
 		| '__root__'
 		| '/'
-		| '/Onboarding'
 		| '/Welcome'
 		| '/(MapTabs)'
 		| '/(MapTabs)/_Map'
 		| '/Onboarding/DataPrivacy'
+		| '/Onboarding/NextStep'
+		| '/Onboarding/'
 		| '/(MapTabs)/_Map/tab1'
 		| '/(MapTabs)/_Map/tab2'
 	fileRoutesById: FileRoutesById
@@ -237,16 +245,20 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
 	IndexRoute: typeof IndexRoute
-	OnboardingRoute: typeof OnboardingRouteWithChildren
 	WelcomeRoute: typeof WelcomeRoute
 	MapTabsRoute: typeof MapTabsRouteWithChildren
+	OnboardingDataPrivacyRoute: typeof OnboardingDataPrivacyRoute
+	OnboardingNextStepRoute: typeof OnboardingNextStepRoute
+	OnboardingIndexRoute: typeof OnboardingIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
 	IndexRoute: IndexRoute,
-	OnboardingRoute: OnboardingRouteWithChildren,
 	WelcomeRoute: WelcomeRoute,
 	MapTabsRoute: MapTabsRouteWithChildren,
+	OnboardingDataPrivacyRoute: OnboardingDataPrivacyRoute,
+	OnboardingNextStepRoute: OnboardingNextStepRoute,
+	OnboardingIndexRoute: OnboardingIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -260,19 +272,15 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/Onboarding",
         "/Welcome",
-        "/(MapTabs)"
+        "/(MapTabs)",
+        "/Onboarding/DataPrivacy",
+        "/Onboarding/NextStep",
+        "/Onboarding/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/Onboarding": {
-      "filePath": "Onboarding.tsx",
-      "children": [
-        "/Onboarding/DataPrivacy"
-      ]
     },
     "/Welcome": {
       "filePath": "Welcome.tsx"
@@ -292,8 +300,13 @@ export const routeTree = rootRoute
       ]
     },
     "/Onboarding/DataPrivacy": {
-      "filePath": "Onboarding.DataPrivacy.tsx",
-      "parent": "/Onboarding"
+      "filePath": "Onboarding/DataPrivacy.tsx"
+    },
+    "/Onboarding/NextStep": {
+      "filePath": "Onboarding/NextStep.tsx"
+    },
+    "/Onboarding/": {
+      "filePath": "Onboarding/index.tsx"
     },
     "/(MapTabs)/_Map/tab1": {
       "filePath": "(MapTabs)/_Map.tab1.tsx",

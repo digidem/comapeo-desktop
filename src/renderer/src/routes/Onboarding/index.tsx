@@ -2,16 +2,16 @@ import { styled } from '@mui/material/styles'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { CORNFLOWER_BLUE, DARK_COMAPEO_BLUE, ORANGE, WHITE } from '../colors'
-import { Button } from '../components/Button'
-import { Text } from '../components/Text'
-import TopoBackground from '../images/TopoLogo.svg'
-import Calling from '../images/calling.png'
-import LockedWithKey from '../images/closed_lock_with_key.png'
-import RaisedFistMediumSkinTone from '../images/raised_fist_medium_skin_tone.png'
-import WorldMap from '../images/world_map.png'
+import { CORNFLOWER_BLUE, DARK_COMAPEO_BLUE, ORANGE, WHITE } from '../../colors'
+import { Button } from '../../components/Button'
+import { Text } from '../../components/Text'
+import TopoBackground from '../../images/TopoLogo.svg'
+import Calling from '../../images/calling.png'
+import LockedWithKey from '../../images/closed_lock_with_key.png'
+import RaisedFistMediumSkinTone from '../../images/raised_fist_medium_skin_tone.png'
+import WorldMap from '../../images/world_map.png'
 
-export const Route = createFileRoute('/Onboarding')({
+export const Route = createFileRoute('/Onboarding/')({
 	component: OnboardingComponent,
 })
 
@@ -144,7 +144,7 @@ const StyledText = styled(Text)(({ theme }) => ({
 	fontSize: theme.typography.caption.fontSize,
 }))
 
-function OnboardingComponent() {
+export function OnboardingComponent() {
 	const navigate = useNavigate()
 	const { formatMessage } = useIntl()
 
