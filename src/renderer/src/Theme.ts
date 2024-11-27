@@ -68,17 +68,20 @@ const theme = createTheme({
 			styleOverrides: {
 				root: ({ ownerState }) => ({
 					...(ownerState.variant === 'outlined' && {
-						borderColor: '#EEEEEE',
-						borderWidth: 2,
+						borderColor: '#CCCCD6',
+						borderWidth: 1,
 						'&:hover': {
-							borderWidth: 2,
+							borderWidth: 1,
 						},
 						'&:focus': {
-							borderWidth: 2,
+							borderWidth: 1,
 						},
 					}),
 					borderRadius: 4,
 					textTransform: 'none',
+					fontSize: '1rem',
+					fontWeight: 400,
+					paddingVertical: 12,
 				}),
 			},
 		},

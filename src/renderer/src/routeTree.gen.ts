@@ -15,6 +15,7 @@ import { Route as MapTabsMapTab1Import } from './routes/(MapTabs)/_Map.tab1'
 import { Route as MapTabsMapTab2Import } from './routes/(MapTabs)/_Map.tab2'
 import { Route as OnboardingDataPrivacyImport } from './routes/Onboarding/DataPrivacy'
 import { Route as OnboardingNextStepImport } from './routes/Onboarding/NextStep'
+import { Route as OnboardingPrivacyPolicyScreenImport } from './routes/Onboarding/PrivacyPolicyScreen'
 import { Route as OnboardingIndexImport } from './routes/Onboarding/index'
 import { Route as WelcomeImport } from './routes/Welcome'
 // Import Routes
@@ -50,6 +51,13 @@ const OnboardingIndexRoute = OnboardingIndexImport.update({
 	path: '/Onboarding/',
 	getParentRoute: () => rootRoute,
 } as any)
+
+const OnboardingPrivacyPolicyScreenRoute =
+	OnboardingPrivacyPolicyScreenImport.update({
+		id: '/Onboarding/PrivacyPolicyScreen',
+		path: '/Onboarding/PrivacyPolicyScreen',
+		getParentRoute: () => rootRoute,
+	} as any)
 
 const OnboardingNextStepRoute = OnboardingNextStepImport.update({
 	id: '/Onboarding/NextStep',
@@ -126,6 +134,13 @@ declare module '@tanstack/react-router' {
 			preLoaderRoute: typeof OnboardingNextStepImport
 			parentRoute: typeof rootRoute
 		}
+		'/Onboarding/PrivacyPolicyScreen': {
+			id: '/Onboarding/PrivacyPolicyScreen'
+			path: '/Onboarding/PrivacyPolicyScreen'
+			fullPath: '/Onboarding/PrivacyPolicyScreen'
+			preLoaderRoute: typeof OnboardingPrivacyPolicyScreenImport
+			parentRoute: typeof rootRoute
+		}
 		'/Onboarding/': {
 			id: '/Onboarding/'
 			path: '/Onboarding'
@@ -182,6 +197,7 @@ export interface FileRoutesByFullPath {
 	'/Welcome': typeof WelcomeRoute
 	'/Onboarding/DataPrivacy': typeof OnboardingDataPrivacyRoute
 	'/Onboarding/NextStep': typeof OnboardingNextStepRoute
+	'/Onboarding/PrivacyPolicyScreen': typeof OnboardingPrivacyPolicyScreenRoute
 	'/Onboarding': typeof OnboardingIndexRoute
 	'/tab1': typeof MapTabsMapTab1Route
 	'/tab2': typeof MapTabsMapTab2Route
@@ -192,6 +208,7 @@ export interface FileRoutesByTo {
 	'/Welcome': typeof WelcomeRoute
 	'/Onboarding/DataPrivacy': typeof OnboardingDataPrivacyRoute
 	'/Onboarding/NextStep': typeof OnboardingNextStepRoute
+	'/Onboarding/PrivacyPolicyScreen': typeof OnboardingPrivacyPolicyScreenRoute
 	'/Onboarding': typeof OnboardingIndexRoute
 	'/tab1': typeof MapTabsMapTab1Route
 	'/tab2': typeof MapTabsMapTab2Route
@@ -205,6 +222,7 @@ export interface FileRoutesById {
 	'/(MapTabs)/_Map': typeof MapTabsMapRouteWithChildren
 	'/Onboarding/DataPrivacy': typeof OnboardingDataPrivacyRoute
 	'/Onboarding/NextStep': typeof OnboardingNextStepRoute
+	'/Onboarding/PrivacyPolicyScreen': typeof OnboardingPrivacyPolicyScreenRoute
 	'/Onboarding/': typeof OnboardingIndexRoute
 	'/(MapTabs)/_Map/tab1': typeof MapTabsMapTab1Route
 	'/(MapTabs)/_Map/tab2': typeof MapTabsMapTab2Route
@@ -217,6 +235,7 @@ export interface FileRouteTypes {
 		| '/Welcome'
 		| '/Onboarding/DataPrivacy'
 		| '/Onboarding/NextStep'
+		| '/Onboarding/PrivacyPolicyScreen'
 		| '/Onboarding'
 		| '/tab1'
 		| '/tab2'
@@ -226,6 +245,7 @@ export interface FileRouteTypes {
 		| '/Welcome'
 		| '/Onboarding/DataPrivacy'
 		| '/Onboarding/NextStep'
+		| '/Onboarding/PrivacyPolicyScreen'
 		| '/Onboarding'
 		| '/tab1'
 		| '/tab2'
@@ -237,6 +257,7 @@ export interface FileRouteTypes {
 		| '/(MapTabs)/_Map'
 		| '/Onboarding/DataPrivacy'
 		| '/Onboarding/NextStep'
+		| '/Onboarding/PrivacyPolicyScreen'
 		| '/Onboarding/'
 		| '/(MapTabs)/_Map/tab1'
 		| '/(MapTabs)/_Map/tab2'
@@ -249,6 +270,7 @@ export interface RootRouteChildren {
 	MapTabsRoute: typeof MapTabsRouteWithChildren
 	OnboardingDataPrivacyRoute: typeof OnboardingDataPrivacyRoute
 	OnboardingNextStepRoute: typeof OnboardingNextStepRoute
+	OnboardingPrivacyPolicyScreenRoute: typeof OnboardingPrivacyPolicyScreenRoute
 	OnboardingIndexRoute: typeof OnboardingIndexRoute
 }
 
@@ -258,6 +280,7 @@ const rootRouteChildren: RootRouteChildren = {
 	MapTabsRoute: MapTabsRouteWithChildren,
 	OnboardingDataPrivacyRoute: OnboardingDataPrivacyRoute,
 	OnboardingNextStepRoute: OnboardingNextStepRoute,
+	OnboardingPrivacyPolicyScreenRoute: OnboardingPrivacyPolicyScreenRoute,
 	OnboardingIndexRoute: OnboardingIndexRoute,
 }
 
@@ -276,6 +299,7 @@ export const routeTree = rootRoute
         "/(MapTabs)",
         "/Onboarding/DataPrivacy",
         "/Onboarding/NextStep",
+        "/Onboarding/PrivacyPolicyScreen",
         "/Onboarding/"
       ]
     },
@@ -304,6 +328,9 @@ export const routeTree = rootRoute
     },
     "/Onboarding/NextStep": {
       "filePath": "Onboarding/NextStep.tsx"
+    },
+    "/Onboarding/PrivacyPolicyScreen": {
+      "filePath": "Onboarding/PrivacyPolicyScreen.tsx"
     },
     "/Onboarding/": {
       "filePath": "Onboarding/index.tsx"
