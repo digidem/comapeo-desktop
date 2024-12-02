@@ -77,6 +77,7 @@ export default tseslint.config(
 			ecmaVersion: 2022,
 			sourceType: 'module',
 		},
+		ignores: ['src/renderer/src/routeTree.gen.ts'],
 	},
 	// Global ignores
 	includeIgnoreFile(fileURLToPath(new URL('.gitignore', import.meta.url))),
