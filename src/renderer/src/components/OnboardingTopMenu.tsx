@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles'
-import { useNavigate } from '@tanstack/react-router'
+import { useNavigate, useRouter } from '@tanstack/react-router'
+import { defineMessages, useIntl } from 'react-intl'
 
 import { BLACK, BLUE_GREY, COMAPEO_BLUE, WHITE } from '../colors'
 import { Button } from './Button'
@@ -17,12 +18,13 @@ const MenuContainer = styled('div')({
 const GoBackButton = styled(Button)({
 	display: 'flex',
 	alignItems: 'center',
-	gap: '8px',
+	gap: 8,
 	backgroundColor: 'transparent',
 	color: BLUE_GREY,
-	fontSize: '16px',
+	fontSize: 16,
 	padding: '12px 32px',
-	borderRadius: '20px',
+	borderRadius: 20,
+	whiteSpace: 'nowrap',
 	'&:hover': {
 		backgroundColor: 'rgba(0, 0, 0, 0.1)',
 	},
@@ -45,6 +47,7 @@ const Step = styled('div')(({ active }: { active: boolean }) => ({
 	padding: '12px 32px',
 	borderRadius: 20,
 	fontWeight: active ? 'bold' : 'normal',
+	whiteSpace: 'nowrap',
 }))
 
 const Divider = styled('div')({
@@ -59,46 +62,58 @@ interface OnboardingTopMenuProps {
 	currentStep: number
 }
 
+const m = defineMessages({
+	goBack: {
+		id: 'components.OnboardingTopMenu.goBack',
+		defaultMessage: 'Go back',
+	},
+	step: {
+		id: 'components.OnboardingTopMenu.step',
+		defaultMessage: 'Step {number}',
+	},
+})
+
 export function OnboardingTopMenu({ currentStep }: OnboardingTopMenuProps) {
 	const navigate = useNavigate()
+	const router = useRouter()
+	const { formatMessage } = useIntl()
 
 	return (
 		<MenuContainer>
 			<GoBackButton
-				onClick={() => navigate({ to: '/Onboarding' })}
+				onClick={() => router.history.back()}
 				variant="text"
 				style={{
 					color: BLUE_GREY,
-					fontWeight: 500,
-					alignItems: 'center',
 					gap: 8,
-					backgroundColor: 'transparent',
 					padding: '12px 32px',
 				}}
 			>
 				<BackArrow>←</BackArrow>
-				Go back
+				{formatMessage(m.goBack)}
 			</GoBackButton>
 			<Steps>
-				{['Step 1', 'Step 2', 'Step 3'].map((step, index) => (
+				{[1, 2, 3].map((step) => (
 					<div key={step} style={{ display: 'flex', alignItems: 'center' }}>
 						<Step
-							active={currentStep === index + 1}
+							active={currentStep === step}
 							onClick={() =>
 								navigate({
 									to: `/Onboarding/${
-										index === 0
-											? 'DataPrivacy' // Example: current step
-											: 'FutureStep' // TODO: Replace with actual route
+										step === 1
+											? 'DataPrivacy'
+											: step === 2
+												? 'NextStep'
+												: 'PrivacyPolicyScreen'
 									}`,
 								})
 							}
 						>
-							<Text kind="body" bold={currentStep === index + 1}>
-								{step}
+							<Text kind="body" bold={currentStep === step}>
+								{formatMessage(m.step, { number: step })}
 							</Text>
 						</Step>
-						{index < 2 && <Divider />}
+						{step < 3 && <Divider />}
 					</div>
 				))}
 			</Steps>

@@ -1,4 +1,10 @@
 {
+  "components.OnboardingTopMenu.goBack": {
+    "message": "Go back"
+  },
+  "components.OnboardingTopMenu.step": {
+    "message": "Step {number}"
+  },
   "screens.DataPrivacy.description": {
     "message": "CoMapeo allows teams to map offline without needing internet servers."
   },
