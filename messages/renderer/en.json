@@ -41,6 +41,9 @@
   "screens.IntroToCoMapeo.viewAndManage": {
     "message": "View and manage observations in CoMapeo Mobile Projects."
   },
+  "screens.OnboardingPrivacyPolicy.permissionsTitle": {
+    "message": "Current Permissions"
+  },
   "screens.PrivacyPolicy.aboutAwana": {
     "message": "About Awana Digital"
   },
@@ -124,6 +127,9 @@
   },
   "screens.PrivacyPolicy.privateByDefaultDescription": {
     "message": "The data you collect and create with CoMapeo (locations, photos, video, audio, text) is only stored on your device by default, and is not stored or sent anywhere else. When you share data with collaborators by joining a project with them, it is sent encrypted, directly to your collaborators' device. This means that the data is not sent via Awana Digital, nor anyone else, on its way to your collaborator. Awana Digital never sees nor has access to any of the data you collect with CoMapeo unless you explicitly send it to us."
+  },
+  "screens.PrivacyPolicy.shareDiagnostics": {
+    "message": "Share Diagnostic Information"
   },
   "screens.PrivacyPolicy.thirdParty": {
     "message": "Third-party access to data"

@@ -160,4 +160,8 @@ export const m = defineMessages({
 		defaultMessage:
 			'A "third-party" is an organization other than Awana Digital.',
 	},
+	permissionsTitle: {
+		id: 'screens.OnboardingPrivacyPolicy.permissionsTitle',
+		defaultMessage: 'Current Permissions',
+	},
 })

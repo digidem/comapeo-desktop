@@ -3,54 +3,52 @@ import { styled } from '@mui/material/styles'
 import { useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARK_GREY, VERY_LIGHT_GREY, WHITE } from '../../colors'
+import BarChart from '../../images/BarChart.svg'
 import BustInSilhouette from '../../images/BustInSilhouette.svg'
 import RedDot from '../../images/RedDot.svg'
+import Wrench from '../../images/Wrench.svg'
 import ChevronUp from '../../images/chevrondown-expanded.svg'
 import ChevronDown from '../../images/chevrondown.svg'
 import ClosedLockWithKey from '../../images/closed_lock_with_key.png'
 import RaisedFistMediumSkinTone from '../../images/raised_fist_medium_skin_tone.png'
+import RaisedHandMediumSkinTone from '../../images/raised_hand_medium_skin_tone.png'
 import { Text } from '../Text'
 import { DiagnosticItem } from './DiagnosticItem'
+import { MetricsDiagnosticsPermissionToggle } from './MetricsDiagnosticsPermissionToggle'
 import { PointContainer } from './PointContainer'
 import { m } from './privacyPolicyMessages'
 
 const Container = styled('div')({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: '20px',
-	padding: '20px',
+	gap: 20,
+	padding: 20,
 	width: '100%',
-	maxWidth: '800px',
+	maxWidth: 800,
 	margin: '0 auto',
 	overflowY: 'auto',
 })
-
 const Header = styled(Text)({
-	marginBottom: '16px',
 	textAlign: 'center',
 })
-
 const Subheader = styled(Text)({
 	marginTop: 50,
 	fontSize: 24,
 	fontWeight: 'bold',
 	marginBottom: 30,
 })
-
 const ContentBox = styled('div')({
 	width: '70%',
-	maxWidth: '800px',
+	maxWidth: 800,
 	margin: '0 auto',
-	padding: '20px',
+	padding: 20,
 	backgroundColor: WHITE,
-	borderRadius: '10px',
+	borderRadius: 10,
 })
-
 const HorizontalLine = styled('div')({
 	borderBottom: `1px solid ${BLUE_GREY}`,
 	margin: '20px 0',
 })
-
 const OverviewBox = styled('div')({
 	padding: 20,
 	borderWidth: 1,
@@ -59,7 +57,6 @@ const OverviewBox = styled('div')({
 	backgroundColor: VERY_LIGHT_GREY,
 	marginBottom: 20,
 })
-
 const ToggleContainer = styled('div')(
 	({ isTop, isBottom }: { isTop?: boolean; isBottom?: boolean }) => ({
 		border: `1px solid ${BLUE_GREY}`,
@@ -70,7 +67,6 @@ const ToggleContainer = styled('div')(
 		gap: 'unset',
 	}),
 )
-
 const ToggleHeader = styled('div')({
 	display: 'flex',
 	justifyContent: 'space-between',
@@ -79,16 +75,35 @@ const ToggleHeader = styled('div')({
 	cursor: 'pointer',
 	backgroundColor: WHITE,
 })
-
 const ToggleContent = styled('div')({
 	padding: '16px 20px',
 	backgroundColor: WHITE,
 })
-
 const ToggledText = styled(Text)(({ theme }) => ({
 	color: DARK_GREY,
 	fontSize: theme.typography.body2.fontSize,
 }))
+const DiagnosticsContainer = styled('div')({
+	border: `1px solid ${BLUE_GREY}`,
+	borderRadius: 10,
+	marginBottom: 20,
+	paddingBottom: 8,
+})
+const DiagnosticsContent = styled('div')({
+	paddingLeft: 20,
+})
+const HorizontalLineSmall = styled('div')({
+	borderBottom: `1px solid ${BLUE_GREY}`,
+	margin: '20px 20px 20px 0',
+})
+const PermissionToggleContainer = styled('div')({
+	flexDirection: 'row',
+	alignItems: 'center',
+	backgroundColor: WHITE,
+	padding: 15,
+	border: `1px solid ${BLUE_GREY}`,
+	borderRadius: 10,
+})
 
 export function PrivacyPolicy() {
 	const { formatMessage } = useIntl()
@@ -149,19 +164,67 @@ export function PrivacyPolicy() {
 					description={formatMessage(m.controlDescription)}
 				/>
 				<HorizontalLine />
-				<Header>{formatMessage(m.diagnosticsTitle)}</Header>
-				<DiagnosticItem
-					title={formatMessage(m.crashData)}
-					description={formatMessage(m.crashDataDescription)}
+				<Subheader kind="title">{formatMessage(m.dataCollection)}</Subheader>
+				<PointContainer
+					icon={BarChart}
+					title={formatMessage(m.whatIsCollected)}
+					description={formatMessage(m.whatIsCollectedDescription)}
 				/>
-				<DiagnosticItem
-					title={formatMessage(m.appErrors)}
-					description={formatMessage(m.appErrorsDescription)}
+				<DiagnosticsContainer>
+					<Text kind="subtitle" style={{ margin: 20 }}>
+						{formatMessage(m.diagnosticsTitle)}
+					</Text>
+					<DiagnosticsContent>
+						<DiagnosticItem
+							title={formatMessage(m.crashData)}
+							description={formatMessage(m.crashDataDescription)}
+						/>
+						<DiagnosticItem
+							title={formatMessage(m.appErrors)}
+							description={formatMessage(m.appErrorsDescription)}
+						/>
+						<DiagnosticItem
+							title={formatMessage(m.performanceData)}
+							description={formatMessage(m.performanceDataDescription)}
+						/>
+						<DiagnosticItem
+							title={formatMessage(m.deviceInfo)}
+							description={formatMessage(m.deviceInfoDescription)}
+						/>
+						<DiagnosticItem
+							title={formatMessage(m.appInfo)}
+							description={formatMessage(m.appInfoDescription)}
+						/>
+						<HorizontalLineSmall />
+						<Text kind="subtitle" style={{ margin: '20px 0px' }}>
+							{formatMessage(m.appUsageTitle)}
+						</Text>
+						<DiagnosticItem
+							title={formatMessage(m.userCount)}
+							description={formatMessage(m.userCountDescription)}
+						/>
+					</DiagnosticsContent>
+				</DiagnosticsContainer>
+				<PointContainer
+					icon={Wrench}
+					title={formatMessage(m.whyCollected)}
+					description={formatMessage(m.whyCollectedDescription)}
 				/>
-				<DiagnosticItem
-					title={formatMessage(m.performanceData)}
-					description={formatMessage(m.performanceDataDescription)}
+				<PointContainer
+					icon={RaisedHandMediumSkinTone}
+					title={formatMessage(m.notCollected)}
+					description={formatMessage(m.notCollectedDescription)}
 				/>
+				<PointContainer
+					icon={RaisedFistMediumSkinTone}
+					title={formatMessage(m.thirdParty)}
+					description={formatMessage(m.thirdPartyDescription)}
+				/>
+				<HorizontalLine />
+				<Subheader kind="title">{formatMessage(m.permissionsTitle)}</Subheader>
+				<PermissionToggleContainer>
+					<MetricsDiagnosticsPermissionToggle />
+				</PermissionToggleContainer>
 			</ContentBox>
 		</Container>
 	)
