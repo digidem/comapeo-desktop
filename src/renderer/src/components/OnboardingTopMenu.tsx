@@ -78,7 +78,7 @@ export function OnboardingTopMenu({ currentStep }: OnboardingTopMenuProps) {
 	const { formatMessage } = useIntl()
 	const stepToRoute: Record<number, string> = {
 		1: 'DataPrivacy',
-		2: 'NextStep',
+		2: 'DeviceNamingScreen',
 		3: 'PrivacyPolicyScreen',
 	}
 

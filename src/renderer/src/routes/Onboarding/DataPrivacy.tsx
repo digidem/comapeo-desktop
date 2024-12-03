@@ -144,7 +144,7 @@ export function DataPrivacyComponent() {
 						{formatMessage(m.learnMore)}
 					</Button>
 					<Button
-						onClick={() => navigate({ to: '/Onboarding/NextStep' })}
+						onClick={() => navigate({ to: '/Onboarding/DeviceNamingScreen' })}
 						style={{
 							width: '100%',
 						}}

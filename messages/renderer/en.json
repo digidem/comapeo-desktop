@@ -29,6 +29,27 @@
   "screens.DataPrivacy.title": {
     "message": "Review Data & Privacy"
   },
+  "screens.DeviceNamingScreen.addName": {
+    "message": "Add Name"
+  },
+  "screens.DeviceNamingScreen.characterCount": {
+    "message": "{count}/60"
+  },
+  "screens.DeviceNamingScreen.description": {
+    "message": "A device name allows others using CoMapeo to invite you to projects."
+  },
+  "screens.DeviceNamingScreen.errorSavingDeviceName": {
+    "message": "An error occurred while saving your device name. Please try again."
+  },
+  "screens.DeviceNamingScreen.placeholder": {
+    "message": "Device Name"
+  },
+  "screens.DeviceNamingScreen.saving": {
+    "message": "Saving..."
+  },
+  "screens.DeviceNamingScreen.title": {
+    "message": "Name Your Device"
+  },
   "screens.IntroToCoMapeo.collaborate": {
     "message": "Collaborate with others"
   },

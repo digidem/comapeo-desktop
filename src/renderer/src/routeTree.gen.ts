@@ -17,7 +17,7 @@ import { Route as WelcomeImport } from './routes/Welcome'
 import { Route as IndexImport } from './routes/index'
 import { Route as OnboardingIndexImport } from './routes/Onboarding/index'
 import { Route as OnboardingPrivacyPolicyScreenImport } from './routes/Onboarding/PrivacyPolicyScreen'
-import { Route as OnboardingNextStepImport } from './routes/Onboarding/NextStep'
+import { Route as OnboardingDeviceNamingScreenImport } from './routes/Onboarding/DeviceNamingScreen'
 import { Route as OnboardingDataPrivacyImport } from './routes/Onboarding/DataPrivacy'
 import { Route as MapTabsMapImport } from './routes/(MapTabs)/_Map'
 import { Route as MapTabsMapTab2Import } from './routes/(MapTabs)/_Map.tab2'
@@ -59,11 +59,12 @@ const OnboardingPrivacyPolicyScreenRoute =
     getParentRoute: () => rootRoute,
   } as any)
 
-const OnboardingNextStepRoute = OnboardingNextStepImport.update({
-  id: '/Onboarding/NextStep',
-  path: '/Onboarding/NextStep',
-  getParentRoute: () => rootRoute,
-} as any)
+const OnboardingDeviceNamingScreenRoute =
+  OnboardingDeviceNamingScreenImport.update({
+    id: '/Onboarding/DeviceNamingScreen',
+    path: '/Onboarding/DeviceNamingScreen',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 const OnboardingDataPrivacyRoute = OnboardingDataPrivacyImport.update({
   id: '/Onboarding/DataPrivacy',
@@ -127,11 +128,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingDataPrivacyImport
       parentRoute: typeof rootRoute
     }
-    '/Onboarding/NextStep': {
-      id: '/Onboarding/NextStep'
-      path: '/Onboarding/NextStep'
-      fullPath: '/Onboarding/NextStep'
-      preLoaderRoute: typeof OnboardingNextStepImport
+    '/Onboarding/DeviceNamingScreen': {
+      id: '/Onboarding/DeviceNamingScreen'
+      path: '/Onboarding/DeviceNamingScreen'
+      fullPath: '/Onboarding/DeviceNamingScreen'
+      preLoaderRoute: typeof OnboardingDeviceNamingScreenImport
       parentRoute: typeof rootRoute
     }
     '/Onboarding/PrivacyPolicyScreen': {
@@ -196,7 +197,7 @@ export interface FileRoutesByFullPath {
   '/': typeof MapTabsMapRouteWithChildren
   '/Welcome': typeof WelcomeRoute
   '/Onboarding/DataPrivacy': typeof OnboardingDataPrivacyRoute
-  '/Onboarding/NextStep': typeof OnboardingNextStepRoute
+  '/Onboarding/DeviceNamingScreen': typeof OnboardingDeviceNamingScreenRoute
   '/Onboarding/PrivacyPolicyScreen': typeof OnboardingPrivacyPolicyScreenRoute
   '/Onboarding': typeof OnboardingIndexRoute
   '/tab1': typeof MapTabsMapTab1Route
@@ -207,7 +208,7 @@ export interface FileRoutesByTo {
   '/': typeof MapTabsMapRouteWithChildren
   '/Welcome': typeof WelcomeRoute
   '/Onboarding/DataPrivacy': typeof OnboardingDataPrivacyRoute
-  '/Onboarding/NextStep': typeof OnboardingNextStepRoute
+  '/Onboarding/DeviceNamingScreen': typeof OnboardingDeviceNamingScreenRoute
   '/Onboarding/PrivacyPolicyScreen': typeof OnboardingPrivacyPolicyScreenRoute
   '/Onboarding': typeof OnboardingIndexRoute
   '/tab1': typeof MapTabsMapTab1Route
@@ -221,7 +222,7 @@ export interface FileRoutesById {
   '/(MapTabs)': typeof MapTabsRouteWithChildren
   '/(MapTabs)/_Map': typeof MapTabsMapRouteWithChildren
   '/Onboarding/DataPrivacy': typeof OnboardingDataPrivacyRoute
-  '/Onboarding/NextStep': typeof OnboardingNextStepRoute
+  '/Onboarding/DeviceNamingScreen': typeof OnboardingDeviceNamingScreenRoute
   '/Onboarding/PrivacyPolicyScreen': typeof OnboardingPrivacyPolicyScreenRoute
   '/Onboarding/': typeof OnboardingIndexRoute
   '/(MapTabs)/_Map/tab1': typeof MapTabsMapTab1Route
@@ -234,7 +235,7 @@ export interface FileRouteTypes {
     | '/'
     | '/Welcome'
     | '/Onboarding/DataPrivacy'
-    | '/Onboarding/NextStep'
+    | '/Onboarding/DeviceNamingScreen'
     | '/Onboarding/PrivacyPolicyScreen'
     | '/Onboarding'
     | '/tab1'
@@ -244,7 +245,7 @@ export interface FileRouteTypes {
     | '/'
     | '/Welcome'
     | '/Onboarding/DataPrivacy'
-    | '/Onboarding/NextStep'
+    | '/Onboarding/DeviceNamingScreen'
     | '/Onboarding/PrivacyPolicyScreen'
     | '/Onboarding'
     | '/tab1'
@@ -256,7 +257,7 @@ export interface FileRouteTypes {
     | '/(MapTabs)'
     | '/(MapTabs)/_Map'
     | '/Onboarding/DataPrivacy'
-    | '/Onboarding/NextStep'
+    | '/Onboarding/DeviceNamingScreen'
     | '/Onboarding/PrivacyPolicyScreen'
     | '/Onboarding/'
     | '/(MapTabs)/_Map/tab1'
@@ -269,7 +270,7 @@ export interface RootRouteChildren {
   WelcomeRoute: typeof WelcomeRoute
   MapTabsRoute: typeof MapTabsRouteWithChildren
   OnboardingDataPrivacyRoute: typeof OnboardingDataPrivacyRoute
-  OnboardingNextStepRoute: typeof OnboardingNextStepRoute
+  OnboardingDeviceNamingScreenRoute: typeof OnboardingDeviceNamingScreenRoute
   OnboardingPrivacyPolicyScreenRoute: typeof OnboardingPrivacyPolicyScreenRoute
   OnboardingIndexRoute: typeof OnboardingIndexRoute
 }
@@ -279,7 +280,7 @@ const rootRouteChildren: RootRouteChildren = {
   WelcomeRoute: WelcomeRoute,
   MapTabsRoute: MapTabsRouteWithChildren,
   OnboardingDataPrivacyRoute: OnboardingDataPrivacyRoute,
-  OnboardingNextStepRoute: OnboardingNextStepRoute,
+  OnboardingDeviceNamingScreenRoute: OnboardingDeviceNamingScreenRoute,
   OnboardingPrivacyPolicyScreenRoute: OnboardingPrivacyPolicyScreenRoute,
   OnboardingIndexRoute: OnboardingIndexRoute,
 }
@@ -298,7 +299,7 @@ export const routeTree = rootRoute
         "/Welcome",
         "/(MapTabs)",
         "/Onboarding/DataPrivacy",
-        "/Onboarding/NextStep",
+        "/Onboarding/DeviceNamingScreen",
         "/Onboarding/PrivacyPolicyScreen",
         "/Onboarding/"
       ]
@@ -326,8 +327,8 @@ export const routeTree = rootRoute
     "/Onboarding/DataPrivacy": {
       "filePath": "Onboarding/DataPrivacy.tsx"
     },
-    "/Onboarding/NextStep": {
-      "filePath": "Onboarding/NextStep.tsx"
+    "/Onboarding/DeviceNamingScreen": {
+      "filePath": "Onboarding/DeviceNamingScreen.tsx"
     },
     "/Onboarding/PrivacyPolicyScreen": {
       "filePath": "Onboarding/PrivacyPolicyScreen.tsx"

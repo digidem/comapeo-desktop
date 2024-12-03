@@ -14,6 +14,7 @@ type CustomButtonProps = PropsWithChildren<{
 	variant?: 'contained' | 'outlined' | 'text'
 	style?: CSSProperties
 	onClick?: MouseEventHandler<HTMLButtonElement>
+	disabled?: boolean
 }>
 
 export const Button = ({
@@ -23,6 +24,7 @@ export const Button = ({
 	color = 'primary',
 	variant = 'contained',
 	style,
+	disabled,
 	...props
 }: CustomButtonProps) => {
 	const propsBasedOnSize = size === 'fullWidth' ? { fullWidth: true } : { size }
@@ -32,6 +34,7 @@ export const Button = ({
 			variant={variant}
 			style={style}
 			data-testid={testID}
+			disabled={disabled}
 			{...propsBasedOnSize}
 			onClick={props.onClick}
 		>
