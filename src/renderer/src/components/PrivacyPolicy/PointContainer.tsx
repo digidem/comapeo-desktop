@@ -38,7 +38,7 @@ export function PointContainer({
 				{isSvg && icon ? (
 					React.createElement(icon, { width: 18, height: 18 })
 				) : (
-					<img src={icon as string} alt="" width={18} height={18} />
+					<img src={icon} alt="" width={18} height={18} />
 				)}
 				<PointTitle>{title}</PointTitle>
 			</PointHeader>

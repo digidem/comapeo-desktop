@@ -63,7 +63,6 @@ const Container = styled('div')({
 	height: '100%',
 	backgroundColor: DARK_COMAPEO_BLUE,
 })
-
 const ContentBox = styled('div')({
 	backgroundColor: 'rgba(255, 255, 255, 0.94)',
 	border: `1px solid ${BLUE_GREY}`,
@@ -79,7 +78,6 @@ const BodyTextWrapper = styled('div')({
 	margin: '16px auto 0',
 	textAlign: 'center',
 })
-
 const ButtonContainer = styled('div')({
 	display: 'flex',
 	justifyContent: 'space-between',
@@ -87,13 +85,11 @@ const ButtonContainer = styled('div')({
 	marginTop: 63,
 	padding: '0 20px',
 })
-
 const StyledIcon = styled(LockedIcon)({
 	marginBottom: '16px',
 	width: 40,
 	height: 50,
 })
-
 const BulletList = styled('ul')({
 	width: '50%',
 	textAlign: 'left',
@@ -101,11 +97,9 @@ const BulletList = styled('ul')({
 	color: DARK_GREY,
 	paddingLeft: 0,
 })
-
 const BulletListItem = styled('li')({
 	marginBottom: 8,
 })
-
 export function DataPrivacyComponent() {
 	const navigate = useNavigate()
 	const { formatMessage } = useIntl()

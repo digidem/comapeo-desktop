@@ -33,6 +33,7 @@ export const MetricsDiagnosticsPermissionToggle = () => {
 	const togglePermission = () => {
 		const newValue = !isEnabled
 		setIsEnabled(newValue)
+		// TODO replace code once the Metrics and Diagnostics handling code is incorporated
 		localStorage.setItem('MetricDiagnosticsPermission', String(newValue))
 
 		console.log('Permission updated:', newValue)

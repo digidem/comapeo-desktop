@@ -14,7 +14,6 @@ const MenuContainer = styled('div')({
 	margin: '16px auto',
 	position: 'relative',
 })
-
 const GoBackButton = styled(Button)({
 	display: 'flex',
 	alignItems: 'center',
@@ -29,18 +28,19 @@ const GoBackButton = styled(Button)({
 		backgroundColor: 'rgba(0, 0, 0, 0.1)',
 	},
 })
-
 const BackArrow = styled('span')({
 	fontSize: 24,
 	color: WHITE,
 })
-
+const StepsContainer = styled('div')({
+	display: 'flex',
+	alignItems: 'center',
+})
 const Steps = styled('div')({
 	display: 'flex',
 	alignItems: 'center',
 	gap: 16,
 })
-
 const Step = styled('div')(({ active }: { active: boolean }) => ({
 	backgroundColor: active ? WHITE : 'transparent',
 	color: active ? BLACK : BLUE_GREY,
@@ -49,7 +49,6 @@ const Step = styled('div')(({ active }: { active: boolean }) => ({
 	fontWeight: active ? 'bold' : 'normal',
 	whiteSpace: 'nowrap',
 }))
-
 const Divider = styled('div')({
 	width: 16,
 	height: 1,
@@ -77,6 +76,11 @@ export function OnboardingTopMenu({ currentStep }: OnboardingTopMenuProps) {
 	const navigate = useNavigate()
 	const router = useRouter()
 	const { formatMessage } = useIntl()
+	const stepToRoute: Record<number, string> = {
+		1: 'DataPrivacy',
+		2: 'NextStep',
+		3: 'PrivacyPolicyScreen',
+	}
 
 	return (
 		<MenuContainer>
@@ -88,25 +92,18 @@ export function OnboardingTopMenu({ currentStep }: OnboardingTopMenuProps) {
 					gap: 8,
 					padding: '12px 32px',
 				}}
+				aria-label={formatMessage(m.goBack)}
 			>
-				<BackArrow>←</BackArrow>
+				<BackArrow aria-hidden="true">←</BackArrow>
 				{formatMessage(m.goBack)}
 			</GoBackButton>
 			<Steps>
 				{[1, 2, 3].map((step) => (
-					<div key={step} style={{ display: 'flex', alignItems: 'center' }}>
+					<StepsContainer key={step}>
 						<Step
 							active={currentStep === step}
 							onClick={() =>
-								navigate({
-									to: `/Onboarding/${
-										step === 1
-											? 'DataPrivacy'
-											: step === 2
-												? 'NextStep'
-												: 'PrivacyPolicyScreen'
-									}`,
-								})
+								navigate({ to: `/Onboarding/${stepToRoute[step]}` })
 							}
 						>
 							<Text kind="body" bold={currentStep === step}>
@@ -114,7 +111,7 @@ export function OnboardingTopMenu({ currentStep }: OnboardingTopMenuProps) {
 							</Text>
 						</Step>
 						{step < 3 && <Divider />}
-					</div>
+					</StepsContainer>
 				))}
 			</Steps>
 		</MenuContainer>
