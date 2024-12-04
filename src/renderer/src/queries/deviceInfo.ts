@@ -28,7 +28,6 @@ export const useEditDeviceInfo = () => {
 			})
 		},
 		onSuccess: () => {
-			console.log('Mutation succeeded')
 			queryClient.invalidateQueries({ queryKey: [DEVICE_INFO_KEY] })
 		},
 	})

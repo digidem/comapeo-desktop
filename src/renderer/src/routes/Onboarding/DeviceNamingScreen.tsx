@@ -120,14 +120,6 @@ export function DeviceNamingScreenComponent() {
 	const [errorMessage, setErrorMessage] = useState('')
 	const setDeviceNameMutation = useEditDeviceInfo()
 
-	console.log('Component rendered. Mutation state:', {
-		isPending: setDeviceNameMutation.isPending,
-		isSuccess: setDeviceNameMutation.isSuccess,
-		isError: setDeviceNameMutation.isError,
-		error: setDeviceNameMutation.error,
-		status: setDeviceNameMutation.status,
-	})
-
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value
 		if (value.length > 60 || value.trim().length === 0) {
@@ -143,10 +135,8 @@ export function DeviceNamingScreenComponent() {
 			setError(true)
 			return
 		}
-		console.log('Starting mutation with deviceName:', deviceName)
 		setDeviceNameMutation.mutate(deviceName, {
 			onSuccess: () => {
-				console.log('Device name saved successfully')
 				navigate({ to: '/Onboarding/PrivacyPolicyScreen' })
 			},
 			onError: (error) => {
