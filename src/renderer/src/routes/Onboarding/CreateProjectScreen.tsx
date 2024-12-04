@@ -11,7 +11,7 @@ import { Text } from '../../components/Text'
 import ProjectImage from '../../images/add_square.png'
 import { useCreateProject } from '../../queries/projects'
 
-const PROJECT_NAME_MAX_LENGTH = 100
+const PROJECT_NAME_MAX_LENGTH_GRAPHEMES = 100
 const PROJECT_NAME_MAX_BYTES = 512
 
 export const m = defineMessages({
@@ -90,16 +90,13 @@ function CreateJoinProjectScreenComponent() {
 	const [errorMessage, setErrorMessage] = useState('')
 	const setProjectNameMutation = useCreateProject()
 
-	function getGraphemeSegments(text: string): Array<string> {
-		if (typeof Intl !== 'undefined' && 'Segmenter' in Intl) {
-			const segmenter = new Intl.Segmenter(undefined, {
-				granularity: 'grapheme',
-			})
-			const segments = [...segmenter.segment(text)].map((s) => s.segment)
-			return segments
-		} else {
-			return Array.from(text)
-		}
+	function countGraphemes(text: string): number {
+		const segmenter = new Intl.Segmenter(undefined, {
+			granularity: 'grapheme',
+		})
+		let result = 0
+		for (const _ of segmenter.segment(text)) result++
+		return result
 	}
 
 	function getUtf8ByteLength(text: string): number {
@@ -108,13 +105,12 @@ function CreateJoinProjectScreenComponent() {
 
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value
-		const segments = getGraphemeSegments(value)
-		const graphemeCount = segments.length
-		const byteLength = getUtf8ByteLength(value)
+		const graphemeCount = countGraphemes(value.trim())
+		const byteLength = getUtf8ByteLength(value.trim())
 		let error = false
 
 		if (
-			graphemeCount > PROJECT_NAME_MAX_LENGTH ||
+			graphemeCount > PROJECT_NAME_MAX_LENGTH_GRAPHEMES ||
 			byteLength > PROJECT_NAME_MAX_BYTES
 		) {
 			error = true
@@ -128,7 +124,7 @@ function CreateJoinProjectScreenComponent() {
 		setError(error)
 	}
 
-	const graphemeCount = getGraphemeSegments(projectName).length
+	const graphemeCount = countGraphemes(projectName.trim())
 
 	const handleAddName = () => {
 		if (projectName.trim().length === 0) {
@@ -192,7 +188,7 @@ function CreateJoinProjectScreenComponent() {
 				<CharacterCount error={error}>
 					{formatMessage(m.characterCount, {
 						count: graphemeCount,
-						maxLength: PROJECT_NAME_MAX_LENGTH,
+						maxLength: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
 					})}
 				</CharacterCount>
 			</InputWrapper>
