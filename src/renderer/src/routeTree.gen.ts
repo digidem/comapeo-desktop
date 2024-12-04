@@ -19,6 +19,7 @@ import { Route as OnboardingIndexImport } from './routes/Onboarding/index'
 import { Route as OnboardingPrivacyPolicyScreenImport } from './routes/Onboarding/PrivacyPolicyScreen'
 import { Route as OnboardingDeviceNamingScreenImport } from './routes/Onboarding/DeviceNamingScreen'
 import { Route as OnboardingDataPrivacyImport } from './routes/Onboarding/DataPrivacy'
+import { Route as OnboardingCreateProjectScreenImport } from './routes/Onboarding/CreateProjectScreen'
 import { Route as OnboardingCreateJoinProjectScreenImport } from './routes/Onboarding/CreateJoinProjectScreen'
 import { Route as MapTabsMapImport } from './routes/(MapTabs)/_Map'
 import { Route as MapTabsMapTab2Import } from './routes/(MapTabs)/_Map.tab2'
@@ -72,6 +73,13 @@ const OnboardingDataPrivacyRoute = OnboardingDataPrivacyImport.update({
   path: '/Onboarding/DataPrivacy',
   getParentRoute: () => rootRoute,
 } as any)
+
+const OnboardingCreateProjectScreenRoute =
+  OnboardingCreateProjectScreenImport.update({
+    id: '/Onboarding/CreateProjectScreen',
+    path: '/Onboarding/CreateProjectScreen',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 const OnboardingCreateJoinProjectScreenRoute =
   OnboardingCreateJoinProjectScreenImport.update({
@@ -134,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/Onboarding/CreateJoinProjectScreen'
       fullPath: '/Onboarding/CreateJoinProjectScreen'
       preLoaderRoute: typeof OnboardingCreateJoinProjectScreenImport
+      parentRoute: typeof rootRoute
+    }
+    '/Onboarding/CreateProjectScreen': {
+      id: '/Onboarding/CreateProjectScreen'
+      path: '/Onboarding/CreateProjectScreen'
+      fullPath: '/Onboarding/CreateProjectScreen'
+      preLoaderRoute: typeof OnboardingCreateProjectScreenImport
       parentRoute: typeof rootRoute
     }
     '/Onboarding/DataPrivacy': {
@@ -212,6 +227,7 @@ export interface FileRoutesByFullPath {
   '/': typeof MapTabsMapRouteWithChildren
   '/Welcome': typeof WelcomeRoute
   '/Onboarding/CreateJoinProjectScreen': typeof OnboardingCreateJoinProjectScreenRoute
+  '/Onboarding/CreateProjectScreen': typeof OnboardingCreateProjectScreenRoute
   '/Onboarding/DataPrivacy': typeof OnboardingDataPrivacyRoute
   '/Onboarding/DeviceNamingScreen': typeof OnboardingDeviceNamingScreenRoute
   '/Onboarding/PrivacyPolicyScreen': typeof OnboardingPrivacyPolicyScreenRoute
@@ -224,6 +240,7 @@ export interface FileRoutesByTo {
   '/': typeof MapTabsMapRouteWithChildren
   '/Welcome': typeof WelcomeRoute
   '/Onboarding/CreateJoinProjectScreen': typeof OnboardingCreateJoinProjectScreenRoute
+  '/Onboarding/CreateProjectScreen': typeof OnboardingCreateProjectScreenRoute
   '/Onboarding/DataPrivacy': typeof OnboardingDataPrivacyRoute
   '/Onboarding/DeviceNamingScreen': typeof OnboardingDeviceNamingScreenRoute
   '/Onboarding/PrivacyPolicyScreen': typeof OnboardingPrivacyPolicyScreenRoute
@@ -239,6 +256,7 @@ export interface FileRoutesById {
   '/(MapTabs)': typeof MapTabsRouteWithChildren
   '/(MapTabs)/_Map': typeof MapTabsMapRouteWithChildren
   '/Onboarding/CreateJoinProjectScreen': typeof OnboardingCreateJoinProjectScreenRoute
+  '/Onboarding/CreateProjectScreen': typeof OnboardingCreateProjectScreenRoute
   '/Onboarding/DataPrivacy': typeof OnboardingDataPrivacyRoute
   '/Onboarding/DeviceNamingScreen': typeof OnboardingDeviceNamingScreenRoute
   '/Onboarding/PrivacyPolicyScreen': typeof OnboardingPrivacyPolicyScreenRoute
@@ -253,6 +271,7 @@ export interface FileRouteTypes {
     | '/'
     | '/Welcome'
     | '/Onboarding/CreateJoinProjectScreen'
+    | '/Onboarding/CreateProjectScreen'
     | '/Onboarding/DataPrivacy'
     | '/Onboarding/DeviceNamingScreen'
     | '/Onboarding/PrivacyPolicyScreen'
@@ -264,6 +283,7 @@ export interface FileRouteTypes {
     | '/'
     | '/Welcome'
     | '/Onboarding/CreateJoinProjectScreen'
+    | '/Onboarding/CreateProjectScreen'
     | '/Onboarding/DataPrivacy'
     | '/Onboarding/DeviceNamingScreen'
     | '/Onboarding/PrivacyPolicyScreen'
@@ -277,6 +297,7 @@ export interface FileRouteTypes {
     | '/(MapTabs)'
     | '/(MapTabs)/_Map'
     | '/Onboarding/CreateJoinProjectScreen'
+    | '/Onboarding/CreateProjectScreen'
     | '/Onboarding/DataPrivacy'
     | '/Onboarding/DeviceNamingScreen'
     | '/Onboarding/PrivacyPolicyScreen'
@@ -291,6 +312,7 @@ export interface RootRouteChildren {
   WelcomeRoute: typeof WelcomeRoute
   MapTabsRoute: typeof MapTabsRouteWithChildren
   OnboardingCreateJoinProjectScreenRoute: typeof OnboardingCreateJoinProjectScreenRoute
+  OnboardingCreateProjectScreenRoute: typeof OnboardingCreateProjectScreenRoute
   OnboardingDataPrivacyRoute: typeof OnboardingDataPrivacyRoute
   OnboardingDeviceNamingScreenRoute: typeof OnboardingDeviceNamingScreenRoute
   OnboardingPrivacyPolicyScreenRoute: typeof OnboardingPrivacyPolicyScreenRoute
@@ -303,6 +325,7 @@ const rootRouteChildren: RootRouteChildren = {
   MapTabsRoute: MapTabsRouteWithChildren,
   OnboardingCreateJoinProjectScreenRoute:
     OnboardingCreateJoinProjectScreenRoute,
+  OnboardingCreateProjectScreenRoute: OnboardingCreateProjectScreenRoute,
   OnboardingDataPrivacyRoute: OnboardingDataPrivacyRoute,
   OnboardingDeviceNamingScreenRoute: OnboardingDeviceNamingScreenRoute,
   OnboardingPrivacyPolicyScreenRoute: OnboardingPrivacyPolicyScreenRoute,
@@ -323,6 +346,7 @@ export const routeTree = rootRoute
         "/Welcome",
         "/(MapTabs)",
         "/Onboarding/CreateJoinProjectScreen",
+        "/Onboarding/CreateProjectScreen",
         "/Onboarding/DataPrivacy",
         "/Onboarding/DeviceNamingScreen",
         "/Onboarding/PrivacyPolicyScreen",
@@ -351,6 +375,9 @@ export const routeTree = rootRoute
     },
     "/Onboarding/CreateJoinProjectScreen": {
       "filePath": "Onboarding/CreateJoinProjectScreen.tsx"
+    },
+    "/Onboarding/CreateProjectScreen": {
+      "filePath": "Onboarding/CreateProjectScreen.tsx"
     },
     "/Onboarding/DataPrivacy": {
       "filePath": "Onboarding/DataPrivacy.tsx"

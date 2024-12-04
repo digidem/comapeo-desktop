@@ -5,6 +5,24 @@
   "components.OnboardingTopMenu.step": {
     "message": "Step {number}"
   },
+  "screens.CreateJoinProjectScreen.askToJoin": {
+    "message": "Ask a monitoring coordinator to join their Project."
+  },
+  "screens.CreateJoinProjectScreen.createProject": {
+    "message": "Create a Project"
+  },
+  "screens.CreateJoinProjectScreen.limitedToDevices": {
+    "message": "Sharing observations and data are limited to devices within each Project."
+  },
+  "screens.CreateJoinProjectScreen.securelyStore": {
+    "message": "Projects help teams securely store and share their territory monitoring data and observations."
+  },
+  "screens.CreateJoinProjectScreen.startNewProject": {
+    "message": "Starting a new territory monitoring project?"
+  },
+  "screens.CreateJoinProjectScreen.title": {
+    "message": "Join a Project"
+  },
   "screens.DataPrivacy.description": {
     "message": "CoMapeo allows teams to map offline without needing internet servers."
   },
@@ -12,7 +30,7 @@
     "message": "Private by default — diagnostic information is made fully anonymous and you can opt-out any time."
   },
   "screens.DataPrivacy.encrypted": {
-    "message": "All data stays fully encrypted"
+    "message": "All data stays fully encrypted."
   },
   "screens.DataPrivacy.learnMore": {
     "message": "Learn More"
@@ -181,5 +199,29 @@
   },
   "screens.PrivacyPolicy.whyCollectedDescription": {
     "message": "Crash data and app errors together with the device and app info provide Awana Digital with the information we need to fix errors and bugs in the app. The performance data helps us improve the responsiveness of the app and identify errors. User counts, including total users, users per country, and users per project, help justify ongoing investment in the development of CoMapeo."
+  },
+  "screens.ProjectCreationScreen.addName": {
+    "message": "Create Project"
+  },
+  "screens.ProjectCreationScreen.advancedProjectSettings": {
+    "message": "Advanced Project Settings"
+  },
+  "screens.ProjectCreationScreen.characterCount": {
+    "message": "{count}/{maxLength}"
+  },
+  "screens.ProjectCreationScreen.description": {
+    "message": "Name your project."
+  },
+  "screens.ProjectCreationScreen.errorSavingProjectName": {
+    "message": "An error occurred while saving your project name. Please try again."
+  },
+  "screens.ProjectCreationScreen.placeholder": {
+    "message": "Project Name"
+  },
+  "screens.ProjectCreationScreen.saving": {
+    "message": "Saving..."
+  },
+  "screens.ProjectCreationScreen.title": {
+    "message": "Create a Project"
   }
 }

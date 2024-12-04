@@ -4,51 +4,54 @@ import { styled } from '@mui/material/styles'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK, BLUE_GREY, RED, WHITE } from '../../colors'
+import { BLACK, RED, WHITE } from '../../colors'
 import { Button } from '../../components/Button'
 import { OnboardingScreenLayout } from '../../components/OnboardingScreenLayout'
 import { Text } from '../../components/Text'
-import DeviceImage from '../../images/device.png'
-import { useEditDeviceInfo } from '../../queries/deviceInfo'
+import ProjectImage from '../../images/add_square.png'
+import { useCreateProject } from '../../queries/projects'
 
-const DEVICE_NAME_MAX_LENGTH = 60
-const DEVICE_NAME_MAX_BYTES = 512
+const PROJECT_NAME_MAX_LENGTH = 100
+const PROJECT_NAME_MAX_BYTES = 512
 
 export const m = defineMessages({
 	title: {
-		id: 'screens.DeviceNamingScreen.title',
-		defaultMessage: 'Name Your Device',
+		id: 'screens.ProjectCreationScreen.title',
+		defaultMessage: 'Create a Project',
 	},
 	description: {
-		id: 'screens.DeviceNamingScreen.description',
-		defaultMessage:
-			'A device name allows others using CoMapeo to invite you to projects.',
+		id: 'screens.ProjectCreationScreen.description',
+		defaultMessage: 'Name your project.',
 	},
 	placeholder: {
-		id: 'screens.DeviceNamingScreen.placeholder',
-		defaultMessage: 'Device Name',
+		id: 'screens.ProjectCreationScreen.placeholder',
+		defaultMessage: 'Project Name',
 	},
 	addName: {
-		id: 'screens.DeviceNamingScreen.addName',
-		defaultMessage: 'Add Name',
+		id: 'screens.ProjectCreationScreen.addName',
+		defaultMessage: 'Create Project',
 	},
 	characterCount: {
-		id: 'screens.DeviceNamingScreen.characterCount',
+		id: 'screens.ProjectCreationScreen.characterCount',
 		defaultMessage: '{count}/{maxLength}',
 	},
-	errorSavingDeviceName: {
-		id: 'screens.DeviceNamingScreen.errorSavingDeviceName',
+	advancedProjectSettings: {
+		id: 'screens.ProjectCreationScreen.advancedProjectSettings',
+		defaultMessage: 'Advanced Project Settings',
+	},
+	errorSavingProjectName: {
+		id: 'screens.ProjectCreationScreen.errorSavingProjectName',
 		defaultMessage:
-			'An error occurred while saving your device name. Please try again.',
+			'An error occurred while saving your project name. Please try again.',
 	},
 	saving: {
-		id: 'screens.DeviceNamingScreen.saving',
+		id: 'screens.ProjectCreationScreen.saving',
 		defaultMessage: 'Saving...',
 	},
 })
 
-export const Route = createFileRoute('/Onboarding/DeviceNamingScreen')({
-	component: DeviceNamingScreenComponent,
+export const Route = createFileRoute('/Onboarding/CreateProjectScreen')({
+	component: CreateJoinProjectScreenComponent,
 })
 
 const StyledImage = styled('img')({
@@ -79,19 +82,13 @@ const CharacterCount = styled(Text)<{ error: boolean }>(({ error }) => ({
 	textAlign: 'right',
 }))
 
-const HorizontalLine = styled('div')({
-	borderBottom: `1px solid ${BLUE_GREY}`,
-	margin: '60px auto 30px auto',
-	width: '55%',
-})
-
-export function DeviceNamingScreenComponent() {
+function CreateJoinProjectScreenComponent() {
 	const navigate = useNavigate()
 	const { formatMessage } = useIntl()
-	const [deviceName, setDeviceName] = useState('')
+	const [projectName, setProjectName] = useState('')
 	const [error, setError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
-	const setDeviceNameMutation = useEditDeviceInfo()
+	const setProjectNameMutation = useCreateProject()
 
 	function getGraphemeSegments(text: string): Array<string> {
 		if (typeof Intl !== 'undefined' && 'Segmenter' in Intl) {
@@ -117,39 +114,39 @@ export function DeviceNamingScreenComponent() {
 		let error = false
 
 		if (
-			graphemeCount > DEVICE_NAME_MAX_LENGTH ||
-			byteLength > DEVICE_NAME_MAX_BYTES
+			graphemeCount > PROJECT_NAME_MAX_LENGTH ||
+			byteLength > PROJECT_NAME_MAX_BYTES
 		) {
 			error = true
 		} else {
 			if (value.trim().length === 0) {
 				error = true
 			}
-			setDeviceName(value)
+			setProjectName(value)
 		}
 
 		setError(error)
 	}
 
-	const graphemeCount = getGraphemeSegments(deviceName).length
+	const graphemeCount = getGraphemeSegments(projectName).length
 
 	const handleAddName = () => {
-		if (deviceName.trim().length === 0) {
+		if (projectName.trim().length === 0) {
 			setError(true)
 			return
 		}
-		setDeviceNameMutation.mutate(deviceName, {
+		setProjectNameMutation.mutate(projectName, {
 			onSuccess: () => {
-				navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
+				navigate({ to: '/tab1' })
 			},
 			onError: (error) => {
-				console.error('Error setting device name:', error)
-				setErrorMessage(formatMessage(m.errorSavingDeviceName))
+				console.error('Error setting project name:', error)
+				setErrorMessage(formatMessage(m.errorSavingProjectName))
 			},
 		})
 	}
 
-	const icon = <StyledImage src={DeviceImage} alt="Add Device" />
+	const icon = <StyledImage src={ProjectImage} alt="Add Project" />
 	const buttons = (
 		<Button
 			onClick={handleAddName}
@@ -158,9 +155,9 @@ export function DeviceNamingScreenComponent() {
 				maxWidth: 350,
 				padding: '12px 20px',
 			}}
-			disabled={setDeviceNameMutation.isPending}
+			disabled={setProjectNameMutation.isPending}
 		>
-			{setDeviceNameMutation.isPending
+			{setProjectNameMutation.isPending
 				? formatMessage(m.saving)
 				: formatMessage(m.addName)}
 		</Button>
@@ -168,7 +165,7 @@ export function DeviceNamingScreenComponent() {
 
 	return (
 		<OnboardingScreenLayout
-			currentStep={2}
+			currentStep={3}
 			icon={icon}
 			title={formatMessage(m.title)}
 			bodyText={formatMessage(m.description)}
@@ -177,7 +174,7 @@ export function DeviceNamingScreenComponent() {
 			<InputWrapper>
 				<StyledTextField
 					placeholder={formatMessage(m.placeholder)}
-					value={deviceName}
+					value={projectName}
 					onChange={handleChange}
 					variant="outlined"
 					error={error}
@@ -195,14 +192,13 @@ export function DeviceNamingScreenComponent() {
 				<CharacterCount error={error}>
 					{formatMessage(m.characterCount, {
 						count: graphemeCount,
-						maxLength: DEVICE_NAME_MAX_LENGTH,
+						maxLength: PROJECT_NAME_MAX_LENGTH,
 					})}
 				</CharacterCount>
 			</InputWrapper>
 			{errorMessage && (
 				<Text style={{ color: RED, marginTop: '16px' }}>{errorMessage}</Text>
 			)}
-			<HorizontalLine />
 		</OnboardingScreenLayout>
 	)
 }

@@ -77,7 +77,7 @@ const theme = createTheme({
 							borderWidth: 1,
 						},
 					}),
-					borderRadius: 4,
+					borderRadius: 32,
 					textTransform: 'none',
 					fontSize: '1rem',
 					fontWeight: 400,
