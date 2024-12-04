@@ -33,7 +33,7 @@
     "message": "Add Name"
   },
   "screens.DeviceNamingScreen.characterCount": {
-    "message": "{count}/60"
+    "message": "{count}/{maxLength}"
   },
   "screens.DeviceNamingScreen.description": {
     "message": "A device name allows others using CoMapeo to invite you to projects."
