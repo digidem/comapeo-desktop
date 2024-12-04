@@ -11,7 +11,7 @@ import { Text } from '../../components/Text'
 import DeviceImage from '../../images/device.png'
 import { useEditDeviceInfo } from '../../queries/deviceInfo'
 
-const DEVICE_NAME_MAX_LENGTH = 60
+const DEVICE_NAME_MAX_LENGTH_GRAPHEMES = 60
 const DEVICE_NAME_MAX_BYTES = 512
 
 export const m = defineMessages({
@@ -116,16 +116,13 @@ export function DeviceNamingScreenComponent() {
 	const [errorMessage, setErrorMessage] = useState('')
 	const setDeviceNameMutation = useEditDeviceInfo()
 
-	function getGraphemeSegments(text: string): Array<string> {
-		if (typeof Intl !== 'undefined' && 'Segmenter' in Intl) {
-			const segmenter = new Intl.Segmenter(undefined, {
-				granularity: 'grapheme',
-			})
-			const segments = [...segmenter.segment(text)].map((s) => s.segment)
-			return segments
-		} else {
-			return Array.from(text)
-		}
+	function countGraphemes(text: string): number {
+		const segmenter = new Intl.Segmenter(undefined, {
+			granularity: 'grapheme',
+		})
+		let result = 0
+		for (const _ of segmenter.segment(text)) result++
+		return result
 	}
 
 	function getUtf8ByteLength(text: string): number {
@@ -134,13 +131,12 @@ export function DeviceNamingScreenComponent() {
 
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value
-		const segments = getGraphemeSegments(value)
-		const graphemeCount = segments.length
-		const byteLength = getUtf8ByteLength(value)
+		const graphemeCount = countGraphemes(value.trim())
+		const byteLength = getUtf8ByteLength(value.trim())
 		let error = false
 
 		if (
-			graphemeCount > DEVICE_NAME_MAX_LENGTH ||
+			graphemeCount > DEVICE_NAME_MAX_LENGTH_GRAPHEMES ||
 			byteLength > DEVICE_NAME_MAX_BYTES
 		) {
 			error = true
@@ -154,7 +150,7 @@ export function DeviceNamingScreenComponent() {
 		setError(error)
 	}
 
-	const graphemeCount = getGraphemeSegments(deviceName).length
+	const graphemeCount = countGraphemes(deviceName.trim())
 
 	const handleAddName = () => {
 		if (deviceName.trim().length === 0) {
@@ -204,7 +200,7 @@ export function DeviceNamingScreenComponent() {
 					<CharacterCount error={error}>
 						{formatMessage(m.characterCount, {
 							count: graphemeCount,
-							maxLength: DEVICE_NAME_MAX_LENGTH,
+							maxLength: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
 						})}
 					</CharacterCount>
 				</InputWrapper>
