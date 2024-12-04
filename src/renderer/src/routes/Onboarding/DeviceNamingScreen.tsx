@@ -56,7 +56,6 @@ const Container = styled('div')({
 	height: '100%',
 	backgroundColor: DARK_COMAPEO_BLUE,
 })
-
 const ContentBox = styled('div')({
 	backgroundColor: 'rgba(255, 255, 255, 0.94)',
 	border: `1px solid ${BLUE_GREY}`,
@@ -66,13 +65,11 @@ const ContentBox = styled('div')({
 	textAlign: 'center',
 	boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.02)',
 })
-
 const BodyTextWrapper = styled('div')({
 	maxWidth: '45%',
 	margin: '16px auto 0',
 	textAlign: 'center',
 })
-
 const ButtonContainer = styled('div')({
 	display: 'flex',
 	justifyContent: 'center',
@@ -80,13 +77,11 @@ const ButtonContainer = styled('div')({
 	marginTop: 63,
 	padding: '0 20px',
 })
-
 const StyledImage = styled('img')({
 	marginBottom: 20,
 	width: 60,
 	height: 60,
 })
-
 const InputWrapper = styled('div')({
 	marginTop: 24,
 	marginBottom: 160,
@@ -94,14 +89,12 @@ const InputWrapper = styled('div')({
 	flexDirection: 'column',
 	alignItems: 'center',
 })
-
 const StyledTextField = styled(TextField)({
 	width: '100%',
 	maxWidth: '400px',
 	backgroundColor: WHITE,
 	marginTop: 20,
 })
-
 const CharacterCount = styled(Text, {
 	shouldForwardProp: (prop) => prop !== 'error',
 })<{ error: boolean }>`
@@ -137,7 +130,7 @@ export function DeviceNamingScreenComponent() {
 		}
 		setDeviceNameMutation.mutate(deviceName, {
 			onSuccess: () => {
-				navigate({ to: '/Onboarding/PrivacyPolicyScreen' })
+				navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
 			},
 			onError: (error) => {
 				console.error('Error setting device name:', error)
@@ -191,7 +184,7 @@ export function DeviceNamingScreenComponent() {
 							borderRadius: 32,
 							padding: '12px 20px',
 						}}
-						disabled={setDeviceNameMutation.status === 'pending' || error}
+						disabled={setDeviceNameMutation.isPending}
 					>
 						{setDeviceNameMutation.isPending
 							? formatMessage(m.saving)

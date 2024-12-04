@@ -79,7 +79,7 @@ export function OnboardingTopMenu({ currentStep }: OnboardingTopMenuProps) {
 	const stepToRoute: Record<number, string> = {
 		1: 'DataPrivacy',
 		2: 'DeviceNamingScreen',
-		3: 'PrivacyPolicyScreen',
+		3: 'CreateJoinProjectScreen',
 	}
 
 	return (
