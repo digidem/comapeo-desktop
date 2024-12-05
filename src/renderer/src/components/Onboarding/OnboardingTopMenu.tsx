@@ -14,20 +14,11 @@ const MenuContainer = styled('div')({
 	margin: '16px auto',
 	position: 'relative',
 })
-const GoBackButton = styled(Button)({
-	display: 'flex',
-	alignItems: 'center',
+const GoBackButton = styled(Button)<{ disabled?: boolean }>(({ disabled }) => ({
 	gap: 8,
-	backgroundColor: 'transparent',
 	color: BLUE_GREY,
-	fontSize: 16,
-	padding: '12px 32px',
-	borderRadius: 20,
-	whiteSpace: 'nowrap',
-	'&:hover': {
-		backgroundColor: 'rgba(0, 0, 0, 0.1)',
-	},
-})
+	cursor: disabled ? 'default' : 'pointer',
+}))
 const BackArrow = styled('span')({
 	fontSize: 24,
 	color: WHITE,
@@ -41,13 +32,21 @@ const Steps = styled('div')({
 	alignItems: 'center',
 	gap: 16,
 })
-const Step = styled('div')(({ active }: { active: boolean }) => ({
+const Step = styled('div')<{
+	active: boolean
+	disabled?: boolean
+}>(({ active, disabled }) => ({
 	backgroundColor: active ? WHITE : 'transparent',
 	color: active ? BLACK : BLUE_GREY,
 	padding: '12px 32px',
 	borderRadius: 20,
 	fontWeight: active ? 'bold' : 'normal',
 	whiteSpace: 'nowrap',
+	cursor: disabled ? 'default' : 'pointer',
+	opacity: disabled ? 0.5 : 1,
+	'&:hover': {
+		backgroundColor: !disabled && !active ? 'rgba(0, 0, 0, 0.1)' : undefined,
+	},
 }))
 const Divider = styled('div')({
 	width: 16,
@@ -82,37 +81,53 @@ export function OnboardingTopMenu({ currentStep }: OnboardingTopMenuProps) {
 		3: 'CreateJoinProjectScreen',
 	}
 
+	const canGoBack = currentStep < 3
+
 	return (
 		<MenuContainer>
 			<GoBackButton
-				onClick={() => router.history.back()}
-				variant="text"
-				style={{
-					color: BLUE_GREY,
-					gap: 8,
-					padding: '12px 32px',
+				onClick={() => {
+					if (canGoBack) {
+						router.history.back()
+					}
 				}}
+				variant="text"
 				aria-label={formatMessage(m.goBack)}
+				disabled={!canGoBack}
+				sx={{
+					'&.Mui-disabled': {
+						color: BLUE_GREY,
+						opacity: 0.5,
+					},
+				}}
 			>
 				<BackArrow aria-hidden="true">←</BackArrow>
 				{formatMessage(m.goBack)}
 			</GoBackButton>
 			<Steps>
-				{[1, 2, 3].map((step) => (
-					<StepsContainer key={step}>
-						<Step
-							active={currentStep === step}
-							onClick={() =>
-								navigate({ to: `/Onboarding/${stepToRoute[step]}` })
-							}
-						>
-							<Text kind="body" bold={currentStep === step}>
-								{formatMessage(m.step, { number: step })}
-							</Text>
-						</Step>
-						{step < 3 && <Divider />}
-					</StepsContainer>
-				))}
+				{[1, 2, 3].map((step) => {
+					const isDisabled =
+						step > currentStep || (currentStep === 3 && step < currentStep)
+
+					return (
+						<StepsContainer key={step}>
+							<Step
+								active={currentStep === step}
+								disabled={isDisabled}
+								onClick={
+									!isDisabled && step < currentStep
+										? () => navigate({ to: `/Onboarding/${stepToRoute[step]}` })
+										: undefined
+								}
+							>
+								<Text kind="body" bold={currentStep === step}>
+									{formatMessage(m.step, { number: step })}
+								</Text>
+							</Step>
+							{step < 3 && <Divider />}
+						</StepsContainer>
+					)
+				})}
 			</Steps>
 		</MenuContainer>
 	)
