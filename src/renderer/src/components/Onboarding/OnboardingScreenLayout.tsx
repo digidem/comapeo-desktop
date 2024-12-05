@@ -1,14 +1,14 @@
 import React, { type ReactNode } from 'react'
 import { styled } from '@mui/material/styles'
 
-import { BLUE_GREY, DARK_COMAPEO_BLUE } from '../colors'
+import { BLUE_GREY, DARK_COMAPEO_BLUE } from '../../colors'
+import { Text } from '../Text'
 import { OnboardingTopMenu } from './OnboardingTopMenu'
-import { Text } from './Text'
 
 const Container = styled('div')({
 	display: 'flex',
 	flexDirection: 'column',
-	height: '100%',
+	minHeight: '100vh',
 	backgroundColor: DARK_COMAPEO_BLUE,
 })
 
@@ -29,6 +29,17 @@ const ContentBox = styled('div')({
 	width: '55%',
 	textAlign: 'center',
 	boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.02)',
+	boxSizing: 'border-box',
+	flexGrow: 0,
+	flexShrink: 0,
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'center',
+})
+
+const Content = styled('div')({
+	width: '100%',
+	flexGrow: 1,
 })
 
 const BodyTextWrapper = styled('div')({
@@ -44,6 +55,7 @@ const ButtonContainer = styled('div')<{ isSingleButton: boolean }>(
 		gap: 15,
 		marginTop: 63,
 		padding: '0 20px',
+		width: '100%',
 	}),
 )
 
@@ -74,7 +86,7 @@ export function OnboardingScreenLayout(props: OnboardingScreenLayoutProps) {
 							</Text>
 						</BodyTextWrapper>
 					)}
-					{children}
+					<Content>{children}</Content>
 					{buttons && (
 						<ButtonContainer isSingleButton={isSingleButton}>
 							{buttons}

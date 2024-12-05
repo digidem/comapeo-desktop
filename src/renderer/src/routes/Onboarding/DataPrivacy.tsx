@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl'
 
 import { BLACK, DARK_GREY, WHITE } from '../../colors'
 import { Button } from '../../components/Button'
-import { OnboardingScreenLayout } from '../../components/OnboardingScreenLayout'
+import { OnboardingScreenLayout } from '../../components/Onboarding/OnboardingScreenLayout'
 import { Text } from '../../components/Text'
 import LockedIcon from '../../images/LockedWithKey.svg'
 

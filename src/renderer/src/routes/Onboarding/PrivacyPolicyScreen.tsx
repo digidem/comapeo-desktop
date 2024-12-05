@@ -2,8 +2,8 @@ import { styled } from '@mui/material/styles'
 import { createFileRoute } from '@tanstack/react-router'
 
 import { BLUE_GREY, DARK_COMAPEO_BLUE } from '../../colors'
-import { OnboardingTopMenu } from '../../components/OnboardingTopMenu'
-import { PrivacyPolicy } from '../../components/PrivacyPolicy'
+import { OnboardingTopMenu } from '../../components/Onboarding/OnboardingTopMenu'
+import { PrivacyPolicy } from '../../components/Onboarding/PrivacyPolicy'
 
 export const Route = createFileRoute('/Onboarding/PrivacyPolicyScreen')({
 	component: PrivacyPolicyScreen,

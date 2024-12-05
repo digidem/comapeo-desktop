@@ -6,7 +6,7 @@ import { defineMessages, useIntl } from 'react-intl'
 
 import { BLACK, RED, WHITE } from '../../colors'
 import { Button } from '../../components/Button'
-import { OnboardingScreenLayout } from '../../components/OnboardingScreenLayout'
+import { OnboardingScreenLayout } from '../../components/Onboarding/OnboardingScreenLayout'
 import { Text } from '../../components/Text'
 import ProjectImage from '../../images/add_square.png'
 import { useCreateProject } from '../../queries/projects'
@@ -74,7 +74,9 @@ const StyledTextField = styled(TextField)({
 	marginTop: 20,
 })
 
-const CharacterCount = styled(Text)<{ error: boolean }>(({ error }) => ({
+const CharacterCount = styled(Text, {
+	shouldForwardProp: (prop) => prop !== 'error',
+})<{ error: boolean }>(({ error }) => ({
 	marginTop: 8,
 	color: error ? RED : BLACK,
 	width: '100%',

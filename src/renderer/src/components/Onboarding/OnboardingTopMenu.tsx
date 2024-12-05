@@ -2,9 +2,9 @@ import { styled } from '@mui/material/styles'
 import { useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK, BLUE_GREY, COMAPEO_BLUE, WHITE } from '../colors'
-import { Button } from './Button'
-import { Text } from './Text'
+import { BLACK, BLUE_GREY, COMAPEO_BLUE, WHITE } from '../../colors'
+import { Button } from '../Button'
+import { Text } from '../Text'
 
 const MenuContainer = styled('div')({
 	display: 'flex',
