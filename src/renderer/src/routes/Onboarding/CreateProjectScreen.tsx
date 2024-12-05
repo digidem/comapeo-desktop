@@ -4,24 +4,27 @@ import { styled } from '@mui/material/styles'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK, RED, WHITE } from '../../colors'
+import { BLACK, BLUE_GREY, RED, WHITE } from '../../colors'
 import { Button } from '../../components/Button'
 import { OnboardingScreenLayout } from '../../components/Onboarding/OnboardingScreenLayout'
 import { Text } from '../../components/Text'
+import {
+	PROJECT_NAME_MAX_BYTES,
+	PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
+} from '../../constants'
 import ProjectImage from '../../images/add_square.png'
+import ChevronUp from '../../images/chevrondown-expanded.svg'
+import ChevronDown from '../../images/chevrondown.svg'
 import { useCreateProject } from '../../queries/projects'
-
-const PROJECT_NAME_MAX_LENGTH_GRAPHEMES = 100
-const PROJECT_NAME_MAX_BYTES = 512
 
 export const m = defineMessages({
 	title: {
 		id: 'screens.ProjectCreationScreen.title',
 		defaultMessage: 'Create a Project',
 	},
-	description: {
-		id: 'screens.ProjectCreationScreen.description',
-		defaultMessage: 'Name your project.',
+	enterNameLabel: {
+		id: 'screens.ProjectCreationScreen.enterNameLabel',
+		defaultMessage: 'Name your project',
 	},
 	placeholder: {
 		id: 'screens.ProjectCreationScreen.placeholder',
@@ -38,6 +41,10 @@ export const m = defineMessages({
 	advancedProjectSettings: {
 		id: 'screens.ProjectCreationScreen.advancedProjectSettings',
 		defaultMessage: 'Advanced Project Settings',
+	},
+	importConfig: {
+		id: 'screens.ProjectCreationScreen.importConfig',
+		defaultMessage: 'Import Config',
 	},
 	errorSavingProjectName: {
 		id: 'screens.ProjectCreationScreen.errorSavingProjectName',
@@ -56,12 +63,12 @@ export const Route = createFileRoute('/Onboarding/CreateProjectScreen')({
 
 const StyledImage = styled('img')({
 	width: 60,
-	height: 48,
+	height: 60,
 })
 
 const InputWrapper = styled('div')({
 	marginTop: 24,
-	marginBottom: 160,
+	marginBottom: 24,
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',
@@ -84,6 +91,12 @@ const CharacterCount = styled(Text, {
 	textAlign: 'right',
 }))
 
+const HorizontalLine = styled('div')({
+	borderBottom: `1px solid ${BLUE_GREY}`,
+	margin: '20px auto 20px auto',
+	width: '65%',
+})
+
 function CreateJoinProjectScreenComponent() {
 	const navigate = useNavigate()
 	const { formatMessage } = useIntl()
@@ -91,6 +104,9 @@ function CreateJoinProjectScreenComponent() {
 	const [error, setError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
 	const setProjectNameMutation = useCreateProject()
+
+	const [advancedSettingOpen, setAdvancedSettingOpen] = useState(false)
+	const [configFileName, setConfigFileName] = useState<string | null>(null)
 
 	function countGraphemes(text: string): number {
 		const segmenter = new Intl.Segmenter(undefined, {
@@ -109,21 +125,18 @@ function CreateJoinProjectScreenComponent() {
 		const value = event.target.value
 		const graphemeCount = countGraphemes(value.trim())
 		const byteLength = getUtf8ByteLength(value.trim())
-		let error = false
+		let localError = false
 
 		if (
 			graphemeCount > PROJECT_NAME_MAX_LENGTH_GRAPHEMES ||
-			byteLength > PROJECT_NAME_MAX_BYTES
+			byteLength > PROJECT_NAME_MAX_BYTES ||
+			value.trim().length === 0
 		) {
-			error = true
+			localError = true
 		} else {
-			if (value.trim().length === 0) {
-				error = true
-			}
 			setProjectName(value)
 		}
-
-		setError(error)
+		setError(localError)
 	}
 
 	const graphemeCount = countGraphemes(projectName.trim())
@@ -142,6 +155,11 @@ function CreateJoinProjectScreenComponent() {
 				setErrorMessage(formatMessage(m.errorSavingProjectName))
 			},
 		})
+	}
+
+	function importConfigFile() {
+		// Placeholder for file import logic
+		setConfigFileName('myProjectConfig.comapeocat')
 	}
 
 	const icon = <StyledImage src={ProjectImage} alt="Add Project" />
@@ -166,21 +184,30 @@ function CreateJoinProjectScreenComponent() {
 			currentStep={3}
 			icon={icon}
 			title={formatMessage(m.title)}
-			bodyText={formatMessage(m.description)}
 			buttons={buttons}
 		>
 			<InputWrapper>
 				<StyledTextField
+					label={formatMessage(m.enterNameLabel)}
+					required
 					placeholder={formatMessage(m.placeholder)}
 					value={projectName}
 					onChange={handleChange}
 					variant="outlined"
 					error={error}
+					sx={{
+						'& .MuiFormLabel-asterisk': {
+							color: 'red',
+						},
+					}}
 					slotProps={{
 						input: {
 							style: {
 								padding: '5px 6px',
 							},
+						},
+						inputLabel: {
+							style: { fontSize: '1.125rem' },
 						},
 						htmlInput: {
 							minLength: 1,
@@ -193,10 +220,64 @@ function CreateJoinProjectScreenComponent() {
 						maxLength: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
 					})}
 				</CharacterCount>
+				{errorMessage && (
+					<Text style={{ color: RED, marginTop: '16px' }}>{errorMessage}</Text>
+				)}
 			</InputWrapper>
-			{errorMessage && (
-				<Text style={{ color: RED, marginTop: '16px' }}>{errorMessage}</Text>
-			)}
+			<HorizontalLine />
+			<div
+				style={{
+					width: '100%',
+					maxWidth: 400,
+					margin: '0 auto',
+					textAlign: 'center',
+				}}
+			>
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: 'space-between',
+						alignItems: 'center',
+						gap: 8,
+						padding: '10px 0',
+						cursor: 'pointer',
+					}}
+					onClick={() => setAdvancedSettingOpen(!advancedSettingOpen)}
+				>
+					<Text bold style={{ fontSize: '1.125rem' }}>
+						{formatMessage(m.advancedProjectSettings)}
+					</Text>
+					{advancedSettingOpen ? <ChevronDown /> : <ChevronUp />}
+				</div>
+				<div
+					style={{
+						display: advancedSettingOpen ? 'flex' : 'none',
+						overflow: 'hidden',
+						transition: 'height 0.3s ease',
+						flexDirection: 'column',
+						gap: 20,
+						alignItems: 'center',
+						padding: advancedSettingOpen ? 20 : 0,
+					}}
+				>
+					<Button
+						variant="outlined"
+						style={{
+							backgroundColor: WHITE,
+							color: BLACK,
+							width: '100%',
+							maxWidth: 350,
+							padding: '12px 20px',
+						}}
+						onClick={importConfigFile}
+					>
+						{formatMessage(m.importConfig)}
+					</Button>
+					{configFileName && (
+						<Text style={{ textAlign: 'center' }}>{configFileName}</Text>
+					)}
+				</div>
+			</div>
 		</OnboardingScreenLayout>
 	)
 }

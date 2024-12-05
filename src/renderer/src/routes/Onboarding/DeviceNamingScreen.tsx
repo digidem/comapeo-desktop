@@ -59,7 +59,7 @@ const StyledImage = styled('img')({
 
 const InputWrapper = styled('div')({
 	marginTop: 24,
-	marginBottom: 160,
+	marginBottom: 24,
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',

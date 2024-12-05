@@ -29,12 +29,10 @@ const ContentBox = styled('div')({
 	width: '55%',
 	textAlign: 'center',
 	boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.02)',
-	boxSizing: 'border-box',
-	flexGrow: 0,
-	flexShrink: 0,
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',
+	minHeight: 700,
 })
 
 const Content = styled('div')({
