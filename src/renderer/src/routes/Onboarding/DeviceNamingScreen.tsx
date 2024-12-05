@@ -4,15 +4,16 @@ import { styled } from '@mui/material/styles'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK, BLUE_GREY, RED, WHITE } from '../../colors'
+import { BLACK, RED, WHITE } from '../../colors'
 import { Button } from '../../components/Button'
-import { OnboardingScreenLayout } from '../../components/OnboardingScreenLayout'
+import { OnboardingScreenLayout } from '../../components/Onboarding/OnboardingScreenLayout'
 import { Text } from '../../components/Text'
+import {
+	DEVICE_NAME_MAX_BYTES,
+	DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
+} from '../../constants'
 import DeviceImage from '../../images/device.png'
 import { useEditDeviceInfo } from '../../queries/deviceInfo'
-
-const DEVICE_NAME_MAX_LENGTH_GRAPHEMES = 60
-const DEVICE_NAME_MAX_BYTES = 512
 
 export const m = defineMessages({
 	title: {
@@ -62,6 +63,7 @@ const InputWrapper = styled('div')({
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',
+	flexGrow: 1,
 })
 
 const StyledTextField = styled(TextField)({
@@ -71,7 +73,9 @@ const StyledTextField = styled(TextField)({
 	marginTop: 20,
 })
 
-const CharacterCount = styled(Text)<{ error: boolean }>(({ error }) => ({
+const CharacterCount = styled(Text, {
+	shouldForwardProp: (prop) => prop !== 'error',
+})<{ error: boolean }>(({ error }) => ({
 	marginTop: 8,
 	color: error ? RED : BLACK,
 	width: '100%',
@@ -79,17 +83,11 @@ const CharacterCount = styled(Text)<{ error: boolean }>(({ error }) => ({
 	textAlign: 'right',
 }))
 
-const HorizontalLine = styled('div')({
-	borderBottom: `1px solid ${BLUE_GREY}`,
-	margin: '60px auto 30px auto',
-	width: '55%',
-})
-
 export function DeviceNamingScreenComponent() {
 	const navigate = useNavigate()
 	const { formatMessage } = useIntl()
 	const [deviceName, setDeviceName] = useState('')
-	const [error, setError] = useState(false)
+	const [inputError, setInputError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
 	const setDeviceNameMutation = useEditDeviceInfo()
 
@@ -124,14 +122,14 @@ export function DeviceNamingScreenComponent() {
 			setDeviceName(value)
 		}
 
-		setError(error)
+		setInputError(error)
 	}
 
 	const graphemeCount = countGraphemes(deviceName.trim())
 
 	const handleAddName = () => {
 		if (deviceName.trim().length === 0) {
-			setError(true)
+			setInputError(true)
 			return
 		}
 		setDeviceNameMutation.mutate(deviceName, {
@@ -154,7 +152,7 @@ export function DeviceNamingScreenComponent() {
 				maxWidth: 350,
 				padding: '12px 20px',
 			}}
-			disabled={setDeviceNameMutation.isPending}
+			disabled={setDeviceNameMutation.isPending || inputError}
 		>
 			{setDeviceNameMutation.isPending
 				? formatMessage(m.saving)
@@ -176,7 +174,7 @@ export function DeviceNamingScreenComponent() {
 					value={deviceName}
 					onChange={handleChange}
 					variant="outlined"
-					error={error}
+					error={inputError}
 					slotProps={{
 						input: {
 							style: {
@@ -188,7 +186,7 @@ export function DeviceNamingScreenComponent() {
 						},
 					}}
 				/>
-				<CharacterCount error={error}>
+				<CharacterCount error={inputError}>
 					{formatMessage(m.characterCount, {
 						count: graphemeCount,
 						maxLength: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
@@ -198,7 +196,6 @@ export function DeviceNamingScreenComponent() {
 			{errorMessage && (
 				<Text style={{ color: RED, marginTop: '16px' }}>{errorMessage}</Text>
 			)}
-			<HorizontalLine />
 		</OnboardingScreenLayout>
 	)
 }
