@@ -1,8 +1,8 @@
 import CircleIcon from '@mui/icons-material/Circle'
 import { styled } from '@mui/material/styles'
 
-import { DARK_GREY } from '../../colors'
-import { Text } from '../../components/Text'
+import { DARK_GREY } from '../../../colors'
+import { Text } from '../../Text'
 
 const DiagnosticsItem = styled('div')({
 	display: 'flex',

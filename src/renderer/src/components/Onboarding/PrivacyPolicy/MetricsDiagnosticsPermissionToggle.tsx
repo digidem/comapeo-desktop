@@ -3,7 +3,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { styled } from '@mui/material/styles'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK } from '../../colors'
+import { BLACK } from '../../../colors'
 
 const m = defineMessages({
 	shareDiagnostics: {

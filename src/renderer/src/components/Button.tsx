@@ -25,11 +25,13 @@ export const Button = ({
 	variant = 'contained',
 	style,
 	disabled,
+	className,
 	...props
 }: CustomButtonProps) => {
 	const propsBasedOnSize = size === 'fullWidth' ? { fullWidth: true } : { size }
 	return (
 		<MuiButton
+			className={className}
 			color={color}
 			variant={variant}
 			style={style}

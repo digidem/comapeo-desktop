@@ -48,7 +48,7 @@ const Container = styled('div')({
 	backgroundColor: DARK_COMAPEO_BLUE,
 	width: '100%',
 	height: '100vh',
-	overflow: 'hidden',
+	overflow: 'auto',
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',
@@ -71,18 +71,39 @@ const ContentWrapper = styled('div')({
 	width: '100%',
 	height: '60%',
 	zIndex: 1,
+	justifyItems: 'center',
+
+	'@media (max-width: 800px)': {
+		height: 'auto',
+		gridTemplateColumns: '1fr',
+		rowGap: 32,
+		padding: '32px 16px',
+	},
 })
 
 const LeftSection = styled('div')({
 	gridColumn: 2,
-	paddingLeft: 32,
-	maxHeight: 189,
+	display: 'flex',
+	flexDirection: 'column',
+	justifyContent: 'center',
+	'@media (max-width: 800px)': {
+		gridColumn: '1',
+		alignItems: 'center',
+		textAlign: 'center',
+	},
 })
 
 const RightSection = styled('div')({
 	gridColumn: 3,
 	maxWidth: 400,
 	paddingLeft: 32,
+	display: 'flex',
+	flexDirection: 'column',
+	justifyContent: 'center',
+	'@media (max-width: 800px)': {
+		gridColumn: '1',
+		margin: '0 auto',
+	},
 })
 
 const LogoSection = styled('div')({
@@ -92,6 +113,9 @@ const LogoSection = styled('div')({
 
 const LogoText = styled(Text)({
 	fontSize: 64,
+	'@media (max-width: 800px)': {
+		fontSize: 48,
+	},
 })
 
 const Co = styled('span')({
@@ -109,6 +133,10 @@ const DesktopText = styled(Text)(() => ({
 	fontSize: 64,
 	fontWeight: 500,
 	marginTop: -24,
+	'@media (max-width: 800px)': {
+		fontSize: 48,
+		marginTop: -16,
+	},
 }))
 
 const MainText = styled(Text)(() => ({
@@ -117,20 +145,26 @@ const MainText = styled(Text)(() => ({
 	fontWeight: 500,
 	marginTop: 12,
 	maxWidth: 300,
+	'@media (max-width: 800px)': {
+		fontSize: 14,
+		marginTop: 8,
+		textAlign: 'center',
+	},
 }))
 
 const TextBox = styled('div')({
 	width: '100%',
 	maxWidth: 300,
 	padding: '32px 24px',
-	borderWidth: 1,
-	borderColor: WHITE,
-	borderStyle: 'solid',
+	border: `1px solid ${WHITE}`,
 	borderRadius: 4,
 	backgroundColor: 'rgba(0, 0, 0, 0.5)',
 	display: 'flex',
 	flexDirection: 'column',
 	gap: 16,
+	'@media (max-width: 800px)': {
+		maxWidth: '100%',
+	},
 })
 
 const TextItem = styled('div')({
@@ -142,6 +176,9 @@ const TextItem = styled('div')({
 const StyledText = styled(Text)(({ theme }) => ({
 	color: WHITE,
 	fontSize: theme.typography.caption.fontSize,
+	'@media (max-width: 800px)': {
+		fontSize: '0.75rem',
+	},
 }))
 
 export function OnboardingComponent() {

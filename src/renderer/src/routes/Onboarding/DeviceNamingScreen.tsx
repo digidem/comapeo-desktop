@@ -4,15 +4,16 @@ import { styled } from '@mui/material/styles'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK, BLUE_GREY, DARK_COMAPEO_BLUE, RED, WHITE } from '../../colors'
+import { BLACK, RED, WHITE } from '../../colors'
 import { Button } from '../../components/Button'
-import { OnboardingTopMenu } from '../../components/OnboardingTopMenu'
+import { OnboardingScreenLayout } from '../../components/Onboarding/OnboardingScreenLayout'
 import { Text } from '../../components/Text'
+import {
+	DEVICE_NAME_MAX_BYTES,
+	DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
+} from '../../constants'
 import DeviceImage from '../../images/device.png'
 import { useEditDeviceInfo } from '../../queries/deviceInfo'
-
-const DEVICE_NAME_MAX_LENGTH_GRAPHEMES = 60
-const DEVICE_NAME_MAX_BYTES = 512
 
 export const m = defineMessages({
 	title: {
@@ -51,68 +52,42 @@ export const Route = createFileRoute('/Onboarding/DeviceNamingScreen')({
 	component: DeviceNamingScreenComponent,
 })
 
-const Container = styled('div')({
-	display: 'flex',
-	flexDirection: 'column',
-	alignItems: 'center',
-	justifyContent: 'center',
-	height: '100%',
-	backgroundColor: DARK_COMAPEO_BLUE,
-})
-const ContentBox = styled('div')({
-	backgroundColor: 'rgba(255, 255, 255, 0.94)',
-	border: `1px solid ${BLUE_GREY}`,
-	borderRadius: 8,
-	padding: 20,
-	width: '55%',
-	textAlign: 'center',
-	boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.02)',
-})
-const BodyTextWrapper = styled('div')({
-	maxWidth: '45%',
-	margin: '16px auto 0',
-	textAlign: 'center',
-})
-const ButtonContainer = styled('div')({
-	display: 'flex',
-	justifyContent: 'center',
-	gap: 15,
-	marginTop: 63,
-	padding: '0 20px',
-})
 const StyledImage = styled('img')({
-	marginBottom: 20,
 	width: 60,
 	height: 48,
 })
+
 const InputWrapper = styled('div')({
 	marginTop: 24,
-	marginBottom: 160,
+	marginBottom: 24,
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',
+	flexGrow: 1,
 })
+
 const StyledTextField = styled(TextField)({
 	width: '100%',
-	maxWidth: '400px',
+	maxWidth: 400,
 	backgroundColor: WHITE,
 	marginTop: 20,
 })
+
 const CharacterCount = styled(Text, {
 	shouldForwardProp: (prop) => prop !== 'error',
-})<{ error: boolean }>`
-	margin-top: 8px;
-	color: ${({ error }) => (error ? RED : BLACK)};
-	width: 100%;
-	max-width: 400px;
-	text-align: right;
-`
+})<{ error: boolean }>(({ error }) => ({
+	marginTop: 8,
+	color: error ? RED : BLACK,
+	width: '100%',
+	maxWidth: 400,
+	textAlign: 'right',
+}))
 
 export function DeviceNamingScreenComponent() {
 	const navigate = useNavigate()
 	const { formatMessage } = useIntl()
 	const [deviceName, setDeviceName] = useState('')
-	const [error, setError] = useState(false)
+	const [inputError, setInputError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
 	const setDeviceNameMutation = useEditDeviceInfo()
 
@@ -147,14 +122,14 @@ export function DeviceNamingScreenComponent() {
 			setDeviceName(value)
 		}
 
-		setError(error)
+		setInputError(error)
 	}
 
 	const graphemeCount = countGraphemes(deviceName.trim())
 
 	const handleAddName = () => {
 		if (deviceName.trim().length === 0) {
-			setError(true)
+			setInputError(true)
 			return
 		}
 		setDeviceNameMutation.mutate(deviceName, {
@@ -168,62 +143,59 @@ export function DeviceNamingScreenComponent() {
 		})
 	}
 
+	const icon = <StyledImage src={DeviceImage} alt="Add Device" />
+	const buttons = (
+		<Button
+			onClick={handleAddName}
+			style={{
+				width: '100%',
+				maxWidth: 350,
+				padding: '12px 20px',
+			}}
+			disabled={setDeviceNameMutation.isPending || inputError}
+		>
+			{setDeviceNameMutation.isPending
+				? formatMessage(m.saving)
+				: formatMessage(m.addName)}
+		</Button>
+	)
+
 	return (
-		<Container>
-			<OnboardingTopMenu currentStep={2} />
-			<ContentBox>
-				<StyledImage src={DeviceImage} alt="Device" />
-				<Text kind="title">{formatMessage(m.title)}</Text>
-				<BodyTextWrapper>
-					<Text kind="body" style={{ marginTop: 36 }}>
-						{formatMessage(m.description)}
-					</Text>
-				</BodyTextWrapper>
-				<InputWrapper>
-					<StyledTextField
-						placeholder={formatMessage(m.placeholder)}
-						value={deviceName}
-						onChange={handleChange}
-						variant="outlined"
-						error={error}
-						slotProps={{
-							input: {
-								style: {
-									padding: '5px 6px',
-								},
+		<OnboardingScreenLayout
+			currentStep={2}
+			icon={icon}
+			title={formatMessage(m.title)}
+			bodyText={formatMessage(m.description)}
+			buttons={buttons}
+		>
+			<InputWrapper>
+				<StyledTextField
+					placeholder={formatMessage(m.placeholder)}
+					value={deviceName}
+					onChange={handleChange}
+					variant="outlined"
+					error={inputError}
+					slotProps={{
+						input: {
+							style: {
+								padding: '5px 6px',
 							},
-							htmlInput: {
-								minLength: 1,
-							},
-						}}
-					/>
-					<CharacterCount error={error}>
-						{formatMessage(m.characterCount, {
-							count: graphemeCount,
-							maxLength: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
-						})}
-					</CharacterCount>
-				</InputWrapper>
-				{errorMessage && (
-					<Text style={{ color: RED, marginTop: '16px' }}>{errorMessage}</Text>
-				)}
-				<ButtonContainer>
-					<Button
-						onClick={handleAddName}
-						style={{
-							width: '100%',
-							maxWidth: '350px',
-							borderRadius: 32,
-							padding: '12px 20px',
-						}}
-						disabled={setDeviceNameMutation.isPending}
-					>
-						{setDeviceNameMutation.isPending
-							? formatMessage(m.saving)
-							: formatMessage(m.addName)}
-					</Button>
-				</ButtonContainer>
-			</ContentBox>
-		</Container>
+						},
+						htmlInput: {
+							minLength: 1,
+						},
+					}}
+				/>
+				<CharacterCount error={inputError}>
+					{formatMessage(m.characterCount, {
+						count: graphemeCount,
+						maxLength: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
+					})}
+				</CharacterCount>
+			</InputWrapper>
+			{errorMessage && (
+				<Text style={{ color: RED, marginTop: '16px' }}>{errorMessage}</Text>
+			)}
+		</OnboardingScreenLayout>
 	)
 }

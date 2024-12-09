@@ -1,8 +1,8 @@
 import React from 'react'
 import { styled } from '@mui/material/styles'
 
-import { BLACK, DARK_GREY } from '../../colors'
-import { Text } from '../Text'
+import { BLACK, DARK_GREY } from '../../../colors'
+import { Text } from '../../Text'
 
 const Container = styled('div')({
 	gap: 20,
