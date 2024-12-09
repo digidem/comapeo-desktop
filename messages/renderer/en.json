@@ -86,6 +86,18 @@
   "screens.IntroToCoMapeo.viewAndManage": {
     "message": "View and manage observations in CoMapeo Mobile Projects."
   },
+  "screens.JoinProjectScreen.declineInvite": {
+    "message": "Decline Invite"
+  },
+  "screens.JoinProjectScreen.invitedTitle": {
+    "message": "You've been invited to join"
+  },
+  "screens.JoinProjectScreen.joinProject": {
+    "message": "Join Project"
+  },
+  "screens.JoinProjectScreen.title": {
+    "message": "Join"
+  },
   "screens.OnboardingPrivacyPolicy.permissionsTitle": {
     "message": "Current Permissions"
   },
