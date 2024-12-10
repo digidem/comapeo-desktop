@@ -1,4 +1,6 @@
+import { Suspense } from 'react'
 import { CssBaseline, ThemeProvider } from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
@@ -16,7 +18,9 @@ export const Route = createRootRoute({
 			<IntlProvider>
 				<QueryClientProvider client={queryClient}>
 					<ApiProvider>
-						<Outlet />
+						<Suspense fallback={<CircularProgress />}>
+							<Outlet />
+						</Suspense>
 						<TanStackRouterDevtools />
 					</ApiProvider>
 				</QueryClientProvider>
