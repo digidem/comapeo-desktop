@@ -1,10 +1,9 @@
 import { styled } from '@mui/material/styles'
-import { useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK, BLUE_GREY, COMAPEO_BLUE, WHITE } from '../colors'
-import { Button } from './Button'
-import { Text } from './Text'
+import { BLACK, BLUE_GREY, COMAPEO_BLUE, WHITE } from '../../colors'
+import { Button } from '../Button'
+import { Text } from '../Text'
 
 const MenuContainer = styled('div')({
 	display: 'flex',
@@ -14,20 +13,11 @@ const MenuContainer = styled('div')({
 	margin: '16px auto',
 	position: 'relative',
 })
-const GoBackButton = styled(Button)({
-	display: 'flex',
-	alignItems: 'center',
+const GoBackButton = styled(Button)<{ disabled?: boolean }>(({ disabled }) => ({
 	gap: 8,
-	backgroundColor: 'transparent',
 	color: BLUE_GREY,
-	fontSize: 16,
-	padding: '12px 32px',
-	borderRadius: 20,
-	whiteSpace: 'nowrap',
-	'&:hover': {
-		backgroundColor: 'rgba(0, 0, 0, 0.1)',
-	},
-})
+	cursor: disabled ? 'default' : 'pointer',
+}))
 const BackArrow = styled('span')({
 	fontSize: 24,
 	color: WHITE,
@@ -41,13 +31,16 @@ const Steps = styled('div')({
 	alignItems: 'center',
 	gap: 16,
 })
-const Step = styled('div')(({ active }: { active: boolean }) => ({
+const Step = styled('div')<{
+	active: boolean
+}>(({ active }) => ({
 	backgroundColor: active ? WHITE : 'transparent',
 	color: active ? BLACK : BLUE_GREY,
 	padding: '12px 32px',
 	borderRadius: 20,
 	fontWeight: active ? 'bold' : 'normal',
 	whiteSpace: 'nowrap',
+	cursor: 'default',
 }))
 const Divider = styled('div')({
 	width: 16,
@@ -59,6 +52,7 @@ const Divider = styled('div')({
 
 interface OnboardingTopMenuProps {
 	currentStep: number
+	onBackPress?: () => void
 }
 
 const m = defineMessages({
@@ -72,27 +66,25 @@ const m = defineMessages({
 	},
 })
 
-export function OnboardingTopMenu({ currentStep }: OnboardingTopMenuProps) {
-	const navigate = useNavigate()
-	const router = useRouter()
+export function OnboardingTopMenu({
+	currentStep,
+	onBackPress,
+}: OnboardingTopMenuProps) {
 	const { formatMessage } = useIntl()
-	const stepToRoute: Record<number, string> = {
-		1: 'DataPrivacy',
-		2: 'DeviceNamingScreen',
-		3: 'CreateJoinProjectScreen',
-	}
 
 	return (
 		<MenuContainer>
 			<GoBackButton
-				onClick={() => router.history.back()}
+				onClick={onBackPress}
 				variant="text"
-				style={{
-					color: BLUE_GREY,
-					gap: 8,
-					padding: '12px 32px',
-				}}
 				aria-label={formatMessage(m.goBack)}
+				disabled={!onBackPress}
+				sx={{
+					'&.Mui-disabled': {
+						color: BLUE_GREY,
+						opacity: 0.5,
+					},
+				}}
 			>
 				<BackArrow aria-hidden="true">←</BackArrow>
 				{formatMessage(m.goBack)}
@@ -100,12 +92,7 @@ export function OnboardingTopMenu({ currentStep }: OnboardingTopMenuProps) {
 			<Steps>
 				{[1, 2, 3].map((step) => (
 					<StepsContainer key={step}>
-						<Step
-							active={currentStep === step}
-							onClick={() =>
-								navigate({ to: `/Onboarding/${stepToRoute[step]}` })
-							}
-						>
+						<Step active={currentStep === step}>
 							<Text kind="body" bold={currentStep === step}>
 								{formatMessage(m.step, { number: step })}
 							</Text>
