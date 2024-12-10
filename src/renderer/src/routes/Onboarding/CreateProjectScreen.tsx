@@ -7,11 +7,13 @@ import { defineMessages, useIntl } from 'react-intl'
 import { BLACK, BLUE_GREY, RED, WHITE } from '../../colors'
 import { Button } from '../../components/Button'
 import { OnboardingScreenLayout } from '../../components/Onboarding/OnboardingScreenLayout'
-import { Text } from '../../components/Text'
+import { OnboardingTopMenu } from '../../components/Onboarding/OnboardingTopMenu'
 import {
-	PROJECT_NAME_MAX_BYTES,
-	PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
-} from '../../constants'
+	checkForError,
+	countGraphemes,
+} from '../../components/Onboarding/onboardingLogic'
+import { Text } from '../../components/Text'
+import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../constants'
 import ProjectImage from '../../images/add_square.png'
 import ChevronUp from '../../images/chevrondown-expanded.svg'
 import ChevronDown from '../../images/chevrondown.svg'
@@ -58,7 +60,7 @@ export const m = defineMessages({
 })
 
 export const Route = createFileRoute('/Onboarding/CreateProjectScreen')({
-	component: CreateJoinProjectScreenComponent,
+	component: CreateProjectScreenComponent,
 })
 
 const StyledImage = styled('img')({
@@ -97,7 +99,7 @@ const HorizontalLine = styled('div')({
 	width: '65%',
 })
 
-function CreateJoinProjectScreenComponent() {
+function CreateProjectScreenComponent() {
 	const navigate = useNavigate()
 	const { formatMessage } = useIntl()
 	const [projectName, setProjectName] = useState('')
@@ -108,33 +110,15 @@ function CreateJoinProjectScreenComponent() {
 	const [advancedSettingOpen, setAdvancedSettingOpen] = useState(false)
 	const [configFileName, setConfigFileName] = useState<string | null>(null)
 
-	function countGraphemes(text: string): number {
-		const segmenter = new Intl.Segmenter(undefined, {
-			granularity: 'grapheme',
-		})
-		let result = 0
-		for (const _ of segmenter.segment(text)) result++
-		return result
-	}
-
-	function getUtf8ByteLength(text: string): number {
-		return new TextEncoder().encode(text).length
-	}
-
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value
-		const graphemeCount = countGraphemes(value.trim())
-		const byteLength = getUtf8ByteLength(value.trim())
-		let localError = false
-
-		if (
-			graphemeCount > PROJECT_NAME_MAX_LENGTH_GRAPHEMES ||
-			byteLength > PROJECT_NAME_MAX_BYTES ||
-			value.trim().length === 0
-		) {
-			localError = true
-		} else {
-			setProjectName(value)
+		const localError: boolean = checkForError(
+			value.trim(),
+			PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
+		)
+		setProjectName(value)
+		if (localError !== error) {
+			setError(localError)
 		}
 		setError(localError)
 	}
@@ -142,7 +126,7 @@ function CreateJoinProjectScreenComponent() {
 	const graphemeCount = countGraphemes(projectName.trim())
 
 	const handleAddName = () => {
-		if (projectName.trim().length === 0) {
+		if (checkForError(projectName, PROJECT_NAME_MAX_LENGTH_GRAPHEMES)) {
 			setError(true)
 			return
 		}
@@ -162,121 +146,136 @@ function CreateJoinProjectScreenComponent() {
 		setConfigFileName('myProjectConfig.comapeocat')
 	}
 
-	const icon = <StyledImage src={ProjectImage} alt="Add Project" />
-	const buttons = (
-		<Button
-			onClick={handleAddName}
-			style={{
-				width: '100%',
-				maxWidth: 350,
-				padding: '12px 20px',
-			}}
-			disabled={setProjectNameMutation.isPending}
-		>
-			{setProjectNameMutation.isPending
-				? formatMessage(m.saving)
-				: formatMessage(m.addName)}
-		</Button>
+	const topMenu = (
+		<OnboardingTopMenu
+			currentStep={3}
+			onBackPress={() =>
+				navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
+			}
+		/>
 	)
 
 	return (
-		<OnboardingScreenLayout
-			currentStep={3}
-			icon={icon}
-			title={formatMessage(m.title)}
-			buttons={buttons}
-		>
-			<InputWrapper>
-				<StyledTextField
-					label={formatMessage(m.enterNameLabel)}
-					required
-					placeholder={formatMessage(m.placeholder)}
-					value={projectName}
-					onChange={handleChange}
-					variant="outlined"
-					error={error}
-					sx={{
-						'& .MuiFormLabel-asterisk': {
-							color: 'red',
-						},
-					}}
-					slotProps={{
-						input: {
-							style: {
-								padding: '5px 6px',
+		<OnboardingScreenLayout topMenu={topMenu}>
+			<StyledImage src={ProjectImage} alt="Add Project" />
+			<Text kind="title" style={{ marginTop: 32 }}>
+				{formatMessage(m.title)}
+			</Text>
+			<div
+				style={{ flexGrow: 1, overflowY: 'auto', width: '100%', marginTop: 32 }}
+			>
+				<InputWrapper>
+					<StyledTextField
+						label={formatMessage(m.enterNameLabel)}
+						required
+						placeholder={formatMessage(m.placeholder)}
+						value={projectName}
+						onChange={handleChange}
+						variant="outlined"
+						error={error}
+						sx={{
+							'& .MuiFormLabel-asterisk': {
+								color: 'red',
 							},
-						},
-						inputLabel: {
-							style: { fontSize: '1.125rem' },
-						},
-						htmlInput: {
-							minLength: 1,
-						},
-					}}
-				/>
-				<CharacterCount error={error}>
-					{formatMessage(m.characterCount, {
-						count: graphemeCount,
-						maxLength: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
-					})}
-				</CharacterCount>
+						}}
+						slotProps={{
+							input: {
+								style: {
+									padding: '5px 6px',
+								},
+							},
+							inputLabel: {
+								style: { fontSize: '1.125rem' },
+							},
+							htmlInput: {
+								minLength: 1,
+							},
+						}}
+					/>
+					<CharacterCount error={error}>
+						{formatMessage(m.characterCount, {
+							count: graphemeCount,
+							maxLength: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
+						})}
+					</CharacterCount>
+				</InputWrapper>
 				{errorMessage && (
-					<Text style={{ color: RED, marginTop: '16px' }}>{errorMessage}</Text>
+					<Text style={{ color: RED, marginTop: 16 }}>{errorMessage}</Text>
 				)}
-			</InputWrapper>
-			<HorizontalLine />
+				<HorizontalLine />
+				<div
+					style={{
+						width: '100%',
+						maxWidth: 400,
+						margin: '0 auto',
+						textAlign: 'center',
+					}}
+				>
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'space-between',
+							alignItems: 'center',
+							gap: 8,
+							padding: '10px 0',
+							cursor: 'pointer',
+						}}
+						onClick={() => setAdvancedSettingOpen(!advancedSettingOpen)}
+					>
+						<Text bold style={{ fontSize: '1.125rem' }}>
+							{formatMessage(m.advancedProjectSettings)}
+						</Text>
+						{advancedSettingOpen ? <ChevronDown /> : <ChevronUp />}
+					</div>
+					<div
+						style={{
+							display: advancedSettingOpen ? 'flex' : 'none',
+							flexDirection: 'column',
+							gap: 20,
+							alignItems: 'center',
+							padding: advancedSettingOpen ? 20 : 0,
+						}}
+					>
+						<Button
+							variant="outlined"
+							style={{
+								backgroundColor: WHITE,
+								color: BLACK,
+								width: '100%',
+								maxWidth: 350,
+								padding: '12px 20px',
+							}}
+							onClick={importConfigFile}
+						>
+							{formatMessage(m.importConfig)}
+						</Button>
+						{configFileName && (
+							<Text style={{ textAlign: 'center' }}>{configFileName}</Text>
+						)}
+					</div>
+				</div>
+			</div>
 			<div
 				style={{
+					marginTop: 32,
 					width: '100%',
-					maxWidth: 400,
-					margin: '0 auto',
-					textAlign: 'center',
+					display: 'flex',
+					justifyContent: 'center',
 				}}
 			>
-				<div
+				<Button
+					onClick={handleAddName}
 					style={{
-						display: 'flex',
-						justifyContent: 'space-between',
-						alignItems: 'center',
-						gap: 8,
-						padding: '10px 0',
-						cursor: 'pointer',
+						width: '100%',
+						maxWidth: 350,
+						padding: '12px 20px',
 					}}
-					onClick={() => setAdvancedSettingOpen(!advancedSettingOpen)}
+					disabled={setProjectNameMutation.isPending}
 				>
-					<Text bold style={{ fontSize: '1.125rem' }}>
-						{formatMessage(m.advancedProjectSettings)}
-					</Text>
-					{advancedSettingOpen ? <ChevronDown /> : <ChevronUp />}
-				</div>
-				<div
-					style={{
-						display: advancedSettingOpen ? 'flex' : 'none',
-						overflow: 'hidden',
-						transition: 'height 0.3s ease',
-						flexDirection: 'column',
-						gap: 20,
-						alignItems: 'center',
-						padding: advancedSettingOpen ? 20 : 0,
-					}}
-				>
-					<Button
-						variant="outlined"
-						style={{
-							backgroundColor: WHITE,
-							color: BLACK,
-							width: '100%',
-							maxWidth: 350,
-							padding: '12px 20px',
-						}}
-						onClick={importConfigFile}
-					>
-						{formatMessage(m.importConfig)}
-					</Button>
-					{configFileName && (
-						<Text style={{ textAlign: 'center' }}>{configFileName}</Text>
-					)}
-				</div>
+					{setProjectNameMutation.isPending
+						? formatMessage(m.saving)
+						: formatMessage(m.addName)}
+				</Button>
 			</div>
 		</OnboardingScreenLayout>
 	)

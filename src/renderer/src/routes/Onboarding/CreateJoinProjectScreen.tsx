@@ -6,6 +6,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import { BLACK, BLUE_GREY, DARK_GREY, WHITE } from '../../colors'
 import { Button } from '../../components/Button'
 import { OnboardingScreenLayout } from '../../components/Onboarding/OnboardingScreenLayout'
+import { OnboardingTopMenu } from '../../components/Onboarding/OnboardingTopMenu'
 import { Text } from '../../components/Text'
 import AddPersonImage from '../../images/add_person.png'
 
@@ -73,48 +74,45 @@ export function CreateJoinProjectScreenComponent() {
 	const navigate = useNavigate()
 	const { formatMessage } = useIntl()
 
-	const icon = <StyledImage src={AddPersonImage} alt="Add Person" />
-	const buttons = (
-		<Button
-			variant="outlined"
-			style={{
-				backgroundColor: WHITE,
-				color: BLACK,
-				width: '100%',
-				maxWidth: 350,
-				padding: '12px 20px',
-			}}
-			onClick={() => navigate({ to: '/Onboarding/CreateProjectScreen' })}
-		>
-			{' '}
-			{formatMessage(m.createProject)}
-		</Button>
-	)
-
-	const bulletPoints = (
-		<BulletList>
-			<BulletListItem>
-				<Text kind="body">{formatMessage(m.securelyStore)}</Text>
-			</BulletListItem>
-			<BulletListItem>
-				<Text kind="body">{formatMessage(m.limitedToDevices)}</Text>
-			</BulletListItem>
-		</BulletList>
-	)
+	const topMenu = <OnboardingTopMenu currentStep={3} />
 
 	return (
-		<OnboardingScreenLayout
-			currentStep={3}
-			icon={icon}
-			title={formatMessage(m.title)}
-			buttons={buttons}
-			bodyText={formatMessage(m.askToJoin)}
-		>
-			{bulletPoints}
-			<HorizontalLine />
-			<SecondarySubtitle style={{ fontSize: '1.125rem' }}>
-				{formatMessage(m.startNewProject)}
-			</SecondarySubtitle>
+		<OnboardingScreenLayout topMenu={topMenu}>
+			<StyledImage src={AddPersonImage} alt="Add Person" />
+			<Text kind="title" style={{ marginTop: 32 }}>
+				{formatMessage(m.title)}
+			</Text>
+			<Text style={{ margin: '32px 0px', fontSize: '1.125rem' }}>
+				{formatMessage(m.askToJoin)}
+			</Text>
+			<div style={{ width: '100%', flexGrow: 1 }}>
+				<BulletList>
+					<BulletListItem>
+						<Text kind="body">{formatMessage(m.securelyStore)}</Text>
+					</BulletListItem>
+					<BulletListItem>
+						<Text kind="body">{formatMessage(m.limitedToDevices)}</Text>
+					</BulletListItem>
+				</BulletList>
+				<HorizontalLine />
+				<SecondarySubtitle style={{ fontSize: '1.125rem' }}>
+					{formatMessage(m.startNewProject)}
+				</SecondarySubtitle>
+			</div>
+			<Button
+				variant="outlined"
+				style={{
+					backgroundColor: WHITE,
+					color: BLACK,
+					width: '100%',
+					maxWidth: 350,
+					padding: '12px 20px',
+				}}
+				onClick={() => navigate({ to: '/Onboarding/JoinProjectScreen' })}
+			>
+				{' '}
+				{formatMessage(m.createProject)}
+			</Button>
 		</OnboardingScreenLayout>
 	)
 }

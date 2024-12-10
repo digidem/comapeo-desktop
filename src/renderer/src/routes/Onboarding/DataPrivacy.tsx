@@ -5,6 +5,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import { BLACK, DARK_GREY, WHITE } from '../../colors'
 import { Button } from '../../components/Button'
 import { OnboardingScreenLayout } from '../../components/Onboarding/OnboardingScreenLayout'
+import { OnboardingTopMenu } from '../../components/Onboarding/OnboardingTopMenu'
 import { Text } from '../../components/Text'
 import LockedIcon from '../../images/LockedWithKey.svg'
 
@@ -69,7 +70,13 @@ export function DataPrivacyComponent() {
 	const navigate = useNavigate()
 	const { formatMessage } = useIntl()
 
-	const icon = <StyledIcon />
+	function onBackPress() {
+		navigate({ to: '/Onboarding' })
+	}
+
+	const topMenu = (
+		<OnboardingTopMenu currentStep={1} onBackPress={onBackPress} />
+	)
 
 	const bulletPoints = (
 		<BulletList>
@@ -88,38 +95,48 @@ export function DataPrivacyComponent() {
 		</BulletList>
 	)
 
-	const buttons = (
-		<>
-			<Button
-				onClick={() => navigate({ to: '/Onboarding/PrivacyPolicyScreen' })}
-				variant="outlined"
+	return (
+		<OnboardingScreenLayout topMenu={topMenu}>
+			<StyledIcon />
+			<Text kind="title" style={{ marginTop: 32 }}>
+				{formatMessage(m.title)}
+			</Text>
+			<Text
+				kind="body"
+				style={{ marginTop: 16, maxWidth: '45%', margin: '16px auto' }}
+			>
+				{formatMessage(m.description)}
+			</Text>
+			<div style={{ width: '100%', flexGrow: 1 }}>{bulletPoints}</div>
+			<div
 				style={{
-					color: BLACK,
-					backgroundColor: WHITE,
+					display: 'flex',
+					justifyContent: 'space-between',
+					gap: 15,
+					marginTop: 63,
+					padding: '0 20px',
 					width: '100%',
-					padding: '12px 20px',
 				}}
 			>
-				{formatMessage(m.learnMore)}
-			</Button>
-			<Button
-				onClick={() => navigate({ to: '/Onboarding/DeviceNamingScreen' })}
-				style={{ width: '100%', padding: '12px 20px' }}
-			>
-				{formatMessage(m.next)}
-			</Button>
-		</>
-	)
-
-	return (
-		<OnboardingScreenLayout
-			currentStep={1}
-			icon={icon}
-			title={formatMessage(m.title)}
-			bodyText={formatMessage(m.description)}
-			buttons={buttons}
-		>
-			{bulletPoints}
+				<Button
+					onClick={() => navigate({ to: '/Onboarding/PrivacyPolicyScreen' })}
+					variant="outlined"
+					style={{
+						color: BLACK,
+						backgroundColor: WHITE,
+						width: '100%',
+						padding: '12px 20px',
+					}}
+				>
+					{formatMessage(m.learnMore)}
+				</Button>
+				<Button
+					onClick={() => navigate({ to: '/Onboarding/DeviceNamingScreen' })}
+					style={{ width: '100%', padding: '12px 20px' }}
+				>
+					{formatMessage(m.next)}
+				</Button>
+			</div>
 		</OnboardingScreenLayout>
 	)
 }

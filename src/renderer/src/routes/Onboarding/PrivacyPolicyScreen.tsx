@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 import { BLUE_GREY, DARK_COMAPEO_BLUE } from '../../colors'
 import { OnboardingTopMenu } from '../../components/Onboarding/OnboardingTopMenu'
@@ -30,9 +30,13 @@ const ContentBox = styled('div')({
 })
 
 export function PrivacyPolicyScreen() {
+	const navigate = useNavigate()
 	return (
 		<Container>
-			<OnboardingTopMenu currentStep={1} />
+			<OnboardingTopMenu
+				currentStep={1}
+				onBackPress={() => navigate({ to: '/Onboarding/DataPrivacy' })}
+			/>
 			<ContentBox>
 				<PrivacyPolicy />
 			</ContentBox>

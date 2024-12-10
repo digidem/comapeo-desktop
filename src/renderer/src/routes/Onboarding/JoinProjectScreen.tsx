@@ -5,6 +5,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import { BLACK, COMAPEO_BLUE, WHITE } from '../../colors'
 import { Button } from '../../components/Button'
 import { OnboardingScreenLayout } from '../../components/Onboarding/OnboardingScreenLayout'
+import { OnboardingTopMenu } from '../../components/Onboarding/OnboardingTopMenu'
 import { Text } from '../../components/Text'
 import AddPersonIcon from '../../images/add_person_solid.png'
 
@@ -64,59 +65,73 @@ function JoinProjectScreenComponent() {
 		navigate({ to: '/tab1' })
 	}
 
-	const buttons = (
-		<>
-			<Button
-				variant="outlined"
-				style={{
-					backgroundColor: WHITE,
-					color: BLACK,
-					width: '100%',
-					padding: '12px 20px',
-				}}
-				onClick={handleDecline}
-			>
-				{formatMessage(m.declineInvite)}
-			</Button>
-			<Button
-				style={{
-					backgroundColor: COMAPEO_BLUE,
-					color: WHITE,
-					width: '100%',
-					padding: '12px 20px',
-				}}
-				onClick={handleJoin}
-			>
-				{formatMessage(m.joinProject)}
-			</Button>
-		</>
+	const topMenu = (
+		<OnboardingTopMenu
+			currentStep={3}
+			onBackPress={() =>
+				navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
+			}
+		/>
 	)
 
 	return (
-		<OnboardingScreenLayout
-			currentStep={3}
-			icon={
-				<IconContainer>
-					<StyledIcon src={AddPersonIcon} alt="Add Person" />
-				</IconContainer>
-			}
-			title={formatMessage(m.title)}
-			buttons={buttons}
-		>
-			<div style={{ textAlign: 'center', marginBottom: 40 }}>
-				<Text bold kind="title">
-					{projectName}
-				</Text>
+		<OnboardingScreenLayout topMenu={topMenu}>
+			<IconContainer>
+				<StyledIcon src={AddPersonIcon} alt="Add Person" />
+			</IconContainer>
+			<Text kind="title" style={{ marginTop: 32 }}>
+				{formatMessage(m.title)}
+			</Text>
+			<div style={{ width: '100%', flexGrow: 1 }}>
+				<div style={{ textAlign: 'center', marginBottom: 40 }}>
+					<Text bold kind="title">
+						{projectName}
+					</Text>
+				</div>
+				<div style={{ textAlign: 'center', margin: '80px 0' }}>
+					<Text
+						style={{ fontSize: '1.25rem', color: BLACK, marginBottom: '8px' }}
+					>
+						{formatMessage(m.invitedTitle)}
+					</Text>
+					<Text bold style={{ fontSize: '1.25rem' }}>
+						{projectName}
+					</Text>
+				</div>
 			</div>
-			<div style={{ textAlign: 'center', margin: '80px 0' }}>
-				<Text
-					style={{ fontSize: '1.25rem', color: BLACK, marginBottom: '8px' }}
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					gap: 15,
+					marginTop: 63,
+					padding: '0 20px',
+					width: '100%',
+				}}
+			>
+				<Button
+					variant="outlined"
+					style={{
+						backgroundColor: WHITE,
+						color: BLACK,
+						width: '100%',
+						padding: '12px 20px',
+					}}
+					onClick={handleDecline}
 				>
-					{formatMessage(m.invitedTitle)}
-				</Text>
-				<Text bold style={{ fontSize: '1.25rem' }}>
-					{projectName}
-				</Text>
+					{formatMessage(m.declineInvite)}
+				</Button>
+				<Button
+					style={{
+						backgroundColor: COMAPEO_BLUE,
+						color: WHITE,
+						width: '100%',
+						padding: '12px 20px',
+					}}
+					onClick={handleJoin}
+				>
+					{formatMessage(m.joinProject)}
+				</Button>
 			</div>
 		</OnboardingScreenLayout>
 	)

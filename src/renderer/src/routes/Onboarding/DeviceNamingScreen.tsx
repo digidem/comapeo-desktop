@@ -7,11 +7,13 @@ import { defineMessages, useIntl } from 'react-intl'
 import { BLACK, RED, WHITE } from '../../colors'
 import { Button } from '../../components/Button'
 import { OnboardingScreenLayout } from '../../components/Onboarding/OnboardingScreenLayout'
-import { Text } from '../../components/Text'
+import { OnboardingTopMenu } from '../../components/Onboarding/OnboardingTopMenu'
 import {
-	DEVICE_NAME_MAX_BYTES,
-	DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
-} from '../../constants'
+	checkForError,
+	countGraphemes,
+} from '../../components/Onboarding/onboardingLogic'
+import { Text } from '../../components/Text'
+import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../constants'
 import DeviceImage from '../../images/device.png'
 import { useEditDeviceInfo } from '../../queries/deviceInfo'
 
@@ -91,44 +93,22 @@ export function DeviceNamingScreenComponent() {
 	const [errorMessage, setErrorMessage] = useState('')
 	const setDeviceNameMutation = useEditDeviceInfo()
 
-	function countGraphemes(text: string): number {
-		const segmenter = new Intl.Segmenter(undefined, {
-			granularity: 'grapheme',
-		})
-		let result = 0
-		for (const _ of segmenter.segment(text)) result++
-		return result
-	}
-
-	function getUtf8ByteLength(text: string): number {
-		return new TextEncoder().encode(text).length
-	}
-
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value
-		const graphemeCount = countGraphemes(value.trim())
-		const byteLength = getUtf8ByteLength(value.trim())
-		let error = false
-
-		if (
-			graphemeCount > DEVICE_NAME_MAX_LENGTH_GRAPHEMES ||
-			byteLength > DEVICE_NAME_MAX_BYTES
-		) {
-			error = true
-		} else {
-			if (value.trim().length === 0) {
-				error = true
-			}
-			setDeviceName(value)
+		const localError: boolean = checkForError(
+			value.trim(),
+			DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
+		)
+		setDeviceName(value)
+		if (localError !== inputError) {
+			setInputError(localError)
 		}
-
-		setInputError(error)
 	}
 
 	const graphemeCount = countGraphemes(deviceName.trim())
 
 	const handleAddName = () => {
-		if (deviceName.trim().length === 0) {
+		if (checkForError(deviceName, DEVICE_NAME_MAX_LENGTH_GRAPHEMES)) {
 			setInputError(true)
 			return
 		}
@@ -143,59 +123,78 @@ export function DeviceNamingScreenComponent() {
 		})
 	}
 
-	const icon = <StyledImage src={DeviceImage} alt="Add Device" />
-	const buttons = (
-		<Button
-			onClick={handleAddName}
-			style={{
-				width: '100%',
-				maxWidth: 350,
-				padding: '12px 20px',
-			}}
-			disabled={setDeviceNameMutation.isPending || inputError}
-		>
-			{setDeviceNameMutation.isPending
-				? formatMessage(m.saving)
-				: formatMessage(m.addName)}
-		</Button>
+	const topMenu = (
+		<OnboardingTopMenu
+			currentStep={2}
+			onBackPress={() => navigate({ to: '/Onboarding/DataPrivacy' })}
+		/>
 	)
 
 	return (
-		<OnboardingScreenLayout
-			currentStep={2}
-			icon={icon}
-			title={formatMessage(m.title)}
-			bodyText={formatMessage(m.description)}
-			buttons={buttons}
-		>
-			<InputWrapper>
-				<StyledTextField
-					placeholder={formatMessage(m.placeholder)}
-					value={deviceName}
-					onChange={handleChange}
-					variant="outlined"
-					error={inputError}
-					slotProps={{
-						input: {
-							style: {
-								padding: '5px 6px',
+		<OnboardingScreenLayout topMenu={topMenu}>
+			<StyledImage src={DeviceImage} alt="Add Device" />
+			<Text kind="title" style={{ marginTop: 32 }}>
+				{formatMessage(m.title)}
+			</Text>
+			<Text
+				kind="body"
+				style={{ marginTop: 32, maxWidth: '45%', margin: '32px auto' }}
+			>
+				{formatMessage(m.description)}
+			</Text>
+			<div style={{ width: '100%', flexGrow: 1 }}>
+				<InputWrapper>
+					<StyledTextField
+						placeholder={formatMessage(m.placeholder)}
+						value={deviceName}
+						onChange={handleChange}
+						variant="outlined"
+						error={inputError}
+						slotProps={{
+							input: {
+								style: {
+									padding: '5px 6px',
+								},
 							},
-						},
-						htmlInput: {
-							minLength: 1,
-						},
+							htmlInput: {
+								minLength: 1,
+							},
+						}}
+					/>
+					<CharacterCount error={inputError}>
+						{formatMessage(m.characterCount, {
+							count: graphemeCount,
+							maxLength: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
+						})}
+					</CharacterCount>
+				</InputWrapper>
+				{errorMessage && (
+					<Text style={{ color: RED, marginTop: '16px' }}>{errorMessage}</Text>
+				)}
+			</div>
+			<div
+				style={{
+					marginTop: 63,
+					width: '100%',
+					display: 'flex',
+					justifyContent: 'center',
+					padding: '0 20px',
+				}}
+			>
+				<Button
+					onClick={handleAddName}
+					style={{
+						width: '100%',
+						maxWidth: 350,
+						padding: '12px 20px',
 					}}
-				/>
-				<CharacterCount error={inputError}>
-					{formatMessage(m.characterCount, {
-						count: graphemeCount,
-						maxLength: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
-					})}
-				</CharacterCount>
-			</InputWrapper>
-			{errorMessage && (
-				<Text style={{ color: RED, marginTop: '16px' }}>{errorMessage}</Text>
-			)}
+					disabled={setDeviceNameMutation.isPending || inputError}
+				>
+					{setDeviceNameMutation.isPending
+						? formatMessage(m.saving)
+						: formatMessage(m.addName)}
+				</Button>
+			</div>
 		</OnboardingScreenLayout>
 	)
 }
