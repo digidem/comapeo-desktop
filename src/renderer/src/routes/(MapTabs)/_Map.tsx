@@ -50,7 +50,11 @@ export function MapLayout() {
 					orientation="vertical"
 				>
 					{/* PostAddIcon is a placeholder icon */}
-					<MapTabStyled icon={<PostAddIcon />} value={'/tab1'} />
+					<MapTabStyled
+						data-testid="tab-observation"
+						icon={<PostAddIcon />}
+						value={'/tab1'}
+					/>
 					<Box flexGrow={1} />
 
 					<MapTabStyled

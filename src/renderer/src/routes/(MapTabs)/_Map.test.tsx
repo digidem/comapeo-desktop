@@ -9,7 +9,7 @@ import { render, screen } from '@testing-library/react'
 import { expect, test } from 'vitest'
 
 import { IntlProvider } from '../../contexts/IntlContext'
-import { Map } from './_Map'
+import { MapLayout } from './_Map'
 
 const rootRoute = createRootRoute({})
 
@@ -17,10 +17,11 @@ const Wrapper = ({ children }: { children: ReactNode }) => (
 	<IntlProvider>{children}</IntlProvider>
 )
 
+// Creates a stubbed out router. We are just testing whether the navigation gets passed the correct route (aka "/tab1" or "/tab2") so we do not need the actual router and can just intecept the navgiation state.
 const mapRoute = createRoute({
 	getParentRoute: () => rootRoute,
 	id: 'map',
-	component: Map,
+	component: MapLayout,
 })
 
 const catchAllRoute = createRoute({
@@ -33,12 +34,21 @@ const routeTree = rootRoute.addChildren([mapRoute.addChildren([catchAllRoute])])
 
 const router = createRouter({ routeTree })
 
-test('renders something', () => {
-	router.navigate({ to: '/tab1' })
+test('clicking tabs navigate to correct tab', () => {
 	// @ts-expect-error - typings
 	render(<RouterProvider router={router} />, { wrapper: Wrapper })
 	const settingsButton = screen.getByText('Settings')
-	expect(settingsButton).toBeDefined()
 	settingsButton.click()
-	console.log(router.state.location)
+	const settingsRouteName = router.state.location.pathname
+	expect(settingsRouteName).toStrictEqual('/tab2')
+
+	const observationTab = screen.getByTestId('tab-observation')
+	observationTab.click()
+	const observationTabRouteName = router.state.location.pathname
+	expect(observationTabRouteName).toStrictEqual('/tab1')
+
+	const aboutTab = screen.getByText('About')
+	aboutTab.click()
+	const aboutTabRoute = router.state.location.pathname
+	expect(aboutTabRoute).toStrictEqual('/tab2')
 })
