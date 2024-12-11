@@ -35,10 +35,10 @@ const MapTabStyled = styled(MapTab)({
 })
 
 export const Route = createFileRoute('/(MapTabs)/_Map')({
-	component: RouteComponent,
+	component: Map,
 })
 
-function RouteComponent() {
+export function Map() {
 	const navigate = useNavigate()
 	const { formatMessage } = useIntl()
 	return (
