@@ -77,6 +77,12 @@ npm start                  # Build translations, then build the app in developme
 - The configuration for the renderer app is defined in the [Vite configuration file](../src/renderer/vite.config.js) that lives in the `src/renderer`.
 - The configuration for the Electron app is located in [`forge.config.js`](/forge.config.js).
 
+### Testing
+
+The renderer app (aka React code) can run unit test with [Vitest](https://vitest.dev/) (and integration tests with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)).
+
+To run unit or integration tests run `npm run vitest:run` or `npm run vitest:watch`. See [vitest run](https://vitest.dev/guide/cli.html#vitest-run) and [vitest watch](https://vitest.dev/guide/cli.html#vitest-watch) to understand the difference.
+
 ## Translations
 
 The `messages/` directory contains the translation strings used by the app. Within this directory are directories for the main process (`messages/main/`) and renderer process (`messages/renderer/`). Messages found in `messages/main/` are typically needed for translating text that lives in native UI (e.g. the menu bar), whereas messages in `messages/renderer/` are needed for translating text that's used in the rendered web app.
