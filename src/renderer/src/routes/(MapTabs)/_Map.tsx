@@ -7,10 +7,10 @@ import { Outlet, createFileRoute, useNavigate } from '@tanstack/react-router'
 import type { FileRoutesById } from '../../routeTree.gen'
 
 export const Route = createFileRoute('/(MapTabs)/_Map')({
-	component: RouteComponent,
+	component: MapLayout,
 })
 
-function RouteComponent() {
+export function MapLayout() {
 	const navigate = useNavigate()
 	const renderCount = React.useRef(0)
 	renderCount.current = renderCount.current + 1

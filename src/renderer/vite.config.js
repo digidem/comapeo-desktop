@@ -30,7 +30,7 @@ export default defineConfig((configEnv) => {
 			emptyOutDir: true,
 		},
 		plugins: [
-			TanStackRouterVite(),
+			TanStackRouterVite({ routeFileIgnorePattern: '\\.test\\.tsx?$' }),
 			react(),
 			svgr({
 				include: '**/*.svg',
@@ -39,5 +39,8 @@ export default defineConfig((configEnv) => {
 				},
 			}),
 		],
+		test: {
+			environment: 'jsdom',
+		},
 	}
 })
