@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+/// <reference types="vitest/config" />
 import * as path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
@@ -30,7 +32,7 @@ export default defineConfig((configEnv) => {
 			emptyOutDir: true,
 		},
 		plugins: [
-			TanStackRouterVite(),
+			TanStackRouterVite({ routeFileIgnorePattern: '*.test.tsx' }),
 			react(),
 			svgr({
 				include: '**/*.svg',
@@ -39,5 +41,8 @@ export default defineConfig((configEnv) => {
 				},
 			}),
 		],
+		test: {
+			environment: 'jsdom',
+		},
 	}
 })
