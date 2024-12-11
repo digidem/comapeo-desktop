@@ -39,5 +39,8 @@ export default defineConfig((configEnv) => {
 				},
 			}),
 		],
+		test: {
+			environment: 'jsdom',
+		},
 	}
 })
