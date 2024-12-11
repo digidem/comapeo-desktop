@@ -44,8 +44,9 @@
 		"types:preload": "tsc -p src/preload/tsconfig.json",
 		"types:renderer": "tsc -p src/renderer/tsconfig.json",
 		"types": "npm-run-all --print-label --parallel --continue-on-error types:*",
-		"test": "npm-run-all --print-label --parallel lint types test:vitest",
-		"test:vitest": "vitest --config ./src/renderer/vite.config.js",
+		"test": "npm-run-all --print-label --parallel lint types vitest:run",
+		"vitest:run": "vitest run --config ./src/renderer/vite.config.js",
+		"vitest:watch": "vitest watch --config ./src/renderer/vite.config.js",
 		"vite:dev": "vite dev src/renderer",
 		"vite:build": "vite build src/renderer"
 	},
