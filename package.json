@@ -44,7 +44,8 @@
 		"types:preload": "tsc -p src/preload/tsconfig.json",
 		"types:renderer": "tsc -p src/renderer/tsconfig.json",
 		"types": "npm-run-all --print-label --parallel --continue-on-error types:*",
-		"test": "npm-run-all --print-label --parallel lint types",
+		"test": "npm-run-all --print-label --parallel lint types vitest",
+		"test:vitest": "vitest --config ./src/renderer/vite.config.js",
 		"vite:dev": "vite dev src/renderer",
 		"vite:build": "vite build src/renderer"
 	},
@@ -110,7 +111,8 @@
 		"typescript": "^5.6.3",
 		"typescript-eslint": "^8.15.0",
 		"vite": "^5.4.11",
-		"vite-plugin-svgr": "^4.3.0"
+		"vite-plugin-svgr": "^4.3.0",
+		"vitest": "2.1.8"
 	},
 	"overrides": {
 		"better-sqlite3": "11.5.0"
