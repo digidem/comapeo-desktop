@@ -10,11 +10,11 @@ const MenuContainer = styled('div')({
 	justifyContent: 'space-between',
 	alignItems: 'center',
 	width: '55%',
-	margin: '16px auto',
+	margin: '20px auto',
 	position: 'relative',
 })
 const GoBackButton = styled(Button)<{ disabled?: boolean }>(({ disabled }) => ({
-	gap: 8,
+	gap: 12,
 	color: BLUE_GREY,
 	cursor: disabled ? 'default' : 'pointer',
 }))
@@ -29,7 +29,7 @@ const StepsContainer = styled('div')({
 const Steps = styled('div')({
 	display: 'flex',
 	alignItems: 'center',
-	gap: 16,
+	gap: 12,
 })
 const Step = styled('div')<{
 	active: boolean

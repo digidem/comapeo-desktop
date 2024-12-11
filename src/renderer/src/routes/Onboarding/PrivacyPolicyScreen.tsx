@@ -21,10 +21,10 @@ const ContentBox = styled('div')({
 	width: '55%',
 	height: '80%',
 	backgroundColor: '#FFFFFF',
-	padding: '20px 30px',
+	padding: 20,
 	borderRadius: 8,
 	border: `1px solid ${BLUE_GREY}`,
-	margin: '16px auto',
+	margin: '12px auto',
 	boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.02)',
 	overflowY: 'auto',
 })

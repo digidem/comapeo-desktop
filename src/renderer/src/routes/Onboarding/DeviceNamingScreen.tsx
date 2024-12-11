@@ -60,8 +60,8 @@ const StyledImage = styled('img')({
 })
 
 const InputWrapper = styled('div')({
-	marginTop: 24,
-	marginBottom: 24,
+	marginTop: 12,
+	marginBottom: 12,
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',
@@ -72,13 +72,13 @@ const StyledTextField = styled(TextField)({
 	width: '100%',
 	maxWidth: 400,
 	backgroundColor: WHITE,
-	marginTop: 20,
+	marginTop: 12,
 })
 
 const CharacterCount = styled(Text, {
 	shouldForwardProp: (prop) => prop !== 'error',
 })<{ error: boolean }>(({ error }) => ({
-	marginTop: 8,
+	marginTop: 12,
 	color: error ? RED : BLACK,
 	width: '100%',
 	maxWidth: 400,
@@ -136,10 +136,7 @@ export function DeviceNamingScreenComponent() {
 			<Text kind="title" style={{ marginTop: 32 }}>
 				{formatMessage(m.title)}
 			</Text>
-			<Text
-				kind="body"
-				style={{ marginTop: 32, maxWidth: '45%', margin: '32px auto' }}
-			>
+			<Text kind="body" style={{ maxWidth: '45%', margin: '12px auto' }}>
 				{formatMessage(m.description)}
 			</Text>
 			<div style={{ width: '100%', flexGrow: 1 }}>
@@ -174,11 +171,9 @@ export function DeviceNamingScreenComponent() {
 			</div>
 			<div
 				style={{
-					marginTop: 63,
 					width: '100%',
 					display: 'flex',
 					justifyContent: 'center',
-					padding: '0 20px',
 				}}
 			>
 				<Button
@@ -186,7 +181,7 @@ export function DeviceNamingScreenComponent() {
 					style={{
 						width: '100%',
 						maxWidth: 350,
-						padding: '12px 20px',
+						padding: 12,
 					}}
 					disabled={setDeviceNameMutation.isPending || inputError}
 				>

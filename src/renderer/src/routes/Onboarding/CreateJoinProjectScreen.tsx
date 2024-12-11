@@ -51,17 +51,17 @@ const StyledImage = styled('img')({
 const BulletList = styled('ul')({
 	width: '50%',
 	textAlign: 'left',
-	margin: '16px auto',
+	margin: '12px auto',
 	color: DARK_GREY,
 	paddingLeft: 0,
 })
 
 const BulletListItem = styled('li')({
-	marginBottom: 8,
+	marginBottom: 12,
 })
 
 const SecondarySubtitle = styled(Text)({
-	marginTop: 40,
+	marginTop: 12,
 })
 
 const HorizontalLine = styled('div')({
@@ -79,10 +79,10 @@ export function CreateJoinProjectScreenComponent() {
 	return (
 		<OnboardingScreenLayout topMenu={topMenu}>
 			<StyledImage src={AddPersonImage} alt="Add Person" />
-			<Text kind="title" style={{ marginTop: 32 }}>
+			<Text kind="title" style={{ marginTop: 12 }}>
 				{formatMessage(m.title)}
 			</Text>
-			<Text style={{ margin: '32px 0px', fontSize: '1.125rem' }}>
+			<Text style={{ margin: '12px 0px', fontSize: '1.125rem' }}>
 				{formatMessage(m.askToJoin)}
 			</Text>
 			<div style={{ width: '100%', flexGrow: 1 }}>
@@ -108,7 +108,7 @@ export function CreateJoinProjectScreenComponent() {
 					maxWidth: 350,
 					padding: '12px 20px',
 				}}
-				onClick={() => navigate({ to: '/Onboarding/JoinProjectScreen' })}
+				onClick={() => navigate({ to: '/Onboarding/CreateProjectScreen' })}
 			>
 				{' '}
 				{formatMessage(m.createProject)}

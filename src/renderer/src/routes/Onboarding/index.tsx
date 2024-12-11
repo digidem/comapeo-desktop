@@ -66,7 +66,6 @@ const Background = styled(TopoBackground)({
 const ContentWrapper = styled('div')({
 	display: 'grid',
 	gridTemplateColumns: '1fr 2fr 2fr 1fr',
-	columnGap: 32,
 	alignItems: 'center',
 	width: '100%',
 	height: '60%',
@@ -76,7 +75,7 @@ const ContentWrapper = styled('div')({
 	'@media (max-width: 800px)': {
 		height: 'auto',
 		gridTemplateColumns: '1fr',
-		rowGap: 32,
+		rowGap: 12,
 		padding: '32px 16px',
 	},
 })
@@ -96,7 +95,7 @@ const LeftSection = styled('div')({
 const RightSection = styled('div')({
 	gridColumn: 3,
 	maxWidth: 400,
-	paddingLeft: 32,
+	paddingLeft: 20,
 	display: 'flex',
 	flexDirection: 'column',
 	justifyContent: 'center',
@@ -132,10 +131,10 @@ const DesktopText = styled(Text)(() => ({
 	color: CORNFLOWER_BLUE,
 	fontSize: 64,
 	fontWeight: 500,
-	marginTop: -24,
+	marginTop: -12,
 	'@media (max-width: 800px)': {
 		fontSize: 48,
-		marginTop: -16,
+		marginTop: -12,
 	},
 }))
 
@@ -147,7 +146,7 @@ const MainText = styled(Text)(() => ({
 	maxWidth: 300,
 	'@media (max-width: 800px)': {
 		fontSize: 14,
-		marginTop: 8,
+		marginTop: 12,
 		textAlign: 'center',
 	},
 }))
@@ -155,13 +154,13 @@ const MainText = styled(Text)(() => ({
 const TextBox = styled('div')({
 	width: '100%',
 	maxWidth: 300,
-	padding: '32px 24px',
+	padding: 20,
 	border: `1px solid ${WHITE}`,
 	borderRadius: 4,
 	backgroundColor: 'rgba(0, 0, 0, 0.5)',
 	display: 'flex',
 	flexDirection: 'column',
-	gap: 16,
+	gap: 12,
 	'@media (max-width: 800px)': {
 		maxWidth: '100%',
 	},
@@ -170,7 +169,7 @@ const TextBox = styled('div')({
 const TextItem = styled('div')({
 	display: 'flex',
 	alignItems: 'center',
-	gap: 16,
+	gap: 12,
 })
 
 const StyledText = styled(Text)(({ theme }) => ({

@@ -8,13 +8,13 @@ const DiagnosticsItem = styled('div')({
 	display: 'flex',
 	flexDirection: 'row',
 	alignItems: 'flex-start',
-	gap: 8,
+	gap: 12,
 	marginBottom: 12,
 	paddingLeft: 12,
 })
 const DiagnosticsTitle = styled(Text)({
 	fontWeight: 'bold',
-	marginRight: 4,
+	marginRight: 12,
 	color: DARK_GREY,
 	lineHeight: 1,
 })

@@ -69,8 +69,8 @@ const StyledImage = styled('img')({
 })
 
 const InputWrapper = styled('div')({
-	marginTop: 24,
-	marginBottom: 24,
+	marginTop: 12,
+	marginBottom: 12,
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',
@@ -80,13 +80,13 @@ const StyledTextField = styled(TextField)({
 	width: '100%',
 	maxWidth: 400,
 	backgroundColor: WHITE,
-	marginTop: 20,
+	marginTop: 12,
 })
 
 const CharacterCount = styled(Text, {
 	shouldForwardProp: (prop) => prop !== 'error',
 })<{ error: boolean }>(({ error }) => ({
-	marginTop: 8,
+	marginTop: 12,
 	color: error ? RED : BLACK,
 	width: '100%',
 	maxWidth: 400,
@@ -158,11 +158,11 @@ function CreateProjectScreenComponent() {
 	return (
 		<OnboardingScreenLayout topMenu={topMenu}>
 			<StyledImage src={ProjectImage} alt="Add Project" />
-			<Text kind="title" style={{ marginTop: 32 }}>
+			<Text kind="title" style={{ marginTop: 12 }}>
 				{formatMessage(m.title)}
 			</Text>
 			<div
-				style={{ flexGrow: 1, overflowY: 'auto', width: '100%', marginTop: 32 }}
+				style={{ flexGrow: 1, overflowY: 'auto', width: '100%', marginTop: 12 }}
 			>
 				<InputWrapper>
 					<StyledTextField
@@ -181,7 +181,7 @@ function CreateProjectScreenComponent() {
 						slotProps={{
 							input: {
 								style: {
-									padding: '5px 6px',
+									padding: '5px 12px',
 								},
 							},
 							inputLabel: {
@@ -200,7 +200,7 @@ function CreateProjectScreenComponent() {
 					</CharacterCount>
 				</InputWrapper>
 				{errorMessage && (
-					<Text style={{ color: RED, marginTop: 16 }}>{errorMessage}</Text>
+					<Text style={{ color: RED, marginTop: 12 }}>{errorMessage}</Text>
 				)}
 				<HorizontalLine />
 				<div
@@ -216,8 +216,8 @@ function CreateProjectScreenComponent() {
 							display: 'flex',
 							justifyContent: 'space-between',
 							alignItems: 'center',
-							gap: 8,
-							padding: '10px 0',
+							gap: 12,
+							padding: '12px 0',
 							cursor: 'pointer',
 						}}
 						onClick={() => setAdvancedSettingOpen(!advancedSettingOpen)}
@@ -231,9 +231,9 @@ function CreateProjectScreenComponent() {
 						style={{
 							display: advancedSettingOpen ? 'flex' : 'none',
 							flexDirection: 'column',
-							gap: 20,
+							gap: 12,
 							alignItems: 'center',
-							padding: advancedSettingOpen ? 20 : 0,
+							padding: advancedSettingOpen ? 12 : 0,
 						}}
 					>
 						<Button
@@ -257,7 +257,7 @@ function CreateProjectScreenComponent() {
 			</div>
 			<div
 				style={{
-					marginTop: 32,
+					marginTop: 12,
 					width: '100%',
 					display: 'flex',
 					justifyContent: 'center',

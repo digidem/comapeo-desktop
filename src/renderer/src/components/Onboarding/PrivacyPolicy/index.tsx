@@ -21,7 +21,7 @@ import { m } from './privacyPolicyMessages'
 const Container = styled('div')({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: 20,
+	gap: 12,
 	padding: 20,
 	width: '100%',
 	maxWidth: 800,
@@ -32,16 +32,16 @@ const Header = styled(Text)({
 	textAlign: 'center',
 })
 const Subheader = styled(Text)({
-	marginTop: 50,
+	marginTop: 12,
 	fontSize: 24,
 	fontWeight: 'bold',
-	marginBottom: 30,
+	marginBottom: 12,
 })
 const ContentBox = styled('div')({
 	width: '70%',
 	maxWidth: 800,
 	margin: '0 auto',
-	padding: 20,
+	padding: 12,
 	backgroundColor: WHITE,
 	borderRadius: 10,
 })
@@ -50,19 +50,19 @@ const HorizontalLine = styled('div')({
 	margin: '20px 0',
 })
 const OverviewBox = styled('div')({
-	padding: 20,
+	padding: 12,
 	borderWidth: 1,
 	borderColor: BLUE_GREY,
 	borderRadius: 10,
 	backgroundColor: VERY_LIGHT_GREY,
-	marginBottom: 20,
+	marginBottom: 12,
 })
 const ToggleContainer = styled('div')(
 	({ isTop, isBottom }: { isTop?: boolean; isBottom?: boolean }) => ({
 		border: `1px solid ${BLUE_GREY}`,
 		borderRadius: isTop ? '10px 10px 0 0' : isBottom ? '0 0 10px 10px' : '0',
 		borderTopWidth: isBottom ? 0 : 1,
-		padding: '20px 0',
+		padding: '12px 0',
 		margin: 0,
 		gap: 'unset',
 	}),
@@ -71,12 +71,12 @@ const ToggleHeader = styled('div')({
 	display: 'flex',
 	justifyContent: 'space-between',
 	alignItems: 'center',
-	padding: '16px 20px',
+	padding: 12,
 	cursor: 'pointer',
 	backgroundColor: WHITE,
 })
 const ToggleContent = styled('div')({
-	padding: '16px 20px',
+	padding: 12,
 	backgroundColor: WHITE,
 })
 const ToggledText = styled(Text)(({ theme }) => ({
@@ -86,11 +86,11 @@ const ToggledText = styled(Text)(({ theme }) => ({
 const DiagnosticsContainer = styled('div')({
 	border: `1px solid ${BLUE_GREY}`,
 	borderRadius: 10,
-	marginBottom: 20,
+	marginBottom: 12,
 	paddingBottom: 8,
 })
 const DiagnosticsContent = styled('div')({
-	paddingLeft: 20,
+	paddingLeft: 12,
 })
 const HorizontalLineSmall = styled('div')({
 	borderBottom: `1px solid ${BLUE_GREY}`,
@@ -100,7 +100,7 @@ const PermissionToggleContainer = styled('div')({
 	flexDirection: 'row',
 	alignItems: 'center',
 	backgroundColor: WHITE,
-	padding: 15,
+	padding: 12,
 	border: `1px solid ${BLUE_GREY}`,
 	borderRadius: 10,
 })

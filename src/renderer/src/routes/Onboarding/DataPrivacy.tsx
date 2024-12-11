@@ -58,13 +58,13 @@ const StyledIcon = styled(LockedIcon)({
 const BulletList = styled('ul')({
 	width: '50%',
 	textAlign: 'left',
-	margin: '16px auto',
+	margin: '12px auto',
 	color: DARK_GREY,
 	paddingLeft: 0,
 })
 
 const BulletListItem = styled('li')({
-	marginBottom: 8,
+	marginBottom: 12,
 })
 export function DataPrivacyComponent() {
 	const navigate = useNavigate()
@@ -101,10 +101,7 @@ export function DataPrivacyComponent() {
 			<Text kind="title" style={{ marginTop: 32 }}>
 				{formatMessage(m.title)}
 			</Text>
-			<Text
-				kind="body"
-				style={{ marginTop: 16, maxWidth: '45%', margin: '16px auto' }}
-			>
+			<Text kind="body" style={{ maxWidth: '45%', margin: '12px auto' }}>
 				{formatMessage(m.description)}
 			</Text>
 			<div style={{ width: '100%', flexGrow: 1 }}>{bulletPoints}</div>
@@ -112,9 +109,7 @@ export function DataPrivacyComponent() {
 				style={{
 					display: 'flex',
 					justifyContent: 'space-between',
-					gap: 15,
-					marginTop: 63,
-					padding: '0 20px',
+					gap: 12,
 					width: '100%',
 				}}
 			>
@@ -125,7 +120,6 @@ export function DataPrivacyComponent() {
 						color: BLACK,
 						backgroundColor: WHITE,
 						width: '100%',
-						padding: '12px 20px',
 					}}
 				>
 					{formatMessage(m.learnMore)}

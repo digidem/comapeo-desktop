@@ -38,7 +38,7 @@ const IconContainer = styled('div')({
 	display: 'flex',
 	alignItems: 'center',
 	justifyContent: 'center',
-	margin: '0 auto 24px auto',
+	margin: '0 auto 12px auto',
 })
 
 const StyledIcon = styled('img')({
@@ -79,19 +79,17 @@ function JoinProjectScreenComponent() {
 			<IconContainer>
 				<StyledIcon src={AddPersonIcon} alt="Add Person" />
 			</IconContainer>
-			<Text kind="title" style={{ marginTop: 32 }}>
+			<Text kind="title" style={{ marginTop: 12 }}>
 				{formatMessage(m.title)}
 			</Text>
 			<div style={{ width: '100%', flexGrow: 1 }}>
-				<div style={{ textAlign: 'center', marginBottom: 40 }}>
+				<div style={{ textAlign: 'center' }}>
 					<Text bold kind="title">
 						{projectName}
 					</Text>
 				</div>
 				<div style={{ textAlign: 'center', margin: '80px 0' }}>
-					<Text
-						style={{ fontSize: '1.25rem', color: BLACK, marginBottom: '8px' }}
-					>
+					<Text style={{ fontSize: '1.25rem', color: BLACK, marginBottom: 12 }}>
 						{formatMessage(m.invitedTitle)}
 					</Text>
 					<Text bold style={{ fontSize: '1.25rem' }}>
@@ -103,9 +101,7 @@ function JoinProjectScreenComponent() {
 				style={{
 					display: 'flex',
 					justifyContent: 'space-between',
-					gap: 15,
-					marginTop: 63,
-					padding: '0 20px',
+					gap: 12,
 					width: '100%',
 				}}
 			>
