@@ -32,7 +32,7 @@ export default defineConfig((configEnv) => {
 			emptyOutDir: true,
 		},
 		plugins: [
-			TanStackRouterVite({ routeFileIgnorePattern: '*.test.tsx' }),
+			TanStackRouterVite({ routeFileIgnorePattern: '\\.test\\.tsx?$' }),
 			react(),
 			svgr({
 				include: '**/*.svg',
