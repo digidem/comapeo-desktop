@@ -125,10 +125,6 @@ export function DeviceNamingScreenComponent() {
 		return result
 	}
 
-	function getUtf8ByteLength(text: string): number {
-		return new TextEncoder().encode(text).length
-	}
-
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value
 		const graphemeCount = countGraphemes(value.trim())
@@ -226,4 +222,8 @@ export function DeviceNamingScreenComponent() {
 			</ContentBox>
 		</Container>
 	)
+}
+
+export function getUtf8ByteLength(text: string): number {
+	return new TextEncoder().encode(text).length
 }
