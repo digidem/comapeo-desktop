@@ -11,7 +11,24 @@ on:
     types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
-  all:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+      - name: Install deps
+        run: npm ci
+      - name: Build translations
+        run: npm run intl:translations
+      - name: Run lint
+        run: npm run lint
+  test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
