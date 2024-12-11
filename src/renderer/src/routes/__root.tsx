@@ -4,10 +4,12 @@ import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 
 import { theme } from '../Theme'
+import { initComapeoClient } from '../comapeo-client.js'
 import { ApiProvider } from '../contexts/ApiContext'
 import { IntlProvider } from '../contexts/IntlContext'
 
 const queryClient = new QueryClient()
+const comapeoClient = initComapeoClient()
 
 export const Route = createRootRoute({
 	component: () => (
@@ -15,7 +17,7 @@ export const Route = createRootRoute({
 			<CssBaseline />
 			<IntlProvider>
 				<QueryClientProvider client={queryClient}>
-					<ApiProvider>
+					<ApiProvider client={comapeoClient}>
 						<Outlet />
 						<TanStackRouterDevtools />
 					</ApiProvider>

@@ -4,7 +4,6 @@ import { defineMessages } from '@formatjs/intl'
 import debug from 'debug'
 import {
 	BrowserWindow,
-	MessageChannelMain,
 	app,
 	ipcMain,
 	safeStorage,
@@ -213,17 +212,17 @@ function initMainWindow({ appMode, services }) {
 
 	// Set up communication channel between window and core service
 	// https://www.electronjs.org/docs/latest/tutorial/message-ports/#messageports-in-the-main-process
-	mainWindow.webContents.ipc.on('request-comapeo-port', (event) => {
-		const { port1, port2 } = new MessageChannelMain()
+	mainWindow.webContents.ipc.on('comapeo-port', (event) => {
+		const [port] = event.ports
+		if (!port) return // TODO: throw/report error
 		services.core.postMessage(
 			/** @satisfies {NewClientMessage} */
 			{
 				type: 'core:new-client',
 				payload: { clientId: `window-${mainWindow.id}` },
 			},
-			[port1],
+			[port],
 		)
-		event.senderFrame?.postMessage('provide-comapeo-port', null, [port2])
 	})
 
 	APP_STATE.browserWindows.set(mainWindow, {
