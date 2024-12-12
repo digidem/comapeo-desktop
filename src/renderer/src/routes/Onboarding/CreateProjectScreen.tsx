@@ -111,7 +111,6 @@ function CreateProjectScreenComponent() {
 	const [errorMessage, setErrorMessage] = useState('')
 	const setProjectNameMutation = useCreateProject()
 
-	const [advancedSettingOpen, setAdvancedSettingOpen] = useState(false)
 	const [configFileName, setConfigFileName] = useState<string | null>(null)
 
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -215,8 +214,6 @@ function CreateProjectScreenComponent() {
 					}}
 				>
 					<Accordion
-						expanded={advancedSettingOpen}
-						onChange={(_, expanded) => setAdvancedSettingOpen(expanded)}
 						sx={{
 							boxShadow: 'none',
 							background: 'transparent',
