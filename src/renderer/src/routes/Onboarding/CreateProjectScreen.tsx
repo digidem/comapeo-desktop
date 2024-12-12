@@ -1,5 +1,11 @@
 import { useRef, useState, type ChangeEvent } from 'react'
-import { TextField } from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import {
+	Accordion,
+	AccordionDetails,
+	AccordionSummary,
+	TextField,
+} from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -16,8 +22,6 @@ import { Text } from '../../components/Text'
 import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../constants'
 import { useConfigFileImporter } from '../../hooks/useConfigFileImporter'
 import ProjectImage from '../../images/add_square.png'
-import ChevronUp from '../../images/chevrondown-expanded.svg'
-import ChevronDown from '../../images/chevrondown.svg'
 import { useCreateProject } from '../../queries/projects'
 
 export const m = defineMessages({
@@ -108,7 +112,6 @@ function CreateProjectScreenComponent() {
 	const [errorMessage, setErrorMessage] = useState('')
 	const setProjectNameMutation = useCreateProject()
 
-	const [advancedSettingOpen, setAdvancedSettingOpen] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement | null>(null)
 
 	const {
@@ -155,17 +158,12 @@ function CreateProjectScreenComponent() {
 		)
 	}
 
-	const handleToggleAdvancedSettings = () => {
-		setAdvancedSettingOpen((prev) => !prev)
-	}
+	const backPressHandler = setProjectNameMutation.isPending
+		? undefined
+		: () => navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
 
 	const topMenu = (
-		<OnboardingTopMenu
-			currentStep={3}
-			onBackPress={() =>
-				navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
-			}
-		/>
+		<OnboardingTopMenu currentStep={3} onBackPress={backPressHandler} />
 	)
 
 	return (
@@ -224,62 +222,64 @@ function CreateProjectScreenComponent() {
 						textAlign: 'center',
 					}}
 				>
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'space-between',
-							alignItems: 'center',
-							gap: 12,
-							padding: '12px 0',
-							cursor: 'pointer',
+					<Accordion
+						sx={{
+							boxShadow: 'none',
+							background: 'transparent',
+							textAlign: 'left',
 						}}
-						onClick={handleToggleAdvancedSettings}
 					>
-						<Text bold style={{ fontSize: '1.125rem' }}>
-							{formatMessage(m.advancedProjectSettings)}
-						</Text>
-						{advancedSettingOpen ? <ChevronDown /> : <ChevronUp />}
-					</div>
-					{advancedSettingOpen && (
-						<div
-							style={{
-								display: 'flex',
-								flexDirection: 'column',
-								gap: 12,
-								alignItems: 'center',
-								padding: 12,
-							}}
+						<AccordionSummary
+							expandIcon={<ExpandMoreIcon />}
+							aria-controls="advanced-settings-content"
+							id="advanced-settings-header"
+							sx={{ padding: '0', margin: '0', minHeight: 'inherit' }}
 						>
-							<input
-								ref={fileInputRef}
-								type="file"
-								accept=".comapeocat"
-								style={{ display: 'none' }}
-								onChange={handleFileSelect}
-							/>
-							<Button
-								variant="outlined"
+							<Text bold style={{ fontSize: '1.125rem' }}>
+								{formatMessage(m.advancedProjectSettings)}
+							</Text>
+						</AccordionSummary>
+						<AccordionDetails>
+							<div
 								style={{
-									backgroundColor: WHITE,
-									color: BLACK,
-									width: '100%',
-									maxWidth: 350,
-									padding: '12px 20px',
+									display: 'flex',
+									flexDirection: 'column',
+									gap: 12,
+									alignItems: 'center',
+									padding: 12,
 								}}
-								onClick={handleImportConfigClick}
 							>
-								{formatMessage(m.importConfig)}
-							</Button>
-							{configFileError && (
-								<Text style={{ textAlign: 'center', color: RED }}>
-									{configFileError}
-								</Text>
-							)}
-							{configFileName && (
-								<Text style={{ textAlign: 'center' }}>{configFileName}</Text>
-							)}
-						</div>
-					)}
+								<input
+									ref={fileInputRef}
+									type="file"
+									accept=".comapeocat"
+									style={{ display: 'none' }}
+									onChange={handleFileSelect}
+								/>
+								<Button
+									variant="outlined"
+									style={{
+										backgroundColor: WHITE,
+										color: BLACK,
+										width: '100%',
+										maxWidth: 350,
+										padding: '12px 20px',
+									}}
+									onClick={handleImportConfigClick}
+								>
+									{formatMessage(m.importConfig)}
+								</Button>
+								{configFileError && (
+									<Text style={{ textAlign: 'center', color: RED }}>
+										{configFileError}
+									</Text>
+								)}
+								{configFileName && (
+									<Text style={{ textAlign: 'center' }}>{configFileName}</Text>
+								)}
+							</div>
+						</AccordionDetails>
+					</Accordion>
 				</div>
 			</div>
 			<div
