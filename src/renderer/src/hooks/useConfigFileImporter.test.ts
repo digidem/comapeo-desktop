@@ -12,7 +12,6 @@ describe('useConfigFileImporter', () => {
 
 	it('sets fileName and clears error when a valid .comapeocat file is selected', () => {
 		const { result } = renderHook(() => useConfigFileImporter())
-		console.log('result', result)
 
 		const mockFile = new File(['test content'], 'project.comapeocat', {
 			type: 'text/plain',
