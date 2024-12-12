@@ -37,8 +37,8 @@ export const m = defineMessages({
 		id: 'screens.ProjectCreationScreen.placeholder',
 		defaultMessage: 'Project Name',
 	},
-	addName: {
-		id: 'screens.ProjectCreationScreen.addName',
+	createProject: {
+		id: 'screens.ProjectCreationScreen.createProject',
 		defaultMessage: 'Create Project',
 	},
 	characterCount: {
@@ -240,70 +240,53 @@ function CreateProjectScreenComponent() {
 							</Text>
 						</AccordionSummary>
 						<AccordionDetails>
-							<div
+							<input
+								ref={fileInputRef}
+								type="file"
+								accept=".comapeocat"
+								style={{ display: 'none' }}
+								onChange={handleFileSelect}
+							/>
+							<Button
+								variant="outlined"
 								style={{
-									display: 'flex',
-									flexDirection: 'column',
-									gap: 12,
-									alignItems: 'center',
-									padding: 12,
+									backgroundColor: WHITE,
+									color: BLACK,
+									width: '100%',
+									maxWidth: 350,
+									padding: '12px 20px',
 								}}
+								onClick={handleImportConfigClick}
 							>
-								<input
-									ref={fileInputRef}
-									type="file"
-									accept=".comapeocat"
-									style={{ display: 'none' }}
-									onChange={handleFileSelect}
-								/>
-								<Button
-									variant="outlined"
-									style={{
-										backgroundColor: WHITE,
-										color: BLACK,
-										width: '100%',
-										maxWidth: 350,
-										padding: '12px 20px',
-									}}
-									onClick={handleImportConfigClick}
-								>
-									{formatMessage(m.importConfig)}
-								</Button>
-								{configFileError && (
-									<Text style={{ textAlign: 'center', color: RED }}>
-										{configFileError}
-									</Text>
-								)}
-								{configFileName && (
-									<Text style={{ textAlign: 'center' }}>{configFileName}</Text>
-								)}
-							</div>
+								{formatMessage(m.importConfig)}
+							</Button>
+							{configFileError && (
+								<Text style={{ textAlign: 'center', color: RED }}>
+									{configFileError}
+								</Text>
+							)}
+							{configFileName && (
+								<Text style={{ textAlign: 'center', marginTop: 12 }}>
+									{configFileName}
+								</Text>
+							)}
 						</AccordionDetails>
 					</Accordion>
 				</div>
 			</div>
-			<div
+			<Button
+				onClick={handleAddName}
 				style={{
-					marginTop: 12,
 					width: '100%',
-					display: 'flex',
-					justifyContent: 'center',
+					maxWidth: 350,
+					padding: '12px 20px',
 				}}
+				disabled={setProjectNameMutation.isPending}
 			>
-				<Button
-					onClick={handleAddName}
-					style={{
-						width: '100%',
-						maxWidth: 350,
-						padding: '12px 20px',
-					}}
-					disabled={setProjectNameMutation.isPending}
-				>
-					{setProjectNameMutation.isPending
-						? formatMessage(m.saving)
-						: formatMessage(m.addName)}
-				</Button>
-			</div>
+				{setProjectNameMutation.isPending
+					? formatMessage(m.saving)
+					: formatMessage(m.createProject)}
+			</Button>
 		</OnboardingScreenLayout>
 	)
 }
