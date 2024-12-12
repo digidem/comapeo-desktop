@@ -21,7 +21,7 @@ export const Route = createRootRoute({
 						<Suspense fallback={<CircularProgress />}>
 							<Outlet />
 						</Suspense>
-						<TanStackRouterDevtools />
+						{/* <TanStackRouterDevtools /> */}
 					</ApiProvider>
 				</QueryClientProvider>
 			</IntlProvider>
