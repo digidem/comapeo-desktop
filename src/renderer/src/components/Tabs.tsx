@@ -52,7 +52,6 @@ export const Tabs = () => {
 
 			<MapTabStyled
 				icon={<SettingsIcon />}
-				sx={{ justifySelf: 'flex-end' }}
 				label={
 					<Text style={{ fontSize: 10 }} kind="title">
 						{formatMessage(m.setting)}
@@ -62,7 +61,6 @@ export const Tabs = () => {
 			/>
 			<MapTabStyled
 				icon={<InfoOutlinedIcon />}
-				sx={{ justifySelf: 'flex-end' }}
 				label={
 					<Text style={{ fontSize: 10 }} kind="title">
 						{formatMessage(m.about)}
