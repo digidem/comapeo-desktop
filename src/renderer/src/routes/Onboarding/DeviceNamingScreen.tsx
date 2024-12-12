@@ -15,7 +15,7 @@ import {
 import { Text } from '../../components/Text'
 import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../constants'
 import DeviceImage from '../../images/device.png'
-import { useEditDeviceInfo } from '../../queries/deviceInfo'
+import { useEditDeviceInfo } from '../../mutations/deviceInfo'
 
 export const m = defineMessages({
 	title: {
