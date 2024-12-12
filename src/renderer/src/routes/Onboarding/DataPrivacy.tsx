@@ -2,15 +2,10 @@ import { styled } from '@mui/material/styles'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import {
-	BLACK,
-	BLUE_GREY,
-	DARK_COMAPEO_BLUE,
-	DARK_GREY,
-	WHITE,
-} from '../../colors'
+import { BLACK, DARK_GREY, WHITE } from '../../colors'
 import { Button } from '../../components/Button'
-import { OnboardingTopMenu } from '../../components/OnboardingTopMenu'
+import { OnboardingScreenLayout } from '../../components/Onboarding/OnboardingScreenLayout'
+import { OnboardingTopMenu } from '../../components/Onboarding/OnboardingTopMenu'
 import { Text } from '../../components/Text'
 import LockedIcon from '../../images/LockedWithKey.svg'
 
@@ -30,7 +25,7 @@ export const m = defineMessages({
 	},
 	dataPrivacyEncrypted: {
 		id: 'screens.DataPrivacy.encrypted',
-		defaultMessage: 'All data stays fully encrypted',
+		defaultMessage: 'All data stays fully encrypted.',
 	},
 	dataPrivacyManageAndControl: {
 		id: 'screens.DataPrivacy.manageAndControl',
@@ -55,104 +50,87 @@ export const Route = createFileRoute('/Onboarding/DataPrivacy')({
 	component: DataPrivacyComponent,
 })
 
-const Container = styled('div')({
-	display: 'flex',
-	flexDirection: 'column',
-	alignItems: 'center',
-	justifyContent: 'center',
-	height: '100%',
-	backgroundColor: DARK_COMAPEO_BLUE,
-})
-const ContentBox = styled('div')({
-	backgroundColor: 'rgba(255, 255, 255, 0.94)',
-	border: `1px solid ${BLUE_GREY}`,
-	borderRadius: 8,
-	padding: 20,
-	width: '55%',
-	textAlign: 'center',
-	boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.02)',
-})
-
-const BodyTextWrapper = styled('div')({
-	maxWidth: '40%',
-	margin: '16px auto 0',
-	textAlign: 'center',
-})
-const ButtonContainer = styled('div')({
-	display: 'flex',
-	justifyContent: 'space-between',
-	gap: 15,
-	marginTop: 63,
-	padding: '0 20px',
-})
 const StyledIcon = styled(LockedIcon)({
-	marginBottom: '16px',
 	width: 40,
 	height: 50,
 })
+
 const BulletList = styled('ul')({
 	width: '50%',
 	textAlign: 'left',
-	margin: '16px auto',
+	margin: '12px auto',
 	color: DARK_GREY,
 	paddingLeft: 0,
 })
+
 const BulletListItem = styled('li')({
-	marginBottom: 8,
+	marginBottom: 12,
 })
 export function DataPrivacyComponent() {
 	const navigate = useNavigate()
 	const { formatMessage } = useIntl()
 
+	function onBackPress() {
+		navigate({ to: '/Onboarding' })
+	}
+
+	const topMenu = (
+		<OnboardingTopMenu currentStep={1} onBackPress={onBackPress} />
+	)
+
+	const bulletPoints = (
+		<BulletList>
+			<BulletListItem>
+				<Text kind="body">{formatMessage(m.dataPrivacyStays)}</Text>
+			</BulletListItem>
+			<BulletListItem>
+				<Text kind="body">{formatMessage(m.dataPrivacyEncrypted)}</Text>
+			</BulletListItem>
+			<BulletListItem>
+				<Text kind="body">{formatMessage(m.dataPrivacyManageAndControl)}</Text>
+			</BulletListItem>
+			<BulletListItem>
+				<Text kind="body">{formatMessage(m.dataPrivacyDiagnostic)}</Text>
+			</BulletListItem>
+		</BulletList>
+	)
+
 	return (
-		<Container>
-			<OnboardingTopMenu currentStep={1} />
-			<ContentBox>
-				<StyledIcon />
-				<Text kind="title">{formatMessage(m.title)}</Text>
-				<BodyTextWrapper>
-					<Text kind="body" style={{ marginTop: '16px' }}>
-						{formatMessage(m.description)}
-					</Text>
-				</BodyTextWrapper>
-				<BulletList>
-					<BulletListItem>
-						<Text kind="body">{formatMessage(m.dataPrivacyStays)}</Text>
-					</BulletListItem>
-					<BulletListItem>
-						<Text kind="body">{formatMessage(m.dataPrivacyEncrypted)}</Text>
-					</BulletListItem>
-					<BulletListItem>
-						<Text kind="body">
-							{formatMessage(m.dataPrivacyManageAndControl)}
-						</Text>
-					</BulletListItem>
-					<BulletListItem>
-						<Text kind="body">{formatMessage(m.dataPrivacyDiagnostic)}</Text>
-					</BulletListItem>
-				</BulletList>
-				<ButtonContainer>
-					<Button
-						onClick={() => navigate({ to: '/Onboarding/PrivacyPolicyScreen' })}
-						variant="outlined"
-						style={{
-							color: BLACK,
-							backgroundColor: WHITE,
-							width: '100%',
-						}}
-					>
-						{formatMessage(m.learnMore)}
-					</Button>
-					<Button
-						onClick={() => navigate({ to: '/Onboarding/DeviceNamingScreen' })}
-						style={{
-							width: '100%',
-						}}
-					>
-						{formatMessage(m.next)}
-					</Button>
-				</ButtonContainer>
-			</ContentBox>
-		</Container>
+		<OnboardingScreenLayout topMenu={topMenu}>
+			<StyledIcon />
+			<Text kind="title" style={{ marginTop: 32 }}>
+				{formatMessage(m.title)}
+			</Text>
+			<Text kind="body" style={{ maxWidth: '45%', margin: '12px auto' }}>
+				{formatMessage(m.description)}
+			</Text>
+			<div style={{ width: '100%', flexGrow: 1 }}>{bulletPoints}</div>
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					gap: 12,
+					width: '100%',
+				}}
+			>
+				<Button
+					onClick={() => navigate({ to: '/Onboarding/PrivacyPolicyScreen' })}
+					variant="outlined"
+					style={{
+						color: BLACK,
+						backgroundColor: WHITE,
+						width: '100%',
+					}}
+				>
+					{formatMessage(m.learnMore)}
+				</Button>
+				<Button
+					onClick={() => navigate({ to: '/Onboarding/DeviceNamingScreen' })}
+					style={{ width: '100%', padding: '12px 20px' }}
+				>
+					{formatMessage(m.next)}
+				</Button>
+			</div>
+		</OnboardingScreenLayout>
 	)
 }

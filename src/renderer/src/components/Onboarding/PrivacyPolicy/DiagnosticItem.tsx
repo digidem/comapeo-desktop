@@ -1,20 +1,20 @@
 import CircleIcon from '@mui/icons-material/Circle'
 import { styled } from '@mui/material/styles'
 
-import { DARK_GREY } from '../../colors'
-import { Text } from '../../components/Text'
+import { DARK_GREY } from '../../../colors'
+import { Text } from '../../Text'
 
 const DiagnosticsItem = styled('div')({
 	display: 'flex',
 	flexDirection: 'row',
 	alignItems: 'flex-start',
-	gap: 8,
+	gap: 12,
 	marginBottom: 12,
 	paddingLeft: 12,
 })
 const DiagnosticsTitle = styled(Text)({
 	fontWeight: 'bold',
-	marginRight: 4,
+	marginRight: 12,
 	color: DARK_GREY,
 	lineHeight: 1,
 })
