@@ -86,6 +86,7 @@ const theme = createTheme({
 			},
 		},
 	},
+	spacing: 1,
 })
 
 export { theme }

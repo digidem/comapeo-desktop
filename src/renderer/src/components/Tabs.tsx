@@ -33,6 +33,8 @@ export const Tabs = () => {
 	return (
 		<MuiTabs
 			sx={{
+				pb: 20,
+				pt: 20,
 				'& .MuiTabs-flexContainer': {
 					height: '100%',
 				},
