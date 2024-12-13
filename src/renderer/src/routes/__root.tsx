@@ -4,7 +4,7 @@ import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 
 type RouterContext = {
 	hasDeviceName: boolean
-	persistedProjectId: string | undefined
+	persistedProjectId: boolean
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
