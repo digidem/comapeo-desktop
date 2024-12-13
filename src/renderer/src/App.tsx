@@ -18,7 +18,7 @@ declare module '@tanstack/react-router' {
 export const App = () => {
 	const { data } = useOwnDeviceInfo()
 	const hasDeviceName = data?.name !== undefined
-	const persistedProjectId = usePersistedProjectIdStore(
+	const persistedProjectId = !!usePersistedProjectIdStore(
 		(store) => store.projectId,
 	)
 	return (

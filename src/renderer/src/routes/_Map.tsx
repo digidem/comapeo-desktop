@@ -15,9 +15,6 @@ const Container = styled('div')({
 
 export const Route = createFileRoute('/_Map')({
 	component: MapLayout,
-	beforeLoad: () => {
-		console.log('LOADING')
-	},
 })
 
 export function MapLayout() {

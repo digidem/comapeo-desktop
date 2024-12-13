@@ -1,7 +1,6 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
-import { useStore, type StateCreator } from 'zustand'
+import { type StateCreator } from 'zustand'
 
-import { createPersistedStore } from './createPersistedState'
+import { createPersistedStoreWithProvider } from './createPersistedState'
 
 type ProjectIdSlice = {
 	projectId: string | undefined
@@ -13,33 +12,32 @@ const projectIdSlice: StateCreator<ProjectIdSlice> = (set) => ({
 	setProjectId: (projectId) => set({ projectId }),
 })
 
-const projectIdStore = createPersistedStore(projectIdSlice, 'ActiveProjectId')
+export const {
+	Provider: PersistedProjectIdProvider,
+	useStoreHook: usePersistedProjectIdStore,
+} = createPersistedStoreWithProvider(projectIdSlice, 'ActiveProjectId')
 
-const PersistedProjectIdContext = createContext<typeof projectIdStore | null>(
-	null,
-)
+// export const PersistedProjectIdProvider = ({
+// 	children,
+// }: {
+// 	children: ReactNode
+// }) => {
+// 	const [store] = useState(() => projectIdStore)
 
-export const PersistedProjectIdProvider = ({
-	children,
-}: {
-	children: ReactNode
-}) => {
-	const [store] = useState(() => projectIdStore)
+// 	return (
+// 		<PersistedProjectIdContext.Provider value={store}>
+// 			{children}
+// 		</PersistedProjectIdContext.Provider>
+// 	)
+// }
 
-	return (
-		<PersistedProjectIdContext.Provider value={store}>
-			{children}
-		</PersistedProjectIdContext.Provider>
-	)
-}
+// export function usePersistedProjectIdStore<Selected>(
+// 	selector: (state: ProjectIdSlice) => Selected,
+// ): Selected {
+// 	const store = useContext(PersistedProjectIdContext)
+// 	if (!store) {
+// 		throw new Error('Missing Persisted Project Id Store')
+// 	}
 
-export function usePersistedProjectIdStore<Selected>(
-	selector: (state: ProjectIdSlice) => Selected,
-): Selected {
-	const store = useContext(PersistedProjectIdContext)
-	if (!store) {
-		throw new Error('Missing Persisted Project Id Store')
-	}
-
-	return useStore(store, selector)
-}
+// 	return useStore(store, selector)
+// }
