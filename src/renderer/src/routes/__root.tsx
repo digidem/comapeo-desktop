@@ -6,6 +6,7 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { theme } from '../Theme'
 import { ApiProvider } from '../contexts/ApiContext'
 import { IntlProvider } from '../contexts/IntlContext'
+import { PersistedActiveProjectProvider } from '../contexts/persistedState/PersistedProjectId'
 
 const queryClient = new QueryClient()
 
@@ -16,8 +17,10 @@ export const Route = createRootRoute({
 			<IntlProvider>
 				<QueryClientProvider client={queryClient}>
 					<ApiProvider>
-						<Outlet />
-						<TanStackRouterDevtools />
+						<PersistedActiveProjectProvider>
+							<Outlet />
+							<TanStackRouterDevtools />
+						</PersistedActiveProjectProvider>
 					</ApiProvider>
 				</QueryClientProvider>
 			</IntlProvider>
