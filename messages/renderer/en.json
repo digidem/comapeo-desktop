@@ -238,5 +238,11 @@
   },
   "screens.ProjectCreationScreen.title": {
     "message": "Create a Project"
+  },
+  "tabBar.label.about": {
+    "message": "About"
+  },
+  "tabBar.label.settings": {
+    "message": "Settings"
   }
 }

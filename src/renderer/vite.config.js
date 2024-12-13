@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+/// <reference types="vitest/config" />
 import * as path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
