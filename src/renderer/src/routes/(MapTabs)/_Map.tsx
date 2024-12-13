@@ -1,49 +1,42 @@
-import * as React from 'react'
-import { Paper } from '@mui/material'
-import Tab from '@mui/material/Tab'
-import Tabs from '@mui/material/Tabs'
-import { Outlet, createFileRoute, useNavigate } from '@tanstack/react-router'
+import { Suspense } from 'react'
+import { CircularProgress, Paper } from '@mui/material'
+import { styled } from '@mui/material/styles'
+import { Outlet, createFileRoute } from '@tanstack/react-router'
 
-import type { FileRoutesById } from '../../routeTree.gen'
+import { VERY_LIGHT_GREY, WHITE } from '../../colors'
+import { Tabs } from '../../components/Tabs'
+
+const Container = styled('div')({
+	display: 'flex',
+	backgroundColor: WHITE,
+	height: '100%',
+})
 
 export const Route = createFileRoute('/(MapTabs)/_Map')({
 	component: MapLayout,
 })
 
 export function MapLayout() {
-	const navigate = useNavigate()
-	const renderCount = React.useRef(0)
-	renderCount.current = renderCount.current + 1
 	return (
-		<div>
-			<Tabs
-				onChange={(_, value) => navigate({ to: value as MapTabRoute })}
-				orientation="vertical"
-			>
-				<MapTab label="Tab 1" value={'/tab1'} />
-				<MapTab label="Tab 2" value={'/tab2'} />
-			</Tabs>
-			<Paper>
-				<Outlet />
+		<Container>
+			<Paper elevation={3} sx={{ display: 'flex' }}>
+				<Tabs />
+				<div
+					style={{
+						width: 300,
+						borderLeftColor: VERY_LIGHT_GREY,
+						borderLeftWidth: '1px',
+						borderLeftStyle: 'solid',
+					}}
+				>
+					<Suspense fallback={<CircularProgress />}>
+						<Outlet />
+					</Suspense>
+				</div>
 			</Paper>
-			<div>map component here</div>
-			<div>parent map component render count: {renderCount.current}</div>
-		</div>
+			<Suspense fallback={<CircularProgress />}>
+				<div>map component here</div>
+			</Suspense>
+		</Container>
 	)
-}
-
-type TabProps = React.ComponentProps<typeof Tab>
-
-type MapTabRoute = {
-	[K in keyof FileRoutesById]: K extends `${'/(MapTabs)/_Map'}${infer Rest}`
-		? Rest extends ''
-			? never
-			: `${Rest}`
-		: never
-}[keyof FileRoutesById]
-
-type MapTabProps = Omit<TabProps, 'value'> & { value: MapTabRoute }
-
-function MapTab(props: MapTabProps) {
-	return <Tab {...props} />
 }
