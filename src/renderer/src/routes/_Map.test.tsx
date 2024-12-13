@@ -8,7 +8,7 @@ import {
 import { render, screen } from '@testing-library/react'
 import { expect, test } from 'vitest'
 
-import { IntlProvider } from '../../contexts/IntlContext'
+import { IntlProvider } from '../contexts/IntlContext'
 import { MapLayout } from './_Map'
 
 const rootRoute = createRootRoute({})

@@ -3,9 +3,9 @@ import { CircularProgress, Paper } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
-import { VERY_LIGHT_GREY, WHITE } from '../../colors'
-import { Tabs } from '../../components/Tabs'
-import { ActiveProjectContextProvider } from '../../contexts/ActiveProjectIdStore'
+import { VERY_LIGHT_GREY, WHITE } from '../colors'
+import { Tabs } from '../components/Tabs'
+import { ActiveProjectContextProvider } from '../contexts/ActiveProjectIdStore'
 
 const Container = styled('div')({
 	display: 'flex',
@@ -13,7 +13,7 @@ const Container = styled('div')({
 	height: '100%',
 })
 
-export const Route = createFileRoute('/(MapTabs)/_Map')({
+export const Route = createFileRoute('/_Map')({
 	component: MapLayout,
 	beforeLoad: () => {
 		console.log('LOADING')
