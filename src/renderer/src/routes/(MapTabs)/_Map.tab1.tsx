@@ -1,19 +1,24 @@
 import * as React from 'react'
+import { useManyDocs } from '@comapeo/core-react'
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Text } from '../../components/Text'
-import { usePersistedProjectIdStore } from '../../contexts/persistedState/PersistedProjectId'
+import { useActiveProjectId } from '../../contexts/ActiveProjectIdStore'
 
 export const Route = createFileRoute('/(MapTabs)/_Map/tab1')({
 	component: RouteComponent,
 })
 
 function RouteComponent() {
-	const projectId = usePersistedProjectIdStore((store) => store.projectId)
+	const projectId = useActiveProjectId()
+	const { data: observations } = useManyDocs({
+		projectId,
+		docType: 'observation',
+	})
 	return (
 		<div>
 			<Text>Tab 1</Text>
-			<Text>{projectId}</Text>
+			<Text>{`Number of observations: ${observations.length}`}</Text>
 		</div>
 	)
 }

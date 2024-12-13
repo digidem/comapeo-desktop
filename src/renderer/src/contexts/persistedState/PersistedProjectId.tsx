@@ -15,11 +15,11 @@ const projectIdSlice: StateCreator<ProjectIdSlice> = (set) => ({
 
 const projectIdStore = createPersistedStore(projectIdSlice, 'ActiveProjectId')
 
-const PersistedActiveProjectContext = createContext<
-	typeof projectIdStore | null
->(null)
+const PersistedProjectIdContext = createContext<typeof projectIdStore | null>(
+	null,
+)
 
-export const PersistedActiveProjectProvider = ({
+export const PersistedProjectIdProvider = ({
 	children,
 }: {
 	children: ReactNode
@@ -27,16 +27,16 @@ export const PersistedActiveProjectProvider = ({
 	const [store] = useState(() => projectIdStore)
 
 	return (
-		<PersistedActiveProjectContext.Provider value={store}>
+		<PersistedProjectIdContext.Provider value={store}>
 			{children}
-		</PersistedActiveProjectContext.Provider>
+		</PersistedProjectIdContext.Provider>
 	)
 }
 
 export function usePersistedProjectIdStore<Selected>(
 	selector: (state: ProjectIdSlice) => Selected,
 ): Selected {
-	const store = useContext(PersistedActiveProjectContext)
+	const store = useContext(PersistedProjectIdContext)
 	if (!store) {
 		throw new Error('Missing Persisted Project Id Store')
 	}
