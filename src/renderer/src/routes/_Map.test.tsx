@@ -6,17 +6,18 @@ import { describe, expect, test, vi } from 'vitest'
 import { IntlProvider } from '../contexts/IntlContext'
 import { routeTree } from '../routeTree.gen'
 
-vi.mock('../contexts/persistedState/PersistedProjectId', () => ({
-	...vi.importActual('../contexts/persistedState/PersistedProjectId'),
-	usePersistedProjectIdStore: vi.fn((selector) => {
-		// Provide the mocked store state here
-		const mockedState = {
-			projectId: 'mocked-project-id',
-			setProjectId: vi.fn(),
-		}
-		return selector(mockedState)
-	}),
-}))
+vi.mock('../contexts/persistedState/PersistedProjectId', () => {
+	return {
+		usePersistedProjectIdStore: vi.fn((selector) => {
+			// Provide the mocked store state here
+			const mockedState = {
+				projectId: 'mocked-project-id',
+				setProjectId: vi.fn(),
+			}
+			return selector(mockedState)
+		}),
+	}
+})
 
 vi.mock('@comapeo/core-react', () => ({
 	useManyDocs: vi.fn(() => ({ data: [] })),
