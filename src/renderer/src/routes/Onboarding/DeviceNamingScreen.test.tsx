@@ -1,6 +1,8 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 
 import { getUtf8ByteLength } from './DeviceNamingScreen'
+
+vi.mock('@comapeo/core-react', () => ({}))
 
 test('should return the correct byte length for ASCII characters', () => {
 	const text = 'hello'
