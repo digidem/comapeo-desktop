@@ -1,40 +1,32 @@
 import type { ReactNode } from 'react'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, test, vi } from 'vitest'
 
+import { App, router } from '../App'
 import { IntlProvider } from '../contexts/IntlContext'
-import { routeTree } from '../routeTree.gen'
+import {
+	PersistedProjectIdContext,
+	nonPersistedProjectIdStore,
+} from '../contexts/persistedState/PersistedProjectId'
 
-vi.mock('../contexts/persistedState/PersistedProjectId', () => {
-	return {
-		usePersistedProjectIdStore: vi.fn((selector) => {
-			// Provide the mocked store state here
-			const mockedState = {
-				projectId: 'mocked-project-id',
-				setProjectId: vi.fn(),
-			}
-			return selector(mockedState)
-		}),
-	}
-})
+nonPersistedProjectIdStore.setState(() => ({
+	projectId: 'tester',
+}))
 
 vi.mock('@comapeo/core-react', () => ({
 	useManyDocs: vi.fn(() => ({ data: [] })),
+	useOwnDeviceInfo: vi.fn(() => ({ data: { name: 'erik' } })),
 }))
 
 const Wrapper = ({ children }: { children: ReactNode }) => (
-	<IntlProvider>{children}</IntlProvider>
+	<PersistedProjectIdContext.Provider value={nonPersistedProjectIdStore}>
+		<IntlProvider>{children}</IntlProvider>
+	</PersistedProjectIdContext.Provider>
 )
-
-const router = createRouter({
-	routeTree,
-	context: { hasDeviceName: true, persistedProjectId: true },
-})
 
 describe('clicking tabs navigate to correct tab', () => {
 	router.navigate({ to: '/Tab1' })
-	render(<RouterProvider router={router} />, { wrapper: Wrapper })
+	render(<App />, { wrapper: Wrapper })
 
 	test('There are 4 tabs', async () => {
 		const AllTabs = await screen.findAllByRole('tab')

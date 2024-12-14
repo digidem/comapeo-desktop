@@ -4,15 +4,26 @@ import { persist } from 'zustand/middleware'
 
 type PersistedStoreKey = 'ActiveProjectId'
 
+/**
+ * @param slice The shape of you store including it inital values
+ * @param persistedStoreKey A string used by local storage to index your store
+ *   (must strongly typed in `type PersistedStoreKey`)
+ *
+ * @returns A Provider to be used by the app, a hook to consume a provider, and
+ *   a context and non persisted store that can be used for testing
+ */
 export function createPersistedStoreWithProvider<T>(
 	slice: StateCreator<T>,
 	persistedStoreKey: PersistedStoreKey,
 ) {
-	const store = createPersistedStore(slice, persistedStoreKey)
-	const Context = createContext<typeof store | null>(null)
+	const persistedStore = createPersistedStore(slice, persistedStoreKey)
+	// used for testing and injecting values into testing environment
+	const nonPersistedStore = createStore(slice)
+	// type persistedStore is a subset type of type nonPersistedStore
+	const Context = createContext<typeof nonPersistedStore | null>(null)
 
 	const Provider = ({ children }: { children: ReactNode }) => {
-		const [storeInstance] = useState(() => store)
+		const [storeInstance] = useState(() => persistedStore)
 
 		return <Context.Provider value={storeInstance}>{children}</Context.Provider>
 	}
@@ -30,7 +41,7 @@ export function createPersistedStoreWithProvider<T>(
 		return useStore(contextStore, selector)
 	}
 
-	return { Provider, useStoreHook }
+	return { Provider, useStoreHook, Context, nonPersistedStore }
 }
 
 function createPersistedStore<T>(

@@ -15,4 +15,6 @@ const projectIdSlice: StateCreator<ProjectIdSlice> = (set) => ({
 export const {
 	Provider: PersistedProjectIdProvider,
 	useStoreHook: usePersistedProjectIdStore,
+	Context: PersistedProjectIdContext,
+	nonPersistedStore: nonPersistedProjectIdStore,
 } = createPersistedStoreWithProvider(projectIdSlice, 'ActiveProjectId')

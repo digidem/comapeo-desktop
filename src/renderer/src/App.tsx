@@ -4,7 +4,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { usePersistedProjectIdStore } from './contexts/persistedState/PersistedProjectId'
 import { routeTree } from './routeTree.gen'
 
-const router = createRouter({
+export const router = createRouter({
 	routeTree,
 	context: { hasDeviceName: undefined!, persistedProjectId: undefined! },
 })
