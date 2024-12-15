@@ -23,6 +23,7 @@ export const AppWrapper = () => {
 	)
 }
 
+// This is used for the app and for testing. It allows the testing environment to resemble the actual app as much as possible
 export const ReuseableProviderWrapper = ({
 	children,
 }: {
