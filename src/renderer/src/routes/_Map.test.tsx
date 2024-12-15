@@ -2,7 +2,6 @@ import type { ReactNode } from 'react'
 import { describe, expect, test, vi } from 'vitest'
 
 import { App, router } from '../App'
-import { IntlProvider } from '../contexts/IntlContext'
 import {
 	PersistedProjectIdContext,
 	nonPersistedProjectIdStore,
@@ -21,7 +20,7 @@ vi.mock('../queries/deviceInfo', () => ({
 
 const Wrapper = ({ children }: { children: ReactNode }) => (
 	<PersistedProjectIdContext.Provider value={nonPersistedProjectIdStore}>
-		<IntlProvider>{children}</IntlProvider>
+		{children}
 	</PersistedProjectIdContext.Provider>
 )
 
