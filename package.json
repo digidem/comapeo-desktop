@@ -91,6 +91,7 @@
 		"@tanstack/router-devtools": "^1.82.1",
 		"@tanstack/router-plugin": "^1.81.9",
 		"@testing-library/dom": "10.4.0",
+		"@testing-library/jest-dom": "6.6.3",
 		"@testing-library/react": "16.1.0",
 		"@types/eslint__js": "^8.42.3",
 		"@types/lint-staged": "^13.3.0",
