@@ -22,9 +22,9 @@ import { Route as OnboardingDeviceNamingScreenImport } from './routes/Onboarding
 import { Route as OnboardingDataPrivacyImport } from './routes/Onboarding/DataPrivacy'
 import { Route as OnboardingCreateProjectScreenImport } from './routes/Onboarding/CreateProjectScreen'
 import { Route as OnboardingCreateJoinProjectScreenImport } from './routes/Onboarding/CreateJoinProjectScreen'
-import { Route as MapTabsMapImport } from './routes/(MapTabs)/_Map'
-import { Route as MapTabsMapTab2Import } from './routes/(MapTabs)/_Map.tab2'
-import { Route as MapTabsMapTab1Import } from './routes/(MapTabs)/_Map.tab1'
+import { Route as MapTabsMapImport } from './routes/_Map/_Map'
+import { Route as MapTabsMapTab2Import } from './routes/_Map/Tab2'
+import { Route as MapTabsMapTab1Import } from './routes/_Map/Tab1'
 
 // Create Virtual Routes
 
