@@ -12,7 +12,6 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as MapImport } from './routes/_Map'
-import { Route as WelcomeImport } from './routes/Welcome'
 import { Route as IndexImport } from './routes/index'
 import { Route as OnboardingIndexImport } from './routes/Onboarding/index'
 import { Route as MapTab2Import } from './routes/_Map/Tab2'
@@ -28,12 +27,6 @@ import { Route as OnboardingCreateJoinProjectScreenImport } from './routes/Onboa
 
 const MapRoute = MapImport.update({
   id: '/_Map',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const WelcomeRoute = WelcomeImport.update({
-  id: '/Welcome',
-  path: '/Welcome',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -111,13 +104,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/Welcome': {
-      id: '/Welcome'
-      path: '/Welcome'
-      fullPath: '/Welcome'
-      preLoaderRoute: typeof WelcomeImport
       parentRoute: typeof rootRoute
     }
     '/_Map': {
@@ -209,7 +195,6 @@ const MapRouteWithChildren = MapRoute._addFileChildren(MapRouteChildren)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/Welcome': typeof WelcomeRoute
   '': typeof MapRouteWithChildren
   '/Onboarding/CreateJoinProjectScreen': typeof OnboardingCreateJoinProjectScreenRoute
   '/Onboarding/CreateProjectScreen': typeof OnboardingCreateProjectScreenRoute
@@ -224,7 +209,6 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/Welcome': typeof WelcomeRoute
   '': typeof MapRouteWithChildren
   '/Onboarding/CreateJoinProjectScreen': typeof OnboardingCreateJoinProjectScreenRoute
   '/Onboarding/CreateProjectScreen': typeof OnboardingCreateProjectScreenRoute
@@ -240,7 +224,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/Welcome': typeof WelcomeRoute
   '/_Map': typeof MapRouteWithChildren
   '/Onboarding/CreateJoinProjectScreen': typeof OnboardingCreateJoinProjectScreenRoute
   '/Onboarding/CreateProjectScreen': typeof OnboardingCreateProjectScreenRoute
@@ -257,7 +240,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/Welcome'
     | ''
     | '/Onboarding/CreateJoinProjectScreen'
     | '/Onboarding/CreateProjectScreen'
@@ -271,7 +253,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/Welcome'
     | ''
     | '/Onboarding/CreateJoinProjectScreen'
     | '/Onboarding/CreateProjectScreen'
@@ -285,7 +266,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/Welcome'
     | '/_Map'
     | '/Onboarding/CreateJoinProjectScreen'
     | '/Onboarding/CreateProjectScreen'
@@ -301,7 +281,6 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  WelcomeRoute: typeof WelcomeRoute
   MapRoute: typeof MapRouteWithChildren
   OnboardingCreateJoinProjectScreenRoute: typeof OnboardingCreateJoinProjectScreenRoute
   OnboardingCreateProjectScreenRoute: typeof OnboardingCreateProjectScreenRoute
@@ -314,7 +293,6 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  WelcomeRoute: WelcomeRoute,
   MapRoute: MapRouteWithChildren,
   OnboardingCreateJoinProjectScreenRoute:
     OnboardingCreateJoinProjectScreenRoute,
@@ -337,7 +315,6 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/Welcome",
         "/_Map",
         "/Onboarding/CreateJoinProjectScreen",
         "/Onboarding/CreateProjectScreen",
@@ -350,9 +327,6 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/Welcome": {
-      "filePath": "Welcome.tsx"
     },
     "/_Map": {
       "filePath": "_Map.tsx",
