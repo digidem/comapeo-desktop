@@ -1,16 +1,24 @@
-import { afterEach } from 'node:test'
 import type { ReactNode } from 'react'
-import { describe, expect, test, vi } from 'vitest'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import { App, router } from '../App'
 import {
 	PersistedProjectIdContext,
 	nonPersistedProjectIdStore,
 } from '../contexts/persistedState/PersistedProjectId'
+import { useDeviceInfo } from '../queries/deviceInfo'
 import { cleanup, render, screen } from '../test/test-util'
 
-const Wrapper = ({ children }: { children: ReactNode }) => (
-	<PersistedProjectIdContext.Provider value={nonPersistedProjectIdStore}>
+vi.mock('../queries/deviceInfo')
+
+const Wrapper = ({
+	children,
+	value,
+}: {
+	children: ReactNode
+	value: typeof nonPersistedProjectIdStore
+}) => (
+	<PersistedProjectIdContext.Provider value={value}>
 		{children}
 	</PersistedProjectIdContext.Provider>
 )
@@ -25,12 +33,19 @@ describe('index navigates to the correct route based on state', () => {
 			projectId: undefined,
 		}))
 
-		vi.mock('../queries/deviceInfo', () => ({
-			useDeviceInfo: vi.fn(() => ({ data: { name: undefined } })),
-		}))
+		vi.mocked(useDeviceInfo).mockReturnValue({
+			// @ts-expect-error -Im not sure why
+			data: { name: undefined },
+		})
+
+		render(
+			<Wrapper value={nonPersistedProjectIdStore}>
+				<App />
+			</Wrapper>,
+		)
 
 		await router.navigate({ to: '/' })
-		render(<App />, { wrapper: Wrapper })
+
 		expect(router.state.location.pathname).toStrictEqual('/Onboarding')
 		const text = await screen.findByText(
 			'View and manage observations in CoMapeo Mobile Projects.',
@@ -42,10 +57,14 @@ describe('index navigates to the correct route based on state', () => {
 		nonPersistedProjectIdStore.setState(() => ({
 			projectId: undefined,
 		}))
+		// @ts-expect-error -Im not sure why
+		vi.mocked(useDeviceInfo).mockReturnValue({ data: { name: 'erik' } })
 
-		vi.mock('../queries/deviceInfo', () => ({
-			useDeviceInfo: vi.fn(() => ({ data: { name: 'Erik' } })),
-		}))
+		render(
+			<Wrapper value={nonPersistedProjectIdStore}>
+				<App />
+			</Wrapper>,
+		)
 
 		await router.navigate({ to: '/' })
 		expect(router.state.location.pathname).toStrictEqual(
@@ -60,10 +79,14 @@ describe('index navigates to the correct route based on state', () => {
 		nonPersistedProjectIdStore.setState(() => ({
 			projectId: 'someId',
 		}))
+		// @ts-expect-error -Im not sure why
+		vi.mocked(useDeviceInfo).mockReturnValue({ data: { name: 'erik' } })
 
-		vi.mock('../queries/deviceInfo', () => ({
-			useDeviceInfo: vi.fn(() => ({ data: { name: 'Erik' } })),
-		}))
+		render(
+			<Wrapper value={nonPersistedProjectIdStore}>
+				<App />
+			</Wrapper>,
+		)
 
 		await router.navigate({ to: '/' })
 		expect(router.state.location.pathname).toStrictEqual('/Tab1')
