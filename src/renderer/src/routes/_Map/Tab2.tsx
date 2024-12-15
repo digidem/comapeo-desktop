@@ -3,14 +3,14 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Text } from '../../components/Text'
 
-export const Route = createFileRoute('/(MapTabs)/_Map/tab1')({
-	component: Observations,
+export const Route = createFileRoute('/_Map/Tab2')({
+	component: Settings,
 })
 
-export function Observations() {
+export function Settings() {
 	return (
 		<div>
-			<Text>Tab 1</Text>
+			<Text>Tab 2</Text>
 		</div>
 	)
 }
