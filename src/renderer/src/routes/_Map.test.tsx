@@ -40,15 +40,15 @@ test('clicking tabs navigate to correct tab', () => {
 	const settingsButton = screen.getByText('Settings')
 	settingsButton.click()
 	const settingsRouteName = router.state.location.pathname
-	expect(settingsRouteName).toStrictEqual('/tab2')
+	expect(settingsRouteName).toStrictEqual('/Tab2')
 
 	const observationTab = screen.getByTestId('tab-observation')
 	observationTab.click()
 	const observationTabRouteName = router.state.location.pathname
-	expect(observationTabRouteName).toStrictEqual('/tab1')
+	expect(observationTabRouteName).toStrictEqual('/Tab1')
 
 	const aboutTab = screen.getByText('About')
 	aboutTab.click()
 	const aboutTabRoute = router.state.location.pathname
-	expect(aboutTabRoute).toStrictEqual('/tab2')
+	expect(aboutTabRoute).toStrictEqual('/Tab2')
 })
