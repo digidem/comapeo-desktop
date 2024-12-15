@@ -1,13 +1,6 @@
-import {
-	createContext,
-	useContext,
-	useEffect,
-	useState,
-	type PropsWithChildren,
-} from 'react'
+import { useEffect, useState, type PropsWithChildren } from 'react'
+import { ClientApiProvider } from '@comapeo/core-react'
 import { createMapeoClient, type MapeoClientApi } from '@comapeo/ipc'
-
-const ApiContext = createContext<MapeoClientApi | null>(null)
 
 export function ApiProvider({ children }: PropsWithChildren) {
 	const [api, setApi] = useState<MapeoClientApi | null>(null)
@@ -44,13 +37,5 @@ export function ApiProvider({ children }: PropsWithChildren) {
 
 	if (!api) return null
 
-	return <ApiContext.Provider value={api}>{children}</ApiContext.Provider>
-}
-
-export function useApi() {
-	const api = useContext(ApiContext)
-
-	if (!api) throw new Error('MapeoApiContext provider needs to be set up')
-
-	return api
+	return <ClientApiProvider clientApi={api}>{children}</ClientApiProvider>
 }
