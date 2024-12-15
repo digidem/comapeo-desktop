@@ -8,6 +8,6 @@ export const Route = createFileRoute('/')({
 		if (!context.persistedProjectId) {
 			throw redirect({ to: '/Onboarding/CreateJoinProjectScreen' })
 		}
-		throw redirect({ to: '/tab1' })
+		throw redirect({ to: '/Tab1' })
 	},
 })

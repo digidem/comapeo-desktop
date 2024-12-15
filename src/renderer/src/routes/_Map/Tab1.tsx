@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Text } from '../../components/Text'
 
-export const Route = createFileRoute('/(MapTabs)/_Map/tab1')({
+export const Route = createFileRoute('/_Map/Tab1')({
 	component: Observations,
 })
 
