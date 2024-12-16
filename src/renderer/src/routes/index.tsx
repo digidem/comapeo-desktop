@@ -1,7 +1,6 @@
 import { useLayoutEffect } from 'react'
+import { useOwnDeviceInfo } from '@comapeo/core-react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-
-import { useDeviceInfo } from '../queries/deviceInfo'
 
 export const Route = createFileRoute('/')({
 	component: RouteComponent,
@@ -12,7 +11,7 @@ export const Route = createFileRoute('/')({
 
 function RouteComponent() {
 	const navigate = useNavigate()
-	const { data } = useDeviceInfo()
+	const { data } = useOwnDeviceInfo()
 	const hasCreatedDeviceName = data?.name !== undefined
 
 	useLayoutEffect(() => {
