@@ -20,9 +20,9 @@ import {
 } from '../../components/Onboarding/onboardingLogic'
 import { Text } from '../../components/Text'
 import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../constants'
+import { useCreateProject } from '../../hooks/mutations/projects'
 import { useConfigFileImporter } from '../../hooks/useConfigFileImporter'
 import ProjectImage from '../../images/add_square.png'
-import { useCreateProject } from '../../queries/projects'
 
 export const m = defineMessages({
 	title: {

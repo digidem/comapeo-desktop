@@ -14,8 +14,8 @@ import {
 } from '../../components/Onboarding/onboardingLogic'
 import { Text } from '../../components/Text'
 import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../constants'
+import { useEditDeviceInfo } from '../../hooks/mutations/deviceInfo'
 import DeviceImage from '../../images/device.png'
-import { useEditDeviceInfo } from '../../queries/deviceInfo'
 
 export const m = defineMessages({
 	title: {
