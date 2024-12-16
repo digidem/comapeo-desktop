@@ -7,6 +7,7 @@ import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { theme } from '../Theme'
 import { ApiProvider } from '../contexts/ApiContext'
 import { IntlProvider } from '../contexts/IntlContext'
+import { SharedLocationContextProvider } from '../contexts/SharedLocationContext'
 
 const queryClient = new QueryClient()
 
@@ -17,9 +18,11 @@ export const Route = createRootRoute({
 			<IntlProvider>
 				<QueryClientProvider client={queryClient}>
 					<ApiProvider>
-						<Suspense fallback={<CircularProgress />}>
-							<Outlet />
-						</Suspense>
+						<SharedLocationContextProvider>
+							<Suspense fallback={<CircularProgress />}>
+								<Outlet />
+							</Suspense>
+						</SharedLocationContextProvider>
 					</ApiProvider>
 				</QueryClientProvider>
 			</IntlProvider>
