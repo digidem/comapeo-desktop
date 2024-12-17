@@ -1,16 +1,8 @@
 import { useEffect } from 'react'
 import { useClientApi } from '@comapeo/core-react'
-import {
-	createFileRoute,
-	useLocation,
-	useNavigate,
-} from '@tanstack/react-router'
+import { useLocation, useNavigate } from '@tanstack/react-router'
 
 import { useRejectInvite } from '../hooks/mutations/invites'
-
-export const Route = createFileRoute('/InviteListener')({
-	component: InviteListener,
-})
 
 export function InviteListener() {
 	const clientApi = useClientApi()
