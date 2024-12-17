@@ -6,10 +6,13 @@ import { App } from './App'
 import { theme } from './Theme'
 import { ApiProvider } from './contexts/ApiContext'
 import { IntlProvider } from './contexts/IntlContext'
-import { PersistedProjectIdProvider } from './contexts/persistedState/PersistedProjectId'
+import {
+	PersistedProjectIdProvider,
+	createProjectIdStore,
+} from './contexts/persistedState/PersistedProjectId'
 
 const queryClient = new QueryClient()
-
+const PersistedProjectIdStore = createProjectIdStore({ isPersisted: true })
 export const AppWrapper = () => {
 	return (
 		<ThemeProvider theme={theme}>
@@ -17,7 +20,7 @@ export const AppWrapper = () => {
 			<IntlProvider>
 				<QueryClientProvider client={queryClient}>
 					<ApiProvider>
-						<PersistedProjectIdProvider>
+						<PersistedProjectIdProvider store={PersistedProjectIdStore}>
 							<App />
 						</PersistedProjectIdProvider>
 					</ApiProvider>

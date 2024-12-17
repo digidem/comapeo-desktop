@@ -1,20 +1,25 @@
-import { type StateCreator } from 'zustand'
-
 import { createPersistedStoreWithProvider } from './createPersistedState'
 
-type ProjectIdSlice = {
-	projectId: string | undefined
-	setProjectId: (id?: string) => void
-}
+type PersistedProjectId = { projectId: string }
 
-const projectIdSlice: StateCreator<ProjectIdSlice> = (set) => ({
-	projectId: undefined,
-	setProjectId: (projectId) => set({ projectId }),
+const {
+	Provider: PersistedProjectIdProvider,
+	createStore: createProjectIdStore,
+	useCurrentStore: usePersistedProjectIdStore,
+	useActions: usePersistedProjectIdActions,
+} = createPersistedStoreWithProvider<PersistedProjectId>({
+	slice: { projectId: 'newId' },
+	actions: {
+		setProjectId: (newProjectId: string) => (set) => {
+			set({ projectId: newProjectId })
+		},
+	},
+	persistedStoreKey: 'ActiveProjectId',
 })
 
-export const {
-	Provider: PersistedProjectIdProvider,
-	useStoreHook: usePersistedProjectIdStore,
-	Context: PersistedProjectIdContext,
-	nonPersistedStore: nonPersistedProjectIdStore,
-} = createPersistedStoreWithProvider(projectIdSlice, 'ActiveProjectId')
+export {
+	PersistedProjectIdProvider,
+	createProjectIdStore,
+	usePersistedProjectIdStore,
+	usePersistedProjectIdActions,
+}
