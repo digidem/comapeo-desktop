@@ -38,13 +38,15 @@
 		"intl:translations": "npm-run-all --print-label --parallel intl:translations:*",
 		"lint:eslint": "eslint --cache .",
 		"lint:format": "prettier --cache --check .",
-		"lint": "npm-run-all --print-label --parallel lint:*",
+		"lint": "npm-run-all --print-label --parallel --aggregate-output lint:*",
 		"types:main": "tsc -p src/main/tsconfig.json",
 		"types:services": "tsc -p src/services/tsconfig.json",
 		"types:preload": "tsc -p src/preload/tsconfig.json",
 		"types:renderer": "tsc -p src/renderer/tsconfig.json",
-		"types": "npm-run-all --print-label --parallel --continue-on-error types:*",
-		"test": "npm-run-all --print-label --parallel lint types",
+		"types": "npm-run-all --print-label --parallel --continue-on-error --aggregate-output types:*",
+		"test": "npm-run-all --print-label --parallel --aggregate-output types vitest:run",
+		"vitest:run": "vitest run --config ./src/renderer/vite.config.js",
+		"vitest:watch": "vitest watch --config ./src/renderer/vite.config.js",
 		"vite:dev": "vite dev src/renderer",
 		"vite:build": "vite build src/renderer"
 	},
@@ -63,6 +65,7 @@
 		"valibot": "^0.42.1"
 	},
 	"devDependencies": {
+		"@comapeo/core-react": "0.1.2",
 		"@electron-forge/cli": "^7.5.0",
 		"@electron-forge/maker-deb": "^7.5.0",
 		"@electron-forge/maker-dmg": "^7.5.0",
@@ -88,6 +91,8 @@
 		"@tanstack/react-router": "^1.82.2",
 		"@tanstack/router-devtools": "^1.82.1",
 		"@tanstack/router-plugin": "^1.81.9",
+		"@testing-library/dom": "10.4.0",
+		"@testing-library/react": "16.1.0",
 		"@types/eslint__js": "^8.42.3",
 		"@types/lint-staged": "^13.3.0",
 		"@types/node": "^20.17.6",
@@ -99,6 +104,7 @@
 		"eslint": "^9.15.0",
 		"globals": "^15.12.0",
 		"husky": "^9.1.7",
+		"jsdom": "25.0.1",
 		"lint-staged": "^15.2.10",
 		"npm-run-all2": "^7.0.1",
 		"patch-package": "^8.0.0",
@@ -110,7 +116,8 @@
 		"typescript": "^5.6.3",
 		"typescript-eslint": "^8.15.0",
 		"vite": "^5.4.11",
-		"vite-plugin-svgr": "^4.3.0"
+		"vite-plugin-svgr": "^4.3.0",
+		"vitest": "2.1.8"
 	},
 	"overrides": {
 		"better-sqlite3": "11.5.0"

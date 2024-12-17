@@ -1,11 +1,11 @@
 import React from 'react'
 import { styled } from '@mui/material/styles'
 
-import { BLACK, DARK_GREY } from '../../colors'
-import { Text } from '../Text'
+import { BLACK, DARK_GREY } from '../../../colors'
+import { Text } from '../../Text'
 
 const Container = styled('div')({
-	gap: 20,
+	gap: 12,
 	paddingBottom: 20,
 	displau: 'flex',
 })
@@ -14,7 +14,7 @@ const PointHeader = styled('div')({
 	display: 'flex',
 	flexDirection: 'row',
 	alignItems: 'center',
-	gap: 10,
+	gap: 12,
 })
 
 const PointTitle = styled(Text)({
