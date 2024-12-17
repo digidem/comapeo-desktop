@@ -7,6 +7,7 @@ import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { theme } from '../Theme'
 import { ApiProvider } from '../contexts/ApiContext'
 import { IntlProvider } from '../contexts/IntlContext'
+import { InviteListener } from './InviteListener'
 
 const queryClient = new QueryClient()
 
@@ -18,6 +19,7 @@ export const Route = createRootRoute({
 				<QueryClientProvider client={queryClient}>
 					<ApiProvider>
 						<Suspense fallback={<CircularProgress />}>
+							<InviteListener />
 							<Outlet />
 						</Suspense>
 					</ApiProvider>
