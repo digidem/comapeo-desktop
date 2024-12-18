@@ -50,12 +50,10 @@ export function CreateActiveProjectIdStore({ persist }: { persist: boolean }) {
 				name: PERSISTED_ACTIVE_PROJECT_ID_KEY,
 			}),
 		)
-
-		store.setState(initialActiveProjectId)
 	}
 
 	const actions = {
-		setProjectId: (newProjectId: string) =>
+		setActiveProjectId: (newProjectId: string) =>
 			store.setState({ activeProjectId: newProjectId }),
 	}
 
