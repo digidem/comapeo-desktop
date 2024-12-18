@@ -14,20 +14,25 @@ export const Route = createFileRoute('/')({
 function RouteComponent() {
 	const navigate = useNavigate()
 	const { data } = useOwnDeviceInfo()
-	const hasCreatedDeviceName = data?.name !== undefined
+	const hasCreatedDeviceName = data.name !== undefined
 	const activeProjectId = useActiveProjectIdStoreState(
 		(store) => store.activeProjectId,
 	)
 
+	console.log({ activeProjectId })
+
 	useLayoutEffect(() => {
 		if (!hasCreatedDeviceName) {
 			navigate({ to: '/Onboarding' })
+			return
 		}
+
 		if (!activeProjectId) {
 			navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
-		} else {
-			navigate({ to: '/tab1' })
+			return
 		}
+
+		navigate({ to: '/tab1' })
 	})
 
 	return null
