@@ -3,12 +3,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 
 import { theme } from './Theme'
+import {
+	ActiveProjectIdProvider,
+	CreateActiveProjectIdStore,
+} from './contexts/ActiveProjectIdProvider'
 import { ApiProvider } from './contexts/ApiContext'
 import { IntlProvider } from './contexts/IntlContext'
-import {
-	PersistedActiveProjectIdProvider,
-	createActiveProjectIdStore,
-} from './contexts/persistedState/PersistedProjectId'
 import { routeTree } from './routeTree.gen'
 
 const queryClient = new QueryClient()
@@ -21,8 +21,8 @@ declare module '@tanstack/react-router' {
 	}
 }
 
-const PersistedProjectIdStore = createActiveProjectIdStore({
-	isPersisted: true,
+const PersistedProjectIdStore = CreateActiveProjectIdStore({
+	persist: true,
 })
 
 export const App = () => (
@@ -30,11 +30,11 @@ export const App = () => (
 		<CssBaseline />
 		<IntlProvider>
 			<QueryClientProvider client={queryClient}>
-				<PersistedActiveProjectIdProvider store={PersistedProjectIdStore}>
+				<ActiveProjectIdProvider store={PersistedProjectIdStore}>
 					<ApiProvider>
 						<RouterProvider router={router} />
 					</ApiProvider>
-				</PersistedActiveProjectIdProvider>
+				</ActiveProjectIdProvider>
 			</QueryClientProvider>
 		</IntlProvider>
 	</ThemeProvider>
