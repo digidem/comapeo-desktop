@@ -8,7 +8,7 @@ import { expect, test } from 'vitest'
 import { router } from '../../App'
 import {
 	ActiveProjectIdProvider,
-	CreateActiveProjectIdStore,
+	createActiveProjectIdStore,
 } from '../../contexts/ActiveProjectIdProvider'
 import { WrapperWithClient } from '../../test/helpers/Wrapper'
 import { setupCoreIpc } from '../../test/helpers/ipc'
@@ -17,7 +17,7 @@ const { client } = setupCoreIpc()
 
 const queryClient = new QueryClient()
 
-const activeProjectIdStore = CreateActiveProjectIdStore({ persist: false })
+const activeProjectIdStore = createActiveProjectIdStore({ persist: false })
 
 const Wrapper = ({ children }: { children: ReactNode }) => (
 	<WrapperWithClient queryClient={queryClient} clientApi={client}>
