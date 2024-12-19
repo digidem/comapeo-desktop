@@ -39,7 +39,7 @@ export {
 	useStoreState as useActiveProjectIdStoreState,
 }
 
-export function CreateActiveProjectIdStore({ persist }: { persist: boolean }) {
+export function createActiveProjectIdStore({ persist }: { persist: boolean }) {
 	let store: StoreApi<ActiveProjectId>
 
 	if (!persist) {
