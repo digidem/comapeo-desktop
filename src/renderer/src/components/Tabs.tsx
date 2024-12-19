@@ -47,7 +47,7 @@ export const Tabs = () => {
 			<MapTabStyled
 				data-testid="tab-observation"
 				icon={<PostAddIcon />}
-				value={'/tab1'}
+				value={'/Tab1'}
 			/>
 			{/* This is needed to properly space the items. Originally used a div, but was causing console errors as the Parent component passes it props, which were invalid for non-tab components */}
 			<Tab disabled={true} sx={{ flex: 1 }} />
@@ -59,7 +59,7 @@ export const Tabs = () => {
 						{formatMessage(m.setting)}
 					</Text>
 				}
-				value={'/tab2'}
+				value={'/Tab2'}
 			/>
 			<MapTabStyled
 				icon={<InfoOutlinedIcon />}
@@ -68,7 +68,7 @@ export const Tabs = () => {
 						{formatMessage(m.about)}
 					</Text>
 				}
-				value={'/tab2'}
+				value={'/Tab2'}
 			/>
 		</MuiTabs>
 	)
@@ -77,7 +77,7 @@ export const Tabs = () => {
 type TabProps = React.ComponentProps<typeof Tab>
 
 type MapTabRoute = {
-	[K in keyof FileRoutesById]: K extends `${'/(MapTabs)/_Map'}${infer Rest}`
+	[K in keyof FileRoutesById]: K extends `${'/_Map'}${infer Rest}`
 		? Rest extends ''
 			? never
 			: `${Rest}`

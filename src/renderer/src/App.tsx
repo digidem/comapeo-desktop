@@ -21,7 +21,7 @@ declare module '@tanstack/react-router' {
 	}
 }
 
-const PersistedProjectIdStore = createActiveProjectIdStore({
+export const PersistedProjectIdStore = createActiveProjectIdStore({
 	persist: true,
 })
 
