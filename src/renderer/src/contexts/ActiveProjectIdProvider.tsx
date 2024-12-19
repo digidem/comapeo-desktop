@@ -12,7 +12,7 @@ const initialActiveProjectId: ActiveProjectId = {
 	activeProjectId: undefined,
 }
 
-type ActiveProjectIdStore = ReturnType<typeof CreateActiveProjectIdStore>
+type ActiveProjectIdStore = ReturnType<typeof createActiveProjectIdStore>
 
 type ActiveProjectIdProviderProps = {
 	children: ReactNode
