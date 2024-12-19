@@ -1,5 +1,4 @@
-import { Suspense } from 'react'
-import { CircularProgress, Paper } from '@mui/material'
+import { Paper } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
@@ -29,14 +28,10 @@ export function MapLayout() {
 						borderLeftStyle: 'solid',
 					}}
 				>
-					<Suspense fallback={<CircularProgress />}>
-						<Outlet />
-					</Suspense>
+					<Outlet />
 				</div>
 			</Paper>
-			<Suspense fallback={<CircularProgress />}>
-				<div>map component here</div>
-			</Suspense>
+			<div>map component here</div>
 		</Container>
 	)
 }
