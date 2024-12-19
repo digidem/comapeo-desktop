@@ -138,7 +138,7 @@ function CreateProjectScreenComponent() {
 		setProjectNameMutation.mutate(projectName, {
 			onSuccess: (projectId) => {
 				setActiveProjectId(projectId)
-				navigate({ to: '/tab1' })
+				navigate({ to: '/Tab1' })
 			},
 			onError: (error) => {
 				console.error('Error setting project name:', error)
