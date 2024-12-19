@@ -19,8 +19,6 @@ function RouteComponent() {
 		(store) => store.activeProjectId,
 	)
 
-	console.log({ activeProjectId })
-
 	useLayoutEffect(() => {
 		if (!hasCreatedDeviceName) {
 			navigate({ to: '/Onboarding' })

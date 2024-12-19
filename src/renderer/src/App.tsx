@@ -6,7 +6,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { theme } from './Theme'
 import {
 	ActiveProjectIdProvider,
-	CreateActiveProjectIdStore,
+	createActiveProjectIdStore,
 } from './contexts/ActiveProjectIdProvider'
 import { ApiProvider } from './contexts/ApiContext'
 import { IntlProvider } from './contexts/IntlContext'
@@ -22,7 +22,7 @@ declare module '@tanstack/react-router' {
 	}
 }
 
-const PersistedProjectIdStore = CreateActiveProjectIdStore({
+const PersistedProjectIdStore = createActiveProjectIdStore({
 	persist: true,
 })
 
