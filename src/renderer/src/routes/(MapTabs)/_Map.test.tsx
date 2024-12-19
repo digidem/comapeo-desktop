@@ -1,54 +1,94 @@
+import { describe } from 'node:test'
 import type { ReactNode } from 'react'
-import {
-	RouterProvider,
-	createRootRoute,
-	createRoute,
-	createRouter,
-} from '@tanstack/react-router'
+import { QueryClient } from '@tanstack/react-query'
+import { RouterProvider } from '@tanstack/react-router'
 import { render, screen } from '@testing-library/react'
 import { expect, test } from 'vitest'
 
-import { IntlProvider } from '../../contexts/IntlContext'
-import { MapLayout } from './_Map'
+import { router } from '../../App'
+import {
+	ActiveProjectIdProvider,
+	CreateActiveProjectIdStore,
+} from '../../contexts/ActiveProjectIdProvider'
+import { WrapperWithClient } from '../../test/helpers/Wrapper'
+import { setupCoreIpc } from '../../test/helpers/ipc'
 
-const rootRoute = createRootRoute({})
+const { client } = setupCoreIpc()
+
+const queryClient = new QueryClient()
+
+const activeProjectIdStore = CreateActiveProjectIdStore({ persist: false })
 
 const Wrapper = ({ children }: { children: ReactNode }) => (
-	<IntlProvider>{children}</IntlProvider>
+	<WrapperWithClient queryClient={queryClient} clientApi={client}>
+		<ActiveProjectIdProvider store={activeProjectIdStore}>
+			{children}
+		</ActiveProjectIdProvider>
+	</WrapperWithClient>
 )
 
-// Creates a stubbed out router. We are just testing whether the navigation gets passed the correct route (aka "/tab1" or "/tab2") so we do not need the actual router and can just intecept the navgiation state.
-const mapRoute = createRoute({
-	getParentRoute: () => rootRoute,
-	id: 'map',
-	component: MapLayout,
-})
-
-const catchAllRoute = createRoute({
-	getParentRoute: () => mapRoute,
-	path: '$',
-	component: () => null,
-})
-
-const routeTree = rootRoute.addChildren([mapRoute.addChildren([catchAllRoute])])
-
-const router = createRouter({ routeTree })
-
-test('clicking tabs navigate to correct tab', () => {
-	// @ts-expect-error - typings
+describe('tabs navigate to correct routes', () => {
 	render(<RouterProvider router={router} />, { wrapper: Wrapper })
-	const settingsButton = screen.getByText('Settings')
-	settingsButton.click()
-	const settingsRouteName = router.state.location.pathname
-	expect(settingsRouteName).toStrictEqual('/tab2')
 
-	const observationTab = screen.getByTestId('tab-observation')
-	observationTab.click()
-	const observationTabRouteName = router.state.location.pathname
-	expect(observationTabRouteName).toStrictEqual('/tab1')
+	router.navigate({ to: '/tab1' })
 
-	const aboutTab = screen.getByText('About')
-	aboutTab.click()
-	const aboutTabRoute = router.state.location.pathname
-	expect(aboutTabRoute).toStrictEqual('/tab2')
+	test('There are 4 tabs', async () => {
+		const AllTabs = await screen.findAllByRole('tab')
+		expect(AllTabs).toHaveLength(4)
+	})
+
+	test('Second tab has no children and is disabled', async () => {
+		const AllTabs = await screen.findAllByRole('tab')
+		const secondTab = AllTabs[1]
+		expect(secondTab?.childElementCount).toBe(0)
+		expect(secondTab).toBeDisabled()
+	})
+
+	test('Tab 1 selected when user has navigated to "tab1", and all other tags are not selected', async () => {
+		const Tab1 = screen.getByTestId('tab-observation')
+		expect(Tab1.ariaSelected).toBe('true')
+		const AllTabs = screen.getAllByRole('tab')
+		const selectedTabs = AllTabs.filter(
+			(tab) => tab.getAttribute('aria-selected') === 'true',
+		)
+		expect(selectedTabs).toHaveLength(1)
+	})
+
+	test('Tab 1 Screen is showing', async () => {
+		const title = await screen.findByText('Tab 1')
+		expect(title).toBeVisible()
+	})
+
+	test('Clicking "Settings" propogates "/Tab 2" to the navigator', () => {
+		const settingsButton = screen.getByText('Settings')
+		settingsButton.click()
+		expect(router.state.location.pathname).toStrictEqual('/tab2')
+	})
+
+	test('Tab 2 Screen is showing', () => {
+		const title = screen.getByText('Tab 2')
+		expect(title).toBeVisible()
+	})
+
+	test('Clicking Top Tab propogated "/Tab1" to the navigator', () => {
+		const firstTab = screen.getByTestId('tab-observation')
+		firstTab.click()
+		expect(router.state.location.pathname).toStrictEqual('/tab1')
+	})
+
+	test('Tab 1 Screen is showing', async () => {
+		const title = await screen.findByText('Tab 1')
+		expect(title).toBeVisible()
+	})
+
+	test('Clicking "About" propogates "/Tab 2" to the navigator', () => {
+		const aboutTab = screen.getByText('About')
+		aboutTab.click()
+		expect(router.state.location.pathname).toStrictEqual('/tab2')
+	})
+
+	test('Tab 2 Screen is showing', () => {
+		const title = screen.getByText('Tab 2')
+		expect(title).toBeDefined()
+	})
 })
