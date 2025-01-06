@@ -7,6 +7,9 @@ import { useSelectProjectConfigFile } from './mutations/file-system'
 describe('useSelectProjectConfigFile', () => {
 	beforeEach(() => {
 		window.runtime = {
+			init: vi.fn(),
+			getLocale: vi.fn().mockResolvedValue('en'),
+			updateLocale: vi.fn(),
 			selectFile: vi.fn(),
 		}
 	})
@@ -44,7 +47,7 @@ describe('useSelectProjectConfigFile', () => {
 
 		const queryClient = new QueryClient()
 
-		const wrapper = ({ children }) => (
+		const wrapper = ({ children }: { children: React.ReactNode }) => (
 			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 		)
 

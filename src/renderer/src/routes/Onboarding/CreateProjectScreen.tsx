@@ -21,7 +21,7 @@ import {
 import { Text } from '../../components/Text'
 import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../constants'
 import { useActiveProjectIdStoreActions } from '../../contexts/ActiveProjectIdProvider'
-import { useSelectProjectConfigFile } from '../../hooks/mutations/file-system.ts'
+import { useSelectProjectConfigFile } from '../../hooks/mutations/file-system'
 import { useCreateProject } from '../../hooks/mutations/projects'
 import ProjectImage from '../../images/add_square.png'
 
