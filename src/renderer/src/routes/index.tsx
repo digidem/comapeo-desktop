@@ -2,6 +2,8 @@ import { useLayoutEffect } from 'react'
 import { useOwnDeviceInfo } from '@comapeo/core-react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
+import { useActiveProjectIdStoreState } from '../contexts/ActiveProjectIdProvider'
+
 export const Route = createFileRoute('/')({
 	component: RouteComponent,
 })
@@ -12,14 +14,23 @@ export const Route = createFileRoute('/')({
 function RouteComponent() {
 	const navigate = useNavigate()
 	const { data } = useOwnDeviceInfo()
-	const hasCreatedDeviceName = data?.name !== undefined
+	const hasCreatedDeviceName = data.name !== undefined
+	const activeProjectId = useActiveProjectIdStoreState(
+		(store) => store.activeProjectId,
+	)
 
 	useLayoutEffect(() => {
 		if (!hasCreatedDeviceName) {
 			navigate({ to: '/Onboarding' })
-		} else {
-			navigate({ to: '/tab1' })
+			return
 		}
+
+		if (!activeProjectId) {
+			navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
+			return
+		}
+
+		navigate({ to: '/tab1' })
 	})
 
 	return null
