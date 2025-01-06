@@ -23,11 +23,26 @@ const runtimeApi = {
 	// Locale
 	async getLocale() {
 		const locale = await ipcRenderer.invoke('locale:get')
-		if (typeof locale !== 'string') throw Error('Locale must be a string')
+		if (typeof locale !== 'string') {
+			throw new Error('Locale must be a string')
+		}
 		return locale
 	},
 	updateLocale(locale) {
 		ipcRenderer.send('locale:update', locale)
+	},
+
+	// Files
+	async selectFile(extensionFilters) {
+		const filePath = await ipcRenderer.invoke('files:select', {
+			extensionFilters,
+		})
+
+		if (!(typeof filePath === 'string' || typeof filePath === 'undefined')) {
+			throw new Error(`File path is unexpected type: ${typeof filePath}`)
+		}
+
+		return filePath
 	},
 }
 
