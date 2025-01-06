@@ -6,12 +6,14 @@ import {
 	BrowserWindow,
 	MessageChannelMain,
 	app,
+	dialog,
 	ipcMain,
 	safeStorage,
 	utilityProcess,
 } from 'electron/main'
 
 import { Intl, getSystemLocale } from './intl.js'
+import { APP_IPC_EVENT_TO_PARAMS_PARSER } from './ipc.js'
 
 const log = debug('comapeo:main:app')
 
@@ -224,6 +226,25 @@ function initMainWindow({ appMode, services }) {
 			[port1],
 		)
 		event.senderFrame?.postMessage('provide-comapeo-port', null, [port2])
+	})
+
+	// Set up IPC specific to the main window
+	mainWindow.webContents.ipc.handle('files:select', async (_event, params) => {
+		const parsedParams = APP_IPC_EVENT_TO_PARAMS_PARSER['files:select'](params)
+
+		const result = await dialog.showOpenDialog({
+			properties: ['openFile'],
+			filters: parsedParams?.extensionFilters
+				? [
+						{
+							name: 'Custom file type',
+							extensions: parsedParams.extensionFilters,
+						},
+					]
+				: undefined,
+		})
+
+		return result.filePaths[0]
 	})
 
 	APP_STATE.browserWindows.set(mainWindow, {
