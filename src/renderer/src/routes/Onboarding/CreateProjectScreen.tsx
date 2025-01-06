@@ -1,4 +1,4 @@
-import { useRef, useState, type ChangeEvent } from 'react'
+import { useState, type ChangeEvent } from 'react'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import {
 	Accordion,
@@ -21,8 +21,8 @@ import {
 import { Text } from '../../components/Text'
 import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../constants'
 import { useActiveProjectIdStoreActions } from '../../contexts/ActiveProjectIdProvider'
+import { useSelectProjectConfigFile } from '../../hooks/mutations/file-system.ts'
 import { useCreateProject } from '../../hooks/mutations/projects'
-import { useConfigFileImporter } from '../../hooks/useConfigFileImporter'
 import ProjectImage from '../../images/add_square.png'
 
 export const m = defineMessages({
@@ -108,60 +108,64 @@ const HorizontalLine = styled('div')({
 function CreateProjectScreenComponent() {
 	const navigate = useNavigate()
 	const { formatMessage } = useIntl()
+
 	const [projectName, setProjectName] = useState('')
-	const [error, setError] = useState(false)
+	const [hasNameError, setHasNameError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
-	const setProjectNameMutation = useCreateProject()
+	const [configPath, setConfigPath] = useState<string | null>(null)
+
+	const createProjectMutation = useCreateProject()
+	const selectConfigFile = useSelectProjectConfigFile()
 	const { setActiveProjectId } = useActiveProjectIdStoreActions()
 
-	const fileInputRef = useRef<HTMLInputElement | null>(null)
-
-	const {
-		handleFileSelect,
-		fileName: configFileName,
-		error: configFileError,
-	} = useConfigFileImporter()
-
-	const handleImportConfigClick = () => {
-		fileInputRef.current?.click()
+	function handleImportConfig() {
+		selectConfigFile.mutate(undefined, {
+			onSuccess: (filePath) => {
+				if (filePath) {
+					setConfigPath(filePath)
+				}
+			},
+			onError: (err) => {
+				console.error('Error selecting file', err)
+			},
+		})
 	}
 
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value
+		setProjectName(value)
+
 		const localError: boolean = checkForError(
 			value.trim(),
 			PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
 		)
-		setProjectName(value)
-		if (localError !== error) {
-			setError(localError)
-		}
+		setHasNameError(localError)
 	}
 
 	const graphemeCount = countGraphemes(projectName.trim())
 
-	const handleAddName = () => {
+	const handleCreateProject = () => {
 		if (checkForError(projectName, PROJECT_NAME_MAX_LENGTH_GRAPHEMES)) {
-			setError(true)
+			setHasNameError(true)
 			return
 		}
 
-		setProjectNameMutation.mutate(
-			{ name: projectName.trim(), configPath: configFileName ?? undefined },
+		createProjectMutation.mutate(
+			{ name: projectName.trim(), configPath: configPath ?? undefined },
 			{
 				onSuccess: (projectId) => {
 					setActiveProjectId(projectId)
 					navigate({ to: '/tab1' })
 				},
 				onError: (error) => {
-					console.error('Error setting project name:', error)
+					console.error('Error saving project:', error)
 					setErrorMessage(formatMessage(m.errorSavingProjectName))
 				},
 			},
 		)
 	}
 
-	const backPressHandler = setProjectNameMutation.isPending
+	const backPressHandler = createProjectMutation.isPending
 		? undefined
 		: () => navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
 
@@ -186,7 +190,7 @@ function CreateProjectScreenComponent() {
 						value={projectName}
 						onChange={handleChange}
 						variant="outlined"
-						error={error}
+						error={hasNameError}
 						sx={{
 							'& .MuiFormLabel-asterisk': {
 								color: 'red',
@@ -206,7 +210,7 @@ function CreateProjectScreenComponent() {
 							},
 						}}
 					/>
-					<CharacterCount error={error}>
+					<CharacterCount error={hasNameError}>
 						{formatMessage(m.characterCount, {
 							count: graphemeCount,
 							maxLength: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
@@ -243,13 +247,6 @@ function CreateProjectScreenComponent() {
 							</Text>
 						</AccordionSummary>
 						<AccordionDetails>
-							<input
-								ref={fileInputRef}
-								type="file"
-								accept=".comapeocat"
-								style={{ display: 'none' }}
-								onChange={handleFileSelect}
-							/>
 							<Button
 								variant="outlined"
 								style={{
@@ -259,18 +256,13 @@ function CreateProjectScreenComponent() {
 									maxWidth: 350,
 									padding: '12px 20px',
 								}}
-								onClick={handleImportConfigClick}
+								onClick={handleImportConfig}
 							>
 								{formatMessage(m.importConfig)}
 							</Button>
-							{configFileError && (
-								<Text style={{ textAlign: 'center', color: RED }}>
-									{configFileError}
-								</Text>
-							)}
-							{configFileName && (
+							{configPath && (
 								<Text style={{ textAlign: 'center', marginTop: 12 }}>
-									{configFileName}
+									{configPath}
 								</Text>
 							)}
 						</AccordionDetails>
@@ -278,15 +270,15 @@ function CreateProjectScreenComponent() {
 				</div>
 			</div>
 			<Button
-				onClick={handleAddName}
+				onClick={handleCreateProject}
 				style={{
 					width: '100%',
 					maxWidth: 350,
 					padding: '12px 20px',
 				}}
-				disabled={setProjectNameMutation.isPending}
+				disabled={createProjectMutation.isPending}
 			>
-				{setProjectNameMutation.isPending
+				{createProjectMutation.isPending
 					? formatMessage(m.saving)
 					: formatMessage(m.createProject)}
 			</Button>

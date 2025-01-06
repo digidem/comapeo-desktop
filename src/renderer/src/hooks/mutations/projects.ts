@@ -1,8 +1,4 @@
-import {
-	getProjectSettingsQueryKey,
-	getProjectsQueryKey,
-	useClientApi,
-} from '@comapeo/core-react'
+import { getProjectsQueryKey, useClientApi } from '@comapeo/core-react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export const CREATE_PROJECT_KEY = 'create_project'
@@ -22,12 +18,9 @@ export function useCreateProject() {
 				return api.createProject()
 			}
 		},
-		onSuccess: (projectId: string) => {
+		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: getProjectsQueryKey(),
-			})
-			queryClient.invalidateQueries({
-				queryKey: getProjectSettingsQueryKey({ projectId: projectId }),
 			})
 		},
 	})
