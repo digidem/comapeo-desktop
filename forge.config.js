@@ -58,6 +58,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	 */
 	getHooks() {
 		return {
+			preStart: [this.#initViteDevServer],
 			resolveForgeConfig: [this.#updatePackagerConfig],
 			postStart: [this.#hookViteDevServer],
 			prePackage: [this.#buildRender],
@@ -66,34 +67,22 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	}
 
 	/**
-	 * Starts the Vite dev server as part of the `forge start` command
-	 *
-	 * @type {PluginBase<{}>['startLogic']}
-	 * @override
+	 * @type {ForgeHookFn<'preStart'>}
 	 */
-	startLogic = async (_opts) => {
-		if (this.#viteDevServer) return false
+	#initViteDevServer = async (_opts) => {
+		if (this.#viteDevServer) return
 
-		return {
-			result: false,
-			tasks: [
-				{
-					title: 'Start Vite dev server',
-					task: async () => {
-						const server = await createServer({
-							configFile: RENDERER_VITE_CONFIG_PATH,
-						})
+		const server = await createServer({
+			configFile: RENDERER_VITE_CONFIG_PATH,
+		})
 
-						try {
-							await server.listen()
-							server.printUrls()
-							this.#viteDevServer = server
-						} catch {
-							console.log('Vite dev server already running.')
-						}
-					},
-				},
-			],
+		try {
+			await server.listen()
+			console.log('Started Vite dev server')
+			server.printUrls()
+			this.#viteDevServer = server
+		} catch {
+			console.log('Vite dev server already running.')
 		}
 	}
 

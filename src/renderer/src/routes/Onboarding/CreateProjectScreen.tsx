@@ -20,6 +20,7 @@ import {
 } from '../../components/Onboarding/onboardingLogic'
 import { Text } from '../../components/Text'
 import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../constants'
+import { useActiveProjectIdStoreActions } from '../../contexts/ActiveProjectIdProvider'
 import { useCreateProject } from '../../hooks/mutations/projects'
 import { useConfigFileImporter } from '../../hooks/useConfigFileImporter'
 import ProjectImage from '../../images/add_square.png'
@@ -111,6 +112,7 @@ function CreateProjectScreenComponent() {
 	const [error, setError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
 	const setProjectNameMutation = useCreateProject()
+	const { setActiveProjectId } = useActiveProjectIdStoreActions()
 
 	const fileInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -147,7 +149,8 @@ function CreateProjectScreenComponent() {
 		setProjectNameMutation.mutate(
 			{ name: projectName.trim(), configPath: configFileName ?? undefined },
 			{
-				onSuccess: () => {
+				onSuccess: (projectId) => {
+					setActiveProjectId(projectId)
 					navigate({ to: '/tab1' })
 				},
 				onError: (error) => {
