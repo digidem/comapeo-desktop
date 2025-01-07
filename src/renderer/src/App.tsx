@@ -9,7 +9,6 @@ import {
 } from './contexts/ActiveProjectIdProvider'
 import { ApiProvider } from './contexts/ApiContext'
 import { IntlProvider } from './contexts/IntlContext'
-import { SharedLocationContextProvider } from './contexts/SharedLocationContext'
 import { routeTree } from './routeTree.gen'
 
 const queryClient = new QueryClient()
@@ -33,9 +32,7 @@ export const App = () => (
 			<QueryClientProvider client={queryClient}>
 				<ActiveProjectIdProvider store={PersistedProjectIdStore}>
 					<ApiProvider>
-						<SharedLocationContextProvider>
-							<RouterProvider router={router} />
-						</SharedLocationContextProvider>
+						<RouterProvider router={router} />
 					</ApiProvider>
 				</ActiveProjectIdProvider>
 			</QueryClientProvider>
