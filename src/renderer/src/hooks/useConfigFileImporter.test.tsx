@@ -32,11 +32,8 @@ describe('useSelectProjectConfigFile', () => {
 		let selectedPath: string | undefined
 
 		await act(async () => {
-			await result.current.mutateAsync(undefined, {
-				onSuccess: (val) => {
-					selectedPath = val
-				},
-			})
+			const val = await result.current.mutateAsync(undefined)
+			selectedPath = val
 		})
 
 		expect(selectedPath).toBe('/some/path.comapeocat')
@@ -58,11 +55,8 @@ describe('useSelectProjectConfigFile', () => {
 		let selectedPath: string | undefined
 
 		await act(async () => {
-			await result.current.mutateAsync(undefined, {
-				onSuccess: (val) => {
-					selectedPath = val
-				},
-			})
+			const val = await result.current.mutateAsync(undefined)
+			selectedPath = val
 		})
 
 		expect(selectedPath).toBeUndefined()

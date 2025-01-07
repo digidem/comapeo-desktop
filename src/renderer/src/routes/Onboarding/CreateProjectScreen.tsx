@@ -54,10 +54,10 @@ export const m = defineMessages({
 		id: 'screens.ProjectCreationScreen.importConfig',
 		defaultMessage: 'Import Config',
 	},
-	errorSavingProjectName: {
-		id: 'screens.ProjectCreationScreen.errorSavingProjectName',
+	errorSavingProject: {
+		id: 'screens.ProjectCreationScreen.errorSavingProject',
 		defaultMessage:
-			'An error occurred while saving your project name. Please try again.',
+			'An error occurred while saving your project. Please try again.',
 	},
 	saving: {
 		id: 'screens.ProjectCreationScreen.saving',
@@ -105,6 +105,16 @@ const HorizontalLine = styled('div')({
 	width: '65%',
 })
 
+const FileNameDisplay = styled(Text)({
+	textAlign: 'center',
+	marginTop: 12,
+	maxWidth: '100%',
+	overflow: 'hidden',
+	whiteSpace: 'nowrap',
+	textOverflow: 'ellipsis',
+	display: 'inline-block',
+})
+
 function CreateProjectScreenComponent() {
 	const navigate = useNavigate()
 	const { formatMessage } = useIntl()
@@ -112,7 +122,8 @@ function CreateProjectScreenComponent() {
 	const [projectName, setProjectName] = useState('')
 	const [hasNameError, setHasNameError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
-	const [configPath, setConfigPath] = useState<string | null>(null)
+	const [configPath, setConfigPath] = useState<string | undefined>(undefined)
+	const [fileName, setFileName] = useState<string | undefined>()
 
 	const createProjectMutation = useCreateProject()
 	const selectConfigFile = useSelectProjectConfigFile()
@@ -123,6 +134,8 @@ function CreateProjectScreenComponent() {
 			onSuccess: (filePath) => {
 				if (filePath) {
 					setConfigPath(filePath)
+					const fileNameOnly = filePath.split(/[\\/]/).pop() ?? filePath
+					setFileName(fileNameOnly)
 				}
 			},
 			onError: (err) => {
@@ -151,7 +164,7 @@ function CreateProjectScreenComponent() {
 		}
 
 		createProjectMutation.mutate(
-			{ name: projectName.trim(), configPath: configPath ?? undefined },
+			{ name: projectName.trim(), configPath },
 			{
 				onSuccess: (projectId) => {
 					setActiveProjectId(projectId)
@@ -159,7 +172,7 @@ function CreateProjectScreenComponent() {
 				},
 				onError: (error) => {
 					console.error('Error saving project:', error)
-					setErrorMessage(formatMessage(m.errorSavingProjectName))
+					setErrorMessage(formatMessage(m.errorSavingProject))
 				},
 			},
 		)
@@ -260,11 +273,7 @@ function CreateProjectScreenComponent() {
 							>
 								{formatMessage(m.importConfig)}
 							</Button>
-							{configPath && (
-								<Text style={{ textAlign: 'center', marginTop: 12 }}>
-									{configPath}
-								</Text>
-							)}
+							{fileName && <FileNameDisplay>{fileName}</FileNameDisplay>}
 						</AccordionDetails>
 					</Accordion>
 				</div>
@@ -278,9 +287,9 @@ function CreateProjectScreenComponent() {
 				}}
 				disabled={createProjectMutation.isPending}
 			>
-				{createProjectMutation.isPending
-					? formatMessage(m.saving)
-					: formatMessage(m.createProject)}
+				{formatMessage(
+					createProjectMutation.isPending ? m.saving : m.createProject,
+				)}
 			</Button>
 		</OnboardingScreenLayout>
 	)
