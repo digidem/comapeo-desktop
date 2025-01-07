@@ -1,8 +1,20 @@
 diff --git a/node_modules/@comapeo/core/src/fastify-plugins/maps.js b/node_modules/@comapeo/core/src/fastify-plugins/maps.js
-index d3df66e..b53baad 100644
+index d3df66e..a574f60 100644
 --- a/node_modules/@comapeo/core/src/fastify-plugins/maps.js
 +++ b/node_modules/@comapeo/core/src/fastify-plugins/maps.js
-@@ -86,13 +86,14 @@ export async function plugin(fastify, opts) {
+@@ -22,6 +22,11 @@ export const FALLBACK_MAP_PREFIX = 'fallback'
+ 
+ /** @type {FastifyPluginAsync<MapsPluginOpts>} */
+ export async function plugin(fastify, opts) {
++  fastify.addHook('onSend', (request, reply, payload, done) => {
++     reply.header('Access-Control-Allow-Origin', '*')
++     reply.header('Access-Control-Allow-Methods', 'GET, OPTIONS')
++     done()
++  })
+   if (opts.customMapPath) {
+     const { customMapPath } = opts
+ 
+@@ -86,13 +91,14 @@ export async function plugin(fastify, opts) {
      })
    }
  
