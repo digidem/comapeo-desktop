@@ -100,7 +100,7 @@
 		"@types/react-dom": "18.3.5",
 		"@types/sodium-native": "^2.3.9",
 		"@vis.gl/react-maplibre": "1.0.0-alpha.4",
-		"@vitejs/plugin-react": "^4.3.3",
+		"@vitejs/plugin-react": "4.3.4",
 		"electron": "33.2.0",
 		"eslint": "9.17.0",
 		"globals": "15.14.0",
