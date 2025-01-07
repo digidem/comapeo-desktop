@@ -1,4 +1,5 @@
 import { randomBytes } from 'node:crypto'
+import { basename } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineMessages } from '@formatjs/intl'
 import debug from 'debug'
@@ -243,7 +244,14 @@ function initMainWindow({ appMode, services }) {
 				: undefined,
 		})
 
-		return result.filePaths[0]
+		const selectedFilePath = result.filePaths[0]
+
+		if (!selectedFilePath) return undefined
+
+		return {
+			name: basename(selectedFilePath),
+			path: selectedFilePath,
+		}
 	})
 
 	APP_STATE.browserWindows.set(mainWindow, {

@@ -28,16 +28,36 @@ const runtimeApi = {
 
 	// Files
 	async selectFile(extensionFilters) {
-		const filePath = await ipcRenderer.invoke('files:select', {
+		/** @type {unknown} */
+		const result = await ipcRenderer.invoke('files:select', {
 			extensionFilters,
 		})
 
-		if (!(typeof filePath === 'string' || typeof filePath === 'undefined')) {
-			throw new Error(`File path is unexpected type: ${typeof filePath}`)
-		}
+		if (!result) return undefined
 
-		return filePath
+		validateSelectedFileResult(result)
+
+		return result
 	},
+}
+
+/**
+ * @param {NonNullable<unknown>} value
+ *
+ * @returns {asserts value is import('./runtime.js').SelectedFile}
+ */
+function validateSelectedFileResult(value) {
+	if (!('path' in value && 'name' in value)) {
+		throw new Error('Value has invalid shape')
+	}
+
+	if (typeof value.path !== 'string') {
+		throw new Error('Value has invalid path field')
+	}
+
+	if (typeof value.name !== 'string') {
+		throw new Error('Value has invalid name field')
+	}
 }
 
 contextBridge.exposeInMainWorld('runtime', runtimeApi)
