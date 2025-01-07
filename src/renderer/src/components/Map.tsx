@@ -1,4 +1,3 @@
-import React from 'react'
 import { Map as ReactMapLibre } from '@vis.gl/react-maplibre'
 
 import 'maplibre-gl/dist/maplibre-gl.css'
