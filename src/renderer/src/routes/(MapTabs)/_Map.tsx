@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles'
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
 import { VERY_LIGHT_GREY, WHITE } from '../../colors'
+import { Map } from '../../components/Map'
 import { Tabs } from '../../components/Tabs'
 
 const Container = styled('div')({
@@ -35,7 +36,9 @@ export function MapLayout() {
 				</div>
 			</Paper>
 			<Suspense fallback={<CircularProgress />}>
-				<div>map component here</div>
+				<div style={{ flex: 1, position: 'relative' }}>
+					<Map />
+				</div>
 			</Suspense>
 		</Container>
 	)

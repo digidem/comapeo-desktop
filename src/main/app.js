@@ -4,14 +4,15 @@ import { defineMessages } from '@formatjs/intl'
 import debug from 'debug'
 import {
 	BrowserWindow,
-	MessageChannelMain,
 	app,
+	dialog,
 	ipcMain,
 	safeStorage,
 	utilityProcess,
 } from 'electron/main'
 
 import { Intl, getSystemLocale } from './intl.js'
+import { APP_IPC_EVENT_TO_PARAMS_PARSER } from './ipc.js'
 
 const log = debug('comapeo:main:app')
 
@@ -213,17 +214,36 @@ function initMainWindow({ appMode, services }) {
 
 	// Set up communication channel between window and core service
 	// https://www.electronjs.org/docs/latest/tutorial/message-ports/#messageports-in-the-main-process
-	mainWindow.webContents.ipc.on('request-comapeo-port', (event) => {
-		const { port1, port2 } = new MessageChannelMain()
+	mainWindow.webContents.ipc.on('comapeo-port', (event) => {
+		const [port] = event.ports
+		if (!port) return // TODO: throw/report error
 		services.core.postMessage(
 			/** @satisfies {NewClientMessage} */
 			{
 				type: 'core:new-client',
 				payload: { clientId: `window-${mainWindow.id}` },
 			},
-			[port1],
+			[port],
 		)
-		event.senderFrame?.postMessage('provide-comapeo-port', null, [port2])
+	})
+
+	// Set up IPC specific to the main window
+	mainWindow.webContents.ipc.handle('files:select', async (_event, params) => {
+		const parsedParams = APP_IPC_EVENT_TO_PARAMS_PARSER['files:select'](params)
+
+		const result = await dialog.showOpenDialog({
+			properties: ['openFile'],
+			filters: parsedParams?.extensionFilters
+				? [
+						{
+							name: 'Custom file type',
+							extensions: parsedParams.extensionFilters,
+						},
+					]
+				: undefined,
+		})
+
+		return result.filePaths[0]
 	})
 
 	APP_STATE.browserWindows.set(mainWindow, {

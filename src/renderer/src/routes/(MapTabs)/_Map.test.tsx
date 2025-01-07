@@ -6,7 +6,7 @@ import {
 	createRouter,
 } from '@tanstack/react-router'
 import { render, screen } from '@testing-library/react'
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 
 import { IntlProvider } from '../../contexts/IntlContext'
 import { MapLayout } from './_Map'
@@ -33,8 +33,10 @@ const catchAllRoute = createRoute({
 const routeTree = rootRoute.addChildren([mapRoute.addChildren([catchAllRoute])])
 
 const router = createRouter({ routeTree })
-
 test('clicking tabs navigate to correct tab', () => {
+	vi.mock('../../components/Map', () => ({
+		Map: () => <div>Mocked Map</div>,
+	}))
 	// @ts-expect-error - typings
 	render(<RouterProvider router={router} />, { wrapper: Wrapper })
 	const settingsButton = screen.getByText('Settings')
