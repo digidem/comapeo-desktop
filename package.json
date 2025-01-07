@@ -106,7 +106,7 @@
 		"globals": "15.14.0",
 		"husky": "^9.1.7",
 		"jsdom": "25.0.1",
-		"lint-staged": "^15.2.10",
+		"lint-staged": "15.3.0",
 		"maplibre-gl": "5.0.0",
 		"npm-run-all2": "7.0.2",
 		"patch-package": "^8.0.0",
