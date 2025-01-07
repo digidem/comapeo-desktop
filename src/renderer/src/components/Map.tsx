@@ -1,6 +1,5 @@
 import React from 'react'
-import { Map as ReactMaplibre } from '@vis.gl/react-maplibre'
-import maplibregl from 'maplibre-gl'
+import { Map as ReactMapLibre } from '@vis.gl/react-maplibre'
 
 import 'maplibre-gl/dist/maplibre-gl.css'
 
@@ -8,8 +7,7 @@ export function Map() {
 	const center = [-72.312023, -10.38787]
 
 	return (
-		<ReactMaplibre
-			mapLib={maplibregl}
+		<ReactMapLibre
 			initialViewState={{
 				longitude: center[0],
 				latitude: center[1],
