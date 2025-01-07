@@ -131,11 +131,10 @@ function CreateProjectScreenComponent() {
 
 	function handleImportConfig() {
 		selectConfigFile.mutate(undefined, {
-			onSuccess: (filePath) => {
-				if (filePath) {
-					setConfigPath(filePath)
-					const fileNameOnly = filePath.split(/[\\/]/).pop() ?? filePath
-					setFileName(fileNameOnly)
+			onSuccess: (file) => {
+				if (file) {
+					setConfigPath(file.path)
+					setFileName(file.name)
 				}
 			},
 			onError: (err) => {
@@ -273,7 +272,11 @@ function CreateProjectScreenComponent() {
 							>
 								{formatMessage(m.importConfig)}
 							</Button>
-							{fileName && <FileNameDisplay>{fileName}</FileNameDisplay>}
+							{fileName && (
+								<FileNameDisplay data-testid="filename-display">
+									{fileName}
+								</FileNameDisplay>
+							)}
 						</AccordionDetails>
 					</Accordion>
 				</div>

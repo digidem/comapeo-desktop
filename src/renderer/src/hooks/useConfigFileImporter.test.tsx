@@ -13,10 +13,11 @@ describe('useSelectProjectConfigFile', () => {
 		}
 	})
 
-	it('returns file path from window.runtime.selectFile', async () => {
-		vi.spyOn(window.runtime, 'selectFile').mockResolvedValue(
-			'/some/path.comapeocat',
-		)
+	it('returns filename and filepath from window.runtime.selectFile', async () => {
+		vi.spyOn(window.runtime, 'selectFile').mockResolvedValue({
+			name: 'myFile.comapeocat',
+			path: '/Users/cindy/documents/myFile.comapeocat',
+		})
 
 		const queryClient = new QueryClient()
 
@@ -28,14 +29,13 @@ describe('useSelectProjectConfigFile', () => {
 			wrapper,
 		})
 
-		let selectedPath: string | undefined
-
 		await act(async () => {
 			const val = await result.current.mutateAsync(undefined)
-			selectedPath = val
+			expect(val).toEqual({
+				name: 'myFile.comapeocat',
+				path: '/Users/cindy/documents/myFile.comapeocat',
+			})
 		})
-
-		expect(selectedPath).toBe('/some/path.comapeocat')
 	})
 
 	it('returns undefined if user cancels', async () => {
@@ -51,13 +51,9 @@ describe('useSelectProjectConfigFile', () => {
 			wrapper,
 		})
 
-		let selectedPath: string | undefined
-
 		await act(async () => {
 			const val = await result.current.mutateAsync(undefined)
-			selectedPath = val
+			expect(val).toBeUndefined()
 		})
-
-		expect(selectedPath).toBeUndefined()
 	})
 })
