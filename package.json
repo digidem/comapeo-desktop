@@ -56,7 +56,7 @@
 		"@formatjs/intl": "^3.0.1",
 		"@mapeo/default-config": "5.0.0",
 		"debug": "^4.3.7",
-		"dotenv": "^16.4.5",
+		"dotenv": "16.4.7",
 		"electron-is-dev": "^3.0.1",
 		"electron-squirrel-startup": "^1.0.1",
 		"electron-store": "^10.0.0",
