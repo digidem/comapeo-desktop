@@ -21,6 +21,7 @@ import {
 import { Text } from '../../components/Text'
 import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../constants'
 import { useActiveProjectIdStoreActions } from '../../contexts/ActiveProjectIdProvider'
+import { useSelectProjectConfigFile } from '../../hooks/mutations/file-system'
 import { useCreateProject } from '../../hooks/mutations/projects'
 import ProjectImage from '../../images/add_square.png'
 
@@ -37,8 +38,8 @@ export const m = defineMessages({
 		id: 'screens.ProjectCreationScreen.placeholder',
 		defaultMessage: 'Project Name',
 	},
-	addName: {
-		id: 'screens.ProjectCreationScreen.addName',
+	createProject: {
+		id: 'screens.ProjectCreationScreen.createProject',
 		defaultMessage: 'Create Project',
 	},
 	characterCount: {
@@ -53,10 +54,10 @@ export const m = defineMessages({
 		id: 'screens.ProjectCreationScreen.importConfig',
 		defaultMessage: 'Import Config',
 	},
-	errorSavingProjectName: {
-		id: 'screens.ProjectCreationScreen.errorSavingProjectName',
+	errorSavingProject: {
+		id: 'screens.ProjectCreationScreen.errorSavingProject',
 		defaultMessage:
-			'An error occurred while saving your project name. Please try again.',
+			'An error occurred while saving your project. Please try again.',
 	},
 	saving: {
 		id: 'screens.ProjectCreationScreen.saving',
@@ -104,55 +105,79 @@ const HorizontalLine = styled('div')({
 	width: '65%',
 })
 
+const FileNameDisplay = styled(Text)({
+	textAlign: 'center',
+	marginTop: 12,
+	maxWidth: '100%',
+	overflow: 'hidden',
+	whiteSpace: 'nowrap',
+	textOverflow: 'ellipsis',
+	display: 'inline-block',
+})
+
 function CreateProjectScreenComponent() {
 	const navigate = useNavigate()
 	const { formatMessage } = useIntl()
+
 	const [projectName, setProjectName] = useState('')
-	const [error, setError] = useState(false)
+	const [hasNameError, setHasNameError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
-	const setProjectNameMutation = useCreateProject()
+	const [configPath, setConfigPath] = useState<string | undefined>(undefined)
+	const [fileName, setFileName] = useState<string | undefined>()
+
+	const createProjectMutation = useCreateProject()
+	const selectConfigFile = useSelectProjectConfigFile()
 	const { setActiveProjectId } = useActiveProjectIdStoreActions()
 
-	const [configFileName, setConfigFileName] = useState<string | null>(null)
-
-	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const value = event.target.value
-		const localError: boolean = checkForError(
-			value.trim(),
-			PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
-		)
-		setProjectName(value)
-		if (localError !== error) {
-			setError(localError)
-		}
-		setError(localError)
-	}
-
-	const graphemeCount = countGraphemes(projectName.trim())
-
-	const handleAddName = () => {
-		if (checkForError(projectName, PROJECT_NAME_MAX_LENGTH_GRAPHEMES)) {
-			setError(true)
-			return
-		}
-		setProjectNameMutation.mutate(projectName, {
-			onSuccess: (projectId) => {
-				setActiveProjectId(projectId)
-				navigate({ to: '/tab1' })
+	function handleImportConfig() {
+		selectConfigFile.mutate(undefined, {
+			onSuccess: (file) => {
+				if (file) {
+					setConfigPath(file.path)
+					setFileName(file.name)
+				}
 			},
-			onError: (error) => {
-				console.error('Error setting project name:', error)
-				setErrorMessage(formatMessage(m.errorSavingProjectName))
+			onError: (err) => {
+				console.error('Error selecting file', err)
 			},
 		})
 	}
 
-	function importConfigFile() {
-		// Placeholder for file import logic
-		setConfigFileName('myProjectConfig.comapeocat')
+	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const value = event.target.value
+		setProjectName(value)
+
+		const localError: boolean = checkForError(
+			value.trim(),
+			PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
+		)
+		setHasNameError(localError)
 	}
 
-	const backPressHandler = setProjectNameMutation.isPending
+	const graphemeCount = countGraphemes(projectName.trim())
+
+	const handleCreateProject = () => {
+		if (checkForError(projectName, PROJECT_NAME_MAX_LENGTH_GRAPHEMES)) {
+			setHasNameError(true)
+			return
+		}
+
+		createProjectMutation.mutate(
+			{ name: projectName.trim(), configPath },
+			{
+				onSuccess: (projectId) => {
+					setActiveProjectId(projectId)
+					navigate({ to: '/tab1' })
+				},
+				onError: (error) => {
+					console.error('Error saving project:', error)
+					setErrorMessage(formatMessage(m.errorSavingProject))
+				},
+			},
+		)
+	}
+
+	const backPressHandler = createProjectMutation.isPending
 		? undefined
 		: () => navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
 
@@ -177,7 +202,7 @@ function CreateProjectScreenComponent() {
 						value={projectName}
 						onChange={handleChange}
 						variant="outlined"
-						error={error}
+						error={hasNameError}
 						sx={{
 							'& .MuiFormLabel-asterisk': {
 								color: 'red',
@@ -197,7 +222,7 @@ function CreateProjectScreenComponent() {
 							},
 						}}
 					/>
-					<CharacterCount error={error}>
+					<CharacterCount error={hasNameError}>
 						{formatMessage(m.characterCount, {
 							count: graphemeCount,
 							maxLength: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
@@ -243,41 +268,32 @@ function CreateProjectScreenComponent() {
 									maxWidth: 350,
 									padding: '12px 20px',
 								}}
-								onClick={importConfigFile}
+								onClick={handleImportConfig}
 							>
 								{formatMessage(m.importConfig)}
 							</Button>
-							{configFileName && (
-								<Text style={{ textAlign: 'center', marginTop: 12 }}>
-									{configFileName}
-								</Text>
+							{fileName && (
+								<FileNameDisplay data-testid="filename-display">
+									{fileName}
+								</FileNameDisplay>
 							)}
 						</AccordionDetails>
 					</Accordion>
 				</div>
 			</div>
-			<div
+			<Button
+				onClick={handleCreateProject}
 				style={{
-					marginTop: 12,
 					width: '100%',
-					display: 'flex',
-					justifyContent: 'center',
+					maxWidth: 350,
+					padding: '12px 20px',
 				}}
+				disabled={createProjectMutation.isPending}
 			>
-				<Button
-					onClick={handleAddName}
-					style={{
-						width: '100%',
-						maxWidth: 350,
-						padding: '12px 20px',
-					}}
-					disabled={setProjectNameMutation.isPending}
-				>
-					{setProjectNameMutation.isPending
-						? formatMessage(m.saving)
-						: formatMessage(m.addName)}
-				</Button>
-			</div>
+				{formatMessage(
+					createProjectMutation.isPending ? m.saving : m.createProject,
+				)}
+			</Button>
 		</OnboardingScreenLayout>
 	)
 }
