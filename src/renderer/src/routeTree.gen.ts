@@ -14,7 +14,6 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as WelcomeImport } from './routes/Welcome'
-import { Route as InviteListenerImport } from './routes/InviteListener'
 import { Route as IndexImport } from './routes/index'
 import { Route as OnboardingIndexImport } from './routes/Onboarding/index'
 import { Route as OnboardingPrivacyPolicyScreenImport } from './routes/Onboarding/PrivacyPolicyScreen'
@@ -41,12 +40,6 @@ const MapTabsRoute = MapTabsImport.update({
 const WelcomeRoute = WelcomeImport.update({
   id: '/Welcome',
   path: '/Welcome',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const InviteListenerRoute = InviteListenerImport.update({
-  id: '/InviteListener',
-  path: '/InviteListener',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -129,13 +122,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/InviteListener': {
-      id: '/InviteListener'
-      path: '/InviteListener'
-      fullPath: '/InviteListener'
-      preLoaderRoute: typeof InviteListenerImport
       parentRoute: typeof rootRoute
     }
     '/Welcome': {
@@ -254,7 +240,6 @@ const MapTabsRouteWithChildren =
 
 export interface FileRoutesByFullPath {
   '/': typeof MapTabsMapRouteWithChildren
-  '/InviteListener': typeof InviteListenerRoute
   '/Welcome': typeof WelcomeRoute
   '/Onboarding/CreateJoinProjectScreen': typeof OnboardingCreateJoinProjectScreenRoute
   '/Onboarding/CreateProjectScreen': typeof OnboardingCreateProjectScreenRoute
@@ -269,7 +254,6 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof MapTabsMapRouteWithChildren
-  '/InviteListener': typeof InviteListenerRoute
   '/Welcome': typeof WelcomeRoute
   '/Onboarding/CreateJoinProjectScreen': typeof OnboardingCreateJoinProjectScreenRoute
   '/Onboarding/CreateProjectScreen': typeof OnboardingCreateProjectScreenRoute
@@ -285,7 +269,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/InviteListener': typeof InviteListenerRoute
   '/Welcome': typeof WelcomeRoute
   '/(MapTabs)': typeof MapTabsRouteWithChildren
   '/(MapTabs)/_Map': typeof MapTabsMapRouteWithChildren
@@ -304,7 +287,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/InviteListener'
     | '/Welcome'
     | '/Onboarding/CreateJoinProjectScreen'
     | '/Onboarding/CreateProjectScreen'
@@ -318,7 +300,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/InviteListener'
     | '/Welcome'
     | '/Onboarding/CreateJoinProjectScreen'
     | '/Onboarding/CreateProjectScreen'
@@ -332,7 +313,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/InviteListener'
     | '/Welcome'
     | '/(MapTabs)'
     | '/(MapTabs)/_Map'
@@ -350,7 +330,6 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  InviteListenerRoute: typeof InviteListenerRoute
   WelcomeRoute: typeof WelcomeRoute
   MapTabsRoute: typeof MapTabsRouteWithChildren
   OnboardingCreateJoinProjectScreenRoute: typeof OnboardingCreateJoinProjectScreenRoute
@@ -364,7 +343,6 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  InviteListenerRoute: InviteListenerRoute,
   WelcomeRoute: WelcomeRoute,
   MapTabsRoute: MapTabsRouteWithChildren,
   OnboardingCreateJoinProjectScreenRoute:
@@ -389,7 +367,6 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/InviteListener",
         "/Welcome",
         "/(MapTabs)",
         "/Onboarding/CreateJoinProjectScreen",
@@ -403,9 +380,6 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/InviteListener": {
-      "filePath": "InviteListener.tsx"
     },
     "/Welcome": {
       "filePath": "Welcome.tsx"

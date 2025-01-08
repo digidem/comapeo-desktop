@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Outlet, createRootRoute } from '@tanstack/react-router'
 
-import { InviteListener } from './InviteListener'
+import { InviteListener } from '../components/InviteListener'
 
 export const Route = createRootRoute({
 	component: () => (
