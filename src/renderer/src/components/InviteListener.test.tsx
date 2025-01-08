@@ -1,6 +1,7 @@
 import React from 'react'
 import { ClientApiProvider } from '@comapeo/core-react'
-import type { invite as Invite, MapeoClientApi } from '@comapeo/ipc'
+import type { Invite } from '@comapeo/core/dist/invite-api'
+import { createMapeoClient } from '@comapeo/ipc'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import {
 	RouterProvider,
@@ -16,6 +17,8 @@ import { routeTree } from '../routeTree.gen'
 type InviteEventHandler = (invite: Invite) => void
 
 let inviteReceivedHandler: ((invite: InviteEventHandler) => void) | undefined
+
+export type MapeoClientApi = ReturnType<typeof createMapeoClient>
 
 const mockInvite = {
 	addListener: vi.fn(
