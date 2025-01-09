@@ -167,7 +167,7 @@ function CreateProjectScreenComponent() {
 			{
 				onSuccess: (projectId) => {
 					setActiveProjectId(projectId)
-					navigate({ to: '/tab1' })
+					navigate({ to: '/main' })
 				},
 				onError: (error) => {
 					console.error('Error saving project:', error)

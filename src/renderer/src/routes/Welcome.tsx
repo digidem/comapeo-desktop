@@ -11,7 +11,7 @@ function RouteComponent() {
 	return (
 		<div>
 			<Text>Welcome Page</Text>
-			<Link to={'/tab1'}>Map</Link>
+			<Link to={'/main'}>Map</Link>
 		</div>
 	)
 }

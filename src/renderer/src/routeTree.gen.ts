@@ -24,7 +24,7 @@ import { Route as OnboardingCreateProjectScreenImport } from './routes/Onboardin
 import { Route as OnboardingCreateJoinProjectScreenImport } from './routes/Onboarding/CreateJoinProjectScreen'
 import { Route as MapTabsMapImport } from './routes/(MapTabs)/_Map'
 import { Route as MapTabsMapTab2Import } from './routes/(MapTabs)/_Map.tab2'
-import { Route as MapTabsMapTab1Import } from './routes/(MapTabs)/_Map.tab1'
+import { Route as MapTabsMapMainImport } from './routes/(MapTabs)/_Map.main'
 
 // Create Virtual Routes
 
@@ -107,9 +107,9 @@ const MapTabsMapTab2Route = MapTabsMapTab2Import.update({
   getParentRoute: () => MapTabsMapRoute,
 } as any)
 
-const MapTabsMapTab1Route = MapTabsMapTab1Import.update({
-  id: '/tab1',
-  path: '/tab1',
+const MapTabsMapMainRoute = MapTabsMapMainImport.update({
+  id: '/main',
+  path: '/main',
   getParentRoute: () => MapTabsMapRoute,
 } as any)
 
@@ -194,11 +194,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingIndexImport
       parentRoute: typeof rootRoute
     }
-    '/(MapTabs)/_Map/tab1': {
-      id: '/(MapTabs)/_Map/tab1'
-      path: '/tab1'
-      fullPath: '/tab1'
-      preLoaderRoute: typeof MapTabsMapTab1Import
+    '/(MapTabs)/_Map/main': {
+      id: '/(MapTabs)/_Map/main'
+      path: '/main'
+      fullPath: '/main'
+      preLoaderRoute: typeof MapTabsMapMainImport
       parentRoute: typeof MapTabsMapImport
     }
     '/(MapTabs)/_Map/tab2': {
@@ -214,12 +214,12 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface MapTabsMapRouteChildren {
-  MapTabsMapTab1Route: typeof MapTabsMapTab1Route
+  MapTabsMapMainRoute: typeof MapTabsMapMainRoute
   MapTabsMapTab2Route: typeof MapTabsMapTab2Route
 }
 
 const MapTabsMapRouteChildren: MapTabsMapRouteChildren = {
-  MapTabsMapTab1Route: MapTabsMapTab1Route,
+  MapTabsMapMainRoute: MapTabsMapMainRoute,
   MapTabsMapTab2Route: MapTabsMapTab2Route,
 }
 
@@ -248,7 +248,7 @@ export interface FileRoutesByFullPath {
   '/Onboarding/JoinProjectScreen': typeof OnboardingJoinProjectScreenRoute
   '/Onboarding/PrivacyPolicyScreen': typeof OnboardingPrivacyPolicyScreenRoute
   '/Onboarding': typeof OnboardingIndexRoute
-  '/tab1': typeof MapTabsMapTab1Route
+  '/main': typeof MapTabsMapMainRoute
   '/tab2': typeof MapTabsMapTab2Route
 }
 
@@ -262,7 +262,7 @@ export interface FileRoutesByTo {
   '/Onboarding/JoinProjectScreen': typeof OnboardingJoinProjectScreenRoute
   '/Onboarding/PrivacyPolicyScreen': typeof OnboardingPrivacyPolicyScreenRoute
   '/Onboarding': typeof OnboardingIndexRoute
-  '/tab1': typeof MapTabsMapTab1Route
+  '/main': typeof MapTabsMapMainRoute
   '/tab2': typeof MapTabsMapTab2Route
 }
 
@@ -279,7 +279,7 @@ export interface FileRoutesById {
   '/Onboarding/JoinProjectScreen': typeof OnboardingJoinProjectScreenRoute
   '/Onboarding/PrivacyPolicyScreen': typeof OnboardingPrivacyPolicyScreenRoute
   '/Onboarding/': typeof OnboardingIndexRoute
-  '/(MapTabs)/_Map/tab1': typeof MapTabsMapTab1Route
+  '/(MapTabs)/_Map/main': typeof MapTabsMapMainRoute
   '/(MapTabs)/_Map/tab2': typeof MapTabsMapTab2Route
 }
 
@@ -295,7 +295,7 @@ export interface FileRouteTypes {
     | '/Onboarding/JoinProjectScreen'
     | '/Onboarding/PrivacyPolicyScreen'
     | '/Onboarding'
-    | '/tab1'
+    | '/main'
     | '/tab2'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -308,7 +308,7 @@ export interface FileRouteTypes {
     | '/Onboarding/JoinProjectScreen'
     | '/Onboarding/PrivacyPolicyScreen'
     | '/Onboarding'
-    | '/tab1'
+    | '/main'
     | '/tab2'
   id:
     | '__root__'
@@ -323,7 +323,7 @@ export interface FileRouteTypes {
     | '/Onboarding/JoinProjectScreen'
     | '/Onboarding/PrivacyPolicyScreen'
     | '/Onboarding/'
-    | '/(MapTabs)/_Map/tab1'
+    | '/(MapTabs)/_Map/main'
     | '/(MapTabs)/_Map/tab2'
   fileRoutesById: FileRoutesById
 }
@@ -393,7 +393,7 @@ export const routeTree = rootRoute
       "filePath": "(MapTabs)/_Map.tsx",
       "parent": "/(MapTabs)",
       "children": [
-        "/(MapTabs)/_Map/tab1",
+        "/(MapTabs)/_Map/main",
         "/(MapTabs)/_Map/tab2"
       ]
     },
@@ -418,8 +418,8 @@ export const routeTree = rootRoute
     "/Onboarding/": {
       "filePath": "Onboarding/index.tsx"
     },
-    "/(MapTabs)/_Map/tab1": {
-      "filePath": "(MapTabs)/_Map.tab1.tsx",
+    "/(MapTabs)/_Map/main": {
+      "filePath": "(MapTabs)/_Map.main.tsx",
       "parent": "/(MapTabs)/_Map"
     },
     "/(MapTabs)/_Map/tab2": {

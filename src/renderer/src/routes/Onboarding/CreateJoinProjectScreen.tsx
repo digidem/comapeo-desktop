@@ -3,12 +3,12 @@ import { styled } from '@mui/material/styles'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK, BLUE_GREY, DARK_GREY, WHITE } from '../../colors'
+import { BLACK, BLUE_GREY, DARK_GREY, DARK_ORANGE, WHITE } from '../../colors'
 import { Button } from '../../components/Button'
 import { OnboardingScreenLayout } from '../../components/Onboarding/OnboardingScreenLayout'
 import { OnboardingTopMenu } from '../../components/Onboarding/OnboardingTopMenu'
 import { Text } from '../../components/Text'
-import AddPersonImage from '../../images/add_person.png'
+import AddPersonImage from '../../images/AddPerson.svg'
 
 export const m = defineMessages({
 	title: {
@@ -43,11 +43,6 @@ export const Route = createFileRoute('/Onboarding/CreateJoinProjectScreen')({
 	component: CreateJoinProjectScreenComponent,
 })
 
-const StyledImage = styled('img')({
-	width: 60,
-	height: 48,
-})
-
 const BulletList = styled('ul')({
 	width: '50%',
 	textAlign: 'left',
@@ -78,7 +73,7 @@ export function CreateJoinProjectScreenComponent() {
 
 	return (
 		<OnboardingScreenLayout topMenu={topMenu}>
-			<StyledImage src={AddPersonImage} alt="Add Person" />
+			<AddPersonImage color={DARK_ORANGE} style={{ width: 60, height: 48 }} />
 			<Text kind="title" style={{ marginTop: 12 }}>
 				{formatMessage(m.title)}
 			</Text>

@@ -15,6 +15,8 @@ type CustomButtonProps = PropsWithChildren<{
 	style?: CSSProperties
 	onClick?: MouseEventHandler<HTMLButtonElement>
 	disabled?: boolean
+	startIcon?: React.ReactNode
+	endIcon?: React.ReactNode
 }>
 
 export const Button = ({
@@ -26,11 +28,15 @@ export const Button = ({
 	style,
 	disabled,
 	className,
+	startIcon,
+	endIcon,
 	...props
 }: CustomButtonProps) => {
 	const propsBasedOnSize = size === 'fullWidth' ? { fullWidth: true } : { size }
 	return (
 		<MuiButton
+			startIcon={startIcon}
+			endIcon={endIcon}
 			className={className}
 			color={color}
 			variant={variant}
