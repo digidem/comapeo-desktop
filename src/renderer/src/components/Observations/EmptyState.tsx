@@ -1,5 +1,6 @@
 import React from 'react'
 import { styled } from '@mui/material/styles'
+import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARK_TEXT, VERY_LIGHT_GREY } from '../../colors'
 import AddPersonIcon from '../../images/AddPerson.svg'
@@ -7,6 +8,21 @@ import EmptyStateImage from '../../images/empty_state.png'
 import Pencil from '../../images/pencil.png'
 import { Button } from '../Button'
 import { Text } from '../Text'
+
+const m = defineMessages({
+	inviteDevices: {
+		id: 'emptyState.inviteDevices',
+		defaultMessage: 'Invite Devices',
+	},
+	noObservationsFound: {
+		id: 'emptyState.noObservationsFound',
+		defaultMessage: 'No Observations Found',
+	},
+	unnamedProject: {
+		id: 'emptyState.unnamedProject',
+		defaultMessage: 'Unnamed Project',
+	},
+})
 
 const Container = styled('div')({
 	display: 'flex',
@@ -55,20 +71,28 @@ const LowerContainer = styled('div')({
 type EmptyStateProps = {
 	projectName?: string
 	onInviteDevices?: () => void
+	onEditProjectName?: () => void
 }
 
-export function EmptyState({ projectName, onInviteDevices }: EmptyStateProps) {
+export function EmptyState({
+	projectName,
+	onInviteDevices,
+	onEditProjectName,
+}: EmptyStateProps) {
+	const { formatMessage } = useIntl()
+	const name = projectName || intl.formatMessage(m.unnamedProject)
+
 	return (
 		<>
 			<Container>
 				<TitleRow>
-					<Text kind="subtitle">{projectName}</Text>
+					<Text kind="subtitle">{name}</Text>
 					<img
 						src={Pencil}
 						alt="Edit"
 						style={{ width: 20, height: 20, cursor: 'pointer' }}
 						onClick={() => {
-							console.log('Pencil clicked')
+							onEditProjectName?.()
 						}}
 					/>
 				</TitleRow>
@@ -79,10 +103,10 @@ export function EmptyState({ projectName, onInviteDevices }: EmptyStateProps) {
 						borderColor: BLUE_GREY,
 						color: DARK_TEXT,
 					}}
-					onClick={() => {}}
+					onClick={() => onInviteDevices?.()}
 					startIcon={<AddPersonIcon color={DARK_TEXT} />}
 				>
-					Invite Devices
+					{formatMessage(m.inviteDevices)}
 				</Button>
 			</Container>
 			<DividerLine />
@@ -96,7 +120,7 @@ export function EmptyState({ projectName, onInviteDevices }: EmptyStateProps) {
 						marginTop: 18,
 					}}
 				>
-					No Observations Found
+					{formatMessage(m.noObservationsFound)}
 				</Text>
 			</LowerContainer>
 		</>

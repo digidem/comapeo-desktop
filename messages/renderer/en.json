@@ -5,6 +5,33 @@
   "components.OnboardingTopMenu.step": {
     "message": "Step {number}"
   },
+  "emptyState.inviteDevices": {
+    "message": "Invite Devices"
+  },
+  "emptyState.noObservationsFound": {
+    "message": "No Observations Found"
+  },
+  "emptyState.unnamedProject": {
+    "message": "Unnamed Project"
+  },
+  "mapMain.errorLoading": {
+    "message": "Oops! Error loading data."
+  },
+  "mapMain.loading": {
+    "message": "Loading..."
+  },
+  "observationListItem.untitledCategory": {
+    "message": "[Category Name]"
+  },
+  "observationListView.button.exchange": {
+    "message": "View Exchange"
+  },
+  "observationListView.button.team": {
+    "message": "View Team"
+  },
+  "observationListView.unnamedProject": {
+    "message": "Unnamed Project"
+  },
   "screens.CreateJoinProjectScreen.askToJoin": {
     "message": "Ask a monitoring coordinator to join their Project."
   },

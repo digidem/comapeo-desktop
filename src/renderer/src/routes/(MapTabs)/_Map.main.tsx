@@ -1,11 +1,23 @@
 import * as React from 'react'
 import { useProjectSettings } from '@comapeo/core-react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { defineMessages, useIntl } from 'react-intl'
 
 import { EmptyState } from '../../components/Observations/EmptyState'
 import { ObservationListView } from '../../components/Observations/ObservationListView'
 import { useActiveProjectIdStoreState } from '../../contexts/ActiveProjectIdProvider'
-import { useAllObservations } from '../../hooks/useObservations.ts'
+import { useAllObservations } from '../../hooks/observations.ts'
+
+const m = defineMessages({
+	loading: {
+		id: 'mapMain.loading',
+		defaultMessage: 'Loading...',
+	},
+	errorLoading: {
+		id: 'mapMain.errorLoading',
+		defaultMessage: 'Oops! Error loading data.',
+	},
+})
 
 export const Route = createFileRoute('/(MapTabs)/_Map/main')({
 	component: MainScreen,
@@ -13,6 +25,7 @@ export const Route = createFileRoute('/(MapTabs)/_Map/main')({
 
 export function MainScreen() {
 	const navigate = useNavigate()
+	const { formatMessage } = useIntl()
 	const activeProjectId = useActiveProjectIdStoreState((s) => s.activeProjectId)
 	const { data: projectSettings, error: settingsError } = useProjectSettings({
 		projectId: activeProjectId || '',
@@ -39,15 +52,29 @@ export function MainScreen() {
 		})
 	}
 
+	const handleSelectTrack = React.useCallback(
+		(trackId: string) => {
+			navigate({
+				to: '/view-track',
+				params: { trackId },
+			})
+		},
+		[navigate],
+	)
+
+	const handleEditProjectName = () => {
+		console.log('Edit project name clicked (TODO in future).')
+	}
+
 	if (isRefetching) {
-		return <div>Loading...</div>
+		return <div>{formatMessage(m.loading)}</div>
 	}
 
 	if (obsError || settingsError) {
-		return <div>Oops! Error loading data.</div>
+		return <div>{formatMessage(m.errorLoading)}</div>
 	}
 
-	const projectName = projectSettings?.name ?? 'Unnamed Project'
+	const projectName = projectSettings?.name
 
 	if (!obsDocs || obsDocs.length === 0) {
 		return <EmptyState projectName={projectName} />
@@ -59,6 +86,8 @@ export function MainScreen() {
 			onViewExchange={handleViewExchange}
 			onViewTeam={handleViewTeam}
 			onSelectObservation={handleSelectObservation}
+			onSelectTrack={handleSelectTrack}
+			onEditProjectName={handleEditProjectName}
 		/>
 	)
 }
