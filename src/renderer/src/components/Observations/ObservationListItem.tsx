@@ -1,13 +1,19 @@
-import React from 'react'
 import type { Observation } from '@comapeo/schema'
 import { styled } from '@mui/material/styles'
-import { FormattedDate, FormattedTime, defineMessages } from 'react-intl'
+import {
+	FormattedDate,
+	FormattedTime,
+	defineMessages,
+	useIntl,
+} from 'react-intl'
 
 import { DARK_TEXT, VERY_LIGHT_GREY } from '../../colors'
+import { useObservationWithPreset } from '../../hooks/useObservationWithPreset'
 import { Text } from '../Text'
 
 type Props = {
 	observation: Observation
+	projectId?: string
 	onClick?: () => void
 }
 
@@ -73,12 +79,13 @@ const m = defineMessages({
 	},
 })
 
-export function ObservationListItem({ observation, onClick }: Props) {
-	const categoryName =
-		typeof observation.tags?.category === 'string'
-			? observation.tags.category
-			: undefined
-
+export function ObservationListItem({
+	observation,
+	projectId,
+	onClick,
+}: Props) {
+	const { formatMessage } = useIntl()
+	const preset = useObservationWithPreset(observation, projectId ?? '')
 	const createdAt = observation.createdAt
 		? new Date(observation.createdAt)
 		: new Date()
@@ -87,11 +94,18 @@ export function ObservationListItem({ observation, onClick }: Props) {
 		(att) => att.type === 'photo',
 	)
 
+	const displayName = preset
+		? formatMessage({
+				id: `presets.${preset.docId}.name`,
+				defaultMessage: preset.name,
+			})
+		: formatMessage(m.untitledCategory)
+
 	return (
 		<Container onClick={onClick}>
 			<TextContainer>
 				<TitleRow>
-					{categoryName ?? <Text message={m.untitledCategory} />}
+					<Text>{displayName}</Text>
 				</TitleRow>
 				<DateRow>
 					<FormattedDate

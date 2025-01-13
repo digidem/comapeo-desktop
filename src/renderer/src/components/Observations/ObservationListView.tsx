@@ -1,5 +1,5 @@
 import React from 'react'
-import type { Observation, Track } from '@compaeo/schema'
+import type { Observation, Track } from '@comapeo/schema'
 import { styled } from '@mui/material/styles'
 import { defineMessages, useIntl } from 'react-intl'
 
@@ -69,6 +69,7 @@ const ListContainer = styled('div')({
 
 type ObservationListViewProps = {
 	projectName?: string
+	projectId?: string
 	observations: Array<Observation>
 	tracks?: Array<Track>
 	onViewExchange?: () => void
@@ -80,6 +81,7 @@ type ObservationListViewProps = {
 
 export function ObservationListView({
 	projectName,
+	projectId,
 	observations,
 	tracks = [],
 	onViewExchange,
@@ -151,6 +153,7 @@ export function ObservationListView({
 							<ObservationListItem
 								key={item.data.docId}
 								observation={item.data}
+								projectId={projectId}
 								onClick={() => onSelectObservation?.(item.data.docId)}
 							/>
 						)

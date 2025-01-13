@@ -80,7 +80,7 @@ export function EmptyState({
 	onEditProjectName,
 }: EmptyStateProps) {
 	const { formatMessage } = useIntl()
-	const name = projectName || intl.formatMessage(m.unnamedProject)
+	const name = projectName || formatMessage(m.unnamedProject)
 
 	return (
 		<>

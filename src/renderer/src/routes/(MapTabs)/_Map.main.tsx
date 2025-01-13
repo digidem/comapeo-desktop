@@ -6,7 +6,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import { EmptyState } from '../../components/Observations/EmptyState'
 import { ObservationListView } from '../../components/Observations/ObservationListView'
 import { useActiveProjectIdStoreState } from '../../contexts/ActiveProjectIdProvider'
-import { useAllObservations } from '../../hooks/observations.ts'
+import { useAllObservations } from '../../hooks/queries/observations'
 
 const m = defineMessages({
 	loading: {
@@ -82,6 +82,7 @@ export function MainScreen() {
 	return (
 		<ObservationListView
 			projectName={projectName}
+			projectId={activeProjectId}
 			observations={obsDocs}
 			onViewExchange={handleViewExchange}
 			onViewTeam={handleViewTeam}
