@@ -17,7 +17,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => (
 	<IntlProvider>{children}</IntlProvider>
 )
 
-// Creates a stubbed out router. We are just testing whether the navigation gets passed the correct route (aka "/tab1" or "/tab2") so we do not need the actual router and can just intecept the navgiation state.
+// Creates a stubbed out router. We are just testing whether the navigation gets passed the correct route (aka "/main" or "/tab2") so we do not need the actual router and can just intecept the navgiation state.
 const mapRoute = createRoute({
 	getParentRoute: () => rootRoute,
 	id: 'map',
@@ -47,7 +47,7 @@ test('clicking tabs navigate to correct tab', () => {
 	const observationTab = screen.getByTestId('tab-observation')
 	observationTab.click()
 	const observationTabRouteName = router.state.location.pathname
-	expect(observationTabRouteName).toStrictEqual('/tab1')
+	expect(observationTabRouteName).toStrictEqual('/main')
 
 	const aboutTab = screen.getByText('About')
 	aboutTab.click()

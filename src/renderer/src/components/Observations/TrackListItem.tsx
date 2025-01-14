@@ -1,4 +1,3 @@
-import React from 'react'
 import type { Track } from '@comapeo/schema'
 import { styled } from '@mui/material/styles'
 import { FormattedDate, FormattedTime } from 'react-intl'
