@@ -1,12 +1,11 @@
 import * as React from 'react'
-import { useProjectSettings } from '@comapeo/core-react'
+import { useManyDocs, useProjectSettings } from '@comapeo/core-react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { EmptyState } from '../../components/Observations/EmptyState'
 import { ObservationListView } from '../../components/Observations/ObservationListView'
 import { useActiveProjectIdStoreState } from '../../contexts/ActiveProjectIdProvider'
-import { useAllObservations } from '../../hooks/queries/observations'
 
 const m = defineMessages({
 	loading: {
@@ -35,7 +34,12 @@ export function MainScreen() {
 		data: obsDocs,
 		error: obsError,
 		isRefetching,
-	} = useAllObservations(activeProjectId)
+	} = useManyDocs({
+		projectId: activeProjectId || '',
+		docType: 'observation',
+		includeDeleted: false,
+		lang: 'en',
+	})
 
 	const handleViewExchange = React.useCallback(() => {
 		navigate({ to: '/exchange' })

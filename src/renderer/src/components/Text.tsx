@@ -2,6 +2,8 @@ import { type CSSProperties, type PropsWithChildren } from 'react'
 import Typography from '@mui/material/Typography'
 import { type Variant } from '@mui/material/styles/createTypography'
 
+import { DARK_TEXT } from '../colors'
+
 type Kind = 'title' | 'subtitle' | 'body'
 
 const kindToVariant: { [k in Kind]: Variant } = {
@@ -41,6 +43,7 @@ export function Text({
 			fontWeight={bold ? 'bold' : undefined}
 			fontStyle={italic ? 'italic' : undefined}
 			style={{
+				color: DARK_TEXT,
 				textDecoration: underline ? 'underline' : undefined,
 				...style,
 			}}

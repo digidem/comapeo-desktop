@@ -171,7 +171,7 @@ function CreateProjectScreenComponent() {
 				onSuccess: (projectId) => {
 					setActiveProjectId(projectId)
 					createTestDataMutation.mutate(
-						{ projectId, count: 10 },
+						{ projectId, count: 20 },
 						{
 							onSuccess: () => {
 								navigate({ to: '/main' })

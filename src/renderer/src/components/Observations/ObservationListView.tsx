@@ -30,9 +30,12 @@ const m = defineMessages({
 const Container = styled('div')({
 	display: 'flex',
 	flexDirection: 'column',
-	padding: 20,
 	height: '100%',
 	backgroundColor: WHITE,
+})
+
+const ContentWrapper = styled('div')({
+	padding: 20,
 })
 
 const TitleRow = styled('div')({
@@ -114,37 +117,50 @@ export function ObservationListView({
 
 	return (
 		<Container>
-			<TitleRow>
-				<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-					<Text kind="subtitle" style={{ fontSize: 16, fontWeight: 500 }}>
-						{name}
-					</Text>
-					<PencilImg src={PencilIcon} alt="Edit" onClick={onEditProjectName} />
-				</div>
-			</TitleRow>
-			<ButtonsRow>
-				<Button
-					variant="contained"
-					style={{ backgroundColor: DARK_ORANGE, color: WHITE }}
-					startIcon={<LightningIcon color={WHITE} width={16} height={16} />}
-					onClick={onViewExchange}
-				>
-					{formatMessage(m.exchange)}
-				</Button>
-				<Button
-					variant="outlined"
-					style={{
-						borderColor: VERY_LIGHT_GREY,
-						color: DARK_TEXT,
-					}}
-					startIcon={<AddPersonIcon fill={DARK_TEXT} width={16} height={16} />}
-					onClick={onViewTeam}
-				>
-					{formatMessage(m.team)}
-				</Button>
-			</ButtonsRow>
+			<ContentWrapper>
+				<TitleRow>
+					<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+						<Text kind="subtitle" style={{ fontSize: 16, fontWeight: 500 }}>
+							{name}
+						</Text>
+						<PencilImg
+							src={PencilIcon}
+							alt="Edit"
+							onClick={onEditProjectName}
+						/>
+					</div>
+				</TitleRow>
+				<ButtonsRow>
+					<Button
+						variant="contained"
+						style={{
+							backgroundColor: DARK_ORANGE,
+							color: WHITE,
+							minWidth: 170,
+						}}
+						startIcon={<LightningIcon color={WHITE} width={16} height={16} />}
+						onClick={onViewExchange}
+					>
+						{formatMessage(m.exchange)}
+					</Button>
+					<Button
+						variant="outlined"
+						style={{
+							borderColor: VERY_LIGHT_GREY,
+							color: DARK_TEXT,
+							minWidth: 170,
+						}}
+						startIcon={
+							<AddPersonIcon fill={DARK_TEXT} width={16} height={16} />
+						}
+						onClick={onViewTeam}
+					>
+						{formatMessage(m.team)}
+					</Button>
+				</ButtonsRow>
 
-			<DividerLine />
+				<DividerLine />
+			</ContentWrapper>
 
 			<ListContainer>
 				{combined.map((item) => {

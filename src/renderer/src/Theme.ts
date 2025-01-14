@@ -4,7 +4,6 @@ import {
 	COMAPEO_BLUE,
 	DARK_COMAPEO_BLUE,
 	DARK_ORANGE,
-	DARK_TEXT,
 	GREEN,
 	LIGHT_COMAPEO_BLUE,
 	ORANGE,
@@ -13,7 +12,6 @@ import {
 
 const theme = createTheme({
 	typography: {
-		color: DARK_TEXT,
 		fontFamily: 'Rubik, sans-serif',
 		fontSize: 12,
 		body1: {

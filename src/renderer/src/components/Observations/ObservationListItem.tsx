@@ -7,8 +7,9 @@ import {
 	useIntl,
 } from 'react-intl'
 
-import { DARK_TEXT, VERY_LIGHT_GREY } from '../../colors'
+import { VERY_LIGHT_GREY } from '../../colors'
 import { useObservationWithPreset } from '../../hooks/useObservationWithPreset'
+import { PresetCircleIcon } from '../PresetCircleIcon'
 import { Text } from '../Text'
 
 type Props = {
@@ -22,9 +23,9 @@ const Container = styled('div')({
 	flexDirection: 'row',
 	alignItems: 'center',
 	borderBottom: `1px solid ${VERY_LIGHT_GREY}`,
-	padding: '10px 0',
+	padding: '10px 20px',
 	cursor: 'pointer',
-	// hover styling for entire row
+	width: '100%',
 	'&:hover': {
 		backgroundColor: '#f9f9f9',
 	},
@@ -36,35 +37,6 @@ const TextContainer = styled('div')({
 	flexDirection: 'column',
 })
 
-const TitleRow = styled('div')({
-	display: 'flex',
-	fontFamily: 'Rubik, sans-serif',
-	fontSize: 12,
-	fontWeight: 500,
-	lineHeight: '14.22px',
-	color: DARK_TEXT,
-})
-
-const DateRow = styled('div')({
-	fontFamily: 'Rubik, sans-serif',
-	fontSize: 10,
-	fontWeight: 400,
-	lineHeight: '11.85px',
-	color: DARK_TEXT,
-})
-
-const IconContainer = styled('div')({
-	minWidth: 48,
-	minHeight: 48,
-	borderRadius: 6,
-	overflow: 'hidden',
-	backgroundColor: VERY_LIGHT_GREY,
-	marginLeft: 20,
-	display: 'flex',
-	justifyContent: 'center',
-	alignItems: 'center',
-})
-
 const PhotoContainer = styled('img')({
 	width: 48,
 	height: 48,
@@ -73,9 +45,11 @@ const PhotoContainer = styled('img')({
 })
 
 const m = defineMessages({
-	untitledCategory: {
-		id: 'observationListItem.untitledCategory',
-		defaultMessage: '[Category Name]',
+	observation: {
+		// Keep id stable for translations
+		id: 'screens.Observation.ObservationView.observation',
+		defaultMessage: 'Observation',
+		description: 'Default name of observation with no matching preset',
 	},
 })
 
@@ -93,21 +67,18 @@ export function ObservationListItem({
 	const photoAttachment = observation.attachments.find(
 		(att) => att.type === 'photo',
 	)
-
 	const displayName = preset
 		? formatMessage({
 				id: `presets.${preset.docId}.name`,
 				defaultMessage: preset.name,
 			})
-		: formatMessage(m.untitledCategory)
+		: formatMessage(m.observation)
 
 	return (
 		<Container onClick={onClick}>
 			<TextContainer>
-				<TitleRow>
-					<Text>{displayName}</Text>
-				</TitleRow>
-				<DateRow>
+				<Text style={{ fontWeight: 500 }}>{displayName}</Text>
+				<Text style={{ fontSize: 10, fontWeight: 400 }}>
 					<FormattedDate
 						value={createdAt}
 						month="short"
@@ -116,12 +87,17 @@ export function ObservationListItem({
 					/>
 					{', '}
 					<FormattedTime value={createdAt} hour="numeric" minute="2-digit" />
-				</DateRow>
+				</Text>
 			</TextContainer>
 			{photoAttachment ? (
 				<PhotoContainer src="/path/to/mock/photo.jpg" alt="Observation photo" />
 			) : (
-				<IconContainer></IconContainer>
+				<PresetCircleIcon
+					projectId={projectId}
+					iconId={preset?.iconRef?.docId}
+					borderColor={preset?.color}
+					size="medium"
+				></PresetCircleIcon>
 			)}
 		</Container>
 	)

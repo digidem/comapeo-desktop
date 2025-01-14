@@ -4,8 +4,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { BBox } from 'geojson'
 
 /**
- * A mutation that creates 10 random observations near a bounding box around
- * [-72.312023, -10.38787].
+ * A mutation that creates a number of random observations near a bounding box
+ * around [-72.312023, -10.38787].
  */
 export function useCreateTestObservations() {
 	const api = useClientApi()

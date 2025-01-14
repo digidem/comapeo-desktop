@@ -20,9 +20,6 @@
   "mapMain.loading": {
     "message": "Loading..."
   },
-  "observationListItem.untitledCategory": {
-    "message": "[Category Name]"
-  },
   "observationListView.button.exchange": {
     "message": "View Exchange"
   },
@@ -124,6 +121,10 @@
   },
   "screens.JoinProjectScreen.title": {
     "message": "Join"
+  },
+  "screens.Observation.ObservationView.observation": {
+    "description": "Default name of observation with no matching preset",
+    "message": "Observation"
   },
   "screens.OnboardingPrivacyPolicy.permissionsTitle": {
     "message": "Current Permissions"
