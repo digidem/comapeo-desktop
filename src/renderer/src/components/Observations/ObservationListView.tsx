@@ -36,13 +36,15 @@ const Container = styled('div')({
 
 const ContentWrapper = styled('div')({
 	padding: 20,
+	borderBottom: `1px solid ${VERY_LIGHT_GREY}`,
 })
 
 const TitleRow = styled('div')({
 	display: 'flex',
 	alignItems: 'center',
 	justifyContent: 'space-between',
-	marginBottom: 10,
+	marginTop: 20,
+	marginBottom: 20,
 })
 
 const ButtonsRow = styled('div')({
@@ -55,14 +57,6 @@ const PencilImg = styled('img')({
 	height: 20,
 	cursor: 'pointer',
 	marginLeft: 10,
-})
-
-const DividerLine = styled('div')({
-	width: '100%',
-	height: 1,
-	backgroundColor: VERY_LIGHT_GREY,
-	marginTop: 20,
-	marginBottom: 20,
 })
 
 const ListContainer = styled('div')({
@@ -119,16 +113,10 @@ export function ObservationListView({
 		<Container>
 			<ContentWrapper>
 				<TitleRow>
-					<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-						<Text kind="subtitle" style={{ fontSize: 16, fontWeight: 500 }}>
-							{name}
-						</Text>
-						<PencilImg
-							src={PencilIcon}
-							alt="Edit"
-							onClick={onEditProjectName}
-						/>
-					</div>
+					<Text kind="subtitle" style={{ fontSize: 16, fontWeight: 500 }}>
+						{name}
+					</Text>
+					<PencilImg src={PencilIcon} alt="Edit" onClick={onEditProjectName} />
 				</TitleRow>
 				<ButtonsRow>
 					<Button
@@ -158,8 +146,6 @@ export function ObservationListView({
 						{formatMessage(m.team)}
 					</Button>
 				</ButtonsRow>
-
-				<DividerLine />
 			</ContentWrapper>
 
 			<ListContainer>

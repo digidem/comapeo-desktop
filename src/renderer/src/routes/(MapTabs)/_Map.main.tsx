@@ -24,7 +24,7 @@ export const Route = createFileRoute('/(MapTabs)/_Map/main')({
 
 export function MainScreen() {
 	const navigate = useNavigate()
-	const { formatMessage } = useIntl()
+	const { formatMessage, locale } = useIntl()
 	const activeProjectId = useActiveProjectIdStoreState((s) => s.activeProjectId)
 	const { data: projectSettings, error: settingsError } = useProjectSettings({
 		projectId: activeProjectId || '',
@@ -38,7 +38,7 @@ export function MainScreen() {
 		projectId: activeProjectId || '',
 		docType: 'observation',
 		includeDeleted: false,
-		lang: 'en',
+		lang: locale,
 	})
 
 	const handleViewExchange = React.useCallback(() => {
