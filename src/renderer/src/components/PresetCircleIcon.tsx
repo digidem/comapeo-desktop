@@ -16,7 +16,7 @@ const Circle = styled('div')<{ radius?: number; borderColor?: string }>(
 	({ radius = 25, borderColor = '#000' }) => ({
 		width: radius * 2,
 		height: radius * 2,
-		borderRadius: radius * 2,
+		borderRadius: '50%',
 		boxShadow: `0px 2px 5px ${hexToRgba(borderColor, 0.3)}`,
 		display: 'flex',
 		alignItems: 'center',
@@ -31,7 +31,7 @@ const IconContainer = styled('div')<{
 }>(({ radius = 25, borderColor }) => ({
 	width: radius * 2,
 	height: radius * 2,
-	borderRadius: radius,
+	borderRadius: '50%',
 	display: 'flex',
 	alignItems: 'center',
 	justifyContent: 'center',

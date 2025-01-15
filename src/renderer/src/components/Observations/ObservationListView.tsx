@@ -42,7 +42,7 @@ const ListContainer = styled('div')({
 	overflowY: 'auto',
 	flex: 1,
 	margin: 0,
-	padding: 0,
+	padding: '0 0 20px 0',
 })
 
 type CombinedData = Observation | Track

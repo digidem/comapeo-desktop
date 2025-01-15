@@ -110,7 +110,13 @@ export function MainScreen() {
 	const projectName = projectSettings?.name || formatMessage(m.unnamedProject)
 
 	return (
-		<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				height: '100%',
+			}}
+		>
 			<ProjectHeader projectName={projectName} onEdit={handleEditProjectName} />
 			{!combinedData.length ? (
 				<EmptyState />
