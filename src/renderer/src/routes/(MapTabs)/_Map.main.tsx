@@ -31,12 +31,23 @@ export function MainScreen() {
 	})
 
 	const {
-		data: obsDocs,
+		data: observations,
 		error: obsError,
-		isRefetching,
+		isRefetching: isRefetchingObs,
 	} = useManyDocs({
 		projectId: activeProjectId || '',
 		docType: 'observation',
+		includeDeleted: false,
+		lang: locale,
+	})
+
+	const {
+		data: tracks,
+		error: trackError,
+		isRefetching: isRefetchingTracks,
+	} = useManyDocs({
+		projectId: activeProjectId || '',
+		docType: 'track',
 		includeDeleted: false,
 		lang: locale,
 	})
@@ -74,24 +85,25 @@ export function MainScreen() {
 		console.log('Edit project name clicked (TODO in future).')
 	}
 
-	if (isRefetching) {
+	if (isRefetchingTracks || isRefetchingObs) {
 		return <div>{formatMessage(m.loading)}</div>
 	}
 
-	if (obsError || settingsError) {
+	if (obsError || trackError || settingsError) {
 		return <div>{formatMessage(m.errorLoading)}</div>
 	}
 
 	const projectName = projectSettings?.name
 
-	if (!obsDocs || obsDocs.length === 0) {
+	if (!observations.length && !tracks.length) {
 		return <EmptyState projectName={projectName} />
 	}
 	return (
 		<ObservationListView
 			projectName={projectName}
 			projectId={activeProjectId}
-			observations={obsDocs}
+			observations={observations}
+			tracks={tracks}
 			onViewExchange={handleViewExchange}
 			onViewTeam={handleViewTeam}
 			onSelectObservation={handleSelectObservation}

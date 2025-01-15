@@ -62,12 +62,14 @@ const PencilImg = styled('img')({
 const ListContainer = styled('div')({
 	overflowY: 'auto',
 	flex: 1,
+	margin: 0,
+	padding: 0,
 })
 
 type ObservationListViewProps = {
 	projectName?: string
 	projectId?: string
-	observations: Array<Observation>
+	observations?: Array<Observation>
 	tracks?: Array<Track>
 	onViewExchange?: () => void
 	onViewTeam?: () => void
@@ -80,7 +82,7 @@ export function ObservationListView({
 	projectName,
 	projectId,
 	observations,
-	tracks = [],
+	tracks,
 	onViewExchange,
 	onViewTeam,
 	onSelectObservation,
@@ -89,23 +91,12 @@ export function ObservationListView({
 }: ObservationListViewProps) {
 	const { formatMessage } = useIntl()
 	const name = projectName || formatMessage(m.unnamedProject)
-	const combined = React.useMemo(() => {
-		const allDocs = [
-			...observations.map((obs) => ({
-				type: 'observation' as const,
-				data: obs,
-			})),
-			...tracks.map((tr) => ({
-				type: 'track' as const,
-				data: tr,
-			})),
-		]
-		allDocs.sort((a, b) => {
-			// descending by createdAt
-			const aTime = a.data.createdAt ?? '1970-01-01T00:00:00.000Z'
-			const bTime = b.data.createdAt ?? '1970-01-01T00:00:00.000Z'
-			return bTime.localeCompare(aTime) // most recent first
-		})
+	const combinedData = React.useMemo(() => {
+		const mappableObservations = observations ?? []
+		const mappableTracks = tracks ?? []
+		const allDocs = [...mappableObservations, ...mappableTracks].sort((a, b) =>
+			a.createdAt < b.createdAt ? 1 : -1,
+		)
 		return allDocs
 	}, [observations, tracks])
 
@@ -148,27 +139,28 @@ export function ObservationListView({
 				</ButtonsRow>
 			</ContentWrapper>
 
-			<ListContainer>
-				{combined.map((item) => {
-					if (item.type === 'observation') {
-						return (
+			<ListContainer as="ul">
+				{combinedData.map((item) => (
+					<li
+						key={item.docId}
+						style={{ listStyle: 'none', margin: 0, padding: 0 }}
+					>
+						{item.schemaName === 'observation' ? (
 							<ObservationListItem
-								key={item.data.docId}
-								observation={item.data}
+								key={item.docId}
+								observation={item}
 								projectId={projectId}
-								onClick={() => onSelectObservation?.(item.data.docId)}
+								onClick={() => onSelectObservation?.(item.docId)}
 							/>
-						)
-					} else {
-						return (
+						) : (
 							<TrackListItem
-								key={item.data.docId}
-								track={item.data}
-								onClick={() => onSelectTrack?.(item.data.docId)}
+								key={item.docId}
+								track={item}
+								onClick={() => onSelectTrack?.(item.docId)}
 							/>
-						)
-					}
-				})}
+						)}
+					</li>
+				))}
 			</ListContainer>
 		</Container>
 	)
