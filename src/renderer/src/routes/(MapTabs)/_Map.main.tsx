@@ -42,26 +42,30 @@ export function MainScreen() {
 	})
 
 	const handleViewExchange = React.useCallback(() => {
-		navigate({ to: '/exchange' })
+		console.log('Clicking on view exchange (TODO in future)')
+		// navigate({ to: '/exchange' })
 	}, [navigate])
 
 	const handleViewTeam = React.useCallback(() => {
-		navigate({ to: '/team' })
+		console.log('Clicking on team (TODO in future)')
+		// navigate({ to: '/team' })
 	}, [navigate])
 
 	const handleSelectObservation = (obsId: string) => {
-		navigate({
-			to: '/view-observation',
-			params: { observationId: obsId },
-		})
+		console.log('Clicking on view observation (TODO in future)')
+		// navigate({
+		// 	to: '/view-observation',
+		// 	params: { observationId: obsId },
+		// })
 	}
 
 	const handleSelectTrack = React.useCallback(
 		(trackId: string) => {
-			navigate({
-				to: '/view-track',
-				params: { trackId },
-			})
+			console.log('Clicking on view track (TODO in future)')
+			// 	navigate({
+			// 		to: '/view-track',
+			// 		params: { trackId },
+			// 	})
 		},
 		[navigate],
 	)

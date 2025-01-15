@@ -4,9 +4,9 @@ import { FormattedDate, FormattedTime } from 'react-intl'
 
 import { VERY_LIGHT_GREY } from '../../colors'
 import { useObservationWithPreset } from '../../hooks/useObservationWithPreset'
+import { FormattedPresetName } from '../FormattedData'
 import { PresetCircleIcon } from '../PresetCircleIcon'
 import { Text } from '../Text'
-import { FormattedPresetName } from '../formattedData'
 
 type Props = {
 	observation: Observation
