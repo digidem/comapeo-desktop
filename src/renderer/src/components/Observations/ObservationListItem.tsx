@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles'
 import { FormattedDate, FormattedTime } from 'react-intl'
 
 import { VERY_LIGHT_GREY } from '../../colors'
+import { useActiveProjectIdStoreState } from '../../contexts/ActiveProjectIdProvider'
 import { useObservationWithPreset } from '../../hooks/useObservationWithPreset'
 import { FormattedPresetName } from '../FormattedData'
 import { PresetCircleIcon } from '../PresetCircleIcon'
@@ -10,7 +11,6 @@ import { Text } from '../Text'
 
 type Props = {
 	observation: Observation
-	projectId?: string
 	onClick?: () => void
 }
 
@@ -40,11 +40,8 @@ const PhotoContainer = styled('img')({
 	objectFit: 'cover',
 })
 
-export function ObservationListItem({
-	observation,
-	projectId,
-	onClick,
-}: Props) {
+export function ObservationListItem({ observation, onClick }: Props) {
+	const projectId = useActiveProjectIdStoreState((s) => s.activeProjectId)
 	const preset = useObservationWithPreset(observation, projectId ?? '')
 	const createdAt = observation.createdAt
 		? new Date(observation.createdAt)

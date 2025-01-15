@@ -13,24 +13,29 @@ import {
 	WHITE,
 } from './colors'
 
+const commonTextStyle = {
+	color: DARK_TEXT,
+}
+
 const theme = createTheme({
 	typography: {
 		fontFamily: 'Rubik, sans-serif',
 		fontSize: 12,
 		body1: {
 			fontSize: '1rem',
+			...commonTextStyle,
 		},
 		body2: {
 			fontSize: '0.875rem',
-			color: DARK_TEXT,
+			...commonTextStyle,
 		},
 		subtitle1: {
 			fontSize: '1.125rem',
-			color: DARK_TEXT,
+			...commonTextStyle,
 		},
 		subtitle2: {
 			fontSize: '1rem',
-			color: DARK_TEXT,
+			...commonTextStyle,
 		},
 		button: {
 			fontSize: '1rem',
@@ -39,17 +44,17 @@ const theme = createTheme({
 		},
 		caption: {
 			fontSize: '0.75rem',
-			color: DARK_TEXT,
+			...commonTextStyle,
 		},
 		h1: {
 			fontSize: '2rem',
 			fontWeight: 700,
-			color: DARK_TEXT,
+			...commonTextStyle,
 		},
 		h2: {
 			fontSize: '1.5rem',
 			fontWeight: 600,
-			color: DARK_TEXT,
+			...commonTextStyle,
 		},
 	},
 	palette: {

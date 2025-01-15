@@ -5,6 +5,7 @@ import { defineMessages, useIntl } from 'react-intl'
 
 import { EmptyState } from '../../components/Observations/EmptyState'
 import { ObservationListView } from '../../components/Observations/ObservationListView'
+import { ProjectHeader } from '../../components/Observations/ProjectHeader'
 import { useActiveProjectIdStoreState } from '../../contexts/ActiveProjectIdProvider'
 
 const m = defineMessages({
@@ -15,6 +16,10 @@ const m = defineMessages({
 	errorLoading: {
 		id: 'mapMain.errorLoading',
 		defaultMessage: 'Oops! Error loading data.',
+	},
+	unnamedProject: {
+		id: 'mapMain.unnamedProject',
+		defaultMessage: 'Unnamed Project',
 	},
 })
 
@@ -52,6 +57,15 @@ export function MainScreen() {
 		lang: locale,
 	})
 
+	const combinedData = React.useMemo(() => {
+		const mappableObservations = observations ?? []
+		const mappableTracks = tracks ?? []
+		const allDocs = [...mappableObservations, ...mappableTracks].sort((a, b) =>
+			a.createdAt < b.createdAt ? 1 : -1,
+		)
+		return allDocs
+	}, [observations, tracks])
+
 	const handleViewExchange = React.useCallback(() => {
 		console.log('Clicking on view exchange (TODO in future)')
 		// navigate({ to: '/exchange' })
@@ -63,7 +77,7 @@ export function MainScreen() {
 	}, [navigate])
 
 	const handleSelectObservation = (obsId: string) => {
-		console.log('Clicking on view observation (TODO in future)')
+		console.log('Clicking on view observation (TODO in future)', obsId)
 		// navigate({
 		// 	to: '/view-observation',
 		// 	params: { observationId: obsId },
@@ -72,7 +86,7 @@ export function MainScreen() {
 
 	const handleSelectTrack = React.useCallback(
 		(trackId: string) => {
-			console.log('Clicking on view track (TODO in future)')
+			console.log('Clicking on view track (TODO in future)', trackId)
 			// 	navigate({
 			// 		to: '/view-track',
 			// 		params: { trackId },
@@ -93,22 +107,24 @@ export function MainScreen() {
 		return <div>{formatMessage(m.errorLoading)}</div>
 	}
 
-	const projectName = projectSettings?.name
+	const projectName = projectSettings?.name || formatMessage(m.unnamedProject)
 
-	if (!observations.length && !tracks.length) {
-		return <EmptyState projectName={projectName} />
-	}
 	return (
-		<ObservationListView
-			projectName={projectName}
-			projectId={activeProjectId}
-			observations={observations}
-			tracks={tracks}
-			onViewExchange={handleViewExchange}
-			onViewTeam={handleViewTeam}
-			onSelectObservation={handleSelectObservation}
-			onSelectTrack={handleSelectTrack}
-			onEditProjectName={handleEditProjectName}
-		/>
+		<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+			<ProjectHeader projectName={projectName} onEdit={handleEditProjectName} />
+			{!combinedData.length ? (
+				<EmptyState />
+			) : (
+				<ObservationListView
+					projectName={projectName}
+					combinedData={combinedData}
+					onViewExchange={handleViewExchange}
+					onViewTeam={handleViewTeam}
+					onSelectObservation={handleSelectObservation}
+					onSelectTrack={handleSelectTrack}
+					onEditProjectName={handleEditProjectName}
+				/>
+			)}
+		</div>
 	)
 }

@@ -1,11 +1,9 @@
-import React from 'react'
 import { styled } from '@mui/material/styles'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARK_TEXT, VERY_LIGHT_GREY } from '../../colors'
 import AddPersonIcon from '../../images/AddPerson.svg'
 import EmptyStateImage from '../../images/empty_state.png'
-import Pencil from '../../images/pencil.png'
 import { Button } from '../Button'
 import { Text } from '../Text'
 
@@ -18,23 +16,12 @@ const m = defineMessages({
 		id: 'emptyState.noObservationsFound',
 		defaultMessage: 'No Observations Found',
 	},
-	unnamedProject: {
-		id: 'emptyState.unnamedProject',
-		defaultMessage: 'Unnamed Project',
-	},
 })
 
 const Container = styled('div')({
 	display: 'flex',
 	flexDirection: 'column',
 	padding: '25px 20px',
-})
-
-const TitleRow = styled('div')({
-	display: 'flex',
-	alignItems: 'center',
-	justifyContent: 'space-between',
-	gap: 10,
 })
 
 const DividerLine = styled('div')({
@@ -46,8 +33,8 @@ const DividerLine = styled('div')({
 })
 
 const Circle = styled('div')({
-	width: 200,
-	height: 200,
+	width: 260,
+	height: 260,
 	borderRadius: '50%',
 	backgroundColor: 'rgba(0, 102, 255, 0.1)',
 	display: 'flex',
@@ -69,33 +56,15 @@ const LowerContainer = styled('div')({
 })
 
 type EmptyStateProps = {
-	projectName?: string
 	onInviteDevices?: () => void
-	onEditProjectName?: () => void
 }
 
-export function EmptyState({
-	projectName,
-	onInviteDevices,
-	onEditProjectName,
-}: EmptyStateProps) {
+export function EmptyState({ onInviteDevices }: EmptyStateProps) {
 	const { formatMessage } = useIntl()
-	const name = projectName || formatMessage(m.unnamedProject)
 
 	return (
 		<>
 			<Container>
-				<TitleRow>
-					<Text kind="subtitle">{name}</Text>
-					<img
-						src={Pencil}
-						alt="Edit"
-						style={{ width: 20, height: 20, cursor: 'pointer' }}
-						onClick={() => {
-							onEditProjectName?.()
-						}}
-					/>
-				</TitleRow>
 				<Button
 					variant="outlined"
 					style={{
