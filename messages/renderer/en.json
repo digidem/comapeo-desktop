@@ -1,4 +1,7 @@
 {
+  "common.goBack": {
+    "message": "Go Back"
+  },
   "components.OnboardingTopMenu.goBack": {
     "message": "Go back"
   },
@@ -88,6 +91,12 @@
   },
   "screens.JoinProjectScreen.declineInvite": {
     "message": "Decline Invite"
+  },
+  "screens.JoinProjectScreen.inviteNotFound": {
+    "message": "Invite Not Found"
+  },
+  "screens.JoinProjectScreen.inviteNotFoundDesc": {
+    "message": "This invite is no longer valid or has been removed."
   },
   "screens.JoinProjectScreen.invitedTitle": {
     "message": "You've been invited to join"
