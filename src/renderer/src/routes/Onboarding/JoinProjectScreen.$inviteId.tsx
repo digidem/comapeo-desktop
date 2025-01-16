@@ -1,5 +1,9 @@
-import React, { useEffect } from 'react'
-import { useClientApi } from '@comapeo/core-react'
+import { useEffect } from 'react'
+import {
+	useAcceptInvite,
+	useClientApi,
+	useRejectInvite,
+} from '@comapeo/core-react'
 import type { Invite, InviteRemovalReason } from '@comapeo/core/dist/invite-api'
 import { styled } from '@mui/material/styles'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
@@ -10,7 +14,6 @@ import { Button } from '../../components/Button'
 import { OnboardingScreenLayout } from '../../components/Onboarding/OnboardingScreenLayout'
 import { OnboardingTopMenu } from '../../components/Onboarding/OnboardingTopMenu'
 import { Text } from '../../components/Text'
-import { useAcceptInvite, useRejectInvite } from '../../hooks/mutations/invites'
 import { usePendingInvites } from '../../hooks/usePendingInvites'
 import AddPersonIcon from '../../images/add_person_solid.png'
 
@@ -26,6 +29,14 @@ export const m = defineMessages({
 	declineInvite: {
 		id: 'screens.JoinProjectScreen.declineInvite',
 		defaultMessage: 'Decline Invite',
+	},
+	inviteNotFound: {
+		id: 'screens.JoinProjectScreen.inviteNotFound',
+		defaultMessage: 'Invite Not Found',
+	},
+	inviteNotFoundDesc: {
+		id: 'screens.JoinProjectScreen.inviteNotFoundDesc',
+		defaultMessage: 'This invite is no longer valid or has been removed.',
 	},
 	joinProject: {
 		id: 'screens.JoinProjectScreen.joinProject',
@@ -64,11 +75,11 @@ function JoinProjectScreenComponent() {
 	})
 	const { formatMessage } = useIntl()
 	const clientApi = useClientApi()
-	const pendingInvites = usePendingInvites().data
+	const { data: pendingInvites } = usePendingInvites()
 	const invite = pendingInvites.find((i) => i.inviteId === inviteId)
 
-	const accept = useAcceptInvite()
-	const reject = useRejectInvite()
+	const { mutate: acceptInvite } = useAcceptInvite()
+	const { mutate: rejectInvite } = useRejectInvite()
 
 	useEffect(() => {
 		function onInviteRemoved(
@@ -98,42 +109,66 @@ function JoinProjectScreenComponent() {
 		}
 	}, [clientApi, inviteId, navigate, pendingInvites])
 
+	if (!invite) {
+		return (
+			<OnboardingScreenLayout topMenu={<OnboardingTopMenu currentStep={3} />}>
+				<div style={{ width: '100%', flexGrow: 1 }}>
+					<div style={{ textAlign: 'center' }}>
+						<Text kind="title" style={{ marginTop: 12 }}>
+							{formatMessage(m.inviteNotFound)}
+						</Text>
+					</div>
+					<div style={{ textAlign: 'center', margin: '80px 0' }}>
+						<Text style={{ marginTop: 12 }}>
+							{formatMessage(m.inviteNotFoundDesc)}
+						</Text>
+					</div>
+				</div>
+				<Button
+					onClick={() =>
+						navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
+					}
+				>
+					{formatMessage({ id: 'common.goBack', defaultMessage: 'Go Back' })}
+				</Button>
+			</OnboardingScreenLayout>
+		)
+	}
+
 	const handleDecline = () => {
-		if (invite) {
-			reject.mutate(
-				{ inviteId: invite.inviteId },
-				{
-					onSuccess: () => {
-						const nextInvite = pendingInvites.find(
-							(i) => i.inviteId !== inviteId,
-						)
-						if (nextInvite) {
-							navigate({
-								to: '/Onboarding/JoinProjectScreen/$inviteId',
-								params: { inviteId: nextInvite.inviteId },
-							})
-						} else {
-							navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
-						}
-					},
+		rejectInvite(
+			{ inviteId: invite.inviteId },
+			{
+				onSuccess: () => {
+					const nextInvite = pendingInvites.find((i) => i.inviteId !== inviteId)
+					if (nextInvite) {
+						navigate({
+							to: '/Onboarding/JoinProjectScreen/$inviteId',
+							params: { inviteId: nextInvite.inviteId },
+						})
+					} else {
+						navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
+					}
 				},
-			)
-		} else {
-			navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
-		}
+				onError: () => {
+					console.log('Declining invite error', invite.inviteId)
+				},
+			},
+		)
 	}
 
 	const handleJoin = () => {
-		if (invite) {
-			accept.mutate(
-				{ inviteId: invite.inviteId },
-				{
-					onSuccess: () => {
-						navigate({ to: '/tab1' })
-					},
+		acceptInvite(
+			{ inviteId: invite.inviteId },
+			{
+				onSuccess: () => {
+					navigate({ to: '/tab1' })
 				},
-			)
-		}
+				onError: () => {
+					console.log('Accepting invite error ', invite.inviteId)
+				},
+			},
+		)
 	}
 
 	const topMenu = (
@@ -156,7 +191,7 @@ function JoinProjectScreenComponent() {
 			<div style={{ width: '100%', flexGrow: 1 }}>
 				<div style={{ textAlign: 'center' }}>
 					<Text bold kind="title">
-						{invite?.projectName ?? 'Unknown Project'}
+						{invite.projectName ?? 'Unknown Project'}
 					</Text>
 				</div>
 				<div style={{ textAlign: 'center', margin: '80px 0' }}>
@@ -164,7 +199,7 @@ function JoinProjectScreenComponent() {
 						{formatMessage(m.invitedTitle)}
 					</Text>
 					<Text bold style={{ fontSize: '1.25rem' }}>
-						{invite?.projectName ?? 'Unknown Project'}
+						{invite.projectName ?? 'Unknown Project'}
 					</Text>
 				</div>
 			</div>
