@@ -56,13 +56,13 @@
 		"@formatjs/intl": "^3.0.1",
 		"@mapeo/default-config": "5.0.0",
 		"debug": "^4.3.7",
-		"dotenv": "^16.4.5",
+		"dotenv": "16.4.7",
 		"electron-is-dev": "^3.0.1",
 		"electron-squirrel-startup": "^1.0.1",
 		"electron-store": "^10.0.0",
 		"sodium-native": "^4.3.1",
 		"tiny-typed-emitter": "^2.1.0",
-		"valibot": "^0.42.1"
+		"valibot": "1.0.0-beta.12"
 	},
 	"devDependencies": {
 		"@comapeo/core-react": "2.0.1",
@@ -101,7 +101,7 @@
 		"@types/sodium-native": "^2.3.9",
 		"@vis.gl/react-maplibre": "1.0.0-alpha.4",
 		"@vitejs/plugin-react": "4.3.4",
-		"electron": "33.2.0",
+		"electron": "34.0.0",
 		"eslint": "9.17.0",
 		"globals": "15.14.0",
 		"husky": "^9.1.7",
@@ -123,6 +123,6 @@
 		"zustand": "5.0.2"
 	},
 	"overrides": {
-		"better-sqlite3": "11.5.0"
+		"better-sqlite3": "11.8.0"
 	}
 }
