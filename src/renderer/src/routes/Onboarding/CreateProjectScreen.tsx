@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent } from 'react'
+import { useCreateProject } from '@comapeo/core-react'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import {
 	Accordion,
@@ -22,7 +23,6 @@ import { Text } from '../../components/Text'
 import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../constants'
 import { useActiveProjectIdStoreActions } from '../../contexts/ActiveProjectIdProvider'
 import { useSelectProjectConfigFile } from '../../hooks/mutations/file-system'
-import { useCreateProject } from '../../hooks/mutations/projects'
 import ProjectImage from '../../images/add_square.png'
 
 export const m = defineMessages({
@@ -177,9 +177,10 @@ function CreateProjectScreenComponent() {
 		)
 	}
 
-	const backPressHandler = createProjectMutation.isPending
-		? undefined
-		: () => navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
+	const backPressHandler =
+		createProjectMutation.status === 'pending'
+			? undefined
+			: () => navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
 
 	const topMenu = (
 		<OnboardingTopMenu currentStep={3} onBackPress={backPressHandler} />
@@ -288,10 +289,12 @@ function CreateProjectScreenComponent() {
 					maxWidth: 350,
 					padding: '12px 20px',
 				}}
-				disabled={createProjectMutation.isPending}
+				disabled={createProjectMutation.status === 'pending'}
 			>
 				{formatMessage(
-					createProjectMutation.isPending ? m.saving : m.createProject,
+					createProjectMutation.status === 'pending'
+						? m.saving
+						: m.createProject,
 				)}
 			</Button>
 		</OnboardingScreenLayout>
