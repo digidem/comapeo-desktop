@@ -150,8 +150,8 @@ function JoinProjectScreenComponent() {
 						navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
 					}
 				},
-				onError: () => {
-					console.log('Declining invite error', invite.inviteId)
+				onError: (error) => {
+					console.log('Declining invite error', error)
 				},
 			},
 		)
@@ -164,8 +164,8 @@ function JoinProjectScreenComponent() {
 				onSuccess: () => {
 					navigate({ to: '/tab1' })
 				},
-				onError: () => {
-					console.log('Accepting invite error ', invite.inviteId)
+				onError: (error) => {
+					console.log('Accepting invite error ', error)
 				},
 			},
 		)
