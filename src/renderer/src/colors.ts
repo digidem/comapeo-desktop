@@ -9,6 +9,7 @@ export const VERY_LIGHT_GREY = '#ededed'
 
 export const ORANGE = '#FF9933'
 export const DARK_ORANGE = '#E86826'
+export const DARKER_ORANGE = '#D95F28'
 
 export const GREEN = '#59A553'
 export const RED = '#D92222'

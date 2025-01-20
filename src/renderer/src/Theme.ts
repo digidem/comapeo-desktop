@@ -3,6 +3,7 @@ import { createTheme } from '@mui/material/styles'
 import {
 	ALMOST_BLACK,
 	COMAPEO_BLUE,
+	DARKER_ORANGE,
 	DARK_COMAPEO_BLUE,
 	DARK_GREY,
 	DARK_ORANGE,
@@ -12,6 +13,12 @@ import {
 	RED,
 	WHITE,
 } from './colors'
+
+declare module '@mui/material/Button' {
+	interface ButtonPropsVariantOverrides {
+		darkOrange: true
+	}
+}
 
 const theme = createTheme({
 	typography: {
@@ -72,6 +79,18 @@ const theme = createTheme({
 	},
 	components: {
 		MuiButton: {
+			variants: [
+				{
+					props: { variant: 'darkOrange' },
+					style: {
+						backgroundColor: DARK_ORANGE,
+						color: WHITE,
+						'&:hover': {
+							backgroundColor: DARKER_ORANGE,
+						},
+					},
+				},
+			],
 			defaultProps: {
 				variant: 'contained',
 			},

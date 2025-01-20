@@ -6,7 +6,7 @@ import {
 import Typography from '@mui/material/Typography'
 import { type Variant } from '@mui/material/styles/createTypography'
 
-type Kind = 'title' | 'subtitle' | 'body'
+type Kind = 'title' | 'subtitle' | 'body' | 'caption'
 
 type TextColor = 'primary' | 'secondary' | 'disabled'
 
@@ -14,6 +14,7 @@ const kindToVariant: { [k in Kind]: Variant } = {
 	title: 'h1',
 	subtitle: 'subtitle1',
 	body: 'body1',
+	caption: 'caption',
 } as const
 
 const textColorToTypographyColor: {

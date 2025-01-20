@@ -42,6 +42,7 @@ const PhotoContainer = styled('img')({
 
 export function ObservationListItem({ observation, onClick }: Props) {
 	const projectId = useActiveProjectIdStoreState((s) => s.activeProjectId)
+	// TODO: Ideally, the fallback shouldn't be necessary
 	const preset = useObservationWithPreset(observation, projectId ?? '')
 	const createdAt = observation.createdAt
 		? new Date(observation.createdAt)
@@ -54,10 +55,10 @@ export function ObservationListItem({ observation, onClick }: Props) {
 	return (
 		<Container onClick={onClick}>
 			<TextContainer>
-				<Text style={{ fontWeight: 500 }}>
+				<Text bold>
 					<FormattedPresetName preset={preset} />
 				</Text>
-				<Text style={{ fontSize: 10, fontWeight: 400 }}>
+				<Text kind="caption">
 					<FormattedDate
 						value={createdAt}
 						month="short"

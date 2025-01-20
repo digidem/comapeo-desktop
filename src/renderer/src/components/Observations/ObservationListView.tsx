@@ -2,7 +2,7 @@ import type { Observation, Track } from '@comapeo/schema'
 import { styled } from '@mui/material/styles'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { ALMOST_BLACK, DARK_ORANGE, VERY_LIGHT_GREY, WHITE } from '../../colors'
+import { ALMOST_BLACK, VERY_LIGHT_GREY, WHITE } from '../../colors'
 import AddPersonIcon from '../../images/AddPerson.svg'
 import LightningIcon from '../../images/Lightning.svg'
 import { Button } from '../Button'
@@ -71,12 +71,8 @@ export function ObservationListView({
 			<ContentWrapper>
 				<ButtonsRow>
 					<Button
-						variant="contained"
-						style={{
-							backgroundColor: DARK_ORANGE,
-							color: WHITE,
-							minWidth: 170,
-						}}
+						variant="darkOrange"
+						style={{ flex: 1 }}
 						startIcon={<LightningIcon color={WHITE} width={16} height={16} />}
 						onClick={onViewExchange}
 					>
@@ -87,7 +83,7 @@ export function ObservationListView({
 						style={{
 							borderColor: VERY_LIGHT_GREY,
 							color: ALMOST_BLACK,
-							minWidth: 170,
+							flex: 1,
 						}}
 						startIcon={
 							<AddPersonIcon fill={ALMOST_BLACK} width={16} height={16} />
@@ -109,13 +105,19 @@ export function ObservationListView({
 							<ObservationListItem
 								key={item.docId}
 								observation={item}
-								onClick={() => onSelectObservation?.(item.docId)}
+								onClick={
+									onSelectObservation
+										? () => onSelectObservation(item.docId)
+										: undefined
+								}
 							/>
 						) : (
 							<TrackListItem
 								key={item.docId}
 								track={item}
-								onClick={() => onSelectTrack?.(item.docId)}
+								onClick={
+									onSelectTrack ? () => onSelectTrack(item.docId) : undefined
+								}
 							/>
 						)}
 					</li>

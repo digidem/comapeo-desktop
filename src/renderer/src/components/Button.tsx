@@ -3,15 +3,15 @@ import {
 	type MouseEventHandler,
 	type PropsWithChildren,
 } from 'react'
-import { Button as MuiButton } from '@mui/material'
+import { Button as MuiButton, type ButtonProps } from '@mui/material'
 
 type CustomButtonProps = PropsWithChildren<{
 	name?: string
 	className?: string
-	color?: 'primary' | 'secondary' | 'success' | 'error'
+	color?: ButtonProps['color']
 	size?: 'medium' | 'large' | 'fullWidth'
 	testID?: string
-	variant?: 'contained' | 'outlined' | 'text'
+	variant?: 'contained' | 'outlined' | 'text' | 'darkOrange'
 	style?: CSSProperties
 	onClick?: MouseEventHandler<HTMLButtonElement>
 	disabled?: boolean
