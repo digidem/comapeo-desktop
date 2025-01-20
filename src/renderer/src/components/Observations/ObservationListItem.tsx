@@ -42,8 +42,8 @@ const PhotoWrapper = styled('div')({
 
 const PresetOverlay = styled('div')({
 	position: 'absolute',
-	bottom: -4,
-	right: -4,
+	bottom: -6,
+	right: -6,
 	width: 24,
 	height: 24,
 })

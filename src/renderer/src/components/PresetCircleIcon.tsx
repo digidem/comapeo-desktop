@@ -7,7 +7,7 @@ import { hexToRgba } from '../lib/utils'
 type IconSize = 'small' | 'medium' | 'large'
 
 const sizeMap: Record<IconSize, number> = {
-	small: 24,
+	small: 18,
 	medium: 35,
 	large: 50,
 }
@@ -36,7 +36,7 @@ const IconContainer = styled('div')<{
 	alignItems: 'center',
 	justifyContent: 'center',
 	overflow: 'hidden',
-	borderWidth: 3,
+	borderWidth: radius / 8,
 	borderStyle: 'solid',
 	borderColor: borderColor || '#000',
 }))
@@ -54,7 +54,7 @@ export function PresetCircleIcon({
 	borderColor,
 	size = 'medium',
 }: Props) {
-	const radius = size === 'small' ? 15 : size === 'large' ? 35 : 25
+	const radius = size === 'small' ? 12 : size === 'large' ? 35 : 25
 	const {
 		data: iconUrl,
 		error,
@@ -87,7 +87,7 @@ export function PresetCircleIcon({
 
 	return (
 		<Circle radius={radius} borderColor={borderColor}>
-			<IconContainer borderColor={borderColor}>
+			<IconContainer radius={radius} borderColor={borderColor}>
 				<img
 					src={iconUrl}
 					alt="Preset Icon"

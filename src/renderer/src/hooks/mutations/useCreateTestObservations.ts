@@ -62,7 +62,17 @@ export function useCreateTestObservations() {
 						},
 					},
 					tags: { ...randomPreset!.tags, notes },
-					attachments: [],
+					attachments:
+						i === 0
+							? [
+									{
+										driveDiscoveryId: 'fakedriveId',
+										name: 'test-image.jpg',
+										type: 'photo' as const,
+										hash: 'fakehash',
+									},
+								]
+							: [],
 				}
 
 				promises.push(projectApi.observation.create(observationValue))
