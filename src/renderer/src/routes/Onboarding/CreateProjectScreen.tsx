@@ -23,7 +23,6 @@ import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../constants'
 import { useActiveProjectIdStoreActions } from '../../contexts/ActiveProjectIdProvider'
 import { useSelectProjectConfigFile } from '../../hooks/mutations/file-system'
 import { useCreateProject } from '../../hooks/mutations/projects'
-import { useCreateTestObservations } from '../../hooks/mutations/useCreateTestObservations'
 import ProjectImage from '../../images/add_square.png'
 
 export const m = defineMessages({
@@ -127,7 +126,6 @@ function CreateProjectScreenComponent() {
 	const [fileName, setFileName] = useState<string | undefined>()
 
 	const createProjectMutation = useCreateProject()
-	const createTestDataMutation = useCreateTestObservations()
 
 	const selectConfigFile = useSelectProjectConfigFile()
 	const { setActiveProjectId } = useActiveProjectIdStoreActions()
@@ -170,18 +168,7 @@ function CreateProjectScreenComponent() {
 			{
 				onSuccess: (projectId) => {
 					setActiveProjectId(projectId)
-					createTestDataMutation.mutate(
-						{ projectId, count: 20 },
-						{
-							onSuccess: () => {
-								navigate({ to: '/main' })
-							},
-							onError: (err) => {
-								console.error('Error creating test data', err)
-								navigate({ to: '/main' })
-							},
-						},
-					)
+					navigate({ to: '/main' })
 				},
 				onError: (error) => {
 					console.error('Error saving project:', error)
