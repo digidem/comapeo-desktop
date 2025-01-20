@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent } from 'react'
+import { useSetOwnDeviceInfo } from '@comapeo/core-react'
 import { TextField } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
@@ -14,7 +15,6 @@ import {
 } from '../../components/Onboarding/onboardingLogic'
 import { Text } from '../../components/Text'
 import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../constants'
-import { useEditDeviceInfo } from '../../hooks/mutations/deviceInfo'
 import DeviceImage from '../../images/device.png'
 
 export const m = defineMessages({
@@ -91,7 +91,7 @@ export function DeviceNamingScreenComponent() {
 	const [deviceName, setDeviceName] = useState('')
 	const [inputError, setInputError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
-	const setDeviceNameMutation = useEditDeviceInfo()
+	const setDeviceInfoMutation = useSetOwnDeviceInfo()
 
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value
@@ -112,15 +112,18 @@ export function DeviceNamingScreenComponent() {
 			setInputError(true)
 			return
 		}
-		setDeviceNameMutation.mutate(deviceName, {
-			onSuccess: () => {
-				navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
+		setDeviceInfoMutation.mutate(
+			{ deviceType: 'desktop', name: deviceName },
+			{
+				onSuccess: () => {
+					navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
+				},
+				onError: (error) => {
+					console.error('Error setting device name:', error)
+					setErrorMessage(formatMessage(m.errorSavingDeviceName))
+				},
 			},
-			onError: (error) => {
-				console.error('Error setting device name:', error)
-				setErrorMessage(formatMessage(m.errorSavingDeviceName))
-			},
-		})
+		)
 	}
 
 	const topMenu = (
@@ -183,9 +186,9 @@ export function DeviceNamingScreenComponent() {
 						maxWidth: 350,
 						padding: 12,
 					}}
-					disabled={setDeviceNameMutation.isPending || inputError}
+					disabled={setDeviceInfoMutation.status === 'pending' || inputError}
 				>
-					{setDeviceNameMutation.isPending
+					{setDeviceInfoMutation.status === 'pending'
 						? formatMessage(m.saving)
 						: formatMessage(m.addName)}
 				</Button>
