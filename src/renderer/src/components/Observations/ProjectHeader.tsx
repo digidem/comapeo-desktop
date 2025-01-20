@@ -7,14 +7,13 @@ const TitleRow = styled('div')({
 	display: 'flex',
 	flexDirection: 'row',
 	justifyContent: 'space-between',
-	margin: '20px 20px 0 20px',
+	padding: '0 20px',
 })
 
 const PencilImg = styled('img')({
 	width: 20,
 	height: 20,
 	cursor: 'pointer',
-	marginLeft: 10,
 })
 
 export function ProjectHeader({

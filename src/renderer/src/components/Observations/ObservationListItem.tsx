@@ -76,7 +76,7 @@ export function ObservationListItem({ observation, onClick }: Props) {
 					iconId={preset?.iconRef?.docId}
 					borderColor={preset?.color}
 					size="medium"
-				></PresetCircleIcon>
+				/>
 			)}
 		</Container>
 	)

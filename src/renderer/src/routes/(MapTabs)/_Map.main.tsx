@@ -115,6 +115,8 @@ export function MainScreen() {
 				display: 'flex',
 				flexDirection: 'column',
 				height: '100%',
+				gap: 18,
+				paddingTop: 20,
 			}}
 		>
 			<ProjectHeader projectName={projectName} onEdit={handleEditProjectName} />

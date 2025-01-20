@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_TEXT, VERY_LIGHT_GREY } from '../../colors'
+import { ALMOST_BLACK, BLUE_GREY, VERY_LIGHT_GREY } from '../../colors'
 import AddPersonIcon from '../../images/AddPerson.svg'
 import EmptyStateImage from '../../images/empty_state.png'
 import { Button } from '../Button'
@@ -28,8 +28,6 @@ const DividerLine = styled('div')({
 	width: '100%',
 	height: 1,
 	backgroundColor: VERY_LIGHT_GREY,
-	marginTop: 20,
-	marginBottom: 20,
 })
 
 const Circle = styled('div')({
@@ -53,6 +51,7 @@ const LowerContainer = styled('div')({
 	alignItems: 'center',
 	height: '75%',
 	justifyContent: 'center',
+	gap: 18,
 })
 
 type EmptyStateProps = {
@@ -68,12 +67,11 @@ export function EmptyState({ onInviteDevices }: EmptyStateProps) {
 				<Button
 					variant="outlined"
 					style={{
-						marginTop: 18,
 						borderColor: BLUE_GREY,
-						color: DARK_TEXT,
+						color: ALMOST_BLACK,
 					}}
 					onClick={() => onInviteDevices?.()}
-					startIcon={<AddPersonIcon color={DARK_TEXT} />}
+					startIcon={<AddPersonIcon color={ALMOST_BLACK} />}
 				>
 					{formatMessage(m.inviteDevices)}
 				</Button>
@@ -83,14 +81,7 @@ export function EmptyState({ onInviteDevices }: EmptyStateProps) {
 				<Circle>
 					<StyledImage src={EmptyStateImage} alt="Empty Observations List" />
 				</Circle>
-				<Text
-					kind="body"
-					style={{
-						marginTop: 18,
-					}}
-				>
-					{formatMessage(m.noObservationsFound)}
-				</Text>
+				<Text kind="body">{formatMessage(m.noObservationsFound)}</Text>
 			</LowerContainer>
 		</>
 	)

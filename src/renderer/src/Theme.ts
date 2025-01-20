@@ -1,11 +1,11 @@
 import { createTheme } from '@mui/material/styles'
 
 import {
+	ALMOST_BLACK,
 	COMAPEO_BLUE,
 	DARK_COMAPEO_BLUE,
 	DARK_GREY,
 	DARK_ORANGE,
-	DARK_TEXT,
 	GREEN,
 	LIGHT_COMAPEO_BLUE,
 	ORANGE,
@@ -13,29 +13,21 @@ import {
 	WHITE,
 } from './colors'
 
-const commonTextStyle = {
-	color: DARK_TEXT,
-}
-
 const theme = createTheme({
 	typography: {
 		fontFamily: 'Rubik, sans-serif',
 		fontSize: 12,
 		body1: {
 			fontSize: '1rem',
-			...commonTextStyle,
 		},
 		body2: {
 			fontSize: '0.875rem',
-			...commonTextStyle,
 		},
 		subtitle1: {
 			fontSize: '1.125rem',
-			...commonTextStyle,
 		},
 		subtitle2: {
 			fontSize: '1rem',
-			...commonTextStyle,
 		},
 		button: {
 			fontSize: '1rem',
@@ -44,22 +36,19 @@ const theme = createTheme({
 		},
 		caption: {
 			fontSize: '0.75rem',
-			...commonTextStyle,
 		},
 		h1: {
 			fontSize: '2rem',
 			fontWeight: 700,
-			...commonTextStyle,
 		},
 		h2: {
 			fontSize: '1.5rem',
 			fontWeight: 600,
-			...commonTextStyle,
 		},
 	},
 	palette: {
 		text: {
-			primary: DARK_TEXT,
+			primary: ALMOST_BLACK,
 			secondary: DARK_GREY,
 		},
 		primary: {

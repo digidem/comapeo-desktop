@@ -29,14 +29,12 @@ export const Button = ({
 	disabled,
 	className,
 	startIcon,
-	endIcon,
 	...props
 }: CustomButtonProps) => {
 	const propsBasedOnSize = size === 'fullWidth' ? { fullWidth: true } : { size }
 	return (
 		<MuiButton
 			startIcon={startIcon}
-			endIcon={endIcon}
 			className={className}
 			color={color}
 			variant={variant}

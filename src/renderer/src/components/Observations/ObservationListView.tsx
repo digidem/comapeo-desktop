@@ -2,7 +2,7 @@ import type { Observation, Track } from '@comapeo/schema'
 import { styled } from '@mui/material/styles'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { DARK_ORANGE, DARK_TEXT, VERY_LIGHT_GREY, WHITE } from '../../colors'
+import { ALMOST_BLACK, DARK_ORANGE, VERY_LIGHT_GREY, WHITE } from '../../colors'
 import AddPersonIcon from '../../images/AddPerson.svg'
 import LightningIcon from '../../images/Lightning.svg'
 import { Button } from '../Button'
@@ -86,11 +86,11 @@ export function ObservationListView({
 						variant="outlined"
 						style={{
 							borderColor: VERY_LIGHT_GREY,
-							color: DARK_TEXT,
+							color: ALMOST_BLACK,
 							minWidth: 170,
 						}}
 						startIcon={
-							<AddPersonIcon fill={DARK_TEXT} width={16} height={16} />
+							<AddPersonIcon fill={ALMOST_BLACK} width={16} height={16} />
 						}
 						onClick={onViewTeam}
 					>
