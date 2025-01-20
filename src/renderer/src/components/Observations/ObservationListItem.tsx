@@ -8,6 +8,7 @@ import { useObservationWithPreset } from '../../hooks/useObservationWithPreset'
 import { FormattedPresetName } from '../FormattedData'
 import { PresetCircleIcon } from '../PresetCircleIcon'
 import { Text } from '../Text'
+import { PhotoAttachmentThumbnail } from './PhotoAttachmentThumbnail'
 
 type Props = {
 	observation: Observation
@@ -33,11 +34,18 @@ const TextContainer = styled('div')({
 	flexDirection: 'column',
 })
 
-const PhotoContainer = styled('img')({
+const PhotoWrapper = styled('div')({
+	position: 'relative',
 	width: 48,
 	height: 48,
-	borderRadius: 6,
-	objectFit: 'cover',
+})
+
+const PresetOverlay = styled('div')({
+	position: 'absolute',
+	bottom: -4,
+	right: -4,
+	width: 24,
+	height: 24,
 })
 
 export function ObservationListItem({ observation, onClick }: Props) {
@@ -70,7 +78,22 @@ export function ObservationListItem({ observation, onClick }: Props) {
 				</Text>
 			</TextContainer>
 			{photoAttachment ? (
-				<PhotoContainer src="/path/to/mock/photo.jpg" alt="Observation photo" />
+				<PhotoWrapper>
+					<PhotoAttachmentThumbnail
+						projectId={projectId || ''}
+						attachment={photoAttachment}
+						width={48}
+						height={48}
+					/>
+					<PresetOverlay>
+						<PresetCircleIcon
+							projectId={projectId}
+							iconId={preset?.iconRef?.docId}
+							borderColor={preset?.color}
+							size="small"
+						/>
+					</PresetOverlay>
+				</PhotoWrapper>
 			) : (
 				<PresetCircleIcon
 					projectId={projectId}
