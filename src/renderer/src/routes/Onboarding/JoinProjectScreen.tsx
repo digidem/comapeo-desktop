@@ -62,7 +62,7 @@ function JoinProjectScreenComponent() {
 
 	const handleJoin = () => {
 		// TODO: Add logic to join project
-		navigate({ to: '/tab1' })
+		navigate({ to: '/main' })
 	}
 
 	const topMenu = (

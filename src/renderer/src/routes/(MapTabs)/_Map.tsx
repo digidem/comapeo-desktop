@@ -24,7 +24,7 @@ export function MapLayout() {
 				<Tabs />
 				<div
 					style={{
-						width: 300,
+						width: 380,
 						borderLeftColor: VERY_LIGHT_GREY,
 						borderLeftWidth: '1px',
 						borderLeftStyle: 'solid',

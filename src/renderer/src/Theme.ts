@@ -1,14 +1,24 @@
 import { createTheme } from '@mui/material/styles'
 
 import {
+	ALMOST_BLACK,
 	COMAPEO_BLUE,
+	DARKER_ORANGE,
 	DARK_COMAPEO_BLUE,
+	DARK_GREY,
 	DARK_ORANGE,
 	GREEN,
 	LIGHT_COMAPEO_BLUE,
 	ORANGE,
 	RED,
+	WHITE,
 } from './colors'
+
+declare module '@mui/material/Button' {
+	interface ButtonPropsVariantOverrides {
+		darkOrange: true
+	}
+}
 
 const theme = createTheme({
 	typography: {
@@ -44,6 +54,10 @@ const theme = createTheme({
 		},
 	},
 	palette: {
+		text: {
+			primary: ALMOST_BLACK,
+			secondary: DARK_GREY,
+		},
 		primary: {
 			main: COMAPEO_BLUE,
 			dark: DARK_COMAPEO_BLUE,
@@ -59,9 +73,24 @@ const theme = createTheme({
 		error: {
 			main: RED,
 		},
+		background: {
+			default: WHITE,
+		},
 	},
 	components: {
 		MuiButton: {
+			variants: [
+				{
+					props: { variant: 'darkOrange' },
+					style: {
+						backgroundColor: DARK_ORANGE,
+						color: WHITE,
+						'&:hover': {
+							backgroundColor: DARKER_ORANGE,
+						},
+					},
+				},
+			],
 			defaultProps: {
 				variant: 'contained',
 			},

@@ -30,7 +30,7 @@ function RouteComponent() {
 			return
 		}
 
-		navigate({ to: '/tab1' })
+		navigate({ to: '/main' })
 	})
 
 	return null

@@ -5,6 +5,27 @@
   "components.OnboardingTopMenu.step": {
     "message": "Step {number}"
   },
+  "emptyState.inviteDevices": {
+    "message": "Invite Devices"
+  },
+  "emptyState.noObservationsFound": {
+    "message": "No Observations Found"
+  },
+  "mapMain.errorLoading": {
+    "message": "Oops! Error loading data."
+  },
+  "mapMain.loading": {
+    "message": "Loading..."
+  },
+  "mapMain.unnamedProject": {
+    "message": "Unnamed Project"
+  },
+  "observationListView.button.exchange": {
+    "message": "View Exchange"
+  },
+  "observationListView.button.team": {
+    "message": "View Team"
+  },
   "screens.CreateJoinProjectScreen.askToJoin": {
     "message": "Ask a monitoring coordinator to join their Project."
   },
@@ -97,6 +118,13 @@
   },
   "screens.JoinProjectScreen.title": {
     "message": "Join"
+  },
+  "screens.Observation.ObservationView.observation": {
+    "description": "Default name of observation with no matching preset",
+    "message": "Observation"
+  },
+  "screens.ObservationList.TrackListItem.Track": {
+    "message": "Track"
   },
   "screens.OnboardingPrivacyPolicy.permissionsTitle": {
     "message": "Current Permissions"

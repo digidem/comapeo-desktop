@@ -47,7 +47,7 @@ export const Tabs = () => {
 			<MapTabStyled
 				data-testid="tab-observation"
 				icon={<PostAddIcon />}
-				value={'/tab1'}
+				value={'/main'}
 			/>
 			{/* This is needed to properly space the items. Originally used a div, but was causing console errors as the Parent component passes it props, which were invalid for non-tab components */}
 			<Tab disabled={true} sx={{ flex: 1 }} />

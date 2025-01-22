@@ -126,6 +126,7 @@ function CreateProjectScreenComponent() {
 	const [fileName, setFileName] = useState<string | undefined>()
 
 	const createProjectMutation = useCreateProject()
+
 	const selectConfigFile = useSelectProjectConfigFile()
 	const { setActiveProjectId } = useActiveProjectIdStoreActions()
 
@@ -167,7 +168,7 @@ function CreateProjectScreenComponent() {
 			{
 				onSuccess: (projectId) => {
 					setActiveProjectId(projectId)
-					navigate({ to: '/tab1' })
+					navigate({ to: '/main' })
 				},
 				onError: (error) => {
 					console.error('Error saving project:', error)
