@@ -35,10 +35,8 @@ const Step = styled('div')<{
 	active: boolean
 }>(({ active }) => ({
 	backgroundColor: active ? WHITE : 'transparent',
-	color: active ? BLACK : BLUE_GREY,
 	padding: '12px 32px',
 	borderRadius: 20,
-	fontWeight: active ? 'bold' : 'normal',
 	whiteSpace: 'nowrap',
 	cursor: 'default',
 }))
@@ -93,7 +91,11 @@ export function OnboardingTopMenu({
 				{[1, 2, 3].map((step) => (
 					<StepsContainer key={step}>
 						<Step active={currentStep === step}>
-							<Text kind="body" bold={currentStep === step}>
+							<Text
+								kind="body"
+								bold={currentStep === step}
+								style={{ color: currentStep !== step ? BLUE_GREY : BLACK }}
+							>
 								{formatMessage(m.step, { number: step })}
 							</Text>
 						</Step>

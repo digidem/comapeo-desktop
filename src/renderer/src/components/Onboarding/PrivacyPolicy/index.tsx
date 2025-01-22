@@ -2,7 +2,13 @@ import React from 'react'
 import { styled } from '@mui/material/styles'
 import { useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY, VERY_LIGHT_GREY, WHITE } from '../../../colors'
+import {
+	BLUE_GREY,
+	DARK_BLUE,
+	DARK_GREY,
+	VERY_LIGHT_GREY,
+	WHITE,
+} from '../../../colors'
 import BarChart from '../../../images/BarChart.svg'
 import BustInSilhouette from '../../../images/BustInSilhouette.svg'
 import Wrench from '../../../images/Wrench.svg'
@@ -36,6 +42,7 @@ const Subheader = styled(Text)({
 	fontSize: 24,
 	fontWeight: 'bold',
 	marginBottom: 12,
+	color: DARK_BLUE,
 })
 const ContentBox = styled('div')({
 	width: '70%',
