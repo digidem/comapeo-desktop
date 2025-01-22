@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK, DARK_GREY, WHITE } from '../../colors'
+import { ALMOST_BLACK, DARK_GREY, WHITE } from '../../colors'
 import { Button } from '../../components/Button'
 import { OnboardingScreenLayout } from '../../components/Onboarding/OnboardingScreenLayout'
 import { OnboardingTopMenu } from '../../components/Onboarding/OnboardingTopMenu'
@@ -117,7 +117,7 @@ export function DataPrivacyComponent() {
 					onClick={() => navigate({ to: '/Onboarding/PrivacyPolicyScreen' })}
 					variant="outlined"
 					style={{
-						color: BLACK,
+						color: ALMOST_BLACK,
 						backgroundColor: WHITE,
 						width: '100%',
 					}}

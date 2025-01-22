@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK, RED, WHITE } from '../../colors'
+import { ALMOST_BLACK, RED, WHITE } from '../../colors'
 import { Button } from '../../components/Button'
 import { OnboardingScreenLayout } from '../../components/Onboarding/OnboardingScreenLayout'
 import { OnboardingTopMenu } from '../../components/Onboarding/OnboardingTopMenu'
@@ -79,7 +79,7 @@ const CharacterCount = styled(Text, {
 	shouldForwardProp: (prop) => prop !== 'error',
 })<{ error: boolean }>(({ error }) => ({
 	marginTop: 12,
-	color: error ? RED : BLACK,
+	color: error ? RED : ALMOST_BLACK,
 	width: '100%',
 	maxWidth: 400,
 	textAlign: 'right',
