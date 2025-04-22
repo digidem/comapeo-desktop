@@ -1,18 +1,8 @@
-import {
-	array,
-	object,
-	optional,
-	parse,
-	string,
-	undefined,
-	union,
-} from 'valibot'
+import * as v from 'valibot'
 
-const FilesSelectParamsSchema = union([
-	object({
-		extensionFilters: optional(array(string())),
-	}),
-	undefined(),
+const FilesSelectParamsSchema = v.union([
+	v.object({ extensionFilters: v.optional(v.array(v.string())) }),
+	v.undefined(),
 ])
 
 export const APP_IPC_EVENT_TO_PARAMS_PARSER = /** @type {const} */ ({
@@ -22,7 +12,7 @@ export const APP_IPC_EVENT_TO_PARAMS_PARSER = /** @type {const} */ ({
 	 * @returns {import('valibot').InferOutput<typeof FilesSelectParamsSchema>}
 	 */
 	'files:select': (value) => {
-		return parse(FilesSelectParamsSchema, value)
+		return v.parse(FilesSelectParamsSchema, value)
 	},
 })
 
