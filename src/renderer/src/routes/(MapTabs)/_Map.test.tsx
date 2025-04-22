@@ -34,10 +34,7 @@ const routeTree = rootRoute.addChildren([mapRoute.addChildren([catchAllRoute])])
 
 const router = createRouter({ routeTree })
 test('clicking tabs navigate to correct tab', () => {
-	vi.mock('../../components/Map', () => ({
-		Map: () => <div>Mocked Map</div>,
-	}))
-	// @ts-expect-error - typings
+	vi.mock('../../components/Map', () => ({ Map: () => <div>Mocked Map</div> }))
 	render(<RouterProvider router={router} />, { wrapper: Wrapper })
 	const settingsButton = screen.getByText('Settings')
 	settingsButton.click()
