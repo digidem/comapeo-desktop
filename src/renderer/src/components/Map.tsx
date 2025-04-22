@@ -1,4 +1,4 @@
-import { Map as ReactMapLibre } from '@vis.gl/react-maplibre'
+import { Map as ReactMapLibre } from 'react-map-gl/maplibre'
 
 import 'maplibre-gl/dist/maplibre-gl.css'
 
@@ -7,11 +7,7 @@ export function Map() {
 
 	return (
 		<ReactMapLibre
-			initialViewState={{
-				longitude: center[0],
-				latitude: center[1],
-				zoom: 6,
-			}}
+			initialViewState={{ longitude: center[0], latitude: center[1], zoom: 6 }}
 			dragPan={true}
 			scrollZoom={true}
 			doubleClickZoom={true}
