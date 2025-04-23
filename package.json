@@ -39,6 +39,7 @@
 		"lint:eslint": "eslint --cache .",
 		"lint:format": "prettier --cache --check .",
 		"lint": "npm-run-all --print-label --parallel --aggregate-output lint:*",
+		"types:root": "tsc -p tsconfig.json",
 		"types:main": "tsc -p src/main/tsconfig.json",
 		"types:services": "tsc -p src/services/tsconfig.json",
 		"types:preload": "tsc -p src/preload/tsconfig.json",

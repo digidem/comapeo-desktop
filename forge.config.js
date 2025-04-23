@@ -240,12 +240,9 @@ export default {
 		new MakerSquirrel({
 			setupIcon: './assets/icon.ico',
 		}),
-		new MakerDMG(
-			// @ts-expect-error Incorrect TS typings (https://github.com/electron/forge/issues/3712)
-			{
-				icon: './assets/icon.icns',
-			},
-		),
+		new MakerDMG({
+			icon: './assets/icon.icns',
+		}),
 		new MakerZIP({}, ['darwin']),
 		new MakerDeb(
 			{
