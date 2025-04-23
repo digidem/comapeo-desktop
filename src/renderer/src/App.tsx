@@ -1,7 +1,11 @@
 import { ClientApiProvider } from '@comapeo/core-react'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
+import {
+	RouterProvider,
+	createHashHistory,
+	createRouter,
+} from '@tanstack/react-router'
 
 import { theme } from './Theme'
 import { initComapeoClient } from './comapeo-client'
@@ -14,7 +18,9 @@ import { routeTree } from './routeTree.gen'
 
 const queryClient = new QueryClient()
 const clientApi = initComapeoClient()
-const router = createRouter({ routeTree })
+
+const hashHistory = createHashHistory()
+const router = createRouter({ routeTree, history: hashHistory })
 
 declare module '@tanstack/react-router' {
 	interface Register {
