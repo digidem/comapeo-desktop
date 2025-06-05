@@ -99,7 +99,7 @@
 		"@types/react": "18.3.20",
 		"@types/react-dom": "18.3.6",
 		"@types/sodium-native": "2.3.9",
-		"@vitejs/plugin-react": "4.4.1",
+		"@vitejs/plugin-react": "4.5.1",
 		"electron": "33.2.0",
 		"eslint": "9.28.0",
 		"globals": "16.2.0",
@@ -117,9 +117,9 @@
 		"react-map-gl": "8.0.4",
 		"typescript": "5.8.3",
 		"typescript-eslint": "8.33.1",
-		"vite": "6.3.2",
+		"vite": "6.3.5",
 		"vite-plugin-svgr": "4.3.0",
-		"vitest": "3.1.2",
+		"vitest": "3.2.2",
 		"zustand": "5.0.3"
 	},
 	"overrides": {
