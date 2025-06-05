@@ -120,7 +120,7 @@
 		"vite": "6.3.5",
 		"vite-plugin-svgr": "4.3.0",
 		"vitest": "3.2.2",
-		"zustand": "5.0.3"
+		"zustand": "5.0.5"
 	},
 	"overrides": {
 		"better-sqlite3": "11.5.0"
