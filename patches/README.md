@@ -5,13 +5,13 @@ fixes.
 
 ## @comapeo/core
 
-### [Do not watch fallback map patch when setting up SMP server plugin](./@comapeo+core+2.3.0+001+fix-smp-fallback-map-setup.patch)
+### [Do not watch fallback map patch when setting up SMP server plugin](./@comapeo+core+3.2.0+001+fix-smp-fallback-map-setup.patch)
 
 By default, core sets up a file watcher for the `fallbackMapPath` option that's provided when instantiating `MapeoManager`. This does not work when packaging the app as an ASAR file (via Electron Forge) because watching a file within the ASAR directory is not possible. Instead, we change the setup so that it does not try to watch the file and instead make the assumption that the file always exists on instantiation, which is generally the case in CoMapeo Desktop (for now).
 
 ## @comapeo/ipc
 
-### [Change imports to avoid calling unavailable code](./@comapeo+ipc+2.1.0+001+fix-client-server-import.patch)
+### [Change imports to avoid calling unavailable code](./@comapeo+ipc+3.0.0+001+fix-client-server-import.patch)
 
 There was an error while running app because of exports in `rpc-reflector` package. To remove this patch, `rpc-reflector` would need to be updated not to use `encode-decode.js` file which indirect usage results in errors.
 

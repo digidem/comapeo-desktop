@@ -1,8 +1,8 @@
 diff --git a/node_modules/@comapeo/core/src/fastify-plugins/maps.js b/node_modules/@comapeo/core/src/fastify-plugins/maps.js
-index d3df66e..b53baad 100644
+index 6009b6c..855dee9 100644
 --- a/node_modules/@comapeo/core/src/fastify-plugins/maps.js
 +++ b/node_modules/@comapeo/core/src/fastify-plugins/maps.js
-@@ -86,13 +86,14 @@ export async function plugin(fastify, opts) {
+@@ -87,13 +87,14 @@ export async function plugin(fastify, opts) {
      })
    }
  
@@ -11,7 +11,7 @@ index d3df66e..b53baad 100644
  
    fastify.addHook('onClose', () => fallbackMapReader.close().catch(noop))
  
-   fastify.register(SMPServerPlugin, {
+   fastify.register(createServer, {
      prefix: FALLBACK_MAP_PREFIX,
 -    reader: fallbackMapReader,
 +    // reader: fallbackMapReader,
