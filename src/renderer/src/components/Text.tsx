@@ -4,13 +4,13 @@ import {
 	type PropsWithChildren,
 } from 'react'
 import Typography from '@mui/material/Typography'
-import { type Variant } from '@mui/material/styles/createTypography'
+import { type TypographyVariant } from '@mui/material/styles'
 
 type Kind = 'title' | 'subtitle' | 'body' | 'caption'
 
 type TextColor = 'primary' | 'secondary' | 'disabled'
 
-const kindToVariant: { [k in Kind]: Variant } = {
+const kindToVariant: { [k in Kind]: TypographyVariant } = {
 	title: 'h1',
 	subtitle: 'subtitle1',
 	body: 'body1',

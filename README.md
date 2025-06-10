@@ -4,6 +4,10 @@ Go to the [Development](./docs/DEVELOPMENT.md) docs to learn about how the proje
 
 ## Quick Start
 
+Make sure you have the preferred versions of tooling installed:
+
+- [`NodeJS`](https://nodejs.org): [22.14.0](./.nvmrc)
+
 1. Clone the repo:
 
    ```sh

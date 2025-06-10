@@ -1,7 +1,7 @@
 import {
 	createContext,
+	use,
 	useCallback,
-	useContext,
 	useState,
 	type PropsWithChildren,
 } from 'react'
@@ -29,13 +29,11 @@ export function IntlProvider({ children }: PropsWithChildren) {
 			locale={locale}
 			defaultLocale="en"
 		>
-			<LocaleContext.Provider value={updateLocale}>
-				{children}
-			</LocaleContext.Provider>
+			<LocaleContext value={updateLocale}>{children}</LocaleContext>
 		</ReactIntlProvider>
 	)
 }
 
 export function useLocaleUpdater() {
-	return useContext(LocaleContext)
+	return use(LocaleContext)
 }
