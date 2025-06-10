@@ -14,8 +14,6 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    strategy:
-      fail-fast: false
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
@@ -31,8 +29,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    strategy:
-      fail-fast: false
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
