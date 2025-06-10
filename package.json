@@ -100,7 +100,7 @@
 		"@types/react-dom": "19.1.6",
 		"@types/sodium-native": "2.3.9",
 		"@vitejs/plugin-react": "4.5.2",
-		"electron": "33.2.0",
+		"electron": "36.4.0",
 		"eslint": "9.28.0",
 		"globals": "16.2.0",
 		"husky": "9.1.7",
