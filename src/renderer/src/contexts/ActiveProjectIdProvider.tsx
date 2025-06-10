@@ -26,9 +26,7 @@ export const ActiveProjectIdProvider = ({
 	store,
 }: ActiveProjectIdProviderProps) => {
 	return (
-		<ActiveProjectIdContext.Provider value={store}>
-			{children}
-		</ActiveProjectIdContext.Provider>
+		<ActiveProjectIdContext value={store}>{children}</ActiveProjectIdContext>
 	)
 }
 

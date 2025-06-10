@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { use } from 'react'
 import { useStore, type StoreApi } from 'zustand'
 
 export function createHooks<TStoreState, TStoreActions>(
@@ -8,7 +8,7 @@ export function createHooks<TStoreState, TStoreActions>(
 	} | null>,
 ) {
 	function useContextValue() {
-		const value = useContext(context)
+		const value = use(context)
 		if (!value) {
 			throw new Error('Must set up the provider first')
 		}
