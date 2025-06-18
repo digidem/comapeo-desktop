@@ -1,18 +1,27 @@
-import { styled } from '@mui/material/styles'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
+import Grid from '@mui/material/Grid'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+import { alpha, useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { CORNFLOWER_BLUE, DARK_COMAPEO_BLUE, ORANGE, WHITE } from '../../colors'
-import { Button } from '../../components/Button'
-import { Text } from '../../components/Text'
-import TopoBackground from '../../images/TopoLogo.svg'
-import Calling from '../../images/calling.png'
-import LockedWithKey from '../../images/closed_lock_with_key.png'
-import RaisedFistMediumSkinTone from '../../images/raised_fist_medium_skin_tone.png'
-import WorldMap from '../../images/world_map.png'
+import { BLACK, BLUE_GREY, DARK_COMAPEO_BLUE } from '../../colors'
+import { ButtonLink } from '../../components/button-link'
+// TODO: Remove `?url` after getting rid of vite-plugin-svgr
+import TOPO_IMAGE_URL from '../../images/TopoLogo.svg?url'
+import LOCK_IMAGE_URL from '../../images/closed_lock_with_key.png'
+import RAISED_FIST_IMAGE_URL from '../../images/raised_fist_medium_skin_tone.png'
+import RAISED_HAND_IMAGE_URL from '../../images/raised_hand_medium_skin_tone.png'
+import WORLD_MAP_IMAGE_URL from '../../images/world_map.png'
 
 export const Route = createFileRoute('/Onboarding/')({
-	component: OnboardingComponent,
+	component: Onboarding,
 })
 
 const m = defineMessages({
@@ -20,9 +29,10 @@ const m = defineMessages({
 		id: 'screens.IntroToCoMapeo.getStarted',
 		defaultMessage: 'Get Started',
 	},
-	mapWorldTogether: {
-		id: 'screens.IntroToCoMapeo.viewAndManage',
-		defaultMessage: 'View and manage observations in CoMapeo Mobile Projects.',
+	appDescription: {
+		id: 'screens.IntroToCoMapeo.appDescription',
+		defaultMessage:
+			'View and manage observations collected with CoMapeo Mobile.',
 	},
 	mapAnywhere: {
 		id: 'screens.IntroToCoMapeo.mapAnywhere',
@@ -30,7 +40,7 @@ const m = defineMessages({
 	},
 	collaborate: {
 		id: 'screens.IntroToCoMapeo.collaborate',
-		defaultMessage: 'Collaborate with others',
+		defaultMessage: 'Collaborate on projects',
 	},
 	ownData: {
 		id: 'screens.IntroToCoMapeo.ownData',
@@ -41,194 +51,120 @@ const m = defineMessages({
 		defaultMessage:
 			'Designed with and for Indigenous peoples & frontline communities',
 	},
-})
-
-const Container = styled('div')({
-	position: 'relative',
-	backgroundColor: DARK_COMAPEO_BLUE,
-	width: '100%',
-	height: '100vh',
-	overflow: 'auto',
-	display: 'flex',
-	flexDirection: 'column',
-	alignItems: 'center',
-	justifyContent: 'center',
-})
-
-const Background = styled(TopoBackground)({
-	position: 'absolute',
-	width: '100%',
-	height: '100%',
-	opacity: 0.5,
-	zIndex: 0,
-})
-
-const ContentWrapper = styled('div')({
-	display: 'grid',
-	gridTemplateColumns: '1fr 2fr 2fr 1fr',
-	alignItems: 'center',
-	width: '100%',
-	height: '60%',
-	zIndex: 1,
-	justifyItems: 'center',
-
-	'@media (max-width: 800px)': {
-		height: 'auto',
-		gridTemplateColumns: '1fr',
-		rowGap: 12,
-		padding: '32px 16px',
+	comapeoDesktop: {
+		id: 'screens.IntroToCoMapeo.comapeoDesktop',
+		defaultMessage: '<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>',
 	},
 })
 
-const LeftSection = styled('div')({
-	gridColumn: 2,
-	display: 'flex',
-	flexDirection: 'column',
-	justifyContent: 'center',
-	'@media (max-width: 800px)': {
-		gridColumn: '1',
-		alignItems: 'center',
-		textAlign: 'center',
-	},
-})
+const LIST_BACKGROUND_COLOR = alpha(BLACK, 0.4)
 
-const RightSection = styled('div')({
-	gridColumn: 3,
-	maxWidth: 400,
-	paddingLeft: 20,
-	display: 'flex',
-	flexDirection: 'column',
-	justifyContent: 'center',
-	'@media (max-width: 800px)': {
-		gridColumn: '1',
-		margin: '0 auto',
-	},
-})
+function Onboarding() {
+	const { formatMessage: t } = useIntl()
+	const theme = useTheme()
 
-const LogoSection = styled('div')({
-	display: 'flex',
-	flexDirection: 'column',
-})
-
-const LogoText = styled(Text)({
-	fontSize: 64,
-	'@media (max-width: 800px)': {
-		fontSize: 48,
-	},
-})
-
-const Co = styled('span')({
-	color: ORANGE,
-	fontWeight: 500,
-})
-
-const Mapeo = styled('span')({
-	color: WHITE,
-	fontWeight: 700,
-})
-
-const DesktopText = styled(Text)(() => ({
-	color: CORNFLOWER_BLUE,
-	fontSize: 64,
-	fontWeight: 500,
-	marginTop: -12,
-	'@media (max-width: 800px)': {
-		fontSize: 48,
-		marginTop: -12,
-	},
-}))
-
-const MainText = styled(Text)(() => ({
-	color: WHITE,
-	fontSize: 16,
-	fontWeight: 500,
-	marginTop: 12,
-	maxWidth: 300,
-	'@media (max-width: 800px)': {
-		fontSize: 14,
-		marginTop: 12,
-		textAlign: 'center',
-	},
-}))
-
-const TextBox = styled('div')({
-	width: '100%',
-	maxWidth: 300,
-	padding: 20,
-	border: `1px solid ${WHITE}`,
-	borderRadius: 4,
-	backgroundColor: 'rgba(0, 0, 0, 0.5)',
-	display: 'flex',
-	flexDirection: 'column',
-	gap: 12,
-	'@media (max-width: 800px)': {
-		maxWidth: '100%',
-	},
-})
-
-const TextItem = styled('div')({
-	display: 'flex',
-	alignItems: 'center',
-	gap: 12,
-})
-
-const StyledText = styled(Text)(({ theme }) => ({
-	color: WHITE,
-	fontSize: theme.typography.caption.fontSize,
-	'@media (max-width: 800px)': {
-		fontSize: '0.75rem',
-	},
-}))
-
-export function OnboardingComponent() {
-	const navigate = useNavigate()
-	const { formatMessage } = useIntl()
+	const viewportIsNarrow = useMediaQuery(theme.breakpoints.down('md'))
 
 	return (
-		<Container>
-			<Background />
-			<ContentWrapper>
-				<LeftSection>
-					<LogoSection>
-						<LogoText>
-							<Co>Co</Co>
-							<Mapeo>Mapeo</Mapeo>
-						</LogoText>
-						<DesktopText>Desktop</DesktopText>
-					</LogoSection>
-					<MainText>{formatMessage(m.mapWorldTogether)}</MainText>
-				</LeftSection>
+		<Box
+			bgcolor={DARK_COMAPEO_BLUE}
+			flexDirection="column"
+			minHeight="100vh"
+			display="flex"
+			justifyContent="center"
+			alignItems="center"
+			padding={5}
+			sx={{
+				backgroundImage: `url("${TOPO_IMAGE_URL}")`,
+				backgroundRepeat: 'no-repeat',
+				backgroundPosition: 'center',
+				backgroundSize: 'contain',
+			}}
+		>
+			<Container maxWidth="lg">
+				<Stack useFlexGap display="flex" alignItems="center" gap={25}>
+					<Grid container spacing={10} justifyContent="center">
+						<Grid
+							container
+							alignItems="center"
+							size={viewportIsNarrow ? 8 : 5}
+							textAlign={viewportIsNarrow ? 'center' : undefined}
+						>
+							<Stack useFlexGap spacing={5}>
+								<Typography variant="bannerTitle" color="textInverted">
+									{t(m.comapeoDesktop)}
+								</Typography>
+								<Typography variant="bannerSubtitle" color="textInverted">
+									{t(m.appDescription)}
+								</Typography>
+							</Stack>
+						</Grid>
+						<Grid size={viewportIsNarrow ? 8 : 5} container>
+							<Stack
+								useFlexGap
+								display="flex"
+								justifyContent="center"
+								paddingX={5}
+								paddingY={6}
+								borderRadius={2}
+								bgcolor={LIST_BACKGROUND_COLOR}
+								borderColor={BLUE_GREY}
+								sx={{
+									borderWidth: 1,
+									borderStyle: 'solid',
+								}}
+							>
+								<List>
+									<ListItem sx={{ gap: 5 }}>
+										<img src={WORLD_MAP_IMAGE_URL} height={30} width={30} />
+										<ListItemText
+											slotProps={{ primary: { color: 'textInverted' } }}
+										>
+											{t(m.mapAnywhere)}
+										</ListItemText>
+									</ListItem>
+									<ListItem sx={{ gap: 5 }}>
+										{/* TODO: Replace with correct image */}
+										<img src={RAISED_HAND_IMAGE_URL} height={30} width={30} />
+										<ListItemText
+											slotProps={{ primary: { color: 'textInverted' } }}
+										>
+											{t(m.collaborate)}
+										</ListItemText>
+									</ListItem>
+									<ListItem sx={{ gap: 5 }}>
+										<img src={LOCK_IMAGE_URL} height={30} width={30} />
+										<ListItemText
+											slotProps={{ primary: { color: 'textInverted' } }}
+										>
+											{t(m.ownData)}
+										</ListItemText>
+									</ListItem>
+									<ListItem sx={{ gap: 5 }}>
+										<img src={RAISED_FIST_IMAGE_URL} height={30} width={30} />
 
-				<RightSection>
-					<TextBox>
-						<TextItem>
-							<img src={WorldMap} alt="World Map" width={24} height={24} />
-							<StyledText>{formatMessage(m.mapAnywhere)}</StyledText>
-						</TextItem>
-						<TextItem>
-							<img src={Calling} width={24} height={24} />
-							<StyledText>{formatMessage(m.collaborate)}</StyledText>
-						</TextItem>
-						<TextItem>
-							<img src={LockedWithKey} width={24} height={24} />
-							<StyledText>{formatMessage(m.ownData)}</StyledText>
-						</TextItem>
-						<TextItem>
-							<img src={RaisedFistMediumSkinTone} width={24} height={24} />
-							<StyledText>{formatMessage(m.designedFor)}</StyledText>
-						</TextItem>
-					</TextBox>
-				</RightSection>
-			</ContentWrapper>
+										<ListItemText
+											slotProps={{ primary: { color: 'textInverted' } }}
+										>
+											{t(m.designedFor)}
+										</ListItemText>
+									</ListItem>
+								</List>
+							</Stack>
+						</Grid>
+					</Grid>
 
-			<Button
-				onClick={() => navigate({ to: '/Onboarding/DataPrivacy' })}
-				style={{ width: '300px' }}
-			>
-				{formatMessage(m.getStarted)}
-			</Button>
-		</Container>
+					<ButtonLink
+						to="/Onboarding/DataPrivacy"
+						fullWidth
+						size="large"
+						variant="contained"
+						sx={{ maxWidth: 400 }}
+					>
+						{t(m.getStarted)}
+					</ButtonLink>
+				</Stack>
+			</Container>
+		</Box>
 	)
 }
-
-export default OnboardingComponent

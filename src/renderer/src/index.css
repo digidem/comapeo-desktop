@@ -1,11 +1,11 @@
-html,
-body,
-#app {
+@import '@fontsource-variable/rubik';
+
+html {
 	font-family:
 		-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
 		sans-serif;
-	margin: auto;
-	height: 100%;
-	margin: 0;
-	padding: 0;
+}
+
+body {
+	min-height: 100vh;
 }

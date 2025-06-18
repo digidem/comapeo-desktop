@@ -89,8 +89,14 @@
   "screens.DeviceNamingScreen.title": {
     "message": "Name Your Device"
   },
+  "screens.IntroToCoMapeo.appDescription": {
+    "message": "View and manage observations collected with CoMapeo Mobile."
+  },
   "screens.IntroToCoMapeo.collaborate": {
-    "message": "Collaborate with others"
+    "message": "Collaborate on projects"
+  },
+  "screens.IntroToCoMapeo.comapeoDesktop": {
+    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
   },
   "screens.IntroToCoMapeo.designedFor": {
     "message": "Designed with and for Indigenous peoples & frontline communities"
@@ -103,9 +109,6 @@
   },
   "screens.IntroToCoMapeo.ownData": {
     "message": "Own and control your data"
-  },
-  "screens.IntroToCoMapeo.viewAndManage": {
-    "message": "View and manage observations in CoMapeo Mobile Projects."
   },
   "screens.JoinProjectScreen.declineInvite": {
     "message": "Decline Invite"

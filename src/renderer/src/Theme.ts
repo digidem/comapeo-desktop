@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles'
+import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 
 import {
 	ALMOST_BLACK,
@@ -20,10 +20,35 @@ declare module '@mui/material/Button' {
 	}
 }
 
-const theme = createTheme({
+declare module '@mui/material/styles' {
+	interface TypographyVariants {
+		bannerTitle: React.CSSProperties
+		bannerSubtitle: React.CSSProperties
+	}
+
+	interface TypographyVariantsOptions {
+		bannerTitle?: React.CSSProperties
+		bannerSubtitle?: React.CSSProperties
+	}
+
+	interface TypeText {
+		inverted: string
+	}
+}
+
+declare module '@mui/material/Typography' {
+	interface TypographyPropsVariantOverrides {
+		bannerTitle: true
+		bannerSubtitle: true
+	}
+}
+
+const baseTheme = createTheme({
+	spacing: 4,
 	typography: {
-		fontFamily: 'Rubik, sans-serif',
-		fontSize: 12,
+		fontFamily: `'Rubik Variable', sans-serif`,
+		fontWeightBold: 500,
+		fontSize: 16,
 		body1: {
 			fontSize: '1rem',
 		},
@@ -38,7 +63,6 @@ const theme = createTheme({
 		},
 		button: {
 			fontSize: '1rem',
-			fontWeight: 700,
 			textTransform: 'none',
 		},
 		caption: {
@@ -52,11 +76,21 @@ const theme = createTheme({
 			fontSize: '1.5rem',
 			fontWeight: 600,
 		},
+		bannerTitle: {
+			fontSize: '6rem',
+			lineHeight: 1,
+		},
+		bannerSubtitle: {
+			fontSize: '1.5rem',
+			fontWeight: 500,
+			lineHeight: 1.25,
+		},
 	},
 	palette: {
 		text: {
 			primary: ALMOST_BLACK,
 			secondary: DARK_GREY,
+			inverted: WHITE,
 		},
 		primary: {
 			main: COMAPEO_BLUE,
@@ -95,7 +129,7 @@ const theme = createTheme({
 				variant: 'contained',
 			},
 			styleOverrides: {
-				root: ({ ownerState }) => ({
+				root: ({ ownerState, theme }) => ({
 					...(ownerState.variant === 'outlined' && {
 						borderColor: '#CCCCD6',
 						borderWidth: 1,
@@ -106,16 +140,30 @@ const theme = createTheme({
 							borderWidth: 1,
 						},
 					}),
-					borderRadius: 32,
-					textTransform: 'none',
-					fontSize: '1rem',
-					fontWeight: 400,
-					paddingVertical: 12,
+					borderRadius: theme.spacing(8),
 				}),
 			},
 		},
 	},
-	spacing: 1,
+})
+
+const theme = responsiveFontSizes(baseTheme, {
+	breakpoints: ['xs', 'sm', 'md', 'lg', 'xl'],
+	variants: [
+		'bannerSubtitle',
+		'bannerTitle',
+		'body1',
+		'body2',
+		'button',
+		'caption',
+		'h1',
+		'h2',
+		'h3',
+		'h4',
+		'h5',
+		'subtitle1',
+		'subtitle2',
+	],
 })
 
 export { theme }

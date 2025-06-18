@@ -180,8 +180,10 @@ function setupIpc({ intl }) {
  */
 function initMainWindow({ appMode, services }) {
 	const mainWindow = new BrowserWindow({
-		height: 600,
-		width: 800,
+		width: 1200,
+		minWidth: 800,
+		height: 800,
+		minHeight: 500,
 		show: false,
 		backgroundColor: '#050F77',
 		webPreferences: { preload: MAIN_WINDOW_PRELOAD_PATH },
