@@ -3,11 +3,27 @@ import {
 	use,
 	useCallback,
 	useState,
+	type ComponentProps,
 	type PropsWithChildren,
 } from 'react'
 import { IntlProvider as ReactIntlProvider } from 'react-intl'
 
 import en from '../../../../translations/renderer/en.json'
+import { CORNFLOWER_BLUE, ORANGE } from '../colors'
+
+const RICH_TEXT_MAPPINGS: ComponentProps<
+	typeof ReactIntlProvider
+>['defaultRichTextElements'] = {
+	b: (parts) => {
+		return <b>{parts}</b>
+	},
+	orange: (parts) => {
+		return <span style={{ color: ORANGE }}>{parts}</span>
+	},
+	blue: (parts) => {
+		return <span style={{ color: CORNFLOWER_BLUE }}>{parts}</span>
+	},
+}
 
 const messages = { en }
 
@@ -28,6 +44,7 @@ export function IntlProvider({ children }: PropsWithChildren) {
 			messages={messages[locale]}
 			locale={locale}
 			defaultLocale="en"
+			defaultRichTextElements={RICH_TEXT_MAPPINGS}
 		>
 			<LocaleContext value={updateLocale}>{children}</LocaleContext>
 		</ReactIntlProvider>

@@ -1,3 +1,4 @@
+import { StrictMode } from 'react'
 import { ClientApiProvider } from '@comapeo/core-react'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -28,21 +29,25 @@ declare module '@tanstack/react-router' {
 	}
 }
 
-const PersistedProjectIdStore = createActiveProjectIdStore({
+const persistedProjectIdStore = createActiveProjectIdStore({
 	persist: true,
 })
 
-export const App = () => (
-	<ThemeProvider theme={theme}>
-		<CssBaseline />
-		<IntlProvider>
-			<QueryClientProvider client={queryClient}>
-				<ClientApiProvider clientApi={clientApi}>
-					<ActiveProjectIdProvider store={PersistedProjectIdStore}>
-						<RouterProvider router={router} />
-					</ActiveProjectIdProvider>
-				</ClientApiProvider>
-			</QueryClientProvider>
-		</IntlProvider>
-	</ThemeProvider>
-)
+export function App() {
+	return (
+		<StrictMode>
+			<ThemeProvider theme={theme}>
+				<CssBaseline />
+				<IntlProvider>
+					<QueryClientProvider client={queryClient}>
+						<ClientApiProvider clientApi={clientApi}>
+							<ActiveProjectIdProvider store={persistedProjectIdStore}>
+								<RouterProvider router={router} />
+							</ActiveProjectIdProvider>
+						</ClientApiProvider>
+					</QueryClientProvider>
+				</IntlProvider>
+			</ThemeProvider>
+		</StrictMode>
+	)
+}
