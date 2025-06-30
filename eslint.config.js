@@ -2,6 +2,7 @@ import { fileURLToPath } from 'node:url'
 import react from '@eslint-react/eslint-plugin'
 import { includeIgnoreFile } from '@eslint/compat'
 import js from '@eslint/js'
+import pluginRouter from '@tanstack/eslint-plugin-router'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
@@ -50,9 +51,12 @@ export default tseslint.config(
 	},
 	// Renderer process
 	{
-		...react.configs['recommended-typescript'],
 		name: 'electron-renderer',
 		files: ['src/renderer/**/*'],
+		extends: [
+			react.configs['recommended-typescript'],
+			pluginRouter.configs['flat/recommended'],
+		],
 		languageOptions: {
 			globals: { ...globals.browser },
 			parser: tseslint.parser,
