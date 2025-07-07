@@ -78,7 +78,7 @@ function RouteComponent() {
 				component={Stack}
 				direction="column"
 				useFlexGap
-				gap={5}
+				gap={10}
 			>
 				<Box alignSelf="center">
 					<Icon
