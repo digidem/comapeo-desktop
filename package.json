@@ -90,7 +90,7 @@
 		"@mui/material": "7.2.0",
 		"@tanstack/eslint-plugin-router": "1.121.21",
 		"@tanstack/react-form": "1.14.1",
-		"@tanstack/react-query": "5.80.6",
+		"@tanstack/react-query": "5.81.5",
 		"@tanstack/react-router": "1.120.20",
 		"@tanstack/router-devtools": "1.120.20",
 		"@tanstack/router-plugin": "1.120.20",
