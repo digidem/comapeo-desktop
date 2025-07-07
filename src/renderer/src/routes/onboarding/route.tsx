@@ -185,13 +185,7 @@ function RouteComponent() {
 						/>
 
 						<StepIndicator
-							isActive={
-								// @ts-expect-error https://github.com/TanStack/router/issues/3780
-								currentPath === '/onboarding/project/' ||
-								currentPath === '/onboarding/project/create' ||
-								currentPath === '/onboarding/project/join/$inviteId/' ||
-								currentPath === '/onboarding/project/join/$inviteId/success'
-							}
+							isActive={currentPath.startsWith('/onboarding/project/')}
 							label={t(m.step, { value: 3 })}
 						/>
 					</Stack>
