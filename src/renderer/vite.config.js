@@ -38,6 +38,9 @@ export default defineConfig((configEnv) => {
 				routesDirectory: fileURLToPath(
 					new URL('./src/routes', import.meta.url),
 				),
+				generatedRouteTree: fileURLToPath(
+					new URL('./src/routeTree.gen.ts', import.meta.url),
+				),
 			}),
 			react(),
 			// TODO: `cwd` option is broken. should submit a fix at some point
