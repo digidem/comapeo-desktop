@@ -127,6 +127,6 @@
 		"zustand": "5.0.6"
 	},
 	"overrides": {
-		"better-sqlite3": "11.10.0"
+		"better-sqlite3": "12.2.0"
 	}
 }
