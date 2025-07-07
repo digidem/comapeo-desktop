@@ -2,7 +2,7 @@
 /// <reference types="vitest/config" />
 import * as path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { iconsSpritesheet } from 'vite-plugin-icons-spritesheet'
@@ -32,7 +32,13 @@ export default defineConfig((configEnv) => {
 			emptyOutDir: true,
 		},
 		plugins: [
-			TanStackRouterVite({ routeFileIgnorePattern: '\\.test\\.tsx?$' }),
+			// TanStackRouterVite({ routeFileIgnorePattern: '\\.test\\.tsx?$' }),
+			tanstackRouter({
+				routeFileIgnorePattern: '\\.test\\.tsx?$',
+				routesDirectory: fileURLToPath(
+					new URL('./src/routes', import.meta.url),
+				),
+			}),
 			react(),
 			// TODO: `cwd` option is broken. should submit a fix at some point
 			iconsSpritesheet({
