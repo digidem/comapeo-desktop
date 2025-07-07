@@ -88,6 +88,7 @@
 		"@ianvs/prettier-plugin-sort-imports": "4.4.2",
 		"@mui/icons-material": "7.2.0",
 		"@mui/material": "7.2.0",
+		"@tanstack/eslint-plugin-query": "5.81.2",
 		"@tanstack/eslint-plugin-router": "1.121.21",
 		"@tanstack/react-form": "1.14.1",
 		"@tanstack/react-query": "5.81.5",

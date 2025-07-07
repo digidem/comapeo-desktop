@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import react from '@eslint-react/eslint-plugin'
 import { includeIgnoreFile } from '@eslint/compat'
 import js from '@eslint/js'
+import pluginQuery from '@tanstack/eslint-plugin-query'
 import pluginRouter from '@tanstack/eslint-plugin-router'
 import * as pluginReactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'
@@ -73,6 +74,7 @@ export default tseslint.config(
 			react.configs['recommended-typescript'],
 			pluginRouter.configs['flat/recommended'],
 			pluginReactHooks.configs['recommended-latest'],
+			pluginQuery.configs['flat/recommended'],
 		],
 		rules: {
 			'react-hooks/exhaustive-deps': 'error',
