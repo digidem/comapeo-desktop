@@ -3,6 +3,7 @@ import react from '@eslint-react/eslint-plugin'
 import { includeIgnoreFile } from '@eslint/compat'
 import js from '@eslint/js'
 import pluginRouter from '@tanstack/eslint-plugin-router'
+import * as pluginReactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
@@ -56,7 +57,12 @@ export default tseslint.config(
 		extends: [
 			react.configs['recommended-typescript'],
 			pluginRouter.configs['flat/recommended'],
+			pluginReactHooks.configs['recommended-latest'],
 		],
+		rules: {
+			'react-hooks/exhaustive-deps': 'error',
+			'react-hooks/rules-of-hooks': 'error',
+		},
 		languageOptions: {
 			globals: { ...globals.browser },
 			parser: tseslint.parser,
