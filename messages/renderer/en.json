@@ -161,6 +161,45 @@
   "routes.onboarding.privacy-policy.whyIsThisDataCollectedDescription": {
     "message": "Crash data and app errors together with the device and app info provide Awana Digital with the information we need to fix errors and bugs in the app.<br></br><br></br>The performance data helps us improve the responsiveness of the app and identify errors.<br></br><br></br>The country where CoMapeo is being used and the language of the UI helps us understand minimal information about CoMapeo users: \"How many CoMapeo users are there in each country?\""
   },
+  "routes.onboarding.project.create.$projectId.notFound": {
+    "message": "Could not find project with ID {projectId}"
+  },
+  "routes.onboarding.project.create.$projectId.success.description": {
+    "message": "You created<br></br><b>{projectName}</b>"
+  },
+  "routes.onboarding.project.create.$projectId.success.goBack": {
+    "message": "Go back"
+  },
+  "routes.onboarding.project.create.$projectId.success.inviteCollaborators": {
+    "message": "Invite Collaborators"
+  },
+  "routes.onboarding.project.create.$projectId.success.title": {
+    "message": "Success!"
+  },
+  "routes.onboarding.project.create.$projectId.success.updateCategoriesSet": {
+    "message": "Start Using CoMapeo"
+  },
+  "routes.onboarding.project.create.index.characterCount": {
+    "message": "{count}/{max}"
+  },
+  "routes.onboarding.project.create.index.createProject": {
+    "message": "Create Project"
+  },
+  "routes.onboarding.project.create.index.description": {
+    "message": "Name your project."
+  },
+  "routes.onboarding.project.create.index.maxLengthError": {
+    "message": "Too long, try a shorter name."
+  },
+  "routes.onboarding.project.create.index.minLengthError": {
+    "message": "Enter a Project Name"
+  },
+  "routes.onboarding.project.create.index.projectName": {
+    "message": "Project Name"
+  },
+  "routes.onboarding.project.create.index.title": {
+    "message": "Create a Project"
+  },
   "routes.onboarding.project.createProject": {
     "message": "Create a Project"
   },
@@ -245,33 +284,6 @@
   },
   "screens.ObservationList.TrackListItem.Track": {
     "message": "Track"
-  },
-  "screens.ProjectCreationScreen.advancedProjectSettings": {
-    "message": "Advanced Project Settings"
-  },
-  "screens.ProjectCreationScreen.characterCount": {
-    "message": "{count}/{maxLength}"
-  },
-  "screens.ProjectCreationScreen.createProject": {
-    "message": "Create Project"
-  },
-  "screens.ProjectCreationScreen.enterNameLabel": {
-    "message": "Name your project"
-  },
-  "screens.ProjectCreationScreen.errorSavingProject": {
-    "message": "An error occurred while saving your project. Please try again."
-  },
-  "screens.ProjectCreationScreen.importConfig": {
-    "message": "Import Config"
-  },
-  "screens.ProjectCreationScreen.placeholder": {
-    "message": "Project Name"
-  },
-  "screens.ProjectCreationScreen.saving": {
-    "message": "Saving..."
-  },
-  "screens.ProjectCreationScreen.title": {
-    "message": "Create a Project"
   },
   "tabBar.label.about": {
     "message": "About"

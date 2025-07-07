@@ -11,6 +11,7 @@ export const iconNames = [
 	'openmoji-handshake-medium-skin-tone',
 	'openmoji-bust-in-silhouette',
 	'openmoji-bar-chart',
+	'material-symbols-new-window',
 	'material-symbols-encrypted',
 	'material-symbols-computer',
 	'material-person-add',

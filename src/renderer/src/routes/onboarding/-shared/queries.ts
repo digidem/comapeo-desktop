@@ -1,4 +1,8 @@
-import { useAcceptInvite, useRejectInvite } from '@comapeo/core-react'
+import {
+	useAcceptInvite,
+	useCreateProject,
+	useRejectInvite,
+} from '@comapeo/core-react'
 import { useMutation, type UseMutationOptions } from '@tanstack/react-query'
 
 export const ONBOARDING_ACCEPT_INVITE_MUTATION_KEY = [
@@ -19,7 +23,7 @@ export function useOnboardingAcceptInvite(
 	return useMutation({
 		...opts,
 		mutationKey: ONBOARDING_ACCEPT_INVITE_MUTATION_KEY,
-		mutationFn: async ({ inviteId }: { inviteId: string }) => {
+		mutationFn: async ({ inviteId }) => {
 			return mutateAsync({ inviteId })
 		},
 	})
@@ -33,8 +37,31 @@ export function useOnboardingRejectInvite(
 	return useMutation({
 		...opts,
 		mutationKey: ONBOARDING_REJECT_INVITE_MUTATION_KEY,
-		mutationFn: async ({ inviteId }: { inviteId: string }) => {
+		mutationFn: async ({ inviteId }) => {
 			return mutateAsync({ inviteId })
+		},
+	})
+}
+
+export const ONBOARDING_CREATE_PROJECT_MUTATION_KEY = [
+	'projects',
+	'create',
+] as const
+
+export function useOnboardingCreateProject(
+	opts?: UseMutationOptions<
+		string,
+		Error,
+		{ name?: string; configPath?: string }
+	>,
+) {
+	const { mutateAsync } = useCreateProject()
+
+	return useMutation({
+		...opts,
+		mutationKey: ONBOARDING_CREATE_PROJECT_MUTATION_KEY,
+		mutationFn: async ({ name, configPath }) => {
+			return mutateAsync({ name, configPath })
 		},
 	})
 }

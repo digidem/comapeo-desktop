@@ -18,6 +18,7 @@ import { COMAPEO_BLUE, DARK_COMAPEO_BLUE, WHITE } from '../../colors'
 import { Icon } from '../../components/icon'
 import {
 	ONBOARDING_ACCEPT_INVITE_MUTATION_KEY,
+	ONBOARDING_CREATE_PROJECT_MUTATION_KEY,
 	ONBOARDING_REJECT_INVITE_MUTATION_KEY,
 	useOnboardingRejectInvite,
 } from './-shared/queries'
@@ -60,9 +61,23 @@ function RouteComponent() {
 		},
 	})
 
-	const inviteResponsePending =
+	const createProjectStatus = useMutationState({
+		filters: {
+			mutationKey: ONBOARDING_CREATE_PROJECT_MUTATION_KEY,
+		},
+		select: (mutation) => {
+			return mutation.state.status
+		},
+	})
+
+	const importantMutationInProgress =
 		rejectInviteStatus.some((s) => s === 'pending') ||
-		acceptInviteStatus.some((s) => s === 'pending')
+		acceptInviteStatus.some((s) => s === 'pending') ||
+		createProjectStatus.some((s) => s === 'pending')
+
+	const shouldHideBackButton =
+		currentPath === '/onboarding/project/create/$projectId/success' ||
+		currentPath === '/onboarding/project/join/$inviteId/success'
 
 	return (
 		<Box bgcolor={DARK_COMAPEO_BLUE} padding={5} height="100vh">
@@ -79,9 +94,11 @@ function RouteComponent() {
 						<Button
 							variant="text"
 							startIcon={<Icon name="material-arrow-back" />}
-							aria-disabled={inviteResponsePending}
+							aria-disabled={
+								importantMutationInProgress || shouldHideBackButton
+							}
 							onClick={() => {
-								if (inviteResponsePending) {
+								if (importantMutationInProgress || shouldHideBackButton) {
 									return
 								}
 
@@ -131,7 +148,6 @@ function RouteComponent() {
 											break
 										}
 										case '/onboarding/project/join/$inviteId/':
-										case '/onboarding/project/join/$inviteId/success':
 										case '/onboarding/project/create': {
 											navigate({
 												to: '/onboarding/project',
@@ -147,7 +163,10 @@ function RouteComponent() {
 								}
 							}}
 							// TODO: Ideally update the theme appropriately instead
-							sx={{ color: WHITE }}
+							sx={{
+								color: WHITE,
+								visibility: shouldHideBackButton ? 'hidden' : undefined,
+							}}
 						>
 							{t(m.goBack)}
 						</Button>
