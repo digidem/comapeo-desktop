@@ -18,6 +18,7 @@ import {
 	DARK_GREY,
 	LIGHT_GREY,
 	RED,
+	WHITE,
 } from '../../../../colors'
 import { Icon } from '../../../../components/icon'
 import { useActiveProjectIdStoreActions } from '../../../../contexts/ActiveProjectIdProvider'
@@ -84,7 +85,7 @@ function RouteComponent() {
 					borderRadius={2}
 					padding={6}
 					boxShadow={BOX_SHADOW}
-					bgcolor={invite.projectColor}
+					bgcolor={invite.projectColor || WHITE}
 					border={`2px solid ${acceptInvite.status === 'error' || rejectInvite.status === 'error' ? RED : LIGHT_GREY}`}
 				>
 					<Typography variant="h1" fontWeight={500}>
