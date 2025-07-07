@@ -69,18 +69,12 @@ function RouteComponent() {
 			<Container
 				maxWidth="md"
 				component={Box}
-				bgcolor={DARK_COMAPEO_BLUE}
 				height="100%"
 				display="grid"
 				gridTemplateRows="auto minmax(0, 1fr)"
 				rowGap={5}
 			>
-				<Stack
-					useFlexGap
-					direction="row"
-					justifyContent="space-between"
-					bgcolor={DARK_COMAPEO_BLUE}
-				>
+				<Stack useFlexGap direction="row" justifyContent="space-between">
 					<Box>
 						<Button
 							variant="text"
