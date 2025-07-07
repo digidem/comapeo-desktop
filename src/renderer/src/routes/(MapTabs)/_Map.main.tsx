@@ -69,11 +69,14 @@ export function MainScreen() {
 	const handleViewExchange = React.useCallback(() => {
 		console.log('Clicking on view exchange (TODO in future)')
 		// navigate({ to: '/exchange' })
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [navigate])
 
 	const handleViewTeam = React.useCallback(() => {
 		console.log('Clicking on team (TODO in future)')
 		// navigate({ to: '/team' })
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [navigate])
 
 	const handleSelectObservation = (obsId: string) => {
@@ -92,6 +95,7 @@ export function MainScreen() {
 			// 		params: { trackId },
 			// 	})
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[navigate],
 	)
 
