@@ -6,7 +6,7 @@ export const CORNFLOWER_BLUE = '#80A0FF'
 export const DARK_BLUE = '#000033'
 export const BLUE_GREY = '#CCCCD6'
 export const DARK_GREY = '#757575'
-export const VERY_LIGHT_GREY = '#ededed'
+export const LIGHT_GREY = '#ededed'
 
 export const ORANGE = '#FF9933'
 export const DARK_ORANGE = '#E86826'

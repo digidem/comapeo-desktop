@@ -87,7 +87,7 @@ export async function start({ appEnv, appMode, configStore }) {
 
 	const intl = setupIntl({ configStore })
 
-	setupIpc({ intl })
+	setupIpc({ configStore, intl })
 
 	await app.whenReady()
 
@@ -150,9 +150,10 @@ function setupIntl({ configStore }) {
 
 /**
  * @param {Object} opts
+ * @param {ConfigStore} opts.configStore
  * @param {Intl} opts.intl
  */
-function setupIpc({ intl }) {
+function setupIpc({ configStore, intl }) {
 	ipcMain.handle('locale:get', (_event) => {
 		log('Locale is', intl.locale)
 		return intl.locale
@@ -169,6 +170,14 @@ function setupIpc({ intl }) {
 			intl.updateLocale(locale)
 		},
 	)
+
+	ipcMain.handle('diagnostics:get', (_event) => {
+		return configStore.get('diagnosticsEnabled')
+	})
+
+	ipcMain.handle('diagnostics:set', (_event, enable) => {
+		configStore.set('diagnosticsEnabled', enable)
+	})
 }
 
 /**

@@ -2,10 +2,9 @@ import type { Observation, Track } from '@comapeo/schema'
 import { styled } from '@mui/material/styles'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { ALMOST_BLACK, VERY_LIGHT_GREY, WHITE } from '../../colors'
-import AddPersonIcon from '../../images/AddPerson.svg'
-import LightningIcon from '../../images/Lightning.svg'
+import { ALMOST_BLACK, LIGHT_GREY, WHITE } from '../../colors'
 import { Button } from '../Button'
+import { Icon } from '../icon'
 import { ObservationListItem } from './ObservationListItem'
 import { TrackListItem } from './TrackListItem'
 
@@ -30,7 +29,7 @@ const Container = styled('div')({
 
 const ContentWrapper = styled('div')({
 	padding: 20,
-	borderBottom: `1px solid ${VERY_LIGHT_GREY}`,
+	borderBottom: `1px solid ${LIGHT_GREY}`,
 })
 
 const ButtonsRow = styled('div')({
@@ -73,7 +72,9 @@ export function ObservationListView({
 					<Button
 						variant="darkOrange"
 						style={{ flex: 1 }}
-						startIcon={<LightningIcon color={WHITE} width={16} height={16} />}
+						startIcon={
+							<Icon name="material-bolt" htmlColor={WHITE} size={16} />
+						}
 						onClick={onViewExchange}
 					>
 						{formatMessage(m.exchange)}
@@ -81,12 +82,16 @@ export function ObservationListView({
 					<Button
 						variant="outlined"
 						style={{
-							borderColor: VERY_LIGHT_GREY,
+							borderColor: LIGHT_GREY,
 							color: ALMOST_BLACK,
 							flex: 1,
 						}}
 						startIcon={
-							<AddPersonIcon fill={ALMOST_BLACK} width={16} height={16} />
+							<Icon
+								name="material-person-add"
+								htmlColor={ALMOST_BLACK}
+								size={16}
+							/>
 						}
 						onClick={onViewTeam}
 					>

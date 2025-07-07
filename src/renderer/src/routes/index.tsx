@@ -1,37 +1,39 @@
-import { useLayoutEffect } from 'react'
-import { useOwnDeviceInfo } from '@comapeo/core-react'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
-import { useActiveProjectIdStoreState } from '../contexts/ActiveProjectIdProvider'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../lib/constants'
 
 export const Route = createFileRoute('/')({
-	component: RouteComponent,
-})
+	beforeLoad: async ({ context }) => {
+		const { queryClient, clientApi, activeProjectId } = context
 
-// the user will never get here, they will be redirected.
-// While this code is semi hacky, the suggested alternative is to redirect in the (beforeLoad)[https://tanstack.com/router/latest/docs/framework/react/guide/authenticated-routes#the-routebeforeload-option]. The problem is that this requires the router to use 'useDeviceInfo'. We could pass this hook to the router via the RouterContext. But i think the complexity of passing that info makes this hacky code slightly more desirable and easy to understand.
+		// TODO: not ideal to do this but requires major changes to @comapeo/core-react
+		// copied from https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/client.ts#L21
+		const ownDeviceInfo = await queryClient.ensureQueryData({
+			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
+			queryFn: async () => {
+				return clientApi.getDeviceInfo()
+			},
+		})
 
-function RouteComponent() {
-	const navigate = useNavigate()
-	const { data } = useOwnDeviceInfo()
-	const hasCreatedDeviceName = data.name !== undefined
-	const activeProjectId = useActiveProjectIdStoreState(
-		(store) => store.activeProjectId,
-	)
-
-	useLayoutEffect(() => {
-		if (!hasCreatedDeviceName) {
-			navigate({ to: '/Onboarding' })
-			return
+		if (!ownDeviceInfo.name) {
+			throw redirect({ to: '/welcome', replace: true })
 		}
 
 		if (!activeProjectId) {
-			navigate({ to: '/Onboarding/CreateJoinProjectScreen' })
-			return
+			throw redirect({
+				to: '/onboarding/project',
+				replace: true,
+			})
 		}
 
-		navigate({ to: '/main' })
-	})
+		throw redirect({
+			to: '/main',
+			replace: true,
+		})
+	},
+	component: RouteComponent,
+})
 
-	return null
+function RouteComponent() {
+	throw new Error('Should not have landed on this page!')
 }

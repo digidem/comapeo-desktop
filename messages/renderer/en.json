@@ -26,101 +26,218 @@
   "observationListView.button.team": {
     "message": "View Team"
   },
-  "screens.CreateJoinProjectScreen.askToJoin": {
-    "message": "Ask a monitoring coordinator to join their Project."
-  },
-  "screens.CreateJoinProjectScreen.createProject": {
-    "message": "Create a Project"
-  },
-  "screens.CreateJoinProjectScreen.limitedToDevices": {
-    "message": "Sharing observations and data are limited to devices within each Project."
-  },
-  "screens.CreateJoinProjectScreen.securelyStore": {
-    "message": "Projects help teams securely store and share their territory monitoring data and observations."
-  },
-  "screens.CreateJoinProjectScreen.startNewProject": {
-    "message": "Starting a new territory monitoring project?"
-  },
-  "screens.CreateJoinProjectScreen.title": {
-    "message": "Join a Project"
-  },
-  "screens.DataPrivacy.description": {
-    "message": "CoMapeo allows teams to map offline without needing internet servers."
-  },
-  "screens.DataPrivacy.diagnostic": {
-    "message": "Private by default — diagnostic information is made fully anonymous and you can opt-out any time."
-  },
-  "screens.DataPrivacy.encrypted": {
+  "routes.onboarding.data-and-privacy.dataEncrypted": {
     "message": "All data stays fully encrypted."
   },
-  "screens.DataPrivacy.learnMore": {
-    "message": "Learn More"
-  },
-  "screens.DataPrivacy.manageAndControl": {
-    "message": "Easily manage and control sharing and collaboration."
-  },
-  "screens.DataPrivacy.next": {
-    "message": "Next"
-  },
-  "screens.DataPrivacy.stays": {
+  "routes.onboarding.data-and-privacy.dataStays": {
     "message": "Your data stays on your devices."
   },
-  "screens.DataPrivacy.title": {
+  "routes.onboarding.data-and-privacy.description": {
+    "message": "CoMapeo allows teams to map offline without needing internet servers."
+  },
+  "routes.onboarding.data-and-privacy.learnMore": {
+    "message": "Learn More"
+  },
+  "routes.onboarding.data-and-privacy.next": {
+    "message": "Next"
+  },
+  "routes.onboarding.data-and-privacy.privateByDefault": {
+    "message": "Private by default — diagnostic information is made fully anonymous and you can opt-out any time."
+  },
+  "routes.onboarding.data-and-privacy.sharingAndCollaboration": {
+    "message": "Easily manage and control sharing and collaboration."
+  },
+  "routes.onboarding.data-and-privacy.title": {
     "message": "Review Data & Privacy"
   },
-  "screens.DeviceNamingScreen.addName": {
+  "routes.onboarding.device-name.addName": {
     "message": "Add Name"
   },
-  "screens.DeviceNamingScreen.characterCount": {
-    "message": "{count}/{maxLength}"
+  "routes.onboarding.device-name.characterCount": {
+    "message": "{count}/{max}"
   },
-  "screens.DeviceNamingScreen.description": {
-    "message": "A device name allows others using CoMapeo to invite you to projects."
+  "routes.onboarding.device-name.description": {
+    "message": "Distinct, memorable names help collaborators recognize you."
   },
-  "screens.DeviceNamingScreen.errorSavingDeviceName": {
-    "message": "An error occurred while saving your device name. Please try again."
-  },
-  "screens.DeviceNamingScreen.placeholder": {
+  "routes.onboarding.device-name.deviceName": {
     "message": "Device Name"
   },
-  "screens.DeviceNamingScreen.saving": {
-    "message": "Saving..."
+  "routes.onboarding.device-name.maxLengthError": {
+    "message": "Too long, try a shorter name."
   },
-  "screens.DeviceNamingScreen.title": {
+  "routes.onboarding.device-name.minLengthError": {
+    "message": "Enter a Device Name"
+  },
+  "routes.onboarding.device-name.title": {
     "message": "Name Your Device"
   },
-  "screens.IntroToCoMapeo.appDescription": {
-    "message": "View and manage observations collected with CoMapeo Mobile."
+  "routes.onboarding.privacy-policy.aboutAwanaDigital": {
+    "message": "About Awana Digital"
   },
-  "screens.IntroToCoMapeo.collaborate": {
-    "message": "Collaborate on projects"
+  "routes.onboarding.privacy-policy.aboutAwanaDigitalDescription": {
+    "message": "CoMapeo is developed by Awana Digital, a 501c3 non-profit organization registered in the United States. Awana Digital works in solidarity with frontline communities to use technology to defend their rights and fight climate change."
   },
-  "screens.IntroToCoMapeo.comapeoDesktop": {
-    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
+  "routes.onboarding.privacy-policy.appErrors": {
+    "message": "<b>App Errors</b>: Information about internal errors that result in the app to not function as expected."
   },
-  "screens.IntroToCoMapeo.designedFor": {
-    "message": "Designed with and for Indigenous peoples & frontline communities"
+  "routes.onboarding.privacy-policy.appInfo": {
+    "message": "<b>App Info</b>: The version and locale (language) of CoMapeo."
   },
-  "screens.IntroToCoMapeo.getStarted": {
-    "message": "Get Started"
+  "routes.onboarding.privacy-policy.appUsage": {
+    "message": "App Usage"
   },
-  "screens.IntroToCoMapeo.mapAnywhere": {
-    "message": "Map anywhere and everywhere"
+  "routes.onboarding.privacy-policy.comapeoDataPrivacy": {
+    "message": "CoMapeo Data Privacy"
   },
-  "screens.IntroToCoMapeo.ownData": {
-    "message": "Own and control your data"
+  "routes.onboarding.privacy-policy.control": {
+    "message": "You're in control"
   },
-  "screens.JoinProjectScreen.declineInvite": {
+  "routes.onboarding.privacy-policy.controlDescription": {
+    "message": "You can opt out of sending any information to Awana Digital.<br></br><br></br>You choose where your data is stored and who it is shared with. You may choose to share anonymized, summarized data about how you use CoMapeo with Awana Digital.<br></br><br></br>We will always be transparent about what information you choose to share for the purpose of improving the app, and this information will never include photos, videos, audio, text, or precise locations that you have entered into CoMapeo."
+  },
+  "routes.onboarding.privacy-policy.country": {
+    "message": "<b>Country</b>: The country where CoMapeo is being used."
+  },
+  "routes.onboarding.privacy-policy.crashData": {
+    "message": "<b>Crash data</b>: Information about what caused the app to close unexpectedly."
+  },
+  "routes.onboarding.privacy-policy.currentPermissions": {
+    "message": "Current Permissions"
+  },
+  "routes.onboarding.privacy-policy.dataCollection": {
+    "message": "CoMapeo Data Collection"
+  },
+  "routes.onboarding.privacy-policy.description": {
+    "message": "The following explains what information (or \"data\") is sent from CoMapeo to the application developer, Awana Digital, and how that information is used."
+  },
+  "routes.onboarding.privacy-policy.deviceInfo": {
+    "message": "<b>Device Info</b>: Such as model and manufacturer of your device; device operating system; screen size; device locale (language); device memory."
+  },
+  "routes.onboarding.privacy-policy.diagnostics": {
+    "message": "Diagnostics"
+  },
+  "routes.onboarding.privacy-policy.noPII": {
+    "message": "No personally identifiable information"
+  },
+  "routes.onboarding.privacy-policy.noPIIDescription": {
+    "message": "Using CoMapeo does not require a user account.<br></br><br></br>Awana Digital does not collect your name, email address or any other personal details.<br></br><br></br>No permanent user identifier or device identifier is ever shared with Awana Digital, and we take extra measures to ensure that no information you share can be used to track you: identifiers are randomized and rotated (changed) every month and we do not store IP addresses."
+  },
+  "routes.onboarding.privacy-policy.openSource": {
+    "message": "Open Source and the \"Official\" Version"
+  },
+  "routes.onboarding.privacy-policy.openSourceDescription": {
+    "message": "CoMapeo is an open-source application.<br></br><br></br>This means that anyone can view the code that makes the app work and can verify the privacy declarations in this document. It also means that anyone can adapt the app to their own needs and release an alternative version.<br></br><br></br>This document refers to data collected by the official releases of CoMapeo, digitally signed by Awana Digital, available from the Google Play Store or the Awana Digital website.<br></br><br></br>Unofficial releases of CoMapeo obtained from other channels are outside our control and may share additional information with other organizations."
+  },
+  "routes.onboarding.privacy-policy.performanceData": {
+    "message": "<b>Performance Data</b>: Such as launch time, energy usage, app freezes, and responsiveness."
+  },
+  "routes.onboarding.privacy-policy.prviateByDefault": {
+    "message": "Private by default"
+  },
+  "routes.onboarding.privacy-policy.prviateByDefaultDescription": {
+    "message": "The data you collect and create with CoMapeo (locations, photos, video, audio, text) is only stored on your device by default, and is not stored or sent anywhere else.<br></br><br></br>When you share data with collaborators by joining a project with them, it is sent encrypted, directly to you collaborators' device. This means that the data is not sent via Awana Digital, nor anyone else, on its way to your collaborator.<br></br><br></br>Awana Digital never sees nor has access to any of the data you collect with CoMapeo unless you explicitly send it to us."
+  },
+  "routes.onboarding.privacy-policy.shareDiagnosticInformation": {
+    "message": "Share Diagnostic Information"
+  },
+  "routes.onboarding.privacy-policy.title": {
+    "message": "Privacy Policy"
+  },
+  "routes.onboarding.privacy-policy.whatIsCollected": {
+    "message": "What is collected?"
+  },
+  "routes.onboarding.privacy-policy.whatIsCollectedDescription": {
+    "message": "By default, anonymized diagnostic information about your device, app crashes, errors and performance is shared with Awana Digital.<br></br><br></br>You can opt-out of sharing this information at any time. This diagnostic information is completely anonymized and it never contains any of your data (the data you have collected with CoMapeo)."
+  },
+  "routes.onboarding.privacy-policy.whatIsNotCollected": {
+    "message": "What is not collected?"
+  },
+  "routes.onboarding.privacy-policy.whatIsNotCollectedDescription": {
+    "message": "We do not collect any personal data or anything that can be used to identify or track a user or device. Device identifiers used to aggregate information are random, anonymous, and changed every month. Diagnostic information does not include data about how you use the app, and it never includes any of the data you have collected with the app. We do not collect your precise or coarse location, only the country where you are using CoMapeo."
+  },
+  "routes.onboarding.privacy-policy.whyIsThisDataCollected": {
+    "message": "Why is this data collected?"
+  },
+  "routes.onboarding.privacy-policy.whyIsThisDataCollectedDescription": {
+    "message": "Crash data and app errors together with the device and app info provide Awana Digital with the information we need to fix errors and bugs in the app.<br></br><br></br>The performance data helps us improve the responsiveness of the app and identify errors.<br></br><br></br>The country where CoMapeo is being used and the language of the UI helps us understand minimal information about CoMapeo users: \"How many CoMapeo users are there in each country?\""
+  },
+  "routes.onboarding.project.createProject": {
+    "message": "Create a Project"
+  },
+  "routes.onboarding.project.description": {
+    "message": "Ask a monitoring coordinator to join their Project."
+  },
+  "routes.onboarding.project.join.$inviteId.goBack": {
+    "message": "Go back"
+  },
+  "routes.onboarding.project.join.$inviteId.index.declineInvite": {
     "message": "Decline Invite"
   },
-  "screens.JoinProjectScreen.invitedTitle": {
-    "message": "You've been invited to join"
+  "routes.onboarding.project.join.$inviteId.index.description": {
+    "message": "You're invited to…"
   },
-  "screens.JoinProjectScreen.joinProject": {
+  "routes.onboarding.project.join.$inviteId.index.joinAs": {
+    "message": "Join as a {role, select, coordinator {coordinator} other {participant}}?"
+  },
+  "routes.onboarding.project.join.$inviteId.index.joinProject": {
     "message": "Join Project"
   },
-  "screens.JoinProjectScreen.title": {
-    "message": "Join"
+  "routes.onboarding.project.join.$inviteId.index.responseError": {
+    "message": "Something went wrong. Try again."
+  },
+  "routes.onboarding.project.join.$inviteId.index.title": {
+    "message": "Join a Project"
+  },
+  "routes.onboarding.project.join.$inviteId.notFound": {
+    "message": "Could not find invite with ID {inviteId}"
+  },
+  "routes.onboarding.project.join.$inviteId.success.description": {
+    "message": "You joined<br></br><b>{projectName}</b>"
+  },
+  "routes.onboarding.project.join.$inviteId.success.startUsingCoMapeo": {
+    "message": "Start Using CoMapeo"
+  },
+  "routes.onboarding.project.join.$inviteId.success.title": {
+    "message": "Success!"
+  },
+  "routes.onboarding.project.limitedToDevices": {
+    "message": "Sharing observations and data are limited to devices within each Project."
+  },
+  "routes.onboarding.project.securelyStore": {
+    "message": "Projects help teams securely store and share their territory monitoring data and observations."
+  },
+  "routes.onboarding.project.startingNewProject": {
+    "message": "Starting a new territory monitoring project?"
+  },
+  "routes.onboarding.project.title": {
+    "message": "Join a Project"
+  },
+  "routes.onboarding.route.goBack": {
+    "message": "Go back"
+  },
+  "routes.onboarding.route.step": {
+    "message": "Step {value}"
+  },
+  "routes.welcome.appDescription": {
+    "message": "View and manage observations collected with CoMapeo Mobile."
+  },
+  "routes.welcome.collaborate": {
+    "message": "Collaborate on projects"
+  },
+  "routes.welcome.comapeoDesktop": {
+    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
+  },
+  "routes.welcome.designedFor": {
+    "message": "Designed with and for Indigenous peoples & frontline communities"
+  },
+  "routes.welcome.getStarted": {
+    "message": "Get Started"
+  },
+  "routes.welcome.mapAnywhere": {
+    "message": "Map anywhere and everywhere"
+  },
+  "routes.welcome.ownData": {
+    "message": "Own and control your data"
   },
   "screens.Observation.ObservationView.observation": {
     "description": "Default name of observation with no matching preset",
@@ -128,120 +245,6 @@
   },
   "screens.ObservationList.TrackListItem.Track": {
     "message": "Track"
-  },
-  "screens.OnboardingPrivacyPolicy.permissionsTitle": {
-    "message": "Current Permissions"
-  },
-  "screens.PrivacyPolicy.aboutAwana": {
-    "message": "About Awana Digital"
-  },
-  "screens.PrivacyPolicy.aboutAwanaContent": {
-    "message": "CoMapeo is developed by Awana Digital, a 501c3 non-profit organization registered in the United States. Awana Digital works in solidarity with frontline communities to use technology to defend their rights and fight climate change."
-  },
-  "screens.PrivacyPolicy.appErrors": {
-    "message": "App Errors"
-  },
-  "screens.PrivacyPolicy.appErrorsDescription": {
-    "message": "Information about internal errors that result in the app not functioning as expected"
-  },
-  "screens.PrivacyPolicy.appInfo": {
-    "message": "App Info"
-  },
-  "screens.PrivacyPolicy.appInfoDescription": {
-    "message": "The version and locale (language) of CoMapeo"
-  },
-  "screens.PrivacyPolicy.appUsageTitle": {
-    "message": "App Usage"
-  },
-  "screens.PrivacyPolicy.comapeoPrivacyPolicy": {
-    "message": "CoMapeo Data Privacy"
-  },
-  "screens.PrivacyPolicy.control": {
-    "message": "You're in control"
-  },
-  "screens.PrivacyPolicy.controlDescription": {
-    "message": "You can opt out of sending any information to Awana Digital. You choose where your data is stored and who it is shared with. You may choose to share anonymized, summarized data about how you use CoMapeo with Awana Digital. We will always be transparent about what information you choose to share for the purposed of improving the app, and this information will never include photos, videos, audio, text, or precise locations that you have entered into CoMapeo."
-  },
-  "screens.PrivacyPolicy.crashData": {
-    "message": "Crash Data"
-  },
-  "screens.PrivacyPolicy.crashDataDescription": {
-    "message": "Information about what caused the app to close unexpectedly"
-  },
-  "screens.PrivacyPolicy.dataCollection": {
-    "message": "CoMapeo Data Collection"
-  },
-  "screens.PrivacyPolicy.deviceInfo": {
-    "message": "Device Info"
-  },
-  "screens.PrivacyPolicy.deviceInfoDescription": {
-    "message": "Such as model and manufacturer of your device; device operating system; screen size; device locale (language); device memory."
-  },
-  "screens.PrivacyPolicy.diagnosticsTitle": {
-    "message": "Diagnostics"
-  },
-  "screens.PrivacyPolicy.noPII": {
-    "message": "No personally identifiable information"
-  },
-  "screens.PrivacyPolicy.noPIIDescription": {
-    "message": "Using CoMapeo does not require a user account. Awana Digital does not collect your name, email address or any other personal details. No permanent user identifier or device identifier is ever shared with Awana Digital, and we take extra measures to ensure that no information you share can be used to track you: identifiers are randomized and rotated (changed) every month and we do not store IP addresses."
-  },
-  "screens.PrivacyPolicy.notCollected": {
-    "message": "What is not collected?"
-  },
-  "screens.PrivacyPolicy.notCollectedDescription": {
-    "message": "We do not collect any personal data or anything that can be used to identify or track a user or device. Device identifiers used to aggregate information are random, anonymous, and changed every month. Diagnostic information does not include data about how you use the app, and it never includes any of the data you have collected with the app. We do not collect your precise or coarse location, only the country where you are using CoMapeo."
-  },
-  "screens.PrivacyPolicy.openSource": {
-    "message": "Open Source and the \"Official\" Version"
-  },
-  "screens.PrivacyPolicy.openSourceContent": {
-    "message": "CoMapeo is an open-source application. This means that anyone can view the code that makes the app work and can verify the privacy declarations in this document. It also means that anyone can adapt the app to their own needs and release an alternative version. This document refers to data collected by the official releases of CoMapeo, digitally signed by Awana Digital, available from the Google Play Store or the Awana Digital website. Unofficial releases of CoMapeo obtained from other channels are outside our control and may share additional information with other organizations."
-  },
-  "screens.PrivacyPolicy.overview": {
-    "message": "The following explains what information (or “data”) is sent from CoMapeo to the application developer, Awana Digital, and how that information is used."
-  },
-  "screens.PrivacyPolicy.performanceData": {
-    "message": "Performance Data"
-  },
-  "screens.PrivacyPolicy.performanceDataDescription": {
-    "message": "Such as launch time, energy usage, app freezes, and responsiveness"
-  },
-  "screens.PrivacyPolicy.privacyPolicyTitle": {
-    "message": "Privacy Policy"
-  },
-  "screens.PrivacyPolicy.privateByDefault": {
-    "message": "Private by default"
-  },
-  "screens.PrivacyPolicy.privateByDefaultDescription": {
-    "message": "The data you collect and create with CoMapeo (locations, photos, video, audio, text) is only stored on your device by default, and is not stored or sent anywhere else. When you share data with collaborators by joining a project with them, it is sent encrypted, directly to your collaborators' device. This means that the data is not sent via Awana Digital, nor anyone else, on its way to your collaborator. Awana Digital never sees nor has access to any of the data you collect with CoMapeo unless you explicitly send it to us."
-  },
-  "screens.PrivacyPolicy.shareDiagnostics": {
-    "message": "Share Diagnostic Information"
-  },
-  "screens.PrivacyPolicy.thirdParty": {
-    "message": "Third-party access to data"
-  },
-  "screens.PrivacyPolicy.thirdPartyDescription": {
-    "message": "A \"third-party\" is an organization other than Awana Digital."
-  },
-  "screens.PrivacyPolicy.userCount": {
-    "message": "User Counts"
-  },
-  "screens.PrivacyPolicy.userCountDescription": {
-    "message": "The number of users per country and per project. Aggregated and anonymized"
-  },
-  "screens.PrivacyPolicy.whatIsCollected": {
-    "message": "What is collected?"
-  },
-  "screens.PrivacyPolicy.whatIsCollectedDescription": {
-    "message": "By default, anonymized diagnostic information about your device, app crashes, errors and performance is shared with Awana Digital. You can opt-out of sharing this information at any time. This diagnostic information is completely anonymized and it never contains any of your data (the data you have collected with CoMapeo)."
-  },
-  "screens.PrivacyPolicy.whyCollected": {
-    "message": "Why is this data collected?"
-  },
-  "screens.PrivacyPolicy.whyCollectedDescription": {
-    "message": "Crash data and app errors together with the device and app info provide Awana Digital with the information we need to fix errors and bugs in the app. The performance data helps us improve the responsiveness of the app and identify errors. User counts, including total users, users per country, and users per project, help justify ongoing investment in the development of CoMapeo."
   },
   "screens.ProjectCreationScreen.advancedProjectSettings": {
     "message": "Advanced Project Settings"

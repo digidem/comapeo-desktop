@@ -1,11 +1,11 @@
 import { styled } from '@mui/material/styles'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { ALMOST_BLACK, BLUE_GREY, VERY_LIGHT_GREY } from '../../colors'
-import AddPersonIcon from '../../images/AddPerson.svg'
+import { ALMOST_BLACK, BLUE_GREY, LIGHT_GREY } from '../../colors'
 import EmptyStateImage from '../../images/empty_state.png'
 import { Button } from '../Button'
 import { Text } from '../Text'
+import { Icon } from '../icon'
 
 const m = defineMessages({
 	inviteDevices: {
@@ -27,7 +27,7 @@ const Container = styled('div')({
 const DividerLine = styled('div')({
 	width: '100%',
 	height: 1,
-	backgroundColor: VERY_LIGHT_GREY,
+	backgroundColor: LIGHT_GREY,
 })
 
 const Circle = styled('div')({
@@ -71,7 +71,9 @@ export function EmptyState({ onInviteDevices }: EmptyStateProps) {
 						color: ALMOST_BLACK,
 					}}
 					onClick={() => onInviteDevices?.()}
-					startIcon={<AddPersonIcon color={ALMOST_BLACK} />}
+					startIcon={
+						<Icon name="material-person-add" htmlColor={ALMOST_BLACK} />
+					}
 				>
 					{formatMessage(m.inviteDevices)}
 				</Button>

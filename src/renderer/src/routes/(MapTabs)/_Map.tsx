@@ -3,7 +3,7 @@ import { CircularProgress, Paper } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
-import { VERY_LIGHT_GREY, WHITE } from '../../colors'
+import { LIGHT_GREY, WHITE } from '../../colors'
 import { Map } from '../../components/Map'
 import { Tabs } from '../../components/Tabs'
 
@@ -25,7 +25,7 @@ export function MapLayout() {
 				<div
 					style={{
 						width: 380,
-						borderLeftColor: VERY_LIGHT_GREY,
+						borderLeftColor: LIGHT_GREY,
 						borderLeftWidth: '1px',
 						borderLeftStyle: 'solid',
 					}}

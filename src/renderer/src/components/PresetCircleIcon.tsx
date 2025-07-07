@@ -41,35 +41,61 @@ const IconContainer = styled('div')<{
 	borderColor: borderColor || '#000',
 }))
 
-type Props = {
-	projectId?: string
-	iconId?: string
-	borderColor?: string
-	size?: IconSize
-}
-
 export function PresetCircleIcon({
 	projectId,
 	iconId,
 	borderColor,
 	size = 'medium',
-}: Props) {
-	const radius = size === 'small' ? 15 : size === 'large' ? 35 : 25
+}: {
+	projectId?: string
+	iconId?: string
+	borderColor?: string
+	size?: IconSize
+}) {
+	if (!projectId || !iconId) {
+		return (
+			<Circle radius={getRadius(size)}>
+				<span style={{ fontSize: sizeMap[size] }}>📍</span>
+			</Circle>
+		)
+	}
+
+	return (
+		<PresetCircleIconInner
+			projectId={projectId}
+			iconId={iconId}
+			size={size}
+			borderColor={borderColor}
+		/>
+	)
+}
+
+function PresetCircleIconInner({
+	projectId,
+	iconId,
+	borderColor,
+	size,
+}: {
+	projectId: string
+	iconId: string
+	borderColor?: string
+	size: IconSize
+}) {
 	const {
 		data: iconUrl,
 		error,
 		isRefetching,
-	} = projectId && iconId
-		? useIconUrl({
-				projectId,
-				iconId,
-				mimeType: 'image/png',
-				pixelDensity: 1,
-				size: 'medium',
-			})
-		: { data: undefined, error: undefined, isRefetching: false }
+	} = useIconUrl({
+		projectId,
+		iconId,
+		mimeType: 'image/png',
+		pixelDensity: 1,
+		size: 'medium',
+	})
 
-	if (!projectId || !iconId || error || !iconUrl) {
+	const radius = getRadius(size)
+
+	if (error || !iconUrl) {
 		return (
 			<Circle radius={radius}>
 				<span style={{ fontSize: sizeMap[size] }}>📍</span>
@@ -100,4 +126,8 @@ export function PresetCircleIcon({
 			</IconContainer>
 		</Circle>
 	)
+}
+
+function getRadius(size: IconSize) {
+	return size === 'small' ? 15 : size === 'large' ? 35 : 25
 }
