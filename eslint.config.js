@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import react from '@eslint-react/eslint-plugin'
 import { includeIgnoreFile } from '@eslint/compat'
@@ -7,7 +8,21 @@ import * as pluginReactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
+const gitignorePath = path.join(
+	path.dirname(fileURLToPath(import.meta.url)),
+	'.gitignore',
+)
+
+const gitExcludePath = path.join(
+	path.dirname(fileURLToPath(import.meta.url)),
+	'.git',
+	'info',
+	'exclude',
+)
+
 export default tseslint.config(
+	includeIgnoreFile(gitignorePath),
+	includeIgnoreFile(gitExcludePath),
 	js.configs.recommended,
 	{
 		name: 'typescript',
@@ -67,6 +82,7 @@ export default tseslint.config(
 			globals: { ...globals.browser },
 			parser: tseslint.parser,
 		},
+		ignores: ['src/renderer/src/routeTree.gen.ts'],
 	},
 	// Node or Node-like processes
 	{
@@ -87,8 +103,5 @@ export default tseslint.config(
 			ecmaVersion: 2022,
 			sourceType: 'module',
 		},
-		ignores: ['src/renderer/src/routeTree.gen.ts'],
 	},
-	// Global ignores
-	includeIgnoreFile(fileURLToPath(new URL('.gitignore', import.meta.url))),
 )
