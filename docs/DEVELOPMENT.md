@@ -92,12 +92,10 @@ In order to update translations, run `npm run intl:translations`, which will ext
 ### Translations workflow
 
 - For the main process:
-
   1. Use `defineMessage` (or `defineMessages`) from `@formatjs/intl` to create messages and use in the main process code.
   2. Run npm run `intl:translations:main` (or`npm run intl:translations`).
 
 - For the renderer process:
-
   1. Use `defineMessage` (or `defineMessages`) from `react-intl` to create messages and use in the renderer process code.
   2. Run npm run `intl:translations:renderer` (or`npm run intl:translations`).
 
