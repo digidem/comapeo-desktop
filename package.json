@@ -89,6 +89,7 @@
 		"@mui/icons-material": "7.1.1",
 		"@mui/material": "7.1.1",
 		"@tanstack/eslint-plugin-router": "1.121.21",
+		"@tanstack/react-form": "1.12.4",
 		"@tanstack/react-query": "5.80.6",
 		"@tanstack/react-router": "1.120.20",
 		"@tanstack/router-devtools": "1.120.20",
@@ -119,7 +120,7 @@
 		"typescript": "5.8.3",
 		"typescript-eslint": "8.34.0",
 		"vite": "6.3.5",
-		"vite-plugin-svgr": "4.3.0",
+		"vite-plugin-icons-spritesheet": "3.0.1",
 		"vitest": "3.2.3",
 		"zustand": "5.0.5"
 	},

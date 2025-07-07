@@ -1,23 +1,31 @@
 import Store from 'electron-store'
 
-/**
- * @typedef {Store<{ locale: string; rootKey?: string }>} ConfigStore
- */
+/** @typedef {ReturnType<typeof createConfigStore>} ConfigStore */
 
-/**
- * @returns {ConfigStore}
- */
 export function createConfigStore() {
-	// @ts-expect-error Not sure how to get type inference from electron-store
-	return new Store({
-		schema: {
-			locale: {
-				type: 'string',
-				default: 'en',
+	const store = /**
+	 * @type {Store<{
+	 * 	locale: string
+	 * 	rootKey?: string
+	 * 	diagnosticsEnabled: boolean
+	 * }>}
+	 */ (
+		new Store({
+			schema: {
+				locale: {
+					type: 'string',
+					default: 'en',
+				},
+				rootKey: {
+					type: 'string',
+				},
+				diagnosticsEnabled: {
+					type: 'boolean',
+					default: true,
+				},
 			},
-			rootKey: {
-				type: 'string',
-			},
-		},
-	})
+		})
+	)
+
+	return store
 }

@@ -10,6 +10,8 @@ describe('useSelectProjectConfigFile', () => {
 			getLocale: vi.fn().mockResolvedValue('en'),
 			updateLocale: vi.fn(),
 			selectFile: vi.fn(),
+			setDiagnosticsEnabled: vi.fn(),
+			getDiagnosticsEnabled: vi.fn(),
 		}
 	})
 

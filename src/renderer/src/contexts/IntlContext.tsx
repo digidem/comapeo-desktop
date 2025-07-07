@@ -23,6 +23,9 @@ const RICH_TEXT_MAPPINGS: ComponentProps<
 	blue: (parts) => {
 		return <span style={{ color: CORNFLOWER_BLUE }}>{parts}</span>
 	},
+	br: () => {
+		return <br />
+	},
 }
 
 const messages = { en }

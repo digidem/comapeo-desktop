@@ -2,7 +2,7 @@ import type { Observation } from '@comapeo/schema'
 import { styled } from '@mui/material/styles'
 import { FormattedDate, FormattedTime } from 'react-intl'
 
-import { VERY_LIGHT_GREY } from '../../colors'
+import { LIGHT_GREY } from '../../colors'
 import { useActiveProjectIdStoreState } from '../../contexts/ActiveProjectIdProvider'
 import { useObservationWithPreset } from '../../hooks/useObservationWithPreset'
 import { FormattedPresetName } from '../FormattedData'
@@ -18,7 +18,7 @@ const Container = styled('div')({
 	display: 'flex',
 	flexDirection: 'row',
 	alignItems: 'center',
-	borderBottom: `1px solid ${VERY_LIGHT_GREY}`,
+	borderBottom: `1px solid ${LIGHT_GREY}`,
 	padding: '10px 20px',
 	cursor: 'pointer',
 	width: '100%',

@@ -26,6 +26,14 @@ const runtimeApi = {
 		ipcRenderer.send('locale:update', locale)
 	},
 
+	// Diagnostics
+	async getDiagnosticsEnabled() {
+		return ipcRenderer.invoke('diagnostics:get')
+	},
+	async setDiagnosticsEnabled(enable) {
+		await ipcRenderer.invoke('diagnostics:set', enable)
+	},
+
 	// Files
 	async selectFile(extensionFilters) {
 		/** @type {unknown} */
