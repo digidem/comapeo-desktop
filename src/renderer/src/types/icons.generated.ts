@@ -11,15 +11,19 @@ export const iconNames = [
 	'openmoji-bust-in-silhouette',
 	'openmoji-bar-chart',
 	'material-symbols-new-window',
-	'material-symbols-encrypted',
+	'material-symbols-encrypted-weight400',
+	'material-symbols-encrypted-weight200',
 	'material-symbols-computer',
+	'material-settings',
 	'material-person-add',
 	'material-hiking',
 	'material-expand-more',
 	'material-expand-less',
+	'material-error-outline',
 	'material-check-circle',
 	'material-bolt',
 	'material-arrow-back',
+	'comapeo-cards',
 ] as const
 
 export type IconName = (typeof iconNames)[number]

@@ -47,6 +47,32 @@ const runtimeApi = {
 
 		return result
 	},
+
+	// App info
+	getAppInfo() {
+		const appVersion = getAppVersion()
+		const systemVersion = process.getSystemVersion()
+
+		return { appVersion, systemVersion }
+	},
+}
+
+function getAppVersion() {
+	const flag = process.argv
+		// TODO: Kind of fragile but works for now
+		.find((a) => a.startsWith(`--comapeo-app-version=`))
+
+	if (!flag) {
+		throw new Error('Missing process argument `comapeo-app-version`')
+	}
+
+	const version = flag.split('=')?.[1]
+
+	if (!version) {
+		throw new Error('Could not parse app version')
+	}
+
+	return version
 }
 
 /**

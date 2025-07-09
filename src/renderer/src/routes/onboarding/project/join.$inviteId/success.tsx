@@ -61,7 +61,7 @@ function RouteComponent() {
 			</Container>
 
 			<ButtonLink
-				to="/main"
+				to="/app"
 				variant="contained"
 				size="large"
 				disableElevation

@@ -12,6 +12,7 @@ describe('useSelectProjectConfigFile', () => {
 			selectFile: vi.fn(),
 			setDiagnosticsEnabled: vi.fn(),
 			getDiagnosticsEnabled: vi.fn(),
+			getAppInfo: vi.fn(),
 		}
 	})
 

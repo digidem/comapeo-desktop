@@ -108,7 +108,7 @@ function RouteComponent() {
 			<Stack direction="row" justifyContent="center" useFlexGap gap={5}>
 				<ButtonLink
 					// TODO: Navigate to categories setting page
-					to="/main"
+					to="/app"
 					variant="outlined"
 					size="large"
 					disableElevation
@@ -118,8 +118,8 @@ function RouteComponent() {
 					{t(m.updateCategoriesSet)}
 				</ButtonLink>
 				<ButtonLink
-					// TODO: Navigate to collborators setting page
-					to="/main"
+					// TODO: Navigate to collaborators setting page
+					to="/app"
 					variant="contained"
 					size="large"
 					disableElevation

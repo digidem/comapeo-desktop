@@ -40,7 +40,7 @@ function RouteComponent() {
 			>
 				<Box alignSelf="center">
 					<Icon
-						name="material-symbols-encrypted"
+						name="material-symbols-encrypted-weight200"
 						size={80}
 						htmlColor={DARKER_ORANGE}
 					/>
