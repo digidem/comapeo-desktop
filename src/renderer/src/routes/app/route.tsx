@@ -44,8 +44,6 @@ function RouteComponent() {
 		select: ({ activeProjectId }) => activeProjectId,
 	})
 
-	console.log({ activeProjectId })
-
 	return (
 		<Box bgcolor={WHITE} height="100vh">
 			<Box display="grid" gridTemplateColumns="min-content 1fr" height="100%">
