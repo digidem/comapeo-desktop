@@ -96,18 +96,17 @@ function RouteComponent() {
 
 							<LabeledNavItem
 								// @ts-expect-error Not implemented yet
-								to="/app/privacy"
-								label={t(m.privacyTabLabel)}
-								icon={
-									<Icon name="material-symbols-encrypted-weight400" size={30} />
-								}
-							/>
-
-							<LabeledNavItem
-								// @ts-expect-error Not implemented yet
 								to="/app/settings"
 								label={t(m.settingsTabLabel)}
 								icon={<Icon name="material-settings" size={30} />}
+							/>
+
+							<LabeledNavItem
+								to="/app/data-and-privacy"
+								label={t(m.dataAndPrivacyTabLabel)}
+								icon={
+									<Icon name="material-symbols-encrypted-weight400" size={30} />
+								}
 							/>
 
 							<LabeledNavItem
@@ -192,9 +191,9 @@ const m = defineMessages({
 		id: 'routes.app.route.exchangeTabLabel',
 		defaultMessage: 'Exchange',
 	},
-	privacyTabLabel: {
-		id: 'routes.app.route.privacyTabLabel',
-		defaultMessage: 'Privacy',
+	dataAndPrivacyTabLabel: {
+		id: 'routes.app.route.dataAndPrivacyTabLabel',
+		defaultMessage: 'Data & Privacy',
 	},
 	settingsTabLabel: {
 		id: 'routes.app.route.settingsTabLabel',
