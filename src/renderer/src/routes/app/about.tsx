@@ -31,7 +31,7 @@ function RouteComponent() {
 						padding={6}
 					>
 						<Icon
-							name="material-error-outline"
+							name="material-symbols-info"
 							size={100}
 							htmlColor={DARKER_ORANGE}
 						/>

@@ -103,7 +103,7 @@ function RouteComponent() {
 							<LabeledNavItem
 								to="/app/about"
 								label={t(m.aboutTabLabel)}
-								icon={<Icon name="material-error-outline" size={30} />}
+								icon={<Icon name="material-symbols-info" size={30} />}
 							/>
 						</Stack>
 					</List>
