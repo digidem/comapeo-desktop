@@ -12,4 +12,5 @@ export type RuntimeApi = {
 		extensionFilters?: Array<string>,
 	) => Promise<SelectedFile | undefined>
 	getAppInfo: () => { appVersion: string; systemVersion: string }
+	openExternalURL: (url: string) => Promise<void>
 }

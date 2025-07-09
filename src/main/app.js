@@ -3,6 +3,7 @@ import { basename } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineMessages } from '@formatjs/intl'
 import debug from 'debug'
+import { shell } from 'electron'
 import {
 	BrowserWindow,
 	app,
@@ -175,9 +176,27 @@ function setupIpc({ configStore, intl }) {
 		return configStore.get('diagnosticsEnabled')
 	})
 
-	ipcMain.handle('diagnostics:set', (_event, enable) => {
-		configStore.set('diagnosticsEnabled', enable)
-	})
+	ipcMain.handle(
+		'diagnostics:set',
+		/**
+		 * @param {any} _event
+		 * @param {boolean} enable
+		 */
+		(_event, enable) => {
+			configStore.set('diagnosticsEnabled', enable)
+		},
+	)
+
+	ipcMain.handle(
+		'shell:open-external-url',
+		/**
+		 * @param {any} _event
+		 * @param {string} url
+		 */
+		(_event, url) => {
+			return shell.openExternal(url)
+		},
+	)
 }
 
 /**

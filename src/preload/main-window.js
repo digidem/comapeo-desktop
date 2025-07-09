@@ -55,6 +55,11 @@ const runtimeApi = {
 
 		return { appVersion, systemVersion }
 	},
+
+	// Shell
+	openExternalURL: async (url) => {
+		return ipcRenderer.invoke('shell:open-external-url', url)
+	},
 }
 
 function getAppVersion() {

@@ -32,14 +32,38 @@
   "routes.app.about.version": {
     "message": "CoMapeo Version"
   },
+  "routes.app.data-and-privacy.description": {
+    "message": "CoMapeo respects your privacy and autonomy"
+  },
+  "routes.app.data-and-privacy.diagnosticInformationDescription": {
+    "message": "Anonymized information about your device, app crashes, errors and performance helps Awana Digital improve the app and fix errors."
+  },
+  "routes.app.data-and-privacy.diagnosticInformationOptOut": {
+    "message": "You can opt-out of sharing diagnostic information at any time."
+  },
+  "routes.app.data-and-privacy.diagnosticInformationPersonalInfo": {
+    "message": "This never includes any of your data or personal information."
+  },
+  "routes.app.data-and-privacy.diagnosticInformationTitle": {
+    "message": "Diagnostic Information"
+  },
+  "routes.app.data-and-privacy.learnMore": {
+    "message": "Learn More"
+  },
+  "routes.app.data-and-privacy.shareDiagnosticInformation": {
+    "message": "Share Diagnostic Information"
+  },
+  "routes.app.data-and-privacy.title": {
+    "message": "Data & Privacy"
+  },
   "routes.app.route.aboutTabLabel": {
     "message": "About CoMapeo"
   },
+  "routes.app.route.dataAndPrivacyTabLabel": {
+    "message": "Data & Privacy"
+  },
   "routes.app.route.exchangeTabLabel": {
     "message": "Exchange"
-  },
-  "routes.app.route.privacyTabLabel": {
-    "message": "Privacy"
   },
   "routes.app.route.settingsTabLabel": {
     "message": "Settings"
