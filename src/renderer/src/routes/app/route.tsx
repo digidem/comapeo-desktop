@@ -96,18 +96,18 @@ function RouteComponent() {
 
 							<LabeledNavItem
 								// @ts-expect-error Not implemented yet
+								to="/app/settings"
+								label={t(m.settingsTabLabel)}
+								icon={<Icon name="material-settings" size={30} />}
+							/>
+
+							<LabeledNavItem
+								// @ts-expect-error Not implemented yet
 								to="/app/privacy"
 								label={t(m.privacyTabLabel)}
 								icon={
 									<Icon name="material-symbols-encrypted-weight400" size={30} />
 								}
-							/>
-
-							<LabeledNavItem
-								// @ts-expect-error Not implemented yet
-								to="/app/settings"
-								label={t(m.settingsTabLabel)}
-								icon={<Icon name="material-settings" size={30} />}
 							/>
 
 							<LabeledNavItem
