@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack'
 import {
 	Outlet,
 	createFileRoute,
+	redirect,
 	type LinkOptions,
 } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -15,9 +16,18 @@ import { ButtonLink, IconButtonLink } from '../../components/button-link'
 import { Icon } from '../../components/icon'
 
 export const Route = createFileRoute('/app')({
-	beforeLoad: ({ context }) => {
+	beforeLoad: ({ context, matches }) => {
 		if (!context.activeProjectId) {
 			throw new Error('Router context is missing `activeProjectId')
+		}
+
+		// Redirect to project-specific "initial" page if the current route is the just /app
+		if (matches.at(-1)!.fullPath === '/app') {
+			throw redirect({
+				to: '/app/projects/$projectId',
+				params: { projectId: context.activeProjectId },
+				replace: true,
+			})
 		}
 
 		return {
@@ -33,6 +43,8 @@ function RouteComponent() {
 	const activeProjectId = Route.useRouteContext({
 		select: ({ activeProjectId }) => activeProjectId,
 	})
+
+	console.log({ activeProjectId })
 
 	return (
 		<Box bgcolor={WHITE} height="100vh">
