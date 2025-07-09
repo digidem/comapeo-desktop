@@ -195,7 +195,10 @@ function initMainWindow({ appMode, services }) {
 		minHeight: 500,
 		show: false,
 		backgroundColor: '#050F77',
-		webPreferences: { preload: MAIN_WINDOW_PRELOAD_PATH },
+		webPreferences: {
+			preload: MAIN_WINDOW_PRELOAD_PATH,
+			additionalArguments: [`--comapeo-app-version=${app.getVersion()}`],
+		},
 	})
 
 	if (appMode === 'development') {

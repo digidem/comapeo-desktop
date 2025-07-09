@@ -27,7 +27,8 @@ export const Route = createFileRoute('/')({
 		}
 
 		throw redirect({
-			to: '/main',
+			to: '/app/projects/$projectId',
+			params: { projectId: activeProjectId },
 			replace: true,
 		})
 	},

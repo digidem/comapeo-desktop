@@ -26,6 +26,24 @@
   "observationListView.button.team": {
     "message": "View Team"
   },
+  "routes.app.about.title": {
+    "message": "About CoMapeo"
+  },
+  "routes.app.about.version": {
+    "message": "CoMapeo Version"
+  },
+  "routes.app.route.aboutTabLabel": {
+    "message": "About CoMapeo"
+  },
+  "routes.app.route.exchangeTabLabel": {
+    "message": "Exchange"
+  },
+  "routes.app.route.privacyTabLabel": {
+    "message": "Privacy"
+  },
+  "routes.app.route.settingsTabLabel": {
+    "message": "Settings"
+  },
   "routes.onboarding.data-and-privacy.dataEncrypted": {
     "message": "All data stays fully encrypted."
   },

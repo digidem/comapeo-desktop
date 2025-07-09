@@ -11,4 +11,5 @@ export type RuntimeApi = {
 	selectFile: (
 		extensionFilters?: Array<string>,
 	) => Promise<SelectedFile | undefined>
+	getAppInfo: () => { appVersion: string; systemVersion: string }
 }

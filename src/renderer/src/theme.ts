@@ -102,16 +102,20 @@ const baseTheme = createTheme({
 			main: COMAPEO_BLUE,
 			dark: DARK_COMAPEO_BLUE,
 			light: LIGHT_COMAPEO_BLUE,
+			contrastText: WHITE,
 		},
 		secondary: {
 			main: ORANGE,
 			dark: DARK_ORANGE,
+			contrastText: WHITE,
 		},
 		success: {
 			main: GREEN,
+			contrastText: WHITE,
 		},
 		error: {
 			main: RED,
+			contrastText: WHITE,
 		},
 		background: {
 			default: DARK_COMAPEO_BLUE,
