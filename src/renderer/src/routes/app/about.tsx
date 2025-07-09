@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { DARKER_ORANGE, DARK_GREY, LIGHT_GREY } from '../../colors'
+import { BLUE_GREY, DARKER_ORANGE, LIGHT_GREY } from '../../colors'
 import { Icon } from '../../components/icon'
 import { TwoPanelLayout } from './-components/two-panel-layout'
 
@@ -20,10 +20,17 @@ function RouteComponent() {
 	return (
 		<TwoPanelLayout
 			start={
-				<Stack direction="column" gap={4} padding={6} useFlexGap flex={1}>
+				<Stack
+					direction="column"
+					gap={4}
+					padding={6}
+					useFlexGap
+					flex={1}
+					overflow="auto"
+				>
 					<Stack
 						direction="column"
-						border={`1px solid ${DARK_GREY}`}
+						border={`1px solid ${BLUE_GREY}`}
 						borderRadius={2}
 						useFlexGap
 						gap={4}
@@ -41,13 +48,12 @@ function RouteComponent() {
 					</Stack>
 					<Stack
 						direction="column"
-						border={`1px solid ${DARK_GREY}`}
+						border={`1px solid ${BLUE_GREY}`}
 						borderRadius={2}
 						useFlexGap
 						gap={4}
 						padding={6}
 						flex={1}
-						overflow="auto"
 					>
 						<List>
 							<ListItem>
