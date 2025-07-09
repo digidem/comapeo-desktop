@@ -18,7 +18,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as OnboardingPrivacyPolicyRouteImport } from './routes/onboarding/privacy-policy'
 import { Route as OnboardingDeviceNameRouteImport } from './routes/onboarding/device-name'
 import { Route as OnboardingDataAndPrivacyRouteImport } from './routes/onboarding/data-and-privacy'
-import { Route as AppPrivacyRouteImport } from './routes/app/privacy'
 import { Route as AppAboutRouteImport } from './routes/app/about'
 import { Route as MapTabsMapRouteImport } from './routes/(MapTabs)/_Map'
 import { Route as OnboardingProjectIndexRouteImport } from './routes/onboarding/project/index'
@@ -73,11 +72,6 @@ const OnboardingDataAndPrivacyRoute =
     path: '/data-and-privacy',
     getParentRoute: () => OnboardingRouteRoute,
   } as any)
-const AppPrivacyRoute = AppPrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => AppRouteRoute,
-} as any)
 const AppAboutRoute = AppAboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -145,7 +139,6 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/welcome': typeof WelcomeRoute
   '/app/about': typeof AppAboutRoute
-  '/app/privacy': typeof AppPrivacyRoute
   '/onboarding/data-and-privacy': typeof OnboardingDataAndPrivacyRoute
   '/onboarding/device-name': typeof OnboardingDeviceNameRoute
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
@@ -165,7 +158,6 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/welcome': typeof WelcomeRoute
   '/app/about': typeof AppAboutRoute
-  '/app/privacy': typeof AppPrivacyRoute
   '/onboarding/data-and-privacy': typeof OnboardingDataAndPrivacyRoute
   '/onboarding/device-name': typeof OnboardingDeviceNameRoute
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
@@ -187,7 +179,6 @@ export interface FileRoutesById {
   '/(MapTabs)': typeof MapTabsRouteWithChildren
   '/(MapTabs)/_Map': typeof MapTabsMapRouteWithChildren
   '/app/about': typeof AppAboutRoute
-  '/app/privacy': typeof AppPrivacyRoute
   '/onboarding/data-and-privacy': typeof OnboardingDataAndPrivacyRoute
   '/onboarding/device-name': typeof OnboardingDeviceNameRoute
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
@@ -209,7 +200,6 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/welcome'
     | '/app/about'
-    | '/app/privacy'
     | '/onboarding/data-and-privacy'
     | '/onboarding/device-name'
     | '/onboarding/privacy-policy'
@@ -229,7 +219,6 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/welcome'
     | '/app/about'
-    | '/app/privacy'
     | '/onboarding/data-and-privacy'
     | '/onboarding/device-name'
     | '/onboarding/privacy-policy'
@@ -250,7 +239,6 @@ export interface FileRouteTypes {
     | '/(MapTabs)'
     | '/(MapTabs)/_Map'
     | '/app/about'
-    | '/app/privacy'
     | '/onboarding/data-and-privacy'
     | '/onboarding/device-name'
     | '/onboarding/privacy-policy'
@@ -330,13 +318,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/onboarding/data-and-privacy'
       preLoaderRoute: typeof OnboardingDataAndPrivacyRouteImport
       parentRoute: typeof OnboardingRouteRoute
-    }
-    '/app/privacy': {
-      id: '/app/privacy'
-      path: '/privacy'
-      fullPath: '/app/privacy'
-      preLoaderRoute: typeof AppPrivacyRouteImport
-      parentRoute: typeof AppRouteRoute
     }
     '/app/about': {
       id: '/app/about'
@@ -420,13 +401,11 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteRouteChildren {
   AppAboutRoute: typeof AppAboutRoute
-  AppPrivacyRoute: typeof AppPrivacyRoute
   AppProjectsProjectIdIndexRoute: typeof AppProjectsProjectIdIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppAboutRoute: AppAboutRoute,
-  AppPrivacyRoute: AppPrivacyRoute,
   AppProjectsProjectIdIndexRoute: AppProjectsProjectIdIndexRoute,
 }
 

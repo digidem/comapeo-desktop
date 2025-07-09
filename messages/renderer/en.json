@@ -35,6 +35,9 @@
   "routes.app.route.aboutTabLabel": {
     "message": "About CoMapeo"
   },
+  "routes.app.route.exchangeTabLabel": {
+    "message": "Exchange"
+  },
   "routes.app.route.privacyTabLabel": {
     "message": "Privacy"
   },

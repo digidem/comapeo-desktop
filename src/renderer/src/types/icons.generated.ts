@@ -16,6 +16,7 @@ export const iconNames = [
 	'material-symbols-computer',
 	'material-settings',
 	'material-person-add',
+	'material-offline-bolt',
 	'material-hiking',
 	'material-expand-more',
 	'material-expand-less',

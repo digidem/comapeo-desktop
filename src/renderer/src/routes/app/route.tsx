@@ -78,6 +78,14 @@ function RouteComponent() {
 
 						<Stack direction="column" useFlexGap gap={5}>
 							<LabeledNavItem
+								// @ts-expect-error Not implemented yet
+								to="/app/projects/$projectId/exchange"
+								label={t(m.exchangeTabLabel)}
+								icon={<Icon name="material-offline-bolt" size={30} />}
+							/>
+
+							<LabeledNavItem
+								// @ts-expect-error Not implemented yet
 								to="/app/privacy"
 								label={t(m.privacyTabLabel)}
 								icon={
@@ -169,6 +177,10 @@ const m = defineMessages({
 	aboutTabLabel: {
 		id: 'routes.app.route.aboutTabLabel',
 		defaultMessage: 'About CoMapeo',
+	},
+	exchangeTabLabel: {
+		id: 'routes.app.route.exchangeTabLabel',
+		defaultMessage: 'Exchange',
 	},
 	privacyTabLabel: {
 		id: 'routes.app.route.privacyTabLabel',
