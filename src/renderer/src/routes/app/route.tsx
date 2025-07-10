@@ -51,6 +51,7 @@ function RouteComponent() {
 					component="nav"
 					display="flex"
 					borderRight={`2px solid ${BLUE_GREY}`}
+					overflow="auto"
 				>
 					<List
 						dense
@@ -61,6 +62,7 @@ function RouteComponent() {
 							justifyContent: 'space-between',
 							flex: 0,
 							padding: 4,
+							gap: 5,
 							textAlign: 'center',
 							alignItems: 'center',
 						}}
@@ -95,9 +97,8 @@ function RouteComponent() {
 							/>
 
 							<LabeledNavItem
-								// @ts-expect-error Not implemented yet
 								to="/app/settings"
-								label={t(m.settingsTabLabel)}
+								label={t(m.appSettingsTabLabel)}
 								icon={<Icon name="material-settings" size={30} />}
 							/>
 
@@ -195,8 +196,8 @@ const m = defineMessages({
 		id: 'routes.app.route.dataAndPrivacyTabLabel',
 		defaultMessage: 'Data & Privacy',
 	},
-	settingsTabLabel: {
-		id: 'routes.app.route.settingsTabLabel',
-		defaultMessage: 'Settings',
+	appSettingsTabLabel: {
+		id: 'routes.app.route.appSettingsTabLabel',
+		defaultMessage: 'App Settings',
 	},
 })

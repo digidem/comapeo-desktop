@@ -1,4 +1,3 @@
-import type { SVGProps } from 'react'
 import SvgIcon, { type SvgIconProps } from '@mui/material/SvgIcon'
 
 import type { IconName } from '../types/icons.generated'
@@ -33,18 +32,5 @@ export function Icon({
 		>
 			<use href={`${SPRITE_PATH}#${name}`} />
 		</SvgIcon>
-	)
-}
-
-export function Icon2({
-	name,
-	...props
-}: SVGProps<SVGSVGElement> & {
-	name: IconName
-}) {
-	return (
-		<svg {...props}>
-			<use href={`${SPRITE_PATH}#${name}`} />
-		</svg>
 	)
 }

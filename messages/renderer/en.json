@@ -59,14 +59,42 @@
   "routes.app.route.aboutTabLabel": {
     "message": "About CoMapeo"
   },
+  "routes.app.route.appSettingsTabLabel": {
+    "message": "App Settings"
+  },
   "routes.app.route.dataAndPrivacyTabLabel": {
     "message": "Data & Privacy"
   },
   "routes.app.route.exchangeTabLabel": {
     "message": "Exchange"
   },
-  "routes.app.route.settingsTabLabel": {
-    "message": "Settings"
+  "routes.app.settings.index.decimalDegrees": {
+    "description": "Label for Decimal Degrees coordinate system.",
+    "message": "DD Coordinates"
+  },
+  "routes.app.settings.index.defaultBackground": {
+    "description": "Name of the background map used if a custom one is not set.",
+    "message": "Default Background"
+  },
+  "routes.app.settings.index.description": {
+    "description": "Description of the settings page.",
+    "message": "CoMapeo is set to the following."
+  },
+  "routes.app.settings.index.dmsCoordinates": {
+    "description": "Label for Degrees/Minutes/Seconds coordinate system.",
+    "message": "DMS Coordinates"
+  },
+  "routes.app.settings.index.editDeviceName": {
+    "description": "Button text for navigating to page to edit device name.",
+    "message": "Edit"
+  },
+  "routes.app.settings.index.title": {
+    "description": "Title of the settings page.",
+    "message": "App Settings"
+  },
+  "routes.app.settings.index.utmCoordinates": {
+    "description": "Label for Universal Transverse Mercator coordinate system.",
+    "message": "UTM Coordinates"
   },
   "routes.onboarding.data-and-privacy.dataEncrypted": {
     "message": "All data stays fully encrypted."
