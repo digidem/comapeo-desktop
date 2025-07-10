@@ -21,7 +21,13 @@ import { Route as OnboardingDataAndPrivacyRouteImport } from './routes/onboardin
 import { Route as AppDataAndPrivacyRouteImport } from './routes/app/data-and-privacy'
 import { Route as AppAboutRouteImport } from './routes/app/about'
 import { Route as MapTabsMapRouteImport } from './routes/(MapTabs)/_Map'
+import { Route as AppSettingsRouteRouteImport } from './routes/app/settings/route'
 import { Route as OnboardingProjectIndexRouteImport } from './routes/onboarding/project/index'
+import { Route as AppSettingsIndexRouteImport } from './routes/app/settings/index'
+import { Route as AppSettingsLanguageRouteImport } from './routes/app/settings/language'
+import { Route as AppSettingsDeviceNameRouteImport } from './routes/app/settings/device-name'
+import { Route as AppSettingsCoordinateSystemRouteImport } from './routes/app/settings/coordinate-system'
+import { Route as AppSettingsBackgroundMapRouteImport } from './routes/app/settings/background-map'
 import { Route as MapTabsMapTab2RouteImport } from './routes/(MapTabs)/_Map.tab2'
 import { Route as MapTabsMapMainRouteImport } from './routes/(MapTabs)/_Map.main'
 import { Route as OnboardingProjectCreateIndexRouteImport } from './routes/onboarding/project/create/index'
@@ -87,11 +93,43 @@ const MapTabsMapRoute = MapTabsMapRouteImport.update({
   id: '/_Map',
   getParentRoute: () => MapTabsRoute,
 } as any)
+const AppSettingsRouteRoute = AppSettingsRouteRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const OnboardingProjectIndexRoute = OnboardingProjectIndexRouteImport.update({
   id: '/project/',
   path: '/project/',
   getParentRoute: () => OnboardingRouteRoute,
 } as any)
+const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppSettingsRouteRoute,
+} as any)
+const AppSettingsLanguageRoute = AppSettingsLanguageRouteImport.update({
+  id: '/language',
+  path: '/language',
+  getParentRoute: () => AppSettingsRouteRoute,
+} as any)
+const AppSettingsDeviceNameRoute = AppSettingsDeviceNameRouteImport.update({
+  id: '/device-name',
+  path: '/device-name',
+  getParentRoute: () => AppSettingsRouteRoute,
+} as any)
+const AppSettingsCoordinateSystemRoute =
+  AppSettingsCoordinateSystemRouteImport.update({
+    id: '/coordinate-system',
+    path: '/coordinate-system',
+    getParentRoute: () => AppSettingsRouteRoute,
+  } as any)
+const AppSettingsBackgroundMapRoute =
+  AppSettingsBackgroundMapRouteImport.update({
+    id: '/background-map',
+    path: '/background-map',
+    getParentRoute: () => AppSettingsRouteRoute,
+  } as any)
 const MapTabsMapTab2Route = MapTabsMapTab2RouteImport.update({
   id: '/tab2',
   path: '/tab2',
@@ -144,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteRouteWithChildren
   '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/welcome': typeof WelcomeRoute
+  '/app/settings': typeof AppSettingsRouteRouteWithChildren
   '/app/about': typeof AppAboutRoute
   '/app/data-and-privacy': typeof AppDataAndPrivacyRoute
   '/onboarding/data-and-privacy': typeof OnboardingDataAndPrivacyRoute
@@ -151,6 +190,11 @@ export interface FileRoutesByFullPath {
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
   '/main': typeof MapTabsMapMainRoute
   '/tab2': typeof MapTabsMapTab2Route
+  '/app/settings/background-map': typeof AppSettingsBackgroundMapRoute
+  '/app/settings/coordinate-system': typeof AppSettingsCoordinateSystemRoute
+  '/app/settings/device-name': typeof AppSettingsDeviceNameRoute
+  '/app/settings/language': typeof AppSettingsLanguageRoute
+  '/app/settings/': typeof AppSettingsIndexRoute
   '/onboarding/project': typeof OnboardingProjectIndexRoute
   '/onboarding/project/join/$inviteId': typeof OnboardingProjectJoinInviteIdRouteRouteWithChildren
   '/app/projects/$projectId': typeof AppProjectsProjectIdIndexRoute
@@ -171,6 +215,11 @@ export interface FileRoutesByTo {
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
   '/main': typeof MapTabsMapMainRoute
   '/tab2': typeof MapTabsMapTab2Route
+  '/app/settings/background-map': typeof AppSettingsBackgroundMapRoute
+  '/app/settings/coordinate-system': typeof AppSettingsCoordinateSystemRoute
+  '/app/settings/device-name': typeof AppSettingsDeviceNameRoute
+  '/app/settings/language': typeof AppSettingsLanguageRoute
+  '/app/settings': typeof AppSettingsIndexRoute
   '/onboarding/project': typeof OnboardingProjectIndexRoute
   '/app/projects/$projectId': typeof AppProjectsProjectIdIndexRoute
   '/onboarding/project/create': typeof OnboardingProjectCreateIndexRoute
@@ -184,6 +233,7 @@ export interface FileRoutesById {
   '/app': typeof AppRouteRouteWithChildren
   '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/welcome': typeof WelcomeRoute
+  '/app/settings': typeof AppSettingsRouteRouteWithChildren
   '/(MapTabs)': typeof MapTabsRouteWithChildren
   '/(MapTabs)/_Map': typeof MapTabsMapRouteWithChildren
   '/app/about': typeof AppAboutRoute
@@ -193,6 +243,11 @@ export interface FileRoutesById {
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
   '/(MapTabs)/_Map/main': typeof MapTabsMapMainRoute
   '/(MapTabs)/_Map/tab2': typeof MapTabsMapTab2Route
+  '/app/settings/background-map': typeof AppSettingsBackgroundMapRoute
+  '/app/settings/coordinate-system': typeof AppSettingsCoordinateSystemRoute
+  '/app/settings/device-name': typeof AppSettingsDeviceNameRoute
+  '/app/settings/language': typeof AppSettingsLanguageRoute
+  '/app/settings/': typeof AppSettingsIndexRoute
   '/onboarding/project/': typeof OnboardingProjectIndexRoute
   '/onboarding/project/join/$inviteId': typeof OnboardingProjectJoinInviteIdRouteRouteWithChildren
   '/app/projects/$projectId/': typeof AppProjectsProjectIdIndexRoute
@@ -208,6 +263,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/onboarding'
     | '/welcome'
+    | '/app/settings'
     | '/app/about'
     | '/app/data-and-privacy'
     | '/onboarding/data-and-privacy'
@@ -215,6 +271,11 @@ export interface FileRouteTypes {
     | '/onboarding/privacy-policy'
     | '/main'
     | '/tab2'
+    | '/app/settings/background-map'
+    | '/app/settings/coordinate-system'
+    | '/app/settings/device-name'
+    | '/app/settings/language'
+    | '/app/settings/'
     | '/onboarding/project'
     | '/onboarding/project/join/$inviteId'
     | '/app/projects/$projectId'
@@ -235,6 +296,11 @@ export interface FileRouteTypes {
     | '/onboarding/privacy-policy'
     | '/main'
     | '/tab2'
+    | '/app/settings/background-map'
+    | '/app/settings/coordinate-system'
+    | '/app/settings/device-name'
+    | '/app/settings/language'
+    | '/app/settings'
     | '/onboarding/project'
     | '/app/projects/$projectId'
     | '/onboarding/project/create'
@@ -247,6 +313,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/onboarding'
     | '/welcome'
+    | '/app/settings'
     | '/(MapTabs)'
     | '/(MapTabs)/_Map'
     | '/app/about'
@@ -256,6 +323,11 @@ export interface FileRouteTypes {
     | '/onboarding/privacy-policy'
     | '/(MapTabs)/_Map/main'
     | '/(MapTabs)/_Map/tab2'
+    | '/app/settings/background-map'
+    | '/app/settings/coordinate-system'
+    | '/app/settings/device-name'
+    | '/app/settings/language'
+    | '/app/settings/'
     | '/onboarding/project/'
     | '/onboarding/project/join/$inviteId'
     | '/app/projects/$projectId/'
@@ -352,12 +424,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MapTabsMapRouteImport
       parentRoute: typeof MapTabsRoute
     }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/onboarding/project/': {
       id: '/onboarding/project/'
       path: '/project'
       fullPath: '/onboarding/project'
       preLoaderRoute: typeof OnboardingProjectIndexRouteImport
       parentRoute: typeof OnboardingRouteRoute
+    }
+    '/app/settings/': {
+      id: '/app/settings/'
+      path: '/'
+      fullPath: '/app/settings/'
+      preLoaderRoute: typeof AppSettingsIndexRouteImport
+      parentRoute: typeof AppSettingsRouteRoute
+    }
+    '/app/settings/language': {
+      id: '/app/settings/language'
+      path: '/language'
+      fullPath: '/app/settings/language'
+      preLoaderRoute: typeof AppSettingsLanguageRouteImport
+      parentRoute: typeof AppSettingsRouteRoute
+    }
+    '/app/settings/device-name': {
+      id: '/app/settings/device-name'
+      path: '/device-name'
+      fullPath: '/app/settings/device-name'
+      preLoaderRoute: typeof AppSettingsDeviceNameRouteImport
+      parentRoute: typeof AppSettingsRouteRoute
+    }
+    '/app/settings/coordinate-system': {
+      id: '/app/settings/coordinate-system'
+      path: '/coordinate-system'
+      fullPath: '/app/settings/coordinate-system'
+      preLoaderRoute: typeof AppSettingsCoordinateSystemRouteImport
+      parentRoute: typeof AppSettingsRouteRoute
+    }
+    '/app/settings/background-map': {
+      id: '/app/settings/background-map'
+      path: '/background-map'
+      fullPath: '/app/settings/background-map'
+      preLoaderRoute: typeof AppSettingsBackgroundMapRouteImport
+      parentRoute: typeof AppSettingsRouteRoute
     }
     '/(MapTabs)/_Map/tab2': {
       id: '/(MapTabs)/_Map/tab2'
@@ -418,13 +532,34 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AppSettingsRouteRouteChildren {
+  AppSettingsBackgroundMapRoute: typeof AppSettingsBackgroundMapRoute
+  AppSettingsCoordinateSystemRoute: typeof AppSettingsCoordinateSystemRoute
+  AppSettingsDeviceNameRoute: typeof AppSettingsDeviceNameRoute
+  AppSettingsLanguageRoute: typeof AppSettingsLanguageRoute
+  AppSettingsIndexRoute: typeof AppSettingsIndexRoute
+}
+
+const AppSettingsRouteRouteChildren: AppSettingsRouteRouteChildren = {
+  AppSettingsBackgroundMapRoute: AppSettingsBackgroundMapRoute,
+  AppSettingsCoordinateSystemRoute: AppSettingsCoordinateSystemRoute,
+  AppSettingsDeviceNameRoute: AppSettingsDeviceNameRoute,
+  AppSettingsLanguageRoute: AppSettingsLanguageRoute,
+  AppSettingsIndexRoute: AppSettingsIndexRoute,
+}
+
+const AppSettingsRouteRouteWithChildren =
+  AppSettingsRouteRoute._addFileChildren(AppSettingsRouteRouteChildren)
+
 interface AppRouteRouteChildren {
+  AppSettingsRouteRoute: typeof AppSettingsRouteRouteWithChildren
   AppAboutRoute: typeof AppAboutRoute
   AppDataAndPrivacyRoute: typeof AppDataAndPrivacyRoute
   AppProjectsProjectIdIndexRoute: typeof AppProjectsProjectIdIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppSettingsRouteRoute: AppSettingsRouteRouteWithChildren,
   AppAboutRoute: AppAboutRoute,
   AppDataAndPrivacyRoute: AppDataAndPrivacyRoute,
   AppProjectsProjectIdIndexRoute: AppProjectsProjectIdIndexRoute,
