@@ -68,6 +68,34 @@
   "routes.app.route.exchangeTabLabel": {
     "message": "Exchange"
   },
+  "routes.app.settings.device-name.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Cancel"
+  },
+  "routes.app.settings.device-name.characterCount": {
+    "description": "Displays number of characters in input out of the maximum allowed characters.",
+    "message": "{count}/{max}"
+  },
+  "routes.app.settings.device-name.inputLabel": {
+    "description": "Label for the device name input.",
+    "message": "Device Name"
+  },
+  "routes.app.settings.device-name.maxLengthError": {
+    "description": "Error message for device name that is too long.",
+    "message": "Too long, try a shorter name."
+  },
+  "routes.app.settings.device-name.minLengthError": {
+    "description": "Error message for device name that is too short.",
+    "message": "Enter a Device Name"
+  },
+  "routes.app.settings.device-name.navTitle": {
+    "description": "Title of the device name settings page.",
+    "message": "Device Name"
+  },
+  "routes.app.settings.device-name.save": {
+    "description": "Label for save button.",
+    "message": "Save"
+  },
   "routes.app.settings.index.decimalDegrees": {
     "description": "Label for Decimal Degrees coordinate system.",
     "message": "DD Coordinates"

@@ -11,10 +11,8 @@ import * as v from 'valibot'
 import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../colors'
 import { Icon } from '../../components/icon'
 import { useAppForm } from '../../hooks/use-app-form'
-import {
-	DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
-	INPUT_NAME_MAX_BYTES,
-} from '../../lib/constants'
+import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../lib/constants'
+import { createDeviceNameSchema } from '../../lib/schemas/device-name'
 
 export const Route = createFileRoute('/onboarding/device-name')({
 	component: RouteComponent,
@@ -30,15 +28,14 @@ function RouteComponent() {
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
 	const deviceNameSchema = useMemo(() => {
-		return v.pipe(
-			v.string(),
-			v.transform((value) => {
-				return value.trim()
-			}),
-			v.minLength(1, t(m.minLengthError)),
-			v.maxGraphemes(DEVICE_NAME_MAX_LENGTH_GRAPHEMES, t(m.maxLengthError)),
-			v.maxBytes(INPUT_NAME_MAX_BYTES, t(m.maxLengthError)),
-		)
+		const maxLengthError = t(m.maxLengthError)
+		const minLengthError = t(m.minLengthError)
+
+		return createDeviceNameSchema({
+			maxBytesError: maxLengthError,
+			maxLengthError,
+			minLengthError,
+		})
 	}, [t])
 
 	const form = useAppForm({
