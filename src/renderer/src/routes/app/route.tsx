@@ -217,7 +217,10 @@ const SHARED_NAV_ITEM_PROPS = {
 } as const
 
 function checkPageHasEditing(currentPath: ToRouteFullPath) {
-	if (currentPath === '/app/settings/device-name') {
+	if (
+		currentPath === '/app/settings/device-name' ||
+		currentPath === '/app/settings/coordinate-system'
+	) {
 		return true
 	}
 

@@ -68,6 +68,22 @@
   "routes.app.route.exchangeTabLabel": {
     "message": "Exchange"
   },
+  "routes.app.settings.coordinate-system.ddOptionLabel": {
+    "description": "Label for the decimal degrees option.",
+    "message": "DD (Decimal Degrees)"
+  },
+  "routes.app.settings.coordinate-system.dmsOptionLabel": {
+    "description": "Label for the degrees/minutes/seconds option.",
+    "message": "DMS (Decimal/Minutes/Seconds)"
+  },
+  "routes.app.settings.coordinate-system.title": {
+    "description": "Title of the coordinate system settings page.",
+    "message": "Coordinate System"
+  },
+  "routes.app.settings.coordinate-system.utmOptionLabel": {
+    "description": "Label for the universal transverse mercator option.",
+    "message": "UTM (Universal Transverse Mercator)"
+  },
   "routes.app.settings.device-name.cancel": {
     "description": "Label for cancel button.",
     "message": "Cancel"
