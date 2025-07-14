@@ -27,8 +27,6 @@ function RouteComponent() {
 
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
-	// TODO: We want to provide translated error messages that can be rendered directly
-	// Probably not ideal do this reactively but can address later
 	const deviceNameSchema = useMemo(() => {
 		return createDeviceNameSchema({ formatMessage: t })
 	}, [t])
