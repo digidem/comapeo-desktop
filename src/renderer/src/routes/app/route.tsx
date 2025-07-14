@@ -124,17 +124,6 @@ function RouteComponent() {
 									pageHasEditing &&
 									!currentRoute.fullPath.startsWith('/app/settings')
 								}
-								onClick={
-									// Prevent the default behavior when clicking on the tab item
-									// within an editing page
-									pageHasEditing &&
-									currentRoute.fullPath.startsWith('/app/settings')
-										? (event) => {
-												event.preventDefault()
-												return false
-											}
-										: undefined
-								}
 								label={t(m.appSettingsTabLabel)}
 								icon={<Icon name="material-settings" size={30} />}
 							/>
