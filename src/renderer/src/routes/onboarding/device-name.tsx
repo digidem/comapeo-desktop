@@ -28,7 +28,14 @@ function RouteComponent() {
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
 	const deviceNameSchema = useMemo(() => {
-		return createDeviceNameSchema({ formatMessage: t })
+		const maxLengthError = t(m.maxLengthError)
+		const minLengthError = t(m.minLengthError)
+
+		return createDeviceNameSchema({
+			maxBytesError: maxLengthError,
+			maxLengthError,
+			minLengthError,
+		})
 	}, [t])
 
 	const form = useAppForm({

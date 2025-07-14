@@ -31,7 +31,14 @@ function RouteComponent() {
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
 	const deviceNameSchema = useMemo(() => {
-		return createDeviceNameSchema({ formatMessage: t })
+		const maxLengthError = t(m.maxLengthError)
+		const minLengthError = t(m.minLengthError)
+
+		return createDeviceNameSchema({
+			maxBytesError: maxLengthError,
+			maxLengthError,
+			minLengthError,
+		})
 	}, [t])
 
 	const form = useAppForm({
@@ -241,5 +248,15 @@ const m = defineMessages({
 		id: 'routes.app.settings.device-name.cancel',
 		defaultMessage: 'Cancel',
 		description: 'Label for cancel button.',
+	},
+	minLengthError: {
+		id: 'routes.app.settings.device-name.minLengthError',
+		defaultMessage: 'Enter a Device Name',
+		description: 'Error message for device name that is too short.',
+	},
+	maxLengthError: {
+		id: 'routes.app.settings.device-name.maxLengthError',
+		defaultMessage: 'Too long, try a shorter name.',
+		description: 'Error message for device name that is too long.',
 	},
 })

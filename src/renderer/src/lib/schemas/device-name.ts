@@ -1,4 +1,3 @@
-import { defineMessages, type IntlShape } from 'react-intl'
 import * as v from 'valibot'
 
 import {
@@ -6,34 +5,18 @@ import {
 	INPUT_NAME_MAX_BYTES,
 } from '../constants'
 
-export function createDeviceNameSchema({
-	formatMessage,
-}: {
-	formatMessage: IntlShape['formatMessage']
+export function createDeviceNameSchema(opts?: {
+	maxBytesError?: string
+	maxLengthError?: string
+	minLengthError?: string
 }) {
 	return v.pipe(
 		v.string(),
 		v.transform((value) => {
 			return value.trim()
 		}),
-		v.minLength(1, formatMessage(m.minLengthError)),
-		v.maxGraphemes(
-			DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
-			formatMessage(m.maxLengthError),
-		),
-		v.maxBytes(INPUT_NAME_MAX_BYTES, formatMessage(m.maxLengthError)),
+		v.minLength(1, opts?.minLengthError),
+		v.maxGraphemes(DEVICE_NAME_MAX_LENGTH_GRAPHEMES, opts?.maxLengthError),
+		v.maxBytes(INPUT_NAME_MAX_BYTES, opts?.maxBytesError),
 	)
 }
-
-const m = defineMessages({
-	minLengthError: {
-		id: 'lib.schemas.device-name.minLengthError',
-		defaultMessage: 'Enter a Device Name',
-		description: 'Error message for device name that is too short.',
-	},
-	maxLengthError: {
-		id: 'lib.schemas.device-name.maxLengthError',
-		defaultMessage: 'Too long, try a shorter name.',
-		description: 'Error message for device name that is too long.',
-	},
-})

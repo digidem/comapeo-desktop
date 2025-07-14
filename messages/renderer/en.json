@@ -11,14 +11,6 @@
   "emptyState.noObservationsFound": {
     "message": "No Observations Found"
   },
-  "lib.schemas.device-name.maxLengthError": {
-    "description": "Error message for device name that is too long.",
-    "message": "Too long, try a shorter name."
-  },
-  "lib.schemas.device-name.minLengthError": {
-    "description": "Error message for device name that is too short.",
-    "message": "Enter a Device Name"
-  },
   "mapMain.errorLoading": {
     "message": "Oops! Error loading data."
   },
@@ -87,6 +79,14 @@
   "routes.app.settings.device-name.inputLabel": {
     "description": "Label for the device name input.",
     "message": "Device Name"
+  },
+  "routes.app.settings.device-name.maxLengthError": {
+    "description": "Error message for device name that is too long.",
+    "message": "Too long, try a shorter name."
+  },
+  "routes.app.settings.device-name.minLengthError": {
+    "description": "Error message for device name that is too short.",
+    "message": "Enter a Device Name"
   },
   "routes.app.settings.device-name.navTitle": {
     "description": "Title of the device name settings page.",
