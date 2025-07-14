@@ -7,13 +7,18 @@ import {
 	Outlet,
 	createFileRoute,
 	redirect,
-	type LinkOptions,
+	useChildMatches,
 } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, COMAPEO_BLUE, DARK_GREY, WHITE } from '../../colors'
-import { ButtonLink, IconButtonLink } from '../../components/button-link'
+import {
+	ButtonLink,
+	IconButtonLink,
+	type ButtonLinkProps,
+} from '../../components/button-link'
 import { Icon } from '../../components/icon'
+import type { ToRouteFullPath } from '../../lib/navigation'
 
 export const Route = createFileRoute('/app')({
 	beforeLoad: ({ context, matches }) => {
@@ -44,6 +49,14 @@ function RouteComponent() {
 		select: ({ activeProjectId }) => activeProjectId,
 	})
 
+	const currentRoute = useChildMatches({
+		select: (matches) => {
+			return matches.at(-1)!
+		},
+	})
+
+	const pageHasEditing = checkPageHasEditing(currentRoute.fullPath)
+
 	return (
 		<Box bgcolor={WHITE} height="100vh">
 			<Box display="grid" gridTemplateColumns="min-content 1fr" height="100%">
@@ -70,6 +83,10 @@ function RouteComponent() {
 						<ListItem {...SHARED_NAV_ITEM_PROPS.listItem}>
 							<IconButtonLink
 								{...SHARED_NAV_ITEM_PROPS.link}
+								disabled={
+									pageHasEditing &&
+									currentRoute.fullPath !== '/app/projects/$projectId'
+								}
 								to="/app/projects/$projectId"
 								params={{ projectId: activeProjectId }}
 								activeProps={{
@@ -92,18 +109,31 @@ function RouteComponent() {
 							<LabeledNavItem
 								// @ts-expect-error Not implemented yet
 								to="/app/projects/$projectId/exchange"
+								disabled={
+									pageHasEditing &&
+									// @ts-expect-error Not implemented yet
+									currentRoute.fullPath !== '/app/projects/$projectId/exchange'
+								}
 								label={t(m.exchangeTabLabel)}
 								icon={<Icon name="material-offline-bolt" size={30} />}
 							/>
 
 							<LabeledNavItem
 								to="/app/settings"
+								disabled={
+									pageHasEditing &&
+									!currentRoute.fullPath.startsWith('/app/settings')
+								}
 								label={t(m.appSettingsTabLabel)}
 								icon={<Icon name="material-settings" size={30} />}
 							/>
 
 							<LabeledNavItem
 								to="/app/data-and-privacy"
+								disabled={
+									pageHasEditing &&
+									currentRoute.fullPath !== '/app/data-and-privacy'
+								}
 								label={t(m.dataAndPrivacyTabLabel)}
 								icon={
 									<Icon name="material-symbols-encrypted-weight400" size={30} />
@@ -112,6 +142,9 @@ function RouteComponent() {
 
 							<LabeledNavItem
 								to="/app/about"
+								disabled={
+									pageHasEditing && currentRoute.fullPath !== '/app/about'
+								}
 								label={t(m.aboutTabLabel)}
 								icon={<Icon name="material-symbols-info" size={30} />}
 							/>
@@ -130,7 +163,7 @@ function LabeledNavItem({
 	icon,
 	label,
 	...linkOptions
-}: LinkOptions & {
+}: ButtonLinkProps & {
 	icon: ReactNode
 	label: string
 }) {
@@ -182,6 +215,14 @@ const SHARED_NAV_ITEM_PROPS = {
 		},
 	},
 } as const
+
+function checkPageHasEditing(currentPath: ToRouteFullPath) {
+	if (currentPath === '/app/settings/device-name') {
+		return true
+	}
+
+	return false
+}
 
 const m = defineMessages({
 	aboutTabLabel: {
