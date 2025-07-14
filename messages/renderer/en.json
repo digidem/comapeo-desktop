@@ -12,9 +12,11 @@
     "message": "No Observations Found"
   },
   "lib.schemas.device-name.maxLengthError": {
+    "description": "Error message for device name that is too long.",
     "message": "Too long, try a shorter name."
   },
   "lib.schemas.device-name.minLengthError": {
+    "description": "Error message for device name that is too short.",
     "message": "Enter a Device Name"
   },
   "mapMain.errorLoading": {
