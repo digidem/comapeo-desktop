@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { useOwnDeviceInfo } from '@comapeo/core-react'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
@@ -9,19 +10,25 @@ import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors'
 import { ButtonLink, IconButtonLink } from '../../../components/button-link'
 import { Icon } from '../../../components/icon'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/constants'
+import { getAppSettingQueryOptions } from '../../../lib/queries/app-settings'
 
 export const Route = createFileRoute('/app/settings/')({
 	loader: async ({ context }) => {
 		const { clientApi, queryClient } = context
 
-		// TODO: not ideal to do this but requires major changes to @comapeo/core-react
-		// copied from https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/client.ts#L21
-		await queryClient.ensureQueryData({
-			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
-			queryFn: async () => {
-				return clientApi.getDeviceInfo()
-			},
-		})
+		await Promise.all([
+			// TODO: not ideal to do this but requires major changes to @comapeo/core-react
+			// copied from https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/client.ts#L21
+			queryClient.ensureQueryData({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
+				queryFn: async () => {
+					return clientApi.getDeviceInfo()
+				},
+			}),
+			queryClient.ensureQueryData(
+				getAppSettingQueryOptions('coordinateFormat'),
+			),
+		])
 	},
 	component: RouteComponent,
 })
@@ -30,6 +37,10 @@ function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 
 	const { data: deviceInfo } = useOwnDeviceInfo()
+
+	const { data: coordinateFormat } = useSuspenseQuery(
+		getAppSettingQueryOptions('coordinateFormat'),
+	)
 
 	return (
 		<Stack
@@ -103,8 +114,13 @@ function RouteComponent() {
 						<Icon name="material-chevron-right" />
 					</IconButtonLink>
 				}
-				// TODO: Get coordinate system from settings
-				label={t(m.dmsCoordinates)}
+				label={t(
+					coordinateFormat === 'utm'
+						? m.utmCoordinates
+						: coordinateFormat === 'dd'
+							? m.ddCoordinates
+							: m.dmsCoordinates,
+				)}
 			/>
 
 			<SettingRow
