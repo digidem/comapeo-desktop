@@ -12,10 +12,25 @@ import * as v from 'valibot'
 import { BLUE_GREY, WHITE } from '../../../colors'
 import { Icon } from '../../../components/icon'
 import { useAppForm } from '../../../hooks/use-app-form'
-import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../../lib/constants'
+import {
+	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+	DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
+} from '../../../lib/constants'
 import { createDeviceNameSchema } from '../../../lib/schemas/device-name'
 
 export const Route = createFileRoute('/app/settings/device-name')({
+	loader: async ({ context }) => {
+		const { clientApi, queryClient } = context
+
+		// TODO: not ideal to do this but requires major changes to @comapeo/core-react
+		// copied from https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/client.ts#L21
+		await queryClient.ensureQueryData({
+			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
+			queryFn: async () => {
+				return clientApi.getDeviceInfo()
+			},
+		})
+	},
 	component: RouteComponent,
 })
 
