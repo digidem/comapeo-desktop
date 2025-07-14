@@ -5,6 +5,7 @@ import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
@@ -21,7 +22,7 @@ import {
 	WHITE,
 } from '../../../../colors'
 import { Icon } from '../../../../components/icon'
-import { useActiveProjectIdStoreActions } from '../../../../contexts/ActiveProjectIdProvider'
+import { setAppSettingMutationOptions } from '../../../../lib/queries/app-settings'
 
 export const Route = createFileRoute('/onboarding/project/join/$inviteId/')({
 	component: RouteComponent,
@@ -40,7 +41,10 @@ function RouteComponent() {
 	const rejectInvite = useOnboardingRejectInvite()
 	const acceptInvite = useOnboardingAcceptInvite()
 
-	const { setActiveProjectId } = useActiveProjectIdStoreActions()
+	const queryClient = useQueryClient()
+	const setActiveProjectId = useMutation(
+		setAppSettingMutationOptions({ queryClient, name: 'activeProjectId' }),
+	)
 
 	return (
 		<Stack
@@ -169,7 +173,7 @@ function RouteComponent() {
 							{ inviteId },
 							{
 								onSuccess: (data) => {
-									setActiveProjectId(data)
+									setActiveProjectId.mutate(data)
 
 									navigate({
 										to: '/onboarding/project/join/$inviteId/success',

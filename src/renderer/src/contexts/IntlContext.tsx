@@ -1,15 +1,15 @@
 import {
 	createContext,
 	use,
-	useCallback,
-	useState,
 	type ComponentProps,
 	type PropsWithChildren,
 } from 'react'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { IntlProvider as ReactIntlProvider } from 'react-intl'
 
 import en from '../../../../translations/renderer/en.json'
 import { CORNFLOWER_BLUE, ORANGE } from '../colors'
+import { getAppSettingQueryOptions } from '../lib/queries/app-settings'
 
 const RICH_TEXT_MAPPINGS: ComponentProps<
 	typeof ReactIntlProvider
@@ -35,21 +35,21 @@ type SupportedLocale = keyof typeof messages
 const LocaleContext = createContext<(locale: SupportedLocale) => void>(() => {})
 
 export function IntlProvider({ children }: PropsWithChildren) {
-	const [locale, setLocale] = useState<SupportedLocale>('en')
-
-	const updateLocale = useCallback((l: SupportedLocale) => {
-		window.runtime.updateLocale(l)
-		setLocale(l)
-	}, [])
+	const { data: persistedLocale } = useSuspenseQuery(
+		getAppSettingQueryOptions('locale'),
+	)
 
 	return (
 		<ReactIntlProvider
-			messages={messages[locale]}
-			locale={locale}
+			messages={
+				// @ts-expect-error Fix later
+				messages[persistedLocale]
+			}
+			locale={persistedLocale}
 			defaultLocale="en"
 			defaultRichTextElements={RICH_TEXT_MAPPINGS}
 		>
-			<LocaleContext value={updateLocale}>{children}</LocaleContext>
+			{children}
 		</ReactIntlProvider>
 	)
 }
