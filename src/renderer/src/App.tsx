@@ -3,7 +3,10 @@ import {
 	ClientApiProvider,
 	useSetUpInvitesListeners,
 } from '@comapeo/core-react'
-import { CssBaseline, ThemeProvider } from '@mui/material'
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
+import CssBaseline from '@mui/material/CssBaseline'
+import { ThemeProvider } from '@mui/material/styles'
 import {
 	QueryClient,
 	QueryClientProvider,
@@ -65,7 +68,18 @@ export function App() {
 			<ThemeProvider theme={theme}>
 				<CssBaseline enableColorScheme />
 				<QueryClientProvider client={queryClient}>
-					<Suspense>
+					<Suspense
+						fallback={
+							<Box
+								height="100vh"
+								display="flex"
+								justifyContent="center"
+								alignItems="center"
+							>
+								<CircularProgress />
+							</Box>
+						}
+					>
 						<IntlProvider>
 							<ClientApiProvider clientApi={clientApi}>
 								<WithInvitesListener>
