@@ -14,26 +14,6 @@ window.onmessage = (event) => {
  * @type {import('./runtime.js').RuntimeApi}
  */
 const runtimeApi = {
-	// Locale
-	async getLocale() {
-		const locale = await ipcRenderer.invoke('locale:get')
-		if (typeof locale !== 'string') {
-			throw new Error('Locale must be a string')
-		}
-		return locale
-	},
-	updateLocale(locale) {
-		ipcRenderer.send('locale:update', locale)
-	},
-
-	// Diagnostics
-	async getDiagnosticsEnabled() {
-		return ipcRenderer.invoke('diagnostics:get')
-	},
-	async setDiagnosticsEnabled(enable) {
-		await ipcRenderer.invoke('diagnostics:set', enable)
-	},
-
 	// Files
 	async selectFile(extensionFilters) {
 		/** @type {unknown} */
@@ -59,6 +39,14 @@ const runtimeApi = {
 	// Shell
 	openExternalURL: async (url) => {
 		return ipcRenderer.invoke('shell:open-external-url', url)
+	},
+
+	// Settings
+	getSetting: async (key) => {
+		return ipcRenderer.invoke('settings:get', key)
+	},
+	setSetting: async (key, value) => {
+		return ipcRenderer.invoke('settings:set', key, value)
 	},
 }
 

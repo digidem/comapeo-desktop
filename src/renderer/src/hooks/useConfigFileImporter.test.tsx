@@ -7,13 +7,11 @@ import { useSelectProjectConfigFile } from './mutations/file-system'
 describe('useSelectProjectConfigFile', () => {
 	beforeEach(() => {
 		window.runtime = {
-			getLocale: vi.fn().mockResolvedValue('en'),
-			updateLocale: vi.fn(),
 			selectFile: vi.fn(),
-			setDiagnosticsEnabled: vi.fn(),
-			getDiagnosticsEnabled: vi.fn(),
 			getAppInfo: vi.fn(),
 			openExternalURL: vi.fn(),
+			getSetting: vi.fn(),
+			setSetting: vi.fn(),
 		}
 	})
 

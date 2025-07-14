@@ -1,10 +1,14 @@
-import { StrictMode, type ReactElement, type ReactNode } from 'react'
+import { StrictMode, Suspense, type ReactElement, type ReactNode } from 'react'
 import {
 	ClientApiProvider,
 	useSetUpInvitesListeners,
 } from '@comapeo/core-react'
 import { CssBaseline, ThemeProvider } from '@mui/material'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import {
+	QueryClient,
+	QueryClientProvider,
+	useSuspenseQuery,
+} from '@tanstack/react-query'
 import {
 	RouterProvider,
 	createHashHistory,
@@ -12,12 +16,8 @@ import {
 } from '@tanstack/react-router'
 
 import { initComapeoClient } from './comapeo-client'
-import {
-	ActiveProjectIdProvider,
-	createActiveProjectIdStore,
-	useActiveProjectIdStoreState,
-} from './contexts/ActiveProjectIdProvider'
 import { IntlProvider } from './contexts/IntlContext'
+import { getAppSettingQueryOptions } from './lib/queries/app-settings'
 import { routeTree } from './routeTree.gen'
 import { theme } from './theme'
 
@@ -45,7 +45,7 @@ const hashHistory = createHashHistory()
 const router = createRouter({
 	routeTree,
 	history: hashHistory,
-	context: { queryClient, clientApi, activeProjectId: undefined },
+	context: { queryClient, clientApi, activeProjectId: null },
 	defaultPreload: 'intent',
 	// Since we're using React Query, we don't want loader calls to ever be stale
 	// This will ensure that the loader is always called when the route is preloaded or visited
@@ -59,20 +59,16 @@ declare module '@tanstack/react-router' {
 	}
 }
 
-const persistedProjectIdStore = createActiveProjectIdStore({
-	persist: true,
-})
-
 export function App() {
 	return (
 		<StrictMode>
 			<ThemeProvider theme={theme}>
 				<CssBaseline enableColorScheme />
-				<IntlProvider>
-					<QueryClientProvider client={queryClient}>
-						<ClientApiProvider clientApi={clientApi}>
-							<WithInvitesListener>
-								<ActiveProjectIdProvider store={persistedProjectIdStore}>
+				<QueryClientProvider client={queryClient}>
+					<Suspense>
+						<IntlProvider>
+							<ClientApiProvider clientApi={clientApi}>
+								<WithInvitesListener>
 									<WithActiveProjectId>
 										{({ activeProjectId }) => (
 											<RouterProvider
@@ -81,11 +77,11 @@ export function App() {
 											/>
 										)}
 									</WithActiveProjectId>
-								</ActiveProjectIdProvider>
-							</WithInvitesListener>
-						</ClientApiProvider>
-					</QueryClientProvider>
-				</IntlProvider>
+								</WithInvitesListener>
+							</ClientApiProvider>
+						</IntlProvider>
+					</Suspense>
+				</QueryClientProvider>
 			</ThemeProvider>
 		</StrictMode>
 	)
@@ -100,10 +96,10 @@ function WithInvitesListener({ children }: { children: ReactNode }) {
 function WithActiveProjectId({
 	children,
 }: {
-	children: (props: { activeProjectId?: string }) => ReactElement
+	children: (props: { activeProjectId: string | null }) => ReactElement
 }) {
-	const activeProjectId = useActiveProjectIdStoreState(
-		(state) => state.activeProjectId,
+	const { data: activeProjectId } = useSuspenseQuery(
+		getAppSettingQueryOptions('activeProjectId'),
 	)
 
 	return children({ activeProjectId })

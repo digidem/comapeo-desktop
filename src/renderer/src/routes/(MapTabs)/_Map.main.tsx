@@ -1,12 +1,13 @@
 import * as React from 'react'
 import { useManyDocs, useProjectSettings } from '@comapeo/core-react'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { EmptyState } from '../../components/Observations/EmptyState'
 import { ObservationListView } from '../../components/Observations/ObservationListView'
 import { ProjectHeader } from '../../components/Observations/ProjectHeader'
-import { useActiveProjectIdStoreState } from '../../contexts/ActiveProjectIdProvider'
+import { getAppSettingQueryOptions } from '../../lib/queries/app-settings'
 
 const m = defineMessages({
 	loading: {
@@ -30,7 +31,9 @@ export const Route = createFileRoute('/(MapTabs)/_Map/main')({
 export function MainScreen() {
 	const navigate = useNavigate()
 	const { formatMessage, locale } = useIntl()
-	const activeProjectId = useActiveProjectIdStoreState((s) => s.activeProjectId)
+	const { data: activeProjectId } = useSuspenseQuery(
+		getAppSettingQueryOptions('activeProjectId'),
+	)
 	const { data: projectSettings, error: settingsError } = useProjectSettings({
 		projectId: activeProjectId || '',
 	})

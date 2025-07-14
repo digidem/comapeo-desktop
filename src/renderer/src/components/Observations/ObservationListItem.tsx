@@ -1,10 +1,11 @@
 import type { Observation } from '@comapeo/schema'
 import { styled } from '@mui/material/styles'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { FormattedDate, FormattedTime } from 'react-intl'
 
 import { LIGHT_GREY } from '../../colors'
-import { useActiveProjectIdStoreState } from '../../contexts/ActiveProjectIdProvider'
 import { useObservationWithPreset } from '../../hooks/useObservationWithPreset'
+import { getAppSettingQueryOptions } from '../../lib/queries/app-settings'
 import { FormattedPresetName } from '../FormattedData'
 import { PresetCircleIcon } from '../PresetCircleIcon'
 import { Text } from '../Text'
@@ -41,7 +42,10 @@ const PhotoContainer = styled('img')({
 })
 
 export function ObservationListItem({ observation, onClick }: Props) {
-	const projectId = useActiveProjectIdStoreState((s) => s.activeProjectId)
+	const { data: projectId } = useSuspenseQuery(
+		getAppSettingQueryOptions('activeProjectId'),
+	)
+
 	// TODO: Ideally, the fallback shouldn't be necessary
 	const preset = useObservationWithPreset(observation, projectId ?? '')
 	const createdAt = observation.createdAt
@@ -73,7 +77,7 @@ export function ObservationListItem({ observation, onClick }: Props) {
 				<PhotoContainer src="/path/to/mock/photo.jpg" alt="Observation photo" />
 			) : (
 				<PresetCircleIcon
-					projectId={projectId}
+					projectId={projectId || undefined}
 					iconId={preset?.iconRef?.docId}
 					borderColor={preset?.color}
 					size="medium"

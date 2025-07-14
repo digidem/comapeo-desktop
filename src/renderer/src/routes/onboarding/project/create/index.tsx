@@ -3,6 +3,7 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
@@ -10,12 +11,12 @@ import * as v from 'valibot'
 import { useOnboardingCreateProject } from '../../-shared/queries'
 import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../../../colors'
 import { Icon } from '../../../../components/icon'
-import { useActiveProjectIdStoreActions } from '../../../../contexts/ActiveProjectIdProvider'
 import { useAppForm } from '../../../../hooks/use-app-form'
 import {
 	INPUT_NAME_MAX_BYTES,
 	PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
 } from '../../../../lib/constants'
+import { setAppSettingMutationOptions } from '../../../../lib/queries/app-settings'
 
 export const Route = createFileRoute('/onboarding/project/create/')({
 	component: RouteComponent,
@@ -27,7 +28,11 @@ function RouteComponent() {
 
 	const createProject = useOnboardingCreateProject()
 
-	const { setActiveProjectId } = useActiveProjectIdStoreActions()
+	const queryClient = useQueryClient()
+
+	const setActiveProjectId = useMutation(
+		setAppSettingMutationOptions({ queryClient, name: 'activeProjectId' }),
+	)
 
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
@@ -57,7 +62,7 @@ function RouteComponent() {
 				name: parsedProjectName,
 			})
 
-			setActiveProjectId(projectId)
+			setActiveProjectId.mutate(projectId)
 			navigate({
 				to: '/onboarding/project/create/$projectId/success',
 				params: { projectId },

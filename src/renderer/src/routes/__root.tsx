@@ -5,7 +5,7 @@ import type { QueryClient } from '@tanstack/react-query'
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 
 export interface RootRouterContext {
-	activeProjectId?: string
+	activeProjectId: string | null
 	clientApi: MapeoClientApi
 	queryClient: QueryClient
 }

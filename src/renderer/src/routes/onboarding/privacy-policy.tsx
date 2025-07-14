@@ -11,35 +11,41 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
+import {
+	useMutation,
+	useQueryClient,
+	useSuspenseQuery,
+} from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARK_GREY, LIGHT_GREY, WHITE } from '../../colors'
 import { Icon } from '../../components/icon'
 import {
-	diagnosticsEnabledMutationOptions,
-	diagnosticsEnabledQueryOptions,
-} from '../../lib/query-options'
+	getAppSettingQueryOptions,
+	setAppSettingMutationOptions,
+} from '../../lib/queries/app-settings'
 
 export const Route = createFileRoute('/onboarding/privacy-policy')({
 	component: RouteComponent,
 	loader: async ({ context }) => {
 		const { queryClient } = context
-		await queryClient.ensureQueryData(diagnosticsEnabledQueryOptions())
+		await queryClient.ensureQueryData(
+			getAppSettingQueryOptions('diagnosticsEnabled'),
+		)
 	},
 })
 
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
-	const { queryClient } = Route.useRouteContext()
+	const queryClient = useQueryClient()
 
 	const setDiagnosticsEnabledMutation = useMutation(
-		diagnosticsEnabledMutationOptions({ queryClient }),
+		setAppSettingMutationOptions({ queryClient, name: 'diagnosticsEnabled' }),
 	)
 
 	const { data: diagnosticsEnabled } = useSuspenseQuery(
-		diagnosticsEnabledQueryOptions(),
+		getAppSettingQueryOptions('diagnosticsEnabled'),
 	)
 
 	return (

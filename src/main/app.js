@@ -19,9 +19,9 @@ import { APP_IPC_EVENT_TO_PARAMS_PARSER } from './ipc.js'
 const log = debug('comapeo:main:app')
 
 /**
- * @import {UtilityProcess} from 'electron/main'
+ * @import {IpcMainInvokeEvent, UtilityProcess} from 'electron/main'
  * @import {ProcessArgs as CoreProcessArgs, NewClientMessage} from '../services/core.js'
- * @import {ConfigStore} from './config-store.js'
+ * @import {ConfigStore, EditableAppSettings} from './config-store.js'
  * @import {AppEnv, AppMode} from './utils.js'
  */
 
@@ -155,42 +155,56 @@ function setupIntl({ configStore }) {
  * @param {Intl} opts.intl
  */
 function setupIpc({ configStore, intl }) {
-	ipcMain.handle('locale:get', (_event) => {
-		log('Locale is', intl.locale)
-		return intl.locale
-	})
-
 	ipcMain.handle(
-		'locale:update',
+		'settings:get',
 		/**
-		 * @param {any} _event
-		 * @param {string} locale
+		 * @param {IpcMainInvokeEvent} _event
+		 * @param {keyof EditableAppSettings} key
 		 */
-		(_event, locale) => {
-			log('Updating locale to', locale)
-			intl.updateLocale(locale)
+		(_event, key) => {
+			// @ts-expect-error For extra safety
+			if (key === 'rootKey') {
+				throw new Error('Not allowed to get the root key using IPC')
+			}
+
+			if (key === 'locale') {
+				return intl.locale
+			}
+
+			return configStore.get(key)
 		},
 	)
 
-	ipcMain.handle('diagnostics:get', (_event) => {
-		return configStore.get('diagnosticsEnabled')
-	})
-
 	ipcMain.handle(
-		'diagnostics:set',
+		'settings:set',
 		/**
-		 * @param {any} _event
-		 * @param {boolean} enable
+		 * @template {keyof EditableAppSettings} K
+		 * @param {IpcMainInvokeEvent} _event
+		 * @param {K} key
+		 * @param {EditableAppSettings[K]} value
 		 */
-		(_event, enable) => {
-			configStore.set('diagnosticsEnabled', enable)
+		(_event, key, value) => {
+			// @ts-expect-error For extra safety
+			if (key === 'rootKey') {
+				throw new Error('Not allowed to set the root key using IPC')
+			}
+
+			if (key === 'locale') {
+				intl.updateLocale(
+					// @ts-expect-error Not sure why this doesn't narrow...
+					value,
+				)
+				return
+			}
+
+			configStore.set(key, value)
 		},
 	)
 
 	ipcMain.handle(
 		'shell:open-external-url',
 		/**
-		 * @param {any} _event
+		 * @param {IpcMainInvokeEvent} _event
 		 * @param {string} url
 		 */
 		(_event, url) => {

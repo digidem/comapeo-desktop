@@ -1,9 +1,10 @@
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 import { Button } from '../../components/Button'
 import { Text } from '../../components/Text'
-import { useActiveProjectIdStoreState } from '../../contexts/ActiveProjectIdProvider'
 import { useCreateTestObservations } from '../../hooks/mutations/useCreateTestObservations'
+import { getAppSettingQueryOptions } from '../../lib/queries/app-settings'
 
 export const Route = createFileRoute('/(MapTabs)/_Map/tab2')({
 	component: Settings,
@@ -12,7 +13,9 @@ export const Route = createFileRoute('/(MapTabs)/_Map/tab2')({
 export function Settings() {
 	const { mutate: createTestData, isPending } = useCreateTestObservations()
 
-	const projectId = useActiveProjectIdStoreState((s) => s.activeProjectId)
+	const { data: projectId } = useSuspenseQuery(
+		getAppSettingQueryOptions('activeProjectId'),
+	)
 	const navigate = useNavigate()
 
 	function handleCreateTestData() {
