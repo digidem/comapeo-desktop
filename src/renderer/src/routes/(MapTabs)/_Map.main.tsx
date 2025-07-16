@@ -7,7 +7,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import { EmptyState } from '../../components/Observations/EmptyState'
 import { ObservationListView } from '../../components/Observations/ObservationListView'
 import { ProjectHeader } from '../../components/Observations/ProjectHeader'
-import { getAppSettingQueryOptions } from '../../lib/queries/app-settings'
+import { getActiveProjectIdQueryOptions } from '../../lib/queries/app-settings'
 
 const m = defineMessages({
 	loading: {
@@ -32,7 +32,7 @@ export function MainScreen() {
 	const navigate = useNavigate()
 	const { formatMessage, locale } = useIntl()
 	const { data: activeProjectId } = useSuspenseQuery(
-		getAppSettingQueryOptions('activeProjectId'),
+		getActiveProjectIdQueryOptions(),
 	)
 	const { data: projectSettings, error: settingsError } = useProjectSettings({
 		projectId: activeProjectId || '',

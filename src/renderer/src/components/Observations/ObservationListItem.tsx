@@ -5,7 +5,7 @@ import { FormattedDate, FormattedTime } from 'react-intl'
 
 import { LIGHT_GREY } from '../../colors'
 import { useObservationWithPreset } from '../../hooks/useObservationWithPreset'
-import { getAppSettingQueryOptions } from '../../lib/queries/app-settings'
+import { getActiveProjectIdQueryOptions } from '../../lib/queries/app-settings'
 import { FormattedPresetName } from '../FormattedData'
 import { PresetCircleIcon } from '../PresetCircleIcon'
 import { Text } from '../Text'
@@ -42,9 +42,7 @@ const PhotoContainer = styled('img')({
 })
 
 export function ObservationListItem({ observation, onClick }: Props) {
-	const { data: projectId } = useSuspenseQuery(
-		getAppSettingQueryOptions('activeProjectId'),
-	)
+	const { data: projectId } = useSuspenseQuery(getActiveProjectIdQueryOptions())
 
 	// TODO: Ideally, the fallback shouldn't be necessary
 	const preset = useObservationWithPreset(observation, projectId ?? '')

@@ -87,7 +87,7 @@ To run unit or integration tests run `npm run vitest:run` or `npm run vitest:wat
 
 The `messages/` directory contains the translation strings used by the app. Within this directory are directories for the main process (`messages/main/`) and renderer process (`messages/renderer/`). Messages found in `messages/main/` are typically needed for translating text that lives in native UI (e.g. the menu bar), whereas messages in `messages/renderer/` are needed for translating text that's used in the rendered web app.
 
-In order to update translations, run `npm run intl:translations`, which will extract messages and place them in the relevant `messages/` directory and then compile those messages into translated strings and place them in the `translations/` directory.
+In order to update translations, run `npm run intl:translations`, which will extract messages and place them in the relevant `messages/` directory and then compile those messages into translated strings and place them in the `translations/` directory. For the renderer process specifically, it also generates a JSON file called [`translated-languages-list.json`](../src/renderer/translated-languages.generated.json), which is used to by the app to know which languages are displayable without having to do that calculation it at runtime.
 
 ### Translations workflow
 

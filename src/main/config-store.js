@@ -1,16 +1,7 @@
 import Store from 'electron-store'
 
 /**
- * @typedef {Object} ConfigSchema
- * @property {string | null} activeProjectId
- * @property {'dd' | 'dms' | 'utm'} coordinateFormat
- * @property {boolean} diagnosticsEnabled
- * @property {string} locale
- * @property {string | null} rootKey
- */
-
-/**
- * @typedef {Omit<ConfigSchema, 'rootKey'>} EditableAppSettings
+ * @import {ConfigSchema} from './types/config-store.js'
  */
 
 /** @typedef {ReturnType<typeof createConfigStore>} ConfigStore */
@@ -35,8 +26,40 @@ export function createConfigStore() {
 					default: true,
 				},
 				locale: {
-					type: 'string',
-					default: 'en',
+					type: 'object',
+					oneOf: [
+						{
+							type: 'object',
+							properties: {
+								useSystemPreferences: {
+									type: 'boolean',
+									const: true,
+								},
+								languageTag: {
+									type: 'null',
+								},
+							},
+							required: ['useSystemPreferences', 'languageTag'],
+						},
+						{
+							type: 'object',
+							properties: {
+								useSystemPreferences: {
+									type: 'boolean',
+									const: false,
+								},
+								languageTag: {
+									type: 'string',
+									minLength: 2,
+								},
+							},
+							required: ['useSystemPreferences', 'languageTag'],
+						},
+					],
+					default: {
+						useSystemPreferences: true,
+						languageTag: null,
+					},
 				},
 				rootKey: {
 					type: ['string', 'null'],

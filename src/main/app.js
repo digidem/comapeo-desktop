@@ -3,25 +3,23 @@ import { basename } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineMessages } from '@formatjs/intl'
 import debug from 'debug'
-import { shell } from 'electron'
 import {
 	BrowserWindow,
 	app,
 	dialog,
-	ipcMain,
 	safeStorage,
 	utilityProcess,
 } from 'electron/main'
 
-import { Intl, getSystemLocale } from './intl.js'
-import { APP_IPC_EVENT_TO_PARAMS_PARSER } from './ipc.js'
+import { Intl } from './intl.js'
+import { APP_IPC_EVENT_TO_PARAMS_PARSER, setUpMainIPC } from './ipc.js'
 
 const log = debug('comapeo:main:app')
 
 /**
- * @import {IpcMainInvokeEvent, UtilityProcess} from 'electron/main'
+ * @import {UtilityProcess} from 'electron/main'
  * @import {ProcessArgs as CoreProcessArgs, NewClientMessage} from '../services/core.js'
- * @import {ConfigStore, EditableAppSettings} from './config-store.js'
+ * @import {ConfigStore} from './config-store.js'
  * @import {AppEnv, AppMode} from './utils.js'
  */
 
@@ -88,7 +86,7 @@ export async function start({ appEnv, appMode, configStore }) {
 
 	const intl = setupIntl({ configStore })
 
-	setupIpc({ configStore, intl })
+	setUpMainIPC({ configStore, intl })
 
 	await app.whenReady()
 
@@ -134,83 +132,9 @@ export async function start({ appEnv, appMode, configStore }) {
  * @returns {Intl}
  */
 function setupIntl({ configStore }) {
-	const intl = new Intl({
-		configStore,
-	})
-
-	let locale = intl.load()
-
-	if (!locale) {
-		locale = getSystemLocale()
-		log('Using system locale', locale)
-		intl.updateLocale(locale)
-	}
+	const intl = new Intl({ configStore })
 
 	return intl
-}
-
-/**
- * @param {Object} opts
- * @param {ConfigStore} opts.configStore
- * @param {Intl} opts.intl
- */
-function setupIpc({ configStore, intl }) {
-	ipcMain.handle(
-		'settings:get',
-		/**
-		 * @param {IpcMainInvokeEvent} _event
-		 * @param {keyof EditableAppSettings} key
-		 */
-		(_event, key) => {
-			// @ts-expect-error For extra safety
-			if (key === 'rootKey') {
-				throw new Error('Not allowed to get the root key using IPC')
-			}
-
-			if (key === 'locale') {
-				return intl.locale
-			}
-
-			return configStore.get(key)
-		},
-	)
-
-	ipcMain.handle(
-		'settings:set',
-		/**
-		 * @template {keyof EditableAppSettings} K
-		 * @param {IpcMainInvokeEvent} _event
-		 * @param {K} key
-		 * @param {EditableAppSettings[K]} value
-		 */
-		(_event, key, value) => {
-			// @ts-expect-error For extra safety
-			if (key === 'rootKey') {
-				throw new Error('Not allowed to set the root key using IPC')
-			}
-
-			if (key === 'locale') {
-				intl.updateLocale(
-					// @ts-expect-error Not sure why this doesn't narrow...
-					value,
-				)
-				return
-			}
-
-			configStore.set(key, value)
-		},
-	)
-
-	ipcMain.handle(
-		'shell:open-external-url',
-		/**
-		 * @param {IpcMainInvokeEvent} _event
-		 * @param {string} url
-		 */
-		(_event, url) => {
-			return shell.openExternal(url)
-		},
-	)
 }
 
 /**

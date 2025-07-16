@@ -1,0 +1,11 @@
+{
+  "routes.app.route.aboutTabLabel": {
+    "message": "Acerca de CoMapeo"
+  },
+  "routes.app.route.appSettingsTabLabel": {
+    "message": "Ajustes de la aplicación"
+  },
+  "routes.app.route.dataAndPrivacyTabLabel": {
+    "message": "Datos y privacidad"
+  }
+}

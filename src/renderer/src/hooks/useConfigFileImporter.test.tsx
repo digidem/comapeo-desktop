@@ -10,8 +10,14 @@ describe('useSelectProjectConfigFile', () => {
 			selectFile: vi.fn(),
 			getAppInfo: vi.fn(),
 			openExternalURL: vi.fn(),
-			getSetting: vi.fn(),
-			setSetting: vi.fn(),
+			getActiveProjectId: vi.fn(),
+			getCoordinateFormat: vi.fn(),
+			getDiagnosticsEnabled: vi.fn(),
+			getLocaleState: vi.fn(),
+			setActiveProjectId: vi.fn(),
+			setCoordinateFormat: vi.fn(),
+			setDiagnosticsEnabled: vi.fn(),
+			setLocale: vi.fn(),
 		}
 	})
 

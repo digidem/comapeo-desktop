@@ -33,8 +33,9 @@
 		"intl:compile:renderer": "formatjs compile-folder messages/renderer translations/renderer --format crowdin --ast",
 		"intl:extract:main": "formatjs extract 'src/main/**/*.{js,ts}' --ignore='**/*.d.ts' --format crowdin --out-file messages/main/en.json",
 		"intl:extract:renderer": "formatjs extract 'src/renderer/**/*.{js,jsx,ts,tsx}' --ignore='**/*.d.ts' --format crowdin --out-file messages/renderer/en.json",
+		"intl:generate-translated-languages-list": "node scripts/generate-translated-languages-list.js",
 		"intl:translations:main": "npm-run-all intl:extract:main intl:compile:main",
-		"intl:translations:renderer": "npm-run-all intl:extract:renderer intl:compile:renderer",
+		"intl:translations:renderer": "npm-run-all intl:extract:renderer intl:compile:renderer intl:generate-translated-languages-list",
 		"intl:translations": "npm-run-all --print-label --parallel intl:translations:*",
 		"lint:eslint": "eslint --cache .",
 		"lint:format": "prettier --cache --check .",
@@ -62,7 +63,6 @@
 		"electron-squirrel-startup": "1.0.1",
 		"electron-store": "10.1.0",
 		"sodium-native": "4.3.3",
-		"tiny-typed-emitter": "2.1.0",
 		"valibot": "1.1.0"
 	},
 	"devDependencies": {

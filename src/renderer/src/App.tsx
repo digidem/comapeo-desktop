@@ -20,7 +20,7 @@ import {
 
 import { initComapeoClient } from './comapeo-client'
 import { IntlProvider } from './contexts/IntlContext'
-import { getAppSettingQueryOptions } from './lib/queries/app-settings'
+import { getActiveProjectIdQueryOptions } from './lib/queries/app-settings'
 import { routeTree } from './routeTree.gen'
 import { theme } from './theme'
 
@@ -113,7 +113,7 @@ function WithActiveProjectId({
 	children: (props: { activeProjectId: string | null }) => ReactElement
 }) {
 	const { data: activeProjectId } = useSuspenseQuery(
-		getAppSettingQueryOptions('activeProjectId'),
+		getActiveProjectIdQueryOptions(),
 	)
 
 	return children({ activeProjectId })
