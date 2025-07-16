@@ -24,6 +24,10 @@ import {
 } from '../../../lib/queries/app-settings'
 
 export const Route = createFileRoute('/app/settings/language')({
+	loader: async ({ context }) => {
+		const { queryClient } = context
+		await queryClient.ensureQueryData(getLocaleStateQueryOptions())
+	},
 	component: RouteComponent,
 })
 
