@@ -10,7 +10,11 @@ import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors'
 import { ButtonLink, IconButtonLink } from '../../../components/button-link'
 import { Icon } from '../../../components/icon'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/constants'
-import { getAppSettingQueryOptions } from '../../../lib/queries/app-settings'
+import { usableLanguages } from '../../../lib/intl'
+import {
+	getCoordinateFormatQueryOptions,
+	getLocaleStateQueryOptions,
+} from '../../../lib/queries/app-settings'
 
 export const Route = createFileRoute('/app/settings/')({
 	loader: async ({ context }) => {
@@ -25,9 +29,8 @@ export const Route = createFileRoute('/app/settings/')({
 					return clientApi.getDeviceInfo()
 				},
 			}),
-			queryClient.ensureQueryData(
-				getAppSettingQueryOptions('coordinateFormat'),
-			),
+			queryClient.ensureQueryData(getCoordinateFormatQueryOptions()),
+			queryClient.ensureQueryData(getLocaleStateQueryOptions()),
 		])
 	},
 	component: RouteComponent,
@@ -39,8 +42,23 @@ function RouteComponent() {
 	const { data: deviceInfo } = useOwnDeviceInfo()
 
 	const { data: coordinateFormat } = useSuspenseQuery(
-		getAppSettingQueryOptions('coordinateFormat'),
+		getCoordinateFormatQueryOptions(),
 	)
+
+	const { data: selectedLanguageName } = useSuspenseQuery({
+		...getLocaleStateQueryOptions(),
+		select: ({ source, value }) => {
+			const match = usableLanguages.find(
+				({ languageTag }) => languageTag === value,
+			)
+
+			if (source === 'system') {
+				return t(m.languageFromSystemPreference, { name: match!.nativeName })
+			}
+
+			return match!.nativeName
+		},
+	})
 
 	return (
 		<Stack
@@ -103,8 +121,7 @@ function RouteComponent() {
 						<Icon name="material-chevron-right" />
 					</IconButtonLink>
 				}
-				// TODO: Get displayed language name from settings
-				label={'English'}
+				label={selectedLanguageName}
 			/>
 
 			<SettingRow
@@ -213,5 +230,10 @@ const m = defineMessages({
 		id: 'routes.app.settings.index.dmsCoordinates',
 		defaultMessage: 'DMS Coordinates',
 		description: 'Label for Degrees/Minutes/Seconds coordinate system.',
+	},
+	languageFromSystemPreference: {
+		id: 'routes.app.settings.index.languageFromSystemPreference',
+		defaultMessage: '{name} (System Preference)',
+		description: 'Label for selected language based on the system preferences.',
 	},
 })

@@ -22,7 +22,7 @@ import {
 	WHITE,
 } from '../../../../colors'
 import { Icon } from '../../../../components/icon'
-import { setAppSettingMutationOptions } from '../../../../lib/queries/app-settings'
+import { setActiveProjectIdMutationOptions } from '../../../../lib/queries/app-settings'
 
 export const Route = createFileRoute('/onboarding/project/join/$inviteId/')({
 	component: RouteComponent,
@@ -43,7 +43,7 @@ function RouteComponent() {
 
 	const queryClient = useQueryClient()
 	const setActiveProjectId = useMutation(
-		setAppSettingMutationOptions({ queryClient, name: 'activeProjectId' }),
+		setActiveProjectIdMutationOptions(queryClient),
 	)
 
 	return (

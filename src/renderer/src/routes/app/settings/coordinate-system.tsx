@@ -22,17 +22,15 @@ import {
 	formatCoords,
 } from '../../../lib/coordinate-format'
 import {
-	getAppSettingQueryOptions,
-	setAppSettingMutationOptions,
+	getCoordinateFormatQueryOptions,
+	setCoordinateFormatMutationOptions,
 } from '../../../lib/queries/app-settings'
 
 export const Route = createFileRoute('/app/settings/coordinate-system')({
 	loader: async ({ context }) => {
 		const { queryClient } = context
 
-		await queryClient.ensureQueryData(
-			getAppSettingQueryOptions('coordinateFormat'),
-		)
+		await queryClient.ensureQueryData(getCoordinateFormatQueryOptions())
 	},
 	component: RouteComponent,
 })
@@ -44,11 +42,11 @@ function RouteComponent() {
 	const queryClient = useQueryClient()
 
 	const { data: coordinateFormat } = useSuspenseQuery(
-		getAppSettingQueryOptions('coordinateFormat'),
+		getCoordinateFormatQueryOptions(),
 	)
 
 	const setCoordinateFormat = useMutation(
-		setAppSettingMutationOptions({ queryClient, name: 'coordinateFormat' }),
+		setCoordinateFormatMutationOptions(queryClient),
 	)
 
 	return (

@@ -16,7 +16,7 @@ import {
 	INPUT_NAME_MAX_BYTES,
 	PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
 } from '../../../../lib/constants'
-import { setAppSettingMutationOptions } from '../../../../lib/queries/app-settings'
+import { setActiveProjectIdMutationOptions } from '../../../../lib/queries/app-settings'
 
 export const Route = createFileRoute('/onboarding/project/create/')({
 	component: RouteComponent,
@@ -31,7 +31,7 @@ function RouteComponent() {
 	const queryClient = useQueryClient()
 
 	const setActiveProjectId = useMutation(
-		setAppSettingMutationOptions({ queryClient, name: 'activeProjectId' }),
+		setActiveProjectIdMutationOptions(queryClient),
 	)
 
 	// TODO: We want to provide translated error messages that can be rendered directly

@@ -132,6 +132,10 @@
     "description": "Button text for navigating to page to edit device name.",
     "message": "Edit"
   },
+  "routes.app.settings.index.languageFromSystemPreference": {
+    "description": "Label for selected language based on the system preferences.",
+    "message": "{name} (System Preference)"
+  },
   "routes.app.settings.index.title": {
     "description": "Title of the settings page.",
     "message": "App Settings"
@@ -139,6 +143,14 @@
   "routes.app.settings.index.utmCoordinates": {
     "description": "Label for Universal Transverse Mercator coordinate system.",
     "message": "UTM Coordinates"
+  },
+  "routes.app.settings.language.followSystemOptionLabel": {
+    "description": "Option label for following system preference for language.",
+    "message": "Follow system preferences"
+  },
+  "routes.app.settings.language.title": {
+    "description": "Title of the language settings page.",
+    "message": "Language"
   },
   "routes.onboarding.data-and-privacy.dataEncrypted": {
     "message": "All data stays fully encrypted."

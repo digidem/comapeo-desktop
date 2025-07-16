@@ -22,17 +22,15 @@ import { defineMessages, useIntl } from 'react-intl'
 import { BLUE_GREY, DARK_GREY, LIGHT_GREY, WHITE } from '../../colors'
 import { Icon } from '../../components/icon'
 import {
-	getAppSettingQueryOptions,
-	setAppSettingMutationOptions,
+	getDiagnosticsEnabledQueryOptions,
+	setDiagnosticsEnabledMutationOptions,
 } from '../../lib/queries/app-settings'
 
 export const Route = createFileRoute('/onboarding/privacy-policy')({
 	component: RouteComponent,
 	loader: async ({ context }) => {
 		const { queryClient } = context
-		await queryClient.ensureQueryData(
-			getAppSettingQueryOptions('diagnosticsEnabled'),
-		)
+		await queryClient.ensureQueryData(getDiagnosticsEnabledQueryOptions())
 	},
 })
 
@@ -41,11 +39,11 @@ function RouteComponent() {
 	const queryClient = useQueryClient()
 
 	const setDiagnosticsEnabledMutation = useMutation(
-		setAppSettingMutationOptions({ queryClient, name: 'diagnosticsEnabled' }),
+		setDiagnosticsEnabledMutationOptions(queryClient),
 	)
 
 	const { data: diagnosticsEnabled } = useSuspenseQuery(
-		getAppSettingQueryOptions('diagnosticsEnabled'),
+		getDiagnosticsEnabledQueryOptions(),
 	)
 
 	return (

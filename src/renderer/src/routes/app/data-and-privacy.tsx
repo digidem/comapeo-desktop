@@ -15,17 +15,15 @@ import { defineMessages, useIntl } from 'react-intl'
 import { BLUE_GREY, DARKER_ORANGE, DARK_GREY, LIGHT_GREY } from '../../colors'
 import { Icon } from '../../components/icon'
 import {
-	getAppSettingQueryOptions,
-	setAppSettingMutationOptions,
+	getDiagnosticsEnabledQueryOptions,
+	setDiagnosticsEnabledMutationOptions,
 } from '../../lib/queries/app-settings'
 import { TwoPanelLayout } from './-components/two-panel-layout'
 
 export const Route = createFileRoute('/app/data-and-privacy')({
 	loader: async ({ context }) => {
 		const { queryClient } = context
-		await queryClient.ensureQueryData(
-			getAppSettingQueryOptions('diagnosticsEnabled'),
-		)
+		await queryClient.ensureQueryData(getDiagnosticsEnabledQueryOptions())
 	},
 	component: RouteComponent,
 })
@@ -38,11 +36,11 @@ function RouteComponent() {
 	})
 
 	const setDiagnosticsEnabledMutation = useMutation(
-		setAppSettingMutationOptions({ queryClient, name: 'diagnosticsEnabled' }),
+		setDiagnosticsEnabledMutationOptions(queryClient),
 	)
 
 	const { data: diagnosticsEnabled } = useSuspenseQuery(
-		getAppSettingQueryOptions('diagnosticsEnabled'),
+		getDiagnosticsEnabledQueryOptions(),
 	)
 
 	return (

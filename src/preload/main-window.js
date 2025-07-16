@@ -41,12 +41,32 @@ const runtimeApi = {
 		return ipcRenderer.invoke('shell:open-external-url', url)
 	},
 
-	// Settings
-	getSetting: async (key) => {
-		return ipcRenderer.invoke('settings:get', key)
+	// Settings (get)
+	getActiveProjectId: async () => {
+		return ipcRenderer.invoke('settings:get:activeProjectId')
 	},
-	setSetting: async (key, value) => {
-		return ipcRenderer.invoke('settings:set', key, value)
+	getCoordinateFormat: async () => {
+		return ipcRenderer.invoke('settings:get:coordinateFormat')
+	},
+	getDiagnosticsEnabled: async () => {
+		return ipcRenderer.invoke('settings:get:diagnosticsEnabled')
+	},
+	getLocaleState: async () => {
+		return ipcRenderer.invoke('settings:get:locale')
+	},
+
+	// Settings (set)
+	setActiveProjectId: async (value) => {
+		return ipcRenderer.invoke('settings:set:activeProjectId', value)
+	},
+	setCoordinateFormat: async (value) => {
+		return ipcRenderer.invoke('settings:set:coordinateFormat', value)
+	},
+	setDiagnosticsEnabled: async (value) => {
+		return ipcRenderer.invoke('settings:set:diagnosticsEnabled', value)
+	},
+	setLocale: async (value) => {
+		return ipcRenderer.invoke('settings:set:locale', value)
 	},
 }
 

@@ -2,95 +2,153 @@ import { createRequire } from 'node:module'
 import { createIntl, createIntlCache } from '@formatjs/intl'
 import debug from 'debug'
 import { app } from 'electron/main'
-import { TypedEmitter } from 'tiny-typed-emitter'
-
-const log = debug('comapeo:main:intl')
-
-/**
- * @import {ConfigStore} from './config-store.js'
- */
-const require = createRequire(import.meta.url)
-
-const enTranslations = require('../../translations/main/en.json')
+import * as v from 'valibot'
 
 /**
  * @import {IntlShape} from '@formatjs/intl'
+ * @import {ConfigStore} from './config-store.js'
+ * @import {PersistedLocale} from './types/config-store.js'
+ * @import {LocaleSource, LocaleState, SupportedLanguageTag} from './types/intl.js'
  */
 
+const require = createRequire(import.meta.url)
+const enTranslations = require('../../translations/main/en.json')
+const esTranslations = require('../../translations/main/es.json')
+const ptTranslations = require('../../translations/main/pt.json')
+
+const SUPPORTED_LANGUAGES = require('../../languages.json')
+
+const SUPPORTED_LANGUAGE_TAGS = /** @type {SupportedLanguageTag[]} */ (
+	Object.keys(SUPPORTED_LANGUAGES)
+)
+
+const SupportedLanguageTagSchema = v.union(
+	SUPPORTED_LANGUAGE_TAGS.map((t) => v.literal(t)),
+)
+
+const log = debug('comapeo:main:intl')
+
+/** @type {{ [key in SupportedLanguageTag]?: Record<string, unknown> }} */
 const messages = {
 	en: enTranslations,
+	es: esTranslations,
+	pt: ptTranslations,
 }
 
-/**
- * @extends {TypedEmitter<{ 'locale:change': (locale: string) => void }>}
- */
-export class Intl extends TypedEmitter {
+export class Intl {
 	static cache = createIntlCache()
 
 	/** @type {ConfigStore} */
 	#config
 
-	/** @type {IntlShape<string>} */
+	/** @type {IntlShape<SupportedLanguageTag>} */
 	#intl
+
+	/** @type {LocaleSource} */
+	#localeSource
 
 	/**
 	 * @param {Object} opts
 	 * @param {ConfigStore} opts.configStore
-	 * @param {string} [opts.defaultLocale='en'] Default is `'en'`
 	 */
-	constructor({ configStore, defaultLocale = 'en' }) {
-		super()
+	constructor({ configStore }) {
 		this.#config = configStore
-		this.#intl = this.#createIntl(this.#config.get('locale', defaultLocale))
-		log('Locale set to', this.#intl.locale)
+
+		const { value, source } = this.#getResolvedLocale(
+			this.#config.get('locale'),
+		)
+
+		this.#intl = this.#createIntl(value)
+		this.#localeSource = source
 	}
 
 	/**
-	 * @param {string} locale
+	 * @param {SupportedLanguageTag} locale
+	 *
+	 * @returns {IntlShape<SupportedLanguageTag>}
 	 */
 	#createIntl(locale) {
+		const localeMessages = messages[locale]
+
+		if (!localeMessages) {
+			log(`Could not find translated messages for language: ${locale}`)
+		}
+
 		return createIntl(
 			{
 				locale,
-				defaultLocale: locale,
-				// @ts-expect-error Ideally assert locale is supported first
-				messages: messages[locale],
+				defaultLocale: 'en',
+				// @ts-expect-error Not worth fixing
+				messages: {
+					// Always load the English translations
+					...messages['en'],
+					// Override with the selected locale's translations
+					...localeMessages,
+				},
 			},
 			Intl.cache,
 		)
 	}
 
-	get locale() {
-		return this.#intl.locale
+	/**
+	 * @type {LocaleState}
+	 */
+	get localeState() {
+		return {
+			source: this.#localeSource,
+			value: /** @type {SupportedLanguageTag} */ (this.#intl.locale),
+		}
 	}
 
 	/**
-	 * @param {string} newLocale
+	 * @param {PersistedLocale} locale
+	 *
+	 * @returns {{ value: SupportedLanguageTag; source: LocaleSource }}
 	 */
-	updateLocale(newLocale) {
-		if (newLocale.length !== 2) {
-			log(
-				'Tried to set locale and failed, must be a 2 character string',
-				newLocale,
-			)
-			return
+	#getResolvedLocale(locale) {
+		if (locale.useSystemPreferences) {
+			const systemPreferredLocale =
+				getBestMatchingLanguageFromSystemPreferences()
+
+			if (systemPreferredLocale) {
+				return {
+					value: systemPreferredLocale,
+					source: 'system',
+				}
+			} else {
+				return {
+					value: 'en',
+					source: 'fallback',
+				}
+			}
 		}
-		log('Changing locale to', newLocale)
-		this.#intl = this.#createIntl(newLocale)
-		this.emit('locale:change', newLocale)
+
+		v.assert(SupportedLanguageTagSchema, locale.languageTag)
+
+		return {
+			source: 'selected',
+			value: locale.languageTag,
+		}
 	}
 
-	save(locale = this.#intl.locale) {
+	/**
+	 * @param {PersistedLocale} locale
+	 */
+	updateLocale(locale) {
 		this.#config.set('locale', locale)
-	}
 
-	load() {
-		try {
-			return this.#config.get('locale')
-		} catch (_err) {
-			log('Failed to load locale from app settings')
-			return null
+		const { value, source } = this.#getResolvedLocale(locale)
+
+		if (source === 'system') {
+			log(`Using system-preferred language: ${value}`)
+		} else if (source === 'fallback') {
+			log(`Using fallback language: ${value}`)
+		} else {
+			log(`Using selected language: ${value}`)
 		}
+
+		this.#intl = this.#createIntl(value)
+		this.#localeSource = source
 	}
 
 	// Exposing mostly for convenience of usage
@@ -107,6 +165,25 @@ export class Intl extends TypedEmitter {
 
 // We only support generalized locales for now (i.e., no difference between
 // Spanish/Espana and Spanish/Latin America)
-export function getSystemLocale() {
-	return app.getLocale().substring(0, 2)
+function getBestMatchingLanguageFromSystemPreferences() {
+	const preferred = app.getPreferredSystemLanguages()
+
+	for (const languageTag of preferred) {
+		const baseTag = languageTag.split('-')[0]
+
+		// Shouldn't happen
+		if (!baseTag) {
+			throw new Error(
+				`Could not extract base tag from language tag: ${languageTag}`,
+			)
+		}
+
+		if (v.is(SupportedLanguageTagSchema, baseTag)) {
+			return baseTag
+		}
+
+		continue
+	}
+
+	return null
 }
