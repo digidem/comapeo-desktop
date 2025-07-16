@@ -1,8 +1,7 @@
 import SvgIcon, { type SvgIconProps } from '@mui/material/SvgIcon'
 
+import ICONS_SPRITE_URL from '../images/icons-sprite.svg'
 import type { IconName } from '../types/icons.generated'
-
-const SPRITE_PATH = '/icons/sprite.svg'
 
 export function Icon({
 	name,
@@ -30,7 +29,7 @@ export function Icon({
 					: sx
 			}
 		>
-			<use href={`${SPRITE_PATH}#${name}`} />
+			<use href={`${ICONS_SPRITE_URL}#${name}`} />
 		</SvgIcon>
 	)
 }

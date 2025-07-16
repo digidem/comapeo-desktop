@@ -46,7 +46,8 @@ export default defineConfig((configEnv) => {
 			// TODO: `cwd` option is broken. should submit a fix at some point
 			iconsSpritesheet({
 				inputDir: fileURLToPath(new URL('./icons', import.meta.url)),
-				outputDir: fileURLToPath(new URL('./public/icons', import.meta.url)),
+				outputDir: fileURLToPath(new URL('./src/images', import.meta.url)),
+				fileName: 'icons-sprite.svg',
 				withTypes: true,
 				typesOutputFile: fileURLToPath(
 					new URL('src/types/icons.generated.ts', import.meta.url),
