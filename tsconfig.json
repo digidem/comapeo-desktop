@@ -19,6 +19,6 @@
 		"target": "es2022",
 		"verbatimModuleSyntax": true
 	},
-	"include": ["**/*.config.js"],
+	"include": ["**/*.config.js", "scripts/*"],
 	"exclude": ["node_modules"]
 }

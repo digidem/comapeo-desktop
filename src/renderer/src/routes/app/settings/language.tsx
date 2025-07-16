@@ -27,6 +27,10 @@ export const Route = createFileRoute('/app/settings/language')({
 	component: RouteComponent,
 })
 
+const sortedUsableLanguages = usableLanguages.sort((a, b) => {
+	return a.englishName.localeCompare(b.englishName)
+})
+
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 	const router = useRouter()
@@ -107,7 +111,7 @@ function RouteComponent() {
 									/>
 								}
 							/>
-							{usableLanguages.map(
+							{sortedUsableLanguages.map(
 								({ languageTag, nativeName, englishName }) => (
 									<FormControlLabel
 										key={languageTag}

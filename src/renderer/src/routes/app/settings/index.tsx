@@ -10,7 +10,7 @@ import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors'
 import { ButtonLink, IconButtonLink } from '../../../components/button-link'
 import { Icon } from '../../../components/icon'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/constants'
-import { usableLanguages } from '../../../lib/intl'
+import { getLanguageInfo } from '../../../lib/intl'
 import {
 	getCoordinateFormatQueryOptions,
 	getLocaleStateQueryOptions,
@@ -48,15 +48,13 @@ function RouteComponent() {
 	const { data: selectedLanguageName } = useSuspenseQuery({
 		...getLocaleStateQueryOptions(),
 		select: ({ source, value }) => {
-			const match = usableLanguages.find(
-				({ languageTag }) => languageTag === value,
-			)
+			const match = getLanguageInfo(value)
 
 			if (source === 'system') {
-				return t(m.languageFromSystemPreference, { name: match!.nativeName })
+				return t(m.languageFromSystemPreference, { name: match.nativeName })
 			}
 
-			return match!.nativeName
+			return match.nativeName
 		},
 	})
 
