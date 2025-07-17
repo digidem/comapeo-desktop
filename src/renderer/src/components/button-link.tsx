@@ -5,7 +5,7 @@
 import type { ComponentProps } from 'react'
 import MUIButton, { type ButtonProps } from '@mui/material/Button'
 import MUIIconButton, { type IconButtonProps } from '@mui/material/IconButton'
-import Link, { type LinkProps as MUILinkProps } from '@mui/material/Link'
+import MUILink, { type LinkProps as MUILinkProps } from '@mui/material/Link'
 import { createLink, type LinkOptions } from '@tanstack/react-router'
 
 const ButtonLinkComponent = createLink((props: ButtonProps<'a'>) => {
@@ -37,7 +37,7 @@ export function IconButtonLink(props: IconButtonLinkProps) {
 }
 
 const TextLinkComponent = createLink((props: MUILinkProps) => {
-	return <Link {...props} />
+	return <MUILink {...props} />
 })
 
 export type TextLinkComponentProps = Omit<
