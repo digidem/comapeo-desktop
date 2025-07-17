@@ -11,7 +11,7 @@ import * as v from 'valibot'
 import { useOnboardingCreateProject } from '../../-shared/queries'
 import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../../../colors'
 import { Icon } from '../../../../components/icon'
-import { useAppForm } from '../../../../hooks/use-app-form'
+import { useAppForm } from '../../../../hooks/forms'
 import {
 	INPUT_NAME_MAX_BYTES,
 	PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
