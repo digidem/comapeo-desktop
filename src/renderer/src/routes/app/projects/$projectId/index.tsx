@@ -23,7 +23,7 @@ import {
 	WHITE,
 } from '../../../../colors'
 import { Icon } from '../../../../components/icon'
-import { ButtonLink } from '../../../../components/link'
+import { ButtonLink, TextLink } from '../../../../components/link'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -282,14 +282,13 @@ function AddObservationsCard({ projectId }: { projectId: string }) {
 				{t(m.addObservationsDescription)}
 			</Typography>
 
-			<ButtonLink
-				variant="text"
+			<TextLink
+				underline="none"
 				to="/app/projects/$projectId/exchange"
 				params={{ projectId }}
-				sx={{ fontWeight: 400 }}
 			>
 				{t(m.goToExchange)}
-			</ButtonLink>
+			</TextLink>
 		</Stack>
 	)
 }
