@@ -28,6 +28,7 @@ export const iconNames = [
 	'material-expand-less',
 	'material-chevron-right',
 	'material-check-circle',
+	'material-category',
 	'material-bolt',
 	'material-arrow-back',
 	'comapeo-cards',

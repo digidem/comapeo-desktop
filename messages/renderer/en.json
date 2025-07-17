@@ -88,6 +88,46 @@
     "description": "Indicates that user is a participant on the current project.",
     "message": "You're a participant on this project."
   },
+  "routes.app.projects.$projectId_.settings.index.addRemoteArchive": {
+    "description": "Text for link that navigates to remote archive settings page.",
+    "message": "Add"
+  },
+  "routes.app.projects.$projectId_.settings.index.categoriesSet": {
+    "description": "Text for item that navigates to project categories set page.",
+    "message": "Categories Set"
+  },
+  "routes.app.projects.$projectId_.settings.index.collaborators": {
+    "description": "Text for item that navigates to project collaborators page.",
+    "message": "Collaborators"
+  },
+  "routes.app.projects.$projectId_.settings.index.deviceIsParticpant": {
+    "description": "Indicates that device is a participant on the current project.",
+    "message": "This device is a participant on this project."
+  },
+  "routes.app.projects.$projectId_.settings.index.editInfo": {
+    "description": "Text for link that navigates to page for editing project settings.",
+    "message": "Edit Info"
+  },
+  "routes.app.projects.$projectId_.settings.index.navTitle": {
+    "description": "Title of the project settings page.",
+    "message": "Project Settings"
+  },
+  "routes.app.projects.$projectId_.settings.index.noProjectDescription": {
+    "description": "Indicates that the project does not have a description.",
+    "message": "No project description."
+  },
+  "routes.app.projects.$projectId_.settings.index.noRemoteArchive": {
+    "description": "Text for item that indicates that project has not added a remote archive.",
+    "message": "No Remote Archive"
+  },
+  "routes.app.projects.$projectId_.settings.index.unnamedProject": {
+    "description": "Fallback for when current project is missing a name.",
+    "message": "Unnamed Project"
+  },
+  "routes.app.projects.$projectId_.settings.index.viewTeam": {
+    "description": "Text for link that navigates to project team page.",
+    "message": "View Team"
+  },
   "routes.app.route.aboutTabLabel": {
     "message": "About CoMapeo"
   },
