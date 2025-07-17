@@ -34,6 +34,7 @@ import { Route as AppProjectsProjectIdRouteRouteImport } from './routes/app/proj
 import { Route as OnboardingProjectCreateIndexRouteImport } from './routes/onboarding/project/create/index'
 import { Route as AppProjectsProjectIdIndexRouteImport } from './routes/app/projects/$projectId/index'
 import { Route as OnboardingProjectJoinInviteIdRouteRouteImport } from './routes/onboarding/project/join.$inviteId/route'
+import { Route as AppProjectsProjectIdSettingsRouteRouteImport } from './routes/app/projects/$projectId_/settings/route'
 import { Route as OnboardingProjectJoinInviteIdIndexRouteImport } from './routes/onboarding/project/join.$inviteId/index'
 import { Route as AppProjectsProjectIdSettingsIndexRouteImport } from './routes/app/projects/$projectId_/settings/index'
 import { Route as AppProjectsProjectIdExchangeIndexRouteImport } from './routes/app/projects/$projectId_/exchange/index'
@@ -168,6 +169,12 @@ const OnboardingProjectJoinInviteIdRouteRoute =
     path: '/project/join/$inviteId',
     getParentRoute: () => OnboardingRouteRoute,
   } as any)
+const AppProjectsProjectIdSettingsRouteRoute =
+  AppProjectsProjectIdSettingsRouteRouteImport.update({
+    id: '/projects/$projectId_/settings',
+    path: '/projects/$projectId/settings',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
 const OnboardingProjectJoinInviteIdIndexRoute =
   OnboardingProjectJoinInviteIdIndexRouteImport.update({
     id: '/',
@@ -176,9 +183,9 @@ const OnboardingProjectJoinInviteIdIndexRoute =
   } as any)
 const AppProjectsProjectIdSettingsIndexRoute =
   AppProjectsProjectIdSettingsIndexRouteImport.update({
-    id: '/projects/$projectId_/settings/',
-    path: '/projects/$projectId/settings/',
-    getParentRoute: () => AppRouteRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppProjectsProjectIdSettingsRouteRoute,
   } as any)
 const AppProjectsProjectIdExchangeIndexRoute =
   AppProjectsProjectIdExchangeIndexRouteImport.update({
@@ -225,13 +232,14 @@ export interface FileRoutesByFullPath {
   '/app/settings/language': typeof AppSettingsLanguageRoute
   '/app/settings/': typeof AppSettingsIndexRoute
   '/onboarding/project': typeof OnboardingProjectIndexRoute
+  '/app/projects/$projectId/settings': typeof AppProjectsProjectIdSettingsRouteRouteWithChildren
   '/onboarding/project/join/$inviteId': typeof OnboardingProjectJoinInviteIdRouteRouteWithChildren
   '/app/projects/$projectId/': typeof AppProjectsProjectIdIndexRoute
   '/onboarding/project/create': typeof OnboardingProjectCreateIndexRoute
   '/onboarding/project/create/$projectId/success': typeof OnboardingProjectCreateProjectIdSuccessRoute
   '/onboarding/project/join/$inviteId/success': typeof OnboardingProjectJoinInviteIdSuccessRoute
   '/app/projects/$projectId/exchange': typeof AppProjectsProjectIdExchangeIndexRoute
-  '/app/projects/$projectId/settings': typeof AppProjectsProjectIdSettingsIndexRoute
+  '/app/projects/$projectId/settings/': typeof AppProjectsProjectIdSettingsIndexRoute
   '/onboarding/project/join/$inviteId/': typeof OnboardingProjectJoinInviteIdIndexRoute
   '/app/projects/$projectId/observations/$observationDocId': typeof AppProjectsProjectIdObservationsObservationDocIdIndexRoute
 }
@@ -285,6 +293,7 @@ export interface FileRoutesById {
   '/app/settings/language': typeof AppSettingsLanguageRoute
   '/app/settings/': typeof AppSettingsIndexRoute
   '/onboarding/project/': typeof OnboardingProjectIndexRoute
+  '/app/projects/$projectId_/settings': typeof AppProjectsProjectIdSettingsRouteRouteWithChildren
   '/onboarding/project/join/$inviteId': typeof OnboardingProjectJoinInviteIdRouteRouteWithChildren
   '/app/projects/$projectId/': typeof AppProjectsProjectIdIndexRoute
   '/onboarding/project/create/': typeof OnboardingProjectCreateIndexRoute
@@ -317,13 +326,14 @@ export interface FileRouteTypes {
     | '/app/settings/language'
     | '/app/settings/'
     | '/onboarding/project'
+    | '/app/projects/$projectId/settings'
     | '/onboarding/project/join/$inviteId'
     | '/app/projects/$projectId/'
     | '/onboarding/project/create'
     | '/onboarding/project/create/$projectId/success'
     | '/onboarding/project/join/$inviteId/success'
     | '/app/projects/$projectId/exchange'
-    | '/app/projects/$projectId/settings'
+    | '/app/projects/$projectId/settings/'
     | '/onboarding/project/join/$inviteId/'
     | '/app/projects/$projectId/observations/$observationDocId'
   fileRoutesByTo: FileRoutesByTo
@@ -376,6 +386,7 @@ export interface FileRouteTypes {
     | '/app/settings/language'
     | '/app/settings/'
     | '/onboarding/project/'
+    | '/app/projects/$projectId_/settings'
     | '/onboarding/project/join/$inviteId'
     | '/app/projects/$projectId/'
     | '/onboarding/project/create/'
@@ -565,6 +576,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingProjectJoinInviteIdRouteRouteImport
       parentRoute: typeof OnboardingRouteRoute
     }
+    '/app/projects/$projectId_/settings': {
+      id: '/app/projects/$projectId_/settings'
+      path: '/projects/$projectId/settings'
+      fullPath: '/app/projects/$projectId/settings'
+      preLoaderRoute: typeof AppProjectsProjectIdSettingsRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/onboarding/project/join/$inviteId/': {
       id: '/onboarding/project/join/$inviteId/'
       path: '/'
@@ -574,10 +592,10 @@ declare module '@tanstack/react-router' {
     }
     '/app/projects/$projectId_/settings/': {
       id: '/app/projects/$projectId_/settings/'
-      path: '/projects/$projectId/settings'
-      fullPath: '/app/projects/$projectId/settings'
+      path: '/'
+      fullPath: '/app/projects/$projectId/settings/'
       preLoaderRoute: typeof AppProjectsProjectIdSettingsIndexRouteImport
-      parentRoute: typeof AppRouteRoute
+      parentRoute: typeof AppProjectsProjectIdSettingsRouteRoute
     }
     '/app/projects/$projectId_/exchange/': {
       id: '/app/projects/$projectId_/exchange/'
@@ -646,13 +664,28 @@ const AppProjectsProjectIdRouteRouteWithChildren =
     AppProjectsProjectIdRouteRouteChildren,
   )
 
+interface AppProjectsProjectIdSettingsRouteRouteChildren {
+  AppProjectsProjectIdSettingsIndexRoute: typeof AppProjectsProjectIdSettingsIndexRoute
+}
+
+const AppProjectsProjectIdSettingsRouteRouteChildren: AppProjectsProjectIdSettingsRouteRouteChildren =
+  {
+    AppProjectsProjectIdSettingsIndexRoute:
+      AppProjectsProjectIdSettingsIndexRoute,
+  }
+
+const AppProjectsProjectIdSettingsRouteRouteWithChildren =
+  AppProjectsProjectIdSettingsRouteRoute._addFileChildren(
+    AppProjectsProjectIdSettingsRouteRouteChildren,
+  )
+
 interface AppRouteRouteChildren {
   AppSettingsRouteRoute: typeof AppSettingsRouteRouteWithChildren
   AppAboutRoute: typeof AppAboutRoute
   AppDataAndPrivacyRoute: typeof AppDataAndPrivacyRoute
   AppProjectsProjectIdRouteRoute: typeof AppProjectsProjectIdRouteRouteWithChildren
+  AppProjectsProjectIdSettingsRouteRoute: typeof AppProjectsProjectIdSettingsRouteRouteWithChildren
   AppProjectsProjectIdExchangeIndexRoute: typeof AppProjectsProjectIdExchangeIndexRoute
-  AppProjectsProjectIdSettingsIndexRoute: typeof AppProjectsProjectIdSettingsIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
@@ -660,10 +693,10 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppAboutRoute: AppAboutRoute,
   AppDataAndPrivacyRoute: AppDataAndPrivacyRoute,
   AppProjectsProjectIdRouteRoute: AppProjectsProjectIdRouteRouteWithChildren,
+  AppProjectsProjectIdSettingsRouteRoute:
+    AppProjectsProjectIdSettingsRouteRouteWithChildren,
   AppProjectsProjectIdExchangeIndexRoute:
     AppProjectsProjectIdExchangeIndexRoute,
-  AppProjectsProjectIdSettingsIndexRoute:
-    AppProjectsProjectIdSettingsIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(

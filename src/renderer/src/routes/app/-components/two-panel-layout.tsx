@@ -14,7 +14,6 @@ export function TwoPanelLayout({
 }: {
 	start: ReactNode
 	end: ReactNode
-	applyBoxShadow?: boolean
 }) {
 	return (
 		<Box display="flex" flex={1}>
