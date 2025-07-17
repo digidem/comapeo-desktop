@@ -158,6 +158,9 @@ function RouteComponent() {
 		}))
 	}, [observations, presets])
 
+	const isAtLeastCoordinator =
+		role.roleId === CREATOR_ROLE_ID || role.roleId === COORDINATOR_ROLE_ID
+
 	return (
 		<Stack direction="column" flex={1} overflow="auto">
 			<Box padding={6}>
@@ -178,8 +181,7 @@ function RouteComponent() {
 					<Stack direction="row" useFlexGap gap={3} alignItems="center">
 						<Icon
 							name={
-								role.roleId === CREATOR_ROLE_ID ||
-								role.roleId === COORDINATOR_ROLE_ID
+								isAtLeastCoordinator
 									? 'material-manage-accounts-filled'
 									: 'material-people-filled'
 							}
@@ -187,8 +189,7 @@ function RouteComponent() {
 						/>
 						<Typography fontWeight={400} sx={{ color: DARK_GREY }}>
 							{t(
-								role.roleId === CREATOR_ROLE_ID ||
-									role.roleId === COORDINATOR_ROLE_ID
+								isAtLeastCoordinator
 									? m.youAreCoordinator
 									: m.youAreParticipant,
 							)}
@@ -213,8 +214,12 @@ function RouteComponent() {
 							size="large"
 							to="/app/projects/$projectId/settings"
 							params={{ projectId }}
+							disabled={!isAtLeastCoordinator}
 							startIcon={<Icon name="material-person-add" />}
-							sx={{ maxWidth: 400 }}
+							sx={{
+								maxWidth: 400,
+								visibility: isAtLeastCoordinator ? undefined : 'hidden',
+							}}
 						>
 							{t(m.invite)}
 						</ButtonLink>
