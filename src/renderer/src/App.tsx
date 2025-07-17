@@ -20,7 +20,7 @@ import {
 
 import type { LocaleState } from '../../main/types/intl'
 import { initComapeoClient } from './comapeo-client'
-import { IntlProvider } from './contexts/IntlContext'
+import { IntlProvider } from './contexts/intl'
 import {
 	getActiveProjectIdQueryOptions,
 	getLocaleStateQueryOptions,
