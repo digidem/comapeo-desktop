@@ -115,4 +115,4 @@ Our build process requires a `.env.production` file to exist at the project root
 
 If you're running into an error with any of the Forge-related commands but not seeing any output in the console, you probably have to prefix the command with `DEBUG=electron-forge` e.g. `DEBUG=electron-forge npm run forge:package`.
 
-By default, we package the app in the [ASAR](https://github.com/electron/asar) format. However, it can be helpful to avoid doing that for debugging purposes (e.g. building locally), in which case you can specify a `ASAR=true` environment variable when running the relevant Forge command e.g. `ASAR=true npm run forge:package`.
+By default, we package the app in the [ASAR](https://github.com/electron/asar) format. However, it can be helpful to avoid doing that for debugging purposes (e.g. building locally), in which case you can specify a `ASAR=false` environment variable when running the relevant Forge command e.g. `ASAR=false npm run forge:package`.
