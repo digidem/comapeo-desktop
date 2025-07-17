@@ -22,8 +22,8 @@ import {
 	LIGHT_GREY,
 	WHITE,
 } from '../../../../colors'
-import { ButtonLink } from '../../../../components/button-link'
 import { Icon } from '../../../../components/icon'
+import { ButtonLink } from '../../../../components/link'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,

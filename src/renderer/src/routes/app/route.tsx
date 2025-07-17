@@ -12,12 +12,12 @@ import {
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, COMAPEO_BLUE, DARK_GREY, WHITE } from '../../colors'
+import { Icon } from '../../components/icon'
 import {
 	ButtonLink,
 	IconButtonLink,
 	type ButtonLinkProps,
-} from '../../components/button-link'
-import { Icon } from '../../components/icon'
+} from '../../components/link'
 import type { ToRouteFullPath } from '../../lib/navigation'
 
 export const Route = createFileRoute('/app')({

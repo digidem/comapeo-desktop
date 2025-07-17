@@ -12,8 +12,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLACK, BLUE_GREY, DARK_COMAPEO_BLUE } from '../colors'
-import { ButtonLink } from '../components/button-link'
 import { Icon } from '../components/icon'
+import { ButtonLink } from '../components/link'
 import topographicPrintURL from '../images/topographic-print.svg'
 
 export const Route = createFileRoute('/welcome')({

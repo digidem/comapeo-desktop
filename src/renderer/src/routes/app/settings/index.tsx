@@ -7,8 +7,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors'
-import { ButtonLink, IconButtonLink } from '../../../components/button-link'
 import { Icon } from '../../../components/icon'
+import { ButtonLink, IconButtonLink } from '../../../components/link'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
 import { getLanguageInfo } from '../../../lib/intl'
 import {

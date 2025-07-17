@@ -7,8 +7,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { GREEN, LIGHT_GREY } from '../../../../colors'
-import { ButtonLink } from '../../../../components/button-link'
 import { Icon } from '../../../../components/icon'
+import { ButtonLink } from '../../../../components/link'
 
 export const Route = createFileRoute(
 	'/onboarding/project/join/$inviteId/success',
