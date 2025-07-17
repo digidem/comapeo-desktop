@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as OnboardingRouteRouteImport } from './routes/onboarding/route'
@@ -20,7 +18,6 @@ import { Route as OnboardingDeviceNameRouteImport } from './routes/onboarding/de
 import { Route as OnboardingDataAndPrivacyRouteImport } from './routes/onboarding/data-and-privacy'
 import { Route as AppDataAndPrivacyRouteImport } from './routes/app/data-and-privacy'
 import { Route as AppAboutRouteImport } from './routes/app/about'
-import { Route as MapTabsMapRouteImport } from './routes/(MapTabs)/_Map'
 import { Route as AppSettingsRouteRouteImport } from './routes/app/settings/route'
 import { Route as OnboardingProjectIndexRouteImport } from './routes/onboarding/project/index'
 import { Route as AppSettingsIndexRouteImport } from './routes/app/settings/index'
@@ -28,8 +25,6 @@ import { Route as AppSettingsLanguageRouteImport } from './routes/app/settings/l
 import { Route as AppSettingsDeviceNameRouteImport } from './routes/app/settings/device-name'
 import { Route as AppSettingsCoordinateSystemRouteImport } from './routes/app/settings/coordinate-system'
 import { Route as AppSettingsBackgroundMapRouteImport } from './routes/app/settings/background-map'
-import { Route as MapTabsMapTab2RouteImport } from './routes/(MapTabs)/_Map.tab2'
-import { Route as MapTabsMapMainRouteImport } from './routes/(MapTabs)/_Map.main'
 import { Route as AppProjectsProjectIdRouteRouteImport } from './routes/app/projects/$projectId/route'
 import { Route as OnboardingProjectCreateIndexRouteImport } from './routes/onboarding/project/create/index'
 import { Route as AppProjectsProjectIdIndexRouteImport } from './routes/app/projects/$projectId/index'
@@ -42,12 +37,6 @@ import { Route as OnboardingProjectJoinInviteIdSuccessRouteImport } from './rout
 import { Route as OnboardingProjectCreateProjectIdSuccessRouteImport } from './routes/onboarding/project/create/$projectId.success'
 import { Route as AppProjectsProjectIdObservationsObservationDocIdIndexRouteImport } from './routes/app/projects/$projectId/observations/$observationDocId/index'
 
-const MapTabsRouteImport = createFileRoute('/(MapTabs)')()
-
-const MapTabsRoute = MapTabsRouteImport.update({
-  id: '/(MapTabs)',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const WelcomeRoute = WelcomeRouteImport.update({
   id: '/welcome',
   path: '/welcome',
@@ -94,10 +83,6 @@ const AppAboutRoute = AppAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const MapTabsMapRoute = MapTabsMapRouteImport.update({
-  id: '/_Map',
-  getParentRoute: () => MapTabsRoute,
-} as any)
 const AppSettingsRouteRoute = AppSettingsRouteRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -135,16 +120,6 @@ const AppSettingsBackgroundMapRoute =
     path: '/background-map',
     getParentRoute: () => AppSettingsRouteRoute,
   } as any)
-const MapTabsMapTab2Route = MapTabsMapTab2RouteImport.update({
-  id: '/tab2',
-  path: '/tab2',
-  getParentRoute: () => MapTabsMapRoute,
-} as any)
-const MapTabsMapMainRoute = MapTabsMapMainRouteImport.update({
-  id: '/main',
-  path: '/main',
-  getParentRoute: () => MapTabsMapRoute,
-} as any)
 const AppProjectsProjectIdRouteRoute =
   AppProjectsProjectIdRouteRouteImport.update({
     id: '/projects/$projectId',
@@ -213,7 +188,7 @@ const AppProjectsProjectIdObservationsObservationDocIdIndexRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof MapTabsMapRouteWithChildren
+  '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
   '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/welcome': typeof WelcomeRoute
@@ -224,8 +199,6 @@ export interface FileRoutesByFullPath {
   '/onboarding/device-name': typeof OnboardingDeviceNameRoute
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
   '/app/projects/$projectId': typeof AppProjectsProjectIdRouteRouteWithChildren
-  '/main': typeof MapTabsMapMainRoute
-  '/tab2': typeof MapTabsMapTab2Route
   '/app/settings/background-map': typeof AppSettingsBackgroundMapRoute
   '/app/settings/coordinate-system': typeof AppSettingsCoordinateSystemRoute
   '/app/settings/device-name': typeof AppSettingsDeviceNameRoute
@@ -244,7 +217,7 @@ export interface FileRoutesByFullPath {
   '/app/projects/$projectId/observations/$observationDocId': typeof AppProjectsProjectIdObservationsObservationDocIdIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof MapTabsMapRouteWithChildren
+  '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
   '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/welcome': typeof WelcomeRoute
@@ -253,8 +226,6 @@ export interface FileRoutesByTo {
   '/onboarding/data-and-privacy': typeof OnboardingDataAndPrivacyRoute
   '/onboarding/device-name': typeof OnboardingDeviceNameRoute
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
-  '/main': typeof MapTabsMapMainRoute
-  '/tab2': typeof MapTabsMapTab2Route
   '/app/settings/background-map': typeof AppSettingsBackgroundMapRoute
   '/app/settings/coordinate-system': typeof AppSettingsCoordinateSystemRoute
   '/app/settings/device-name': typeof AppSettingsDeviceNameRoute
@@ -277,16 +248,12 @@ export interface FileRoutesById {
   '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/welcome': typeof WelcomeRoute
   '/app/settings': typeof AppSettingsRouteRouteWithChildren
-  '/(MapTabs)': typeof MapTabsRouteWithChildren
-  '/(MapTabs)/_Map': typeof MapTabsMapRouteWithChildren
   '/app/about': typeof AppAboutRoute
   '/app/data-and-privacy': typeof AppDataAndPrivacyRoute
   '/onboarding/data-and-privacy': typeof OnboardingDataAndPrivacyRoute
   '/onboarding/device-name': typeof OnboardingDeviceNameRoute
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
   '/app/projects/$projectId': typeof AppProjectsProjectIdRouteRouteWithChildren
-  '/(MapTabs)/_Map/main': typeof MapTabsMapMainRoute
-  '/(MapTabs)/_Map/tab2': typeof MapTabsMapTab2Route
   '/app/settings/background-map': typeof AppSettingsBackgroundMapRoute
   '/app/settings/coordinate-system': typeof AppSettingsCoordinateSystemRoute
   '/app/settings/device-name': typeof AppSettingsDeviceNameRoute
@@ -318,8 +285,6 @@ export interface FileRouteTypes {
     | '/onboarding/device-name'
     | '/onboarding/privacy-policy'
     | '/app/projects/$projectId'
-    | '/main'
-    | '/tab2'
     | '/app/settings/background-map'
     | '/app/settings/coordinate-system'
     | '/app/settings/device-name'
@@ -347,8 +312,6 @@ export interface FileRouteTypes {
     | '/onboarding/data-and-privacy'
     | '/onboarding/device-name'
     | '/onboarding/privacy-policy'
-    | '/main'
-    | '/tab2'
     | '/app/settings/background-map'
     | '/app/settings/coordinate-system'
     | '/app/settings/device-name'
@@ -370,16 +333,12 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/welcome'
     | '/app/settings'
-    | '/(MapTabs)'
-    | '/(MapTabs)/_Map'
     | '/app/about'
     | '/app/data-and-privacy'
     | '/onboarding/data-and-privacy'
     | '/onboarding/device-name'
     | '/onboarding/privacy-policy'
     | '/app/projects/$projectId'
-    | '/(MapTabs)/_Map/main'
-    | '/(MapTabs)/_Map/tab2'
     | '/app/settings/background-map'
     | '/app/settings/coordinate-system'
     | '/app/settings/device-name'
@@ -403,18 +362,10 @@ export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
   OnboardingRouteRoute: typeof OnboardingRouteRouteWithChildren
   WelcomeRoute: typeof WelcomeRoute
-  MapTabsRoute: typeof MapTabsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/(MapTabs)': {
-      id: '/(MapTabs)'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof MapTabsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/welcome': {
       id: '/welcome'
       path: '/welcome'
@@ -478,13 +429,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAboutRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/(MapTabs)/_Map': {
-      id: '/(MapTabs)/_Map'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof MapTabsMapRouteImport
-      parentRoute: typeof MapTabsRoute
-    }
     '/app/settings': {
       id: '/app/settings'
       path: '/settings'
@@ -533,20 +477,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/settings/background-map'
       preLoaderRoute: typeof AppSettingsBackgroundMapRouteImport
       parentRoute: typeof AppSettingsRouteRoute
-    }
-    '/(MapTabs)/_Map/tab2': {
-      id: '/(MapTabs)/_Map/tab2'
-      path: '/tab2'
-      fullPath: '/tab2'
-      preLoaderRoute: typeof MapTabsMapTab2RouteImport
-      parentRoute: typeof MapTabsMapRoute
-    }
-    '/(MapTabs)/_Map/main': {
-      id: '/(MapTabs)/_Map/main'
-      path: '/main'
-      fullPath: '/main'
-      preLoaderRoute: typeof MapTabsMapMainRouteImport
-      parentRoute: typeof MapTabsMapRoute
     }
     '/app/projects/$projectId': {
       id: '/app/projects/$projectId'
@@ -747,37 +677,11 @@ const OnboardingRouteRouteWithChildren = OnboardingRouteRoute._addFileChildren(
   OnboardingRouteRouteChildren,
 )
 
-interface MapTabsMapRouteChildren {
-  MapTabsMapMainRoute: typeof MapTabsMapMainRoute
-  MapTabsMapTab2Route: typeof MapTabsMapTab2Route
-}
-
-const MapTabsMapRouteChildren: MapTabsMapRouteChildren = {
-  MapTabsMapMainRoute: MapTabsMapMainRoute,
-  MapTabsMapTab2Route: MapTabsMapTab2Route,
-}
-
-const MapTabsMapRouteWithChildren = MapTabsMapRoute._addFileChildren(
-  MapTabsMapRouteChildren,
-)
-
-interface MapTabsRouteChildren {
-  MapTabsMapRoute: typeof MapTabsMapRouteWithChildren
-}
-
-const MapTabsRouteChildren: MapTabsRouteChildren = {
-  MapTabsMapRoute: MapTabsMapRouteWithChildren,
-}
-
-const MapTabsRouteWithChildren =
-  MapTabsRoute._addFileChildren(MapTabsRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRouteRoute: AppRouteRouteWithChildren,
   OnboardingRouteRoute: OnboardingRouteRouteWithChildren,
   WelcomeRoute: WelcomeRoute,
-  MapTabsRoute: MapTabsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
