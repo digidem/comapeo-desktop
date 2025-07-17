@@ -81,6 +81,7 @@ function RouteComponent() {
 						}}
 					>
 						<ListItem {...SHARED_NAV_ITEM_PROPS.listItem}>
+							{/* TODO: Should not be active when on exchange page */}
 							<IconButtonLink
 								{...SHARED_NAV_ITEM_PROPS.link}
 								disabled={

@@ -15,7 +15,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import { GREEN, LIGHT_GREY } from '../../../../colors'
 import { ButtonLink } from '../../../../components/button-link'
 import { Icon } from '../../../../components/icon'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/constants'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
 
 export const Route = createFileRoute(
 	'/onboarding/project/create/$projectId/success',
