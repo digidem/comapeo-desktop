@@ -3,7 +3,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
 import { TwoPanelLayout } from '../../-components/two-panel-layout'
-import { Map } from '../../../../components/Map'
+import { Map } from '../../../../components/map'
 
 export const Route = createFileRoute('/app/projects/$projectId')({
 	pendingComponent: () => {
