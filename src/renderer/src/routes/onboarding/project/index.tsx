@@ -16,8 +16,8 @@ import {
 	DARK_GREY,
 	LIGHT_GREY,
 } from '../../../colors'
-import { ButtonLink } from '../../../components/button-link'
 import { Icon } from '../../../components/icon'
+import { ButtonLink } from '../../../components/link'
 
 export const Route = createFileRoute('/onboarding/project/')({
 	component: RouteComponent,

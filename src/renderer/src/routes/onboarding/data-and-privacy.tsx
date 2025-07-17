@@ -8,8 +8,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { DARKER_ORANGE, DARK_GREY, LIGHT_GREY } from '../../colors'
-import { ButtonLink } from '../../components/button-link'
 import { Icon } from '../../components/icon'
+import { ButtonLink } from '../../components/link'
 
 export const Route = createFileRoute('/onboarding/data-and-privacy')({
 	component: RouteComponent,

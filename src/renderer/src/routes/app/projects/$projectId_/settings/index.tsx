@@ -14,12 +14,12 @@ import { createFileRoute, notFound, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARK_GREY } from '../../../../../colors'
+import { Icon } from '../../../../../components/icon'
 import {
 	ButtonLink,
 	IconButtonLink,
 	TextLink,
-} from '../../../../../components/button-link'
-import { Icon } from '../../../../../components/icon'
+} from '../../../../../components/link'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
