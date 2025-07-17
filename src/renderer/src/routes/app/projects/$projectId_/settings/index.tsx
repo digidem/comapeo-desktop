@@ -1,11 +1,15 @@
 import type { ReactNode } from 'react'
-import { useOwnRoleInProject, useProjectSettings } from '@comapeo/core-react'
+import {
+	useManyMembers,
+	useOwnRoleInProject,
+	useProjectSettings,
+} from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute, notFound, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARK_GREY } from '../../../../../colors'
@@ -16,11 +20,88 @@ import {
 } from '../../../../../components/button-link'
 import { Icon } from '../../../../../components/icon'
 import {
+	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
+	memberIsActiveRemoteArchive,
+	type ActiveRemoteArchiveMemberInfo,
 } from '../../../../../lib/comapeo'
 
 export const Route = createFileRoute('/app/projects/$projectId_/settings/')({
+	loader: async ({ context, params }) => {
+		const {
+			clientApi,
+			queryClient,
+			localeState: { value: lang },
+		} = context
+		const { projectId } = params
+
+		let projectApi
+		try {
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			// Copied from https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/projects.ts#L29-L31
+			projectApi = await queryClient.ensureQueryData({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects', projectId],
+				queryFn: async () => {
+					return clientApi.getProject(projectId)
+				},
+			})
+		} catch {
+			throw notFound()
+		}
+
+		await Promise.all([
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'project_settings',
+				],
+				queryFn: async () => {
+					return projectApi.$getProjectSettings()
+				},
+			}),
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'role',
+				],
+				queryFn: async () => {
+					return projectApi.$getOwnRole()
+				},
+			}),
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'observations',
+					{ lang },
+				],
+				queryFn: async () => {
+					return projectApi.observation.getMany({ lang })
+				},
+			}),
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'members',
+				],
+				queryFn: async () => {
+					return projectApi.$member.getMany()
+				},
+			}),
+		])
+	},
 	pendingComponent: () => {
 		return (
 			<Box
@@ -40,12 +121,13 @@ export const Route = createFileRoute('/app/projects/$projectId_/settings/')({
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 	const router = useRouter()
-
 	const { projectId } = Route.useParams()
 
 	const { data: projectSettings } = useProjectSettings({ projectId })
-
 	const { data: role } = useOwnRoleInProject({ projectId })
+	const { data: members } = useManyMembers({ projectId })
+
+	const remoteArchiveMember = members.find(memberIsActiveRemoteArchive)
 
 	const isAtLeastCoordinator =
 		role.roleId === COORDINATOR_ROLE_ID || role.roleId === CREATOR_ROLE_ID
@@ -97,6 +179,7 @@ function RouteComponent() {
 							projectSettings.projectDescription || t(m.noProjectDescription)
 						}
 						projectColor={projectSettings.projectColor}
+						remoteArchiveMember={remoteArchiveMember}
 					/>
 				) : (
 					<ParticipantSettingsView
@@ -217,11 +300,13 @@ function CoordinatorSettingsView({
 	projectName,
 	projectColor,
 	projectDescription,
+	remoteArchiveMember,
 }: {
 	projectId: string
 	projectColor?: string
 	projectName: string
 	projectDescription?: string
+	remoteArchiveMember?: ActiveRemoteArchiveMemberInfo
 }) {
 	const { formatMessage: t } = useIntl()
 
@@ -314,7 +399,12 @@ function CoordinatorSettingsView({
 				icon={
 					<Icon name="material-offline-bolt" htmlColor={DARK_GREY} size={30} />
 				}
-				label={t(m.noRemoteArchive)}
+				label={
+					remoteArchiveMember
+						? remoteArchiveMember.name ||
+							remoteArchiveMember.selfHostedServerDetails.baseUrl
+						: t(m.noRemoteArchive)
+				}
 				actionButton={
 					<ButtonLink
 						variant="text"

@@ -1,3 +1,4 @@
+import type { MemberInfo } from '@comapeo/core/dist/member-api'
 import type { Observation, Preset } from '@comapeo/schema'
 
 // https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/shared.ts#L6C1-L6C52
@@ -57,4 +58,18 @@ export function getMatchingPresetForObservation(
 	})
 
 	return bestMatch
+}
+
+export type ActiveRemoteArchiveMemberInfo = MemberInfo & {
+	deviceType: 'selfHostedServer'
+	selfHostedServerDetails: NonNullable<MemberInfo['selfHostedServerDetails']>
+}
+
+export function memberIsActiveRemoteArchive(
+	member: MemberInfo,
+): member is ActiveRemoteArchiveMemberInfo {
+	if (member.deviceType !== 'selfHostedServer') return false
+	if (!member.selfHostedServerDetails) return false
+	if (member.role.roleId !== MEMBER_ROLE_ID) return false
+	return true
 }
