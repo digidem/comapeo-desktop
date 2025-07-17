@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import {
 	useManyMembers,
 	useOwnRoleInProject,
@@ -9,6 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { useTheme } from '@mui/material/styles'
 import { createFileRoute, notFound, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
@@ -209,6 +210,12 @@ function ParticipantSettingsView({
 }) {
 	const { formatMessage: t } = useIntl()
 
+	const theme = useTheme()
+
+	const iconSize = useMemo(() => {
+		return `calc(${theme.typography.h1.fontSize} * ${theme.typography.h1.lineHeight} * 1.25)`
+	}, [theme.typography.h1.fontSize, theme.typography.h1.lineHeight])
+
 	return (
 		<Stack
 			direction="column"
@@ -227,7 +234,7 @@ function ParticipantSettingsView({
 				padding={5}
 				alignItems="flex-start"
 			>
-				<Icon name="comapeo-cards" htmlColor={DARK_GREY} size={30} />
+				<Icon name="comapeo-cards" htmlColor={DARK_GREY} size={iconSize} />
 
 				<Stack
 					direction="column"
@@ -260,7 +267,7 @@ function ParticipantSettingsView({
 				<Icon
 					name="material-manage-accounts-filled"
 					htmlColor={DARK_GREY}
-					size={30}
+					size={iconSize}
 				/>
 
 				<Stack

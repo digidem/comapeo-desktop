@@ -10,7 +10,7 @@ export function Icon({
 	...props
 }: Omit<SvgIconProps, 'name' | 'width' | 'height'> & {
 	name: IconName
-	size?: number
+	size?: number | string
 }) {
 	return (
 		<SvgIcon
