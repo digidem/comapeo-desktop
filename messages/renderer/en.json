@@ -56,6 +56,38 @@
   "routes.app.data-and-privacy.title": {
     "message": "Data & Privacy"
   },
+  "routes.app.projects.$projectId.index.addObservationsDescription": {
+    "description": "Description of card that is displayed when project has no observations to display.",
+    "message": "Use Exchange to add Collaborator Observations"
+  },
+  "routes.app.projects.$projectId.index.addObservationsTitle": {
+    "description": "Title of card that is displayed when project has no observations to display.",
+    "message": "Add Observations"
+  },
+  "routes.app.projects.$projectId.index.goToExchange": {
+    "description": "Link text to navigate to Exchange page.",
+    "message": "Go to Exchange"
+  },
+  "routes.app.projects.$projectId.index.invite": {
+    "description": "Link text to navigate to invite collaborators page.",
+    "message": "Invite"
+  },
+  "routes.app.projects.$projectId.index.unnamedProject": {
+    "description": "Fallback for when current project is missing a name.",
+    "message": "Unnamed Project"
+  },
+  "routes.app.projects.$projectId.index.view": {
+    "description": "Link text to navigate to project settings page.",
+    "message": "View"
+  },
+  "routes.app.projects.$projectId.index.youAreCoordinator": {
+    "description": "Indicates that user is a coordinator on the current project.",
+    "message": "You're a coordinator on this project."
+  },
+  "routes.app.projects.$projectId.index.youAreParticipant": {
+    "description": "Indicates that user is a participant on the current project.",
+    "message": "You're a participant on this project."
+  },
   "routes.app.route.aboutTabLabel": {
     "message": "About CoMapeo"
   },

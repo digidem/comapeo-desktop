@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../lib/constants'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../lib/comapeo'
 
 export const Route = createFileRoute('/')({
 	beforeLoad: async ({ context }) => {

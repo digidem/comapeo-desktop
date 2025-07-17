@@ -3,7 +3,7 @@ import { useManyDocs } from '@comapeo/core-react'
 import type { Observation } from '@comapeo/schema'
 import { useIntl } from 'react-intl'
 
-import { matchPreset } from '../lib/matchPreset'
+import { getMatchingPresetForObservation } from '../lib/comapeo'
 
 export function useObservationWithPreset(
 	observation: Observation,
@@ -19,7 +19,7 @@ export function useObservationWithPreset(
 
 	const matchedPreset = useMemo(() => {
 		if (!observation?.tags) return undefined
-		return matchPreset(observation.tags, presets)
+		return getMatchingPresetForObservation(observation.tags, presets)
 	}, [observation?.tags, presets])
 
 	return matchedPreset

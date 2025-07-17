@@ -12,7 +12,7 @@ import {
 import { defineMessages, useIntl } from 'react-intl'
 
 import { LIGHT_GREY } from '../../../../colors'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/constants'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
 
 export const Route = createFileRoute('/onboarding/project/join/$inviteId')({
 	loader: async ({ context, params }) => {

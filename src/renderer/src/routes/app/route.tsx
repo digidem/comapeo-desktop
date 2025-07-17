@@ -81,6 +81,7 @@ function RouteComponent() {
 						}}
 					>
 						<ListItem {...SHARED_NAV_ITEM_PROPS.listItem}>
+							{/* TODO: Should not be active when on exchange page */}
 							<IconButtonLink
 								{...SHARED_NAV_ITEM_PROPS.link}
 								disabled={
@@ -107,12 +108,13 @@ function RouteComponent() {
 
 						<Stack direction="column" useFlexGap gap={5}>
 							<LabeledNavItem
-								// @ts-expect-error Not implemented yet
 								to="/app/projects/$projectId/exchange"
+								params={{ projectId: activeProjectId }}
 								disabled={
 									pageHasEditing &&
-									// @ts-expect-error Not implemented yet
-									currentRoute.fullPath !== '/app/projects/$projectId/exchange'
+									!currentRoute.fullPath.startsWith(
+										'/app/projects/$projectId/exchange',
+									)
 								}
 								label={t(m.exchangeTabLabel)}
 								icon={<Icon name="material-offline-bolt" size={30} />}

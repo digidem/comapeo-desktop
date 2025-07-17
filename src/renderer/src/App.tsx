@@ -18,9 +18,13 @@ import {
 	createRouter,
 } from '@tanstack/react-router'
 
+import type { LocaleState } from '../../main/types/intl'
 import { initComapeoClient } from './comapeo-client'
 import { IntlProvider } from './contexts/IntlContext'
-import { getActiveProjectIdQueryOptions } from './lib/queries/app-settings'
+import {
+	getActiveProjectIdQueryOptions,
+	getLocaleStateQueryOptions,
+} from './lib/queries/app-settings'
 import { routeTree } from './routeTree.gen'
 import { theme } from './theme'
 
@@ -48,7 +52,12 @@ const hashHistory = createHashHistory()
 const router = createRouter({
 	routeTree,
 	history: hashHistory,
-	context: { queryClient, clientApi, activeProjectId: null },
+	context: {
+		queryClient,
+		clientApi,
+		activeProjectId: null,
+		localeState: undefined!,
+	},
 	defaultPreload: 'intent',
 	// Since we're using React Query, we don't want loader calls to ever be stale
 	// This will ensure that the loader is always called when the route is preloaded or visited
@@ -83,14 +92,14 @@ export function App() {
 						<IntlProvider>
 							<ClientApiProvider clientApi={clientApi}>
 								<WithInvitesListener>
-									<WithActiveProjectId>
-										{({ activeProjectId }) => (
+									<WithAddedRouteContext>
+										{({ activeProjectId, localeState }) => (
 											<RouterProvider
 												router={router}
-												context={{ activeProjectId }}
+												context={{ activeProjectId, localeState }}
 											/>
 										)}
-									</WithActiveProjectId>
+									</WithAddedRouteContext>
 								</WithInvitesListener>
 							</ClientApiProvider>
 						</IntlProvider>
@@ -107,14 +116,19 @@ function WithInvitesListener({ children }: { children: ReactNode }) {
 	return children
 }
 
-function WithActiveProjectId({
+function WithAddedRouteContext({
 	children,
 }: {
-	children: (props: { activeProjectId: string | null }) => ReactElement
+	children: (props: {
+		activeProjectId: string | null
+		localeState: LocaleState
+	}) => ReactElement
 }) {
 	const { data: activeProjectId } = useSuspenseQuery(
 		getActiveProjectIdQueryOptions(),
 	)
 
-	return children({ activeProjectId })
+	const { data: localeState } = useSuspenseQuery(getLocaleStateQueryOptions())
+
+	return children({ activeProjectId, localeState })
 }
