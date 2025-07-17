@@ -1,24 +1,9 @@
 {
-  "components.OnboardingTopMenu.goBack": {
-    "message": "Go back"
-  },
-  "components.OnboardingTopMenu.step": {
-    "message": "Step {number}"
-  },
   "emptyState.inviteDevices": {
     "message": "Invite Devices"
   },
   "emptyState.noObservationsFound": {
     "message": "No Observations Found"
-  },
-  "mapMain.errorLoading": {
-    "message": "Oops! Error loading data."
-  },
-  "mapMain.loading": {
-    "message": "Loading..."
-  },
-  "mapMain.unnamedProject": {
-    "message": "Unnamed Project"
   },
   "observationListView.button.exchange": {
     "message": "View Exchange"
