@@ -12,11 +12,9 @@ import { useOnboardingCreateProject } from '../../-shared/queries'
 import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../../../colors'
 import { Icon } from '../../../../components/icon'
 import { useAppForm } from '../../../../hooks/forms'
-import {
-	INPUT_NAME_MAX_BYTES,
-	PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
-} from '../../../../lib/constants'
+import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../../../lib/constants'
 import { setActiveProjectIdMutationOptions } from '../../../../lib/queries/app-settings'
+import { createProjectNameSchema } from '../../../../lib/validators/project'
 
 export const Route = createFileRoute('/onboarding/project/create/')({
 	component: RouteComponent,
@@ -37,15 +35,14 @@ function RouteComponent() {
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
 	const projectNameSchema = useMemo(() => {
-		return v.pipe(
-			v.string(),
-			v.transform((value) => {
-				return value.trim()
-			}),
-			v.minLength(1, t(m.minLengthError)),
-			v.maxGraphemes(PROJECT_NAME_MAX_LENGTH_GRAPHEMES, t(m.maxLengthError)),
-			v.maxBytes(INPUT_NAME_MAX_BYTES, t(m.maxLengthError)),
-		)
+		const maxLengthError = t(m.maxLengthError)
+		const minLengthError = t(m.minLengthError)
+
+		return createProjectNameSchema({
+			maxBytesError: maxLengthError,
+			minLengthError,
+			maxLengthError,
+		})
 	}, [t])
 
 	const form = useAppForm({

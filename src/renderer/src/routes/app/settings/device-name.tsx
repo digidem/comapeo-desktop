@@ -14,7 +14,7 @@ import { Icon } from '../../../components/icon'
 import { useAppForm } from '../../../hooks/forms'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
 import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../../lib/constants'
-import { createDeviceNameSchema } from '../../../lib/schemas/device-name'
+import { createDeviceNameSchema } from '../../../lib/validators/device'
 
 export const Route = createFileRoute('/app/settings/device-name')({
 	loader: async ({ context }) => {

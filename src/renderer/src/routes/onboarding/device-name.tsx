@@ -12,7 +12,7 @@ import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../colors'
 import { Icon } from '../../components/icon'
 import { useAppForm } from '../../hooks/forms'
 import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../lib/constants'
-import { createDeviceNameSchema } from '../../lib/schemas/device-name'
+import { createDeviceNameSchema } from '../../lib/validators/device'
 
 export const Route = createFileRoute('/onboarding/device-name')({
 	component: RouteComponent,
