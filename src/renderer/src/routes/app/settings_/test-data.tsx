@@ -13,7 +13,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useStore } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
 import { bboxPolygon } from '@turf/bbox-polygon'
 import { featureCollection, lengthToDegrees } from '@turf/helpers'
 import { randomPosition } from '@turf/random'
@@ -31,6 +31,17 @@ import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
 
 // TODO: This technically should live in project settings
 export const Route = createFileRoute('/app/settings_/test-data')({
+	beforeLoad: ({ context }) => {
+		if (
+			!context.activeProjectId ||
+			!(
+				import.meta.env.DEV ||
+				import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true'
+			)
+		) {
+			throw redirect({ to: '/', replace: true })
+		}
+	},
 	pendingComponent: () => {
 		return (
 			<TwoPanelLayout
