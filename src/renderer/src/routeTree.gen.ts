@@ -21,6 +21,7 @@ import { Route as AppAboutRouteImport } from './routes/app/about'
 import { Route as AppSettingsRouteRouteImport } from './routes/app/settings/route'
 import { Route as OnboardingProjectIndexRouteImport } from './routes/onboarding/project/index'
 import { Route as AppSettingsIndexRouteImport } from './routes/app/settings/index'
+import { Route as AppSettingsTestDataRouteImport } from './routes/app/settings_/test-data'
 import { Route as AppSettingsLanguageRouteImport } from './routes/app/settings/language'
 import { Route as AppSettingsDeviceNameRouteImport } from './routes/app/settings/device-name'
 import { Route as AppSettingsCoordinateSystemRouteImport } from './routes/app/settings/coordinate-system'
@@ -97,6 +98,11 @@ const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppSettingsRouteRoute,
+} as any)
+const AppSettingsTestDataRoute = AppSettingsTestDataRouteImport.update({
+  id: '/settings_/test-data',
+  path: '/settings/test-data',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const AppSettingsLanguageRoute = AppSettingsLanguageRouteImport.update({
   id: '/language',
@@ -203,6 +209,7 @@ export interface FileRoutesByFullPath {
   '/app/settings/coordinate-system': typeof AppSettingsCoordinateSystemRoute
   '/app/settings/device-name': typeof AppSettingsDeviceNameRoute
   '/app/settings/language': typeof AppSettingsLanguageRoute
+  '/app/settings/test-data': typeof AppSettingsTestDataRoute
   '/app/settings/': typeof AppSettingsIndexRoute
   '/onboarding/project': typeof OnboardingProjectIndexRoute
   '/app/projects/$projectId/settings': typeof AppProjectsProjectIdSettingsRouteRouteWithChildren
@@ -230,6 +237,7 @@ export interface FileRoutesByTo {
   '/app/settings/coordinate-system': typeof AppSettingsCoordinateSystemRoute
   '/app/settings/device-name': typeof AppSettingsDeviceNameRoute
   '/app/settings/language': typeof AppSettingsLanguageRoute
+  '/app/settings/test-data': typeof AppSettingsTestDataRoute
   '/app/settings': typeof AppSettingsIndexRoute
   '/onboarding/project': typeof OnboardingProjectIndexRoute
   '/app/projects/$projectId': typeof AppProjectsProjectIdIndexRoute
@@ -258,6 +266,7 @@ export interface FileRoutesById {
   '/app/settings/coordinate-system': typeof AppSettingsCoordinateSystemRoute
   '/app/settings/device-name': typeof AppSettingsDeviceNameRoute
   '/app/settings/language': typeof AppSettingsLanguageRoute
+  '/app/settings_/test-data': typeof AppSettingsTestDataRoute
   '/app/settings/': typeof AppSettingsIndexRoute
   '/onboarding/project/': typeof OnboardingProjectIndexRoute
   '/app/projects/$projectId_/settings': typeof AppProjectsProjectIdSettingsRouteRouteWithChildren
@@ -289,6 +298,7 @@ export interface FileRouteTypes {
     | '/app/settings/coordinate-system'
     | '/app/settings/device-name'
     | '/app/settings/language'
+    | '/app/settings/test-data'
     | '/app/settings/'
     | '/onboarding/project'
     | '/app/projects/$projectId/settings'
@@ -316,6 +326,7 @@ export interface FileRouteTypes {
     | '/app/settings/coordinate-system'
     | '/app/settings/device-name'
     | '/app/settings/language'
+    | '/app/settings/test-data'
     | '/app/settings'
     | '/onboarding/project'
     | '/app/projects/$projectId'
@@ -343,6 +354,7 @@ export interface FileRouteTypes {
     | '/app/settings/coordinate-system'
     | '/app/settings/device-name'
     | '/app/settings/language'
+    | '/app/settings_/test-data'
     | '/app/settings/'
     | '/onboarding/project/'
     | '/app/projects/$projectId_/settings'
@@ -449,6 +461,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/settings/'
       preLoaderRoute: typeof AppSettingsIndexRouteImport
       parentRoute: typeof AppSettingsRouteRoute
+    }
+    '/app/settings_/test-data': {
+      id: '/app/settings_/test-data'
+      path: '/settings/test-data'
+      fullPath: '/app/settings/test-data'
+      preLoaderRoute: typeof AppSettingsTestDataRouteImport
+      parentRoute: typeof AppRouteRoute
     }
     '/app/settings/language': {
       id: '/app/settings/language'
@@ -614,6 +633,7 @@ interface AppRouteRouteChildren {
   AppAboutRoute: typeof AppAboutRoute
   AppDataAndPrivacyRoute: typeof AppDataAndPrivacyRoute
   AppProjectsProjectIdRouteRoute: typeof AppProjectsProjectIdRouteRouteWithChildren
+  AppSettingsTestDataRoute: typeof AppSettingsTestDataRoute
   AppProjectsProjectIdSettingsRouteRoute: typeof AppProjectsProjectIdSettingsRouteRouteWithChildren
   AppProjectsProjectIdExchangeIndexRoute: typeof AppProjectsProjectIdExchangeIndexRoute
 }
@@ -623,6 +643,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppAboutRoute: AppAboutRoute,
   AppDataAndPrivacyRoute: AppDataAndPrivacyRoute,
   AppProjectsProjectIdRouteRoute: AppProjectsProjectIdRouteRouteWithChildren,
+  AppSettingsTestDataRoute: AppSettingsTestDataRoute,
   AppProjectsProjectIdSettingsRouteRoute:
     AppProjectsProjectIdSettingsRouteRouteWithChildren,
   AppProjectsProjectIdExchangeIndexRoute:

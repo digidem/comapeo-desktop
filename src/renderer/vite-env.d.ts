@@ -1,10 +1,9 @@
 /// <reference types="vite/client" />
-/// <reference types="vite-plugin-svgr/client" />
 
-// interface ImportMetaEnv {
-// 	// Define any renderer-exposed environment variables
-// }
+interface ImportMetaEnv {
+	readonly VITE_FEATURE_TEST_DATA_UI: string
+}
 
-// interface ImportMeta {
-// 	readonly env: ImportMetaEnv
-// }
+interface ImportMeta {
+	readonly env: ImportMetaEnv
+}

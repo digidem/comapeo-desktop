@@ -30,6 +30,7 @@ export const iconNames = [
 	'material-check-circle',
 	'material-category',
 	'material-bolt',
+	'material-auto-fix-high',
 	'material-arrow-back',
 	'comapeo-cards',
 ] as const
