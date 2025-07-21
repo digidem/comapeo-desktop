@@ -101,6 +101,62 @@
     "description": "Text for link that navigates to project team page.",
     "message": "View Team"
   },
+  "routes.app.projects.$projectId_.settings.info.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Cancel"
+  },
+  "routes.app.projects.$projectId_.settings.info.maxProjectDescriptionLengthError": {
+    "description": "Error message for project description that is too long.",
+    "message": "Too long, try a shorter description."
+  },
+  "routes.app.projects.$projectId_.settings.info.maxProjectNameLengthError": {
+    "description": "Error message for project name that is too long.",
+    "message": "Too long, try a shorter name."
+  },
+  "routes.app.projects.$projectId_.settings.info.minProjectNameLengthError": {
+    "description": "Error message for project name that is too short.",
+    "message": "Enter a Project Name"
+  },
+  "routes.app.projects.$projectId_.settings.info.navTitle": {
+    "description": "Title of the project settings info page.",
+    "message": "Edit Info"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectCardColorLabel": {
+    "description": "Label for the project card color selector.",
+    "message": "Project Card Color"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectColorOptionBlue": {
+    "description": "Label for blue option in project color selector.",
+    "message": "Blue"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectColorOptionGreen": {
+    "description": "Label for green option in project color selector.",
+    "message": "Green"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectColorOptionGrey": {
+    "description": "Label for grey option in project color selector.",
+    "message": "Grey"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectColorOptionOrange": {
+    "description": "Label for orange option in project color selector.",
+    "message": "Orange"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectColorOptionRed": {
+    "description": "Label for grey option in project color selector.",
+    "message": "Red"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectDescriptionInputLabel": {
+    "description": "Label for the project description input.",
+    "message": "Project Description"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectNameInputLabel": {
+    "description": "Label for the project name input.",
+    "message": "Project Name"
+  },
+  "routes.app.projects.$projectId_.settings.info.save": {
+    "description": "Label for save button.",
+    "message": "Save"
+  },
   "routes.app.route.aboutTabLabel": {
     "message": "About CoMapeo"
   },

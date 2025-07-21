@@ -347,9 +347,7 @@ function CoordinatorSettingsView({
 
 				<TextLink
 					underline="none"
-					onClick={() => {
-						alert('Not implemented yet')
-					}}
+					to="/app/projects/$projectId/settings/info"
 					params={{ projectId }}
 				>
 					{t(m.editInfo)}
