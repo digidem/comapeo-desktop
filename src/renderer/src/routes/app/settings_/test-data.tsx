@@ -1,0 +1,662 @@
+import { useMemo, useState } from 'react'
+import {
+	useCreateDocument,
+	useManyDocs,
+	useOwnDeviceInfo,
+} from '@comapeo/core-react'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import CircularProgress from '@mui/material/CircularProgress'
+import IconButton from '@mui/material/IconButton'
+import Snackbar from '@mui/material/Snackbar'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+import { useStore } from '@tanstack/react-form'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { bboxPolygon } from '@turf/bbox-polygon'
+import { featureCollection, lengthToDegrees } from '@turf/helpers'
+import { randomPosition } from '@turf/random'
+import type { BBox } from 'geojson'
+import { defineMessages, useIntl } from 'react-intl'
+import { Layer, Marker, Source } from 'react-map-gl/maplibre'
+import * as v from 'valibot'
+
+import { TwoPanelLayout } from '../-components/two-panel-layout'
+import { BLACK, BLUE_GREY } from '../../../colors'
+import { Icon } from '../../../components/icon'
+import { Map } from '../../../components/map'
+import { useAppForm } from '../../../hooks/forms'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
+
+// TODO: This technically should live in project settings
+export const Route = createFileRoute('/app/settings_/test-data')({
+	pendingComponent: () => {
+		return (
+			<TwoPanelLayout
+				start={
+					<Box
+						display="flex"
+						flex={1}
+						justifyContent="center"
+						alignItems="center"
+					>
+						<CircularProgress />
+					</Box>
+				}
+				end={
+					<Box
+						display="flex"
+						flex={1}
+						justifyContent="center"
+						alignItems="center"
+					>
+						<CircularProgress />
+					</Box>
+				}
+			/>
+		)
+	},
+	component: RouteComponent,
+})
+
+const FORM_ID = 'create-test-data-form'
+const MIN_OBSERVATION_COUNT = 1
+const MAX_OBSERVATION_COUNT = 1000
+const DEFAULT_BOUNDED_DISTANCE_KM = 50
+const MIN_BOUNDED_DISTANCE_KM = 0.1
+
+function RouteComponent() {
+	const { formatMessage: t } = useIntl()
+	const router = useRouter()
+
+	const [notification, setNotification] = useState<{
+		type: 'success'
+		id: string
+		message: string
+	} | null>(null)
+
+	const { activeProjectId } = Route.useRouteContext()
+
+	const createTestObservations = useCreateTestObservations({
+		projectId: activeProjectId,
+	})
+
+	const onChangeSchema = useMemo(() => {
+		const requiredError = t(m.requiredError)
+
+		return v.object({
+			observationCount: v.pipe(
+				v.string(),
+				v.minLength(1, requiredError),
+				v.trim(),
+				v.digits(t(m.invalidObservationCountFormat)),
+				v.transform((value) => {
+					return Number(value)
+				}),
+				v.minValue(
+					MIN_OBSERVATION_COUNT,
+					t(m.minObservationCountError, {
+						value: MIN_OBSERVATION_COUNT,
+					}),
+				),
+				v.maxValue(
+					MAX_OBSERVATION_COUNT,
+					t(m.maxObservationCountError, {
+						value: MAX_OBSERVATION_COUNT,
+					}),
+				),
+			),
+			boundedDistance: v.pipe(
+				v.string(),
+				v.minLength(1, requiredError),
+				v.trim(),
+				v.decimal(t(m.invalidBoundedDistanceFormat)),
+				v.transform((value) => {
+					return Number.parseFloat(value)
+				}),
+				v.minValue(
+					MIN_BOUNDED_DISTANCE_KM,
+					t(m.minBoundedDistanceError, { value: MIN_BOUNDED_DISTANCE_KM }),
+				),
+			),
+			latitude: v.pipe(v.number(), v.minValue(-180), v.maxValue(180)),
+			longitude: v.pipe(v.number(), v.minValue(-90), v.maxValue(90)),
+		})
+	}, [t])
+
+	const form = useAppForm({
+		defaultValues: {
+			observationCount: '1',
+			boundedDistance: DEFAULT_BOUNDED_DISTANCE_KM.toString(10),
+			latitude: 0,
+			longitude: 0,
+		},
+		validators: {
+			onChange: onChangeSchema,
+		},
+		onSubmit: async ({ value }) => {
+			const parsedValue = v.parse(onChangeSchema, value)
+
+			try {
+				createTestObservations.mutateAsync({
+					count: parsedValue.observationCount,
+					boundingBox: getBoundingBoxUsingDistance({
+						longitude: parsedValue.longitude,
+						latitude: parsedValue.latitude,
+						distance: parsedValue.boundedDistance,
+					}),
+				})
+
+				setNotification({
+					type: 'success',
+					id: `id_${Date.now()}`,
+					message: t(m.observationCreateSuccess, {
+						count: parsedValue.observationCount,
+					}),
+				})
+			} catch (reason) {
+				const errorMessage =
+					reason instanceof Error ? reason.message : `Unknown error`
+
+				// TODO: use shared error dialog
+				alert(t(m.observationCreateError, { error: errorMessage }))
+			}
+		},
+	})
+
+	const boundedDistance = useStore(form.store, (state) => {
+		if (
+			state.fieldMeta.boundedDistance &&
+			!state.fieldMeta.boundedDistance.isValid
+		) {
+			return undefined
+		}
+
+		return v.parse(
+			onChangeSchema.entries['boundedDistance'],
+			state.values.boundedDistance,
+		)
+	})
+
+	const coordinates = useStore(form.store, (state) => {
+		return {
+			longitude: state.values.longitude,
+			latitude: state.values.latitude,
+		}
+	})
+
+	const boundingBox = useMemo(() => {
+		if (!boundedDistance) return null
+
+		const { longitude, latitude } = coordinates
+
+		return getBoundingBoxUsingDistance({
+			longitude,
+			latitude,
+			distance: boundedDistance,
+		})
+	}, [boundedDistance, coordinates])
+
+	const data = featureCollection(boundingBox ? [bboxPolygon(boundingBox)] : [])
+
+	return (
+		<>
+			<TwoPanelLayout
+				start={
+					<Stack direction="column" flex={1}>
+						<Stack
+							direction="row"
+							alignItems="center"
+							component="nav"
+							useFlexGap
+							gap={4}
+							padding={4}
+							borderBottom={`1px solid ${BLUE_GREY}`}
+						>
+							<IconButton
+								onClick={() => {
+									if (router.history.canGoBack()) {
+										router.history.back()
+										return
+									}
+
+									router.navigate({ to: '/app/settings', replace: true })
+								}}
+							>
+								<Icon name="material-arrow-back" size={30} />
+							</IconButton>
+
+							<Typography variant="h1" fontWeight={500}>
+								{t(m.navTitle)}
+							</Typography>
+						</Stack>
+
+						<Stack
+							direction="column"
+							flex={1}
+							justifyContent="space-between"
+							overflow="auto"
+						>
+							<Box padding={6}>
+								<Box
+									component="form"
+									id={FORM_ID}
+									noValidate
+									autoComplete="off"
+									onSubmit={(event) => {
+										event.preventDefault()
+										if (form.state.isSubmitting) return
+										form.handleSubmit()
+									}}
+								>
+									<Stack direction="column" useFlexGap gap={10}>
+										<form.AppField name="observationCount">
+											{(field) => (
+												<field.TextField
+													required
+													fullWidth
+													label={t(m.observationCountLabel)}
+													value={field.state.value}
+													error={!field.state.meta.isValid}
+													name={field.name}
+													onBlur={field.handleBlur}
+													inputMode="numeric"
+													onChange={(event) => {
+														if (
+															event.target.value === '' ||
+															v.is(
+																v.pipe(v.string(), v.digits()),
+																event.target.value,
+															)
+														) {
+															field.handleChange(event.target.value)
+														}
+													}}
+													slotProps={{ htmlInput: { maxLength: 4 } }}
+													helperText={
+														<Box component="span">
+															{field.state.meta.errors.length > 0
+																? field.state.meta.errors[0]?.message
+																: t(m.observationCountHelperText, {
+																		min: MIN_OBSERVATION_COUNT,
+																		max: MAX_OBSERVATION_COUNT,
+																	})}
+														</Box>
+													}
+												/>
+											)}
+										</form.AppField>
+
+										<Box
+											component="fieldset"
+											display="flex"
+											flexDirection="column"
+											border="none"
+											padding={0}
+											gap={10}
+										>
+											<Stack direction="column" useFlexGap gap={5}>
+												<Typography>{t(m.coordinatesSelectionHint)}</Typography>
+												<Stack
+													direction="row"
+													useFlexGap
+													gap={4}
+													justifyContent="space-between"
+												>
+													<form.AppField name="longitude">
+														{(field) => (
+															<field.TextField
+																fullWidth
+																aria-disabled
+																disabled
+																value={field.state.value}
+																label="Longitude"
+															/>
+														)}
+													</form.AppField>
+
+													<form.AppField name="latitude">
+														{(field) => (
+															<field.TextField
+																fullWidth
+																aria-disabled
+																disabled
+																value={field.state.value}
+																label="Latitude"
+															/>
+														)}
+													</form.AppField>
+												</Stack>
+											</Stack>
+
+											<form.AppField name="boundedDistance">
+												{(field) => (
+													<field.TextField
+														required
+														fullWidth
+														label={t(m.boundedDistanceLabel)}
+														value={field.state.value}
+														error={!field.state.meta.isValid}
+														name={field.name}
+														onBlur={field.handleBlur}
+														inputMode="decimal"
+														onChange={(event) => {
+															field.handleChange(event.target.value)
+														}}
+														helperText={
+															<Box component="span">
+																{field.state.meta.errors.length > 0
+																	? field.state.meta.errors[0]?.message
+																	: null}
+															</Box>
+														}
+													/>
+												)}
+											</form.AppField>
+										</Box>
+									</Stack>
+								</Box>
+							</Box>
+
+							<Stack
+								direction="column"
+								useFlexGap
+								gap={4}
+								paddingX={6}
+								paddingBottom={6}
+								position="sticky"
+								bottom={0}
+								alignItems="center"
+							>
+								<form.Subscribe
+									selector={(state) => [state.canSubmit, state.isSubmitting]}
+								>
+									{([canSubmit, isSubmitting]) => (
+										<>
+											<Button
+												type="button"
+												variant="outlined"
+												size="large"
+												fullWidth
+												disableElevation
+												aria-disabled={isSubmitting}
+												onClick={() => {
+													if (isSubmitting) return
+
+													if (router.history.canGoBack()) {
+														router.history.back()
+														return
+													}
+
+													router.navigate({
+														to: '/app/settings',
+														replace: true,
+													})
+												}}
+												sx={{ maxWidth: 400 }}
+											>
+												{t(m.cancel)}
+											</Button>
+
+											<form.SubmitButton
+												type="submit"
+												form={FORM_ID}
+												fullWidth
+												disableElevation
+												variant="contained"
+												size="large"
+												loading={isSubmitting}
+												loadingPosition="start"
+												aria-disabled={!canSubmit}
+												sx={{ maxWidth: 400 }}
+											>
+												{t(m.create)}
+											</form.SubmitButton>
+										</>
+									)}
+								</form.Subscribe>
+							</Stack>
+						</Stack>
+					</Stack>
+				}
+				end={
+					<Map
+						onClick={(event) => {
+							form.setFieldValue('latitude', event.lngLat.lat)
+							form.setFieldValue('longitude', event.lngLat.lng)
+						}}
+					>
+						<Source id="selection" type="geojson" data={data}>
+							<Layer type="symbol" id="point" />
+
+							<Layer
+								type="fill"
+								id="radius"
+								paint={{
+									'fill-color': BLACK,
+									'fill-opacity': 0.2,
+									'fill-outline-color': BLACK,
+								}}
+							/>
+							<Layer
+								type="line"
+								id="border"
+								paint={{ 'line-width': 1, 'line-color': BLACK }}
+							/>
+						</Source>
+
+						{coordinates ? (
+							<Marker
+								draggable
+								latitude={coordinates.latitude}
+								longitude={coordinates.longitude}
+								onDragEnd={(event) => {
+									form.setFieldValue('latitude', event.lngLat.lat)
+									form.setFieldValue('longitude', event.lngLat.lng)
+								}}
+							/>
+						) : null}
+					</Map>
+				}
+			/>
+			<Snackbar
+				key={notification?.id}
+				open={!!notification}
+				message={notification?.message}
+				autoHideDuration={3_000}
+				onClose={(_event, reason) => {
+					if (reason === 'clickaway') {
+						return
+					}
+
+					setNotification(null)
+				}}
+				slotProps={{
+					transition: {
+						onExited: () => {
+							setNotification(null)
+						},
+					},
+				}}
+				anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+			/>
+		</>
+	)
+}
+
+function useCreateTestObservations({ projectId }: { projectId: string }) {
+	const queryClient = useQueryClient()
+
+	const { data: deviceInfo } = useOwnDeviceInfo()
+
+	const { data: presets } = useManyDocs({ projectId, docType: 'preset' })
+
+	const createObservation = useCreateDocument({
+		projectId,
+		docType: 'observation',
+	})
+
+	return useMutation({
+		mutationFn: async ({
+			count,
+			boundingBox,
+		}: {
+			count: number
+			boundingBox: BBox
+		}) => {
+			const promises = []
+
+			for (let i = 0; i < count; i++) {
+				const position = randomPosition(boundingBox)
+
+				const longitude = position[0]
+				const latitude = position[1]
+
+				// Shouldn't happen but need to narrow the type
+				if (longitude === undefined || latitude === undefined) {
+					throw new Error(
+						`randomPosition() returned unexpected position ${position}`,
+					)
+				}
+
+				const randomPreset = presets.at(
+					Math.floor(Math.random() * presets.length),
+				)
+
+				const now = new Date().toISOString()
+
+				const notes = deviceInfo.name ? `Created by ${deviceInfo.name}` : null
+
+				promises.push(
+					createObservation.mutateAsync({
+						value: {
+							lon: longitude,
+							lat: latitude,
+							metadata: {
+								manualLocation: false,
+								position: {
+									timestamp: now,
+									mocked: false,
+									coords: { latitude, longitude },
+								},
+							},
+							tags: { ...randomPreset!.tags, notes },
+							attachments: [],
+						},
+					}),
+				)
+			}
+
+			await Promise.all(promises)
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'observations',
+				],
+			})
+		},
+	})
+}
+
+function getBoundingBoxUsingDistance({
+	longitude,
+	latitude,
+	distance,
+}: {
+	longitude: number
+	latitude: number
+	distance: number
+}): BBox {
+	const distanceBufferDegrees = lengthToDegrees(distance, 'kilometers')
+
+	return [
+		Math.max(longitude - distanceBufferDegrees, -180),
+		Math.max(latitude - distanceBufferDegrees, -90),
+		Math.min(longitude + distanceBufferDegrees, 180),
+		Math.min(latitude + distanceBufferDegrees, 90),
+	]
+}
+
+const m = defineMessages({
+	navTitle: {
+		id: 'routes.app.settings_.test-data.navTitle',
+		defaultMessage: 'Create Test Data',
+		description: 'Title of test data page.',
+	},
+	requiredError: {
+		id: 'routes.app.settings_.test-data.requiredError',
+		defaultMessage: 'Required',
+		description: 'Error message for when required input is empty.',
+	},
+	observationCountLabel: {
+		id: 'routes.app.settings_.test-data.observationCountLabel',
+		defaultMessage: 'Number of observations',
+		description: 'Label for the observation count input.',
+	},
+	boundedDistanceLabel: {
+		id: 'routes.app.settings_.test-data.boundedDistanceLabel',
+		defaultMessage: 'Maximum bounded distance (kilometers)',
+		description: 'Label for the bounded distance input.',
+	},
+	invalidObservationCountFormat: {
+		id: 'routes.app.settings_.test-data.invalidObservationCountFormat',
+		defaultMessage: 'Must be an integer',
+		description: 'Error message for when observation count is not an integer.',
+	},
+	invalidBoundedDistanceFormat: {
+		id: 'routes.app.settings_.test-data.invalidBoundedDistanceFormat',
+		defaultMessage: 'Must be a decimal',
+		description: 'Error message for when bounded distance is not an decimal.',
+	},
+	minObservationCountError: {
+		id: 'routes.app.settings_.test-data.minObservationCountError',
+		defaultMessage: 'Must be greater than {value}',
+		description: 'Error message for when observation count is too small',
+	},
+	maxObservationCountError: {
+		id: 'routes.app.settings_.test-data.maxObservationCountError',
+		defaultMessage: 'Cannot be greater than {value}',
+		description: 'Error message for when observation count is too large',
+	},
+	observationCountHelperText: {
+		id: 'routes.app.settings_.test-data.observationCountHelperText',
+		defaultMessage: 'Between {min} and {max}',
+		description: 'Helper text for observation count input.',
+	},
+	minBoundedDistanceError: {
+		id: 'routes.app.settings_.test-data.minBoundedDistanceError',
+		defaultMessage: 'Must be greater than {value} kilometers',
+		description: 'Error message for when bounded distance is too small',
+	},
+	cancel: {
+		id: 'routes.app.settings_.test-data.cancel',
+		defaultMessage: 'Cancel',
+		description: 'Label for cancel button.',
+	},
+	create: {
+		id: 'routes.app.settings_.test-data.create',
+		defaultMessage: 'Create',
+		description: 'Label for create button.',
+	},
+	coordinatesSelectionHint: {
+		id: 'routes.app.settings_.test-data.coordinatesSelectionHint',
+		defaultMessage:
+			'Set the coordinates by clicking on the map or dragging the location marker.',
+		description: 'Instructions displayed for coordinates selection inputs.',
+	},
+	observationCreateSuccess: {
+		id: 'routes.app.settings_.test-data.observationCreateSuccess',
+		defaultMessage: 'Created {count} observations.',
+		description: 'Message displayed when observation creation succeeds',
+	},
+	observationCreateError: {
+		id: 'routes.app.settings_.test-data.observationCreateError',
+		defaultMessage: 'Failed to create observations: {error}',
+		description: 'Error message displayed when observation creation fails.',
+	},
+})

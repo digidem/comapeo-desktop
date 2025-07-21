@@ -1,7 +1,8 @@
-import type { ReactNode } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import { useOwnDeviceInfo } from '@comapeo/core-react'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { useTheme } from '@mui/material/styles'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -58,6 +59,12 @@ function RouteComponent() {
 		},
 	})
 
+	const theme = useTheme()
+
+	const rowIconSize = useMemo(() => {
+		return `calc(${theme.typography.body1.fontSize} * ${theme.typography.body1.lineHeight} * 1.25)`
+	}, [theme.typography.body1.fontSize, theme.typography.body1.lineHeight])
+
 	return (
 		<Stack
 			direction="column"
@@ -96,7 +103,7 @@ function RouteComponent() {
 					<Icon
 						name="material-symbols-computer"
 						htmlColor={DARK_GREY}
-						size={30}
+						size={rowIconSize}
 					/>
 				}
 				actionButton={
@@ -113,20 +120,36 @@ function RouteComponent() {
 			/>
 
 			<SettingRow
-				icon={<Icon name="material-language" htmlColor={DARK_GREY} size={30} />}
+				icon={
+					<Icon
+						name="material-language"
+						htmlColor={DARK_GREY}
+						size={rowIconSize}
+					/>
+				}
 				actionButton={
 					<IconButtonLink to="/app/settings/language">
-						<Icon name="material-chevron-right" />
+						<Icon name="material-chevron-right" size={rowIconSize} />
 					</IconButtonLink>
 				}
 				label={selectedLanguageName}
 			/>
 
 			<SettingRow
-				icon={<Icon name="material-explore" htmlColor={DARK_GREY} size={30} />}
+				icon={
+					<Icon
+						name="material-explore"
+						htmlColor={DARK_GREY}
+						size={rowIconSize}
+					/>
+				}
 				actionButton={
 					<IconButtonLink to="/app/settings/coordinate-system">
-						<Icon name="material-chevron-right" />
+						<Icon
+							name="material-chevron-right"
+							htmlColor={DARK_GREY}
+							// size={rowIconSize}
+						/>
 					</IconButtonLink>
 				}
 				label={t(
@@ -139,15 +162,44 @@ function RouteComponent() {
 			/>
 
 			<SettingRow
-				icon={<Icon name="material-map" htmlColor={DARK_GREY} size={30} />}
+				icon={
+					<Icon name="material-map" htmlColor={DARK_GREY} size={rowIconSize} />
+				}
 				actionButton={
 					<IconButtonLink to="/app/settings/background-map">
-						<Icon name="material-chevron-right" />
+						<Icon
+							name="material-chevron-right"
+							htmlColor={DARK_GREY}
+							size={rowIconSize}
+						/>
 					</IconButtonLink>
 				}
 				// TODO: Get background map name from settings
 				label={t(m.defaultBackground)}
 			/>
+
+			{import.meta.env.DEV ||
+			import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
+				<SettingRow
+					icon={
+						<Icon
+							name="material-auto-fix-high"
+							htmlColor={DARK_GREY}
+							size={rowIconSize}
+						/>
+					}
+					actionButton={
+						<IconButtonLink to="/app/settings/test-data">
+							<Icon
+								name="material-chevron-right"
+								htmlColor={DARK_GREY}
+								size={rowIconSize}
+							/>
+						</IconButtonLink>
+					}
+					label={t(m.createTestData)}
+				/>
+			) : null}
 		</Stack>
 	)
 }
@@ -233,5 +285,10 @@ const m = defineMessages({
 		id: 'routes.app.settings.index.languageFromSystemPreference',
 		defaultMessage: '{name} (System Preference)',
 		description: 'Label for selected language based on the system preferences.',
+	},
+	createTestData: {
+		id: 'routes.app.settings.index.createTestData',
+		defaultMessage: 'Create Test Data',
+		description: 'Label for item that navigates to test data creation page.',
 	},
 })

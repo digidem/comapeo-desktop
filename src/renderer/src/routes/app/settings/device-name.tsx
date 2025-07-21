@@ -74,164 +74,163 @@ function RouteComponent() {
 	})
 
 	return (
-		<>
-			<Stack direction="column" flex={1}>
-				<Stack
-					direction="row"
-					alignItems="center"
-					component="nav"
-					useFlexGap
-					gap={4}
-					padding={4}
-					borderBottom={`1px solid ${BLUE_GREY}`}
+		<Stack direction="column" flex={1}>
+			<Stack
+				direction="row"
+				alignItems="center"
+				component="nav"
+				useFlexGap
+				gap={4}
+				padding={4}
+				borderBottom={`1px solid ${BLUE_GREY}`}
+			>
+				<IconButton
+					onClick={() => {
+						if (form.state.isSubmitting) {
+							return
+						}
+
+						if (router.history.canGoBack()) {
+							router.history.back()
+							return
+						}
+
+						router.navigate({ to: '/app/settings', replace: true })
+					}}
 				>
-					<IconButton
-						onClick={() => {
-							if (form.state.isSubmitting) {
-								return
-							}
+					<Icon name="material-arrow-back" size={30} />
+				</IconButton>
+				<Typography variant="h1" fontWeight={500}>
+					{t(m.navTitle)}
+				</Typography>
+			</Stack>
 
-							if (router.history.canGoBack()) {
-								router.history.back()
-								return
-							}
-
-							router.navigate({ to: '/app/settings', replace: true })
+			<Stack
+				direction="column"
+				flex={1}
+				justifyContent="space-between"
+				overflow="auto"
+			>
+				<Box padding={6}>
+					<Box
+						component="form"
+						id={FORM_ID}
+						noValidate
+						autoComplete="off"
+						onSubmit={(event) => {
+							event.preventDefault()
+							if (form.state.isSubmitting) return
+							form.handleSubmit()
 						}}
 					>
-						<Icon name="material-arrow-back" size={30} />
-					</IconButton>
-					<Typography variant="h1" fontWeight={500}>
-						{t(m.navTitle)}
-					</Typography>
-				</Stack>
+						<form.AppField name="deviceName">
+							{(field) => (
+								<field.TextField
+									required
+									fullWidth
+									label={t(m.inputLabel)}
+									value={field.state.value}
+									error={!field.state.meta.isValid}
+									name={field.name}
+									onChange={(event) => {
+										field.handleChange(event.target.value)
+									}}
+									slotProps={{
+										input: {
+											style: {
+												backgroundColor: WHITE,
+											},
+										},
+									}}
+									onBlur={field.handleBlur}
+									helperText={
+										<Stack
+											component="span"
+											direction="row"
+											justifyContent="space-between"
+										>
+											<Box component="span">
+												{field.state.meta.errors[0]?.message}
+											</Box>
+											<Box component="span">
+												<form.Subscribe
+													selector={(state) =>
+														v._getGraphemeCount(state.values.deviceName)
+													}
+												>
+													{(count) =>
+														t(m.characterCount, {
+															count,
+															max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
+														})
+													}
+												</form.Subscribe>
+											</Box>
+										</Stack>
+									}
+								/>
+							)}
+						</form.AppField>
+					</Box>
+				</Box>
 
 				<Stack
 					direction="column"
-					flex={1}
-					justifyContent="space-between"
-					overflow="auto"
+					useFlexGap
+					gap={4}
+					paddingX={6}
+					paddingBottom={6}
+					position="sticky"
+					bottom={0}
+					alignItems="center"
 				>
-					<Box padding={6}>
-						<Box
-							component="form"
-							id={FORM_ID}
-							noValidate
-							autoComplete="off"
-							onSubmit={(event) => {
-								event.preventDefault()
-								if (form.state.isSubmitting) return
-								form.handleSubmit()
-							}}
-						>
-							<form.AppField name="deviceName">
-								{(field) => (
-									<field.TextField
-										required
-										fullWidth
-										label={t(m.inputLabel)}
-										value={field.state.value}
-										error={!field.state.meta.isValid}
-										onChange={(event) => {
-											field.handleChange(event.target.value)
-										}}
-										slotProps={{
-											input: {
-												style: {
-													backgroundColor: WHITE,
-												},
-											},
-										}}
-										onBlur={field.handleBlur}
-										helperText={
-											<Stack
-												component="span"
-												direction="row"
-												justifyContent="space-between"
-											>
-												<Box component="span">
-													{field.state.meta.errors[0]?.message}
-												</Box>
-												<Box component="span">
-													<form.Subscribe
-														selector={(state) =>
-															v._getGraphemeCount(state.values.deviceName)
-														}
-													>
-														{(count) =>
-															t(m.characterCount, {
-																count,
-																max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
-															})
-														}
-													</form.Subscribe>
-												</Box>
-											</Stack>
-										}
-									/>
-								)}
-							</form.AppField>
-						</Box>
-					</Box>
-
-					<Stack
-						direction="column"
-						useFlexGap
-						gap={4}
-						paddingX={6}
-						paddingBottom={6}
-						position="sticky"
-						bottom={0}
-						alignItems="center"
+					<form.Subscribe
+						selector={(state) => [state.canSubmit, state.isSubmitting]}
 					>
-						<form.Subscribe
-							selector={(state) => [state.canSubmit, state.isSubmitting]}
-						>
-							{([canSubmit, isSubmitting]) => (
-								<>
-									<Button
-										type="button"
-										variant="outlined"
-										size="large"
-										fullWidth
-										disableElevation
-										aria-disabled={isSubmitting}
-										onClick={() => {
-											if (isSubmitting) return
+						{([canSubmit, isSubmitting]) => (
+							<>
+								<Button
+									type="button"
+									variant="outlined"
+									size="large"
+									fullWidth
+									disableElevation
+									aria-disabled={isSubmitting}
+									onClick={() => {
+										if (isSubmitting) return
 
-											if (router.history.canGoBack()) {
-												router.history.back()
-												return
-											}
+										if (router.history.canGoBack()) {
+											router.history.back()
+											return
+										}
 
-											router.navigate({ to: '/app/settings', replace: true })
-										}}
-										sx={{ maxWidth: 400 }}
-									>
-										{t(m.cancel)}
-									</Button>
+										router.navigate({ to: '/app/settings', replace: true })
+									}}
+									sx={{ maxWidth: 400 }}
+								>
+									{t(m.cancel)}
+								</Button>
 
-									<form.SubmitButton
-										type="submit"
-										form={FORM_ID}
-										fullWidth
-										disableElevation
-										variant="contained"
-										size="large"
-										loading={isSubmitting}
-										loadingPosition="start"
-										aria-disabled={!canSubmit}
-										sx={{ maxWidth: 400 }}
-									>
-										{t(m.save)}
-									</form.SubmitButton>
-								</>
-							)}
-						</form.Subscribe>
-					</Stack>
+								<form.SubmitButton
+									type="submit"
+									form={FORM_ID}
+									fullWidth
+									disableElevation
+									variant="contained"
+									size="large"
+									loading={isSubmitting}
+									loadingPosition="start"
+									aria-disabled={!canSubmit}
+									sx={{ maxWidth: 400 }}
+								>
+									{t(m.save)}
+								</form.SubmitButton>
+							</>
+						)}
+					</form.Subscribe>
 				</Stack>
 			</Stack>
-		</>
+		</Stack>
 	)
 }
 

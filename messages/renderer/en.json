@@ -157,6 +157,10 @@
     "description": "Label for save button.",
     "message": "Save"
   },
+  "routes.app.settings.index.createTestData": {
+    "description": "Label for item that navigates to test data creation page.",
+    "message": "Create Test Data"
+  },
   "routes.app.settings.index.decimalDegrees": {
     "description": "Label for Decimal Degrees coordinate system.",
     "message": "DD Coordinates"
@@ -196,6 +200,66 @@
   "routes.app.settings.language.title": {
     "description": "Title of the language settings page.",
     "message": "Language"
+  },
+  "routes.app.settings_.test-data.boundedDistanceLabel": {
+    "description": "Label for the bounded distance input.",
+    "message": "Maximum bounded distance (kilometers)"
+  },
+  "routes.app.settings_.test-data.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Cancel"
+  },
+  "routes.app.settings_.test-data.coordinatesSelectionHint": {
+    "description": "Instructions displayed for coordinates selection inputs.",
+    "message": "Set the coordinates by clicking on the map or dragging the location marker."
+  },
+  "routes.app.settings_.test-data.create": {
+    "description": "Label for create button.",
+    "message": "Create"
+  },
+  "routes.app.settings_.test-data.invalidBoundedDistanceFormat": {
+    "description": "Error message for when bounded distance is not an decimal.",
+    "message": "Must be a decimal"
+  },
+  "routes.app.settings_.test-data.invalidObservationCountFormat": {
+    "description": "Error message for when observation count is not an integer.",
+    "message": "Must be an integer"
+  },
+  "routes.app.settings_.test-data.maxObservationCountError": {
+    "description": "Error message for when observation count is too large",
+    "message": "Cannot be greater than {value}"
+  },
+  "routes.app.settings_.test-data.minBoundedDistanceError": {
+    "description": "Error message for when bounded distance is too small",
+    "message": "Must be greater than {value} kilometers"
+  },
+  "routes.app.settings_.test-data.minObservationCountError": {
+    "description": "Error message for when observation count is too small",
+    "message": "Must be greater than {value}"
+  },
+  "routes.app.settings_.test-data.navTitle": {
+    "description": "Title of test data page.",
+    "message": "Create Test Data"
+  },
+  "routes.app.settings_.test-data.observationCountHelperText": {
+    "description": "Helper text for observation count input.",
+    "message": "Between {min} and {max}"
+  },
+  "routes.app.settings_.test-data.observationCountLabel": {
+    "description": "Label for the observation count input.",
+    "message": "Number of observations"
+  },
+  "routes.app.settings_.test-data.observationCreateError": {
+    "description": "Error message displayed when observation creation fails.",
+    "message": "Failed to create observations: {error}"
+  },
+  "routes.app.settings_.test-data.observationCreateSuccess": {
+    "description": "Message displayed when observation creation succeeds",
+    "message": "Created {count} observations."
+  },
+  "routes.app.settings_.test-data.requiredError": {
+    "description": "Error message for when required input is empty.",
+    "message": "Required"
   },
   "routes.onboarding.data-and-privacy.dataEncrypted": {
     "message": "All data stays fully encrypted."
