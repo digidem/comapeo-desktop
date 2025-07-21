@@ -107,8 +107,7 @@ function RouteComponent() {
 
 			<Stack direction="row" justifyContent="center" useFlexGap gap={5}>
 				<ButtonLink
-					// TODO: Navigate to categories setting page
-					to="/app"
+					to="/app/projects/$projectId/settings/categories"
 					variant="outlined"
 					size="large"
 					disableElevation
