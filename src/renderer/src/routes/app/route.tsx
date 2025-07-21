@@ -86,7 +86,7 @@ function RouteComponent() {
 								{...SHARED_NAV_ITEM_PROPS.link}
 								disabled={
 									pageHasEditing &&
-									currentRoute.fullPath !== '/app/projects/$projectId'
+									!currentRoute.fullPath.startsWith('/app/projects/$projectId')
 								}
 								to="/app/projects/$projectId"
 								params={{ projectId: activeProjectId }}
@@ -222,7 +222,8 @@ function checkPageHasEditing(currentPath: ToRouteFullPath) {
 	return (
 		currentPath === '/app/settings/device-name' ||
 		currentPath === '/app/settings/coordinate-system' ||
-		currentPath === '/app/settings/language'
+		currentPath === '/app/settings/language' ||
+		currentPath === '/app/projects/$projectId/settings/info'
 	)
 }
 
