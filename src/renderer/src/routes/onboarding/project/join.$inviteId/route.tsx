@@ -15,11 +15,12 @@ import { LIGHT_GREY } from '../../../../colors'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
 
 export const Route = createFileRoute('/onboarding/project/join/$inviteId')({
-	loader: async ({ context, params }) => {
+	beforeLoad: async ({ context, params }) => {
 		const { clientApi, queryClient } = context
 		const { inviteId } = params
 
 		try {
+			// TODO: Not ideal but requires changes in @comapeo/core-react
 			await queryClient.ensureQueryData({
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'invites', { inviteId }],
 				queryFn: async () => {
