@@ -85,10 +85,6 @@
     "description": "Label for button to upload new categories set.",
     "message": "Upload New Set"
   },
-  "routes.app.projects.$projectId_.settings.index.addRemoteArchive": {
-    "description": "Text for link that navigates to remote archive settings page.",
-    "message": "Add"
-  },
   "routes.app.projects.$projectId_.settings.index.categoriesSet": {
     "description": "Text for item that navigates to project categories set page.",
     "message": "Categories Set"
@@ -96,6 +92,10 @@
   "routes.app.projects.$projectId_.settings.index.collaborators": {
     "description": "Text for item that navigates to project collaborators page.",
     "message": "Collaborators"
+  },
+  "routes.app.projects.$projectId_.settings.index.deviceIsCoordinator": {
+    "description": "Indicates that device is a coordinator on the current project.",
+    "message": "This device is a coordinator on this project."
   },
   "routes.app.projects.$projectId_.settings.index.deviceIsParticpant": {
     "description": "Indicates that device is a participant on the current project.",
@@ -113,13 +113,13 @@
     "description": "Indicates that the project does not have a description.",
     "message": "No project description."
   },
-  "routes.app.projects.$projectId_.settings.index.noRemoteArchive": {
-    "description": "Text for item that indicates that project has not added a remote archive.",
-    "message": "No Remote Archive"
-  },
   "routes.app.projects.$projectId_.settings.index.unnamedProject": {
     "description": "Fallback for when current project is missing a name.",
     "message": "Unnamed Project"
+  },
+  "routes.app.projects.$projectId_.settings.index.updateCategoriesSet": {
+    "description": "Text for link that navigates to project categories set page.",
+    "message": "Update Set"
   },
   "routes.app.projects.$projectId_.settings.index.viewTeam": {
     "description": "Text for link that navigates to project team page.",
