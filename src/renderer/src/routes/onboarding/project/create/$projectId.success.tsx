@@ -120,7 +120,12 @@ function RouteComponent() {
 				</ButtonLink>
 				<ButtonLink
 					// TODO: Navigate to collaborators setting page
-					to="/app"
+					// to="/app/$projectId/settings/team"
+					onClick={() => {
+						alert('Not implemented yet')
+					}}
+					params={{ projectId }}
+					reloadDocument
 					variant="contained"
 					size="large"
 					disableElevation
