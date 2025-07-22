@@ -11,7 +11,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, notFound } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import {
@@ -35,25 +35,11 @@ import { getLocaleStateQueryOptions } from '../../../../lib/queries/app-settings
 export const Route = createFileRoute('/app/projects/$projectId/')({
 	loader: async ({ context, params }) => {
 		const {
-			clientApi,
+			projectApi,
 			queryClient,
 			localeState: { value: lang },
 		} = context
 		const { projectId } = params
-
-		let projectApi
-		try {
-			// TODO: Not ideal but requires changes in @comapeo/core-react
-			// Copied from https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/projects.ts#L29-L31
-			projectApi = await queryClient.ensureQueryData({
-				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects', projectId],
-				queryFn: async () => {
-					return clientApi.getProject(projectId)
-				},
-			})
-		} catch {
-			throw notFound()
-		}
 
 		await Promise.all([
 			// TODO: Not ideal but requires changes in @comapeo/core-react

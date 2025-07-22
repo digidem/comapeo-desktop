@@ -7,7 +7,7 @@ import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useMutation } from '@tanstack/react-query'
-import { createFileRoute, notFound, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARK_GREY, DARK_ORANGE } from '../../../../../colors'
@@ -19,24 +19,11 @@ export const Route = createFileRoute(
 	'/app/projects/$projectId_/settings/categories',
 )({
 	loader: async ({ context, params }) => {
-		const { clientApi, queryClient } = context
+		const { projectApi, queryClient } = context
 		const { projectId } = params
 
-		let projectApi
-		try {
-			// TODO: Not ideal but requires changes in @comapeo/core-react
-			projectApi = await queryClient.ensureQueryData({
-				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects', projectId],
-				queryFn: async () => {
-					return clientApi.getProject(projectId)
-				},
-			})
-		} catch {
-			throw notFound()
-		}
-
 		// TODO: Not ideal but requires changes in @comapeo/core-react
-		queryClient.ensureQueryData({
+		await queryClient.ensureQueryData({
 			queryKey: [
 				COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 				'projects',
