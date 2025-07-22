@@ -9,10 +9,23 @@ import { defineMessages, useIntl } from 'react-intl'
 import { GREEN, LIGHT_GREY } from '../../../../colors'
 import { Icon } from '../../../../components/icon'
 import { ButtonLink } from '../../../../components/link'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
 
 export const Route = createFileRoute(
 	'/onboarding/project/join/$inviteId/success',
 )({
+	loader: async ({ context, params }) => {
+		const { clientApi, queryClient } = context
+		const { inviteId } = params
+
+		// TODO: Not ideal but requires changes in @comapeo/core-react
+		await queryClient.ensureQueryData({
+			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'invites', { inviteId }],
+			queryFn: async () => {
+				return clientApi.invite.getById(inviteId)
+			},
+		})
+	},
 	component: RouteComponent,
 })
 

@@ -13,7 +13,7 @@ import FormLabel from '@mui/material/FormLabel'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { createFileRoute, notFound, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
@@ -41,25 +41,12 @@ import {
 
 export const Route = createFileRoute('/app/projects/$projectId_/settings/info')(
 	{
-		beforeLoad: async ({ context, params }) => {
-			const { clientApi, queryClient } = context
+		loader: async ({ context, params }) => {
+			const { projectApi, queryClient } = context
 			const { projectId } = params
 
-			let projectApi
-			try {
-				// TODO: Not ideal but requires changes in @comapeo/core-react
-				projectApi = await queryClient.ensureQueryData({
-					queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects', projectId],
-					queryFn: async () => {
-						return clientApi.getProject(projectId)
-					},
-				})
-			} catch {
-				throw notFound()
-			}
-
 			// TODO: Not ideal but requires changes in @comapeo/core-react
-			queryClient.ensureQueryData({
+			await queryClient.ensureQueryData({
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',
@@ -149,9 +136,15 @@ function RouteComponent() {
 				projectColor: projectColor === null ? undefined : projectColor,
 			})
 
+			if (router.history.canGoBack()) {
+				router.history.back()
+				return
+			}
+
 			router.navigate({
 				to: '/app/projects/$projectId/settings',
 				params: { projectId },
+				replace: true,
 			})
 		},
 	})

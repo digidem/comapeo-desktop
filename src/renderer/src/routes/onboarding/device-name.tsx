@@ -109,6 +109,7 @@ function RouteComponent() {
 							<field.TextField
 								required
 								fullWidth
+								autoFocus
 								label={t(m.deviceName)}
 								value={field.state.value}
 								error={!field.state.meta.isValid}
