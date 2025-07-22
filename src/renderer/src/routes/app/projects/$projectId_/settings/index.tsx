@@ -1,9 +1,5 @@
 import { useMemo, type ReactNode } from 'react'
-import {
-	useManyMembers,
-	useOwnRoleInProject,
-	useProjectSettings,
-} from '@comapeo/core-react'
+import { useOwnRoleInProject, useProjectSettings } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
@@ -15,17 +11,11 @@ import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARK_GREY } from '../../../../../colors'
 import { Icon } from '../../../../../components/icon'
-import {
-	ButtonLink,
-	IconButtonLink,
-	TextLink,
-} from '../../../../../components/link'
+import { TextLink } from '../../../../../components/link'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
-	memberIsActiveRemoteArchive,
-	type ActiveRemoteArchiveMemberInfo,
 } from '../../../../../lib/comapeo'
 
 export const Route = createFileRoute('/app/projects/$projectId_/settings/')({
@@ -89,18 +79,6 @@ export const Route = createFileRoute('/app/projects/$projectId_/settings/')({
 					return projectApi.observation.getMany({ lang })
 				},
 			}),
-			// TODO: Not ideal but requires changes in @comapeo/core-react
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'members',
-				],
-				queryFn: async () => {
-					return projectApi.$member.getMany()
-				},
-			}),
 		])
 	},
 	pendingComponent: () => {
@@ -126,12 +104,15 @@ function RouteComponent() {
 
 	const { data: projectSettings } = useProjectSettings({ projectId })
 	const { data: role } = useOwnRoleInProject({ projectId })
-	const { data: members } = useManyMembers({ projectId })
-
-	const remoteArchiveMember = members.find(memberIsActiveRemoteArchive)
 
 	const isAtLeastCoordinator =
 		role.roleId === COORDINATOR_ROLE_ID || role.roleId === CREATOR_ROLE_ID
+
+	const theme = useTheme()
+
+	const iconSize = useMemo(() => {
+		return `calc(${theme.typography.h1.fontSize} * ${theme.typography.h1.lineHeight} * 1.25)`
+	}, [theme.typography.h1.fontSize, theme.typography.h1.lineHeight])
 
 	return (
 		<Stack direction="column" flex={1}>
@@ -172,297 +153,140 @@ function RouteComponent() {
 				flexDirection="column"
 				flex={1}
 			>
-				{isAtLeastCoordinator ? (
-					<CoordinatorSettingsView
-						projectId={projectId}
-						projectName={projectSettings.name || t(m.unnamedProject)}
-						projectDescription={
-							projectSettings.projectDescription || t(m.noProjectDescription)
+				<Stack
+					direction="column"
+					flexDirection="column"
+					flex={1}
+					useFlexGap
+					gap={6}
+				>
+					<SettingsItem
+						title={projectSettings.name || t(m.unnamedProject)}
+						description={projectSettings.projectDescription}
+						icon={
+							<Icon
+								name="comapeo-cards"
+								htmlColor={DARK_GREY}
+								size={iconSize}
+							/>
 						}
-						projectColor={projectSettings.projectColor}
-						remoteArchiveMember={remoteArchiveMember}
-					/>
-				) : (
-					<ParticipantSettingsView
-						projectId={projectId}
-						projectName={projectSettings.name || t(m.unnamedProject)}
-						projectDescription={
-							projectSettings.projectDescription || t(m.noProjectDescription)
+						action={
+							isAtLeastCoordinator ? (
+								<Box>
+									<TextLink
+										to="/app/projects/$projectId/settings/info"
+										params={{ projectId }}
+										underline="none"
+									>
+										{t(m.editInfo)}
+									</TextLink>
+								</Box>
+							) : undefined
 						}
-						projectColor={projectSettings.projectColor}
 					/>
-				)}
+
+					<SettingsItem
+						title={t(m.collaborators)}
+						description={t(
+							isAtLeastCoordinator
+								? m.deviceIsCoordinator
+								: m.deviceIsParticipant,
+						)}
+						icon={
+							<Icon
+								name="material-manage-accounts-filled"
+								htmlColor={DARK_GREY}
+								size={iconSize}
+							/>
+						}
+						action={
+							isAtLeastCoordinator ? (
+								<Box>
+									<TextLink
+										// TODO: Not implemented yet
+										// to="/app/projects/$projectId/settings/team"
+										onClick={() => {
+											alert('Not implemented yet')
+										}}
+										params={{ projectId }}
+										underline="none"
+									>
+										{t(m.viewTeam)}
+									</TextLink>
+								</Box>
+							) : undefined
+						}
+					/>
+
+					<SettingsItem
+						title={t(m.categoriesSet)}
+						description={projectSettings.configMetadata?.name || 'No name'}
+						icon={
+							<Icon
+								name="material-category"
+								htmlColor={DARK_GREY}
+								size={iconSize}
+							/>
+						}
+						action={
+							isAtLeastCoordinator ? (
+								<Box>
+									<TextLink
+										to="/app/projects/$projectId/settings/categories"
+										params={{ projectId }}
+										underline="none"
+									>
+										{t(m.updateCategoriesSet)}
+									</TextLink>
+								</Box>
+							) : undefined
+						}
+					/>
+				</Stack>
 			</Box>
 		</Stack>
 	)
 }
 
-function ParticipantSettingsView({
-	projectId,
-	projectName,
-	projectColor,
-	projectDescription,
-}: {
-	projectId: string
-	projectColor?: string
-	projectName: string
-	projectDescription?: string
-}) {
-	const { formatMessage: t } = useIntl()
-
-	const theme = useTheme()
-
-	const iconSize = useMemo(() => {
-		return `calc(${theme.typography.h1.fontSize} * ${theme.typography.h1.lineHeight} * 1.25)`
-	}, [theme.typography.h1.fontSize, theme.typography.h1.lineHeight])
-
-	return (
-		<Stack
-			direction="column"
-			flexDirection="column"
-			flex={1}
-			useFlexGap
-			gap={6}
-		>
-			<Stack
-				direction="row"
-				useFlexGap
-				gap={5}
-				bgcolor={projectColor}
-				borderRadius={2}
-				border={`1px solid ${BLUE_GREY}`}
-				padding={5}
-				alignItems="flex-start"
-			>
-				<Icon name="comapeo-cards" htmlColor={DARK_GREY} size={iconSize} />
-
-				<Stack
-					direction="column"
-					useFlexGap
-					gap={5}
-					justifyContent="space-between"
-				>
-					<Typography variant="h1" fontWeight={500}>
-						{projectName}
-					</Typography>
-
-					{projectDescription ? (
-						<Typography sx={{ color: DARK_GREY }}>
-							{projectDescription}
-						</Typography>
-					) : null}
-				</Stack>
-			</Stack>
-
-			<Stack
-				direction="row"
-				useFlexGap
-				gap={5}
-				bgcolor={projectColor}
-				borderRadius={2}
-				border={`1px solid ${BLUE_GREY}`}
-				padding={5}
-				alignItems="flex-start"
-			>
-				<Icon
-					name="material-manage-accounts-filled"
-					htmlColor={DARK_GREY}
-					size={iconSize}
-				/>
-
-				<Stack
-					direction="column"
-					useFlexGap
-					gap={5}
-					justifyContent="space-between"
-				>
-					<Typography variant="h1" fontWeight={500}>
-						{t(m.collaborators)}
-					</Typography>
-
-					<Typography sx={{ color: DARK_GREY }}>
-						{t(m.deviceIsParticipant)}
-					</Typography>
-
-					<Box>
-						<TextLink
-							// TODO: Replace with `to`
-							onClick={() => {
-								alert('Not implemented yet')
-							}}
-							params={{ projectId }}
-							underline="none"
-						>
-							{t(m.viewTeam)}
-						</TextLink>
-					</Box>
-				</Stack>
-			</Stack>
-		</Stack>
-	)
-}
-
-function CoordinatorSettingsView({
-	projectId,
-	projectName,
-	projectColor,
-	projectDescription,
-	remoteArchiveMember,
-}: {
-	projectId: string
-	projectColor?: string
-	projectName: string
-	projectDescription?: string
-	remoteArchiveMember?: ActiveRemoteArchiveMemberInfo
-}) {
-	const { formatMessage: t } = useIntl()
-
-	return (
-		<Stack
-			direction="column"
-			flexDirection="column"
-			flex={1}
-			useFlexGap
-			gap={6}
-		>
-			<Stack
-				direction="column"
-				useFlexGap
-				gap={3}
-				bgcolor={projectColor}
-				borderRadius={2}
-				border={`1px solid ${BLUE_GREY}`}
-				padding={5}
-				alignItems="center"
-			>
-				<Typography variant="h1" fontWeight={500} textAlign="center">
-					{projectName}
-				</Typography>
-
-				{projectDescription ? (
-					<Typography textAlign="center" sx={{ color: DARK_GREY }}>
-						{projectDescription}
-					</Typography>
-				) : null}
-
-				<TextLink
-					underline="none"
-					to="/app/projects/$projectId/settings/info"
-					params={{ projectId }}
-				>
-					{t(m.editInfo)}
-				</TextLink>
-			</Stack>
-
-			<SettingsRow
-				icon={
-					<Icon
-						name="material-manage-accounts-filled"
-						htmlColor={DARK_GREY}
-						size={30}
-					/>
-				}
-				label={t(m.collaborators)}
-				actionButton={
-					<IconButtonLink
-						// TODO: Replace with `to`
-						onClick={() => {
-							alert('Not implemented yet')
-						}}
-						params={{ projectId }}
-					>
-						<Icon
-							name="material-chevron-right"
-							htmlColor={DARK_GREY}
-							size={30}
-						/>
-					</IconButtonLink>
-				}
-			/>
-
-			<SettingsRow
-				icon={<Icon name="material-category" htmlColor={DARK_GREY} size={30} />}
-				label={t(m.categoriesSet)}
-				actionButton={
-					<IconButtonLink
-						to="/app/projects/$projectId/settings/categories"
-						params={{ projectId }}
-					>
-						<Icon
-							name="material-chevron-right"
-							htmlColor={DARK_GREY}
-							size={30}
-						/>
-					</IconButtonLink>
-				}
-			/>
-
-			<SettingsRow
-				icon={
-					<Icon name="material-offline-bolt" htmlColor={DARK_GREY} size={30} />
-				}
-				label={
-					remoteArchiveMember
-						? remoteArchiveMember.name ||
-							remoteArchiveMember.selfHostedServerDetails.baseUrl
-						: t(m.noRemoteArchive)
-				}
-				actionButton={
-					<ButtonLink
-						variant="text"
-						// TODO: Replace with `to`
-						onClick={() => {
-							alert('Not implemented yet')
-						}}
-						params={{ projectId }}
-						sx={{ fontWeight: 400 }}
-					>
-						{t(m.addRemoteArchive)}
-					</ButtonLink>
-				}
-			/>
-		</Stack>
-	)
-}
-
-// TODO: Make whole row clickable?
-function SettingsRow({
-	actionButton,
+function SettingsItem({
+	action,
+	description,
 	icon,
-	label,
+	title,
 }: {
-	actionButton: ReactNode
+	action?: ReactNode
+	description?: string
 	icon: ReactNode
-	label: string
+	title: string
 }) {
 	return (
 		<Stack
 			direction="row"
-			justifyContent="space-between"
-			border={`1px solid ${BLUE_GREY}`}
+			useFlexGap
+			gap={5}
 			borderRadius={2}
-			padding={4}
-			alignItems="center"
+			border={`1px solid ${BLUE_GREY}`}
+			padding={5}
+			alignItems="flex-start"
 		>
+			{icon}
+
 			<Stack
-				direction="row"
-				alignItems="center"
+				direction="column"
 				useFlexGap
-				gap={3}
-				overflow="auto"
+				gap={5}
+				justifyContent="space-between"
 			>
-				{icon}
-				<Typography
-					textOverflow="ellipsis"
-					whiteSpace="nowrap"
-					overflow="hidden"
-					flex={1}
-					fontWeight={500}
-				>
-					{label}
+				<Typography variant="h1" fontWeight={500}>
+					{title}
 				</Typography>
+
+				{description ? (
+					<Typography sx={{ color: DARK_GREY }}>{description}</Typography>
+				) : null}
+
+				{action}
 			</Stack>
-			{actionButton}
 		</Stack>
 	)
 }
@@ -494,17 +318,11 @@ const m = defineMessages({
 		defaultMessage: 'Categories Set',
 		description: 'Text for item that navigates to project categories set page.',
 	},
-	noRemoteArchive: {
-		id: 'routes.app.projects.$projectId_.settings.index.noRemoteArchive',
-		defaultMessage: 'No Remote Archive',
+	deviceIsCoordinator: {
+		id: 'routes.app.projects.$projectId_.settings.index.deviceIsCoordinator',
+		defaultMessage: 'This device is a coordinator on this project.',
 		description:
-			'Text for item that indicates that project has not added a remote archive.',
-	},
-	addRemoteArchive: {
-		id: 'routes.app.projects.$projectId_.settings.index.addRemoteArchive',
-		defaultMessage: 'Add',
-		description:
-			'Text for link that navigates to remote archive settings page.',
+			'Indicates that device is a coordinator on the current project.',
 	},
 	deviceIsParticipant: {
 		id: 'routes.app.projects.$projectId_.settings.index.deviceIsParticpant',
@@ -521,5 +339,10 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId_.settings.index.noProjectDescription',
 		defaultMessage: 'No project description.',
 		description: 'Indicates that the project does not have a description.',
+	},
+	updateCategoriesSet: {
+		id: 'routes.app.projects.$projectId_.settings.index.updateCategoriesSet',
+		defaultMessage: 'Update Set',
+		description: 'Text for link that navigates to project categories set page.',
 	},
 })
