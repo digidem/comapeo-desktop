@@ -149,9 +149,15 @@ function RouteComponent() {
 				projectColor: projectColor === null ? undefined : projectColor,
 			})
 
+			if (router.history.canGoBack()) {
+				router.history.back()
+				return
+			}
+
 			router.navigate({
 				to: '/app/projects/$projectId/settings',
 				params: { projectId },
+				replace: true,
 			})
 		},
 	})
