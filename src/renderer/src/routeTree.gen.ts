@@ -36,6 +36,7 @@ import { Route as AppProjectsProjectIdSettingsIndexRouteImport } from './routes/
 import { Route as AppProjectsProjectIdExchangeIndexRouteImport } from './routes/app/projects/$projectId_/exchange/index'
 import { Route as OnboardingProjectJoinInviteIdSuccessRouteImport } from './routes/onboarding/project/join.$inviteId/success'
 import { Route as OnboardingProjectCreateProjectIdSuccessRouteImport } from './routes/onboarding/project/create/$projectId.success'
+import { Route as AppProjectsProjectIdSettingsTeamRouteImport } from './routes/app/projects/$projectId_/settings/team'
 import { Route as AppProjectsProjectIdSettingsInfoRouteImport } from './routes/app/projects/$projectId_/settings/info'
 import { Route as AppProjectsProjectIdSettingsCategoriesRouteImport } from './routes/app/projects/$projectId_/settings/categories'
 import { Route as AppProjectsProjectIdObservationsObservationDocIdIndexRouteImport } from './routes/app/projects/$projectId/observations/$observationDocId/index'
@@ -188,6 +189,12 @@ const OnboardingProjectCreateProjectIdSuccessRoute =
     path: '/project/create/$projectId/success',
     getParentRoute: () => OnboardingRouteRoute,
   } as any)
+const AppProjectsProjectIdSettingsTeamRoute =
+  AppProjectsProjectIdSettingsTeamRouteImport.update({
+    id: '/team',
+    path: '/team',
+    getParentRoute: () => AppProjectsProjectIdSettingsRouteRoute,
+  } as any)
 const AppProjectsProjectIdSettingsInfoRoute =
   AppProjectsProjectIdSettingsInfoRouteImport.update({
     id: '/info',
@@ -232,6 +239,7 @@ export interface FileRoutesByFullPath {
   '/onboarding/project/create': typeof OnboardingProjectCreateIndexRoute
   '/app/projects/$projectId/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
   '/app/projects/$projectId/settings/info': typeof AppProjectsProjectIdSettingsInfoRoute
+  '/app/projects/$projectId/settings/team': typeof AppProjectsProjectIdSettingsTeamRoute
   '/onboarding/project/create/$projectId/success': typeof OnboardingProjectCreateProjectIdSuccessRoute
   '/onboarding/project/join/$inviteId/success': typeof OnboardingProjectJoinInviteIdSuccessRoute
   '/app/projects/$projectId/exchange': typeof AppProjectsProjectIdExchangeIndexRoute
@@ -260,6 +268,7 @@ export interface FileRoutesByTo {
   '/onboarding/project/create': typeof OnboardingProjectCreateIndexRoute
   '/app/projects/$projectId/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
   '/app/projects/$projectId/settings/info': typeof AppProjectsProjectIdSettingsInfoRoute
+  '/app/projects/$projectId/settings/team': typeof AppProjectsProjectIdSettingsTeamRoute
   '/onboarding/project/create/$projectId/success': typeof OnboardingProjectCreateProjectIdSuccessRoute
   '/onboarding/project/join/$inviteId/success': typeof OnboardingProjectJoinInviteIdSuccessRoute
   '/app/projects/$projectId/exchange': typeof AppProjectsProjectIdExchangeIndexRoute
@@ -293,6 +302,7 @@ export interface FileRoutesById {
   '/onboarding/project/create/': typeof OnboardingProjectCreateIndexRoute
   '/app/projects/$projectId_/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
   '/app/projects/$projectId_/settings/info': typeof AppProjectsProjectIdSettingsInfoRoute
+  '/app/projects/$projectId_/settings/team': typeof AppProjectsProjectIdSettingsTeamRoute
   '/onboarding/project/create/$projectId/success': typeof OnboardingProjectCreateProjectIdSuccessRoute
   '/onboarding/project/join/$inviteId/success': typeof OnboardingProjectJoinInviteIdSuccessRoute
   '/app/projects/$projectId_/exchange/': typeof AppProjectsProjectIdExchangeIndexRoute
@@ -327,6 +337,7 @@ export interface FileRouteTypes {
     | '/onboarding/project/create'
     | '/app/projects/$projectId/settings/categories'
     | '/app/projects/$projectId/settings/info'
+    | '/app/projects/$projectId/settings/team'
     | '/onboarding/project/create/$projectId/success'
     | '/onboarding/project/join/$inviteId/success'
     | '/app/projects/$projectId/exchange'
@@ -355,6 +366,7 @@ export interface FileRouteTypes {
     | '/onboarding/project/create'
     | '/app/projects/$projectId/settings/categories'
     | '/app/projects/$projectId/settings/info'
+    | '/app/projects/$projectId/settings/team'
     | '/onboarding/project/create/$projectId/success'
     | '/onboarding/project/join/$inviteId/success'
     | '/app/projects/$projectId/exchange'
@@ -387,6 +399,7 @@ export interface FileRouteTypes {
     | '/onboarding/project/create/'
     | '/app/projects/$projectId_/settings/categories'
     | '/app/projects/$projectId_/settings/info'
+    | '/app/projects/$projectId_/settings/team'
     | '/onboarding/project/create/$projectId/success'
     | '/onboarding/project/join/$inviteId/success'
     | '/app/projects/$projectId_/exchange/'
@@ -593,6 +606,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingProjectCreateProjectIdSuccessRouteImport
       parentRoute: typeof OnboardingRouteRoute
     }
+    '/app/projects/$projectId_/settings/team': {
+      id: '/app/projects/$projectId_/settings/team'
+      path: '/team'
+      fullPath: '/app/projects/$projectId/settings/team'
+      preLoaderRoute: typeof AppProjectsProjectIdSettingsTeamRouteImport
+      parentRoute: typeof AppProjectsProjectIdSettingsRouteRoute
+    }
     '/app/projects/$projectId_/settings/info': {
       id: '/app/projects/$projectId_/settings/info'
       path: '/info'
@@ -656,6 +676,7 @@ const AppProjectsProjectIdRouteRouteWithChildren =
 interface AppProjectsProjectIdSettingsRouteRouteChildren {
   AppProjectsProjectIdSettingsCategoriesRoute: typeof AppProjectsProjectIdSettingsCategoriesRoute
   AppProjectsProjectIdSettingsInfoRoute: typeof AppProjectsProjectIdSettingsInfoRoute
+  AppProjectsProjectIdSettingsTeamRoute: typeof AppProjectsProjectIdSettingsTeamRoute
   AppProjectsProjectIdSettingsIndexRoute: typeof AppProjectsProjectIdSettingsIndexRoute
 }
 
@@ -665,6 +686,8 @@ const AppProjectsProjectIdSettingsRouteRouteChildren: AppProjectsProjectIdSettin
       AppProjectsProjectIdSettingsCategoriesRoute,
     AppProjectsProjectIdSettingsInfoRoute:
       AppProjectsProjectIdSettingsInfoRoute,
+    AppProjectsProjectIdSettingsTeamRoute:
+      AppProjectsProjectIdSettingsTeamRoute,
     AppProjectsProjectIdSettingsIndexRoute:
       AppProjectsProjectIdSettingsIndexRoute,
   }

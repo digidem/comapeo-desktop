@@ -189,11 +189,7 @@ function RouteComponent() {
 							isAtLeastCoordinator ? (
 								<Box>
 									<TextLink
-										// TODO: Not implemented yet
-										// to="/app/projects/$projectId/settings/team"
-										onClick={() => {
-											alert('Not implemented yet')
-										}}
+										to="/app/projects/$projectId/settings/team"
 										params={{ projectId }}
 										underline="none"
 									>
