@@ -108,6 +108,8 @@ function RouteComponent() {
 			<Stack direction="row" justifyContent="center" useFlexGap gap={5}>
 				<ButtonLink
 					to="/app/projects/$projectId/settings/categories"
+					params={{ projectId }}
+					reloadDocument
 					variant="outlined"
 					size="large"
 					disableElevation
