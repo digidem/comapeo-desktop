@@ -198,7 +198,7 @@ const m = defineMessages({
 	},
 	updateCategoriesSet: {
 		id: 'routes.onboarding.project.create.$projectId.success.updateCategoriesSet',
-		defaultMessage: 'Start Using CoMapeo',
+		defaultMessage: 'Update Categories Set',
 	},
 	inviteCollaborators: {
 		id: 'routes.onboarding.project.create.$projectId.success.inviteCollaborators',
