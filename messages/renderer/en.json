@@ -181,6 +181,74 @@
     "description": "Label for save button.",
     "message": "Save"
   },
+  "routes.app.projects.$projectId_.settings.team.coordinatorsSectionDescription": {
+    "description": "Description of the coordinators section in the team page.",
+    "message": "Coordinators can invite devices, edit and delete data, and manage project details."
+  },
+  "routes.app.projects.$projectId_.settings.team.coordinatorsSectionTitle": {
+    "description": "Title of the coordinators section in the team page.",
+    "message": "Coordinators"
+  },
+  "routes.app.projects.$projectId_.settings.team.dateAddedColumnTitle": {
+    "description": "Title used for column containing date added of project members.",
+    "message": "Date Added"
+  },
+  "routes.app.projects.$projectId_.settings.team.deviceNameColumnTitle": {
+    "description": "Title used for column containing device name of project members.",
+    "message": "Device Name"
+  },
+  "routes.app.projects.$projectId_.settings.team.deviceTypeDesktop": {
+    "description": "Text indicating that the member is a desktop device (displays when hovering over the icon).",
+    "message": "Desktop"
+  },
+  "routes.app.projects.$projectId_.settings.team.deviceTypeMobile": {
+    "description": "Text indicating that the member is a mobile device (displays when hovering over the icon).",
+    "message": "Mobile"
+  },
+  "routes.app.projects.$projectId_.settings.team.deviceTypeRemoteArchive": {
+    "description": "Text indicating that the member is a remote archive (displays when hovering over the icon).",
+    "message": "Remote Archive"
+  },
+  "routes.app.projects.$projectId_.settings.team.deviceTypeTablet": {
+    "description": "Text indicating that the member is a tablet device (displays when hovering over the icon).",
+    "message": "Tablet"
+  },
+  "routes.app.projects.$projectId_.settings.team.deviceTypeUnknown": {
+    "description": "Text indicating that the member device type is unknown (displays when hovering over the icon).",
+    "message": "Unknown device type"
+  },
+  "routes.app.projects.$projectId_.settings.team.deviceTypeUnspecified": {
+    "description": "Text indicating that the member device type is unspecified (displays when hovering over the icon).",
+    "message": "Unspecified device type"
+  },
+  "routes.app.projects.$projectId_.settings.team.inviteDevice": {
+    "description": "Text for button that initiates steps for inviting device to project.",
+    "message": "Invite Device"
+  },
+  "routes.app.projects.$projectId_.settings.team.leaveProject": {
+    "description": "Text for button that initiates steps for leaving project.",
+    "message": "Leave Project"
+  },
+  "routes.app.projects.$projectId_.settings.team.navTitle": {
+    "description": "Title of the project settings team page.",
+    "message": "Team"
+  },
+  "routes.app.projects.$projectId_.settings.team.noParticipants": {
+    "description": "Text indicating that no participants are part of the project yet.",
+    "message": "No Participants have been added to this project."
+  },
+  "routes.app.projects.$projectId_.settings.team.participantsSectionDescription": {
+    "description": "Description of the participants section in the team page.",
+    "message": "Participants can take and share observations. They cannot manage users or project details."
+  },
+  "routes.app.projects.$projectId_.settings.team.participantsSectionTitle": {
+    "description": "Title of the participants section in the team page.",
+    "message": "Participants"
+  },
+  "routes.app.projects.$projectId_.settings.team.thisDevice": {
+    "description": "Text indicating that the listed device refers to the one currently being used.",
+    "message": "This Device!"
+  },
   "routes.app.route.aboutTabLabel": {
     "message": "About CoMapeo"
   },
