@@ -385,10 +385,7 @@ function CoordinatorSettingsView({
 				label={t(m.categoriesSet)}
 				actionButton={
 					<IconButtonLink
-						// TODO: Replace with `to`
-						onClick={() => {
-							alert('Not implemented yet')
-						}}
+						to="/app/projects/$projectId/settings/categories"
 						params={{ projectId }}
 					>
 						<Icon

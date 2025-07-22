@@ -107,8 +107,9 @@ function RouteComponent() {
 
 			<Stack direction="row" justifyContent="center" useFlexGap gap={5}>
 				<ButtonLink
-					// TODO: Navigate to categories setting page
-					to="/app"
+					to="/app/projects/$projectId/settings/categories"
+					params={{ projectId }}
+					reloadDocument
 					variant="outlined"
 					size="large"
 					disableElevation
@@ -199,7 +200,7 @@ const m = defineMessages({
 	},
 	updateCategoriesSet: {
 		id: 'routes.onboarding.project.create.$projectId.success.updateCategoriesSet',
-		defaultMessage: 'Start Using CoMapeo',
+		defaultMessage: 'Update Categories Set',
 	},
 	inviteCollaborators: {
 		id: 'routes.onboarding.project.create.$projectId.success.inviteCollaborators',

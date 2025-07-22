@@ -203,7 +203,7 @@ function initMainWindow({ appMode, services }) {
 	mainWindow.webContents.ipc.handle('files:select', async (_event, params) => {
 		const parsedParams = APP_IPC_EVENT_TO_PARAMS_PARSER['files:select'](params)
 
-		const result = await dialog.showOpenDialog({
+		const result = await dialog.showOpenDialog(mainWindow, {
 			properties: ['openFile'],
 			filters: parsedParams?.extensionFilters
 				? [

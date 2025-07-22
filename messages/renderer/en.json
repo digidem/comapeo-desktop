@@ -61,6 +61,30 @@
     "description": "Indicates that user is a participant on the current project.",
     "message": "You're a participant on this project."
   },
+  "routes.app.projects.$projectId_.settings.categories.customCategoriesExplainer": {
+    "description": "Explanation for custom categories",
+    "message": "Use custom categories by importing new categories set files below."
+  },
+  "routes.app.projects.$projectId_.settings.categories.dateAdded": {
+    "description": "Text indicating the date the categories set was added.",
+    "message": "Added {date}"
+  },
+  "routes.app.projects.$projectId_.settings.categories.defaultCategoriesExplainer": {
+    "description": "Explanation for default categories",
+    "message": "Default categories help you start organizing your observations instantly."
+  },
+  "routes.app.projects.$projectId_.settings.categories.missingCategoriesName": {
+    "description": "Text indicating that project is missing categories set name.",
+    "message": "No name found for categories set."
+  },
+  "routes.app.projects.$projectId_.settings.categories.navTitle": {
+    "description": "Title of the categories set page.",
+    "message": "Categories Set"
+  },
+  "routes.app.projects.$projectId_.settings.categories.uploadNewSet": {
+    "description": "Label for button to upload new categories set.",
+    "message": "Upload New Set"
+  },
   "routes.app.projects.$projectId_.settings.index.addRemoteArchive": {
     "description": "Text for link that navigates to remote archive settings page.",
     "message": "Add"
@@ -468,7 +492,7 @@
     "message": "Success!"
   },
   "routes.onboarding.project.create.$projectId.success.updateCategoriesSet": {
-    "message": "Start Using CoMapeo"
+    "message": "Update Categories Set"
   },
   "routes.onboarding.project.create.index.characterCount": {
     "message": "{count}/{max}"

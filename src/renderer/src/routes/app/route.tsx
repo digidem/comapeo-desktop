@@ -223,7 +223,8 @@ function checkPageHasEditing(currentPath: ToRouteFullPath) {
 		currentPath === '/app/settings/device-name' ||
 		currentPath === '/app/settings/coordinate-system' ||
 		currentPath === '/app/settings/language' ||
-		currentPath === '/app/projects/$projectId/settings/info'
+		currentPath === '/app/projects/$projectId/settings/info' ||
+		currentPath === '/app/projects/$projectId/settings/categories'
 	)
 }
 
