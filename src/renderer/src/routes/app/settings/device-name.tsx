@@ -69,7 +69,15 @@ function RouteComponent() {
 				name: parsedDeviceName,
 			})
 
-			router.navigate({ to: '/app/settings' })
+			if (router.history.canGoBack()) {
+				router.history.back()
+				return
+			}
+
+			router.navigate({
+				to: '/app/settings',
+				replace: true,
+			})
 		},
 	})
 
