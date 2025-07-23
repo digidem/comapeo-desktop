@@ -356,6 +356,7 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 						outline: `1px solid ${LIGHT_GREY}`,
 						position: 'relative',
 						padding: 4,
+						overflow: 'hidden',
 					}}
 				>
 					<Suspense>
@@ -364,9 +365,19 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 							originalVersionId={value.originalVersionId}
 						/>
 					</Suspense>
-					<Stack direction="row" flex={1}>
-						<Stack direction="column" flex={1} justifyContent="center">
-							<Typography fontWeight={500}>
+					<Stack direction="row" flex={1} useFlexGap gap={2} overflow="auto">
+						<Stack
+							direction="column"
+							flex={1}
+							justifyContent="center"
+							overflow="hidden"
+						>
+							<Typography
+								fontWeight={500}
+								textOverflow="ellipsis"
+								whiteSpace="nowrap"
+								overflow="hidden"
+							>
 								{preset?.name ||
 									t(
 										type === 'observation'
@@ -375,7 +386,11 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 									)}
 							</Typography>
 
-							<Typography>
+							<Typography
+								textOverflow="ellipsis"
+								whiteSpace="nowrap"
+								overflow="hidden"
+							>
 								{formatDate(value.createdAt, {
 									year: 'numeric',
 									month: 'short',
