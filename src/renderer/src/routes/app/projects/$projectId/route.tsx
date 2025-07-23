@@ -4,6 +4,7 @@ import { Outlet, createFileRoute, notFound } from '@tanstack/react-router'
 import * as v from 'valibot'
 
 import { TwoPanelLayout } from '../../-components/two-panel-layout'
+import { BLACK } from '../../../../colors'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
 import { MapWithData } from './-map-with-data'
 
@@ -102,6 +103,8 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 						flex={1}
 						justifyContent="center"
 						alignItems="center"
+						bgcolor={BLACK}
+						sx={{ opacity: 0.5 }}
 					>
 						<CircularProgress />
 					</Box>

@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useManyDocs } from '@comapeo/core-react'
 import type { Observation, Preset, Track } from '@comapeo/schema'
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import {
 	useChildMatches,
@@ -20,7 +22,7 @@ import {
 } from 'react-map-gl/maplibre'
 import * as v from 'valibot'
 
-import { ORANGE, WHITE } from '../../../../colors'
+import { BLACK, ORANGE, WHITE } from '../../../../colors'
 import { Map } from '../../../../components/map'
 import { getMatchingPresetForObservation } from '../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../lib/queries/app-settings'
@@ -37,6 +39,8 @@ export function MapWithData() {
 	const navigate = useNavigate({ from: '/app/projects/$projectId' })
 	const { projectId } = useParams({ from: '/app/projects/$projectId' })
 	const { focusedDocId } = useSearch({ from: '/app/projects/$projectId' })
+
+	const [mapLoaded, setMapLoaded] = useState(false)
 
 	const currentRoute = useChildMatches({
 		select: (matches) => {
@@ -198,39 +202,61 @@ export function MapWithData() {
 	}, [docIdToHighlight])
 
 	return (
-		<Map
-			ref={mapRef}
-			initialViewState={{
-				bounds: observationsBbox,
-				fitBoundsOptions: { maxZoom: 12, padding: 40 },
-			}}
-			interactive={enableMapInteractions}
-			onClick={enableMapInteractions ? onMapClick : undefined}
-			onMouseMove={enableMapInteractions ? onMapMouseMove : undefined}
-			interactiveLayerIds={INTERACTIVE_LAYER_IDS}
-		>
-			<Source
-				type="geojson"
-				id={OBSERVATIONS_SOURCE_ID}
-				data={observationsFeatureCollection}
-				// Need this in order for the feature-state querying to work when hovering
-				promoteId="id"
+		<Box position="relative" display="flex" flex={1}>
+			{mapLoaded ? null : (
+				<Box
+					display="flex"
+					flex={1}
+					justifyContent="center"
+					alignItems="center"
+					position="absolute"
+					left={0}
+					right={0}
+					top={0}
+					bottom={0}
+					sx={{ opacity: 0.5 }}
+					bgcolor={BLACK}
+				>
+					<CircularProgress />
+				</Box>
+			)}
+			<Map
+				ref={mapRef}
+				initialViewState={{
+					bounds: observationsBbox,
+					fitBoundsOptions: { maxZoom: 12, padding: 40 },
+				}}
+				interactive={enableMapInteractions}
+				onClick={enableMapInteractions ? onMapClick : undefined}
+				onMouseMove={enableMapInteractions ? onMapMouseMove : undefined}
+				interactiveLayerIds={INTERACTIVE_LAYER_IDS}
+				onLoad={() => {
+					setMapLoaded(true)
+				}}
 			>
-				<Layer
-					type="circle"
-					id={OBSERVATIONS_LAYER_ID}
-					paint={observationLayerPaint}
-				/>
-			</Source>
+				<Source
+					type="geojson"
+					id={OBSERVATIONS_SOURCE_ID}
+					data={observationsFeatureCollection}
+					// Need this in order for the feature-state querying to work when hovering
+					promoteId="id"
+				>
+					<Layer
+						type="circle"
+						id={OBSERVATIONS_LAYER_ID}
+						paint={observationLayerPaint}
+					/>
+				</Source>
 
-			<Source
-				type="geojson"
-				id={TRACKS_SOURCE_ID}
-				data={tracksFeatureCollection}
-				// Need this in order for the feature-state querying to work when hovering
-				promoteId="id"
-			></Source>
-		</Map>
+				<Source
+					type="geojson"
+					id={TRACKS_SOURCE_ID}
+					data={tracksFeatureCollection}
+					// Need this in order for the feature-state querying to work when hovering
+					promoteId="id"
+				></Source>
+			</Map>
+		</Box>
 	)
 }
 

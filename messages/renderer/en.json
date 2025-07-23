@@ -50,7 +50,7 @@
     "message": "Observation"
   },
   "routes.app.projects.$projectId.index.presetIconAlt": {
-    "description": "Alt text for icon image displayed for preset.",
+    "description": "Alt text for icon image displayed for preset (used for accessibility tools).",
     "message": "Icon for preset {name}"
   },
   "routes.app.projects.$projectId.index.trackPresetNameFallback": {
