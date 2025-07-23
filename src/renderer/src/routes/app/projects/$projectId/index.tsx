@@ -506,7 +506,7 @@ function AddObservationsCard({ projectId }: { projectId: string }) {
 				border={`1px solid ${BLUE_GREY}`}
 				paddingX={6}
 				paddingY={10}
-				justifyContent={'center'}
+				justifyContent="center"
 				flex={1}
 			>
 				<Box
@@ -596,6 +596,7 @@ const m = defineMessages({
 	presetIconAlt: {
 		id: 'routes.app.projects.$projectId.index.presetIconAlt',
 		defaultMessage: 'Icon for preset {name}',
-		description: 'Alt text for icon image displayed for preset.',
+		description:
+			'Alt text for icon image displayed for preset (used for accessibility tools).',
 	},
 })
