@@ -1,12 +1,18 @@
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Outlet, createFileRoute, notFound } from '@tanstack/react-router'
+import * as v from 'valibot'
 
 import { TwoPanelLayout } from '../../-components/two-panel-layout'
-import { Map } from '../../../../components/map'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
+import { MapWithData } from './-map-with-data'
+
+const SearchParamsSchema = v.object({
+	focusedDocId: v.optional(v.string()),
+})
 
 export const Route = createFileRoute('/app/projects/$projectId')({
+	validateSearch: SearchParamsSchema,
 	beforeLoad: async ({ context, params }) => {
 		const { clientApi, queryClient } = context
 		const { projectId } = params
@@ -25,6 +31,57 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 		}
 
 		return { projectApi }
+	},
+	// Accounts for queries used by the MapWithData component.
+	loader: async ({ context, params }) => {
+		const {
+			projectApi,
+			queryClient,
+			localeState: { value: lang },
+		} = context
+		const { projectId } = params
+
+		await Promise.all([
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'observations',
+					{ lang },
+				],
+				queryFn: async () => {
+					return projectApi.observation.getMany({ lang })
+				},
+			}),
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'tracks',
+					{ lang },
+				],
+				queryFn: async () => {
+					return projectApi.track.getMany({ lang })
+				},
+			}),
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'presets',
+					{ lang },
+				],
+				queryFn: async () => {
+					return projectApi.preset.getMany({ lang })
+				},
+			}),
+		])
 	},
 	pendingComponent: () => {
 		return (
@@ -57,5 +114,5 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 })
 
 function RouteComponent() {
-	return <TwoPanelLayout start={<Outlet />} end={<Map />} />
+	return <TwoPanelLayout start={<Outlet />} end={<MapWithData />} />
 }

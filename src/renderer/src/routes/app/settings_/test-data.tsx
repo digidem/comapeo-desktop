@@ -198,7 +198,9 @@ function RouteComponent() {
 	})
 
 	const boundingBox = useMemo(() => {
-		if (!boundedDistance) return null
+		if (!boundedDistance) {
+			return undefined
+		}
 
 		const { longitude, latitude } = coordinates
 
@@ -433,6 +435,15 @@ function RouteComponent() {
 				}
 				end={
 					<Map
+						initialViewState={{
+							fitBoundsOptions: {
+								padding: 40,
+								maxZoom: 12,
+							},
+							...(coordinates.latitude === 0 && coordinates.longitude === 0
+								? coordinates
+								: { bounds: boundingBox }),
+						}}
 						onClick={(event) => {
 							form.setFieldValue('latitude', event.lngLat.lat)
 							form.setFieldValue('longitude', event.lngLat.lng)
@@ -582,7 +593,7 @@ function getBoundingBoxUsingDistance({
 	longitude: number
 	latitude: number
 	distance: number
-}): BBox {
+}): [number, number, number, number] {
 	const distanceBufferDegrees = lengthToDegrees(distance, 'kilometers')
 
 	return [

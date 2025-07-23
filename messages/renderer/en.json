@@ -45,6 +45,18 @@
     "description": "Link text to navigate to invite collaborators page.",
     "message": "Invite"
   },
+  "routes.app.projects.$projectId.index.observationPresetNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Observation"
+  },
+  "routes.app.projects.$projectId.index.presetIconAlt": {
+    "description": "Alt text for icon image displayed for preset.",
+    "message": "Icon for preset {name}"
+  },
+  "routes.app.projects.$projectId.index.trackPresetNameFallback": {
+    "description": "Fallback name for track without a matching category.",
+    "message": "Track"
+  },
   "routes.app.projects.$projectId.index.unnamedProject": {
     "description": "Fallback for when current project is missing a name.",
     "message": "Unnamed Project"
