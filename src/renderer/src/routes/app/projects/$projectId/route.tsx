@@ -112,7 +112,6 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 			/>
 		)
 	},
-
 	component: RouteComponent,
 })
 
