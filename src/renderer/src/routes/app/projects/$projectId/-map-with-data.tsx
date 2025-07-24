@@ -11,6 +11,7 @@ import {
 	useSearch,
 } from '@tanstack/react-router'
 import { bbox } from '@turf/bbox'
+import { center } from '@turf/center'
 import { featureCollection, lineString, point } from '@turf/helpers'
 import type { Feature, Point } from 'geojson'
 import type { FitBoundsOptions } from 'maplibre-gl'
@@ -225,6 +226,40 @@ export function MapWithData() {
 			animate: false,
 		})
 	}, [observationsBbox])
+
+	useEffect(() => {
+		if (docIdToHighlight) {
+			const observationMatch = observationsFeatureCollection.features.find(
+				({ properties }) => properties.id === docIdToHighlight,
+			)
+
+			if (observationMatch) {
+				mapRef.current?.panTo(
+					{
+						lon: observationMatch.geometry.coordinates[0]!,
+						lat: observationMatch.geometry.coordinates[1]!,
+					},
+					{ zoom: 8 },
+				)
+			}
+
+			const tracksMatch = tracksFeatureCollection.features.find(
+				({ properties }) => properties.id === docIdToHighlight,
+			)
+
+			if (tracksMatch) {
+				const c = center(tracksMatch)
+
+				mapRef.current?.panTo(
+					{
+						lon: c.geometry.coordinates[0]!,
+						lat: c.geometry.coordinates[1]!,
+					},
+					{ zoom: 8 },
+				)
+			}
+		}
+	}, [docIdToHighlight, observationsFeatureCollection, tracksFeatureCollection])
 
 	return (
 		<Box position="relative" display="flex" flex={1}>
