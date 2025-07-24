@@ -346,6 +346,26 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 		el.focus()
 	}, [])
 
+	const isMouseOverListRef = useRef(false)
+
+	useEffect(() => {
+		// Prevents issues with manually scrolling on the list due to the behavior
+		// implemented in onMouseMove
+		if (isMouseOverListRef.current) {
+			return
+		}
+
+		if (highlightedDocument && listRef.current) {
+			const item = listRef.current.querySelector(
+				`[data-docid="${highlightedDocument.docId}"]`,
+			)
+
+			if (item) {
+				item.scrollIntoView({ block: 'center' })
+			}
+		}
+	}, [highlightedDocument])
+
 	return sortedListData.length > 0 ? (
 		<List
 			component="ul"
@@ -353,6 +373,12 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 			disablePadding
 			onFocus={onFocus}
 			onMouseMove={onMouseMove}
+			onMouseEnter={() => {
+				isMouseOverListRef.current = true
+			}}
+			onMouseLeave={() => {
+				isMouseOverListRef.current = false
+			}}
 			sx={{ overflow: 'auto', scrollbarColor: 'initial', position: 'relative' }}
 		>
 			{sortedListData.map(({ type, value, preset }) => (
