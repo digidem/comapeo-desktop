@@ -6,6 +6,7 @@ import {
 	useRef,
 	type FocusEvent,
 	type MouseEvent,
+	type ReactNode,
 } from 'react'
 import {
 	useDocumentCreatedBy,
@@ -470,7 +471,9 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 									/>
 								</Suspense>
 							) : (
-								<Icon name="material-place" />
+								<CategoryIconContainer borderColor={BLUE_GREY}>
+									<Icon name="material-place" size={40} />
+								</CategoryIconContainer>
 							)}
 						</Box>
 					</Stack>
@@ -531,6 +534,24 @@ function DisplayedPresetAndAttachments({
 	})
 
 	return (
+		<CategoryIconContainer borderColor={borderColor}>
+			<img
+				src={iconURL}
+				alt={t(m.presetIconAlt, { name: presetName })}
+				style={{ aspectRatio: 1, maxHeight: 48 }}
+			/>
+		</CategoryIconContainer>
+	)
+}
+
+function CategoryIconContainer({
+	borderColor,
+	children,
+}: {
+	borderColor: string
+	children: ReactNode
+}) {
+	return (
 		<Box
 			display="flex"
 			alignItems="center"
@@ -540,11 +561,7 @@ function DisplayedPresetAndAttachments({
 			borderRadius="50%"
 			border={`3px solid ${borderColor}`}
 		>
-			<img
-				src={iconURL}
-				alt={t(m.presetIconAlt, { name: presetName })}
-				style={{ aspectRatio: 1, maxHeight: 48 }}
-			/>
+			{children}
 		</Box>
 	)
 }
