@@ -402,7 +402,7 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 							})
 						}
 					}}
-					sx={{ outline: `1px solid ${LIGHT_GREY}`, padding: 4 }}
+					sx={{ borderBottom: `1px solid ${LIGHT_GREY}`, padding: 4 }}
 				>
 					<Suspense>
 						<SyncedIndicatorLine
