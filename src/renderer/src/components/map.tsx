@@ -27,14 +27,19 @@ export function Map({
 		<ReactMapLibre
 			{...rest}
 			ref={ref}
+			mapStyle={mapStyle}
+			reuseMaps={reuseMaps}
+			// NOTE: Not sure if it's because of our default to reuse map instances,
+			// but setting this doesn't necessarily disable the interactions as expected when set to `true`.
+			// Still need to disable the various interactions via the props.
+			// Instead, we conditionally assign the interaction props based on the `interactive` prop being specified or not.
+			// i.e. if it's specified, set the props using that value. Otherwise defer to the corresponding props.
+			interactive={interactive}
 			dragPan={interactive === undefined ? dragPan : interactive}
 			dragRotate={interactive === undefined ? dragRotate : interactive}
 			doubleClickZoom={
 				interactive === undefined ? doubleClickZoom : interactive
 			}
-			interactive={interactive}
-			mapStyle={mapStyle}
-			reuseMaps={reuseMaps}
 			scrollZoom={interactive === undefined ? scrollZoom : interactive}
 			touchPitch={interactive === undefined ? touchPitch : interactive}
 			touchZoomRotate={
