@@ -34,6 +34,7 @@ export default defineConfig((configEnv) => {
 		plugins: [
 			// TanStackRouterVite({ routeFileIgnorePattern: '\\.test\\.tsx?$' }),
 			tanstackRouter({
+				autoCodeSplitting: true,
 				routeFileIgnorePattern: '\\.test\\.tsx?$',
 				routesDirectory: fileURLToPath(
 					new URL('./src/routes', import.meta.url),
