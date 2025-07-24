@@ -26,7 +26,7 @@ import * as v from 'valibot'
 
 import { BLACK, ORANGE, WHITE } from '../../../../colors'
 import { Map } from '../../../../components/map'
-import { getMatchingPresetForObservation } from '../../../../lib/comapeo'
+import { getMatchingCategoryForObservation } from '../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../lib/queries/app-settings'
 
 const OBSERVATIONS_SOURCE_ID = 'observations_source'
@@ -111,23 +111,26 @@ export function MapWithData() {
 		lang,
 	})
 
-	const { data: presets } = useManyDocs({
+	const { data: categories } = useManyDocs({
 		projectId,
 		docType: 'preset',
 		lang,
 	})
 
 	const observationsFeatureCollection = useMemo(() => {
-		return observationsToFeatureCollection(observations, presets)
-	}, [observations, presets])
+		return observationsToFeatureCollection(observations, categories)
+	}, [observations, categories])
 
 	const tracksFeatureCollection = useMemo(() => {
 		return tracksToFeatureCollection(tracks)
 	}, [tracks])
 
 	const observationLayerPaint = useMemo(() => {
-		return createObservationLayerPaintProperty(presets, !!documentToHighlight)
-	}, [presets, documentToHighlight])
+		return createObservationLayerPaintProperty(
+			categories,
+			!!documentToHighlight,
+		)
+	}, [categories, documentToHighlight])
 
 	// TODO: Should cover both observations and tracks?
 	const observationsBbox: [number, number, number, number] = useMemo(() => {
@@ -363,20 +366,20 @@ export function MapWithData() {
 
 function observationsToFeatureCollection(
 	observations: Array<Observation>,
-	presets: Array<Preset>,
+	categories: Array<Preset>,
 ) {
 	const displayablePoints: Array<
-		Feature<Point, { id: string; presetDocId?: string }>
+		Feature<Point, { id: string; categoryDocId?: string }>
 	> = []
 
 	for (const obs of observations) {
 		if (typeof obs.lon === 'number' && typeof obs.lat === 'number') {
-			const preset = getMatchingPresetForObservation(obs.tags, presets)
+			const category = getMatchingCategoryForObservation(obs.tags, categories)
 
 			displayablePoints.push(
 				point([obs.lon, obs.lat], {
 					id: obs.docId,
-					presetDocId: preset?.docId,
+					categoryDocId: category?.docId,
 				}),
 			)
 		}
@@ -400,12 +403,12 @@ function tracksToFeatureCollection(tracks: Array<Track>) {
 }
 
 function createObservationLayerPaintProperty(
-	presets: Array<Preset>,
+	categories: Array<Preset>,
 	enableHighlighting: boolean,
 ): CircleLayerSpecification['paint'] {
 	const categoryColorPairs: Array<string> = []
 
-	for (const { color, docId } of presets) {
+	for (const { color, docId } of categories) {
 		// @comapeo/schema only allows hex values for color field
 		if (v.is(v.pipe(v.string(), v.hexColor()), color)) {
 			categoryColorPairs.push(docId, color)
@@ -419,7 +422,7 @@ function createObservationLayerPaintProperty(
 		// @ts-expect-error Type def doesn't like the spread of the pairs
 		'circle-stroke-color':
 			categoryColorPairs.length > 0
-				? ['match', ['get', 'presetDocId'], ...categoryColorPairs, ORANGE]
+				? ['match', ['get', 'categoryDocId'], ...categoryColorPairs, ORANGE]
 				: ORANGE,
 		'circle-stroke-opacity': enableHighlighting
 			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.25]

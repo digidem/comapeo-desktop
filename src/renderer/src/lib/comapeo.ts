@@ -20,7 +20,7 @@ export const NO_ROLE_ID = '08e4251e36f6e7ed'
  * convention. This approach allows for tags to be edited and changed in a
  * preset while still maintaining backwards compatibility when necessary.
  */
-export function getMatchingPresetForObservation(
+export function getMatchingCategoryForObservation(
 	observationTags: Observation['tags'],
 	presets: Array<Preset>,
 ): Preset | undefined {
@@ -60,7 +60,7 @@ export function getMatchingPresetForObservation(
 	return bestMatch
 }
 
-export function getMatchingPresetForTrack(
+export function getMatchingCategoryForTrack(
 	track: Track,
 	presets: Array<Preset>,
 ): Preset | undefined {

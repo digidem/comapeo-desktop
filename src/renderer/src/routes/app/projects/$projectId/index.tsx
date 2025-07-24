@@ -43,8 +43,8 @@ import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
-	getMatchingPresetForObservation,
-	getMatchingPresetForTrack,
+	getMatchingCategoryForObservation,
+	getMatchingCategoryForTrack,
 } from '../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../lib/queries/app-settings'
 
@@ -271,33 +271,33 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 		lang,
 	})
 
-	const { data: presets } = useManyDocs({
+	const { data: categories } = useManyDocs({
 		projectId,
 		docType: 'preset',
 		lang,
 	})
 
-	const observationsWithPreset = useMemo(() => {
+	const observationsWithCategory = useMemo(() => {
 		return observations.map((o) => ({
 			type: 'observation' as const,
 			value: o,
-			preset: getMatchingPresetForObservation(o.tags, presets),
+			category: getMatchingCategoryForObservation(o.tags, categories),
 		}))
-	}, [observations, presets])
+	}, [observations, categories])
 
-	const tracksWithPreset = useMemo(() => {
+	const tracksWithCategory = useMemo(() => {
 		return tracks.map((t) => ({
 			type: 'track' as const,
 			value: t,
-			preset: getMatchingPresetForTrack(t, presets),
+			category: getMatchingCategoryForTrack(t, categories),
 		}))
-	}, [tracks, presets])
+	}, [tracks, categories])
 
 	const sortedListData = useMemo(() => {
-		return [...observationsWithPreset, ...tracksWithPreset].sort((a, b) => {
+		return [...observationsWithCategory, ...tracksWithCategory].sort((a, b) => {
 			return a.value.createdAt < b.value.createdAt ? 1 : -1
 		})
-	}, [observationsWithPreset, tracksWithPreset])
+	}, [observationsWithCategory, tracksWithCategory])
 
 	const listRef = useRef<HTMLUListElement | null>(null)
 
@@ -382,7 +382,7 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 			}}
 			sx={{ overflow: 'auto', scrollbarColor: 'initial', position: 'relative' }}
 		>
-			{sortedListData.map(({ type, value, preset }) => (
+			{sortedListData.map(({ type, value, category }) => (
 				<ListItemButton
 					key={value.docId}
 					data-datatype={type}
@@ -424,11 +424,11 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 								whiteSpace="nowrap"
 								overflow="hidden"
 							>
-								{preset?.name ||
+								{category?.name ||
 									t(
 										type === 'observation'
-											? m.observationPresetNameFallback
-											: m.trackPresetNameFallback,
+											? m.observationCategoryNameFallback
+											: m.trackCategoryNameFallback,
 									)}
 							</Typography>
 
@@ -449,7 +449,7 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 						</Stack>
 
 						<Box display="flex" justifyContent="center" alignItems="center">
-							{preset?.iconRef?.docId ? (
+							{category?.iconRef?.docId ? (
 								<Suspense
 									fallback={
 										<Box
@@ -463,11 +463,11 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 										</Box>
 									}
 								>
-									<DisplayedPresetAndAttachments
+									<DisplayedCategoryAndAttachments
 										projectId={projectId}
-										presetName={preset.name}
-										borderColor={preset.color || BLUE_GREY}
-										iconDocumentId={preset.iconRef.docId}
+										categoryName={category.name}
+										borderColor={category.color || BLUE_GREY}
+										iconDocumentId={category.iconRef.docId}
 									/>
 								</Suspense>
 							) : (
@@ -512,14 +512,14 @@ function SyncedIndicatorLine({
 }
 
 // TODO: Display attachments
-function DisplayedPresetAndAttachments({
+function DisplayedCategoryAndAttachments({
 	borderColor,
-	presetName,
+	categoryName,
 	projectId,
 	iconDocumentId,
 }: {
 	borderColor: string
-	presetName: string
+	categoryName: string
 	projectId: string
 	iconDocumentId: string
 }) {
@@ -537,7 +537,7 @@ function DisplayedPresetAndAttachments({
 		<CategoryIconContainer borderColor={borderColor}>
 			<img
 				src={iconURL}
-				alt={t(m.presetIconAlt, { name: presetName })}
+				alt={t(m.categoryIconAlt, { name: categoryName })}
 				style={{ aspectRatio: 1, maxHeight: 48 }}
 			/>
 		</CategoryIconContainer>
@@ -657,20 +657,20 @@ const m = defineMessages({
 		defaultMessage: 'Go to Exchange',
 		description: 'Link text to navigate to Exchange page.',
 	},
-	observationPresetNameFallback: {
-		id: 'routes.app.projects.$projectId.index.observationPresetNameFallback',
+	observationCategoryNameFallback: {
+		id: 'routes.app.projects.$projectId.index.observationCategoryNameFallback',
 		defaultMessage: 'Observation',
 		description: 'Fallback name for observation without a matching category.',
 	},
-	trackPresetNameFallback: {
-		id: 'routes.app.projects.$projectId.index.trackPresetNameFallback',
+	trackCategoryNameFallback: {
+		id: 'routes.app.projects.$projectId.index.trackCategoryNameFallback',
 		defaultMessage: 'Track',
 		description: 'Fallback name for track without a matching category.',
 	},
-	presetIconAlt: {
-		id: 'routes.app.projects.$projectId.index.presetIconAlt',
-		defaultMessage: 'Icon for preset {name}',
+	categoryIconAlt: {
+		id: 'routes.app.projects.$projectId.index.categoryIconAlt',
+		defaultMessage: 'Icon for {name} category',
 		description:
-			'Alt text for icon image displayed for preset (used for accessibility tools).',
+			'Alt text for icon image displayed for category (used for accessibility tools).',
 	},
 })

@@ -37,6 +37,10 @@
     "description": "Title of card that is displayed when project has no observations to display.",
     "message": "Add Observations"
   },
+  "routes.app.projects.$projectId.index.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Icon for {name} category"
+  },
   "routes.app.projects.$projectId.index.goToExchange": {
     "description": "Link text to navigate to Exchange page.",
     "message": "Go to Exchange"
@@ -45,15 +49,11 @@
     "description": "Link text to navigate to invite collaborators page.",
     "message": "Invite"
   },
-  "routes.app.projects.$projectId.index.observationPresetNameFallback": {
+  "routes.app.projects.$projectId.index.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
     "message": "Observation"
   },
-  "routes.app.projects.$projectId.index.presetIconAlt": {
-    "description": "Alt text for icon image displayed for preset (used for accessibility tools).",
-    "message": "Icon for preset {name}"
-  },
-  "routes.app.projects.$projectId.index.trackPresetNameFallback": {
+  "routes.app.projects.$projectId.index.trackCategoryNameFallback": {
     "description": "Fallback name for track without a matching category.",
     "message": "Track"
   },
