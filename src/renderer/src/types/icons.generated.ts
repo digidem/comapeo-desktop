@@ -18,6 +18,7 @@ export const iconNames = [
 	'material-symbols-computer',
 	'material-settings',
 	'material-question-mark',
+	'material-place',
 	'material-phone-android',
 	'material-person-add',
 	'material-people-filled',

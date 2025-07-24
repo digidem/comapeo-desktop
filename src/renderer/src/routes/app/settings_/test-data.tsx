@@ -42,6 +42,21 @@ export const Route = createFileRoute('/app/settings_/test-data')({
 			throw redirect({ to: '/', replace: true })
 		}
 	},
+	loader: async ({ context }) => {
+		const { activeProjectId, clientApi, queryClient } = context
+
+		// TODO: Not ideal but requires changes in @comapeo/core-react
+		await queryClient.ensureQueryData({
+			queryKey: [
+				COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+				'projects',
+				activeProjectId,
+			],
+			queryFn: async () => {
+				return clientApi.getProject(activeProjectId)
+			},
+		})
+	},
 	pendingComponent: () => {
 		return (
 			<TwoPanelLayout
@@ -76,6 +91,9 @@ const MIN_OBSERVATION_COUNT = 1
 const MAX_OBSERVATION_COUNT = 1000
 const DEFAULT_BOUNDED_DISTANCE_KM = 50
 const MIN_BOUNDED_DISTANCE_KM = 0.1
+const MAP_MAX_BOUNDS: [number, number, number, number] = [
+	-179.99999, -89.99999, 179.99999, 89.99999,
+]
 
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
@@ -131,8 +149,8 @@ function RouteComponent() {
 					t(m.minBoundedDistanceError, { value: MIN_BOUNDED_DISTANCE_KM }),
 				),
 			),
-			latitude: v.pipe(v.number(), v.minValue(-180), v.maxValue(180)),
-			longitude: v.pipe(v.number(), v.minValue(-90), v.maxValue(90)),
+			latitude: v.pipe(v.number(), v.minValue(-90), v.maxValue(90)),
+			longitude: v.pipe(v.number(), v.minValue(-180), v.maxValue(180)),
 		})
 	}, [t])
 
@@ -198,7 +216,9 @@ function RouteComponent() {
 	})
 
 	const boundingBox = useMemo(() => {
-		if (!boundedDistance) return null
+		if (!boundedDistance) {
+			return undefined
+		}
 
 		const { longitude, latitude } = coordinates
 
@@ -323,6 +343,13 @@ function RouteComponent() {
 																disabled
 																value={field.state.value}
 																label="Longitude"
+																helperText={
+																	<Box component="span">
+																		{field.state.meta.errors.length > 0
+																			? field.state.meta.errors[0]?.message
+																			: null}
+																	</Box>
+																}
 															/>
 														)}
 													</form.AppField>
@@ -335,6 +362,13 @@ function RouteComponent() {
 																disabled
 																value={field.state.value}
 																label="Latitude"
+																helperText={
+																	<Box component="span">
+																		{field.state.meta.errors.length > 0
+																			? field.state.meta.errors[0]?.message
+																			: null}
+																	</Box>
+																}
 															/>
 														)}
 													</form.AppField>
@@ -381,7 +415,9 @@ function RouteComponent() {
 								alignItems="center"
 							>
 								<form.Subscribe
-									selector={(state) => [state.canSubmit, state.isSubmitting]}
+									selector={(state) =>
+										[state.canSubmit, state.isSubmitting] as const
+									}
 								>
 									{([canSubmit, isSubmitting]) => (
 										<>
@@ -433,6 +469,16 @@ function RouteComponent() {
 				}
 				end={
 					<Map
+						initialViewState={{
+							fitBoundsOptions: {
+								padding: 40,
+								maxZoom: 12,
+							},
+							...(coordinates.latitude === 0 && coordinates.longitude === 0
+								? coordinates
+								: { bounds: boundingBox }),
+						}}
+						maxBounds={MAP_MAX_BOUNDS}
 						onClick={(event) => {
 							form.setFieldValue('latitude', event.lngLat.lat)
 							form.setFieldValue('longitude', event.lngLat.lng)
@@ -582,7 +628,7 @@ function getBoundingBoxUsingDistance({
 	longitude: number
 	latitude: number
 	distance: number
-}): BBox {
+}): [number, number, number, number] {
 	const distanceBufferDegrees = lengthToDegrees(distance, 'kilometers')
 
 	return [

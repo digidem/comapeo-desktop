@@ -1,12 +1,26 @@
-import { useMemo } from 'react'
 import {
+	Suspense,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	type FocusEvent,
+	type MouseEvent,
+	type ReactNode,
+} from 'react'
+import {
+	useDocumentCreatedBy,
+	useIconUrl,
 	useManyDocs,
+	useOwnDeviceInfo,
 	useOwnRoleInProject,
 	useProjectSettings,
 } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import Divider from '@mui/material/Divider'
+import List from '@mui/material/List'
+import ListItemButton from '@mui/material/ListItemButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
@@ -17,6 +31,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import {
 	BLACK,
 	BLUE_GREY,
+	COMAPEO_BLUE,
 	DARK_GREY,
 	LIGHT_COMAPEO_BLUE,
 	LIGHT_GREY,
@@ -28,13 +43,15 @@ import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
-	getMatchingPresetForObservation,
+	getMatchingCategoryForObservation,
+	getMatchingCategoryForTrack,
 } from '../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../lib/queries/app-settings'
 
 export const Route = createFileRoute('/app/projects/$projectId/')({
 	loader: async ({ context, params }) => {
 		const {
+			clientApi,
 			projectApi,
 			queryClient,
 			localeState: { value: lang },
@@ -42,6 +59,13 @@ export const Route = createFileRoute('/app/projects/$projectId/')({
 		const { projectId } = params
 
 		await Promise.all([
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			queryClient.ensureQueryData({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
+				queryFn: async () => {
+					return clientApi.getDeviceInfo()
+				},
+			}),
 			// TODO: Not ideal but requires changes in @comapeo/core-react
 			queryClient.ensureQueryData({
 				queryKey: [
@@ -85,6 +109,19 @@ export const Route = createFileRoute('/app/projects/$projectId/')({
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',
 					projectId,
+					'tracks',
+					{ lang },
+				],
+				queryFn: async () => {
+					return projectApi.track.getMany({ lang })
+				},
+			}),
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
 					'presets',
 					{ lang },
 				],
@@ -119,30 +156,6 @@ function RouteComponent() {
 
 	const { data: projectSettings } = useProjectSettings({ projectId })
 	const { data: role } = useOwnRoleInProject({ projectId })
-
-	const { data: lang } = useSuspenseQuery({
-		...getLocaleStateQueryOptions(),
-		select: ({ value }) => value,
-	})
-
-	const { data: observations } = useManyDocs({
-		projectId,
-		docType: 'observation',
-		lang,
-	})
-
-	const { data: presets } = useManyDocs({
-		projectId,
-		docType: 'preset',
-		lang,
-	})
-
-	const observationsWithPreset = useMemo(() => {
-		return observations.map((o) => ({
-			observation: o,
-			preset: getMatchingPresetForObservation(o.tags, presets),
-		}))
-	}, [observations, presets])
 
 	const isAtLeastCoordinator =
 		role.roleId === CREATOR_ROLE_ID || role.roleId === COORDINATOR_ROLE_ID
@@ -215,21 +228,341 @@ function RouteComponent() {
 
 			<Divider sx={{ bgcolor: LIGHT_GREY }} />
 
-			<Box
-				padding={6}
-				overflow="auto"
-				display="flex"
-				flexDirection="column"
-				flex={1}
-			>
-				{observationsWithPreset.length > 0 ? (
-					// TODO: Render observations
-					<Stack direction="column" flexDirection="column" flex={1}></Stack>
-				) : (
-					<AddObservationsCard projectId={projectId} />
-				)}
+			<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
+				<Suspense
+					fallback={
+						<Box
+							display="flex"
+							flex={1}
+							justifyContent="center"
+							alignItems="center"
+						>
+							<CircularProgress />
+						</Box>
+					}
+				>
+					<ListedDataSection projectId={projectId} />
+				</Suspense>
 			</Box>
 		</Stack>
+	)
+}
+
+function ListedDataSection({ projectId }: { projectId: string }) {
+	const { formatMessage: t, formatDate } = useIntl()
+
+	const { highlightedDocument } = Route.useSearch()
+	const navigate = Route.useNavigate()
+
+	const { data: lang } = useSuspenseQuery({
+		...getLocaleStateQueryOptions(),
+		select: ({ value }) => value,
+	})
+
+	const { data: observations } = useManyDocs({
+		projectId,
+		docType: 'observation',
+		lang,
+	})
+
+	const { data: tracks } = useManyDocs({
+		projectId,
+		docType: 'track',
+		lang,
+	})
+
+	const { data: categories } = useManyDocs({
+		projectId,
+		docType: 'preset',
+		lang,
+	})
+
+	const observationsWithCategory = useMemo(() => {
+		return observations.map((o) => ({
+			type: 'observation' as const,
+			value: o,
+			category: getMatchingCategoryForObservation(o.tags, categories),
+		}))
+	}, [observations, categories])
+
+	const tracksWithCategory = useMemo(() => {
+		return tracks.map((t) => ({
+			type: 'track' as const,
+			value: t,
+			category: getMatchingCategoryForTrack(t, categories),
+		}))
+	}, [tracks, categories])
+
+	const sortedListData = useMemo(() => {
+		return [...observationsWithCategory, ...tracksWithCategory].sort((a, b) => {
+			return a.value.createdAt < b.value.createdAt ? 1 : -1
+		})
+	}, [observationsWithCategory, tracksWithCategory])
+
+	const listRef = useRef<HTMLUListElement | null>(null)
+
+	const onFocus = useCallback(
+		(event: FocusEvent<HTMLUListElement>) => {
+			const el = event.target.closest('[data-docid]')
+
+			if (!(el instanceof HTMLElement)) {
+				return
+			}
+
+			const dataType = el.getAttribute('data-datatype')
+			const docId = el.getAttribute('data-docid')
+
+			if (!(dataType && docId)) {
+				return
+			}
+
+			if (!(dataType === 'observation' || dataType === 'track')) {
+				return
+			}
+
+			if (highlightedDocument && docId === highlightedDocument.docId) {
+				return
+			}
+
+			navigate({
+				search: {
+					highlightedDocument: {
+						type: dataType,
+						docId,
+					},
+				},
+			})
+		},
+		[navigate, highlightedDocument],
+	)
+
+	const onMouseMove = useCallback((event: MouseEvent<HTMLUListElement>) => {
+		const el = (event.target as HTMLElement).closest('[data-docid]')
+
+		if (!(el instanceof HTMLElement)) {
+			return
+		}
+
+		// NOTE: We defer to the onFocus callback in order to determine the navigation changes.
+		el.focus()
+	}, [])
+
+	const isMouseOverListRef = useRef(false)
+
+	useEffect(() => {
+		// Prevents issues with manually scrolling on the list due to the behavior
+		// implemented in onMouseMove
+		if (isMouseOverListRef.current) {
+			return
+		}
+
+		if (highlightedDocument && listRef.current) {
+			const item = listRef.current.querySelector(
+				`[data-docid="${highlightedDocument.docId}"]`,
+			)
+
+			if (item) {
+				item.scrollIntoView({ block: 'center' })
+			}
+		}
+	}, [highlightedDocument])
+
+	return sortedListData.length > 0 ? (
+		<List
+			component="ul"
+			ref={listRef}
+			disablePadding
+			onFocus={onFocus}
+			onMouseMove={onMouseMove}
+			onMouseEnter={() => {
+				isMouseOverListRef.current = true
+			}}
+			onMouseLeave={() => {
+				isMouseOverListRef.current = false
+			}}
+			sx={{ overflow: 'auto', scrollbarColor: 'initial', position: 'relative' }}
+		>
+			{sortedListData.map(({ type, value, category }) => (
+				<ListItemButton
+					key={value.docId}
+					data-datatype={type}
+					data-docid={value.docId}
+					disableGutters
+					disableTouchRipple
+					selected={highlightedDocument?.docId === value.docId}
+					onClick={() => {
+						if (type === 'observation') {
+							navigate({
+								to: './observations/$observationDocId',
+								params: { observationDocId: value.docId },
+							})
+						} else {
+							navigate({
+								to: './tracks/$trackDocId',
+								params: { trackDocId: value.docId },
+							})
+						}
+					}}
+					sx={{ borderBottom: `1px solid ${LIGHT_GREY}`, padding: 4 }}
+				>
+					<Suspense>
+						<SyncedIndicatorLine
+							projectId={projectId}
+							originalVersionId={value.originalVersionId}
+						/>
+					</Suspense>
+					<Stack direction="row" flex={1} useFlexGap gap={2} overflow="auto">
+						<Stack
+							direction="column"
+							flex={1}
+							justifyContent="center"
+							overflow="hidden"
+						>
+							<Typography
+								fontWeight={500}
+								textOverflow="ellipsis"
+								whiteSpace="nowrap"
+								overflow="hidden"
+							>
+								{category?.name ||
+									t(
+										type === 'observation'
+											? m.observationCategoryNameFallback
+											: m.trackCategoryNameFallback,
+									)}
+							</Typography>
+
+							<Typography
+								textOverflow="ellipsis"
+								whiteSpace="nowrap"
+								overflow="hidden"
+							>
+								{formatDate(value.createdAt, {
+									year: 'numeric',
+									month: 'short',
+									day: '2-digit',
+									minute: '2-digit',
+									hour: '2-digit',
+									hourCycle: 'h12',
+								})}
+							</Typography>
+						</Stack>
+
+						<Box display="flex" justifyContent="center" alignItems="center">
+							{category?.iconRef?.docId ? (
+								<Suspense
+									fallback={
+										<Box
+											display="flex"
+											justifyContent="center"
+											alignItems="center"
+											height={48}
+											width={48}
+										>
+											<CircularProgress disableShrink size={30} />
+										</Box>
+									}
+								>
+									<DisplayedCategoryAndAttachments
+										projectId={projectId}
+										categoryName={category.name}
+										borderColor={category.color || BLUE_GREY}
+										iconDocumentId={category.iconRef.docId}
+									/>
+								</Suspense>
+							) : (
+								<CategoryIconContainer borderColor={BLUE_GREY}>
+									<Icon name="material-place" size={40} />
+								</CategoryIconContainer>
+							)}
+						</Box>
+					</Stack>
+				</ListItemButton>
+			))}
+		</List>
+	) : (
+		<AddObservationsCard projectId={projectId} />
+	)
+}
+
+function SyncedIndicatorLine({
+	projectId,
+	originalVersionId,
+}: {
+	projectId: string
+	originalVersionId: string
+}) {
+	const { data: ownDeviceInfo } = useOwnDeviceInfo()
+
+	const { data: createdBy } = useDocumentCreatedBy({
+		projectId,
+		originalVersionId,
+	})
+
+	return ownDeviceInfo.deviceId !== createdBy ? (
+		<Box
+			position="absolute"
+			width={8}
+			left={0}
+			bottom={0}
+			top={0}
+			bgcolor={COMAPEO_BLUE}
+		/>
+	) : null
+}
+
+// TODO: Display attachments
+function DisplayedCategoryAndAttachments({
+	borderColor,
+	categoryName,
+	projectId,
+	iconDocumentId,
+}: {
+	borderColor: string
+	categoryName: string
+	projectId: string
+	iconDocumentId: string
+}) {
+	const { formatMessage: t } = useIntl()
+
+	const { data: iconURL } = useIconUrl({
+		projectId,
+		iconId: iconDocumentId,
+		mimeType: 'image/png',
+		size: 'small',
+		pixelDensity: 3,
+	})
+
+	return (
+		<CategoryIconContainer borderColor={borderColor}>
+			<img
+				src={iconURL}
+				alt={t(m.categoryIconAlt, { name: categoryName })}
+				style={{ aspectRatio: 1, maxHeight: 48 }}
+			/>
+		</CategoryIconContainer>
+	)
+}
+
+function CategoryIconContainer({
+	borderColor,
+	children,
+}: {
+	borderColor: string
+	children: ReactNode
+}) {
+	return (
+		<Box
+			display="flex"
+			alignItems="center"
+			justifyContent="center"
+			padding={2}
+			overflow="hidden"
+			borderRadius="50%"
+			border={`3px solid ${borderColor}`}
+		>
+			{children}
+		</Box>
 	)
 }
 
@@ -237,45 +570,47 @@ function AddObservationsCard({ projectId }: { projectId: string }) {
 	const { formatMessage: t } = useIntl()
 
 	return (
-		<Stack
-			direction="column"
-			useFlexGap
-			gap={4}
-			alignItems="center"
-			borderRadius={2}
-			border={`1px solid ${BLUE_GREY}`}
-			paddingX={6}
-			paddingY={10}
-			justifyContent={'center'}
-			flex={1}
-		>
-			<Box
-				borderRadius="100%"
-				bgcolor={LIGHT_COMAPEO_BLUE}
-				display="flex"
-				justifyContent="center"
+		<Box display="flex" flex={1} padding={6}>
+			<Stack
+				direction="column"
+				useFlexGap
+				gap={4}
 				alignItems="center"
-				padding={6}
+				borderRadius={2}
+				border={`1px solid ${BLUE_GREY}`}
+				paddingX={6}
+				paddingY={10}
+				justifyContent="center"
+				flex={1}
 			>
-				<Icon name="comapeo-cards" htmlColor={WHITE} size={40} />
-			</Box>
+				<Box
+					borderRadius="100%"
+					bgcolor={LIGHT_COMAPEO_BLUE}
+					display="flex"
+					justifyContent="center"
+					alignItems="center"
+					padding={6}
+				>
+					<Icon name="comapeo-cards" htmlColor={WHITE} size={40} />
+				</Box>
 
-			<Typography variant="h1" textAlign="center" fontWeight={500}>
-				{t(m.addObservationsTitle)}
-			</Typography>
+				<Typography variant="h1" textAlign="center" fontWeight={500}>
+					{t(m.addObservationsTitle)}
+				</Typography>
 
-			<Typography textAlign="center" fontWeight={400}>
-				{t(m.addObservationsDescription)}
-			</Typography>
+				<Typography textAlign="center" fontWeight={400}>
+					{t(m.addObservationsDescription)}
+				</Typography>
 
-			<TextLink
-				underline="none"
-				to="/app/projects/$projectId/exchange"
-				params={{ projectId }}
-			>
-				{t(m.goToExchange)}
-			</TextLink>
-		</Stack>
+				<TextLink
+					underline="none"
+					to="/app/projects/$projectId/exchange"
+					params={{ projectId }}
+				>
+					{t(m.goToExchange)}
+				</TextLink>
+			</Stack>
+		</Box>
 	)
 }
 
@@ -321,5 +656,21 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId.index.goToExchange',
 		defaultMessage: 'Go to Exchange',
 		description: 'Link text to navigate to Exchange page.',
+	},
+	observationCategoryNameFallback: {
+		id: 'routes.app.projects.$projectId.index.observationCategoryNameFallback',
+		defaultMessage: 'Observation',
+		description: 'Fallback name for observation without a matching category.',
+	},
+	trackCategoryNameFallback: {
+		id: 'routes.app.projects.$projectId.index.trackCategoryNameFallback',
+		defaultMessage: 'Track',
+		description: 'Fallback name for track without a matching category.',
+	},
+	categoryIconAlt: {
+		id: 'routes.app.projects.$projectId.index.categoryIconAlt',
+		defaultMessage: 'Icon for {name} category',
+		description:
+			'Alt text for icon image displayed for category (used for accessibility tools).',
 	},
 })
