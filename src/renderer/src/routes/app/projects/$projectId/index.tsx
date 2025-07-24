@@ -1,4 +1,12 @@
-import { Suspense, useMemo, useRef } from 'react'
+import {
+	Suspense,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	type FocusEvent,
+	type MouseEvent,
+} from 'react'
 import {
 	useDocumentCreatedBy,
 	useIconUrl,
@@ -242,7 +250,7 @@ function RouteComponent() {
 function ListedDataSection({ projectId }: { projectId: string }) {
 	const { formatMessage: t, formatDate } = useIntl()
 
-	const { focusedDocId } = Route.useSearch()
+	const { highlightedDocument } = Route.useSearch()
 	const navigate = Route.useNavigate()
 
 	const { data: lang } = useSuspenseQuery({
@@ -290,55 +298,71 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 		})
 	}, [observationsWithPreset, tracksWithPreset])
 
-	function updateFocusedDocId(target: HTMLElement) {
-		const el = target.closest('[data-docid]')
-		const docId = el?.getAttribute('data-docid')
-
-		if (docId && focusedDocId !== docId) {
-			navigate({ search: { focusedDocId: docId } })
-		}
-	}
-
 	const listRef = useRef<HTMLUListElement | null>(null)
 
-	// TODO: Implement scroll-to-view whenever it changes
-	// Implementation below is buggy when scrolling through the list
-	// useEffect(() => {
-	// 	if (focusedDocId && listRef.current) {
-	// 		const item = listRef.current.querySelector(
-	// 			`[data-docid="${focusedDocId}"]`,
-	// 		)
+	const onFocus = useCallback(
+		(event: FocusEvent<HTMLUListElement>) => {
+			const el = event.target.closest('[data-docid]')
 
-	// 		if (item) {
-	// 			item.scrollIntoView()
-	// 		}
-	// 	}
-	// }, [focusedDocId])
+			if (!(el instanceof HTMLElement)) {
+				return
+			}
+
+			const dataType = el.getAttribute('data-datatype')
+			const docId = el.getAttribute('data-docid')
+
+			if (!(dataType && docId)) {
+				return
+			}
+
+			if (!(dataType === 'observation' || dataType === 'track')) {
+				return
+			}
+
+			if (highlightedDocument && docId === highlightedDocument.docId) {
+				return
+			}
+
+			navigate({
+				search: {
+					highlightedDocument: {
+						type: dataType,
+						docId,
+					},
+				},
+			})
+		},
+		[navigate, highlightedDocument],
+	)
+
+	const onMouseMove = useCallback((event: MouseEvent<HTMLUListElement>) => {
+		const el = (event.target as HTMLElement).closest('[data-docid]')
+
+		if (!(el instanceof HTMLElement)) {
+			return
+		}
+
+		// NOTE: We defer to the onFocus callback in order to determine the navigation changes.
+		el.focus()
+	}, [])
 
 	return sortedListData.length > 0 ? (
 		<List
 			component="ul"
 			ref={listRef}
 			disablePadding
-			onFocus={(event) => {
-				updateFocusedDocId(event.target as HTMLElement)
-			}}
-			onMouseMove={(event) => {
-				updateFocusedDocId(event.target as HTMLElement)
-			}}
-			sx={{
-				overflow: 'auto',
-				scrollbarColor: 'initial',
-				position: 'relative',
-			}}
+			onFocus={onFocus}
+			onMouseMove={onMouseMove}
+			sx={{ overflow: 'auto', scrollbarColor: 'initial', position: 'relative' }}
 		>
 			{sortedListData.map(({ type, value, preset }) => (
 				<ListItemButton
 					key={value.docId}
+					data-datatype={type}
 					data-docid={value.docId}
 					disableGutters
 					disableTouchRipple
-					selected={focusedDocId === value.docId}
+					selected={highlightedDocument?.docId === value.docId}
 					onClick={() => {
 						if (type === 'observation') {
 							navigate({

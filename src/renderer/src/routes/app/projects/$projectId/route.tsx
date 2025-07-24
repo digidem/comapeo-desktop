@@ -9,7 +9,18 @@ import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
 import { MapWithData } from './-map-with-data'
 
 const SearchParamsSchema = v.object({
-	focusedDocId: v.optional(v.string()),
+	highlightedDocument: v.optional(
+		v.variant('type', [
+			v.object({
+				type: v.literal('observation'),
+				docId: v.string(),
+			}),
+			v.object({
+				type: v.literal('track'),
+				docId: v.string(),
+			}),
+		]),
+	),
 })
 
 export const Route = createFileRoute('/app/projects/$projectId')({

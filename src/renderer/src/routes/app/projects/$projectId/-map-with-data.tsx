@@ -46,7 +46,9 @@ const BASE_FIT_BOUNDS_OPTIONS: FitBoundsOptions = { padding: 40, maxZoom: 12 }
 export function MapWithData() {
 	const navigate = useNavigate({ from: '/app/projects/$projectId' })
 	const { projectId } = useParams({ from: '/app/projects/$projectId' })
-	const { focusedDocId } = useSearch({ from: '/app/projects/$projectId' })
+	const { highlightedDocument } = useSearch({
+		from: '/app/projects/$projectId',
+	})
 
 	const [mapLoaded, setMapLoaded] = useState(false)
 
@@ -56,18 +58,24 @@ export function MapWithData() {
 		},
 	})
 
-	const docIdFromRouteParams = useChildMatches({
+	const documentFromRouteParams = useChildMatches({
 		select: (matches) => {
 			for (const m of matches) {
 				if (
 					m.routeId ===
 					'/app/projects/$projectId/observations/$observationDocId/'
 				) {
-					return m.params.observationDocId
+					return {
+						type: 'observation' as const,
+						docId: m.params.observationDocId,
+					}
 				}
 
 				if (m.routeId === '/app/projects/$projectId/tracks/$trackDocId/') {
-					return m.params.trackDocId
+					return {
+						type: 'track' as const,
+						docId: m.params.trackDocId,
+					}
 				}
 			}
 
@@ -82,7 +90,7 @@ export function MapWithData() {
 	// 4. An observation or track in the list on the main project page is clicked on.
 	// 5. A specific observation's page is being viewed.
 	// 6. A specific track's page is being viewed.
-	const docIdToHighlight = docIdFromRouteParams || focusedDocId
+	const documentToHighlight = documentFromRouteParams || highlightedDocument
 
 	const mapRef = useRef<MapRef>(null)
 
@@ -118,8 +126,8 @@ export function MapWithData() {
 	}, [tracks])
 
 	const observationLayerPaint = useMemo(() => {
-		return createObservationLayerPaintProperty(presets, !!docIdToHighlight)
-	}, [presets, docIdToHighlight])
+		return createObservationLayerPaintProperty(presets, !!documentToHighlight)
+	}, [presets, documentToHighlight])
 
 	// TODO: Should cover both observations and tracks?
 	const observationsBbox: [number, number, number, number] = useMemo(() => {
@@ -136,8 +144,8 @@ export function MapWithData() {
 			const feature = event.features?.[0]
 
 			if (!feature) {
-				if (docIdToHighlight) {
-					navigate({ search: { focusedDocId: undefined } })
+				if (documentToHighlight) {
+					navigate({ search: { highlightedDocument: undefined } })
 				}
 				return
 			}
@@ -164,7 +172,7 @@ export function MapWithData() {
 				return
 			}
 		},
-		[navigate, docIdToHighlight],
+		[navigate, documentToHighlight],
 	)
 
 	const onMapMouseMove = useCallback(
@@ -180,7 +188,17 @@ export function MapWithData() {
 					feature.layer.id === TRACKS_LAYER_ID) &&
 				typeof feature.properties.id === 'string'
 			) {
-				navigate({ search: { focusedDocId: feature.properties.id } })
+				navigate({
+					search: {
+						highlightedDocument: {
+							type:
+								feature.layer.id === OBSERVATIONS_LAYER_ID
+									? 'observation'
+									: 'track',
+							docId: feature.properties.id,
+						},
+					},
+				})
 				return
 			}
 		},
@@ -191,25 +209,25 @@ export function MapWithData() {
 		currentRoute.routeId === '/app/projects/$projectId/'
 
 	useEffect(() => {
-		if (docIdToHighlight) {
+		if (documentToHighlight) {
 			// Clear the existing feature states first
 			mapRef.current?.removeFeatureState({ source: TRACKS_SOURCE_ID })
 			mapRef.current?.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
 
 			// Highlight the feature with the new value
 			mapRef.current?.setFeatureState(
-				{ source: OBSERVATIONS_SOURCE_ID, id: docIdToHighlight },
+				{ source: OBSERVATIONS_SOURCE_ID, id: documentToHighlight.docId },
 				{ highlight: true },
 			)
 			mapRef.current?.setFeatureState(
-				{ source: TRACKS_SOURCE_ID, id: docIdToHighlight },
+				{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
 				{ highlight: true },
 			)
 		} else {
 			mapRef.current?.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
 			mapRef.current?.removeFeatureState({ source: TRACKS_SOURCE_ID })
 		}
-	}, [docIdToHighlight])
+	}, [documentToHighlight])
 
 	// Accounts for the following situation:
 	//
@@ -228,9 +246,15 @@ export function MapWithData() {
 	}, [observationsBbox])
 
 	useEffect(() => {
-		if (docIdToHighlight) {
+		if (!documentToHighlight) {
+			return
+		}
+
+		const { type, docId } = documentToHighlight
+
+		if (type === 'observation') {
 			const observationMatch = observationsFeatureCollection.features.find(
-				({ properties }) => properties.id === docIdToHighlight,
+				({ properties }) => properties.id === docId,
 			)
 
 			if (observationMatch) {
@@ -242,9 +266,9 @@ export function MapWithData() {
 					{ zoom: 8 },
 				)
 			}
-
+		} else {
 			const tracksMatch = tracksFeatureCollection.features.find(
-				({ properties }) => properties.id === docIdToHighlight,
+				({ properties }) => properties.id === docId,
 			)
 
 			if (tracksMatch) {
@@ -259,7 +283,11 @@ export function MapWithData() {
 				)
 			}
 		}
-	}, [docIdToHighlight, observationsFeatureCollection, tracksFeatureCollection])
+	}, [
+		documentToHighlight,
+		observationsFeatureCollection,
+		tracksFeatureCollection,
+	])
 
 	return (
 		<Box position="relative" display="flex" flex={1}>
