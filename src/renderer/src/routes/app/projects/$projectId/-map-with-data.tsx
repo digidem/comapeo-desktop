@@ -209,25 +209,29 @@ export function MapWithData() {
 		currentRoute.routeId === '/app/projects/$projectId/'
 
 	useEffect(() => {
+		if (!mapRef.current || !mapLoaded) {
+			return
+		}
+
 		if (documentToHighlight) {
 			// Clear the existing feature states first
-			mapRef.current?.removeFeatureState({ source: TRACKS_SOURCE_ID })
-			mapRef.current?.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
+			mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
+			mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
 
 			// Highlight the feature with the new value
-			mapRef.current?.setFeatureState(
+			mapRef.current.setFeatureState(
 				{ source: OBSERVATIONS_SOURCE_ID, id: documentToHighlight.docId },
 				{ highlight: true },
 			)
-			mapRef.current?.setFeatureState(
+			mapRef.current.setFeatureState(
 				{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
 				{ highlight: true },
 			)
 		} else {
-			mapRef.current?.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
-			mapRef.current?.removeFeatureState({ source: TRACKS_SOURCE_ID })
+			mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
+			mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
 		}
-	}, [documentToHighlight])
+	}, [documentToHighlight, mapLoaded])
 
 	// Accounts for the following situation:
 	//
@@ -239,14 +243,18 @@ export function MapWithData() {
 	// The new data comes in afterwards and the bounds are re-calculated, but they do not get applied to the map
 	// as there's no way to reactively update it after initialization.
 	useEffect(() => {
-		mapRef.current?.fitBounds(observationsBbox, {
+		if (!mapLoaded || !mapRef.current) {
+			return
+		}
+
+		mapRef.current.fitBounds(observationsBbox, {
 			...BASE_FIT_BOUNDS_OPTIONS,
 			animate: false,
 		})
-	}, [observationsBbox])
+	}, [observationsBbox, mapLoaded])
 
 	useEffect(() => {
-		if (!documentToHighlight) {
+		if (!mapLoaded || !mapRef.current || !documentToHighlight) {
 			return
 		}
 
@@ -258,7 +266,7 @@ export function MapWithData() {
 			)
 
 			if (observationMatch) {
-				mapRef.current?.panTo(
+				mapRef.current.panTo(
 					{
 						lon: observationMatch.geometry.coordinates[0]!,
 						lat: observationMatch.geometry.coordinates[1]!,
@@ -274,7 +282,7 @@ export function MapWithData() {
 			if (tracksMatch) {
 				const c = center(tracksMatch)
 
-				mapRef.current?.panTo(
+				mapRef.current.panTo(
 					{
 						lon: c.geometry.coordinates[0]!,
 						lat: c.geometry.coordinates[1]!,
@@ -285,6 +293,7 @@ export function MapWithData() {
 		}
 	}, [
 		documentToHighlight,
+		mapLoaded,
 		observationsFeatureCollection,
 		tracksFeatureCollection,
 	])
