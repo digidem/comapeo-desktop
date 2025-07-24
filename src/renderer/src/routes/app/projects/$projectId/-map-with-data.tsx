@@ -13,6 +13,7 @@ import {
 import { bbox } from '@turf/bbox'
 import { featureCollection, lineString, point } from '@turf/helpers'
 import type { Feature, Point } from 'geojson'
+import type { FitBoundsOptions } from 'maplibre-gl'
 import {
 	Layer,
 	Source,
@@ -38,6 +39,8 @@ const INTERACTIVE_LAYER_IDS = [OBSERVATIONS_LAYER_ID, TRACKS_LAYER_ID]
 const DEFAULT_BOUNDING_BOX: [number, number, number, number] = [
 	-180, -90, 180, 90,
 ]
+
+const BASE_FIT_BOUNDS_OPTIONS: FitBoundsOptions = { padding: 40, maxZoom: 12 }
 
 export function MapWithData() {
 	const navigate = useNavigate({ from: '/app/projects/$projectId' })
@@ -208,6 +211,22 @@ export function MapWithData() {
 		}
 	}, [docIdToHighlight])
 
+	// Accounts for the following situation:
+	//
+	// 1. Leave this page
+	// 2. New data is received (e.g. creating test data, exchanging)
+	// 3. Return to this page
+	//
+	// After (3), the stale data is still being used to calculate the map's initial bounds (not really sure why though).
+	// The new data comes in afterwards and the bounds are re-calculated, but they do not get applied to the map
+	// as there's no way to reactively update it after initialization.
+	useEffect(() => {
+		mapRef.current?.fitBounds(observationsBbox, {
+			...BASE_FIT_BOUNDS_OPTIONS,
+			animate: false,
+		})
+	}, [observationsBbox])
+
 	return (
 		<Box position="relative" display="flex" flex={1}>
 			{mapLoaded ? null : (
@@ -231,8 +250,12 @@ export function MapWithData() {
 				ref={mapRef}
 				initialViewState={{
 					bounds: observationsBbox,
-					fitBoundsOptions: { maxZoom: 12, padding: 40 },
+					fitBoundsOptions: BASE_FIT_BOUNDS_OPTIONS,
 				}}
+				// TODO: Consider making this the bounding box of the data?
+				// Needs to be explicitly set to this since we reuse map instances
+				// and this seems to get preserved between different usages of the maps.
+				maxBounds={undefined}
 				interactive={enableMapInteractions}
 				onClick={enableMapInteractions ? onMapClick : undefined}
 				onMouseMove={enableMapInteractions ? onMapMouseMove : undefined}
