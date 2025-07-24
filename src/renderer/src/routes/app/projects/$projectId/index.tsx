@@ -327,8 +327,8 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 				updateFocusedDocId(event.target as HTMLElement)
 			}}
 			sx={{
-				scrollbarColor: 'initial',
 				overflow: 'auto',
+				scrollbarColor: 'initial',
 				position: 'relative',
 			}}
 		>
@@ -352,12 +352,7 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 							})
 						}
 					}}
-					sx={{
-						outline: `1px solid ${LIGHT_GREY}`,
-						position: 'relative',
-						padding: 4,
-						overflow: 'hidden',
-					}}
+					sx={{ outline: `1px solid ${LIGHT_GREY}`, padding: 4 }}
 				>
 					<Suspense>
 						<SyncedIndicatorLine
@@ -402,9 +397,21 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 							</Typography>
 						</Stack>
 
-						<Box display="flex">
+						<Box display="flex" justifyContent="center" alignItems="center">
 							{preset?.iconRef?.docId ? (
-								<Suspense fallback={<CircularProgress />}>
+								<Suspense
+									fallback={
+										<Box
+											display="flex"
+											justifyContent="center"
+											alignItems="center"
+											height={48}
+											width={48}
+										>
+											<CircularProgress disableShrink size={30} />
+										</Box>
+									}
+								>
 									<DisplayedPresetAndAttachments
 										projectId={projectId}
 										presetName={preset.name}
