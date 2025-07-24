@@ -35,6 +35,10 @@ const TRACKS_LAYER_ID = 'tracks_layer' as const
 
 const INTERACTIVE_LAYER_IDS = [OBSERVATIONS_LAYER_ID, TRACKS_LAYER_ID]
 
+const DEFAULT_BOUNDING_BOX: [number, number, number, number] = [
+	-180, -90, 180, 90,
+]
+
 export function MapWithData() {
 	const navigate = useNavigate({ from: '/app/projects/$projectId' })
 	const { projectId } = useParams({ from: '/app/projects/$projectId' })
@@ -116,6 +120,9 @@ export function MapWithData() {
 
 	// TODO: Should cover both observations and tracks?
 	const observationsBbox: [number, number, number, number] = useMemo(() => {
+		if (observationsFeatureCollection.features.length === 0) {
+			return DEFAULT_BOUNDING_BOX
+		}
 		const [minLon, minLat, maxLon, maxLat] = bbox(observationsFeatureCollection)
 
 		return [minLon, minLat, maxLon, maxLat]
