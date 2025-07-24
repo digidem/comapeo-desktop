@@ -57,7 +57,6 @@ export function MapWithData() {
 
 	const docIdFromRouteParams = useChildMatches({
 		select: (matches) => {
-			// TODO: Handle tracks too
 			for (const m of matches) {
 				if (
 					m.routeId ===
