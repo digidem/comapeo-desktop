@@ -90,13 +90,10 @@ function RouteComponent() {
 				minLengthError: minProjectNameLengthError,
 				maxLengthError: maxProjectNameLengthError,
 			}),
-			projectDescription: v.union([
-				createProjectDescriptionSchema({
-					maxBytesError: maxProjectDescriptionLengthError,
-					maxLengthError: maxProjectDescriptionLengthError,
-				}),
-				v.null(),
-			]),
+			projectDescription: createProjectDescriptionSchema({
+				maxBytesError: maxProjectDescriptionLengthError,
+				maxLengthError: maxProjectDescriptionLengthError,
+			}),
 			projectColor: v.union([
 				v.pipe(
 					createProjectColorSchema(),
@@ -116,7 +113,7 @@ function RouteComponent() {
 	const form = useAppForm({
 		defaultValues: {
 			projectName: projectSettings.name,
-			projectDescription: projectSettings.projectDescription || null,
+			projectDescription: projectSettings.projectDescription || '',
 			projectColor: projectSettings.projectColor || null,
 		},
 		validators: {
@@ -132,7 +129,7 @@ function RouteComponent() {
 			await setProjectSettings.mutateAsync({
 				name: projectName,
 				projectDescription:
-					projectDescription === null ? undefined : projectDescription,
+					projectDescription.length > 0 ? projectDescription : undefined,
 				projectColor: projectColor === null ? undefined : projectColor,
 			})
 
