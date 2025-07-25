@@ -10,9 +10,11 @@ import {
 	safeStorage,
 	utilityProcess,
 } from 'electron/main'
+import * as v from 'valibot'
 
 import { Intl } from './intl.js'
-import { APP_IPC_EVENT_TO_PARAMS_PARSER, setUpMainIPC } from './ipc.js'
+import { setUpMainIPC } from './ipc.js'
+import { FilesSelectParamsSchema } from './validation.js'
 
 const log = debug('comapeo:main:app')
 
@@ -201,17 +203,12 @@ function initMainWindow({ appMode, services }) {
 
 	// Set up IPC specific to the main window
 	mainWindow.webContents.ipc.handle('files:select', async (_event, params) => {
-		const parsedParams = APP_IPC_EVENT_TO_PARAMS_PARSER['files:select'](params)
+		v.assert(FilesSelectParamsSchema, params)
 
 		const result = await dialog.showOpenDialog(mainWindow, {
 			properties: ['openFile'],
-			filters: parsedParams?.extensionFilters
-				? [
-						{
-							name: 'Custom file type',
-							extensions: parsedParams.extensionFilters,
-						},
-					]
+			filters: params?.extensionFilters
+				? [{ name: 'Custom file type', extensions: params.extensionFilters }]
 				: undefined,
 		})
 
@@ -219,10 +216,7 @@ function initMainWindow({ appMode, services }) {
 
 		if (!selectedFilePath) return undefined
 
-		return {
-			name: basename(selectedFilePath),
-			path: selectedFilePath,
-		}
+		return { name: basename(selectedFilePath), path: selectedFilePath }
 	})
 
 	APP_STATE.browserWindows.set(mainWindow, {
@@ -287,7 +281,5 @@ function setupServices({ appEnv, rootKey }) {
 		{ serviceName: `CoMapeo Core Service` },
 	)
 
-	return {
-		core: coreService,
-	}
+	return { core: coreService }
 }

@@ -1,20 +1,15 @@
 import Store from 'electron-store'
 
-/**
- * @import {ConfigSchema} from './types/config-store.js'
- */
-
 /** @typedef {ReturnType<typeof createConfigStore>} ConfigStore */
 
 export function createConfigStore() {
 	const store = /**
-	 * @type {Store<ConfigSchema>}
+	 * @type {Store<import('./types/config-store.js').ConfigSchema>}
 	 */ (
 		new Store({
 			schema: {
 				activeProjectId: {
-					type: ['string', 'null'],
-					default: null,
+					type: ['string'],
 				},
 				coordinateFormat: {
 					type: ['string'],
@@ -62,8 +57,7 @@ export function createConfigStore() {
 					},
 				},
 				rootKey: {
-					type: ['string', 'null'],
-					default: null,
+					type: ['string'],
 				},
 			},
 		})

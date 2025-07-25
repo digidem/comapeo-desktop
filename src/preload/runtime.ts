@@ -22,7 +22,7 @@ export type RuntimeApi = {
 	openExternalURL: (url: string) => Promise<void>
 
 	// Settings (get)
-	getActiveProjectId: () => Promise<string | null>
+	getActiveProjectId: () => Promise<string | undefined>
 	getCoordinateFormat: () => Promise<PersistedCoordinateFormat>
 	getDiagnosticsEnabled: () => Promise<boolean>
 	getLocaleState: () => Promise<LocaleState>
