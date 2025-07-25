@@ -2,28 +2,15 @@ import { shell } from 'electron'
 import { ipcMain } from 'electron/main'
 import * as v from 'valibot'
 
+import {
+	PersistedCoordinateFormatSchema,
+	PersistedLocaleSchema,
+} from './validation.js'
+
 /**
  * @import {ConfigStore} from './config-store.js'
  * @import {Intl} from './intl.js'
  */
-
-const FilesSelectParamsSchema = v.union([
-	v.object({ extensionFilters: v.optional(v.array(v.string())) }),
-	v.undefined(),
-])
-
-export const APP_IPC_EVENT_TO_PARAMS_PARSER = /** @type {const} */ ({
-	/**
-	 * @param {unknown} value
-	 *
-	 * @returns {import('valibot').InferOutput<typeof FilesSelectParamsSchema>}
-	 */
-	'files:select': (value) => {
-		return v.parse(FilesSelectParamsSchema, value)
-	},
-})
-
-/** @typedef {keyof typeof APP_IPC_EVENT_TO_PARAMS_PARSER} AppIPCEvents */
 
 /**
  * @param {Object} opts
@@ -56,15 +43,19 @@ export function setUpMainIPC({ configStore, intl }) {
 
 	// Settings (set)
 	ipcMain.handle('settings:set:activeProjectId', (_event, value) => {
-		v.assert(v.string(), value)
-		return configStore.set('activeProjectId', value)
+		v.assert(v.union([v.string(), v.null()]), value)
+
+		// We cannot use configStore.set() with `undefined` to "unset" a value in the store
+		// since it is not JSON-serializable. Must use configStore.delete() instead.
+		if (value === null) {
+			return configStore.delete('activeProjectId')
+		} else {
+			return configStore.set('activeProjectId', value)
+		}
 	})
 
 	ipcMain.handle('settings:set:coordinateFormat', (_event, value) => {
-		v.assert(
-			v.union([v.literal('dd'), v.literal('dms'), v.literal('utm')]),
-			value,
-		)
+		v.assert(PersistedCoordinateFormatSchema, value)
 		return configStore.set('coordinateFormat', value)
 	})
 
@@ -74,6 +65,7 @@ export function setUpMainIPC({ configStore, intl }) {
 	})
 
 	ipcMain.handle('settings:set:locale', (_event, value) => {
+		v.assert(PersistedLocaleSchema, value)
 		return intl.updateLocale(value)
 	})
 }

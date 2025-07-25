@@ -1,18 +1,7 @@
 import isDev from 'electron-is-dev'
 import * as v from 'valibot'
 
-const AppEnvSchema = v.object({
-	asar: v.optional(
-		v.pipe(
-			v.union([v.literal('true'), v.literal('false')]),
-			v.transform((value) => {
-				return value === 'true'
-			}),
-		),
-	),
-	onlineStyleUrl: v.pipe(v.string(), v.url()),
-	userDataPath: v.optional(v.string()),
-})
+import { AppEnvSchema } from './validation.js'
 
 /**
  * @typedef {v.InferOutput<typeof AppEnvSchema>} AppEnv

@@ -13,7 +13,9 @@ export function getActiveProjectIdQueryOptions() {
 	return queryOptions({
 		queryKey: [BASE_QUERY_KEY, 'activeProjectId'],
 		queryFn: async () => {
-			return window.runtime.getActiveProjectId()
+			// Query functions cannot return undefined so we return null in this case
+			const result = await window.runtime.getActiveProjectId()
+			return result === undefined ? null : result
 		},
 	})
 }
