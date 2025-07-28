@@ -1,5 +1,5 @@
 import type { MemberInfo } from '@comapeo/core/dist/member-api'
-import type { Observation, Preset } from '@comapeo/schema'
+import type { Observation, Preset, Track } from '@comapeo/schema'
 
 // https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/shared.ts#L6C1-L6C52
 export const COMAPEO_CORE_REACT_ROOT_QUERY_KEY = '@comapeo/core-react' as const
@@ -20,8 +20,8 @@ export const NO_ROLE_ID = '08e4251e36f6e7ed'
  * convention. This approach allows for tags to be edited and changed in a
  * preset while still maintaining backwards compatibility when necessary.
  */
-export function getCategoryBasedOnObservationTags(
-	observationTags: Observation['tags'],
+function getCategoryUsingTags(
+	tags: Observation['tags'] | Track['tags'],
 	presets: Array<Preset>,
 ): Preset | undefined {
 	let bestMatch: Preset | undefined
@@ -35,7 +35,7 @@ export function getCategoryBasedOnObservationTags(
 			// eslint-disable-next-line no-prototype-builtins
 			if (preset.tags.hasOwnProperty(key)) {
 				const presetTag = preset.tags[key]
-				const availableTag = observationTags[key]
+				const availableTag = tags[key]
 				if (presetTag === availableTag) {
 					score++
 				} else if (
@@ -58,6 +58,19 @@ export function getCategoryBasedOnObservationTags(
 	})
 
 	return bestMatch
+}
+
+export function getMatchingCategoryForDocument(
+	document: Observation | Track,
+	categories: Array<Preset>,
+) {
+	let result = getCategoryUsingTags(document.tags, categories)
+
+	if (!result && document.presetRef?.docId) {
+		result = categories.find((c) => c.docId === document.presetRef?.docId)
+	}
+
+	return result
 }
 
 export type ActiveRemoteArchiveMemberInfo = MemberInfo & {
