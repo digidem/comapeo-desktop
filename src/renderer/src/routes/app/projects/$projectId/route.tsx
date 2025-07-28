@@ -60,7 +60,7 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',
 					projectId,
-					'observations',
+					'observation',
 					{ lang },
 				],
 				queryFn: async () => {
@@ -73,7 +73,7 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',
 					projectId,
-					'tracks',
+					'track',
 					{ lang },
 				],
 				queryFn: async () => {
@@ -86,7 +86,7 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',
 					projectId,
-					'presets',
+					'preset',
 					{ lang },
 				],
 				queryFn: async () => {

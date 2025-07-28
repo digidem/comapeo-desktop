@@ -37,10 +37,7 @@ import {
 } from '../../../../../colors'
 import { Icon } from '../../../../../components/icon'
 import { TextLink } from '../../../../../components/link'
-import {
-	getMatchingCategoryForObservation,
-	getMatchingCategoryForTrack,
-} from '../../../../../lib/comapeo'
+import { getCategoryBasedOnObservationTags } from '../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
 
 const APPROXIMATE_ITEM_HEIGHT_PX = 100
@@ -77,18 +74,32 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 	})
 
 	const observationsWithCategory = useMemo(() => {
-		return observations.map((o) => ({
-			type: 'observation' as const,
-			document: o,
-			category: getMatchingCategoryForObservation(o.tags, categories),
-		}))
+		return observations.map((o) => {
+			let category: Preset | undefined = undefined
+
+			if (o.presetRef?.docId) {
+				category = categories.find((c) => c.docId === o.presetRef?.docId)
+			}
+
+			if (!category) {
+				category = getCategoryBasedOnObservationTags(o.tags, categories)
+			}
+
+			return {
+				type: 'observation' as const,
+				document: o,
+				category,
+			}
+		})
 	}, [observations, categories])
 
 	const tracksWithCategory = useMemo(() => {
 		return tracks.map((t) => ({
 			type: 'track' as const,
 			document: t,
-			category: getMatchingCategoryForTrack(t, categories),
+			category: t.presetRef?.docId
+				? categories.find((c) => c.docId === t.presetRef?.docId)
+				: undefined,
 		}))
 	}, [tracks, categories])
 
