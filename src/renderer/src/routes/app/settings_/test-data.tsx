@@ -579,7 +579,7 @@ function useCreateTestObservations({ projectId }: { projectId: string }) {
 
 				const randomPreset = presets.at(
 					Math.floor(Math.random() * presets.length),
-				)
+				)!
 
 				const now = new Date().toISOString()
 
@@ -590,6 +590,10 @@ function useCreateTestObservations({ projectId }: { projectId: string }) {
 						value: {
 							lon: longitude,
 							lat: latitude,
+							presetRef: {
+								docId: randomPreset.docId,
+								versionId: randomPreset.versionId,
+							},
 							metadata: {
 								manualLocation: false,
 								position: {
@@ -598,7 +602,8 @@ function useCreateTestObservations({ projectId }: { projectId: string }) {
 									coords: { latitude, longitude },
 								},
 							},
-							tags: { ...randomPreset!.tags, notes },
+							tags: { ...randomPreset.tags, notes },
+
 							attachments: [],
 						},
 					}),
