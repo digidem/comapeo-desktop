@@ -26,6 +26,7 @@ import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import { defineMessages, useIntl } from 'react-intl'
 
 import {
@@ -50,22 +51,10 @@ import { getLocaleStateQueryOptions } from '../../../../lib/queries/app-settings
 
 export const Route = createFileRoute('/app/projects/$projectId/')({
 	loader: async ({ context, params }) => {
-		const {
-			clientApi,
-			projectApi,
-			queryClient,
-			localeState: { value: lang },
-		} = context
+		const { projectApi, queryClient } = context
 		const { projectId } = params
 
 		await Promise.all([
-			// TODO: Not ideal but requires changes in @comapeo/core-react
-			queryClient.ensureQueryData({
-				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
-				queryFn: async () => {
-					return clientApi.getDeviceInfo()
-				},
-			}),
 			// TODO: Not ideal but requires changes in @comapeo/core-react
 			queryClient.ensureQueryData({
 				queryKey: [
@@ -88,45 +77,6 @@ export const Route = createFileRoute('/app/projects/$projectId/')({
 				],
 				queryFn: async () => {
 					return projectApi.$getOwnRole()
-				},
-			}),
-			// TODO: Not ideal but requires changes in @comapeo/core-react
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'observations',
-					{ lang },
-				],
-				queryFn: async () => {
-					return projectApi.observation.getMany({ lang })
-				},
-			}),
-			// TODO: Not ideal but requires changes in @comapeo/core-react
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'tracks',
-					{ lang },
-				],
-				queryFn: async () => {
-					return projectApi.track.getMany({ lang })
-				},
-			}),
-			// TODO: Not ideal but requires changes in @comapeo/core-react
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'presets',
-					{ lang },
-				],
-				queryFn: async () => {
-					return projectApi.preset.getMany({ lang })
 				},
 			}),
 		])
@@ -347,7 +297,37 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 		el.focus()
 	}, [])
 
+	const getItemKey = useCallback(
+		(index: number) => {
+			const item = sortedListData[index]
+
+			// Shouldn't happen but fail loudly if it does
+			if (!item) {
+				throw new Error(`Could not get item from listed data at index ${index}`)
+			}
+
+			return item.value.docId
+		},
+		[sortedListData],
+	)
+
+	const rowVirtualizer = useVirtualizer({
+		count: sortedListData.length,
+		getScrollElement: () => listRef.current,
+		estimateSize: () => 100,
+		getItemKey,
+		overscan: 10,
+	})
+
 	const isMouseOverListRef = useRef(false)
+
+	const itemIndexToScrollTo = highlightedDocument?.docId
+		? sortedListData.findIndex(
+				({ value }) => value.docId === highlightedDocument.docId,
+			)
+		: undefined
+
+	const { scrollToIndex } = rowVirtualizer
 
 	useEffect(() => {
 		// Prevents issues with manually scrolling on the list due to the behavior
@@ -356,16 +336,12 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 			return
 		}
 
-		if (highlightedDocument && listRef.current) {
-			const item = listRef.current.querySelector(
-				`[data-docid="${highlightedDocument.docId}"]`,
-			)
-
-			if (item) {
-				item.scrollIntoView({ block: 'center' })
-			}
+		if (itemIndexToScrollTo) {
+			scrollToIndex(itemIndexToScrollTo, {
+				align: 'center',
+			})
 		}
-	}, [highlightedDocument])
+	}, [itemIndexToScrollTo, scrollToIndex])
 
 	return sortedListData.length > 0 ? (
 		<List
@@ -380,105 +356,137 @@ function ListedDataSection({ projectId }: { projectId: string }) {
 			onMouseLeave={() => {
 				isMouseOverListRef.current = false
 			}}
-			sx={{ overflow: 'auto', scrollbarColor: 'initial', position: 'relative' }}
+			sx={{ overflow: 'auto', scrollbarColor: 'initial' }}
 		>
-			{sortedListData.map(({ type, value, category }) => (
-				<ListItemButton
-					key={value.docId}
-					data-datatype={type}
-					data-docid={value.docId}
-					disableGutters
-					disableTouchRipple
-					selected={highlightedDocument?.docId === value.docId}
-					onClick={() => {
-						if (type === 'observation') {
-							navigate({
-								to: './observations/$observationDocId',
-								params: { observationDocId: value.docId },
-							})
-						} else {
-							navigate({
-								to: './tracks/$trackDocId',
-								params: { trackDocId: value.docId },
-							})
-						}
-					}}
-					sx={{ borderBottom: `1px solid ${LIGHT_GREY}`, padding: 4 }}
-				>
-					<Suspense>
-						<SyncedIndicatorLine
-							projectId={projectId}
-							originalVersionId={value.originalVersionId}
-						/>
-					</Suspense>
-					<Stack direction="row" flex={1} useFlexGap gap={2} overflow="auto">
-						<Stack
-							direction="column"
-							flex={1}
-							justifyContent="center"
-							overflow="hidden"
+			<Box
+				position="relative"
+				height={`${rowVirtualizer.getTotalSize()}px`}
+				width="100%"
+			>
+				{rowVirtualizer.getVirtualItems().map((row) => {
+					const { type, category, value } = sortedListData[row.index]!
+
+					return (
+						<Box
+							key={row.key}
+							sx={{
+								position: 'absolute',
+								top: 0,
+								left: 0,
+								width: '100%',
+								height: `${row.size}px`,
+								transform: `translateY(${row.start}px)`,
+							}}
 						>
-							<Typography
-								fontWeight={500}
-								textOverflow="ellipsis"
-								whiteSpace="nowrap"
-								overflow="hidden"
-							>
-								{category?.name ||
-									t(
-										type === 'observation'
-											? m.observationCategoryNameFallback
-											: m.trackCategoryNameFallback,
-									)}
-							</Typography>
-
-							<Typography
-								textOverflow="ellipsis"
-								whiteSpace="nowrap"
-								overflow="hidden"
-							>
-								{formatDate(value.createdAt, {
-									year: 'numeric',
-									month: 'short',
-									day: '2-digit',
-									minute: '2-digit',
-									hour: '2-digit',
-									hourCycle: 'h12',
-								})}
-							</Typography>
-						</Stack>
-
-						<Box display="flex" justifyContent="center" alignItems="center">
-							{category?.iconRef?.docId ? (
-								<Suspense
-									fallback={
-										<Box
-											display="flex"
-											justifyContent="center"
-											alignItems="center"
-											height={48}
-											width={48}
-										>
-											<CircularProgress disableShrink size={30} />
-										</Box>
+							<ListItemButton
+								key={value.docId}
+								data-datatype={type}
+								data-docid={value.docId}
+								disableGutters
+								disableTouchRipple
+								selected={highlightedDocument?.docId === value.docId}
+								onClick={() => {
+									if (type === 'observation') {
+										navigate({
+											to: './observations/$observationDocId',
+											params: { observationDocId: value.docId },
+										})
+									} else {
+										navigate({
+											to: './tracks/$trackDocId',
+											params: { trackDocId: value.docId },
+										})
 									}
-								>
-									<DisplayedCategoryAndAttachments
+								}}
+								sx={{ borderBottom: `1px solid ${LIGHT_GREY}`, padding: 4 }}
+							>
+								<Suspense>
+									<SyncedIndicatorLine
 										projectId={projectId}
-										categoryName={category.name}
-										borderColor={category.color || BLUE_GREY}
-										iconDocumentId={category.iconRef.docId}
+										originalVersionId={value.originalVersionId}
 									/>
 								</Suspense>
-							) : (
-								<CategoryIconContainer borderColor={BLUE_GREY}>
-									<Icon name="material-place" size={40} />
-								</CategoryIconContainer>
-							)}
+								<Stack
+									direction="row"
+									flex={1}
+									useFlexGap
+									gap={2}
+									overflow="auto"
+								>
+									<Stack
+										direction="column"
+										flex={1}
+										justifyContent="center"
+										overflow="hidden"
+									>
+										<Typography
+											fontWeight={500}
+											textOverflow="ellipsis"
+											whiteSpace="nowrap"
+											overflow="hidden"
+										>
+											{category?.name ||
+												t(
+													type === 'observation'
+														? m.observationCategoryNameFallback
+														: m.trackCategoryNameFallback,
+												)}
+										</Typography>
+
+										<Typography
+											textOverflow="ellipsis"
+											whiteSpace="nowrap"
+											overflow="hidden"
+										>
+											{formatDate(value.createdAt, {
+												year: 'numeric',
+												month: 'short',
+												day: '2-digit',
+												minute: '2-digit',
+												hour: '2-digit',
+												hourCycle: 'h12',
+											})}
+										</Typography>
+									</Stack>
+
+									<Box
+										display="flex"
+										justifyContent="center"
+										alignItems="center"
+									>
+										{category?.iconRef?.docId ? (
+											<Suspense
+												fallback={
+													<Box
+														display="flex"
+														justifyContent="center"
+														alignItems="center"
+														height={48}
+														width={48}
+													>
+														<CircularProgress disableShrink size={30} />
+													</Box>
+												}
+											>
+												<DisplayedCategoryAndAttachments
+													projectId={projectId}
+													categoryName={category.name}
+													borderColor={category.color || BLUE_GREY}
+													iconDocumentId={category.iconRef.docId}
+												/>
+											</Suspense>
+										) : (
+											<CategoryIconContainer borderColor={BLUE_GREY}>
+												<Icon name="material-place" size={40} />
+											</CategoryIconContainer>
+										)}
+									</Box>
+								</Stack>
+							</ListItemButton>
 						</Box>
-					</Stack>
-				</ListItemButton>
-			))}
+					)
+				})}
+			</Box>
 		</List>
 	) : (
 		<AddObservationsCard projectId={projectId} />
