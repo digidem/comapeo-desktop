@@ -362,6 +362,7 @@ export function DisplayedDataMap() {
 				onLoad={() => {
 					setMapLoaded(true)
 				}}
+				cursor={enableMapInteractions ? undefined : 'default'}
 			>
 				<Source
 					type="geojson"
