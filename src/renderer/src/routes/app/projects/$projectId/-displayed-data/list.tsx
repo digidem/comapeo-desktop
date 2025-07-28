@@ -26,6 +26,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { defineMessages, useIntl } from 'react-intl'
+import scrollIntoView from 'scroll-into-view-if-needed'
 
 import {
 	BLUE_GREY,
@@ -143,7 +144,7 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 
 	const listRef = useRef<HTMLUListElement | null>(null)
 	const rowVirtualizer = useVirtual(listRef, sortedListData)
-	const { scrollToIndex } = rowVirtualizer
+	const { scrollToIndex, scrollElement } = rowVirtualizer
 
 	const isMouseOverListRef = useRef(false)
 
@@ -164,20 +165,31 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 				return
 			}
 
-			const itemIndexToScrollTo = highlightedDocument?.docId
-				? sortedListData.findIndex(
-						({ document }) => document.docId === highlightedDocument.docId,
+			if (highlightedDocument?.docId) {
+				if (scrollElement) {
+					const itemNode = scrollElement.querySelector(
+						`[data-docid="${highlightedDocument.docId}"]`,
 					)
-				: undefined
+					if (itemNode) {
+						// We don't want the list to change scroll position if it's not needed (i.e the item is already visible in the list).
+						// Reduces the amount of visual abruptness.
+						scrollIntoView(itemNode, { scrollMode: 'if-needed' })
+						return
+					}
+				}
 
-			if (itemIndexToScrollTo) {
-				// NOTE: It'd be nice if https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded were standardized...
-				scrollToIndex(itemIndexToScrollTo, {
-					align: 'center',
-				})
+				const itemIndexToScrollTo = highlightedDocument?.docId
+					? sortedListData.findIndex(
+							({ document }) => document.docId === highlightedDocument.docId,
+						)
+					: undefined
+
+				if (itemIndexToScrollTo) {
+					scrollToIndex(itemIndexToScrollTo)
+				}
 			}
 		},
-		[highlightedDocument?.docId, scrollToIndex, sortedListData],
+		[highlightedDocument?.docId, scrollToIndex, sortedListData, scrollElement],
 	)
 
 	return sortedListData.length > 0 ? (
