@@ -1,5 +1,5 @@
 import type { MemberInfo } from '@comapeo/core/dist/member-api'
-import type { Observation, Preset, Track } from '@comapeo/schema'
+import type { Observation, Preset } from '@comapeo/schema'
 
 // https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/shared.ts#L6C1-L6C52
 export const COMAPEO_CORE_REACT_ROOT_QUERY_KEY = '@comapeo/core-react' as const
@@ -20,7 +20,7 @@ export const NO_ROLE_ID = '08e4251e36f6e7ed'
  * convention. This approach allows for tags to be edited and changed in a
  * preset while still maintaining backwards compatibility when necessary.
  */
-export function getMatchingCategoryForObservation(
+export function getCategoryBasedOnObservationTags(
 	observationTags: Observation['tags'],
 	presets: Array<Preset>,
 ): Preset | undefined {
@@ -58,19 +58,6 @@ export function getMatchingCategoryForObservation(
 	})
 
 	return bestMatch
-}
-
-export function getMatchingCategoryForTrack(
-	track: Track,
-	presets: Array<Preset>,
-): Preset | undefined {
-	if (!track.presetRef) {
-		return undefined
-	}
-
-	const { docId } = track.presetRef
-
-	return presets.find((p) => p.docId === docId)
 }
 
 export type ActiveRemoteArchiveMemberInfo = MemberInfo & {

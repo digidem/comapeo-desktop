@@ -26,7 +26,7 @@ import * as v from 'valibot'
 
 import { BLACK, ORANGE, WHITE } from '../../../../../colors'
 import { Map } from '../../../../../components/map'
-import { getMatchingCategoryForObservation } from '../../../../../lib/comapeo'
+import { getCategoryBasedOnObservationTags } from '../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
 
 const OBSERVATIONS_SOURCE_ID = 'observations_source'
@@ -402,7 +402,15 @@ function observationsToFeatureCollection(
 
 	for (const obs of observations) {
 		if (typeof obs.lon === 'number' && typeof obs.lat === 'number') {
-			const category = getMatchingCategoryForObservation(obs.tags, categories)
+			let category: Preset | undefined = undefined
+
+			if (obs.presetRef?.docId) {
+				category = categories.find((c) => c.docId === obs.presetRef?.docId)
+			}
+
+			if (!category) {
+				category = getCategoryBasedOnObservationTags(obs.tags, categories)
+			}
 
 			displayablePoints.push(
 				point([obs.lon, obs.lat], {
