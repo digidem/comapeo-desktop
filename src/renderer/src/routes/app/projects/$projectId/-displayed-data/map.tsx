@@ -24,10 +24,10 @@ import {
 } from 'react-map-gl/maplibre'
 import * as v from 'valibot'
 
-import { BLACK, ORANGE, WHITE } from '../../../../colors'
-import { Map } from '../../../../components/map'
-import { getMatchingCategoryForObservation } from '../../../../lib/comapeo'
-import { getLocaleStateQueryOptions } from '../../../../lib/queries/app-settings'
+import { BLACK, ORANGE, WHITE } from '../../../../../colors'
+import { Map } from '../../../../../components/map'
+import { getMatchingCategoryForObservation } from '../../../../../lib/comapeo'
+import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
 
 const OBSERVATIONS_SOURCE_ID = 'observations_source'
 const TRACKS_SOURCE_ID = 'tracks_source' as const
@@ -43,7 +43,7 @@ const DEFAULT_BOUNDING_BOX: [number, number, number, number] = [
 
 const BASE_FIT_BOUNDS_OPTIONS: FitBoundsOptions = { padding: 40, maxZoom: 12 }
 
-export function MapWithData() {
+export function DisplayedDataMap() {
 	const navigate = useNavigate({ from: '/app/projects/$projectId' })
 	const { projectId } = useParams({ from: '/app/projects/$projectId' })
 	const { highlightedDocument } = useSearch({
@@ -208,100 +208,123 @@ export function MapWithData() {
 		[navigate],
 	)
 
+	useEffect(
+		/**
+		 * Updates the map such that the map adjusts how features are displayed
+		 * based on whether there is a document to highlight or not.
+		 */
+		function updateMapFeatureHighlighting() {
+			if (!mapRef.current || !mapLoaded) {
+				return
+			}
+
+			if (documentToHighlight) {
+				// Clear the existing feature states first
+				mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
+				mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
+
+				// Highlight the feature with the new value
+				mapRef.current.setFeatureState(
+					{ source: OBSERVATIONS_SOURCE_ID, id: documentToHighlight.docId },
+					{ highlight: true },
+				)
+				mapRef.current.setFeatureState(
+					{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
+					{ highlight: true },
+				)
+			} else {
+				mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
+				mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
+			}
+		},
+		[documentToHighlight, mapLoaded],
+	)
+
+	useEffect(
+		/**
+		 * Accounts for the following situation:
+		 *
+		 * 1. Leave this page
+		 * 2. New data is received (e.g. creating test data, exchanging)
+		 * 3. Return to this page
+		 *
+		 * After (3), the stale data is still being used to calculate the map's
+		 * initial bounds (not really sure why though). The new data comes in
+		 * afterwards and the bounds are re-calculated, but they do not get applied
+		 * to the map as there's no way to reactively update it after
+		 * initialization.
+		 */
+		function setMapBoundsBasedOnDataBbox() {
+			if (!mapLoaded || !mapRef.current) {
+				return
+			}
+
+			mapRef.current.fitBounds(observationsBbox, {
+				...BASE_FIT_BOUNDS_OPTIONS,
+				animate: false,
+			})
+		},
+		[observationsBbox, mapLoaded],
+	)
+
+	useEffect(
+		/**
+		 * Whenever the highlighted document changes (either due to a list or map
+		 * interaction), pan the map such that the corresponding feature is
+		 * centered. Also zooms closer to the feature if necessary (it will never
+		 * zoom out).
+		 */
+		function panToMapFeature() {
+			if (!mapLoaded || !mapRef.current || !documentToHighlight) {
+				return
+			}
+
+			const { type, docId } = documentToHighlight
+
+			const panOptions = mapRef.current.getZoom() < 8 ? { zoom: 8 } : undefined
+
+			if (type === 'observation') {
+				const observationMatch = observationsFeatureCollection.features.find(
+					({ properties }) => properties.id === docId,
+				)
+
+				if (observationMatch) {
+					mapRef.current.panTo(
+						{
+							lon: observationMatch.geometry.coordinates[0]!,
+							lat: observationMatch.geometry.coordinates[1]!,
+						},
+						panOptions,
+					)
+				}
+			} else {
+				const tracksMatch = tracksFeatureCollection.features.find(
+					({ properties }) => properties.id === docId,
+				)
+
+				if (tracksMatch) {
+					const c = center(tracksMatch)
+
+					mapRef.current.panTo(
+						{
+							lon: c.geometry.coordinates[0]!,
+							lat: c.geometry.coordinates[1]!,
+						},
+						panOptions,
+					)
+				}
+			}
+		},
+		[
+			documentToHighlight,
+			mapLoaded,
+			observationsFeatureCollection,
+			tracksFeatureCollection,
+		],
+	)
+
 	const enableMapInteractions =
 		currentRoute.routeId === '/app/projects/$projectId/'
-
-	useEffect(() => {
-		if (!mapRef.current || !mapLoaded) {
-			return
-		}
-
-		if (documentToHighlight) {
-			// Clear the existing feature states first
-			mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
-			mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
-
-			// Highlight the feature with the new value
-			mapRef.current.setFeatureState(
-				{ source: OBSERVATIONS_SOURCE_ID, id: documentToHighlight.docId },
-				{ highlight: true },
-			)
-			mapRef.current.setFeatureState(
-				{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
-				{ highlight: true },
-			)
-		} else {
-			mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
-			mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
-		}
-	}, [documentToHighlight, mapLoaded])
-
-	// Accounts for the following situation:
-	//
-	// 1. Leave this page
-	// 2. New data is received (e.g. creating test data, exchanging)
-	// 3. Return to this page
-	//
-	// After (3), the stale data is still being used to calculate the map's initial bounds (not really sure why though).
-	// The new data comes in afterwards and the bounds are re-calculated, but they do not get applied to the map
-	// as there's no way to reactively update it after initialization.
-	useEffect(() => {
-		if (!mapLoaded || !mapRef.current) {
-			return
-		}
-
-		mapRef.current.fitBounds(observationsBbox, {
-			...BASE_FIT_BOUNDS_OPTIONS,
-			animate: false,
-		})
-	}, [observationsBbox, mapLoaded])
-
-	useEffect(() => {
-		if (!mapLoaded || !mapRef.current || !documentToHighlight) {
-			return
-		}
-
-		const { type, docId } = documentToHighlight
-
-		const panOptions = mapRef.current.getZoom() < 8 ? { zoom: 8 } : undefined
-
-		if (type === 'observation') {
-			const observationMatch = observationsFeatureCollection.features.find(
-				({ properties }) => properties.id === docId,
-			)
-
-			if (observationMatch) {
-				mapRef.current.panTo(
-					{
-						lon: observationMatch.geometry.coordinates[0]!,
-						lat: observationMatch.geometry.coordinates[1]!,
-					},
-					panOptions,
-				)
-			}
-		} else {
-			const tracksMatch = tracksFeatureCollection.features.find(
-				({ properties }) => properties.id === docId,
-			)
-
-			if (tracksMatch) {
-				const c = center(tracksMatch)
-
-				mapRef.current.panTo(
-					{
-						lon: c.geometry.coordinates[0]!,
-						lat: c.geometry.coordinates[1]!,
-					},
-					panOptions,
-				)
-			}
-		}
-	}, [
-		documentToHighlight,
-		mapLoaded,
-		observationsFeatureCollection,
-		tracksFeatureCollection,
-	])
 
 	return (
 		<Box position="relative" display="flex" flex={1}>
@@ -360,7 +383,9 @@ export function MapWithData() {
 					data={tracksFeatureCollection}
 					// Need this in order for the feature-state querying to work when hovering
 					promoteId="id"
-				></Source>
+				>
+					{/* TODO: Implement tracks layer */}
+				</Source>
 			</Map>
 		</Box>
 	)
