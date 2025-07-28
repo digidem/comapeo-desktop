@@ -281,7 +281,7 @@ export function DisplayedDataMap() {
 
 			const { type, docId } = documentToHighlight
 
-			const panOptions = mapRef.current.getZoom() < 8 ? { zoom: 8 } : undefined
+			const shouldZoomIn = mapRef.current.getZoom() < 10
 
 			if (type === 'observation') {
 				const observationMatch = observationsFeatureCollection.features.find(
@@ -294,7 +294,7 @@ export function DisplayedDataMap() {
 							lon: observationMatch.geometry.coordinates[0]!,
 							lat: observationMatch.geometry.coordinates[1]!,
 						},
-						panOptions,
+						shouldZoomIn ? { zoom: 10 } : undefined,
 					)
 				}
 			} else {
@@ -310,7 +310,7 @@ export function DisplayedDataMap() {
 							lon: c.geometry.coordinates[0]!,
 							lat: c.geometry.coordinates[1]!,
 						},
-						panOptions,
+						shouldZoomIn ? { zoom: 10 } : undefined,
 					)
 				}
 			}
