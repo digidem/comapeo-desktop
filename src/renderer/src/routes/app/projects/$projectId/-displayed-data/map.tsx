@@ -155,22 +155,22 @@ export function DisplayedDataMap() {
 
 			if (
 				feature.layer.id === OBSERVATIONS_LAYER_ID &&
-				typeof feature.properties.id === 'string'
+				typeof feature.properties.docId === 'string'
 			) {
 				navigate({
 					to: './observations/$observationDocId',
-					params: { observationDocId: feature.properties.id },
+					params: { observationDocId: feature.properties.docId },
 				})
 				return
 			}
 
 			if (
 				feature.layer.id === TRACKS_LAYER_ID &&
-				typeof feature.properties.id === 'string'
+				typeof feature.properties.docId === 'string'
 			) {
 				navigate({
 					to: './tracks/$trackDocId',
-					params: { trackDocId: feature.properties.id },
+					params: { trackDocId: feature.properties.docId },
 				})
 				return
 			}
@@ -189,7 +189,7 @@ export function DisplayedDataMap() {
 			if (
 				(feature.layer.id === OBSERVATIONS_LAYER_ID ||
 					feature.layer.id === TRACKS_LAYER_ID) &&
-				typeof feature.properties.id === 'string'
+				typeof feature.properties.docId === 'string'
 			) {
 				navigate({
 					search: {
@@ -198,7 +198,7 @@ export function DisplayedDataMap() {
 								feature.layer.id === OBSERVATIONS_LAYER_ID
 									? 'observation'
 									: 'track',
-							docId: feature.properties.id,
+							docId: feature.properties.docId,
 						},
 					},
 				})
@@ -285,7 +285,7 @@ export function DisplayedDataMap() {
 
 			if (type === 'observation') {
 				const observationMatch = observationsFeatureCollection.features.find(
-					({ properties }) => properties.id === docId,
+					({ properties }) => properties.docId === docId,
 				)
 
 				if (observationMatch) {
@@ -299,7 +299,7 @@ export function DisplayedDataMap() {
 				}
 			} else {
 				const tracksMatch = tracksFeatureCollection.features.find(
-					({ properties }) => properties.id === docId,
+					({ properties }) => properties.docId === docId,
 				)
 
 				if (tracksMatch) {
@@ -368,7 +368,7 @@ export function DisplayedDataMap() {
 					id={OBSERVATIONS_SOURCE_ID}
 					data={observationsFeatureCollection}
 					// Need this in order for the feature-state querying to work when hovering
-					promoteId="id"
+					promoteId="docId"
 				>
 					<Layer
 						type="circle"
@@ -382,7 +382,7 @@ export function DisplayedDataMap() {
 					id={TRACKS_SOURCE_ID}
 					data={tracksFeatureCollection}
 					// Need this in order for the feature-state querying to work when hovering
-					promoteId="id"
+					promoteId="docId"
 				>
 					{/* TODO: Implement tracks layer */}
 				</Source>
@@ -396,7 +396,7 @@ function observationsToFeatureCollection(
 	categories: Array<Preset>,
 ) {
 	const displayablePoints: Array<
-		Feature<Point, { id: string; categoryDocId?: string }>
+		Feature<Point, { docId: string; categoryDocId?: string }>
 	> = []
 
 	for (const obs of observations) {
@@ -405,7 +405,7 @@ function observationsToFeatureCollection(
 
 			displayablePoints.push(
 				point([obs.lon, obs.lat], {
-					id: obs.docId,
+					docId: obs.docId,
 					categoryDocId: category?.docId,
 				}),
 			)
@@ -423,7 +423,7 @@ function tracksToFeatureCollection(tracks: Array<Track>) {
 					location.coords.longitude,
 					location.coords.latitude,
 				]),
-				{ id: track.docId },
+				{ docId: track.docId },
 			),
 		),
 	)
