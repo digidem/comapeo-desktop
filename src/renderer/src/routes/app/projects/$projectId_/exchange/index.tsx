@@ -27,6 +27,7 @@ import {
 	DARKER_ORANGE,
 	GREEN,
 	LIGHT_COMAPEO_BLUE,
+	LIGHT_GREY,
 	WHITE,
 } from '../../../../../colors'
 import { Icon } from '../../../../../components/icon'
@@ -222,7 +223,7 @@ function RouteComponent() {
 					</Box>
 				</Stack>
 			}
-			end={null}
+			end={<Box bgcolor={LIGHT_GREY} display="flex" flex={1} />}
 		/>
 	)
 }
