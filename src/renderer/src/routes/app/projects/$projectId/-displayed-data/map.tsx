@@ -452,10 +452,10 @@ function createObservationLayerPaintProperty(
 				? ['match', ['get', 'categoryDocId'], ...categoryColorPairs, ORANGE]
 				: ORANGE,
 		'circle-stroke-opacity': enableHighlighting
-			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.25]
+			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.2]
 			: 1,
 		'circle-opacity': enableHighlighting
-			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.25]
+			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.2]
 			: 1,
 	}
 }
