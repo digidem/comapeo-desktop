@@ -29,33 +29,33 @@
   "routes.app.data-and-privacy.title": {
     "message": "Data & Privacy"
   },
-  "routes.app.projects.$projectId.index.addObservationsDescription": {
+  "routes.app.projects.$projectId.-displayed.data.index.addObservationsDescription": {
     "description": "Description of card that is displayed when project has no observations to display.",
     "message": "Use Exchange to add Collaborator Observations"
   },
-  "routes.app.projects.$projectId.index.addObservationsTitle": {
+  "routes.app.projects.$projectId.-displayed.data.index.addObservationsTitle": {
     "description": "Title of card that is displayed when project has no observations to display.",
     "message": "Add Observations"
   },
-  "routes.app.projects.$projectId.index.categoryIconAlt": {
+  "routes.app.projects.$projectId.-displayed.data.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
   },
-  "routes.app.projects.$projectId.index.goToExchange": {
+  "routes.app.projects.$projectId.-displayed.data.index.goToExchange": {
     "description": "Link text to navigate to Exchange page.",
     "message": "Go to Exchange"
+  },
+  "routes.app.projects.$projectId.-displayed.data.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Observation"
+  },
+  "routes.app.projects.$projectId.-displayed.data.index.trackCategoryNameFallback": {
+    "description": "Fallback name for track without a matching category.",
+    "message": "Track"
   },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
     "message": "Invite"
-  },
-  "routes.app.projects.$projectId.index.observationCategoryNameFallback": {
-    "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
-  },
-  "routes.app.projects.$projectId.index.trackCategoryNameFallback": {
-    "description": "Fallback name for track without a matching category.",
-    "message": "Track"
   },
   "routes.app.projects.$projectId.index.unnamedProject": {
     "description": "Fallback for when current project is missing a name.",

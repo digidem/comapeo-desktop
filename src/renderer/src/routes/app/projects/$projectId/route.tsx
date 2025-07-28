@@ -6,7 +6,7 @@ import * as v from 'valibot'
 import { TwoPanelLayout } from '../../-components/two-panel-layout'
 import { BLACK } from '../../../../colors'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
-import { MapWithData } from './-map-with-data'
+import { DisplayedDataMap } from './-displayed-data/map'
 
 const SearchParamsSchema = v.object({
 	highlightedDocument: v.optional(
@@ -127,5 +127,5 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 })
 
 function RouteComponent() {
-	return <TwoPanelLayout start={<Outlet />} end={<MapWithData />} />
+	return <TwoPanelLayout start={<Outlet />} end={<DisplayedDataMap />} />
 }

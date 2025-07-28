@@ -24,10 +24,10 @@ import {
 } from 'react-map-gl/maplibre'
 import * as v from 'valibot'
 
-import { BLACK, ORANGE, WHITE } from '../../../../colors'
-import { Map } from '../../../../components/map'
-import { getMatchingCategoryForObservation } from '../../../../lib/comapeo'
-import { getLocaleStateQueryOptions } from '../../../../lib/queries/app-settings'
+import { BLACK, ORANGE, WHITE } from '../../../../../colors'
+import { Map } from '../../../../../components/map'
+import { getMatchingCategoryForObservation } from '../../../../../lib/comapeo'
+import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
 
 const OBSERVATIONS_SOURCE_ID = 'observations_source'
 const TRACKS_SOURCE_ID = 'tracks_source' as const
@@ -43,7 +43,7 @@ const DEFAULT_BOUNDING_BOX: [number, number, number, number] = [
 
 const BASE_FIT_BOUNDS_OPTIONS: FitBoundsOptions = { padding: 40, maxZoom: 12 }
 
-export function MapWithData() {
+export function DisplayedDataMap() {
 	const navigate = useNavigate({ from: '/app/projects/$projectId' })
 	const { projectId } = useParams({ from: '/app/projects/$projectId' })
 	const { highlightedDocument } = useSearch({
@@ -155,22 +155,22 @@ export function MapWithData() {
 
 			if (
 				feature.layer.id === OBSERVATIONS_LAYER_ID &&
-				typeof feature.properties.id === 'string'
+				typeof feature.properties.docId === 'string'
 			) {
 				navigate({
 					to: './observations/$observationDocId',
-					params: { observationDocId: feature.properties.id },
+					params: { observationDocId: feature.properties.docId },
 				})
 				return
 			}
 
 			if (
 				feature.layer.id === TRACKS_LAYER_ID &&
-				typeof feature.properties.id === 'string'
+				typeof feature.properties.docId === 'string'
 			) {
 				navigate({
 					to: './tracks/$trackDocId',
-					params: { trackDocId: feature.properties.id },
+					params: { trackDocId: feature.properties.docId },
 				})
 				return
 			}
@@ -189,7 +189,7 @@ export function MapWithData() {
 			if (
 				(feature.layer.id === OBSERVATIONS_LAYER_ID ||
 					feature.layer.id === TRACKS_LAYER_ID) &&
-				typeof feature.properties.id === 'string'
+				typeof feature.properties.docId === 'string'
 			) {
 				navigate({
 					search: {
@@ -198,7 +198,7 @@ export function MapWithData() {
 								feature.layer.id === OBSERVATIONS_LAYER_ID
 									? 'observation'
 									: 'track',
-							docId: feature.properties.id,
+							docId: feature.properties.docId,
 						},
 					},
 				})
@@ -208,98 +208,123 @@ export function MapWithData() {
 		[navigate],
 	)
 
+	useEffect(
+		/**
+		 * Updates the map such that the map adjusts how features are displayed
+		 * based on whether there is a document to highlight or not.
+		 */
+		function updateMapFeatureHighlighting() {
+			if (!mapRef.current || !mapLoaded) {
+				return
+			}
+
+			if (documentToHighlight) {
+				// Clear the existing feature states first
+				mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
+				mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
+
+				// Highlight the feature with the new value
+				mapRef.current.setFeatureState(
+					{ source: OBSERVATIONS_SOURCE_ID, id: documentToHighlight.docId },
+					{ highlight: true },
+				)
+				mapRef.current.setFeatureState(
+					{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
+					{ highlight: true },
+				)
+			} else {
+				mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
+				mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
+			}
+		},
+		[documentToHighlight, mapLoaded],
+	)
+
+	useEffect(
+		/**
+		 * Accounts for the following situation:
+		 *
+		 * 1. Leave this page
+		 * 2. New data is received (e.g. creating test data, exchanging)
+		 * 3. Return to this page
+		 *
+		 * After (3), the stale data is still being used to calculate the map's
+		 * initial bounds (not really sure why though). The new data comes in
+		 * afterwards and the bounds are re-calculated, but they do not get applied
+		 * to the map as there's no way to reactively update it after
+		 * initialization.
+		 */
+		function setMapBoundsBasedOnDataBbox() {
+			if (!mapLoaded || !mapRef.current) {
+				return
+			}
+
+			mapRef.current.fitBounds(observationsBbox, {
+				...BASE_FIT_BOUNDS_OPTIONS,
+				animate: false,
+			})
+		},
+		[observationsBbox, mapLoaded],
+	)
+
+	useEffect(
+		/**
+		 * Whenever the highlighted document changes (either due to a list or map
+		 * interaction), pan the map such that the corresponding feature is
+		 * centered. Also zooms closer to the feature if necessary (it will never
+		 * zoom out).
+		 */
+		function panToMapFeature() {
+			if (!mapLoaded || !mapRef.current || !documentToHighlight) {
+				return
+			}
+
+			const { type, docId } = documentToHighlight
+
+			const shouldZoomIn = mapRef.current.getZoom() < 10
+
+			if (type === 'observation') {
+				const observationMatch = observationsFeatureCollection.features.find(
+					({ properties }) => properties.docId === docId,
+				)
+
+				if (observationMatch) {
+					mapRef.current.panTo(
+						{
+							lon: observationMatch.geometry.coordinates[0]!,
+							lat: observationMatch.geometry.coordinates[1]!,
+						},
+						shouldZoomIn ? { zoom: 10 } : undefined,
+					)
+				}
+			} else {
+				const tracksMatch = tracksFeatureCollection.features.find(
+					({ properties }) => properties.docId === docId,
+				)
+
+				if (tracksMatch) {
+					const c = center(tracksMatch)
+
+					mapRef.current.panTo(
+						{
+							lon: c.geometry.coordinates[0]!,
+							lat: c.geometry.coordinates[1]!,
+						},
+						shouldZoomIn ? { zoom: 10 } : undefined,
+					)
+				}
+			}
+		},
+		[
+			documentToHighlight,
+			mapLoaded,
+			observationsFeatureCollection,
+			tracksFeatureCollection,
+		],
+	)
+
 	const enableMapInteractions =
 		currentRoute.routeId === '/app/projects/$projectId/'
-
-	useEffect(() => {
-		if (!mapRef.current || !mapLoaded) {
-			return
-		}
-
-		if (documentToHighlight) {
-			// Clear the existing feature states first
-			mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
-			mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
-
-			// Highlight the feature with the new value
-			mapRef.current.setFeatureState(
-				{ source: OBSERVATIONS_SOURCE_ID, id: documentToHighlight.docId },
-				{ highlight: true },
-			)
-			mapRef.current.setFeatureState(
-				{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
-				{ highlight: true },
-			)
-		} else {
-			mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
-			mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
-		}
-	}, [documentToHighlight, mapLoaded])
-
-	// Accounts for the following situation:
-	//
-	// 1. Leave this page
-	// 2. New data is received (e.g. creating test data, exchanging)
-	// 3. Return to this page
-	//
-	// After (3), the stale data is still being used to calculate the map's initial bounds (not really sure why though).
-	// The new data comes in afterwards and the bounds are re-calculated, but they do not get applied to the map
-	// as there's no way to reactively update it after initialization.
-	useEffect(() => {
-		if (!mapLoaded || !mapRef.current) {
-			return
-		}
-
-		mapRef.current.fitBounds(observationsBbox, {
-			...BASE_FIT_BOUNDS_OPTIONS,
-			animate: false,
-		})
-	}, [observationsBbox, mapLoaded])
-
-	useEffect(() => {
-		if (!mapLoaded || !mapRef.current || !documentToHighlight) {
-			return
-		}
-
-		const { type, docId } = documentToHighlight
-
-		if (type === 'observation') {
-			const observationMatch = observationsFeatureCollection.features.find(
-				({ properties }) => properties.id === docId,
-			)
-
-			if (observationMatch) {
-				mapRef.current.panTo(
-					{
-						lon: observationMatch.geometry.coordinates[0]!,
-						lat: observationMatch.geometry.coordinates[1]!,
-					},
-					{ zoom: 8 },
-				)
-			}
-		} else {
-			const tracksMatch = tracksFeatureCollection.features.find(
-				({ properties }) => properties.id === docId,
-			)
-
-			if (tracksMatch) {
-				const c = center(tracksMatch)
-
-				mapRef.current.panTo(
-					{
-						lon: c.geometry.coordinates[0]!,
-						lat: c.geometry.coordinates[1]!,
-					},
-					{ zoom: 8 },
-				)
-			}
-		}
-	}, [
-		documentToHighlight,
-		mapLoaded,
-		observationsFeatureCollection,
-		tracksFeatureCollection,
-	])
 
 	return (
 		<Box position="relative" display="flex" flex={1}>
@@ -337,13 +362,14 @@ export function MapWithData() {
 				onLoad={() => {
 					setMapLoaded(true)
 				}}
+				cursor={enableMapInteractions ? undefined : 'default'}
 			>
 				<Source
 					type="geojson"
 					id={OBSERVATIONS_SOURCE_ID}
 					data={observationsFeatureCollection}
 					// Need this in order for the feature-state querying to work when hovering
-					promoteId="id"
+					promoteId="docId"
 				>
 					<Layer
 						type="circle"
@@ -357,8 +383,10 @@ export function MapWithData() {
 					id={TRACKS_SOURCE_ID}
 					data={tracksFeatureCollection}
 					// Need this in order for the feature-state querying to work when hovering
-					promoteId="id"
-				></Source>
+					promoteId="docId"
+				>
+					{/* TODO: Implement tracks layer */}
+				</Source>
 			</Map>
 		</Box>
 	)
@@ -369,7 +397,7 @@ function observationsToFeatureCollection(
 	categories: Array<Preset>,
 ) {
 	const displayablePoints: Array<
-		Feature<Point, { id: string; categoryDocId?: string }>
+		Feature<Point, { docId: string; categoryDocId?: string }>
 	> = []
 
 	for (const obs of observations) {
@@ -378,7 +406,7 @@ function observationsToFeatureCollection(
 
 			displayablePoints.push(
 				point([obs.lon, obs.lat], {
-					id: obs.docId,
+					docId: obs.docId,
 					categoryDocId: category?.docId,
 				}),
 			)
@@ -396,7 +424,7 @@ function tracksToFeatureCollection(tracks: Array<Track>) {
 					location.coords.longitude,
 					location.coords.latitude,
 				]),
-				{ id: track.docId },
+				{ docId: track.docId },
 			),
 		),
 	)
@@ -425,10 +453,10 @@ function createObservationLayerPaintProperty(
 				? ['match', ['get', 'categoryDocId'], ...categoryColorPairs, ORANGE]
 				: ORANGE,
 		'circle-stroke-opacity': enableHighlighting
-			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.25]
+			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.2]
 			: 1,
 		'circle-opacity': enableHighlighting
-			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.25]
+			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.2]
 			: 1,
 	}
 }
