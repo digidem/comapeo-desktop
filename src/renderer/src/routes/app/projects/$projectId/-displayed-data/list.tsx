@@ -146,8 +146,6 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 	const rowVirtualizer = useVirtual(listRef, sortedListData)
 	const { scrollToIndex, scrollElement } = rowVirtualizer
 
-	const isMouseOverListRef = useRef(false)
-
 	useEffect(
 		/**
 		 * Scrolls the list to the item that is either:
@@ -159,12 +157,6 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 		 * interaction on the list.
 		 */
 		function scrollToHighlightedItem() {
-			// Prevents issues with manually scrolling on the list due to the behavior
-			// implemented in onMouseMove
-			if (isMouseOverListRef.current) {
-				return
-			}
-
 			if (highlightedDocument?.docId) {
 				if (scrollElement) {
 					const itemNode = scrollElement.querySelector(
@@ -199,12 +191,6 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 			disablePadding
 			onFocus={onFocus}
 			onMouseMove={onMouseMove}
-			onMouseEnter={() => {
-				isMouseOverListRef.current = true
-			}}
-			onMouseLeave={() => {
-				isMouseOverListRef.current = false
-			}}
 			sx={{ overflow: 'auto', scrollbarColor: 'initial' }}
 		>
 			<Box
