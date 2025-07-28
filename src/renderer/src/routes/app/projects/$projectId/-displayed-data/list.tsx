@@ -149,9 +149,13 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 
 	useEffect(
 		/**
-		 * Scrolls the list to the item that is highlighted on the map. Does not
-		 * occur if the highlighting is triggered by a mouseover interaction on the
-		 * list.
+		 * Scrolls the list to the item that is either:
+		 *
+		 * 1. Hovered over on the map
+		 * 2. Focused onto via the keyboard in the list.
+		 *
+		 * Does not do anything if the highlighting is triggered by a mouseover
+		 * interaction on the list.
 		 */
 		function scrollToHighlightedItem() {
 			// Prevents issues with manually scrolling on the list due to the behavior
