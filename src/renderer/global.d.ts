@@ -1,3 +1,5 @@
+/// <reference types="network-information-types/dist-types/" />
+
 import { type RuntimeApi } from '../preload/runtime'
 
 declare global {

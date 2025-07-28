@@ -1,5 +1,6 @@
 import { shell } from 'electron'
 import { ipcMain } from 'electron/main'
+import si from 'systeminformation'
 import * as v from 'valibot'
 
 import {
@@ -22,6 +23,11 @@ export function setUpMainIPC({ configStore, intl }) {
 	ipcMain.handle('shell:open-external-url', (_event, url) => {
 		v.assert(v.string(), url)
 		return shell.openExternal(url)
+	})
+
+	// System
+	ipcMain.handle('system:get:wifiConnections', () => {
+		return si.wifiConnections()
 	})
 
 	// Settings (get)

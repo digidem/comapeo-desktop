@@ -21,6 +21,7 @@ import {
 import type { LocaleState } from '../../main/types/intl'
 import { initComapeoClient } from './comapeo-client'
 import { IntlProvider } from './contexts/intl'
+import { useNetworkConnectionChangeListener } from './hooks/network'
 import {
 	getActiveProjectIdQueryOptions,
 	getLocaleStateQueryOptions,
@@ -77,6 +78,8 @@ export function App() {
 			<ThemeProvider theme={theme}>
 				<CssBaseline enableColorScheme />
 				<QueryClientProvider client={queryClient}>
+					<NetworkConnectionChangeListener />
+
 					<Suspense
 						fallback={
 							<Box
@@ -108,6 +111,11 @@ export function App() {
 			</ThemeProvider>
 		</StrictMode>
 	)
+}
+
+function NetworkConnectionChangeListener() {
+	useNetworkConnectionChangeListener()
+	return null
 }
 
 function WithInvitesListener({ children }: { children: ReactNode }) {
