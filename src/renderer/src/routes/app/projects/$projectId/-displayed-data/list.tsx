@@ -43,6 +43,8 @@ import {
 } from '../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
 
+const APPROXIMATE_ITEM_HEIGHT_PX = 100
+
 export function DisplayedDataList({ projectId }: { projectId: string }) {
 	const { formatMessage: t, formatDate } = useIntl()
 
@@ -165,7 +167,10 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 					if (itemNode) {
 						// We don't want the list to change scroll position if it's not needed (i.e the item is already visible in the list).
 						// Reduces the amount of visual abruptness.
-						scrollIntoView(itemNode, { scrollMode: 'if-needed' })
+						scrollIntoView(itemNode, {
+							scrollMode: 'if-needed',
+							block: 'nearest',
+						})
 						return
 					}
 				}
@@ -191,7 +196,10 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 			disablePadding
 			onFocus={onFocus}
 			onMouseMove={onMouseMove}
-			sx={{ overflow: 'auto', scrollbarColor: 'initial' }}
+			sx={{
+				overflow: 'auto',
+				scrollbarColor: 'initial',
+			}}
 		>
 			<Box
 				position="relative"
@@ -353,7 +361,7 @@ function useVirtual(
 	return useVirtualizer({
 		count: data.length,
 		getScrollElement: () => listRef.current,
-		estimateSize: () => 100,
+		estimateSize: () => APPROXIMATE_ITEM_HEIGHT_PX,
 		getItemKey,
 		overscan: 10,
 	})
