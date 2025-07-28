@@ -1,3 +1,5 @@
+import type { Systeminformation } from 'systeminformation'
+
 import type {
 	PersistedCoordinateFormat,
 	PersistedLocale,
@@ -17,6 +19,7 @@ export type RuntimeApi = {
 
 	// System
 	getAppInfo: () => { appVersion: string; systemVersion: string }
+	getWifiConnections: () => Promise<Array<Systeminformation.WifiConnectionData>>
 
 	// Shell
 	openExternalURL: (url: string) => Promise<void>

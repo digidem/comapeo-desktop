@@ -28,12 +28,15 @@ const runtimeApi = {
 		return result
 	},
 
-	// App info
-	getAppInfo() {
+	// System
+	getAppInfo: () => {
 		const appVersion = getAppVersion()
 		const systemVersion = process.getSystemVersion()
 
 		return { appVersion, systemVersion }
+	},
+	getWifiConnections: async () => {
+		return ipcRenderer.invoke('system:get:wifiConnections')
 	},
 
 	// Shell

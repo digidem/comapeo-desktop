@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useSyncState } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -55,6 +56,9 @@ function RouteComponent() {
 		},
 	})
 
+	const syncState = useSyncState({ projectId: activeProjectId })
+	const syncEnabled = syncState?.data.isSyncEnabled
+
 	const pageHasEditing = checkPageHasEditing(currentRoute.fullPath)
 
 	return (
@@ -81,12 +85,16 @@ function RouteComponent() {
 						}}
 					>
 						<ListItem {...SHARED_NAV_ITEM_PROPS.listItem}>
-							{/* TODO: Should not be active when on exchange page */}
 							<IconButtonLink
 								{...SHARED_NAV_ITEM_PROPS.link}
 								disabled={
-									pageHasEditing &&
-									!currentRoute.fullPath.startsWith('/app/projects/$projectId')
+									(pageHasEditing &&
+										!currentRoute.fullPath.startsWith(
+											'/app/projects/$projectId',
+										)) ||
+									(syncEnabled &&
+										currentRoute.routeId ===
+											'/app/projects/$projectId_/exchange/')
 								}
 								to="/app/projects/$projectId"
 								params={{ projectId: activeProjectId }}
@@ -94,6 +102,11 @@ function RouteComponent() {
 									...SHARED_NAV_ITEM_PROPS.link.activeProps,
 									sx: {
 										...SHARED_NAV_ITEM_PROPS.link.activeProps.sx,
+										color:
+											currentRoute.routeId ===
+											'/app/projects/$projectId_/exchange/'
+												? DARK_GREY
+												: COMAPEO_BLUE,
 										border: `2px solid currentColor`,
 									},
 								}}
@@ -123,8 +136,11 @@ function RouteComponent() {
 							<LabeledNavItem
 								to="/app/settings"
 								disabled={
-									pageHasEditing &&
-									!currentRoute.fullPath.startsWith('/app/settings')
+									(pageHasEditing &&
+										!currentRoute.fullPath.startsWith('/app/settings')) ||
+									(currentRoute.routeId ===
+										'/app/projects/$projectId_/exchange/' &&
+										syncEnabled)
 								}
 								label={t(m.appSettingsTabLabel)}
 								icon={<Icon name="material-settings" size={30} />}
@@ -133,8 +149,11 @@ function RouteComponent() {
 							<LabeledNavItem
 								to="/app/data-and-privacy"
 								disabled={
-									pageHasEditing &&
-									currentRoute.fullPath !== '/app/data-and-privacy'
+									(pageHasEditing &&
+										currentRoute.fullPath !== '/app/data-and-privacy') ||
+									(currentRoute.routeId ===
+										'/app/projects/$projectId_/exchange/' &&
+										syncEnabled)
 								}
 								label={t(m.dataAndPrivacyTabLabel)}
 								icon={
@@ -145,7 +164,10 @@ function RouteComponent() {
 							<LabeledNavItem
 								to="/app/about"
 								disabled={
-									pageHasEditing && currentRoute.fullPath !== '/app/about'
+									(pageHasEditing && currentRoute.fullPath !== '/app/about') ||
+									(currentRoute.routeId ===
+										'/app/projects/$projectId_/exchange/' &&
+										syncEnabled)
 								}
 								label={t(m.aboutTabLabel)}
 								icon={<Icon name="material-symbols-info" size={30} />}
