@@ -618,7 +618,7 @@ function useCreateTestObservations({ projectId }: { projectId: string }) {
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',
 					projectId,
-					'observations',
+					'observation',
 				],
 			})
 		},

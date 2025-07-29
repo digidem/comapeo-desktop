@@ -1,5 +1,16 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useManyDocs } from '@comapeo/core-react'
+import {
+	Suspense,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react'
+import {
+	useIconUrl,
+	useManyDocs,
+	useSingleDocByDocId,
+} from '@comapeo/core-react'
 import type { Observation, Preset, Track } from '@comapeo/schema'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -15,8 +26,10 @@ import { center } from '@turf/center'
 import { featureCollection, lineString, point } from '@turf/helpers'
 import type { Feature, Point } from 'geojson'
 import type { FitBoundsOptions } from 'maplibre-gl'
+import { defineMessages, useIntl } from 'react-intl'
 import {
 	Layer,
+	Marker,
 	Source,
 	type CircleLayerSpecification,
 	type MapLayerMouseEvent,
@@ -24,7 +37,9 @@ import {
 } from 'react-map-gl/maplibre'
 import * as v from 'valibot'
 
-import { BLACK, ORANGE, WHITE } from '../../../../../colors'
+import { BLACK, BLUE_GREY, ORANGE, WHITE } from '../../../../../colors'
+import { CategoryIconContainer } from '../../../../../components/category-icon'
+import { Icon } from '../../../../../components/icon'
 import { Map } from '../../../../../components/map'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
@@ -58,7 +73,7 @@ export function DisplayedDataMap() {
 		},
 	})
 
-	const documentFromRouteParams = useChildMatches({
+	const documentFromRouteParams: typeof highlightedDocument = useChildMatches({
 		select: (matches) => {
 			for (const m of matches) {
 				if (
@@ -68,6 +83,7 @@ export function DisplayedDataMap() {
 					return {
 						type: 'observation' as const,
 						docId: m.params.observationDocId,
+						from: 'list' as const,
 					}
 				}
 
@@ -75,6 +91,7 @@ export function DisplayedDataMap() {
 					return {
 						type: 'track' as const,
 						docId: m.params.trackDocId,
+						from: 'list' as const,
 					}
 				}
 			}
@@ -199,6 +216,7 @@ export function DisplayedDataMap() {
 									? 'observation'
 									: 'track',
 							docId: feature.properties.docId,
+							from: 'map',
 						},
 					},
 				})
@@ -279,6 +297,11 @@ export function DisplayedDataMap() {
 				return
 			}
 
+			// Do not pan the map if the highlighting is done via a map interaction
+			if (documentToHighlight.from === 'map') {
+				return
+			}
+
 			const { type, docId } = documentToHighlight
 
 			const shouldZoomIn = mapRef.current.getZoom() < 10
@@ -326,6 +349,13 @@ export function DisplayedDataMap() {
 	const enableMapInteractions =
 		currentRoute.routeId === '/app/projects/$projectId/'
 
+	const observationFeatureToShowCategoryIconOn =
+		documentToHighlight && documentToHighlight.type === 'observation'
+			? observationsFeatureCollection.features.find(
+					(f) => f.properties.docId === documentToHighlight.docId,
+				)
+			: undefined
+
 	return (
 		<Box position="relative" display="flex" flex={1}>
 			{mapLoaded ? null : (
@@ -364,6 +394,34 @@ export function DisplayedDataMap() {
 				}}
 				cursor={enableMapInteractions ? undefined : 'default'}
 			>
+				{observationFeatureToShowCategoryIconOn &&
+				currentRoute.routeId ===
+					'/app/projects/$projectId/observations/$observationDocId/' ? (
+					<Suspense>
+						<Marker
+							style={enableMapInteractions ? undefined : { cursor: 'default' }}
+							longitude={
+								observationFeatureToShowCategoryIconOn.geometry.coordinates[0]!
+							}
+							latitude={
+								observationFeatureToShowCategoryIconOn.geometry.coordinates[1]!
+							}
+						>
+							<CategoryIconMarker
+								projectId={projectId}
+								documentId={
+									observationFeatureToShowCategoryIconOn.properties.docId
+								}
+								categoryDocumentId={
+									observationFeatureToShowCategoryIconOn.properties
+										.categoryDocId
+								}
+								lang={lang}
+							/>
+						</Marker>
+					</Suspense>
+				) : null}
+
 				<Source
 					type="geojson"
 					id={OBSERVATIONS_SOURCE_ID}
@@ -389,6 +447,104 @@ export function DisplayedDataMap() {
 				</Source>
 			</Map>
 		</Box>
+	)
+}
+
+function CategoryIconMarker({
+	projectId,
+	documentId,
+	categoryDocumentId,
+	lang,
+}: {
+	projectId: string
+	documentId: string
+	categoryDocumentId?: string
+	lang: string
+}) {
+	const { data: document } = useSingleDocByDocId({
+		projectId,
+		docType: 'observation',
+		docId: documentId,
+		lang,
+	})
+
+	const categoryDocIdToUse = categoryDocumentId || document.presetRef?.docId
+
+	return categoryDocIdToUse ? (
+		<CategoryIconImage
+			categoryDocumentId={categoryDocIdToUse}
+			projectId={projectId}
+			size={20}
+			lang={lang}
+		/>
+	) : (
+		<CategoryIconContainer color={BLUE_GREY} applyBoxShadow padding={1}>
+			<Icon name="material-place" size={20} />
+		</CategoryIconContainer>
+	)
+}
+
+function CategoryIconImage({
+	categoryDocumentId,
+	lang,
+	projectId,
+	size,
+}: {
+	categoryDocumentId: string
+	lang: string
+	projectId: string
+	size: number
+}) {
+	const { formatMessage: t } = useIntl()
+
+	const { data: category } = useSingleDocByDocId({
+		projectId,
+		docType: 'preset',
+		docId: categoryDocumentId,
+		lang,
+	})
+
+	return (
+		<CategoryIconContainer
+			color={category.color || BLUE_GREY}
+			applyBoxShadow
+			padding={1}
+		>
+			{category.iconRef?.docId ? (
+				<IconImage
+					projectId={projectId}
+					iconDocumentId={category.iconRef.docId}
+					size={size}
+					alt={t(m.categoryIconAlt, { name: category.name })}
+				/>
+			) : (
+				<Icon name="material-place" size={size} />
+			)}
+		</CategoryIconContainer>
+	)
+}
+
+function IconImage({
+	alt,
+	iconDocumentId,
+	projectId,
+	size,
+}: {
+	alt: string
+	iconDocumentId: string
+	projectId: string
+	size: number
+}) {
+	const { data: iconUrl } = useIconUrl({
+		projectId,
+		iconId: iconDocumentId,
+		mimeType: 'image/png',
+		size: 'small',
+		pixelDensity: 3,
+	})
+
+	return (
+		<img alt={alt} src={iconUrl} height={size} style={{ aspectRatio: 1 }} />
 	)
 }
 
@@ -460,3 +616,12 @@ function createObservationLayerPaintProperty(
 			: 1,
 	}
 }
+
+const m = defineMessages({
+	categoryIconAlt: {
+		id: 'routes.app.projects.$projectId.-displayed.data.map.categoryIconAlt',
+		defaultMessage: 'Icon for {name} category',
+		description:
+			'Alt text for icon image displayed for category (used for accessibility tools).',
+	},
+})
