@@ -14,7 +14,7 @@ export function Map({
 	doubleClickZoom,
 	dragPan,
 	dragRotate,
-	interactive,
+	interactive = true,
 	mapStyle = FALLBACK_MAP_STYLE,
 	ref,
 	reuseMaps = true,
