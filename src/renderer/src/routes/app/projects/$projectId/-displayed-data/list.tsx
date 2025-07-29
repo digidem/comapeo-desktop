@@ -6,7 +6,6 @@ import {
 	useRef,
 	type FocusEvent,
 	type MouseEvent,
-	type ReactNode,
 	type RefObject,
 } from 'react'
 import {
@@ -35,6 +34,7 @@ import {
 	LIGHT_GREY,
 	WHITE,
 } from '../../../../../colors'
+import { CategoryIconContainer } from '../../../../../components/category-icon'
 import { Icon } from '../../../../../components/icon'
 import { TextLink } from '../../../../../components/link'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo'
@@ -123,6 +123,7 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 					highlightedDocument: {
 						type: dataType,
 						docId,
+						from: 'list',
 					},
 				},
 			})
@@ -317,7 +318,7 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 												/>
 											</Suspense>
 										) : (
-											<CategoryIconContainer borderColor={BLUE_GREY}>
+											<CategoryIconContainer color={BLUE_GREY}>
 												<Icon name="material-place" size={40} />
 											</CategoryIconContainer>
 										)}
@@ -413,35 +414,13 @@ function DisplayedCategoryAndAttachments({
 	})
 
 	return (
-		<CategoryIconContainer borderColor={borderColor}>
+		<CategoryIconContainer color={borderColor}>
 			<img
 				src={iconURL}
 				alt={t(m.categoryIconAlt, { name: categoryName })}
 				style={{ aspectRatio: 1, maxHeight: 48 }}
 			/>
 		</CategoryIconContainer>
-	)
-}
-
-function CategoryIconContainer({
-	borderColor,
-	children,
-}: {
-	borderColor: string
-	children: ReactNode
-}) {
-	return (
-		<Box
-			display="flex"
-			alignItems="center"
-			justifyContent="center"
-			padding={2}
-			overflow="hidden"
-			borderRadius="50%"
-			border={`3px solid ${borderColor}`}
-		>
-			{children}
-		</Box>
 	)
 }
 
@@ -495,34 +474,34 @@ function AddObservationsCard({ projectId }: { projectId: string }) {
 
 const m = defineMessages({
 	addObservationsTitle: {
-		id: 'routes.app.projects.$projectId.-displayed.data.index.addObservationsTitle',
+		id: 'routes.app.projects.$projectId.-displayed.data.list.addObservationsTitle',
 		defaultMessage: 'Add Observations',
 		description:
 			'Title of card that is displayed when project has no observations to display.',
 	},
 	addObservationsDescription: {
-		id: 'routes.app.projects.$projectId.-displayed.data.index.addObservationsDescription',
+		id: 'routes.app.projects.$projectId.-displayed.data.list.addObservationsDescription',
 		defaultMessage: 'Use Exchange to add Collaborator Observations',
 		description:
 			'Description of card that is displayed when project has no observations to display.',
 	},
 	goToExchange: {
-		id: 'routes.app.projects.$projectId.-displayed.data.index.goToExchange',
+		id: 'routes.app.projects.$projectId.-displayed.data.list.goToExchange',
 		defaultMessage: 'Go to Exchange',
 		description: 'Link text to navigate to Exchange page.',
 	},
 	observationCategoryNameFallback: {
-		id: 'routes.app.projects.$projectId.-displayed.data.index.observationCategoryNameFallback',
+		id: 'routes.app.projects.$projectId.-displayed.data.list.observationCategoryNameFallback',
 		defaultMessage: 'Observation',
 		description: 'Fallback name for observation without a matching category.',
 	},
 	trackCategoryNameFallback: {
-		id: 'routes.app.projects.$projectId.-displayed.data.index.trackCategoryNameFallback',
+		id: 'routes.app.projects.$projectId.-displayed.data.list.trackCategoryNameFallback',
 		defaultMessage: 'Track',
 		description: 'Fallback name for track without a matching category.',
 	},
 	categoryIconAlt: {
-		id: 'routes.app.projects.$projectId.-displayed.data.index.categoryIconAlt',
+		id: 'routes.app.projects.$projectId.-displayed.data.list.categoryIconAlt',
 		defaultMessage: 'Icon for {name} category',
 		description:
 			'Alt text for icon image displayed for category (used for accessibility tools).',

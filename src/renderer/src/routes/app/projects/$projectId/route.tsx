@@ -10,16 +10,11 @@ import { DisplayedDataMap } from './-displayed-data/map'
 
 const SearchParamsSchema = v.object({
 	highlightedDocument: v.optional(
-		v.variant('type', [
-			v.object({
-				type: v.literal('observation'),
-				docId: v.string(),
-			}),
-			v.object({
-				type: v.literal('track'),
-				docId: v.string(),
-			}),
-		]),
+		v.object({
+			type: v.union([v.literal('observation'), v.literal('track')]),
+			docId: v.string(),
+			from: v.union([v.literal('map'), v.literal('list')]),
+		}),
 	),
 })
 

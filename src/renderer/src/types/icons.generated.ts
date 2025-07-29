@@ -31,6 +31,7 @@ export const iconNames = [
 	'material-manage-accounts-filled',
 	'material-language',
 	'material-hiking',
+	'material-fmd-good-filled',
 	'material-explore',
 	'material-expand-more',
 	'material-expand-less',

@@ -29,29 +29,33 @@
   "routes.app.data-and-privacy.title": {
     "message": "Data & Privacy"
   },
-  "routes.app.projects.$projectId.-displayed.data.index.addObservationsDescription": {
+  "routes.app.projects.$projectId.-displayed.data.list.addObservationsDescription": {
     "description": "Description of card that is displayed when project has no observations to display.",
     "message": "Use Exchange to add Collaborator Observations"
   },
-  "routes.app.projects.$projectId.-displayed.data.index.addObservationsTitle": {
+  "routes.app.projects.$projectId.-displayed.data.list.addObservationsTitle": {
     "description": "Title of card that is displayed when project has no observations to display.",
     "message": "Add Observations"
   },
-  "routes.app.projects.$projectId.-displayed.data.index.categoryIconAlt": {
+  "routes.app.projects.$projectId.-displayed.data.list.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
   },
-  "routes.app.projects.$projectId.-displayed.data.index.goToExchange": {
+  "routes.app.projects.$projectId.-displayed.data.list.goToExchange": {
     "description": "Link text to navigate to Exchange page.",
     "message": "Go to Exchange"
   },
-  "routes.app.projects.$projectId.-displayed.data.index.observationCategoryNameFallback": {
+  "routes.app.projects.$projectId.-displayed.data.list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
     "message": "Observation"
   },
-  "routes.app.projects.$projectId.-displayed.data.index.trackCategoryNameFallback": {
+  "routes.app.projects.$projectId.-displayed.data.list.trackCategoryNameFallback": {
     "description": "Fallback name for track without a matching category.",
     "message": "Track"
+  },
+  "routes.app.projects.$projectId.-displayed.data.map.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Icon for {name} category"
   },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
@@ -72,6 +76,46 @@
   "routes.app.projects.$projectId.index.youAreParticipant": {
     "description": "Indicates that user is a participant on the current project.",
     "message": "You're a participant on this project."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Icon for {name} category"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
+    "description": "Title for details section.",
+    "message": "Details"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerFalse": {
+    "description": "Text displayed if a boolean field is answered with \"false\"",
+    "message": "FALSE"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "No answer"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNull": {
+    "description": "Text displayed if a field is answered with \"null\"",
+    "message": "NULL"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerTrue": {
+    "description": "Text displayed if a boolean field is answered with \"true\"",
+    "message": "TRUE"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
+    "description": "Title of the observation details page.",
+    "message": "Observation"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.noLocation": {
+    "description": "Fallback for location when observation does not have location specified.",
+    "message": "No location"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.notesSectionTitle": {
+    "description": "Title for notes section.",
+    "message": "Notes"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Observation"
   },
   "routes.app.projects.$projectId_.exchange.index.complete": {
     "description": "Text displayed when exchange is completed with all devices.",
