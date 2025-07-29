@@ -4,16 +4,19 @@ import {
 	useEffect,
 	useMemo,
 	useRef,
+	type CSSProperties,
 	type FocusEvent,
 	type MouseEvent,
 	type RefObject,
 } from 'react'
 import {
+	useAttachmentUrl,
 	useDocumentCreatedBy,
 	useIconUrl,
 	useManyDocs,
 	useOwnDeviceInfo,
 } from '@comapeo/core-react'
+import type { BlobId } from '@comapeo/core/dist/types'
 import type { Observation, Preset, Track } from '@comapeo/schema'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -28,6 +31,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import scrollIntoView from 'scroll-into-view-if-needed'
 
 import {
+	BLACK,
 	BLUE_GREY,
 	COMAPEO_BLUE,
 	LIGHT_COMAPEO_BLUE,
@@ -37,10 +41,14 @@ import {
 import { CategoryIconContainer } from '../../../../../components/category-icon'
 import { Icon } from '../../../../../components/icon'
 import { TextLink } from '../../../../../components/link'
-import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo'
+import {
+	getMatchingCategoryForDocument,
+	type Attachment,
+} from '../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
 
-const APPROXIMATE_ITEM_HEIGHT_PX = 100
+const CATEGORY_CONTAINER_SIZE_PX = 64
+const APPROXIMATE_ITEM_HEIGHT_PX = CATEGORY_CONTAINER_SIZE_PX + 16 * 2
 
 export function DisplayedDataList({ projectId }: { projectId: string }) {
 	const { formatMessage: t, formatDate } = useIntl()
@@ -295,33 +303,38 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 										display="flex"
 										justifyContent="center"
 										alignItems="center"
+										width={CATEGORY_CONTAINER_SIZE_PX}
+										sx={{ aspectRatio: 1 }}
 									>
-										{category?.iconRef?.docId ? (
-											<Suspense
-												fallback={
-													<Box
-														display="flex"
-														justifyContent="center"
-														alignItems="center"
-														height={48}
-														width={48}
-													>
-														<CircularProgress disableShrink size={30} />
-													</Box>
-												}
-											>
-												<DisplayedCategoryAndAttachments
+										<Suspense
+											fallback={
+												<Box
+													display="flex"
+													justifyContent="center"
+													alignItems="center"
+													flex={1}
+												>
+													<CircularProgress disableShrink size={30} />
+												</Box>
+											}
+										>
+											{type === 'observation' ? (
+												<ObservationCategory
+													attachments={document.attachments}
+													categoryColor={category?.color}
+													categoryName={category?.name}
+													categoryIconDocumentId={category?.iconRef?.docId}
 													projectId={projectId}
-													categoryName={category.name}
-													borderColor={category.color || BLUE_GREY}
-													iconDocumentId={category.iconRef.docId}
 												/>
-											</Suspense>
-										) : (
-											<CategoryIconContainer color={BLUE_GREY}>
-												<Icon name="material-place" size={40} />
-											</CategoryIconContainer>
-										)}
+											) : (
+												<TrackCategory
+													categoryIconDocumentId={category?.iconRef?.docId}
+													categoryColor={category?.color}
+													categoryName={category?.name}
+													projectId={projectId}
+												/>
+											)}
+										</Suspense>
 									</Box>
 								</Stack>
 							</ListItemButton>
@@ -391,17 +404,163 @@ function SyncedIndicatorLine({
 	) : null
 }
 
-// TODO: Display attachments
-function DisplayedCategoryAndAttachments({
-	borderColor,
+function ObservationCategory({
+	attachments,
+	projectId,
+	categoryName,
+	categoryColor,
+	categoryIconDocumentId,
+}: {
+	attachments: Array<Attachment>
+	categoryColor?: string
+	categoryIconDocumentId?: string
+	categoryName?: string
+	projectId: string
+}) {
+	const { formatMessage: t } = useIntl()
+
+	const displayableAttachments = attachments.filter(
+		// TODO: Support other attachment types
+		(a): a is Extract<Attachment, { type: 'photo' }> => a.type === 'photo',
+	)
+
+	const color = categoryColor || BLUE_GREY
+	const name = categoryName || t(m.observationCategoryNameFallback)
+
+	if (displayableAttachments.length > 0) {
+		const shouldStack = displayableAttachments.length > 1
+
+		const categoryIcon = categoryIconDocumentId ? (
+			<CategoryIcon
+				projectId={projectId}
+				iconDocumentId={categoryIconDocumentId}
+				categoryColor={color}
+				categoryName={name}
+				imageStyle={{ aspectRatio: 1, maxHeight: 12, objectFit: 'cover' }}
+			/>
+		) : (
+			<CategoryIconContainer color={BLUE_GREY}>
+				<Icon name="material-place" size={40} />
+			</CategoryIconContainer>
+		)
+
+		return (
+			<>
+				<Box
+					overflow="hidden"
+					borderRadius={2}
+					display="flex"
+					flexDirection="column"
+					position="relative"
+					width="100%"
+					sx={{ aspectRatio: 1 }}
+				>
+					{
+						// NOTE: We only display the first three
+						displayableAttachments.slice(0, 3).map((attachment, index) => (
+							<Box
+								key={`${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`}
+								position="absolute"
+								sx={
+									shouldStack
+										? {
+												aspectRatio: 1,
+												outline: `1px solid ${BLUE_GREY}`,
+												width: '80%',
+												top: index * 5,
+												left: index * 5,
+											}
+										: {
+												top: 0,
+												right: 0,
+												left: 0,
+												bottom: 0,
+											}
+								}
+								overflow="hidden"
+								borderRadius={2}
+							>
+								<AttachmentImage
+									projectId={projectId}
+									blobId={{
+										driveId: attachment.driveDiscoveryId,
+										name: attachment.name,
+										variant: 'preview',
+										type: attachment.type,
+									}}
+								/>
+							</Box>
+						))
+					}
+				</Box>
+
+				<Box
+					position="absolute"
+					right={(theme) => theme.spacing(2)}
+					bottom={(theme) => theme.spacing(2)}
+					zIndex={1}
+				>
+					{categoryIcon}
+				</Box>
+			</>
+		)
+	}
+
+	return categoryIconDocumentId ? (
+		<CategoryIcon
+			projectId={projectId}
+			iconDocumentId={categoryIconDocumentId}
+			categoryColor={color}
+			categoryName={name}
+			imageStyle={{ aspectRatio: 1, width: '100%' }}
+		/>
+	) : (
+		<CategoryIconContainer color={BLUE_GREY}>
+			<Icon name="material-place" size={40} />
+		</CategoryIconContainer>
+	)
+}
+
+function TrackCategory({
+	categoryColor,
+	categoryIconDocumentId,
 	categoryName,
 	projectId,
-	iconDocumentId,
 }: {
-	borderColor: string
-	categoryName: string
 	projectId: string
+	categoryColor?: string
+	categoryIconDocumentId?: string
+	categoryName?: string
+}) {
+	const { formatMessage: t } = useIntl()
+
+	return categoryIconDocumentId ? (
+		<CategoryIcon
+			projectId={projectId}
+			iconDocumentId={categoryIconDocumentId}
+			categoryColor={categoryColor || BLUE_GREY}
+			categoryName={categoryName || t(m.trackCategoryNameFallback)}
+			imageStyle={{ aspectRatio: 1, width: '100%' }}
+		/>
+	) : (
+		<CategoryIconContainer color={BLACK}>
+			<Icon name="material-hiking" size={40} />
+		</CategoryIconContainer>
+	)
+}
+
+function CategoryIcon({
+	categoryColor,
+	categoryName,
+	iconDocumentId,
+	imageStyle,
+	projectId,
+}: {
+	categoryColor: string
+	categoryName: string
 	iconDocumentId: string
+	imageStyle?: CSSProperties
+	projectId: string
 }) {
 	const { formatMessage: t } = useIntl()
 
@@ -414,13 +573,34 @@ function DisplayedCategoryAndAttachments({
 	})
 
 	return (
-		<CategoryIconContainer color={borderColor}>
+		<CategoryIconContainer color={categoryColor}>
 			<img
 				src={iconURL}
 				alt={t(m.categoryIconAlt, { name: categoryName })}
-				style={{ aspectRatio: 1, maxHeight: 48 }}
+				style={imageStyle}
 			/>
 		</CategoryIconContainer>
+	)
+}
+
+function AttachmentImage({
+	blobId,
+	projectId,
+}: {
+	blobId: BlobId
+	projectId: string
+}) {
+	const { data: attachmentUrl } = useAttachmentUrl({ projectId, blobId })
+
+	return (
+		<img
+			src={attachmentUrl}
+			style={{
+				aspectRatio: 1,
+				width: '100%',
+				objectFit: 'cover',
+			}}
+		/>
 	)
 }
 
