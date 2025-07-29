@@ -178,164 +178,170 @@ function RouteComponent() {
 				</Typography>
 			</Stack>
 
-			<Stack direction="column" useFlexGap gap={6} overflow="auto" padding={6}>
-				<Typography>
-					{formatDate(observation.createdAt, {
-						year: 'numeric',
-						month: 'short',
-						day: '2-digit',
-						minute: '2-digit',
-						hour: '2-digit',
-						hourCycle: 'h12',
-					})}
-				</Typography>
-
-				<Stack
-					direction="column"
-					border={`1px solid ${BLUE_GREY}`}
-					borderRadius={2}
-				>
-					{category ? (
-						<Stack
-							direction="row"
-							alignItems="center"
-							useFlexGap
-							gap={4}
-							padding={4}
-						>
-							<Suspense
-								fallback={
-									<Box
-										display="flex"
-										justifyContent="center"
-										alignItems="center"
-										height={48}
-										width={48}
-									>
-										<CircularProgress disableShrink size={30} />
-									</Box>
-								}
-							>
-								<CategoryIconContainer
-									color={category.color || BLUE_GREY}
-									applyBoxShadow
-								>
-									{category.iconRef?.docId ? (
-										<CategoryIconImage
-											categoryName={
-												category.name || t(m.observationCategoryNameFallback)
-											}
-											iconDocumentId={category.iconRef.docId}
-											projectId={projectId}
-										/>
-									) : (
-										<Icon name="material-place" size={40} />
-									)}
-								</CategoryIconContainer>
-							</Suspense>
-
-							<Typography variant="h2" fontWeight={500}>
-								{category.name}
-							</Typography>
-						</Stack>
-					) : (
-						<Stack
-							direction="row"
-							alignItems="center"
-							useFlexGap
-							gap={3}
-							padding={4}
-						>
-							<CategoryIconContainer color={BLUE_GREY} applyBoxShadow>
-								<Icon name="material-place" size={40} />
-							</CategoryIconContainer>
-
-							<Typography variant="h2" fontWeight={500}>
-								{t(m.observationCategoryNameFallback)}
-							</Typography>
-						</Stack>
-					)}
-
-					<Divider variant="fullWidth" sx={{ color: BLUE_GREY }} />
-
-					<Stack
-						direction="row"
-						alignItems="center"
-						padding={4}
-						useFlexGap
-						gap={3}
-					>
-						<Icon name="material-fmd-good-filled" htmlColor={DARKER_ORANGE} />
-
-						<Typography>
-							{typeof observation.lon === 'number' &&
-							typeof observation.lat === 'number'
-								? formatCoords({
-										lon: observation.lon,
-										lat: observation.lat,
-										format: coordinateFormat,
-									})
-								: t(m.noLocation)}
-						</Typography>
-					</Stack>
-				</Stack>
-
-				<Stack direction="column" useFlexGap gap={4}>
-					<Typography component="h2" variant="body1" textTransform="uppercase">
-						{t(m.notesSectionTitle)}
+			<Box padding={6} overflow="auto">
+				<Stack direction="column" useFlexGap gap={6}>
+					<Typography>
+						{formatDate(observation.createdAt, {
+							year: 'numeric',
+							month: 'short',
+							day: '2-digit',
+							minute: '2-digit',
+							hour: '2-digit',
+							hourCycle: 'h12',
+						})}
 					</Typography>
 
-					<Typography>{observation.tags.notes}</Typography>
-				</Stack>
+					<Stack
+						direction="column"
+						border={`1px solid ${BLUE_GREY}`}
+						borderRadius={2}
+					>
+						{category ? (
+							<Stack
+								direction="row"
+								alignItems="center"
+								useFlexGap
+								gap={4}
+								padding={4}
+							>
+								<Suspense
+									fallback={
+										<Box
+											display="flex"
+											justifyContent="center"
+											alignItems="center"
+											height={48}
+											width={48}
+										>
+											<CircularProgress disableShrink size={30} />
+										</Box>
+									}
+								>
+									<CategoryIconContainer
+										color={category.color || BLUE_GREY}
+										applyBoxShadow
+									>
+										{category.iconRef?.docId ? (
+											<CategoryIconImage
+												categoryName={
+													category.name || t(m.observationCategoryNameFallback)
+												}
+												iconDocumentId={category.iconRef.docId}
+												projectId={projectId}
+											/>
+										) : (
+											<Icon name="material-place" size={40} />
+										)}
+									</CategoryIconContainer>
+								</Suspense>
 
-				{/* TODO: Render attachments here */}
-				<Stack direction="column" useFlexGap gap={2}></Stack>
+								<Typography variant="h2" fontWeight={500}>
+									{category.name}
+								</Typography>
+							</Stack>
+						) : (
+							<Stack
+								direction="row"
+								alignItems="center"
+								useFlexGap
+								gap={3}
+								padding={4}
+							>
+								<CategoryIconContainer color={BLUE_GREY} applyBoxShadow>
+									<Icon name="material-place" size={40} />
+								</CategoryIconContainer>
 
-				{fieldsToDisplay.length > 0 ? (
+								<Typography variant="h2" fontWeight={500}>
+									{t(m.observationCategoryNameFallback)}
+								</Typography>
+							</Stack>
+						)}
+
+						<Divider variant="fullWidth" sx={{ color: BLUE_GREY }} />
+
+						<Stack
+							direction="row"
+							alignItems="center"
+							padding={4}
+							useFlexGap
+							gap={3}
+						>
+							<Icon name="material-fmd-good-filled" htmlColor={DARKER_ORANGE} />
+
+							<Typography>
+								{typeof observation.lon === 'number' &&
+								typeof observation.lat === 'number'
+									? formatCoords({
+											lon: observation.lon,
+											lat: observation.lat,
+											format: coordinateFormat,
+										})
+									: t(m.noLocation)}
+							</Typography>
+						</Stack>
+					</Stack>
+
 					<Stack direction="column" useFlexGap gap={4}>
 						<Typography
 							component="h2"
 							variant="body1"
 							textTransform="uppercase"
 						>
-							{t(m.detailsSectionTitle)}
+							{t(m.notesSectionTitle)}
 						</Typography>
 
-						<Stack direction="column" useFlexGap gap={3}>
-							{fieldsToDisplay.map((field) => {
-								const { label, answer } = getRenderableFieldInfo({
-									field,
-									tags: observation.tags,
-									answerTypeToTranslatedString: {
-										true: t(m.fieldAnswerTrue),
-										false: t(m.fieldAnswerFalse),
-										null: t(m.fieldAnswerNull),
-									},
-								})
-
-								return (
-									<Stack
-										key={field.docId}
-										direction="column"
-										useFlexGap
-										gap={2}
-									>
-										<Typography component="h3" variant="body1">
-											{label}
-										</Typography>
-
-										<Typography
-											fontStyle={answer.length === 0 ? 'italic' : undefined}
-										>
-											{answer.length > 0 ? answer : t(m.fieldAnswerNoAnswer)}
-										</Typography>
-									</Stack>
-								)
-							})}
-						</Stack>
+						<Typography>{observation.tags.notes}</Typography>
 					</Stack>
-				) : null}
-			</Stack>
+
+					{/* TODO: Render attachments here */}
+					<Stack direction="column" useFlexGap gap={2}></Stack>
+
+					{fieldsToDisplay.length > 0 ? (
+						<Stack direction="column" useFlexGap gap={4}>
+							<Typography
+								component="h2"
+								variant="body1"
+								textTransform="uppercase"
+							>
+								{t(m.detailsSectionTitle)}
+							</Typography>
+
+							<Stack direction="column" useFlexGap gap={3}>
+								{fieldsToDisplay.map((field) => {
+									const { label, answer } = getRenderableFieldInfo({
+										field,
+										tags: observation.tags,
+										answerTypeToTranslatedString: {
+											true: t(m.fieldAnswerTrue),
+											false: t(m.fieldAnswerFalse),
+											null: t(m.fieldAnswerNull),
+										},
+									})
+
+									return (
+										<Stack
+											key={field.docId}
+											direction="column"
+											useFlexGap
+											gap={2}
+										>
+											<Typography component="h3" variant="body1">
+												{label}
+											</Typography>
+
+											<Typography
+												fontStyle={answer.length === 0 ? 'italic' : undefined}
+											>
+												{answer.length > 0 ? answer : t(m.fieldAnswerNoAnswer)}
+											</Typography>
+										</Stack>
+									)
+								})}
+							</Stack>
+						</Stack>
+					) : null}
+				</Stack>
+			</Box>
 		</Stack>
 	)
 }
