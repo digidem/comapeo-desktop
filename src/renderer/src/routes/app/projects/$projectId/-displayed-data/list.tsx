@@ -308,35 +308,36 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 										width={CATEGORY_CONTAINER_SIZE_PX}
 										sx={{ aspectRatio: 1 }}
 									>
-										<Suspense
-											fallback={
-												<Box
-													display="flex"
-													justifyContent="center"
-													alignItems="center"
-													flex={1}
-												>
-													<CircularProgress disableShrink size={30} />
-												</Box>
-											}
-										>
-											{type === 'observation' ? (
-												<ObservationCategory
-													attachments={document.attachments}
-													categoryColor={category?.color}
-													categoryName={category?.name}
-													categoryIconDocumentId={category?.iconRef?.docId}
-													projectId={projectId}
-												/>
-											) : (
-												<TrackCategory
-													categoryIconDocumentId={category?.iconRef?.docId}
-													categoryColor={category?.color}
-													categoryName={category?.name}
-													projectId={projectId}
-												/>
-											)}
-										</Suspense>
+										<Box flex={1}>
+											<Suspense
+												fallback={
+													<Box
+														display="flex"
+														justifyContent="center"
+														alignItems="center"
+													>
+														<CircularProgress disableShrink size={30} />
+													</Box>
+												}
+											>
+												{type === 'observation' ? (
+													<ObservationCategory
+														attachments={document.attachments}
+														categoryColor={category?.color}
+														categoryName={category?.name}
+														categoryIconDocumentId={category?.iconRef?.docId}
+														projectId={projectId}
+													/>
+												) : (
+													<TrackCategory
+														categoryIconDocumentId={category?.iconRef?.docId}
+														categoryColor={category?.color}
+														categoryName={category?.name}
+														projectId={projectId}
+													/>
+												)}
+											</Suspense>
+										</Box>
 									</Box>
 								</Stack>
 							</ListItemButton>
@@ -442,7 +443,17 @@ function ObservationCategory({
 			/>
 		) : (
 			<CategoryIconContainer color={BLUE_GREY}>
-				<Icon name="material-place" size={40} />
+				<Box
+					display="flex"
+					justifyContent="center"
+					alignItems="center"
+					maxHeight={12}
+					sx={{
+						aspectRatio: 1,
+					}}
+				>
+					<Icon name="material-place" />
+				</Box>
 			</CategoryIconContainer>
 		)
 
