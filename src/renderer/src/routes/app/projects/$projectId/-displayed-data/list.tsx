@@ -39,8 +39,10 @@ import {
 	WHITE,
 } from '../../../../../colors'
 import { CategoryIconContainer } from '../../../../../components/category-icon'
+import { ErrorBoundary } from '../../../../../components/error-boundary'
 import { Icon } from '../../../../../components/icon'
 import { TextLink } from '../../../../../components/link'
+import { SuspenseImage } from '../../../../../components/suspense-image'
 import {
 	getMatchingCategoryForDocument,
 	type Attachment,
@@ -465,12 +467,13 @@ function ObservationCategory({
 									shouldStack
 										? {
 												aspectRatio: 1,
-												outline: `1px solid ${BLUE_GREY}`,
+												border: `1px solid ${BLUE_GREY}`,
 												width: '80%',
 												top: index * 5,
 												left: index * 5,
 											}
 										: {
+												border: `1px solid ${BLUE_GREY}`,
 												top: 0,
 												right: 0,
 												left: 0,
@@ -480,15 +483,34 @@ function ObservationCategory({
 								overflow="hidden"
 								borderRadius={2}
 							>
-								<AttachmentImage
-									projectId={projectId}
-									blobId={{
-										driveId: attachment.driveDiscoveryId,
-										name: attachment.name,
-										variant: 'preview',
-										type: attachment.type,
-									}}
-								/>
+								<ErrorBoundary
+									getResetKey={() =>
+										`${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`
+									}
+									fallback={() => (
+										<Box
+											display="flex"
+											flex={1}
+											justifyContent="center"
+											alignItems="center"
+											height="100%"
+											width="100%"
+											bgcolor={WHITE}
+										>
+											<Icon name="material-error" color="error" />
+										</Box>
+									)}
+								>
+									<AttachmentImage
+										projectId={projectId}
+										blobId={{
+											driveId: attachment.driveDiscoveryId,
+											name: attachment.name,
+											variant: 'preview',
+											type: attachment.type,
+										}}
+									/>
+								</ErrorBoundary>
 							</Box>
 						))
 					}
@@ -564,7 +586,7 @@ function CategoryIcon({
 }) {
 	const { formatMessage: t } = useIntl()
 
-	const { data: iconURL } = useIconUrl({
+	const { data: iconUrl } = useIconUrl({
 		projectId,
 		iconId: iconDocumentId,
 		mimeType: 'image/png',
@@ -574,11 +596,26 @@ function CategoryIcon({
 
 	return (
 		<CategoryIconContainer color={categoryColor}>
-			<img
-				src={iconURL}
-				alt={t(m.categoryIconAlt, { name: categoryName })}
-				style={imageStyle}
-			/>
+			<ErrorBoundary
+				getResetKey={() => iconUrl}
+				fallback={() => (
+					<Box
+						sx={imageStyle}
+						display="flex"
+						justifyContent="center"
+						alignItems="center"
+						flex={1}
+					>
+						<Icon name="material-error" color="error" />
+					</Box>
+				)}
+			>
+				<SuspenseImage
+					src={iconUrl}
+					alt={t(m.categoryIconAlt, { name: categoryName })}
+					style={imageStyle}
+				/>
+			</ErrorBoundary>
 		</CategoryIconContainer>
 	)
 }
@@ -593,7 +630,7 @@ function AttachmentImage({
 	const { data: attachmentUrl } = useAttachmentUrl({ projectId, blobId })
 
 	return (
-		<img
+		<SuspenseImage
 			src={attachmentUrl}
 			style={{
 				aspectRatio: 1,
