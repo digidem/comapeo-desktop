@@ -113,6 +113,7 @@
 		"@types/sodium-native": "2.3.9",
 		"@types/utm": "1.1.4",
 		"@vitejs/plugin-react": "4.7.0",
+		"date-fns": "4.1.0",
 		"electron": "37.2.4",
 		"eslint": "9.31.0",
 		"eslint-plugin-react-hooks": "5.2.0",

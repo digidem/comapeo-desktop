@@ -30,6 +30,11 @@ import {
 	getCoordinateFormatQueryOptions,
 	getLocaleStateQueryOptions,
 } from '../../../../../../lib/queries/app-settings'
+import {
+	AttachmentError,
+	AttachmentPending,
+	AttachmentPreview,
+} from './-attachment-preview'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/observations/$observationDocId/',
@@ -180,105 +185,107 @@ function RouteComponent() {
 				</Typography>
 			</Stack>
 
-			<Box padding={6} overflow="auto">
-				<Stack direction="column" useFlexGap gap={6}>
-					<Typography>
-						{formatDate(observation.createdAt, {
-							year: 'numeric',
-							month: 'short',
-							day: '2-digit',
-							minute: '2-digit',
-							hour: '2-digit',
-							hourCycle: 'h12',
-						})}
-					</Typography>
-
-					<Stack
-						direction="column"
-						border={`1px solid ${BLUE_GREY}`}
-						borderRadius={2}
-					>
-						{category ? (
-							<Stack
-								direction="row"
-								alignItems="center"
-								useFlexGap
-								gap={4}
-								padding={4}
-							>
-								<CategoryIconContainer
-									color={category.color || BLUE_GREY}
-									applyBoxShadow
+			<Box overflow="auto">
+				<Stack direction="column" paddingBlock={6} useFlexGap gap={6}>
+					<Box paddingInline={6}>
+						<Typography>
+							{formatDate(observation.createdAt, {
+								year: 'numeric',
+								month: 'short',
+								day: '2-digit',
+								minute: '2-digit',
+								hour: '2-digit',
+								hourCycle: 'h12',
+							})}
+						</Typography>
+					</Box>
+					<Stack direction="column" paddingInline={6}>
+						<Box border={`1px solid ${BLUE_GREY}`} borderRadius={2}>
+							{category ? (
+								<Stack
+									direction="row"
+									alignItems="center"
+									useFlexGap
+									gap={4}
+									padding={4}
 								>
-									<Box
-										flex={1}
-										display="flex"
-										justifyContent={'center'}
-										alignItems={'center'}
-										width={48}
-										sx={{ aspectRatio: 1 }}
+									<CategoryIconContainer
+										color={category.color || BLUE_GREY}
+										applyBoxShadow
 									>
-										{category.iconRef?.docId ? (
-											<CategoryIconImage
-												categoryName={
-													category.name || t(m.observationCategoryNameFallback)
-												}
-												iconDocumentId={category.iconRef.docId}
-												projectId={projectId}
-											/>
-										) : (
-											<Icon name="material-place" size={40} />
-										)}
-									</Box>
-								</CategoryIconContainer>
+										<Box
+											flex={1}
+											display="flex"
+											justifyContent={'center'}
+											alignItems={'center'}
+											width={48}
+											sx={{ aspectRatio: 1 }}
+										>
+											{category.iconRef?.docId ? (
+												<CategoryIconImage
+													categoryName={
+														category.name ||
+														t(m.observationCategoryNameFallback)
+													}
+													iconDocumentId={category.iconRef.docId}
+													projectId={projectId}
+												/>
+											) : (
+												<Icon name="material-place" size={40} />
+											)}
+										</Box>
+									</CategoryIconContainer>
 
-								<Typography variant="h2" fontWeight={500}>
-									{category.name}
-								</Typography>
-							</Stack>
-						) : (
+									<Typography variant="h2" fontWeight={500}>
+										{category.name}
+									</Typography>
+								</Stack>
+							) : (
+								<Stack
+									direction="row"
+									alignItems="center"
+									useFlexGap
+									gap={3}
+									padding={4}
+								>
+									<CategoryIconContainer color={BLUE_GREY} applyBoxShadow>
+										<Icon name="material-place" size={40} />
+									</CategoryIconContainer>
+
+									<Typography variant="h2" fontWeight={500}>
+										{t(m.observationCategoryNameFallback)}
+									</Typography>
+								</Stack>
+							)}
+
+							<Divider variant="fullWidth" sx={{ color: BLUE_GREY }} />
+
 							<Stack
 								direction="row"
 								alignItems="center"
+								padding={4}
 								useFlexGap
 								gap={3}
-								padding={4}
 							>
-								<CategoryIconContainer color={BLUE_GREY} applyBoxShadow>
-									<Icon name="material-place" size={40} />
-								</CategoryIconContainer>
+								<Icon
+									name="material-fmd-good-filled"
+									htmlColor={DARKER_ORANGE}
+								/>
 
-								<Typography variant="h2" fontWeight={500}>
-									{t(m.observationCategoryNameFallback)}
+								<Typography>
+									{typeof observation.lon === 'number' &&
+									typeof observation.lat === 'number'
+										? formatCoords({
+												lon: observation.lon,
+												lat: observation.lat,
+												format: coordinateFormat,
+											})
+										: t(m.noLocation)}
 								</Typography>
 							</Stack>
-						)}
-
-						<Divider variant="fullWidth" sx={{ color: BLUE_GREY }} />
-
-						<Stack
-							direction="row"
-							alignItems="center"
-							padding={4}
-							useFlexGap
-							gap={3}
-						>
-							<Icon name="material-fmd-good-filled" htmlColor={DARKER_ORANGE} />
-
-							<Typography>
-								{typeof observation.lon === 'number' &&
-								typeof observation.lat === 'number'
-									? formatCoords({
-											lon: observation.lon,
-											lat: observation.lat,
-											format: coordinateFormat,
-										})
-									: t(m.noLocation)}
-							</Typography>
-						</Stack>
+						</Box>
 					</Stack>
-
-					<Stack direction="column" useFlexGap gap={4}>
+					<Stack direction="column" paddingInline={6} useFlexGap gap={4}>
 						<Typography
 							component="h2"
 							variant="body1"
@@ -290,11 +297,44 @@ function RouteComponent() {
 						<Typography>{observation.tags.notes}</Typography>
 					</Stack>
 
-					{/* TODO: Render attachments here */}
-					<Stack direction="column" useFlexGap gap={2}></Stack>
+					<Stack direction="column" gap={2} overflow="auto">
+						<Stack
+							direction="row"
+							overflow="auto"
+							paddingBlock={4}
+							paddingInline={6}
+							useFlexGap
+							gap={4}
+						>
+							{observation.attachments.map((attachment) => {
+								const key = `${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`
+								return (
+									<ErrorBoundary
+										key={key}
+										getResetKey={() => key}
+										fallback={() => (
+											<AttachmentError
+												// TODO: Open some error dialog
+												onClick={() => {
+													alert('Not implemented yet')
+												}}
+											/>
+										)}
+									>
+										<Suspense fallback={<AttachmentPending />}>
+											<AttachmentPreview
+												attachment={attachment}
+												projectId={projectId}
+											/>
+										</Suspense>
+									</ErrorBoundary>
+								)
+							})}
+						</Stack>
+					</Stack>
 
 					{fieldsToDisplay.length > 0 ? (
-						<Stack direction="column" useFlexGap gap={4}>
+						<Stack direction="column" paddingInline={6} useFlexGap gap={4}>
 							<Typography
 								component="h2"
 								variant="body1"
@@ -418,6 +458,18 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.notesSectionTitle',
 		defaultMessage: 'Notes',
 		description: 'Title for notes section.',
+	},
+	onlyPreviewsAvailable: {
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.onlyPreviewsAvailable',
+		defaultMessage: 'Only previews available',
+		description:
+			'Text displayed when only preview-quality attachments are available.',
+	},
+	unableToGetDurationTime: {
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.unableToGetDurationTime',
+		defaultMessage: 'Unable to get duration time.',
+		description:
+			'Text displayed when the duration of an audio attachment cannot be determined.',
 	},
 	detailsSectionTitle: {
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle',
