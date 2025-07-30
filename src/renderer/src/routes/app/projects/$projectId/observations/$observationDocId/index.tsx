@@ -17,7 +17,9 @@ import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARKER_ORANGE } from '../../../../../../colors'
 import { CategoryIconContainer } from '../../../../../../components/category-icon'
+import { ErrorBoundary } from '../../../../../../components/error-boundary'
 import { Icon } from '../../../../../../components/icon'
+import { SuspenseImage } from '../../../../../../components/suspense-image'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	getMatchingCategoryForDocument,
@@ -204,22 +206,17 @@ function RouteComponent() {
 								gap={4}
 								padding={4}
 							>
-								<Suspense
-									fallback={
-										<Box
-											display="flex"
-											justifyContent="center"
-											alignItems="center"
-											height={48}
-											width={48}
-										>
-											<CircularProgress disableShrink size={30} />
-										</Box>
-									}
+								<CategoryIconContainer
+									color={category.color || BLUE_GREY}
+									applyBoxShadow
 								>
-									<CategoryIconContainer
-										color={category.color || BLUE_GREY}
-										applyBoxShadow
+									<Box
+										flex={1}
+										display="flex"
+										justifyContent={'center'}
+										alignItems={'center'}
+										width={48}
+										sx={{ aspectRatio: 1 }}
 									>
 										{category.iconRef?.docId ? (
 											<CategoryIconImage
@@ -232,8 +229,8 @@ function RouteComponent() {
 										) : (
 											<Icon name="material-place" size={40} />
 										)}
-									</CategoryIconContainer>
-								</Suspense>
+									</Box>
+								</CategoryIconContainer>
 
 								<Typography variant="h2" fontWeight={500}>
 									{category.name}
@@ -357,7 +354,7 @@ function CategoryIconImage({
 }) {
 	const { formatMessage: t } = useIntl()
 
-	const { data: iconURL } = useIconUrl({
+	const { data: iconUrl } = useIconUrl({
 		projectId,
 		iconId: iconDocumentId,
 		mimeType: 'image/png',
@@ -366,12 +363,17 @@ function CategoryIconImage({
 	})
 
 	return (
-		<img
-			src={iconURL}
-			alt={t(m.categoryIconAlt, { name: categoryName })}
-			height={48}
-			style={{ aspectRatio: 1 }}
-		/>
+		<ErrorBoundary
+			getResetKey={() => iconUrl}
+			fallback={() => <Icon name="material-error" color="error" />}
+		>
+			<Suspense fallback={<CircularProgress disableShrink size={30} />}>
+				<SuspenseImage
+					src={iconUrl}
+					alt={t(m.categoryIconAlt, { name: categoryName })}
+				/>
+			</Suspense>
+		</ErrorBoundary>
 	)
 }
 

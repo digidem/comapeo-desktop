@@ -21,7 +21,6 @@ export function CategoryIconContainer({
 			flexDirection="column"
 			justifyContent="center"
 			alignItems="center"
-			// flex={1}
 			bgcolor={WHITE}
 			borderRadius="50%"
 			padding={padding}

@@ -443,7 +443,17 @@ function ObservationCategory({
 			/>
 		) : (
 			<CategoryIconContainer color={BLUE_GREY}>
-				<Icon name="material-place" size={40} />
+				<Box
+					display="flex"
+					justifyContent="center"
+					alignItems="center"
+					maxHeight={12}
+					sx={{
+						aspectRatio: 1,
+					}}
+				>
+					<Icon name="material-place" />
+				</Box>
 			</CategoryIconContainer>
 		)
 

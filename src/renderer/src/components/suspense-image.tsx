@@ -3,7 +3,7 @@ import { use, type ComponentProps } from 'react'
 
 import { imageSrcResource } from '../lib/image'
 
-type SuspenseImageProps = ComponentProps<'img'> &
+export type SuspenseImageProps = ComponentProps<'img'> &
 	Required<Pick<ComponentProps<'img'>, 'src'>>
 
 export function SuspenseImage({ src, ...props }: SuspenseImageProps) {
