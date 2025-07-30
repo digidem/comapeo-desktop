@@ -35,6 +35,7 @@ export const iconNames = [
 	'material-explore',
 	'material-expand-more',
 	'material-expand-less',
+	'material-error',
 	'material-chevron-right',
 	'material-check',
 	'material-check-circle',
