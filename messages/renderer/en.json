@@ -11,6 +11,22 @@
     "description": "Generic title text for the error dialog.",
     "message": "Something Went Wrong"
   },
+  "components.generic-route-error-component.error": {
+    "description": "Label for error section",
+    "message": "Error"
+  },
+  "components.generic-route-error-component.reload": {
+    "description": "Button text to reload the page",
+    "message": "Reload"
+  },
+  "components.generic-route-error-component.somethinWentWrong": {
+    "description": "Title text of page error",
+    "message": "Something went wrong"
+  },
+  "components.generic-route-error-component.stacktrace": {
+    "description": "Label for stack trace section",
+    "message": "Stack trace"
+  },
   "routes.app.about.title": {
     "message": "About CoMapeo"
   },
