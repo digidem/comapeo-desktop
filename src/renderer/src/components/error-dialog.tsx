@@ -89,6 +89,8 @@ export function ErrorDialog({
 										component="pre"
 										variant="body2"
 										fontFamily="monospace"
+										whiteSpace="pre-wrap"
+										sx={{ wordBreak: 'break-word' }}
 									>
 										{errorMessage}
 									</Typography>
