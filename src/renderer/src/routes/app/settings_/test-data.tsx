@@ -25,6 +25,7 @@ import * as v from 'valibot'
 import { TwoPanelLayout } from '../-components/two-panel-layout'
 import { BLACK, BLUE_GREY } from '../../../colors'
 import { ErrorDialog } from '../../../components/error-dialog'
+import { GenericRoutePendingComponent } from '../../../components/generic-route-pending-component'
 import { Icon } from '../../../components/icon'
 import { Map } from '../../../components/map'
 import { useAppForm } from '../../../hooks/forms'
@@ -61,16 +62,7 @@ export const Route = createFileRoute('/app/settings_/test-data')({
 	pendingComponent: () => {
 		return (
 			<TwoPanelLayout
-				start={
-					<Box
-						display="flex"
-						flex={1}
-						justifyContent="center"
-						alignItems="center"
-					>
-						<CircularProgress />
-					</Box>
-				}
+				start={<GenericRoutePendingComponent />}
 				end={
 					<Box
 						display="flex"

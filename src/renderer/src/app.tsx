@@ -21,6 +21,7 @@ import {
 import type { LocaleState } from '../../main/types/intl'
 import { initComapeoClient } from './comapeo-client'
 import { GenericRouteErrorComponent } from './components/generic-route-error-component'
+import { GenericRoutePendingComponent } from './components/generic-route-pending-component'
 import { IntlProvider } from './contexts/intl'
 import { useNetworkConnectionChangeListener } from './hooks/network'
 import {
@@ -66,6 +67,7 @@ const router = createRouter({
 	defaultPreloadStaleTime: 0,
 	scrollRestoration: true,
 	defaultErrorComponent: GenericRouteErrorComponent,
+	defaultPendingComponent: GenericRoutePendingComponent,
 })
 
 declare module '@tanstack/react-router' {

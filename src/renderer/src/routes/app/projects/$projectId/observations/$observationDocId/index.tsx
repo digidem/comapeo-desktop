@@ -95,19 +95,6 @@ export const Route = createFileRoute(
 			}),
 		])
 	},
-	pendingComponent: () => {
-		return (
-			<Box
-				display="flex"
-				flexDirection="column"
-				flex={1}
-				justifyContent="center"
-				alignItems="center"
-			>
-				<CircularProgress />
-			</Box>
-		)
-	},
 	component: RouteComponent,
 })
 

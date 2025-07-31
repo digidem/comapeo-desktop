@@ -5,6 +5,7 @@ import * as v from 'valibot'
 
 import { TwoPanelLayout } from '../../-components/two-panel-layout'
 import { BLACK } from '../../../../colors'
+import { GenericRoutePendingComponent } from '../../../../components/generic-route-pending-component'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
 import { DisplayedDataMap } from './-displayed-data/map'
 
@@ -93,16 +94,7 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 	pendingComponent: () => {
 		return (
 			<TwoPanelLayout
-				start={
-					<Box
-						display="flex"
-						flex={1}
-						justifyContent="center"
-						alignItems="center"
-					>
-						<CircularProgress />
-					</Box>
-				}
+				start={<GenericRoutePendingComponent />}
 				end={
 					<Box
 						display="flex"
