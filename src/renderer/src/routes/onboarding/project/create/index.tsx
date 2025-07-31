@@ -10,6 +10,7 @@ import * as v from 'valibot'
 
 import { useOnboardingCreateProject } from '../../-shared/queries'
 import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../../../colors'
+import { ErrorDialog } from '../../../../components/error-dialog'
 import { Icon } from '../../../../components/icon'
 import { useAppForm } from '../../../../hooks/forms'
 import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../../../lib/constants'
@@ -34,14 +35,16 @@ function RouteComponent() {
 
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
-	const projectNameSchema = useMemo(() => {
+	const onChangeSchema = useMemo(() => {
 		const maxLengthError = t(m.maxLengthError)
 		const minLengthError = t(m.minLengthError)
 
-		return createProjectNameSchema({
-			maxBytesError: maxLengthError,
-			minLengthError,
-			maxLengthError,
+		return v.object({
+			projectName: createProjectNameSchema({
+				maxBytesError: maxLengthError,
+				minLengthError,
+				maxLengthError,
+			}),
 		})
 	}, [t])
 
@@ -50,16 +53,17 @@ function RouteComponent() {
 			projectName: '',
 		},
 		validators: {
-			onChange: v.object({ projectName: projectNameSchema }),
+			onChange: onChangeSchema,
 		},
 		onSubmit: async ({ value }) => {
-			const parsedProjectName = v.parse(projectNameSchema, value.projectName)
+			const { projectName } = v.parse(onChangeSchema, value)
 
-			const projectId = await createProject.mutateAsync({
-				name: parsedProjectName,
-			})
+			// TODO: Catch error and report to Sentry
+			const projectId = await createProject.mutateAsync({ name: projectName })
 
+			// TODO: Should we await this?
 			setActiveProjectId.mutate(projectId)
+
 			navigate({
 				to: '/onboarding/project/create/$projectId/success',
 				params: { projectId },
@@ -68,127 +72,137 @@ function RouteComponent() {
 	})
 
 	return (
-		<Stack
-			display="flex"
-			useFlexGap
-			direction="column"
-			justifyContent="space-between"
-			flex={1}
-			gap={10}
-			bgcolor={LIGHT_GREY}
-			padding={5}
-			borderRadius={2}
-			overflow="auto"
-		>
-			<Container
-				maxWidth="sm"
-				component={Stack}
-				direction="column"
+		<>
+			<Stack
+				display="flex"
 				useFlexGap
-				gap={5}
+				direction="column"
+				justifyContent="space-between"
+				flex={1}
+				gap={10}
+				bgcolor={LIGHT_GREY}
+				padding={5}
+				borderRadius={2}
+				overflow="auto"
 			>
-				<Box alignSelf="center">
-					<Icon
-						name="material-symbols-new-window"
-						htmlColor={DARKER_ORANGE}
-						size={80}
-					/>
-				</Box>
-
-				<Typography variant="h1" fontWeight={500} textAlign="center">
-					{t(m.title)}
-				</Typography>
-
-				<Typography variant="h2" fontWeight={400} textAlign="center">
-					{t(m.description)}
-				</Typography>
-
-				<Box
-					component="form"
-					id="device-name-form"
-					noValidate
-					autoComplete="off"
-					onSubmit={(event) => {
-						event.preventDefault()
-						if (form.state.isSubmitting) return
-						form.handleSubmit()
-					}}
+				<Container
+					maxWidth="sm"
+					component={Stack}
+					direction="column"
+					useFlexGap
+					gap={5}
 				>
-					<form.AppField name="projectName">
-						{(field) => (
-							<field.TextField
-								required
-								fullWidth
-								autoFocus
-								label={t(m.projectName)}
-								value={field.state.value}
-								error={!field.state.meta.isValid}
-								onChange={(event) => {
-									field.handleChange(event.target.value)
-								}}
-								slotProps={{
-									input: {
-										style: {
-											backgroundColor: WHITE,
+					<Box alignSelf="center">
+						<Icon
+							name="material-symbols-new-window"
+							htmlColor={DARKER_ORANGE}
+							size={80}
+						/>
+					</Box>
+
+					<Typography variant="h1" fontWeight={500} textAlign="center">
+						{t(m.title)}
+					</Typography>
+
+					<Typography variant="h2" fontWeight={400} textAlign="center">
+						{t(m.description)}
+					</Typography>
+
+					<Box
+						component="form"
+						id="device-name-form"
+						noValidate
+						autoComplete="off"
+						onSubmit={(event) => {
+							event.preventDefault()
+							if (form.state.isSubmitting) return
+							form.handleSubmit()
+						}}
+					>
+						<form.AppField name="projectName">
+							{(field) => (
+								<field.TextField
+									required
+									fullWidth
+									autoFocus
+									label={t(m.projectName)}
+									value={field.state.value}
+									error={!field.state.meta.isValid}
+									onChange={(event) => {
+										field.handleChange(event.target.value)
+									}}
+									slotProps={{
+										input: {
+											style: {
+												backgroundColor: WHITE,
+											},
 										},
-									},
-								}}
-								onBlur={field.handleBlur}
-								helperText={
-									<Stack
-										component="span"
-										direction="row"
-										justifyContent="space-between"
-									>
-										<Box component="span">
-											{field.state.meta.errors[0]?.message}
-										</Box>
-										<Box component="span">
-											<form.Subscribe
-												selector={(state) =>
-													v._getGraphemeCount(state.values.projectName)
-												}
-											>
-												{(count) =>
-													t(m.characterCount, {
-														count,
-														max: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
-													})
-												}
-											</form.Subscribe>
-										</Box>
-									</Stack>
-								}
-							/>
-						)}
-					</form.AppField>
-				</Box>
-			</Container>
+									}}
+									onBlur={field.handleBlur}
+									helperText={
+										<Stack
+											component="span"
+											direction="row"
+											justifyContent="space-between"
+										>
+											<Box component="span">
+												{field.state.meta.errors[0]?.message}
+											</Box>
+											<Box component="span">
+												<form.Subscribe
+													selector={(state) =>
+														v._getGraphemeCount(state.values.projectName)
+													}
+												>
+													{(count) =>
+														t(m.characterCount, {
+															count,
+															max: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
+														})
+													}
+												</form.Subscribe>
+											</Box>
+										</Stack>
+									}
+								/>
+							)}
+						</form.AppField>
+					</Box>
+				</Container>
 
-			<Box display="flex" justifyContent="center">
-				<form.Subscribe
-					selector={(state) => [state.canSubmit, state.isSubmitting]}
-				>
-					{([canSubmit, isSubmitting]) => (
-						<form.SubmitButton
-							fullWidth
-							form="device-name-form"
-							variant="contained"
-							size="large"
-							disableElevation
-							type="submit"
-							aria-disabled={!canSubmit || isSubmitting}
-							// TODO: Maybe use spin-delay?
-							loading={isSubmitting}
-							loadingPosition="start"
-							sx={{ maxWidth: 400 }}
-						>
-							{t(m.createProject)}
-						</form.SubmitButton>
-					)}
-				</form.Subscribe>
-			</Box>
-		</Stack>
+				<Box display="flex" justifyContent="center">
+					<form.Subscribe
+						selector={(state) => [state.canSubmit, state.isSubmitting]}
+					>
+						{([canSubmit, isSubmitting]) => (
+							<form.SubmitButton
+								fullWidth
+								form="device-name-form"
+								variant="contained"
+								size="large"
+								disableElevation
+								type="submit"
+								aria-disabled={!canSubmit || isSubmitting}
+								// TODO: Maybe use spin-delay?
+								loading={isSubmitting}
+								loadingPosition="start"
+								sx={{ maxWidth: 400 }}
+							>
+								{t(m.createProject)}
+							</form.SubmitButton>
+						)}
+					</form.Subscribe>
+				</Box>
+			</Stack>
+
+			<ErrorDialog
+				open={createProject.status === 'error'}
+				errorMessage={createProject.error?.message}
+				onClose={() => {
+					createProject.reset()
+				}}
+			/>
+		</>
 	)
 }
 
