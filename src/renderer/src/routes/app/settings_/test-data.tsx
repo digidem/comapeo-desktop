@@ -225,7 +225,6 @@ function RouteComponent() {
 							direction="row"
 							alignItems="center"
 							component="nav"
-							useFlexGap
 							gap={4}
 							padding={4}
 							borderBottom={`1px solid ${BLUE_GREY}`}
@@ -268,7 +267,7 @@ function RouteComponent() {
 										})
 									}}
 								>
-									<Stack direction="column" useFlexGap gap={10}>
+									<Stack direction="column" gap={10}>
 										<form.AppField name="observationCount">
 											{(field) => (
 												<field.TextField
@@ -314,11 +313,10 @@ function RouteComponent() {
 											padding={0}
 											gap={10}
 										>
-											<Stack direction="column" useFlexGap gap={5}>
+											<Stack direction="column" gap={5}>
 												<Typography>{t(m.coordinatesSelectionHint)}</Typography>
 												<Stack
 													direction="row"
-													useFlexGap
 													gap={4}
 													justifyContent="space-between"
 												>
@@ -393,7 +391,6 @@ function RouteComponent() {
 
 							<Stack
 								direction="column"
-								useFlexGap
 								gap={4}
 								paddingX={6}
 								paddingBottom={6}

@@ -66,19 +66,11 @@ function RouteComponent() {
 	}, [theme.typography.body1.fontSize, theme.typography.body1.lineHeight])
 
 	return (
-		<Stack
-			direction="column"
-			padding={6}
-			flex={1}
-			overflow="auto"
-			useFlexGap
-			gap={6}
-		>
+		<Stack direction="column" padding={6} flex={1} overflow="auto" gap={6}>
 			<Stack
 				direction="column"
 				border={`1px solid ${BLUE_GREY}`}
 				borderRadius={2}
-				useFlexGap
 				gap={4}
 				alignItems="center"
 				padding={6}
@@ -222,13 +214,7 @@ function SettingRow({
 			borderRadius={2}
 			padding={4}
 		>
-			<Stack
-				direction="row"
-				alignItems="center"
-				useFlexGap
-				gap={3}
-				overflow="auto"
-			>
+			<Stack direction="row" alignItems="center" gap={3} overflow="auto">
 				{icon}
 				<Typography
 					textOverflow="ellipsis"

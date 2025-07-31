@@ -154,7 +154,6 @@ function RouteComponent() {
 					direction="row"
 					alignItems="center"
 					component="nav"
-					useFlexGap
 					gap={4}
 					padding={4}
 					borderBottom={`1px solid ${BLUE_GREY}`}
@@ -199,7 +198,7 @@ function RouteComponent() {
 								form.handleSubmit()
 							}}
 						>
-							<Stack direction="column" useFlexGap gap={10}>
+							<Stack direction="column" gap={10}>
 								<Box paddingInline={6}>
 									<form.AppField name="projectName">
 										{(field) => (
@@ -299,7 +298,7 @@ function RouteComponent() {
 								</Box>
 
 								<FormControl>
-									<Stack direction="column" useFlexGap gap={4}>
+									<Stack direction="column" gap={4}>
 										<Box paddingInline={6}>
 											<FormLabel id="project-color-selector-label">
 												{t(m.projectCardColorLabel)}
@@ -411,7 +410,6 @@ function RouteComponent() {
 
 					<Stack
 						direction="column"
-						useFlexGap
 						gap={4}
 						paddingX={6}
 						paddingBottom={6}

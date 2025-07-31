@@ -55,7 +55,6 @@ function RouteComponent() {
 	return (
 		<Stack
 			display="flex"
-			useFlexGap
 			direction="column"
 			justifyContent="space-between"
 			flex={1}
@@ -69,7 +68,6 @@ function RouteComponent() {
 				maxWidth="sm"
 				component={Stack}
 				direction="column"
-				useFlexGap
 				gap={5}
 				textAlign="center"
 			>
@@ -104,7 +102,6 @@ function RouteComponent() {
 				component={Stack}
 				direction="column"
 				alignItems="center"
-				useFlexGap
 				gap={8}
 			>
 				<Divider sx={{ backgroundColor: BLUE_GREY, alignSelf: 'stretch' }} />

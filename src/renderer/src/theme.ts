@@ -185,6 +185,11 @@ const baseTheme = createTheme({
 				},
 			},
 		},
+		MuiStack: {
+			defaultProps: {
+				useFlexGap: true,
+			},
+		},
 	},
 })
 

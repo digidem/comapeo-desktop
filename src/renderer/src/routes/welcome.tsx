@@ -45,7 +45,7 @@ function RouteComponent() {
 			}}
 		>
 			<Container maxWidth="lg">
-				<Stack useFlexGap display="flex" alignItems="center" gap={25}>
+				<Stack display="flex" alignItems="center" gap={25}>
 					<Grid container spacing={10} justifyContent="center">
 						<Grid
 							container
@@ -53,7 +53,7 @@ function RouteComponent() {
 							size={viewportIsNarrow ? 8 : 5}
 							textAlign={viewportIsNarrow ? 'center' : undefined}
 						>
-							<Stack useFlexGap spacing={5}>
+							<Stack spacing={5}>
 								<Typography variant="bannerTitle" color="textInverted">
 									{t(m.comapeoDesktop)}
 								</Typography>
@@ -64,7 +64,6 @@ function RouteComponent() {
 						</Grid>
 						<Grid size={viewportIsNarrow ? 8 : 5} container>
 							<Stack
-								useFlexGap
 								display="flex"
 								justifyContent="center"
 								paddingX={5}

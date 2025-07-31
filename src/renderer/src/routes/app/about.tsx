@@ -20,19 +20,11 @@ function RouteComponent() {
 	return (
 		<TwoPanelLayout
 			start={
-				<Stack
-					direction="column"
-					gap={4}
-					padding={6}
-					useFlexGap
-					flex={1}
-					overflow="auto"
-				>
+				<Stack direction="column" gap={4} padding={6} flex={1} overflow="auto">
 					<Stack
 						direction="column"
 						border={`1px solid ${BLUE_GREY}`}
 						borderRadius={2}
-						useFlexGap
 						gap={4}
 						alignItems="center"
 						padding={6}
@@ -50,14 +42,13 @@ function RouteComponent() {
 						direction="column"
 						border={`1px solid ${BLUE_GREY}`}
 						borderRadius={2}
-						useFlexGap
 						gap={4}
 						padding={6}
 						flex={1}
 					>
 						<List>
 							<ListItem>
-								<Stack direction="column" useFlexGap gap={3}>
+								<Stack direction="column" gap={3}>
 									<Typography variant="h2" fontWeight={500}>
 										{t(m.version)}
 									</Typography>

@@ -70,7 +70,6 @@ function RouteComponent() {
 	return (
 		<Stack
 			display="flex"
-			useFlexGap
 			direction="column"
 			justifyContent="space-between"
 			flex={1}
@@ -80,13 +79,7 @@ function RouteComponent() {
 			borderRadius={2}
 			overflow="auto"
 		>
-			<Container
-				maxWidth="sm"
-				component={Stack}
-				direction="column"
-				useFlexGap
-				gap={5}
-			>
+			<Container maxWidth="sm" component={Stack} direction="column" gap={5}>
 				<Box alignSelf="center">
 					<Icon name="material-check-circle" size={80} htmlColor={GREEN} />
 				</Box>
@@ -105,7 +98,7 @@ function RouteComponent() {
 				</Typography>
 			</Container>
 
-			<Stack direction="row" justifyContent="center" useFlexGap gap={5}>
+			<Stack direction="row" justifyContent="center" gap={5}>
 				<ButtonLink
 					to="/app/projects/$projectId/settings/categories"
 					params={{ projectId }}
@@ -149,7 +142,6 @@ function NotFoundComponent(_props: NotFoundRouteProps) {
 	return (
 		<Stack
 			display="flex"
-			useFlexGap
 			direction="column"
 			justifyContent="space-between"
 			flex={1}
@@ -163,7 +155,6 @@ function NotFoundComponent(_props: NotFoundRouteProps) {
 				maxWidth="sm"
 				component={Stack}
 				direction="column"
-				useFlexGap
 				gap={5}
 				flex={1}
 				justifyContent="center"

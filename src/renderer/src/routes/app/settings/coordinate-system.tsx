@@ -57,7 +57,6 @@ function RouteComponent() {
 					direction="row"
 					alignItems="center"
 					component="nav"
-					useFlexGap
 					gap={4}
 					padding={4}
 					borderBottom={`1px solid ${BLUE_GREY}`}
@@ -98,7 +97,7 @@ function RouteComponent() {
 								setCoordinateFormat.mutate(parsedValue)
 							}}
 						>
-							<Stack direction="column" useFlexGap gap={6}>
+							<Stack direction="column" gap={6}>
 								<FormControlLabel
 									value="dd"
 									control={<Radio />}

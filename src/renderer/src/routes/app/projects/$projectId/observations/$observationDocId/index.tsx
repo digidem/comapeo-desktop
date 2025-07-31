@@ -142,7 +142,6 @@ function RouteComponent() {
 				direction="row"
 				alignItems="center"
 				component="nav"
-				useFlexGap
 				gap={4}
 				padding={4}
 				borderBottom={`1px solid ${BLUE_GREY}`}
@@ -173,7 +172,7 @@ function RouteComponent() {
 			</Stack>
 
 			<Box overflow="auto">
-				<Stack direction="column" paddingBlock={6} useFlexGap gap={6}>
+				<Stack direction="column" paddingBlock={6} gap={6}>
 					<Box paddingInline={6}>
 						<Typography>
 							{formatDate(observation.createdAt, {
@@ -189,13 +188,7 @@ function RouteComponent() {
 					<Stack direction="column" paddingInline={6}>
 						<Box border={`1px solid ${BLUE_GREY}`} borderRadius={2}>
 							{category ? (
-								<Stack
-									direction="row"
-									alignItems="center"
-									useFlexGap
-									gap={4}
-									padding={4}
-								>
+								<Stack direction="row" alignItems="center" gap={4} padding={4}>
 									<CategoryIconContainer
 										color={category.color || BLUE_GREY}
 										applyBoxShadow
@@ -228,13 +221,7 @@ function RouteComponent() {
 									</Typography>
 								</Stack>
 							) : (
-								<Stack
-									direction="row"
-									alignItems="center"
-									useFlexGap
-									gap={3}
-									padding={4}
-								>
+								<Stack direction="row" alignItems="center" gap={3} padding={4}>
 									<CategoryIconContainer color={BLUE_GREY} applyBoxShadow>
 										<Icon name="material-place" size={40} />
 									</CategoryIconContainer>
@@ -247,13 +234,7 @@ function RouteComponent() {
 
 							<Divider variant="fullWidth" sx={{ color: BLUE_GREY }} />
 
-							<Stack
-								direction="row"
-								alignItems="center"
-								padding={4}
-								useFlexGap
-								gap={3}
-							>
+							<Stack direction="row" alignItems="center" padding={4} gap={3}>
 								<Icon
 									name="material-fmd-good-filled"
 									htmlColor={DARKER_ORANGE}
@@ -272,7 +253,7 @@ function RouteComponent() {
 							</Stack>
 						</Box>
 					</Stack>
-					<Stack direction="column" paddingInline={6} useFlexGap gap={4}>
+					<Stack direction="column" paddingInline={6} gap={4}>
 						<Typography
 							component="h2"
 							variant="body1"
@@ -290,7 +271,6 @@ function RouteComponent() {
 							overflow="auto"
 							paddingBlock={4}
 							paddingInline={6}
-							useFlexGap
 							gap={4}
 						>
 							{observation.attachments.map((attachment) => {
@@ -321,7 +301,7 @@ function RouteComponent() {
 					</Stack>
 
 					{fieldsToDisplay.length > 0 ? (
-						<Stack direction="column" paddingInline={6} useFlexGap gap={4}>
+						<Stack direction="column" paddingInline={6} gap={4}>
 							<Typography
 								component="h2"
 								variant="body1"
@@ -330,7 +310,7 @@ function RouteComponent() {
 								{t(m.detailsSectionTitle)}
 							</Typography>
 
-							<Stack direction="column" useFlexGap gap={3}>
+							<Stack direction="column" gap={3}>
 								{fieldsToDisplay.map((field) => {
 									const { label, answer } = getRenderableFieldInfo({
 										field,
@@ -343,12 +323,7 @@ function RouteComponent() {
 									})
 
 									return (
-										<Stack
-											key={field.docId}
-											direction="column"
-											useFlexGap
-											gap={2}
-										>
+										<Stack key={field.docId} direction="column" gap={2}>
 											<Typography component="h3" variant="body1">
 												{label}
 											</Typography>

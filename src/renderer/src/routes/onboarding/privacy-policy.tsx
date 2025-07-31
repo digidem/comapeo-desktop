@@ -51,7 +51,6 @@ function RouteComponent() {
 		<>
 			<Stack
 				display="flex"
-				useFlexGap
 				direction="column"
 				justifyContent="space-between"
 				flex={1}
@@ -62,18 +61,12 @@ function RouteComponent() {
 				bgcolor={WHITE}
 				overflow="auto"
 			>
-				<Container
-					component={Stack}
-					maxWidth="sm"
-					direction="column"
-					useFlexGap
-					gap={10}
-				>
+				<Container component={Stack} maxWidth="sm" direction="column" gap={10}>
 					<Typography variant="h1" fontWeight={500} textAlign="center">
 						{t(m.title)}
 					</Typography>
 
-					<Stack direction="column" useFlexGap gap={3}>
+					<Stack direction="column" gap={3}>
 						<Box
 							border={`1px solid ${BLUE_GREY}`}
 							bgcolor={LIGHT_GREY}
@@ -96,7 +89,7 @@ function RouteComponent() {
 						/>
 					</Stack>
 
-					<Stack useFlexGap direction="column" gap={10}>
+					<Stack direction="column" gap={10}>
 						<Typography variant="h2" fontWeight={500}>
 							{t(m.comapeoDataPrivacy)}
 						</Typography>
@@ -134,13 +127,11 @@ function RouteComponent() {
 								border={`1px solid ${BLUE_GREY}`}
 								borderRadius={2}
 								direction="column"
-								useFlexGap
 								gap={5}
 								paddingY={5}
 							>
 								<Stack
 									component="section"
-									useFlexGap
 									direction="column"
 									paddingX={5}
 									gap={3}
@@ -181,7 +172,6 @@ function RouteComponent() {
 								<Stack
 									component="section"
 									direction="column"
-									useFlexGap
 									paddingX={5}
 									gap={3}
 								>
@@ -224,7 +214,6 @@ function RouteComponent() {
 							border={`1px solid ${BLUE_GREY}`}
 							borderRadius={2}
 							direction="column"
-							useFlexGap
 							gap={5}
 							padding={5}
 						>
@@ -270,8 +259,8 @@ function QuestionAnswerItem({
 	title: string
 }>) {
 	return (
-		<Stack component="section" useFlexGap direction="column" gap={10}>
-			<Stack direction="row" alignItems="center" useFlexGap gap={2}>
+		<Stack component="section" direction="column" gap={10}>
+			<Stack direction="row" alignItems="center" gap={2}>
 				{icon}
 				<Typography variant="h3">{title}</Typography>
 			</Stack>

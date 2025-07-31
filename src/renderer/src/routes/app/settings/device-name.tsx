@@ -92,7 +92,6 @@ function RouteComponent() {
 					direction="row"
 					alignItems="center"
 					component="nav"
-					useFlexGap
 					gap={4}
 					padding={4}
 					borderBottom={`1px solid ${BLUE_GREY}`}
@@ -189,7 +188,6 @@ function RouteComponent() {
 
 					<Stack
 						direction="column"
-						useFlexGap
 						gap={4}
 						paddingX={6}
 						paddingBottom={6}

@@ -107,7 +107,6 @@ function RouteComponent() {
 				direction="row"
 				alignItems="center"
 				component="nav"
-				useFlexGap
 				gap={4}
 				padding={4}
 				borderBottom={`1px solid ${BLUE_GREY}`}
@@ -141,7 +140,7 @@ function RouteComponent() {
 				overflow="auto"
 			>
 				<Box padding={6}>
-					<Stack direction="column" useFlexGap gap={6}>
+					<Stack direction="column" gap={6}>
 						{isAtLeastCoordinator ? (
 							<Box display="flex" justifyContent="center">
 								<ButtonLink
@@ -162,8 +161,8 @@ function RouteComponent() {
 							</Box>
 						) : null}
 
-						<Stack direction="column" useFlexGap gap={2}>
-							<Stack direction="row" useFlexGap gap={4} alignItems="center">
+						<Stack direction="column" gap={2}>
+							<Stack direction="row" gap={4} alignItems="center">
 								<Icon
 									name="material-manage-accounts-filled"
 									size={sectionIconSize}
@@ -183,8 +182,8 @@ function RouteComponent() {
 							projectId={projectId}
 						/>
 
-						<Stack direction="column" useFlexGap gap={2}>
-							<Stack direction="row" useFlexGap gap={4} alignItems="center">
+						<Stack direction="column" gap={2}>
+							<Stack direction="row" gap={4} alignItems="center">
 								<Icon name="material-people-filled" size={sectionIconSize} />
 
 								<Typography variant="h2" fontWeight={500}>
@@ -236,8 +235,8 @@ function DeviceList({
 	}, [theme.typography.body1.fontSize, theme.typography.body1.lineHeight])
 
 	return (
-		<Stack direction="column" useFlexGap gap={4}>
-			<Stack direction="row" useFlexGap gap={2} justifyContent="space-between">
+		<Stack direction="column" gap={4}>
+			<Stack direction="row" gap={2} justifyContent="space-between">
 				<Typography color="textSecondary">
 					{t(m.deviceNameColumnTitle)}
 				</Typography>
@@ -254,7 +253,6 @@ function DeviceList({
 					<Stack
 						key={device.deviceId}
 						direction="row"
-						useFlexGap
 						gap={4}
 						padding={5}
 						border={`1px solid ${BLUE_GREY}`}

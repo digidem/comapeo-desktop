@@ -94,10 +94,9 @@ function RouteComponent() {
 						overflow="auto"
 						justifyContent="space-between"
 						padding={6}
-						useFlexGap
 						gap={6}
 					>
-						<Stack direction="row" alignItems="center" useFlexGap gap={4}>
+						<Stack direction="row" alignItems="center" gap={4}>
 							<Box
 								display="flex"
 								flex={1}
@@ -123,7 +122,6 @@ function RouteComponent() {
 
 						<Stack
 							direction="column"
-							useFlexGap
 							gap={5}
 							borderRadius={2}
 							border={`1px solid ${BLUE_GREY}`}
@@ -177,7 +175,7 @@ function RouteComponent() {
 								<CircularProgress />
 							)}
 
-							<Stack direction="column" useFlexGap gap={2}>
+							<Stack direction="column" gap={2}>
 								<Typography fontWeight={500} textAlign="center">
 									{t(m.exchangeEverythingTitle)}
 								</Typography>
@@ -267,7 +265,6 @@ function NetworkConnectionInfo() {
 	return (
 		<Stack
 			direction="row"
-			useFlexGap
 			gap={3}
 			alignItems="center"
 			justifyContent="center"
@@ -328,7 +325,7 @@ function DisplayedSyncState({
 	const title = getExchangeStateTitle(syncStage, syncState.data.isSyncEnabled)
 
 	return (
-		<Stack direction="column" flex={1} useFlexGap gap={5} padding={6}>
+		<Stack direction="column" flex={1} gap={5} padding={6}>
 			<Typography variant="h1" fontWeight={500} textAlign="center">
 				{t(title)}
 			</Typography>
@@ -388,7 +385,7 @@ function SyncProgress({
 				}
 
 	return (
-		<Stack direction="column" useFlexGap gap={3} padding={6}>
+		<Stack direction="column" gap={3} padding={6}>
 			{stage.name === 'complete-full' ? (
 				<Icon name="material-check" htmlColor={GREEN} />
 			) : stage.name !== 'waiting' ? (

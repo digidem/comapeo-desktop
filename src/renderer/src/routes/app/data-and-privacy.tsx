@@ -52,7 +52,6 @@ function RouteComponent() {
 						direction="column"
 						gap={4}
 						padding={6}
-						useFlexGap
 						flex={1}
 						overflow="auto"
 					>
@@ -60,7 +59,6 @@ function RouteComponent() {
 							direction="column"
 							border={`1px solid ${BLUE_GREY}`}
 							borderRadius={2}
-							useFlexGap
 							gap={4}
 							alignItems="center"
 							padding={6}
@@ -97,10 +95,9 @@ function RouteComponent() {
 							direction="column"
 							border={`1px solid ${BLUE_GREY}`}
 							borderRadius={2}
-							useFlexGap
 							flex={1}
 						>
-							<Stack padding={6} direction="column" useFlexGap gap={6} flex={1}>
+							<Stack padding={6} direction="column" gap={6} flex={1}>
 								<Typography variant="h2" fontWeight={500}>
 									{t(m.diagnosticInformationTitle)}
 								</Typography>

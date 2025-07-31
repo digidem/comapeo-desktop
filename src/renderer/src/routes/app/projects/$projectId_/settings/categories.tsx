@@ -85,7 +85,6 @@ function RouteComponent() {
 					direction="row"
 					alignItems="center"
 					component="nav"
-					useFlexGap
 					gap={4}
 					padding={4}
 					borderBottom={`1px solid ${BLUE_GREY}`}
@@ -122,7 +121,6 @@ function RouteComponent() {
 					justifyContent="space-between"
 					overflow="auto"
 					padding={6}
-					useFlexGap
 					gap={6}
 				>
 					<Stack
@@ -131,7 +129,6 @@ function RouteComponent() {
 						border={`1px solid ${BLUE_GREY}`}
 						flex={1}
 						justifyContent="center"
-						useFlexGap
 						gap={5}
 						padding={6}
 					>
