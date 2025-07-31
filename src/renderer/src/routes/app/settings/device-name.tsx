@@ -10,6 +10,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
 import { BLUE_GREY, WHITE } from '../../../colors'
+import { ErrorDialog } from '../../../components/error-dialog'
 import { Icon } from '../../../components/icon'
 import { useAppForm } from '../../../hooks/forms'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
@@ -43,14 +44,16 @@ function RouteComponent() {
 
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
-	const deviceNameSchema = useMemo(() => {
+	const onChangeSchema = useMemo(() => {
 		const maxLengthError = t(m.maxLengthError)
 		const minLengthError = t(m.minLengthError)
 
-		return createDeviceNameSchema({
-			maxBytesError: maxLengthError,
-			maxLengthError,
-			minLengthError,
+		return v.object({
+			deviceName: createDeviceNameSchema({
+				maxBytesError: maxLengthError,
+				maxLengthError,
+				minLengthError,
+			}),
 		})
 	}, [t])
 
@@ -59,14 +62,15 @@ function RouteComponent() {
 			deviceName: deviceInfo.name ? deviceInfo.name : '',
 		},
 		validators: {
-			onChange: v.object({ deviceName: deviceNameSchema }),
+			onChange: onChangeSchema,
 		},
 		onSubmit: async ({ value }) => {
-			const parsedDeviceName = v.parse(deviceNameSchema, value.deviceName)
+			const { deviceName } = v.parse(onChangeSchema, value)
 
+			// TODO: Catch error and report to Sentry
 			await setOwnDeviceInfo.mutateAsync({
 				deviceType: 'desktop',
-				name: parsedDeviceName,
+				name: deviceName,
 			})
 
 			if (router.history.canGoBack()) {
@@ -82,163 +86,173 @@ function RouteComponent() {
 	})
 
 	return (
-		<Stack direction="column" flex={1}>
-			<Stack
-				direction="row"
-				alignItems="center"
-				component="nav"
-				useFlexGap
-				gap={4}
-				padding={4}
-				borderBottom={`1px solid ${BLUE_GREY}`}
-			>
-				<IconButton
-					onClick={() => {
-						if (form.state.isSubmitting) {
-							return
-						}
-
-						if (router.history.canGoBack()) {
-							router.history.back()
-							return
-						}
-
-						router.navigate({ to: '/app/settings', replace: true })
-					}}
+		<>
+			<Stack direction="column" flex={1}>
+				<Stack
+					direction="row"
+					alignItems="center"
+					component="nav"
+					useFlexGap
+					gap={4}
+					padding={4}
+					borderBottom={`1px solid ${BLUE_GREY}`}
 				>
-					<Icon name="material-arrow-back" size={30} />
-				</IconButton>
-				<Typography variant="h1" fontWeight={500}>
-					{t(m.navTitle)}
-				</Typography>
-			</Stack>
+					<IconButton
+						onClick={() => {
+							if (form.state.isSubmitting) {
+								return
+							}
 
-			<Stack
-				direction="column"
-				flex={1}
-				justifyContent="space-between"
-				overflow="auto"
-			>
-				<Box padding={6}>
-					<Box
-						component="form"
-						id={FORM_ID}
-						noValidate
-						autoComplete="off"
-						onSubmit={(event) => {
-							event.preventDefault()
-							if (form.state.isSubmitting) return
-							form.handleSubmit()
+							if (router.history.canGoBack()) {
+								router.history.back()
+								return
+							}
+
+							router.navigate({ to: '/app/settings', replace: true })
 						}}
 					>
-						<form.AppField name="deviceName">
-							{(field) => (
-								<field.TextField
-									required
-									fullWidth
-									label={t(m.inputLabel)}
-									value={field.state.value}
-									error={!field.state.meta.isValid}
-									name={field.name}
-									onChange={(event) => {
-										field.handleChange(event.target.value)
-									}}
-									slotProps={{
-										input: {
-											style: {
-												backgroundColor: WHITE,
-											},
-										},
-									}}
-									onBlur={field.handleBlur}
-									helperText={
-										<Stack
-											component="span"
-											direction="row"
-											justifyContent="space-between"
-										>
-											<Box component="span">
-												{field.state.meta.errors[0]?.message}
-											</Box>
-											<Box component="span">
-												<form.Subscribe
-													selector={(state) =>
-														v._getGraphemeCount(state.values.deviceName)
-													}
-												>
-													{(count) =>
-														t(m.characterCount, {
-															count,
-															max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
-														})
-													}
-												</form.Subscribe>
-											</Box>
-										</Stack>
-									}
-								/>
-							)}
-						</form.AppField>
-					</Box>
-				</Box>
+						<Icon name="material-arrow-back" size={30} />
+					</IconButton>
+					<Typography variant="h1" fontWeight={500}>
+						{t(m.navTitle)}
+					</Typography>
+				</Stack>
 
 				<Stack
 					direction="column"
-					useFlexGap
-					gap={4}
-					paddingX={6}
-					paddingBottom={6}
-					position="sticky"
-					bottom={0}
-					alignItems="center"
+					flex={1}
+					justifyContent="space-between"
+					overflow="auto"
 				>
-					<form.Subscribe
-						selector={(state) => [state.canSubmit, state.isSubmitting]}
-					>
-						{([canSubmit, isSubmitting]) => (
-							<>
-								<Button
-									type="button"
-									variant="outlined"
-									size="large"
-									fullWidth
-									disableElevation
-									aria-disabled={isSubmitting}
-									onClick={() => {
-										if (isSubmitting) return
-
-										if (router.history.canGoBack()) {
-											router.history.back()
-											return
+					<Box padding={6}>
+						<Box
+							component="form"
+							id={FORM_ID}
+							noValidate
+							autoComplete="off"
+							onSubmit={(event) => {
+								event.preventDefault()
+								if (form.state.isSubmitting) return
+								form.handleSubmit()
+							}}
+						>
+							<form.AppField name="deviceName">
+								{(field) => (
+									<field.TextField
+										required
+										fullWidth
+										label={t(m.inputLabel)}
+										value={field.state.value}
+										error={!field.state.meta.isValid}
+										name={field.name}
+										onChange={(event) => {
+											field.handleChange(event.target.value)
+										}}
+										slotProps={{
+											input: {
+												style: {
+													backgroundColor: WHITE,
+												},
+											},
+										}}
+										onBlur={field.handleBlur}
+										helperText={
+											<Stack
+												component="span"
+												direction="row"
+												justifyContent="space-between"
+											>
+												<Box component="span">
+													{field.state.meta.errors[0]?.message}
+												</Box>
+												<Box component="span">
+													<form.Subscribe
+														selector={(state) =>
+															v._getGraphemeCount(state.values.deviceName)
+														}
+													>
+														{(count) =>
+															t(m.characterCount, {
+																count,
+																max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
+															})
+														}
+													</form.Subscribe>
+												</Box>
+											</Stack>
 										}
+									/>
+								)}
+							</form.AppField>
+						</Box>
+					</Box>
 
-										router.navigate({ to: '/app/settings', replace: true })
-									}}
-									sx={{ maxWidth: 400 }}
-								>
-									{t(m.cancel)}
-								</Button>
+					<Stack
+						direction="column"
+						useFlexGap
+						gap={4}
+						paddingX={6}
+						paddingBottom={6}
+						position="sticky"
+						bottom={0}
+						alignItems="center"
+					>
+						<form.Subscribe
+							selector={(state) => [state.canSubmit, state.isSubmitting]}
+						>
+							{([canSubmit, isSubmitting]) => (
+								<>
+									<Button
+										type="button"
+										variant="outlined"
+										size="large"
+										fullWidth
+										disableElevation
+										aria-disabled={isSubmitting}
+										onClick={() => {
+											if (isSubmitting) return
 
-								<form.SubmitButton
-									type="submit"
-									form={FORM_ID}
-									fullWidth
-									disableElevation
-									variant="contained"
-									size="large"
-									loading={isSubmitting}
-									loadingPosition="start"
-									aria-disabled={!canSubmit}
-									sx={{ maxWidth: 400 }}
-								>
-									{t(m.save)}
-								</form.SubmitButton>
-							</>
-						)}
-					</form.Subscribe>
+											if (router.history.canGoBack()) {
+												router.history.back()
+												return
+											}
+
+											router.navigate({ to: '/app/settings', replace: true })
+										}}
+										sx={{ maxWidth: 400 }}
+									>
+										{t(m.cancel)}
+									</Button>
+
+									<form.SubmitButton
+										type="submit"
+										form={FORM_ID}
+										fullWidth
+										disableElevation
+										variant="contained"
+										size="large"
+										loading={isSubmitting}
+										loadingPosition="start"
+										aria-disabled={!canSubmit}
+										sx={{ maxWidth: 400 }}
+									>
+										{t(m.save)}
+									</form.SubmitButton>
+								</>
+							)}
+						</form.Subscribe>
+					</Stack>
 				</Stack>
 			</Stack>
-		</Stack>
+
+			<ErrorDialog
+				open={setOwnDeviceInfo.status === 'error'}
+				errorMessage={setOwnDeviceInfo.error?.message}
+				onClose={() => {
+					setOwnDeviceInfo.reset()
+				}}
+			/>
+		</>
 	)
 }
 
