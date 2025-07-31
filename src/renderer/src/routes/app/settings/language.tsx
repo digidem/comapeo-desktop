@@ -140,7 +140,7 @@ function RouteComponent() {
 
 			<ErrorDialog
 				open={setLocale.status === 'error'}
-				errorMessage={setLocale.error?.message}
+				errorMessage={setLocale.error?.toString()}
 				onClose={() => {
 					setLocale.reset()
 				}}

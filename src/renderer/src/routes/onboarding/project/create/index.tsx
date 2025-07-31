@@ -197,7 +197,7 @@ function RouteComponent() {
 
 			<ErrorDialog
 				open={createProject.status === 'error'}
-				errorMessage={createProject.error?.message}
+				errorMessage={createProject.error?.toString()}
 				onClose={() => {
 					createProject.reset()
 				}}

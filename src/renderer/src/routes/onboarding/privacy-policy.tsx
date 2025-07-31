@@ -250,7 +250,7 @@ function RouteComponent() {
 
 			<ErrorDialog
 				open={setDiagnosticsEnabledMutation.status === 'error'}
-				errorMessage={setDiagnosticsEnabledMutation.error?.message}
+				errorMessage={setDiagnosticsEnabledMutation.error?.toString()}
 				onClose={() => {
 					setDiagnosticsEnabledMutation.reset()
 				}}

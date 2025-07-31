@@ -247,7 +247,7 @@ function RouteComponent() {
 
 			<ErrorDialog
 				open={setOwnDeviceInfo.status === 'error'}
-				errorMessage={setOwnDeviceInfo.error?.message}
+				errorMessage={setOwnDeviceInfo.error?.toString()}
 				onClose={() => {
 					setOwnDeviceInfo.reset()
 				}}

@@ -137,7 +137,7 @@ function RouteComponent() {
 
 			<ErrorDialog
 				open={setCoordinateFormat.status === 'error'}
-				errorMessage={setCoordinateFormat.error?.message}
+				errorMessage={setCoordinateFormat.error?.toString()}
 				onClose={() => {
 					setCoordinateFormat.reset()
 				}}

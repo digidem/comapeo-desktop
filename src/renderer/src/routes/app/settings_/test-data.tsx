@@ -536,7 +536,7 @@ function RouteComponent() {
 
 			<ErrorDialog
 				open={createTestObservations.status === 'error'}
-				errorMessage={createTestObservations.error?.message}
+				errorMessage={createTestObservations.error?.toString()}
 				onClose={() => {
 					createTestObservations.reset()
 				}}
