@@ -117,6 +117,14 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "Observation"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.onlyPreviewsAvailable": {
+    "description": "Text displayed when only preview-quality attachments are available.",
+    "message": "Only previews available"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.unableToGetDurationTime": {
+    "description": "Text displayed when the duration of an audio attachment cannot be determined.",
+    "message": "Unable to get duration time."
+  },
   "routes.app.projects.$projectId_.exchange.index.complete": {
     "description": "Text displayed when exchange is completed with all devices.",
     "message": "Complete!"

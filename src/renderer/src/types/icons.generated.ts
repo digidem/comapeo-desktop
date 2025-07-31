@@ -12,6 +12,7 @@ export const iconNames = [
 	'openmoji-bar-chart',
 	'material-wifi',
 	'material-wifi-off',
+	'material-volume-up',
 	'material-tablet-android',
 	'material-symbols-stars-2',
 	'material-symbols-new-window',
@@ -42,6 +43,7 @@ export const iconNames = [
 	'material-category',
 	'material-bolt',
 	'material-auto-fix-high',
+	'material-attachment',
 	'material-arrow-back',
 	'comapeo-cards',
 ] as const
