@@ -1,4 +1,16 @@
 {
+  "components.error-dialog.advanced": {
+    "description": "Title text for the collapsible section that shows the actual error message.",
+    "message": "Advanced"
+  },
+  "components.error-dialog.close": {
+    "description": "Button text for the close button in the error dialog.",
+    "message": "Close"
+  },
+  "components.error-dialog.somethingWentWrong": {
+    "description": "Generic title text for the error dialog.",
+    "message": "Something Went Wrong"
+  },
   "routes.app.about.title": {
     "message": "About CoMapeo"
   },
@@ -516,10 +528,6 @@
   "routes.app.settings_.test-data.observationCountLabel": {
     "description": "Label for the observation count input.",
     "message": "Number of observations"
-  },
-  "routes.app.settings_.test-data.observationCreateError": {
-    "description": "Error message displayed when observation creation fails.",
-    "message": "Failed to create observations: {error}"
   },
   "routes.app.settings_.test-data.observationCreateSuccess": {
     "description": "Message displayed when observation creation succeeds",

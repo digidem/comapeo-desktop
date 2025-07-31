@@ -16,6 +16,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
 import { BLUE_GREY, DARK_GREY } from '../../../colors'
+import { ErrorDialog } from '../../../components/error-dialog'
 import { Icon } from '../../../components/icon'
 import { SupportedLanguageTagSchema, usableLanguages } from '../../../lib/intl'
 import {
@@ -45,96 +46,106 @@ function RouteComponent() {
 	const setLocale = useMutation(setLocaleMutationOptions(queryClient))
 
 	return (
-		<Stack direction="column" flex={1}>
-			<Stack
-				direction="row"
-				alignItems="center"
-				component="nav"
-				useFlexGap
-				gap={4}
-				padding={4}
-				borderBottom={`1px solid ${BLUE_GREY}`}
-			>
-				<IconButton
-					onClick={() => {
-						if (router.history.canGoBack()) {
-							router.history.back()
-							return
-						}
-
-						router.navigate({ to: '/app/settings', replace: true })
-					}}
+		<>
+			<Stack direction="column" flex={1}>
+				<Stack
+					direction="row"
+					alignItems="center"
+					component="nav"
+					useFlexGap
+					gap={4}
+					padding={4}
+					borderBottom={`1px solid ${BLUE_GREY}`}
 				>
-					<Icon name="material-arrow-back" size={30} />
-				</IconButton>
-				<Typography
-					variant="h1"
-					fontWeight={500}
-					id="coordinate-system-selection-label"
-				>
-					{t(m.navTitle)}
-				</Typography>
-			</Stack>
-			<Box padding={6} overflow="auto">
-				<FormControl>
-					<RadioGroup
-						aria-labelledby="language-selection-label"
-						value={
-							localeState.source !== 'selected' ? 'system' : localeState.value
-						}
-						name="language"
-						onChange={(event) => {
-							const parsedValue = v.parse(
-								v.union([
-									v.pipe(v.literal('system')),
-									SupportedLanguageTagSchema,
-								]),
-								event.currentTarget.value,
-							)
+					<IconButton
+						onClick={() => {
+							if (router.history.canGoBack()) {
+								router.history.back()
+								return
+							}
 
-							setLocale.mutate(
-								parsedValue === 'system'
-									? {
-											useSystemPreferences: true,
-											languageTag: null,
-										}
-									: {
-											useSystemPreferences: false,
-											languageTag: parsedValue,
-										},
-							)
+							router.navigate({ to: '/app/settings', replace: true })
 						}}
 					>
-						<Stack direction="column" useFlexGap gap={6}>
-							<FormControlLabel
-								value="system"
-								control={<Radio />}
-								label={
-									<RadioOptionLabel
-										primaryText={t(m.followSystemOptionLabel)}
-									/>
-								}
-							/>
-							{sortedUsableLanguages.map(
-								({ languageTag, nativeName, englishName }) => (
-									<FormControlLabel
-										key={languageTag}
-										value={languageTag}
-										control={<Radio />}
-										label={
-											<RadioOptionLabel
-												primaryText={nativeName}
-												secondaryText={englishName}
-											/>
-										}
-									/>
-								),
-							)}
-						</Stack>
-					</RadioGroup>
-				</FormControl>
-			</Box>
-		</Stack>
+						<Icon name="material-arrow-back" size={30} />
+					</IconButton>
+					<Typography
+						variant="h1"
+						fontWeight={500}
+						id="coordinate-system-selection-label"
+					>
+						{t(m.navTitle)}
+					</Typography>
+				</Stack>
+				<Box padding={6} overflow="auto">
+					<FormControl>
+						<RadioGroup
+							aria-labelledby="language-selection-label"
+							value={
+								localeState.source !== 'selected' ? 'system' : localeState.value
+							}
+							name="language"
+							onChange={(event) => {
+								const parsedValue = v.parse(
+									v.union([
+										v.pipe(v.literal('system')),
+										SupportedLanguageTagSchema,
+									]),
+									event.currentTarget.value,
+								)
+
+								setLocale.mutate(
+									parsedValue === 'system'
+										? {
+												useSystemPreferences: true,
+												languageTag: null,
+											}
+										: {
+												useSystemPreferences: false,
+												languageTag: parsedValue,
+											},
+								)
+							}}
+						>
+							<Stack direction="column" useFlexGap gap={6}>
+								<FormControlLabel
+									value="system"
+									control={<Radio />}
+									label={
+										<RadioOptionLabel
+											primaryText={t(m.followSystemOptionLabel)}
+										/>
+									}
+								/>
+								{sortedUsableLanguages.map(
+									({ languageTag, nativeName, englishName }) => (
+										<FormControlLabel
+											key={languageTag}
+											value={languageTag}
+											control={<Radio />}
+											label={
+												<RadioOptionLabel
+													primaryText={nativeName}
+													secondaryText={englishName}
+												/>
+											}
+										/>
+									),
+								)}
+							</Stack>
+						</RadioGroup>
+					</FormControl>
+				</Box>
+			</Stack>
+
+			<ErrorDialog
+				open={setLocale.status === 'error'}
+				errorMessage={setLocale.error?.toString()}
+				onClose={() => {
+					setLocale.reset()
+				}}
+			/>
+		</>
 	)
 }
 

@@ -16,6 +16,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import { parse } from 'valibot'
 
 import { BLUE_GREY, DARK_GREY } from '../../../colors'
+import { ErrorDialog } from '../../../components/error-dialog'
 import { Icon } from '../../../components/icon'
 import {
 	CoordinateFormatSchema,
@@ -50,88 +51,98 @@ function RouteComponent() {
 	)
 
 	return (
-		<Stack direction="column" flex={1}>
-			<Stack
-				direction="row"
-				alignItems="center"
-				component="nav"
-				useFlexGap
-				gap={4}
-				padding={4}
-				borderBottom={`1px solid ${BLUE_GREY}`}
-			>
-				<IconButton
-					onClick={() => {
-						if (router.history.canGoBack()) {
-							router.history.back()
-							return
-						}
-
-						router.navigate({ to: '/app/settings', replace: true })
-					}}
+		<>
+			<Stack direction="column" flex={1}>
+				<Stack
+					direction="row"
+					alignItems="center"
+					component="nav"
+					useFlexGap
+					gap={4}
+					padding={4}
+					borderBottom={`1px solid ${BLUE_GREY}`}
 				>
-					<Icon name="material-arrow-back" size={30} />
-				</IconButton>
-				<Typography
-					variant="h1"
-					fontWeight={500}
-					id="coordinate-system-selection-label"
-				>
-					{t(m.navTitle)}
-				</Typography>
-			</Stack>
-			<Box padding={6} overflow="auto">
-				<FormControl>
-					<RadioGroup
-						aria-labelledby="coordinate-system-selection-label"
-						value={coordinateFormat}
-						name="coordinate-system"
-						onChange={(event) => {
-							const parsedValue = parse(
-								CoordinateFormatSchema,
-								event.currentTarget.value,
-							)
+					<IconButton
+						onClick={() => {
+							if (router.history.canGoBack()) {
+								router.history.back()
+								return
+							}
 
-							// TODO: Handle errors
-							setCoordinateFormat.mutate(parsedValue)
+							router.navigate({ to: '/app/settings', replace: true })
 						}}
 					>
-						<Stack direction="column" useFlexGap gap={6}>
-							<FormControlLabel
-								value="dd"
-								control={<Radio />}
-								label={
-									<RadioOptionLabel
-										primaryText={t(m.ddOptionLabel)}
-										secondaryText={EXAMPLE_DD}
-									/>
-								}
-							/>
-							<FormControlLabel
-								value="dms"
-								control={<Radio />}
-								label={
-									<RadioOptionLabel
-										primaryText={t(m.dmsOptionLabel)}
-										secondaryText={EXAMPLE_DMS}
-									/>
-								}
-							/>
-							<FormControlLabel
-								value="utm"
-								control={<Radio />}
-								label={
-									<RadioOptionLabel
-										primaryText={t(m.utmOptionLabel)}
-										secondaryText={EXAMPLE_UTM}
-									/>
-								}
-							/>
-						</Stack>
-					</RadioGroup>
-				</FormControl>
-			</Box>
-		</Stack>
+						<Icon name="material-arrow-back" size={30} />
+					</IconButton>
+					<Typography
+						variant="h1"
+						fontWeight={500}
+						id="coordinate-system-selection-label"
+					>
+						{t(m.navTitle)}
+					</Typography>
+				</Stack>
+				<Box padding={6} overflow="auto">
+					<FormControl>
+						<RadioGroup
+							aria-labelledby="coordinate-system-selection-label"
+							value={coordinateFormat}
+							name="coordinate-system"
+							onChange={(event) => {
+								const parsedValue = parse(
+									CoordinateFormatSchema,
+									event.currentTarget.value,
+								)
+
+								// TODO: Handle errors
+								setCoordinateFormat.mutate(parsedValue)
+							}}
+						>
+							<Stack direction="column" useFlexGap gap={6}>
+								<FormControlLabel
+									value="dd"
+									control={<Radio />}
+									label={
+										<RadioOptionLabel
+											primaryText={t(m.ddOptionLabel)}
+											secondaryText={EXAMPLE_DD}
+										/>
+									}
+								/>
+								<FormControlLabel
+									value="dms"
+									control={<Radio />}
+									label={
+										<RadioOptionLabel
+											primaryText={t(m.dmsOptionLabel)}
+											secondaryText={EXAMPLE_DMS}
+										/>
+									}
+								/>
+								<FormControlLabel
+									value="utm"
+									control={<Radio />}
+									label={
+										<RadioOptionLabel
+											primaryText={t(m.utmOptionLabel)}
+											secondaryText={EXAMPLE_UTM}
+										/>
+									}
+								/>
+							</Stack>
+						</RadioGroup>
+					</FormControl>
+				</Box>
+			</Stack>
+
+			<ErrorDialog
+				open={setCoordinateFormat.status === 'error'}
+				errorMessage={setCoordinateFormat.error?.toString()}
+				onClose={() => {
+					setCoordinateFormat.reset()
+				}}
+			/>
+		</>
 	)
 }
 

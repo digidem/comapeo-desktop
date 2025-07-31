@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARKER_ORANGE, DARK_GREY, LIGHT_GREY } from '../../colors'
+import { ErrorDialog } from '../../components/error-dialog'
 import { Icon } from '../../components/icon'
 import {
 	getDiagnosticsEnabledQueryOptions,
@@ -44,116 +45,135 @@ function RouteComponent() {
 	)
 
 	return (
-		<TwoPanelLayout
-			start={
-				<Stack
-					direction="column"
-					gap={4}
-					padding={6}
-					useFlexGap
-					flex={1}
-					overflow="auto"
-				>
+		<>
+			<TwoPanelLayout
+				start={
 					<Stack
 						direction="column"
-						border={`1px solid ${BLUE_GREY}`}
-						borderRadius={2}
-						useFlexGap
 						gap={4}
-						alignItems="center"
 						padding={6}
-					>
-						<Icon
-							name="material-symbols-info"
-							size={100}
-							htmlColor={DARKER_ORANGE}
-						/>
-
-						<Typography variant="h1" fontWeight={500}>
-							{t(m.title)}
-						</Typography>
-
-						<Typography color="textSecondary" textAlign="center">
-							{t(m.description)}
-						</Typography>
-
-						<Button
-							variant="text"
-							sx={{ fontWeight: 400 }}
-							onClick={() => {
-								window.runtime.openExternalURL(PRIVACY_POLICY_URL).catch(() => {
-									// TODO: Trigger generic error modal?
-								})
-							}}
-						>
-							{t(m.learnMore)}
-						</Button>
-					</Stack>
-					<Stack
-						direction="column"
-						border={`1px solid ${BLUE_GREY}`}
-						borderRadius={2}
 						useFlexGap
 						flex={1}
+						overflow="auto"
 					>
-						<Stack padding={6} direction="column" useFlexGap gap={6} flex={1}>
-							<Typography variant="h2" fontWeight={500}>
-								{t(m.diagnosticInformationTitle)}
+						<Stack
+							direction="column"
+							border={`1px solid ${BLUE_GREY}`}
+							borderRadius={2}
+							useFlexGap
+							gap={4}
+							alignItems="center"
+							padding={6}
+						>
+							<Icon
+								name="material-symbols-info"
+								size={100}
+								htmlColor={DARKER_ORANGE}
+							/>
+
+							<Typography variant="h1" fontWeight={500}>
+								{t(m.title)}
 							</Typography>
 
-							<Box>
-								<Typography color="textSecondary">
-									{t(m.diagnosticInformationDescription)}
+							<Typography color="textSecondary" textAlign="center">
+								{t(m.description)}
+							</Typography>
+
+							<Button
+								variant="text"
+								sx={{ fontWeight: 400 }}
+								onClick={() => {
+									window.runtime
+										.openExternalURL(PRIVACY_POLICY_URL)
+										.catch(() => {
+											// TODO: Trigger generic error modal?
+										})
+								}}
+							>
+								{t(m.learnMore)}
+							</Button>
+						</Stack>
+						<Stack
+							direction="column"
+							border={`1px solid ${BLUE_GREY}`}
+							borderRadius={2}
+							useFlexGap
+							flex={1}
+						>
+							<Stack padding={6} direction="column" useFlexGap gap={6} flex={1}>
+								<Typography variant="h2" fontWeight={500}>
+									{t(m.diagnosticInformationTitle)}
 								</Typography>
 
-								<List
-									sx={{ listStyleType: 'disc', paddingX: 8, color: DARK_GREY }}
-								>
-									<ListItem disablePadding sx={{ display: 'list-item' }}>
-										<Typography color="textSecondary">
-											{t(m.diagnosticInformationPersonalInfo)}
-										</Typography>
-									</ListItem>
+								<Box>
+									<Typography color="textSecondary">
+										{t(m.diagnosticInformationDescription)}
+									</Typography>
 
-									<ListItem disablePadding sx={{ display: 'list-item' }}>
-										<Typography color="textSecondary">
-											{t(m.diagnosticInformationOptOut)}
-										</Typography>
-									</ListItem>
-								</List>
+									<List
+										sx={{
+											listStyleType: 'disc',
+											paddingX: 8,
+											color: DARK_GREY,
+										}}
+									>
+										<ListItem disablePadding sx={{ display: 'list-item' }}>
+											<Typography color="textSecondary">
+												{t(m.diagnosticInformationPersonalInfo)}
+											</Typography>
+										</ListItem>
+
+										<ListItem disablePadding sx={{ display: 'list-item' }}>
+											<Typography color="textSecondary">
+												{t(m.diagnosticInformationOptOut)}
+											</Typography>
+										</ListItem>
+									</List>
+								</Box>
+							</Stack>
+
+							<Divider
+								variant="fullWidth"
+								sx={{ backgroundColor: BLUE_GREY }}
+							/>
+
+							<Box paddingX={6} paddingY={4}>
+								<FormGroup>
+									<FormControlLabel
+										control={<Checkbox checked={diagnosticsEnabled} />}
+										onChange={(_event, checked) => {
+											// TODO: Optimistic update?
+											// TODO: Handle error?
+											setDiagnosticsEnabledMutation.mutate(checked)
+										}}
+										slotProps={{
+											typography: {
+												fontWeight: 500,
+											},
+										}}
+										label={t(m.shareDiagnosticInformation)}
+										labelPlacement="start"
+										sx={{
+											margin: 0,
+											justifyContent: 'space-between',
+										}}
+									/>
+								</FormGroup>
 							</Box>
 						</Stack>
-
-						<Divider variant="fullWidth" sx={{ backgroundColor: BLUE_GREY }} />
-
-						<Box paddingX={6} paddingY={4}>
-							<FormGroup>
-								<FormControlLabel
-									control={<Checkbox checked={diagnosticsEnabled} />}
-									onChange={(_event, checked) => {
-										// TODO: Optimistic update?
-										// TODO: Handle error?
-										setDiagnosticsEnabledMutation.mutate(checked)
-									}}
-									slotProps={{
-										typography: {
-											fontWeight: 500,
-										},
-									}}
-									label={t(m.shareDiagnosticInformation)}
-									labelPlacement="start"
-									sx={{
-										margin: 0,
-										justifyContent: 'space-between',
-									}}
-								/>
-							</FormGroup>
-						</Box>
 					</Stack>
-				</Stack>
-			}
-			end={<Box bgcolor={LIGHT_GREY} display="flex" flex={1} />}
-		/>
+				}
+				end={<Box bgcolor={LIGHT_GREY} display="flex" flex={1} />}
+			/>
+
+			<ErrorDialog
+				open={setDiagnosticsEnabledMutation.status === 'error'}
+				errorMessage={setDiagnosticsEnabledMutation.error?.toString()}
+				onClose={() => {
+					setDiagnosticsEnabledMutation.reset()
+				}}
+			/>
+		</>
 	)
 }
 

@@ -9,12 +9,25 @@ import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
 import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../colors'
+import { ErrorDialog } from '../../components/error-dialog'
 import { Icon } from '../../components/icon'
 import { useAppForm } from '../../hooks/forms'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo'
 import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../lib/constants'
 import { createDeviceNameSchema } from '../../lib/validators/device'
 
 export const Route = createFileRoute('/onboarding/device-name')({
+	loader: async ({ context }) => {
+		const { clientApi, queryClient } = context
+
+		// TODO: not ideal to do this but requires major changes to @comapeo/core-react
+		await queryClient.ensureQueryData({
+			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
+			queryFn: async () => {
+				return clientApi.getDeviceInfo()
+			},
+		})
+	},
 	component: RouteComponent,
 })
 
@@ -48,6 +61,7 @@ function RouteComponent() {
 		onSubmit: async ({ value }) => {
 			const parsedDeviceName = v.parse(deviceNameSchema, value.deviceName)
 
+			// TODO: Catch error and report to Sentry
 			await setOwnDeviceInfo.mutateAsync({
 				deviceType: 'desktop',
 				name: parsedDeviceName,
@@ -58,122 +72,132 @@ function RouteComponent() {
 	})
 
 	return (
-		<Stack
-			display="flex"
-			useFlexGap
-			direction="column"
-			justifyContent="space-between"
-			flex={1}
-			gap={10}
-			bgcolor={LIGHT_GREY}
-			padding={5}
-			borderRadius={2}
-			overflow="auto"
-		>
-			<Container
-				maxWidth="sm"
-				component={Stack}
-				direction="column"
+		<>
+			<Stack
+				display="flex"
 				useFlexGap
-				gap={5}
+				direction="column"
+				justifyContent="space-between"
+				flex={1}
+				gap={10}
+				bgcolor={LIGHT_GREY}
+				padding={5}
+				borderRadius={2}
+				overflow="auto"
 			>
-				<Box alignSelf="center">
-					<Icon
-						name="material-symbols-computer"
-						htmlColor={DARKER_ORANGE}
-						size={80}
-					/>
-				</Box>
-
-				<Typography variant="h1" fontWeight={500} textAlign="center">
-					{t(m.title)}
-				</Typography>
-
-				<Typography variant="h2" fontWeight={400} textAlign="center">
-					{t(m.description)}
-				</Typography>
-
-				<Box
-					component="form"
-					id="device-name-form"
-					noValidate
-					autoComplete="off"
-					onSubmit={(event) => {
-						event.preventDefault()
-						if (form.state.isSubmitting) return
-						form.handleSubmit()
-					}}
+				<Container
+					maxWidth="sm"
+					component={Stack}
+					direction="column"
+					useFlexGap
+					gap={5}
 				>
-					<form.AppField name="deviceName">
-						{(field) => (
-							<field.TextField
-								required
-								fullWidth
-								autoFocus
-								label={t(m.deviceName)}
-								value={field.state.value}
-								error={!field.state.meta.isValid}
-								onChange={(event) => {
-									field.handleChange(event.target.value)
-								}}
-								slotProps={{
-									input: {
-										style: {
-											backgroundColor: WHITE,
-										},
-									},
-								}}
-								onBlur={field.handleBlur}
-								helperText={
-									<Stack
-										component="span"
-										direction="row"
-										justifyContent="space-between"
-									>
-										<Box component="span">
-											{field.state.meta.errors[0]?.message}
-										</Box>
-										<Box component="span">
-											<form.Subscribe
-												selector={(state) =>
-													v._getGraphemeCount(state.values.deviceName)
-												}
-											>
-												{(count) =>
-													t(m.characterCount, {
-														count,
-														max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
-													})
-												}
-											</form.Subscribe>
-										</Box>
-									</Stack>
-								}
-							/>
-						)}
-					</form.AppField>
-				</Box>
-			</Container>
+					<Box alignSelf="center">
+						<Icon
+							name="material-symbols-computer"
+							htmlColor={DARKER_ORANGE}
+							size={80}
+						/>
+					</Box>
 
-			<Box display="flex" justifyContent="center">
-				<form.Subscribe selector={(state) => state.canSubmit}>
-					{(canSubmit) => (
-						<form.SubmitButton
-							fullWidth
-							form="device-name-form"
-							variant="contained"
-							size="large"
-							disableElevation
-							type="submit"
-							aria-disabled={!canSubmit}
-							sx={{ maxWidth: 400 }}
-						>
-							{t(m.addName)}
-						</form.SubmitButton>
-					)}
-				</form.Subscribe>
-			</Box>
-		</Stack>
+					<Typography variant="h1" fontWeight={500} textAlign="center">
+						{t(m.title)}
+					</Typography>
+
+					<Typography variant="h2" fontWeight={400} textAlign="center">
+						{t(m.description)}
+					</Typography>
+
+					<Box
+						component="form"
+						id="device-name-form"
+						noValidate
+						autoComplete="off"
+						onSubmit={(event) => {
+							event.preventDefault()
+							if (form.state.isSubmitting) return
+							form.handleSubmit()
+						}}
+					>
+						<form.AppField name="deviceName">
+							{(field) => (
+								<field.TextField
+									required
+									fullWidth
+									autoFocus
+									label={t(m.deviceName)}
+									value={field.state.value}
+									error={!field.state.meta.isValid}
+									onChange={(event) => {
+										field.handleChange(event.target.value)
+									}}
+									slotProps={{
+										input: {
+											style: {
+												backgroundColor: WHITE,
+											},
+										},
+									}}
+									onBlur={field.handleBlur}
+									helperText={
+										<Stack
+											component="span"
+											direction="row"
+											justifyContent="space-between"
+										>
+											<Box component="span">
+												{field.state.meta.errors[0]?.message}
+											</Box>
+											<Box component="span">
+												<form.Subscribe
+													selector={(state) =>
+														v._getGraphemeCount(state.values.deviceName)
+													}
+												>
+													{(count) =>
+														t(m.characterCount, {
+															count,
+															max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
+														})
+													}
+												</form.Subscribe>
+											</Box>
+										</Stack>
+									}
+								/>
+							)}
+						</form.AppField>
+					</Box>
+				</Container>
+
+				<Box display="flex" justifyContent="center">
+					<form.Subscribe selector={(state) => state.canSubmit}>
+						{(canSubmit) => (
+							<form.SubmitButton
+								fullWidth
+								form="device-name-form"
+								variant="contained"
+								size="large"
+								disableElevation
+								type="submit"
+								aria-disabled={!canSubmit}
+								sx={{ maxWidth: 400 }}
+							>
+								{t(m.addName)}
+							</form.SubmitButton>
+						)}
+					</form.Subscribe>
+				</Box>
+			</Stack>
+
+			<ErrorDialog
+				open={setOwnDeviceInfo.status === 'error'}
+				errorMessage={setOwnDeviceInfo.error?.toString()}
+				onClose={() => {
+					setOwnDeviceInfo.reset()
+				}}
+			/>
+		</>
 	)
 }
 
