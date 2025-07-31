@@ -18,8 +18,20 @@ import {
 } from '../../../colors'
 import { Icon } from '../../../components/icon'
 import { ButtonLink } from '../../../components/link'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
 
 export const Route = createFileRoute('/onboarding/project/')({
+	loader: async ({ context }) => {
+		const { clientApi, queryClient } = context
+
+		// TODO: not ideal to do this but requires major changes to @comapeo/core-react
+		await queryClient.ensureQueryData({
+			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'invites'],
+			queryFn: async () => {
+				return clientApi.invite.getMany()
+			},
+		})
+	},
 	component: RouteComponent,
 })
 
