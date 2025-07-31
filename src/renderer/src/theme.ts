@@ -4,7 +4,6 @@ import {
 	ALMOST_BLACK,
 	BLUE_GREY,
 	COMAPEO_BLUE,
-	DARKER_ORANGE,
 	DARK_COMAPEO_BLUE,
 	DARK_GREY,
 	DARK_ORANGE,
@@ -137,26 +136,14 @@ const baseTheme = createTheme({
 			},
 		},
 		MuiButton: {
-			variants: [
-				{
-					props: { variant: 'darkOrange' },
-					style: {
-						backgroundColor: DARK_ORANGE,
-						color: WHITE,
-						'&:hover': {
-							backgroundColor: DARKER_ORANGE,
-						},
-					},
-				},
-			],
 			defaultProps: {
 				variant: 'contained',
+				disableElevation: true,
+				size: 'large',
 			},
 			styleOverrides: {
 				root: ({ theme }) => {
-					return {
-						borderRadius: theme.spacing(8),
-					}
+					return { borderRadius: theme.spacing(8) }
 				},
 				loading: () => {
 					return {
@@ -183,6 +170,11 @@ const baseTheme = createTheme({
 						border: `1px solid ${BLUE_GREY}`,
 					}
 				},
+			},
+		},
+		MuiStack: {
+			defaultProps: {
+				useFlexGap: true,
 			},
 		},
 	},

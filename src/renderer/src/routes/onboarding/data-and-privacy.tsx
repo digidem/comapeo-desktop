@@ -21,7 +21,6 @@ function RouteComponent() {
 	return (
 		<Stack
 			display="flex"
-			useFlexGap
 			direction="column"
 			justifyContent="space-between"
 			flex={1}
@@ -31,13 +30,7 @@ function RouteComponent() {
 			borderRadius={2}
 			overflow="auto"
 		>
-			<Container
-				maxWidth="sm"
-				component={Stack}
-				direction="column"
-				useFlexGap
-				gap={5}
-			>
+			<Container maxWidth="sm" component={Stack} direction="column" gap={5}>
 				<Box alignSelf="center">
 					<Icon
 						name="material-symbols-encrypted-weight200"
@@ -69,12 +62,10 @@ function RouteComponent() {
 					</ListItem>
 				</List>
 			</Container>
-			<Stack direction="row" justifyContent="center" useFlexGap gap={5}>
+			<Stack direction="row" justifyContent="center" gap={5}>
 				<ButtonLink
 					to="/onboarding/privacy-policy"
 					variant="outlined"
-					size="large"
-					disableElevation
 					fullWidth
 					sx={{ maxWidth: 400 }}
 				>
@@ -83,8 +74,6 @@ function RouteComponent() {
 				<ButtonLink
 					to="/onboarding/device-name"
 					variant="contained"
-					size="large"
-					disableElevation
 					fullWidth
 					sx={{ maxWidth: 400 }}
 				>

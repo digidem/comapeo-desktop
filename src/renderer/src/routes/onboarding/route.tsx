@@ -89,7 +89,7 @@ function RouteComponent() {
 				gridTemplateRows="auto minmax(0, 1fr)"
 				rowGap={5}
 			>
-				<Stack useFlexGap direction="row" justifyContent="space-between">
+				<Stack direction="row" justifyContent="space-between">
 					<Box>
 						<Button
 							variant="text"
@@ -171,7 +171,7 @@ function RouteComponent() {
 							{t(m.goBack)}
 						</Button>
 					</Box>
-					<Stack useFlexGap direction="row" alignItems="center" gap={4}>
+					<Stack direction="row" alignItems="center" gap={4}>
 						<StepIndicator
 							isActive={
 								currentPath === '/onboarding/privacy-policy' ||

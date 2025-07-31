@@ -27,9 +27,9 @@ export function ErrorDialog({
 
 	return (
 		<Dialog open={open} maxWidth="sm">
-			<Stack direction="column" useFlexGap>
-				<Stack direction="column" useFlexGap gap={10} flex={1} padding={20}>
-					<Stack direction="column" alignItems="center" useFlexGap gap={4}>
+			<Stack direction="column">
+				<Stack direction="column" gap={10} flex={1} padding={20}>
+					<Stack direction="column" alignItems="center" gap={4}>
 						<Icon name="material-error" color="error" size={72} />
 
 						<Typography variant="h1" fontWeight={500} textAlign="center">
@@ -38,7 +38,7 @@ export function ErrorDialog({
 					</Stack>
 
 					{errorMessage ? (
-						<Stack direction="column" flex={1} useFlexGap gap={2}>
+						<Stack direction="column" flex={1} gap={2}>
 							<ButtonBase
 								disableRipple
 								onClick={() => {
@@ -110,7 +110,6 @@ export function ErrorDialog({
 					<Button
 						fullWidth
 						variant="outlined"
-						disableElevation
 						onClick={(event) => {
 							setAdvancedExpanded(false)
 							onClose(event)

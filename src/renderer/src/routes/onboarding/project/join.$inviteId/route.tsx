@@ -49,7 +49,6 @@ function NotFoundComponent(_props: NotFoundRouteProps) {
 	return (
 		<Stack
 			display="flex"
-			useFlexGap
 			direction="column"
 			justifyContent="space-between"
 			flex={1}
@@ -63,7 +62,6 @@ function NotFoundComponent(_props: NotFoundRouteProps) {
 				maxWidth="sm"
 				component={Stack}
 				direction="column"
-				useFlexGap
 				gap={5}
 				flex={1}
 				justifyContent="center"
@@ -75,8 +73,6 @@ function NotFoundComponent(_props: NotFoundRouteProps) {
 
 			<Button
 				variant="outlined"
-				size="large"
-				disableElevation
 				fullWidth
 				onClick={() => {
 					if (router.history.canGoBack()) {

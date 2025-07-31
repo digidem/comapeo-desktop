@@ -18,8 +18,20 @@ import {
 } from '../../../colors'
 import { Icon } from '../../../components/icon'
 import { ButtonLink } from '../../../components/link'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
 
 export const Route = createFileRoute('/onboarding/project/')({
+	loader: async ({ context }) => {
+		const { clientApi, queryClient } = context
+
+		// TODO: not ideal to do this but requires major changes to @comapeo/core-react
+		await queryClient.ensureQueryData({
+			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'invites'],
+			queryFn: async () => {
+				return clientApi.invite.getMany()
+			},
+		})
+	},
 	component: RouteComponent,
 })
 
@@ -43,7 +55,6 @@ function RouteComponent() {
 	return (
 		<Stack
 			display="flex"
-			useFlexGap
 			direction="column"
 			justifyContent="space-between"
 			flex={1}
@@ -57,7 +68,6 @@ function RouteComponent() {
 				maxWidth="sm"
 				component={Stack}
 				direction="column"
-				useFlexGap
 				gap={5}
 				textAlign="center"
 			>
@@ -92,7 +102,6 @@ function RouteComponent() {
 				component={Stack}
 				direction="column"
 				alignItems="center"
-				useFlexGap
 				gap={8}
 			>
 				<Divider sx={{ backgroundColor: BLUE_GREY, alignSelf: 'stretch' }} />
@@ -104,8 +113,6 @@ function RouteComponent() {
 				<ButtonLink
 					to="/onboarding/project/create"
 					variant="outlined"
-					size="large"
-					disableElevation
 					fullWidth
 					sx={{ maxWidth: 400 }}
 				>

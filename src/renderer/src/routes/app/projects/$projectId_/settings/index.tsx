@@ -92,7 +92,6 @@ function RouteComponent() {
 				direction="row"
 				alignItems="center"
 				component="nav"
-				useFlexGap
 				gap={4}
 				padding={4}
 				borderBottom={`1px solid ${BLUE_GREY}`}
@@ -125,13 +124,7 @@ function RouteComponent() {
 				flexDirection="column"
 				flex={1}
 			>
-				<Stack
-					direction="column"
-					flexDirection="column"
-					flex={1}
-					useFlexGap
-					gap={6}
-				>
+				<Stack direction="column" flexDirection="column" flex={1} gap={6}>
 					<SettingsItem
 						title={projectSettings.name || t(m.unnamedProject)}
 						description={projectSettings.projectDescription}
@@ -230,7 +223,6 @@ function SettingsItem({
 	return (
 		<Stack
 			direction="row"
-			useFlexGap
 			gap={5}
 			borderRadius={2}
 			border={`1px solid ${BLUE_GREY}`}
@@ -239,12 +231,7 @@ function SettingsItem({
 		>
 			{icon}
 
-			<Stack
-				direction="column"
-				useFlexGap
-				gap={5}
-				justifyContent="space-between"
-			>
+			<Stack direction="column" gap={5} justifyContent="space-between">
 				<Typography variant="h1" fontWeight={500}>
 					{title}
 				</Typography>

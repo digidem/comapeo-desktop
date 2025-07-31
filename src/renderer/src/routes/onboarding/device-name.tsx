@@ -75,7 +75,6 @@ function RouteComponent() {
 		<>
 			<Stack
 				display="flex"
-				useFlexGap
 				direction="column"
 				justifyContent="space-between"
 				flex={1}
@@ -85,13 +84,7 @@ function RouteComponent() {
 				borderRadius={2}
 				overflow="auto"
 			>
-				<Container
-					maxWidth="sm"
-					component={Stack}
-					direction="column"
-					useFlexGap
-					gap={5}
-				>
+				<Container maxWidth="sm" component={Stack} direction="column" gap={5}>
 					<Box alignSelf="center">
 						<Icon
 							name="material-symbols-computer"
@@ -177,8 +170,6 @@ function RouteComponent() {
 								fullWidth
 								form="device-name-form"
 								variant="contained"
-								size="large"
-								disableElevation
 								type="submit"
 								aria-disabled={!canSubmit}
 								sx={{ maxWidth: 400 }}

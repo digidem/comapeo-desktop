@@ -70,7 +70,6 @@ export function AttachmentPreview({
 				>
 					<Stack
 						direction="column"
-						useFlexGap
 						gap={2}
 						justifyContent="center"
 						alignItems="center"
@@ -98,7 +97,6 @@ export function AttachmentPreview({
 				>
 					<Stack
 						direction="column"
-						useFlexGap
 						gap={2}
 						justifyContent="center"
 						alignItems="center"

@@ -92,7 +92,6 @@ function RouteComponent() {
 					direction="row"
 					alignItems="center"
 					component="nav"
-					useFlexGap
 					gap={4}
 					padding={4}
 					borderBottom={`1px solid ${BLUE_GREY}`}
@@ -189,7 +188,6 @@ function RouteComponent() {
 
 					<Stack
 						direction="column"
-						useFlexGap
 						gap={4}
 						paddingX={6}
 						paddingBottom={6}
@@ -205,9 +203,7 @@ function RouteComponent() {
 									<Button
 										type="button"
 										variant="outlined"
-										size="large"
 										fullWidth
-										disableElevation
 										aria-disabled={isSubmitting}
 										onClick={() => {
 											if (isSubmitting) return
@@ -228,9 +224,7 @@ function RouteComponent() {
 										type="submit"
 										form={FORM_ID}
 										fullWidth
-										disableElevation
 										variant="contained"
-										size="large"
 										loading={isSubmitting}
 										loadingPosition="start"
 										aria-disabled={!canSubmit}

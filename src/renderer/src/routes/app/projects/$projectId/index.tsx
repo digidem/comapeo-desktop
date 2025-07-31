@@ -72,7 +72,6 @@ function RouteComponent() {
 			<Box padding={6}>
 				<Stack
 					direction="column"
-					useFlexGap
 					gap={5}
 					borderRadius={2}
 					padding={6}
@@ -84,7 +83,7 @@ function RouteComponent() {
 						{projectSettings.name || t(m.unnamedProject)}
 					</Typography>
 
-					<Stack direction="row" useFlexGap gap={3} alignItems="center">
+					<Stack direction="row" gap={3} alignItems="center">
 						<Icon
 							name={
 								isAtLeastCoordinator
@@ -102,11 +101,10 @@ function RouteComponent() {
 						</Typography>
 					</Stack>
 
-					<Stack direction="row" useFlexGap gap={5} justifyContent="center">
+					<Stack direction="row" gap={5} justifyContent="center">
 						<ButtonLink
 							fullWidth
 							variant="outlined"
-							size="large"
 							to="/app/projects/$projectId/settings"
 							params={{ projectId }}
 							sx={{ maxWidth: 400 }}
@@ -117,7 +115,6 @@ function RouteComponent() {
 						<ButtonLink
 							fullWidth
 							variant="contained"
-							size="large"
 							to="/app/projects/$projectId/settings"
 							params={{ projectId }}
 							disabled={!isAtLeastCoordinator}

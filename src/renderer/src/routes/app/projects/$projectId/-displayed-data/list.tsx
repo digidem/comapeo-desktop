@@ -258,13 +258,7 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 										originalVersionId={originalVersionId}
 									/>
 								</Suspense>
-								<Stack
-									direction="row"
-									flex={1}
-									useFlexGap
-									gap={2}
-									overflow="auto"
-								>
+								<Stack direction="row" flex={1} gap={2} overflow="auto">
 									<Stack
 										direction="column"
 										flex={1}
@@ -659,7 +653,6 @@ function AddObservationsCard({ projectId }: { projectId: string }) {
 		<Box display="flex" flex={1} padding={6}>
 			<Stack
 				direction="column"
-				useFlexGap
 				gap={4}
 				alignItems="center"
 				borderRadius={2}

@@ -19,6 +19,7 @@ import {
 	getDiagnosticsEnabledQueryOptions,
 	setDiagnosticsEnabledMutationOptions,
 } from '../../lib/queries/app-settings'
+import { openExternalURLMutationOptions } from '../../lib/queries/system'
 import { TwoPanelLayout } from './-components/two-panel-layout'
 
 export const Route = createFileRoute('/app/data-and-privacy')({
@@ -44,6 +45,30 @@ function RouteComponent() {
 		getDiagnosticsEnabledQueryOptions(),
 	)
 
+	const openExternalURL = useMutation(openExternalURLMutationOptions())
+
+	const errorDialogProps =
+		setDiagnosticsEnabledMutation.status === 'error'
+			? {
+					open: true,
+					errorMessage: setDiagnosticsEnabledMutation.error.toString(),
+					onClose: () => {
+						setDiagnosticsEnabledMutation.reset()
+					},
+				}
+			: openExternalURL.status === 'error'
+				? {
+						open: true,
+						errorMessage: openExternalURL.error.toString(),
+						onClose: () => {
+							openExternalURL.reset()
+						},
+					}
+				: {
+						open: false,
+						onClose: () => {},
+					}
+
 	return (
 		<>
 			<TwoPanelLayout
@@ -52,7 +77,6 @@ function RouteComponent() {
 						direction="column"
 						gap={4}
 						padding={6}
-						useFlexGap
 						flex={1}
 						overflow="auto"
 					>
@@ -60,7 +84,6 @@ function RouteComponent() {
 							direction="column"
 							border={`1px solid ${BLUE_GREY}`}
 							borderRadius={2}
-							useFlexGap
 							gap={4}
 							alignItems="center"
 							padding={6}
@@ -80,14 +103,11 @@ function RouteComponent() {
 							</Typography>
 
 							<Button
+								size="medium"
 								variant="text"
 								sx={{ fontWeight: 400 }}
 								onClick={() => {
-									window.runtime
-										.openExternalURL(PRIVACY_POLICY_URL)
-										.catch(() => {
-											// TODO: Trigger generic error modal?
-										})
+									openExternalURL.mutate(PRIVACY_POLICY_URL)
 								}}
 							>
 								{t(m.learnMore)}
@@ -97,10 +117,9 @@ function RouteComponent() {
 							direction="column"
 							border={`1px solid ${BLUE_GREY}`}
 							borderRadius={2}
-							useFlexGap
 							flex={1}
 						>
-							<Stack padding={6} direction="column" useFlexGap gap={6} flex={1}>
+							<Stack padding={6} direction="column" gap={6} flex={1}>
 								<Typography variant="h2" fontWeight={500}>
 									{t(m.diagnosticInformationTitle)}
 								</Typography>
@@ -166,13 +185,7 @@ function RouteComponent() {
 				end={<Box bgcolor={LIGHT_GREY} display="flex" flex={1} />}
 			/>
 
-			<ErrorDialog
-				open={setDiagnosticsEnabledMutation.status === 'error'}
-				errorMessage={setDiagnosticsEnabledMutation.error?.toString()}
-				onClose={() => {
-					setDiagnosticsEnabledMutation.reset()
-				}}
-			/>
+			<ErrorDialog {...errorDialogProps} />
 		</>
 	)
 }

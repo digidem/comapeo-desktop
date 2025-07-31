@@ -119,7 +119,7 @@ function RouteComponent() {
 							</IconButtonLink>
 						</ListItem>
 
-						<Stack direction="column" useFlexGap gap={5}>
+						<Stack direction="column" gap={5}>
 							<LabeledNavItem
 								to="/app/projects/$projectId/exchange"
 								params={{ projectId: activeProjectId }}

@@ -17,12 +17,11 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 			bgcolor={WHITE}
 			direction="column"
 			flex={1}
-			useFlexGap
 			gap={6}
 			height="100%"
 			overflow="auto"
 		>
-			<Stack direction="column" flex={1} useFlexGap gap={6} padding={6}>
+			<Stack direction="column" flex={1} gap={6} padding={6}>
 				<Typography
 					variant="h1"
 					color="error"
@@ -86,8 +85,6 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 			>
 				<Button
 					fullWidth
-					disableElevation
-					size="large"
 					onClick={() => {
 						navigate({ to: '.', reloadDocument: true })
 					}}

@@ -20,39 +20,6 @@ export const Route = createFileRoute('/welcome')({
 	component: RouteComponent,
 })
 
-const m = defineMessages({
-	getStarted: {
-		id: 'routes.welcome.getStarted',
-		defaultMessage: 'Get Started',
-	},
-	appDescription: {
-		id: 'routes.welcome.appDescription',
-		defaultMessage:
-			'View and manage observations collected with CoMapeo Mobile.',
-	},
-	mapAnywhere: {
-		id: 'routes.welcome.mapAnywhere',
-		defaultMessage: 'Map anywhere and everywhere',
-	},
-	collaborate: {
-		id: 'routes.welcome.collaborate',
-		defaultMessage: 'Collaborate on projects',
-	},
-	ownData: {
-		id: 'routes.welcome.ownData',
-		defaultMessage: 'Own and control your data',
-	},
-	designedFor: {
-		id: 'routes.welcome.designedFor',
-		defaultMessage:
-			'Designed with and for Indigenous peoples & frontline communities',
-	},
-	comapeoDesktop: {
-		id: 'routes.welcome.comapeoDesktop',
-		defaultMessage: '<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>',
-	},
-})
-
 const LIST_BACKGROUND_COLOR = alpha(BLACK, 0.4)
 
 function RouteComponent() {
@@ -78,7 +45,7 @@ function RouteComponent() {
 			}}
 		>
 			<Container maxWidth="lg">
-				<Stack useFlexGap display="flex" alignItems="center" gap={25}>
+				<Stack display="flex" alignItems="center" gap={25}>
 					<Grid container spacing={10} justifyContent="center">
 						<Grid
 							container
@@ -86,7 +53,7 @@ function RouteComponent() {
 							size={viewportIsNarrow ? 8 : 5}
 							textAlign={viewportIsNarrow ? 'center' : undefined}
 						>
-							<Stack useFlexGap spacing={5}>
+							<Stack spacing={5}>
 								<Typography variant="bannerTitle" color="textInverted">
 									{t(m.comapeoDesktop)}
 								</Typography>
@@ -97,7 +64,6 @@ function RouteComponent() {
 						</Grid>
 						<Grid size={viewportIsNarrow ? 8 : 5} container>
 							<Stack
-								useFlexGap
 								display="flex"
 								justifyContent="center"
 								paddingX={5}
@@ -151,9 +117,7 @@ function RouteComponent() {
 					<ButtonLink
 						to="/onboarding/data-and-privacy"
 						fullWidth
-						size="large"
 						variant="contained"
-						disableElevation
 						sx={{ maxWidth: 400 }}
 					>
 						{t(m.getStarted)}
@@ -163,3 +127,36 @@ function RouteComponent() {
 		</Box>
 	)
 }
+
+const m = defineMessages({
+	getStarted: {
+		id: 'routes.welcome.getStarted',
+		defaultMessage: 'Get Started',
+	},
+	appDescription: {
+		id: 'routes.welcome.appDescription',
+		defaultMessage:
+			'View and manage observations collected with CoMapeo Mobile.',
+	},
+	mapAnywhere: {
+		id: 'routes.welcome.mapAnywhere',
+		defaultMessage: 'Map anywhere and everywhere',
+	},
+	collaborate: {
+		id: 'routes.welcome.collaborate',
+		defaultMessage: 'Collaborate on projects',
+	},
+	ownData: {
+		id: 'routes.welcome.ownData',
+		defaultMessage: 'Own and control your data',
+	},
+	designedFor: {
+		id: 'routes.welcome.designedFor',
+		defaultMessage:
+			'Designed with and for Indigenous peoples & frontline communities',
+	},
+	comapeoDesktop: {
+		id: 'routes.welcome.comapeoDesktop',
+		defaultMessage: '<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>',
+	},
+})

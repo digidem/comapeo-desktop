@@ -83,7 +83,6 @@ function RouteComponent() {
 		<>
 			<Stack
 				display="flex"
-				useFlexGap
 				direction="column"
 				justifyContent="space-between"
 				flex={1}
@@ -93,13 +92,7 @@ function RouteComponent() {
 				borderRadius={2}
 				overflow="auto"
 			>
-				<Container
-					maxWidth="sm"
-					component={Stack}
-					direction="column"
-					useFlexGap
-					gap={5}
-				>
+				<Container maxWidth="sm" component={Stack} direction="column" gap={5}>
 					<Box alignSelf="center">
 						<Icon
 							name="material-person-add"
@@ -118,7 +111,6 @@ function RouteComponent() {
 
 					<Stack
 						direction="column"
-						useFlexGap
 						gap={4}
 						borderRadius={2}
 						padding={6}
@@ -145,13 +137,10 @@ function RouteComponent() {
 					component={Stack}
 					direction="row"
 					justifyContent="center"
-					useFlexGap
 					gap={5}
 				>
 					<Button
 						variant="outlined"
-						size="large"
-						disableElevation
 						fullWidth
 						sx={{ maxWidth: 400 }}
 						// TODO: Consider using spin-delay
@@ -188,8 +177,6 @@ function RouteComponent() {
 
 					<Button
 						variant="contained"
-						size="large"
-						disableElevation
 						fullWidth
 						sx={{ maxWidth: 400 }}
 						// TODO: Consider using spin-delay
