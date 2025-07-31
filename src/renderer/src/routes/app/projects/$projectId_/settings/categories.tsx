@@ -190,9 +190,7 @@ function RouteComponent() {
 						<Button
 							type="button"
 							variant="outlined"
-							size="large"
 							fullWidth
-							disableElevation
 							loading={someMutationPending}
 							loadingPosition="start"
 							onClick={() => {

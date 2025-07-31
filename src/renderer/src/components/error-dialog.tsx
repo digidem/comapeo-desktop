@@ -110,7 +110,6 @@ export function ErrorDialog({
 					<Button
 						fullWidth
 						variant="outlined"
-						disableElevation
 						onClick={(event) => {
 							setAdvancedExpanded(false)
 							onClose(event)

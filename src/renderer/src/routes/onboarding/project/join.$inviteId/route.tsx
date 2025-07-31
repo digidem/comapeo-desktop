@@ -73,8 +73,6 @@ function NotFoundComponent(_props: NotFoundRouteProps) {
 
 			<Button
 				variant="outlined"
-				size="large"
-				disableElevation
 				fullWidth
 				onClick={() => {
 					if (router.history.canGoBack()) {

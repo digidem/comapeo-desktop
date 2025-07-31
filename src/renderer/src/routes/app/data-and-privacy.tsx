@@ -78,6 +78,7 @@ function RouteComponent() {
 							</Typography>
 
 							<Button
+								size="medium"
 								variant="text"
 								sx={{ fontWeight: 400 }}
 								onClick={() => {

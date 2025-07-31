@@ -203,9 +203,7 @@ function RouteComponent() {
 									<Button
 										type="button"
 										variant="outlined"
-										size="large"
 										fullWidth
-										disableElevation
 										aria-disabled={isSubmitting}
 										onClick={() => {
 											if (isSubmitting) return
@@ -226,9 +224,7 @@ function RouteComponent() {
 										type="submit"
 										form={FORM_ID}
 										fullWidth
-										disableElevation
 										variant="contained"
-										size="large"
 										loading={isSubmitting}
 										loadingPosition="start"
 										aria-disabled={!canSubmit}

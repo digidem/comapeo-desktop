@@ -193,11 +193,9 @@ function RouteComponent() {
 						>
 							<Button
 								fullWidth
-								disableElevation
 								variant={
 									syncState?.data.isSyncEnabled ? 'outlined' : 'contained'
 								}
-								size="large"
 								sx={{ maxWidth: 400 }}
 								startIcon={
 									<Icon

@@ -145,8 +145,6 @@ function RouteComponent() {
 							<Box display="flex" justifyContent="center">
 								<ButtonLink
 									fullWidth
-									disableElevation
-									size="large"
 									variant="outlined"
 									sx={{ maxWidth: 400 }}
 									// TODO: Navigate to collaborators page

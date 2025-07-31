@@ -104,8 +104,6 @@ function RouteComponent() {
 					params={{ projectId }}
 					reloadDocument
 					variant="outlined"
-					size="large"
-					disableElevation
 					fullWidth
 					sx={{ maxWidth: 400 }}
 				>
@@ -120,8 +118,6 @@ function RouteComponent() {
 					params={{ projectId }}
 					reloadDocument
 					variant="contained"
-					size="large"
-					disableElevation
 					fullWidth
 					sx={{ maxWidth: 400 }}
 				>
@@ -166,8 +162,6 @@ function NotFoundComponent(_props: NotFoundRouteProps) {
 
 			<Button
 				variant="outlined"
-				size="large"
-				disableElevation
 				fullWidth
 				onClick={() => {
 					if (router.history.canGoBack()) {

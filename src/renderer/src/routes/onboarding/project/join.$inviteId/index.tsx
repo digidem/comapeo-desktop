@@ -141,8 +141,6 @@ function RouteComponent() {
 				>
 					<Button
 						variant="outlined"
-						size="large"
-						disableElevation
 						fullWidth
 						sx={{ maxWidth: 400 }}
 						// TODO: Consider using spin-delay
@@ -179,8 +177,6 @@ function RouteComponent() {
 
 					<Button
 						variant="contained"
-						size="large"
-						disableElevation
 						fullWidth
 						sx={{ maxWidth: 400 }}
 						// TODO: Consider using spin-delay

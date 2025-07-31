@@ -85,8 +85,6 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 			>
 				<Button
 					fullWidth
-					disableElevation
-					size="large"
 					onClick={() => {
 						navigate({ to: '.', reloadDocument: true })
 					}}

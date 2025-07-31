@@ -117,9 +117,7 @@ function RouteComponent() {
 					<ButtonLink
 						to="/onboarding/data-and-privacy"
 						fullWidth
-						size="large"
 						variant="contained"
-						disableElevation
 						sx={{ maxWidth: 400 }}
 					>
 						{t(m.getStarted)}

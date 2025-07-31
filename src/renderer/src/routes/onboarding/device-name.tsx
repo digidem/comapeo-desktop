@@ -170,8 +170,6 @@ function RouteComponent() {
 								fullWidth
 								form="device-name-form"
 								variant="contained"
-								size="large"
-								disableElevation
 								type="submit"
 								aria-disabled={!canSubmit}
 								sx={{ maxWidth: 400 }}

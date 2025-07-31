@@ -105,7 +105,6 @@ function RouteComponent() {
 						<ButtonLink
 							fullWidth
 							variant="outlined"
-							size="large"
 							to="/app/projects/$projectId/settings"
 							params={{ projectId }}
 							sx={{ maxWidth: 400 }}
@@ -116,7 +115,6 @@ function RouteComponent() {
 						<ButtonLink
 							fullWidth
 							variant="contained"
-							size="large"
 							to="/app/projects/$projectId/settings"
 							params={{ projectId }}
 							disabled={!isAtLeastCoordinator}

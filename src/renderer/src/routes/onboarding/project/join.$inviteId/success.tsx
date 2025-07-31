@@ -69,8 +69,6 @@ function RouteComponent() {
 			<ButtonLink
 				to="/app"
 				variant="contained"
-				size="large"
-				disableElevation
 				fullWidth
 				sx={{ maxWidth: 400, alignSelf: 'center' }}
 				loadingPosition="start"

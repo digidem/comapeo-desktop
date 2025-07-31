@@ -66,8 +66,6 @@ function RouteComponent() {
 				<ButtonLink
 					to="/onboarding/privacy-policy"
 					variant="outlined"
-					size="large"
-					disableElevation
 					fullWidth
 					sx={{ maxWidth: 400 }}
 				>
@@ -76,8 +74,6 @@ function RouteComponent() {
 				<ButtonLink
 					to="/onboarding/device-name"
 					variant="contained"
-					size="large"
-					disableElevation
 					fullWidth
 					sx={{ maxWidth: 400 }}
 				>

@@ -113,8 +113,6 @@ function RouteComponent() {
 				<ButtonLink
 					to="/onboarding/project/create"
 					variant="outlined"
-					size="large"
-					disableElevation
 					fullWidth
 					sx={{ maxWidth: 400 }}
 				>
