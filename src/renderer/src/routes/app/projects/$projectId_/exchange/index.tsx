@@ -31,6 +31,7 @@ import {
 	WHITE,
 } from '../../../../../colors'
 import { ErrorDialog } from '../../../../../components/error-dialog'
+import { GenericRoutePendingComponent } from '../../../../../components/generic-route-pending-component'
 import { Icon } from '../../../../../components/icon'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
 import { useBrowserNetInfo } from '../../../../../hooks/network'
@@ -46,19 +47,7 @@ import {
 export const Route = createFileRoute('/app/projects/$projectId_/exchange/')({
 	pendingComponent: () => {
 		return (
-			<TwoPanelLayout
-				start={
-					<Box
-						display="flex"
-						flex={1}
-						justifyContent="center"
-						alignItems="center"
-					>
-						<CircularProgress />
-					</Box>
-				}
-				end={null}
-			/>
+			<TwoPanelLayout start={<GenericRoutePendingComponent />} end={null} />
 		)
 	},
 	component: RouteComponent,

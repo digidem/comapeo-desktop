@@ -28,11 +28,11 @@ import {
 } from '../../lib/queries/app-settings'
 
 export const Route = createFileRoute('/onboarding/privacy-policy')({
-	component: RouteComponent,
 	loader: async ({ context }) => {
 		const { queryClient } = context
 		await queryClient.ensureQueryData(getDiagnosticsEnabledQueryOptions())
 	},
+	component: RouteComponent,
 })
 
 function RouteComponent() {

@@ -1,7 +1,6 @@
 import { useMemo, type ReactNode } from 'react'
 import { useOwnRoleInProject, useProjectSettings } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
-import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
@@ -66,19 +65,6 @@ export const Route = createFileRoute('/app/projects/$projectId_/settings/')({
 				},
 			}),
 		])
-	},
-	pendingComponent: () => {
-		return (
-			<Box
-				display="flex"
-				flexDirection="column"
-				flex={1}
-				justifyContent="center"
-				alignItems="center"
-			>
-				<CircularProgress />
-			</Box>
-		)
 	},
 	component: RouteComponent,
 })
