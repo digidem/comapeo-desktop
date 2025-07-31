@@ -19,6 +19,7 @@ import {
 	getDiagnosticsEnabledQueryOptions,
 	setDiagnosticsEnabledMutationOptions,
 } from '../../lib/queries/app-settings'
+import { openExternalURLMutationOptions } from '../../lib/queries/system'
 import { TwoPanelLayout } from './-components/two-panel-layout'
 
 export const Route = createFileRoute('/app/data-and-privacy')({
@@ -43,6 +44,30 @@ function RouteComponent() {
 	const { data: diagnosticsEnabled } = useSuspenseQuery(
 		getDiagnosticsEnabledQueryOptions(),
 	)
+
+	const openExternalURL = useMutation(openExternalURLMutationOptions())
+
+	const errorDialogProps =
+		setDiagnosticsEnabledMutation.status === 'error'
+			? {
+					open: true,
+					errorMessage: setDiagnosticsEnabledMutation.error.toString(),
+					onClose: () => {
+						setDiagnosticsEnabledMutation.reset()
+					},
+				}
+			: openExternalURL.status === 'error'
+				? {
+						open: true,
+						errorMessage: openExternalURL.error.toString(),
+						onClose: () => {
+							openExternalURL.reset()
+						},
+					}
+				: {
+						open: false,
+						onClose: () => {},
+					}
 
 	return (
 		<>
@@ -82,11 +107,7 @@ function RouteComponent() {
 								variant="text"
 								sx={{ fontWeight: 400 }}
 								onClick={() => {
-									window.runtime
-										.openExternalURL(PRIVACY_POLICY_URL)
-										.catch(() => {
-											// TODO: Trigger generic error modal?
-										})
+									openExternalURL.mutate(PRIVACY_POLICY_URL)
 								}}
 							>
 								{t(m.learnMore)}
@@ -164,13 +185,7 @@ function RouteComponent() {
 				end={<Box bgcolor={LIGHT_GREY} display="flex" flex={1} />}
 			/>
 
-			<ErrorDialog
-				open={setDiagnosticsEnabledMutation.status === 'error'}
-				errorMessage={setDiagnosticsEnabledMutation.error?.toString()}
-				onClose={() => {
-					setDiagnosticsEnabledMutation.reset()
-				}}
-			/>
+			<ErrorDialog {...errorDialogProps} />
 		</>
 	)
 }
