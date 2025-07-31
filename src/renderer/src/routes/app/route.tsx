@@ -62,7 +62,7 @@ function RouteComponent() {
 	const pageHasEditing = checkPageHasEditing(currentRoute.fullPath)
 
 	return (
-		<Box bgcolor={WHITE} height="100vh">
+		<Box bgcolor={WHITE} height="100%">
 			<Box display="grid" gridTemplateColumns="min-content 1fr" height="100%">
 				<Box
 					component="nav"

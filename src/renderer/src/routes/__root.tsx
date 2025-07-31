@@ -1,6 +1,5 @@
-import { Suspense } from 'react'
 import type { MapeoClientApi } from '@comapeo/ipc'
-import CircularProgress from '@mui/material/CircularProgress'
+import Box from '@mui/material/Box'
 import type { QueryClient } from '@tanstack/react-query'
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 
@@ -15,8 +14,8 @@ export interface RootRouterContext {
 
 export const Route = createRootRouteWithContext<RootRouterContext>()({
 	component: () => (
-		<Suspense fallback={<CircularProgress />}>
+		<Box height="100dvh">
 			<Outlet />
-		</Suspense>
+		</Box>
 	),
 })

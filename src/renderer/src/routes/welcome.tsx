@@ -63,9 +63,9 @@ function RouteComponent() {
 
 	return (
 		<Box
+			height="100%"
 			bgcolor={DARK_COMAPEO_BLUE}
 			flexDirection="column"
-			minHeight="100vh"
 			display="flex"
 			justifyContent="center"
 			alignItems="center"

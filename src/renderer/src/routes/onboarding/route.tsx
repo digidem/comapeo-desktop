@@ -80,7 +80,7 @@ function RouteComponent() {
 		currentPath === '/onboarding/project/join/$inviteId/success'
 
 	return (
-		<Box bgcolor={DARK_COMAPEO_BLUE} padding={5} height="100vh">
+		<Box bgcolor={DARK_COMAPEO_BLUE} padding={5} height="100%">
 			<Container
 				maxWidth="md"
 				component={Box}
