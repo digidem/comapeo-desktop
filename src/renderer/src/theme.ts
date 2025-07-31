@@ -176,9 +176,6 @@ const baseTheme = createTheme({
 			},
 		},
 		MuiDialog: {
-			defaultProps: {
-				maxWidth: 'xs',
-			},
 			styleOverrides: {
 				paper: ({ theme }) => {
 					return {

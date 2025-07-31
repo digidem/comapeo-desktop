@@ -26,26 +26,18 @@ export function ErrorDialog({
 	const [advancedExpanded, setAdvancedExpanded] = useState(false)
 
 	return (
-		<Dialog open={open}>
-			<Stack
-				direction="column"
-				useFlexGap
-				gap={10}
-				paddingInline={10}
-				paddingBlock={6}
-				justifyContent="space-between"
-				alignItems="center"
-			>
-				<Stack direction="column" alignItems="center" useFlexGap gap={4}>
-					<Icon name="material-error" color="error" size={72} />
+		<Dialog open={open} maxWidth="sm">
+			<Stack direction="column" useFlexGap>
+				<Stack direction="column" useFlexGap gap={10} flex={1} padding={20}>
+					<Stack direction="column" alignItems="center" useFlexGap gap={4}>
+						<Icon name="material-error" color="error" size={72} />
 
-					<Typography variant="h1" fontWeight={500}>
-						{t(m.somethingWentWrong)}
-					</Typography>
-				</Stack>
+						<Typography variant="h1" fontWeight={500} textAlign="center">
+							{t(m.somethingWentWrong)}
+						</Typography>
+					</Stack>
 
-				{errorMessage ? (
-					<Box display="flex" alignSelf="stretch" flex={1}>
+					{errorMessage ? (
 						<Stack direction="column" flex={1} useFlexGap gap={2}>
 							<ButtonBase
 								disableRipple
@@ -83,6 +75,7 @@ export function ErrorDialog({
 									/>
 								</Stack>
 							</ButtonBase>
+
 							<Collapse in={advancedExpanded}>
 								<Box
 									bgcolor={LIGHT_GREY}
@@ -90,25 +83,41 @@ export function ErrorDialog({
 									border={`1px solid ${BLUE_GREY}`}
 									maxHeight={300}
 									overflow="auto"
+									borderRadius={2}
 								>
-									<Typography>{errorMessage}</Typography>
+									<Typography
+										component="pre"
+										variant="body2"
+										fontFamily="monospace"
+									>
+										{errorMessage}
+									</Typography>
 								</Box>
 							</Collapse>
 						</Stack>
-					</Box>
-				) : null}
+					) : null}
+				</Stack>
 
-				<Button
-					fullWidth
-					variant="outlined"
-					onClick={(event) => {
-						setAdvancedExpanded(false)
-						onClose(event)
-					}}
-					sx={{ maxWidth: 400 }}
+				<Box
+					position="sticky"
+					bottom={0}
+					display="flex"
+					justifyContent="center"
+					padding={6}
 				>
-					{t(m.close)}
-				</Button>
+					<Button
+						fullWidth
+						variant="outlined"
+						disableElevation
+						onClick={(event) => {
+							setAdvancedExpanded(false)
+							onClose(event)
+						}}
+						sx={{ maxWidth: 400, alignSelf: 'center' }}
+					>
+						{t(m.close)}
+					</Button>
+				</Box>
 			</Stack>
 		</Dialog>
 	)
