@@ -24,6 +24,7 @@ import * as v from 'valibot'
 
 import { TwoPanelLayout } from '../-components/two-panel-layout'
 import { BLACK, BLUE_GREY } from '../../../colors'
+import { ErrorDialog } from '../../../components/error-dialog'
 import { Icon } from '../../../components/icon'
 import { Map } from '../../../components/map'
 import { useAppForm } from '../../../hooks/forms'
@@ -167,30 +168,22 @@ function RouteComponent() {
 		onSubmit: async ({ value }) => {
 			const parsedValue = v.parse(onChangeSchema, value)
 
-			try {
-				createTestObservations.mutateAsync({
+			await createTestObservations.mutateAsync({
+				count: parsedValue.observationCount,
+				boundingBox: getBoundingBoxUsingDistance({
+					longitude: parsedValue.longitude,
+					latitude: parsedValue.latitude,
+					distance: parsedValue.boundedDistance,
+				}),
+			})
+
+			setNotification({
+				type: 'success',
+				id: `id_${Date.now()}`,
+				message: t(m.observationCreateSuccess, {
 					count: parsedValue.observationCount,
-					boundingBox: getBoundingBoxUsingDistance({
-						longitude: parsedValue.longitude,
-						latitude: parsedValue.latitude,
-						distance: parsedValue.boundedDistance,
-					}),
-				})
-
-				setNotification({
-					type: 'success',
-					id: `id_${Date.now()}`,
-					message: t(m.observationCreateSuccess, {
-						count: parsedValue.observationCount,
-					}),
-				})
-			} catch (reason) {
-				const errorMessage =
-					reason instanceof Error ? reason.message : `Unknown error`
-
-				// TODO: use shared error dialog
-				alert(t(m.observationCreateError, { error: errorMessage }))
-			}
+				}),
+			})
 		},
 	})
 
@@ -278,7 +271,9 @@ function RouteComponent() {
 									onSubmit={(event) => {
 										event.preventDefault()
 										if (form.state.isSubmitting) return
-										form.handleSubmit()
+										form.handleSubmit().catch((_err) => {
+											// TODO: Report to Sentry?
+										})
 									}}
 								>
 									<Stack direction="column" useFlexGap gap={10}>
@@ -538,6 +533,14 @@ function RouteComponent() {
 				}}
 				anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 			/>
+
+			<ErrorDialog
+				open={createTestObservations.status === 'error'}
+				errorMessage={createTestObservations.error?.message}
+				onClose={() => {
+					createTestObservations.reset()
+				}}
+			/>
 		</>
 	)
 }
@@ -715,10 +718,5 @@ const m = defineMessages({
 		id: 'routes.app.settings_.test-data.observationCreateSuccess',
 		defaultMessage: 'Created {count} observations.',
 		description: 'Message displayed when observation creation succeeds',
-	},
-	observationCreateError: {
-		id: 'routes.app.settings_.test-data.observationCreateError',
-		defaultMessage: 'Failed to create observations: {error}',
-		description: 'Error message displayed when observation creation fails.',
 	},
 })
