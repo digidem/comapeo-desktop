@@ -20,6 +20,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARK_GREY, LIGHT_GREY, WHITE } from '../../colors'
+import { ErrorDialog } from '../../components/error-dialog'
 import { Icon } from '../../components/icon'
 import {
 	getDiagnosticsEnabledQueryOptions,
@@ -47,197 +48,214 @@ function RouteComponent() {
 	)
 
 	return (
-		<Stack
-			display="flex"
-			useFlexGap
-			direction="column"
-			justifyContent="space-between"
-			flex={1}
-			gap={10}
-			paddingX={5}
-			paddingY={10}
-			borderRadius={2}
-			bgcolor={WHITE}
-			overflow="auto"
-		>
-			<Container
-				component={Stack}
-				maxWidth="sm"
-				direction="column"
+		<>
+			<Stack
+				display="flex"
 				useFlexGap
+				direction="column"
+				justifyContent="space-between"
+				flex={1}
 				gap={10}
+				paddingX={5}
+				paddingY={10}
+				borderRadius={2}
+				bgcolor={WHITE}
+				overflow="auto"
 			>
-				<Typography variant="h1" fontWeight={500} textAlign="center">
-					{t(m.title)}
-				</Typography>
+				<Container
+					component={Stack}
+					maxWidth="sm"
+					direction="column"
+					useFlexGap
+					gap={10}
+				>
+					<Typography variant="h1" fontWeight={500} textAlign="center">
+						{t(m.title)}
+					</Typography>
 
-				<Stack direction="column" useFlexGap gap={3}>
-					<Box
-						border={`1px solid ${BLUE_GREY}`}
-						bgcolor={LIGHT_GREY}
-						borderRadius={2}
-						padding={5}
-					>
-						<Typography variant="body1" fontWeight={400}>
-							{t(m.description)}
+					<Stack direction="column" useFlexGap gap={3}>
+						<Box
+							border={`1px solid ${BLUE_GREY}`}
+							bgcolor={LIGHT_GREY}
+							borderRadius={2}
+							padding={5}
+						>
+							<Typography variant="body1" fontWeight={400}>
+								{t(m.description)}
+							</Typography>
+						</Box>
+
+						<CustomAccordion
+							label={t(m.aboutAwanaDigital)}
+							description={t(m.aboutAwanaDigitalDescription)}
+						/>
+
+						<CustomAccordion
+							label={t(m.openSource)}
+							description={t(m.openSourceDescription)}
+						/>
+					</Stack>
+
+					<Stack useFlexGap direction="column" gap={10}>
+						<Typography variant="h2" fontWeight={500}>
+							{t(m.comapeoDataPrivacy)}
 						</Typography>
-					</Box>
 
-					<CustomAccordion
-						label={t(m.aboutAwanaDigital)}
-						description={t(m.aboutAwanaDigitalDescription)}
-					/>
+						<QuestionAnswerItem
+							icon={<Icon name="openmoji-red-circle" />}
+							title={t(m.privateByDefault)}
+							description={t(m.privateByDefaultDescription)}
+						/>
 
-					<CustomAccordion
-						label={t(m.openSource)}
-						description={t(m.openSourceDescription)}
-					/>
-				</Stack>
+						<QuestionAnswerItem
+							icon={<Icon name="openmoji-bust-in-silhouette" />}
+							title={t(m.noPII)}
+							description={t(m.noPIIDescription)}
+						/>
 
-				<Stack useFlexGap direction="column" gap={10}>
-					<Typography variant="h2" fontWeight={500}>
-						{t(m.comapeoDataPrivacy)}
-					</Typography>
+						<QuestionAnswerItem
+							icon={<Icon name="openmoji-locked-with-key" />}
+							title={t(m.control)}
+							description={t(m.controlDescription)}
+						/>
 
-					<QuestionAnswerItem
-						icon={<Icon name="openmoji-red-circle" />}
-						title={t(m.privateByDefault)}
-						description={t(m.privateByDefaultDescription)}
-					/>
+						<Divider sx={{ backgroundColor: BLUE_GREY }} />
 
-					<QuestionAnswerItem
-						icon={<Icon name="openmoji-bust-in-silhouette" />}
-						title={t(m.noPII)}
-						description={t(m.noPIIDescription)}
-					/>
+						<Typography variant="h2" fontWeight={500}>
+							{t(m.dataCollection)}
+						</Typography>
 
-					<QuestionAnswerItem
-						icon={<Icon name="openmoji-locked-with-key" />}
-						title={t(m.control)}
-						description={t(m.controlDescription)}
-					/>
+						<QuestionAnswerItem
+							icon={<Icon name="openmoji-bar-chart" />}
+							title={t(m.whatIsCollected)}
+							description={t(m.whatIsCollectedDescription)}
+						>
+							<Stack
+								border={`1px solid ${BLUE_GREY}`}
+								borderRadius={2}
+								direction="column"
+								useFlexGap
+								gap={5}
+								paddingY={5}
+							>
+								<Stack
+									component="section"
+									useFlexGap
+									direction="column"
+									paddingX={5}
+									gap={3}
+								>
+									<Typography variant="h3">{t(m.diagnostics)}</Typography>
 
-					<Divider sx={{ backgroundColor: BLUE_GREY }} />
+									<List
+										sx={{
+											listStyleType: 'disc',
+											paddingX: 8,
+											color: DARK_GREY,
+										}}
+									>
+										<ListItem sx={{ display: 'list-item' }} disablePadding>
+											{t(m.crashData)}
+										</ListItem>
 
-					<Typography variant="h2" fontWeight={500}>
-						{t(m.dataCollection)}
-					</Typography>
+										<ListItem sx={{ display: 'list-item' }} disablePadding>
+											{t(m.appErrors)}
+										</ListItem>
 
-					<QuestionAnswerItem
-						icon={<Icon name="openmoji-bar-chart" />}
-						title={t(m.whatIsCollected)}
-						description={t(m.whatIsCollectedDescription)}
-					>
+										<ListItem sx={{ display: 'list-item' }} disablePadding>
+											{t(m.performanceData)}
+										</ListItem>
+
+										<ListItem sx={{ display: 'list-item' }} disablePadding>
+											{t(m.deviceInfo)}
+										</ListItem>
+
+										<ListItem sx={{ display: 'list-item' }} disablePadding>
+											{t(m.appInfo)}
+										</ListItem>
+									</List>
+								</Stack>
+
+								<Divider sx={{ backgroundColor: BLUE_GREY }} />
+
+								<Stack
+									component="section"
+									direction="column"
+									useFlexGap
+									paddingX={5}
+									gap={3}
+								>
+									<Typography variant="h3">{t(m.appUsage)}</Typography>
+
+									<List
+										sx={{
+											listStyleType: 'disc',
+											paddingX: 8,
+											color: DARK_GREY,
+										}}
+									>
+										<ListItem sx={{ display: 'list-item' }} disablePadding>
+											{t(m.country)}
+										</ListItem>
+									</List>
+								</Stack>
+							</Stack>
+						</QuestionAnswerItem>
+
+						<QuestionAnswerItem
+							icon={<Icon name="openmoji-wrench" />}
+							title={t(m.whyIsThisDataCollected)}
+							description={t(m.whyIsThisDataCollectedDescription)}
+						/>
+
+						<QuestionAnswerItem
+							icon={<Icon name="openmoji-raised-hand-medium-skin-tone" />}
+							title={t(m.whatIsNotCollected)}
+							description={t(m.whatIsNotCollectedDescription)}
+						/>
+
+						<Divider sx={{ backgroundColor: BLUE_GREY }} />
+
+						<Typography variant="h2" fontWeight={500}>
+							{t(m.dataCollection)}
+						</Typography>
+
 						<Stack
 							border={`1px solid ${BLUE_GREY}`}
 							borderRadius={2}
 							direction="column"
 							useFlexGap
 							gap={5}
-							paddingY={5}
+							padding={5}
 						>
-							<Stack
-								component="section"
-								useFlexGap
-								direction="column"
-								paddingX={5}
-								gap={3}
-							>
-								<Typography variant="h3">{t(m.diagnostics)}</Typography>
-
-								<List
-									sx={{ listStyleType: 'disc', paddingX: 8, color: DARK_GREY }}
-								>
-									<ListItem sx={{ display: 'list-item' }} disablePadding>
-										{t(m.crashData)}
-									</ListItem>
-
-									<ListItem sx={{ display: 'list-item' }} disablePadding>
-										{t(m.appErrors)}
-									</ListItem>
-
-									<ListItem sx={{ display: 'list-item' }} disablePadding>
-										{t(m.performanceData)}
-									</ListItem>
-
-									<ListItem sx={{ display: 'list-item' }} disablePadding>
-										{t(m.deviceInfo)}
-									</ListItem>
-
-									<ListItem sx={{ display: 'list-item' }} disablePadding>
-										{t(m.appInfo)}
-									</ListItem>
-								</List>
-							</Stack>
-
-							<Divider sx={{ backgroundColor: BLUE_GREY }} />
-
-							<Stack
-								component="section"
-								direction="column"
-								useFlexGap
-								paddingX={5}
-								gap={3}
-							>
-								<Typography variant="h3">{t(m.appUsage)}</Typography>
-
-								<List
-									sx={{ listStyleType: 'disc', paddingX: 8, color: DARK_GREY }}
-								>
-									<ListItem sx={{ display: 'list-item' }} disablePadding>
-										{t(m.country)}
-									</ListItem>
-								</List>
-							</Stack>
+							<FormGroup>
+								<FormControlLabel
+									control={<Checkbox checked={diagnosticsEnabled} />}
+									onChange={(_event, checked) => {
+										// TODO: Handle error and report to Sentry
+										setDiagnosticsEnabledMutation.mutate(checked)
+									}}
+									label={t(m.shareDiagnosticInformation)}
+									labelPlacement="start"
+									sx={{
+										margin: 0,
+										justifyContent: 'space-between',
+									}}
+								/>
+							</FormGroup>
 						</Stack>
-					</QuestionAnswerItem>
-
-					<QuestionAnswerItem
-						icon={<Icon name="openmoji-wrench" />}
-						title={t(m.whyIsThisDataCollected)}
-						description={t(m.whyIsThisDataCollectedDescription)}
-					/>
-
-					<QuestionAnswerItem
-						icon={<Icon name="openmoji-raised-hand-medium-skin-tone" />}
-						title={t(m.whatIsNotCollected)}
-						description={t(m.whatIsNotCollectedDescription)}
-					/>
-
-					<Divider sx={{ backgroundColor: BLUE_GREY }} />
-
-					<Typography variant="h2" fontWeight={500}>
-						{t(m.dataCollection)}
-					</Typography>
-
-					<Stack
-						border={`1px solid ${BLUE_GREY}`}
-						borderRadius={2}
-						direction="column"
-						useFlexGap
-						gap={5}
-						padding={5}
-					>
-						<FormGroup>
-							<FormControlLabel
-								control={<Checkbox checked={diagnosticsEnabled} />}
-								onChange={(_event, checked) => {
-									// TODO: Optimistic update?
-									// TODO: Handle error?
-									setDiagnosticsEnabledMutation.mutate(checked)
-								}}
-								label={t(m.shareDiagnosticInformation)}
-								labelPlacement="start"
-								sx={{
-									margin: 0,
-									justifyContent: 'space-between',
-								}}
-							/>
-						</FormGroup>
 					</Stack>
-				</Stack>
-			</Container>
-		</Stack>
+				</Container>
+			</Stack>
+
+			<ErrorDialog
+				open={setDiagnosticsEnabledMutation.status === 'error'}
+				errorMessage={setDiagnosticsEnabledMutation.error?.message}
+				onClose={() => {
+					setDiagnosticsEnabledMutation.reset()
+				}}
+			/>
+		</>
 	)
 }
 
