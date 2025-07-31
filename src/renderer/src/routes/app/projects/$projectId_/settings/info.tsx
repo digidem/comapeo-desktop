@@ -26,6 +26,7 @@ import {
 	PROJECT_ORANGE,
 	PROJECT_RED,
 } from '../../../../../colors'
+import { ErrorDialog } from '../../../../../components/error-dialog'
 import { Icon } from '../../../../../components/icon'
 import { useAppForm } from '../../../../../hooks/forms'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
@@ -125,7 +126,7 @@ function RouteComponent() {
 				value,
 			)
 
-			// TODO: Catch error and show error dialog
+			// TODO: Catch error and report to Sentry
 			await setProjectSettings.mutateAsync({
 				name: projectName,
 				projectDescription:
@@ -147,325 +148,337 @@ function RouteComponent() {
 	})
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
-			<Stack
-				direction="row"
-				alignItems="center"
-				component="nav"
-				useFlexGap
-				gap={4}
-				padding={4}
-				borderBottom={`1px solid ${BLUE_GREY}`}
-			>
-				<IconButton
-					onClick={() => {
-						if (router.history.canGoBack()) {
-							router.history.back()
-							return
-						}
-
-						router.navigate({
-							to: '/app/projects/$projectId/settings',
-							params: { projectId },
-							replace: true,
-						})
-					}}
+		<>
+			<Stack direction="column" flex={1} overflow="auto">
+				<Stack
+					direction="row"
+					alignItems="center"
+					component="nav"
+					useFlexGap
+					gap={4}
+					padding={4}
+					borderBottom={`1px solid ${BLUE_GREY}`}
 				>
-					<Icon name="material-arrow-back" size={30} />
-				</IconButton>
+					<IconButton
+						onClick={() => {
+							if (router.history.canGoBack()) {
+								router.history.back()
+								return
+							}
 
-				<Typography variant="h1" fontWeight={500}>
-					{t(m.navTitle)}
-				</Typography>
-			</Stack>
-
-			<Stack
-				direction="column"
-				flex={1}
-				justifyContent="space-between"
-				overflow="auto"
-			>
-				<Box paddingBlock={6}>
-					<Box
-						component="form"
-						id={FORM_ID}
-						noValidate
-						autoComplete="off"
-						onSubmit={(event) => {
-							event.preventDefault()
-							if (form.state.isSubmitting) return
-							form.handleSubmit()
+							router.navigate({
+								to: '/app/projects/$projectId/settings',
+								params: { projectId },
+								replace: true,
+							})
 						}}
 					>
-						<Stack direction="column" useFlexGap gap={10}>
-							<Box paddingInline={6}>
-								<form.AppField name="projectName">
-									{(field) => (
-										<field.TextField
-											required
-											fullWidth
-											label={t(m.projectNameInputLabel)}
-											value={field.state.value}
-											error={!field.state.meta.isValid}
-											name={field.name}
-											onChange={(event) => {
-												field.handleChange(event.target.value)
-											}}
-											onBlur={field.handleBlur}
-											helperText={
-												<Stack
-													component="span"
-													direction="row"
-													justifyContent="space-between"
-												>
-													<Box component="span">
-														{field.state.meta.errors[0]?.message}
-													</Box>
-													<Box component="span">
-														<form.Subscribe
-															selector={(state) =>
-																state.values.projectName
-																	? v._getGraphemeCount(
-																			state.values.projectName,
-																		)
-																	: 0
-															}
-														>
-															{(count) =>
-																t(m.characterCount, {
-																	count,
-																	max: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
-																})
-															}
-														</form.Subscribe>
-													</Box>
-												</Stack>
-											}
-										/>
-									)}
-								</form.AppField>
-							</Box>
+						<Icon name="material-arrow-back" size={30} />
+					</IconButton>
 
-							<Box paddingInline={6}>
-								<form.AppField name="projectDescription">
-									{(field) => (
-										<field.TextField
-											fullWidth
-											multiline
-											rows={3}
-											enterKeyHint="done"
-											label={t(m.projectDescriptionInputLabel)}
-											value={field.state.value}
-											error={!field.state.meta.isValid}
-											name={field.name}
-											onChange={(event) => {
-												field.handleChange(event.target.value)
-											}}
-											onBlur={field.handleBlur}
-											helperText={
-												<Stack
-													component="span"
-													direction="row"
-													justifyContent="space-between"
-												>
-													<Box component="span">
-														{field.state.meta.errors[0]?.message}
-													</Box>
-													<Box component="span">
-														<form.Subscribe
-															selector={(state) =>
-																state.values.projectDescription
-																	? v._getGraphemeCount(
-																			state.values.projectDescription,
-																		)
-																	: 0
-															}
-														>
-															{(count) =>
-																t(m.characterCount, {
-																	count,
-																	max: PROJECT_DESCRIPTION_MAX_LENGTH_GRAPHEMES,
-																})
-															}
-														</form.Subscribe>
-													</Box>
-												</Stack>
-											}
-										/>
-									)}
-								</form.AppField>
-							</Box>
-
-							<FormControl>
-								<Stack direction="column" useFlexGap gap={4}>
-									<Box paddingInline={6}>
-										<FormLabel id="project-color-selector-label">
-											{t(m.projectCardColorLabel)}
-										</FormLabel>
-									</Box>
-
-									<form.AppField name="projectColor">
-										{(field) => (
-											<FormGroup
-												row
-												aria-labelledby="project-color-selector-label"
-												sx={{
-													flexWrap: 'nowrap',
-													gap: 10,
-													overflowX: 'auto',
-													paddingInline: 6,
-													paddingBlock: 2,
-												}}
-											>
-												<FormControlLabel
-													name="option-orange"
-													label={t(m.projectColorOptionOrange)}
-													checked={field.state.value === PROJECT_ORANGE}
-													onChange={(_event, checked) => {
-														field.handleChange(checked ? PROJECT_ORANGE : null)
-													}}
-													labelPlacement="bottom"
-													control={
-														<ProjectColorCheckboxControl
-															projectColor={PROJECT_ORANGE}
-														/>
-													}
-													sx={{ margin: 0, gap: 4 }}
-												/>
-
-												<FormControlLabel
-													name="option-blue"
-													label={t(m.projectColorOptionBlue)}
-													checked={field.state.value === PROJECT_BLUE}
-													onChange={(_event, checked) => {
-														field.handleChange(checked ? PROJECT_BLUE : null)
-													}}
-													labelPlacement="bottom"
-													control={
-														<ProjectColorCheckboxControl
-															projectColor={PROJECT_BLUE}
-														/>
-													}
-													sx={{ margin: 0, gap: 4 }}
-												/>
-
-												<FormControlLabel
-													name="option-green"
-													label={t(m.projectColorOptionGreen)}
-													checked={field.state.value === PROJECT_GREEN}
-													onChange={(_event, checked) => {
-														field.handleChange(checked ? PROJECT_GREEN : null)
-													}}
-													labelPlacement="bottom"
-													control={
-														<ProjectColorCheckboxControl
-															projectColor={PROJECT_GREEN}
-														/>
-													}
-													sx={{ margin: 0, gap: 4 }}
-												/>
-
-												<FormControlLabel
-													name="option-red"
-													label={t(m.projectColorOptionRed)}
-													checked={field.state.value === PROJECT_RED}
-													onChange={(_event, checked) => {
-														field.handleChange(checked ? PROJECT_RED : null)
-													}}
-													labelPlacement="bottom"
-													control={
-														<ProjectColorCheckboxControl
-															projectColor={PROJECT_RED}
-														/>
-													}
-													sx={{ margin: 0, gap: 4 }}
-												/>
-
-												<FormControlLabel
-													name="option-grey"
-													label={t(m.projectColorOptionGrey)}
-													checked={field.state.value === PROJECT_GREY}
-													onChange={(_event, checked) => {
-														field.handleChange(checked ? PROJECT_GREY : null)
-													}}
-													labelPlacement="bottom"
-													control={
-														<ProjectColorCheckboxControl
-															projectColor={PROJECT_GREY}
-														/>
-													}
-													sx={{ margin: 0, gap: 4 }}
-												/>
-											</FormGroup>
-										)}
-									</form.AppField>
-								</Stack>
-							</FormControl>
-						</Stack>
-					</Box>
-				</Box>
+					<Typography variant="h1" fontWeight={500}>
+						{t(m.navTitle)}
+					</Typography>
+				</Stack>
 
 				<Stack
 					direction="column"
-					useFlexGap
-					gap={4}
-					paddingX={6}
-					paddingBottom={6}
-					position="sticky"
-					bottom={0}
-					alignItems="center"
+					flex={1}
+					justifyContent="space-between"
+					overflow="auto"
 				>
-					<form.Subscribe
-						selector={(state) => [state.canSubmit, state.isSubmitting]}
+					<Box paddingBlock={6}>
+						<Box
+							component="form"
+							id={FORM_ID}
+							noValidate
+							autoComplete="off"
+							onSubmit={(event) => {
+								event.preventDefault()
+								if (form.state.isSubmitting) return
+								form.handleSubmit()
+							}}
+						>
+							<Stack direction="column" useFlexGap gap={10}>
+								<Box paddingInline={6}>
+									<form.AppField name="projectName">
+										{(field) => (
+											<field.TextField
+												required
+												fullWidth
+												label={t(m.projectNameInputLabel)}
+												value={field.state.value}
+												error={!field.state.meta.isValid}
+												name={field.name}
+												onChange={(event) => {
+													field.handleChange(event.target.value)
+												}}
+												onBlur={field.handleBlur}
+												helperText={
+													<Stack
+														component="span"
+														direction="row"
+														justifyContent="space-between"
+													>
+														<Box component="span">
+															{field.state.meta.errors[0]?.message}
+														</Box>
+														<Box component="span">
+															<form.Subscribe
+																selector={(state) =>
+																	state.values.projectName
+																		? v._getGraphemeCount(
+																				state.values.projectName,
+																			)
+																		: 0
+																}
+															>
+																{(count) =>
+																	t(m.characterCount, {
+																		count,
+																		max: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
+																	})
+																}
+															</form.Subscribe>
+														</Box>
+													</Stack>
+												}
+											/>
+										)}
+									</form.AppField>
+								</Box>
+
+								<Box paddingInline={6}>
+									<form.AppField name="projectDescription">
+										{(field) => (
+											<field.TextField
+												fullWidth
+												multiline
+												rows={3}
+												enterKeyHint="done"
+												label={t(m.projectDescriptionInputLabel)}
+												value={field.state.value}
+												error={!field.state.meta.isValid}
+												name={field.name}
+												onChange={(event) => {
+													field.handleChange(event.target.value)
+												}}
+												onBlur={field.handleBlur}
+												helperText={
+													<Stack
+														component="span"
+														direction="row"
+														justifyContent="space-between"
+													>
+														<Box component="span">
+															{field.state.meta.errors[0]?.message}
+														</Box>
+														<Box component="span">
+															<form.Subscribe
+																selector={(state) =>
+																	state.values.projectDescription
+																		? v._getGraphemeCount(
+																				state.values.projectDescription,
+																			)
+																		: 0
+																}
+															>
+																{(count) =>
+																	t(m.characterCount, {
+																		count,
+																		max: PROJECT_DESCRIPTION_MAX_LENGTH_GRAPHEMES,
+																	})
+																}
+															</form.Subscribe>
+														</Box>
+													</Stack>
+												}
+											/>
+										)}
+									</form.AppField>
+								</Box>
+
+								<FormControl>
+									<Stack direction="column" useFlexGap gap={4}>
+										<Box paddingInline={6}>
+											<FormLabel id="project-color-selector-label">
+												{t(m.projectCardColorLabel)}
+											</FormLabel>
+										</Box>
+
+										<form.AppField name="projectColor">
+											{(field) => (
+												<FormGroup
+													row
+													aria-labelledby="project-color-selector-label"
+													sx={{
+														flexWrap: 'nowrap',
+														gap: 10,
+														overflowX: 'auto',
+														paddingInline: 6,
+														paddingBlock: 2,
+													}}
+												>
+													<FormControlLabel
+														name="option-orange"
+														label={t(m.projectColorOptionOrange)}
+														checked={field.state.value === PROJECT_ORANGE}
+														onChange={(_event, checked) => {
+															field.handleChange(
+																checked ? PROJECT_ORANGE : null,
+															)
+														}}
+														labelPlacement="bottom"
+														control={
+															<ProjectColorCheckboxControl
+																projectColor={PROJECT_ORANGE}
+															/>
+														}
+														sx={{ margin: 0, gap: 4 }}
+													/>
+
+													<FormControlLabel
+														name="option-blue"
+														label={t(m.projectColorOptionBlue)}
+														checked={field.state.value === PROJECT_BLUE}
+														onChange={(_event, checked) => {
+															field.handleChange(checked ? PROJECT_BLUE : null)
+														}}
+														labelPlacement="bottom"
+														control={
+															<ProjectColorCheckboxControl
+																projectColor={PROJECT_BLUE}
+															/>
+														}
+														sx={{ margin: 0, gap: 4 }}
+													/>
+
+													<FormControlLabel
+														name="option-green"
+														label={t(m.projectColorOptionGreen)}
+														checked={field.state.value === PROJECT_GREEN}
+														onChange={(_event, checked) => {
+															field.handleChange(checked ? PROJECT_GREEN : null)
+														}}
+														labelPlacement="bottom"
+														control={
+															<ProjectColorCheckboxControl
+																projectColor={PROJECT_GREEN}
+															/>
+														}
+														sx={{ margin: 0, gap: 4 }}
+													/>
+
+													<FormControlLabel
+														name="option-red"
+														label={t(m.projectColorOptionRed)}
+														checked={field.state.value === PROJECT_RED}
+														onChange={(_event, checked) => {
+															field.handleChange(checked ? PROJECT_RED : null)
+														}}
+														labelPlacement="bottom"
+														control={
+															<ProjectColorCheckboxControl
+																projectColor={PROJECT_RED}
+															/>
+														}
+														sx={{ margin: 0, gap: 4 }}
+													/>
+
+													<FormControlLabel
+														name="option-grey"
+														label={t(m.projectColorOptionGrey)}
+														checked={field.state.value === PROJECT_GREY}
+														onChange={(_event, checked) => {
+															field.handleChange(checked ? PROJECT_GREY : null)
+														}}
+														labelPlacement="bottom"
+														control={
+															<ProjectColorCheckboxControl
+																projectColor={PROJECT_GREY}
+															/>
+														}
+														sx={{ margin: 0, gap: 4 }}
+													/>
+												</FormGroup>
+											)}
+										</form.AppField>
+									</Stack>
+								</FormControl>
+							</Stack>
+						</Box>
+					</Box>
+
+					<Stack
+						direction="column"
+						useFlexGap
+						gap={4}
+						paddingX={6}
+						paddingBottom={6}
+						position="sticky"
+						bottom={0}
+						alignItems="center"
 					>
-						{([canSubmit, isSubmitting]) => (
-							<>
-								<Button
-									type="button"
-									variant="outlined"
-									size="large"
-									fullWidth
-									disableElevation
-									aria-disabled={isSubmitting}
-									onClick={() => {
-										if (isSubmitting) return
+						<form.Subscribe
+							selector={(state) => [state.canSubmit, state.isSubmitting]}
+						>
+							{([canSubmit, isSubmitting]) => (
+								<>
+									<Button
+										type="button"
+										variant="outlined"
+										size="large"
+										fullWidth
+										disableElevation
+										aria-disabled={isSubmitting}
+										onClick={() => {
+											if (isSubmitting) return
 
-										if (router.history.canGoBack()) {
-											router.history.back()
-											return
-										}
+											if (router.history.canGoBack()) {
+												router.history.back()
+												return
+											}
 
-										router.navigate({
-											to: '/app/projects/$projectId/settings',
-											params: { projectId },
-											replace: true,
-										})
-									}}
-									sx={{ maxWidth: 400 }}
-								>
-									{t(m.cancel)}
-								</Button>
+											router.navigate({
+												to: '/app/projects/$projectId/settings',
+												params: { projectId },
+												replace: true,
+											})
+										}}
+										sx={{ maxWidth: 400 }}
+									>
+										{t(m.cancel)}
+									</Button>
 
-								<form.SubmitButton
-									type="submit"
-									form={FORM_ID}
-									fullWidth
-									disableElevation
-									variant="contained"
-									size="large"
-									loading={isSubmitting}
-									loadingPosition="start"
-									aria-disabled={!canSubmit}
-									sx={{ maxWidth: 400 }}
-								>
-									{t(m.save)}
-								</form.SubmitButton>
-							</>
-						)}
-					</form.Subscribe>
+									<form.SubmitButton
+										type="submit"
+										form={FORM_ID}
+										fullWidth
+										disableElevation
+										variant="contained"
+										size="large"
+										loading={isSubmitting}
+										loadingPosition="start"
+										aria-disabled={!canSubmit}
+										sx={{ maxWidth: 400 }}
+									>
+										{t(m.save)}
+									</form.SubmitButton>
+								</>
+							)}
+						</form.Subscribe>
+					</Stack>
 				</Stack>
 			</Stack>
-		</Stack>
+
+			<ErrorDialog
+				open={setProjectSettings.status === 'error'}
+				errorMessage={setProjectSettings.error?.message}
+				onClose={() => {
+					setProjectSettings.reset()
+				}}
+			/>
+		</>
 	)
 }
 
