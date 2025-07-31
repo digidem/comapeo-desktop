@@ -175,6 +175,19 @@ const baseTheme = createTheme({
 				},
 			},
 		},
+		MuiDialog: {
+			defaultProps: {
+				maxWidth: 'xs',
+			},
+			styleOverrides: {
+				paper: ({ theme }) => {
+					return {
+						borderRadius: theme.spacing(2),
+						border: `1px solid ${BLUE_GREY}`,
+					}
+				},
+			},
+		},
 	},
 })
 
