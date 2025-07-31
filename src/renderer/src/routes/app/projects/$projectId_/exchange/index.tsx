@@ -30,6 +30,7 @@ import {
 	LIGHT_GREY,
 	WHITE,
 } from '../../../../../colors'
+import { ErrorDialog } from '../../../../../components/error-dialog'
 import { Icon } from '../../../../../components/icon'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
 import { useBrowserNetInfo } from '../../../../../hooks/network'
@@ -75,156 +76,184 @@ function RouteComponent() {
 	const startSync = useStartSync({ projectId })
 	const stopSync = useStopSync({ projectId })
 
-	return (
-		<TwoPanelLayout
-			start={
-				<Stack
-					direction="column"
-					flex={1}
-					overflow="auto"
-					justifyContent="space-between"
-					padding={6}
-					useFlexGap
-					gap={6}
-				>
-					<Stack direction="row" alignItems="center" useFlexGap gap={4}>
-						<Box
-							display="flex"
-							flex={1}
-							flexDirection="row"
-							justifyContent="center"
-							alignItems="center"
-							borderRadius={2}
-							border={`1px solid ${BLUE_GREY}`}
-							padding={4}
-							overflow="auto"
-						>
-							<Suspense
-								fallback={
-									<Typography fontWeight={500}>
-										{t(m.gettingWifiInfo)}
-									</Typography>
-								}
-							>
-								<NetworkConnectionInfo />
-							</Suspense>
-						</Box>
-					</Stack>
+	const errorDialogProps =
+		startSync.status === 'error'
+			? {
+					open: true,
+					errorMessage: startSync.error.message,
+					onClose: () => {
+						startSync.reset()
+					},
+				}
+			: stopSync.status === 'error'
+				? {
+						open: true,
+						errorMessage: stopSync.error.message,
+						onClose: () => {
+							stopSync.reset()
+						},
+					}
+				: { open: false, onClose: () => {} }
 
+	return (
+		<>
+			<TwoPanelLayout
+				start={
 					<Stack
 						direction="column"
-						useFlexGap
-						gap={5}
-						borderRadius={2}
-						border={`1px solid ${BLUE_GREY}`}
 						flex={1}
-						paddingBlock={10}
+						overflow="auto"
+						justifyContent="space-between"
+						padding={6}
+						useFlexGap
+						gap={6}
 					>
-						<Box
-							display="flex"
-							flexDirection="row"
-							alignItems="center"
-							justifyContent="center"
-							flex={0}
-							position="relative"
+						<Stack direction="row" alignItems="center" useFlexGap gap={4}>
+							<Box
+								display="flex"
+								flex={1}
+								flexDirection="row"
+								justifyContent="center"
+								alignItems="center"
+								borderRadius={2}
+								border={`1px solid ${BLUE_GREY}`}
+								padding={4}
+								overflow="auto"
+							>
+								<Suspense
+									fallback={
+										<Typography fontWeight={500}>
+											{t(m.gettingWifiInfo)}
+										</Typography>
+									}
+								>
+									<NetworkConnectionInfo />
+								</Suspense>
+							</Box>
+						</Stack>
+
+						<Stack
+							direction="column"
+							useFlexGap
+							gap={5}
+							borderRadius={2}
+							border={`1px solid ${BLUE_GREY}`}
+							flex={1}
+							paddingBlock={10}
 						>
 							<Box
 								display="flex"
-								flexDirection="column"
-								padding={2}
-								borderRadius="50%"
-								border={`12px solid ${DARKER_ORANGE}`}
+								flexDirection="row"
+								alignItems="center"
+								justifyContent="center"
+								flex={0}
 								position="relative"
 							>
-								<Icon
-									name="material-bolt"
-									htmlColor={DARKER_ORANGE}
-									size={128}
-								/>
 								<Box
-									position="absolute"
-									right={-12}
-									bottom={-12}
-									zIndex={1}
 									display="flex"
 									flexDirection="column"
 									padding={2}
 									borderRadius="50%"
-									bgcolor={DARKER_ORANGE}
-									boxShadow={ICON_BOX_SHADOW}
+									border={`12px solid ${DARKER_ORANGE}`}
+									position="relative"
 								>
-									<Icon name="material-symbols-stars-2" htmlColor={WHITE} />
+									<Icon
+										name="material-bolt"
+										htmlColor={DARKER_ORANGE}
+										size={128}
+									/>
+									<Box
+										position="absolute"
+										right={-12}
+										bottom={-12}
+										zIndex={1}
+										display="flex"
+										flexDirection="column"
+										padding={2}
+										borderRadius="50%"
+										bgcolor={DARKER_ORANGE}
+										boxShadow={ICON_BOX_SHADOW}
+									>
+										<Icon name="material-symbols-stars-2" htmlColor={WHITE} />
+									</Box>
 								</Box>
 							</Box>
-						</Box>
 
-						{syncState ? (
-							<DisplayedSyncState projectId={projectId} syncState={syncState} />
-						) : (
-							<CircularProgress />
-						)}
-
-						<Stack direction="column" useFlexGap gap={2}>
-							<Typography fontWeight={500} textAlign="center">
-								{t(m.exchangeEverythingTitle)}
-							</Typography>
-							<Typography color="textSecondary" textAlign="center">
-								{t(m.exchangeEverythingDescription)}
-							</Typography>
-						</Stack>
-					</Stack>
-
-					<Box
-						display="flex"
-						flexDirection="row"
-						alignItems="center"
-						justifyContent="center"
-					>
-						<Button
-							fullWidth
-							disableElevation
-							variant={syncState?.data.isSyncEnabled ? 'outlined' : 'contained'}
-							size="large"
-							sx={{ maxWidth: 400 }}
-							startIcon={
-								<Icon
-									name={
-										syncState?.data.isSyncEnabled
-											? 'material-square-filled'
-											: 'material-bolt'
-									}
+							{syncState ? (
+								<DisplayedSyncState
+									projectId={projectId}
+									syncState={syncState}
 								/>
-							}
-							onClick={() => {
-								if (
-									stopSync.status === 'pending' ||
-									startSync.status === 'pending'
-								) {
-									return
-								}
+							) : (
+								<CircularProgress />
+							)}
 
-								if (syncState?.data.isSyncEnabled) {
-									stopSync.mutate(undefined, {
-										onError: (_err) => {
-											// TODO: Show error dialog
-										},
-									})
-								} else {
-									startSync.mutate(undefined, {
-										onError: (_err) => {
-											// TODO: Show error dialog
-										},
-									})
-								}
-							}}
+							<Stack direction="column" useFlexGap gap={2}>
+								<Typography fontWeight={500} textAlign="center">
+									{t(m.exchangeEverythingTitle)}
+								</Typography>
+								<Typography color="textSecondary" textAlign="center">
+									{t(m.exchangeEverythingDescription)}
+								</Typography>
+							</Stack>
+						</Stack>
+
+						<Box
+							display="flex"
+							flexDirection="row"
+							alignItems="center"
+							justifyContent="center"
 						>
-							{t(syncState?.data.isSyncEnabled ? m.stop : m.start)}
-						</Button>
-					</Box>
-				</Stack>
-			}
-			end={<Box bgcolor={LIGHT_GREY} display="flex" flex={1} />}
-		/>
+							<Button
+								fullWidth
+								disableElevation
+								variant={
+									syncState?.data.isSyncEnabled ? 'outlined' : 'contained'
+								}
+								size="large"
+								sx={{ maxWidth: 400 }}
+								startIcon={
+									<Icon
+										name={
+											syncState?.data.isSyncEnabled
+												? 'material-square-filled'
+												: 'material-bolt'
+										}
+									/>
+								}
+								onClick={() => {
+									if (
+										stopSync.status === 'pending' ||
+										startSync.status === 'pending'
+									) {
+										return
+									}
+
+									if (syncState?.data.isSyncEnabled) {
+										stopSync.mutate(undefined, {
+											onError: (_err) => {
+												// TODO: Show error dialog
+											},
+										})
+									} else {
+										startSync.mutate(undefined, {
+											onError: (_err) => {
+												// TODO: Show error dialog
+											},
+										})
+									}
+								}}
+							>
+								{t(syncState?.data.isSyncEnabled ? m.stop : m.start)}
+							</Button>
+						</Box>
+					</Stack>
+				}
+				end={<Box bgcolor={LIGHT_GREY} display="flex" flex={1} />}
+			/>
+
+			<ErrorDialog {...errorDialogProps} />
+		</>
 	)
 }
 
