@@ -20,39 +20,6 @@ export const Route = createFileRoute('/welcome')({
 	component: RouteComponent,
 })
 
-const m = defineMessages({
-	getStarted: {
-		id: 'routes.welcome.getStarted',
-		defaultMessage: 'Get Started',
-	},
-	appDescription: {
-		id: 'routes.welcome.appDescription',
-		defaultMessage:
-			'View and manage observations collected with CoMapeo Mobile.',
-	},
-	mapAnywhere: {
-		id: 'routes.welcome.mapAnywhere',
-		defaultMessage: 'Map anywhere and everywhere',
-	},
-	collaborate: {
-		id: 'routes.welcome.collaborate',
-		defaultMessage: 'Collaborate on projects',
-	},
-	ownData: {
-		id: 'routes.welcome.ownData',
-		defaultMessage: 'Own and control your data',
-	},
-	designedFor: {
-		id: 'routes.welcome.designedFor',
-		defaultMessage:
-			'Designed with and for Indigenous peoples & frontline communities',
-	},
-	comapeoDesktop: {
-		id: 'routes.welcome.comapeoDesktop',
-		defaultMessage: '<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>',
-	},
-})
-
 const LIST_BACKGROUND_COLOR = alpha(BLACK, 0.4)
 
 function RouteComponent() {
@@ -163,3 +130,36 @@ function RouteComponent() {
 		</Box>
 	)
 }
+
+const m = defineMessages({
+	getStarted: {
+		id: 'routes.welcome.getStarted',
+		defaultMessage: 'Get Started',
+	},
+	appDescription: {
+		id: 'routes.welcome.appDescription',
+		defaultMessage:
+			'View and manage observations collected with CoMapeo Mobile.',
+	},
+	mapAnywhere: {
+		id: 'routes.welcome.mapAnywhere',
+		defaultMessage: 'Map anywhere and everywhere',
+	},
+	collaborate: {
+		id: 'routes.welcome.collaborate',
+		defaultMessage: 'Collaborate on projects',
+	},
+	ownData: {
+		id: 'routes.welcome.ownData',
+		defaultMessage: 'Own and control your data',
+	},
+	designedFor: {
+		id: 'routes.welcome.designedFor',
+		defaultMessage:
+			'Designed with and for Indigenous peoples & frontline communities',
+	},
+	comapeoDesktop: {
+		id: 'routes.welcome.comapeoDesktop',
+		defaultMessage: '<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>',
+	},
+})
