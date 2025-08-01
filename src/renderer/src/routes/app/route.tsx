@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
+import { useMutationState } from '@tanstack/react-query'
 import {
 	Outlet,
 	createFileRoute,
@@ -20,6 +21,7 @@ import {
 	type ButtonLinkProps,
 } from '../../components/link'
 import type { ToRouteFullPath } from '../../lib/navigation'
+import { GLOBAL_MUTATIONS_BASE_KEY } from '../../lib/queries/global-mutations'
 
 export const Route = createFileRoute('/app')({
 	beforeLoad: ({ context, matches }) => {
@@ -61,6 +63,14 @@ function RouteComponent() {
 
 	const pageHasEditing = checkPageHasEditing(currentRoute.fullPath)
 
+	const someGlobalMutationIsPending =
+		useMutationState({
+			filters: {
+				mutationKey: GLOBAL_MUTATIONS_BASE_KEY,
+				predicate: (mutation) => mutation.state.status === 'pending',
+			},
+		}).length > 0
+
 	return (
 		<Box bgcolor={WHITE} height="100%">
 			<Box display="grid" gridTemplateColumns="min-content 1fr" height="100%">
@@ -88,7 +98,7 @@ function RouteComponent() {
 							<IconButtonLink
 								{...SHARED_NAV_ITEM_PROPS.link}
 								disabled={
-									(pageHasEditing &&
+									((pageHasEditing || someGlobalMutationIsPending) &&
 										!currentRoute.fullPath.startsWith(
 											'/app/projects/$projectId',
 										)) ||
@@ -124,7 +134,7 @@ function RouteComponent() {
 								to="/app/projects/$projectId/exchange"
 								params={{ projectId: activeProjectId }}
 								disabled={
-									pageHasEditing &&
+									(pageHasEditing || someGlobalMutationIsPending) &&
 									!currentRoute.fullPath.startsWith(
 										'/app/projects/$projectId/exchange',
 									)
@@ -136,7 +146,7 @@ function RouteComponent() {
 							<LabeledNavItem
 								to="/app/settings"
 								disabled={
-									(pageHasEditing &&
+									((pageHasEditing || someGlobalMutationIsPending) &&
 										!currentRoute.fullPath.startsWith('/app/settings')) ||
 									(currentRoute.routeId ===
 										'/app/projects/$projectId_/exchange/' &&
@@ -149,7 +159,7 @@ function RouteComponent() {
 							<LabeledNavItem
 								to="/app/data-and-privacy"
 								disabled={
-									(pageHasEditing &&
+									((pageHasEditing || someGlobalMutationIsPending) &&
 										currentRoute.fullPath !== '/app/data-and-privacy') ||
 									(currentRoute.routeId ===
 										'/app/projects/$projectId_/exchange/' &&
@@ -164,7 +174,8 @@ function RouteComponent() {
 							<LabeledNavItem
 								to="/app/about"
 								disabled={
-									(pageHasEditing && currentRoute.fullPath !== '/app/about') ||
+									((pageHasEditing || someGlobalMutationIsPending) &&
+										currentRoute.fullPath !== '/app/about') ||
 									(currentRoute.routeId ===
 										'/app/projects/$projectId_/exchange/' &&
 										syncEnabled)
@@ -245,8 +256,7 @@ function checkPageHasEditing(currentPath: ToRouteFullPath) {
 		currentPath === '/app/settings/device-name' ||
 		currentPath === '/app/settings/coordinate-system' ||
 		currentPath === '/app/settings/language' ||
-		currentPath === '/app/projects/$projectId/settings/info' ||
-		currentPath === '/app/projects/$projectId/settings/categories'
+		currentPath === '/app/projects/$projectId/settings/info'
 	)
 }
 
