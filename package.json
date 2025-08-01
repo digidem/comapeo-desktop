@@ -53,7 +53,7 @@
 		"vite:build": "vite build src/renderer"
 	},
 	"dependencies": {
-		"@comapeo/core": "4.1.0",
+		"@comapeo/core": "4.1.2",
 		"@comapeo/ipc": "4.0.0",
 		"@formatjs/intl": "3.1.6",
 		"@mapeo/default-config": "5.0.0",
