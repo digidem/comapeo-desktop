@@ -15,6 +15,7 @@ import { ErrorDialog } from '../../../../../components/error-dialog'
 import { Icon } from '../../../../../components/icon'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
 import { selectCategoriesFileMutationOptions } from '../../../../../lib/queries/file-system'
+import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId_/settings/categories',
@@ -41,6 +42,11 @@ export const Route = createFileRoute(
 
 const DEFAULT_CATEGORIES_NAME = `@mapeo/default-config`
 
+const SELECT_AND_IMPORT_CATEGORY_MUTATION_KEY = createGlobalMutationsKey([
+	'category',
+	'select-and-import',
+])
+
 function RouteComponent() {
 	const { formatMessage: t, formatDate } = useIntl()
 	const router = useRouter()
@@ -55,28 +61,21 @@ function RouteComponent() {
 
 	const importCategoriesFile = useImportProjectConfig({ projectId })
 
-	const someMutationPending =
-		selectCategoriesFile.status === 'pending' ||
-		importCategoriesFile.status === 'pending'
+	const selectAndImportMutation = useMutation({
+		mutationKey: SELECT_AND_IMPORT_CATEGORY_MUTATION_KEY,
+		mutationFn: async () => {
+			const fileInfo = await selectCategoriesFile.mutateAsync(undefined)
 
-	const errorDialogProps =
-		selectCategoriesFile.status === 'error'
-			? {
-					open: true,
-					errorMessage: selectCategoriesFile.error.message,
-					onClose: () => {
-						selectCategoriesFile.reset()
-					},
-				}
-			: importCategoriesFile.status === 'error'
-				? {
-						open: true,
-						errorMessage: importCategoriesFile.error.message,
-						onClose: () => {
-							selectCategoriesFile.reset()
-						},
-					}
-				: { open: false, onClose: () => {} }
+			if (!fileInfo) {
+				return
+			}
+
+			// TODO: Surface config errors/warnings?
+			const _configErrors = await importCategoriesFile.mutateAsync({
+				configPath: fileInfo.path,
+			})
+		},
+	})
 
 	return (
 		<>
@@ -91,7 +90,7 @@ function RouteComponent() {
 				>
 					<IconButton
 						onClick={() => {
-							if (someMutationPending) {
+							if (selectAndImportMutation.status === 'pending') {
 								return
 							}
 
@@ -191,29 +190,12 @@ function RouteComponent() {
 							type="button"
 							variant="outlined"
 							fullWidth
-							loading={someMutationPending}
+							loading={selectAndImportMutation.status === 'pending'}
 							loadingPosition="start"
 							onClick={() => {
-								selectCategoriesFile.mutate(undefined, {
+								selectAndImportMutation.mutate(undefined, {
 									onError: (_err) => {
 										// TODO: Report to Sentry
-									},
-									onSuccess: async (fileInfo) => {
-										if (!fileInfo) {
-											return
-										}
-
-										importCategoriesFile.mutate(
-											{ configPath: fileInfo.path },
-											{
-												onError: (_err) => {
-													// TODO: Report to Sentry
-												},
-												onSuccess: (_configErrors) => {
-													// TODO: Surface config errors/warnings?
-												},
-											},
-										)
 									},
 								})
 							}}
@@ -225,7 +207,13 @@ function RouteComponent() {
 				</Stack>
 			</Stack>
 
-			<ErrorDialog {...errorDialogProps} />
+			<ErrorDialog
+				open={selectAndImportMutation.status === 'error'}
+				errorMessage={selectAndImportMutation.error?.toString()}
+				onClose={() => {
+					selectAndImportMutation.reset()
+				}}
+			/>
 		</>
 	)
 }
