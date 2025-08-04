@@ -112,8 +112,6 @@ The [Electron Forge docs](https://www.electronforge.io/) are pretty informative 
 
 All commands place the built assets in the `out/` directory.
 
-Our build process requires a `.env.production` file to exist at the project root in order for these commands to work. Usually this file will be generated as a prerequisite to packaging the app (e.g. in continuous deployment environments like GitHub Actions). If you are just debugging locally, you can create a copy of your `.env` file and call it `.env.production` in order to avoid errors at build time.
-
 If you're running into an error with any of the Forge-related commands but not seeing any output in the console, you probably have to prefix the command with `DEBUG=electron-forge` e.g. `DEBUG=electron-forge npm run forge:package`.
 
 By default, we package the app in the [ASAR](https://github.com/electron/asar) format. However, it can be helpful to avoid doing that for debugging purposes (e.g. building locally), in which case you can specify a `ASAR=false` environment variable when running the relevant Forge command e.g. `ASAR=false npm run forge:package`.
