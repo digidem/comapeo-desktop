@@ -10,9 +10,12 @@ import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-nati
 import { PluginBase } from '@electron-forge/plugin-base'
 import { FusesPlugin } from '@electron-forge/plugin-fuses'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
+import dotenv from 'dotenv'
 import { build, createServer } from 'vite'
 
-import 'dotenv/config'
+const ENV_FILE_PATH = fileURLToPath(new URL('./.env', import.meta.url))
+
+dotenv.config({ path: ENV_FILE_PATH })
 
 /**
  * @import {ForgeConfig, ForgeHookFn} from '@electron-forge/shared-types'
@@ -21,10 +24,6 @@ import 'dotenv/config'
 
 const RENDERER_VITE_CONFIG_PATH = fileURLToPath(
 	new URL('./src/renderer/vite.config.js', import.meta.url),
-)
-
-const PRODUCTION_ENV_FILE_PATH = fileURLToPath(
-	new URL('./.env.production', import.meta.url),
 )
 
 /**
@@ -62,7 +61,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 			resolveForgeConfig: [this.#updatePackagerConfig],
 			postStart: [this.#hookViteDevServer],
 			prePackage: [this.#buildRender],
-			packageAfterCopy: [this.#moveBuiltRender],
+			packageAfterCopy: [this.#moveBuiltRendererApp],
 		}
 	}
 
@@ -72,9 +71,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	#initViteDevServer = async (_opts) => {
 		if (this.#viteDevServer) return
 
-		const server = await createServer({
-			configFile: RENDERER_VITE_CONFIG_PATH,
-		})
+		const server = await createServer({ configFile: RENDERER_VITE_CONFIG_PATH })
 
 		try {
 			await server.listen()
@@ -110,9 +107,10 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 
 		const ignoresToAppend = [
 			// Unnecessary directories
-			/^\/(\.github|\.husky|assets|data|docs|messages|patches)/,
+			/^\/(\.github|\.husky|assets|data|docs|messages|patches|\.tanstack|\.vscode|scripts)/,
 			// Unnecessary files
-			/^\/\.env/,
+			// Only keep .env file (i.e. no .env.local, .env.production, etc)
+			/^\/\.env\.+/,
 			/^\/.*\.config\.js$/,
 			/^\/\.eslintcache$/,
 			/^\/\.gitignore$/,
@@ -147,19 +145,17 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	 * @type {ForgeHookFn<'prePackage'>}
 	 */
 	async #buildRender() {
-		await build({
-			configFile: RENDERER_VITE_CONFIG_PATH,
-		})
+		await build({ configFile: RENDERER_VITE_CONFIG_PATH })
 	}
 
 	/**
 	 * Moves the built renderer app from Vite's build output directory (usually
-	 * `/dist/`) into the appropriate packaged app
-	 * directory(`/<buildPath>/src/renderer/`).
+	 * `/dist/`) into the appropriate packaged app directory
+	 * (`/<buildPath>/src/renderer/`).
 	 *
 	 * @type {ForgeHookFn<'packageAfterCopy'>}
 	 */
-	async #moveBuiltRender(_config, buildPath) {
+	async #moveBuiltRendererApp(_config, buildPath) {
 		const outPath = path.join(buildPath, './src/renderer')
 
 		try {
@@ -171,18 +167,6 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 
 		await fs.mkdir(outPath, { recursive: true })
 		await fs.rename(path.join(buildPath, './dist/renderer'), outPath)
-
-		try {
-			await fs.copyFile(
-				PRODUCTION_ENV_FILE_PATH,
-				path.join(buildPath, '.env.production'),
-			)
-		} catch (err) {
-			throw new Error(
-				'Failed to copy over production env file. Confirm that it is present.',
-				{ cause: err },
-			)
-		}
 	}
 
 	#cleanUpVite = () => {
@@ -243,21 +227,14 @@ export default {
 		new MakerDMG({
 			icon: './assets/icon.icns',
 		}),
-		new MakerZIP({}, ['darwin']),
+		new MakerZIP(undefined, ['darwin']),
 		new MakerDeb(
-			{
-				options: {
-					icon: './assets/icon.png',
-				},
-			},
-			['linux'],
-		),
-		new MakerRpm(
 			{
 				options: { icon: './assets/icon.png' },
 			},
 			['linux'],
 		),
+		new MakerRpm({ options: { icon: './assets/icon.png' } }, ['linux']),
 	],
 	plugins,
 }
