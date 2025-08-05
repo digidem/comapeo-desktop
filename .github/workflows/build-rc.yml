@@ -68,9 +68,8 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PR_NUMBER: ${{ inputs.pr_number || github.event.pull_request.number }}
-          # TODO: Add link to build job's artifact URL.
           COMMENT_BODY: |
-            :construction: Release candidate build based on ${{ env.BUILD_SHA }} (potential merge of ${{ env.PR_HEAD_SHA }})
+            :construction: Release candidate build based on ${{ env.BUILD_SHA }} (potential merge of ${{ env.PR_HEAD_SHA }}): https://github.com/digidem/comapeo-desktop/actions/runs/${{ github.run_id }}/artifacts
 
         run: |
           gh pr comment $PR_NUMBER --body "$COMMENT_BODY" --repo "$GITHUB_REPOSITORY"
