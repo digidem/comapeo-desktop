@@ -99,6 +99,7 @@ jobs:
         with:
           name: ${{ matrix.os.name }}-${{ inputs.build_sha }}
           compression-level: 0
+          overwrite: true
           path: |
             out/make/**/*.AppImage
             out/make/**/*.dmg
