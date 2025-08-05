@@ -1,0 +1,112 @@
+# Summary:
+#
+# Reusable workflow for creating the distributable application assets.
+# Will also publish the application if the `app_type` input is `production`.
+#
+name: Create builds
+
+on:
+  workflow_call:
+    inputs:
+      app_type:
+        description: 'Type of application. Valid values are: internal, release-candidate, or production.'
+        required: true
+        type: string
+      build_sha:
+        description: 'SHA of commit to build'
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      app_type:
+        description: 'Type of application. Valid values are: internal, or release-candidate'
+        required: true
+        type: choice
+        # We only allow internal and release candidate builds when doing manual dispatches.
+        # Production builds should only be triggered by the appropriate calling workflows.
+        options: ['internal', 'release-candidate']
+
+jobs:
+  builds:
+    name: Create builds
+    strategy:
+      matrix:
+        os:
+          [
+            { name: 'linux', image: 'ubuntu-latest' },
+            { name: 'macos', image: 'macos-latest' },
+            { name: 'macos-intel', image: 'macos-13' },
+            { name: 'windows', image: 'windows-latest' },
+          ]
+    runs-on: ${{ matrix.os.image }}
+    outputs:
+      artifact_id: ${{ steps.artifact.outputs.artifact-id }}
+      artifact_url: ${{ steps.artifact.outputs.artifact-url }}
+    steps:
+      - name: Validate app_type input
+        if: ${{ !(inputs.app_type == 'internal' || inputs.app_type == 'release-candidate' || inputs.app_type == 'production') }}
+        run: |
+          echo "app_type input must be one of the following: internal, release-candidate, production"
+          exit 1
+
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.RELEASE_BOT_APP_ID }}
+          private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+
+      - name: Checkout repository
+        env:
+          # When called from another workflow, the input value is used.
+          # When called from a manual dispatch, uses the value corresponding to the branch/tag selected in the GitHub UI.
+          BUILD_SHA: ${{ inputs.build_sha || github.sha }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BUILD_SHA }}
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      - name: Create env file
+        env:
+          APP_TYPE: ${{ inputs.app_type }}
+        run: |
+          echo "APP_TYPE=${{ env.APP_TYPE }}" >> .env
+          echo "ONLINE_STYLE_URL=${{ secrets.ONLINE_STYLE_URL }}" >> .env
+
+          if [[ ${{ env.APP_TYPE }} != 'production' ]]; then
+            echo "VITE_FEATURE_TEST_DATA_UI=true" >> .env # We enable the test data creation UI for non-production builds
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build translations
+        run: npm run intl:translations
+
+      - name: Create distributables
+        run: npm run forge:make
+
+      - name: Upload artifacts
+        id: artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os.name }}-${{ inputs.build_sha }}
+          compression-level: 0
+          path: |
+            out/make/**/*.AppImage
+            out/make/**/*.dmg
+            out/make/**/*.exe
+            out/make/**/*.zip
+
+      - name: Publish application
+        if: ${{ inputs.APP_TYPE == 'production' }}
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          npm run forge:publish

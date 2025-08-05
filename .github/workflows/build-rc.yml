@@ -1,0 +1,76 @@
+# Summary:
+#
+# Builds a release candidate.
+#
+# Triggers:
+#
+# - Opening a PR that targets a base branch that matches `release/**`
+# - Commenting on a PR that targets a base branch that matches `release/**` with the command specified
+#   as a repository variable called `BUILD_COMMENT_TRIGGER` (or `/build-rc` if not specified).
+#
+# Effects:
+#
+# - Triggers a release candidate build on GitHub Actions.
+# - Creates a comment on the Release Candidate PR with a link to the artifact(s).
+name: Build Release Candidate
+
+on:
+  pull_request:
+    branches:
+      - 'release/**'
+    types: [opened]
+  workflow_call:
+    inputs:
+      pr_number:
+        description: 'Pull request number'
+        required: true
+        type: number
+      build_sha:
+        description: 'SHA of commit to build'
+        required: true
+        type: string
+      pr_head_sha:
+        description: 'SHA of head commit of pull request'
+        required: true
+        type: string
+
+jobs:
+  build:
+    name: Build
+    uses: ./.github/workflows/create-builds.yml
+    with:
+      app_type:
+        release-candidate
+        # When this is run from a comment, we need to manually pass the build sha
+      build_sha: ${{ inputs.build_sha || github.sha }}
+    secrets: inherit
+
+  comment:
+    name: Comment
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      # When this is run from a comment, we need to manually pass the build sha
+      BUILD_SHA: ${{ inputs.build_sha || github.sha }}
+      # RCs are built from the potential merge commit of the PR, but we
+      # reference the PR head commit in the comment so we know which commits are
+      # included in the RC
+      PR_HEAD_SHA: ${{ inputs.pr_head_sha || github.event.pull_request.head.sha }}
+    steps:
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.RELEASE_BOT_APP_ID }}
+          private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+
+      - name: Comment on PR
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PR_NUMBER: ${{ inputs.pr_number || github.event.pull_request.number }}
+          # TODO: Add link to build job's artifact URL.
+          COMMENT_BODY: |
+            :construction: Release candidate build based on ${{ env.BUILD_SHA }} (potential merge of ${{ env.PR_HEAD_SHA }})
+
+        run: |
+          gh pr comment $PR_NUMBER --body "$COMMENT_BODY" --repo "$GITHUB_REPOSITORY"

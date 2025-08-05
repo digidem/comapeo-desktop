@@ -9,13 +9,47 @@ import { MakerZIP } from '@electron-forge/maker-zip'
 import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives'
 import { PluginBase } from '@electron-forge/plugin-base'
 import { FusesPlugin } from '@electron-forge/plugin-fuses'
+import { PublisherGithub } from '@electron-forge/publisher-github'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
 import dotenv from 'dotenv'
+import * as v from 'valibot'
 import { build, createServer } from 'vite'
 
 const ENV_FILE_PATH = fileURLToPath(new URL('./.env', import.meta.url))
 
-dotenv.config({ path: ENV_FILE_PATH })
+const dotenvOutput = dotenv.config({ path: ENV_FILE_PATH })
+
+if (dotenvOutput.error) {
+	throw dotenvOutput.error
+}
+
+const { ASAR } = v.parse(
+	v.object({
+		APP_TYPE: v.optional(
+			v.union(
+				[
+					v.literal('development'),
+					v.literal('internal'),
+					v.literal('release-candidate'),
+					v.literal('production'),
+				],
+				"APP_TYPE env variable must be 'development', 'internal', 'release-candidate', or 'production'",
+			),
+			'development',
+		),
+		ASAR: v.optional(
+			v.pipe(
+				v.union(
+					[v.literal('true'), v.literal('false')],
+					"ASAR env variable must be 'true' or 'false'",
+				),
+				v.transform((v) => v === 'true'),
+			),
+			'true',
+		),
+	}),
+	process.env,
+)
 
 /**
  * @import {ForgeConfig, ForgeHookFn} from '@electron-forge/shared-types'
@@ -177,21 +211,6 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	}
 }
 
-/** @type {boolean} */
-let ASAR_ENABLED
-
-if (process.env.ASAR) {
-	if (process.env.ASAR === 'true') {
-		ASAR_ENABLED = true
-	} else if (process.env.ASAR === 'false') {
-		ASAR_ENABLED = false
-	} else {
-		throw new Error("ASAR env variable must be 'true' or 'false'")
-	}
-} else {
-	ASAR_ENABLED = true
-}
-
 /** @type {ForgeConfig['plugins']} */
 const plugins = [
 	new CoMapeoDesktopForgePlugin({}),
@@ -204,37 +223,37 @@ const plugins = [
 		[FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
 		[FuseV1Options.EnableNodeCliInspectArguments]: false,
 		[FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
-		[FuseV1Options.OnlyLoadAppFromAsar]: ASAR_ENABLED,
+		[FuseV1Options.OnlyLoadAppFromAsar]: ASAR,
 	}),
 ]
 
-if (ASAR_ENABLED) {
+if (ASAR) {
 	plugins.push(new AutoUnpackNativesPlugin({}))
 }
 
 /** @type {ForgeConfig} */
 export default {
 	packagerConfig: {
-		asar: ASAR_ENABLED,
-		name: 'CoMapeo Desktop',
+		asar: ASAR,
+		name: `CoMapeo Desktop`,
 		icon: './assets/icon',
 	},
 	rebuildConfig: {},
 	makers: [
-		new MakerSquirrel({
-			setupIcon: './assets/icon.ico',
-		}),
-		new MakerDMG({
-			icon: './assets/icon.icns',
-		}),
+		new MakerSquirrel({ setupIcon: './assets/icon.ico' }),
+		new MakerDMG({ icon: './assets/icon.icns' }),
 		new MakerZIP(undefined, ['darwin']),
-		new MakerDeb(
-			{
-				options: { icon: './assets/icon.png' },
-			},
-			['linux'],
-		),
+		new MakerDeb({ options: { icon: './assets/icon.png' } }, ['linux']),
 		new MakerRpm({ options: { icon: './assets/icon.png' } }, ['linux']),
+	],
+	publishers: [
+		new PublisherGithub({
+			draft: true,
+			force: true,
+			generateReleaseNotes: true,
+			repository: { owner: 'digidem', name: 'comapeo-desktop' },
+			tagPrefix: 'v',
+		}),
 	],
 	plugins,
 }

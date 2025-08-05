@@ -15,6 +15,12 @@ By default, core sets up a file watcher for the `fallbackMapPath` option that's 
 
 There was an error while running app because of exports in `rpc-reflector` package. To remove this patch, `rpc-reflector` would need to be updated not to use `encode-decode.js` file which indirect usage results in errors.
 
+## @electron-forge/publisher-github
+
+### [Change format of release version used for publishing](./@electron-forge+publisher-github+7.8.2+001+adjust-release-version-format.patch)
+
+The module attempts to create/update a GitHub release based on a version that has the following format: `v<major>.<minor>.<patch>`. However, CoMapeo release version do not include the major version in the name. The patch updates the extraction of the version information to omit the major version such that the lookup of existing releases based tags or release names matches the format we use.
+
 ## rpc-reflector
 
 ### [Change imports to avoid calling unavailable code](./rpc-reflector+1.3.11+001+fix-client-duplex.patch)
