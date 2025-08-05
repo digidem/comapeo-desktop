@@ -50,9 +50,6 @@ jobs:
             { name: 'windows', image: 'windows-latest' },
           ]
     runs-on: ${{ matrix.os.image }}
-    outputs:
-      artifact_id: ${{ steps.artifact.outputs.artifact-id }}
-      artifact_url: ${{ steps.artifact.outputs.artifact-url }}
     steps:
       - name: Create GitHub App Token
         uses: actions/create-github-app-token@v1
@@ -98,7 +95,6 @@ jobs:
         run: npm run forge:make
 
       - name: Upload artifacts
-        id: artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os.name }}-${{ inputs.build_sha }}
