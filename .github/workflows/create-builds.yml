@@ -27,8 +27,19 @@ on:
         options: ['internal', 'release-candidate']
 
 jobs:
+  validate_inputs:
+    name: Validate inputs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate app_type input
+        if: ${{ !(inputs.app_type == 'internal' || inputs.app_type == 'release-candidate' || inputs.app_type == 'production') }}
+        run: |
+          echo "app_type input must be one of the following: internal, release-candidate, production"
+          exit 1
+
   builds:
     name: Create builds
+    needs: validate_inputs
     strategy:
       matrix:
         os:
@@ -43,12 +54,6 @@ jobs:
       artifact_id: ${{ steps.artifact.outputs.artifact-id }}
       artifact_url: ${{ steps.artifact.outputs.artifact-url }}
     steps:
-      - name: Validate app_type input
-        if: ${{ !(inputs.app_type == 'internal' || inputs.app_type == 'release-candidate' || inputs.app_type == 'production') }}
-        run: |
-          echo "app_type input must be one of the following: internal, release-candidate, production"
-          exit 1
-
       - name: Create GitHub App Token
         uses: actions/create-github-app-token@v1
         id: app-token
@@ -108,5 +113,4 @@ jobs:
         if: ${{ inputs.APP_TYPE == 'production' }}
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: |
-          npm run forge:publish
+        run: npm run forge:publish
