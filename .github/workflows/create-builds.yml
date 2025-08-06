@@ -101,9 +101,12 @@ jobs:
           compression-level: 0
           overwrite: true
           path: |
+            out/make/**/RELEASES
             out/make/**/*.AppImage
-            out/make/**/*.dmg
             out/make/**/*.exe
+            out/make/**/*.dmg
+            out/make/**/*.nupkg
+            out/make/**/*.rpm
             out/make/**/*.zip
 
       - name: Publish application
