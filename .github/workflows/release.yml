@@ -1,6 +1,6 @@
 # Summary:
 #
-# Creates a release tag on the release branch when a release candidate PR is merged.
+# Creates a release based on the release branch when a release candidate PR is merged.
 #
 # Triggers:
 #
@@ -8,9 +8,8 @@
 #
 # Effects:
 #
-# - Creates a release tag to the release branch named `v${version}` using the merge commit in the targeted `release/**` branch,
-#   where `version` is `<minor>.<patch>` e.g. `1.2.0` is truncated to `2.0`.
-# - Triggers a production release that creates the builds, creates a (draft) GitHub release, and publishes the assets to that release.
+# - Creates a draft GitHub release
+# - Creates application builds and uploads them to the GitHub release.
 # - Comments on the the release PR pointing to the GitHub release URL.
 name: Release
 
@@ -22,12 +21,10 @@ on:
       - 'release/**'
 
 jobs:
-  tag:
-    name: Create tag
+  create_release:
+    name: Create release
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    outputs:
-      version_tag: v${{ steps.version.outputs.release_version_short }}
     steps:
       - name: Create GitHub App Token
         uses: actions/create-github-app-token@v1
@@ -48,30 +45,11 @@ jobs:
         id: version
         uses: ./.github/parse-version
 
-      - name: Tag release
-        run: |
-          git config --global user.name 'awana-release-bot[bot]'
-          git config --global user.email '${{ vars.RELEASE_BOT_USER_ID }}+awana-release-bot[bot]@users.noreply.github.com'
-          git tag ${{ steps.version.outputs.releaseShort }}
-          git push origin git tag ${{ steps.version.outputs.releaseShort }}
-
-  create_release:
-    name: Create release
-    needs: tag
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create GitHub App Token
-        uses: actions/create-github-app-token@v1
-        id: app-token
-        with:
-          app-id: ${{ vars.RELEASE_BOT_APP_ID }}
-          private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
-
       - name: Create release on GitHub
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           REPOSITORY: ${{ github.repository }}
-          TAG_NAME: ${{ needs.tag.outputs.version_tag }}
+          TAG_NAME: ${{ steps.version.outputs.release_version_short }}
         run: |
           release_url=$(gh release create \
             --repo "$REPOSITORY" \
@@ -82,7 +60,7 @@ jobs:
 
   build:
     name: Create builds
-    needs: tag
+    needs: create_release
     uses: ./.github/workflows/create-builds.yml
     with:
       app_type: 'production'
@@ -100,10 +78,6 @@ jobs:
         with:
           app-id: ${{ vars.RELEASE_BOT_APP_ID }}
           private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
-
-      - name: Parse version
-        id: version
-        uses: ./.github/parse-version
 
       - name: Comment on PR
         env:
