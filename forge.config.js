@@ -12,6 +12,7 @@ import { FusesPlugin } from '@electron-forge/plugin-fuses'
 import { PublisherGithub } from '@electron-forge/publisher-github'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
 import dotenv from 'dotenv'
+import semver from 'semver'
 import * as v from 'valibot'
 import { build, createServer } from 'vite'
 
@@ -23,7 +24,7 @@ if (dotenvOutput.error) {
 	throw dotenvOutput.error
 }
 
-const { ASAR } = v.parse(
+const { APP_TYPE, ASAR } = v.parse(
 	v.object({
 		APP_TYPE: v.optional(
 			v.union(
@@ -235,7 +236,7 @@ if (ASAR) {
 export default {
 	packagerConfig: {
 		asar: ASAR,
-		name: `CoMapeo Desktop`,
+		name: 'CoMapeo Desktop',
 		icon: './assets/icon',
 	},
 	rebuildConfig: {},
@@ -255,5 +256,29 @@ export default {
 			tagPrefix: 'v',
 		}),
 	],
+	hooks: {
+		readPackageJson:
+			APP_TYPE === 'development'
+				? undefined
+				: async (_config, packageJson) => {
+						const parsed = semver.parse(packageJson.version)
+
+						if (!parsed) {
+							throw new Error(
+								`Unable to parse package.json version: ${packageJson.version}`,
+							)
+						}
+
+						const { minor, patch } = parsed
+
+						// NOTE: We update the version here to align with our release version format (i.e. no major),
+						// which enables tools like the GitHub publisher to work as intended for our cases.
+						// As noted in the Forge documentation, this does not affect the application metadata that's used by Forge
+						// when packaging (https://www.electronforge.io/config/hooks#readpackagejson).
+						packageJson.version = `${minor}.${patch}`
+
+						return packageJson
+					},
+	},
 	plugins,
 }
