@@ -111,7 +111,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 			new URL('./app.config.json', import.meta.url),
 		)
 
-		/** @type {import('./src/main/utils.js').AppConfig} */
+		/** @type {import('./src/main/validation').AppConfig} */
 		const appConfig = {
 			onlineStyleUrl: ONLINE_STYLE_URL,
 			asar: ASAR,

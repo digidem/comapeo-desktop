@@ -1,5 +1,9 @@
 import * as v from 'valibot'
 
+/**
+ * @typedef {v.InferOutput<typeof AppConfigSchema>} AppConfig
+ */
+
 export const AppConfigSchema = v.object({
 	asar: v.optional(v.boolean()),
 	onlineStyleUrl: v.pipe(v.string(), v.url()),

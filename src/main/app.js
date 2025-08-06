@@ -22,7 +22,8 @@ const log = debug('comapeo:main:app')
  * @import {UtilityProcess} from 'electron/main'
  * @import {ProcessArgs as CoreProcessArgs, NewClientMessage} from '../services/core.js'
  * @import {ConfigStore} from './config-store.js'
- * @import {AppConfig, AppMode} from './utils.js'
+ * @import {AppMode} from './utils.js'
+ * @import {AppConfig} from './validation.js'
  */
 
 /**
