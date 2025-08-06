@@ -8,12 +8,11 @@
 #
 # Effects:
 #
-# - Adds a release tag to the release branch name `v${version}` using the merge commit in the targeted `release/**` branch,
+# - Creates a release tag to the release branch named `v${version}` using the merge commit in the targeted `release/**` branch,
 #   where `version` is `<minor>.<patch>` e.g. `1.2.0` is truncated to `2.0`.
-# - Comments on the the release PR pointing to the tentative GitHub release URL.
-# - Creates a release tag named `v${version}` on the merge commit in the targeted `release/**` branch.
-#   `version` is `<minor>.<patch>` e.g. `1.2.0` is truncated to `2.0`.
-name: Tag Release
+# - Triggers a production release that creates the builds, creates a (draft) GitHub release, and publishes the assets to that release.
+# - Comments on the the release PR pointing to the GitHub release URL.
+name: Release
 
 on:
   pull_request:
@@ -24,7 +23,7 @@ on:
 
 jobs:
   tag:
-    name: Create release tag
+    name: Create tag
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     outputs:
@@ -42,26 +41,30 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
 
-      - run: npm install --no-save semver
-        shell: bash
-
-      - name: Extract release versions
+      - name: Parse version
         id: version
-        run: |
-          release_version_short=$(node -e "const {version} = require('./package.json'); const semver = require('semver'); const parsed = semver.parse(version); console.log(parsed.minor + '.' + parsed.patch);")
-          echo "release_version_short=$release_version_short" >> $GITHUB_OUTPUT
+        uses: ./.github/parse-version
 
       - name: Tag release
         run: |
           git config --global user.name 'awana-release-bot[bot]'
           git config --global user.email '${{ vars.RELEASE_BOT_USER_ID }}+awana-release-bot[bot]@users.noreply.github.com'
-          git tag v${{ steps.version.outputs.release_version_short }}
-          git push origin v${{ steps.version.outputs.release_version_short }}
+          git tag ${{ steps.version.outputs.releaseShort }}
+          git push origin git tag ${{ steps.version.outputs.releaseShort }}
+
+  build:
+    name: Create builds
+    needs: tag
+    uses: ./.github/workflows/create-builds.yml
+    with:
+      app_type: 'production'
+      build_sha: ${{ github.sha }}
+    secrets: inherit
 
   comment:
     name: Comment
+    needs: build
     runs-on: ubuntu-latest
-    needs: tag
     steps:
       - name: Create GitHub App Token
         uses: actions/create-github-app-token@v1
@@ -70,12 +73,16 @@ jobs:
           app-id: ${{ vars.RELEASE_BOT_APP_ID }}
           private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
 
+      - name: Parse version
+        id: version
+        uses: ./.github/parse-version
+
       - name: Comment on PR
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          RELEASE_URL: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ needs.tag.outputs.version_tag }}
+          RELEASE_URL: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ steps.version.outputs.releaseShort }}
           COMMENT_BODY: |
-            :rocket: A draft release pointing to ${{ github.event.pull_request.merge_commit_sha }} will be created [here](${{ env.RELEASE_URL }}).
+            :rocket: A draft release pointing to ${{ github.event.pull_request.merge_commit_sha }} has been created at ${{ env.RELEASE_URL }}
         run: |
           gh pr comment $PR_NUMBER --body "$COMMENT_BODY" --repo "$GITHUB_REPOSITORY"
