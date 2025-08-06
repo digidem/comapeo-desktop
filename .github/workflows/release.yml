@@ -41,7 +41,7 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
           sparse-checkout: |
-              package.json
+            package.json
           sparse-checkout-cone-mode: false
 
       - name: Parse version
