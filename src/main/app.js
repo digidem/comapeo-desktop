@@ -22,7 +22,7 @@ const log = debug('comapeo:main:app')
  * @import {UtilityProcess} from 'electron/main'
  * @import {ProcessArgs as CoreProcessArgs, NewClientMessage} from '../services/core.js'
  * @import {ConfigStore} from './config-store.js'
- * @import {AppEnv, AppMode} from './utils.js'
+ * @import {AppConfig, AppMode} from './utils.js'
  */
 
 /**
@@ -62,13 +62,13 @@ const APP_STATE = {
 
 /**
  * @param {Object} opts
- * @param {AppEnv} opts.appEnv
+ * @param {AppConfig} opts.appConfig
  * @param {AppMode} opts.appMode
  * @param {ConfigStore} opts.configStore
  *
  * @returns {Promise<void>}
  */
-export async function start({ appEnv, appMode, configStore }) {
+export async function start({ appConfig, appMode, configStore }) {
 	// Quit when all windows are closed, except on macOS. There, it's common
 	// for applications and their menu bar to stay active until the user quits
 	// explicitly with Cmd + Q.
@@ -93,7 +93,7 @@ export async function start({ appEnv, appMode, configStore }) {
 	await app.whenReady()
 
 	const rootKey = loadRootKey({ configStore })
-	const services = setupServices({ appEnv, rootKey })
+	const services = setupServices({ appConfig, rootKey })
 
 	app.on('activate', () => {
 		log('App activated')
@@ -262,15 +262,15 @@ function loadRootKey({ configStore }) {
 
 /**
  * @param {Object} opts
- * @param {AppEnv} opts.appEnv
+ * @param {AppConfig} opts.appConfig
  * @param {string} opts.rootKey
  *
  * @returns {Services}
  */
-function setupServices({ appEnv, rootKey }) {
+function setupServices({ appConfig, rootKey }) {
 	/** @satisfies {CoreProcessArgs} */
 	const coreArgs = {
-		onlineStyleUrl: appEnv.onlineStyleUrl,
+		onlineStyleUrl: appConfig.onlineStyleUrl,
 		rootKey,
 		storageDirectory: app.getPath('userData'),
 	}

@@ -48,7 +48,6 @@ Make sure you have the desired Node version installed. For this project we encou
 Create a copy of the [`.env.template`](../.env.template) and call it `.env`. Update the following variables:
 
 - `ONLINE_STYLE_URL`: Full URL that points to a compatible map's StyleJSON.
-- `VITE_FEATURE_TEST_DATA_UI`: `true` or `false`. Enables the test data creation UI in the app if set to `true`.
 
 ### Running the app
 

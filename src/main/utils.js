@@ -1,21 +1,27 @@
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import isDev from 'electron-is-dev'
+import { app } from 'electron/main'
 import * as v from 'valibot'
 
-import { AppEnvSchema } from './validation.js'
+import { AppConfigSchema } from './validation.js'
 
 /**
- * @typedef {v.InferOutput<typeof AppEnvSchema>} AppEnv
+ * @typedef {v.InferOutput<typeof AppConfigSchema>} AppConfig
  */
 
 /**
- * @returns {AppEnv}
+ * @returns {Promise<AppConfig>}
  */
-export function getAppEnv() {
-	return v.parse(AppEnvSchema, {
-		asar: process.env.ASAR,
-		onlineStyleUrl: process.env.ONLINE_STYLE_URL,
-		userDataPath: process.env.USER_DATA_PATH,
-	})
+export async function getAppConfig() {
+	const appPath = app.getAppPath()
+
+	const appConfigFile = await readFile(
+		join(appPath, 'app.config.json'),
+		'utf-8',
+	)
+
+	return v.parse(AppConfigSchema, JSON.parse(appConfigFile))
 }
 
 /**

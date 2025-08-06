@@ -1,24 +1,20 @@
 #!/usr/bin/env electron
 import { createRequire } from 'node:module'
 import * as path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import debug from 'debug'
-import dotenv from 'dotenv'
 import { app } from 'electron/main'
 
 import { start } from './app.js'
 import { createConfigStore } from './config-store.js'
-import { getAppEnv, getAppMode } from './utils.js'
+import { getAppConfig, getAppMode } from './utils.js'
 
 const require = createRequire(import.meta.url)
 
 const log = debug('comapeo:main:index')
 
-dotenv.config({ path: fileURLToPath(new URL('../../.env', import.meta.url)) })
+const appConfig = await getAppConfig()
 
-const appEnv = getAppEnv()
-
-if (appEnv.asar === false) {
+if (appConfig.asar === false) {
 	process.noAsar = true
 }
 
@@ -36,10 +32,10 @@ if (appMode === 'development') {
 	/** @type {string} */
 	let userDataPath
 
-	if (appEnv.userDataPath) {
-		userDataPath = path.isAbsolute(appEnv.userDataPath)
-			? path.resolve(appEnv.userDataPath)
-			: path.resolve(appPath, appEnv.userDataPath)
+	if (appConfig.userDataPath) {
+		userDataPath = path.isAbsolute(appConfig.userDataPath)
+			? path.resolve(appConfig.userDataPath)
+			: path.resolve(appPath, appConfig.userDataPath)
 	} else {
 		userDataPath = path.join(appPath, 'data')
 	}
@@ -50,7 +46,7 @@ if (appMode === 'development') {
 const configStore = createConfigStore()
 
 start({
-	appEnv,
+	appConfig,
 	appMode,
 	configStore,
 })
