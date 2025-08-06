@@ -68,3 +68,6 @@ dist/
 
 # Vite build directory
 .vite/build/
+
+# App config
+app.config.json

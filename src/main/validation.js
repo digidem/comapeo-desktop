@@ -1,14 +1,11 @@
 import * as v from 'valibot'
 
-export const AppEnvSchema = v.object({
-	asar: v.optional(
-		v.pipe(
-			v.union([v.literal('true'), v.literal('false')]),
-			v.transform((value) => {
-				return value === 'true'
-			}),
-		),
-	),
+/**
+ * @typedef {v.InferOutput<typeof AppConfigSchema>} AppConfig
+ */
+
+export const AppConfigSchema = v.object({
+	asar: v.optional(v.boolean()),
 	onlineStyleUrl: v.pipe(v.string(), v.url()),
 	userDataPath: v.optional(v.string()),
 })

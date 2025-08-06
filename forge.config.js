@@ -16,15 +16,15 @@ import semver from 'semver'
 import * as v from 'valibot'
 import { build, createServer } from 'vite'
 
-const ENV_FILE_PATH = fileURLToPath(new URL('./.env', import.meta.url))
-
-const dotenvOutput = dotenv.config({ path: ENV_FILE_PATH })
+const dotenvOutput = dotenv.config({
+	path: fileURLToPath(new URL('./.env', import.meta.url)),
+})
 
 if (dotenvOutput.error) {
 	throw dotenvOutput.error
 }
 
-const { APP_TYPE, ASAR } = v.parse(
+const { APP_TYPE, ASAR, ONLINE_STYLE_URL, USER_DATA_PATH } = v.parse(
 	v.object({
 		APP_TYPE: v.optional(
 			v.union(
@@ -48,6 +48,8 @@ const { APP_TYPE, ASAR } = v.parse(
 			),
 			'true',
 		),
+		ONLINE_STYLE_URL: v.pipe(v.string(), v.url()),
+		USER_DATA_PATH: v.optional(v.string()),
 	}),
 	process.env,
 )
@@ -92,12 +94,33 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	 */
 	getHooks() {
 		return {
+			generateAssets: [this.#createAppConfigFile],
 			preStart: [this.#initViteDevServer],
 			resolveForgeConfig: [this.#updatePackagerConfig],
 			postStart: [this.#hookViteDevServer],
 			prePackage: [this.#buildRender],
 			packageAfterCopy: [this.#moveBuiltRendererApp],
 		}
+	}
+
+	/**
+	 * @type {ForgeHookFn<'generateAssets'>}
+	 */
+	#createAppConfigFile = async (_forgeConfig, _platform, _version) => {
+		const outputPath = fileURLToPath(
+			new URL('./app.config.json', import.meta.url),
+		)
+
+		/** @type {import('./src/main/validation').AppConfig} */
+		const appConfig = {
+			onlineStyleUrl: ONLINE_STYLE_URL,
+			asar: ASAR,
+			userDataPath: USER_DATA_PATH,
+		}
+
+		await fs.writeFile(outputPath, JSON.stringify(appConfig))
+
+		console.log(`✅ Created app config file at ${outputPath}`)
 	}
 
 	/**
@@ -144,8 +167,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 			// Unnecessary directories
 			/^\/(\.github|\.husky|assets|data|docs|messages|patches|\.tanstack|\.vscode|scripts)/,
 			// Unnecessary files
-			// Only keep .env file (i.e. no .env.local, .env.production, etc)
-			/^\/\.env\.+/,
+			/^\/\.env/,
 			/^\/.*\.config\.js$/,
 			/^\/\.eslintcache$/,
 			/^\/\.gitignore$/,
