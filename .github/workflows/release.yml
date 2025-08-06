@@ -55,6 +55,34 @@ jobs:
           git tag ${{ steps.version.outputs.releaseShort }}
           git push origin git tag ${{ steps.version.outputs.releaseShort }}
 
+  create_release:
+    name: Create release
+    needs: tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.RELEASE_BOT_APP_ID }}
+          private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+
+      - name: Create release on GitHub
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPOSITORY: ${{ github.repository }}
+          TAG_NAME: ${{ needs.tag.outputs.version_tag }}
+        run: |
+          release_url=$(gh release create \
+            --repo "$REPOSITORY" \
+            --draft \
+            --verify-tag \
+            --generate-notes \
+            --title "$TAG_NAME" \
+            "$TAG_NAME" | jq '.url' --raw-output)
+
+          echo "release_url=$release_url" >> $GITHUB_OUTPUT
+
   build:
     name: Create builds
     needs: tag
@@ -66,7 +94,7 @@ jobs:
 
   comment:
     name: Comment
-    needs: build
+    needs: [create_release, build]
     runs-on: ubuntu-latest
     steps:
       - name: Create GitHub App Token
@@ -84,7 +112,7 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          RELEASE_URL: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ steps.version.outputs.releaseShort }}
+          RELEASE_URL: ${{ needs.create_release.result.release_url }}
           COMMENT_BODY: |
             :rocket: A draft release pointing to ${{ github.event.pull_request.merge_commit_sha }} has been created at ${{ env.RELEASE_URL }}
         run: |
