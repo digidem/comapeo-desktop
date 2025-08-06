@@ -1,7 +1,7 @@
 {
 	"name": "comapeo-desktop",
 	"private": true,
-	"version": "0.1.0",
+	"version": "1.0.0-pre",
 	"description": "Desktop application for CoMapeo",
 	"keywords": [],
 	"author": {
@@ -78,6 +78,7 @@
 		"@electron-forge/plugin-auto-unpack-natives": "7.8.2",
 		"@electron-forge/plugin-base": "7.8.2",
 		"@electron-forge/plugin-fuses": "7.8.2",
+		"@electron-forge/publisher-github": "7.8.2",
 		"@electron-forge/shared-types": "7.8.2",
 		"@electron/fuses": "2.0.0",
 		"@emotion/react": "11.14.0",
@@ -110,6 +111,7 @@
 		"@types/node": "22.16.5",
 		"@types/react": "19.1.9",
 		"@types/react-dom": "19.1.7",
+		"@types/semver": "7.7.0",
 		"@types/sodium-native": "2.3.9",
 		"@types/utm": "1.1.4",
 		"@vitejs/plugin-react": "4.7.0",
@@ -133,6 +135,7 @@
 		"react-intl": "7.1.11",
 		"react-map-gl": "8.0.4",
 		"scroll-into-view-if-needed": "3.1.0",
+		"semver": "7.7.2",
 		"typescript": "5.8.3",
 		"typescript-eslint": "8.38.0",
 		"utm": "1.1.1",

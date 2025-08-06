@@ -1,0 +1,90 @@
+# Summary:
+#
+# Creates a release based on the release branch when a release candidate PR is merged.
+#
+# Triggers:
+#
+# - Merging a PR that targets a base branch that matches `release/**`
+#
+# Effects:
+#
+# - Creates a draft GitHub release
+# - Creates application builds and uploads them to the GitHub release.
+# - Comments on the the release PR pointing to the GitHub release URL.
+name: Release
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - 'release/**'
+
+jobs:
+  create_release:
+    name: Create release
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.RELEASE_BOT_APP_ID }}
+          private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          sparse-checkout: |
+            package.json
+          sparse-checkout-cone-mode: false
+
+      - name: Parse version
+        id: version
+        uses: ./.github/parse-version
+
+      - name: Create release on GitHub
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPOSITORY: ${{ github.repository }}
+          TAG_NAME: ${{ steps.version.outputs.release_version_short }}
+        run: |
+          release_url=$(gh release create \
+            --repo "$REPOSITORY" \
+            --draft \
+            --generate-notes \
+            --title "$TAG_NAME" \
+            "$TAG_NAME")
+
+  build:
+    name: Create builds
+    needs: create_release
+    uses: ./.github/workflows/create-builds.yml
+    with:
+      app_type: 'production'
+      build_sha: ${{ github.sha }}
+    secrets: inherit
+
+  comment:
+    name: Comment
+    needs: [create_release, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.RELEASE_BOT_APP_ID }}
+          private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+
+      - name: Comment on PR
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          RELEASE_URL: ${{ needs.create_release.result.release_url }}
+          COMMENT_BODY: |
+            :rocket: A draft release pointing to ${{ github.event.pull_request.merge_commit_sha }} has been created at ${{ env.RELEASE_URL }}
+        run: |
+          gh pr comment $PR_NUMBER --body "$COMMENT_BODY" --repo "$GITHUB_REPOSITORY"
