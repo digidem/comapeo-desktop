@@ -110,7 +110,4 @@ jobs:
         if: ${{ inputs.APP_TYPE == 'production' }}
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: |
-          git config --global user.name 'awana-release-bot[bot]'
-          git config --global user.email '${{ vars.RELEASE_BOT_USER_ID }}+awana-release-bot[bot]@users.noreply.github.com'
-          npm run forge:publish
+        run: npm run forge:publish
