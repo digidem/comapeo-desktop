@@ -76,12 +76,9 @@ jobs:
           release_url=$(gh release create \
             --repo "$REPOSITORY" \
             --draft \
-            --verify-tag \
             --generate-notes \
             --title "$TAG_NAME" \
-            "$TAG_NAME" | jq '.url' --raw-output)
-
-          echo "release_url=$release_url" >> $GITHUB_OUTPUT
+            "$TAG_NAME")
 
   build:
     name: Create builds
