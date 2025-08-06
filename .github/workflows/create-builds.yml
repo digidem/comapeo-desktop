@@ -74,17 +74,6 @@ jobs:
           node-version-file: .nvmrc
           cache: 'npm'
 
-      - name: Create env file
-        env:
-          APP_TYPE: ${{ inputs.app_type }}
-        run: |
-          echo "APP_TYPE=${{ env.APP_TYPE }}" >> .env
-          echo "ONLINE_STYLE_URL=${{ secrets.ONLINE_STYLE_URL }}" >> .env
-
-          if [[ ${{ env.APP_TYPE }} != 'production' ]]; then
-            echo "VITE_FEATURE_TEST_DATA_UI=true" >> .env # We enable the test data creation UI for non-production builds
-          fi
-
       - name: Install dependencies
         run: npm ci
 
@@ -92,6 +81,10 @@ jobs:
         run: npm run intl:translations
 
       - name: Create distributables
+        env:
+          APP_TYPE: ${{ inputs.app_type }}
+          ONLINE_STYLE_URL: ${{ secrets.ONLINE_STYLE_URL }}
+          VITE_FEATURE_TEST_DATA_UI: ${{ env.APP_TYPE == 'production' && 'false' || 'true' }}
         run: npm run forge:make
 
       - name: Upload artifacts
