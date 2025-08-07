@@ -1,4 +1,4 @@
-import { shell } from 'electron'
+import { shell } from 'electron/common'
 import { ipcMain } from 'electron/main'
 import si from 'systeminformation'
 import * as v from 'valibot'
