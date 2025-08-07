@@ -13,6 +13,10 @@
 		"noImplicitOverride": true,
 		"noUncheckedIndexedAccess": true,
 		"noUnusedLocals": false, // May want to enable but we let typescript-eslint handle checking this since it can be more granular
+		"paths": {
+			// Electron sets up the submodule type definitions in its main types file
+			"electron/*": ["./node_modules/electron"]
+		},
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"strict": true,
