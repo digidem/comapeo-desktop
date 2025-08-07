@@ -6,7 +6,7 @@ Go to the [Development](./docs/DEVELOPMENT.md) docs to learn about how the proje
 
 Make sure you have the preferred versions of tooling installed:
 
-- [`NodeJS`](https://nodejs.org): [22.16.0](./.nvmrc)
+- [`NodeJS`](https://nodejs.org): [22.17.1](./.nvmrc)
 
 1. Clone the repo:
 
