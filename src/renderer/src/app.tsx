@@ -18,7 +18,7 @@ import {
 	createRouter,
 } from '@tanstack/react-router'
 
-import type { LocaleState } from '../../main/types/intl'
+import type { LocaleState } from '../../shared/intl'
 import { initComapeoClient } from './comapeo-client'
 import { GenericRouteErrorComponent } from './components/generic-route-error-component'
 import { GenericRoutePendingComponent } from './components/generic-route-pending-component'
