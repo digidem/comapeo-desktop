@@ -4,5 +4,5 @@
 		"lib": ["ESNext", "dom"],
 		"module": "NodeNext"
 	},
-	"include": ["../types/*", "**/*.js", "**/*.ts"]
+	"include": ["../shared/*", "**/*.js", "**/*.ts"]
 }
