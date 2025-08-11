@@ -87,6 +87,8 @@ export async function start({ appConfig, configStore }) {
 
 	const intl = setupIntl({ configStore })
 
+	app.setAboutPanelOptions({ applicationVersion: appConfig.appVersion })
+
 	setUpMainIPC({ configStore, intl })
 
 	await app.whenReady()
