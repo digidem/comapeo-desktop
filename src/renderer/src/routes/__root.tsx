@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 import type { QueryClient } from '@tanstack/react-query'
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 
-import type { LocaleState } from '../../../main/types/intl'
+import type { LocaleState } from '../../../shared/intl'
 
 export interface RootRouterContext {
 	activeProjectId: string | null

@@ -1,6 +1,7 @@
 #!/usr/bin/env electron
 import { readFile } from 'node:fs/promises'
 import { createRequire } from 'node:module'
+import { platform } from 'node:os'
 import * as path from 'node:path'
 import debug from 'debug'
 import { app } from 'electron/main'
@@ -8,35 +9,38 @@ import { parse } from 'valibot'
 
 import { start } from './app.js'
 import { createConfigStore } from './config-store.js'
-import { getAppMode } from './utils.js'
 import { AppConfigSchema } from './validation.js'
 
 const require = createRequire(import.meta.url)
-
-const log = debug('comapeo:main:index')
-
-const appPath = app.getAppPath()
-
-const appConfigFile = await readFile(
-	path.join(appPath, 'app.config.json'),
-	'utf-8',
-)
-
-const appConfig = parse(AppConfigSchema, JSON.parse(appConfigFile))
-
-if (appConfig.asar === false) {
-	process.noAsar = true
-}
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
 	app.quit()
 }
 
-const appMode = getAppMode()
+const log = debug('comapeo:main:index')
 
-// Set userData to alternative location if in development mode (to avoid conflicts/overriding production installation)
-if (appMode === 'development') {
+const appConfigFile = await readFile(
+	path.join(app.getAppPath(), 'app.config.json'),
+	'utf-8',
+)
+
+/** @type {import('../shared/app.js').AppConfig} */
+const appConfig = parse(AppConfigSchema, JSON.parse(appConfigFile))
+
+// If desired, tell Electron to not use the ASAR format (https://www.electronjs.org/docs/latest/tutorial/asar-archives#treating-an-asar-archive-as-a-normal-file)
+if (appConfig.asar === false) {
+	process.noAsar = true
+}
+
+if (appConfig.appType === 'development') {
+	// This is typically handled in the `readPackageJson` hook in the Forge configuration but that only runs when packaging an application.
+	// This is still needed in the case of running the app through the development server.
+	app.setName(`${app.name} Dev`)
+
+	// Update some of the application paths used during development. This helps to avoid conflicts with production installations and helps debugging in some cases.
+	//   - Sets the user data directory to `<root>/data/`, which can be overridden if `USER_DATA_PATH` is specified.
+	//   - Sets the logs directory to `<root>/logs/` for macOS.
 	const appPath = app.getAppPath()
 
 	/** @type {string} */
@@ -50,23 +54,28 @@ if (appMode === 'development') {
 		userDataPath = path.join(appPath, 'data')
 	}
 
+	log(`Setting user data path to ${userDataPath}`)
+
 	app.setPath('userData', userDataPath)
+
+	// Logs are stored within the user data path on Windows and Linux, so no need to adjust it here.
+	if (platform() === 'darwin') {
+		const logsPath = path.join(appPath, 'logs')
+
+		log(`Setting logs path to ${logsPath}`)
+
+		app.setAppLogsPath(logsPath)
+	}
 }
 
 const configStore = createConfigStore()
 
-start({
-	appConfig,
-	appMode,
-	configStore,
+log('Paths', {
+	app: app.getAppPath(),
+	userData: app.getPath('userData'),
+	logs: app.getPath('logs'),
 })
-	.then(() => {
-		log('Paths', {
-			app: app.getAppPath(),
-			userData: app.getPath('userData'),
-			logs: app.getPath('logs'),
-		})
-	})
-	.catch((err) => {
-		log(err)
-	})
+
+start({ appConfig, configStore }).catch((err) => {
+	log(err)
+})

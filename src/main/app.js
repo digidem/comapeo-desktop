@@ -21,9 +21,8 @@ const log = debug('comapeo:main:app')
 /**
  * @import {UtilityProcess} from 'electron/main'
  * @import {ProcessArgs as CoreProcessArgs, NewClientMessage} from '../services/core.js'
+ * @import {AppConfig} from '../shared/app.js'
  * @import {ConfigStore} from './config-store.js'
- * @import {AppMode} from './utils.js'
- * @import {AppConfig} from './validation.js'
  */
 
 /**
@@ -64,12 +63,11 @@ const APP_STATE = {
 /**
  * @param {Object} opts
  * @param {AppConfig} opts.appConfig
- * @param {AppMode} opts.appMode
  * @param {ConfigStore} opts.configStore
  *
  * @returns {Promise<void>}
  */
-export async function start({ appConfig, appMode, configStore }) {
+export async function start({ appConfig, configStore }) {
 	// Quit when all windows are closed, except on macOS. There, it's common
 	// for applications and their menu bar to stay active until the user quits
 	// explicitly with Cmd + Q.
@@ -88,6 +86,8 @@ export async function start({ appConfig, appMode, configStore }) {
 	})
 
 	const intl = setupIntl({ configStore })
+
+	app.setAboutPanelOptions({ applicationVersion: appConfig.appVersion })
 
 	setUpMainIPC({ configStore, intl })
 
@@ -114,7 +114,11 @@ export async function start({ appConfig, appMode, configStore }) {
 			existingMainWindow.show()
 		} else {
 			log('Main window does not exist - creating new main window')
-			const mainWindow = initMainWindow({ appMode, services })
+			const mainWindow = initMainWindow({
+				isDevelopment: appConfig.appType === 'development',
+				appVersion: appConfig.appVersion,
+				services,
+			})
 
 			mainWindow.show()
 
@@ -122,7 +126,11 @@ export async function start({ appConfig, appMode, configStore }) {
 		}
 	})
 
-	const mainWindow = initMainWindow({ appMode, services })
+	const mainWindow = initMainWindow({
+		appVersion: appConfig.appVersion,
+		isDevelopment: appConfig.appType === 'development',
+		services,
+	})
 	mainWindow.show()
 
 	log(`Created main window with id ${mainWindow.id}`)
@@ -142,12 +150,13 @@ function setupIntl({ configStore }) {
 
 /**
  * @param {Object} opts
- * @param {AppMode} opts.appMode
+ * @param {string} opts.appVersion
+ * @param {boolean} opts.isDevelopment
  * @param {Services} opts.services
  *
  * @returns {BrowserWindow} The main browser window
  */
-function initMainWindow({ appMode, services }) {
+function initMainWindow({ appVersion, isDevelopment, services }) {
 	const mainWindow = new BrowserWindow({
 		width: 1200,
 		minWidth: 800,
@@ -157,11 +166,11 @@ function initMainWindow({ appMode, services }) {
 		backgroundColor: '#050F77',
 		webPreferences: {
 			preload: MAIN_WINDOW_PRELOAD_PATH,
-			additionalArguments: [`--comapeo-app-version=${app.getVersion()}`],
+			additionalArguments: [`--comapeo-app-version=${appVersion}`],
 		},
 	})
 
-	if (appMode === 'development') {
+	if (isDevelopment) {
 		// TODO: Don't hard code ideally
 		mainWindow.loadURL('http://localhost:5173/')
 		mainWindow.webContents.openDevTools({

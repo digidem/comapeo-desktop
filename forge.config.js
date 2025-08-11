@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -16,8 +17,16 @@ import semver from 'semver'
 import * as v from 'valibot'
 import { build, createServer } from 'vite'
 
+import packageJSON from './package.json' with { type: 'json' }
+
+/**
+ * @import {ForgeConfig, ForgeHookFn} from '@electron-forge/shared-types'
+ * @import {ViteDevServer} from 'vite'
+ */
+
 const dotenvOutput = dotenv.config({
 	path: fileURLToPath(new URL('./.env', import.meta.url)),
+	quiet: process.env.NODE_ENV !== 'development',
 })
 
 if (dotenvOutput.error) {
@@ -53,11 +62,6 @@ const { APP_TYPE, ASAR, ONLINE_STYLE_URL, USER_DATA_PATH } = v.parse(
 	}),
 	process.env,
 )
-
-/**
- * @import {ForgeConfig, ForgeHookFn} from '@electron-forge/shared-types'
- * @import {ViteDevServer} from 'vite'
- */
 
 const RENDERER_VITE_CONFIG_PATH = fileURLToPath(
 	new URL('./src/renderer/vite.config.js', import.meta.url),
@@ -111,11 +115,13 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 			new URL('./app.config.json', import.meta.url),
 		)
 
-		/** @type {import('./src/main/validation').AppConfig} */
+		/** @type {import('./src/shared/app').AppConfig} */
 		const appConfig = {
-			onlineStyleUrl: ONLINE_STYLE_URL,
+			appType: APP_TYPE,
 			asar: ASAR,
+			onlineStyleUrl: ONLINE_STYLE_URL,
 			userDataPath: USER_DATA_PATH,
+			appVersion: getAppVersion(packageJSON.version, APP_TYPE),
 		}
 
 		await fs.writeFile(outputPath, JSON.stringify(appConfig))
@@ -127,6 +133,12 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	 * @type {ForgeHookFn<'preStart'>}
 	 */
 	#initViteDevServer = async (_opts) => {
+		if (APP_TYPE !== 'development') {
+			throw new Error(
+				`Cannot run the Vite dev server and have APP_TYPE environment variable set to something other than 'develop'`,
+			)
+		}
+
 		if (this.#viteDevServer) return
 
 		const server = await createServer({ configFile: RENDERER_VITE_CONFIG_PATH })
@@ -202,7 +214,13 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	 * @type {ForgeHookFn<'prePackage'>}
 	 */
 	async #buildRender() {
-		await build({ configFile: RENDERER_VITE_CONFIG_PATH })
+		if (APP_TYPE === 'development') {
+			throw new Error(
+				"Cannot package app with APP_TYPE environment variable set to 'development'. You probably should use 'internal' instead.",
+			)
+		}
+
+		await build({ configFile: RENDERER_VITE_CONFIG_PATH, mode: APP_TYPE })
 	}
 
 	/**
@@ -254,12 +272,20 @@ if (ASAR) {
 	plugins.push(new AutoUnpackNativesPlugin({}))
 }
 
+const APP_TYPE_SUFFIXES = getAppTypeSuffixes(APP_TYPE)
+const APP_BUNDLE_ID = APP_TYPE_SUFFIXES.id
+	? `com.comapeo.${APP_TYPE_SUFFIXES.id}`
+	: `com.comapeo`
+const APPLICATION_NAME = `${packageJSON.productName}${APP_TYPE_SUFFIXES.name}`
+
 /** @type {ForgeConfig} */
 export default {
 	packagerConfig: {
 		asar: ASAR,
-		name: 'CoMapeo Desktop',
+		// macOS: https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleidentifier
+		appBundleId: APP_BUNDLE_ID,
 		icon: './assets/icon',
+		name: APPLICATION_NAME,
 	},
 	rebuildConfig: {},
 	makers: [
@@ -279,28 +305,95 @@ export default {
 		}),
 	],
 	hooks: {
-		readPackageJson:
-			APP_TYPE === 'development'
-				? undefined
-				: async (_config, packageJson) => {
-						const parsed = semver.parse(packageJson.version)
+		readPackageJson: async (_config, packageJson) => {
+			// We need to update this in order for Electron to use the desired name (it uses this field if present).
+			// This leads to the desired outcome of properly isolated application data when having several apps on the same machine.
+			packageJson.productName = APPLICATION_NAME
 
-						if (!parsed) {
-							throw new Error(
-								`Unable to parse package.json version: ${packageJson.version}`,
-							)
-						}
+			// NOTE: Kind of hacky but has the following desired effects:
+			//   - Uses the correct version for the file name of the asset that is generated in Forge's `make` step.
+			//   - Uses the correct version for the GitHub release that the GitHub publisher should upload builds to.
+			//
+			// TODO: We should probably just stop using the GitHub publisher and remove the need for this in favor of using GitHub Actions.
+			if (APP_TYPE === 'production') {
+				const parsed = semver.parse(packageJson.version)
 
-						const { minor, patch } = parsed
+				if (!parsed) {
+					throw new Error(
+						`Unable to parse package.json version: ${packageJson.version}`,
+					)
+				}
 
-						// NOTE: We update the version here to align with our release version format (i.e. no major),
-						// which enables tools like the GitHub publisher to work as intended for our cases.
-						// As noted in the Forge documentation, this does not affect the application metadata that's used by Forge
-						// when packaging (https://www.electronforge.io/config/hooks#readpackagejson).
-						packageJson.version = `${minor}.${patch}`
+				const { minor, patch } = parsed
 
-						return packageJson
-					},
+				// NOTE: We update the version here to align with our release version format (i.e. no major).
+				// As noted in the Forge documentation, this does not affect the application metadata that's used by Forge
+				// when packaging (https://www.electronforge.io/config/hooks#readpackagejson).
+				packageJson.version = `${minor}.${patch}`
+			}
+
+			return packageJson
+		},
 	},
 	plugins,
+}
+
+/**
+ * @param {import('./src/shared/app').AppType} appType
+ */
+function getAppTypeSuffixes(appType) {
+	let result = { id: '', name: '' }
+
+	switch (appType) {
+		case 'development': {
+			result = { id: 'dev', name: ' Dev' }
+			break
+		}
+		case 'internal': {
+			result = { id: 'internal', name: ' Internal' }
+			break
+		}
+		case 'release-candidate': {
+			result = { id: 'rc', name: ' RC' }
+		}
+	}
+
+	return result
+}
+
+/**
+ * Get the user-facing app version. This is different from the versions used by
+ * `@electron/packager` internally, which needs to conform to platform-specific
+ * requirements around format:
+ *
+ * - MacOS:
+ *   https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleversion
+ *   and //
+ *   https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleshortversionstring
+ * - Windows:
+ *   https://learn.microsoft.com/en-us/windows/win32/menurc/versioninfo-resource#parameters
+ *
+ * @param {string} version
+ * @param {import('./src/shared/app').AppType} appType
+ */
+function getAppVersion(version, appType) {
+	const commitSHA = (
+		process.env.BUILD_SHA || execSync('git rev-parse HEAD').toString().trim()
+	).slice(0, 7)
+
+	const parsedVersion = semver.parse(version)
+
+	if (!parsedVersion) {
+		throw new Error(`Unable to parse version: ${version}`)
+	}
+
+	const { major, minor, patch } = parsedVersion
+
+	if (appType === 'development') {
+		return `${major}.${minor}.${patch}-${APP_TYPE_SUFFIXES.id}+${commitSHA}`
+	} else if (appType === 'internal' || appType === 'release-candidate') {
+		return `${minor}.${patch}-${APP_TYPE_SUFFIXES.id}+${commitSHA}`
+	}
+
+	return `${minor}.${patch}`
 }

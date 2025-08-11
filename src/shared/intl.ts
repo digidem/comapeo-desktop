@@ -1,8 +1,8 @@
-import languages from '../../../languages.json' with { type: 'json' }
+import SUPPORTED_LANGUAGES from '../../languages.json' with { type: 'json' }
 
 export type LocaleSource = 'selected' | 'system' | 'fallback'
 
-export type SupportedLanguageTag = keyof typeof languages
+export type SupportedLanguageTag = keyof typeof SUPPORTED_LANGUAGES
 
 export type LocaleState = {
 	source: LocaleSource

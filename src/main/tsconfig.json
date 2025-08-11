@@ -3,5 +3,5 @@
 	"compilerOptions": {
 		"module": "NodeNext"
 	},
-	"include": ["**/*.js", "**/*.ts"]
+	"include": ["../shared/*", "**/*.js", "**/*.ts"]
 }
