@@ -1,5 +1,6 @@
 {
 	"name": "comapeo-desktop",
+	"productName": "CoMapeo Desktop",
 	"private": true,
 	"version": "1.0.0-pre",
 	"description": "Desktop application for CoMapeo",
