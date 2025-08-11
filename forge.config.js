@@ -274,23 +274,20 @@ if (ASAR) {
 
 const APP_TYPE_SUFFIXES = getAppTypeSuffixes(APP_TYPE)
 
-const BUILD_COMMIT_SHA = (
-	process.env.BUILD_SHA || execSync('git rev-parse HEAD').toString().trim()
-).slice(0, 7)
-
 /** @type {ForgeConfig} */
 export default {
 	packagerConfig: {
 		asar: ASAR,
 		// macOS: https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleidentifier
-		appBundleId: `app.comapeo${
+		appBundleId: `com.comapeo${
 			APP_TYPE_SUFFIXES.id ? `.${APP_TYPE_SUFFIXES.id}` : ''
 		}`,
-		// There seems to be issues with using Forge's `packagerConfig` for configuring the name:
+		icon: './assets/icon',
+		// The only reliably tangent effect this has is setting the name of the build asset and executable.
+		// There seems to be a variety odd behaviors related to how this option is actually used by Forge and Electron internally.
 		// - https://github.com/electron/forge/issues/3660
 		// - https://github.com/electron/forge/issues/3847
 		name: `CoMapeo Desktop${APP_TYPE_SUFFIXES.name}`,
-		icon: './assets/icon',
 	},
 	rebuildConfig: {},
 	makers: [
@@ -364,10 +361,25 @@ function getAppTypeSuffixes(appType) {
 }
 
 /**
+ * Get the user-facing app version. This is different from the versions used by
+ * `@electron/packager` internally, which needs to conform to platform-specific
+ * requirements around format:
+ *
+ * - MacOS:
+ *   https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleversion
+ *   and //
+ *   https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleshortversionstring
+ * - Windows:
+ *   https://learn.microsoft.com/en-us/windows/win32/menurc/versioninfo-resource#parameters
+ *
  * @param {string} version
  * @param {import('./src/shared/app').AppType} appType
  */
 function getAppVersion(version, appType) {
+	const commitSHA = (
+		process.env.BUILD_SHA || execSync('git rev-parse HEAD').toString().trim()
+	).slice(0, 7)
+
 	const parsedVersion = semver.parse(version)
 
 	if (!parsedVersion) {
@@ -377,9 +389,9 @@ function getAppVersion(version, appType) {
 	const { major, minor, patch } = parsedVersion
 
 	if (appType === 'development') {
-		return `${major}.${minor}.${patch}-${APP_TYPE_SUFFIXES.id}+${BUILD_COMMIT_SHA}`
+		return `${major}.${minor}.${patch}-${APP_TYPE_SUFFIXES.id}+${commitSHA}`
 	} else if (appType === 'internal' || appType === 'release-candidate') {
-		return `${minor}.${patch}-${APP_TYPE_SUFFIXES.id}+${BUILD_COMMIT_SHA}`
+		return `${minor}.${patch}-${APP_TYPE_SUFFIXES.id}+${commitSHA}`
 	}
 
 	return `${minor}.${patch}`
