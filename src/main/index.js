@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { platform } from 'node:os'
 import * as path from 'node:path'
+import * as Sentry from '@sentry/electron/main'
 import debug from 'debug'
 import { app } from 'electron/main'
 import { parse } from 'valibot'
@@ -10,6 +11,11 @@ import { parse } from 'valibot'
 import { start } from './app.js'
 import { createConfigStore } from './config-store.js'
 import { AppConfigSchema } from './validation.js'
+
+console.log('APP', {
+	name: app.name,
+	version: app.getVersion(),
+})
 
 const require = createRequire(import.meta.url)
 
@@ -68,6 +74,27 @@ if (appConfig.appType === 'development') {
 	}
 }
 
+/** @type {import('../shared/app.js').SentryEnvironment} */
+let sentryEnvironment = 'development'
+
+if (appConfig.appType === 'release-candidate') {
+	sentryEnvironment = 'qa'
+} else if (appConfig.appType === 'production') {
+	sentryEnvironment = 'production'
+}
+
+// NOTE: Has to be set up after user data directory is updated
+// https://docs.sentry.io/platforms/javascript/guides/electron/#app-userdata-directory
+Sentry.init({
+	dsn: 'https://f7336c12cc39fb0367886e31036a6cd7@o4507148235702272.ingest.us.sentry.io/4509803831820288',
+	tracesSampleRate: 1.0,
+	environment: sentryEnvironment,
+	// TODO: Not sure if this is helpful
+	release: appConfig.appVersion,
+	debug:
+		appConfig.appType === 'development' || appConfig.appType === 'internal',
+})
+
 const configStore = createConfigStore()
 
 log('Paths', {
@@ -77,5 +104,6 @@ log('Paths', {
 })
 
 start({ appConfig, configStore }).catch((err) => {
-	log(err)
+	Sentry.captureException(err)
+	process.exit(1)
 })
