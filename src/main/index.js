@@ -8,10 +8,14 @@ import { parse } from 'valibot'
 
 import { start } from './app.js'
 import { createConfigStore } from './config-store.js'
-import { getAppMode } from './utils.js'
 import { AppConfigSchema } from './validation.js'
 
 const require = createRequire(import.meta.url)
+
+// Handle creating/removing shortcuts on Windows when installing/uninstalling.
+if (require('electron-squirrel-startup')) {
+	app.quit()
+}
 
 const log = debug('comapeo:main:index')
 
@@ -22,21 +26,15 @@ const appConfigFile = await readFile(
 	'utf-8',
 )
 
+/** @type {import('../shared/app.js').AppConfig} */
 const appConfig = parse(AppConfigSchema, JSON.parse(appConfigFile))
 
 if (appConfig.asar === false) {
 	process.noAsar = true
 }
 
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) {
-	app.quit()
-}
-
-const appMode = getAppMode()
-
 // Set userData to alternative location if in development mode (to avoid conflicts/overriding production installation)
-if (appMode === 'development') {
+if (appConfig.appType === 'development') {
 	const appPath = app.getAppPath()
 
 	/** @type {string} */
@@ -55,11 +53,7 @@ if (appMode === 'development') {
 
 const configStore = createConfigStore()
 
-start({
-	appConfig,
-	appMode,
-	configStore,
-})
+start({ appConfig, configStore })
 	.then(() => {
 		log('Paths', {
 			app: app.getAppPath(),

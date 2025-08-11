@@ -4,7 +4,7 @@ import type {
 	PersistedCoordinateFormat,
 	PersistedLocale,
 } from '../main/types/config-store.js'
-import type { LocaleState } from '../main/types/intl.js'
+import type { LocaleState } from '../shared/intl.js'
 
 export type SelectedFile = {
 	name: string

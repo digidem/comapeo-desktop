@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -16,8 +17,16 @@ import semver from 'semver'
 import * as v from 'valibot'
 import { build, createServer } from 'vite'
 
+import packageJSON from './package.json' with { type: 'json' }
+
+/**
+ * @import {ForgeConfig, ForgeHookFn} from '@electron-forge/shared-types'
+ * @import {ViteDevServer} from 'vite'
+ */
+
 const dotenvOutput = dotenv.config({
 	path: fileURLToPath(new URL('./.env', import.meta.url)),
+	quiet: process.env.NODE_ENV !== 'development',
 })
 
 if (dotenvOutput.error) {
@@ -53,11 +62,6 @@ const { APP_TYPE, ASAR, ONLINE_STYLE_URL, USER_DATA_PATH } = v.parse(
 	}),
 	process.env,
 )
-
-/**
- * @import {ForgeConfig, ForgeHookFn} from '@electron-forge/shared-types'
- * @import {ViteDevServer} from 'vite'
- */
 
 const RENDERER_VITE_CONFIG_PATH = fileURLToPath(
 	new URL('./src/renderer/vite.config.js', import.meta.url),
@@ -111,11 +115,13 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 			new URL('./app.config.json', import.meta.url),
 		)
 
-		/** @type {import('./src/main/validation').AppConfig} */
+		/** @type {import('./src/shared/app').AppConfig} */
 		const appConfig = {
-			onlineStyleUrl: ONLINE_STYLE_URL,
+			appType: APP_TYPE,
 			asar: ASAR,
+			onlineStyleUrl: ONLINE_STYLE_URL,
 			userDataPath: USER_DATA_PATH,
+			appVersion: getAppVersion(packageJSON.version, APP_TYPE),
 		}
 
 		await fs.writeFile(outputPath, JSON.stringify(appConfig))
@@ -127,6 +133,12 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	 * @type {ForgeHookFn<'preStart'>}
 	 */
 	#initViteDevServer = async (_opts) => {
+		if (APP_TYPE !== 'development') {
+			throw new Error(
+				`Cannot run the Vite dev server and have APP_TYPE environment variable set to something other than 'develop'`,
+			)
+		}
+
 		if (this.#viteDevServer) return
 
 		const server = await createServer({ configFile: RENDERER_VITE_CONFIG_PATH })
@@ -202,7 +214,13 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	 * @type {ForgeHookFn<'prePackage'>}
 	 */
 	async #buildRender() {
-		await build({ configFile: RENDERER_VITE_CONFIG_PATH })
+		if (APP_TYPE === 'development') {
+			throw new Error(
+				"Cannot package app with APP_TYPE environment variable set to 'development'. You probably should use 'internal' instead.",
+			)
+		}
+
+		await build({ configFile: RENDERER_VITE_CONFIG_PATH, mode: APP_TYPE })
 	}
 
 	/**
@@ -254,11 +272,24 @@ if (ASAR) {
 	plugins.push(new AutoUnpackNativesPlugin({}))
 }
 
+const APP_TYPE_SUFFIXES = getAppTypeSuffixes(APP_TYPE)
+
+const BUILD_COMMIT_SHA = (
+	process.env.BUILD_SHA || execSync('git rev-parse HEAD').toString().trim()
+).slice(0, 7)
+
 /** @type {ForgeConfig} */
 export default {
 	packagerConfig: {
 		asar: ASAR,
-		name: 'CoMapeo Desktop',
+		// macOS: https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleidentifier
+		appBundleId: `app.comapeo${
+			APP_TYPE_SUFFIXES.id ? `.${APP_TYPE_SUFFIXES.id}` : ''
+		}`,
+		// There seems to be issues with using Forge's `packagerConfig` for configuring the name:
+		// - https://github.com/electron/forge/issues/3660
+		// - https://github.com/electron/forge/issues/3847
+		name: `CoMapeo Desktop${APP_TYPE_SUFFIXES.name}`,
 		icon: './assets/icon',
 	},
 	rebuildConfig: {},
@@ -279,10 +310,14 @@ export default {
 		}),
 	],
 	hooks: {
+		// NOTE: Kind of hacky but has the following desired effects:
+		//   - Uses the correct version for the file name of the asset that is generated in Forge's `make` step.
+		//   - Uses the correct version for the GitHub release that the GitHub publisher should upload builds to.
+		//
+		// TODO: We should probably just stop using the GitHub publisher and remove the need for this in favor of using GitHub Actions.
 		readPackageJson:
-			APP_TYPE === 'development'
-				? undefined
-				: async (_config, packageJson) => {
+			APP_TYPE === 'production'
+				? async (_config, packageJson) => {
 						const parsed = semver.parse(packageJson.version)
 
 						if (!parsed) {
@@ -293,14 +328,59 @@ export default {
 
 						const { minor, patch } = parsed
 
-						// NOTE: We update the version here to align with our release version format (i.e. no major),
-						// which enables tools like the GitHub publisher to work as intended for our cases.
+						// NOTE: We update the version here to align with our release version format (i.e. no major).
 						// As noted in the Forge documentation, this does not affect the application metadata that's used by Forge
 						// when packaging (https://www.electronforge.io/config/hooks#readpackagejson).
 						packageJson.version = `${minor}.${patch}`
 
 						return packageJson
-					},
+					}
+				: undefined,
 	},
 	plugins,
+}
+
+/**
+ * @param {import('./src/shared/app').AppType} appType
+ */
+function getAppTypeSuffixes(appType) {
+	let result = { id: '', name: '' }
+
+	switch (appType) {
+		case 'development': {
+			result = { id: 'dev', name: ' Dev' }
+			break
+		}
+		case 'internal': {
+			result = { id: 'internal', name: ' Internal' }
+			break
+		}
+		case 'release-candidate': {
+			result = { id: 'rc', name: ' RC' }
+		}
+	}
+
+	return result
+}
+
+/**
+ * @param {string} version
+ * @param {import('./src/shared/app').AppType} appType
+ */
+function getAppVersion(version, appType) {
+	const parsedVersion = semver.parse(version)
+
+	if (!parsedVersion) {
+		throw new Error(`Unable to parse version: ${version}`)
+	}
+
+	const { major, minor, patch } = parsedVersion
+
+	if (appType === 'development') {
+		return `${major}.${minor}.${patch}-${APP_TYPE_SUFFIXES.id}+${BUILD_COMMIT_SHA}`
+	} else if (appType === 'internal' || appType === 'release-candidate') {
+		return `${minor}.${patch}-${APP_TYPE_SUFFIXES.id}+${BUILD_COMMIT_SHA}`
+	}
+
+	return `${minor}.${patch}`
 }

@@ -6,5 +6,5 @@
 		"lib": ["es2022", "dom", "dom.iterable", "WebWorker"],
 		"jsx": "react-jsx"
 	},
-	"include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
+	"include": ["../shared/*", "**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
 }
