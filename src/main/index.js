@@ -33,25 +33,6 @@ if (appConfig.asar === false) {
 	process.noAsar = true
 }
 
-// Surprisingly, configuring the `name` for `@electron/packager` does not affect Electron's behavior of resolving the app name at runtime.
-// Without the following change, it will still use the value in the `name` (or `productName`) field of the package.json file.
-// We update the name that Electron should use internally so that we provide proper isolation between the various
-// kinds of app builds that one could have on the same machine, which is relevant for things like app data storage locations and safe storage entry names.
-switch (appConfig.appType) {
-	case 'development': {
-		app.setName(`${app.name} Dev`)
-		break
-	}
-	case 'internal': {
-		app.setName(`${app.name} Internal`)
-		break
-	}
-	case 'release-candidate': {
-		app.setName(`${app.name} RC`)
-		break
-	}
-}
-
 // Update some of the application paths used during development. This helps to avoid conflicts with production installations and helps debugging in some cases.
 //   - Sets the user data directory to `<root>/data/`, which can be overridden if `USER_DATA_PATH` is specified.
 //   - Sets the logs directory to `<root>/logs/` for macOS.
