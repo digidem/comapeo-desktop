@@ -33,11 +33,14 @@ if (appConfig.asar === false) {
 	process.noAsar = true
 }
 
-// Update some of the application paths used during development. This helps to avoid conflicts with production installations and helps debugging in some cases.
-//   - Sets the user data directory to `<root>/data/`, which can be overridden if `USER_DATA_PATH` is specified.
-//   - Sets the logs directory to `<root>/logs/` for macOS.
 if (appConfig.appType === 'development') {
-	// Set userData to alternative location if in development mode (to avoid conflicts/overriding production installation)
+	// This is typically handled in the `readPackageJson` hook in the Forge configuration but that only runs when packaging an application.
+	// This is still needed in the case of running the app through the development server.
+	app.setName(`${app.name} Dev`)
+
+	// Update some of the application paths used during development. This helps to avoid conflicts with production installations and helps debugging in some cases.
+	//   - Sets the user data directory to `<root>/data/`, which can be overridden if `USER_DATA_PATH` is specified.
+	//   - Sets the logs directory to `<root>/logs/` for macOS.
 	const appPath = app.getAppPath()
 
 	/** @type {string} */
