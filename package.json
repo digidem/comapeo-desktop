@@ -59,7 +59,6 @@
 		"@formatjs/intl": "3.1.6",
 		"@mapeo/default-config": "5.0.0",
 		"debug": "4.4.1",
-		"electron-is-dev": "3.0.1",
 		"electron-squirrel-startup": "1.0.1",
 		"electron-store": "10.1.0",
 		"sodium-native": "4.3.3",
