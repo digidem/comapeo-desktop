@@ -78,6 +78,12 @@ const configStore = createConfigStore()
 
 let sentryUser = configStore.get('sentryUser')
 
+// NOTE: The retrieved value may be the default based on config store schema,
+// which is not immediately persisted upon initialization.
+// We want to make sure that this value is persisted upon startup, even if it might be
+// rotated shortly after.
+configStore.set('sentryUser', sentryUser)
+
 if (shouldRotateSentryUser(sentryUser)) {
 	log('Rotating Sentry user')
 	const newSentryUser = generateSentryUser()
