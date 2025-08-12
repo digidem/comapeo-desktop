@@ -31,8 +31,10 @@ export default defineConfig((configEnv) => {
 			outDir: path.join(PROJECT_ROOT_DIR, 'dist/renderer'),
 			emptyOutDir: true,
 		},
+		define: {
+			__APP_TYPE__: JSON.stringify(configEnv.mode),
+		},
 		plugins: [
-			// TanStackRouterVite({ routeFileIgnorePattern: '\\.test\\.tsx?$' }),
 			tanstackRouter({
 				autoCodeSplitting: true,
 				routeFileIgnorePattern: '\\.test\\.tsx?$',

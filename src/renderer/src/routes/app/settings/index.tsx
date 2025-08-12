@@ -140,7 +140,7 @@ function RouteComponent() {
 						<Icon
 							name="material-chevron-right"
 							htmlColor={DARK_GREY}
-							// size={rowIconSize}
+							size={rowIconSize}
 						/>
 					</IconButtonLink>
 				}
@@ -170,7 +170,7 @@ function RouteComponent() {
 				label={t(m.defaultBackground)}
 			/>
 
-			{import.meta.env.DEV ||
+			{__APP_TYPE__ !== 'production' &&
 			import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
 				<SettingRow
 					icon={
