@@ -89,7 +89,7 @@
 		"@fontsource-variable/rubik": "5.2.6",
 		"@formatjs/cli": "6.7.2",
 		"@ianvs/prettier-plugin-sort-imports": "4.6.1",
-		"@mui/material": "7.2.0",
+		"@mui/material": "7.3.1",
 		"@tanstack/eslint-plugin-query": "5.83.1",
 		"@tanstack/eslint-plugin-router": "1.129.7",
 		"@tanstack/react-form": "1.15.2",
