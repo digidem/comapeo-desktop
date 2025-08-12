@@ -124,7 +124,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 
 		// Use the `VITE_MAPBOX_ACCESS_TOKEN` to the online style URL
 		// if it's a Mapbox style that doesn't already have an access token param
-		let onlineStyleUrl = new URL(ONLINE_STYLE_URL)
+		const onlineStyleUrl = new URL(ONLINE_STYLE_URL)
 		if (onlineStyleUrl.host === 'api.mapbox.com') {
 			if (
 				!onlineStyleUrl.searchParams.has('access_token') &&
@@ -136,7 +136,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 				)
 			} else {
 				console.warn(
-					'⚠️ Using a Mapbox map requires an access token. Either update the `ONLINE_STYLE_URL` or specify `VITE_MAPBOX_ACCESS_TOKEN`.',
+					'⚠️ Using a Mapbox map requires an access token. Either update the `ONLINE_STYLE_URL` env variable or specify the `VITE_MAPBOX_ACCESS_TOKEN` env variable',
 				)
 			}
 		}
