@@ -33,7 +33,13 @@ if (dotenvOutput.error) {
 	throw dotenvOutput.error
 }
 
-const { APP_TYPE, ASAR, ONLINE_STYLE_URL, USER_DATA_PATH } = v.parse(
+const {
+	APP_TYPE,
+	ASAR,
+	ONLINE_STYLE_URL,
+	USER_DATA_PATH,
+	VITE_MAPBOX_ACCESS_TOKEN,
+} = v.parse(
 	v.object({
 		APP_TYPE: v.optional(
 			v.union(
@@ -59,6 +65,7 @@ const { APP_TYPE, ASAR, ONLINE_STYLE_URL, USER_DATA_PATH } = v.parse(
 		),
 		ONLINE_STYLE_URL: v.pipe(v.string(), v.url()),
 		USER_DATA_PATH: v.optional(v.string()),
+		VITE_MAPBOX_ACCESS_TOKEN: v.optional(v.string()),
 	}),
 	process.env,
 )
@@ -115,11 +122,30 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 			new URL('./app.config.json', import.meta.url),
 		)
 
+		// Use the `VITE_MAPBOX_ACCESS_TOKEN` to the online style URL
+		// if it's a Mapbox style that doesn't already have an access token param
+		let onlineStyleUrl = new URL(ONLINE_STYLE_URL)
+		if (onlineStyleUrl.host === 'api.mapbox.com') {
+			if (
+				!onlineStyleUrl.searchParams.has('access_token') &&
+				VITE_MAPBOX_ACCESS_TOKEN
+			) {
+				onlineStyleUrl.searchParams.set(
+					'access_token',
+					VITE_MAPBOX_ACCESS_TOKEN,
+				)
+			} else {
+				console.warn(
+					'⚠️ Using a Mapbox map requires an access token. Either update the `ONLINE_STYLE_URL` or specify `VITE_MAPBOX_ACCESS_TOKEN`.',
+				)
+			}
+		}
+
 		/** @type {import('./src/shared/app').AppConfig} */
 		const appConfig = {
 			appType: APP_TYPE,
 			asar: ASAR,
-			onlineStyleUrl: ONLINE_STYLE_URL,
+			onlineStyleUrl: onlineStyleUrl.toString(),
 			userDataPath: USER_DATA_PATH,
 			appVersion: getAppVersion(packageJSON.version, APP_TYPE),
 		}

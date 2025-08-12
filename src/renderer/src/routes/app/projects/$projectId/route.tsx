@@ -43,6 +43,7 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 	// Accounts for queries used by the MapWithData component.
 	loader: async ({ context, params }) => {
 		const {
+			clientApi,
 			projectApi,
 			queryClient,
 			localeState: { value: lang },
@@ -50,6 +51,12 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 		const { projectId } = params
 
 		await Promise.all([
+			queryClient.ensureQueryData({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'maps', 'stylejson_url'],
+				queryFn: async () => {
+					return clientApi.getMapStyleJsonUrl()
+				},
+			}),
 			// TODO: Not ideal but requires changes in @comapeo/core-react
 			queryClient.ensureQueryData({
 				queryKey: [

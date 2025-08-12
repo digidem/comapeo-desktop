@@ -9,6 +9,7 @@ import {
 import {
 	useIconUrl,
 	useManyDocs,
+	useMapStyleUrl,
 	useSingleDocByDocId,
 } from '@comapeo/core-react'
 import type { Observation, Preset, Track } from '@comapeo/schema'
@@ -133,6 +134,8 @@ export function DisplayedDataMap() {
 		docType: 'preset',
 		lang,
 	})
+
+	const { data: mapStyleUrl } = useMapStyleUrl()
 
 	const observationsFeatureCollection = useMemo(() => {
 		return observationsToFeatureCollection(observations, categories)
@@ -377,6 +380,7 @@ export function DisplayedDataMap() {
 			)}
 			<Map
 				ref={mapRef}
+				mapStyle={mapStyleUrl}
 				initialViewState={{
 					bounds: observationsBbox,
 					fitBoundsOptions: BASE_FIT_BOUNDS_OPTIONS,

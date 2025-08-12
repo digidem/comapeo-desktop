@@ -47,7 +47,8 @@ Make sure you have the desired Node version installed. For this project we encou
 
 Create a copy of the [`.env.template`](../.env.template) and call it `.env`. Update the following variables:
 
-- `ONLINE_STYLE_URL`: Full URL that points to a compatible map's StyleJSON.
+- `ONLINE_STYLE_URL`: Full URL that points to a compatible map's StyleJSON. If it's a Mapbox style, it is preferable to omit the `access_token` search param and specify `VITE_MAPBOX_ACCESS_TOKEN` instead.
+- `VITE_MAPBOX_ACCESS_TOKEN`: Public token necessary used for accessing Mapbox-provided maps. Follow the instructions [here](https://docs.mapbox.com/help/getting-started/access-tokens/) or reach out to the maintainers to obtain one.
 
 ### Running the app
 
