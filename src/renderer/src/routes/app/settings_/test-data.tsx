@@ -35,11 +35,9 @@ import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
 export const Route = createFileRoute('/app/settings_/test-data')({
 	beforeLoad: ({ context }) => {
 		if (
-			!context.activeProjectId ||
-			!(
-				import.meta.env.DEV ||
-				import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true'
-			)
+			__APP_TYPE__ === 'production' ||
+			import.meta.env.VITE_FEATURE_TEST_DATA_UI !== 'true' ||
+			!context.activeProjectId
 		) {
 			throw redirect({ to: '/', replace: true })
 		}
