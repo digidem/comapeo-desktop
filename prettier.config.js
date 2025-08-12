@@ -23,7 +23,7 @@ export default {
 		'',
 		'.css$',
 	],
-	importOrderTypeScriptVersion: '5.8.3',
+	importOrderTypeScriptVersion: '5.9.2',
 	importOrderCaseSensitive: true,
 	/**
 	 * Configuration for prettier-plugin-jsdoc

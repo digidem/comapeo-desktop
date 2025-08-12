@@ -135,7 +135,7 @@
 		"react-map-gl": "8.0.4",
 		"scroll-into-view-if-needed": "3.1.0",
 		"semver": "7.7.2",
-		"typescript": "5.8.3",
+		"typescript": "5.9.2",
 		"typescript-eslint": "8.39.1",
 		"utm": "1.1.1",
 		"vite": "7.1.2",
