@@ -113,7 +113,7 @@
 		"@types/semver": "7.7.0",
 		"@types/sodium-native": "2.3.9",
 		"@types/utm": "1.1.4",
-		"@vitejs/plugin-react": "4.7.0",
+		"@vitejs/plugin-react": "5.0.0",
 		"date-fns": "4.1.0",
 		"dotenv": "17.2.1",
 		"electron": "37.2.6",
@@ -139,7 +139,7 @@
 		"typescript": "5.8.3",
 		"typescript-eslint": "8.39.1",
 		"utm": "1.1.1",
-		"vite": "7.0.6",
+		"vite": "7.1.2",
 		"vite-plugin-icons-spritesheet": "3.0.1",
 		"vitest": "3.2.4"
 	},
