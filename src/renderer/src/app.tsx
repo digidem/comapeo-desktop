@@ -90,6 +90,8 @@ if (__APP_TYPE__ === 'release-candidate') {
 	sentryEnvironment = 'production'
 }
 
+const sentryUserId = window.runtime.getSentryUserId()
+
 initSentryElectron(
 	{
 		dsn: 'https://f7336c12cc39fb0367886e31036a6cd7@o4507148235702272.ingest.us.sentry.io/4509803831820288',
@@ -98,6 +100,7 @@ initSentryElectron(
 		integrations: [tanstackRouterBrowserTracingIntegration(router)],
 		environment: sentryEnvironment,
 		debug: sentryEnvironment === 'development',
+		initialScope: { user: { id: sentryUserId } },
 	},
 	initSentryReact,
 )

@@ -30,7 +30,7 @@ const runtimeApi = {
 
 	// System
 	getAppInfo: () => {
-		const appVersion = getAppVersion()
+		const appVersion = getProcessArgValue('comapeo-app-version')
 		const systemVersion = process.getSystemVersion()
 
 		return { appVersion, systemVersion }
@@ -71,24 +71,34 @@ const runtimeApi = {
 	setLocale: async (value) => {
 		return ipcRenderer.invoke('settings:set:locale', value)
 	},
+
+	// Misc
+	getSentryUserId: () => {
+		return getProcessArgValue('comapeo-sentry-user-id')
+	},
 }
 
-function getAppVersion() {
-	const flag = process.argv
+/**
+ * @param {`comapeo-${string}`} flag
+ *
+ * @returns {string}
+ */
+function getProcessArgValue(flag) {
+	const match = process.argv
 		// TODO: Kind of fragile but works for now
-		.find((a) => a.startsWith(`--comapeo-app-version=`))
+		.find((a) => a.startsWith(`--${flag}=`))
 
-	if (!flag) {
-		throw new Error('Missing process argument `comapeo-app-version`')
+	if (!match) {
+		throw new Error(`Missing process argument '${flag}'`)
 	}
 
-	const version = flag.split('=')?.[1]
+	const value = match.split('=')?.[1]
 
-	if (!version) {
-		throw new Error('Could not parse app version')
+	if (!value) {
+		throw new Error(`Could not get value for flag '${flag}'`)
 	}
 
-	return version
+	return value
 }
 
 /**

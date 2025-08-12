@@ -96,6 +96,8 @@ export async function start({ appConfig, configStore }) {
 	const rootKey = loadRootKey({ configStore })
 	const services = setupServices({ appConfig, rootKey })
 
+	const sentryUserId = configStore.get('sentryUser').id
+
 	app.on('activate', () => {
 		log('App activated')
 
@@ -118,6 +120,7 @@ export async function start({ appConfig, configStore }) {
 				isDevelopment: appConfig.appType === 'development',
 				appVersion: appConfig.appVersion,
 				services,
+				sentryUserId,
 			})
 
 			mainWindow.show()
@@ -129,6 +132,7 @@ export async function start({ appConfig, configStore }) {
 	const mainWindow = initMainWindow({
 		appVersion: appConfig.appVersion,
 		isDevelopment: appConfig.appType === 'development',
+		sentryUserId,
 		services,
 	})
 	mainWindow.show()
@@ -152,11 +156,12 @@ function setupIntl({ configStore }) {
  * @param {Object} opts
  * @param {string} opts.appVersion
  * @param {boolean} opts.isDevelopment
+ * @param {string} opts.sentryUserId
  * @param {Services} opts.services
  *
  * @returns {BrowserWindow} The main browser window
  */
-function initMainWindow({ appVersion, isDevelopment, services }) {
+function initMainWindow({ appVersion, isDevelopment, sentryUserId, services }) {
 	const mainWindow = new BrowserWindow({
 		width: 1200,
 		minWidth: 800,
@@ -166,7 +171,10 @@ function initMainWindow({ appVersion, isDevelopment, services }) {
 		backgroundColor: '#050F77',
 		webPreferences: {
 			preload: MAIN_WINDOW_PRELOAD_PATH,
-			additionalArguments: [`--comapeo-app-version=${appVersion}`],
+			additionalArguments: [
+				`--comapeo-app-version=${appVersion}`,
+				`--comapeo-sentry-user-id=${sentryUserId}`,
+			],
 		},
 	})
 

@@ -9,7 +9,11 @@ import { app } from 'electron/main'
 import { parse } from 'valibot'
 
 import { start } from './app.js'
-import { createConfigStore } from './config-store.js'
+import {
+	createConfigStore,
+	generateSentryUser,
+	shouldRotateSentryUser,
+} from './config-store.js'
 import { AppConfigSchema } from './validation.js'
 
 const require = createRequire(import.meta.url)
@@ -69,6 +73,17 @@ if (appConfig.appType === 'development') {
 	}
 }
 
+const configStore = createConfigStore()
+
+let sentryUser = configStore.get('sentryUser')
+
+if (shouldRotateSentryUser(sentryUser)) {
+	log('Rotating Sentry user')
+	const newSentryUser = generateSentryUser()
+	configStore.set('sentryUser', newSentryUser)
+	sentryUser = newSentryUser
+}
+
 /** @type {import('../shared/app.js').SentryEnvironment} */
 let sentryEnvironment = 'development'
 
@@ -87,9 +102,8 @@ Sentry.init({
 	environment: sentryEnvironment,
 	release: appConfig.appVersion,
 	debug: sentryEnvironment === 'development',
+	initialScope: { user: { id: sentryUser.id } },
 })
-
-const configStore = createConfigStore()
 
 log('Paths', {
 	app: app.getAppPath(),

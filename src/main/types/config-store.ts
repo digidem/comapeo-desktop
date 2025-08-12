@@ -12,4 +12,8 @@ export type ConfigSchema = {
 	diagnosticsEnabled: boolean
 	locale: PersistedLocale
 	rootKey?: string
+	sentryUser: {
+		id: string
+		createdAt: { year: number; month: number }
+	}
 }
