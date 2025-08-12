@@ -123,7 +123,7 @@
 		"husky": "9.1.7",
 		"jsdom": "26.1.0",
 		"lint-staged": "16.1.5",
-		"maplibre-gl": "5.6.1",
+		"maplibre-gl": "5.6.2",
 		"network-information-types": "0.1.1",
 		"npm-run-all2": "8.0.4",
 		"patch-package": "8.0.0",
