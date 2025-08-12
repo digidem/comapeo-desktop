@@ -36,9 +36,6 @@ export default defineConfig((configEnv) => {
 		define: {
 			__APP_TYPE__: JSON.stringify(configEnv.mode),
 		},
-		define: {
-			__APP_TYPE__: JSON.stringify(configEnv.mode),
-		},
 		plugins: [
 			tanstackRouter({
 				autoCodeSplitting: true,
