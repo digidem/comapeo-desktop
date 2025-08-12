@@ -1,4 +1,4 @@
-import type { MapeoClientApi } from '@comapeo/ipc'
+import type { MapeoClientApi } from '@comapeo/ipc/client.js'
 import Box from '@mui/material/Box'
 import type { QueryClient } from '@tanstack/react-query'
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'

@@ -1,4 +1,4 @@
-import { createMapeoClient } from '@comapeo/ipc'
+import { createMapeoClient } from '@comapeo/ipc/client.js'
 
 export function initComapeoClient() {
 	const { port1, port2 } = new MessageChannel()

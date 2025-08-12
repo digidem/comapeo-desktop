@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
+import type { MemberApi } from '@comapeo/core'
 import {
 	useManyMembers,
 	useOwnDeviceInfo,
 	useOwnRoleInProject,
 } from '@comapeo/core-react'
-import type { MemberInfo } from '@comapeo/core/dist/member-api'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
@@ -219,7 +219,7 @@ function DeviceList({
 }: {
 	canLeaveProject: boolean
 	devices: Array<
-		Pick<MemberInfo, 'deviceId' | 'deviceType' | 'name' | 'joinedAt'>
+		Pick<MemberApi.MemberInfo, 'deviceId' | 'deviceType' | 'name' | 'joinedAt'>
 	>
 	ownDeviceId: string
 	projectId: string
@@ -342,7 +342,7 @@ function DeviceList({
 }
 
 function getIconNameForDeviceType(
-	deviceType: MemberInfo['deviceType'],
+	deviceType: MemberApi.MemberInfo['deviceType'],
 ): IconName {
 	switch (deviceType) {
 		case 'desktop': {
@@ -365,7 +365,7 @@ function getIconNameForDeviceType(
 	}
 }
 
-function getIconTitleMessage(deviceType: MemberInfo['deviceType']) {
+function getIconTitleMessage(deviceType: MemberApi.MemberInfo['deviceType']) {
 	switch (deviceType) {
 		case 'desktop': {
 			return m.deviceTypeDesktop
