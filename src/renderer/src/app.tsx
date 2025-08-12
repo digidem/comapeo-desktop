@@ -7,8 +7,11 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
-import * as SentryElectron from '@sentry/electron/renderer'
-import * as SentryReact from '@sentry/react'
+import { init as initSentryElectron } from '@sentry/electron/renderer'
+import {
+	init as initSentryReact,
+	tanstackRouterBrowserTracingIntegration,
+} from '@sentry/react'
 import {
 	QueryClient,
 	QueryClientProvider,
@@ -87,15 +90,15 @@ if (__APP_TYPE__ === 'release-candidate') {
 	sentryEnvironment = 'production'
 }
 
-SentryElectron.init(
+initSentryElectron(
 	{
 		dsn: 'https://f7336c12cc39fb0367886e31036a6cd7@o4507148235702272.ingest.us.sentry.io/4509803831820288',
 		tracesSampleRate: 1.0,
-		integrations: [SentryReact.tanstackRouterBrowserTracingIntegration(router)],
+		integrations: [tanstackRouterBrowserTracingIntegration(router)],
 		environment: sentryEnvironment,
 		debug: __APP_TYPE__ === 'development' || __APP_TYPE__ === 'internal',
 	},
-	SentryReact.init,
+	initSentryReact,
 )
 
 export function App() {
