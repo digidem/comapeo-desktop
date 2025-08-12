@@ -68,7 +68,6 @@ export default defineConfig((configEnv) => {
 				project: process.env.SENTRY_PROJECT,
 				authToken: process.env.SENTRY_AUTH_TOKEN,
 				telemetry: false,
-				disable: true,
 			}),
 		],
 		test: {
