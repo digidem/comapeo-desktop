@@ -54,8 +54,8 @@
 		"vite:build": "vite build src/renderer"
 	},
 	"dependencies": {
-		"@comapeo/core": "4.1.2",
-		"@comapeo/ipc": "4.0.0",
+		"@comapeo/core": "4.1.4",
+		"@comapeo/ipc": "5.0.0",
 		"@formatjs/intl": "3.1.6",
 		"@mapeo/default-config": "5.0.0",
 		"debug": "4.4.1",
@@ -67,7 +67,7 @@
 		"valibot": "1.1.0"
 	},
 	"devDependencies": {
-		"@comapeo/core-react": "5.0.0",
+		"@comapeo/core-react": "6.0.0",
 		"@comapeo/schema": "2.0.0",
 		"@electron-forge/cli": "7.8.3",
 		"@electron-forge/maker-deb": "7.8.3",

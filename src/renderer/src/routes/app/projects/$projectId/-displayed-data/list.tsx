@@ -9,6 +9,7 @@ import {
 	type MouseEvent,
 	type RefObject,
 } from 'react'
+import type { BlobApi } from '@comapeo/core'
 import {
 	useAttachmentUrl,
 	useDocumentCreatedBy,
@@ -16,7 +17,6 @@ import {
 	useManyDocs,
 	useOwnDeviceInfo,
 } from '@comapeo/core-react'
-import type { BlobId } from '@comapeo/core/dist/types'
 import type { Observation, Preset, Track } from '@comapeo/schema'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -629,7 +629,7 @@ function AttachmentImage({
 	blobId,
 	projectId,
 }: {
-	blobId: BlobId
+	blobId: BlobApi.BlobId
 	projectId: string
 }) {
 	const { data: attachmentUrl } = useAttachmentUrl({ projectId, blobId })

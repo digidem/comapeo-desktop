@@ -1,4 +1,4 @@
-import type { MemberInfo } from '@comapeo/core/dist/member-api'
+import type { MemberApi } from '@comapeo/core'
 import type { Field, Observation, Preset, Track } from '@comapeo/schema'
 
 export type Attachment = Observation['attachments'][number]
@@ -75,13 +75,15 @@ export function getMatchingCategoryForDocument(
 	return result
 }
 
-export type ActiveRemoteArchiveMemberInfo = MemberInfo & {
+export type ActiveRemoteArchiveMemberInfo = MemberApi.MemberInfo & {
 	deviceType: 'selfHostedServer'
-	selfHostedServerDetails: NonNullable<MemberInfo['selfHostedServerDetails']>
+	selfHostedServerDetails: NonNullable<
+		MemberApi.MemberInfo['selfHostedServerDetails']
+	>
 }
 
 export function memberIsActiveRemoteArchive(
-	member: MemberInfo,
+	member: MemberApi.MemberInfo,
 ): member is ActiveRemoteArchiveMemberInfo {
 	if (member.deviceType !== 'selfHostedServer') return false
 	if (!member.selfHostedServerDetails) return false
