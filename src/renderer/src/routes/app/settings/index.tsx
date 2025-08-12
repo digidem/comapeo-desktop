@@ -140,7 +140,7 @@ function RouteComponent() {
 						<Icon
 							name="material-chevron-right"
 							htmlColor={DARK_GREY}
-							// size={rowIconSize}
+							size={rowIconSize}
 						/>
 					</IconButtonLink>
 				}
