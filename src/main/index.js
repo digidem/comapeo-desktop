@@ -82,11 +82,11 @@ if (appConfig.appType === 'release-candidate') {
 // https://docs.sentry.io/platforms/javascript/guides/electron/#app-userdata-directory
 Sentry.init({
 	dsn: 'https://f7336c12cc39fb0367886e31036a6cd7@o4507148235702272.ingest.us.sentry.io/4509803831820288',
-	tracesSampleRate: 1.0,
+	// TODO: Enable tracing based on user consent in production
+	tracesSampleRate: sentryEnvironment === 'production' ? 0 : 1.0,
 	environment: sentryEnvironment,
 	release: appConfig.appVersion,
-	debug:
-		appConfig.appType === 'development' || appConfig.appType === 'internal',
+	debug: sentryEnvironment === 'development',
 })
 
 const configStore = createConfigStore()

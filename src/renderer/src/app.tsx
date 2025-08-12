@@ -93,10 +93,11 @@ if (__APP_TYPE__ === 'release-candidate') {
 initSentryElectron(
 	{
 		dsn: 'https://f7336c12cc39fb0367886e31036a6cd7@o4507148235702272.ingest.us.sentry.io/4509803831820288',
-		tracesSampleRate: 1.0,
+		// TODO: Enable tracing based on user consent in production
+		tracesSampleRate: sentryEnvironment === 'production' ? 0 : 1.0,
 		integrations: [tanstackRouterBrowserTracingIntegration(router)],
 		environment: sentryEnvironment,
-		debug: __APP_TYPE__ === 'development' || __APP_TYPE__ === 'internal',
+		debug: sentryEnvironment === 'development',
 	},
 	initSentryReact,
 )
