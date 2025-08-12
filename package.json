@@ -55,6 +55,7 @@
 	},
 	"dependencies": {
 		"@comapeo/core": "4.1.4",
+		"@comapeo/fallback-smp": "1.0.0",
 		"@comapeo/ipc": "5.0.0",
 		"@formatjs/intl": "3.1.6",
 		"@mapeo/default-config": "5.0.0",
@@ -122,6 +123,7 @@
 		"jsdom": "26.1.0",
 		"lint-staged": "16.1.5",
 		"maplibre-gl": "5.6.2",
+		"maplibregl-mapbox-request-transformer": "0.0.2",
 		"network-information-types": "0.1.1",
 		"npm-run-all2": "8.0.4",
 		"patch-package": "8.0.0",

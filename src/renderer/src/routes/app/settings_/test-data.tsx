@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import {
 	useCreateDocument,
 	useManyDocs,
+	useMapStyleUrl,
 	useOwnDeviceInfo,
 } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
@@ -45,17 +46,26 @@ export const Route = createFileRoute('/app/settings_/test-data')({
 	loader: async ({ context }) => {
 		const { activeProjectId, clientApi, queryClient } = context
 
-		// TODO: Not ideal but requires changes in @comapeo/core-react
-		await queryClient.ensureQueryData({
-			queryKey: [
-				COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-				'projects',
-				activeProjectId,
-			],
-			queryFn: async () => {
-				return clientApi.getProject(activeProjectId)
-			},
-		})
+		await Promise.all([
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					activeProjectId,
+				],
+				queryFn: async () => {
+					return clientApi.getProject(activeProjectId)
+				},
+			}),
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			queryClient.ensureQueryData({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'maps', 'stylejson_url'],
+				queryFn: async () => {
+					return clientApi.getMapStyleJsonUrl()
+				},
+			}),
+		])
 	},
 	pendingComponent: () => {
 		return (
@@ -213,6 +223,8 @@ function RouteComponent() {
 	}, [boundedDistance, coordinates])
 
 	const data = featureCollection(boundingBox ? [bboxPolygon(boundingBox)] : [])
+
+	const { data: mapStyleUrl } = useMapStyleUrl()
 
 	return (
 		<>
@@ -447,6 +459,7 @@ function RouteComponent() {
 				}
 				end={
 					<Map
+						mapStyle={mapStyleUrl}
 						initialViewState={{
 							fitBoundsOptions: {
 								padding: 40,

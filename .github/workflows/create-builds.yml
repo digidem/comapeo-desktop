@@ -85,6 +85,7 @@ jobs:
           APP_TYPE: ${{ inputs.app_type }}
           ONLINE_STYLE_URL: ${{ secrets.ONLINE_STYLE_URL }}
           VITE_FEATURE_TEST_DATA_UI: ${{ env.APP_TYPE == 'production' && 'false' || 'true' }}
+          VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
         run: npm run forge:make
 
       - name: Upload artifacts
