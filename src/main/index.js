@@ -73,6 +73,7 @@ if (appConfig.appType === 'development') {
 	}
 }
 
+// NOTE: Has to be set up after user data directory is updated
 const configStore = createConfigStore()
 
 let sentryUser = configStore.get('sentryUser')
