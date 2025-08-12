@@ -5,6 +5,7 @@ import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
+import { captureException } from '@sentry/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -157,8 +158,8 @@ function RouteComponent() {
 							rejectInvite.mutate(
 								{ inviteId },
 								{
-									onError: (_err) => {
-										// TODO: Sentry
+									onError: (err) => {
+										captureException(err)
 									},
 									onSuccess: () => {
 										if (router.history.canGoBack()) {
@@ -193,15 +194,20 @@ function RouteComponent() {
 							acceptInvite.mutate(
 								{ inviteId },
 								{
-									onError: (_err) => {
-										// TODO: Report to Sentry
+									onError: (err) => {
+										captureException(err)
 									},
 									onSuccess: (data) => {
-										setActiveProjectId.mutate(data)
-
-										navigate({
-											to: '/onboarding/project/join/$inviteId/success',
-											params: { inviteId },
+										setActiveProjectId.mutate(data, {
+											onError: (err) => {
+												captureException(err)
+											},
+											onSuccess: () => {
+												navigate({
+													to: '/onboarding/project/join/$inviteId/success',
+													params: { inviteId },
+												})
+											},
 										})
 									},
 								},

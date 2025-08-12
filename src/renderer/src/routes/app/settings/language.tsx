@@ -6,6 +6,7 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { captureException } from '@sentry/react'
 import {
 	useMutation,
 	useQueryClient,
@@ -103,6 +104,11 @@ function RouteComponent() {
 												useSystemPreferences: false,
 												languageTag: parsedValue,
 											},
+									{
+										onError: (err) => {
+											captureException(err)
+										},
+									},
 								)
 							}}
 						>

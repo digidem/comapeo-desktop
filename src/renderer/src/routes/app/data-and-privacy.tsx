@@ -8,6 +8,7 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -107,7 +108,11 @@ function RouteComponent() {
 								variant="text"
 								sx={{ fontWeight: 400 }}
 								onClick={() => {
-									openExternalURL.mutate(PRIVACY_POLICY_URL)
+									openExternalURL.mutate(PRIVACY_POLICY_URL, {
+										onError: (err) => {
+											captureException(err)
+										},
+									})
 								}}
 							>
 								{t(m.learnMore)}
@@ -161,9 +166,11 @@ function RouteComponent() {
 									<FormControlLabel
 										control={<Checkbox checked={diagnosticsEnabled} />}
 										onChange={(_event, checked) => {
-											// TODO: Optimistic update?
-											// TODO: Handle error?
-											setDiagnosticsEnabledMutation.mutate(checked)
+											setDiagnosticsEnabledMutation.mutate(checked, {
+												onError: (err) => {
+													captureException(err)
+												},
+											})
 										}}
 										slotProps={{
 											typography: {

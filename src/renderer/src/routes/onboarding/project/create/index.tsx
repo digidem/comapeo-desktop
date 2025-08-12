@@ -3,6 +3,7 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { captureException } from '@sentry/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -58,11 +59,14 @@ function RouteComponent() {
 		onSubmit: async ({ value }) => {
 			const { projectName } = v.parse(onChangeSchema, value)
 
-			// TODO: Catch error and report to Sentry
-			const projectId = await createProject.mutateAsync({ name: projectName })
-
-			// TODO: Should we await this?
-			setActiveProjectId.mutate(projectId)
+			let projectId: string
+			try {
+				projectId = await createProject.mutateAsync({ name: projectName })
+				await setActiveProjectId.mutateAsync(projectId)
+			} catch (err) {
+				captureException(err)
+				return
+			}
 
 			navigate({
 				to: '/onboarding/project/create/$projectId/success',
@@ -70,6 +74,26 @@ function RouteComponent() {
 			})
 		},
 	})
+
+	const errorDialogProps =
+		createProject.status === 'error'
+			? {
+					open: true,
+
+					errorMessage: createProject.error.toString(),
+					onClose: () => {
+						createProject.reset()
+					},
+				}
+			: setActiveProjectId.status === 'error'
+				? {
+						open: true,
+						errorMessage: setActiveProjectId.error.toString(),
+						onClose: () => {
+							setActiveProjectId.reset()
+						},
+					}
+				: { open: false, onClose: () => {} }
 
 	return (
 		<>
@@ -186,13 +210,7 @@ function RouteComponent() {
 				</Box>
 			</Stack>
 
-			<ErrorDialog
-				open={createProject.status === 'error'}
-				errorMessage={createProject.error?.toString()}
-				onClose={() => {
-					createProject.reset()
-				}}
-			/>
+			<ErrorDialog {...errorDialogProps} />
 		</>
 	)
 }

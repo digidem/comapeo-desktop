@@ -6,6 +6,7 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { captureException } from '@sentry/react'
 import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -70,6 +71,7 @@ function RouteComponent() {
 				return
 			}
 
+			// TODO: Does not throw even in egregious cases: https://github.com/digidem/comapeo-core/issues/1082
 			// TODO: Surface config errors/warnings?
 			const _configErrors = await importCategoriesFile.mutateAsync({
 				configPath: fileInfo.path,
@@ -194,8 +196,8 @@ function RouteComponent() {
 							loadingPosition="start"
 							onClick={() => {
 								selectAndImportMutation.mutate(undefined, {
-									onError: (_err) => {
-										// TODO: Report to Sentry
+									onError: (err) => {
+										captureException(err)
 									},
 								})
 							}}
