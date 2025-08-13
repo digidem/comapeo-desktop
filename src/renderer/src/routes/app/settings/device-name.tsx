@@ -194,6 +194,7 @@ function RouteComponent() {
 						position="sticky"
 						bottom={0}
 						alignItems="center"
+						zIndex={1}
 					>
 						<form.Subscribe
 							selector={(state) => [state.canSubmit, state.isSubmitting]}
