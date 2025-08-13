@@ -290,21 +290,17 @@ if (ASAR) {
 	plugins.push(new AutoUnpackNativesPlugin({}))
 }
 
-const APP_TYPE_SUFFIXES = getAppTypeSuffixes(APP_TYPE)
-const APP_BUNDLE_ID = APP_TYPE_SUFFIXES.id
-	? `com.comapeo.${APP_TYPE_SUFFIXES.id}`
-	: `com.comapeo`
-const APPLICATION_NAME = `${packageJSON.productName}${APP_TYPE_SUFFIXES.name}`
+const properties = getPropertiesForAppType(APP_TYPE)
 
 /** @type {ForgeConfig} */
 export default {
 	packagerConfig: {
 		asar: ASAR,
 		// macOS: https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleidentifier
-		appBundleId: APP_BUNDLE_ID,
+		appBundleId: properties.appBundleId,
 		icon: './assets/icon',
-		name: APPLICATION_NAME,
-		executableName: `comapeo-desktop${APP_TYPE_SUFFIXES.executable}`,
+		name: properties.appName,
+		executableName: properties.executableName,
 	},
 	rebuildConfig: {},
 	makers: [
@@ -327,7 +323,7 @@ export default {
 		readPackageJson: async (_config, packageJson) => {
 			// We need to update this in order for Electron to use the desired name (it uses this field if present).
 			// This leads to the desired outcome of properly isolated application data when having several apps on the same machine.
-			packageJson.productName = APPLICATION_NAME
+			packageJson.productName = properties.appName
 
 			// NOTE: Kind of hacky but has the following desired effects:
 			//   - Uses the correct version for the file name of the asset that is generated in Forge's `make` step.
@@ -360,24 +356,47 @@ export default {
 /**
  * @param {import('./src/shared/app').AppType} appType
  */
-function getAppTypeSuffixes(appType) {
-	let result = { id: '', name: '', executable: '' }
+function getPropertiesForAppType(appType) {
+	const baseAppBundleId = 'com.comapeo'
+	const baseExecutableName = 'comapeo-desktop'
+	const baseAppName = packageJSON.productName
 
 	switch (appType) {
 		case 'development': {
-			result = { id: 'dev', name: ' Dev', executable: '-dev' }
-			break
+			const shortName = 'dev'
+			return {
+				shortName,
+				appBundleId: `${baseAppBundleId}.${shortName}`,
+				appName: `${baseAppName} Dev`,
+				executableName: `${baseExecutableName}-${shortName}`,
+			}
 		}
 		case 'internal': {
-			result = { id: 'internal', name: ' Internal', executable: '-internal' }
-			break
+			const shortName = 'internal'
+			return {
+				shortName,
+				appBundleId: `${baseAppBundleId}.${shortName}`,
+				appName: `${baseAppName} Internal`,
+				executableName: `${baseExecutableName}-${shortName}`,
+			}
 		}
 		case 'release-candidate': {
-			result = { id: 'rc', name: ' RC', executable: '-rc' }
+			const shortName = 'rc'
+			return {
+				shortName,
+				appBundleId: `${baseAppBundleId}.${shortName}`,
+				appName: `${baseAppName} RC`,
+				executableName: `${baseExecutableName}-${shortName}`,
+			}
+		}
+		case 'production': {
+			return {
+				appBundleId: baseAppBundleId,
+				appName: baseAppName,
+				executableName: baseExecutableName,
+			}
 		}
 	}
-
-	return result
 }
 
 /**
@@ -408,10 +427,12 @@ function getAppVersion(version, appType) {
 
 	const { major, minor, patch } = parsedVersion
 
+	const { shortName } = getPropertiesForAppType(appType)
+
 	if (appType === 'development') {
-		return `${major}.${minor}.${patch}-${APP_TYPE_SUFFIXES.id}+${commitSHA}`
+		return `${major}.${minor}.${patch}-${shortName}+${commitSHA}`
 	} else if (appType === 'internal' || appType === 'release-candidate') {
-		return `${minor}.${patch}-${APP_TYPE_SUFFIXES.id}+${commitSHA}`
+		return `${minor}.${patch}-${shortName}+${commitSHA}`
 	}
 
 	return `${minor}.${patch}`
