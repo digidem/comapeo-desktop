@@ -57,8 +57,9 @@ out/
 # Ignore the data directory used by the main process to store userData in development
 data/
 
-# Ignore the translations directory used by the renderer for internationalization
+# Ignore the translations-related files used by the renderer for internationalization
 translations/
+src/renderer/translated-languages.generated.json
 
 # Ignore vscode settings (for now)
 .vscode/
