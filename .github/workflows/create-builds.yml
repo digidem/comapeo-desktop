@@ -41,6 +41,7 @@ jobs:
     name: Create builds
     needs: validate_inputs
     strategy:
+      fail-fast: false
       matrix:
         os:
           [
