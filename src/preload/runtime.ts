@@ -18,7 +18,11 @@ export type RuntimeApi = {
 	) => Promise<SelectedFile | undefined>
 
 	// System
-	getAppInfo: () => { appVersion: string; systemVersion: string }
+	getAppInfo: () => {
+		appVersion: string
+		systemVersion: string
+		platform: NodeJS.Platform
+	}
 	getWifiConnections: () => Promise<Array<Systeminformation.WifiConnectionData>>
 
 	// Shell
