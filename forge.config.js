@@ -304,66 +304,6 @@ const APP_BUNDLE_ID = APP_TYPE_SUFFIXES.id
 	: `com.comapeo`
 const APPLICATION_NAME = `${packageJSON.productName}${APP_TYPE_SUFFIXES.name}`
 
-/** @type {ForgeConfig} */
-export default {
-	packagerConfig: {
-		asar: ASAR,
-		// macOS: https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleidentifier
-		appBundleId: APP_BUNDLE_ID,
-		icon: './assets/icon',
-		name: APPLICATION_NAME,
-	},
-	rebuildConfig: {},
-	makers: [
-		new MakerSquirrel({ setupIcon: './assets/icon.ico' }),
-		new MakerDMG({ icon: './assets/icon.icns' }),
-		new MakerZIP(undefined, ['darwin']),
-		new MakerDeb({ options: { icon: './assets/icon.png' } }, ['linux']),
-		new MakerRpm({ options: { icon: './assets/icon.png' } }, ['linux']),
-	],
-	publishers: [
-		new PublisherGithub({
-			draft: true,
-			force: true,
-			generateReleaseNotes: true,
-			repository: { owner: 'digidem', name: 'comapeo-desktop' },
-			tagPrefix: 'v',
-		}),
-	],
-	hooks: {
-		readPackageJson: async (_config, packageJson) => {
-			// We need to update this in order for Electron to use the desired name (it uses this field if present).
-			// This leads to the desired outcome of properly isolated application data when having several apps on the same machine.
-			packageJson.productName = APPLICATION_NAME
-
-			// NOTE: Kind of hacky but has the following desired effects:
-			//   - Uses the correct version for the file name of the asset that is generated in Forge's `make` step.
-			//   - Uses the correct version for the GitHub release that the GitHub publisher should upload builds to.
-			//
-			// TODO: We should probably just stop using the GitHub publisher and remove the need for this in favor of using GitHub Actions.
-			if (APP_TYPE === 'production') {
-				const parsed = semver.parse(packageJson.version)
-
-				if (!parsed) {
-					throw new Error(
-						`Unable to parse package.json version: ${packageJson.version}`,
-					)
-				}
-
-				const { minor, patch } = parsed
-
-				// NOTE: We update the version here to align with our release version format (i.e. no major).
-				// As noted in the Forge documentation, this does not affect the application metadata that's used by Forge
-				// when packaging (https://www.electronforge.io/config/hooks#readpackagejson).
-				packageJson.version = `${minor}.${patch}`
-			}
-
-			return packageJson
-		},
-	},
-	plugins,
-}
-
 /**
  * @param {import('./src/shared/app').AppType} appType
  */
@@ -422,4 +362,64 @@ function getAppVersion(version, appType) {
 	}
 
 	return `${minor}.${patch}`
+}
+
+/** @type {ForgeConfig} */
+export default {
+	packagerConfig: {
+		asar: ASAR,
+		// macOS: https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleidentifier
+		appBundleId: APP_BUNDLE_ID,
+		icon: './assets/icon',
+		name: APPLICATION_NAME,
+	},
+	rebuildConfig: {},
+	makers: [
+		new MakerSquirrel({ setupIcon: './assets/icon.ico' }),
+		new MakerDMG({ icon: './assets/icon.icns' }),
+		new MakerZIP(undefined, ['darwin']),
+		new MakerDeb({ options: { icon: './assets/icon.png' } }, ['linux']),
+		new MakerRpm({ options: { icon: './assets/icon.png' } }, ['linux']),
+	],
+	publishers: [
+		new PublisherGithub({
+			draft: true,
+			force: true,
+			generateReleaseNotes: true,
+			repository: { owner: 'digidem', name: 'comapeo-desktop' },
+			tagPrefix: 'v',
+		}),
+	],
+	hooks: {
+		readPackageJson: async (_config, packageJson) => {
+			// We need to update this in order for Electron to use the desired name (it uses this field if present).
+			// This leads to the desired outcome of properly isolated application data when having several apps on the same machine.
+			packageJson.productName = APPLICATION_NAME
+
+			// NOTE: Kind of hacky but has the following desired effects:
+			//   - Uses the correct version for the file name of the asset that is generated in Forge's `make` step.
+			//   - Uses the correct version for the GitHub release that the GitHub publisher should upload builds to.
+			//
+			// TODO: We should probably just stop using the GitHub publisher and remove the need for this in favor of using GitHub Actions.
+			if (APP_TYPE === 'production') {
+				const parsed = semver.parse(packageJson.version)
+
+				if (!parsed) {
+					throw new Error(
+						`Unable to parse package.json version: ${packageJson.version}`,
+					)
+				}
+
+				const { minor, patch } = parsed
+
+				// NOTE: We update the version here to align with our release version format (i.e. no major).
+				// As noted in the Forge documentation, this does not affect the application metadata that's used by Forge
+				// when packaging (https://www.electronforge.io/config/hooks#readpackagejson).
+				packageJson.version = `${minor}.${patch}`
+			}
+
+			return packageJson
+		},
+	},
+	plugins,
 }
