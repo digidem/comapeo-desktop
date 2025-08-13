@@ -12,26 +12,18 @@ import { PluginBase } from '@electron-forge/plugin-base'
 import { FusesPlugin } from '@electron-forge/plugin-fuses'
 import { PublisherGithub } from '@electron-forge/publisher-github'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
-import dotenv from 'dotenv'
 import semver from 'semver'
 import * as v from 'valibot'
 import { build, createServer } from 'vite'
 
 import packageJSON from './package.json' with { type: 'json' }
 
+import 'dotenv/config'
+
 /**
  * @import {ForgeConfig, ForgeHookFn} from '@electron-forge/shared-types'
  * @import {ViteDevServer} from 'vite'
  */
-
-const dotenvOutput = dotenv.config({
-	path: fileURLToPath(new URL('./.env', import.meta.url)),
-	quiet: process.env.NODE_ENV !== 'development',
-})
-
-if (dotenvOutput.error) {
-	throw dotenvOutput.error
-}
 
 const {
 	APP_TYPE,
