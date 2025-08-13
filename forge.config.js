@@ -305,7 +305,7 @@ const APP_BUNDLE_ID = APP_TYPE_SUFFIXES.id
 const APPLICATION_NAME = `${packageJSON.productName}${APP_TYPE_SUFFIXES.name}`
 
 /** @type {ForgeConfig} */
-const config = {
+export default {
 	packagerConfig: {
 		asar: ASAR,
 		// macOS: https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleidentifier
@@ -423,5 +423,3 @@ function getAppVersion(version, appType) {
 
 	return `${minor}.${patch}`
 }
-
-export default config
