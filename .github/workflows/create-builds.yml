@@ -102,6 +102,7 @@ jobs:
             out/make/**/RELEASES
             out/make/**/*.AppImage
             out/make/**/*.exe
+            out/make/**/*.deb
             out/make/**/*.dmg
             out/make/**/*.nupkg
             out/make/**/*.rpm
