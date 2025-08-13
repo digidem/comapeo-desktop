@@ -1,17 +1,18 @@
 diff --git a/node_modules/@electron-forge/core/dist/util/forge-config.js b/node_modules/@electron-forge/core/dist/util/forge-config.js
-index 07b93f4..98ed248 100644
+index 07b93f4..fca674c 100644
 --- a/node_modules/@electron-forge/core/dist/util/forge-config.js
 +++ b/node_modules/@electron-forge/core/dist/util/forge-config.js
-@@ -163,6 +163,7 @@ exports.default = async (dir) => {
+@@ -163,6 +163,8 @@ exports.default = async (dir) => {
              }
              // The loaded "config" could potentially be a static forge config, ESM module or async function
              const loaded = (await loadFn(forgeConfigPath));
 +            console.log("LOADED", loaded)
++            throw new Error("FOO")
              const maybeForgeConfig = 'default' in loaded ? loaded.default : loaded;
              forgeConfig = typeof maybeForgeConfig === 'function' ? await maybeForgeConfig() : maybeForgeConfig;
          }
 diff --git a/node_modules/@electron-forge/core/helper/dynamic-import.js b/node_modules/@electron-forge/core/helper/dynamic-import.js
-index fd4fadf..dcce2b8 100644
+index fd4fadf..2c08c8b 100644
 --- a/node_modules/@electron-forge/core/helper/dynamic-import.js
 +++ b/node_modules/@electron-forge/core/helper/dynamic-import.js
 @@ -3,6 +3,11 @@ const fs = require('fs');
@@ -26,3 +27,11 @@ index fd4fadf..dcce2b8 100644
      return await import(fs.existsSync(path) ? url.pathToFileURL(path) : path);
    } catch (error) {
      return Promise.reject(error);
+@@ -13,6 +18,7 @@ exports.dynamicImportMaybe = async function dynamicImportMaybe(path) {
+   try {
+     return require(path);
+   } catch (e1) {
++    console.log("REQUIRE ERROR", e1.message)
+     try {
+       return await exports.dynamicImport(path);
+     } catch (e2) {
