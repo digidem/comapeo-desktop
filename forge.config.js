@@ -307,8 +307,18 @@ export default {
 		new MakerSquirrel({ setupIcon: './assets/icon.ico' }),
 		new MakerDMG({ icon: './assets/icon.icns' }),
 		new MakerZIP(undefined, ['darwin']),
-		new MakerDeb({ options: { icon: './assets/icon.png' } }, ['linux']),
-		new MakerRpm({ options: { icon: './assets/icon.png' } }, ['linux']),
+		new MakerDeb(
+			{
+				options: { icon: './assets/icon.png', bin: properties.executableName },
+			},
+			['linux'],
+		),
+		new MakerRpm(
+			{
+				options: { icon: './assets/icon.png', bin: properties.executableName },
+			},
+			['linux'],
+		),
 	],
 	publishers: [
 		new PublisherGithub({
