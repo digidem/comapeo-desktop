@@ -304,66 +304,6 @@ const APP_BUNDLE_ID = APP_TYPE_SUFFIXES.id
 	: `com.comapeo`
 const APPLICATION_NAME = `${packageJSON.productName}${APP_TYPE_SUFFIXES.name}`
 
-/**
- * @param {import('./src/shared/app').AppType} appType
- */
-function getAppTypeSuffixes(appType) {
-	let result = { id: '', name: '' }
-
-	switch (appType) {
-		case 'development': {
-			result = { id: 'dev', name: ' Dev' }
-			break
-		}
-		case 'internal': {
-			result = { id: 'internal', name: ' Internal' }
-			break
-		}
-		case 'release-candidate': {
-			result = { id: 'rc', name: ' RC' }
-		}
-	}
-
-	return result
-}
-
-/**
- * Get the user-facing app version. This is different from the versions used by
- * `@electron/packager` internally, which needs to conform to platform-specific
- * requirements around format:
- *
- * - MacOS:
- *   https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleversion
- *   and //
- *   https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleshortversionstring
- * - Windows:
- *   https://learn.microsoft.com/en-us/windows/win32/menurc/versioninfo-resource#parameters
- *
- * @param {string} version
- * @param {import('./src/shared/app').AppType} appType
- */
-function getAppVersion(version, appType) {
-	const commitSHA = (
-		process.env.BUILD_SHA || execSync('git rev-parse HEAD').toString().trim()
-	).slice(0, 7)
-
-	const parsedVersion = semver.parse(version)
-
-	if (!parsedVersion) {
-		throw new Error(`Unable to parse version: ${version}`)
-	}
-
-	const { major, minor, patch } = parsedVersion
-
-	if (appType === 'development') {
-		return `${major}.${minor}.${patch}-${APP_TYPE_SUFFIXES.id}+${commitSHA}`
-	} else if (appType === 'internal' || appType === 'release-candidate') {
-		return `${minor}.${patch}-${APP_TYPE_SUFFIXES.id}+${commitSHA}`
-	}
-
-	return `${minor}.${patch}`
-}
-
 /** @type {ForgeConfig} */
 export default {
 	packagerConfig: {
@@ -422,4 +362,64 @@ export default {
 		},
 	},
 	plugins,
+}
+
+/**
+ * @param {import('./src/shared/app').AppType} appType
+ */
+function getAppTypeSuffixes(appType) {
+	let result = { id: '', name: '' }
+
+	switch (appType) {
+		case 'development': {
+			result = { id: 'dev', name: ' Dev' }
+			break
+		}
+		case 'internal': {
+			result = { id: 'internal', name: ' Internal' }
+			break
+		}
+		case 'release-candidate': {
+			result = { id: 'rc', name: ' RC' }
+		}
+	}
+
+	return result
+}
+
+/**
+ * Get the user-facing app version. This is different from the versions used by
+ * `@electron/packager` internally, which needs to conform to platform-specific
+ * requirements around format:
+ *
+ * - MacOS:
+ *   https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleversion
+ *   and //
+ *   https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleshortversionstring
+ * - Windows:
+ *   https://learn.microsoft.com/en-us/windows/win32/menurc/versioninfo-resource#parameters
+ *
+ * @param {string} version
+ * @param {import('./src/shared/app').AppType} appType
+ */
+function getAppVersion(version, appType) {
+	const commitSHA = (
+		process.env.BUILD_SHA || execSync('git rev-parse HEAD').toString().trim()
+	).slice(0, 7)
+
+	const parsedVersion = semver.parse(version)
+
+	if (!parsedVersion) {
+		throw new Error(`Unable to parse version: ${version}`)
+	}
+
+	const { major, minor, patch } = parsedVersion
+
+	if (appType === 'development') {
+		return `${major}.${minor}.${patch}-${APP_TYPE_SUFFIXES.id}+${commitSHA}`
+	} else if (appType === 'internal' || appType === 'release-candidate') {
+		return `${minor}.${patch}-${APP_TYPE_SUFFIXES.id}+${commitSHA}`
+	}
+
+	return `${minor}.${patch}`
 }
