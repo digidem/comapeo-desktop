@@ -308,7 +308,11 @@ export default {
 	},
 	rebuildConfig: {},
 	makers: [
-		new MakerSquirrel({ setupIcon: './assets/icon.ico' }),
+		new MakerSquirrel({
+			// TODO: Enable this once we export a compatiable asset. Cannot just be a renamed png file...
+			// https://www.electronforge.io/guides/create-and-add-icons#supported-formats
+			// setupIcon: './assets/icon.ico'
+		}),
 		new MakerDMG({ icon: './assets/icon.icns' }),
 		new MakerZIP(undefined, ['darwin']),
 		new MakerDeb(
