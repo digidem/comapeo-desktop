@@ -27,6 +27,10 @@
     "description": "Label for stack trace section",
     "message": "Stack trace"
   },
+  "routes.__root.appName": {
+    "description": "Name of the app displayed in the title bar.",
+    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
+  },
   "routes.app.about.title": {
     "message": "About CoMapeo"
   },

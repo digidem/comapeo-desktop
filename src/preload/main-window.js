@@ -33,7 +33,7 @@ const runtimeApi = {
 		const appVersion = getAppVersion()
 		const systemVersion = process.getSystemVersion()
 
-		return { appVersion, systemVersion }
+		return { appVersion, systemVersion, platform: process.platform }
 	},
 	getWifiConnections: async () => {
 		return ipcRenderer.invoke('system:get:wifiConnections')
