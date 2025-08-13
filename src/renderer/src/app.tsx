@@ -91,10 +91,12 @@ if (__APP_TYPE__ === 'release-candidate') {
 }
 
 const sentryUserId = window.runtime.getSentryUserId()
+const enableSentry = window.runtime.enableSentryOnInit()
 
 initSentryElectron(
 	{
 		dsn: 'https://f7336c12cc39fb0367886e31036a6cd7@o4507148235702272.ingest.us.sentry.io/4509803831820288',
+		enabled: enableSentry,
 		// TODO: Enable tracing based on user consent in production
 		tracesSampleRate: sentryEnvironment === 'production' ? 0 : 1.0,
 		integrations: [tanstackRouterBrowserTracingIntegration(router)],

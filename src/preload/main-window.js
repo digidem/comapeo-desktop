@@ -72,9 +72,12 @@ const runtimeApi = {
 		return ipcRenderer.invoke('settings:set:locale', value)
 	},
 
-	// Misc
+	// Sentry
 	getSentryUserId: () => {
 		return getProcessArgValue('comapeo-sentry-user-id')
+	},
+	enableSentryOnInit: () => {
+		return getProcessArgValue('comapeo-sentry-enable') === 'true'
 	},
 }
 

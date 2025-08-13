@@ -40,6 +40,7 @@ export type RuntimeApi = {
 	setDiagnosticsEnabled: (value: boolean) => Promise<void>
 	setLocale: (value: PersistedLocale) => Promise<void>
 
-	// Misc
+	// Sentry
 	getSentryUserId: () => string
+	enableSentryOnInit: () => boolean
 }
