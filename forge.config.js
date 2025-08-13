@@ -304,6 +304,7 @@ export default {
 		appBundleId: APP_BUNDLE_ID,
 		icon: './assets/icon',
 		name: APPLICATION_NAME,
+		executableName: `comapeo-desktop${APP_TYPE_SUFFIXES.executable}`,
 	},
 	rebuildConfig: {},
 	makers: [
@@ -360,19 +361,19 @@ export default {
  * @param {import('./src/shared/app').AppType} appType
  */
 function getAppTypeSuffixes(appType) {
-	let result = { id: '', name: '' }
+	let result = { id: '', name: '', executable: '' }
 
 	switch (appType) {
 		case 'development': {
-			result = { id: 'dev', name: ' Dev' }
+			result = { id: 'dev', name: ' Dev', executable: '-dev' }
 			break
 		}
 		case 'internal': {
-			result = { id: 'internal', name: ' Internal' }
+			result = { id: 'internal', name: ' Internal', executable: '-internal' }
 			break
 		}
 		case 'release-candidate': {
-			result = { id: 'rc', name: ' RC' }
+			result = { id: 'rc', name: ' RC', executable: '-rc' }
 		}
 	}
 
