@@ -263,7 +263,6 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 			// no-op if out path doesn't exist
 		}
 
-		await fs.mkdir(outPath, { recursive: true })
 		await fs.rename(path.join(buildPath, './dist/renderer'), outPath)
 	}
 
