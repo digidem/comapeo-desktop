@@ -51,7 +51,7 @@ function TitleBar() {
 			justifyContent={platform === 'darwin' ? 'flex-end' : undefined}
 			paddingX={6}
 			bgcolor={TITLE_BAR_COLOR}
-			sx={{ appRegion: 'drag', '-webkit-app-region': 'drag' }}
+			sx={{ appRegion: 'drag', WebkitAppRegion: 'drag' }}
 		>
 			<Typography color="textInverted">{t(m.appName)}</Typography>
 		</Box>
