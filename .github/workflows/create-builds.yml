@@ -1,7 +1,7 @@
 # Summary:
 #
 # Reusable workflow for creating the distributable application assets.
-# Will also publish the application if the `app_type` input is `production`.
+# Will also publish the artifacts if the `app_type` input is `production`.
 #
 name: Create builds
 
@@ -26,6 +26,11 @@ on:
         # Production builds should only be triggered by the appropriate calling workflows.
         options: ['internal', 'release-candidate']
 
+# When called from another workflow, the input value is used.
+# When called from a manual dispatch, uses the value corresponding to the branch/tag selected in the GitHub UI.
+env:
+  BUILD_SHA: ${{ inputs.build_sha || github.sha }}
+
 jobs:
   validate_inputs:
     name: Validate inputs
@@ -41,6 +46,7 @@ jobs:
     name: Create builds
     needs: validate_inputs
     strategy:
+      fail-fast: false
       matrix:
         os:
           [
@@ -60,9 +66,7 @@ jobs:
 
       - name: Checkout repository
         env:
-          # When called from another workflow, the input value is used.
-          # When called from a manual dispatch, uses the value corresponding to the branch/tag selected in the GitHub UI.
-          BUILD_SHA: ${{ inputs.build_sha || github.sha }}
+          BUILD_SHA: ${{ env.BUILD_SHA }}
         uses: actions/checkout@v4
         with:
           ref: ${{ env.BUILD_SHA }}
@@ -91,14 +95,15 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os.name }}-${{ inputs.build_sha }}
+          name: ${{ matrix.os.name }}-${{ env.BUILD_SHA }}
           compression-level: 0
           overwrite: true
           path: |
             out/make/**/RELEASES
             out/make/**/*.AppImage
-            out/make/**/*.exe
+            out/make/**/*.deb
             out/make/**/*.dmg
+            out/make/**/*.exe
             out/make/**/*.nupkg
             out/make/**/*.rpm
             out/make/**/*.zip

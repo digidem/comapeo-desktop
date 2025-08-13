@@ -2,6 +2,7 @@
 // This is done so that this info is known at compile time instead of being calculated during run time.
 import fs from 'node:fs'
 import { glob } from 'node:fs/promises'
+import { fileURLToPath } from 'node:url'
 import * as prettier from 'prettier'
 import * as v from 'valibot'
 
@@ -29,13 +30,17 @@ const SupportedLanguageTagSchema = v.union(
 	SUPPORTED_LANGUAGE_TAGS.map((t) => v.literal(t)),
 )
 
+const RENDERER_MESSAGES_DIR = fileURLToPath(
+	new URL('../messages/renderer', import.meta.url),
+)
+
 /**
  * @type {SupportedLanguageTag[]}
  */
 const translatedLanguages = []
 
-for await (const entry of glob('./messages/renderer/*.json')) {
-	const match = entry.match(/renderer\/(?<language>.+)\.json/)
+for await (const entry of glob('*.json', { cwd: RENDERER_MESSAGES_DIR })) {
+	const match = entry.match(/(?<language>.+)\.json/)
 
 	const matchedLanguage = match?.groups?.language
 
