@@ -10,3 +10,19 @@ index 07b93f4..98ed248 100644
              const maybeForgeConfig = 'default' in loaded ? loaded.default : loaded;
              forgeConfig = typeof maybeForgeConfig === 'function' ? await maybeForgeConfig() : maybeForgeConfig;
          }
+diff --git a/node_modules/@electron-forge/core/helper/dynamic-import.js b/node_modules/@electron-forge/core/helper/dynamic-import.js
+index fd4fadf..dcce2b8 100644
+--- a/node_modules/@electron-forge/core/helper/dynamic-import.js
++++ b/node_modules/@electron-forge/core/helper/dynamic-import.js
+@@ -3,6 +3,11 @@ const fs = require('fs');
+ 
+ exports.dynamicImport = async function dynamicImport(path) {
+   try {
++    console.log("dynamicImport", {
++      path,
++      exists: fs.existsSync(path),
++      fileUrl: url.pathToFileURL(path)
++    })
+     return await import(fs.existsSync(path) ? url.pathToFileURL(path) : path);
+   } catch (error) {
+     return Promise.reject(error);
