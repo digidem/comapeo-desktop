@@ -164,6 +164,8 @@ function initMainWindow({ appVersion, isDevelopment, services }) {
 		minHeight: 500,
 		show: false,
 		backgroundColor: '#050F77',
+		titleBarStyle: 'hiddenInset',
+		titleBarOverlay: true,
 		webPreferences: {
 			preload: MAIN_WINDOW_PRELOAD_PATH,
 			additionalArguments: [`--comapeo-app-version=${appVersion}`],
