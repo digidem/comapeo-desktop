@@ -31,6 +31,7 @@ import { Icon } from '../../../components/icon'
 import { Map } from '../../../components/map'
 import { useAppForm } from '../../../hooks/forms'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
+import { createGlobalMutationsKey } from '../../../lib/queries/global-mutations'
 
 // TODO: This technically should live in project settings
 export const Route = createFileRoute('/app/settings_/test-data')({
@@ -542,6 +543,10 @@ function RouteComponent() {
 	)
 }
 
+const CREATE_TEST_OBSERVATIONS_MUTATION_KEY = createGlobalMutationsKey([
+	'create-test-observations',
+])
+
 function useCreateTestObservations({ projectId }: { projectId: string }) {
 	const queryClient = useQueryClient()
 
@@ -555,6 +560,7 @@ function useCreateTestObservations({ projectId }: { projectId: string }) {
 	})
 
 	return useMutation({
+		mutationKey: CREATE_TEST_OBSERVATIONS_MUTATION_KEY,
 		mutationFn: async ({
 			count,
 			boundingBox,
