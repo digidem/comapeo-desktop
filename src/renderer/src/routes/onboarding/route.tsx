@@ -4,6 +4,7 @@ import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { captureException } from '@sentry/react'
 import { useMutationState } from '@tanstack/react-query'
 import {
 	Outlet,
@@ -107,11 +108,12 @@ function RouteComponent() {
 									currentRouteMatch.fullPath ===
 									'/onboarding/project/join/$inviteId'
 								) {
+									// TODO: Should we block navigation if this fails?
 									rejectInvite.mutate(
 										{ inviteId: currentRouteMatch.params.inviteId },
 										{
-											onError: (_err) => {
-												// TODO: Sentry
+											onError: (err) => {
+												captureException(err)
 											},
 										},
 									)

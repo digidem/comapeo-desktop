@@ -11,6 +11,7 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { captureException } from '@sentry/react'
 import {
 	useMutation,
 	useQueryClient,
@@ -221,8 +222,11 @@ function RouteComponent() {
 								<FormControlLabel
 									control={<Checkbox checked={diagnosticsEnabled} />}
 									onChange={(_event, checked) => {
-										// TODO: Handle error and report to Sentry
-										setDiagnosticsEnabledMutation.mutate(checked)
+										setDiagnosticsEnabledMutation.mutate(checked, {
+											onError: (err) => {
+												captureException(err)
+											},
+										})
 									}}
 									label={t(m.shareDiagnosticInformation)}
 									labelPlacement="start"

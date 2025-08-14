@@ -15,6 +15,7 @@ import LinearProgress, {
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
+import { captureException } from '@sentry/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -216,14 +217,14 @@ function RouteComponent() {
 
 									if (syncState?.data.isSyncEnabled) {
 										stopSync.mutate(undefined, {
-											onError: (_err) => {
-												// TODO: Show error dialog
+											onError: (err) => {
+												captureException(err)
 											},
 										})
 									} else {
 										startSync.mutate(undefined, {
-											onError: (_err) => {
-												// TODO: Show error dialog
+											onError: (err) => {
+												captureException(err)
 											},
 										})
 									}

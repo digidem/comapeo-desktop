@@ -6,6 +6,7 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { captureException } from '@sentry/react'
 import {
 	useMutation,
 	useQueryClient,
@@ -93,8 +94,11 @@ function RouteComponent() {
 									event.currentTarget.value,
 								)
 
-								// TODO: Handle errors
-								setCoordinateFormat.mutate(parsedValue)
+								setCoordinateFormat.mutate(parsedValue, {
+									onError: (err) => {
+										captureException(err)
+									},
+								})
 							}}
 						>
 							<Stack direction="column" gap={6}>
