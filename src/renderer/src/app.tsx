@@ -90,19 +90,18 @@ if (__APP_TYPE__ === 'release-candidate') {
 	sentryEnvironment = 'production'
 }
 
-const sentryUserId = window.runtime.getSentryUserId()
-const enableSentry = window.runtime.enableSentryOnInit()
+const sentryConfig = window.runtime.getSentryConfig()
 
 initSentryElectron(
 	{
 		dsn: 'https://f7336c12cc39fb0367886e31036a6cd7@o4507148235702272.ingest.us.sentry.io/4509803831820288',
-		enabled: enableSentry,
+		enabled: sentryConfig.enabled,
 		// TODO: Enable tracing based on user consent in production
 		tracesSampleRate: sentryEnvironment === 'production' ? 0 : 1.0,
 		integrations: [tanstackRouterBrowserTracingIntegration(router)],
 		environment: sentryEnvironment,
 		debug: sentryEnvironment === 'development',
-		initialScope: { user: { id: sentryUserId } },
+		initialScope: { user: { id: sentryConfig.userId } },
 	},
 	initSentryReact,
 )
