@@ -89,7 +89,11 @@ initSentryElectron(
 		enabled: sentryConfig.enabled,
 		// TODO: Enable tracing based on user consent in production
 		tracesSampleRate: sentryConfig.environment === 'production' ? 0 : 1.0,
-		integrations: [tanstackRouterBrowserTracingIntegration(router)],
+		// TODO: Enable router integration based on user consent in production
+		integrations:
+			sentryConfig.environment === 'production'
+				? undefined
+				: [tanstackRouterBrowserTracingIntegration(router)],
 		environment: sentryConfig.environment,
 		debug: sentryConfig.environment === 'development',
 		initialScope: { user: { id: sentryConfig.userId } },
