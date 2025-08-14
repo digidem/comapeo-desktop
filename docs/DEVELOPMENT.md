@@ -48,6 +48,9 @@ Make sure you have the desired Node version installed. For this project we encou
 Create a copy of the [`.env.template`](../.env.template) and call it `.env`. Update the following variables:
 
 - `ONLINE_STYLE_URL`: Full URL that points to a compatible map's StyleJSON. If it's a Mapbox style, it is preferable to omit the `access_token` search param and specify `VITE_MAPBOX_ACCESS_TOKEN` instead.
+- `SENTRY_AUTH_TOKEN`: Auth token used for enabling Sentry integration. Reach out to the maintainers for setting this up.
+- `SENTRY_ORG`: Organization name on Sentry. Reach out to the maintainers for setting this up.
+- `SENTRY_PROJECT`: Project name on Sentry. Reach out to the maintainers for setting this up.
 - `VITE_MAPBOX_ACCESS_TOKEN`: Public token necessary for accessing Mapbox-provided resources. Follow the instructions [here](https://docs.mapbox.com/help/getting-started/access-tokens/) or reach out to the maintainers to obtain one.
 
 ### Running the app

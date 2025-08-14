@@ -2,6 +2,7 @@
 /// <reference types="vitest/config" />
 import * as path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
@@ -30,6 +31,7 @@ export default defineConfig((configEnv) => {
 		build: {
 			outDir: path.join(PROJECT_ROOT_DIR, 'dist/renderer'),
 			emptyOutDir: true,
+			sourcemap: true,
 		},
 		define: {
 			__APP_TYPE__: JSON.stringify(configEnv.mode),
@@ -60,6 +62,12 @@ export default defineConfig((configEnv) => {
 					return name
 				},
 				formatter: 'prettier',
+			}),
+			sentryVitePlugin({
+				org: process.env.SENTRY_ORG,
+				project: process.env.SENTRY_PROJECT,
+				authToken: process.env.SENTRY_AUTH_TOKEN,
+				telemetry: false,
 			}),
 		],
 		test: {

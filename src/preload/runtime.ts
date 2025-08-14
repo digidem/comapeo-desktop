@@ -39,4 +39,8 @@ export type RuntimeApi = {
 	setCoordinateFormat: (value: PersistedCoordinateFormat) => Promise<void>
 	setDiagnosticsEnabled: (value: boolean) => Promise<void>
 	setLocale: (value: PersistedLocale) => Promise<void>
+
+	// Sentry
+	getSentryUserId: () => string
+	enableSentryOnInit: () => boolean
 }

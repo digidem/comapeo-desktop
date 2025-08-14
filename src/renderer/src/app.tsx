@@ -7,6 +7,11 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
+import { init as initSentryElectron } from '@sentry/electron/renderer'
+import {
+	init as initSentryReact,
+	tanstackRouterBrowserTracingIntegration,
+} from '@sentry/react'
 import {
 	QueryClient,
 	QueryClientProvider,
@@ -18,6 +23,7 @@ import {
 	createRouter,
 } from '@tanstack/react-router'
 
+import type { SentryEnvironment } from '../../shared/app'
 import type { LocaleState } from '../../shared/intl'
 import { initComapeoClient } from './comapeo-client'
 import { GenericRouteErrorComponent } from './components/generic-route-error-component'
@@ -75,6 +81,31 @@ declare module '@tanstack/react-router' {
 		router: typeof router
 	}
 }
+
+let sentryEnvironment: SentryEnvironment = 'development'
+
+if (__APP_TYPE__ === 'release-candidate') {
+	sentryEnvironment = 'qa'
+} else if (__APP_TYPE__ === 'production') {
+	sentryEnvironment = 'production'
+}
+
+const sentryUserId = window.runtime.getSentryUserId()
+const enableSentry = window.runtime.enableSentryOnInit()
+
+initSentryElectron(
+	{
+		dsn: 'https://f7336c12cc39fb0367886e31036a6cd7@o4507148235702272.ingest.us.sentry.io/4509803831820288',
+		enabled: enableSentry,
+		// TODO: Enable tracing based on user consent in production
+		tracesSampleRate: sentryEnvironment === 'production' ? 0 : 1.0,
+		integrations: [tanstackRouterBrowserTracingIntegration(router)],
+		environment: sentryEnvironment,
+		debug: sentryEnvironment === 'development',
+		initialScope: { user: { id: sentryUserId } },
+	},
+	initSentryReact,
+)
 
 export function App() {
 	return (

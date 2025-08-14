@@ -3,12 +3,17 @@ import { readFile } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { platform } from 'node:os'
 import * as path from 'node:path'
+import * as Sentry from '@sentry/electron/main'
 import debug from 'debug'
 import { app } from 'electron/main'
 import { parse } from 'valibot'
 
 import { start } from './app.js'
-import { createConfigStore } from './config-store.js'
+import {
+	createConfigStore,
+	generateSentryUser,
+	shouldRotateSentryUser,
+} from './config-store.js'
 import { AppConfigSchema } from './validation.js'
 
 const require = createRequire(import.meta.url)
@@ -68,7 +73,48 @@ if (appConfig.appType === 'development') {
 	}
 }
 
+// NOTE: Has to be set up after user data directory is updated
 const configStore = createConfigStore()
+
+let sentryUser = configStore.get('sentryUser')
+
+// NOTE: The retrieved value may be the default based on config store schema,
+// which is not immediately persisted upon initialization.
+// We want to make sure that this value is persisted upon startup, even if it might be
+// rotated shortly after.
+configStore.set('sentryUser', sentryUser)
+
+if (shouldRotateSentryUser(sentryUser)) {
+	log('Rotating Sentry user')
+	const newSentryUser = generateSentryUser()
+	configStore.set('sentryUser', newSentryUser)
+	sentryUser = newSentryUser
+}
+
+/** @type {import('../shared/app.js').SentryEnvironment} */
+let sentryEnvironment = 'development'
+
+if (appConfig.appType === 'release-candidate') {
+	sentryEnvironment = 'qa'
+} else if (appConfig.appType === 'production') {
+	sentryEnvironment = 'production'
+}
+
+// NOTE: Has to be set up after user data directory is updated
+// https://docs.sentry.io/platforms/javascript/guides/electron/#app-userdata-directory
+Sentry.init({
+	dsn: 'https://f7336c12cc39fb0367886e31036a6cd7@o4507148235702272.ingest.us.sentry.io/4509803831820288',
+	// TODO: Only works on app startup. Any changes to `diagnosticsEnabled` while the app is running will not
+	// take effect here until the app is restarted.
+	enabled: configStore.get('diagnosticsEnabled'),
+	sendDefaultPii: false,
+	// TODO: Enable tracing based on user consent in production
+	tracesSampleRate: sentryEnvironment === 'production' ? 0 : 1.0,
+	environment: sentryEnvironment,
+	release: appConfig.appVersion,
+	debug: sentryEnvironment === 'development',
+	initialScope: { user: { id: sentryUser.id } },
+})
 
 log('Paths', {
 	app: app.getAppPath(),
@@ -77,5 +123,6 @@ log('Paths', {
 })
 
 start({ appConfig, configStore }).catch((err) => {
-	log(err)
+	Sentry.captureException(err)
+	process.exit(1)
 })

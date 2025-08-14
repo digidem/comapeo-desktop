@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto'
 import Store from 'electron-store'
 
 /** @typedef {ReturnType<typeof createConfigStore>} ConfigStore */
@@ -59,9 +60,63 @@ export function createConfigStore() {
 				rootKey: {
 					type: ['string'],
 				},
+				sentryUser: {
+					type: 'object',
+					properties: {
+						id: {
+							type: 'string',
+						},
+						createdAt: {
+							type: 'object',
+							properties: {
+								year: {
+									type: 'number',
+								},
+								month: { type: 'number' },
+							},
+							required: ['year', 'month'],
+						},
+					},
+					required: ['id', 'createdAt'],
+					default: generateSentryUser(),
+				},
 			},
 		})
 	)
 
 	return store
+}
+
+/**
+ * @returns {ConfigStore['store']['sentryUser']}
+ */
+export function generateSentryUser() {
+	const id = randomBytes(16).toString('hex')
+	const now = new Date()
+
+	const createdAt = {
+		year: now.getUTCFullYear(),
+		// NOTE: getUTCMonth returns 0 as first month...
+		month: now.getUTCMonth() + 1,
+	}
+
+	return { id, createdAt }
+}
+
+/**
+ * @param {ConfigStore['store']['sentryUser']} existing
+ *
+ * @returns {boolean}
+ */
+export function shouldRotateSentryUser(existing) {
+	const now = new Date()
+
+	const currentYear = now.getUTCFullYear()
+	// NOTE: getUTCMonth returns 0 as first month...
+	const currentMonth = now.getUTCMonth() + 1
+
+	return (
+		currentYear !== existing.createdAt.year ||
+		currentMonth !== existing.createdAt.month
+	)
 }
