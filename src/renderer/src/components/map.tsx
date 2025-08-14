@@ -56,8 +56,8 @@ function transformRequest(url: string, resourceType?: ResourceType) {
 	if (isMapboxURL(url)) {
 		return transformMapboxUrl(
 			url,
-			resourceType || '',
-			import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || '',
+			resourceType,
+			import.meta.env.VITE_MAPBOX_ACCESS_TOKEN,
 		)
 	}
 
