@@ -14,6 +14,7 @@ const log = debug('comapeo:services:core')
 
 /**
  * @import {MessagePortMain} from 'electron'
+ * @import {DiscoveryInitMessageSchema, ServiceErrorMessageSchema} from '../main/validation.js'
  */
 
 const require = createRequire(import.meta.url)
@@ -55,7 +56,7 @@ const ProcessArgsSchema = v.object({
 })
 
 const NewClientMessageSchema = v.object({
-	type: v.literal('core:new-client'),
+	type: v.literal('main:new-client'),
 	payload: v.object({
 		clientId: v.string(),
 	}),
@@ -117,6 +118,25 @@ const { manager, fastifyController } = initializeCore({
 	storageDirectory: parsedProcessArgs.storageDirectory,
 })
 
+manager
+	.startLocalPeerDiscoveryServer()
+	.then(({ name, port }) => {
+		log('Started local peer discovery server')
+
+		process.parentPort.postMessage(
+			/** @satisfies {v.InferInput<typeof DiscoveryInitMessageSchema>} */
+			({ type: 'core:discovery-init', name, port }),
+		)
+	})
+	.catch((err) => {
+		log('Failed to start local peer discovery server', err)
+
+		process.parentPort.postMessage(
+			/** @satisfies {v.InferInput<typeof ServiceErrorMessageSchema>} */
+			{ type: 'error', error: err instanceof Error ? err : new Error(err) },
+		)
+	})
+
 state = {
 	...state,
 	status: 'active',
@@ -139,7 +159,7 @@ process.parentPort.on('message', (event) => {
 	const { data } = event
 
 	switch (data.type) {
-		case 'core:new-client': {
+		case 'main:new-client': {
 			if (state.clientPorts.has(port)) {
 				log(
 					`Ignoring 'core:new-client' message because message port already initialized`,

@@ -34,3 +34,14 @@ export const PersistedCoordinateFormatSchema = v.union([
 	v.literal('dms'),
 	v.literal('utm'),
 ])
+
+export const DiscoveryInitMessageSchema = v.object({
+	type: v.literal('core:discovery-init'),
+	name: v.string(),
+	port: v.number(),
+})
+
+export const ServiceErrorMessageSchema = v.object({
+	type: v.literal('error'),
+	error: v.instance(Error),
+})

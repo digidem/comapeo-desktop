@@ -2,6 +2,7 @@ import { randomBytes } from 'node:crypto'
 import { basename } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineMessages } from '@formatjs/intl'
+import { captureException } from '@sentry/electron'
 import debug from 'debug'
 import {
 	BrowserWindow,
@@ -14,13 +15,16 @@ import * as v from 'valibot'
 
 import { Intl } from './intl.js'
 import { setUpMainIPC } from './ipc.js'
-import { FilesSelectParamsSchema } from './validation.js'
+import {
+	DiscoveryInitMessageSchema,
+	FilesSelectParamsSchema,
+	ServiceErrorMessageSchema,
+} from './validation.js'
 
 const log = debug('comapeo:main:app')
 
 /**
- * @import {UtilityProcess} from 'electron/main'
- * @import {ProcessArgs as CoreProcessArgs, NewClientMessage} from '../services/core.js'
+ * @import {UtilityProcess} from 'electron'
  * @import {AppConfig, SentryEnvironment} from '../shared/app.js'
  * @import {ConfigStore} from './config-store.js'
  */
@@ -48,6 +52,9 @@ const _menuMessages = defineMessages({
 
 const CORE_SERVICE_PATH = fileURLToPath(
 	import.meta.resolve('../services/core.js'),
+)
+const DISCOVERY_SERVICE_PATH = fileURLToPath(
+	import.meta.resolve('../services/discovery.js'),
 )
 
 const MAIN_WINDOW_PRELOAD_PATH = fileURLToPath(
@@ -94,7 +101,70 @@ export async function start({ appConfig, configStore }) {
 	await app.whenReady()
 
 	const rootKey = loadRootKey({ configStore })
-	const services = setupServices({ appConfig, rootKey })
+
+	const coreService = utilityProcess.fork(
+		CORE_SERVICE_PATH,
+		[
+			`--onlineStyleUrl=${appConfig.onlineStyleUrl}`,
+			`--rootKey=${rootKey}`,
+			`--storageDirectory=${app.getPath('userData')}`,
+		],
+		{ serviceName: `CoMapeo Core Service` },
+	)
+
+	app.on('quit', () => {
+		if (coreService.pid) {
+			coreService.kill()
+		}
+	})
+
+	let discoveryServiceStarted = false
+
+	coreService.on('message', (message) => {
+		if (v.is(ServiceErrorMessageSchema, message)) {
+			captureException(message.error)
+			return
+		}
+
+		if (!v.is(DiscoveryInitMessageSchema, message)) {
+			log('Received unrecognized message received from core service', message)
+			return
+		}
+
+		if (discoveryServiceStarted) {
+			return
+		}
+
+		const { name, port } = message
+
+		const discoveryService = utilityProcess.fork(
+			DISCOVERY_SERVICE_PATH,
+			[`--name=${name}`, `--port=${port}`],
+			{ serviceName: 'CoMapeo Discovery Service' },
+		)
+
+		app.on('quit', () => {
+			if (discoveryService.pid) {
+				discoveryService.kill()
+			}
+		})
+
+		discoveryService.on('message', (message) => {
+			if (v.is(ServiceErrorMessageSchema, message)) {
+				captureException(message.error)
+			}
+		})
+
+		discoveryService.on('error', (type, location, report) => {
+			log('Discovery service error', { type, location, report })
+		})
+
+		discoveryService.on('spawn', () => {
+			log('Spawned discovery service with PID %d', discoveryService?.pid)
+		})
+
+		discoveryServiceStarted = true
+	})
 
 	const sentryUserId = configStore.get('sentryUser').id
 	const diagnosticsEnabled = configStore.get('diagnosticsEnabled')
@@ -126,10 +196,11 @@ export async function start({ appConfig, configStore }) {
 			existingMainWindow.show()
 		} else {
 			log('Main window does not exist - creating new main window')
+
 			const mainWindow = initMainWindow({
-				isDevelopment: appConfig.appType === 'development',
 				appVersion: appConfig.appVersion,
-				services,
+				coreService,
+				isDevelopment: appConfig.appType === 'development',
 				sentryConfig: {
 					enabled: diagnosticsEnabled,
 					environment: sentryEnvironment,
@@ -145,14 +216,15 @@ export async function start({ appConfig, configStore }) {
 
 	const mainWindow = initMainWindow({
 		appVersion: appConfig.appVersion,
+		coreService,
 		isDevelopment: appConfig.appType === 'development',
 		sentryConfig: {
 			enabled: diagnosticsEnabled,
 			environment: sentryEnvironment,
 			userId: sentryUserId,
 		},
-		services,
 	})
+
 	mainWindow.show()
 
 	log(`Created main window with id ${mainWindow.id}`)
@@ -173,17 +245,23 @@ function setupIntl({ configStore }) {
 /**
  * @param {Object} opts
  * @param {string} opts.appVersion
+ * @param {UtilityProcess} opts.coreService
  * @param {boolean} opts.isDevelopment
  * @param {{
  * 	enabled: boolean
  * 	environment: SentryEnvironment
  * 	userId: string
  * }} opts.sentryConfig
- * @param {Services} opts.services
+ *
  *
  * @returns {BrowserWindow} The main browser window
  */
-function initMainWindow({ appVersion, isDevelopment, sentryConfig, services }) {
+function initMainWindow({
+	appVersion,
+	coreService,
+	isDevelopment,
+	sentryConfig,
+}) {
 	const mainWindow = new BrowserWindow({
 		width: 1200,
 		minWidth: 800,
@@ -235,10 +313,10 @@ function initMainWindow({ appVersion, isDevelopment, sentryConfig, services }) {
 	mainWindow.webContents.ipc.on('comapeo-port', (event) => {
 		const [port] = event.ports
 		if (!port) return // TODO: throw/report error
-		services.core.postMessage(
+		coreService.postMessage(
 			/** @satisfies {NewClientMessage} */
 			{
-				type: 'core:new-client',
+				type: 'main:new-client',
 				payload: { clientId: `window-${mainWindow.id}` },
 			},
 			[port],
@@ -263,9 +341,7 @@ function initMainWindow({ appVersion, isDevelopment, sentryConfig, services }) {
 		return { name: basename(selectedFilePath), path: selectedFilePath }
 	})
 
-	APP_STATE.browserWindows.set(mainWindow, {
-		type: 'main',
-	})
+	APP_STATE.browserWindows.set(mainWindow, { type: 'main' })
 
 	return mainWindow
 }
@@ -302,28 +378,4 @@ function loadRootKey({ configStore }) {
 		: storedRootKey
 
 	return rootKey
-}
-
-/**
- * @param {Object} opts
- * @param {AppConfig} opts.appConfig
- * @param {string} opts.rootKey
- *
- * @returns {Services}
- */
-function setupServices({ appConfig, rootKey }) {
-	/** @satisfies {CoreProcessArgs} */
-	const coreArgs = {
-		onlineStyleUrl: appConfig.onlineStyleUrl,
-		rootKey,
-		storageDirectory: app.getPath('userData'),
-	}
-
-	const coreService = utilityProcess.fork(
-		CORE_SERVICE_PATH,
-		Object.entries(coreArgs).map(([flag, value]) => `--${flag}=${value}`),
-		{ serviceName: `CoMapeo Core Service` },
-	)
-
-	return { core: coreService }
 }
