@@ -1,5 +1,8 @@
 import { randomBytes } from 'node:crypto'
+import debug from 'debug'
 import Store from 'electron-store'
+
+const log = debug('comapeo:main:config-store')
 
 /** @typedef {ReturnType<typeof createConfigStore>} ConfigStore */
 
@@ -66,23 +69,30 @@ export function createConfigStore() {
 						id: {
 							type: 'string',
 						},
-						createdAt: {
-							type: 'object',
-							properties: {
-								year: {
-									type: 'number',
-								},
-								month: { type: 'number' },
-							},
-							required: ['year', 'month'],
+						idMonth: {
+							type: 'string',
 						},
 					},
-					required: ['id', 'createdAt'],
+					required: ['id', 'idMonth'],
 					default: generateSentryUser(),
 				},
 			},
 		})
 	)
+
+	const sentryUser = store.get('sentryUser')
+
+	// NOTE: The retrieved value may be the default based on config store schema,
+	// which is not immediately persisted upon initialization.
+	// We want to make sure that this value is persisted upon startup, even if it might be
+	// rotated shortly after.
+	store.set('sentryUser', sentryUser)
+
+	if (shouldRotateSentryUser(sentryUser.idMonth)) {
+		log('Rotating Sentry user')
+		const newSentryUser = generateSentryUser()
+		store.set('sentryUser', newSentryUser)
+	}
 
 	return store
 }
@@ -94,29 +104,18 @@ export function generateSentryUser() {
 	const id = randomBytes(16).toString('hex')
 	const now = new Date()
 
-	const createdAt = {
-		year: now.getUTCFullYear(),
-		// NOTE: getUTCMonth returns 0 as first month...
-		month: now.getUTCMonth() + 1,
-	}
-
-	return { id, createdAt }
+	return { id, idMonth: `${now.getUTCFullYear()}-${now.getUTCMonth()}` }
 }
 
 /**
- * @param {ConfigStore['store']['sentryUser']} existing
+ * @param {ConfigStore['store']['sentryUser']['idMonth']} idMonth
  *
  * @returns {boolean}
  */
-export function shouldRotateSentryUser(existing) {
+export function shouldRotateSentryUser(idMonth) {
 	const now = new Date()
 
-	const currentYear = now.getUTCFullYear()
-	// NOTE: getUTCMonth returns 0 as first month...
-	const currentMonth = now.getUTCMonth() + 1
+	const currentIdMonth = `${now.getUTCFullYear()}-${now.getUTCMonth()}`
 
-	return (
-		currentYear !== existing.createdAt.year ||
-		currentMonth !== existing.createdAt.month
-	)
+	return currentIdMonth !== idMonth
 }

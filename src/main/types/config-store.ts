@@ -14,6 +14,6 @@ export type ConfigSchema = {
 	rootKey?: string
 	sentryUser: {
 		id: string
-		createdAt: { year: number; month: number }
+		idMonth: string
 	}
 }
