@@ -9,11 +9,7 @@ import { app } from 'electron/main'
 import { parse } from 'valibot'
 
 import { start } from './app.js'
-import {
-	createConfigStore,
-	generateSentryUser,
-	shouldRotateSentryUser,
-} from './config-store.js'
+import { createConfigStore } from './config-store.js'
 import { AppConfigSchema } from './validation.js'
 
 const require = createRequire(import.meta.url)
@@ -76,20 +72,7 @@ if (appConfig.appType === 'development') {
 // NOTE: Has to be set up after user data directory is updated
 const configStore = createConfigStore()
 
-let sentryUser = configStore.get('sentryUser')
-
-// NOTE: The retrieved value may be the default based on config store schema,
-// which is not immediately persisted upon initialization.
-// We want to make sure that this value is persisted upon startup, even if it might be
-// rotated shortly after.
-configStore.set('sentryUser', sentryUser)
-
-if (shouldRotateSentryUser(sentryUser)) {
-	log('Rotating Sentry user')
-	const newSentryUser = generateSentryUser()
-	configStore.set('sentryUser', newSentryUser)
-	sentryUser = newSentryUser
-}
+const sentryUserId = configStore.get('sentryUser').id
 
 /** @type {import('../shared/app.js').SentryEnvironment} */
 let sentryEnvironment = 'development'
@@ -113,7 +96,7 @@ Sentry.init({
 	environment: sentryEnvironment,
 	release: appConfig.appVersion,
 	debug: sentryEnvironment === 'development',
-	initialScope: { user: { id: sentryUser.id } },
+	initialScope: { user: { id: sentryUserId } },
 })
 
 log('Paths', {

@@ -1,5 +1,8 @@
 import { randomBytes } from 'node:crypto'
+import debug from 'debug'
 import Store from 'electron-store'
+
+const log = debug('comapeo:main:config-store')
 
 /** @typedef {ReturnType<typeof createConfigStore>} ConfigStore */
 
@@ -83,6 +86,20 @@ export function createConfigStore() {
 			},
 		})
 	)
+
+	const sentryUser = store.get('sentryUser')
+
+	// NOTE: The retrieved value may be the default based on config store schema,
+	// which is not immediately persisted upon initialization.
+	// We want to make sure that this value is persisted upon startup, even if it might be
+	// rotated shortly after.
+	store.set('sentryUser', sentryUser)
+
+	if (shouldRotateSentryUser(sentryUser)) {
+		log('Rotating Sentry user')
+		const newSentryUser = generateSentryUser()
+		store.set('sentryUser', newSentryUser)
+	}
 
 	return store
 }
