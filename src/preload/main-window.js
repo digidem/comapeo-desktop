@@ -74,10 +74,11 @@ const runtimeApi = {
 
 	// Sentry
 	getSentryConfig: () => {
+		const enabled = getProcessArgValue('comapeo-sentry-enabled') === 'true'
+		const environment = getProcessArgValue('comapeo-sentry-environment')
 		const userId = getProcessArgValue('comapeo-sentry-user-id')
-		const enabled = getProcessArgValue('comapeo-sentry-enable') === 'true'
 
-		return { userId, enabled }
+		return { enabled, environment, userId }
 	},
 }
 

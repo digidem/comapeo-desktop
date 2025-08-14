@@ -23,7 +23,6 @@ import {
 	createRouter,
 } from '@tanstack/react-router'
 
-import type { SentryEnvironment } from '../../shared/app'
 import type { LocaleState } from '../../shared/intl'
 import { initComapeoClient } from './comapeo-client'
 import { GenericRouteErrorComponent } from './components/generic-route-error-component'
@@ -82,14 +81,6 @@ declare module '@tanstack/react-router' {
 	}
 }
 
-let sentryEnvironment: SentryEnvironment = 'development'
-
-if (__APP_TYPE__ === 'release-candidate') {
-	sentryEnvironment = 'qa'
-} else if (__APP_TYPE__ === 'production') {
-	sentryEnvironment = 'production'
-}
-
 const sentryConfig = window.runtime.getSentryConfig()
 
 initSentryElectron(
@@ -97,10 +88,10 @@ initSentryElectron(
 		dsn: 'https://f7336c12cc39fb0367886e31036a6cd7@o4507148235702272.ingest.us.sentry.io/4509803831820288',
 		enabled: sentryConfig.enabled,
 		// TODO: Enable tracing based on user consent in production
-		tracesSampleRate: sentryEnvironment === 'production' ? 0 : 1.0,
+		tracesSampleRate: sentryConfig.environment === 'production' ? 0 : 1.0,
 		integrations: [tanstackRouterBrowserTracingIntegration(router)],
-		environment: sentryEnvironment,
-		debug: sentryEnvironment === 'development',
+		environment: sentryConfig.environment,
+		debug: sentryConfig.environment === 'development',
 		initialScope: { user: { id: sentryConfig.userId } },
 	},
 	initSentryReact,
