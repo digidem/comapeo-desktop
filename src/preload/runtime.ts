@@ -1,9 +1,6 @@
 import type { Systeminformation } from 'systeminformation'
 
-import type {
-	PersistedCoordinateFormat,
-	PersistedLocale,
-} from '../main/types/config-store.js'
+import type { PersistedState } from '../main/persisted-store.js'
 import type { LocaleState } from '../shared/intl.js'
 
 export type SelectedFile = {
@@ -30,15 +27,17 @@ export type RuntimeApi = {
 
 	// Settings (get)
 	getActiveProjectId: () => Promise<string | undefined>
-	getCoordinateFormat: () => Promise<PersistedCoordinateFormat>
+	getCoordinateFormat: () => Promise<PersistedState['coordinateFormat']>
 	getDiagnosticsEnabled: () => Promise<boolean>
 	getLocaleState: () => Promise<LocaleState>
 
 	// Settings (set)
 	setActiveProjectId: (value: string | null) => Promise<void>
-	setCoordinateFormat: (value: PersistedCoordinateFormat) => Promise<void>
+	setCoordinateFormat: (
+		value: PersistedState['coordinateFormat'],
+	) => Promise<void>
 	setDiagnosticsEnabled: (value: boolean) => Promise<void>
-	setLocale: (value: PersistedLocale) => Promise<void>
+	setLocale: (value: PersistedState['locale']) => Promise<void>
 
 	// Sentry
 	getSentryConfig: () => {
