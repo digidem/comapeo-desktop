@@ -12,7 +12,8 @@ import type {
 	LocaleState,
 	SupportedLanguageTag,
 } from '../shared/intl.js'
-import type { ConfigStore, PersistedLocale } from './config-store.js'
+import type { ConfigStore } from './config-store.js'
+import type { PersistedLocale } from './validation.js'
 
 const SUPPORTED_LANGUAGE_TAGS = Object.keys(
 	SUPPORTED_LANGUAGES,

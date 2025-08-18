@@ -1,18 +1,11 @@
 import { randomBytes } from 'node:crypto'
 import debug from 'debug'
 import Store from 'electron-store'
-import { type InferOutput } from 'valibot'
 
-import {
-	PersistedCoordinateFormatSchema,
-	PersistedLocaleSchema,
+import type {
+	PersistedCoordinateFormat,
+	PersistedLocale,
 } from './validation.js'
-
-export type PersistedLocale = InferOutput<typeof PersistedLocaleSchema>
-
-export type PersistedCoordinateFormat = InferOutput<
-	typeof PersistedCoordinateFormatSchema
->
 
 export type Config = {
 	activeProjectId?: string

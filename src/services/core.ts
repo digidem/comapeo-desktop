@@ -12,7 +12,7 @@ import Fastify from 'fastify'
 import sodium from 'sodium-native'
 import * as v from 'valibot'
 
-import type { ServiceErrorMessageSchema } from '../main/validation.js'
+import type { ServiceErrorMessage } from '../main/validation.js'
 
 const log = debug('comapeo:services:core')
 
@@ -93,7 +93,7 @@ initializePeerDiscovery(manager).catch((err) => {
 	process.parentPort.postMessage({
 		type: 'error',
 		error: err instanceof Error ? err : new Error(err),
-	} satisfies v.InferInput<typeof ServiceErrorMessageSchema>)
+	} satisfies ServiceErrorMessage)
 })
 
 const connectedClientPorts: WeakSet<MessagePortMain> = new WeakSet()
