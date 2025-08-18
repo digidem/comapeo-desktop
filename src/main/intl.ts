@@ -3,25 +3,17 @@ import debug from 'debug'
 import { app } from 'electron/main'
 import * as v from 'valibot'
 
-import SUPPORTED_LANGUAGES from '../../languages.json' with { type: 'json' }
 import enTranslations from '../../translations/main/en.json' with { type: 'json' }
 import esTranslations from '../../translations/main/es.json' with { type: 'json' }
 import ptTranslations from '../../translations/main/pt.json' with { type: 'json' }
-import type {
-	Locale,
-	LocaleSource,
-	LocaleState,
-	SupportedLanguageTag,
+import {
+	SupportedLanguageTagSchema,
+	type Locale,
+	type LocaleSource,
+	type LocaleState,
+	type SupportedLanguageTag,
 } from '../shared/intl.js'
 import type { ConfigStore } from './config-store.js'
-
-const SUPPORTED_LANGUAGE_TAGS = Object.keys(
-	SUPPORTED_LANGUAGES,
-) as Array<SupportedLanguageTag>
-
-const SupportedLanguageTagSchema = v.union(
-	SUPPORTED_LANGUAGE_TAGS.map((t) => v.literal(t)),
-)
 
 const log = debug('comapeo:main:intl')
 

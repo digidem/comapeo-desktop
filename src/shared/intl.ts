@@ -1,10 +1,20 @@
 import * as v from 'valibot'
 
-import SUPPORTED_LANGUAGES from '../../languages.json' with { type: 'json' }
+import languages from '../../languages.json' with { type: 'json' }
+
+export const SUPPORTED_LANGUAGES = languages
+
+export type SupportedLanguageTag = keyof typeof languages
+
+const SUPPORTED_LANGUAGE_TAGS = Object.keys(
+	languages,
+) as Array<SupportedLanguageTag>
+
+export const SupportedLanguageTagSchema = v.union(
+	SUPPORTED_LANGUAGE_TAGS.map((t) => v.literal(t)),
+)
 
 export type LocaleSource = 'selected' | 'system' | 'fallback'
-
-export type SupportedLanguageTag = keyof typeof SUPPORTED_LANGUAGES
 
 export type LocaleState = {
 	source: LocaleSource
