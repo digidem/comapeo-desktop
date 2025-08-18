@@ -1,39 +1,32 @@
 import assert from 'node:assert'
 import { mkdirSync } from 'node:fs'
-import { createRequire } from 'node:module'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 import { FastifyController, MapeoManager } from '@comapeo/core'
 import { createMapeoServer } from '@comapeo/ipc/server.js'
-import ciao from '@homebridge/ciao'
+import ciao, { type Protocol } from '@homebridge/ciao'
 import debug from 'debug'
+import type { MessagePortMain } from 'electron'
 import Fastify from 'fastify'
+import sodium from 'sodium-native'
 import * as v from 'valibot'
 
+import type { ServiceErrorMessageSchema } from '../main/validation.js'
+
 const log = debug('comapeo:services:core')
-
-/**
- * @import {MessagePortMain} from 'electron'
- * @import {Protocol} from '@homebridge/ciao'
- * @import {ServiceErrorMessageSchema} from '../main/validation.js'
- */
-
-const require = createRequire(import.meta.url)
 
 // Patching due to issues with sodium-native in more recent versions of Electron due to removal of APIs that the module relies on.
 // Replaces the usage of SecureBuffer in sodium's malloc with just a normal Buffer, which may have security implications.
 // https://github.com/holepunchto/sodium-native/issues/185
-const sodium = require('sodium-native')
+// const sodium = require('sodium-native')
 
-/**
- * @param {number} n
- */
-// @ts-expect-error Needs patch to work
-sodium.sodium_malloc = function sodium_malloc_monkey_patched(n) {
+// @ts-expect-error Need patch
+sodium.sodium_malloc = function sodium_malloc_monkey_patched(n: number) {
 	return Buffer.alloc(n)
 }
-// @ts-expect-error Needs patch to work
+
+// @ts-expect-error Need patch
 sodium.sodium_free = function sodium_free_monkey_patched() {}
 
 const DATABASE_MIGRATIONS_DIRECTORY = fileURLToPath(
@@ -71,11 +64,8 @@ const NewClientMessageSchema = v.object({
 	}),
 })
 
-/**
- * @typedef {v.InferInput<typeof ProcessArgsSchema>} ProcessArgs
- *
- * @typedef {v.InferInput<typeof NewClientMessageSchema>} NewClientMessage
- */
+export type ProcessArgs = v.InferInput<typeof ProcessArgsSchema>
+export type NewClientMessage = v.InferInput<typeof NewClientMessageSchema>
 
 const { values } = parseArgs({
 	strict: true,
@@ -100,14 +90,13 @@ const { manager } = initializeCore({
 initializePeerDiscovery(manager).catch((err) => {
 	log('Failed to start peer discovery', err)
 
-	process.parentPort.postMessage(
-		/** @satisfies {v.InferInput<typeof ServiceErrorMessageSchema>} */
-		({ type: 'error', error: err instanceof Error ? err : new Error(err) }),
-	)
+	process.parentPort.postMessage({
+		type: 'error',
+		error: err instanceof Error ? err : new Error(err),
+	} satisfies v.InferInput<typeof ServiceErrorMessageSchema>)
 })
 
-/** @type {WeakSet<MessagePortMain>} */
-const connectedClientPorts = new WeakSet()
+const connectedClientPorts: WeakSet<MessagePortMain> = new WeakSet()
 
 // We might get multiple clients, for instance if there are multiple windows,
 // or if the main window reloads.
@@ -145,13 +134,15 @@ process.parentPort.on('message', (event) => {
 	port.start()
 })
 
-/**
- * @param {Object} opts
- * @param {string} [opts.onlineStyleUrl]
- * @param {Buffer} opts.rootKey
- * @param {string} opts.storageDirectory
- */
-function initializeCore({ onlineStyleUrl, rootKey, storageDirectory }) {
+function initializeCore({
+	onlineStyleUrl,
+	rootKey,
+	storageDirectory,
+}: {
+	onlineStyleUrl?: string
+	rootKey: Buffer
+	storageDirectory: string
+}) {
 	const databaseDirectory = path.join(storageDirectory, DB_DIR_NAME)
 	const coreStorageDirectory = path.join(
 		storageDirectory,
@@ -189,10 +180,7 @@ function initializeCore({ onlineStyleUrl, rootKey, storageDirectory }) {
 	return { manager, fastifyController }
 }
 
-/**
- * @param {MapeoManager} manager
- */
-async function initializePeerDiscovery(manager) {
+async function initializePeerDiscovery(manager: MapeoManager) {
 	const { name, port } = await manager.startLocalPeerDiscoveryServer()
 
 	log('Started local peer discovery server')
@@ -203,12 +191,11 @@ async function initializePeerDiscovery(manager) {
 		domain: 'local',
 		name,
 		port,
-		protocol: /** @type {Protocol} */ ('tcp'),
+		protocol: 'tcp' as Protocol,
 		type: 'comapeo',
 	})
 
-	/** @type {Promise<void> | undefined} */
-	let shutdownPromise
+	let shutdownPromise: Promise<void> | undefined
 
 	async function cleanup() {
 		if (shutdownPromise) {
@@ -232,36 +219,21 @@ async function initializePeerDiscovery(manager) {
 // Needed to account for type limitation in @comapeo/ipc: https://github.com/digidem/comapeo-ipc/blob/17e9a4e386c1bfd880f5a0f1c9f2b02ca712fe44/src/lib/sub-channel.js#L16
 // Electron.MessagePortMain more closely follows Node's event listener interface, which uses on/off and addListener/removeListener
 class MessagePortLike {
-	/** @type {MessagePortMain} */
-	#port
+	#port: MessagePortMain
 
-	/**
-	 * @param {MessagePortMain} port
-	 */
-	constructor(port) {
+	constructor(port: MessagePortMain) {
 		this.#port = port
 	}
 
-	/**
-	 * @param {unknown} message
-	 */
-	postMessage(message) {
+	postMessage(message: unknown) {
 		this.#port.postMessage(message)
 	}
 
-	/**
-	 * @param {'message'} event
-	 * @param {() => void} listener
-	 */
-	addEventListener(event, listener) {
+	addEventListener(event: 'message', listener: () => void) {
 		this.#port.addListener(event, listener)
 	}
 
-	/**
-	 * @param {'message'} event
-	 * @param {() => void} listener
-	 */
-	removeEventListener(event, listener) {
+	removeEventListener(event: 'message', listener: () => void) {
 		this.#port.removeListener(event, listener)
 	}
 }

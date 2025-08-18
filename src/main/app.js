@@ -51,7 +51,7 @@ const _menuMessages = defineMessages({
 })
 
 const CORE_SERVICE_PATH = fileURLToPath(
-	import.meta.resolve('../services/core.js'),
+	import.meta.resolve('../services/core.ts'),
 )
 
 const MAIN_WINDOW_PRELOAD_PATH = fileURLToPath(
