@@ -8,6 +8,8 @@ import {
 	BrowserWindow,
 	app,
 	dialog,
+	ipcMain,
+	net,
 	safeStorage,
 	utilityProcess,
 } from 'electron/main'
@@ -27,6 +29,8 @@ const log = debug('comapeo:main:app')
  * @import {UtilityProcess} from 'electron'
  * @import {AppConfig, SentryEnvironment} from '../shared/app.js'
  * @import {ConfigStore} from './config-store.js'
+ * @import {NewClientMessage} from '../services/core.js'
+ * @import {NetworkChangeMessage} from '../services/discovery.js'
  */
 
 /**
@@ -142,6 +146,31 @@ export async function start({ appConfig, configStore }) {
 			[`--name=${name}`, `--port=${port}`],
 			{ serviceName: 'CoMapeo Discovery Service' },
 		)
+
+		// TODO: Connect the renderer <-> discovery service using similar approach as renderer <-> core service?
+
+		// Send initial message about online status
+		if (net.online) {
+			discoveryService.postMessage(
+				/** @satisfies {NetworkChangeMessage} */ ({
+					type: 'network-change',
+					online: net.online,
+				}),
+			)
+		}
+
+		ipcMain.on('network-change', () => {
+			if (!discoveryService.pid) {
+				return
+			}
+
+			discoveryService.postMessage(
+				/** @satisfies {NetworkChangeMessage} */ ({
+					type: 'network-change',
+					online: net.online,
+				}),
+			)
+		})
 
 		app.on('quit', () => {
 			if (discoveryService.pid) {
@@ -314,11 +343,10 @@ function initMainWindow({
 		const [port] = event.ports
 		if (!port) return // TODO: throw/report error
 		coreService.postMessage(
-			/** @satisfies {NewClientMessage} */
-			{
+			/** @satisfies {NewClientMessage} */ ({
 				type: 'main:new-client',
 				payload: { clientId: `window-${mainWindow.id}` },
-			},
+			}),
 			[port],
 		)
 	})
