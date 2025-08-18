@@ -90,8 +90,8 @@ npm start                  # Build translations, then build the app in developme
 
 ### Helpful tips about configuration
 
-- The configuration for the renderer app is defined in the [Vite configuration file](../src/renderer/vite.config.js) that lives in the `src/renderer`.
-- The configuration for the Electron app is located in [`forge.config.js`](/forge.config.js).
+- The configuration for the renderer app is defined in the [Vite configuration file](../src/renderer/vite.config.ts) that lives in the `src/renderer`.
+- The configuration for the Electron app is located in [`forge.config.ts`](/forge.config.ts).
 
 ### Testing
 
