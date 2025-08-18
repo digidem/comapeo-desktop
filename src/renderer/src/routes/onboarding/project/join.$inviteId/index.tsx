@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useSingleInvite } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -7,7 +8,12 @@ import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { captureException } from '@sentry/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
+import {
+	createFileRoute,
+	redirect,
+	useNavigate,
+	useRouter,
+} from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import {
@@ -33,12 +39,17 @@ export const Route = createFileRoute('/onboarding/project/join/$inviteId/')({
 		const { inviteId } = params
 
 		// TODO: Not ideal but requires changes in @comapeo/core-react
-		await queryClient.ensureQueryData({
+		const invite = await queryClient.ensureQueryData({
 			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'invites', { inviteId }],
 			queryFn: async () => {
 				return clientApi.invite.getById(inviteId)
 			},
 		})
+
+		// Redirect if the invite of interest cannot be responded to
+		if (invite.state !== 'pending') {
+			throw redirect({ to: '/onboarding/project', replace: true })
+		}
 	},
 	component: RouteComponent,
 })
@@ -79,6 +90,18 @@ function RouteComponent() {
 						},
 					}
 				: { open: false, onClose: () => {} }
+
+	useEffect(() => {
+		// Navigate away from the page if the invite gets cancelled from the invitor's side.
+		if (invite.state === 'canceled') {
+			if (router.history.canGoBack()) {
+				router.history.back()
+				return
+			}
+
+			navigate({ to: '/onboarding/project', replace: true })
+		}
+	}, [invite.state, router, navigate])
 
 	return (
 		<>
@@ -148,7 +171,10 @@ function RouteComponent() {
 						loading={rejectInvite.status === 'pending'}
 						loadingPosition="start"
 						onClick={() => {
-							if (acceptInvite.status === 'pending') {
+							if (
+								acceptInvite.status === 'pending' ||
+								rejectInvite.status === 'pending'
+							) {
 								return
 							}
 
@@ -184,7 +210,10 @@ function RouteComponent() {
 						loading={acceptInvite.status === 'pending'}
 						loadingPosition="start"
 						onClick={() => {
-							if (rejectInvite.status === 'pending') {
+							if (
+								acceptInvite.status === 'pending' ||
+								rejectInvite.status === 'pending'
+							) {
 								return
 							}
 
