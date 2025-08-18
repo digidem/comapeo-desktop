@@ -42,6 +42,7 @@
 		"lint:format": "prettier --cache --check .",
 		"lint": "concurrently --prefix \"lint:{name}\" --pad-prefix --group \"node:lint:*\"",
 		"types:root": "tsc -p tsconfig.json",
+		"types:shared": "tsc -p src/shared/tsconfig.json",
 		"types:main": "tsc -p src/main/tsconfig.json",
 		"types:services": "tsc -p src/services/tsconfig.json",
 		"types:preload": "tsc -p src/preload/tsconfig.json",
