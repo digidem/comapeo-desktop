@@ -133,7 +133,7 @@ manager
 
 		process.parentPort.postMessage(
 			/** @satisfies {v.InferInput<typeof ServiceErrorMessageSchema>} */
-			{ type: 'error', error: err instanceof Error ? err : new Error(err) },
+			({ type: 'error', error: err instanceof Error ? err : new Error(err) }),
 		)
 	})
 

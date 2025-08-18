@@ -5,6 +5,7 @@ import * as v from 'valibot'
 
 /**
  * @import {Protocol} from '@homebridge/ciao'
+ * @import {ServiceErrorMessageSchema} from '../main/validation.js'
  */
 
 const log = debug('comapeo:services:discovery')
@@ -66,9 +67,9 @@ service
 		log('Service failed to advertise', err)
 
 		process.parentPort.postMessage(
-			/** @satisfies {v.InferInput<typeof ServiceErrorMessageSchema>} */ {
+			/** @satisfies {v.InferInput<typeof ServiceErrorMessageSchema>} */ ({
 				type: 'error',
 				error: err instanceof Error ? err : new Error(err),
-			},
+			}),
 		)
 	})

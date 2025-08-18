@@ -25,6 +25,7 @@ const log = debug('comapeo:main:app')
 
 /**
  * @import {UtilityProcess} from 'electron'
+ * @import {NewClientMessage} from '../services/core.js'
  * @import {AppConfig, SentryEnvironment} from '../shared/app.js'
  * @import {ConfigStore} from './config-store.js'
  */
@@ -315,10 +316,10 @@ function initMainWindow({
 		if (!port) return // TODO: throw/report error
 		coreService.postMessage(
 			/** @satisfies {NewClientMessage} */
-			{
+			({
 				type: 'main:new-client',
 				payload: { clientId: `window-${mainWindow.id}` },
-			},
+			}),
 			[port],
 		)
 	})
