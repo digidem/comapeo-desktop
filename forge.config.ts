@@ -15,14 +15,14 @@ import { PublisherGithub } from '@electron-forge/publisher-github'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
 import semver from 'semver'
 import * as v from 'valibot'
-import { ViteDevServer, build, createServer } from 'vite'
+import { build, createServer, type ViteDevServer } from 'vite'
 
 import packageJSON from './package.json' with { type: 'json' }
 import type { AppConfig, AppType } from './src/shared/app.ts'
 
 import 'dotenv/config'
 
-import {
+import type {
 	ForgeConfig,
 	ForgeConfigPlugin,
 	ForgeHookFn,
