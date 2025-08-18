@@ -21,7 +21,7 @@
 	},
 	"license": "GPL-3.0",
 	"type": "module",
-	"main": "src/main/index.js",
+	"main": "src/main/index.ts",
 	"scripts": {
 		"postinstall": "patch-package",
 		"prepare": "husky",
