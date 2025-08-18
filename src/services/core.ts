@@ -64,7 +64,6 @@ const NewClientMessageSchema = v.object({
 	}),
 })
 
-export type ProcessArgs = v.InferInput<typeof ProcessArgsSchema>
 export type NewClientMessage = v.InferInput<typeof NewClientMessageSchema>
 
 const { values } = parseArgs({
