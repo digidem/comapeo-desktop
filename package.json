@@ -47,9 +47,9 @@
 		"types:preload": "tsc -p src/preload/tsconfig.json",
 		"types:renderer": "tsc -p src/renderer/tsconfig.json",
 		"types": "concurrently --prefix \"types:{name}\" --pad-prefix --group \"node:types:*\"",
-		"test": "concurrently --pad-prefix --group \"node:types\" \"node:vitest:run\"",
-		"vitest:run": "vitest run --config ./src/renderer/vite.config.js",
-		"vitest:watch": "vitest watch --config ./src/renderer/vite.config.js",
+		"test:renderer": "vitest run --config ./src/renderer/vite.config.js",
+		"test:shared": "vitest run --dir ./src/shared/",
+		"test": "concurrently --prefix \"test:{name}\" --pad-prefix --group \"node:test:*\"",
 		"vite:dev": "vite dev src/renderer",
 		"vite:build": "vite build src/renderer"
 	},

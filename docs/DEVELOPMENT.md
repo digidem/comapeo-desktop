@@ -93,7 +93,7 @@ npm start                  # Build translations, then build the app in developme
 
 The renderer app (aka React code) can run unit test with [Vitest](https://vitest.dev/) (and integration tests with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)).
 
-To run unit or integration tests run `node --run vitest:run` or `node --run vitest:watch`. See [vitest run](https://vitest.dev/guide/cli.html#vitest-run) and [vitest watch](https://vitest.dev/guide/cli.html#vitest-watch) to understand the difference.
+To run unit or integration tests run `node --run vitest:run`. See [vitest run](https://vitest.dev/guide/cli.html#vitest-run).
 
 ## Translations
 
