@@ -7,9 +7,11 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { useIsMutating } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
+import { ONBOARDING_REJECT_INVITE_MUTATION_KEY } from '../-shared/queries'
 import {
 	BLUE_GREY,
 	DARKER_ORANGE,
@@ -39,10 +41,18 @@ function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 
 	const navigate = useNavigate()
-	const { data: invites } = useManyInvites()
+
+	const { data: invites, isRefetching: isRefetchingInvites } = useManyInvites()
+
+	const rejectingInvite =
+		useIsMutating({ mutationKey: ONBOARDING_REJECT_INVITE_MUTATION_KEY }) > 0
 
 	useEffect(() => {
-		const pendingInvite = invites.find((i) => i.state === 'pending')
+		if (rejectingInvite || isRefetchingInvites) {
+			return
+		}
+
+		const pendingInvite = invites.find((invite) => invite.state === 'pending')
 
 		if (pendingInvite) {
 			navigate({
@@ -50,7 +60,7 @@ function RouteComponent() {
 				params: { inviteId: pendingInvite.inviteId },
 			})
 		}
-	}, [invites, navigate])
+	}, [invites, navigate, rejectingInvite, isRefetchingInvites])
 
 	return (
 		<Stack
