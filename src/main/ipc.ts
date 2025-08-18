@@ -3,22 +3,20 @@ import { ipcMain } from 'electron/main'
 import si from 'systeminformation'
 import * as v from 'valibot'
 
+import { type ConfigStore } from './config-store.js'
+import { type Intl } from './intl.js'
 import {
 	PersistedCoordinateFormatSchema,
 	PersistedLocaleSchema,
 } from './validation.js'
 
-/**
- * @import {ConfigStore} from './config-store.js'
- * @import {Intl} from './intl.js'
- */
-
-/**
- * @param {Object} opts
- * @param {ConfigStore} opts.configStore
- * @param {Intl} opts.intl
- */
-export function setUpMainIPC({ configStore, intl }) {
+export function setUpMainIPC({
+	configStore,
+	intl,
+}: {
+	configStore: ConfigStore
+	intl: Intl
+}) {
 	// Shell
 	ipcMain.handle('shell:open-external-url', (_event, url) => {
 		v.assert(v.string(), url)
