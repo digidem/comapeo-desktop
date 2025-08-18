@@ -32,6 +32,10 @@ The following directories can be found in `src/` and approximately represent the
 - [`renderer/`](../src/renderer/): Code that runs in Electron's [renderer process](https://www.electronjs.org/docs/latest/tutorial/process-model#the-renderer-process).
   - has access to browser APIs
 
+### Shared code
+
+The [`shared/`](../src/shared/) directory contains code that should be usable from any of the aforementioned processes. As of right now, `preload/` can only use types from this directory until a bundling step is in place. In practice, most of the code here is related to shared types or validators.
+
 ### Electron Runtime
 
 The following use cases should generally be defined and set up in a preload script:
