@@ -2,8 +2,8 @@ import { randomBytes } from 'node:crypto'
 import debug from 'debug'
 import Store from 'electron-store'
 
-import type { CoordinateFormat } from '../shared/coordinate-format.js'
-import type { Locale } from '../shared/intl.js'
+import type { CoordinateFormat } from '../shared/coordinate-format.ts'
+import type { Locale } from '../shared/intl.ts'
 
 export type Config = {
 	activeProjectId?: string

@@ -3,10 +3,10 @@ import { ipcMain } from 'electron/main'
 import si from 'systeminformation'
 import * as v from 'valibot'
 
-import { CoordinateFormatSchema } from '../shared/coordinate-format.js'
-import { LocaleSchema } from '../shared/intl.js'
-import { type ConfigStore } from './config-store.js'
-import { type Intl } from './intl.js'
+import { CoordinateFormatSchema } from '../shared/coordinate-format.ts'
+import { LocaleSchema } from '../shared/intl.ts'
+import { type ConfigStore } from './config-store.ts'
+import { type Intl } from './intl.ts'
 
 export function setUpMainIPC({
 	configStore,

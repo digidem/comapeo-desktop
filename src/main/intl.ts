@@ -12,8 +12,8 @@ import {
 	type LocaleSource,
 	type LocaleState,
 	type SupportedLanguageTag,
-} from '../shared/intl.js'
-import type { ConfigStore } from './config-store.js'
+} from '../shared/intl.ts'
+import type { ConfigStore } from './config-store.ts'
 
 const log = debug('comapeo:main:intl')
 

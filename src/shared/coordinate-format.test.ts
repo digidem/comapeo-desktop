@@ -1,7 +1,7 @@
 import { is } from 'valibot'
 import { describe, expect, test } from 'vitest'
 
-import { CoordinateFormatSchema } from './coordinate-format.js'
+import { CoordinateFormatSchema } from './coordinate-format.ts'
 
 describe('CoordinateFormatSchema', () => {
 	test('captures valid values', () => {

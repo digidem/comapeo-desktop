@@ -12,9 +12,9 @@ import {
 	AppConfigSchema,
 	type AppConfig,
 	type SentryEnvironment,
-} from '../shared/app.js'
-import { start } from './app.js'
-import { createConfigStore } from './config-store.js'
+} from '../shared/app.ts'
+import { start } from './app.ts'
+import { createConfigStore } from './config-store.ts'
 
 const require = createRequire(import.meta.url)
 
