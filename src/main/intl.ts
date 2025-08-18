@@ -1,25 +1,22 @@
-import { createRequire } from 'node:module'
-import { createIntl, createIntlCache } from '@formatjs/intl'
+import { createIntl, createIntlCache, type IntlShape } from '@formatjs/intl'
 import debug from 'debug'
 import { app } from 'electron/main'
 import * as v from 'valibot'
 
-/**
- * @import {IntlShape} from '@formatjs/intl'
- * @import {LocaleSource, LocaleState, SupportedLanguageTag} from '../shared/intl.js'
- * @import {ConfigStore, PersistedLocale} from './config-store.js'
- */
+import SUPPORTED_LANGUAGES from '../../languages.json' with { type: 'json' }
+import enTranslations from '../../translations/main/en.json' with { type: 'json' }
+import esTranslations from '../../translations/main/es.json' with { type: 'json' }
+import ptTranslations from '../../translations/main/pt.json' with { type: 'json' }
+import type {
+	LocaleSource,
+	LocaleState,
+	SupportedLanguageTag,
+} from '../shared/intl.js'
+import type { ConfigStore, PersistedLocale } from './config-store.js'
 
-const require = createRequire(import.meta.url)
-const enTranslations = require('../../translations/main/en.json')
-const esTranslations = require('../../translations/main/es.json')
-const ptTranslations = require('../../translations/main/pt.json')
-
-const SUPPORTED_LANGUAGES = require('../../languages.json')
-
-const SUPPORTED_LANGUAGE_TAGS = /** @type {SupportedLanguageTag[]} */ (
-	Object.keys(SUPPORTED_LANGUAGES)
-)
+const SUPPORTED_LANGUAGE_TAGS = Object.keys(
+	SUPPORTED_LANGUAGES,
+) as Array<SupportedLanguageTag>
 
 const SupportedLanguageTagSchema = v.union(
 	SUPPORTED_LANGUAGE_TAGS.map((t) => v.literal(t)),
@@ -27,8 +24,7 @@ const SupportedLanguageTagSchema = v.union(
 
 const log = debug('comapeo:main:intl')
 
-/** @type {{ [key in SupportedLanguageTag]?: Record<string, unknown> }} */
-const messages = {
+const messages: { [key in SupportedLanguageTag]?: Record<string, unknown> } = {
 	en: enTranslations,
 	es: esTranslations,
 	pt: ptTranslations,
@@ -37,20 +33,13 @@ const messages = {
 export class Intl {
 	static cache = createIntlCache()
 
-	/** @type {ConfigStore} */
-	#config
+	#config: ConfigStore
 
-	/** @type {IntlShape<SupportedLanguageTag>} */
-	#intl
+	#intl: IntlShape<SupportedLanguageTag>
 
-	/** @type {LocaleSource} */
-	#localeSource
+	#localeSource: LocaleSource
 
-	/**
-	 * @param {Object} opts
-	 * @param {ConfigStore} opts.configStore
-	 */
-	constructor({ configStore }) {
+	constructor({ configStore }: { configStore: ConfigStore }) {
 		this.#config = configStore
 
 		const { value, source } = this.#getResolvedLocale(
@@ -61,12 +50,7 @@ export class Intl {
 		this.#localeSource = source
 	}
 
-	/**
-	 * @param {SupportedLanguageTag} locale
-	 *
-	 * @returns {IntlShape<SupportedLanguageTag>}
-	 */
-	#createIntl(locale) {
+	#createIntl(locale: SupportedLanguageTag): IntlShape<SupportedLanguageTag> {
 		const localeMessages = messages[locale]
 
 		if (!localeMessages) {
@@ -89,22 +73,17 @@ export class Intl {
 		)
 	}
 
-	/**
-	 * @type {LocaleState}
-	 */
-	get localeState() {
+	get localeState(): LocaleState {
 		return {
 			source: this.#localeSource,
-			value: /** @type {SupportedLanguageTag} */ (this.#intl.locale),
+			value: this.#intl.locale as SupportedLanguageTag,
 		}
 	}
 
-	/**
-	 * @param {PersistedLocale} locale
-	 *
-	 * @returns {{ value: SupportedLanguageTag; source: LocaleSource }}
-	 */
-	#getResolvedLocale(locale) {
+	#getResolvedLocale(locale: PersistedLocale): {
+		value: SupportedLanguageTag
+		source: LocaleSource
+	} {
 		if (locale.useSystemPreferences) {
 			const systemPreferredLocale =
 				getBestMatchingLanguageFromSystemPreferences()
@@ -130,10 +109,7 @@ export class Intl {
 		}
 	}
 
-	/**
-	 * @param {PersistedLocale} locale
-	 */
-	updateLocale(locale) {
+	updateLocale(locale: PersistedLocale) {
 		this.#config.set('locale', locale)
 
 		const { value, source } = this.#getResolvedLocale(locale)
@@ -151,12 +127,7 @@ export class Intl {
 	}
 
 	// Exposing mostly for convenience of usage
-	/**
-	 * @param {Parameters<IntlShape['formatMessage']>} args
-	 *
-	 * @returns {string}
-	 */
-	formatMessage(...args) {
+	formatMessage(...args: Parameters<IntlShape['formatMessage']>): string {
 		const result = this.#intl.formatMessage(...args)
 		return Array.isArray(result) ? result.join() : result
 	}
