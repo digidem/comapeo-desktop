@@ -7,8 +7,7 @@ import * as v from 'valibot'
 /**
  * @import {IntlShape} from '@formatjs/intl'
  * @import {LocaleSource, LocaleState, SupportedLanguageTag} from '../shared/intl.js'
- * @import {ConfigStore} from './config-store.js'
- * @import {PersistedLocale} from './types/config-store.js'
+ * @import {ConfigStore, PersistedLocale} from './config-store.js'
  */
 
 const require = createRequire(import.meta.url)

@@ -3,7 +3,7 @@ import type { Systeminformation } from 'systeminformation'
 import type {
 	PersistedCoordinateFormat,
 	PersistedLocale,
-} from '../main/types/config-store.js'
+} from '../main/config-store.js'
 import type { LocaleState } from '../shared/intl.js'
 
 export type SelectedFile = {
