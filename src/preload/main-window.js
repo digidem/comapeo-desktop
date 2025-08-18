@@ -10,13 +10,6 @@ window.onmessage = (event) => {
 	ipcRenderer.postMessage('comapeo-port', null, [port])
 }
 
-function handleNetworkChange() {
-	ipcRenderer.send('network-change')
-}
-
-window.addEventListener('online', handleNetworkChange)
-window.addEventListener('offline', handleNetworkChange)
-
 /**
  * @type {import('./runtime.js').RuntimeApi}
  */

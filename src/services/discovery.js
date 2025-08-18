@@ -30,8 +30,6 @@ const { values } = parseArgs({
 
 const { name, port } = v.parse(ProcessArgsSchema, values)
 
-log('Process args %O', { name, port })
-
 const responder = ciao.getResponder()
 
 const service = responder.createService({
@@ -59,58 +57,18 @@ async function cleanup() {
 process.on('SIGTERM', cleanup)
 process.on('SIGINT', cleanup)
 
-const NetworkChangeMessageSchema = v.object({
-	type: v.literal('network-change'),
-	online: v.boolean(),
-})
+service
+	.advertise()
+	.then(() => {
+		log('Service is published')
+	})
+	.catch((err) => {
+		log('Service failed to advertise', err)
 
-/**
- * @typedef {v.InferInput<typeof NetworkChangeMessageSchema>} NetworkChangeMessage
- */
-
-process.parentPort.on('message', (event) => {
-	// NOTE: Ideally we could just use Electron's net module but
-	// it doesn't seem to work as expected when called within a utility process
-	// https://github.com/electron/electron/issues/48100
-	if (v.is(NetworkChangeMessageSchema, event.data)) {
-		const { online } = event.data
-
-		log('Network change', { online })
-
-		handleNetworkChange(online).catch((err) => {
-			process.parentPort.postMessage(
-				/** @satisfies {v.InferInput<typeof ServiceErrorMessageSchema>} */ {
-					type: 'error',
-					error: err instanceof Error ? err : new Error(err),
-				},
-			)
-		})
-	}
-})
-
-let isAdvertising = false
-
-/**
- * @param {boolean} online
- */
-async function handleNetworkChange(online) {
-	if (online && !isAdvertising) {
-		try {
-			await service.advertise()
-			log('Started advertising')
-			isAdvertising = true
-		} catch (err) {
-			log('Failed to advertise', err)
-			throw err
-		}
-	} else if (!online && isAdvertising) {
-		try {
-			await service.end()
-			log('Stopped advertising')
-			isAdvertising = false
-		} catch (err) {
-			log('Failed to stop advertising', err)
-			throw err
-		}
-	}
-}
+		process.parentPort.postMessage(
+			/** @satisfies {v.InferInput<typeof ServiceErrorMessageSchema>} */ {
+				type: 'error',
+				error: err instanceof Error ? err : new Error(err),
+			},
+		)
+	})
