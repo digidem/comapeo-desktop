@@ -3,12 +3,10 @@ import { ipcMain } from 'electron/main'
 import si from 'systeminformation'
 import * as v from 'valibot'
 
+import { CoordinateFormatSchema } from '../shared/coordinate-format.js'
+import { LocaleSchema } from '../shared/intl.js'
 import { type ConfigStore } from './config-store.js'
 import { type Intl } from './intl.js'
-import {
-	PersistedCoordinateFormatSchema,
-	PersistedLocaleSchema,
-} from './validation.js'
 
 export function setUpMainIPC({
 	configStore,
@@ -59,7 +57,7 @@ export function setUpMainIPC({
 	})
 
 	ipcMain.handle('settings:set:coordinateFormat', (_event, value) => {
-		v.assert(PersistedCoordinateFormatSchema, value)
+		v.assert(CoordinateFormatSchema, value)
 		return configStore.set('coordinateFormat', value)
 	})
 
@@ -69,7 +67,7 @@ export function setUpMainIPC({
 	})
 
 	ipcMain.handle('settings:set:locale', (_event, value) => {
-		v.assert(PersistedLocaleSchema, value)
+		v.assert(LocaleSchema, value)
 		return intl.updateLocale(value)
 	})
 }

@@ -8,12 +8,12 @@ import enTranslations from '../../translations/main/en.json' with { type: 'json'
 import esTranslations from '../../translations/main/es.json' with { type: 'json' }
 import ptTranslations from '../../translations/main/pt.json' with { type: 'json' }
 import type {
+	Locale,
 	LocaleSource,
 	LocaleState,
 	SupportedLanguageTag,
 } from '../shared/intl.js'
 import type { ConfigStore } from './config-store.js'
-import type { PersistedLocale } from './validation.js'
 
 const SUPPORTED_LANGUAGE_TAGS = Object.keys(
 	SUPPORTED_LANGUAGES,
@@ -81,7 +81,7 @@ export class Intl {
 		}
 	}
 
-	#getResolvedLocale(locale: PersistedLocale): {
+	#getResolvedLocale(locale: Locale): {
 		value: SupportedLanguageTag
 		source: LocaleSource
 	} {
@@ -110,7 +110,7 @@ export class Intl {
 		}
 	}
 
-	updateLocale(locale: PersistedLocale) {
+	updateLocale(locale: Locale) {
 		this.#config.set('locale', locale)
 
 		const { value, source } = this.#getResolvedLocale(locale)

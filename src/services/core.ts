@@ -12,7 +12,7 @@ import Fastify from 'fastify'
 import sodium from 'sodium-native'
 import * as v from 'valibot'
 
-import type { ServiceErrorMessage } from '../main/validation.js'
+import type { ServiceErrorMessage } from '../main/service-error.js'
 
 const log = debug('comapeo:services:core')
 

@@ -2,16 +2,14 @@ import { randomBytes } from 'node:crypto'
 import debug from 'debug'
 import Store from 'electron-store'
 
-import type {
-	PersistedCoordinateFormat,
-	PersistedLocale,
-} from './validation.js'
+import type { CoordinateFormat } from '../shared/coordinate-format.js'
+import type { Locale } from '../shared/intl.js'
 
 export type Config = {
 	activeProjectId?: string
-	coordinateFormat: PersistedCoordinateFormat
+	coordinateFormat: CoordinateFormat
 	diagnosticsEnabled: boolean
-	locale: PersistedLocale
+	locale: Locale
 	rootKey?: string
 	sentryUser: {
 		id: string

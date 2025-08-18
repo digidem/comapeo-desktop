@@ -108,7 +108,7 @@ function getProcessArgValue(flag) {
 /**
  * @param {NonNullable<unknown>} value
  *
- * @returns {asserts value is import('./runtime.js').SelectedFile}
+ * @returns {asserts value is import('../shared/ipc.js').SelectedFile}
  */
 function validateSelectedFileResult(value) {
 	if (!('path' in value && 'name' in value)) {

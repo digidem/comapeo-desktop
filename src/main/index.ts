@@ -8,10 +8,13 @@ import debug from 'debug'
 import { app } from 'electron/main'
 import { parse } from 'valibot'
 
-import type { AppConfig, SentryEnvironment } from '../shared/app.js'
+import {
+	AppConfigSchema,
+	type AppConfig,
+	type SentryEnvironment,
+} from '../shared/app.js'
 import { start } from './app.js'
 import { createConfigStore } from './config-store.js'
-import { AppConfigSchema } from './validation.js'
 
 const require = createRequire(import.meta.url)
 
