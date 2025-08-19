@@ -50,7 +50,9 @@ import {
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
 
 const CATEGORY_CONTAINER_SIZE_PX = 64
-const APPROXIMATE_ITEM_HEIGHT_PX = CATEGORY_CONTAINER_SIZE_PX + 16 * 2
+
+// NOTE: Accounts for space added by top + bottom padding and bottom border
+const APPROXIMATE_ITEM_HEIGHT_PX = CATEGORY_CONTAINER_SIZE_PX + 16 * 2 + 1
 
 export function DisplayedDataList({ projectId }: { projectId: string }) {
 	const { formatMessage: t, formatDate } = useIntl()
