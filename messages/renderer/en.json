@@ -81,8 +81,8 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "Observation"
   },
-  "routes.app.projects.$projectId.-displayed.data.list.trackCategoryNameFallback": {
-    "description": "Fallback name for track without a matching category.",
+  "routes.app.projects.$projectId.-displayed.data.list.trackItemTitle": {
+    "description": "Title for list item that is a track.",
     "message": "Track"
   },
   "routes.app.projects.$projectId.-displayed.data.map.categoryIconAlt": {
