@@ -7,7 +7,6 @@ import {
 	useState,
 } from 'react'
 import {
-	useIconUrl,
 	useManyDocs,
 	useMapStyleUrl,
 	useSingleDocByDocId,
@@ -39,7 +38,10 @@ import {
 import * as v from 'valibot'
 
 import { BLACK, BLUE_GREY, ORANGE, WHITE } from '../../../../../colors'
-import { CategoryIconContainer } from '../../../../../components/category-icon'
+import {
+	CategoryIconContainer,
+	CategoryIconImage,
+} from '../../../../../components/category-icon'
 import { Icon } from '../../../../../components/icon'
 import { Map } from '../../../../../components/map'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo'
@@ -507,6 +509,8 @@ export function DisplayedDataMap() {
 	)
 }
 
+const ICON_SIZE = 20
+
 function CategoryIconMarker({
 	projectId,
 	documentId,
@@ -528,29 +532,26 @@ function CategoryIconMarker({
 	const categoryDocIdToUse = categoryDocumentId || document.presetRef?.docId
 
 	return categoryDocIdToUse ? (
-		<CategoryIconImage
+		<CategoryIcon
 			categoryDocumentId={categoryDocIdToUse}
 			projectId={projectId}
-			size={20}
 			lang={lang}
 		/>
 	) : (
 		<CategoryIconContainer color={BLUE_GREY} applyBoxShadow padding={1}>
-			<Icon name="material-place" size={20} />
+			<Icon name="material-place" size={ICON_SIZE} />
 		</CategoryIconContainer>
 	)
 }
 
-function CategoryIconImage({
+function CategoryIcon({
 	categoryDocumentId,
 	lang,
 	projectId,
-	size,
 }: {
 	categoryDocumentId: string
 	lang: string
 	projectId: string
-	size: number
 }) {
 	const { formatMessage: t } = useIntl()
 
@@ -568,40 +569,16 @@ function CategoryIconImage({
 			padding={1}
 		>
 			{category.iconRef?.docId ? (
-				<IconImage
+				<CategoryIconImage
 					projectId={projectId}
 					iconDocumentId={category.iconRef.docId}
-					size={size}
-					alt={t(m.categoryIconAlt, { name: category.name })}
+					imageStyle={{ height: ICON_SIZE, aspectRatio: 1 }}
+					altText={t(m.categoryIconAlt, { name: category.name })}
 				/>
 			) : (
-				<Icon name="material-place" size={size} />
+				<Icon name="material-place" size={20} />
 			)}
 		</CategoryIconContainer>
-	)
-}
-
-function IconImage({
-	alt,
-	iconDocumentId,
-	projectId,
-	size,
-}: {
-	alt: string
-	iconDocumentId: string
-	projectId: string
-	size: number
-}) {
-	const { data: iconUrl } = useIconUrl({
-		projectId,
-		iconId: iconDocumentId,
-		mimeType: 'image/png',
-		size: 'small',
-		pixelDensity: 3,
-	})
-
-	return (
-		<img alt={alt} src={iconUrl} height={size} style={{ aspectRatio: 1 }} />
 	)
 }
 

@@ -4,7 +4,6 @@ import {
 	useEffect,
 	useMemo,
 	useRef,
-	type CSSProperties,
 	type FocusEvent,
 	type MouseEvent,
 	type RefObject,
@@ -13,7 +12,6 @@ import type { BlobApi } from '@comapeo/core'
 import {
 	useAttachmentUrl,
 	useDocumentCreatedBy,
-	useIconUrl,
 	useManyDocs,
 	useOwnDeviceInfo,
 } from '@comapeo/core-react'
@@ -38,7 +36,10 @@ import {
 	LIGHT_GREY,
 	WHITE,
 } from '../../../../../colors'
-import { CategoryIconContainer } from '../../../../../components/category-icon'
+import {
+	CategoryIconContainer,
+	CategoryIconImage,
+} from '../../../../../components/category-icon'
 import { ErrorBoundary } from '../../../../../components/error-boundary'
 import { Icon } from '../../../../../components/icon'
 import { TextLink } from '../../../../../components/link'
@@ -238,7 +239,6 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 							}}
 						>
 							<ListItemButton
-								key={docId}
 								data-datatype={type}
 								data-docid={docId}
 								disableGutters
@@ -429,27 +429,26 @@ function ObservationCategory({
 	if (displayableAttachments.length > 0) {
 		const shouldStack = displayableAttachments.length > 1
 
-		const categoryIcon = categoryIconDocumentId ? (
-			<CategoryIcon
-				projectId={projectId}
-				iconDocumentId={categoryIconDocumentId}
-				categoryColor={color}
-				categoryName={name}
-				imageStyle={{ aspectRatio: 1, maxHeight: 12, objectFit: 'cover' }}
-			/>
-		) : (
-			<CategoryIconContainer color={BLUE_GREY}>
-				<Box
-					display="flex"
-					justifyContent="center"
-					alignItems="center"
-					maxHeight={12}
-					sx={{
-						aspectRatio: 1,
-					}}
-				>
-					<Icon name="material-place" />
-				</Box>
+		const categoryIcon = (
+			<CategoryIconContainer color={color}>
+				{categoryIconDocumentId ? (
+					<CategoryIconImage
+						projectId={projectId}
+						iconDocumentId={categoryIconDocumentId}
+						altText={t(m.categoryIconAlt, { name })}
+						imageStyle={{ aspectRatio: 1, maxHeight: 12, objectFit: 'cover' }}
+					/>
+				) : (
+					<Box
+						display="flex"
+						justifyContent="center"
+						alignItems="center"
+						maxHeight={12}
+						sx={{ aspectRatio: 1 }}
+					>
+						<Icon name="material-place" />
+					</Box>
+				)}
 			</CategoryIconContainer>
 		)
 
@@ -536,13 +535,14 @@ function ObservationCategory({
 	}
 
 	return categoryIconDocumentId ? (
-		<CategoryIcon
-			projectId={projectId}
-			iconDocumentId={categoryIconDocumentId}
-			categoryColor={color}
-			categoryName={name}
-			imageStyle={{ aspectRatio: 1, width: '100%' }}
-		/>
+		<CategoryIconContainer color={color}>
+			<CategoryIconImage
+				projectId={projectId}
+				iconDocumentId={categoryIconDocumentId}
+				altText={t(m.categoryIconAlt, { name })}
+				imageStyle={{ aspectRatio: 1, width: '100%' }}
+			/>
+		</CategoryIconContainer>
 	) : (
 		<CategoryIconContainer color={BLUE_GREY}>
 			<Icon name="material-place" size={40} />
@@ -564,65 +564,19 @@ function TrackCategory({
 	const { formatMessage: t } = useIntl()
 
 	return categoryIconDocumentId ? (
-		<CategoryIcon
-			projectId={projectId}
-			iconDocumentId={categoryIconDocumentId}
-			categoryColor={categoryColor || BLUE_GREY}
-			categoryName={categoryName || t(m.trackItemTitle)}
-			imageStyle={{ aspectRatio: 1, width: '100%' }}
-		/>
+		<CategoryIconContainer color={categoryColor || BLUE_GREY}>
+			<CategoryIconImage
+				projectId={projectId}
+				iconDocumentId={categoryIconDocumentId}
+				altText={t(m.categoryIconAlt, {
+					name: categoryName || t(m.trackItemTitle),
+				})}
+				imageStyle={{ aspectRatio: 1, width: '100%' }}
+			/>
+		</CategoryIconContainer>
 	) : (
 		<CategoryIconContainer color={BLACK}>
 			<Icon name="material-hiking" size={40} />
-		</CategoryIconContainer>
-	)
-}
-
-function CategoryIcon({
-	categoryColor,
-	categoryName,
-	iconDocumentId,
-	imageStyle,
-	projectId,
-}: {
-	categoryColor: string
-	categoryName: string
-	iconDocumentId: string
-	imageStyle?: CSSProperties
-	projectId: string
-}) {
-	const { formatMessage: t } = useIntl()
-
-	const { data: iconUrl } = useIconUrl({
-		projectId,
-		iconId: iconDocumentId,
-		mimeType: 'image/png',
-		size: 'small',
-		pixelDensity: 3,
-	})
-
-	return (
-		<CategoryIconContainer color={categoryColor}>
-			<ErrorBoundary
-				getResetKey={() => iconUrl}
-				fallback={() => (
-					<Box
-						sx={imageStyle}
-						display="flex"
-						justifyContent="center"
-						alignItems="center"
-						flex={1}
-					>
-						<Icon name="material-error" color="error" />
-					</Box>
-				)}
-			>
-				<SuspenseImage
-					src={iconUrl}
-					alt={t(m.categoryIconAlt, { name: categoryName })}
-					style={imageStyle}
-				/>
-			</ErrorBoundary>
 		</CategoryIconContainer>
 	)
 }

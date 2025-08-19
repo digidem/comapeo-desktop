@@ -1,12 +1,7 @@
 import { Suspense } from 'react'
-import {
-	useIconUrl,
-	useManyDocs,
-	useSingleDocByDocId,
-} from '@comapeo/core-react'
+import { useManyDocs, useSingleDocByDocId } from '@comapeo/core-react'
 import type { Field, Preset } from '@comapeo/schema'
 import Box from '@mui/material/Box'
-import CircularProgress from '@mui/material/CircularProgress'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
@@ -16,10 +11,12 @@ import { createFileRoute, notFound, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARKER_ORANGE } from '../../../../../../colors'
-import { CategoryIconContainer } from '../../../../../../components/category-icon'
+import {
+	CategoryIconContainer,
+	CategoryIconImage,
+} from '../../../../../../components/category-icon'
 import { ErrorBoundary } from '../../../../../../components/error-boundary'
 import { Icon } from '../../../../../../components/icon'
-import { SuspenseImage } from '../../../../../../components/suspense-image'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	getMatchingCategoryForDocument,
@@ -203,10 +200,11 @@ function RouteComponent() {
 										>
 											{category.iconRef?.docId ? (
 												<CategoryIconImage
-													categoryName={
-														category.name ||
-														t(m.observationCategoryNameFallback)
-													}
+													altText={t(m.categoryIconAlt, {
+														name:
+															category.name ||
+															t(m.observationCategoryNameFallback),
+													})}
 													iconDocumentId={category.iconRef.docId}
 													projectId={projectId}
 												/>
@@ -342,40 +340,6 @@ function RouteComponent() {
 				</Stack>
 			</Box>
 		</Stack>
-	)
-}
-
-function CategoryIconImage({
-	categoryName,
-	iconDocumentId,
-	projectId,
-}: {
-	categoryName: string
-	iconDocumentId: string
-	projectId: string
-}) {
-	const { formatMessage: t } = useIntl()
-
-	const { data: iconUrl } = useIconUrl({
-		projectId,
-		iconId: iconDocumentId,
-		mimeType: 'image/png',
-		size: 'small',
-		pixelDensity: 3,
-	})
-
-	return (
-		<ErrorBoundary
-			getResetKey={() => iconUrl}
-			fallback={() => <Icon name="material-error" color="error" />}
-		>
-			<Suspense fallback={<CircularProgress disableShrink size={30} />}>
-				<SuspenseImage
-					src={iconUrl}
-					alt={t(m.categoryIconAlt, { name: categoryName })}
-				/>
-			</Suspense>
-		</ErrorBoundary>
 	)
 }
 
