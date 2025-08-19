@@ -1,8 +1,18 @@
-import type { ComponentProps, ReactNode } from 'react'
+import {
+	Suspense,
+	type CSSProperties,
+	type ComponentProps,
+	type ReactNode,
+} from 'react'
+import { useIconUrl } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
 import { alpha } from '@mui/material/styles'
 
 import { WHITE } from '../colors'
+import { ErrorBoundary } from './error-boundary'
+import { Icon } from './icon'
+import { SuspenseImage } from './suspense-image'
 
 export function CategoryIconContainer({
 	children,
@@ -32,5 +42,36 @@ export function CategoryIconContainer({
 		>
 			{children}
 		</Box>
+	)
+}
+
+export function CategoryIconImage({
+	altText,
+	projectId,
+	iconDocumentId,
+	imageStyle,
+}: {
+	altText: string
+	iconDocumentId: string
+	projectId: string
+	imageStyle?: CSSProperties
+}) {
+	const { data: iconUrl } = useIconUrl({
+		projectId,
+		iconId: iconDocumentId,
+		mimeType: 'image/png',
+		size: 'small',
+		pixelDensity: 3,
+	})
+
+	return (
+		<ErrorBoundary
+			getResetKey={() => iconUrl}
+			fallback={() => <Icon name="material-error" color="error" />}
+		>
+			<Suspense fallback={<CircularProgress disableShrink />}>
+				<SuspenseImage src={iconUrl} alt={altText} style={imageStyle} />
+			</Suspense>
+		</ErrorBoundary>
 	)
 }
