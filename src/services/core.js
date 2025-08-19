@@ -53,7 +53,14 @@ const CUSTOM_MAPS_DIR_NAME = 'maps'
 
 const ProcessArgsSchema = v.object({
 	onlineStyleUrl: v.pipe(v.string(), v.url()),
-	rootKey: v.pipe(v.string(), v.hexadecimal()),
+	rootKey: v.pipe(
+		v.string(),
+		v.hexadecimal(),
+		v.transform((value) => {
+			return Buffer.from(value, 'hex')
+		}),
+		v.length(16, 'Root key must be 16 bytes'),
+	),
 	storageDirectory: v.string(),
 })
 
@@ -78,26 +85,11 @@ const NewClientMessageSchema = v.object({
 /**
  * @private
  * @typedef {{
- * 			status: 'active'
- * 			fastifyController: FastifyController
- * 			manager: MapeoManager
- * 			clientPorts: ConnectedClientPorts
- * 	  }
- * 	| {
- * 			status: 'idle'
- * 			fastifyController: null
- * 			manager: null
- * 			clientPorts: ConnectedClientPorts
- * 	  }} State
+ * 	fastifyController: FastifyController
+ * 	manager: MapeoManager
+ * 	clientPorts: ConnectedClientPorts
+ * }} State
  */
-
-/** @type {State} */
-let state = {
-	status: 'idle',
-	fastifyController: null,
-	manager: null,
-	clientPorts: new WeakSet(),
-}
 
 const { values } = parseArgs({
 	strict: true,
@@ -108,16 +100,15 @@ const { values } = parseArgs({
 	},
 })
 
-const parsedProcessArgs = v.parse(ProcessArgsSchema, values)
+const { onlineStyleUrl, rootKey, storageDirectory } = v.parse(
+	ProcessArgsSchema,
+	values,
+)
 
-const rootKey = Buffer.from(parsedProcessArgs.rootKey, 'hex')
-
-assert(rootKey.byteLength === 16, 'Root key must be 16 bytes')
-
-const { manager, fastifyController } = initializeCore({
-	onlineStyleUrl: parsedProcessArgs.onlineStyleUrl,
+const { manager } = initializeCore({
+	onlineStyleUrl,
 	rootKey,
-	storageDirectory: parsedProcessArgs.storageDirectory,
+	storageDirectory,
 })
 
 initializePeerDiscovery(manager).catch((err) => {
@@ -129,96 +120,41 @@ initializePeerDiscovery(manager).catch((err) => {
 	)
 })
 
-state = {
-	...state,
-	status: 'active',
-	manager,
-	fastifyController,
-}
+/** @type {ConnectedClientPorts} */
+const clientPorts = new WeakSet()
 
 // We might get multiple clients, for instance if there are multiple windows,
 // or if the main window reloads.
 process.parentPort.on('message', (event) => {
+	if (!v.is(NewClientMessageSchema, event.data)) {
+		log('Unrecognized message received', event)
+		return
+	}
+
 	const [port] = event.ports
 
 	assert(port)
 
-	if (!v.is(NewClientMessageSchema, event.data)) {
-		log(`Unrecognized message: ${JSON.stringify(event)}`)
+	if (clientPorts.has(port)) {
+		log(
+			`Ignoring '${event.data.type}' message because message port already initialized`,
+		)
 		return
 	}
 
-	const { data } = event
+	const { clientId } = event.data.payload
 
-	switch (data.type) {
-		case 'main:new-client': {
-			if (state.clientPorts.has(port)) {
-				log(
-					`Ignoring 'core:new-client' message because message port already initialized`,
-				)
-				return
-			}
+	log('Adding new client', clientId)
 
-			switch (state.status) {
-				// Initialize core and set up the RPC connection
-				case 'idle': {
-					const { manager, fastifyController } = initializeCore({
-						onlineStyleUrl: parsedProcessArgs.onlineStyleUrl,
-						rootKey,
-						storageDirectory: parsedProcessArgs.storageDirectory,
-					})
+	const server = createMapeoServer(manager, new MessagePortLike(port))
 
-					initializePeerDiscovery(manager).catch((err) => {
-						log('Failed to start peer discovery', err)
+	port.on('close', () => {
+		log(`Port associated with client ${clientId} closed`)
+		server.close()
+		clientPorts.delete(port)
+	})
 
-						process.parentPort.postMessage(
-							/** @satisfies {v.InferInput<typeof ServiceErrorMessageSchema>} */
-							({
-								type: 'error',
-								error: err instanceof Error ? err : new Error(err),
-							}),
-						)
-					})
-
-					const server = createMapeoServer(manager, new MessagePortLike(port))
-
-					port.on('close', () => {
-						log(`Port associated with client ${data.payload.clientId} closed`)
-						server.close()
-						state.clientPorts.delete(port)
-					})
-
-					state = {
-						status: 'active',
-						manager,
-						fastifyController,
-						clientPorts: new WeakSet([port]),
-					}
-
-					break
-				}
-				// Create another RPC connection
-				case 'active': {
-					const server = createMapeoServer(
-						state.manager,
-						new MessagePortLike(port),
-					)
-
-					port.on('close', () => {
-						log(`Port associated with client ${data.payload.clientId} closed`)
-						server.close()
-						state.clientPorts.delete(port)
-					})
-
-					state.clientPorts.add(port)
-
-					break
-				}
-			}
-
-			break
-		}
-	}
+	clientPorts.add(port)
 
 	port.start()
 })
