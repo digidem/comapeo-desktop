@@ -26,7 +26,7 @@ import { bbox } from '@turf/bbox'
 import { center } from '@turf/center'
 import { featureCollection, lineString, point } from '@turf/helpers'
 import type { Feature, Point } from 'geojson'
-import type { FitBoundsOptions } from 'maplibre-gl'
+import type { FitBoundsOptions, LineLayerSpecification } from 'maplibre-gl'
 import { defineMessages, useIntl } from 'react-intl'
 import {
 	Layer,
@@ -50,6 +50,11 @@ const TRACKS_SOURCE_ID = 'tracks_source' as const
 
 const OBSERVATIONS_LAYER_ID = 'observations_layer' as const
 const TRACKS_LAYER_ID = 'tracks_layer' as const
+
+const TRACKS_LAYER_LAYOUT: LineLayerSpecification['layout'] = {
+	'line-cap': 'round',
+	'line-join': 'round',
+}
 
 const INTERACTIVE_LAYER_IDS = [OBSERVATIONS_LAYER_ID, TRACKS_LAYER_ID]
 
@@ -145,22 +150,36 @@ export function DisplayedDataMap() {
 		return tracksToFeatureCollection(tracks)
 	}, [tracks])
 
-	const observationLayerPaint = useMemo(() => {
+	const observationsLayerPaint = useMemo(() => {
 		return createObservationLayerPaintProperty(
 			categories,
 			!!documentToHighlight,
 		)
 	}, [categories, documentToHighlight])
 
-	// TODO: Should cover both observations and tracks?
-	const observationsBbox: [number, number, number, number] = useMemo(() => {
-		if (observationsFeatureCollection.features.length === 0) {
+	const tracksLayerPaint = useMemo(() => {
+		return createTrackLayerPaintProperty(!!documentToHighlight)
+	}, [documentToHighlight])
+
+	const mapBbox: [number, number, number, number] = useMemo(() => {
+		if (
+			observationsFeatureCollection.features.length === 0 &&
+			tracksFeatureCollection.features.length === 0
+		) {
 			return DEFAULT_BOUNDING_BOX
 		}
-		const [minLon, minLat, maxLon, maxLat] = bbox(observationsFeatureCollection)
+
+		// TODO: There's probably a better way of doing this with turf but not worth trying to figure out
+		const observationsBbox = bbox(observationsFeatureCollection)
+		const tracksBbox = bbox(tracksFeatureCollection)
+
+		const minLon = Math.min(tracksBbox[0], observationsBbox[0])
+		const minLat = Math.min(tracksBbox[1], observationsBbox[1])
+		const maxLon = Math.max(tracksBbox[2], observationsBbox[2])
+		const maxLat = Math.max(tracksBbox[3], observationsBbox[3])
 
 		return [minLon, minLat, maxLon, maxLat]
-	}, [observationsFeatureCollection])
+	}, [observationsFeatureCollection, tracksFeatureCollection])
 
 	const onMapClick = useCallback(
 		(event: MapLayerMouseEvent) => {
@@ -244,21 +263,43 @@ export function DisplayedDataMap() {
 				mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
 				mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
 
-				// Highlight the feature with the new value
-				mapRef.current.setFeatureState(
-					{ source: OBSERVATIONS_SOURCE_ID, id: documentToHighlight.docId },
-					{ highlight: true },
-				)
-				mapRef.current.setFeatureState(
-					{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
-					{ highlight: true },
-				)
+				// Highlight the feature(s) with the new value
+				if (documentToHighlight.type === 'observation') {
+					mapRef.current.setFeatureState(
+						{ source: OBSERVATIONS_SOURCE_ID, id: documentToHighlight.docId },
+						{ highlight: true },
+					)
+				} else {
+					mapRef.current.setFeatureState(
+						{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
+						{ highlight: true },
+					)
+
+					const highlightedTrack = tracks.find(
+						(t) => t.docId === documentToHighlight.docId,
+					)
+
+					if (!highlightedTrack) {
+						console.warn(
+							`Could not find track with doc ID: ${documentToHighlight.docId}`,
+						)
+						return
+					}
+
+					// NOTE: Highlighting a track should highlight observations that it references.
+					for (const o of highlightedTrack.observationRefs) {
+						mapRef.current.setFeatureState(
+							{ source: OBSERVATIONS_SOURCE_ID, id: o.docId },
+							{ highlight: true },
+						)
+					}
+				}
 			} else {
 				mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
 				mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
 			}
 		},
-		[documentToHighlight, mapLoaded],
+		[documentToHighlight, mapLoaded, tracks],
 	)
 
 	useEffect(
@@ -280,12 +321,12 @@ export function DisplayedDataMap() {
 				return
 			}
 
-			mapRef.current.fitBounds(observationsBbox, {
+			mapRef.current.fitBounds(mapBbox, {
 				...BASE_FIT_BOUNDS_OPTIONS,
 				animate: false,
 			})
 		},
-		[observationsBbox, mapLoaded],
+		[mapBbox, mapLoaded],
 	)
 
 	useEffect(
@@ -331,12 +372,19 @@ export function DisplayedDataMap() {
 				if (tracksMatch) {
 					const c = center(tracksMatch)
 
+					const [minLon, minLat, maxLon, maxLat] = bbox(tracksMatch)
+
 					mapRef.current.panTo(
 						{
 							lon: c.geometry.coordinates[0]!,
 							lat: c.geometry.coordinates[1]!,
 						},
 						shouldZoomIn ? { zoom: 10 } : undefined,
+					)
+
+					mapRef.current.fitBounds(
+						[minLon, minLat, maxLon, maxLat],
+						BASE_FIT_BOUNDS_OPTIONS,
 					)
 				}
 			}
@@ -382,7 +430,7 @@ export function DisplayedDataMap() {
 				ref={mapRef}
 				mapStyle={mapStyleUrl}
 				initialViewState={{
-					bounds: observationsBbox,
+					bounds: mapBbox,
 					fitBoundsOptions: BASE_FIT_BOUNDS_OPTIONS,
 				}}
 				// TODO: Consider making this the bounding box of the data?
@@ -398,6 +446,35 @@ export function DisplayedDataMap() {
 				}}
 				cursor={enableMapInteractions ? undefined : 'default'}
 			>
+				<Source
+					type="geojson"
+					id={TRACKS_SOURCE_ID}
+					data={tracksFeatureCollection}
+					// Need this in order for the feature-state querying to work when hovering
+					promoteId="docId"
+				>
+					<Layer
+						type="line"
+						id={TRACKS_LAYER_ID}
+						paint={tracksLayerPaint}
+						layout={TRACKS_LAYER_LAYOUT}
+					/>
+				</Source>
+
+				<Source
+					type="geojson"
+					id={OBSERVATIONS_SOURCE_ID}
+					data={observationsFeatureCollection}
+					// Need this in order for the feature-state querying to work when hovering
+					promoteId="docId"
+				>
+					<Layer
+						type="circle"
+						id={OBSERVATIONS_LAYER_ID}
+						paint={observationsLayerPaint}
+					/>
+				</Source>
+
 				{observationFeatureToShowCategoryIconOn &&
 				currentRoute.routeId ===
 					'/app/projects/$projectId/observations/$observationDocId/' ? (
@@ -425,30 +502,6 @@ export function DisplayedDataMap() {
 						</Marker>
 					</Suspense>
 				) : null}
-
-				<Source
-					type="geojson"
-					id={OBSERVATIONS_SOURCE_ID}
-					data={observationsFeatureCollection}
-					// Need this in order for the feature-state querying to work when hovering
-					promoteId="docId"
-				>
-					<Layer
-						type="circle"
-						id={OBSERVATIONS_LAYER_ID}
-						paint={observationLayerPaint}
-					/>
-				</Source>
-
-				<Source
-					type="geojson"
-					id={TRACKS_SOURCE_ID}
-					data={tracksFeatureCollection}
-					// Need this in order for the feature-state querying to work when hovering
-					promoteId="docId"
-				>
-					{/* TODO: Implement tracks layer */}
-				</Source>
 			</Map>
 		</Box>
 	)
@@ -588,6 +641,18 @@ function tracksToFeatureCollection(tracks: Array<Track>) {
 			),
 		),
 	)
+}
+
+function createTrackLayerPaintProperty(
+	enableHighlighting: boolean,
+): LineLayerSpecification['paint'] {
+	return {
+		'line-color': BLACK,
+		'line-width': 4,
+		'line-opacity': enableHighlighting
+			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.2]
+			: 1,
+	}
 }
 
 function createObservationLayerPaintProperty(
