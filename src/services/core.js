@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 import { FastifyController, MapeoManager } from '@comapeo/core'
 import { createMapeoServer } from '@comapeo/ipc/server.js'
+import ciao from '@homebridge/ciao'
 import debug from 'debug'
 import Fastify from 'fastify'
 import * as v from 'valibot'
@@ -14,6 +15,8 @@ const log = debug('comapeo:services:core')
 
 /**
  * @import {MessagePortMain} from 'electron'
+ * @import {Protocol} from '@homebridge/ciao'
+ * @import {ServiceErrorMessageSchema} from '../main/validation.js'
  */
 
 const require = createRequire(import.meta.url)
@@ -50,12 +53,19 @@ const CUSTOM_MAPS_DIR_NAME = 'maps'
 
 const ProcessArgsSchema = v.object({
 	onlineStyleUrl: v.pipe(v.string(), v.url()),
-	rootKey: v.pipe(v.string(), v.hexadecimal()),
+	rootKey: v.pipe(
+		v.string(),
+		v.hexadecimal(),
+		v.transform((value) => {
+			return Buffer.from(value, 'hex')
+		}),
+		v.length(16, 'Root key must be 16 bytes'),
+	),
 	storageDirectory: v.string(),
 })
 
 const NewClientMessageSchema = v.object({
-	type: v.literal('core:new-client'),
+	type: v.literal('main:new-client'),
 	payload: v.object({
 		clientId: v.string(),
 	}),
@@ -67,35 +77,6 @@ const NewClientMessageSchema = v.object({
  * @typedef {v.InferInput<typeof NewClientMessageSchema>} NewClientMessage
  */
 
-/**
- * @private
- * @typedef {WeakSet<MessagePortMain>} ConnectedClientPorts
- */
-
-/**
- * @private
- * @typedef {{
- * 			status: 'active'
- * 			fastifyController: FastifyController
- * 			manager: MapeoManager
- * 			clientPorts: ConnectedClientPorts
- * 	  }
- * 	| {
- * 			status: 'idle'
- * 			fastifyController: null
- * 			manager: null
- * 			clientPorts: ConnectedClientPorts
- * 	  }} State
- */
-
-/** @type {State} */
-let state = {
-	status: 'idle',
-	fastifyController: null,
-	manager: null,
-	clientPorts: new WeakSet(),
-}
-
 const { values } = parseArgs({
 	strict: true,
 	options: {
@@ -105,96 +86,61 @@ const { values } = parseArgs({
 	},
 })
 
-const parsedProcessArgs = v.parse(ProcessArgsSchema, values)
+const { onlineStyleUrl, rootKey, storageDirectory } = v.parse(
+	ProcessArgsSchema,
+	values,
+)
 
-const rootKey = Buffer.from(parsedProcessArgs.rootKey, 'hex')
-
-assert(rootKey.byteLength === 16, 'Root key must be 16 bytes')
-
-const { manager, fastifyController } = initializeCore({
-	onlineStyleUrl: parsedProcessArgs.onlineStyleUrl,
+const { manager } = initializeCore({
+	onlineStyleUrl,
 	rootKey,
-	storageDirectory: parsedProcessArgs.storageDirectory,
+	storageDirectory,
 })
 
-state = {
-	...state,
-	status: 'active',
-	manager,
-	fastifyController,
-}
+initializePeerDiscovery(manager).catch((err) => {
+	log('Failed to start peer discovery', err)
+
+	process.parentPort.postMessage(
+		/** @satisfies {v.InferInput<typeof ServiceErrorMessageSchema>} */
+		({ type: 'error', error: err instanceof Error ? err : new Error(err) }),
+	)
+})
+
+/** @type {WeakSet<MessagePortMain>} */
+const connectedClientPorts = new WeakSet()
 
 // We might get multiple clients, for instance if there are multiple windows,
 // or if the main window reloads.
 process.parentPort.on('message', (event) => {
+	if (!v.is(NewClientMessageSchema, event.data)) {
+		log('Unrecognized message received', event)
+		return
+	}
+
 	const [port] = event.ports
 
 	assert(port)
 
-	if (!v.is(NewClientMessageSchema, event.data)) {
-		log(`Unrecognized message: ${JSON.stringify(event)}`)
+	if (connectedClientPorts.has(port)) {
+		log(
+			`Ignoring '${event.data.type}' message because message port already initialized`,
+		)
 		return
 	}
 
-	const { data } = event
+	const { clientId } = event.data.payload
 
-	switch (data.type) {
-		case 'core:new-client': {
-			if (state.clientPorts.has(port)) {
-				log(
-					`Ignoring 'core:new-client' message because message port already initialized`,
-				)
-				return
-			}
+	log('Adding new client', clientId)
 
-			switch (state.status) {
-				// Initialize core and set up the RPC connection
-				case 'idle': {
-					const { manager, fastifyController } = initializeCore({
-						onlineStyleUrl: parsedProcessArgs.onlineStyleUrl,
-						rootKey,
-						storageDirectory: parsedProcessArgs.storageDirectory,
-					})
+	const server = createMapeoServer(manager, new MessagePortLike(port))
 
-					const server = createMapeoServer(manager, new MessagePortLike(port))
+	port.on('close', () => {
+		log(`Port associated with client ${clientId} closed`)
+		server.close()
+		connectedClientPorts.delete(port)
+	})
 
-					port.on('close', () => {
-						log(`Port associated with client ${data.payload.clientId} closed`)
-						server.close()
-						state.clientPorts.delete(port)
-					})
-
-					state = {
-						status: 'active',
-						manager,
-						fastifyController,
-						clientPorts: new WeakSet([port]),
-					}
-
-					break
-				}
-				// Create another RPC connection
-				case 'active': {
-					const server = createMapeoServer(
-						state.manager,
-						new MessagePortLike(port),
-					)
-
-					port.on('close', () => {
-						log(`Port associated with client ${data.payload.clientId} closed`)
-						server.close()
-						state.clientPorts.delete(port)
-					})
-
-					state.clientPorts.add(port)
-
-					break
-				}
-			}
-
-			break
-		}
-	}
+	connectedClientPorts.add(port)
 
 	port.start()
 })
@@ -241,6 +187,46 @@ function initializeCore({ onlineStyleUrl, rootKey, storageDirectory }) {
 	fastifyController.start().catch(noop)
 
 	return { manager, fastifyController }
+}
+
+/**
+ * @param {MapeoManager} manager
+ */
+async function initializePeerDiscovery(manager) {
+	const { name, port } = await manager.startLocalPeerDiscoveryServer()
+
+	log('Started local peer discovery server')
+
+	const responder = ciao.getResponder()
+
+	const service = responder.createService({
+		domain: 'local',
+		name,
+		port,
+		protocol: /** @type {Protocol} */ ('tcp'),
+		type: 'comapeo',
+	})
+
+	/** @type {Promise<void> | undefined} */
+	let shutdownPromise
+
+	async function cleanup() {
+		if (shutdownPromise) {
+			return
+		}
+		log('Shutting down responder')
+		// NOTE: shutdown should only be called once.
+		// https://developers.homebridge.io/ciao/classes/Responder.html#shutdown
+		shutdownPromise = responder.shutdown()
+		await shutdownPromise
+	}
+
+	process.on('SIGTERM', cleanup)
+	process.on('SIGINT', cleanup)
+
+	await service.advertise()
+
+	log('Advertising peer')
 }
 
 // Needed to account for type limitation in @comapeo/ipc: https://github.com/digidem/comapeo-ipc/blob/17e9a4e386c1bfd880f5a0f1c9f2b02ca712fe44/src/lib/sub-channel.js#L16

@@ -34,3 +34,8 @@ export const PersistedCoordinateFormatSchema = v.union([
 	v.literal('dms'),
 	v.literal('utm'),
 ])
+
+export const ServiceErrorMessageSchema = v.object({
+	type: v.literal('error'),
+	error: v.instance(Error),
+})
