@@ -82,15 +82,6 @@ const NewClientMessageSchema = v.object({
  * @typedef {WeakSet<MessagePortMain>} ConnectedClientPorts
  */
 
-/**
- * @private
- * @typedef {{
- * 	fastifyController: FastifyController
- * 	manager: MapeoManager
- * 	clientPorts: ConnectedClientPorts
- * }} State
- */
-
 const { values } = parseArgs({
 	strict: true,
 	options: {
