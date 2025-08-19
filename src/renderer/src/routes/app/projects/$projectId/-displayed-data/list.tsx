@@ -197,8 +197,6 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 		[highlightedDocument?.docId, scrollToIndex, sortedListData, scrollElement],
 	)
 
-	console.log(tracksWithCategory)
-
 	return sortedListData.length > 0 ? (
 		<List
 			component="ul"
