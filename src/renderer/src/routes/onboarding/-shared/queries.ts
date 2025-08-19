@@ -3,7 +3,7 @@ import {
 	useCreateProject,
 	useRejectInvite,
 } from '@comapeo/core-react'
-import { useMutation, type UseMutationOptions } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 export const ONBOARDING_ACCEPT_INVITE_MUTATION_KEY = [
 	'invites',
@@ -15,31 +15,21 @@ export const ONBOARDING_REJECT_INVITE_MUTATION_KEY = [
 	'reject',
 ] as const
 
-export function useOnboardingAcceptInvite(
-	opts?: UseMutationOptions<string, Error, { inviteId: string }>,
-) {
-	const { mutateAsync } = useAcceptInvite()
+export function useOnboardingRejectInvite() {
+	const rejectInvite = useRejectInvite()
 
 	return useMutation({
-		...opts,
-		mutationKey: ONBOARDING_ACCEPT_INVITE_MUTATION_KEY,
-		mutationFn: async ({ inviteId }) => {
-			return mutateAsync({ inviteId })
-		},
+		mutationKey: ONBOARDING_REJECT_INVITE_MUTATION_KEY,
+		mutationFn: rejectInvite.mutateAsync,
 	})
 }
 
-export function useOnboardingRejectInvite(
-	opts?: UseMutationOptions<void, Error, { inviteId: string }>,
-) {
-	const { mutateAsync } = useRejectInvite()
+export function useOnboardingAcceptInvite() {
+	const acceptInvite = useAcceptInvite()
 
 	return useMutation({
-		...opts,
-		mutationKey: ONBOARDING_REJECT_INVITE_MUTATION_KEY,
-		mutationFn: async ({ inviteId }) => {
-			return mutateAsync({ inviteId })
-		},
+		mutationKey: ONBOARDING_ACCEPT_INVITE_MUTATION_KEY,
+		mutationFn: acceptInvite.mutateAsync,
 	})
 }
 
@@ -48,19 +38,18 @@ export const ONBOARDING_CREATE_PROJECT_MUTATION_KEY = [
 	'create',
 ] as const
 
-export function useOnboardingCreateProject(
-	opts?: UseMutationOptions<
-		string,
-		Error,
-		{ name?: string; configPath?: string }
-	>,
-) {
+export function useOnboardingCreateProject() {
 	const { mutateAsync } = useCreateProject()
 
 	return useMutation({
-		...opts,
 		mutationKey: ONBOARDING_CREATE_PROJECT_MUTATION_KEY,
-		mutationFn: async ({ name, configPath }) => {
+		mutationFn: async ({
+			name,
+			configPath,
+		}: {
+			name?: string
+			configPath?: string
+		}) => {
 			return mutateAsync({ name, configPath })
 		},
 	})

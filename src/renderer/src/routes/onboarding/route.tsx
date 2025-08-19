@@ -5,7 +5,7 @@ import Divider from '@mui/material/Divider'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
-import { useMutationState } from '@tanstack/react-query'
+import { useIsMutating } from '@tanstack/react-query'
 import {
 	Outlet,
 	createFileRoute,
@@ -44,37 +44,17 @@ function RouteComponent() {
 
 	const rejectInvite = useOnboardingRejectInvite()
 
-	const acceptInviteStatus = useMutationState({
-		filters: {
-			mutationKey: ONBOARDING_ACCEPT_INVITE_MUTATION_KEY,
-		},
-		select: (mutation) => {
-			return mutation.state.status
-		},
-	})
+	const isAcceptingInvite =
+		useIsMutating({ mutationKey: ONBOARDING_ACCEPT_INVITE_MUTATION_KEY }) > 0
 
-	const rejectInviteStatus = useMutationState({
-		filters: {
-			mutationKey: ONBOARDING_REJECT_INVITE_MUTATION_KEY,
-		},
-		select: (mutation) => {
-			return mutation.state.status
-		},
-	})
+	const isRejectingInvite =
+		useIsMutating({ mutationKey: ONBOARDING_REJECT_INVITE_MUTATION_KEY }) > 0
 
-	const createProjectStatus = useMutationState({
-		filters: {
-			mutationKey: ONBOARDING_CREATE_PROJECT_MUTATION_KEY,
-		},
-		select: (mutation) => {
-			return mutation.state.status
-		},
-	})
+	const isCreatingProject =
+		useIsMutating({ mutationKey: ONBOARDING_CREATE_PROJECT_MUTATION_KEY }) > 0
 
 	const importantMutationInProgress =
-		rejectInviteStatus.some((s) => s === 'pending') ||
-		acceptInviteStatus.some((s) => s === 'pending') ||
-		createProjectStatus.some((s) => s === 'pending')
+		isAcceptingInvite || isRejectingInvite || isCreatingProject
 
 	const shouldHideBackButton =
 		currentPath === '/onboarding/project/create/$projectId/success' ||
@@ -105,8 +85,8 @@ function RouteComponent() {
 
 								// TODO: There's probably a better way of doing this...
 								if (
-									currentRouteMatch.fullPath ===
-									'/onboarding/project/join/$inviteId'
+									currentRouteMatch.routeId ===
+									'/onboarding/project/join/$inviteId/'
 								) {
 									// TODO: Should we block navigation if this fails?
 									rejectInvite.mutate(
