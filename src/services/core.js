@@ -77,11 +77,6 @@ const NewClientMessageSchema = v.object({
  * @typedef {v.InferInput<typeof NewClientMessageSchema>} NewClientMessage
  */
 
-/**
- * @private
- * @typedef {WeakSet<MessagePortMain>} ConnectedClientPorts
- */
-
 const { values } = parseArgs({
 	strict: true,
 	options: {
@@ -111,8 +106,8 @@ initializePeerDiscovery(manager).catch((err) => {
 	)
 })
 
-/** @type {ConnectedClientPorts} */
-const clientPorts = new WeakSet()
+/** @type {WeakSet<MessagePortMain>} */
+const connectedClientPorts = new WeakSet()
 
 // We might get multiple clients, for instance if there are multiple windows,
 // or if the main window reloads.
@@ -126,7 +121,7 @@ process.parentPort.on('message', (event) => {
 
 	assert(port)
 
-	if (clientPorts.has(port)) {
+	if (connectedClientPorts.has(port)) {
 		log(
 			`Ignoring '${event.data.type}' message because message port already initialized`,
 		)
@@ -142,10 +137,10 @@ process.parentPort.on('message', (event) => {
 	port.on('close', () => {
 		log(`Port associated with client ${clientId} closed`)
 		server.close()
-		clientPorts.delete(port)
+		connectedClientPorts.delete(port)
 	})
 
-	clientPorts.add(port)
+	connectedClientPorts.add(port)
 
 	port.start()
 })
