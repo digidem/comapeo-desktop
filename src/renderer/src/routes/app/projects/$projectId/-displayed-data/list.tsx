@@ -197,6 +197,8 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 		[highlightedDocument?.docId, scrollToIndex, sortedListData, scrollElement],
 	)
 
+	console.log(tracksWithCategory)
+
 	return sortedListData.length > 0 ? (
 		<List
 			component="ul"
@@ -217,6 +219,11 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 				{rowVirtualizer.getVirtualItems().map((row) => {
 					const { type, category, document } = sortedListData[row.index]!
 					const { createdAt, docId, originalVersionId } = document
+
+					const title =
+						type === 'track'
+							? t(m.trackItemTitle)
+							: category?.name || t(m.observationCategoryNameFallback)
 
 					return (
 						<Box
@@ -271,12 +278,7 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 											whiteSpace="nowrap"
 											overflow="hidden"
 										>
-											{category?.name ||
-												t(
-													type === 'observation'
-														? m.observationCategoryNameFallback
-														: m.trackCategoryNameFallback,
-												)}
+											{title}
 										</Typography>
 
 										<Typography
@@ -566,7 +568,7 @@ function TrackCategory({
 			projectId={projectId}
 			iconDocumentId={categoryIconDocumentId}
 			categoryColor={categoryColor || BLUE_GREY}
-			categoryName={categoryName || t(m.trackCategoryNameFallback)}
+			categoryName={categoryName || t(m.trackItemTitle)}
 			imageStyle={{ aspectRatio: 1, width: '100%' }}
 		/>
 	) : (
@@ -716,10 +718,10 @@ const m = defineMessages({
 		defaultMessage: 'Observation',
 		description: 'Fallback name for observation without a matching category.',
 	},
-	trackCategoryNameFallback: {
-		id: 'routes.app.projects.$projectId.-displayed.data.list.trackCategoryNameFallback',
+	trackItemTitle: {
+		id: 'routes.app.projects.$projectId.-displayed.data.list.trackItemTitle',
 		defaultMessage: 'Track',
-		description: 'Fallback name for track without a matching category.',
+		description: 'Title for list item that is a track.',
 	},
 	categoryIconAlt: {
 		id: 'routes.app.projects.$projectId.-displayed.data.list.categoryIconAlt',
