@@ -517,6 +517,10 @@
     "description": "Label for create button.",
     "message": "Create"
   },
+  "routes.app.settings_.test-data.createTrack": {
+    "description": "Label for toggle to create track when creating test data.",
+    "message": "Create track"
+  },
   "routes.app.settings_.test-data.invalidBoundedDistanceFormat": {
     "description": "Error message for when bounded distance is not an decimal.",
     "message": "Must be a decimal"
@@ -550,12 +554,16 @@
     "message": "Number of observations"
   },
   "routes.app.settings_.test-data.observationCreateSuccess": {
-    "description": "Message displayed when observation creation succeeds",
-    "message": "Created {count} observations."
+    "description": "Message displayed when observation creation succeeds.",
+    "message": "Created {count, plural, one {# observation} other {# observations}}."
   },
   "routes.app.settings_.test-data.requiredError": {
     "description": "Error message for when required input is empty.",
     "message": "Required"
+  },
+  "routes.app.settings_.test-data.trackCreateSuccess": {
+    "description": "Message displayed when track creation succeeds.",
+    "message": "Created {count, plural, one {# track} other {# tracks}}."
   },
   "routes.onboarding.data-and-privacy.dataEncrypted": {
     "message": "All data stays fully encrypted."

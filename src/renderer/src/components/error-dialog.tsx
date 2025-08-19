@@ -12,15 +12,13 @@ import { defineMessages, useIntl } from 'react-intl'
 import { BLUE_GREY, DARK_GREY, LIGHT_GREY } from '../colors'
 import { Icon } from './icon'
 
-export function ErrorDialog({
-	errorMessage,
-	onClose,
-	open,
-}: {
+export type Props = {
 	errorMessage?: string
 	onClose: MouseEventHandler<HTMLButtonElement>
 	open: boolean
-}) {
+}
+
+export function ErrorDialog({ errorMessage, onClose, open }: Props) {
 	const { formatMessage: t } = useIntl()
 
 	const [advancedExpanded, setAdvancedExpanded] = useState(false)

@@ -5,9 +5,12 @@ import {
 	useMapStyleUrl,
 	useOwnDeviceInfo,
 } from '@comapeo/core-react'
+import type { Observation, Track } from '@comapeo/schema'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
 import CircularProgress from '@mui/material/CircularProgress'
+import FormControlLabel from '@mui/material/FormControlLabel'
 import IconButton from '@mui/material/IconButton'
 import Snackbar from '@mui/material/Snackbar'
 import Stack from '@mui/material/Stack'
@@ -19,13 +22,17 @@ import { bboxPolygon } from '@turf/bbox-polygon'
 import { featureCollection, lengthToDegrees } from '@turf/helpers'
 import { randomPosition } from '@turf/random'
 import type { BBox } from 'geojson'
+import { draw } from 'radashi'
 import { defineMessages, useIntl } from 'react-intl'
 import { Layer, Marker, Source } from 'react-map-gl/maplibre'
 import * as v from 'valibot'
 
 import { TwoPanelLayout } from '../-components/two-panel-layout'
 import { BLACK, BLUE_GREY } from '../../../colors'
-import { ErrorDialog } from '../../../components/error-dialog'
+import {
+	ErrorDialog,
+	type Props as ErrorDialogProps,
+} from '../../../components/error-dialog'
 import { GenericRoutePendingComponent } from '../../../components/generic-route-pending-component'
 import { Icon } from '../../../components/icon'
 import { Map } from '../../../components/map'
@@ -113,6 +120,10 @@ function RouteComponent() {
 		projectId: activeProjectId,
 	})
 
+	const createTestTrack = useCreateTestTrack({
+		projectId: activeProjectId,
+	})
+
 	const onChangeSchema = useMemo(() => {
 		const requiredError = t(m.requiredError)
 
@@ -153,6 +164,7 @@ function RouteComponent() {
 			),
 			latitude: v.pipe(v.number(), v.minValue(-90), v.maxValue(90)),
 			longitude: v.pipe(v.number(), v.minValue(-180), v.maxValue(180)),
+			createTrack: v.boolean(),
 		})
 	}, [t])
 
@@ -162,6 +174,7 @@ function RouteComponent() {
 			boundedDistance: DEFAULT_BOUNDED_DISTANCE_KM.toString(10),
 			latitude: 0,
 			longitude: 0,
+			createTrack: false,
 		},
 		validators: {
 			onChange: onChangeSchema,
@@ -169,7 +182,7 @@ function RouteComponent() {
 		onSubmit: async ({ value }) => {
 			const parsedValue = v.parse(onChangeSchema, value)
 
-			await createTestObservations.mutateAsync({
+			const observations = await createTestObservations.mutateAsync({
 				count: parsedValue.observationCount,
 				boundingBox: getBoundingBoxUsingDistance({
 					longitude: parsedValue.longitude,
@@ -178,12 +191,16 @@ function RouteComponent() {
 				}),
 			})
 
+			if (parsedValue.createTrack) {
+				await createTestTrack.mutateAsync({ observations })
+			}
+
 			setNotification({
 				type: 'success',
 				id: `id_${Date.now()}`,
-				message: t(m.observationCreateSuccess, {
+				message: `${t(m.observationCreateSuccess, {
 					count: parsedValue.observationCount,
-				}),
+				})} ${t(m.trackCreateSuccess, { count: parsedValue.createTrack ? 1 : 0 })}`,
 			})
 		},
 	})
@@ -226,6 +243,25 @@ function RouteComponent() {
 	const data = featureCollection(boundingBox ? [bboxPolygon(boundingBox)] : [])
 
 	const { data: mapStyleUrl } = useMapStyleUrl()
+
+	const errorDialogProps: ErrorDialogProps =
+		createTestObservations.status === 'error'
+			? {
+					errorMessage: createTestObservations.error.toString(),
+					onClose: () => {
+						createTestObservations.reset()
+					},
+					open: true,
+				}
+			: createTestTrack.status === 'error'
+				? {
+						open: true,
+						errorMessage: createTestTrack.error.toString(),
+						onClose: () => {
+							createTestTrack.reset()
+						},
+					}
+				: { open: false, onClose: () => {} }
 
 	return (
 		<>
@@ -396,6 +432,20 @@ function RouteComponent() {
 												)}
 											</form.AppField>
 										</Box>
+
+										<form.AppField name="createTrack">
+											{(field) => (
+												<FormControlLabel
+													control={<Checkbox />}
+													checked={field.state.value}
+													onChange={(_event, checked) => {
+														field.handleChange(checked)
+													}}
+													onBlur={field.handleBlur}
+													label={t(m.createTrack)}
+												/>
+											)}
+										</form.AppField>
 									</Stack>
 								</Box>
 							</Box>
@@ -532,19 +582,17 @@ function RouteComponent() {
 				anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 			/>
 
-			<ErrorDialog
-				open={createTestObservations.status === 'error'}
-				errorMessage={createTestObservations.error?.toString()}
-				onClose={() => {
-					createTestObservations.reset()
-				}}
-			/>
+			<ErrorDialog {...errorDialogProps} />
 		</>
 	)
 }
 
 const CREATE_TEST_OBSERVATIONS_MUTATION_KEY = createGlobalMutationsKey([
 	'create-test-observations',
+])
+
+const CREATE_TEST_TRACK_MUTATION_KEY = createGlobalMutationsKey([
+	'create-test-track',
 ])
 
 function useCreateTestObservations({ projectId }: { projectId: string }) {
@@ -583,9 +631,7 @@ function useCreateTestObservations({ projectId }: { projectId: string }) {
 					)
 				}
 
-				const randomPreset = presets.at(
-					Math.floor(Math.random() * presets.length),
-				)!
+				const randomPreset = draw(presets)!
 
 				const now = new Date().toISOString()
 
@@ -616,7 +662,7 @@ function useCreateTestObservations({ projectId }: { projectId: string }) {
 				)
 			}
 
-			await Promise.all(promises)
+			return Promise.all(promises)
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({
@@ -626,6 +672,70 @@ function useCreateTestObservations({ projectId }: { projectId: string }) {
 					projectId,
 					'observation',
 				],
+			})
+		},
+	})
+}
+
+function useCreateTestTrack({ projectId }: { projectId: string }) {
+	const queryClient = useQueryClient()
+
+	const { data: presets } = useManyDocs({ projectId, docType: 'preset' })
+
+	const createTrack = useCreateDocument({
+		projectId,
+		docType: 'track',
+	})
+
+	return useMutation({
+		mutationKey: CREATE_TEST_TRACK_MUTATION_KEY,
+		mutationFn: async ({
+			observations,
+		}: {
+			observations: Array<Observation>
+		}) => {
+			const randomPreset = Math.random() > 0.5 ? draw(presets) : null
+
+			const locations: Track['locations'] = []
+			const observationRefs: Track['observationRefs'] = []
+
+			for (const observation of observations) {
+				observationRefs.push({
+					docId: observation.docId,
+					versionId: observation.versionId,
+				})
+
+				if (
+					typeof observation.lon === 'number' &&
+					typeof observation.lat === 'number'
+				) {
+					locations.push({
+						mocked: false,
+						timestamp: observation.createdAt,
+						coords: { longitude: observation.lon, latitude: observation.lat },
+					})
+				}
+			}
+
+			return createTrack.mutateAsync({
+				value: {
+					locations,
+					observationRefs,
+					...(randomPreset
+						? {
+								tags: randomPreset.tags,
+								presetRef: {
+									docId: randomPreset.docId,
+									versionId: randomPreset.versionId,
+								},
+							}
+						: { tags: {} }),
+				},
+			})
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'track'],
 			})
 		},
 	})
@@ -717,9 +827,20 @@ const m = defineMessages({
 			'Set the coordinates by clicking on the map or dragging the location marker.',
 		description: 'Instructions displayed for coordinates selection inputs.',
 	},
+	createTrack: {
+		id: 'routes.app.settings_.test-data.createTrack',
+		defaultMessage: 'Create track',
+		description: 'Label for toggle to create track when creating test data.',
+	},
 	observationCreateSuccess: {
 		id: 'routes.app.settings_.test-data.observationCreateSuccess',
-		defaultMessage: 'Created {count} observations.',
-		description: 'Message displayed when observation creation succeeds',
+		defaultMessage:
+			'Created {count, plural, one {# observation} other {# observations}}.',
+		description: 'Message displayed when observation creation succeeds.',
+	},
+	trackCreateSuccess: {
+		id: 'routes.app.settings_.test-data.trackCreateSuccess',
+		defaultMessage: 'Created {count, plural, one {# track} other {# tracks}}.',
+		description: 'Message displayed when track creation succeeds.',
 	},
 })
