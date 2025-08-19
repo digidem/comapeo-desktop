@@ -680,6 +680,8 @@ function useCreateTestObservations({ projectId }: { projectId: string }) {
 function useCreateTestTrack({ projectId }: { projectId: string }) {
 	const queryClient = useQueryClient()
 
+	const { data: deviceInfo } = useOwnDeviceInfo()
+
 	const { data: presets } = useManyDocs({ projectId, docType: 'preset' })
 
 	const createTrack = useCreateDocument({
@@ -717,19 +719,21 @@ function useCreateTestTrack({ projectId }: { projectId: string }) {
 				}
 			}
 
+			const notes = deviceInfo.name ? `Created by ${deviceInfo.name}` : null
+
 			return createTrack.mutateAsync({
 				value: {
 					locations,
 					observationRefs,
 					...(randomPreset
 						? {
-								tags: randomPreset.tags,
+								tags: { ...randomPreset.tags, notes },
 								presetRef: {
 									docId: randomPreset.docId,
 									versionId: randomPreset.versionId,
 								},
 							}
-						: { tags: {} }),
+						: { tags: { notes } }),
 				},
 			})
 		},
