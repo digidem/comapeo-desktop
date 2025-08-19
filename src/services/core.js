@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 import { FastifyController, MapeoManager } from '@comapeo/core'
 import { createMapeoServer } from '@comapeo/ipc/server.js'
+import ciao from '@homebridge/ciao'
 import debug from 'debug'
 import Fastify from 'fastify'
 import * as v from 'valibot'
@@ -14,7 +15,8 @@ const log = debug('comapeo:services:core')
 
 /**
  * @import {MessagePortMain} from 'electron'
- * @import {DiscoveryInitMessageSchema, ServiceErrorMessageSchema} from '../main/validation.js'
+ * @import {Protocol} from '@homebridge/ciao'
+ * @import {ServiceErrorMessageSchema} from '../main/validation.js'
  */
 
 const require = createRequire(import.meta.url)
@@ -118,24 +120,14 @@ const { manager, fastifyController } = initializeCore({
 	storageDirectory: parsedProcessArgs.storageDirectory,
 })
 
-manager
-	.startLocalPeerDiscoveryServer()
-	.then(({ name, port }) => {
-		log('Started local peer discovery server')
+initializePeerDiscovery(manager).catch((err) => {
+	log('Failed to start peer discovery', err)
 
-		process.parentPort.postMessage(
-			/** @satisfies {v.InferInput<typeof DiscoveryInitMessageSchema>} */
-			({ type: 'core:discovery-init', name, port }),
-		)
-	})
-	.catch((err) => {
-		log('Failed to start local peer discovery server', err)
-
-		process.parentPort.postMessage(
-			/** @satisfies {v.InferInput<typeof ServiceErrorMessageSchema>} */
-			({ type: 'error', error: err instanceof Error ? err : new Error(err) }),
-		)
-	})
+	process.parentPort.postMessage(
+		/** @satisfies {v.InferInput<typeof ServiceErrorMessageSchema>} */
+		({ type: 'error', error: err instanceof Error ? err : new Error(err) }),
+	)
+})
 
 state = {
 	...state,
@@ -174,6 +166,18 @@ process.parentPort.on('message', (event) => {
 						onlineStyleUrl: parsedProcessArgs.onlineStyleUrl,
 						rootKey,
 						storageDirectory: parsedProcessArgs.storageDirectory,
+					})
+
+					initializePeerDiscovery(manager).catch((err) => {
+						log('Failed to start peer discovery', err)
+
+						process.parentPort.postMessage(
+							/** @satisfies {v.InferInput<typeof ServiceErrorMessageSchema>} */
+							({
+								type: 'error',
+								error: err instanceof Error ? err : new Error(err),
+							}),
+						)
 					})
 
 					const server = createMapeoServer(manager, new MessagePortLike(port))
@@ -261,6 +265,46 @@ function initializeCore({ onlineStyleUrl, rootKey, storageDirectory }) {
 	fastifyController.start().catch(noop)
 
 	return { manager, fastifyController }
+}
+
+/**
+ * @param {MapeoManager} manager
+ */
+async function initializePeerDiscovery(manager) {
+	const { name, port } = await manager.startLocalPeerDiscoveryServer()
+
+	log('Started local peer discovery server')
+
+	const responder = ciao.getResponder()
+
+	const service = responder.createService({
+		domain: 'local',
+		name,
+		port,
+		protocol: /** @type {Protocol} */ ('tcp'),
+		type: 'comapeo',
+	})
+
+	/** @type {Promise<void> | undefined} */
+	let shutdownPromise
+
+	async function cleanup() {
+		if (shutdownPromise) {
+			return
+		}
+		log('Shutting down responder')
+		// NOTE: shutdown should only be called once.
+		// https://developers.homebridge.io/ciao/classes/Responder.html#shutdown
+		shutdownPromise = responder.shutdown()
+		await shutdownPromise
+	}
+
+	process.on('SIGTERM', cleanup)
+	process.on('SIGINT', cleanup)
+
+	await service.advertise()
+
+	log('Advertising peer')
 }
 
 // Needed to account for type limitation in @comapeo/ipc: https://github.com/digidem/comapeo-ipc/blob/17e9a4e386c1bfd880f5a0f1c9f2b02ca712fe44/src/lib/sub-channel.js#L16

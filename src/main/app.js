@@ -16,7 +16,6 @@ import * as v from 'valibot'
 import { Intl } from './intl.js'
 import { setUpMainIPC } from './ipc.js'
 import {
-	DiscoveryInitMessageSchema,
 	FilesSelectParamsSchema,
 	ServiceErrorMessageSchema,
 } from './validation.js'
@@ -53,9 +52,6 @@ const _menuMessages = defineMessages({
 
 const CORE_SERVICE_PATH = fileURLToPath(
 	import.meta.resolve('../services/core.js'),
-)
-const DISCOVERY_SERVICE_PATH = fileURLToPath(
-	import.meta.resolve('../services/discovery.js'),
 )
 
 const MAIN_WINDOW_PRELOAD_PATH = fileURLToPath(
@@ -113,58 +109,17 @@ export async function start({ appConfig, configStore }) {
 		{ serviceName: `CoMapeo Core Service` },
 	)
 
-	app.on('quit', () => {
-		if (coreService.pid) {
-			coreService.kill()
-		}
-	})
-
-	let discoveryServiceStarted = false
-
 	coreService.on('message', (message) => {
 		if (v.is(ServiceErrorMessageSchema, message)) {
 			captureException(message.error)
 			return
 		}
+	})
 
-		if (!v.is(DiscoveryInitMessageSchema, message)) {
-			log('Received unrecognized message received from core service', message)
-			return
+	app.on('quit', () => {
+		if (coreService.pid) {
+			coreService.kill()
 		}
-
-		if (discoveryServiceStarted) {
-			return
-		}
-
-		const { name, port } = message
-
-		const discoveryService = utilityProcess.fork(
-			DISCOVERY_SERVICE_PATH,
-			[`--name=${name}`, `--port=${port}`],
-			{ serviceName: 'CoMapeo Discovery Service' },
-		)
-
-		app.on('quit', () => {
-			if (discoveryService.pid) {
-				discoveryService.kill()
-			}
-		})
-
-		discoveryService.on('message', (message) => {
-			if (v.is(ServiceErrorMessageSchema, message)) {
-				captureException(message.error)
-			}
-		})
-
-		discoveryService.on('error', (type, location, report) => {
-			log('Discovery service error', { type, location, report })
-		})
-
-		discoveryService.on('spawn', () => {
-			log('Spawned discovery service with PID %d', discoveryService?.pid)
-		})
-
-		discoveryServiceStarted = true
 	})
 
 	const sentryUserId = configStore.get('sentryUser').id
