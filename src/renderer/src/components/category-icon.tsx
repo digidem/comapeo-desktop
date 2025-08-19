@@ -67,7 +67,17 @@ export function CategoryIconImage({
 	return (
 		<ErrorBoundary
 			getResetKey={() => iconUrl}
-			fallback={() => <Icon name="material-error" color="error" />}
+			fallback={() => (
+				<Box
+					sx={imageStyle}
+					display="flex"
+					justifyContent="center"
+					alignItems="center"
+					flex={1}
+				>
+					<Icon name="material-error" color="error" />
+				</Box>
+			)}
 		>
 			<Suspense fallback={<CircularProgress disableShrink />}>
 				<SuspenseImage src={iconUrl} alt={altText} style={imageStyle} />
