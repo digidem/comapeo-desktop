@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, notFound, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARKER_ORANGE } from '../../../../../../colors'
@@ -16,6 +16,7 @@ import {
 	CategoryIconImage,
 } from '../../../../../../components/category-icon'
 import { ErrorBoundary } from '../../../../../../components/error-boundary'
+import { GenericRouteNotFoundComponent } from '../../../../../../components/generic-route-not-found-component'
 import { Icon } from '../../../../../../components/icon'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -23,6 +24,7 @@ import {
 	getRenderableFieldInfo,
 } from '../../../../../../lib/comapeo'
 import { formatCoords } from '../../../../../../lib/coordinate-format'
+import { customNotFound } from '../../../../../../lib/navigation'
 import {
 	getCoordinateFormatQueryOptions,
 	getLocaleStateQueryOptions,
@@ -41,6 +43,7 @@ export const Route = createFileRoute(
 			projectApi,
 			queryClient,
 			localeState: { value: lang },
+			formatMessage,
 		} = context
 		const { projectId, observationDocId } = params
 
@@ -60,7 +63,13 @@ export const Route = createFileRoute(
 				},
 			})
 		} catch {
-			throw notFound()
+			throw customNotFound({
+				data: {
+					message: formatMessage(m.observationNotFound, {
+						docId: observationDocId.slice(0, 7),
+					}),
+				},
+			})
 		}
 
 		await Promise.all([
@@ -92,6 +101,7 @@ export const Route = createFileRoute(
 			}),
 		])
 	},
+	notFoundComponent: GenericRouteNotFoundComponent,
 	component: RouteComponent,
 })
 
@@ -413,5 +423,10 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNull',
 		defaultMessage: 'NULL',
 		description: 'Text displayed if a field is answered with "null"',
+	},
+	observationNotFound: {
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound',
+		defaultMessage: 'Could not find observation with ID {docId}',
+		description: 'Text displayed when observation cannot be found.',
 	},
 })

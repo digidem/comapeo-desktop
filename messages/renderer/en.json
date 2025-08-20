@@ -165,6 +165,10 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "Observation"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound": {
+    "description": "Text displayed when observation cannot be found.",
+    "message": "Could not find observation with ID {docId}"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.onlyPreviewsAvailable": {
     "description": "Text displayed when only preview-quality attachments are available.",
     "message": "Only previews available"
