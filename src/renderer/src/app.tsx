@@ -25,9 +25,11 @@ import {
 import { useIntl, type IntlShape } from 'react-intl'
 
 import type { LocaleState } from '../../shared/intl'
+import { WHITE } from './colors'
 import { initComapeoClient } from './comapeo-client'
 import { AppTitleBar, TITLE_BAR_HEIGHT } from './components/app-title-bar'
 import { GenericRouteErrorComponent } from './components/generic-route-error-component'
+import { GenericRouteNotFoundComponent } from './components/generic-route-not-found-component'
 import { GenericRoutePendingComponent } from './components/generic-route-pending-component'
 import { IntlProvider } from './contexts/intl'
 import { useNetworkConnectionChangeListener } from './hooks/network'
@@ -78,6 +80,9 @@ const router = createRouter({
 	scrollRestoration: true,
 	defaultErrorComponent: GenericRouteErrorComponent,
 	defaultPendingComponent: GenericRoutePendingComponent,
+	defaultNotFoundComponent: ({ data }) => (
+		<GenericRouteNotFoundComponent data={data} backgroundColor={WHITE} />
+	),
 	notFoundMode: 'fuzzy',
 })
 
