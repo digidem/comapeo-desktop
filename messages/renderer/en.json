@@ -157,6 +157,30 @@
     "description": "Text displayed when the duration of an audio attachment cannot be determined.",
     "message": "Unable to get duration time."
   },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Icon for {name} category"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.descriptionSectionTitle": {
+    "description": "Title for description section.",
+    "message": "Description"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.navTitle": {
+    "description": "Displayed title.",
+    "message": "Track"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Observation"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.observationsSectionTitle": {
+    "description": "Title for the track observations section.",
+    "message": "{count, plural, one {# Observation} other {# Observations}}"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.tracks": {
+    "description": "Displayed title next to category icon.",
+    "message": "Tracks"
+  },
   "routes.app.projects.$projectId_.exchange.index.complete": {
     "description": "Text displayed when exchange is completed with all devices.",
     "message": "Complete!"
