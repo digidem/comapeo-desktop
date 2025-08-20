@@ -181,9 +181,11 @@ export async function start({ appConfig, configStore }) {
 		},
 	})
 
-	mainWindow.show()
-
 	log(`Created main window with id ${mainWindow.id}`)
+
+	mainWindow.addListener('ready-to-show', () => {
+		mainWindow.show()
+	})
 }
 
 /**

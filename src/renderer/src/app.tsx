@@ -25,6 +25,7 @@ import {
 
 import type { LocaleState } from '../../shared/intl'
 import { initComapeoClient } from './comapeo-client'
+import { AppTitleBar, TITLE_BAR_HEIGHT } from './components/app-title-bar'
 import { GenericRouteErrorComponent } from './components/generic-route-error-component'
 import { GenericRoutePendingComponent } from './components/generic-route-pending-component'
 import { IntlProvider } from './contexts/intl'
@@ -101,41 +102,52 @@ initSentryElectron(
 	initSentryReact,
 )
 
+const { platform } = window.runtime.getAppInfo()
+
+const MAIN_CONTENT_HEIGHT = `calc(100% - ${TITLE_BAR_HEIGHT})`
+
 export function App() {
 	return (
 		<StrictMode>
 			<ThemeProvider theme={theme}>
 				<CssBaseline enableColorScheme />
-				<QueryClientProvider client={queryClient}>
-					<NetworkConnectionChangeListener />
 
-					<Suspense
-						fallback={
-							<Box
-								height="100vh"
-								display="flex"
-								justifyContent="center"
-								alignItems="center"
-							>
-								<CircularProgress />
+				<QueryClientProvider client={queryClient}>
+					<IntlProvider>
+						<NetworkConnectionChangeListener />
+
+						<Box height="100dvh">
+							<AppTitleBar platform={platform} />
+
+							<Box height={MAIN_CONTENT_HEIGHT}>
+								<Suspense
+									fallback={
+										<Box
+											display="flex"
+											justifyContent="center"
+											alignItems="center"
+											height="100%"
+										>
+											<CircularProgress />
+										</Box>
+									}
+								>
+									<ClientApiProvider clientApi={clientApi}>
+										<WithInvitesListener>
+											<WithAddedRouteContext>
+												{({ activeProjectId, localeState }) => (
+													<RouterProvider
+														router={router}
+														context={{ activeProjectId, localeState }}
+													/>
+												)}
+											</WithAddedRouteContext>
+										</WithInvitesListener>
+									</ClientApiProvider>
+								</Suspense>
 							</Box>
-						}
-					>
-						<IntlProvider>
-							<ClientApiProvider clientApi={clientApi}>
-								<WithInvitesListener>
-									<WithAddedRouteContext>
-										{({ activeProjectId, localeState }) => (
-											<RouterProvider
-												router={router}
-												context={{ activeProjectId, localeState }}
-											/>
-										)}
-									</WithAddedRouteContext>
-								</WithInvitesListener>
-							</ClientApiProvider>
-						</IntlProvider>
-					</Suspense>
+						</Box>
+					</IntlProvider>
 				</QueryClientProvider>
 			</ThemeProvider>
 		</StrictMode>
