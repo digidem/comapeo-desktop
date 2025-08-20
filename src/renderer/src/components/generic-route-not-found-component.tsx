@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
@@ -10,14 +11,18 @@ import {
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { WHITE } from '../colors'
 import { CustomNotFoundDataSchema } from '../lib/navigation'
 
 const CustomNotFoundDataPropSchema = v.looseObject({
 	data: CustomNotFoundDataSchema,
 })
 
-export function GenericRouteNotFoundComponent({ data }: NotFoundRouteProps) {
+export function GenericRouteNotFoundComponent({
+	backgroundColor,
+	data,
+}: NotFoundRouteProps & {
+	backgroundColor?: CSSProperties['backgroundColor']
+}) {
 	const router = useRouter()
 	const navigate = useNavigate()
 
@@ -25,7 +30,7 @@ export function GenericRouteNotFoundComponent({ data }: NotFoundRouteProps) {
 
 	return (
 		<Stack
-			bgcolor={WHITE}
+			bgcolor={backgroundColor}
 			direction="column"
 			flex={1}
 			gap={6}
