@@ -1,4 +1,8 @@
 {
+  "components.app-title-bar.appName": {
+    "description": "Name of the app displayed in the title bar.",
+    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
+  },
   "components.error-dialog.advanced": {
     "description": "Title text for the collapsible section that shows the actual error message.",
     "message": "Advanced"
@@ -26,10 +30,6 @@
   "components.generic-route-error-component.stacktrace": {
     "description": "Label for stack trace section",
     "message": "Stack trace"
-  },
-  "routes.__root.appName": {
-    "description": "Name of the app displayed in the title bar.",
-    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
   },
   "routes.app.about.title": {
     "message": "About CoMapeo"
