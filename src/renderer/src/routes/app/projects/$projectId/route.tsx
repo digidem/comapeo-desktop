@@ -7,6 +7,7 @@ import { TwoPanelLayout } from '../../-components/two-panel-layout'
 import { BLACK } from '../../../../colors'
 import { GenericRoutePendingComponent } from '../../../../components/generic-route-pending-component'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
+import { getActiveProjectIdQueryOptions } from '../../../../lib/queries/app-settings'
 import { DisplayedDataMap } from './-displayed-data/map'
 
 const SearchParamsSchema = v.object({
@@ -41,8 +42,9 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 		return { projectApi }
 	},
 	// Accounts for queries used by the MapWithData component.
-	loader: async ({ context, params }) => {
+	loader: async ({ context, params, preload }) => {
 		const {
+			activeProjectId,
 			clientApi,
 			projectApi,
 			queryClient,
@@ -97,6 +99,15 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 				},
 			}),
 		])
+
+		// NOTE: We want to update the active project ID that's used at in the router context (app level) when navigating to a different project.
+		if (!preload && activeProjectId !== projectId) {
+			await window.runtime.setActiveProjectId(projectId)
+
+			queryClient.invalidateQueries({
+				queryKey: getActiveProjectIdQueryOptions().queryKey,
+			})
+		}
 	},
 	pendingComponent: () => {
 		return (
