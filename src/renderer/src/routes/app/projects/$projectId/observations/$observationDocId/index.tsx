@@ -190,28 +190,20 @@ function RouteComponent() {
 										color={category.color || BLUE_GREY}
 										applyBoxShadow
 									>
-										<Box
-											flex={1}
-											display="flex"
-											justifyContent={'center'}
-											alignItems={'center'}
-											width={48}
-											sx={{ aspectRatio: 1 }}
-										>
-											{category.iconRef?.docId ? (
-												<CategoryIconImage
-													altText={t(m.categoryIconAlt, {
-														name:
-															category.name ||
-															t(m.observationCategoryNameFallback),
-													})}
-													iconDocumentId={category.iconRef.docId}
-													projectId={projectId}
-												/>
-											) : (
-												<Icon name="material-place" size={40} />
-											)}
-										</Box>
+										{category.iconRef?.docId ? (
+											<CategoryIconImage
+												altText={t(m.categoryIconAlt, {
+													name:
+														category.name ||
+														t(m.observationCategoryNameFallback),
+												})}
+												iconDocumentId={category.iconRef.docId}
+												projectId={projectId}
+												imageStyle={{ width: 48, aspectRatio: 1 }}
+											/>
+										) : (
+											<Icon name="material-place" size={40} />
+										)}
 									</CategoryIconContainer>
 
 									<Typography variant="h2" fontWeight={500}>
