@@ -14,7 +14,7 @@ import ListItemButton from '@mui/material/ListItemButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, notFound, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLACK, BLUE_GREY, COMAPEO_BLUE } from '../../../../../../colors'
@@ -22,11 +22,13 @@ import {
 	CategoryIconContainer,
 	CategoryIconImage,
 } from '../../../../../../components/category-icon'
+import { GenericRouteNotFoundComponent } from '../../../../../../components/generic-route-not-found-component'
 import { Icon } from '../../../../../../components/icon'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	getMatchingCategoryForDocument,
 } from '../../../../../../lib/comapeo'
+import { customNotFound } from '../../../../../../lib/navigation'
 import { getLocaleStateQueryOptions } from '../../../../../../lib/queries/app-settings'
 
 export const Route = createFileRoute(
@@ -37,6 +39,7 @@ export const Route = createFileRoute(
 			projectApi,
 			queryClient,
 			localeState: { value: lang },
+			formatMessage,
 		} = context
 		const { projectId, trackDocId } = params
 
@@ -56,7 +59,13 @@ export const Route = createFileRoute(
 				},
 			})
 		} catch {
-			throw notFound()
+			throw customNotFound({
+				data: {
+					message: formatMessage(m.trackNotFound, {
+						docId: trackDocId.slice(0, 7),
+					}),
+				},
+			})
 		}
 
 		// TODO: Not ideal but requires changes to core-react
@@ -73,6 +82,7 @@ export const Route = createFileRoute(
 			},
 		})
 	},
+	notFoundComponent: GenericRouteNotFoundComponent,
 	component: RouteComponent,
 })
 
@@ -446,5 +456,10 @@ const m = defineMessages({
 		defaultMessage: 'Icon for {name} category',
 		description:
 			'Alt text for icon image displayed for category (used for accessibility tools).',
+	},
+	trackNotFound: {
+		id: 'routes.app.projects.$projectId.tracks.$trackDocId.index.trackNotFound',
+		defaultMessage: 'Could not find track with ID {docId}',
+		description: 'Text displayed when track cannot be found.',
 	},
 })

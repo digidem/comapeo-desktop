@@ -197,6 +197,10 @@
     "description": "Title for the track observations section.",
     "message": "{count, plural, one {# Observation} other {# Observations}}"
   },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.trackNotFound": {
+    "description": "Text displayed when track cannot be found.",
+    "message": "Could not find track with ID {docId}"
+  },
   "routes.app.projects.$projectId.tracks.$trackDocId.index.tracks": {
     "description": "Displayed title next to category icon.",
     "message": "Tracks"
