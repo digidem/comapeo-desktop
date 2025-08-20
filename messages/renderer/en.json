@@ -31,6 +31,22 @@
     "description": "Label for stack trace section",
     "message": "Stack trace"
   },
+  "components.generic-route-not-found-component.goBack": {
+    "description": "Button text for back button.",
+    "message": "Go back"
+  },
+  "components.generic-route-not-found-component.notFoundDefault": {
+    "description": "Default message shown when page is not found.",
+    "message": "Page not found"
+  },
+  "components.generic-route-not-found-component.reloadApp": {
+    "description": "Button text for reload app button.",
+    "message": "Reload App"
+  },
+  "components.generic-route-not-found-component.tryAgain": {
+    "description": "Button text for try again button.",
+    "message": "Try Again"
+  },
   "routes.app.about.title": {
     "message": "About CoMapeo"
   },
