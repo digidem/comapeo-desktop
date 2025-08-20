@@ -121,7 +121,7 @@ function RouteComponent() {
 											})
 											break
 										}
-										// @ts-expect-error https://github.com/TanStack/router/issues/3780
+
 										case '/onboarding/project/': {
 											navigate({
 												to: '/onboarding/device-name',
@@ -129,7 +129,7 @@ function RouteComponent() {
 											})
 											break
 										}
-										case '/onboarding/project/join/$inviteId/':
+										case '/onboarding/project/join/$inviteId':
 										case '/onboarding/project/create': {
 											navigate({
 												to: '/onboarding/project',

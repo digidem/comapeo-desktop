@@ -78,6 +78,7 @@ const router = createRouter({
 	scrollRestoration: true,
 	defaultErrorComponent: GenericRouteErrorComponent,
 	defaultPendingComponent: GenericRoutePendingComponent,
+	notFoundMode: 'fuzzy',
 })
 
 declare module '@tanstack/react-router' {

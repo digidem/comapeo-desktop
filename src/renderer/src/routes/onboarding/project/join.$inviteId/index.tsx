@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useSingleInvite } from '@comapeo/core-react'
+import type { Invite } from '@comapeo/core/dist/invite/invite-api'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
@@ -31,20 +32,35 @@ import {
 import { ErrorDialog } from '../../../../components/error-dialog'
 import { Icon } from '../../../../components/icon'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
+import { customNotFound } from '../../../../lib/navigation'
 import { setActiveProjectIdMutationOptions } from '../../../../lib/queries/app-settings'
 
 export const Route = createFileRoute('/onboarding/project/join/$inviteId/')({
 	loader: async ({ context, params }) => {
-		const { clientApi, queryClient } = context
+		const { clientApi, queryClient, formatMessage } = context
 		const { inviteId } = params
 
-		// TODO: Not ideal but requires changes in @comapeo/core-react
-		const invite = await queryClient.ensureQueryData({
-			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'invites', { inviteId }],
-			queryFn: async () => {
-				return clientApi.invite.getById(inviteId)
-			},
-		})
+		let invite: Invite
+		try {
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			invite = await queryClient.ensureQueryData({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'invites', { inviteId }],
+				queryFn: async () => {
+					return clientApi.invite.getById(inviteId)
+				},
+			})
+		} catch {
+			throw customNotFound({
+				// TODO: Ideally do not need to specify this but it seems that the 'fuzzy' behavior
+				// is not working as described in https://tanstack.com/router/latest/docs/framework/react/guide/not-found-errors
+				routeId: '/onboarding/project',
+				data: {
+					message: formatMessage(m.inviteNotFound, {
+						inviteId: inviteId.slice(0, 7),
+					}),
+				},
+			})
+		}
 
 		// Redirect if the invite of interest cannot be responded to
 		if (invite.state !== 'pending') {
@@ -278,5 +294,10 @@ const m = defineMessages({
 	responseError: {
 		id: 'routes.onboarding.project.join.$inviteId.index.responseError',
 		defaultMessage: 'Something went wrong. Try again.',
+	},
+	inviteNotFound: {
+		id: 'routes.onboarding.project.join.$inviteId.index.inviteNotFound',
+		defaultMessage: 'Could not find invite with ID {inviteId}',
+		description: 'Text displayed when invite cannot be found.',
 	},
 })

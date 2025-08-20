@@ -6,7 +6,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import {
 	createFileRoute,
-	notFound,
+	redirect,
 	useRouter,
 	type NotFoundRouteProps,
 } from '@tanstack/react-router'
@@ -24,18 +24,19 @@ export const Route = createFileRoute(
 		const { clientApi, queryClient } = context
 		const { projectId } = params
 
-		let project
+		let projectApi
 		try {
 			// TODO: Not ideal but requires notable changes to @comapeo/core-react
 			// Copied from https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/projects.ts#L30
-			project = await queryClient.ensureQueryData({
+			projectApi = await queryClient.ensureQueryData({
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects', projectId],
 				queryFn: async () => {
 					return clientApi.getProject(projectId)
 				},
 			})
 		} catch {
-			throw notFound()
+			// We are assuming that getting the project fails because it does not exist
+			throw redirect({ to: '/onboarding/project/create' })
 		}
 
 		// TODO: Not ideal but requires notable changes to @comapeo/core-react
@@ -48,13 +49,14 @@ export const Route = createFileRoute(
 				'project_settings',
 			],
 			queryFn: async () => {
-				return project.$getProjectSettings()
+				return projectApi.$getProjectSettings()
 			},
 		})
 
+		// TODO: Kind of hacky but we do not allow creating a project without a name
+		// so it should be okay to redirect them to the project creation page for now.
 		if (!settings.name) {
-			// TODO: Might make sense to redirect to project name step instead?
-			throw notFound()
+			throw redirect({ to: '/onboarding/project/create' })
 		}
 	},
 	component: RouteComponent,
@@ -74,10 +76,7 @@ function RouteComponent() {
 			justifyContent="space-between"
 			flex={1}
 			gap={10}
-			bgcolor={LIGHT_GREY}
 			padding={5}
-			borderRadius={2}
-			overflow="auto"
 		>
 			<Container maxWidth="sm" component={Stack} direction="column" gap={5}>
 				<Box alignSelf="center">
@@ -110,11 +109,7 @@ function RouteComponent() {
 					{t(m.updateCategoriesSet)}
 				</ButtonLink>
 				<ButtonLink
-					// TODO: Navigate to collaborators setting page
-					// to="/app/$projectId/settings/team"
-					onClick={() => {
-						alert('Not implemented yet')
-					}}
+					to="/app/projects/$projectId/settings/team"
 					params={{ projectId }}
 					reloadDocument
 					variant="contained"
@@ -203,5 +198,11 @@ const m = defineMessages({
 	goBack: {
 		id: 'routes.onboarding.project.create.$projectId.success.goBack',
 		defaultMessage: 'Go back',
+	},
+
+	projectNotFound: {
+		id: 'routes.onboarding.project.create.$projectId.success.projectNotFound',
+		defaultMessage: 'Could not find invite with ID {inviteId}',
+		description: 'Text displayed when invite cannot be found.',
 	},
 })

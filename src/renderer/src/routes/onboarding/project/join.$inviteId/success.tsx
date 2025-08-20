@@ -1,30 +1,55 @@
 import { useSingleInvite } from '@comapeo/core-react'
+import type { Invite } from '@comapeo/core/dist/invite/invite-api'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { GREEN, LIGHT_GREY } from '../../../../colors'
+import { GREEN } from '../../../../colors'
 import { Icon } from '../../../../components/icon'
 import { ButtonLink } from '../../../../components/link'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
+import { customNotFound } from '../../../../lib/navigation'
 
 export const Route = createFileRoute(
 	'/onboarding/project/join/$inviteId/success',
 )({
 	loader: async ({ context, params }) => {
-		const { clientApi, queryClient } = context
+		const { clientApi, queryClient, formatMessage } = context
 		const { inviteId } = params
 
-		// TODO: Not ideal but requires changes in @comapeo/core-react
-		await queryClient.ensureQueryData({
-			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'invites', { inviteId }],
-			queryFn: async () => {
-				return clientApi.invite.getById(inviteId)
-			},
-		})
+		let invite: Invite
+		try {
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			invite = await queryClient.ensureQueryData({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'invites', { inviteId }],
+				queryFn: async () => {
+					return clientApi.invite.getById(inviteId)
+				},
+			})
+		} catch {
+			throw customNotFound({
+				// TODO: Ideally do not need to specify this but it seems that the 'fuzzy' behavior
+				// is not working as described in https://tanstack.com/router/latest/docs/framework/react/guide/not-found-errors
+				routeId: '/onboarding/project',
+				data: {
+					message: formatMessage(m.inviteNotFound, {
+						inviteId: inviteId.slice(0, 7),
+					}),
+				},
+			})
+		}
+
+		// Redirect if the invite response did not actually succeed
+		if (invite.state !== 'joined') {
+			throw redirect({
+				to: '/onboarding/project/join/$inviteId',
+				params: { inviteId },
+				replace: true,
+			})
+		}
 	},
 	component: RouteComponent,
 })
@@ -42,10 +67,7 @@ function RouteComponent() {
 			justifyContent="space-between"
 			flex={1}
 			gap={10}
-			bgcolor={LIGHT_GREY}
 			padding={5}
-			borderRadius={2}
-			overflow="auto"
 		>
 			<Container maxWidth="sm" component={Stack} direction="column" gap={5}>
 				<Box alignSelf="center">
@@ -91,5 +113,10 @@ const m = defineMessages({
 	startUsingCoMapeo: {
 		id: 'routes.onboarding.project.join.$inviteId.success.startUsingCoMapeo',
 		defaultMessage: 'Start Using CoMapeo',
+	},
+	inviteNotFound: {
+		id: 'routes.onboarding.project.join.$inviteId.success.inviteNotFound',
+		defaultMessage: 'Could not find invite with ID {inviteId}',
+		description: 'Text displayed when invite cannot be found.',
 	},
 })
