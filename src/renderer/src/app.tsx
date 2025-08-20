@@ -22,6 +22,7 @@ import {
 	createHashHistory,
 	createRouter,
 } from '@tanstack/react-router'
+import { useIntl, type IntlShape } from 'react-intl'
 
 import type { LocaleState } from '../../shared/intl'
 import { initComapeoClient } from './comapeo-client'
@@ -65,7 +66,10 @@ const router = createRouter({
 		queryClient,
 		clientApi,
 		activeProjectId: null,
+		// NOTE: Populated at render time
 		localeState: undefined!,
+		// NOTE: Populated at render time
+		formatMessage: undefined!,
 	},
 	defaultPreload: 'intent',
 	// Since we're using React Query, we don't want loader calls to ever be stale
@@ -135,10 +139,14 @@ export function App() {
 									<ClientApiProvider clientApi={clientApi}>
 										<WithInvitesListener>
 											<WithAddedRouteContext>
-												{({ activeProjectId, localeState }) => (
+												{({ activeProjectId, formatMessage, localeState }) => (
 													<RouterProvider
 														router={router}
-														context={{ activeProjectId, localeState }}
+														context={{
+															activeProjectId,
+															formatMessage,
+															localeState,
+														}}
 													/>
 												)}
 											</WithAddedRouteContext>
@@ -170,14 +178,17 @@ function WithAddedRouteContext({
 }: {
 	children: (props: {
 		activeProjectId: string | null
+		formatMessage: IntlShape['formatMessage']
 		localeState: LocaleState
 	}) => ReactElement
 }) {
+	const { formatMessage } = useIntl()
+
 	const { data: activeProjectId } = useSuspenseQuery(
 		getActiveProjectIdQueryOptions(),
 	)
 
 	const { data: localeState } = useSuspenseQuery(getLocaleStateQueryOptions())
 
-	return children({ activeProjectId, localeState })
+	return children({ activeProjectId, formatMessage, localeState })
 }
