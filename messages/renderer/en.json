@@ -225,10 +225,6 @@
     "description": "Title displayed when exchange setting is set to 'exchange everything'",
     "message": "Exchange everything."
   },
-  "routes.app.projects.$projectId_.exchange.index.exchangeProgress": {
-    "description": "Text indicating exchange progress as a percentage.",
-    "message": "{value}%"
-  },
   "routes.app.projects.$projectId_.exchange.index.exchanging": {
     "description": "Text displayed when exchanging with other devices.",
     "message": "Exchanging…"

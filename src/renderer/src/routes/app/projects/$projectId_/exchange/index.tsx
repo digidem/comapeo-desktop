@@ -369,7 +369,7 @@ function SyncProgress({
 		{ name: 'syncing' | 'waiting' | 'complete-partial' | 'complete-full' }
 	>
 }) {
-	const { formatMessage: t } = useIntl()
+	const { formatNumber } = useIntl()
 
 	const progressProps: LinearProgressProps =
 		stage.name === 'waiting'
@@ -394,8 +394,8 @@ function SyncProgress({
 			<LinearProgress {...progressProps} />
 
 			<Typography color="textSecondary" textAlign="end">
-				{t(m.exchangeProgress, {
-					value: stage.name === 'waiting' ? 0 : stage.progress * 100,
+				{formatNumber(stage.name === 'waiting' ? 0 : stage.progress, {
+					style: 'percent',
 				})}
 			</Typography>
 		</Stack>
@@ -472,11 +472,6 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId_.exchange.index.upToDate',
 		defaultMessage: 'Up to date!',
 		description: 'Text displayed when exchangable data is up to date.',
-	},
-	exchangeProgress: {
-		id: 'routes.app.projects.$projectId_.exchange.index.exchangeProgress',
-		defaultMessage: '{value}%',
-		description: 'Text indicating exchange progress as a percentage.',
 	},
 	exchangeEverythingTitle: {
 		id: 'routes.app.projects.$projectId_.exchange.index.exchangeEverythingTitle',
