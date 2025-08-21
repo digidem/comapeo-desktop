@@ -109,7 +109,7 @@ function RouteComponent() {
 					{t(m.updateCategoriesSet)}
 				</ButtonLink>
 				<ButtonLink
-					to="/app/projects/$projectId/settings/team"
+					to="/app/projects/$projectId/invite"
 					params={{ projectId }}
 					reloadDocument
 					variant="contained"

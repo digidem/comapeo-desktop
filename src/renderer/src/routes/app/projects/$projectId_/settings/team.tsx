@@ -147,11 +147,7 @@ function RouteComponent() {
 									fullWidth
 									variant="outlined"
 									sx={{ maxWidth: 400 }}
-									// TODO: Navigate to collaborators page
-									// to="/app/projects/$projectId/settings/collaborators"
-									onClick={() => {
-										alert('Not implemented yet')
-									}}
+									to="/app/projects/$projectId/invite"
 									params={{ projectId }}
 								>
 									{t(m.inviteDevice)}
