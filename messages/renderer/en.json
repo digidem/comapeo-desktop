@@ -31,6 +31,22 @@
     "description": "Label for stack trace section",
     "message": "Stack trace"
   },
+  "components.generic-route-not-found-component.goBack": {
+    "description": "Button text for back button.",
+    "message": "Go back"
+  },
+  "components.generic-route-not-found-component.reloadApp": {
+    "description": "Button text for reload app button.",
+    "message": "Reload App"
+  },
+  "components.generic-route-not-found-component.title": {
+    "description": "Title text shown when page is not found.",
+    "message": "Page not found"
+  },
+  "components.generic-route-not-found-component.tryAgain": {
+    "description": "Button text for try again button.",
+    "message": "Try Again"
+  },
   "routes.app.about.title": {
     "message": "About CoMapeo"
   },
@@ -149,6 +165,10 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "Observation"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound": {
+    "description": "Text displayed when observation cannot be found.",
+    "message": "Could not find observation with ID {docId}"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.onlyPreviewsAvailable": {
     "description": "Text displayed when only preview-quality attachments are available.",
     "message": "Only previews available"
@@ -176,6 +196,10 @@
   "routes.app.projects.$projectId.tracks.$trackDocId.index.observationsSectionTitle": {
     "description": "Title for the track observations section.",
     "message": "{count, plural, one {# Observation} other {# Observations}}"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.trackNotFound": {
+    "description": "Text displayed when track cannot be found.",
+    "message": "Could not find track with ID {docId}"
   },
   "routes.app.projects.$projectId.tracks.$trackDocId.index.tracks": {
     "description": "Displayed title next to category icon.",
@@ -736,6 +760,10 @@
   "routes.onboarding.project.create.$projectId.success.inviteCollaborators": {
     "message": "Invite Collaborators"
   },
+  "routes.onboarding.project.create.$projectId.success.projectNotFound": {
+    "description": "Text displayed when invite cannot be found.",
+    "message": "Could not find invite with ID {inviteId}"
+  },
   "routes.onboarding.project.create.$projectId.success.title": {
     "message": "Success!"
   },
@@ -769,14 +797,15 @@
   "routes.onboarding.project.description": {
     "message": "Ask a monitoring coordinator to join their Project."
   },
-  "routes.onboarding.project.join.$inviteId.goBack": {
-    "message": "Go back"
-  },
   "routes.onboarding.project.join.$inviteId.index.declineInvite": {
     "message": "Decline Invite"
   },
   "routes.onboarding.project.join.$inviteId.index.description": {
     "message": "You're invited to…"
+  },
+  "routes.onboarding.project.join.$inviteId.index.inviteNotFound": {
+    "description": "Text displayed when invite cannot be found.",
+    "message": "Could not find invite with ID {inviteId}"
   },
   "routes.onboarding.project.join.$inviteId.index.joinAs": {
     "message": "Join as a {role, select, coordinator {coordinator} other {participant}}?"
@@ -790,11 +819,12 @@
   "routes.onboarding.project.join.$inviteId.index.title": {
     "message": "Join a Project"
   },
-  "routes.onboarding.project.join.$inviteId.notFound": {
-    "message": "Could not find invite with ID {inviteId}"
-  },
   "routes.onboarding.project.join.$inviteId.success.description": {
     "message": "You joined<br></br><b>{projectName}</b>"
+  },
+  "routes.onboarding.project.join.$inviteId.success.inviteNotFound": {
+    "description": "Text displayed when invite cannot be found.",
+    "message": "Could not find invite with ID {inviteId}"
   },
   "routes.onboarding.project.join.$inviteId.success.startUsingCoMapeo": {
     "message": "Start Using CoMapeo"

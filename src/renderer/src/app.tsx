@@ -22,11 +22,14 @@ import {
 	createHashHistory,
 	createRouter,
 } from '@tanstack/react-router'
+import { useIntl, type IntlShape } from 'react-intl'
 
 import type { LocaleState } from '../../shared/intl'
+import { WHITE } from './colors'
 import { initComapeoClient } from './comapeo-client'
 import { AppTitleBar, TITLE_BAR_HEIGHT } from './components/app-title-bar'
 import { GenericRouteErrorComponent } from './components/generic-route-error-component'
+import { GenericRouteNotFoundComponent } from './components/generic-route-not-found-component'
 import { GenericRoutePendingComponent } from './components/generic-route-pending-component'
 import { IntlProvider } from './contexts/intl'
 import { useNetworkConnectionChangeListener } from './hooks/network'
@@ -65,7 +68,10 @@ const router = createRouter({
 		queryClient,
 		clientApi,
 		activeProjectId: null,
+		// NOTE: Populated at render time
 		localeState: undefined!,
+		// NOTE: Populated at render time
+		formatMessage: undefined!,
 	},
 	defaultPreload: 'intent',
 	// Since we're using React Query, we don't want loader calls to ever be stale
@@ -74,6 +80,10 @@ const router = createRouter({
 	scrollRestoration: true,
 	defaultErrorComponent: GenericRouteErrorComponent,
 	defaultPendingComponent: GenericRoutePendingComponent,
+	defaultNotFoundComponent: ({ data }) => (
+		<GenericRouteNotFoundComponent data={data} backgroundColor={WHITE} />
+	),
+	notFoundMode: 'fuzzy',
 })
 
 declare module '@tanstack/react-router' {
@@ -135,10 +145,14 @@ export function App() {
 									<ClientApiProvider clientApi={clientApi}>
 										<WithInvitesListener>
 											<WithAddedRouteContext>
-												{({ activeProjectId, localeState }) => (
+												{({ activeProjectId, formatMessage, localeState }) => (
 													<RouterProvider
 														router={router}
-														context={{ activeProjectId, localeState }}
+														context={{
+															activeProjectId,
+															formatMessage,
+															localeState,
+														}}
 													/>
 												)}
 											</WithAddedRouteContext>
@@ -170,14 +184,17 @@ function WithAddedRouteContext({
 }: {
 	children: (props: {
 		activeProjectId: string | null
+		formatMessage: IntlShape['formatMessage']
 		localeState: LocaleState
 	}) => ReactElement
 }) {
+	const { formatMessage } = useIntl()
+
 	const { data: activeProjectId } = useSuspenseQuery(
 		getActiveProjectIdQueryOptions(),
 	)
 
 	const { data: localeState } = useSuspenseQuery(getLocaleStateQueryOptions())
 
-	return children({ activeProjectId, localeState })
+	return children({ activeProjectId, formatMessage, localeState })
 }

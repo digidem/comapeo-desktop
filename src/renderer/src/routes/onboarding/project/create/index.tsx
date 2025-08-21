@@ -10,7 +10,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
 import { useOnboardingCreateProject } from '../../-shared/queries'
-import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../../../colors'
+import { DARKER_ORANGE, WHITE } from '../../../../colors'
 import { ErrorDialog } from '../../../../components/error-dialog'
 import { Icon } from '../../../../components/icon'
 import { useAppForm } from '../../../../hooks/forms'
@@ -103,10 +103,7 @@ function RouteComponent() {
 				justifyContent="space-between"
 				flex={1}
 				gap={10}
-				bgcolor={LIGHT_GREY}
 				padding={5}
-				borderRadius={2}
-				overflow="auto"
 			>
 				<Container maxWidth="sm" component={Stack} direction="column" gap={5}>
 					<Box alignSelf="center">

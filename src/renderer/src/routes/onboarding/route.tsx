@@ -34,13 +34,11 @@ function RouteComponent() {
 	const navigate = useNavigate()
 	const { formatMessage: t } = useIntl()
 
-	const currentRouteMatch = useChildMatches({
+	const currentRoute = useChildMatches({
 		select: (matches) => {
 			return matches.at(-1)!
 		},
 	})
-
-	const currentPath = currentRouteMatch.fullPath
 
 	const rejectInvite = useOnboardingRejectInvite()
 
@@ -57,8 +55,8 @@ function RouteComponent() {
 		isAcceptingInvite || isRejectingInvite || isCreatingProject
 
 	const shouldHideBackButton =
-		currentPath === '/onboarding/project/create/$projectId/success' ||
-		currentPath === '/onboarding/project/join/$inviteId/success'
+		currentRoute.routeId === '/onboarding/project/create/$projectId/success' ||
+		currentRoute.routeId === '/onboarding/project/join/$inviteId/success'
 
 	return (
 		<Box bgcolor={DARK_COMAPEO_BLUE} padding={5} height="100%">
@@ -85,12 +83,11 @@ function RouteComponent() {
 
 								// TODO: There's probably a better way of doing this...
 								if (
-									currentRouteMatch.routeId ===
-									'/onboarding/project/join/$inviteId/'
+									currentRoute.routeId === '/onboarding/project/join/$inviteId/'
 								) {
 									// TODO: Should we block navigation if this fails?
 									rejectInvite.mutate(
-										{ inviteId: currentRouteMatch.params.inviteId },
+										{ inviteId: currentRoute.params.inviteId },
 										{
 											onError: (err) => {
 												captureException(err)
@@ -102,7 +99,7 @@ function RouteComponent() {
 								if (router.history.canGoBack()) {
 									router.history.back()
 								} else {
-									switch (currentPath) {
+									switch (currentRoute.routeId) {
 										case '/onboarding/data-and-privacy': {
 											navigate({ to: '/welcome', replace: true })
 											break
@@ -121,7 +118,7 @@ function RouteComponent() {
 											})
 											break
 										}
-										// @ts-expect-error https://github.com/TanStack/router/issues/3780
+
 										case '/onboarding/project/': {
 											navigate({
 												to: '/onboarding/device-name',
@@ -130,7 +127,7 @@ function RouteComponent() {
 											break
 										}
 										case '/onboarding/project/join/$inviteId/':
-										case '/onboarding/project/create': {
+										case '/onboarding/project/create/': {
 											navigate({
 												to: '/onboarding/project',
 												replace: true,
@@ -139,7 +136,9 @@ function RouteComponent() {
 										}
 
 										default: {
-											throw new Error(`Unexpected path: ${currentRouteMatch}`)
+											throw new Error(
+												`Unexpected route ID: ${currentRoute.routeId}`,
+											)
 										}
 									}
 								}
@@ -156,8 +155,8 @@ function RouteComponent() {
 					<Stack direction="row" alignItems="center" gap={4}>
 						<StepIndicator
 							isActive={
-								currentPath === '/onboarding/privacy-policy' ||
-								currentPath === '/onboarding/data-and-privacy'
+								currentRoute.routeId === '/onboarding/privacy-policy' ||
+								currentRoute.routeId === '/onboarding/data-and-privacy'
 							}
 							label={t(m.step, { value: 1 })}
 						/>
@@ -172,7 +171,7 @@ function RouteComponent() {
 						/>
 
 						<StepIndicator
-							isActive={currentPath === '/onboarding/device-name'}
+							isActive={currentRoute.routeId === '/onboarding/device-name'}
 							label={t(m.step, { value: 2 })}
 						/>
 
@@ -186,7 +185,9 @@ function RouteComponent() {
 						/>
 
 						<StepIndicator
-							isActive={currentPath.startsWith('/onboarding/project/')}
+							isActive={currentRoute.fullPath.startsWith(
+								'/onboarding/project/',
+							)}
 							label={t(m.step, { value: 3 })}
 						/>
 					</Stack>

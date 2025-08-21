@@ -12,12 +12,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { ONBOARDING_REJECT_INVITE_MUTATION_KEY } from '../-shared/queries'
-import {
-	BLUE_GREY,
-	DARKER_ORANGE,
-	DARK_GREY,
-	LIGHT_GREY,
-} from '../../../colors'
+import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors'
 import { Icon } from '../../../components/icon'
 import { ButtonLink } from '../../../components/link'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
@@ -69,10 +64,7 @@ function RouteComponent() {
 			justifyContent="space-between"
 			flex={1}
 			gap={10}
-			bgcolor={LIGHT_GREY}
 			padding={5}
-			borderRadius={2}
-			overflow="auto"
 		>
 			<Container
 				maxWidth="sm"
