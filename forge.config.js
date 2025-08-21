@@ -379,39 +379,50 @@ function getPropertiesForAppType(appType) {
 	const baseExecutableName = 'comapeo-desktop'
 	const baseAppName = packageJSON.productName
 
+	const isMacOS = process.platform === 'darwin'
+
 	switch (appType) {
 		case 'development': {
 			const shortName = 'dev'
+			const appName = `${baseAppName} Dev`
 			return {
 				shortName,
 				appBundleId: `${baseAppBundleId}.${shortName}`,
-				appName: `${baseAppName} Dev`,
-				executableName: `${baseExecutableName}-${shortName}`,
+				appName,
+				executableName: isMacOS
+					? appName
+					: `${baseExecutableName}-${shortName}`,
 			}
 		}
 		case 'internal': {
 			const shortName = 'internal'
+			const appName = `${baseAppName} Internal`
 			return {
 				shortName,
 				appBundleId: `${baseAppBundleId}.${shortName}`,
-				appName: `${baseAppName} Internal`,
-				executableName: `${baseExecutableName}-${shortName}`,
+				appName,
+				executableName: isMacOS
+					? appName
+					: `${baseExecutableName}-${shortName}`,
 			}
 		}
 		case 'release-candidate': {
 			const shortName = 'rc'
+			const appName = `${baseAppName} RC`
 			return {
 				shortName,
 				appBundleId: `${baseAppBundleId}.${shortName}`,
-				appName: `${baseAppName} RC`,
-				executableName: `${baseExecutableName}-${shortName}`,
+				appName,
+				executableName: isMacOS
+					? appName
+					: `${baseExecutableName}-${shortName}`,
 			}
 		}
 		case 'production': {
 			return {
 				appBundleId: baseAppBundleId,
 				appName: baseAppName,
-				executableName: baseExecutableName,
+				executableName: isMacOS ? baseAppName : baseExecutableName,
 			}
 		}
 	}
