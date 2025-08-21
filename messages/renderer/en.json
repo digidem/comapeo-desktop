@@ -20,7 +20,7 @@
     "message": "Error"
   },
   "components.generic-route-error-component.reload": {
-    "description": "Button text to reload the page",
+    "description": "Text for button to reload page.",
     "message": "Reload"
   },
   "components.generic-route-error-component.somethinWentWrong": {

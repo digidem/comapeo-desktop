@@ -2,13 +2,13 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useNavigate, type ErrorComponentProps } from '@tanstack/react-router'
+import { useRouter, type ErrorComponentProps } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, LIGHT_GREY, WHITE } from '../colors'
 
 export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
-	const navigate = useNavigate()
+	const router = useRouter()
 
 	const { formatMessage: t } = useIntl()
 
@@ -81,12 +81,13 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 				bottom={0}
 				padding={6}
 				display="flex"
-				justifyContent="center"
+				flexDirection="column"
+				alignItems="center"
 			>
 				<Button
 					fullWidth
 					onClick={() => {
-						navigate({ to: '.', reloadDocument: true })
+						router.invalidate()
 					}}
 					sx={{ maxWidth: 400 }}
 				>
@@ -116,6 +117,6 @@ const m = defineMessages({
 	reload: {
 		id: 'components.generic-route-error-component.reload',
 		defaultMessage: 'Reload',
-		description: 'Button text to reload the page',
+		description: 'Text for button to reload page.',
 	},
 })
