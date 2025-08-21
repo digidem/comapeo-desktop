@@ -29,7 +29,6 @@ import {
 	RED,
 	WHITE,
 } from '../../../../colors'
-import { ErrorDialog } from '../../../../components/error-dialog'
 import { Icon } from '../../../../components/icon'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
 import { customNotFound } from '../../../../lib/navigation'
@@ -87,25 +86,6 @@ function RouteComponent() {
 	const setActiveProjectId = useMutation(
 		setActiveProjectIdMutationOptions(queryClient),
 	)
-
-	const errorDialogProps =
-		rejectInvite.status === 'error'
-			? {
-					open: true,
-					errorMessage: rejectInvite.error.message,
-					onClose: () => {
-						rejectInvite.reset()
-					},
-				}
-			: acceptInvite.status === 'error'
-				? {
-						open: true,
-						errorMessage: acceptInvite.error.message,
-						onClose: () => {
-							acceptInvite.reset()
-						},
-					}
-				: { open: false, onClose: () => {} }
 
 	useEffect(() => {
 		// Navigate away from the page if the invite gets cancelled from the invitor's side.
@@ -263,8 +243,6 @@ function RouteComponent() {
 					</Button>
 				</Container>
 			</Stack>
-
-			<ErrorDialog {...errorDialogProps} />
 		</>
 	)
 }
