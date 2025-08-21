@@ -6,7 +6,6 @@ import {
 	useSyncState,
 	type SyncState,
 } from '@comapeo/core-react'
-import { formatNumber } from '@formatjs/intl'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
