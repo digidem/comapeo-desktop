@@ -167,6 +167,7 @@ function RouteComponent() {
 						DEFAULT_CATEGORIES_NAME ? (
 							<List
 								sx={{
+									alignSelf: 'center',
 									listStyleType: 'disc',
 									paddingInline: 8,
 									color: DARK_GREY,
