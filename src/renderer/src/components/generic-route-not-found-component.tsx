@@ -102,9 +102,9 @@ export function GenericRouteNotFoundComponent({
 
 const m = defineMessages({
 	title: {
-		id: 'components.generic-route-not-found-component.notFoundDefault',
+		id: 'components.generic-route-not-found-component.title',
 		defaultMessage: 'Page not found',
-		description: 'Default message shown when page is not found.',
+		description: 'Title text shown when page is not found.',
 	},
 	goBack: {
 		id: 'components.generic-route-not-found-component.goBack',
