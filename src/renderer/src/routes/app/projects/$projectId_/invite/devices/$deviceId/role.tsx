@@ -6,7 +6,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { DeviceRow } from '../-shared/device-row'
@@ -18,25 +18,6 @@ import { useLocalPeers } from '../../../../../../../hooks/peers'
 export const Route = createFileRoute(
 	'/app/projects/$projectId_/invite/devices/$deviceId/role',
 )({
-	loader: async ({ context, params }) => {
-		const { clientApi } = context
-		const { deviceId, projectId } = params
-		const peers = await clientApi.listLocalPeers()
-
-		const matchingPeer = peers.find((p) => p.deviceId === deviceId)
-
-		if (!matchingPeer || matchingPeer.status === 'disconnected') {
-			throw redirect({
-				to: '/app/projects/$projectId/invite/devices',
-				params: { projectId },
-				replace: true,
-			})
-		}
-
-		return { peerOnLoad: matchingPeer }
-	},
-	// NOTE: We always want to refetch on page load
-	shouldReload: true,
 	pendingComponent: GenericRoutePendingComponent,
 	component: RouteComponent,
 })
@@ -46,9 +27,9 @@ function RouteComponent() {
 
 	const router = useRouter()
 
-	const { projectId, deviceId } = Route.useParams()
+	const { peerOnLoad } = Route.useRouteContext()
 
-	const { peerOnLoad } = Route.useLoaderData()
+	const { projectId, deviceId } = Route.useParams()
 
 	const updatedPeer = useLocalPeers().find((p) => p.deviceId === deviceId)
 
