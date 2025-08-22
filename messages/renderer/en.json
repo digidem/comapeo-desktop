@@ -253,6 +253,46 @@
     "description": "Text displayed when waiting for other devices to be found.",
     "message": "Waiting for Devices"
   },
+  "routes.app.projects.$projectId_.invite.devices.index.disconnected": {
+    "description": "Text displayed when external device is disconnected.",
+    "message": "Disconnected"
+  },
+  "routes.app.projects.$projectId_.invite.devices.index.gettingWifiInfo": {
+    "description": "Text displayed when waiting for Wi-Fi information.",
+    "message": "Getting Wi-Fi information…"
+  },
+  "routes.app.projects.$projectId_.invite.devices.index.navTitle": {
+    "description": "Title of the device selection for invite page.",
+    "message": "Select a Device"
+  },
+  "routes.app.projects.$projectId_.invite.index.controlSharing": {
+    "description": "Detail about how to control data sharing.",
+    "message": "Control sharing in Project Settings."
+  },
+  "routes.app.projects.$projectId_.invite.index.inviteCollaborators": {
+    "description": "Title of the Invite Get Started page.",
+    "message": "Invite Collaborators"
+  },
+  "routes.app.projects.$projectId_.invite.index.navTitle": {
+    "description": "Title of the Invite Get Started page.",
+    "message": "Get Started"
+  },
+  "routes.app.projects.$projectId_.invite.index.onlyInvitedDevices": {
+    "description": "Detail about who contributes.",
+    "message": "Only invited devices contribute."
+  },
+  "routes.app.projects.$projectId_.invite.index.primaryDescription": {
+    "description": "Primary description text.",
+    "message": "Invite devices using CoMapeo to start collaborating."
+  },
+  "routes.app.projects.$projectId_.invite.index.selectDevice": {
+    "description": "Text for button to navigate to device selection.",
+    "message": "Select a Device"
+  },
+  "routes.app.projects.$projectId_.invite.index.shareUsingExchange": {
+    "description": "Detail about how collaborators share data.",
+    "message": "Collaborators share securely using Exchange."
+  },
   "routes.app.projects.$projectId_.settings.categories.customCategoriesExplainer": {
     "description": "Explanation for custom categories",
     "message": "Use custom categories by importing new categories set files below."
@@ -389,30 +429,6 @@
     "description": "Title used for column containing device name of project members.",
     "message": "Device Name"
   },
-  "routes.app.projects.$projectId_.settings.team.deviceTypeDesktop": {
-    "description": "Text indicating that the member is a desktop device (displays when hovering over the icon).",
-    "message": "Desktop"
-  },
-  "routes.app.projects.$projectId_.settings.team.deviceTypeMobile": {
-    "description": "Text indicating that the member is a mobile device (displays when hovering over the icon).",
-    "message": "Mobile"
-  },
-  "routes.app.projects.$projectId_.settings.team.deviceTypeRemoteArchive": {
-    "description": "Text indicating that the member is a remote archive (displays when hovering over the icon).",
-    "message": "Remote Archive"
-  },
-  "routes.app.projects.$projectId_.settings.team.deviceTypeTablet": {
-    "description": "Text indicating that the member is a tablet device (displays when hovering over the icon).",
-    "message": "Tablet"
-  },
-  "routes.app.projects.$projectId_.settings.team.deviceTypeUnknown": {
-    "description": "Text indicating that the member device type is unknown (displays when hovering over the icon).",
-    "message": "Unknown device type"
-  },
-  "routes.app.projects.$projectId_.settings.team.deviceTypeUnspecified": {
-    "description": "Text indicating that the member device type is unspecified (displays when hovering over the icon).",
-    "message": "Unspecified device type"
-  },
   "routes.app.projects.$projectId_.settings.team.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Invite Device"
@@ -440,6 +456,30 @@
   "routes.app.projects.$projectId_.settings.team.thisDevice": {
     "description": "Text indicating that the listed device refers to the one currently being used.",
     "message": "This Device!"
+  },
+  "routes.app.projects.-shared.device-icon.deviceTypeDesktop": {
+    "description": "Text indicating that the member is a desktop device (displays when hovering over the icon).",
+    "message": "Desktop"
+  },
+  "routes.app.projects.-shared.device-icon.deviceTypeMobile": {
+    "description": "Text indicating that the member is a mobile device (displays when hovering over the icon).",
+    "message": "Mobile"
+  },
+  "routes.app.projects.-shared.device-icon.deviceTypeRemoteArchive": {
+    "description": "Text indicating that the member is a remote archive (displays when hovering over the icon).",
+    "message": "Remote Archive"
+  },
+  "routes.app.projects.-shared.device-icon.deviceTypeTablet": {
+    "description": "Text indicating that the member is a tablet device (displays when hovering over the icon).",
+    "message": "Tablet"
+  },
+  "routes.app.projects.-shared.device-icon.deviceTypeUnknown": {
+    "description": "Text indicating that the member device type is unknown (displays when hovering over the icon).",
+    "message": "Unknown device type"
+  },
+  "routes.app.projects.-shared.device-icon.deviceTypeUnspecified": {
+    "description": "Text indicating that the member device type is unspecified (displays when hovering over the icon).",
+    "message": "Unspecified device type"
   },
   "routes.app.projects.-shared.network-connection-info.notConnectedToWifi": {
     "description": "Text displayed when Wi-Fi is not connected.",

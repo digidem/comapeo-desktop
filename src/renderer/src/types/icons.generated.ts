@@ -12,6 +12,7 @@ export const iconNames = [
 	'openmoji-bar-chart',
 	'material-wifi',
 	'material-wifi-off',
+	'material-warning-rounded',
 	'material-volume-up',
 	'material-tablet-android',
 	'material-symbols-stars-2',
