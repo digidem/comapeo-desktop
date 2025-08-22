@@ -237,10 +237,6 @@
     "description": "Text displayed when no devices have been found.",
     "message": "No Devices Found"
   },
-  "routes.app.projects.$projectId_.exchange.index.notConnectedToWifi": {
-    "description": "Text displayed Wi-Fi is not connected.",
-    "message": "Not connected to Wi-Fi"
-  },
   "routes.app.projects.$projectId_.exchange.index.start": {
     "description": "Button text to start exchange.",
     "message": "Start"
@@ -444,6 +440,10 @@
   "routes.app.projects.$projectId_.settings.team.thisDevice": {
     "description": "Text indicating that the listed device refers to the one currently being used.",
     "message": "This Device!"
+  },
+  "routes.app.projects.-shared.network-connection-info.notConnectedToWifi": {
+    "description": "Text displayed when Wi-Fi is not connected.",
+    "message": "Not connected to Wi-Fi"
   },
   "routes.app.route.aboutTabLabel": {
     "message": "About CoMapeo"
