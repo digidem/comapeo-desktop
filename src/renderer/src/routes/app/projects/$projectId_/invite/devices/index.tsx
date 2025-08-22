@@ -1,7 +1,6 @@
 import { Suspense } from 'react'
 import { useManyMembers } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
-import CircularProgress from '@mui/material/CircularProgress'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
@@ -114,18 +113,7 @@ function RouteComponent() {
 				</Stack>
 
 				<Stack direction="column" flex={1}>
-					<Suspense
-						fallback={
-							<Box
-								display="flex"
-								flexDirection="column"
-								justifyContent="center"
-								alignItems="center"
-							>
-								<CircularProgress disableShrink size={40} />
-							</Box>
-						}
-					>
+					<Suspense>
 						<InvitablePeersList projectId={projectId} />
 					</Suspense>
 				</Stack>
