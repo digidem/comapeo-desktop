@@ -253,7 +253,31 @@
     "description": "Text displayed when waiting for other devices to be found.",
     "message": "Waiting for Devices"
   },
-  "routes.app.projects.$projectId_.invite.devices.index.disconnected": {
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.coordinatorDescription": {
+    "description": "Coordinator role description.",
+    "message": "As a Coordinator this device can invite and remove users, and manage project details."
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.coordinatorTitle": {
+    "description": "Coordinator role name.",
+    "message": "Coordinator"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.navTitle": {
+    "description": "Title of the invite role selection page.",
+    "message": "Select a Role"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.participantDescription": {
+    "description": "Participant role description.",
+    "message": "As a Participant this device can take and share observations. They cannot manage users or project details."
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.participantTitle": {
+    "description": "Participant role name.",
+    "message": "Participant"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.selectingRole": {
+    "description": "Description of action being taken in role selection page.",
+    "message": "You are selecting a role for this device:"
+  },
+  "routes.app.projects.$projectId_.invite.devices.-shared.device-row.disconnected": {
     "description": "Text displayed when external device is disconnected.",
     "message": "Disconnected"
   },

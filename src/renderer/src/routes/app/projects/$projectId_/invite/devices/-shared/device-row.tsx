@@ -55,8 +55,7 @@ export function DeviceRow({
 					whiteSpace="nowrap"
 					overflow="hidden"
 				>
-					{/* {deviceId.slice(0, 12)} */}
-					{deviceId}
+					{deviceId.slice(0, 12)}
 				</Typography>
 
 				{disconnected ? (

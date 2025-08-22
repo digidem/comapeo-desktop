@@ -173,7 +173,7 @@ function InvitablePeersList({ projectId }: { projectId: string }) {
 							peer.status === 'connected'
 								? () => {
 										navigate({
-											to: '/app/projects/$projectId/invite/devices/$deviceId',
+											to: '/app/projects/$projectId/invite/devices/$deviceId/role',
 											params: { projectId, deviceId: peer.deviceId },
 										})
 									}
