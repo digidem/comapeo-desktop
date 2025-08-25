@@ -551,6 +551,7 @@ function InviteAccepted({
 						to="/app/projects/$projectId/invite/devices"
 						params={{ projectId }}
 						replace
+						reloadDocument
 						fullWidth
 						variant="outlined"
 						sx={{ maxWidth: 400, alignSelf: 'center' }}
