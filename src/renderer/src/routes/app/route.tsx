@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
-import { useMutationState } from '@tanstack/react-query'
+import { useIsMutating } from '@tanstack/react-query'
 import {
 	Outlet,
 	createFileRoute,
@@ -64,12 +64,7 @@ function RouteComponent() {
 	const pageHasEditing = checkPageHasEditing(currentRoute.fullPath)
 
 	const someGlobalMutationIsPending =
-		useMutationState({
-			filters: {
-				mutationKey: GLOBAL_MUTATIONS_BASE_KEY,
-				predicate: (mutation) => mutation.state.status === 'pending',
-			},
-		}).length > 0
+		useIsMutating({ mutationKey: GLOBAL_MUTATIONS_BASE_KEY }) > 0
 
 	return (
 		<Box bgcolor={WHITE} height="100%">
@@ -108,6 +103,11 @@ function RouteComponent() {
 								}
 								to="/app/projects/$projectId"
 								params={{ projectId: activeProjectId }}
+								onClick={(event) => {
+									if (someGlobalMutationIsPending) {
+										event.preventDefault()
+									}
+								}}
 								activeProps={{
 									...SHARED_NAV_ITEM_PROPS.link.activeProps,
 									sx: {
@@ -256,7 +256,9 @@ function checkPageHasEditing(currentPath: ToRouteFullPath) {
 		currentPath === '/app/settings/device-name' ||
 		currentPath === '/app/settings/coordinate-system' ||
 		currentPath === '/app/settings/language' ||
-		currentPath === '/app/projects/$projectId/settings/info'
+		currentPath === '/app/projects/$projectId/settings/info' ||
+		currentPath === '/app/projects/$projectId/invite/devices/$deviceId/role' ||
+		currentPath === '/app/projects/$projectId/invite/devices/$deviceId/send'
 	)
 }
 

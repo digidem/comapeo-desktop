@@ -3,6 +3,8 @@ import type { Field, Observation, Preset, Track } from '@comapeo/schema'
 
 export type Attachment = Observation['attachments'][number]
 
+export type DeviceType = NonNullable<MemberApi.MemberInfo['deviceType']>
+
 // https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/shared.ts#L6C1-L6C52
 export const COMAPEO_CORE_REACT_ROOT_QUERY_KEY = '@comapeo/core-react' as const
 

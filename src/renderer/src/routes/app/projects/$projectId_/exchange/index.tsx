@@ -16,10 +16,10 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { captureException } from '@sentry/react'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, notFound } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
+import { NetworkConnectionInfo } from '../../-shared/network-connection-info'
 import { TwoPanelLayout } from '../../../-components/two-panel-layout'
 import {
 	BLACK,
@@ -27,17 +27,14 @@ import {
 	COMAPEO_BLUE,
 	DARKER_ORANGE,
 	GREEN,
-	LIGHT_COMAPEO_BLUE,
 	LIGHT_GREY,
 	WHITE,
 } from '../../../../../colors'
 import { ErrorDialog } from '../../../../../components/error-dialog'
 import { GenericRoutePendingComponent } from '../../../../../components/generic-route-pending-component'
 import { Icon } from '../../../../../components/icon'
-import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
-import { useBrowserNetInfo } from '../../../../../hooks/network'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
 import { ExhaustivenessError } from '../../../../../lib/exchaustiveness-error'
-import { getWifiConnectionsOptions } from '../../../../../lib/queries/system'
 import {
 	deriveSyncStage,
 	getConnectedPeersCount,
@@ -46,9 +43,30 @@ import {
 } from '../../../../../lib/sync'
 
 export const Route = createFileRoute('/app/projects/$projectId_/exchange/')({
+	beforeLoad: async ({ context, params }) => {
+		const { clientApi, queryClient } = context
+		const { projectId } = params
+
+		let projectApi
+		try {
+			projectApi = await queryClient.ensureQueryData({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects', projectId],
+				queryFn: async () => {
+					return clientApi.getProject(projectId)
+				},
+			})
+		} catch {
+			throw notFound()
+		}
+
+		return { projectApi }
+	},
 	pendingComponent: () => {
 		return (
-			<TwoPanelLayout start={<GenericRoutePendingComponent />} end={null} />
+			<TwoPanelLayout
+				start={<GenericRoutePendingComponent />}
+				end={<Box bgcolor={LIGHT_GREY} display="flex" flex={1} />}
+			/>
 		)
 	},
 	component: RouteComponent,
@@ -97,7 +115,7 @@ function RouteComponent() {
 						padding={6}
 						gap={6}
 					>
-						<Stack direction="row" alignItems="center" gap={4}>
+						<Box flexDirection="row" alignItems="center">
 							<Box
 								display="flex"
 								flex={1}
@@ -116,10 +134,10 @@ function RouteComponent() {
 										</Typography>
 									}
 								>
-									<NetworkConnectionInfo />
+									<NetworkConnectionInfo waitingText={t(m.gettingWifiInfo)} />
 								</Suspense>
 							</Box>
-						</Stack>
+						</Box>
 
 						<Stack
 							direction="column"
@@ -243,58 +261,6 @@ function RouteComponent() {
 	)
 }
 
-function NetworkConnectionInfo() {
-	const { formatMessage: t } = useIntl()
-
-	const { data: wifiConnection, isRefetching: isRefetchingWifiConnection } =
-		useSuspenseQuery({
-			...getWifiConnectionsOptions(),
-			select: (connections) => {
-				return connections[0]
-			},
-		})
-
-	const netInfo = useBrowserNetInfo()
-
-	const wifiIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
-		multiplier: 0.8,
-	})
-
-	return (
-		<Stack
-			direction="row"
-			gap={3}
-			alignItems="center"
-			justifyContent="center"
-			overflow="auto"
-		>
-			{isRefetchingWifiConnection ? (
-				<Typography fontWeight={500}>{t(m.gettingWifiInfo)}</Typography>
-			) : wifiConnection ? (
-				<>
-					<WifiIcon offline={!netInfo.online} size={wifiIconSize} />
-					<Typography
-						fontWeight={500}
-						overflow="hidden"
-						textOverflow="ellipsis"
-						whiteSpace="nowrap"
-						flex={1}
-					>
-						{/* TODO: Should the effectiveType be translatable? */}
-						{wifiConnection.ssid} - {netInfo.effectiveType}
-					</Typography>
-				</>
-			) : (
-				<>
-					<WifiIcon offline size={wifiIconSize} />
-					<Typography fontWeight={500}>{t(m.notConnectedToWifi)}</Typography>
-				</>
-			)}
-		</Stack>
-	)
-}
-
 function DisplayedSyncState({
 	projectId,
 	syncState,
@@ -402,40 +368,11 @@ function SyncProgress({
 	)
 }
 
-function WifiIcon({
-	offline,
-	size,
-}: {
-	offline?: boolean
-	size?: string | number
-}) {
-	return (
-		<Box
-			display="flex"
-			justifyContent="center"
-			alignItems="center"
-			borderRadius="50%"
-			padding={1}
-			bgcolor={LIGHT_COMAPEO_BLUE}
-		>
-			<Icon
-				name={offline ? 'material-wifi-off' : 'material-wifi'}
-				size={size}
-			/>
-		</Box>
-	)
-}
-
 const m = defineMessages({
 	gettingWifiInfo: {
 		id: 'routes.app.projects.$projectId_.exchange.index.gettingWifiInfo',
 		defaultMessage: 'Getting Wi-Fi information…',
 		description: 'Text displayed when waiting for Wi-Fi information.',
-	},
-	notConnectedToWifi: {
-		id: 'routes.app.projects.$projectId_.exchange.index.notConnectedToWifi',
-		defaultMessage: 'Not connected to Wi-Fi',
-		description: 'Text displayed Wi-Fi is not connected.',
 	},
 	waitingForDevices: {
 		id: 'routes.app.projects.$projectId_.exchange.index.waitingForDevices',

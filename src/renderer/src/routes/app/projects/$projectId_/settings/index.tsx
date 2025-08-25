@@ -1,16 +1,16 @@
-import { useMemo, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { useOwnRoleInProject, useProjectSettings } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useTheme } from '@mui/material/styles'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARK_GREY } from '../../../../../colors'
 import { Icon } from '../../../../../components/icon'
 import { TextLink } from '../../../../../components/link'
+import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -80,11 +80,10 @@ function RouteComponent() {
 	const isAtLeastCoordinator =
 		role.roleId === COORDINATOR_ROLE_ID || role.roleId === CREATOR_ROLE_ID
 
-	const theme = useTheme()
-
-	const iconSize = useMemo(() => {
-		return `calc(${theme.typography.h1.fontSize} * ${theme.typography.h1.lineHeight} * 1.25)`
-	}, [theme.typography.h1.fontSize, theme.typography.h1.lineHeight])
+	const iconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+		multiplier: 1.25,
+	})
 
 	return (
 		<Stack direction="column" flex={1}>

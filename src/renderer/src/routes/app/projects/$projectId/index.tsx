@@ -115,7 +115,7 @@ function RouteComponent() {
 						<ButtonLink
 							fullWidth
 							variant="contained"
-							to="/app/projects/$projectId/settings"
+							to="/app/projects/$projectId/invite"
 							params={{ projectId }}
 							disabled={!isAtLeastCoordinator}
 							startIcon={<Icon name="material-person-add" />}
