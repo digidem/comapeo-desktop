@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import {
 	useRequestCancelInvite,
 	useSendInvite,
@@ -27,6 +27,7 @@ import {
 	WHITE,
 } from '../../../../../../../colors'
 import { ErrorDialog } from '../../../../../../../components/error-dialog'
+import { GenericRoutePendingComponent } from '../../../../../../../components/generic-route-pending-component'
 import { Icon } from '../../../../../../../components/icon'
 import { ButtonLink } from '../../../../../../../components/link'
 import { useLocalPeers } from '../../../../../../../hooks/peers'
@@ -157,10 +158,12 @@ function RouteComponent() {
 
 		case 'ACCEPT': {
 			return (
-				<InviteAccepted
-					deviceId={invite.variables.deviceId}
-					projectId={projectId}
-				/>
+				<Suspense fallback={<GenericRoutePendingComponent />}>
+					<InviteAccepted
+						deviceId={invite.variables.deviceId}
+						projectId={projectId}
+					/>
+				</Suspense>
 			)
 		}
 		case 'ALREADY': {
