@@ -4,10 +4,12 @@ import { defineMessages, useIntl } from 'react-intl'
 
 const TITLE_BAR_COLOR = '#2348B2'
 
+const FALLBACK_TITLE_BAR_HEIGHT_PX = 40
+
 // NOTE: This is provided by Electron when using the `titleBarOverlay` option for creating a BrowserWindow
 // - https://www.electronjs.org/docs/latest/api/structures/base-window-options
 // - https://github.com/WICG/window-controls-overlay/blob/main/explainer.md#css-environment-variables
-export const TITLE_BAR_HEIGHT = `env(titlebar-area-height)`
+export const TITLE_BAR_HEIGHT = `env(titlebar-area-height, ${FALLBACK_TITLE_BAR_HEIGHT_PX}px)`
 
 export function AppTitleBar({ platform }: { platform: NodeJS.Platform }) {
 	const { formatMessage: t } = useIntl()
