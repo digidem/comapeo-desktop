@@ -23,6 +23,7 @@ export const iconNames = [
 	'material-symbols-computer',
 	'material-square-filled',
 	'material-settings',
+	'material-send-filled',
 	'material-question-mark',
 	'material-place',
 	'material-phone-android',
@@ -46,6 +47,7 @@ export const iconNames = [
 	'material-auto-fix-high',
 	'material-attachment',
 	'material-arrow-back',
+	'comapeo-send',
 	'comapeo-cards',
 ] as const
 

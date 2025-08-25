@@ -6,7 +6,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { DeviceRow } from '../-shared/device-row'
@@ -26,9 +26,9 @@ function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 
 	const router = useRouter()
+	const navigate = useNavigate()
 
 	const { peerOnLoad } = Route.useRouteContext()
-
 	const { projectId, deviceId } = Route.useParams()
 
 	const updatedPeer = useLocalPeers().find((p) => p.deviceId === deviceId)
@@ -89,12 +89,26 @@ function RouteComponent() {
 						name={t(m.participantTitle)}
 						description={t(m.participantDescription)}
 						icon={<Icon name="material-people-filled" />}
+						onClick={() => {
+							navigate({
+								to: '/app/projects/$projectId/invite/devices/$deviceId/send',
+								params: { projectId, deviceId: peer.deviceId },
+								search: { role: 'participant' },
+							})
+						}}
 					/>
 
 					<RoleOption
 						name={t(m.coordinatorTitle)}
 						description={t(m.coordinatorDescription)}
 						icon={<Icon name="material-manage-accounts-filled" />}
+						onClick={() => {
+							navigate({
+								to: '/app/projects/$projectId/invite/devices/$deviceId/send',
+								params: { projectId, deviceId: peer.deviceId },
+								search: { role: 'coordinator' },
+							})
+						}}
 					/>
 				</List>
 			</Stack>

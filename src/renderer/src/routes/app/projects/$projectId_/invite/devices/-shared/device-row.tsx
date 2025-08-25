@@ -2,12 +2,10 @@ import { useMemo } from 'react'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material/styles'
-import { defineMessages, useIntl } from 'react-intl'
 
 import { DeviceIcon } from '../../../../-shared/device-icon'
-import { ORANGE } from '../../../../../../../colors'
-import { Icon } from '../../../../../../../components/icon'
 import type { DeviceType } from '../../../../../../../lib/comapeo'
+import { DisconnectedIndicator } from './disconnected-indicator'
 
 export function DeviceRow({
 	deviceId,
@@ -20,8 +18,6 @@ export function DeviceRow({
 	disconnected?: boolean
 	name: string | undefined
 }) {
-	const { formatMessage: t } = useIntl()
-
 	const theme = useTheme()
 
 	const deviceIconSize = useMemo(() => {
@@ -58,27 +54,8 @@ export function DeviceRow({
 					{deviceId.slice(0, 12)}
 				</Typography>
 
-				{disconnected ? (
-					<Stack direction="row" gap={1} alignItems="center">
-						<Icon
-							name="material-warning-rounded"
-							htmlColor={ORANGE}
-							size={theme.typography.body2.fontSize}
-						/>
-						<Typography variant="body2" color="warning">
-							{t(m.disconnected)}
-						</Typography>
-					</Stack>
-				) : null}
+				{disconnected ? <DisconnectedIndicator /> : null}
 			</Stack>
 		</Stack>
 	)
 }
-
-const m = defineMessages({
-	disconnected: {
-		id: 'routes.app.projects.$projectId_.invite.devices.-shared.device-row.disconnected',
-		defaultMessage: 'Disconnected',
-		description: 'Text displayed when external device is disconnected.',
-	},
-})

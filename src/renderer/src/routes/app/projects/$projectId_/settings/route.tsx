@@ -3,6 +3,7 @@ import { Outlet, createFileRoute, notFound } from '@tanstack/react-router'
 
 import { TwoPanelLayout } from '../../../-components/two-panel-layout'
 import { LIGHT_GREY } from '../../../../../colors'
+import { GenericRoutePendingComponent } from '../../../../../components/generic-route-pending-component'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
 
 export const Route = createFileRoute('/app/projects/$projectId_/settings')({
@@ -24,6 +25,14 @@ export const Route = createFileRoute('/app/projects/$projectId_/settings')({
 		}
 
 		return { projectApi }
+	},
+	pendingComponent: () => {
+		return (
+			<TwoPanelLayout
+				start={<GenericRoutePendingComponent />}
+				end={<Box bgcolor={LIGHT_GREY} display="flex" flex={1} />}
+			/>
+		)
 	},
 	component: RouteComponent,
 })

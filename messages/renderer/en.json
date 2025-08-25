@@ -277,7 +277,67 @@
     "description": "Description of action being taken in role selection page.",
     "message": "You are selecting a role for this device:"
   },
-  "routes.app.projects.$projectId_.invite.devices.-shared.device-row.disconnected": {
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.accepted": {
+    "description": "Text displayed when invite is accepted.",
+    "message": "Accepted!"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.addAnotherDevice": {
+    "description": "Text for button to add another device.",
+    "message": "Add Another Device"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.addedOn": {
+    "description": "Text showing when device was added to project.",
+    "message": "Added on {date, date, long}"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.cancelInvite": {
+    "description": "Text for button to cancel invite.",
+    "message": "Cancel Invite"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
+    "description": "Text for button to leave invite flow.",
+    "message": "Close"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.coordinator": {
+    "description": "Coordinator role name.",
+    "message": "Coordinator"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.deviceBeingInvited": {
+    "description": "Text displaying the device and its role that it is being invited as.",
+    "message": "{name}<br></br><br></br> is being invited as <br></br><br></br>{role}"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.invitationDeclinedDescription": {
+    "description": "Description of a declined invite.",
+    "message": "This device has declined your invitation. They have not joined the project."
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.invitationDeclinedTitle": {
+    "description": "Title of page when invite is declined.",
+    "message": "Invitation Declined"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.inviteAccepted": {
+    "description": "Text displayed when invite is accepted.",
+    "message": "Invite Accepted"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.navTitle": {
+    "description": "Title of the review invite page.",
+    "message": "Review Invitation"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.participant": {
+    "description": "Participant role name.",
+    "message": "Participant"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.sendInvite": {
+    "description": "Button text for sending invite.",
+    "message": "Send Invite"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.timeSinceSent": {
+    "description": "Text showing time elapsed since invite was sent",
+    "message": "Invite sent {time}s ago"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.waiting": {
+    "description": "Text displayed while waiting for invite response.",
+    "message": "Waiting for Device to Accept Invite"
+  },
+  "routes.app.projects.$projectId_.invite.devices.-shared.disconnected-indicator.disconnected": {
     "description": "Text displayed when external device is disconnected.",
     "message": "Disconnected"
   },

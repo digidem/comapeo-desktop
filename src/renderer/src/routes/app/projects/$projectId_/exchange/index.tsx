@@ -16,7 +16,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { captureException } from '@sentry/react'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, notFound } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { NetworkConnectionInfo } from '../../-shared/network-connection-info'
@@ -33,6 +33,7 @@ import {
 import { ErrorDialog } from '../../../../../components/error-dialog'
 import { GenericRoutePendingComponent } from '../../../../../components/generic-route-pending-component'
 import { Icon } from '../../../../../components/icon'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
 import { ExhaustivenessError } from '../../../../../lib/exchaustiveness-error'
 import {
 	deriveSyncStage,
@@ -42,9 +43,30 @@ import {
 } from '../../../../../lib/sync'
 
 export const Route = createFileRoute('/app/projects/$projectId_/exchange/')({
+	beforeLoad: async ({ context, params }) => {
+		const { clientApi, queryClient } = context
+		const { projectId } = params
+
+		let projectApi
+		try {
+			projectApi = await queryClient.ensureQueryData({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects', projectId],
+				queryFn: async () => {
+					return clientApi.getProject(projectId)
+				},
+			})
+		} catch {
+			throw notFound()
+		}
+
+		return { projectApi }
+	},
 	pendingComponent: () => {
 		return (
-			<TwoPanelLayout start={<GenericRoutePendingComponent />} end={null} />
+			<TwoPanelLayout
+				start={<GenericRoutePendingComponent />}
+				end={<Box bgcolor={LIGHT_GREY} display="flex" flex={1} />}
+			/>
 		)
 	},
 	component: RouteComponent,
