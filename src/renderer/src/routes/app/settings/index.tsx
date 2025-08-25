@@ -1,8 +1,7 @@
-import { useMemo, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { useOwnDeviceInfo } from '@comapeo/core-react'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useTheme } from '@mui/material/styles'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -10,6 +9,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors'
 import { Icon } from '../../../components/icon'
 import { ButtonLink, IconButtonLink } from '../../../components/link'
+import { useIconSizeBasedOnTypography } from '../../../hooks/icon'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
 import { getLanguageInfo } from '../../../lib/intl'
 import {
@@ -59,11 +59,10 @@ function RouteComponent() {
 		},
 	})
 
-	const theme = useTheme()
-
-	const rowIconSize = useMemo(() => {
-		return `calc(${theme.typography.body1.fontSize} * ${theme.typography.body1.lineHeight} * 1.25)`
-	}, [theme.typography.body1.fontSize, theme.typography.body1.lineHeight])
+	const rowIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+		multiplier: 1.25,
+	})
 
 	return (
 		<Stack direction="column" padding={6} flex={1} overflow="auto" gap={6}>

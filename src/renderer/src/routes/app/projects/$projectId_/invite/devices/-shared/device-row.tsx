@@ -1,9 +1,8 @@
-import { useMemo } from 'react'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useTheme } from '@mui/material/styles'
 
 import { DeviceIcon } from '../../../../-shared/device-icon'
+import { useIconSizeBasedOnTypography } from '../../../../../../../hooks/icon'
 import type { DeviceType } from '../../../../../../../lib/comapeo'
 import { DisconnectedIndicator } from './disconnected-indicator'
 
@@ -18,11 +17,10 @@ export function DeviceRow({
 	disconnected?: boolean
 	name: string | undefined
 }) {
-	const theme = useTheme()
-
-	const deviceIconSize = useMemo(() => {
-		return `calc(${theme.typography.body1.fontSize} * ${theme.typography.body1.lineHeight} * 1.5)`
-	}, [theme.typography.body1.fontSize, theme.typography.body1.lineHeight])
+	const deviceIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+		multiplier: 1.5,
+	})
 
 	return (
 		<Stack

@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import type { MemberApi } from '@comapeo/core'
 import {
 	useManyMembers,
@@ -9,7 +8,6 @@ import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useTheme } from '@mui/material/styles'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
@@ -17,6 +15,7 @@ import { DeviceIcon } from '../../-shared/device-icon'
 import { BLUE_GREY } from '../../../../../colors'
 import { Icon } from '../../../../../components/icon'
 import { ButtonLink, TextLink } from '../../../../../components/link'
+import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -95,11 +94,10 @@ function RouteComponent() {
 	const canLeaveProject =
 		coordinators.filter((c) => c.deviceId !== ownDeviceInfo.deviceId).length > 0
 
-	const theme = useTheme()
-
-	const sectionIconSize = useMemo(() => {
-		return `calc(${theme.typography.h2.fontSize} * ${theme.typography.h2.lineHeight} * 1.5)`
-	}, [theme.typography.h2.fontSize, theme.typography.h2.lineHeight])
+	const sectionIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h2',
+		multiplier: 1.5,
+	})
 
 	return (
 		<Stack direction="column" flex={1} overflow="auto">
@@ -222,11 +220,10 @@ function DeviceList({
 }) {
 	const { formatMessage: t, formatDate } = useIntl()
 
-	const theme = useTheme()
-
-	const iconSize = useMemo(() => {
-		return `calc(${theme.typography.body1.fontSize} * ${theme.typography.body1.lineHeight} * 1.5)`
-	}, [theme.typography.body1.fontSize, theme.typography.body1.lineHeight])
+	const iconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+		multiplier: 1.5,
+	})
 
 	return (
 		<Stack direction="column" gap={4}>
