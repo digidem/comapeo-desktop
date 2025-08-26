@@ -14,7 +14,7 @@ export const Route = createFileRoute(
 
 		const matchingPeer = peers.find((p) => p.deviceId === deviceId)
 
-		if (!matchingPeer || matchingPeer.status === 'disconnected') {
+		if (!matchingPeer) {
 			throw redirect({
 				to: '/app/projects/$projectId/invite/devices',
 				params: { projectId },
