@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useDeferredValue, useEffect, useState } from 'react'
 import {
 	useRequestCancelInvite,
 	useSendInvite,
@@ -110,7 +110,9 @@ function RouteComponent() {
 		[deviceId, cancelInvite, queryClient],
 	)
 
-	if (invite.status === 'idle' || invite.status === 'error') {
+	const deferredInviteStatus = useDeferredValue(invite.status)
+
+	if (deferredInviteStatus === 'idle' || deferredInviteStatus === 'error') {
 		return (
 			<ReviewInvitation
 				error={invite.error}
@@ -128,7 +130,7 @@ function RouteComponent() {
 		)
 	}
 
-	if (invite.status === 'pending') {
+	if (deferredInviteStatus === 'pending') {
 		return (
 			<InvitePending
 				sentAt={invite.submittedAt}
