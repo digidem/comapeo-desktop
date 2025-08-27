@@ -1,23 +1,19 @@
 {
-  "components.app-title-bar.appName": {
-    "description": "Name of the app displayed in the title bar.",
-    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Escritorio</blue>"
-  },
   "components.error-dialog.advanced": {
     "description": "Title text for the collapsible section that shows the actual error message.",
-    "message": "Avanzado"
+    "message": "高度な設定"
   },
   "components.error-dialog.close": {
     "description": "Button text for the close button in the error dialog.",
-    "message": "Abrir ajustes"
+    "message": "Open Settings"
   },
   "components.error-dialog.somethingWentWrong": {
     "description": "Generic title text for the error dialog.",
-    "message": "Algo salió mal"
+    "message": "問題が発生しました"
   },
   "components.generic-route-error-component.error": {
     "description": "Label for error section",
-    "message": "Error"
+    "message": "エラー"
   },
   "components.generic-route-error-component.reload": {
     "description": "Text for button to reload page.",
@@ -25,125 +21,125 @@
   },
   "components.generic-route-error-component.somethinWentWrong": {
     "description": "Title text of page error",
-    "message": "Algo salió mal"
+    "message": "問題が発生しました"
   },
   "components.generic-route-error-component.stacktrace": {
     "description": "Label for stack trace section",
-    "message": "Traza de la pila"
+    "message": "スタックトレース"
   },
   "components.generic-route-not-found-component.goBack": {
     "description": "Button text for back button.",
-    "message": "Regresar"
+    "message": "戻る"
   },
   "components.generic-route-not-found-component.reloadApp": {
     "description": "Button text for reload app button.",
-    "message": "Recargar App"
+    "message": "アプリを再読み込み"
   },
   "components.generic-route-not-found-component.title": {
     "description": "Title text shown when page is not found.",
-    "message": "Página no encontrada"
+    "message": "ページが見つかりません"
   },
   "components.generic-route-not-found-component.tryAgain": {
     "description": "Button text for try again button.",
-    "message": "Inténtalo de nuevo"
+    "message": "もう一度試す"
   },
   "routes.app.about.title": {
-    "message": "Acerca de CoMapeo"
+    "message": "CoMapeoについて"
   },
   "routes.app.about.version": {
-    "message": "Versión de CoMapeo"
+    "message": "CoMapeo バージョン"
   },
   "routes.app.data-and-privacy.description": {
-    "message": "CoMapeo respeta su privacidad y autonomía"
+    "message": "CoMapeoはあなたのプライバシーと自律性を尊重します"
   },
   "routes.app.data-and-privacy.diagnosticInformationDescription": {
-    "message": "La información anonimizada sobre su dispositivo, los errores de las aplicaciones, los errores y el rendimiento ayuda a Awana Digital a mejorar la aplicación y a corregir errores."
+    "message": "デバイスに関する匿名化された情報、アプリのクラッシュ、エラー、パフォーマンスは、Awana Digitalがアプリを改善し、エラーを修正するのに役立ちます。"
   },
   "routes.app.data-and-privacy.diagnosticInformationOptOut": {
-    "message": "Puedes optar por no compartir información de diagnóstico en cualquier momento."
+    "message": "診断情報の共有をいつでもオプトアウトすることができます。"
   },
   "routes.app.data-and-privacy.diagnosticInformationPersonalInfo": {
-    "message": "Esto nunca incluye ninguno de tus datos o datos personales."
+    "message": "これには、お客様のデータや個人情報は一切含まれません。"
   },
   "routes.app.data-and-privacy.diagnosticInformationTitle": {
-    "message": "Información de diagnóstico"
+    "message": "診断情報"
   },
   "routes.app.data-and-privacy.learnMore": {
-    "message": "Aprende más"
+    "message": "もっと詳しく"
   },
   "routes.app.data-and-privacy.shareDiagnosticInformation": {
-    "message": "Compartir información de diagnóstico"
+    "message": "診断情報を共有"
   },
   "routes.app.data-and-privacy.title": {
-    "message": "Datos y privacidad"
+    "message": "データ & プライバシー"
   },
   "routes.app.projects.$projectId.-displayed.data.list.addObservationsDescription": {
     "description": "Description of card that is displayed when project has no observations to display.",
-    "message": "Utilice Exchange para añadir observaciones de colaborador"
+    "message": "Exchangeを使用してコラボレーターの観察記録を追加"
   },
   "routes.app.projects.$projectId.-displayed.data.list.addObservationsTitle": {
     "description": "Title of card that is displayed when project has no observations to display.",
-    "message": "Añadir observaciones"
+    "message": "観察記録を追加"
   },
   "routes.app.projects.$projectId.-displayed.data.list.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
-    "message": "Icono para la categoría {name}"
+    "message": "{name} カテゴリのアイコン"
   },
   "routes.app.projects.$projectId.-displayed.data.list.goToExchange": {
     "description": "Link text to navigate to Exchange page.",
-    "message": "Ir a Exchange"
+    "message": "取引に移動"
   },
   "routes.app.projects.$projectId.-displayed.data.list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
-    "message": "Observación"
+    "message": "観察記録"
   },
   "routes.app.projects.$projectId.-displayed.data.list.trackItemTitle": {
     "description": "Title for list item that is a track.",
-    "message": "Trayecto"
+    "message": "トラック"
   },
   "routes.app.projects.$projectId.-displayed.data.map.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
-    "message": "Icono para la categoría {name}"
+    "message": "{name} カテゴリのアイコン"
   },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
-    "message": "Invitar"
+    "message": "招待"
   },
   "routes.app.projects.$projectId.index.unnamedProject": {
     "description": "Fallback for when current project is missing a name.",
-    "message": "Proyecto sin nombre"
+    "message": "名前のないプロジェクト"
   },
   "routes.app.projects.$projectId.index.view": {
     "description": "Link text to navigate to project settings page.",
-    "message": "Ver"
+    "message": "表示"
   },
   "routes.app.projects.$projectId.index.youAreCoordinator": {
     "description": "Indicates that user is a coordinator on the current project.",
-    "message": "Eres un coordinator en este proyecto."
+    "message": "あなたはこのプロジェクトのコーディネーターです。"
   },
   "routes.app.projects.$projectId.index.youAreParticipant": {
     "description": "Indicates that user is a participant on the current project.",
-    "message": "Eres un participante en este proyecto."
+    "message": "あなたはこのプロジェクトの参加者です。"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
-    "message": "Icono para la categoría {name}"
+    "message": "{name} カテゴリのアイコン"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
-    "message": "Detalles"
+    "message": "詳細情報"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerFalse": {
     "description": "Text displayed if a boolean field is answered with \"false\"",
-    "message": "FABRICAR"
+    "message": "FALSE"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
     "description": "Fallback text displayed if field has no meaningful value.",
-    "message": "Sin respuesta"
+    "message": "回答なし"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNull": {
     "description": "Text displayed if a field is answered with \"null\"",
-    "message": "NÚLL"
+    "message": "NULL"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerTrue": {
     "description": "Text displayed if a boolean field is answered with \"true\"",
@@ -151,455 +147,439 @@
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
-    "message": "Observación"
+    "message": "観察記録"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.noLocation": {
     "description": "Fallback for location when observation does not have location specified.",
-    "message": "Sin ubicación"
+    "message": "位置情報がありません"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.notesSectionTitle": {
     "description": "Title for notes section.",
-    "message": "Notas"
+    "message": "メモ"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
-    "message": "Observación"
+    "message": "観察記録"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound": {
     "description": "Text displayed when observation cannot be found.",
-    "message": "No se pudo encontrar la observación con ID {docId}"
+    "message": "ID {docId} の観察記録が見つかりませんでした"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.onlyPreviewsAvailable": {
     "description": "Text displayed when only preview-quality attachments are available.",
-    "message": "Sólo vistas previas disponibles"
+    "message": "プレビューのみ"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.unableToGetDurationTime": {
     "description": "Text displayed when the duration of an audio attachment cannot be determined.",
-    "message": "No se puede obtener la duración del tiempo."
+    "message": "時間を取得できません。"
   },
   "routes.app.projects.$projectId.tracks.$trackDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
-    "message": "Icono para la categoría {name}"
+    "message": "{name} カテゴリのアイコン"
   },
   "routes.app.projects.$projectId.tracks.$trackDocId.index.descriptionSectionTitle": {
     "description": "Title for description section.",
-    "message": "Descripción"
+    "message": "説明"
   },
   "routes.app.projects.$projectId.tracks.$trackDocId.index.navTitle": {
     "description": "Displayed title.",
-    "message": "Trayecto"
+    "message": "トラック"
   },
   "routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
-    "message": "Observación"
+    "message": "観察記録"
   },
   "routes.app.projects.$projectId.tracks.$trackDocId.index.observationsSectionTitle": {
     "description": "Title for the track observations section.",
-    "message": "{count, plural, one {# Observación} other {# Observaciones}}"
+    "message": "{count, plural, one {# Observations} other {# Observations}}"
   },
   "routes.app.projects.$projectId.tracks.$trackDocId.index.trackNotFound": {
     "description": "Text displayed when track cannot be found.",
-    "message": "No se pudo encontrar la pista con ID {docId}"
+    "message": "ID {docId} のトラックが見つかりませんでした"
   },
   "routes.app.projects.$projectId.tracks.$trackDocId.index.tracks": {
     "description": "Displayed title next to category icon.",
-    "message": "Trayectos"
+    "message": "トラック"
   },
   "routes.app.projects.$projectId_.exchange.index.complete": {
     "description": "Text displayed when exchange is completed with all devices.",
-    "message": "¡Listo! Ya te actualizaste"
+    "message": "Complete! You're up to date"
   },
   "routes.app.projects.$projectId_.exchange.index.completeAndWaiting": {
     "description": "Text displayed when exchange is completed with currently connected devices.",
-    "message": "¡Completado! Esperando a que se unan otros dispositivos."
+    "message": "完了！他のデバイスが参加するのを待っています。"
   },
   "routes.app.projects.$projectId_.exchange.index.devicesFound": {
     "description": "Text displayed when other devices have been found.",
-    "message": "Dispositivos encontrados"
+    "message": "デバイスが見つかりました"
   },
   "routes.app.projects.$projectId_.exchange.index.exchangeEverythingDescription": {
     "description": "Description of 'exchange everything' setting",
-    "message": "Fotos de tamaño completo y audio.<br></br>Utiliza más almacenamiento."
+    "message": "フルサイズの写真とオーディオ。<br></br>ストレージを使用します。"
   },
   "routes.app.projects.$projectId_.exchange.index.exchangeEverythingTitle": {
     "description": "Title displayed when exchange setting is set to 'exchange everything'",
-    "message": "Intercambiar todo."
-  },
-  "routes.app.projects.$projectId_.exchange.index.exchanging": {
-    "description": "Text displayed when exchanging with other devices.",
-    "message": "Intercambiando…"
-  },
-  "routes.app.projects.$projectId_.exchange.index.gettingWifiInfo": {
-    "description": "Text displayed when waiting for Wi-Fi information.",
-    "message": "Obteniendo información Wi-Fi…"
+    "message": "すべてを交換します。"
   },
   "routes.app.projects.$projectId_.exchange.index.noDevicesFound": {
     "description": "Text displayed when no devices have been found.",
-    "message": "No se encontraron dispositivos"
+    "message": "デバイスが見つかりませんでした"
   },
   "routes.app.projects.$projectId_.exchange.index.start": {
     "description": "Button text to start exchange.",
-    "message": "Comenzar"
+    "message": "開始"
   },
   "routes.app.projects.$projectId_.exchange.index.stop": {
     "description": "Button text to stop exchange.",
-    "message": "Detener"
+    "message": "停止"
   },
   "routes.app.projects.$projectId_.exchange.index.upToDate": {
     "description": "Text displayed when exchangable data is up to date.",
-    "message": "Todos los datos están sincronizados"
+    "message": "All data synced"
   },
   "routes.app.projects.$projectId_.exchange.index.waitingForDevices": {
     "description": "Text displayed when waiting for other devices to be found.",
-    "message": "Esperando a dispositivos"
+    "message": "デバイスを待っています"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.role.coordinatorDescription": {
     "description": "Coordinator role description.",
-    "message": "Como persona Coordinadora, este dispositivo puede invitar y quitar dispositivos de este proyecto y administrar los detalles del Proyecto."
+    "message": "コーディネーターとして、このデバイスはユーザーの招待と削除、およびプロジェクトの詳細を管理することができます。"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.role.coordinatorTitle": {
     "description": "Coordinator role name.",
-    "message": "Persona Coordinadora"
+    "message": "Coordinator"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.role.navTitle": {
     "description": "Title of the invite role selection page.",
-    "message": "Seleccionar un rol"
+    "message": "役割を選択"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.role.participantDescription": {
     "description": "Participant role description.",
-    "message": "Como Participante, este dispositivo puede crear, editar, sincronizar y compartir observaciones. No puede administrar personas usuarias ni detalles del Proyecto."
+    "message": "参加者として、このデバイスは観察記録を取ったり共有したりできます。ユーザーやプロジェクトの詳細を管理することはできません。"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.role.participantTitle": {
     "description": "Participant role name.",
-    "message": "Participante"
+    "message": "参加者"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.role.selectingRole": {
     "description": "Description of action being taken in role selection page.",
-    "message": "Está seleccionando un rol para este dispositivo:"
+    "message": "このデバイスのロールを選択しています:"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.accepted": {
     "description": "Text displayed when invite is accepted.",
-    "message": "Invitación aceptada"
+    "message": "Invite Accepted"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.addAnotherDevice": {
     "description": "Text for button to add another device.",
-    "message": "Añadir otro dispositivo"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.addedOn": {
-    "description": "Text showing when device was added to project.",
-    "message": "¡Añadido el {date, date, long}"
+    "message": "別のデバイスを追加"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.cancelInvite": {
     "description": "Text for button to cancel invite.",
-    "message": "Cancelar invitación"
+    "message": "招待をキャンセル"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
     "description": "Text for button to leave invite flow.",
-    "message": "Abrir ajustes"
+    "message": "Open Settings"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.coordinator": {
     "description": "Coordinator role name.",
-    "message": "Persona Coordinadora"
+    "message": "Coordinator"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.deviceBeingInvited": {
     "description": "Text displaying the device and its role that it is being invited as.",
-    "message": "{name}<br></br><br></br> está siendo invitado como <br></br><br></br>{role}"
+    "message": "{name}<br></br><br></br> が <br></br><br></br>{role} として招待されています"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.invitationDeclinedDescription": {
     "description": "Description of a declined invite.",
-    "message": "Este dispositivo ha rechazado tu invitación. No se ha unido al Proyecto."
+    "message": "このデバイスはあなたの招待を拒否しました。彼らはプロジェクトに参加していません。"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.invitationDeclinedTitle": {
     "description": "Title of page when invite is declined.",
-    "message": "Invitación rechazada"
+    "message": "招待が拒否されました"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.inviteAccepted": {
     "description": "Text displayed when invite is accepted.",
-    "message": "Invitación aceptada"
+    "message": "招待が承認されました"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.navTitle": {
     "description": "Title of the review invite page.",
-    "message": "Revisar invitación"
+    "message": "招待状を確認"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.participant": {
     "description": "Participant role name.",
-    "message": "Participante"
+    "message": "参加者"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.sendInvite": {
     "description": "Button text for sending invite.",
-    "message": "Enviar invitación"
+    "message": "招待を送信"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.timeSinceSent": {
     "description": "Text showing time elapsed since invite was sent",
-    "message": "Invitación enviada hace {time}s"
+    "message": "{time}秒前に招待を送信しました"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.waiting": {
     "description": "Text displayed while waiting for invite response.",
-    "message": "Esperando a que el dispositivo acepte la invitación"
+    "message": "デバイスが招待を承認するのを待っています"
   },
   "routes.app.projects.$projectId_.invite.devices.-shared.disconnected-indicator.disconnected": {
     "description": "Text displayed when external device is disconnected.",
-    "message": "Desconectado"
-  },
-  "routes.app.projects.$projectId_.invite.devices.index.gettingWifiInfo": {
-    "description": "Text displayed when waiting for Wi-Fi information.",
-    "message": "Obteniendo información Wi-Fi…"
+    "message": "切断済み"
   },
   "routes.app.projects.$projectId_.invite.devices.index.navTitle": {
     "description": "Title of the device selection for invite page.",
-    "message": "Seleccione un dispositivo"
+    "message": "デバイスを選択"
   },
   "routes.app.projects.$projectId_.invite.index.controlSharing": {
     "description": "Detail about how to control data sharing.",
-    "message": "Control para compartir en la configuración del proyecto."
+    "message": "プロジェクト設定で共有を制御します。"
   },
   "routes.app.projects.$projectId_.invite.index.inviteCollaborators": {
     "description": "Title of the Invite Get Started page.",
-    "message": "Invita colaboradores"
+    "message": "コラボレーターを招待"
   },
   "routes.app.projects.$projectId_.invite.index.navTitle": {
     "description": "Title of the Invite Get Started page.",
-    "message": "¡Comienza ya!"
+    "message": "はじめよう"
   },
   "routes.app.projects.$projectId_.invite.index.onlyInvitedDevices": {
     "description": "Detail about who contributes.",
-    "message": "Sólo los dispositivos invitados contribuyen."
+    "message": "招待されたデバイスのみが貢献します。"
   },
   "routes.app.projects.$projectId_.invite.index.primaryDescription": {
     "description": "Primary description text.",
-    "message": "Invitar a los dispositivos usando CoMapeo para empezar a colaborar."
+    "message": "CoMapeoを使用してデバイスを招待してコラボレーションを開始します。"
   },
   "routes.app.projects.$projectId_.invite.index.selectDevice": {
     "description": "Text for button to navigate to device selection.",
-    "message": "Seleccione un dispositivo"
+    "message": "デバイスを選択"
   },
   "routes.app.projects.$projectId_.invite.index.shareUsingExchange": {
     "description": "Detail about how collaborators share data.",
-    "message": "Colaboradores comparten con seguridad el uso de Exchange."
+    "message": "コラボレーターはExchangeを使用して安全に共有します。"
   },
   "routes.app.projects.$projectId_.settings.categories.customCategoriesExplainer": {
     "description": "Explanation for custom categories",
-    "message": "Utilice categorías personalizadas importando los archivos del conjunto de categorías a continuación."
+    "message": "新しいカテゴリセットファイルを以下にインポートしてカスタムカテゴリを使用します。"
   },
   "routes.app.projects.$projectId_.settings.categories.dateAdded": {
     "description": "Text indicating the date the categories set was added.",
-    "message": "Añadido {date}"
+    "message": "{date} を追加しました"
   },
   "routes.app.projects.$projectId_.settings.categories.defaultCategoriesExplainer": {
     "description": "Explanation for default categories",
-    "message": "Las categorías por defecto te ayudan a empezar a organizar tus observaciones al instante."
+    "message": "デフォルトのカテゴリは、観察記録を即座に整理するのに役立ちます。"
   },
   "routes.app.projects.$projectId_.settings.categories.missingCategoriesName": {
     "description": "Text indicating that project is missing categories set name.",
-    "message": "No se ha encontrado un nombre para las categorías."
+    "message": "カテゴリセットの名前が見つかりません。"
   },
   "routes.app.projects.$projectId_.settings.categories.navTitle": {
     "description": "Title of the categories set page.",
-    "message": "Conjunto de categorías"
+    "message": "カテゴリセット"
   },
   "routes.app.projects.$projectId_.settings.categories.uploadNewSet": {
     "description": "Label for button to upload new categories set.",
-    "message": "Subir nuevo conjunto"
+    "message": "新しいセットをアップロード"
   },
   "routes.app.projects.$projectId_.settings.index.categoriesSet": {
     "description": "Text for item that navigates to project categories set page.",
-    "message": "Conjunto de categorías"
+    "message": "カテゴリセット"
   },
   "routes.app.projects.$projectId_.settings.index.collaborators": {
     "description": "Text for item that navigates to project collaborators page.",
-    "message": "Colaboradores"
+    "message": "共同編集者"
   },
   "routes.app.projects.$projectId_.settings.index.deviceIsCoordinator": {
     "description": "Indicates that device is a coordinator on the current project.",
-    "message": "Este dispositivo es un coordinator de este proyecto."
+    "message": "このデバイスはこのプロジェクトのコーディネーターです。"
   },
   "routes.app.projects.$projectId_.settings.index.deviceIsParticpant": {
     "description": "Indicates that device is a participant on the current project.",
-    "message": "Este dispositivo es un coordinador de este proyecto."
+    "message": "このデバイスはこのプロジェクトの参加者です。"
   },
   "routes.app.projects.$projectId_.settings.index.editInfo": {
     "description": "Text for link that navigates to page for editing project settings.",
-    "message": "Editar información"
+    "message": "情報を編集"
   },
   "routes.app.projects.$projectId_.settings.index.navTitle": {
     "description": "Title of the project settings page.",
-    "message": "Configuración del Proyecto"
+    "message": "プロジェクトの設定"
   },
   "routes.app.projects.$projectId_.settings.index.noProjectDescription": {
     "description": "Indicates that the project does not have a description.",
-    "message": "No hay descripción del proyecto."
+    "message": "プロジェクトの説明がありません。"
   },
   "routes.app.projects.$projectId_.settings.index.unnamedProject": {
     "description": "Fallback for when current project is missing a name.",
-    "message": "Proyecto sin nombre"
+    "message": "名前のないプロジェクト"
   },
   "routes.app.projects.$projectId_.settings.index.updateCategoriesSet": {
     "description": "Text for link that navigates to project categories set page.",
-    "message": "Actualizar conjunto"
+    "message": "セットを更新"
   },
   "routes.app.projects.$projectId_.settings.index.viewTeam": {
     "description": "Text for link that navigates to project team page.",
-    "message": "Ver equipo"
+    "message": "チームを表示"
   },
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",
-    "message": "Cancelar"
+    "message": "取消"
   },
   "routes.app.projects.$projectId_.settings.info.maxProjectDescriptionLengthError": {
     "description": "Error message for project description that is too long.",
-    "message": "Demasiado largo, pruebe una descripción más corta."
+    "message": "長すぎます。説明を短くしてください。"
   },
   "routes.app.projects.$projectId_.settings.info.maxProjectNameLengthError": {
     "description": "Error message for project name that is too long.",
-    "message": "Demasiado largo, pruebe un nombre más corto."
+    "message": "長すぎます。短い名前を入力してください。"
   },
   "routes.app.projects.$projectId_.settings.info.minProjectNameLengthError": {
     "description": "Error message for project name that is too short.",
-    "message": "Introduzca un nombre de proyecto"
+    "message": "プロジェクト名を入力"
   },
   "routes.app.projects.$projectId_.settings.info.navTitle": {
     "description": "Title of the project settings info page.",
-    "message": "Editar información"
+    "message": "情報を編集"
   },
   "routes.app.projects.$projectId_.settings.info.projectCardColorLabel": {
     "description": "Label for the project card color selector.",
-    "message": "Color de la tarjeta de proyecto"
+    "message": "プロジェクトカードの色"
   },
   "routes.app.projects.$projectId_.settings.info.projectColorOptionBlue": {
     "description": "Label for blue option in project color selector.",
-    "message": "Azul"
+    "message": "青"
   },
   "routes.app.projects.$projectId_.settings.info.projectColorOptionGreen": {
     "description": "Label for green option in project color selector.",
-    "message": "Verde"
+    "message": "緑"
   },
   "routes.app.projects.$projectId_.settings.info.projectColorOptionGrey": {
     "description": "Label for grey option in project color selector.",
-    "message": "Gris"
+    "message": "グレー"
   },
   "routes.app.projects.$projectId_.settings.info.projectColorOptionOrange": {
     "description": "Label for orange option in project color selector.",
-    "message": "Naranja"
+    "message": "オレンジ"
   },
   "routes.app.projects.$projectId_.settings.info.projectColorOptionRed": {
     "description": "Label for grey option in project color selector.",
-    "message": "Rojo"
+    "message": "赤"
   },
   "routes.app.projects.$projectId_.settings.info.projectDescriptionInputLabel": {
     "description": "Label for the project description input.",
-    "message": "Descripción del proyecto"
+    "message": "プロジェクトの説明"
   },
   "routes.app.projects.$projectId_.settings.info.projectNameInputLabel": {
     "description": "Label for the project name input.",
-    "message": "Introduce un nombre para el Proyecto"
+    "message": "Enter a name for the Project"
   },
   "routes.app.projects.$projectId_.settings.info.save": {
     "description": "Label for save button.",
-    "message": "Guardar"
+    "message": "保存"
   },
   "routes.app.projects.$projectId_.settings.team.coordinatorsSectionDescription": {
     "description": "Description of the coordinators section in the team page.",
-    "message": "Las personas Coordinadoras pueden invitar dispositivos, editar y eliminar datos y administrar los detalles del proyecto."
+    "message": "コーディネーターは、デバイスの招待、データの編集、削除、プロジェクトの詳細の管理ができます。"
   },
   "routes.app.projects.$projectId_.settings.team.coordinatorsSectionTitle": {
     "description": "Title of the coordinators section in the team page.",
-    "message": "Persona Coordinadora"
+    "message": "Coordinators"
   },
   "routes.app.projects.$projectId_.settings.team.dateAddedColumnTitle": {
     "description": "Title used for column containing date added of project members.",
-    "message": "Fecha agregada"
+    "message": "追加日"
   },
   "routes.app.projects.$projectId_.settings.team.deviceNameColumnTitle": {
     "description": "Title used for column containing device name of project members.",
-    "message": "Nombre del dispositivo"
+    "message": "端末名"
   },
   "routes.app.projects.$projectId_.settings.team.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
-    "message": "Invitar dispositivo"
+    "message": "デバイスを招待"
   },
   "routes.app.projects.$projectId_.settings.team.leaveProject": {
     "description": "Text for button that initiates steps for leaving project.",
-    "message": "Abandonar proyecto"
+    "message": "プロジェクトを退出する"
   },
   "routes.app.projects.$projectId_.settings.team.navTitle": {
     "description": "Title of the project settings team page.",
-    "message": "Equipo"
+    "message": "チーム"
   },
   "routes.app.projects.$projectId_.settings.team.noParticipants": {
     "description": "Text indicating that no participants are part of the project yet.",
-    "message": "No se han añadido participantes a este proyecto."
+    "message": "このプロジェクトに参加者が追加されていません．"
   },
   "routes.app.projects.$projectId_.settings.team.participantsSectionDescription": {
     "description": "Description of the participants section in the team page.",
-    "message": "Como Participante, este dispositivo puede crear, editar, sincronizar y compartir observaciones. No puede administrar personas usuarias ni detalles del proyecto."
+    "message": "参加者は観察記録を取ったり共有したりできます。ユーザやプロジェクトの詳細を管理することはできません。"
   },
   "routes.app.projects.$projectId_.settings.team.participantsSectionTitle": {
     "description": "Title of the participants section in the team page.",
-    "message": "Participantes"
+    "message": "参加者"
   },
   "routes.app.projects.$projectId_.settings.team.thisDevice": {
     "description": "Text indicating that the listed device refers to the one currently being used.",
-    "message": "¡Este dispositivo!"
+    "message": "このデバイスです！"
   },
   "routes.app.projects.-shared.device-icon.deviceTypeDesktop": {
     "description": "Text indicating that the member is a desktop device (displays when hovering over the icon).",
-    "message": "Escritorio"
+    "message": "デスクトップ"
   },
   "routes.app.projects.-shared.device-icon.deviceTypeMobile": {
     "description": "Text indicating that the member is a mobile device (displays when hovering over the icon).",
-    "message": "Móvil"
+    "message": "モバイル"
   },
   "routes.app.projects.-shared.device-icon.deviceTypeRemoteArchive": {
     "description": "Text indicating that the member is a remote archive (displays when hovering over the icon).",
-    "message": "Archivo Remoto"
+    "message": "リモートアーカイブ"
   },
   "routes.app.projects.-shared.device-icon.deviceTypeTablet": {
     "description": "Text indicating that the member is a tablet device (displays when hovering over the icon).",
-    "message": "Tablet"
+    "message": "タブレット"
   },
   "routes.app.projects.-shared.device-icon.deviceTypeUnknown": {
     "description": "Text indicating that the member device type is unknown (displays when hovering over the icon).",
-    "message": "Tipo de dispositivo desconocido"
+    "message": "不明なデバイスの種類"
   },
   "routes.app.projects.-shared.device-icon.deviceTypeUnspecified": {
     "description": "Text indicating that the member device type is unspecified (displays when hovering over the icon).",
-    "message": "Tipo de dispositivo no especificado"
+    "message": "指定されていないデバイスタイプ"
   },
   "routes.app.projects.-shared.network-connection-info.notConnectedToWifi": {
     "description": "Text displayed when Wi-Fi is not connected.",
-    "message": "No conectado a Wi-Fi"
+    "message": "Wi-Fiに接続されていません"
   },
   "routes.app.route.aboutTabLabel": {
-    "message": "Acerca de CoMapeo"
+    "message": "CoMapeoについて"
   },
   "routes.app.route.appSettingsTabLabel": {
-    "message": "Ajustes de la aplicación"
+    "message": "アプリの設定"
   },
   "routes.app.route.dataAndPrivacyTabLabel": {
-    "message": "Datos y privacidad"
+    "message": "データ & プライバシー"
   },
   "routes.app.route.exchangeTabLabel": {
-    "message": "Intercambiar"
+    "message": "交換"
   },
   "routes.app.settings.coordinate-system.ddOptionLabel": {
     "description": "Label for the decimal degrees option.",
-    "message": "DD (Grados decimales)"
+    "message": "DD (小数点以下)"
   },
   "routes.app.settings.coordinate-system.dmsOptionLabel": {
     "description": "Label for the degrees/minutes/seconds option.",
-    "message": "DMS (Decimal/Minudos/Segundos)"
+    "message": "DMS (小数点/分/秒)"
   },
   "routes.app.settings.coordinate-system.title": {
     "description": "Title of the coordinate system settings page.",
-    "message": "Sistema de coordenadas"
+    "message": "座標系"
   },
   "routes.app.settings.coordinate-system.utmOptionLabel": {
     "description": "Label for the universal transverse mercator option.",
-    "message": "UTM (Mercador Universal Transversal)"
+    "message": "UTM (Universal Transverse Mercator)"
   },
   "routes.app.settings.device-name.cancel": {
     "description": "Label for cancel button.",
-    "message": "Cancelar"
+    "message": "取消"
   },
   "routes.app.settings.device-name.characterCount": {
     "description": "Displays number of characters in input out of the maximum allowed characters.",
@@ -607,27 +587,27 @@
   },
   "routes.app.settings.device-name.inputLabel": {
     "description": "Label for the device name input.",
-    "message": "Nombre del dispositivo"
+    "message": "端末名"
   },
   "routes.app.settings.device-name.maxLengthError": {
     "description": "Error message for device name that is too long.",
-    "message": "Demasiado largo, pruebe un nombre más corto."
+    "message": "長すぎます。短い名前を入力してください。"
   },
   "routes.app.settings.device-name.minLengthError": {
     "description": "Error message for device name that is too short.",
-    "message": "Introduzca un nombre de dispositivo"
+    "message": "デバイス名を入力してください"
   },
   "routes.app.settings.device-name.navTitle": {
     "description": "Title of the device name settings page.",
-    "message": "Nombre del dispositivo"
+    "message": "端末名"
   },
   "routes.app.settings.device-name.save": {
     "description": "Label for save button.",
-    "message": "Guardar"
+    "message": "保存"
   },
   "routes.app.settings.index.createTestData": {
     "description": "Label for item that navigates to test data creation page.",
-    "message": "Crear datos de prueba"
+    "message": "テストデータの作成"
   },
   "routes.app.settings.index.decimalDegrees": {
     "description": "Label for Decimal Degrees coordinate system.",
@@ -635,11 +615,11 @@
   },
   "routes.app.settings.index.defaultBackground": {
     "description": "Name of the background map used if a custom one is not set.",
-    "message": "Fondo por defecto"
+    "message": "デフォルトの背景"
   },
   "routes.app.settings.index.description": {
     "description": "Description of the settings page.",
-    "message": "CoMapeo está configurado a lo siguiente."
+    "message": "CoMapeoは以下に設定されています。"
   },
   "routes.app.settings.index.dmsCoordinates": {
     "description": "Label for Degrees/Minutes/Seconds coordinate system.",
@@ -647,330 +627,327 @@
   },
   "routes.app.settings.index.editDeviceName": {
     "description": "Button text for navigating to page to edit device name.",
-    "message": "Editar"
+    "message": "編集"
   },
   "routes.app.settings.index.languageFromSystemPreference": {
     "description": "Label for selected language based on the system preferences.",
-    "message": "{name} (Preferencia del Sistema)"
+    "message": "{name} (システム環境設定)"
   },
   "routes.app.settings.index.title": {
     "description": "Title of the settings page.",
-    "message": "Ajustes de la aplicación"
+    "message": "アプリの設定"
   },
   "routes.app.settings.index.utmCoordinates": {
     "description": "Label for Universal Transverse Mercator coordinate system.",
-    "message": "Coordenadas UTM"
+    "message": "UTM座標"
   },
   "routes.app.settings.language.followSystemOptionLabel": {
     "description": "Option label for following system preference for language.",
-    "message": "Sigue las preferencias del sistema"
+    "message": "システム設定に従ってください"
   },
   "routes.app.settings.language.title": {
     "description": "Title of the language settings page.",
-    "message": "Idioma"
+    "message": "言語"
   },
   "routes.app.settings_.test-data.boundedDistanceLabel": {
     "description": "Label for the bounded distance input.",
-    "message": "Distancia máxima límite (kilómetros)"
+    "message": "最大限界距離（キロメートル）"
   },
   "routes.app.settings_.test-data.cancel": {
     "description": "Label for cancel button.",
-    "message": "Cancelar"
+    "message": "取消"
   },
   "routes.app.settings_.test-data.coordinatesSelectionHint": {
     "description": "Instructions displayed for coordinates selection inputs.",
-    "message": "Establezca las coordenadas haciendo clic en el mapa o arrastrando el marcador de ubicación."
+    "message": "地図をクリックするか、位置マーカーをドラッグして座標を設定します。"
   },
   "routes.app.settings_.test-data.create": {
     "description": "Label for create button.",
-    "message": "Crear proyecto"
+    "message": "Create Project"
   },
   "routes.app.settings_.test-data.createTrack": {
     "description": "Label for toggle to create track when creating test data.",
-    "message": "Crear pista"
+    "message": "トラックを作成"
   },
   "routes.app.settings_.test-data.invalidBoundedDistanceFormat": {
     "description": "Error message for when bounded distance is not an decimal.",
-    "message": "Debe ser un decimal"
+    "message": "小数点以下でなければなりません"
   },
   "routes.app.settings_.test-data.invalidObservationCountFormat": {
     "description": "Error message for when observation count is not an integer.",
-    "message": "Debe ser un entero"
+    "message": "整数でなければなりません"
   },
   "routes.app.settings_.test-data.maxObservationCountError": {
     "description": "Error message for when observation count is too large",
-    "message": "No puede ser mayor que {value}"
+    "message": "{value} より大きくすることはできません"
   },
   "routes.app.settings_.test-data.minBoundedDistanceError": {
     "description": "Error message for when bounded distance is too small",
-    "message": "Debe ser mayor que {value} kilómetros"
+    "message": "{value} キロメートル以上でなければなりません"
   },
   "routes.app.settings_.test-data.minObservationCountError": {
     "description": "Error message for when observation count is too small",
-    "message": "Debe ser mayor que {value}"
+    "message": "{value} より大きくなければなりません"
   },
   "routes.app.settings_.test-data.navTitle": {
     "description": "Title of test data page.",
-    "message": "Crear datos de prueba"
+    "message": "テストデータの作成"
   },
   "routes.app.settings_.test-data.observationCountHelperText": {
     "description": "Helper text for observation count input.",
-    "message": "Entre {min} y {max}"
+    "message": "{min} から {max} の間"
   },
   "routes.app.settings_.test-data.observationCountLabel": {
     "description": "Label for the observation count input.",
-    "message": "Número de observaciones"
+    "message": "観察記録の数"
   },
   "routes.app.settings_.test-data.observationCreateSuccess": {
     "description": "Message displayed when observation creation succeeds.",
-    "message": "¡Creado {count, plural, one {# observación} other {# observaciones}}."
+    "message": "作成されました {count, plural, one {# 観察記録} other {# 観察記録}}"
   },
   "routes.app.settings_.test-data.requiredError": {
     "description": "Error message for when required input is empty.",
-    "message": "Requerido"
+    "message": "必須"
   },
   "routes.app.settings_.test-data.trackCreateSuccess": {
     "description": "Message displayed when track creation succeeds.",
-    "message": "¡Creado {count, plural, one {# pista} other {# pistas}}."
+    "message": "作成されました {count, plural, one {# トラック} other {# トラック}}"
   },
   "routes.onboarding.data-and-privacy.dataEncrypted": {
-    "message": "Toda la información permanece completamente cifrada."
+    "message": "すべてのデータは完全に暗号化されたままです。"
   },
   "routes.onboarding.data-and-privacy.dataStays": {
-    "message": "Tu información permanece en tus dispositivos."
+    "message": "データは端末に保存されます。"
   },
   "routes.onboarding.data-and-privacy.description": {
-    "message": "CoMapeo permite a los equipos mapear sin conexión sin necesidad de servidores de Internet."
+    "message": "CoMapeoは、チームがインターネットサーバーを必要とせずにオフラインでマップすることを可能にします。"
   },
   "routes.onboarding.data-and-privacy.learnMore": {
-    "message": "Aprende más"
+    "message": "もっと詳しく"
   },
   "routes.onboarding.data-and-privacy.next": {
-    "message": "Siguiente"
+    "message": "次へ"
   },
   "routes.onboarding.data-and-privacy.privateByDefault": {
-    "message": "Privada de forma predeterminada — la información de diagnóstico se hace totalmente anónima y usted puede optar por no hacerlo en cualquier momento."
+    "message": "非公開:診断情報は完全に匿名化され、いつでもオプトアウトできます。"
   },
   "routes.onboarding.data-and-privacy.sharingAndCollaboration": {
-    "message": "Gestiona y controla fácilmente el intercambio y la colaboración."
+    "message": "共有やコラボレーションを簡単に管理できます。"
   },
   "routes.onboarding.data-and-privacy.title": {
-    "message": "Revisar datos y privacidad"
+    "message": "データとプライバシーを確認する"
   },
   "routes.onboarding.device-name.addName": {
-    "message": "Agregar nombre"
+    "message": "名前を追加"
   },
   "routes.onboarding.device-name.characterCount": {
     "message": "{count}/{max}"
   },
   "routes.onboarding.device-name.description": {
-    "message": "Ya puedes empezar a mapear de manera individual o empezar a mapear en equipo. Crea o colabora en un proyecto para compartir información entre dispositivos que son parte del mismo proyecto."
+    "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
   },
   "routes.onboarding.device-name.deviceName": {
-    "message": "Nombre del dispositivo"
+    "message": "端末名"
   },
   "routes.onboarding.device-name.maxLengthError": {
-    "message": "Demasiado largo, pruebe un nombre más corto."
+    "message": "長すぎます。短い名前を入力してください。"
   },
   "routes.onboarding.device-name.minLengthError": {
-    "message": "Introduzca un nombre de dispositivo"
+    "message": "デバイス名を入力してください"
   },
   "routes.onboarding.device-name.title": {
-    "message": "Nombra su dispositivo"
+    "message": "デバイスに名前を付ける"
   },
   "routes.onboarding.privacy-policy.aboutAwanaDigital": {
-    "message": "Acerca de Awana Digital"
+    "message": "Awana Digitalについて"
   },
   "routes.onboarding.privacy-policy.aboutAwanaDigitalDescription": {
-    "message": "CoMapeo es desarrollado por Awana Digital, una organización sin fines de lucro 501c3 registrada en los Estados Unidos. Awana Digital trabaja en solidaridad con las comunidades de primera línea para utilizar la tecnología para defender sus derechos y luchar contra el cambio climático."
+    "message": "CoMapeoは、米国に登録されている501c3非営利団体であるAwana Digitalによって開発されました。 Awana Digitalは、最前線のコミュニティと連帯して、自らの権利を守り、気候変動と戦うためにテクノロジーを使用しています。"
   },
   "routes.onboarding.privacy-policy.appErrors": {
-    "message": "<b>Errores de la aplicación</b>: Información sobre errores internos que resultan en que la aplicación no funcione como se esperaba."
+    "message": "<b>App Errors</b>: アプリが期待どおりに動作しない内部エラーに関する情報。"
   },
   "routes.onboarding.privacy-policy.appInfo": {
-    "message": "<b>App Info</b>: La versión y locale (idioma) de CoMapeo."
+    "message": "<b>アプリ情報</b>: CoMapeoのバージョンとロケール(言語)。"
   },
   "routes.onboarding.privacy-policy.appUsage": {
-    "message": "Uso de la aplicación"
+    "message": "アプリの使用状況"
   },
   "routes.onboarding.privacy-policy.comapeoDataPrivacy": {
-    "message": "Privacidad de datos de CoMapeo"
+    "message": "CoMapeo Data Privacy"
   },
   "routes.onboarding.privacy-policy.control": {
-    "message": "Tú tienes el control"
-  },
-  "routes.onboarding.privacy-policy.controlDescription": {
-    "message": "Puede optar por no enviar cualquier información a Awana Digital.<br></br><br></br>Usted elige dónde se almacenan sus datos y con quién se comparte. Puedes elegir compartir datos anónimos y resumidos sobre cómo usar CoMapeo con Awana Digital.<br></br><br></br>Siempre seremos transparentes sobre la información que decidas compartir con el fin de mejorar la aplicación, y esta información nunca incluirá fotos, vídeos, audio, texto o ubicaciones precisas que haya introducido en CoMapeo."
+    "message": "あなたが制御しています"
   },
   "routes.onboarding.privacy-policy.country": {
-    "message": "<b>País</b>: El país donde se está utilizando CoMapeo."
+    "message": "<b>国</b>: CoMapeoが使用されている国"
+  },
+  "routes.onboarding.privacy-policy.crashData": {
+    "message": "<b>クラッシュデータ</b>: アプリが予期せず終了した原因についての情報。"
   },
   "routes.onboarding.privacy-policy.currentPermissions": {
-    "message": "Permisos actuales"
+    "message": "現在の権限"
   },
   "routes.onboarding.privacy-policy.dataCollection": {
-    "message": "Recopilación de datos de CoMapeo"
+    "message": "CoMapeo データ収集"
   },
   "routes.onboarding.privacy-policy.description": {
-    "message": "A continuación se explica qué información (o \"datos\") se envía desde CoMapeo al desarrollador de aplicaciones, Awana Digital, y cómo se utiliza esa información."
+    "message": "以下では、CoMapeoからアプリケーション開発者Awana Digitalに送信される情報(または「データ」)とその情報がどのように使用されるかについて説明します。"
   },
   "routes.onboarding.privacy-policy.deviceInfo": {
-    "message": "<b>Información del dispositivo</b>: como modelo y fabricante de su dispositivo; sistema operativo del dispositivo; tamaño de la pantalla; configuración regional del dispositivo (idioma); memoria del dispositivo."
+    "message": "<b>デバイス情報</b>: お使いのデバイスのモデルやメーカー、デバイスのオペレーティングシステム、画面サイズ、デバイスのロケール(言語)、デバイスのメモリなど。"
   },
   "routes.onboarding.privacy-policy.diagnostics": {
-    "message": "Diagnósticos"
+    "message": "診断"
   },
   "routes.onboarding.privacy-policy.noPII": {
-    "message": "No hay información personal identificable"
-  },
-  "routes.onboarding.privacy-policy.noPIIDescription": {
-    "message": "Usar CoMapeo no requiere una cuenta de usuario.<br></br><br></br>Awana Digital no recopila tu nombre, dirección de correo electrónico ni ningún otro dato personal.<br></br><br></br>Nunca se comparte ningún identificador de usuario o dispositivo permanente con Awana Digital, y tomamos medidas adicionales para asegurar que ninguna información que usted comparte pueda ser usada para rastrearle: los identificadores son aleatorizados y rotados (cambiados) cada mes y no almacenamos direcciones IP."
+    "message": "個人を特定できる情報がありません"
   },
   "routes.onboarding.privacy-policy.openSource": {
-    "message": "Código abierto y la versión \"oficial\""
+    "message": "オープンソースと「公式」バージョン"
   },
   "routes.onboarding.privacy-policy.performanceData": {
-    "message": "<b>Datos de rendimiento</b>: tales como tiempo de lanzamiento, uso de energía, congelación de aplicaciones y recepción."
+    "message": "<b>パフォーマンスデータ</b>: 起動時間、エネルギー使用量、アプリのフリーズ、応答性など。"
   },
   "routes.onboarding.privacy-policy.prviateByDefault": {
-    "message": "Privado por defecto"
+    "message": "デフォルトでは非公開"
   },
   "routes.onboarding.privacy-policy.shareDiagnosticInformation": {
-    "message": "Compartir información de diagnóstico"
+    "message": "診断情報を共有"
   },
   "routes.onboarding.privacy-policy.title": {
-    "message": "Política de privacidad"
+    "message": "プライバシーポリシー"
   },
   "routes.onboarding.privacy-policy.whatIsCollected": {
-    "message": "¿Qué no se recopila?"
+    "message": "収集されたものは？"
+  },
+  "routes.onboarding.privacy-policy.whatIsCollectedDescription": {
+    "message": "デフォルトでは、デバイスに関する匿名化された診断情報、アプリのクラッシュ、エラー、パフォーマンスはAwana Digitalと共有されます。<br></br><br></br>いつでもこの情報を共有することをオプトアウトできます。 この診断情報は完全に匿名化され、お客様のデータ(CoMapeoで収集したデータ)は一切含まれません。"
   },
   "routes.onboarding.privacy-policy.whatIsNotCollected": {
-    "message": "¿Qué no se recopila?"
+    "message": "何が収集されていませんか?"
   },
   "routes.onboarding.privacy-policy.whatIsNotCollectedDescription": {
-    "message": "No recopilamos ningún dato personal ni ningún dato que pueda ser utilizado para identificar o rastrear a una persona usuaria o un dispositivo. Los identificadores de dispositivo utilizados para agregar información son aleatorios, anónimos, y cambian cada mes. La información de diagnóstico no incluye datos sobre cómo usas la aplicación, y nunca incluye ninguno de los datos que has recopilado con la aplicación. No recolectamos tu ubicación precisa o gruesa, sólo el país donde estás utilizando CoMapeo."
+    "message": "当社は、個人データまたはユーザーまたはデバイスを特定または追跡するために使用できるものは一切収集しません。 情報を集約するために使用されるデバイス識別子は、ランダム、匿名、および毎月変更されます。 診断情報にはアプリの使用方法に関するデータは含まれていません アプリで収集したデータは一切含まれていません 私たちは、あなたがCoMapeoを使用している国のみ、あなたの正確なまたは粗い場所を収集しません。"
   },
   "routes.onboarding.privacy-policy.whyIsThisDataCollected": {
-    "message": "¿Por qué se recolectan estos datos?"
+    "message": "なぜこのデータが収集されるのですか?"
   },
   "routes.onboarding.project.create.$projectId.notFound": {
-    "message": "No se pudo encontrar el proyecto con ID {projectId}"
+    "message": "ID {projectId} のプロジェクトが見つかりませんでした"
   },
   "routes.onboarding.project.create.$projectId.success.description": {
-    "message": "Creaste<br></br><b>{projectName}</b>"
+    "message": "あなたは<br></br><b>{projectName}</b> を作成しました"
   },
   "routes.onboarding.project.create.$projectId.success.goBack": {
-    "message": "Regresar"
+    "message": "戻る"
   },
   "routes.onboarding.project.create.$projectId.success.inviteCollaborators": {
-    "message": "Invita colaboradores"
+    "message": "コラボレーターを招待"
   },
   "routes.onboarding.project.create.$projectId.success.projectNotFound": {
     "description": "Text displayed when invite cannot be found.",
-    "message": "No se pudo encontrar la invitación con ID {inviteId}"
+    "message": "ID {inviteId} の招待状が見つかりませんでした"
   },
   "routes.onboarding.project.create.$projectId.success.title": {
-    "message": "¡Éxito!"
+    "message": "成功！"
   },
   "routes.onboarding.project.create.$projectId.success.updateCategoriesSet": {
-    "message": "Actualizar conjunto de categorías"
+    "message": "カテゴリセットを更新"
   },
   "routes.onboarding.project.create.index.characterCount": {
     "message": "{count}/{max}"
   },
   "routes.onboarding.project.create.index.createProject": {
-    "message": "Crear proyecto"
+    "message": "プロジェクトを作成"
   },
   "routes.onboarding.project.create.index.description": {
-    "message": "Nombra su proyecto."
+    "message": "プロジェクトに名前を付けます。"
   },
   "routes.onboarding.project.create.index.maxLengthError": {
-    "message": "Demasiado largo, pruebe un nombre más corto."
+    "message": "長すぎます。短い名前を入力してください。"
   },
   "routes.onboarding.project.create.index.minLengthError": {
-    "message": "Introduzca un nombre de proyecto"
+    "message": "プロジェクト名を入力"
   },
   "routes.onboarding.project.create.index.projectName": {
-    "message": "Introduce un nombre para el Proyecto"
+    "message": "Enter a name for the Project"
   },
   "routes.onboarding.project.create.index.title": {
-    "message": "Crear un Proyecto"
+    "message": "プロジェクトを作成"
   },
   "routes.onboarding.project.createProject": {
-    "message": "Crear un Proyecto"
+    "message": "プロジェクトを作成"
   },
   "routes.onboarding.project.description": {
-    "message": "Pídele a un coordinador de monitorización que se una a su proyecto."
+    "message": "監視コーディネーターにプロジェクトに参加するよう依頼します。"
   },
   "routes.onboarding.project.join.$inviteId.index.declineInvite": {
-    "message": "Rechazar invitación"
-  },
-  "routes.onboarding.project.join.$inviteId.index.description": {
-    "message": "Has sido invitado a…"
+    "message": "招待を拒否する"
   },
   "routes.onboarding.project.join.$inviteId.index.inviteNotFound": {
     "description": "Text displayed when invite cannot be found.",
-    "message": "No se pudo encontrar la invitación con ID {inviteId}"
+    "message": "ID {inviteId} の招待状が見つかりませんでした"
   },
   "routes.onboarding.project.join.$inviteId.index.joinAs": {
-    "message": "¡Únete como coordinador {role, select, coordinator {} other {¡participante}}?"
+    "message": "{role, select, coordinator {コーディネーターとして参加しましょう} other {参加者}}"
   },
   "routes.onboarding.project.join.$inviteId.index.joinProject": {
-    "message": "Unirse a un proyecto"
+    "message": "プロジェクトに参加"
   },
   "routes.onboarding.project.join.$inviteId.index.responseError": {
-    "message": "Algo salió mal. Inténtelo de nuevo."
+    "message": "何か問題が発生しました。もう一度お試しください。"
   },
   "routes.onboarding.project.join.$inviteId.index.title": {
-    "message": "Unirse a un proyecto"
+    "message": "プロジェクトに参加"
+  },
+  "routes.onboarding.project.join.$inviteId.success.description": {
+    "message": "<br></br><b>{projectName}</b> に参加しました"
   },
   "routes.onboarding.project.join.$inviteId.success.inviteNotFound": {
     "description": "Text displayed when invite cannot be found.",
-    "message": "No se pudo encontrar la invitación con ID {inviteId}"
+    "message": "ID {inviteId} の招待状が見つかりませんでした"
   },
   "routes.onboarding.project.join.$inviteId.success.startUsingCoMapeo": {
-    "message": "Empezar a usar CoMapeo"
+    "message": "CoMapeoの使用を開始"
   },
   "routes.onboarding.project.join.$inviteId.success.title": {
-    "message": "¡Éxito!"
+    "message": "成功！"
   },
   "routes.onboarding.project.limitedToDevices": {
-    "message": "Compartiendo observaciones y datos se limitan a dispositivos dentro de cada proyecto."
+    "message": "観察記録やデータは、各プロジェクト内のデバイスに限定されます。"
   },
   "routes.onboarding.project.securelyStore": {
-    "message": "Los proyectos ayudan a los equipos a almacenar y compartir de forma segura sus datos y observaciones de monitoreo del territorio."
+    "message": "プロジェクトにより、チームはテリトリーの監視データと観測データを安全に保存し、共有することができます。"
   },
   "routes.onboarding.project.startingNewProject": {
-    "message": "¿Iniciar un nuevo proyecto de monitorización del territorio?"
+    "message": "新しいテリトリー監視プロジェクトを開始しますか？"
   },
   "routes.onboarding.project.title": {
-    "message": "Unirse a un proyecto"
+    "message": "プロジェクトに参加"
   },
   "routes.onboarding.route.goBack": {
-    "message": "Regresar"
+    "message": "戻る"
   },
   "routes.onboarding.route.step": {
-    "message": "Paso {value}"
+    "message": "手順 {value}"
   },
   "routes.welcome.appDescription": {
-    "message": "Ver y administrar las observaciones recolectadas con CoMapeo Mobile."
+    "message": "CoMapeo Mobileで収集した観察記録を表示および管理します。"
   },
   "routes.welcome.collaborate": {
-    "message": "Colabora con otras personas"
-  },
-  "routes.welcome.comapeoDesktop": {
-    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Escritorio</blue>"
+    "message": "Collaborate with others"
   },
   "routes.welcome.designedFor": {
-    "message": "Diseñado con y para pueblos indígenas y comunidades de primera línea"
+    "message": "先住民族と最前線コミュニティのために設計されました"
   },
   "routes.welcome.getStarted": {
-    "message": "¡Comienza ya!"
+    "message": "はじめよう"
   },
   "routes.welcome.mapAnywhere": {
-    "message": "Mapea en cualquier lugar y en todas partes"
+    "message": "どこでもどこでもマップ"
   },
   "routes.welcome.ownData": {
-    "message": "Controla tu información y hazla tuya"
+    "message": "データを所有し、制御する"
   }
 }

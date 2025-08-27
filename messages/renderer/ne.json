@@ -1,0 +1,108 @@
+{
+  "components.error-dialog.close": {
+    "description": "Button text for the close button in the error dialog.",
+    "message": "Open Settings"
+  },
+  "components.generic-route-error-component.error": {
+    "description": "Label for error section",
+    "message": "समस्या"
+  },
+  "routes.app.projects.$projectId.-displayed.data.list.addObservationsTitle": {
+    "description": "Title of card that is displayed when project has no observations to display.",
+    "message": "अवलोकन थप्नुहोस"
+  },
+  "routes.app.projects.$projectId.-displayed.data.list.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "अवलाेकन"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
+    "description": "Title for details section.",
+    "message": "विवरणहरू"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "उत्तर छैन"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
+    "description": "Title of the observation details page.",
+    "message": "अवलाेकन"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "अवलाेकन"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "अवलाेकन"
+  },
+  "routes.app.projects.$projectId_.exchange.index.complete": {
+    "description": "Text displayed when exchange is completed with all devices.",
+    "message": "Complete! You're up to date"
+  },
+  "routes.app.projects.$projectId_.exchange.index.upToDate": {
+    "description": "Text displayed when exchangable data is up to date.",
+    "message": "All data synced"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.accepted": {
+    "description": "Text displayed when invite is accepted.",
+    "message": "Invite Accepted"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
+    "description": "Text for button to leave invite flow.",
+    "message": "Open Settings"
+  },
+  "routes.app.projects.$projectId_.settings.info.cancel": {
+    "description": "Label for cancel button.",
+    "message": "रद्द"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectNameInputLabel": {
+    "description": "Label for the project name input.",
+    "message": "Enter a name for the Project"
+  },
+  "routes.app.projects.$projectId_.settings.info.save": {
+    "description": "Label for save button.",
+    "message": "संग्रह"
+  },
+  "routes.app.projects.$projectId_.settings.team.inviteDevice": {
+    "description": "Text for button that initiates steps for inviting device to project.",
+    "message": "उपकरणलाई निमन्त्रणा"
+  },
+  "routes.app.settings.device-name.cancel": {
+    "description": "Label for cancel button.",
+    "message": "रद्द"
+  },
+  "routes.app.settings.device-name.save": {
+    "description": "Label for save button.",
+    "message": "संग्रह"
+  },
+  "routes.app.settings.language.title": {
+    "description": "Title of the language settings page.",
+    "message": "भाषा"
+  },
+  "routes.app.settings_.test-data.cancel": {
+    "description": "Label for cancel button.",
+    "message": "रद्द"
+  },
+  "routes.app.settings_.test-data.create": {
+    "description": "Label for create button.",
+    "message": "Create Project"
+  },
+  "routes.onboarding.data-and-privacy.next": {
+    "message": "अर्काे"
+  },
+  "routes.onboarding.device-name.description": {
+    "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
+  },
+  "routes.onboarding.project.create.$projectId.success.title": {
+    "message": "सफल!"
+  },
+  "routes.onboarding.project.create.index.projectName": {
+    "message": "Enter a name for the Project"
+  },
+  "routes.onboarding.project.join.$inviteId.success.title": {
+    "message": "सफल!"
+  },
+  "routes.welcome.collaborate": {
+    "message": "Collaborate with others"
+  }
+}
