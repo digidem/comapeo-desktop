@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import {
 	useCreateDocument,
 	useManyDocs,
+	useManyProjects,
 	useMapStyleUrl,
 	useOwnDeviceInfo,
 } from '@comapeo/core-react'
@@ -10,8 +11,12 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
 import CircularProgress from '@mui/material/CircularProgress'
+import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import IconButton from '@mui/material/IconButton'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import Select from '@mui/material/Select'
 import Snackbar from '@mui/material/Snackbar'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
@@ -42,11 +47,10 @@ import { createGlobalMutationsKey } from '../../../lib/queries/global-mutations'
 
 // TODO: This technically should live in project settings
 export const Route = createFileRoute('/app/settings_/test-data')({
-	beforeLoad: ({ context }) => {
+	beforeLoad: () => {
 		if (
 			__APP_TYPE__ === 'production' ||
-			import.meta.env.VITE_FEATURE_TEST_DATA_UI !== 'true' ||
-			!context.activeProjectId
+			import.meta.env.VITE_FEATURE_TEST_DATA_UI !== 'true'
 		) {
 			throw redirect({ to: '/', replace: true })
 		}
@@ -55,7 +59,12 @@ export const Route = createFileRoute('/app/settings_/test-data')({
 		const { activeProjectId, clientApi, queryClient } = context
 
 		await Promise.all([
-			// TODO: Not ideal but requires changes in @comapeo/core-react
+			queryClient.ensureQueryData({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects'],
+				queryFn: async () => {
+					return clientApi.listProjects()
+				},
+			}),
 			queryClient.ensureQueryData({
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -66,7 +75,6 @@ export const Route = createFileRoute('/app/settings_/test-data')({
 					return clientApi.getProject(activeProjectId)
 				},
 			}),
-			// TODO: Not ideal but requires changes in @comapeo/core-react
 			queryClient.ensureQueryData({
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'maps', 'stylejson_url'],
 				queryFn: async () => {
@@ -114,15 +122,7 @@ function RouteComponent() {
 		message: string
 	} | null>(null)
 
-	const { activeProjectId } = Route.useRouteContext()
-
-	const createTestObservations = useCreateTestObservations({
-		projectId: activeProjectId,
-	})
-
-	const createTestTrack = useCreateTestTrack({
-		projectId: activeProjectId,
-	})
+	const { data: allProjects } = useManyProjects()
 
 	const onChangeSchema = useMemo(() => {
 		const requiredError = t(m.requiredError)
@@ -165,8 +165,11 @@ function RouteComponent() {
 			latitude: v.pipe(v.number(), v.minValue(-90), v.maxValue(90)),
 			longitude: v.pipe(v.number(), v.minValue(-180), v.maxValue(180)),
 			createTrack: v.boolean(),
+			projectId: v.string(),
 		})
 	}, [t])
+
+	const { activeProjectId } = Route.useRouteContext()
 
 	const form = useAppForm({
 		defaultValues: {
@@ -175,6 +178,7 @@ function RouteComponent() {
 			latitude: 0,
 			longitude: 0,
 			createTrack: false,
+			projectId: activeProjectId,
 		},
 		validators: {
 			onChange: onChangeSchema,
@@ -203,6 +207,19 @@ function RouteComponent() {
 				})} ${t(m.trackCreateSuccess, { count: parsedValue.createTrack ? 1 : 0 })}`,
 			})
 		},
+	})
+
+	const selectedProjectId = useStore(
+		form.store,
+		(state) => state.values.projectId,
+	)
+
+	const createTestObservations = useCreateTestObservations({
+		projectId: selectedProjectId,
+	})
+
+	const createTestTrack = useCreateTestTrack({
+		projectId: selectedProjectId,
 	})
 
 	const boundedDistance = useStore(form.store, (state) => {
@@ -267,7 +284,7 @@ function RouteComponent() {
 		<>
 			<TwoPanelLayout
 				start={
-					<Stack direction="column" flex={1}>
+					<Stack direction="column" flex={1} overflow="hidden">
 						<Stack
 							direction="row"
 							alignItems="center"
@@ -315,6 +332,41 @@ function RouteComponent() {
 									}}
 								>
 									<Stack direction="column" gap={10}>
+										<form.AppField name="projectId">
+											{(field) => (
+												<FormControl>
+													<InputLabel id="selected-project-label">
+														{t(m.projectSelectLabel)}
+													</InputLabel>
+													<Select
+														labelId="selected-project-label"
+														label={t(m.projectSelectLabel)}
+														onBlur={field.handleBlur}
+														onChange={(event) => {
+															field.handleChange(event.target.value as string)
+														}}
+														value={field.state.value}
+													>
+														{allProjects.map((project) => {
+															const displayedProjectId = `${project.projectId.slice(0, 7)}…`
+
+															return (
+																<MenuItem
+																	key={project.projectId}
+																	value={project.projectId}
+																	color={project.projectColor}
+																>
+																	{project.name
+																		? `${project.name} (${displayedProjectId})`
+																		: displayedProjectId}
+																</MenuItem>
+															)
+														})}
+													</Select>
+												</FormControl>
+											)}
+										</form.AppField>
+
 										<form.AppField name="observationCount">
 											{(field) => (
 												<field.TextField
@@ -846,5 +898,10 @@ const m = defineMessages({
 		id: 'routes.app.settings_.test-data.trackCreateSuccess',
 		defaultMessage: 'Created {count, plural, one {# track} other {# tracks}}.',
 		description: 'Message displayed when track creation succeeds.',
+	},
+	projectSelectLabel: {
+		id: 'routes.app.settings_.test-data.projectSelectLabel',
+		defaultMessage: 'Project',
+		description: 'Text label for project selector input.',
 	},
 })
