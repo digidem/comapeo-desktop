@@ -53,7 +53,9 @@ Create a copy of the [`.env.template`](../.env.template) and call it `.env`. Upd
 
 If you're planning to use a different online map style, you'll need to specify a couple of other environment variables:
 
-- `ONLINE_STYLE_URL`: Full URL that points to a compatible map's StyleJSON. If it's a [Mapbox](https://www.mapbox.com/) style, it is preferable to omit the `access_token` search param and specify `VITE_MAPBOX_ACCESS_TOKEN` instead.
+- `ONLINE_STYLE_URL`: Full URL that points to a compatible map's StyleJSON.
+  - This should be a fully qualified http-based URL. For example, providers like Mapbox may use their own custom URL format, such as `mapbox://styles/mapbox/outdoors-v12`. Instead, you should convert this to something like `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12`.
+  - If it's a [Mapbox](https://www.mapbox.com/) style, it is preferable to omit the `access_token` search param and specify `VITE_MAPBOX_ACCESS_TOKEN` instead.
 - `VITE_MAPBOX_ACCESS_TOKEN`: Public token necessary for accessing [Mapbox](https://www.mapbox.com/)-provided resources. Follow the instructions [here](https://docs.mapbox.com/help/getting-started/access-tokens/) or reach out to the maintainers to obtain one.
 
 ### Running the app
