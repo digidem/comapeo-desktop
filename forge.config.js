@@ -56,7 +56,7 @@ const {
 			),
 			'true',
 		),
-		ONLINE_STYLE_URL: v.pipe(v.string(), v.url()),
+		ONLINE_STYLE_URL: v.optional(v.pipe(v.string(), v.url())),
 		USER_DATA_PATH: v.optional(v.string()),
 		VITE_MAPBOX_ACCESS_TOKEN: v.optional(v.string()),
 	}),
@@ -117,20 +117,25 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 
 		// Use the `VITE_MAPBOX_ACCESS_TOKEN` to the online style URL
 		// if it's a Mapbox style that doesn't already have an access token param
-		const onlineStyleUrl = new URL(ONLINE_STYLE_URL)
-		if (onlineStyleUrl.host === 'api.mapbox.com') {
-			if (
-				!onlineStyleUrl.searchParams.has('access_token') &&
-				VITE_MAPBOX_ACCESS_TOKEN
-			) {
-				onlineStyleUrl.searchParams.set(
-					'access_token',
-					VITE_MAPBOX_ACCESS_TOKEN,
-				)
-			} else {
-				console.warn(
-					'⚠️ Using a Mapbox map requires an access token. Either update the `ONLINE_STYLE_URL` env variable or specify the `VITE_MAPBOX_ACCESS_TOKEN` env variable',
-				)
+		const onlineStyleUrl = ONLINE_STYLE_URL
+			? new URL(ONLINE_STYLE_URL)
+			: undefined
+
+		if (onlineStyleUrl) {
+			if (onlineStyleUrl.host === 'api.mapbox.com') {
+				if (
+					!onlineStyleUrl.searchParams.has('access_token') &&
+					VITE_MAPBOX_ACCESS_TOKEN
+				) {
+					onlineStyleUrl.searchParams.set(
+						'access_token',
+						VITE_MAPBOX_ACCESS_TOKEN,
+					)
+				} else {
+					console.warn(
+						'⚠️ Using a Mapbox map requires an access token. Either update the `ONLINE_STYLE_URL` env variable or specify the `VITE_MAPBOX_ACCESS_TOKEN` env variable',
+					)
+				}
 			}
 		}
 
@@ -138,7 +143,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 		const appConfig = {
 			appType: APP_TYPE,
 			asar: ASAR,
-			onlineStyleUrl: onlineStyleUrl.toString(),
+			onlineStyleUrl: onlineStyleUrl?.toString(),
 			userDataPath: USER_DATA_PATH,
 			appVersion: getAppVersion(packageJSON.version, APP_TYPE),
 		}

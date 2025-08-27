@@ -99,15 +99,18 @@ export async function start({ appConfig, configStore }) {
 
 	const rootKey = loadRootKey({ configStore })
 
-	const coreService = utilityProcess.fork(
-		CORE_SERVICE_PATH,
-		[
-			`--onlineStyleUrl=${appConfig.onlineStyleUrl}`,
-			`--rootKey=${rootKey}`,
-			`--storageDirectory=${app.getPath('userData')}`,
-		],
-		{ serviceName: `CoMapeo Core Service` },
-	)
+	const coreProcessArgs = [
+		`--rootKey=${rootKey}`,
+		`--storageDirectory=${app.getPath('userData')}`,
+	]
+
+	if (appConfig.onlineStyleUrl) {
+		coreProcessArgs.push(`--onlineStyleUrl=${appConfig.onlineStyleUrl}`)
+	}
+
+	const coreService = utilityProcess.fork(CORE_SERVICE_PATH, coreProcessArgs, {
+		serviceName: `CoMapeo Core Service`,
+	})
 
 	coreService.on('message', (message) => {
 		if (v.is(ServiceErrorMessageSchema, message)) {

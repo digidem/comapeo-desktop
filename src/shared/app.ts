@@ -10,7 +10,7 @@ export type AppConfig = {
 	/** Enables ASAR format */
 	asar?: boolean
 	/** Sets the online map style for @comapeo/core to use */
-	onlineStyleUrl: string
+	onlineStyleUrl?: string
 	/** Sets the user data directory for the application to use */
 	userDataPath?: string
 	/** Indicates the app type */

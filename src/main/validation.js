@@ -2,7 +2,7 @@ import * as v from 'valibot'
 
 export const AppConfigSchema = v.object({
 	asar: v.optional(v.boolean()),
-	onlineStyleUrl: v.pipe(v.string(), v.url()),
+	onlineStyleUrl: v.optional(v.pipe(v.string(), v.url())),
 	userDataPath: v.optional(v.string()),
 	appType: v.union([
 		v.literal('development'),

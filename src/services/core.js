@@ -52,7 +52,7 @@ const CORE_STORAGE_DIR_NAME = 'core-storage'
 const CUSTOM_MAPS_DIR_NAME = 'maps'
 
 const ProcessArgsSchema = v.object({
-	onlineStyleUrl: v.pipe(v.string(), v.url()),
+	onlineStyleUrl: v.optional(v.pipe(v.string(), v.url())),
 	rootKey: v.pipe(
 		v.string(),
 		v.hexadecimal(),
@@ -147,7 +147,7 @@ process.parentPort.on('message', (event) => {
 
 /**
  * @param {Object} opts
- * @param {string} opts.onlineStyleUrl
+ * @param {string} [opts.onlineStyleUrl]
  * @param {Buffer} opts.rootKey
  * @param {string} opts.storageDirectory
  */
