@@ -827,7 +827,7 @@
     "message": "Keine persönlichen Daten"
   },
   "routes.onboarding.privacy-policy.noPIIDescription": {
-    "message": "Die Verwendung von CoMapeo erfordert kein Benutzerkonto.<br></br><br></br></br> Awana Digital erfasst weder Ihren Namen, Ihre E-Mail-Adresse noch andere persönliche Daten.<br></br><br></br>Es wird keine permanente Benutzerkennung oder Gerätekennung jemals mit Awana Digital geteilt, und wir ergreifen zusätzliche Maßnahmen, um sicherzustellen, dass keine Informationen, die Sie teilen, verwendet werden können, um Sie zu verfolgen: Identifikatoren werden zufällig und gedreht (geändert) jeden Monat und wir speichern keine IP-Adressen."
+    "message": "Die Verwendung von CoMapeo erfordert kein Benutzerkonto.<br></br><br></br>Awana Digital erfasst weder Ihren Namen, Ihre E-Mail-Adresse noch andere persönliche Daten.<br></br><br></br>Es wird keine permanente Benutzerkennung oder Gerätekennung jemals mit Awana Digital geteilt, und wir ergreifen zusätzliche Maßnahmen, um sicherzustellen, dass keine Informationen, die Sie teilen, verwendet werden können, um Sie zu verfolgen: Identifikatoren werden zufällig und gedreht (geändert) jeden Monat und wir speichern keine IP-Adressen."
   },
   "routes.onboarding.privacy-policy.openSource": {
     "message": "Open Source und die \"Offizielle\" Version"
@@ -842,7 +842,7 @@
     "message": "Standardmäßig privat"
   },
   "routes.onboarding.privacy-policy.prviateByDefaultDescription": {
-    "message": "Die Daten, die Sie mit CoMapeo sammeln und erstellen (Orte, Fotos, Video, Audio, ) wird standardmäßig nur auf Ihrem Gerät gespeichert und wird nirgends gespeichert oder an anderer Stelle versendet.<br></br><br></br>Wenn Sie Daten mit Mitarbeitern teilen, indem Sie einem Projekt beitreten Es wird verschlüsselt, direkt an das Gerät Ihrer Mitarbeiter gesendet. Das bedeutet, dass die Daten weder über Awana Digital noch über irgendjemanden auf dem Weg zu Ihrem Mitarbeiter gesendet werden.<br></br><br></br></br> Awana Digital sieht noch hat keinen Zugriff auf die Daten, die Sie mit CoMapeo erheben, es sei denn, Sie senden sie uns explizit zu."
+    "message": "Die Daten, die Sie mit CoMapeo sammeln und erstellen (Orte, Fotos, Video, Audio, ) wird standardmäßig nur auf Ihrem Gerät gespeichert und wird nirgends gespeichert oder an anderer Stelle versendet.<br></br><br></br>Wenn Sie Daten mit Mitarbeitern teilen, indem Sie einem Projekt beitreten Es wird verschlüsselt, direkt an das Gerät Ihrer Mitarbeiter gesendet. Das bedeutet, dass die Daten weder über Awana Digital noch über irgendjemanden auf dem Weg zu Ihrem Mitarbeiter gesendet werden.<br></br><br></br>Awana Digital sieht noch hat keinen Zugriff auf die Daten, die Sie mit CoMapeo erheben, es sei denn, Sie senden sie uns explizit zu."
   },
   "routes.onboarding.privacy-policy.shareDiagnosticInformation": {
     "message": "Diagnoseinformationen teilen"
