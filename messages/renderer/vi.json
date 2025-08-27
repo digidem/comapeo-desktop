@@ -1,0 +1,169 @@
+{
+  "components.error-dialog.close": {
+    "description": "Button text for the close button in the error dialog.",
+    "message": "Open Settings"
+  },
+  "components.generic-route-error-component.error": {
+    "description": "Label for error section",
+    "message": "Lỗi"
+  },
+  "components.generic-route-not-found-component.tryAgain": {
+    "description": "Button text for try again button.",
+    "message": "Thử lại"
+  },
+  "routes.app.projects.$projectId.-displayed.data.list.addObservationsTitle": {
+    "description": "Title of card that is displayed when project has no observations to display.",
+    "message": "Thêm Quan sát"
+  },
+  "routes.app.projects.$projectId.-displayed.data.list.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Quan sát"
+  },
+  "routes.app.projects.$projectId.index.invite": {
+    "description": "Link text to navigate to invite collaborators page.",
+    "message": "Mời tham gia"
+  },
+  "routes.app.projects.$projectId.index.view": {
+    "description": "Link text to navigate to project settings page.",
+    "message": "Xem"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
+    "description": "Title for details section.",
+    "message": "Chi tiết"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "Không có câu trả lời"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
+    "description": "Title of the observation details page.",
+    "message": "Quan sát"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Quan sát"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.descriptionSectionTitle": {
+    "description": "Title for description section.",
+    "message": "Mô tả"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Quan sát"
+  },
+  "routes.app.projects.$projectId_.exchange.index.complete": {
+    "description": "Text displayed when exchange is completed with all devices.",
+    "message": "Complete! You're up to date"
+  },
+  "routes.app.projects.$projectId_.exchange.index.upToDate": {
+    "description": "Text displayed when exchangable data is up to date.",
+    "message": "All data synced"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.accepted": {
+    "description": "Text displayed when invite is accepted.",
+    "message": "Invite Accepted"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
+    "description": "Text for button to leave invite flow.",
+    "message": "Open Settings"
+  },
+  "routes.app.projects.$projectId_.invite.devices.-shared.disconnected-indicator.disconnected": {
+    "description": "Text displayed when external device is disconnected.",
+    "message": "Ngừng kết nối"
+  },
+  "routes.app.projects.$projectId_.settings.info.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Hủy"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectNameInputLabel": {
+    "description": "Label for the project name input.",
+    "message": "Enter a name for the Project"
+  },
+  "routes.app.projects.$projectId_.settings.info.save": {
+    "description": "Label for save button.",
+    "message": "Print"
+  },
+  "routes.app.projects.$projectId_.settings.team.deviceNameColumnTitle": {
+    "description": "Title used for column containing device name of project members.",
+    "message": "Tên thiết bị"
+  },
+  "routes.app.projects.$projectId_.settings.team.inviteDevice": {
+    "description": "Text for button that initiates steps for inviting device to project.",
+    "message": "Mời thiết bị tham gia"
+  },
+  "routes.app.projects.$projectId_.settings.team.leaveProject": {
+    "description": "Text for button that initiates steps for leaving project.",
+    "message": "Rời khỏi dự án"
+  },
+  "routes.app.settings.device-name.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Hủy"
+  },
+  "routes.app.settings.device-name.inputLabel": {
+    "description": "Label for the device name input.",
+    "message": "Tên thiết bị"
+  },
+  "routes.app.settings.device-name.navTitle": {
+    "description": "Title of the device name settings page.",
+    "message": "Tên thiết bị"
+  },
+  "routes.app.settings.device-name.save": {
+    "description": "Label for save button.",
+    "message": "Print"
+  },
+  "routes.app.settings.index.editDeviceName": {
+    "description": "Button text for navigating to page to edit device name.",
+    "message": "Sửa"
+  },
+  "routes.app.settings.language.title": {
+    "description": "Title of the language settings page.",
+    "message": "Language"
+  },
+  "routes.app.settings_.test-data.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Hủy"
+  },
+  "routes.app.settings_.test-data.create": {
+    "description": "Label for create button.",
+    "message": "Create Project"
+  },
+  "routes.onboarding.data-and-privacy.next": {
+    "message": "Tiếp theo"
+  },
+  "routes.onboarding.device-name.description": {
+    "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
+  },
+  "routes.onboarding.device-name.deviceName": {
+    "message": "Tên thiết bị"
+  },
+  "routes.onboarding.project.create.$projectId.success.title": {
+    "message": "Thành công!"
+  },
+  "routes.onboarding.project.create.index.createProject": {
+    "message": "Tạo Dự án"
+  },
+  "routes.onboarding.project.create.index.projectName": {
+    "message": "Enter a name for the Project"
+  },
+  "routes.onboarding.project.create.index.title": {
+    "message": "Tạo một Dự án"
+  },
+  "routes.onboarding.project.createProject": {
+    "message": "Tạo một Dự án"
+  },
+  "routes.onboarding.project.join.$inviteId.index.declineInvite": {
+    "message": "Từ chối lời mời"
+  },
+  "routes.onboarding.project.join.$inviteId.index.title": {
+    "message": "Tham gia một dự án"
+  },
+  "routes.onboarding.project.join.$inviteId.success.title": {
+    "message": "Thành công!"
+  },
+  "routes.onboarding.project.title": {
+    "message": "Tham gia một dự án"
+  },
+  "routes.welcome.collaborate": {
+    "message": "Collaborate with others"
+  }
+}
