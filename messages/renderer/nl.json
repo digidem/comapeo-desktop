@@ -1,0 +1,972 @@
+{
+  "components.app-title-bar.appName": {
+    "description": "Name of the app displayed in the title bar.",
+    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
+  },
+  "components.error-dialog.advanced": {
+    "description": "Title text for the collapsible section that shows the actual error message.",
+    "message": "Geavanceerd"
+  },
+  "components.error-dialog.close": {
+    "description": "Button text for the close button in the error dialog.",
+    "message": "Open Settings"
+  },
+  "components.error-dialog.somethingWentWrong": {
+    "description": "Generic title text for the error dialog.",
+    "message": "Er is iets misgegaan"
+  },
+  "components.generic-route-error-component.error": {
+    "description": "Label for error section",
+    "message": "Fout"
+  },
+  "components.generic-route-error-component.reload": {
+    "description": "Text for button to reload page.",
+    "message": "Reload"
+  },
+  "components.generic-route-error-component.somethinWentWrong": {
+    "description": "Title text of page error",
+    "message": "Er ging iets mis"
+  },
+  "components.generic-route-error-component.stacktrace": {
+    "description": "Label for stack trace section",
+    "message": "Stapel traceren"
+  },
+  "components.generic-route-not-found-component.goBack": {
+    "description": "Button text for back button.",
+    "message": "Ga terug"
+  },
+  "components.generic-route-not-found-component.reloadApp": {
+    "description": "Button text for reload app button.",
+    "message": "App opnieuw laden"
+  },
+  "components.generic-route-not-found-component.title": {
+    "description": "Title text shown when page is not found.",
+    "message": "Pagina niet gevonden"
+  },
+  "components.generic-route-not-found-component.tryAgain": {
+    "description": "Button text for try again button.",
+    "message": "Probeer opnieuw"
+  },
+  "routes.app.about.title": {
+    "message": "Over CoMapeo"
+  },
+  "routes.app.about.version": {
+    "message": "CoMapeo versie"
+  },
+  "routes.app.data-and-privacy.description": {
+    "message": "CoMapeo respecteert uw privacy en autonomie"
+  },
+  "routes.app.data-and-privacy.diagnosticInformationDescription": {
+    "message": "Geanonimiseerde informatie over uw apparaat, app crasht, fouten en prestaties helpt Awana Digital om de app te verbeteren en fouten op te lossen."
+  },
+  "routes.app.data-and-privacy.diagnosticInformationOptOut": {
+    "message": "U kunt diagnostische informatie op elk moment niet delen."
+  },
+  "routes.app.data-and-privacy.diagnosticInformationPersonalInfo": {
+    "message": "Dit bevat nooit enige van je gegevens of persoonlijke informatie."
+  },
+  "routes.app.data-and-privacy.diagnosticInformationTitle": {
+    "message": "Diagnostische informatie"
+  },
+  "routes.app.data-and-privacy.learnMore": {
+    "message": "Meer informatie"
+  },
+  "routes.app.data-and-privacy.shareDiagnosticInformation": {
+    "message": "Diagnostische informatie delen"
+  },
+  "routes.app.data-and-privacy.title": {
+    "message": "Gegevens & Privacy"
+  },
+  "routes.app.projects.$projectId.-displayed.data.list.addObservationsDescription": {
+    "description": "Description of card that is displayed when project has no observations to display.",
+    "message": "Gebruik Exchange om waarnemingen van Collaborator toe te voegen"
+  },
+  "routes.app.projects.$projectId.-displayed.data.list.addObservationsTitle": {
+    "description": "Title of card that is displayed when project has no observations to display.",
+    "message": "Waarnemingen toevoegen"
+  },
+  "routes.app.projects.$projectId.-displayed.data.list.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Pictogram voor {name} categorie"
+  },
+  "routes.app.projects.$projectId.-displayed.data.list.goToExchange": {
+    "description": "Link text to navigate to Exchange page.",
+    "message": "Ga naar Exchange"
+  },
+  "routes.app.projects.$projectId.-displayed.data.list.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Waarneming"
+  },
+  "routes.app.projects.$projectId.-displayed.data.list.trackItemTitle": {
+    "description": "Title for list item that is a track.",
+    "message": "Bijhouden"
+  },
+  "routes.app.projects.$projectId.-displayed.data.map.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Pictogram voor {name} categorie"
+  },
+  "routes.app.projects.$projectId.index.invite": {
+    "description": "Link text to navigate to invite collaborators page.",
+    "message": "Uitnodigen"
+  },
+  "routes.app.projects.$projectId.index.unnamedProject": {
+    "description": "Fallback for when current project is missing a name.",
+    "message": "Naamloos project"
+  },
+  "routes.app.projects.$projectId.index.view": {
+    "description": "Link text to navigate to project settings page.",
+    "message": "Toon"
+  },
+  "routes.app.projects.$projectId.index.youAreCoordinator": {
+    "description": "Indicates that user is a coordinator on the current project.",
+    "message": "Je bent een coördinator voor dit project."
+  },
+  "routes.app.projects.$projectId.index.youAreParticipant": {
+    "description": "Indicates that user is a participant on the current project.",
+    "message": "Je bent een deelnemer in dit project."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Pictogram voor {name} categorie"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
+    "description": "Title for details section.",
+    "message": "Details"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerFalse": {
+    "description": "Text displayed if a boolean field is answered with \"false\"",
+    "message": "UITVOEREN"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "Geen antwoord"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNull": {
+    "description": "Text displayed if a field is answered with \"null\"",
+    "message": "NULL"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerTrue": {
+    "description": "Text displayed if a boolean field is answered with \"true\"",
+    "message": "WAAR"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
+    "description": "Title of the observation details page.",
+    "message": "Waarneming"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.noLocation": {
+    "description": "Fallback for location when observation does not have location specified.",
+    "message": "Geen locatie"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.notesSectionTitle": {
+    "description": "Title for notes section.",
+    "message": "Opmerkingen"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Waarneming"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound": {
+    "description": "Text displayed when observation cannot be found.",
+    "message": "Kan waarneming met ID {docId} niet vinden"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.onlyPreviewsAvailable": {
+    "description": "Text displayed when only preview-quality attachments are available.",
+    "message": "Alleen voorbeelden beschikbaar"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.unableToGetDurationTime": {
+    "description": "Text displayed when the duration of an audio attachment cannot be determined.",
+    "message": "Niet in staat om tijdsduur op te halen."
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Pictogram voor {name} categorie"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.descriptionSectionTitle": {
+    "description": "Title for description section.",
+    "message": "Beschrijving"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.navTitle": {
+    "description": "Displayed title.",
+    "message": "Bijhouden"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Waarneming"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.observationsSectionTitle": {
+    "description": "Title for the track observations section.",
+    "message": "{count, plural, one {# Waarneming} other {# waarnemingen}}"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.trackNotFound": {
+    "description": "Text displayed when track cannot be found.",
+    "message": "Kan geen spoor vinden met ID {docId}"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.tracks": {
+    "description": "Displayed title next to category icon.",
+    "message": "Nummers"
+  },
+  "routes.app.projects.$projectId_.exchange.index.complete": {
+    "description": "Text displayed when exchange is completed with all devices.",
+    "message": "Complete! You're up to date"
+  },
+  "routes.app.projects.$projectId_.exchange.index.completeAndWaiting": {
+    "description": "Text displayed when exchange is completed with currently connected devices.",
+    "message": "Voltooid! Wachten tot andere toestellen zich aansluiten."
+  },
+  "routes.app.projects.$projectId_.exchange.index.devicesFound": {
+    "description": "Text displayed when other devices have been found.",
+    "message": "Apparaten gevonden"
+  },
+  "routes.app.projects.$projectId_.exchange.index.exchangeEverythingDescription": {
+    "description": "Description of 'exchange everything' setting",
+    "message": "Foto's en audio op volledige grootte.<br></br>Maakt gebruik van meer opslagruimte."
+  },
+  "routes.app.projects.$projectId_.exchange.index.exchangeEverythingTitle": {
+    "description": "Title displayed when exchange setting is set to 'exchange everything'",
+    "message": "Ruil alles uit."
+  },
+  "routes.app.projects.$projectId_.exchange.index.noDevicesFound": {
+    "description": "Text displayed when no devices have been found.",
+    "message": "Geen apparaten gevonden"
+  },
+  "routes.app.projects.$projectId_.exchange.index.start": {
+    "description": "Button text to start exchange.",
+    "message": "Beginnen"
+  },
+  "routes.app.projects.$projectId_.exchange.index.stop": {
+    "description": "Button text to stop exchange.",
+    "message": "Stoppen"
+  },
+  "routes.app.projects.$projectId_.exchange.index.upToDate": {
+    "description": "Text displayed when exchangable data is up to date.",
+    "message": "All data synced"
+  },
+  "routes.app.projects.$projectId_.exchange.index.waitingForDevices": {
+    "description": "Text displayed when waiting for other devices to be found.",
+    "message": "Wachten op apparaten"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.coordinatorDescription": {
+    "description": "Coordinator role description.",
+    "message": "Als coördinator kan dit apparaat gebruikers uitnodigen en verwijderen en projectdetails beheren."
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.coordinatorTitle": {
+    "description": "Coordinator role name.",
+    "message": "Coördinator"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.navTitle": {
+    "description": "Title of the invite role selection page.",
+    "message": "Selecteer een rol"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.participantDescription": {
+    "description": "Participant role description.",
+    "message": "Als deelnemer kan dit apparaat waarnemingen aannemen en delen. Ze kunnen geen gebruikers of projectgegevens beheren."
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.participantTitle": {
+    "description": "Participant role name.",
+    "message": "Deelnemer"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.selectingRole": {
+    "description": "Description of action being taken in role selection page.",
+    "message": "U selecteert een rol voor dit apparaat:"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.accepted": {
+    "description": "Text displayed when invite is accepted.",
+    "message": "Invite Accepted"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.addAnotherDevice": {
+    "description": "Text for button to add another device.",
+    "message": "Nog een apparaat toevoegen"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.addedOn": {
+    "description": "Text showing when device was added to project.",
+    "message": "Toegevoegd op {date, date, long}"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.cancelInvite": {
+    "description": "Text for button to cancel invite.",
+    "message": "Annuleer uitnodiging"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
+    "description": "Text for button to leave invite flow.",
+    "message": "Open Settings"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.coordinator": {
+    "description": "Coordinator role name.",
+    "message": "Coördinator"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.invitationDeclinedDescription": {
+    "description": "Description of a declined invite.",
+    "message": "Dit apparaat heeft je uitnodiging geweigerd. Ze nemen geen deel aan het project."
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.invitationDeclinedTitle": {
+    "description": "Title of page when invite is declined.",
+    "message": "Uitnodiging geweigerd"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.inviteAccepted": {
+    "description": "Text displayed when invite is accepted.",
+    "message": "Uitnodiging geaccepteerd"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.navTitle": {
+    "description": "Title of the review invite page.",
+    "message": "Uitnodiging bekijken"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.participant": {
+    "description": "Participant role name.",
+    "message": "Deelnemer"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.sendInvite": {
+    "description": "Button text for sending invite.",
+    "message": "Uitnodiging sturen"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.timeSinceSent": {
+    "description": "Text showing time elapsed since invite was sent",
+    "message": "Uitnodiging verzonden {time}s geleden"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.waiting": {
+    "description": "Text displayed while waiting for invite response.",
+    "message": "Wachten op apparaat om uitnodiging te accepteren"
+  },
+  "routes.app.projects.$projectId_.invite.devices.-shared.disconnected-indicator.disconnected": {
+    "description": "Text displayed when external device is disconnected.",
+    "message": "Losgekoppeld"
+  },
+  "routes.app.projects.$projectId_.invite.devices.index.navTitle": {
+    "description": "Title of the device selection for invite page.",
+    "message": "Selecteer een apparaat"
+  },
+  "routes.app.projects.$projectId_.invite.index.controlSharing": {
+    "description": "Detail about how to control data sharing.",
+    "message": "Controleer delen in projectinstellingen."
+  },
+  "routes.app.projects.$projectId_.invite.index.inviteCollaborators": {
+    "description": "Title of the Invite Get Started page.",
+    "message": "Nodig samenwerkers uit"
+  },
+  "routes.app.projects.$projectId_.invite.index.navTitle": {
+    "description": "Title of the Invite Get Started page.",
+    "message": "Nu inschrijven"
+  },
+  "routes.app.projects.$projectId_.invite.index.onlyInvitedDevices": {
+    "description": "Detail about who contributes.",
+    "message": "Alleen uitgenodigde apparaten bijdragen."
+  },
+  "routes.app.projects.$projectId_.invite.index.primaryDescription": {
+    "description": "Primary description text.",
+    "message": "Apparaten uitnodigen die CoMapeo gebruiken om samen te werken."
+  },
+  "routes.app.projects.$projectId_.invite.index.selectDevice": {
+    "description": "Text for button to navigate to device selection.",
+    "message": "Selecteer een apparaat"
+  },
+  "routes.app.projects.$projectId_.invite.index.shareUsingExchange": {
+    "description": "Detail about how collaborators share data.",
+    "message": "Medewerkers delen veilig met behulp van Exchange."
+  },
+  "routes.app.projects.$projectId_.settings.categories.customCategoriesExplainer": {
+    "description": "Explanation for custom categories",
+    "message": "Gebruik aangepaste categorieën door het importeren van nieuwe categoriëen hieronder ingestelde bestanden."
+  },
+  "routes.app.projects.$projectId_.settings.categories.dateAdded": {
+    "description": "Text indicating the date the categories set was added.",
+    "message": "Toegevoegd {date}"
+  },
+  "routes.app.projects.$projectId_.settings.categories.defaultCategoriesExplainer": {
+    "description": "Explanation for default categories",
+    "message": "Standaardcategorieën helpen je om je waarnemingen direct te organiseren."
+  },
+  "routes.app.projects.$projectId_.settings.categories.missingCategoriesName": {
+    "description": "Text indicating that project is missing categories set name.",
+    "message": "Geen naam gevonden voor de categorieën."
+  },
+  "routes.app.projects.$projectId_.settings.categories.navTitle": {
+    "description": "Title of the categories set page.",
+    "message": "Categorieën instellen"
+  },
+  "routes.app.projects.$projectId_.settings.categories.uploadNewSet": {
+    "description": "Label for button to upload new categories set.",
+    "message": "Nieuwe set uploaden"
+  },
+  "routes.app.projects.$projectId_.settings.index.categoriesSet": {
+    "description": "Text for item that navigates to project categories set page.",
+    "message": "Categorieën instellen"
+  },
+  "routes.app.projects.$projectId_.settings.index.collaborators": {
+    "description": "Text for item that navigates to project collaborators page.",
+    "message": "Medewerkers"
+  },
+  "routes.app.projects.$projectId_.settings.index.deviceIsCoordinator": {
+    "description": "Indicates that device is a coordinator on the current project.",
+    "message": "Dit apparaat is een coördinator voor dit project."
+  },
+  "routes.app.projects.$projectId_.settings.index.deviceIsParticpant": {
+    "description": "Indicates that device is a participant on the current project.",
+    "message": "Dit apparaat is een deelnemer in dit project."
+  },
+  "routes.app.projects.$projectId_.settings.index.editInfo": {
+    "description": "Text for link that navigates to page for editing project settings.",
+    "message": "Info bewerken"
+  },
+  "routes.app.projects.$projectId_.settings.index.navTitle": {
+    "description": "Title of the project settings page.",
+    "message": "Project Instellingen"
+  },
+  "routes.app.projects.$projectId_.settings.index.noProjectDescription": {
+    "description": "Indicates that the project does not have a description.",
+    "message": "Geen projectbeschrijving."
+  },
+  "routes.app.projects.$projectId_.settings.index.unnamedProject": {
+    "description": "Fallback for when current project is missing a name.",
+    "message": "Naamloos project"
+  },
+  "routes.app.projects.$projectId_.settings.index.updateCategoriesSet": {
+    "description": "Text for link that navigates to project categories set page.",
+    "message": "Set bijwerken"
+  },
+  "routes.app.projects.$projectId_.settings.index.viewTeam": {
+    "description": "Text for link that navigates to project team page.",
+    "message": "Bekijk team"
+  },
+  "routes.app.projects.$projectId_.settings.info.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Annuleren"
+  },
+  "routes.app.projects.$projectId_.settings.info.maxProjectDescriptionLengthError": {
+    "description": "Error message for project description that is too long.",
+    "message": "Te lang, probeer een kortere beschrijving."
+  },
+  "routes.app.projects.$projectId_.settings.info.maxProjectNameLengthError": {
+    "description": "Error message for project name that is too long.",
+    "message": "Te lang, probeer een kortere naam."
+  },
+  "routes.app.projects.$projectId_.settings.info.minProjectNameLengthError": {
+    "description": "Error message for project name that is too short.",
+    "message": "Voer een projectnaam in"
+  },
+  "routes.app.projects.$projectId_.settings.info.navTitle": {
+    "description": "Title of the project settings info page.",
+    "message": "Info bewerken"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectCardColorLabel": {
+    "description": "Label for the project card color selector.",
+    "message": "Project Kaart Kleur"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectColorOptionBlue": {
+    "description": "Label for blue option in project color selector.",
+    "message": "Blauw"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectColorOptionGreen": {
+    "description": "Label for green option in project color selector.",
+    "message": "Groen"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectColorOptionGrey": {
+    "description": "Label for grey option in project color selector.",
+    "message": "Grijs"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectColorOptionOrange": {
+    "description": "Label for orange option in project color selector.",
+    "message": "Oranje"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectColorOptionRed": {
+    "description": "Label for grey option in project color selector.",
+    "message": "Rood"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectDescriptionInputLabel": {
+    "description": "Label for the project description input.",
+    "message": "Project beschrijving"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectNameInputLabel": {
+    "description": "Label for the project name input.",
+    "message": "Enter a name for the Project"
+  },
+  "routes.app.projects.$projectId_.settings.info.save": {
+    "description": "Label for save button.",
+    "message": "Opslaan"
+  },
+  "routes.app.projects.$projectId_.settings.team.coordinatorsSectionDescription": {
+    "description": "Description of the coordinators section in the team page.",
+    "message": "Coördinatoren kunnen apparaten, bewerken en verwijderen van gegevens, en projectdetails beheren."
+  },
+  "routes.app.projects.$projectId_.settings.team.coordinatorsSectionTitle": {
+    "description": "Title of the coordinators section in the team page.",
+    "message": "Coördinatoren"
+  },
+  "routes.app.projects.$projectId_.settings.team.dateAddedColumnTitle": {
+    "description": "Title used for column containing date added of project members.",
+    "message": "Datum toegevoegd"
+  },
+  "routes.app.projects.$projectId_.settings.team.deviceNameColumnTitle": {
+    "description": "Title used for column containing device name of project members.",
+    "message": "Apparaat Naam"
+  },
+  "routes.app.projects.$projectId_.settings.team.inviteDevice": {
+    "description": "Text for button that initiates steps for inviting device to project.",
+    "message": "Apparaat Uitnodigen"
+  },
+  "routes.app.projects.$projectId_.settings.team.leaveProject": {
+    "description": "Text for button that initiates steps for leaving project.",
+    "message": "Project verlaten"
+  },
+  "routes.app.projects.$projectId_.settings.team.navTitle": {
+    "description": "Title of the project settings team page.",
+    "message": "Team"
+  },
+  "routes.app.projects.$projectId_.settings.team.noParticipants": {
+    "description": "Text indicating that no participants are part of the project yet.",
+    "message": "Er zijn geen deelnemers aan dit project toegevoegd."
+  },
+  "routes.app.projects.$projectId_.settings.team.participantsSectionDescription": {
+    "description": "Description of the participants section in the team page.",
+    "message": "Deelnemers kunnen waarnemingen aannemen en delen. Ze kunnen gebruikers of projectdetails niet beheren."
+  },
+  "routes.app.projects.$projectId_.settings.team.participantsSectionTitle": {
+    "description": "Title of the participants section in the team page.",
+    "message": "Deelnemers"
+  },
+  "routes.app.projects.$projectId_.settings.team.thisDevice": {
+    "description": "Text indicating that the listed device refers to the one currently being used.",
+    "message": "Dit apparaat!"
+  },
+  "routes.app.projects.-shared.device-icon.deviceTypeDesktop": {
+    "description": "Text indicating that the member is a desktop device (displays when hovering over the icon).",
+    "message": "Startscherm"
+  },
+  "routes.app.projects.-shared.device-icon.deviceTypeMobile": {
+    "description": "Text indicating that the member is a mobile device (displays when hovering over the icon).",
+    "message": "Mobiel"
+  },
+  "routes.app.projects.-shared.device-icon.deviceTypeRemoteArchive": {
+    "description": "Text indicating that the member is a remote archive (displays when hovering over the icon).",
+    "message": "Extern archief"
+  },
+  "routes.app.projects.-shared.device-icon.deviceTypeTablet": {
+    "description": "Text indicating that the member is a tablet device (displays when hovering over the icon).",
+    "message": "Telefoon"
+  },
+  "routes.app.projects.-shared.device-icon.deviceTypeUnknown": {
+    "description": "Text indicating that the member device type is unknown (displays when hovering over the icon).",
+    "message": "Onbekend apparaattype"
+  },
+  "routes.app.projects.-shared.device-icon.deviceTypeUnspecified": {
+    "description": "Text indicating that the member device type is unspecified (displays when hovering over the icon).",
+    "message": "Niet-gespecificeerd apparaattype"
+  },
+  "routes.app.projects.-shared.network-connection-info.notConnectedToWifi": {
+    "description": "Text displayed when Wi-Fi is not connected.",
+    "message": "Niet verbonden met Wi-Fi"
+  },
+  "routes.app.route.aboutTabLabel": {
+    "message": "Over CoMapeo"
+  },
+  "routes.app.route.appSettingsTabLabel": {
+    "message": "App instellingen"
+  },
+  "routes.app.route.dataAndPrivacyTabLabel": {
+    "message": "Gegevens & Privacy"
+  },
+  "routes.app.route.exchangeTabLabel": {
+    "message": "Ruil"
+  },
+  "routes.app.settings.coordinate-system.ddOptionLabel": {
+    "description": "Label for the decimal degrees option.",
+    "message": "DD (decimale graden)"
+  },
+  "routes.app.settings.coordinate-system.dmsOptionLabel": {
+    "description": "Label for the degrees/minutes/seconds option.",
+    "message": "DMS (Decimal/Minuten/Seconden)"
+  },
+  "routes.app.settings.coordinate-system.title": {
+    "description": "Title of the coordinate system settings page.",
+    "message": "Coördinaat systeem"
+  },
+  "routes.app.settings.coordinate-system.utmOptionLabel": {
+    "description": "Label for the universal transverse mercator option.",
+    "message": "UTM (Universeel Transverse Mercator)"
+  },
+  "routes.app.settings.device-name.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Annuleren"
+  },
+  "routes.app.settings.device-name.characterCount": {
+    "description": "Displays number of characters in input out of the maximum allowed characters.",
+    "message": "{count}/{max}"
+  },
+  "routes.app.settings.device-name.inputLabel": {
+    "description": "Label for the device name input.",
+    "message": "Apparaat Naam"
+  },
+  "routes.app.settings.device-name.maxLengthError": {
+    "description": "Error message for device name that is too long.",
+    "message": "Te lang, probeer een kortere naam."
+  },
+  "routes.app.settings.device-name.minLengthError": {
+    "description": "Error message for device name that is too short.",
+    "message": "Voer een apparaatnaam in"
+  },
+  "routes.app.settings.device-name.navTitle": {
+    "description": "Title of the device name settings page.",
+    "message": "Apparaat Naam"
+  },
+  "routes.app.settings.device-name.save": {
+    "description": "Label for save button.",
+    "message": "Opslaan"
+  },
+  "routes.app.settings.index.createTestData": {
+    "description": "Label for item that navigates to test data creation page.",
+    "message": "Maak Test Data"
+  },
+  "routes.app.settings.index.decimalDegrees": {
+    "description": "Label for Decimal Degrees coordinate system.",
+    "message": "DD Coordinates"
+  },
+  "routes.app.settings.index.defaultBackground": {
+    "description": "Name of the background map used if a custom one is not set.",
+    "message": "Standaard achtergrond"
+  },
+  "routes.app.settings.index.description": {
+    "description": "Description of the settings page.",
+    "message": "CoMapeo is ingesteld op het volgende."
+  },
+  "routes.app.settings.index.dmsCoordinates": {
+    "description": "Label for Degrees/Minutes/Seconds coordinate system.",
+    "message": "DMS Coordinates"
+  },
+  "routes.app.settings.index.editDeviceName": {
+    "description": "Button text for navigating to page to edit device name.",
+    "message": "Bewerken"
+  },
+  "routes.app.settings.index.languageFromSystemPreference": {
+    "description": "Label for selected language based on the system preferences.",
+    "message": "{name} (Systeemvoorkeur)"
+  },
+  "routes.app.settings.index.title": {
+    "description": "Title of the settings page.",
+    "message": "App instellingen"
+  },
+  "routes.app.settings.index.utmCoordinates": {
+    "description": "Label for Universal Transverse Mercator coordinate system.",
+    "message": "UTM Coördinaten"
+  },
+  "routes.app.settings.language.followSystemOptionLabel": {
+    "description": "Option label for following system preference for language.",
+    "message": "Volg systeemvoorkeuren"
+  },
+  "routes.app.settings.language.title": {
+    "description": "Title of the language settings page.",
+    "message": "Taal"
+  },
+  "routes.app.settings_.test-data.boundedDistanceLabel": {
+    "description": "Label for the bounded distance input.",
+    "message": "Maximale begrensde afstand (kilometers)"
+  },
+  "routes.app.settings_.test-data.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Annuleren"
+  },
+  "routes.app.settings_.test-data.coordinatesSelectionHint": {
+    "description": "Instructions displayed for coordinates selection inputs.",
+    "message": "Stel de coördinaten in door op de kaart te klikken of de locatie marker te slepen."
+  },
+  "routes.app.settings_.test-data.create": {
+    "description": "Label for create button.",
+    "message": "Create Project"
+  },
+  "routes.app.settings_.test-data.createTrack": {
+    "description": "Label for toggle to create track when creating test data.",
+    "message": "Track maken"
+  },
+  "routes.app.settings_.test-data.invalidBoundedDistanceFormat": {
+    "description": "Error message for when bounded distance is not an decimal.",
+    "message": "Moet een decimaal zijn"
+  },
+  "routes.app.settings_.test-data.invalidObservationCountFormat": {
+    "description": "Error message for when observation count is not an integer.",
+    "message": "Moet een geheel getal zijn"
+  },
+  "routes.app.settings_.test-data.maxObservationCountError": {
+    "description": "Error message for when observation count is too large",
+    "message": "Kan niet groter zijn dan {value}"
+  },
+  "routes.app.settings_.test-data.minBoundedDistanceError": {
+    "description": "Error message for when bounded distance is too small",
+    "message": "Moet groter zijn dan {value} kilometer"
+  },
+  "routes.app.settings_.test-data.minObservationCountError": {
+    "description": "Error message for when observation count is too small",
+    "message": "Moet groter zijn dan {value}"
+  },
+  "routes.app.settings_.test-data.navTitle": {
+    "description": "Title of test data page.",
+    "message": "Maak Test Data"
+  },
+  "routes.app.settings_.test-data.observationCountHelperText": {
+    "description": "Helper text for observation count input.",
+    "message": "Tussen {min} en {max}"
+  },
+  "routes.app.settings_.test-data.observationCountLabel": {
+    "description": "Label for the observation count input.",
+    "message": "Aantal waarnemingen"
+  },
+  "routes.app.settings_.test-data.observationCreateSuccess": {
+    "description": "Message displayed when observation creation succeeds.",
+    "message": "{count, plural, one {# waarneming} other {# waarnemingen}}."
+  },
+  "routes.app.settings_.test-data.requiredError": {
+    "description": "Error message for when required input is empty.",
+    "message": "vereist"
+  },
+  "routes.app.settings_.test-data.trackCreateSuccess": {
+    "description": "Message displayed when track creation succeeds.",
+    "message": "{count, plural, one {# nummer} other {# nummer nummer}}."
+  },
+  "routes.onboarding.data-and-privacy.dataEncrypted": {
+    "message": "Alle data blijft volledig versleuteld."
+  },
+  "routes.onboarding.data-and-privacy.dataStays": {
+    "message": "Uw gegevens blijven op uw apparaten."
+  },
+  "routes.onboarding.data-and-privacy.description": {
+    "message": "Met CoMapeo kunnen teams offline kaart zonder internet servers nodig te hebben."
+  },
+  "routes.onboarding.data-and-privacy.learnMore": {
+    "message": "Meer informatie"
+  },
+  "routes.onboarding.data-and-privacy.next": {
+    "message": "Volgende"
+  },
+  "routes.onboarding.data-and-privacy.privateByDefault": {
+    "message": "Privé standaard - diagnostische informatie wordt volledig anoniem gemaakt en je kunt er op elk moment gebruik van maken."
+  },
+  "routes.onboarding.data-and-privacy.sharingAndCollaboration": {
+    "message": "Gemakkelijk beheren en beheren van delen en samenwerken."
+  },
+  "routes.onboarding.data-and-privacy.title": {
+    "message": "Gegevens en privacy controleren"
+  },
+  "routes.onboarding.device-name.addName": {
+    "message": "Naam toevoegen"
+  },
+  "routes.onboarding.device-name.characterCount": {
+    "message": "{count}/{max}"
+  },
+  "routes.onboarding.device-name.description": {
+    "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
+  },
+  "routes.onboarding.device-name.deviceName": {
+    "message": "Apparaat Naam"
+  },
+  "routes.onboarding.device-name.maxLengthError": {
+    "message": "Te lang, probeer een kortere naam."
+  },
+  "routes.onboarding.device-name.minLengthError": {
+    "message": "Voer een apparaatnaam in"
+  },
+  "routes.onboarding.device-name.title": {
+    "message": "Benoem uw apparaat"
+  },
+  "routes.onboarding.privacy-policy.aboutAwanaDigital": {
+    "message": "Over Awana Digitaal"
+  },
+  "routes.onboarding.privacy-policy.aboutAwanaDigitalDescription": {
+    "message": "CoMapeo is ontwikkeld door Awana Digital, een 501c3 non-profitorganisatie geregistreerd in de Verenigde Staten. Awana Digital werkt solidair met frontlinie gemeenschappen om technologie te gebruiken om hun rechten te verdedigen en klimaatverandering te bestrijden."
+  },
+  "routes.onboarding.privacy-policy.appErrors": {
+    "message": "<b>App Fouten</b>: Informatie over interne fouten die leiden tot het functioneren van de app zoals verwacht."
+  },
+  "routes.onboarding.privacy-policy.appInfo": {
+    "message": "<b>App Info</b>: De versie en taal van CoMapeo."
+  },
+  "routes.onboarding.privacy-policy.appUsage": {
+    "message": "App gebruik"
+  },
+  "routes.onboarding.privacy-policy.comapeoDataPrivacy": {
+    "message": "CoMapeo gegevens privacy"
+  },
+  "routes.onboarding.privacy-policy.control": {
+    "message": "U bent de baas"
+  },
+  "routes.onboarding.privacy-policy.controlDescription": {
+    "message": "U kunt zich afmelden voor het verzenden van informatie naar Awana Digital.<br></br><br></br>U kiest waar uw gegevens worden opgeslagen en met wie het wordt gedeeld. U kunt ervoor kiezen om geanonimiseerde, samengevatte gegevens te delen over hoe u CoMapeo gebruikt met Awana Digital.<br></br><br></br>We zijn altijd transparant over welke informatie je wilt delen om de app te verbeteren. en deze informatie zal nooit foto's, video's, audio, tekst of precieze locaties bevatten die u hebt ingevoerd in CoMapeo."
+  },
+  "routes.onboarding.privacy-policy.country": {
+    "message": "<b>Land</b>: Het land waar CoMapeo wordt gebruikt."
+  },
+  "routes.onboarding.privacy-policy.crashData": {
+    "message": "<b>Crash gegevens</b>: Informatie over wat de app onverwacht heeft gesloten."
+  },
+  "routes.onboarding.privacy-policy.currentPermissions": {
+    "message": "Huidige permissies"
+  },
+  "routes.onboarding.privacy-policy.dataCollection": {
+    "message": "CoMapeo gegevens verzamelen"
+  },
+  "routes.onboarding.privacy-policy.description": {
+    "message": "Het volgende verklaart welke informatie (of \"gegevens\") wordt verzonden van CoMapeo naar de ontwikkelaar van de applicatie, Awana Digital, en hoe die informatie wordt gebruikt."
+  },
+  "routes.onboarding.privacy-policy.deviceInfo": {
+    "message": "<b>Apparaat Info</b>: zoals model en fabrikant van uw apparaat; besturingssysteem van het apparaat; scherm grootte; apparaat locale (taal); apparaat geheugen."
+  },
+  "routes.onboarding.privacy-policy.diagnostics": {
+    "message": "Diagnose"
+  },
+  "routes.onboarding.privacy-policy.noPII": {
+    "message": "Geen persoonlijk identificeerbare informatie"
+  },
+  "routes.onboarding.privacy-policy.openSource": {
+    "message": "Open Source en de \"Official\" versie"
+  },
+  "routes.onboarding.privacy-policy.openSourceDescription": {
+    "message": "CoMapeo is een open-source applicatie.<br></br><br></br>Dit betekent dat iedereen de code kan bekijken die de app laat werken en de privacyverklaringen in dit document kan verifiëren. Het betekent ook dat iedereen de app kan aanpassen aan zijn eigen behoeften en een alternatieve versie kan vrijgeven.<br></br><br></br>Dit document verwijst naar gegevens die zijn verzameld door de officiële releases van CoMapeo, digitaal ondertekend door Awana Digital, beschikbaar via de Google Play Store of de Awana Digital website.<br></br><br></br>Unofficiële releases van CoMapeo verkregen van andere kanalen vallen buiten onze controle en kunnen aanvullende informatie delen met andere organisaties."
+  },
+  "routes.onboarding.privacy-policy.performanceData": {
+    "message": "<b>Prestatiegegevens</b>: zoals opstartten, energiegebruik, bevriezing van apps en responsiviteit."
+  },
+  "routes.onboarding.privacy-policy.prviateByDefault": {
+    "message": "Standaard Privé"
+  },
+  "routes.onboarding.privacy-policy.prviateByDefaultDescription": {
+    "message": "De gegevens die u verzamelt en maakt met CoMapeo (locaties, foto's, video, audio, tekst) wordt standaard alleen op je apparaat opgeslagen en wordt nergens anders opgeslagen of verzonden.<br></br><br></br>Wanneer u gegevens deelt met medewerkers door deel te nemen aan een project met hen, het is versleuteld verstuurd, rechtstreeks naar het apparaat van medewerkers. Dit betekent dat de gegevens niet worden verzonden via Awana Digital, noch door iemand anders, op weg naar uw medewerker.<br></br><br></br>Awana Digitaal ziet en heeft geen toegang tot de gegevens die u met CoMapeo verzamelt tenzij u deze expliciet naar ons stuurt."
+  },
+  "routes.onboarding.privacy-policy.shareDiagnosticInformation": {
+    "message": "Diagnostische informatie delen"
+  },
+  "routes.onboarding.privacy-policy.title": {
+    "message": "Privacy Beleid"
+  },
+  "routes.onboarding.privacy-policy.whatIsCollected": {
+    "message": "Wat wordt verzameld?"
+  },
+  "routes.onboarding.privacy-policy.whatIsCollectedDescription": {
+    "message": "Standaard wordt geanonimiseerde diagnostische informatie over uw apparaat, app crashes, fouten en prestaties gedeeld met Awana Digital.<br></br><br></br>Je kunt deze informatie op elk moment niet delen. Deze diagnostische informatie is volledig geanonimiseerd en bevat nooit enige van uw gegevens (de gegevens die u hebt verzameld met CoMapeo)."
+  },
+  "routes.onboarding.privacy-policy.whatIsNotCollected": {
+    "message": "Wat wordt niet verzameld?"
+  },
+  "routes.onboarding.privacy-policy.whatIsNotCollectedDescription": {
+    "message": "We verzamelen geen persoonlijke gegevens of iets dat gebruikt kan worden om een gebruiker of apparaat te identificeren of te volgen. Apparaat-ID's die gebruikt worden om informatie samen te voegen zijn willekeurig, anoniem, en elke maand gewijzigd. Diagnostische informatie bevat geen gegevens over hoe je de app gebruikt. en het bevat nooit enige van de gegevens die u met de app hebt verzameld. We verzamelen uw precieze of grofste locatie niet, alleen het land waar u CoMapeo gebruikt."
+  },
+  "routes.onboarding.privacy-policy.whyIsThisDataCollected": {
+    "message": "Waarom worden deze gegevens verzameld?"
+  },
+  "routes.onboarding.privacy-policy.whyIsThisDataCollectedDescription": {
+    "message": "Crashen van gegevens en app-fouten, samen met de informatie van het apparaat en app bieden Awana Digital de informatie die nodig is om fouten en fouten in de app op te lossen.<br></br><br></br>De prestatiegegevens helpen ons bij het verbeteren van het reactievermogen van de app en het identificeren van fouten.<br></br><br></br>Het land waar CoMapeo wordt gebruikt en de taal van de UI helpt ons minimale informatie over CoMapeo gebruikers te begrijpen: \"Hoeveel CoMapeo gebruikers zijn er in elk land?\""
+  },
+  "routes.onboarding.project.create.$projectId.notFound": {
+    "message": "Kan project met ID {projectId} niet vinden"
+  },
+  "routes.onboarding.project.create.$projectId.success.description": {
+    "message": "Je hebt gemaakt<br></br><b>{projectName}</b>"
+  },
+  "routes.onboarding.project.create.$projectId.success.goBack": {
+    "message": "Ga terug"
+  },
+  "routes.onboarding.project.create.$projectId.success.inviteCollaborators": {
+    "message": "Nodig samenwerkers uit"
+  },
+  "routes.onboarding.project.create.$projectId.success.projectNotFound": {
+    "description": "Text displayed when invite cannot be found.",
+    "message": "Kon de uitnodiging niet vinden met ID {inviteId}"
+  },
+  "routes.onboarding.project.create.$projectId.success.title": {
+    "message": "Voltooid!"
+  },
+  "routes.onboarding.project.create.$projectId.success.updateCategoriesSet": {
+    "message": "Categorieën set bijwerken"
+  },
+  "routes.onboarding.project.create.index.characterCount": {
+    "message": "{count}/{max}"
+  },
+  "routes.onboarding.project.create.index.createProject": {
+    "message": "Project aanmaken"
+  },
+  "routes.onboarding.project.create.index.description": {
+    "message": "Benoem uw project."
+  },
+  "routes.onboarding.project.create.index.maxLengthError": {
+    "message": "Te lang, probeer een kortere naam."
+  },
+  "routes.onboarding.project.create.index.minLengthError": {
+    "message": "Voer een projectnaam in"
+  },
+  "routes.onboarding.project.create.index.projectName": {
+    "message": "Enter a name for the Project"
+  },
+  "routes.onboarding.project.create.index.title": {
+    "message": "Maak een project aan"
+  },
+  "routes.onboarding.project.createProject": {
+    "message": "Maak een project aan"
+  },
+  "routes.onboarding.project.description": {
+    "message": "Vraag een bewakingscoördinator om zich aan te sluiten bij hun project."
+  },
+  "routes.onboarding.project.join.$inviteId.index.declineInvite": {
+    "message": "Uitnodiging afwijzen"
+  },
+  "routes.onboarding.project.join.$inviteId.index.description": {
+    "message": "U bent uitgenodigd voor…"
+  },
+  "routes.onboarding.project.join.$inviteId.index.inviteNotFound": {
+    "description": "Text displayed when invite cannot be found.",
+    "message": "Kon de uitnodiging niet vinden met ID {inviteId}"
+  },
+  "routes.onboarding.project.join.$inviteId.index.joinProject": {
+    "message": "Deelnemen aan project"
+  },
+  "routes.onboarding.project.join.$inviteId.index.responseError": {
+    "message": "Er is iets misgegaan. Probeer het opnieuw."
+  },
+  "routes.onboarding.project.join.$inviteId.index.title": {
+    "message": "Deelnemen aan een project"
+  },
+  "routes.onboarding.project.join.$inviteId.success.description": {
+    "message": "Je bent toegetreden<br></br><b>{projectName}</b>"
+  },
+  "routes.onboarding.project.join.$inviteId.success.inviteNotFound": {
+    "description": "Text displayed when invite cannot be found.",
+    "message": "Kon de uitnodiging niet vinden met ID {inviteId}"
+  },
+  "routes.onboarding.project.join.$inviteId.success.startUsingCoMapeo": {
+    "message": "Start met behulp van CoMapeo"
+  },
+  "routes.onboarding.project.join.$inviteId.success.title": {
+    "message": "Voltooid!"
+  },
+  "routes.onboarding.project.limitedToDevices": {
+    "message": "Het delen van waarnemingen en gegevens is beperkt tot apparaten binnen elk Project."
+  },
+  "routes.onboarding.project.securelyStore": {
+    "message": "Projecten helpen teams om gegevens en waarnemingen veilig op te slaan en te delen."
+  },
+  "routes.onboarding.project.startingNewProject": {
+    "message": "Een nieuw territorium monitoringsproject starten?"
+  },
+  "routes.onboarding.project.title": {
+    "message": "Deelnemen aan een project"
+  },
+  "routes.onboarding.route.goBack": {
+    "message": "Ga terug"
+  },
+  "routes.onboarding.route.step": {
+    "message": "Stap {value}"
+  },
+  "routes.welcome.appDescription": {
+    "message": "Bekijk en beheer waarnemingen die zijn verzameld met CoMapeo Mobile."
+  },
+  "routes.welcome.collaborate": {
+    "message": "Collaborate with others"
+  },
+  "routes.welcome.comapeoDesktop": {
+    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
+  },
+  "routes.welcome.designedFor": {
+    "message": "Ontworpen met en voor inheemse volkeren & frontlinie gemeenschappen"
+  },
+  "routes.welcome.getStarted": {
+    "message": "Nu inschrijven"
+  },
+  "routes.welcome.mapAnywhere": {
+    "message": "Kaart overal en overal"
+  },
+  "routes.welcome.ownData": {
+    "message": "Eigen en besturen van uw gegevens"
+  }
+}
