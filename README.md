@@ -6,7 +6,7 @@ Go to the [Development](./docs/DEVELOPMENT.md) docs to learn about how the proje
 
 Make sure you have the preferred versions of tooling installed:
 
-- [`NodeJS`](https://nodejs.org): [22.17.1](./.nvmrc)
+- [`NodeJS`](https://nodejs.org): [22.18.0](./.nvmrc)
 
 1. Clone the repo:
 
@@ -23,7 +23,13 @@ Make sure you have the preferred versions of tooling installed:
 3. Start the application in development mode:
 
    ```sh
-   npm start
+   node --run start
+   ```
+
+   Alternatively can use npm (although it will be a bit slower for things to start) i.e.
+
+   ```sh
+   npm run start
    ```
 
 ## License

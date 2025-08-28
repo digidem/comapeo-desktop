@@ -82,7 +82,7 @@ jobs:
         run: npm ci
 
       - name: Build translations
-        run: npm run intl:translations
+        run: node --run intl
 
       - name: Create distributables
         env:
@@ -93,7 +93,7 @@ jobs:
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-        run: npm run forge:make
+        run: node --run forge:make
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -115,4 +115,4 @@ jobs:
         if: ${{ inputs.APP_TYPE == 'production' }}
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: npm run forge:publish
+        run: node --run forge:publish
