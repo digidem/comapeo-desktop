@@ -65,7 +65,7 @@
 		"electron-squirrel-startup": "1.0.1",
 		"electron-store": "10.1.0",
 		"sodium-native": "4.3.3",
-		"systeminformation": "5.27.7",
+		"systeminformation": "5.27.8",
 		"valibot": "1.1.0"
 	},
 	"devDependencies": {
