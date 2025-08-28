@@ -223,7 +223,6 @@ function initMainWindow({
 	isDevelopment,
 	sentryConfig,
 }) {
-	console.log('APP PATH', app.getAppPath())
 	const mainWindow = new BrowserWindow({
 		width: 1200,
 		minWidth: 800,
