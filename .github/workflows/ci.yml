@@ -23,9 +23,9 @@ jobs:
       - name: Install deps
         run: npm ci
       - name: Build translations
-        run: npm run intl:translations
+        run: node --run intl
       - name: Run lint
-        run: npm run lint
+        run: node --run lint
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -38,6 +38,6 @@ jobs:
       - name: Install deps
         run: npm ci
       - name: Build translations
-        run: npm run intl:translations
+        run: node --run intl
       - name: Run tests
-        run: npm test
+        run: node --run test

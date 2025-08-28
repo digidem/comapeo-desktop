@@ -12,6 +12,9 @@
   - [Translations workflow](#translations-workflow)
 - [Building the app](#building-the-app)
 
+> [!TIP]
+> Most of the npm scripts listed in this documentation use [Node's built-in command runner](https://nodejs.org/api/cli.html#--run) i.e. `node --run`. However, if you prefer using npm or need to avoid the [limitations](https://nodejs.org/api/cli.html#intentional-limitations), you can use `npm run` as well. Just note that some scripts will take longer to execute in this case.
+
 ## Architecture
 
 ### Processes
@@ -90,36 +93,36 @@ npm start                  # Build translations, then build the app in developme
 
 The renderer app (aka React code) can run unit test with [Vitest](https://vitest.dev/) (and integration tests with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)).
 
-To run unit or integration tests run `npm run vitest:run` or `npm run vitest:watch`. See [vitest run](https://vitest.dev/guide/cli.html#vitest-run) and [vitest watch](https://vitest.dev/guide/cli.html#vitest-watch) to understand the difference.
+To run unit or integration tests run `node --run vitest:run` or `node --run vitest:watch`. See [vitest run](https://vitest.dev/guide/cli.html#vitest-run) and [vitest watch](https://vitest.dev/guide/cli.html#vitest-watch) to understand the difference.
 
 ## Translations
 
 The `messages/` directory contains the translation strings used by the app. Within this directory are directories for the main process (`messages/main/`) and renderer process (`messages/renderer/`). Messages found in `messages/main/` are typically needed for translating text that lives in native UI (e.g. the menu bar), whereas messages in `messages/renderer/` are needed for translating text that's used in the rendered web app.
 
-In order to update translations, run `npm run intl:translations`, which will extract messages and place them in the relevant `messages/` directory and then compile those messages into translated strings and place them in the `translations/` directory. For the renderer process specifically, it also generates a JSON file called [`translated-languages-list.json`](../src/renderer/translated-languages.generated.json), which is used to by the app to know which languages are displayable without having to do that calculation it at runtime.
+In order to update translations, run `node --run intl`, which will extract messages and place them in the relevant `messages/` directory and then compile those messages into translated strings and place them in the `translations/` directory. For the renderer process specifically, it also generates a JSON file called [`translated-languages-list.json`](../src/renderer/translated-languages.generated.json), which is used to by the app to know which languages are displayable without having to do that calculation it at runtime.
 
 ### Translations workflow
 
 - For the main process:
   1. Use `defineMessage` (or `defineMessages`) from `@formatjs/intl` to create messages and use in the main process code.
-  2. Run npm run `intl:translations:main` (or`npm run intl:translations`).
+  2. Run `node --run intl:main` (or`node --run intl`).
 
 - For the renderer process:
   1. Use `defineMessage` (or `defineMessages`) from `react-intl` to create messages and use in the renderer process code.
-  2. Run npm run `intl:translations:renderer` (or`npm run intl:translations`).
+  2. Run `node --run intl:renderer` (or`node --run intl`).
 
 ## Building the app
 
 The [Electron Forge docs](https://www.electronforge.io/) are pretty informative (especially https://www.electronforge.io/core-concepts/build-lifecycle) but in a nutshell:
 
-- `npm run forge:package`: generate an executable app bundle i.e. an executable that you can run in the command-line.
+- `node --run forge:package`: generate an executable app bundle i.e. an executable that you can run in the command-line.
 
-- `npm run forge:make`: generate an distributable installer or archives that you can install by opening using your filesystem.
+- `node --run forge:make`: generate an distributable installer or archives that you can install by opening using your filesystem.
 
-- `npm run forge:publish`: upload the distributable to some cloud storage for distribution.
+- `node --run forge:publish`: upload the distributable to some cloud storage for distribution.
 
 All commands place the built assets in the `out/` directory.
 
-If you're running into an error with any of the Forge-related commands but not seeing any output in the console, you probably have to prefix the command with `DEBUG=electron-forge` e.g. `DEBUG=electron-forge npm run forge:package`.
+If you're running into an error with any of the Forge-related commands but not seeing any output in the console, you probably have to prefix the command with `DEBUG=electron-forge` e.g. `DEBUG=electron-forge node --run forge:package`.
 
-By default, we package the app in the [ASAR](https://github.com/electron/asar) format. However, it can be helpful to avoid doing that for debugging purposes (e.g. building locally), in which case you can specify a `ASAR=false` environment variable when running the relevant Forge command e.g. `ASAR=false npm run forge:package`.
+By default, we package the app in the [ASAR](https://github.com/electron/asar) format. However, it can be helpful to avoid doing that for debugging purposes (e.g. building locally), in which case you can specify a `ASAR=false` environment variable when running the relevant Forge command e.g. `ASAR=false node --run forge:package`.
