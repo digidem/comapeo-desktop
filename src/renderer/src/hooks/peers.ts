@@ -1,7 +1,7 @@
 import { useRef, useSyncExternalStore } from 'react'
 import { useClientApi } from '@comapeo/core-react'
 import type { PublicPeerInfo } from '@comapeo/core/dist/mapeo-manager'
-import { type MapeoClientApi } from '@comapeo/ipc'
+import { type MapeoClientApi } from '@comapeo/ipc/client.js'
 import { isEqual } from 'radashi'
 
 export type LocalPeer = PublicPeerInfo
