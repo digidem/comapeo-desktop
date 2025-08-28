@@ -237,7 +237,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 	}
 
 	/**
-	 * Builds the renderer app with Vite (similar to `npm run vite:build`).
+	 * Builds the renderer app with Vite (similar to `node --run vite:build`).
 	 *
 	 * @type {ForgeHookFn<'prePackage'>}
 	 */
