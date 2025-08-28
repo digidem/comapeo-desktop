@@ -721,6 +721,10 @@
     "description": "Label for the observation count input.",
     "message": "Número de observações"
   },
+  "routes.app.settings_.test-data.projectSelectLabel": {
+    "description": "Text label for project selector input.",
+    "message": "Projecto"
+  },
   "routes.app.settings_.test-data.requiredError": {
     "description": "Error message for when required input is empty.",
     "message": "Obrigatório"
