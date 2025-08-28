@@ -201,7 +201,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 
 		const ignoresToAppend = [
 			// Unnecessary directories
-			/^\/(\.github|\.husky|assets|data|docs|messages|patches|\.tanstack|\.vscode|scripts)/,
+			/^\/(\.github|\.husky|data|docs|messages|patches|\.tanstack|\.vscode|scripts)/,
 			// Unnecessary files
 			/^\/\.env/,
 			/^\/.*\.config\.js$/,
