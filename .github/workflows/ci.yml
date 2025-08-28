@@ -27,8 +27,12 @@ jobs:
       - name: Run lint
         run: node --run lint
   test:
-    runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-latest', 'macos-latest', 'macos-13', 'windows-latest']
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
