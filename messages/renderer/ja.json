@@ -705,6 +705,10 @@
     "description": "Message displayed when observation creation succeeds.",
     "message": "作成されました {count, plural, one {# 観察記録} other {# 観察記録}}"
   },
+  "routes.app.settings_.test-data.projectSelectLabel": {
+    "description": "Text label for project selector input.",
+    "message": "プロジェクト"
+  },
   "routes.app.settings_.test-data.requiredError": {
     "description": "Error message for when required input is empty.",
     "message": "必須"
