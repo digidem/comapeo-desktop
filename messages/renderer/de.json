@@ -725,6 +725,10 @@
     "description": "Message displayed when observation creation succeeds.",
     "message": "Erstellt {count, plural, one {# Beobachtung} other {# Beobachtungen}}"
   },
+  "routes.app.settings_.test-data.projectSelectLabel": {
+    "description": "Text label for project selector input.",
+    "message": "Projekt"
+  },
   "routes.app.settings_.test-data.requiredError": {
     "description": "Error message for when required input is empty.",
     "message": "Benötigt"
