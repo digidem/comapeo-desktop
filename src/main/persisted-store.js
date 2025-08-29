@@ -120,6 +120,9 @@ export function createPersistedStore(opts) {
  * @typedef {ReturnType<typeof createPersistedStore>} PersistedStore
  */
 
+/**
+ * @returns {{ id: string; idMonth: string }}
+ */
 function generateSentryUser() {
 	const id = randomBytes(16).toString('hex')
 	const now = new Date()
@@ -132,7 +135,7 @@ function generateSentryUser() {
  *
  * @returns {boolean}
  */
-export function shouldRotateSentryUser(idMonth) {
+function shouldRotateSentryUser(idMonth) {
 	const now = new Date()
 
 	const currentIdMonth = `${now.getUTCFullYear()}-${now.getUTCMonth()}`
