@@ -10,38 +10,24 @@ import {
 	dialog,
 	safeStorage,
 	utilityProcess,
+	type UtilityProcess,
 } from 'electron/main'
 import * as v from 'valibot'
 
-import { Intl } from './intl.js'
-import { setUpMainIPC } from './ipc.js'
-import {
-	FilesSelectParamsSchema,
-	ServiceErrorMessageSchema,
-} from './validation.js'
+import type { NewClientMessage } from '../services/core.ts'
+import type { AppConfig, SentryEnvironment } from '../shared/app.ts'
+import { FilesSelectParamsSchema } from '../shared/ipc.ts'
+import { Intl } from './intl.ts'
+import { setUpMainIPC } from './ipc.ts'
+import type { PersistedStore } from './persisted-store.ts'
+import { ServiceErrorMessageSchema } from './service-error.ts'
 
 const log = debug('comapeo:main:app')
 
-/**
- * @import {UtilityProcess} from 'electron'
- * @import {NewClientMessage} from '../services/core.js'
- * @import {AppConfig, SentryEnvironment} from '../shared/app.js'
- * @import {PersistedStore} from './persisted-store.js'
- */
-
-/**
- * @private
- * @typedef {Object} Services
- * @property {UtilityProcess} core
- */
-
-/**
- * @private
- * @typedef {Object} AppState
- * @property {boolean} tryingToQuitApp Used for distinguishing between closing a
- *   window explicitly and closing the application
- * @property {WeakMap<BrowserWindow, { type: 'main' | 'secondary' }>} browserWindows
- */
+type AppState = {
+	tryingToQuitApp: boolean
+	browserWindows: WeakMap<BrowserWindow, { type: 'main' | 'secondary' }>
+}
 
 const _menuMessages = defineMessages({
 	importConfig: {
@@ -51,27 +37,25 @@ const _menuMessages = defineMessages({
 })
 
 const CORE_SERVICE_PATH = fileURLToPath(
-	import.meta.resolve('../services/core.js'),
+	import.meta.resolve('../services/core.ts'),
 )
 
 const MAIN_WINDOW_PRELOAD_PATH = fileURLToPath(
 	new URL('../preload/main-window.js', import.meta.url),
 )
 
-/** @type {AppState} */
-const APP_STATE = {
+const APP_STATE: AppState = {
 	tryingToQuitApp: false,
 	browserWindows: new WeakMap(),
 }
 
-/**
- * @param {Object} opts
- * @param {AppConfig} opts.appConfig
- * @param {import('./persisted-store.js').PersistedStore} opts.persistedStore
- *
- * @returns {Promise<void>}
- */
-export async function start({ appConfig, persistedStore }) {
+export async function start({
+	appConfig,
+	persistedStore,
+}: {
+	appConfig: AppConfig
+	persistedStore: PersistedStore
+}): Promise<void> {
 	// Quit when all windows are closed, except on macOS. There, it's common
 	// for applications and their menu bar to stay active until the user quits
 	// explicitly with Cmd + Q.
@@ -137,8 +121,7 @@ export async function start({ appConfig, persistedStore }) {
 	const sentryUserId = persisted.sentryUser.id
 	const diagnosticsEnabled = persisted.diagnosticsEnabled
 
-	/** @type {SentryEnvironment} */
-	let sentryEnvironment = 'development'
+	let sentryEnvironment: SentryEnvironment = 'development'
 
 	if (appConfig.appType === 'release-candidate') {
 		sentryEnvironment = 'qa'
@@ -200,26 +183,21 @@ export async function start({ appConfig, persistedStore }) {
 	})
 }
 
-/**
- * @param {Object} opts
- * @param {string} opts.appVersion
- * @param {UtilityProcess} opts.coreService
- * @param {boolean} opts.isDevelopment
- * @param {{
- * 	enabled: boolean
- * 	environment: SentryEnvironment
- * 	userId: string
- * }} opts.sentryConfig
- *
- *
- * @returns {BrowserWindow} The main browser window
- */
 function initMainWindow({
 	appVersion,
 	coreService,
 	isDevelopment,
 	sentryConfig,
-}) {
+}: {
+	appVersion: string
+	coreService: UtilityProcess
+	isDevelopment: boolean
+	sentryConfig: {
+		enabled: boolean
+		environment: SentryEnvironment
+		userId: string
+	}
+}): BrowserWindow {
 	const mainWindow = new BrowserWindow({
 		width: 1200,
 		minWidth: 800,
@@ -278,11 +256,10 @@ function initMainWindow({
 		const [port] = event.ports
 		if (!port) return // TODO: throw/report error
 		coreService.postMessage(
-			/** @satisfies {NewClientMessage} */
-			({
+			{
 				type: 'main:new-client',
 				payload: { clientId: `window-${mainWindow.id}` },
-			}),
+			} satisfies NewClientMessage,
 			[port],
 		)
 	})
@@ -311,12 +288,9 @@ function initMainWindow({
 }
 
 /**
- * @param {Object} opts
- * @param {PersistedStore} opts.persistedStore
- *
- * @returns {string} Root key as hexidecimal string
+ * @returns Root key as hexidecimal string
  */
-function loadRootKey({ persistedStore }) {
+function loadRootKey({ persistedStore }: { persistedStore: PersistedStore }) {
 	const canEncrypt = safeStorage.isEncryptionAvailable()
 
 	const storedRootKey = persistedStore.getState().rootKey

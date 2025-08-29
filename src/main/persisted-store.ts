@@ -4,10 +4,11 @@ import { dirname } from 'node:path'
 import { writeFileSync as atomicWriteFileSync } from 'atomically'
 import debug from 'debug'
 import * as v from 'valibot'
-import { persist } from 'zustand/middleware'
+import { persist, type PersistStorage } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 
-import { CoordinateFormatSchema, LocaleSchema } from './validation.js'
+import { CoordinateFormatSchema } from '../shared/coordinate-format.ts'
+import { LocaleSchema } from '../shared/intl.ts'
 
 const log = debug('comapeo:main:persisted-store')
 
@@ -29,21 +30,14 @@ export const PersistedStateV1Schema = v.object({
 	),
 })
 
-/**
- * @typedef {v.InferOutput<typeof PersistedStateV1Schema>} PersistedStateV1
- */
+export type PersistedStateV1 = v.InferOutput<typeof PersistedStateV1Schema>
 
-/**
- * @param {Object} opts
- * @param {string} opts.filePath
- */
-export function createPersistedStore(opts) {
+export function createPersistedStore(opts: { filePath: string }) {
 	function ensureDirectory() {
 		mkdirSync(dirname(opts.filePath), { recursive: true })
 	}
 
-	/** @type {import('zustand/middleware').PersistStorage<PersistedStateV1>} */
-	const storage = {
+	const storage: PersistStorage<PersistedStateV1> = {
 		getItem: () => {
 			let content
 			try {
@@ -77,7 +71,10 @@ export function createPersistedStore(opts) {
 			} catch (err) {
 				// NOTE: Accounts for potential issue with writing atomically on Windows
 				// See https://github.com/sindresorhus/conf/blob/655f87c61bbf8240dfdedcd4fdf34a0457708b27/source/index.ts#L485-L487
-				if (/** @type {any} */ (err)?.code === 'EXDEV') {
+				if (
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					(err as any)?.code === 'EXDEV'
+				) {
 					writeFileSync(opts.filePath, data)
 					return
 				}
@@ -89,10 +86,7 @@ export function createPersistedStore(opts) {
 
 	const store = createStore(
 		persist(
-			/**
-			 * @returns {v.InferOutput<typeof PersistedStateV1Schema>}
-			 */
-			() => {
+			(): PersistedStateV1 => {
 				return v.getDefaults(PersistedStateV1Schema)
 			},
 			{
@@ -119,26 +113,16 @@ export function createPersistedStore(opts) {
 	return store
 }
 
-/**
- * @typedef {ReturnType<typeof createPersistedStore>} PersistedStore
- */
+export type PersistedStore = ReturnType<typeof createPersistedStore>
 
-/**
- * @returns {{ id: string; idMonth: string }}
- */
-function generateSentryUser() {
+function generateSentryUser(): { id: string; idMonth: string } {
 	const id = randomBytes(16).toString('hex')
 	const now = new Date()
 
 	return { id, idMonth: `${now.getUTCFullYear()}-${now.getUTCMonth()}` }
 }
 
-/**
- * @param {string} idMonth
- *
- * @returns {boolean}
- */
-function shouldRotateSentryUser(idMonth) {
+function shouldRotateSentryUser(idMonth: string): boolean {
 	const now = new Date()
 
 	const currentIdMonth = `${now.getUTCFullYear()}-${now.getUTCMonth()}`

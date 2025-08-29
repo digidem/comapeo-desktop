@@ -90,7 +90,7 @@ export default tseslint.config(
 	{
 		name: 'node',
 		files: [
-			'**/*.config.js',
+			'**/*.config.{js,ts}',
 			'src/main/**/*',
 			'src/services/**/*',
 			'scripts/*',

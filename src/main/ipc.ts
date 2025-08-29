@@ -3,19 +3,19 @@ import { ipcMain } from 'electron/main'
 import si from 'systeminformation'
 import * as v from 'valibot'
 
-import { PersistedStateV1Schema } from './persisted-store.js'
+import { type Intl } from './intl.ts'
+import {
+	PersistedStateV1Schema,
+	type PersistedStore,
+} from './persisted-store.ts'
 
-/**
- * @import {PersistedStore} from './persisted-store.js'
- * @import {Intl} from './intl.js'
- */
-
-/**
- * @param {Object} opts
- * @param {PersistedStore} opts.persistedStore
- * @param {Intl} opts.intl
- */
-export function setUpMainIPC({ persistedStore, intl }) {
+export function setUpMainIPC({
+	persistedStore,
+	intl,
+}: {
+	persistedStore: PersistedStore
+	intl: Intl
+}) {
 	// Shell
 	ipcMain.handle('shell:open-external-url', (_event, url) => {
 		v.assert(v.string(), url)
