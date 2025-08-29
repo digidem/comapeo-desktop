@@ -32,6 +32,10 @@ The following directories can be found in `src/` and approximately represent the
 - [`renderer/`](../src/renderer/): Code that runs in Electron's [renderer process](https://www.electronjs.org/docs/latest/tutorial/process-model#the-renderer-process).
   - has access to browser APIs
 
+### Shared code
+
+The [`shared/`](../src/shared/) directory contains code that should be usable from any of the aforementioned processes. As of right now, `preload/` can only use types from this directory until a bundling step is in place. In practice, most of the code here is related to shared types or validators.
+
 ### Electron Runtime
 
 The following use cases should generally be defined and set up in a preload script:
@@ -86,14 +90,14 @@ npm start                  # Build translations, then build the app in developme
 
 ### Helpful tips about configuration
 
-- The configuration for the renderer app is defined in the [Vite configuration file](../src/renderer/vite.config.js) that lives in the `src/renderer`.
-- The configuration for the Electron app is located in [`forge.config.js`](/forge.config.js).
+- The configuration for the renderer app is defined in the [Vite configuration file](../src/renderer/vite.config.ts) that lives in the `src/renderer`.
+- The configuration for the Electron app is located in [`forge.config.ts`](/forge.config.ts).
 
 ### Testing
 
 The renderer app (aka React code) can run unit test with [Vitest](https://vitest.dev/) (and integration tests with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)).
 
-To run unit or integration tests run `node --run vitest:run` or `node --run vitest:watch`. See [vitest run](https://vitest.dev/guide/cli.html#vitest-run) and [vitest watch](https://vitest.dev/guide/cli.html#vitest-watch) to understand the difference.
+To run unit or integration tests run `node --run vitest:run`. See [vitest run](https://vitest.dev/guide/cli.html#vitest-run).
 
 ## Translations
 

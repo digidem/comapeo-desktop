@@ -1,8 +1,10 @@
 import type { IntlConfig } from 'react-intl'
 import * as v from 'valibot'
 
-import SUPPORTED_LANGUAGES from '../../../../languages.json' with { type: 'json' }
-import { type SupportedLanguageTag } from '../../../shared/intl'
+import {
+	SUPPORTED_LANGUAGES,
+	type SupportedLanguageTag,
+} from '../../../shared/intl'
 import TRANSLATED_LANGUAGE_TAGS from '../../translated-languages.generated.json'
 
 const translations = import.meta.glob('./*.json', {

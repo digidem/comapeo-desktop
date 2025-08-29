@@ -8,9 +8,13 @@ import debug from 'debug'
 import { app } from 'electron/main'
 import { parse } from 'valibot'
 
-import { start } from './app.js'
-import { createConfigStore } from './config-store.js'
-import { AppConfigSchema } from './validation.js'
+import {
+	AppConfigSchema,
+	type AppConfig,
+	type SentryEnvironment,
+} from '../shared/app.ts'
+import { start } from './app.ts'
+import { createPersistedStore } from './persisted-store.ts'
 
 const require = createRequire(import.meta.url)
 
@@ -26,8 +30,7 @@ const appConfigFile = await readFile(
 	'utf-8',
 )
 
-/** @type {import('../shared/app.js').AppConfig} */
-const appConfig = parse(AppConfigSchema, JSON.parse(appConfigFile))
+const appConfig: AppConfig = parse(AppConfigSchema, JSON.parse(appConfigFile))
 
 // If desired, tell Electron to not use the ASAR format (https://www.electronjs.org/docs/latest/tutorial/asar-archives#treating-an-asar-archive-as-a-normal-file)
 if (appConfig.asar === false) {
@@ -44,8 +47,7 @@ if (appConfig.appType === 'development') {
 	//   - Sets the logs directory to `<root>/logs/` for macOS.
 	const appPath = app.getAppPath()
 
-	/** @type {string} */
-	let userDataPath
+	let userDataPath: string
 
 	if (appConfig.userDataPath) {
 		userDataPath = path.isAbsolute(appConfig.userDataPath)
@@ -70,12 +72,13 @@ if (appConfig.appType === 'development') {
 }
 
 // NOTE: Has to be set up after user data directory is updated
-const configStore = createConfigStore()
+const persistedStore = createPersistedStore({
+	filePath: path.join(app.getPath('userData'), 'config.json'),
+})
 
-const sentryUserId = configStore.get('sentryUser').id
+const persistedStoreState = persistedStore.getState()
 
-/** @type {import('../shared/app.js').SentryEnvironment} */
-let sentryEnvironment = 'development'
+let sentryEnvironment: SentryEnvironment = 'development'
 
 if (appConfig.appType === 'release-candidate') {
 	sentryEnvironment = 'qa'
@@ -89,14 +92,14 @@ Sentry.init({
 	dsn: 'https://f7336c12cc39fb0367886e31036a6cd7@o4507148235702272.ingest.us.sentry.io/4509803831820288',
 	// NOTE: Only works on app startup. Any changes to `diagnosticsEnabled` while the app is running will not
 	// take effect here until the app is restarted.
-	enabled: configStore.get('diagnosticsEnabled'),
+	enabled: persistedStoreState.diagnosticsEnabled,
 	sendDefaultPii: false,
 	// TODO: Enable tracing based on user consent in production
 	tracesSampleRate: sentryEnvironment === 'production' ? 0 : 1.0,
 	environment: sentryEnvironment,
 	release: appConfig.appVersion,
 	debug: sentryEnvironment === 'development',
-	initialScope: { user: { id: sentryUserId } },
+	initialScope: { user: { id: persistedStoreState.sentryUser.id } },
 })
 
 log('Paths', {
@@ -105,7 +108,7 @@ log('Paths', {
 	logs: app.getPath('logs'),
 })
 
-start({ appConfig, configStore }).catch((err) => {
+start({ appConfig, persistedStore }).catch((err) => {
 	Sentry.captureException(err)
 	process.exit(1)
 })

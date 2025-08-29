@@ -4,5 +4,5 @@
 		"module": "NodeNext",
 		"erasableSyntaxOnly": true
 	},
-	"include": ["../shared/*", "**/*.js", "**/*.ts"]
+	"include": ["**/*.js", "**/*.ts"]
 }

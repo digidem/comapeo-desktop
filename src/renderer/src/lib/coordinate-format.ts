@@ -1,13 +1,6 @@
 import { fromLatLon } from 'utm'
-import { literal, union, type InferOutput } from 'valibot'
 
-export const CoordinateFormatSchema = union([
-	literal('utm'),
-	literal('dd'),
-	literal('dms'),
-])
-
-export type CoordinateFormat = InferOutput<typeof CoordinateFormatSchema>
+import type { CoordinateFormat } from '../../../shared/coordinate-format'
 
 export function formatCoords({
 	lon,
