@@ -70,7 +70,6 @@ if (appConfig.appType === 'development') {
 }
 
 // NOTE: Has to be set up after user data directory is updated
-// const configStore = createConfigStore()
 const persistedStore = createPersistedStore({
 	filePath: path.join(app.getPath('userData'), 'config.json'),
 })
