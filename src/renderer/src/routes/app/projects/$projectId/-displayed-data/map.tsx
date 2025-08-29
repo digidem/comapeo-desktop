@@ -30,6 +30,8 @@ import { defineMessages, useIntl } from 'react-intl'
 import {
 	Layer,
 	Marker,
+	NavigationControl,
+	ScaleControl,
 	Source,
 	type CircleLayerSpecification,
 	type MapLayerMouseEvent,
@@ -448,6 +450,9 @@ export function DisplayedDataMap() {
 				}}
 				cursor={enableMapInteractions ? undefined : 'default'}
 			>
+				<ScaleControl />
+				<NavigationControl showCompass={false} />
+
 				<Source
 					type="geojson"
 					id={TRACKS_SOURCE_ID}
