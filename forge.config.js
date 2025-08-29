@@ -201,7 +201,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase {
 
 		const ignoresToAppend = [
 			// Unnecessary directories
-			/^\/(\.github|\.husky|assets|data|docs|messages|patches|\.tanstack|\.vscode|scripts)/,
+			/^\/(\.github|\.husky|data|docs|messages|patches|\.tanstack|\.vscode|scripts)/,
 			// Unnecessary files
 			/^\/\.env/,
 			/^\/.*\.config\.js$/,
@@ -314,9 +314,7 @@ export default {
 	rebuildConfig: {},
 	makers: [
 		new MakerSquirrel({
-			// TODO: Enable this once we export a compatiable asset. Cannot just be a renamed png file...
-			// https://www.electronforge.io/guides/create-and-add-icons#supported-formats
-			// setupIcon: './assets/icon.ico'
+			setupIcon: './assets/icon.ico',
 		}),
 		new MakerDMG({ icon: './assets/icon.icns' }),
 		new MakerZIP(undefined, ['darwin']),

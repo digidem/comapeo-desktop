@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto'
-import { basename } from 'node:path'
+import { basename, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineMessages } from '@formatjs/intl'
 import { captureException } from '@sentry/electron'
@@ -228,6 +228,12 @@ function initMainWindow({
 		minWidth: 800,
 		height: 800,
 		minHeight: 500,
+		// NOTE: Needs to be explicitly set for Linux
+		// https://www.electronforge.io/guides/create-and-add-icons#linux
+		icon:
+			process.platform === 'linux'
+				? join(app.getAppPath(), 'assets', 'icon.png')
+				: undefined,
 		show: false,
 		backgroundColor: '#050F77',
 		titleBarStyle: 'hiddenInset',
