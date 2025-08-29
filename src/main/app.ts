@@ -14,13 +14,13 @@ import {
 } from 'electron/main'
 import * as v from 'valibot'
 
-import type { NewClientMessage } from '../services/core.js'
-import type { AppConfig, SentryEnvironment } from '../shared/app.js'
-import { FilesSelectParamsSchema } from '../shared/ipc.js'
-import type { ConfigStore } from './config-store.js'
-import { Intl } from './intl.js'
-import { setUpMainIPC } from './ipc.js'
-import { ServiceErrorMessageSchema } from './service-error.js'
+import type { NewClientMessage } from '../services/core.ts'
+import type { AppConfig, SentryEnvironment } from '../shared/app.ts'
+import { FilesSelectParamsSchema } from '../shared/ipc.ts'
+import type { ConfigStore } from './config-store.ts'
+import { Intl } from './intl.ts'
+import { setUpMainIPC } from './ipc.ts'
+import { ServiceErrorMessageSchema } from './service-error.ts'
 
 const log = debug('comapeo:main:app')
 
