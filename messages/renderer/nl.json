@@ -709,6 +709,10 @@
     "description": "Message displayed when observation creation succeeds.",
     "message": "{count, plural, one {# waarneming} other {# waarnemingen}}."
   },
+  "routes.app.settings_.test-data.projectSelectLabel": {
+    "description": "Text label for project selector input.",
+    "message": "Project"
+  },
   "routes.app.settings_.test-data.requiredError": {
     "description": "Error message for when required input is empty.",
     "message": "vereist"
