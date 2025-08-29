@@ -8,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out a copy of the repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
       - name: Check package-lock.json version has not been changed
-        uses: mansona/npm-lockfile-version@v1
+        uses: mansona/npm-lockfile-version@85d9138b7776b4f8f768259f8a3e4f2611457d8f # v1
         with:
           version: 3
   lockfile_changes:
@@ -18,9 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out a copy of the repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
       - name: Create GitHub App Token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@8ab05a8a84060745bdc8f0b4f6d8f403c29e06b8 # v2.1.1
         id: app-token
         with:
           app-id: ${{ vars.LOCKFILE_BOT_APP_ID }}
