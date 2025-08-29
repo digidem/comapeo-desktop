@@ -18,7 +18,7 @@ export const FilesSelectParamsSchema = v.union([
 	v.undefined(),
 ])
 
-export const PersistedLocaleSchema = v.variant('useSystemPreferences', [
+export const LocaleSchema = v.variant('useSystemPreferences', [
 	v.object({
 		useSystemPreferences: v.literal(true),
 		languageTag: v.null(),
@@ -29,7 +29,7 @@ export const PersistedLocaleSchema = v.variant('useSystemPreferences', [
 	}),
 ])
 
-export const PersistedCoordinateFormatSchema = v.union([
+export const CoordinateFormatSchema = v.union([
 	v.literal('dd'),
 	v.literal('dms'),
 	v.literal('utm'),

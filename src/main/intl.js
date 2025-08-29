@@ -7,8 +7,7 @@ import * as v from 'valibot'
 /**
  * @import {IntlShape} from '@formatjs/intl'
  * @import {LocaleSource, LocaleState, SupportedLanguageTag} from '../shared/intl.js'
- * @import {ConfigStore} from './config-store.js'
- * @import {PersistedLocale} from './types/config-store.js'
+ * @import {PersistedStateV1} from './persisted-store.js'
  */
 
 const require = createRequire(import.meta.url)
@@ -38,9 +37,6 @@ const messages = {
 export class Intl {
 	static cache = createIntlCache()
 
-	/** @type {ConfigStore} */
-	#config
-
 	/** @type {IntlShape<SupportedLanguageTag>} */
 	#intl
 
@@ -49,14 +45,10 @@ export class Intl {
 
 	/**
 	 * @param {Object} opts
-	 * @param {ConfigStore} opts.configStore
+	 * @param {PersistedStateV1['locale']} opts.initialLocale
 	 */
-	constructor({ configStore }) {
-		this.#config = configStore
-
-		const { value, source } = this.#getResolvedLocale(
-			this.#config.get('locale'),
-		)
+	constructor({ initialLocale }) {
+		const { value, source } = this.#getResolvedLocale(initialLocale)
 
 		this.#intl = this.#createIntl(value)
 		this.#localeSource = source
@@ -101,7 +93,7 @@ export class Intl {
 	}
 
 	/**
-	 * @param {PersistedLocale} locale
+	 * @param {PersistedStateV1['locale']} locale
 	 *
 	 * @returns {{ value: SupportedLanguageTag; source: LocaleSource }}
 	 */
@@ -132,11 +124,9 @@ export class Intl {
 	}
 
 	/**
-	 * @param {PersistedLocale} locale
+	 * @param {PersistedStateV1['locale']} locale
 	 */
 	updateLocale(locale) {
-		this.#config.set('locale', locale)
-
 		const { value, source } = this.#getResolvedLocale(locale)
 
 		if (source === 'system') {
