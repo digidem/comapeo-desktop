@@ -17,19 +17,12 @@ import * as v from 'valibot'
 import type { NewClientMessage } from '../services/core.ts'
 import type { AppConfig, SentryEnvironment } from '../shared/app.ts'
 import { FilesSelectParamsSchema } from '../shared/ipc.ts'
-import type { ConfigStore } from './config-store.ts'
 import { Intl } from './intl.ts'
 import { setUpMainIPC } from './ipc.ts'
+import type { PersistedStore } from './persisted-store.ts'
 import { ServiceErrorMessageSchema } from './service-error.ts'
 
 const log = debug('comapeo:main:app')
-
-/**
- * @import {UtilityProcess} from 'electron'
- * @import {NewClientMessage} from '../services/core.js'
- * @import {AppConfig, SentryEnvironment} from '../shared/app.js'
- * @import {ConfigStore} from './config-store.js'
- */
 
 type AppState = {
 	tryingToQuitApp: boolean
@@ -58,10 +51,10 @@ const APP_STATE: AppState = {
 
 export async function start({
 	appConfig,
-	configStore,
+	persistedStore,
 }: {
 	appConfig: AppConfig
-	configStore: ConfigStore
+	persistedStore: PersistedStore
 }): Promise<void> {
 	// Quit when all windows are closed, except on macOS. There, it's common
 	// for applications and their menu bar to stay active until the user quits
@@ -80,15 +73,23 @@ export async function start({
 		APP_STATE.tryingToQuitApp = false
 	})
 
-	const intl = setupIntl({ configStore })
+	const intl = new Intl({
+		initialLocale: persistedStore.getState().locale,
+	})
+
+	persistedStore.subscribe((current, previous) => {
+		if (previous.locale !== current.locale) {
+			intl.updateLocale(current.locale)
+		}
+	})
 
 	app.setAboutPanelOptions({ applicationVersion: appConfig.appVersion })
 
-	setUpMainIPC({ configStore, intl })
+	setUpMainIPC({ persistedStore, intl })
 
 	await app.whenReady()
 
-	const rootKey = loadRootKey({ configStore })
+	const rootKey = loadRootKey({ persistedStore })
 
 	const coreProcessArgs = [
 		`--rootKey=${rootKey}`,
@@ -116,10 +117,10 @@ export async function start({
 		}
 	})
 
-	const sentryUserId = configStore.get('sentryUser').id
-	const diagnosticsEnabled = configStore.get('diagnosticsEnabled')
+	const persisted = persistedStore.getState()
+	const sentryUserId = persisted.sentryUser.id
+	const diagnosticsEnabled = persisted.diagnosticsEnabled
 
-	/** @type {SentryEnvironment} */
 	let sentryEnvironment: SentryEnvironment = 'development'
 
 	if (appConfig.appType === 'release-candidate') {
@@ -180,18 +181,6 @@ export async function start({
 	mainWindow.addListener('ready-to-show', () => {
 		mainWindow.show()
 	})
-}
-
-/**
- * @param {Object} opts
- * @param {ConfigStore} opts.configStore
- *
- * @returns {Intl}
- */
-function setupIntl({ configStore }: { configStore: ConfigStore }): Intl {
-	const intl = new Intl({ configStore })
-
-	return intl
 }
 
 function initMainWindow({
@@ -298,21 +287,23 @@ function initMainWindow({
 	return mainWindow
 }
 
-function loadRootKey({ configStore }: { configStore: ConfigStore }): string {
+/**
+ * @returns Root key as hexidecimal string
+ */
+function loadRootKey({ persistedStore }: { persistedStore: PersistedStore }) {
 	const canEncrypt = safeStorage.isEncryptionAvailable()
 
-	const storedRootKey = configStore.get('rootKey')
+	const storedRootKey = persistedStore.getState().rootKey
 
 	if (!storedRootKey) {
 		const rootKey = randomBytes(16).toString('hex')
 
 		if (canEncrypt) {
-			configStore.set(
-				'rootKey',
-				safeStorage.encryptString(rootKey).toString('hex'),
-			)
+			persistedStore.setState({
+				rootKey: safeStorage.encryptString(rootKey).toString('hex'),
+			})
 		} else {
-			configStore.set('rootKey', rootKey)
+			persistedStore.setState({ rootKey })
 		}
 
 		return rootKey

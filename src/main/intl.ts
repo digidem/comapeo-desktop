@@ -8,12 +8,11 @@ import esTranslations from '../../translations/main/es.json' with { type: 'json'
 import ptTranslations from '../../translations/main/pt.json' with { type: 'json' }
 import {
 	SupportedLanguageTagSchema,
-	type Locale,
 	type LocaleSource,
 	type LocaleState,
 	type SupportedLanguageTag,
 } from '../shared/intl.ts'
-import type { ConfigStore } from './config-store.ts'
+import type { PersistedStateV1 } from './persisted-store.ts'
 
 const log = debug('comapeo:main:intl')
 
@@ -26,18 +25,16 @@ const messages: { [key in SupportedLanguageTag]?: Record<string, unknown> } = {
 export class Intl {
 	static cache = createIntlCache()
 
-	#config: ConfigStore
-
 	#intl: IntlShape<SupportedLanguageTag>
 
 	#localeSource: LocaleSource
 
-	constructor({ configStore }: { configStore: ConfigStore }) {
-		this.#config = configStore
-
-		const { value, source } = this.#getResolvedLocale(
-			this.#config.get('locale'),
-		)
+	constructor({
+		initialLocale,
+	}: {
+		initialLocale: PersistedStateV1['locale']
+	}) {
+		const { value, source } = this.#getResolvedLocale(initialLocale)
 
 		this.#intl = this.#createIntl(value)
 		this.#localeSource = source
@@ -73,7 +70,7 @@ export class Intl {
 		}
 	}
 
-	#getResolvedLocale(locale: Locale): {
+	#getResolvedLocale(locale: PersistedStateV1['locale']): {
 		value: SupportedLanguageTag
 		source: LocaleSource
 	} {
@@ -102,9 +99,7 @@ export class Intl {
 		}
 	}
 
-	updateLocale(locale: Locale) {
-		this.#config.set('locale', locale)
-
+	updateLocale(locale: PersistedStateV1['locale']) {
 		const { value, source } = this.#getResolvedLocale(locale)
 
 		if (source === 'system') {

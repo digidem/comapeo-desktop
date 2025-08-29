@@ -3,16 +3,17 @@ import { ipcMain } from 'electron/main'
 import si from 'systeminformation'
 import * as v from 'valibot'
 
-import { CoordinateFormatSchema } from '../shared/coordinate-format.ts'
-import { LocaleSchema } from '../shared/intl.ts'
-import { type ConfigStore } from './config-store.ts'
 import { type Intl } from './intl.ts'
+import {
+	PersistedStateV1Schema,
+	type PersistedStore,
+} from './persisted-store.ts'
 
 export function setUpMainIPC({
-	configStore,
+	persistedStore,
 	intl,
 }: {
-	configStore: ConfigStore
+	persistedStore: PersistedStore
 	intl: Intl
 }) {
 	// Shell
@@ -28,15 +29,15 @@ export function setUpMainIPC({
 
 	// Settings (get)
 	ipcMain.handle('settings:get:activeProjectId', () => {
-		return configStore.get('activeProjectId')
+		return persistedStore.getState().activeProjectId
 	})
 
 	ipcMain.handle('settings:get:coordinateFormat', () => {
-		return configStore.get('coordinateFormat')
+		return persistedStore.getState().coordinateFormat
 	})
 
 	ipcMain.handle('settings:get:diagnosticsEnabled', () => {
-		return configStore.get('diagnosticsEnabled')
+		return persistedStore.getState().diagnosticsEnabled
 	})
 
 	ipcMain.handle('settings:get:locale', () => {
@@ -45,29 +46,37 @@ export function setUpMainIPC({
 
 	// Settings (set)
 	ipcMain.handle('settings:set:activeProjectId', (_event, value) => {
-		v.assert(v.union([v.string(), v.null()]), value)
+		v.assert(
+			v.union([
+				v.nonOptional(PersistedStateV1Schema.entries.activeProjectId),
+				v.null(),
+			]),
+			value,
+		)
 
-		// We cannot use configStore.set() with `undefined` to "unset" a value in the store
-		// since it is not JSON-serializable. Must use configStore.delete() instead.
-		if (value === null) {
-			return configStore.delete('activeProjectId')
-		} else {
-			return configStore.set('activeProjectId', value)
-		}
+		persistedStore.setState({
+			activeProjectId: value === null ? undefined : value,
+		})
 	})
 
 	ipcMain.handle('settings:set:coordinateFormat', (_event, value) => {
-		v.assert(CoordinateFormatSchema, value)
-		return configStore.set('coordinateFormat', value)
+		v.assert(
+			v.nonOptional(PersistedStateV1Schema.entries.coordinateFormat),
+			value,
+		)
+		persistedStore.setState({ coordinateFormat: value })
 	})
 
 	ipcMain.handle('settings:set:diagnosticsEnabled', (_event, value) => {
-		v.assert(v.boolean(), value)
-		return configStore.set('diagnosticsEnabled', value)
+		v.assert(
+			v.nonOptional(PersistedStateV1Schema.entries.diagnosticsEnabled),
+			value,
+		)
+		persistedStore.setState({ diagnosticsEnabled: value })
 	})
 
 	ipcMain.handle('settings:set:locale', (_event, value) => {
-		v.assert(LocaleSchema, value)
-		return intl.updateLocale(value)
+		v.assert(v.nonOptional(PersistedStateV1Schema.entries.locale), value)
+		persistedStore.setState({ locale: value })
 	})
 }

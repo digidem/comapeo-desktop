@@ -62,12 +62,13 @@
 		"@homebridge/ciao": "1.3.4",
 		"@mapeo/default-config": "5.0.0",
 		"@sentry/electron": "6.11.0",
+		"atomically": "2.0.3",
 		"debug": "4.4.1",
 		"electron-squirrel-startup": "1.0.1",
-		"electron-store": "10.1.0",
 		"sodium-native": "4.3.3",
 		"systeminformation": "5.27.8",
-		"valibot": "1.1.0"
+		"valibot": "1.1.0",
+		"zustand": "5.0.7"
 	},
 	"devDependencies": {
 		"@comapeo/core-react": "6.0.0",
