@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto'
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname } from 'node:path'
+import { writeFileSync as atomicWriteFileSync } from 'atomically'
 import debug from 'debug'
 import * as v from 'valibot'
 import { persist } from 'zustand/middleware'
@@ -41,7 +42,6 @@ export function createPersistedStore(opts) {
 		mkdirSync(dirname(opts.filePath), { recursive: true })
 	}
 
-	// TODO: Use https://github.com/fabiospampinato/atomically
 	/** @type {import('zustand/middleware').PersistStorage<PersistedStateV1>} */
 	const storage = {
 		getItem: () => {
@@ -64,12 +64,23 @@ export function createPersistedStore(opts) {
 		setItem: (_name, value) => {
 			ensureDirectory()
 
-			writeFileSync(
-				opts.filePath,
+			const data =
 				process.env.NODE_ENV === 'development'
 					? JSON.stringify(value, null, 2)
-					: JSON.stringify(value),
-			)
+					: JSON.stringify(value)
+
+			try {
+				atomicWriteFileSync(opts.filePath, data)
+			} catch (err) {
+				// NOTE: Accounts for potential issue with writing atomically on Windows
+				// See https://github.com/sindresorhus/conf/blob/655f87c61bbf8240dfdedcd4fdf34a0457708b27/source/index.ts#L485-L487
+				if (/** @type {any} */ (err)?.code === 'EXDEV') {
+					writeFileSync(opts.filePath, data)
+					return
+				}
+
+				throw err
+			}
 		},
 	}
 
