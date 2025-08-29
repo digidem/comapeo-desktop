@@ -54,30 +54,23 @@ export function setUpMainIPC({ persistedStore, intl }) {
 			value,
 		)
 
-		// We cannot use configStore.set() with `undefined` to "unset" a value in the store
-		// since it is not JSON-serializable. Must use configStore.delete() instead.
-		if (value === null) {
-			return persistedStore.setState((prev) => ({
-				...prev,
-				activeProjectId: undefined,
-			}))
-		} else {
-			return persistedStore.setState({ activeProjectId: value })
-		}
+		persistedStore.setState({
+			activeProjectId: value === null ? undefined : value,
+		})
 	})
 
 	ipcMain.handle('settings:set:coordinateFormat', (_event, value) => {
 		v.assert(v.nonOptional(PersistedV1Schema.entries.coordinateFormat), value)
-		return persistedStore.setState({ coordinateFormat: value })
+		persistedStore.setState({ coordinateFormat: value })
 	})
 
 	ipcMain.handle('settings:set:diagnosticsEnabled', (_event, value) => {
 		v.assert(v.nonOptional(PersistedV1Schema.entries.diagnosticsEnabled), value)
-		return persistedStore.setState({ diagnosticsEnabled: value })
+		persistedStore.setState({ diagnosticsEnabled: value })
 	})
 
 	ipcMain.handle('settings:set:locale', (_event, value) => {
 		v.assert(v.nonOptional(PersistedV1Schema.entries.locale), value)
-		return persistedStore.setState({ locale: value })
+		persistedStore.setState({ locale: value })
 	})
 }
