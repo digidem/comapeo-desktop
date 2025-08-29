@@ -1,3 +1,7 @@
+// NOTE: This is not a TypeScript file due to lack of support
+// from the VSCode extension as of writing
+// https://github.com/prettier/prettier-vscode/issues/3623
+
 /** @type {import('prettier').Config} */
 export default {
 	tabWidth: 2,
