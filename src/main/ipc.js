@@ -3,7 +3,7 @@ import { ipcMain } from 'electron/main'
 import si from 'systeminformation'
 import * as v from 'valibot'
 
-import { PersistedV1Schema } from './persisted-store.js'
+import { PersistedStateV1Schema } from './persisted-store.js'
 
 /**
  * @import {PersistedStore} from './persisted-store.js'
@@ -48,7 +48,7 @@ export function setUpMainIPC({ persistedStore, intl }) {
 	ipcMain.handle('settings:set:activeProjectId', (_event, value) => {
 		v.assert(
 			v.union([
-				v.nonOptional(PersistedV1Schema.entries.activeProjectId),
+				v.nonOptional(PersistedStateV1Schema.entries.activeProjectId),
 				v.null(),
 			]),
 			value,
@@ -60,17 +60,23 @@ export function setUpMainIPC({ persistedStore, intl }) {
 	})
 
 	ipcMain.handle('settings:set:coordinateFormat', (_event, value) => {
-		v.assert(v.nonOptional(PersistedV1Schema.entries.coordinateFormat), value)
+		v.assert(
+			v.nonOptional(PersistedStateV1Schema.entries.coordinateFormat),
+			value,
+		)
 		persistedStore.setState({ coordinateFormat: value })
 	})
 
 	ipcMain.handle('settings:set:diagnosticsEnabled', (_event, value) => {
-		v.assert(v.nonOptional(PersistedV1Schema.entries.diagnosticsEnabled), value)
+		v.assert(
+			v.nonOptional(PersistedStateV1Schema.entries.diagnosticsEnabled),
+			value,
+		)
 		persistedStore.setState({ diagnosticsEnabled: value })
 	})
 
 	ipcMain.handle('settings:set:locale', (_event, value) => {
-		v.assert(v.nonOptional(PersistedV1Schema.entries.locale), value)
+		v.assert(v.nonOptional(PersistedStateV1Schema.entries.locale), value)
 		persistedStore.setState({ locale: value })
 	})
 }

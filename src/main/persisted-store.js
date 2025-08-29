@@ -11,7 +11,7 @@ import { CoordinateFormatSchema, LocaleSchema } from './validation.js'
 
 const log = debug('comapeo:main:persisted-store')
 
-export const PersistedV1Schema = v.object({
+export const PersistedStateV1Schema = v.object({
 	activeProjectId: v.optional(v.string()),
 	coordinateFormat: v.optional(CoordinateFormatSchema, 'utm'),
 	diagnosticsEnabled: v.optional(v.boolean(), true),
@@ -30,7 +30,7 @@ export const PersistedV1Schema = v.object({
 })
 
 /**
- * @typedef {v.InferOutput<typeof PersistedV1Schema>} PersistedStateV1
+ * @typedef {v.InferOutput<typeof PersistedStateV1Schema>} PersistedStateV1
  */
 
 /**
@@ -54,7 +54,10 @@ export function createPersistedStore(opts) {
 			}
 
 			return v.parse(
-				v.object({ version: v.optional(v.number()), state: PersistedV1Schema }),
+				v.object({
+					version: v.optional(v.number()),
+					state: PersistedStateV1Schema,
+				}),
 				JSON.parse(content),
 			)
 		},
@@ -87,10 +90,10 @@ export function createPersistedStore(opts) {
 	const store = createStore(
 		persist(
 			/**
-			 * @returns {v.InferOutput<typeof PersistedV1Schema>}
+			 * @returns {v.InferOutput<typeof PersistedStateV1Schema>}
 			 */
 			() => {
-				return v.getDefaults(PersistedV1Schema)
+				return v.getDefaults(PersistedStateV1Schema)
 			},
 			{
 				name: 'comapeo-persisted',
