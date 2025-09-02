@@ -9,7 +9,7 @@ import {
 } from 'maplibre-gl'
 import { useControl, type MapInstance } from 'react-map-gl/maplibre'
 
-import { getIconURL } from './icon'
+import { getIconURL } from '../lib/icons'
 
 type ControlOptions = {
 	buttonTitle: string
