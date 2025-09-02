@@ -448,13 +448,18 @@ export function DisplayedDataMap() {
 				// Needs to be explicitly set to this since we reuse map instances
 				// and this seems to get preserved between different usages of the maps.
 				maxBounds={undefined}
-				interactive={enableMapInteractions}
-				onClick={enableMapInteractions ? onMapClick : undefined}
-				onMouseMove={enableMapInteractions ? onMapMouseMove : undefined}
 				interactiveLayerIds={INTERACTIVE_LAYER_IDS}
 				onLoad={() => {
 					setMapLoaded(true)
 				}}
+				onClick={enableMapInteractions ? onMapClick : undefined}
+				onMouseMove={enableMapInteractions ? onMapMouseMove : undefined}
+				dragPan={enableMapInteractions}
+				scrollZoom={enableMapInteractions}
+				touchPitch={false}
+				dragRotate={false}
+				pitchWithRotate={false}
+				touchZoomRotate={false}
 				cursor={enableMapInteractions ? undefined : 'default'}
 			>
 				<ScaleControl />

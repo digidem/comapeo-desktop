@@ -22,16 +22,8 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { getIconURL } from './icon'
 
 export function Map({
-	doubleClickZoom,
-	dragPan,
-	dragRotate,
-	interactive = true,
-	mapStyle,
 	ref,
 	reuseMaps = true,
-	scrollZoom,
-	touchPitch,
-	touchZoomRotate,
 	...rest
 }: Omit<MapProps, 'transformRequest'> & { ref?: Ref<MapRef> }) {
 	return (
@@ -39,24 +31,7 @@ export function Map({
 			{...rest}
 			transformRequest={transformRequest}
 			ref={ref}
-			mapStyle={mapStyle}
 			reuseMaps={reuseMaps}
-			// NOTE: Not sure if it's because of our default to reuse map instances,
-			// but setting this doesn't necessarily disable the interactions as expected when set to `true`.
-			// Still need to disable the various interactions via the props.
-			// Instead, we conditionally assign the interaction props based on the `interactive` prop being specified or not.
-			// i.e. if it's specified, set the props using that value. Otherwise defer to the corresponding props.
-			interactive={interactive}
-			dragPan={interactive === undefined ? dragPan : interactive}
-			dragRotate={interactive === undefined ? dragRotate : interactive}
-			doubleClickZoom={
-				interactive === undefined ? doubleClickZoom : interactive
-			}
-			scrollZoom={interactive === undefined ? scrollZoom : interactive}
-			touchPitch={interactive === undefined ? touchPitch : interactive}
-			touchZoomRotate={
-				interactive === undefined ? touchZoomRotate : interactive
-			}
 		/>
 	)
 }
