@@ -1,4 +1,4 @@
-import { useEffect, useRef, type Ref } from 'react'
+import { type Ref } from 'react'
 import type {
 	ControlPosition,
 	FitBoundsOptions,
@@ -59,27 +59,14 @@ export function ZoomToDataControl({
 	fitBoundsOptions: FitBoundsOptions
 	position?: ControlPosition
 }) {
-	// NOTE: Using the ref approach avoids issues related to
-	// additional mounts due to React strict mode.
-	const instance = useRef(
-		new ZoomToDataControlImplementation({
-			bbox,
-			title: buttonTitle,
-			fitBoundsOptions,
-		}),
-	)
-
-	useControl(() => instance.current, { position })
-
-	useEffect(
-		function updateControlInstance() {
-			instance.current = new ZoomToDataControlImplementation({
+	useControl(
+		() =>
+			new ZoomToDataControlImplementation({
 				bbox,
-				fitBoundsOptions,
 				title: buttonTitle,
-			})
-		},
-		[bbox, buttonTitle, fitBoundsOptions],
+				fitBoundsOptions,
+			}),
+		{ position },
 	)
 
 	return null
