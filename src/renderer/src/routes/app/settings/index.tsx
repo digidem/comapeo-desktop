@@ -74,11 +74,7 @@ function RouteComponent() {
 				alignItems="center"
 				padding={6}
 			>
-				<Icon
-					name="material-symbols-info"
-					size={100}
-					htmlColor={DARKER_ORANGE}
-				/>
+				<Icon name="material-settings" size={100} htmlColor={DARKER_ORANGE} />
 
 				<Typography variant="h1" fontWeight={500}>
 					{t(m.title)}
