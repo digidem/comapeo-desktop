@@ -40,6 +40,7 @@ export const iconNames = [
 	'material-expand-more',
 	'material-expand-less',
 	'material-error',
+	'material-circle-filled',
 	'material-chevron-right',
 	'material-check',
 	'material-check-circle',
