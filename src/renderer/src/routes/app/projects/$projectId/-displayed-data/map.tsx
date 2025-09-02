@@ -50,7 +50,7 @@ import { ZoomToDataMapControl } from '../../../../../components/zoom-to-data-map
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
 
-const OBSERVATIONS_SOURCE_ID = 'observations_source'
+const OBSERVATIONS_SOURCE_ID = 'observations_source' as const
 const TRACKS_SOURCE_ID = 'tracks_source' as const
 
 const OBSERVATIONS_LAYER_ID = 'observations_layer' as const
@@ -468,9 +468,9 @@ export function DisplayedDataMap() {
 
 				{showZoomToDataControl ? (
 					<ZoomToDataMapControl
-						bbox={mapBbox}
 						buttonTitle={t(m.zoomToData)}
 						fitBoundsOptions={BASE_FIT_BOUNDS_OPTIONS}
+						sourceIds={[OBSERVATIONS_SOURCE_ID, TRACKS_SOURCE_ID]}
 					/>
 				) : null}
 
