@@ -45,7 +45,8 @@ import {
 	CategoryIconImage,
 } from '../../../../../components/category-icon'
 import { Icon } from '../../../../../components/icon'
-import { Map, ZoomToDataControl } from '../../../../../components/map'
+import { Map } from '../../../../../components/map'
+import { ZoomToDataMapControl } from '../../../../../components/zoom-to-data-map-control'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
 
@@ -466,7 +467,7 @@ export function DisplayedDataMap() {
 				<NavigationControl showCompass={false} />
 
 				{showZoomToDataControl ? (
-					<ZoomToDataControl
+					<ZoomToDataMapControl
 						bbox={mapBbox}
 						buttonTitle={t(m.zoomToData)}
 						fitBoundsOptions={BASE_FIT_BOUNDS_OPTIONS}
