@@ -105,6 +105,10 @@
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
   },
+  "routes.app.projects.$projectId.-displayed.data.map.zoomToData": {
+    "description": "Text displayed when hovering over map control for zooming to data.",
+    "message": "Zoom to data"
+  },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
     "message": "Invite"

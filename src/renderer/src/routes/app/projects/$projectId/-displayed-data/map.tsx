@@ -45,7 +45,7 @@ import {
 	CategoryIconImage,
 } from '../../../../../components/category-icon'
 import { Icon } from '../../../../../components/icon'
-import { Map } from '../../../../../components/map'
+import { Map, ZoomToDataControl } from '../../../../../components/map'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
 
@@ -69,6 +69,8 @@ const DEFAULT_BOUNDING_BOX: [number, number, number, number] = [
 const BASE_FIT_BOUNDS_OPTIONS: FitBoundsOptions = { padding: 40, maxZoom: 12 }
 
 export function DisplayedDataMap() {
+	const { formatMessage: t } = useIntl()
+
 	const navigate = useNavigate({ from: '/app/projects/$projectId' })
 	const { projectId } = useParams({ from: '/app/projects/$projectId' })
 	const { highlightedDocument } = useSearch({
@@ -411,6 +413,11 @@ export function DisplayedDataMap() {
 				)
 			: undefined
 
+	const showZoomToDataControl =
+		currentRoute.routeId !==
+			'/app/projects/$projectId/observations/$observationDocId/' &&
+		currentRoute.routeId !== '/app/projects/$projectId/tracks/$trackDocId/'
+
 	return (
 		<Box position="relative" display="flex" flex={1}>
 			{mapLoaded ? null : (
@@ -452,6 +459,14 @@ export function DisplayedDataMap() {
 			>
 				<ScaleControl />
 				<NavigationControl showCompass={false} />
+
+				{showZoomToDataControl ? (
+					<ZoomToDataControl
+						bbox={mapBbox}
+						buttonTitle={t(m.zoomToData)}
+						fitBoundsOptions={BASE_FIT_BOUNDS_OPTIONS}
+					/>
+				) : null}
 
 				<Source
 					type="geojson"
@@ -674,5 +689,11 @@ const m = defineMessages({
 		defaultMessage: 'Icon for {name} category',
 		description:
 			'Alt text for icon image displayed for category (used for accessibility tools).',
+	},
+	zoomToData: {
+		id: 'routes.app.projects.$projectId.-displayed.data.map.zoomToData',
+		defaultMessage: 'Zoom to data',
+		description:
+			'Text displayed when hovering over map control for zooming to data.',
 	},
 })
