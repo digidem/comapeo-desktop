@@ -30,6 +30,8 @@ import { defineMessages, useIntl } from 'react-intl'
 import {
 	Layer,
 	Marker,
+	NavigationControl,
+	ScaleControl,
 	Source,
 	type CircleLayerSpecification,
 	type MapLayerMouseEvent,
@@ -44,10 +46,11 @@ import {
 } from '../../../../../components/category-icon'
 import { Icon } from '../../../../../components/icon'
 import { Map } from '../../../../../components/map'
+import { ZoomToDataMapControl } from '../../../../../components/zoom-to-data-map-control'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
 
-const OBSERVATIONS_SOURCE_ID = 'observations_source'
+const OBSERVATIONS_SOURCE_ID = 'observations_source' as const
 const TRACKS_SOURCE_ID = 'tracks_source' as const
 
 const OBSERVATIONS_LAYER_ID = 'observations_layer' as const
@@ -67,6 +70,8 @@ const DEFAULT_BOUNDING_BOX: [number, number, number, number] = [
 const BASE_FIT_BOUNDS_OPTIONS: FitBoundsOptions = { padding: 40, maxZoom: 12 }
 
 export function DisplayedDataMap() {
+	const { formatMessage: t } = useIntl()
+
 	const navigate = useNavigate({ from: '/app/projects/$projectId' })
 	const { projectId } = useParams({ from: '/app/projects/$projectId' })
 	const { highlightedDocument } = useSearch({
@@ -409,6 +414,11 @@ export function DisplayedDataMap() {
 				)
 			: undefined
 
+	const showZoomToDataControl =
+		currentRoute.routeId !==
+			'/app/projects/$projectId/observations/$observationDocId/' &&
+		currentRoute.routeId !== '/app/projects/$projectId/tracks/$trackDocId/'
+
 	return (
 		<Box position="relative" display="flex" flex={1}>
 			{mapLoaded ? null : (
@@ -439,15 +449,31 @@ export function DisplayedDataMap() {
 				// Needs to be explicitly set to this since we reuse map instances
 				// and this seems to get preserved between different usages of the maps.
 				maxBounds={undefined}
-				interactive={enableMapInteractions}
-				onClick={enableMapInteractions ? onMapClick : undefined}
-				onMouseMove={enableMapInteractions ? onMapMouseMove : undefined}
 				interactiveLayerIds={INTERACTIVE_LAYER_IDS}
 				onLoad={() => {
 					setMapLoaded(true)
 				}}
+				onClick={enableMapInteractions ? onMapClick : undefined}
+				onMouseMove={enableMapInteractions ? onMapMouseMove : undefined}
+				dragPan={enableMapInteractions}
+				scrollZoom={enableMapInteractions}
+				touchPitch={false}
+				dragRotate={false}
+				pitchWithRotate={false}
+				touchZoomRotate={false}
 				cursor={enableMapInteractions ? undefined : 'default'}
 			>
+				<ScaleControl />
+				<NavigationControl showCompass={false} />
+
+				{showZoomToDataControl ? (
+					<ZoomToDataMapControl
+						buttonTitle={t(m.zoomToData)}
+						fitBoundsOptions={BASE_FIT_BOUNDS_OPTIONS}
+						sourceIds={[OBSERVATIONS_SOURCE_ID, TRACKS_SOURCE_ID]}
+					/>
+				) : null}
+
 				<Source
 					type="geojson"
 					id={TRACKS_SOURCE_ID}
@@ -669,5 +695,11 @@ const m = defineMessages({
 		defaultMessage: 'Icon for {name} category',
 		description:
 			'Alt text for icon image displayed for category (used for accessibility tools).',
+	},
+	zoomToData: {
+		id: 'routes.app.projects.$projectId.-displayed.data.map.zoomToData',
+		defaultMessage: 'Zoom to data',
+		description:
+			'Text displayed when hovering over map control for zooming to data.',
 	},
 })

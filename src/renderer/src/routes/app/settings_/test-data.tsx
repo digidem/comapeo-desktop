@@ -578,6 +578,9 @@ function RouteComponent() {
 							form.setFieldValue('latitude', event.lngLat.lat)
 							form.setFieldValue('longitude', event.lngLat.lng)
 						}}
+						touchZoomRotate={false}
+						dragRotate={false}
+						pitchWithRotate={false}
 					>
 						<Source id="selection" type="geojson" data={data}>
 							<Layer type="symbol" id="point" />

@@ -29,7 +29,11 @@ export function Icon({
 					: sx
 			}
 		>
-			<use href={`${ICONS_SPRITE_URL}#${name}`} />
+			<use href={getIconURL(name)} />
 		</SvgIcon>
 	)
+}
+
+export function getIconURL(iconName: IconName) {
+	return `${ICONS_SPRITE_URL}#${iconName}`
 }
