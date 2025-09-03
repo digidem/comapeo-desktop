@@ -26,7 +26,7 @@ import { GLOBAL_MUTATIONS_BASE_KEY } from '../../lib/queries/global-mutations'
 export const Route = createFileRoute('/app')({
 	beforeLoad: ({ context, matches }) => {
 		if (!context.activeProjectId) {
-			throw new Error('Router context is missing `activeProjectId')
+			throw new Error('Router context is missing `activeProjectId`')
 		}
 
 		// Redirect to project-specific "initial" page if the current route is the just /app
