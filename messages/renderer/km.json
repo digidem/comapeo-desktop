@@ -15,6 +15,10 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "ការសង្កេត"
   },
+  "routes.app.projects.$projectId.-displayed.data.map.zoomToData": {
+    "description": "Text displayed when hovering over map control for zooming to data.",
+    "message": "ពង្រីកទៅកាន់ទិន្នន័យ"
+  },
   "routes.app.projects.$projectId.index.view": {
     "description": "Link text to navigate to project settings page.",
     "message": "ទិដ្ឋភាព"
