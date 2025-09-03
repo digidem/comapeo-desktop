@@ -241,6 +241,10 @@
     "description": "Text displayed when no devices have been found.",
     "message": "No Devices Found"
   },
+  "routes.app.projects.$projectId_.exchange.index.remoteArchiveConnected": {
+    "description": "Text indicating that some remote archive is connected.",
+    "message": "Remote Archive connected"
+  },
   "routes.app.projects.$projectId_.exchange.index.start": {
     "description": "Button text to start exchange.",
     "message": "Start"

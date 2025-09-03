@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import {
 	useDataSyncProgress,
+	useManyMembers,
 	useStartSync,
 	useStopSync,
 	useSyncState,
@@ -33,7 +34,12 @@ import {
 import { ErrorDialog } from '../../../../../components/error-dialog'
 import { GenericRoutePendingComponent } from '../../../../../components/generic-route-pending-component'
 import { Icon } from '../../../../../components/icon'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
+import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
+import { useBrowserNetInfo } from '../../../../../hooks/network'
+import {
+	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+	memberIsActiveRemoteArchive,
+} from '../../../../../lib/comapeo'
 import { ExhaustivenessError } from '../../../../../lib/exchaustiveness-error'
 import {
 	deriveSyncStage,
@@ -185,6 +191,10 @@ function RouteComponent() {
 								</Box>
 							</Box>
 
+							<Suspense>
+								<RemoteArchiveIndicator projectId={projectId} />
+							</Suspense>
+
 							{syncState ? (
 								<DisplayedSyncState
 									projectId={projectId}
@@ -258,6 +268,31 @@ function RouteComponent() {
 
 			<ErrorDialog {...errorDialogProps} />
 		</>
+	)
+}
+
+function RemoteArchiveIndicator({ projectId }: { projectId: string }) {
+	const { formatMessage: t } = useIntl()
+	const { data: members } = useManyMembers({ projectId })
+
+	const activeRemoteArchives = members.filter(memberIsActiveRemoteArchive)
+
+	const { online } = useBrowserNetInfo()
+
+	const iconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body2',
+		multiplier: 0.6,
+	})
+
+	if (activeRemoteArchives.length === 0 || !online) {
+		return null
+	}
+
+	return (
+		<Stack direction="row" justifyContent="center" alignItems="center" gap={2}>
+			<Icon name="material-circle-filled" size={iconSize} />
+			<Typography variant="body2">{t(m.remoteArchiveConnected)}</Typography>
+		</Stack>
 	)
 }
 
@@ -430,5 +465,10 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId_.exchange.index.stop',
 		defaultMessage: 'Stop',
 		description: 'Button text to stop exchange.',
+	},
+	remoteArchiveConnected: {
+		id: 'routes.app.projects.$projectId_.exchange.index.remoteArchiveConnected',
+		defaultMessage: 'Remote Archive connected',
+		description: 'Text indicating that some remote archive is connected.',
 	},
 })
