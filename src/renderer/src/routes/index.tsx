@@ -14,6 +14,7 @@ export const Route = createFileRoute('/')({
 			},
 		})
 
+		// NOTE: Implicit check that the user hasn't completed the onboarding yet.
 		if (!ownDeviceInfo.name) {
 			throw redirect({ to: '/welcome', replace: true })
 		}
