@@ -16,6 +16,10 @@ on:
         description: 'SHA of commit to build'
         required: true
         type: string
+    outputs:
+      artifact_id:
+        description: Artifact ID containing the builds
+        value: ${{ jobs.upload_merged.outputs.artifact_id }}
   workflow_dispatch:
     inputs:
       app_type:
@@ -98,7 +102,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: ${{ matrix.os.name }}-${{ env.BUILD_SHA }}
+          name: builds-${{ matrix.os.name }}-${{ env.BUILD_SHA }}
           compression-level: 0
           overwrite: true
           path: |
@@ -111,8 +115,17 @@ jobs:
             out/make/**/*.rpm
             out/make/**/*.zip
 
-      - name: Publish application
-        if: ${{ inputs.APP_TYPE == 'production' }}
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: node --run forge:publish
+  upload_merged:
+    name: Upload merged artifacts
+    needs: builds
+    runs-on: ubuntu-latest
+    outputs:
+      artifact_id: ${{ steps.merge_and_upload.outputs.artifact-id }}
+    steps:
+      - name: Merge and upload artifacts
+        id: merge_and_upload
+        uses: actions/upload-artifact/merge@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: builds-${{ env.BUILD_SHA }}
+          delete-merged: true
+          compression-level: 0
