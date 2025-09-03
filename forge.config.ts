@@ -348,7 +348,7 @@ export default {
 
 			return packageJson
 		},
-		// NOTE: Creates an output directory at `out/artifacts` that contains just the distributable assets.
+		// NOTE: Creates an output directory at `out/distributables` that contains just the distributable assets.
 		// Used by the [`create-builds`](./github/workflows/create-builds.yml) workflow
 		postMake: async (config, makeResults) => {
 			const destinationDir = path.join(
