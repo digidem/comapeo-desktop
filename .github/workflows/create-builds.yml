@@ -105,15 +105,8 @@ jobs:
           name: builds-${{ matrix.os.name }}-${{ env.BUILD_SHA }}
           compression-level: 0
           overwrite: true
-          path: |
-            out/make/**/RELEASES
-            out/make/**/*.AppImage
-            out/make/**/*.deb
-            out/make/**/*.dmg
-            out/make/**/*.exe
-            out/make/**/*.nupkg
-            out/make/**/*.rpm
-            out/make/**/*.zip
+          if-no-files-found: error
+          path: out/distributables
 
   upload_merged:
     name: Upload merged artifacts

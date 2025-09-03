@@ -1,4 +1,5 @@
 import { execSync } from 'node:child_process'
+import { mkdirSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import { arch, platform } from 'node:os'
 import path from 'node:path'
@@ -346,6 +347,30 @@ export default {
 			}
 
 			return packageJson
+		},
+		// NOTE: Creates an output directory at `out/artifacts` that contains just the distributable assets.
+		// Used by the [`create-builds`](./github/workflows/create-builds.yml) workflow
+		postMake: async (config, makeResults) => {
+			const destinationDir = path.join(
+				config.outDir || './out',
+				'distributables',
+			)
+
+			try {
+				mkdirSync(destinationDir)
+			} catch (err) {
+				if (err.code !== 'EEXIST') {
+					throw err
+				}
+			}
+
+			const artifacts = makeResults.flatMap((result) => result.artifacts)
+
+			await Promise.all(
+				artifacts.map((a) =>
+					fs.cp(a, path.join(destinationDir, path.basename(a))),
+				),
+			)
 		},
 	},
 	plugins,
