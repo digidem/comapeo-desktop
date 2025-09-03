@@ -4,7 +4,6 @@ import fs from 'node:fs'
 import { glob } from 'node:fs/promises'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import * as prettier from 'prettier'
 import * as v from 'valibot'
 
 import SUPPORTED_LANGUAGES from '../languages.json' with { type: 'json' }
@@ -75,10 +74,6 @@ for await (const entry of glob('*.json', { cwd: RENDERER_MESSAGES_DIR })) {
 
 const OUTPUT_FILE = './src/renderer/translated-languages.generated.json'
 
-const formatted = await prettier.format(JSON.stringify(translatedLanguages), {
-	filepath: OUTPUT_FILE,
-})
-
-fs.writeFileSync(OUTPUT_FILE, formatted)
+fs.writeFileSync(OUTPUT_FILE, JSON.stringify(translatedLanguages))
 
 console.log(`✅ Generated file at ${OUTPUT_FILE}`)
