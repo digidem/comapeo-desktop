@@ -3,7 +3,7 @@
 import fs from 'node:fs'
 import { glob } from 'node:fs/promises'
 import { join } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import * as v from 'valibot'
 
 import SUPPORTED_LANGUAGES from '../languages.json' with { type: 'json' }
@@ -56,9 +56,10 @@ for await (const entry of glob('*.json', { cwd: RENDERER_MESSAGES_DIR })) {
 		continue
 	}
 
-	const messages = await import(join(RENDERER_MESSAGES_DIR, entry), {
-		with: { type: 'json' },
-	})
+	const messages = await import(
+		pathToFileURL(join(RENDERER_MESSAGES_DIR, entry)).href,
+		{ with: { type: 'json' } }
+	)
 
 	// If a language is added to Crowdin but has no translated messages,
 	// Crowdin still creates an empty file. We do not include as a selectable language.
