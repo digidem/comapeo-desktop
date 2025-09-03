@@ -78,8 +78,8 @@ jobs:
         id: download
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
-          artifact-ids: ${{ needs.build.outputs.artifact_id }}
           path: build
+          merge-multiple: true
 
       - name: Create GitHub App Token
         uses: actions/create-github-app-token@8ab05a8a84060745bdc8f0b4f6d8f403c29e06b8 # v2.1.1
