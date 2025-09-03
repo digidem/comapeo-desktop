@@ -19,6 +19,10 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "නිරීක්ෂණ"
   },
+  "routes.app.projects.$projectId.-displayed.data.map.zoomToData": {
+    "description": "Text displayed when hovering over map control for zooming to data.",
+    "message": "Zoom to data"
+  },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
     "message": "ආරාධනා කරන්න"
