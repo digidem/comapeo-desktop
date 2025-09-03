@@ -2,6 +2,7 @@
 // This is done so that this info is known at compile time instead of being calculated during run time.
 import fs from 'node:fs'
 import { glob } from 'node:fs/promises'
+import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import * as prettier from 'prettier'
 import * as v from 'valibot'
@@ -52,6 +53,19 @@ for await (const entry of glob('*.json', { cwd: RENDERER_MESSAGES_DIR })) {
 		console.warn(
 			`Translated language tag "${matchedLanguage}" is not listed as a supported language.\n\n
             Update languages.json with the relevant information in order for it to be displayed as an option in the application.`,
+		)
+		continue
+	}
+
+	const messages = await import(join(RENDERER_MESSAGES_DIR, entry), {
+		with: { type: 'json' },
+	})
+
+	// If a language is added to Crowdin but has no translated messages,
+	// Crowdin still creates an empty file. We do not include as a selectable language.
+	if (Object.keys(messages).length === 0) {
+		console.warn(
+			`No translated messages for "${matchedLanguage}". Not including as a translated language for the app to use.`,
 		)
 		continue
 	}
