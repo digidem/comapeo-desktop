@@ -2,8 +2,8 @@
 // This is done so that this info is known at compile time instead of being calculated during run time.
 import fs from 'node:fs'
 import { glob } from 'node:fs/promises'
-import { fileURLToPath } from 'node:url'
-import * as prettier from 'prettier'
+import { join } from 'node:path'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import * as v from 'valibot'
 
 import SUPPORTED_LANGUAGES from '../languages.json' with { type: 'json' }
@@ -56,15 +56,25 @@ for await (const entry of glob('*.json', { cwd: RENDERER_MESSAGES_DIR })) {
 		continue
 	}
 
+	const messages = await import(
+		pathToFileURL(join(RENDERER_MESSAGES_DIR, entry)).href,
+		{ with: { type: 'json' } }
+	)
+
+	// If a language is added to Crowdin but has no translated messages,
+	// Crowdin still creates an empty file. We do not include as a selectable language.
+	if (Object.keys(messages).length === 0) {
+		console.warn(
+			`No translated messages for "${matchedLanguage}". Not including as a translated language for the app to use.`,
+		)
+		continue
+	}
+
 	translatedLanguages.push(matchedLanguage)
 }
 
 const OUTPUT_FILE = './src/renderer/translated-languages.generated.json'
 
-const formatted = await prettier.format(JSON.stringify(translatedLanguages), {
-	filepath: OUTPUT_FILE,
-})
-
-fs.writeFileSync(OUTPUT_FILE, formatted)
+fs.writeFileSync(OUTPUT_FILE, JSON.stringify(translatedLanguages))
 
 console.log(`✅ Generated file at ${OUTPUT_FILE}`)
