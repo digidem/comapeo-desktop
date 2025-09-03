@@ -11,7 +11,6 @@ import { MakerZIP } from '@electron-forge/maker-zip'
 import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives'
 import { PluginBase } from '@electron-forge/plugin-base'
 import { FusesPlugin } from '@electron-forge/plugin-fuses'
-import { PublisherGithub } from '@electron-forge/publisher-github'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
 import semver from 'semver'
 import * as v from 'valibot'
@@ -317,15 +316,6 @@ export default {
 			},
 			['linux'],
 		),
-	],
-	publishers: [
-		new PublisherGithub({
-			draft: true,
-			force: true,
-			generateReleaseNotes: true,
-			repository: { owner: 'digidem', name: 'comapeo-desktop' },
-			tagPrefix: 'v',
-		}),
 	],
 	hooks: {
 		readPackageJson: async (_config, packageJson) => {
