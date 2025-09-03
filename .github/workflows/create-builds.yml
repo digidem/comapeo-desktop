@@ -1,8 +1,6 @@
 # Summary:
 #
 # Reusable workflow for creating the distributable application assets.
-# Will also publish the artifacts if the `app_type` input is `production`.
-#
 name: Create builds
 
 on:
