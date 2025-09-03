@@ -105,6 +105,10 @@
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Symbol für {name} Kategorie"
   },
+  "routes.app.projects.$projectId.-displayed.data.map.zoomToData": {
+    "description": "Text displayed when hovering over map control for zooming to data.",
+    "message": "Auf Daten zoomen"
+  },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
     "message": "Einladen"
@@ -236,6 +240,10 @@
   "routes.app.projects.$projectId_.exchange.index.noDevicesFound": {
     "description": "Text displayed when no devices have been found.",
     "message": "Keine Geräte gefunden"
+  },
+  "routes.app.projects.$projectId_.exchange.index.remoteArchiveConnected": {
+    "description": "Text indicating that some remote archive is connected.",
+    "message": "Entferntes Archiv verbunden"
   },
   "routes.app.projects.$projectId_.exchange.index.start": {
     "description": "Button text to start exchange.",
