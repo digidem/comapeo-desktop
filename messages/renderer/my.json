@@ -1,0 +1,78 @@
+{
+  "components.error-dialog.close": {
+    "description": "Button text for the close button in the error dialog.",
+    "message": "Open Settings"
+  },
+  "routes.app.projects.$projectId.-displayed.data.list.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "လေ့လာတွေ့ရှိချက်များ"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "အဖြေမရှိပါ"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
+    "description": "Title of the observation details page.",
+    "message": "လေ့လာတွေ့ရှိချက်များ"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "လေ့လာတွေ့ရှိချက်များ"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "လေ့လာတွေ့ရှိချက်များ"
+  },
+  "routes.app.projects.$projectId_.exchange.index.complete": {
+    "description": "Text displayed when exchange is completed with all devices.",
+    "message": "Complete! You're up to date"
+  },
+  "routes.app.projects.$projectId_.exchange.index.upToDate": {
+    "description": "Text displayed when exchangable data is up to date.",
+    "message": "All data synced"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.accepted": {
+    "description": "Text displayed when invite is accepted.",
+    "message": "Invite Accepted"
+  },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
+    "description": "Text for button to leave invite flow.",
+    "message": "Open Settings"
+  },
+  "routes.app.projects.$projectId_.settings.info.cancel": {
+    "description": "Label for cancel button.",
+    "message": "ပယ်ဖျက်သည်"
+  },
+  "routes.app.projects.$projectId_.settings.info.projectNameInputLabel": {
+    "description": "Label for the project name input.",
+    "message": "Enter a name for the Project"
+  },
+  "routes.app.projects.$projectId_.settings.team.inviteDevice": {
+    "description": "Text for button that initiates steps for inviting device to project.",
+    "message": "ကိရိယာများကို ဖိတ်ခေါ်ပါ"
+  },
+  "routes.app.settings.device-name.cancel": {
+    "description": "Label for cancel button.",
+    "message": "ပယ်ဖျက်သည်"
+  },
+  "routes.app.settings_.test-data.cancel": {
+    "description": "Label for cancel button.",
+    "message": "ပယ်ဖျက်သည်"
+  },
+  "routes.app.settings_.test-data.create": {
+    "description": "Label for create button.",
+    "message": "Create Project"
+  },
+  "routes.onboarding.data-and-privacy.next": {
+    "message": "နောက်ထပ်"
+  },
+  "routes.onboarding.device-name.description": {
+    "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
+  },
+  "routes.onboarding.project.create.index.projectName": {
+    "message": "Enter a name for the Project"
+  },
+  "routes.welcome.collaborate": {
+    "message": "Collaborate with others"
+  }
+}
