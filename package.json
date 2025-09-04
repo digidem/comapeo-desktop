@@ -68,7 +68,7 @@
 		"sodium-native": "4.3.3",
 		"systeminformation": "5.27.8",
 		"valibot": "1.1.0",
-		"zustand": "5.0.7"
+		"zustand": "5.0.8"
 	},
 	"devDependencies": {
 		"@comapeo/core-react": "6.0.0",
