@@ -6,6 +6,7 @@ import js from '@eslint/js'
 import pluginQuery from '@tanstack/eslint-plugin-query'
 import pluginRouter from '@tanstack/eslint-plugin-router'
 import * as pluginReactHooks from 'eslint-plugin-react-hooks'
+import { defineConfig } from 'eslint/config'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
@@ -21,7 +22,7 @@ const gitExcludePath = path.join(
 	'exclude',
 )
 
-export default tseslint.config(
+export default defineConfig(
 	includeIgnoreFile(gitignorePath),
 	includeIgnoreFile(gitExcludePath),
 	js.configs.recommended,
