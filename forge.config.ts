@@ -1,4 +1,5 @@
 import { execSync } from 'node:child_process'
+import { mkdirSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import { arch, platform } from 'node:os'
 import path from 'node:path'
@@ -11,7 +12,6 @@ import { MakerZIP } from '@electron-forge/maker-zip'
 import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives'
 import { PluginBase } from '@electron-forge/plugin-base'
 import { FusesPlugin } from '@electron-forge/plugin-fuses'
-import { PublisherGithub } from '@electron-forge/publisher-github'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
 import semver from 'semver'
 import * as v from 'valibot'
@@ -318,15 +318,6 @@ export default {
 			['linux'],
 		),
 	],
-	publishers: [
-		new PublisherGithub({
-			draft: true,
-			force: true,
-			generateReleaseNotes: true,
-			repository: { owner: 'digidem', name: 'comapeo-desktop' },
-			tagPrefix: 'v',
-		}),
-	],
 	hooks: {
 		readPackageJson: async (_config, packageJson) => {
 			// We need to update this in order for Electron to use the desired name (it uses this field if present).
@@ -356,6 +347,30 @@ export default {
 			}
 
 			return packageJson
+		},
+		// NOTE: Creates an output directory at `out/distributables` that contains just the distributable assets.
+		// Used by the [`create-builds`](./github/workflows/create-builds.yml) workflow
+		postMake: async (config, makeResults) => {
+			const destinationDir = path.join(
+				config.outDir || './out',
+				'distributables',
+			)
+
+			try {
+				mkdirSync(destinationDir)
+			} catch (err) {
+				if (err.code !== 'EEXIST') {
+					throw err
+				}
+			}
+
+			const artifacts = makeResults.flatMap((result) => result.artifacts)
+
+			await Promise.all(
+				artifacts.map((a) =>
+					fs.cp(a, path.join(destinationDir, path.basename(a))),
+				),
+			)
 		},
 	},
 	plugins,

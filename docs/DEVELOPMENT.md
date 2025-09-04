@@ -123,8 +123,6 @@ The [Electron Forge docs](https://www.electronforge.io/) are pretty informative 
 
 - `node --run forge:make`: generate an distributable installer or archives that you can install by opening using your filesystem.
 
-- `node --run forge:publish`: upload the distributable to some cloud storage for distribution.
-
 All commands place the built assets in the `out/` directory.
 
 If you're running into an error with any of the Forge-related commands but not seeing any output in the console, you probably have to prefix the command with `DEBUG=electron-forge` e.g. `DEBUG=electron-forge node --run forge:package`.
