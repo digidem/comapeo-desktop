@@ -2,4 +2,4 @@
 /data
 /messages
 /translations
-/src/renderer/src/routeTree.gen.ts
+/src/renderer/src/generated

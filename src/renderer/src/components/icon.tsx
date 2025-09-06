@@ -1,7 +1,7 @@
 import SvgIcon, { type SvgIconProps } from '@mui/material/SvgIcon'
 
+import type { IconName } from '../generated/icons.generated'
 import { getIconURL } from '../lib/icons'
-import type { IconName } from '../types/icons.generated'
 
 export function Icon({
 	name,

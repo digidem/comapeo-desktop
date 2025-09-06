@@ -74,7 +74,12 @@ for await (const entry of glob('*.json', { cwd: RENDERER_MESSAGES_DIR })) {
 	translatedLanguages.push(matchedLanguage)
 }
 
-const OUTPUT_FILE = './src/renderer/translated-languages.generated.json'
+const OUTPUT_FILE = fileURLToPath(
+	new URL(
+		'../src/renderer/src/generated/translated-languages.generated.json',
+		import.meta.url,
+	),
+)
 
 fs.writeFileSync(OUTPUT_FILE, JSON.stringify(translatedLanguages))
 
