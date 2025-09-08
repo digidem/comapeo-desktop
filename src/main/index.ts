@@ -73,7 +73,7 @@ if (appConfig.appType === 'development') {
 
 // NOTE: Has to be set up after user data directory is updated
 const persistedStore = createPersistedStore({
-	filePath: path.join(app.getPath('userData'), 'config.json'),
+	filePath: path.join(app.getPath('userData'), 'comapeo', 'config.json'),
 })
 
 const persistedStoreState = persistedStore.getState()
