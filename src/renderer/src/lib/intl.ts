@@ -5,7 +5,7 @@ import {
 	SUPPORTED_LANGUAGES,
 	type SupportedLanguageTag,
 } from '../../../shared/intl'
-import TRANSLATED_LANGUAGE_TAGS from '../../translated-languages.generated.json'
+import TRANSLATED_LANGUAGE_TAGS from '../generated/translated-languages.generated.json'
 
 const translations = import.meta.glob('./*.json', {
 	base: '../../../../translations/renderer',

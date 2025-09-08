@@ -59,7 +59,6 @@ data/
 
 # Ignore the translations-related files used by the renderer for internationalization
 translations/
-src/renderer/translated-languages.generated.json
 
 # Ignore vscode settings (for now)
 .vscode/

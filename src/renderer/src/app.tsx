@@ -32,12 +32,12 @@ import { GenericRouteErrorComponent } from './components/generic-route-error-com
 import { GenericRouteNotFoundComponent } from './components/generic-route-not-found-component'
 import { GenericRoutePendingComponent } from './components/generic-route-pending-component'
 import { IntlProvider } from './contexts/intl'
+import { routeTree } from './generated/routeTree.gen'
 import { useNetworkConnectionChangeListener } from './hooks/network'
 import {
 	getActiveProjectIdQueryOptions,
 	getLocaleStateQueryOptions,
 } from './lib/queries/app-settings'
-import { routeTree } from './routeTree.gen'
 import { theme } from './theme'
 
 const queryClient = new QueryClient({

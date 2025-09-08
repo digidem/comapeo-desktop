@@ -4,8 +4,8 @@ import { defineMessages, useIntl } from 'react-intl'
 
 import { LIGHT_GREY } from '../../../../colors'
 import { Icon } from '../../../../components/icon'
+import type { IconName } from '../../../../generated/icons.generated'
 import type { DeviceType } from '../../../../lib/comapeo'
-import type { IconName } from '../../../../types/icons.generated'
 
 export function DeviceIcon({
 	deviceType,

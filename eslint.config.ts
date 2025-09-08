@@ -85,7 +85,7 @@ export default defineConfig(
 			globals: { ...globals.browser },
 			parser: tseslint.parser,
 		},
-		ignores: ['src/renderer/src/routeTree.gen.ts'],
+		ignores: ['src/renderer/src/generated/routeTree.gen.ts'],
 	},
 	// Node or Node-like processes
 	{
