@@ -1,7 +1,7 @@
 import { notFound, type NotFoundError } from '@tanstack/react-router'
 import * as v from 'valibot'
 
-import type { FileRouteTypes, FileRoutesByTo } from '../routeTree.gen'
+import type { FileRouteTypes, FileRoutesByTo } from '../generated/routeTree.gen'
 
 export type ToRoute = FileRouteTypes['to']
 

@@ -10,6 +10,8 @@ import { iconsSpritesheet } from 'vite-plugin-icons-spritesheet'
 
 const PROJECT_ROOT_DIR = fileURLToPath(new URL('../../', import.meta.url))
 
+const GENERATED_DIR = fileURLToPath(new URL('./src/generated', import.meta.url))
+
 export default defineConfig((configEnv) => {
 	return {
 		root: path.dirname(fileURLToPath(import.meta.url)),
@@ -43,9 +45,7 @@ export default defineConfig((configEnv) => {
 				routesDirectory: fileURLToPath(
 					new URL('./src/routes', import.meta.url),
 				),
-				generatedRouteTree: fileURLToPath(
-					new URL('./src/routeTree.gen.ts', import.meta.url),
-				),
+				generatedRouteTree: path.join(GENERATED_DIR, 'routeTree.gen.ts'),
 			}),
 			react(),
 			// TODO: `cwd` option is broken. should submit a fix at some point
@@ -54,9 +54,7 @@ export default defineConfig((configEnv) => {
 				outputDir: fileURLToPath(new URL('./src/images', import.meta.url)),
 				fileName: 'icons-sprite.svg',
 				withTypes: true,
-				typesOutputFile: fileURLToPath(
-					new URL('src/types/icons.generated.ts', import.meta.url),
-				),
+				typesOutputFile: path.join(GENERATED_DIR, 'icons.generated.ts'),
 				iconNameTransformer: (name) => {
 					// Return name of file as-is
 					return name
