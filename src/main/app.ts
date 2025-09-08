@@ -93,7 +93,7 @@ export async function start({
 
 	const coreProcessArgs = [
 		`--rootKey=${rootKey}`,
-		`--storageDirectory=${app.getPath('userData')}`,
+		`--storageDirectory=${join(app.getPath('userData'), 'comapeo')}`,
 	]
 
 	if (appConfig.onlineStyleUrl) {
