@@ -73,9 +73,12 @@ class CoMapeoDesktopForgePlugin extends PluginBase<undefined> {
 	name = 'comapeo-desktop'
 
 	#viteDevServer: ViteDevServer | null = null
+	#win32AppUserModelId: string
 
-	constructor() {
+	constructor(options: { win32AppUserModelId: string }) {
 		super(undefined)
+
+		this.#win32AppUserModelId = options.win32AppUserModelId
 
 		process.on('exit', () => {
 			this.#cleanUpVite()
@@ -137,6 +140,8 @@ class CoMapeoDesktopForgePlugin extends PluginBase<undefined> {
 			onlineStyleUrl: onlineStyleUrl?.toString(),
 			userDataPath: USER_DATA_PATH,
 			appVersion: getAppVersion(packageJSON.version, APP_TYPE),
+			win32AppUserModelId:
+				process.platform === 'win32' ? this.#win32AppUserModelId : undefined,
 		}
 
 		await fs.writeFile(outputPath, JSON.stringify(appConfig))
@@ -268,8 +273,12 @@ class CoMapeoDesktopForgePlugin extends PluginBase<undefined> {
 	}
 }
 
+const properties = getPropertiesForAppType(APP_TYPE)
+
 const plugins: Array<ForgeConfigPlugin> = [
-	new CoMapeoDesktopForgePlugin(),
+	new CoMapeoDesktopForgePlugin({
+		win32AppUserModelId: properties.win32AppUserModelId,
+	}),
 	// Fuses are used to enable/disable various Electron functionality
 	// at package time, before code signing the application
 	new FusesPlugin({
@@ -287,8 +296,6 @@ if (ASAR) {
 	plugins.push(new AutoUnpackNativesPlugin({}))
 }
 
-const properties = getPropertiesForAppType(APP_TYPE)
-
 export default {
 	packagerConfig: {
 		asar: ASAR,
@@ -302,6 +309,8 @@ export default {
 	makers: [
 		new MakerSquirrel({
 			setupIcon: './assets/icon.ico',
+			// https://www.electronforge.io/config/makers/squirrel.windows#spaces-in-the-app-name
+			name: properties.win32ProductName,
 		}),
 		new MakerDMG({ icon: './assets/icon.icns' }),
 		new MakerZIP(undefined, ['darwin']),
@@ -376,10 +385,19 @@ export default {
 	plugins,
 } satisfies ForgeConfig
 
-function getPropertiesForAppType(appType: AppType) {
+function getPropertiesForAppType(appType: AppType): {
+	shortName?: string
+	appBundleId: string
+	appName: string
+	executableName: string
+	win32OrgName: string
+	win32ProductName: string
+	win32AppUserModelId: string
+} {
 	const baseAppBundleId = 'com.comapeo'
 	const baseExecutableName = 'comapeo-desktop'
 	const baseAppName = packageJSON.productName
+	const author = packageJSON.author.name
 
 	const isMacOS = process.platform === 'darwin'
 
@@ -387,6 +405,12 @@ function getPropertiesForAppType(appType: AppType) {
 		case 'development': {
 			const shortName = 'dev'
 			const appName = `${baseAppName} Dev`
+			const {
+				org: win32OrgName,
+				product: win32ProductName,
+				appUserModelId: win32AppUserModelId,
+			} = getWin32PackagingStrings({ author, appName })
+
 			return {
 				shortName,
 				appBundleId: `${baseAppBundleId}.${shortName}`,
@@ -394,11 +418,20 @@ function getPropertiesForAppType(appType: AppType) {
 				executableName: isMacOS
 					? appName
 					: `${baseExecutableName}-${shortName}`,
+				win32OrgName,
+				win32ProductName,
+				win32AppUserModelId,
 			}
 		}
 		case 'internal': {
 			const shortName = 'internal'
 			const appName = `${baseAppName} Internal`
+			const {
+				org: win32OrgName,
+				product: win32ProductName,
+				appUserModelId: win32AppUserModelId,
+			} = getWin32PackagingStrings({ author, appName })
+
 			return {
 				shortName,
 				appBundleId: `${baseAppBundleId}.${shortName}`,
@@ -406,11 +439,20 @@ function getPropertiesForAppType(appType: AppType) {
 				executableName: isMacOS
 					? appName
 					: `${baseExecutableName}-${shortName}`,
+				win32OrgName,
+				win32ProductName,
+				win32AppUserModelId,
 			}
 		}
 		case 'release-candidate': {
 			const shortName = 'rc'
 			const appName = `${baseAppName} RC`
+			const {
+				org: win32OrgName,
+				product: win32ProductName,
+				appUserModelId: win32AppUserModelId,
+			} = getWin32PackagingStrings({ author, appName })
+
 			return {
 				shortName,
 				appBundleId: `${baseAppBundleId}.${shortName}`,
@@ -418,13 +460,25 @@ function getPropertiesForAppType(appType: AppType) {
 				executableName: isMacOS
 					? appName
 					: `${baseExecutableName}-${shortName}`,
+				win32OrgName,
+				win32ProductName,
+				win32AppUserModelId,
 			}
 		}
 		case 'production': {
+			const {
+				org: win32OrgName,
+				product: win32ProductName,
+				appUserModelId: win32AppUserModelId,
+			} = getWin32PackagingStrings({ author, appName: baseAppName })
+
 			return {
 				appBundleId: baseAppBundleId,
 				appName: baseAppName,
 				executableName: isMacOS ? baseAppName : baseExecutableName,
+				win32OrgName,
+				win32ProductName,
+				win32AppUserModelId,
 			}
 		}
 	}
@@ -464,4 +518,28 @@ function getAppVersion(version: string, appType: AppType) {
 	}
 
 	return `${minor}.${patch}`
+}
+
+/**
+ * Derives the relevant components of the package name used for Win32
+ * applications.
+ *
+ * https://learn.microsoft.com/en-us/windows/win32/shell/appids
+ */
+function getWin32PackagingStrings({
+	author,
+	appName,
+}: {
+	author: string
+	appName: string
+}): {
+	org: string
+	product: string
+	appUserModelId: string
+} {
+	// Cannot have spaces: https://learn.microsoft.com/en-us/windows/win32/shell/appids#how-to-form-an-application-defined-appusermodelid
+	const org = author.replaceAll(' ', '')
+	const product = appName.replaceAll(' ', '')
+
+	return { org, product, appUserModelId: `${org}.${product}` }
 }
