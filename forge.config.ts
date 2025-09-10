@@ -13,7 +13,6 @@ import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-nati
 import { PluginBase } from '@electron-forge/plugin-base'
 import { FusesPlugin } from '@electron-forge/plugin-fuses'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
-import { convertVersion } from 'electron-winstaller'
 import semver from 'semver'
 import * as v from 'valibot'
 import { build, createServer, type ViteDevServer } from 'vite'
@@ -322,7 +321,6 @@ export default {
 			name: properties.win32ProductName,
 			exe: `${properties.executableName}.exe`,
 			setupExe: `${properties.executableName}-${properties.appVersion}-win32-${arch}-setup.exe`,
-			version: convertVersion(properties.appVersion),
 			noMsi: true,
 		})),
 		new MakerDMG({ icon: './assets/icon.icns' }),
