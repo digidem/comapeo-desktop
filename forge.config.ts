@@ -433,6 +433,7 @@ function getPropertiesForAppType(appType: AppType): {
 			const appVersion = getAppVersion({
 				version: packageJSON.version,
 				appType,
+				appTypeSuffix,
 			})
 
 			return {
