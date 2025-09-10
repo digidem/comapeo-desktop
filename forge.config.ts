@@ -307,7 +307,7 @@ export default {
 		// macOS: https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleidentifier
 		appBundleId: properties.appBundleId,
 		icon: './assets/icon',
-		name: properties.appName,
+		name: properties.appNameExternal,
 		executableName: properties.executableName,
 	},
 	rebuildConfig: {},
@@ -342,7 +342,7 @@ export default {
 		readPackageJson: async (_config, packageJson) => {
 			// We need to update this in order for Electron to use the desired name (it uses this field if present).
 			// This leads to the desired outcome of properly isolated application data when having several apps on the same machine.
-			packageJson.productName = properties.appName
+			packageJson.productName = properties.appNameExternal
 
 			// NOTE: Kind of hacky but has the following desired effects:
 			//   - Uses the correct version for the file name of the asset that is generated in Forge's `make` step.
@@ -398,7 +398,15 @@ export default {
 
 function getPropertiesForAppType(appType: AppType): {
 	appBundleId: string
-	appName: string
+	/**
+	 * App name used for userfacing configurations e.g. `CoMapeo Desktop`
+	 */
+	appNameExternal: string
+	/**
+	 * App name used for generally non-userfacing configurations and
+	 * identification e.g. `comapeo-desktop-rc`
+	 */
+	appNameInternal: string
 	appVersion: string
 	executableName: string
 	win32AppUserModelId: string
@@ -406,16 +414,21 @@ function getPropertiesForAppType(appType: AppType): {
 } {
 	const baseAppBundleId = 'com.comapeo'
 	const baseExecutableName = 'comapeo-desktop'
-	const baseAppName = packageJSON.productName
+	const baseAppNameExternal = packageJSON.productName
+	const baseAppNameInternal = packageJSON.name
 
 	const isMacOS = process.platform === 'darwin'
 
 	switch (appType) {
 		case 'development': {
 			const appTypeSuffix = 'dev'
-			const appName = `${baseAppName} Dev`
-			const { product: win32ProductName, appUserModelId: win32AppUserModelId } =
-				getWin32PackagingStrings({ appName })
+			const appNameExternal = `${baseAppNameExternal} Dev`
+			const appNameInternal = `${baseAppNameInternal}-${appTypeSuffix}`
+
+			const {
+				productName: win32ProductName,
+				appUserModelId: win32AppUserModelId,
+			} = getWin32PackagingStrings({ appNameExternal, appNameInternal })
 
 			const appVersion = getAppVersion({
 				version: packageJSON.version,
@@ -424,10 +437,11 @@ function getPropertiesForAppType(appType: AppType): {
 
 			return {
 				appBundleId: `${baseAppBundleId}.${appTypeSuffix}`,
-				appName,
+				appNameExternal,
+				appNameInternal,
 				appVersion,
 				executableName: isMacOS
-					? appName
+					? appNameExternal
 					: `${baseExecutableName}-${appTypeSuffix}`,
 				win32AppUserModelId,
 				win32ProductName,
@@ -435,9 +449,13 @@ function getPropertiesForAppType(appType: AppType): {
 		}
 		case 'internal': {
 			const appTypeSuffix = 'internal'
-			const appName = `${baseAppName} Internal`
-			const { product: win32ProductName, appUserModelId: win32AppUserModelId } =
-				getWin32PackagingStrings({ appName })
+			const appNameExternal = `${baseAppNameExternal} Internal`
+			const appNameInternal = `${baseAppNameInternal}-${appTypeSuffix}`
+
+			const {
+				productName: win32ProductName,
+				appUserModelId: win32AppUserModelId,
+			} = getWin32PackagingStrings({ appNameExternal, appNameInternal })
 
 			const appVersion = getAppVersion({
 				version: packageJSON.version,
@@ -447,10 +465,11 @@ function getPropertiesForAppType(appType: AppType): {
 
 			return {
 				appBundleId: `${baseAppBundleId}.${appTypeSuffix}`,
-				appName,
+				appNameExternal,
+				appNameInternal,
 				appVersion,
 				executableName: isMacOS
-					? appName
+					? appNameExternal
 					: `${baseExecutableName}-${appTypeSuffix}`,
 				win32AppUserModelId,
 				win32ProductName,
@@ -458,9 +477,13 @@ function getPropertiesForAppType(appType: AppType): {
 		}
 		case 'release-candidate': {
 			const appTypeSuffix = 'rc'
-			const appName = `${baseAppName} RC`
-			const { product: win32ProductName, appUserModelId: win32AppUserModelId } =
-				getWin32PackagingStrings({ appName })
+			const appNameExternal = `${baseAppNameExternal} RC`
+			const appNameInternal = `${baseAppNameInternal}-${appTypeSuffix}`
+
+			const {
+				productName: win32ProductName,
+				appUserModelId: win32AppUserModelId,
+			} = getWin32PackagingStrings({ appNameExternal, appNameInternal })
 
 			const appVersion = getAppVersion({
 				version: packageJSON.version,
@@ -470,18 +493,24 @@ function getPropertiesForAppType(appType: AppType): {
 
 			return {
 				appBundleId: `${baseAppBundleId}.${appTypeSuffix}`,
-				appName,
+				appNameExternal,
+				appNameInternal,
 				appVersion,
 				executableName: isMacOS
-					? appName
+					? appNameExternal
 					: `${baseExecutableName}-${appTypeSuffix}`,
 				win32AppUserModelId,
 				win32ProductName,
 			}
 		}
 		case 'production': {
-			const { product: win32ProductName, appUserModelId: win32AppUserModelId } =
-				getWin32PackagingStrings({ appName: baseAppName })
+			const {
+				productName: win32ProductName,
+				appUserModelId: win32AppUserModelId,
+			} = getWin32PackagingStrings({
+				appNameExternal: baseAppNameExternal,
+				appNameInternal: baseAppNameInternal,
+			})
 
 			const appVersion = getAppVersion({
 				version: packageJSON.version,
@@ -490,9 +519,10 @@ function getPropertiesForAppType(appType: AppType): {
 
 			return {
 				appBundleId: baseAppBundleId,
-				appName: baseAppName,
+				appNameExternal: baseAppNameExternal,
+				appNameInternal: baseAppNameInternal,
 				appVersion,
-				executableName: isMacOS ? baseAppName : baseExecutableName,
+				executableName: isMacOS ? baseAppNameExternal : baseExecutableName,
 				win32AppUserModelId,
 				win32ProductName,
 			}
@@ -551,13 +581,22 @@ function getAppVersion(options: {
  *
  * https://learn.microsoft.com/en-us/windows/win32/shell/appids
  */
-function getWin32PackagingStrings({ appName }: { appName: string }): {
-	product: string
+function getWin32PackagingStrings({
+	appNameExternal,
+	appNameInternal,
+}: {
+	appNameExternal: string
+	appNameInternal: string
+}): {
+	productName: string
 	appUserModelId: string
 } {
-	// https://www.electronforge.io/config/makers/squirrel.windows#spaces-in-the-app-name
-	const product = appName.replaceAll(' ', '')
-	const appUserModelId = `com.squirrel.${product}.${product}`
+	const productName = appNameExternal.replaceAll(' ', '')
 
-	return { product, appUserModelId }
+	return {
+		productName,
+		// Documentation in https://www.electronforge.io/config/makers/squirrel.windows#spaces-in-the-app-name
+		// is slightly incorrect: https://github.com/electron/forge/issues/3118
+		appUserModelId: `com.squirrel.${productName}.${appNameInternal}`,
+	}
 }
