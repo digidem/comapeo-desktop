@@ -1,8 +1,6 @@
 # Summary:
 #
 # Reusable workflow for creating the distributable application assets.
-# Will also publish the artifacts if the `app_type` input is `production`.
-#
 name: Create builds
 
 on:
@@ -98,21 +96,8 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: ${{ matrix.os.name }}-${{ env.BUILD_SHA }}
+          name: builds-${{ matrix.os.name }}-${{ env.BUILD_SHA }}
           compression-level: 0
           overwrite: true
-          path: |
-            out/make/**/RELEASES
-            out/make/**/*.AppImage
-            out/make/**/*.deb
-            out/make/**/*.dmg
-            out/make/**/*.exe
-            out/make/**/*.nupkg
-            out/make/**/*.rpm
-            out/make/**/*.zip
-
-      - name: Publish application
-        if: ${{ inputs.APP_TYPE == 'production' }}
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: node --run forge:publish
+          if-no-files-found: error
+          path: out/distributables
