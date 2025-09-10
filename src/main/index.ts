@@ -37,6 +37,21 @@ if (appConfig.asar === false) {
 	process.noAsar = true
 }
 
+/**
+ * NOTE: Make sure we associate the program with the app user model id. This
+ * enables Windows to:
+ *
+ * 1. Associate the running program with any shortcut that is pinned to the
+ *    taskbar.
+ * 2. Prevent showing two icons in the taskbar for the same app.
+ *
+ * https://www.electronforge.io/config/makers/squirrel.windows#spaces-in-the-app-name
+ * https://learn.microsoft.com/en-us/windows/win32/shell/appids
+ */
+if (process.platform === 'win32' && appConfig.win32AppUserModelId) {
+	app.setAppUserModelId(appConfig.win32AppUserModelId)
+}
+
 if (appConfig.appType === 'development') {
 	// This is typically handled in the `readPackageJson` hook in the Forge configuration but that only runs when packaging an application.
 	// This is still needed in the case of running the app through the development server.

@@ -24,6 +24,11 @@ export const AppConfigSchema = v.object({
 	]),
 	/** Indicates the app version */
 	appVersion: v.string(),
+	/**
+	 * Windows-only. Indicates the Application User Model ID:
+	 * https://learn.microsoft.com/en-us/windows/win32/shell/appids
+	 */
+	win32AppUserModelId: v.optional(v.string()),
 })
 
 export type AppConfig = v.InferOutput<typeof AppConfigSchema>
