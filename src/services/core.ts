@@ -43,6 +43,7 @@ const DEFAULT_CONFIG_PATH = fileURLToPath(
 const DB_DIR_NAME = 'sqlite-dbs'
 const CORE_STORAGE_DIR_NAME = 'core-storage'
 const CUSTOM_MAPS_DIR_NAME = 'maps'
+const DEFAULT_CUSTOM_MAP_FILE_NAME = 'default.smp'
 
 const ProcessArgsSchema = v.object({
 	onlineStyleUrl: v.optional(v.pipe(v.string(), v.url())),
@@ -170,8 +171,7 @@ function initializeCore({
 		defaultConfigPath: DEFAULT_CONFIG_PATH,
 		defaultOnlineStyleUrl: onlineStyleUrl,
 		defaultIsArchiveDevice: true,
-		// TODO: Specify
-		// customMapPath: undefined
+		customMapPath: path.join(customMapsDirectory, DEFAULT_CUSTOM_MAP_FILE_NAME),
 	})
 
 	// Don't await, methods that use the server will await this internally
