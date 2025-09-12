@@ -96,7 +96,7 @@
 		"@sentry/vite-plugin": "4.3.0",
 		"@tanstack/eslint-plugin-query": "5.86.0",
 		"@tanstack/eslint-plugin-router": "1.131.2",
-		"@tanstack/react-devtools": "0.6.3",
+		"@tanstack/react-devtools": "0.6.7",
 		"@tanstack/react-form": "1.19.3",
 		"@tanstack/react-query": "5.86.0",
 		"@tanstack/react-router": "1.131.41",
