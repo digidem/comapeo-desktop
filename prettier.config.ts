@@ -1,8 +1,5 @@
-// NOTE: This is not a TypeScript file due to lack of support
-// from the VSCode extension as of writing
-// https://github.com/prettier/prettier-vscode/issues/3623
+import type { Config } from 'prettier'
 
-/** @type {import('prettier').Config} */
 export default {
 	tabWidth: 2,
 	useTabs: true,
@@ -35,4 +32,4 @@ export default {
 	jsdocCommentLineStrategy: 'keep',
 	jsdocAddDefaultToDescription: false,
 	jsdocSeparateReturnsFromParam: true,
-}
+} satisfies Config
