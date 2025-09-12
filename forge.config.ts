@@ -13,6 +13,7 @@ import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-nati
 import { PluginBase } from '@electron-forge/plugin-base'
 import { FusesPlugin } from '@electron-forge/plugin-fuses'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
+import { MakerAppImage } from '@reforged/maker-appimage'
 import semver from 'semver'
 import * as v from 'valibot'
 import { build, createServer, type ViteDevServer } from 'vite'
@@ -325,6 +326,17 @@ export default {
 		})),
 		new MakerDMG({ icon: './assets/icon.icns' }),
 		new MakerZIP(undefined, ['darwin']),
+		new MakerAppImage(
+			{
+				options: {
+					bin: properties.executableName,
+					icon: './assets/icon.png',
+					name: properties.appNameInternal,
+					productName: properties.appNameExternal,
+				},
+			},
+			['linux'],
+		),
 		new MakerDeb(
 			{
 				options: { icon: './assets/icon.png', bin: properties.executableName },
