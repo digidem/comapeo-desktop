@@ -339,13 +339,23 @@ export default {
 		),
 		new MakerDeb(
 			{
-				options: { icon: './assets/icon.png', bin: properties.executableName },
+				options: {
+					bin: properties.executableName,
+					icon: './assets/icon.png',
+					name: properties.appNameInternal,
+					productName: properties.appNameExternal,
+				},
 			},
 			['linux'],
 		),
 		new MakerRpm(
 			{
-				options: { icon: './assets/icon.png', bin: properties.executableName },
+				options: {
+					bin: properties.executableName,
+					icon: './assets/icon.png',
+					name: properties.appNameInternal,
+					productName: properties.appNameExternal,
+				},
 			},
 			['linux'],
 		),
