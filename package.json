@@ -128,7 +128,7 @@
 		"husky": "9.1.7",
 		"jsdom": "26.1.0",
 		"lint-staged": "16.1.6",
-		"maplibre-gl": "5.7.0",
+		"maplibre-gl": "5.7.1",
 		"maplibregl-mapbox-request-transformer": "0.0.3",
 		"network-information-types": "0.1.1",
 		"patch-package": "8.0.0",
