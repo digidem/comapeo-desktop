@@ -92,7 +92,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase<CoMapeoDesktopForgePluginConf
 		})
 	}
 
-	getHooks() {
+	override getHooks() {
 		return {
 			generateAssets: [this.#createAppConfigFile],
 			preStart: [this.#initViteDevServer],
@@ -379,7 +379,10 @@ export default {
 			try {
 				mkdirSync(destinationDir)
 			} catch (err) {
-				if (err.code !== 'EEXIST') {
+				if (
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					(err as any).code !== 'EEXIST'
+				) {
 					throw err
 				}
 			}
