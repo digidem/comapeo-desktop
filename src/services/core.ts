@@ -169,6 +169,7 @@ function initializeCore({
 		fastify,
 		defaultConfigPath: DEFAULT_CONFIG_PATH,
 		defaultOnlineStyleUrl: onlineStyleUrl,
+		defaultIsArchiveDevice: true,
 		// TODO: Specify
 		// customMapPath: undefined
 	})
