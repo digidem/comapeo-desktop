@@ -401,6 +401,12 @@
 				d="M6 16h12V8H6v8zm2-6h8v4H8v-4zm-4 5H2v3c0 1.1.9 2 2 2h3v-2H4v-3zm0-9h3V4H4c-1.1 0-2 .9-2 2v3h2V6zm16-2h-3v2h3v3h2V6c0-1.1-.9-2-2-2zm0 14h-3v2h3c1.1 0 2-.9 2-2v-3h-2v3z"
 			></path>
 		</symbol>
+		<symbol viewBox="0 0 24 24" id="material-file-download">
+			<path fill="none" d="M0 0h24v24H0z"></path>
+			<path
+				d="M18 15v3H6v-3H4v3c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-3h-2zm-1-4-1.41-1.41L13 12.17V4h-2v8.17L8.41 9.59 7 11l5 5 5-5z"
+			></path>
+		</symbol>
 		<symbol viewBox="0 0 24 24" id="material-explore">
 			<path fill="none" d="M0 0h24v24H0V0z"></path>
 			<path

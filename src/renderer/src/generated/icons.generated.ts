@@ -36,6 +36,7 @@ export const iconNames = [
 	'material-hiking',
 	'material-fmd-good-filled',
 	'material-fit-screen',
+	'material-file-download',
 	'material-explore',
 	'material-expand-more',
 	'material-expand-less',
