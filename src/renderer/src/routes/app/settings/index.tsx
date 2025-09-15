@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react'
-import { useOwnDeviceInfo } from '@comapeo/core-react'
+import { Suspense, type ReactNode } from 'react'
+import { useMapStyleUrl, useOwnDeviceInfo } from '@comapeo/core-react'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -7,6 +7,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors'
+import { ErrorBoundary } from '../../../components/error-boundary'
 import { Icon } from '../../../components/icon'
 import { ButtonLink, IconButtonLink } from '../../../components/link'
 import { useIconSizeBasedOnTypography } from '../../../hooks/icon'
@@ -16,6 +17,7 @@ import {
 	getCoordinateFormatQueryOptions,
 	getLocaleStateQueryOptions,
 } from '../../../lib/queries/app-settings'
+import { getCustomMapInfoQueryOptions } from '../../../lib/queries/maps'
 
 export const Route = createFileRoute('/app/settings/')({
 	loader: async ({ context }) => {
@@ -58,6 +60,8 @@ function RouteComponent() {
 			return match.nativeName
 		},
 	})
+
+	const { data: styleUrl } = useMapStyleUrl()
 
 	const rowIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
@@ -161,8 +165,11 @@ function RouteComponent() {
 						/>
 					</IconButtonLink>
 				}
-				// TODO: Get background map name from settings
-				label={t(m.defaultBackground)}
+				label={
+					<Suspense>
+						<BackgroundMapLabel styleUrl={styleUrl} />
+					</Suspense>
+				}
 			/>
 
 			{__APP_TYPE__ !== 'production' &&
@@ -199,7 +206,7 @@ function SettingRow({
 }: {
 	actionButton: ReactNode
 	icon: ReactNode
-	label: string
+	label: ReactNode
 }) {
 	return (
 		<Stack
@@ -226,6 +233,37 @@ function SettingRow({
 	)
 }
 
+function BackgroundMapLabel({ styleUrl }: { styleUrl: string }) {
+	const { formatMessage: t } = useIntl()
+
+	return (
+		<ErrorBoundary
+			getResetKey={() => styleUrl}
+			fallback={() => <>{t(m.customBackground)}</>}
+		>
+			<BackgroundMapText styleUrl={styleUrl} />
+		</ErrorBoundary>
+	)
+}
+
+function BackgroundMapText({ styleUrl }: { styleUrl: string }) {
+	const { formatMessage: t } = useIntl()
+
+	const customMapInfo = useSuspenseQuery(
+		getCustomMapInfoQueryOptions({ styleUrl }),
+	)
+
+	if (customMapInfo.status === 'error') {
+		return t(m.customBackground)
+	}
+
+	if (!customMapInfo.data) {
+		return t(m.defaultBackground)
+	}
+
+	return customMapInfo.data.name
+}
+
 const m = defineMessages({
 	title: {
 		id: 'routes.app.settings.index.title',
@@ -246,6 +284,12 @@ const m = defineMessages({
 		id: 'routes.app.settings.index.defaultBackground',
 		defaultMessage: 'Default Background',
 		description: 'Name of the background map used if a custom one is not set.',
+	},
+	customBackground: {
+		id: 'routes.app.settings.index.customBackground',
+		defaultMessage: 'Custom Background',
+		description:
+			'Placeholder name of custom background map if name cannot be retrieved.',
 	},
 	ddCoordinates: {
 		id: 'routes.app.settings.index.decimalDegrees',
