@@ -153,6 +153,10 @@
     "description": "Text displayed if a boolean field is answered with \"true\"",
     "message": "TRUE"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.mediaAttachmentsSectionTitle": {
+    "description": "Title for media attachments section.",
+    "message": "Media Attachments"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
     "message": "Observation"

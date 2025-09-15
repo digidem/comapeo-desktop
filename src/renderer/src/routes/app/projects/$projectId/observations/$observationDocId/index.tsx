@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { useManyDocs, useSingleDocByDocId } from '@comapeo/core-react'
 import type { Field, Preset } from '@comapeo/schema'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
@@ -266,37 +267,54 @@ function RouteComponent() {
 					</Stack>
 
 					<Stack direction="column" gap={2} overflow="auto">
-						<Stack
-							direction="row"
-							overflow="auto"
-							paddingBlock={4}
-							paddingInline={6}
-							gap={4}
-						>
-							{observation.attachments.map((attachment) => {
-								const key = `${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`
-								return (
-									<ErrorBoundary
-										key={key}
-										getResetKey={() => key}
-										fallback={() => (
-											<AttachmentError
-												// TODO: Open some error dialog
-												onClick={() => {
-													alert('Not implemented yet')
-												}}
-											/>
-										)}
+						<Stack direction="column" paddingInline={6} gap={4}>
+							<Typography
+								component="h2"
+								variant="body1"
+								textTransform="uppercase"
+							>
+								{t(m.mediaAttachmentsSectionTitle)}
+							</Typography>
+
+							<Box display="flex" flexWrap="wrap" gap={4} overflow="auto">
+								{observation.attachments.map((attachment) => {
+									const key = `${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`
+									return (
+										<ErrorBoundary
+											key={key}
+											getResetKey={() => key}
+											fallback={() => (
+												<AttachmentError
+													// TODO: Open some error dialog
+													onClick={() => {
+														alert('Not implemented yet')
+													}}
+												/>
+											)}
+										>
+											<Suspense fallback={<AttachmentPending />}>
+												<AttachmentPreview
+													attachment={attachment}
+													projectId={projectId}
+												/>
+											</Suspense>
+										</ErrorBoundary>
+									)
+								})}
+							</Box>
+
+							{observation.attachments.length > 0 ? (
+								<Box display="flex" flexDirection="row" justifyContent="center">
+									<Button
+										fullWidth
+										variant="outlined"
+										sx={{ maxWidth: 400 }}
+										startIcon={<Icon name="material-file-download" />}
 									>
-										<Suspense fallback={<AttachmentPending />}>
-											<AttachmentPreview
-												attachment={attachment}
-												projectId={projectId}
-											/>
-										</Suspense>
-									</ErrorBoundary>
-								)
-							})}
+										Download Attachments
+									</Button>
+								</Box>
+							) : null}
 						</Stack>
 					</Stack>
 
@@ -428,5 +446,10 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound',
 		defaultMessage: 'Could not find observation with ID {docId}',
 		description: 'Text displayed when observation cannot be found.',
+	},
+	mediaAttachmentsSectionTitle: {
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.mediaAttachmentsSectionTitle',
+		defaultMessage: 'Media Attachments',
+		description: 'Title for media attachments section.',
 	},
 })
