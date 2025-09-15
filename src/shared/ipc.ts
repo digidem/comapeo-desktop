@@ -10,4 +10,8 @@ export const FilesSelectParamsSchema = v.union([
 	v.undefined(),
 ])
 
+export const ImportSMPFileParamsSchema = v.object({
+	filePath: v.string(),
+})
+
 export type FilesSelectParams = v.InferInput<typeof FilesSelectParamsSchema>

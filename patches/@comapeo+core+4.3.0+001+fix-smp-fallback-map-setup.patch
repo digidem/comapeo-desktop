@@ -8,8 +8,9 @@ index 6009b6c..855dee9 100644
  
 -  const fallbackMapReader = new ReaderWatch(opts.fallbackMapPath)
 +  // const fallbackMapReader = new ReaderWatch(opts.fallbackMapPath)
- 
-   fastify.addHook('onClose', () => fallbackMapReader.close().catch(noop))
+
+-  fastify.addHook('onClose', () => fallbackMapReader.close().catch(noop)) 
++  // fastify.addHook('onClose', () => fallbackMapReader.close().catch(noop))
  
    fastify.register(createServer, {
      prefix: FALLBACK_MAP_PREFIX,

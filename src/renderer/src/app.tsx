@@ -32,6 +32,10 @@ import { GenericRouteErrorComponent } from './components/generic-route-error-com
 import { GenericRouteNotFoundComponent } from './components/generic-route-not-found-component'
 import { GenericRoutePendingComponent } from './components/generic-route-pending-component'
 import { IntlProvider } from './contexts/intl'
+import {
+	RefreshTokensStoreProvider,
+	createRefreshTokensStore,
+} from './contexts/refresh-tokens-store-context'
 import { routeTree } from './generated/routeTree.gen'
 import { useNetworkConnectionChangeListener } from './hooks/network'
 import {
@@ -116,53 +120,61 @@ const { platform } = window.runtime.getAppInfo()
 
 const MAIN_CONTENT_HEIGHT = `calc(100% - ${TITLE_BAR_HEIGHT})`
 
+const refreshTokensStore = createRefreshTokensStore()
+
 export function App() {
 	return (
 		<StrictMode>
 			<ThemeProvider theme={theme}>
 				<CssBaseline enableColorScheme />
 
-				<QueryClientProvider client={queryClient}>
-					<IntlProvider>
-						<NetworkConnectionChangeListener />
+				<RefreshTokensStoreProvider value={refreshTokensStore}>
+					<QueryClientProvider client={queryClient}>
+						<IntlProvider>
+							<NetworkConnectionChangeListener />
 
-						<Box height="100dvh">
-							<AppTitleBar platform={platform} />
+							<Box height="100dvh">
+								<AppTitleBar platform={platform} />
 
-							<Box height={MAIN_CONTENT_HEIGHT}>
-								<Suspense
-									fallback={
-										<Box
-											display="flex"
-											justifyContent="center"
-											alignItems="center"
-											height="100%"
-										>
-											<CircularProgress />
-										</Box>
-									}
-								>
-									<ClientApiProvider clientApi={clientApi}>
-										<WithInvitesListener>
-											<WithAddedRouteContext>
-												{({ activeProjectId, formatMessage, localeState }) => (
-													<RouterProvider
-														router={router}
-														context={{
-															activeProjectId,
-															formatMessage,
-															localeState,
-														}}
-													/>
-												)}
-											</WithAddedRouteContext>
-										</WithInvitesListener>
-									</ClientApiProvider>
-								</Suspense>
+								<Box height={MAIN_CONTENT_HEIGHT}>
+									<Suspense
+										fallback={
+											<Box
+												display="flex"
+												justifyContent="center"
+												alignItems="center"
+												height="100%"
+											>
+												<CircularProgress />
+											</Box>
+										}
+									>
+										<ClientApiProvider clientApi={clientApi}>
+											<WithInvitesListener>
+												<WithAddedRouteContext>
+													{({
+														activeProjectId,
+														formatMessage,
+														localeState,
+													}) => (
+														<RouterProvider
+															router={router}
+															context={{
+																activeProjectId,
+																formatMessage,
+																localeState,
+															}}
+														/>
+													)}
+												</WithAddedRouteContext>
+											</WithInvitesListener>
+										</ClientApiProvider>
+									</Suspense>
+								</Box>
 							</Box>
-						</Box>
-					</IntlProvider>
-				</QueryClientProvider>
+						</IntlProvider>
+					</QueryClientProvider>
+				</RefreshTokensStoreProvider>
 			</ThemeProvider>
 		</StrictMode>
 	)
