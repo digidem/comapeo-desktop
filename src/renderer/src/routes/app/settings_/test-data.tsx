@@ -41,6 +41,10 @@ import {
 import { GenericRoutePendingComponent } from '../../../components/generic-route-pending-component'
 import { Icon } from '../../../components/icon'
 import { Map } from '../../../components/map'
+import {
+	mapsRefreshTokenSelector,
+	useRefreshTokensState,
+} from '../../../contexts/refresh-tokens-store-context'
 import { useAppForm } from '../../../hooks/forms'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
 import { createGlobalMutationsKey } from '../../../lib/queries/global-mutations'
@@ -259,7 +263,10 @@ function RouteComponent() {
 
 	const data = featureCollection(boundingBox ? [bboxPolygon(boundingBox)] : [])
 
-	const { data: mapStyleUrl } = useMapStyleUrl()
+	const mapsRefreshToken = useRefreshTokensState(mapsRefreshTokenSelector)
+	const { data: mapStyleUrl } = useMapStyleUrl({
+		refreshToken: mapsRefreshToken,
+	})
 
 	const errorDialogProps: ErrorDialogProps =
 		createTestObservations.status === 'error'

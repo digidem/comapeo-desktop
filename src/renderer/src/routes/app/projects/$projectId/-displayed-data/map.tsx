@@ -47,6 +47,10 @@ import {
 import { Icon } from '../../../../../components/icon'
 import { Map } from '../../../../../components/map'
 import { ZoomToDataMapControl } from '../../../../../components/zoom-to-data-map-control'
+import {
+	mapsRefreshTokenSelector,
+	useRefreshTokensState,
+} from '../../../../../contexts/refresh-tokens-store-context'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
 
@@ -147,7 +151,10 @@ export function DisplayedDataMap() {
 		lang,
 	})
 
-	const { data: mapStyleUrl } = useMapStyleUrl()
+	const mapsRefreshToken = useRefreshTokensState(mapsRefreshTokenSelector)
+	const { data: mapStyleUrl } = useMapStyleUrl({
+		refreshToken: mapsRefreshToken,
+	})
 
 	const observationsFeatureCollection = useMemo(() => {
 		return observationsToFeatureCollection(observations, categories)
