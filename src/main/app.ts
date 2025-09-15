@@ -1,5 +1,6 @@
 import { randomBytes } from 'node:crypto'
-import { basename, join } from 'node:path'
+import { copyFile, rm } from 'node:fs/promises'
+import { basename, isAbsolute, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineMessages } from '@formatjs/intl'
 import { captureException } from '@sentry/electron'
@@ -16,7 +17,10 @@ import * as v from 'valibot'
 
 import type { NewClientMessage } from '../services/core.ts'
 import type { AppConfig, SentryEnvironment } from '../shared/app.ts'
-import { FilesSelectParamsSchema } from '../shared/ipc.ts'
+import {
+	FilesSelectParamsSchema,
+	ImportSMPFileParamsSchema,
+} from '../shared/ipc.ts'
 import { Intl } from './intl.ts'
 import { setUpMainIPC } from './ipc.ts'
 import type { PersistedStore } from './persisted-store.ts'
@@ -91,9 +95,11 @@ export async function start({
 
 	const rootKey = loadRootKey({ persistedStore })
 
+	const comapeoUserDataDirectory = join(app.getPath('userData'), 'comapeo')
+
 	const coreProcessArgs = [
 		`--rootKey=${rootKey}`,
-		`--storageDirectory=${join(app.getPath('userData'), 'comapeo')}`,
+		`--storageDirectory=${comapeoUserDataDirectory}`,
 	]
 
 	if (appConfig.onlineStyleUrl) {
@@ -151,6 +157,7 @@ export async function start({
 			const mainWindow = initMainWindow({
 				appVersion: appConfig.appVersion,
 				coreService,
+				comapeoUserDataDirectory,
 				isDevelopment: appConfig.appType === 'development',
 				sentryConfig: {
 					enabled: diagnosticsEnabled,
@@ -168,6 +175,7 @@ export async function start({
 	const mainWindow = initMainWindow({
 		appVersion: appConfig.appVersion,
 		coreService,
+		comapeoUserDataDirectory,
 		isDevelopment: appConfig.appType === 'development',
 		sentryConfig: {
 			enabled: diagnosticsEnabled,
@@ -186,11 +194,13 @@ export async function start({
 function initMainWindow({
 	appVersion,
 	coreService,
+	comapeoUserDataDirectory,
 	isDevelopment,
 	sentryConfig,
 }: {
 	appVersion: string
 	coreService: UtilityProcess
+	comapeoUserDataDirectory: string
 	isDevelopment: boolean
 	sentryConfig: {
 		enabled: boolean
@@ -280,6 +290,26 @@ function initMainWindow({
 		if (!selectedFilePath) return undefined
 
 		return { name: basename(selectedFilePath), path: selectedFilePath }
+	})
+
+	// NOTE: Must match what's set up in core service (see `CUSTOM_MAPS_DIR_NAME` variable)
+	const customMapsDirectory = join(comapeoUserDataDirectory, 'maps')
+
+	mainWindow.webContents.ipc.handle(
+		'files:import_smp_file',
+		async (_event, params) => {
+			v.assert(ImportSMPFileParamsSchema, params)
+
+			if (!isAbsolute(params.filePath)) {
+				throw new Error('file path must be an absolute path')
+			}
+
+			await copyFile(params.filePath, join(customMapsDirectory, 'default.smp'))
+		},
+	)
+
+	mainWindow.webContents.ipc.handle('files:remove_smp_file', async () => {
+		await rm(join(customMapsDirectory, 'default.smp'), { force: true })
 	})
 
 	APP_STATE.browserWindows.set(mainWindow, { type: 'main' })

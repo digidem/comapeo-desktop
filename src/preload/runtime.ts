@@ -9,6 +9,8 @@ export type RuntimeApi = {
 	selectFile: (
 		extensionFilters?: Array<string>,
 	) => Promise<SelectedFile | undefined>
+	importSMPFile: (filePath: string) => Promise<void>
+	removeSMPFile: () => Promise<void>
 
 	// System
 	getAppInfo: () => {

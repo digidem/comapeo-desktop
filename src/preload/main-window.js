@@ -27,6 +27,12 @@ const runtimeApi = {
 
 		return result
 	},
+	async importSMPFile(filePath) {
+		return ipcRenderer.invoke('files:import_smp_file', { filePath })
+	},
+	async removeSMPFile() {
+		return ipcRenderer.invoke('files:remove_smp_file')
+	},
 
 	// System
 	getAppInfo: () => {
