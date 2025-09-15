@@ -1,0 +1,18 @@
+diff --git a/node_modules/@comapeo/core/src/fastify-plugins/maps.js b/node_modules/@comapeo/core/src/fastify-plugins/maps.js
+index 855dee9..338a216 100644
+--- a/node_modules/@comapeo/core/src/fastify-plugins/maps.js
++++ b/node_modules/@comapeo/core/src/fastify-plugins/maps.js
+@@ -30,7 +30,12 @@ export async function plugin(fastify, opts) {
+ 
+     fastify.addHook('onClose', () => customMapReader.close().catch(noop))
+ 
+-    fastify.get(`/${CUSTOM_MAP_PREFIX}/info`, async () => {
++    fastify.get(`/${CUSTOM_MAP_PREFIX}/info`, async (_request, reply) => {
++      // NOTE: Fixes CORS issues while working in development
++      if (process.env.NODE_ENV === 'development') {
++        reply.headers({ 'access-control-allow-origin': '*' })
++      }
++
+       const baseUrl = new URL(fastify.prefix, fastify.listeningOrigin)
+ 
+       if (!baseUrl.href.endsWith('/')) {

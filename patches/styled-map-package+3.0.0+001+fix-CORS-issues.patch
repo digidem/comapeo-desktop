@@ -1,0 +1,39 @@
+diff --git a/node_modules/styled-map-package/dist/server.js b/node_modules/styled-map-package/dist/server.js
+index 377124f..e8e5dc0 100644
+--- a/node_modules/styled-map-package/dist/server.js
++++ b/node_modules/styled-map-package/dist/server.js
+@@ -7,6 +7,10 @@ function sendResource(reply, resource) {
+   if (resource.contentEncoding) {
+     reply.header("content-encoding", resource.contentEncoding);
+   }
++  // NOTE: Fixes CORS issues while working in development
++  if (process.env.NODE_ENV === 'development') {
++    reply.header('access-control-allow-origin', '*')
++  }
+   return reply.send(resource.stream);
+ }
+ function createServer(fastify, opts, done) {
+@@ -14,7 +18,11 @@ function createServer(fastify, opts, done) {
+   if (!("reader" in opts)) {
+     fastify.addHook("onClose", () => reader.close().catch(noop));
+   }
+-  fastify.get("/style.json", async () => {
++  fastify.get("/style.json", async (_request, reply) => {
++    // NOTE: Fixes CORS issues while working in development
++    if (process.env.NODE_ENV === 'development') {
++      reply.header('access-control-allow-origin', '*')
++    }
+     try {
+       const baseUrl = new URL(fastify.prefix, fastify.listeningOrigin);
+       const style = await reader.getStyle(baseUrl.href);
+@@ -27,6 +35,10 @@ function createServer(fastify, opts, done) {
+     }
+   });
+   fastify.get("*", async (request, reply) => {
++    // NOTE: Fixes CORS issues while working in development
++    if (process.env.NODE_ENV === 'development') {
++      reply.header('access-control-allow-origin', '*')
++    }
+     const path = request.params["*"];
+     try {
+       const resource = await reader.getResource(path);
