@@ -15,7 +15,7 @@ import { BLUE_GREY, DARK_GREY, DARK_ORANGE } from '../../../../../colors'
 import { ErrorDialog } from '../../../../../components/error-dialog'
 import { Icon } from '../../../../../components/icon'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
-import { selectCategoriesFileMutationOptions } from '../../../../../lib/queries/file-system'
+import { selectFileMutationOptions } from '../../../../../lib/queries/file-system'
 import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations'
 
 export const Route = createFileRoute(
@@ -56,16 +56,16 @@ function RouteComponent() {
 
 	const { data: projectSettings } = useProjectSettings({ projectId })
 
-	const selectCategoriesFile = useMutation(
-		selectCategoriesFileMutationOptions(),
-	)
+	const selectFile = useMutation(selectFileMutationOptions())
 
 	const importCategoriesFile = useImportProjectConfig({ projectId })
 
 	const selectAndImportMutation = useMutation({
 		mutationKey: SELECT_AND_IMPORT_CATEGORY_MUTATION_KEY,
 		mutationFn: async () => {
-			const fileInfo = await selectCategoriesFile.mutateAsync(undefined)
+			const fileInfo = await selectFile.mutateAsync({
+				extensionFilters: ['comapeocat'],
+			})
 
 			if (!fileInfo) {
 				return
