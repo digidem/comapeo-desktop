@@ -23,6 +23,14 @@
     "description": "Label for the project name input.",
     "message": "Enter a name for the Project"
   },
+  "routes.app.settings.background-map.close": {
+    "description": "Text displayed for closing dialogs",
+    "message": "Open Settings"
+  },
+  "routes.app.settings.background-map.navTitle": {
+    "description": "Title of the background map settings page.",
+    "message": "Background Maps"
+  },
   "routes.app.settings.language.title": {
     "description": "Title of the language settings page.",
     "message": "Idioma"
