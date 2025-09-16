@@ -248,7 +248,7 @@ function initMainWindow({
 	}
 
 	mainWindow.on('close', (event) => {
-		if (!APP_STATE.tryingToQuitApp) {
+		if (process.platform === 'darwin' && !APP_STATE.tryingToQuitApp) {
 			log(`Hiding main window with id ${mainWindow.id}`)
 			event.preventDefault()
 			mainWindow.hide()
