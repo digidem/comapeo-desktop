@@ -99,6 +99,14 @@
     "description": "Text for button that initiates steps for leaving project.",
     "message": "திட்டத்தை விட்டு வெளியேறவும்"
   },
+  "routes.app.settings.background-map.close": {
+    "description": "Text displayed for closing dialogs",
+    "message": "Open Settings"
+  },
+  "routes.app.settings.background-map.navTitle": {
+    "description": "Title of the background map settings page.",
+    "message": "Map Management"
+  },
   "routes.app.settings.device-name.cancel": {
     "description": "Label for cancel button.",
     "message": "ரத்து செய்க"
