@@ -27,6 +27,14 @@
     "description": "Label for the project name input.",
     "message": "Enter a name for the Project"
   },
+  "routes.app.settings.background-map.close": {
+    "description": "Text displayed for closing dialogs",
+    "message": "Open Settings"
+  },
+  "routes.app.settings.background-map.navTitle": {
+    "description": "Title of the background map settings page.",
+    "message": "Map Management"
+  },
   "routes.app.settings.device-name.cancel": {
     "description": "Label for cancel button.",
     "message": "Noomtee"
