@@ -99,6 +99,18 @@
     "description": "Text for button that initiates steps for leaving project.",
     "message": "Ondoka kwenye Mradi"
   },
+  "routes.app.settings.background-map.close": {
+    "description": "Text displayed for closing dialogs",
+    "message": "Open Settings"
+  },
+  "routes.app.settings.background-map.navTitle": {
+    "description": "Title of the background map settings page.",
+    "message": "Map Management"
+  },
+  "routes.app.settings.background-map.removeMap": {
+    "description": "Text for button to remove map",
+    "message": "Ondoa Ramani"
+  },
   "routes.app.settings.device-name.cancel": {
     "description": "Label for cancel button.",
     "message": "Ghairi"

@@ -569,6 +569,54 @@
   "routes.app.route.exchangeTabLabel": {
     "message": "交換"
   },
+  "routes.app.settings.background-map.acceptedFileTypes": {
+    "description": "Text describing what kind of files are usable for background maps.",
+    "message": "受け入れられるファイルの種類は .smp です"
+  },
+  "routes.app.settings.background-map.chooseFile": {
+    "description": "Text for button to choose file.",
+    "message": "ファイルを選択"
+  },
+  "routes.app.settings.background-map.close": {
+    "description": "Text displayed for closing dialogs",
+    "message": "Open Settings"
+  },
+  "routes.app.settings.background-map.customMapInfoError": {
+    "description": "Text displayed when info about a custom map cannot be retrieved.",
+    "message": "ファイルからカスタムマップ情報を取得できませんでした。削除するか、別のファイルを選択してください。"
+  },
+  "routes.app.settings.background-map.dateAdded": {
+    "description": "Column label text for date added.",
+    "message": "追加日"
+  },
+  "routes.app.settings.background-map.description": {
+    "description": "Description of how custom background maps work.",
+    "message": "カスタムバックグラウンドマップは、このデバイスでのみオフラインで表示できます。"
+  },
+  "routes.app.settings.background-map.mapNameColumnLabel": {
+    "description": "Column label text for map name.",
+    "message": "地図名"
+  },
+  "routes.app.settings.background-map.mapUpdateSuccessDescription": {
+    "description": "Description text for dialog when updating map successfully.",
+    "message": "CoMapeoは現在、最新のバックグラウンドマップを使用しています。"
+  },
+  "routes.app.settings.background-map.mapUpdateSuccessTitle": {
+    "description": "Title text for dialog when updating map successfully.",
+    "message": "更新されました！"
+  },
+  "routes.app.settings.background-map.navTitle": {
+    "description": "Title of the background map settings page.",
+    "message": "Map Management"
+  },
+  "routes.app.settings.background-map.removeMap": {
+    "description": "Text for button to remove map",
+    "message": "地図を削除"
+  },
+  "routes.app.settings.background-map.sizeInMegabytes": {
+    "description": "Text describing what kind of files are usable for background maps.",
+    "message": "{value} MB"
+  },
   "routes.app.settings.coordinate-system.ddOptionLabel": {
     "description": "Label for the decimal degrees option.",
     "message": "DD (小数点以下)"
@@ -616,6 +664,10 @@
   "routes.app.settings.index.createTestData": {
     "description": "Label for item that navigates to test data creation page.",
     "message": "テストデータの作成"
+  },
+  "routes.app.settings.index.customBackground": {
+    "description": "Placeholder name of custom background map if name cannot be retrieved.",
+    "message": "カスタム背景"
   },
   "routes.app.settings.index.decimalDegrees": {
     "description": "Label for Decimal Degrees coordinate system.",

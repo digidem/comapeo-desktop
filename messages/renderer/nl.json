@@ -573,6 +573,54 @@
   "routes.app.route.exchangeTabLabel": {
     "message": "Ruil"
   },
+  "routes.app.settings.background-map.acceptedFileTypes": {
+    "description": "Text describing what kind of files are usable for background maps.",
+    "message": "Geaccepteerde bestandstypen zijn .smp"
+  },
+  "routes.app.settings.background-map.chooseFile": {
+    "description": "Text for button to choose file.",
+    "message": "Bestand kiezen"
+  },
+  "routes.app.settings.background-map.close": {
+    "description": "Text displayed for closing dialogs",
+    "message": "Open Settings"
+  },
+  "routes.app.settings.background-map.customMapInfoError": {
+    "description": "Text displayed when info about a custom map cannot be retrieved.",
+    "message": "Kan aangepaste kaartinformatie niet uit bestand ophalen. Verwijder het of kies een ander bestand."
+  },
+  "routes.app.settings.background-map.dateAdded": {
+    "description": "Column label text for date added.",
+    "message": "Datum toegevoegd"
+  },
+  "routes.app.settings.background-map.description": {
+    "description": "Description of how custom background maps work.",
+    "message": "Aangepaste achtergrondkaarten zijn offline zichtbaar en alleen op dit apparaat."
+  },
+  "routes.app.settings.background-map.mapNameColumnLabel": {
+    "description": "Column label text for map name.",
+    "message": "Kaart naam"
+  },
+  "routes.app.settings.background-map.mapUpdateSuccessDescription": {
+    "description": "Description text for dialog when updating map successfully.",
+    "message": "CoMapeo gebruikt nu de nieuwste achtergrondkaart."
+  },
+  "routes.app.settings.background-map.mapUpdateSuccessTitle": {
+    "description": "Title text for dialog when updating map successfully.",
+    "message": "Bijgewerkt!"
+  },
+  "routes.app.settings.background-map.navTitle": {
+    "description": "Title of the background map settings page.",
+    "message": "Map Management"
+  },
+  "routes.app.settings.background-map.removeMap": {
+    "description": "Text for button to remove map",
+    "message": "Kaart verwijderen"
+  },
+  "routes.app.settings.background-map.sizeInMegabytes": {
+    "description": "Text describing what kind of files are usable for background maps.",
+    "message": "{value} MB"
+  },
   "routes.app.settings.coordinate-system.ddOptionLabel": {
     "description": "Label for the decimal degrees option.",
     "message": "DD (decimale graden)"
@@ -620,6 +668,10 @@
   "routes.app.settings.index.createTestData": {
     "description": "Label for item that navigates to test data creation page.",
     "message": "Maak Test Data"
+  },
+  "routes.app.settings.index.customBackground": {
+    "description": "Placeholder name of custom background map if name cannot be retrieved.",
+    "message": "Aangepaste achtergrond"
   },
   "routes.app.settings.index.decimalDegrees": {
     "description": "Label for Decimal Degrees coordinate system.",

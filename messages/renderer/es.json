@@ -589,6 +589,54 @@
   "routes.app.route.exchangeTabLabel": {
     "message": "Intercambiar"
   },
+  "routes.app.settings.background-map.acceptedFileTypes": {
+    "description": "Text describing what kind of files are usable for background maps.",
+    "message": "Los tipos de archivo aceptados son .smp"
+  },
+  "routes.app.settings.background-map.chooseFile": {
+    "description": "Text for button to choose file.",
+    "message": "Elegir archivo"
+  },
+  "routes.app.settings.background-map.close": {
+    "description": "Text displayed for closing dialogs",
+    "message": "Abrir ajustes"
+  },
+  "routes.app.settings.background-map.customMapInfoError": {
+    "description": "Text displayed when info about a custom map cannot be retrieved.",
+    "message": "No se pudo obtener la información del mapa personalizado del archivo. Por favor, elimínala o elige un archivo diferente."
+  },
+  "routes.app.settings.background-map.dateAdded": {
+    "description": "Column label text for date added.",
+    "message": "Fecha agregada"
+  },
+  "routes.app.settings.background-map.description": {
+    "description": "Description of how custom background maps work.",
+    "message": "Los mapas de fondo personalizados son visibles sin conexión y sólo en este dispositivo."
+  },
+  "routes.app.settings.background-map.mapNameColumnLabel": {
+    "description": "Column label text for map name.",
+    "message": "Nombre del mapa"
+  },
+  "routes.app.settings.background-map.mapUpdateSuccessDescription": {
+    "description": "Description text for dialog when updating map successfully.",
+    "message": "CoMapeo ahora está usando el último mapa de fondo."
+  },
+  "routes.app.settings.background-map.mapUpdateSuccessTitle": {
+    "description": "Title text for dialog when updating map successfully.",
+    "message": "¡Actualizado!"
+  },
+  "routes.app.settings.background-map.navTitle": {
+    "description": "Title of the background map settings page.",
+    "message": "Map Management"
+  },
+  "routes.app.settings.background-map.removeMap": {
+    "description": "Text for button to remove map",
+    "message": "Eliminar mapa"
+  },
+  "routes.app.settings.background-map.sizeInMegabytes": {
+    "description": "Text describing what kind of files are usable for background maps.",
+    "message": "{value} MB"
+  },
   "routes.app.settings.coordinate-system.ddOptionLabel": {
     "description": "Label for the decimal degrees option.",
     "message": "DD (Grados decimales)"
@@ -636,6 +684,10 @@
   "routes.app.settings.index.createTestData": {
     "description": "Label for item that navigates to test data creation page.",
     "message": "Crear datos de prueba"
+  },
+  "routes.app.settings.index.customBackground": {
+    "description": "Placeholder name of custom background map if name cannot be retrieved.",
+    "message": "Fondo personalizado"
   },
   "routes.app.settings.index.decimalDegrees": {
     "description": "Label for Decimal Degrees coordinate system.",
