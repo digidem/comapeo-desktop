@@ -19,7 +19,7 @@
     "description": "Context menu item label for cutting text",
     "message": "Cut"
   },
-  "main.app.contextMenuInspect": {
+  "main.app.contextMenuInspectElement": {
     "description": "Context menu item label for inspecting an element",
     "message": "Inspect"
   },

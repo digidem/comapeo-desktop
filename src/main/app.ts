@@ -381,6 +381,11 @@ const messages = defineMessages({
 		defaultMessage: 'Cut',
 		description: 'Context menu item label for cutting text',
 	},
+	contextMenuInspectElement: {
+		id: 'main.app.contextMenuInspectElement',
+		defaultMessage: 'Inspect',
+		description: 'Context menu item label for inspecting an element',
+	},
 	contextMenuLearnSpelling: {
 		id: 'main.app.contextMenuLearnSpelling',
 		defaultMessage: 'Learn Spelling {placeholder}',
@@ -396,11 +401,6 @@ const messages = defineMessages({
 		id: 'main.app.contextMenuPaste',
 		defaultMessage: 'Paste',
 		description: 'Context menu item label for paste',
-	},
-	contextMenuInspect: {
-		id: 'main.app.contextMenuInspect',
-		defaultMessage: 'Inspect',
-		description: 'Context menu item label for inspecting an element',
 	},
 	contextMenuSaveImageAs: {
 		id: 'main.app.contextMenuSaveImageAs',
@@ -438,7 +438,7 @@ function createAppContextMenu({
 			),
 			copyLink: intlManager.formatMessage(messages.contextMenuCopyLink),
 			cut: intlManager.formatMessage(messages.contextMenuCut),
-			inspect: intlManager.formatMessage(messages.contextMenuInspect),
+			inspect: intlManager.formatMessage(messages.contextMenuInspectElement),
 			learnSpelling: intlManager.formatMessage(
 				messages.contextMenuLearnSpelling,
 				{
