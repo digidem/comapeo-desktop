@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { defineMessages } from '@formatjs/intl'
 import { captureException } from '@sentry/electron'
 import debug from 'debug'
+import contextMenu from 'electron-context-menu'
 import {
 	BrowserWindow,
 	app,
@@ -90,6 +91,16 @@ export async function start({
 	app.setAboutPanelOptions({ applicationVersion: appConfig.appVersion })
 
 	setUpMainIPC({ persistedStore, intlManager })
+
+	// TODO: Need to set up i18n for labels
+	contextMenu({
+		showCopyLink: true,
+		showCopyImage: true,
+		showInspectElement: appConfig.appType !== 'production',
+		showSaveImage: true,
+		showSaveImageAs: true,
+		showSearchWithGoogle: false,
+	})
 
 	await app.whenReady()
 
