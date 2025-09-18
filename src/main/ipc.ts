@@ -3,7 +3,7 @@ import { ipcMain } from 'electron/main'
 import si from 'systeminformation'
 import * as v from 'valibot'
 
-import { type Intl } from './intl.ts'
+import type { IntlManager } from './intl-manager.ts'
 import {
 	PersistedStateV1Schema,
 	type PersistedStore,
@@ -11,10 +11,10 @@ import {
 
 export function setUpMainIPC({
 	persistedStore,
-	intl,
+	intlManager,
 }: {
 	persistedStore: PersistedStore
-	intl: Intl
+	intlManager: IntlManager
 }) {
 	// Shell
 	ipcMain.handle('shell:open-external-url', (_event, url) => {
@@ -41,7 +41,7 @@ export function setUpMainIPC({
 	})
 
 	ipcMain.handle('settings:get:locale', () => {
-		return intl.localeState
+		return intlManager.localeState
 	})
 
 	// Settings (set)
