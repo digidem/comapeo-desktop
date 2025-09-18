@@ -79,7 +79,11 @@ function RouteComponent() {
 
 	const invite = useMutation({
 		mutationKey: SEND_INVITE_GLOBAL_MUTATIONS_KEY,
-		mutationFn: sendInvite.mutateAsync,
+		mutationFn: async (
+			variables: Parameters<(typeof sendInvite)['mutateAsync']>[0],
+		) => {
+			return sendInvite.mutateAsync(variables)
+		},
 	})
 
 	const cancelInvite = useRequestCancelInvite({ projectId })
