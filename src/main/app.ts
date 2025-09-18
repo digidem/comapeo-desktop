@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { defineMessages } from '@formatjs/intl'
 import { captureException } from '@sentry/electron'
 import debug from 'debug'
+import contextMenu from 'electron-context-menu'
 import {
 	BrowserWindow,
 	app,
@@ -16,7 +17,7 @@ import {
 import * as v from 'valibot'
 
 import type { NewClientMessage } from '../services/core.ts'
-import type { AppConfig, SentryEnvironment } from '../shared/app.ts'
+import type { AppConfig, AppType, SentryEnvironment } from '../shared/app.ts'
 import {
 	FilesSelectParamsSchema,
 	ImportSMPFileParamsSchema,
@@ -32,13 +33,6 @@ type AppState = {
 	tryingToQuitApp: boolean
 	browserWindows: WeakMap<BrowserWindow, { type: 'main' | 'secondary' }>
 }
-
-const _menuMessages = defineMessages({
-	importConfig: {
-		id: 'main.app.importConfig',
-		defaultMessage: 'Import Config',
-	},
-})
 
 const CORE_SERVICE_PATH = fileURLToPath(
 	import.meta.resolve('../services/core.ts'),
@@ -90,6 +84,20 @@ export async function start({
 	app.setAboutPanelOptions({ applicationVersion: appConfig.appVersion })
 
 	setUpMainIPC({ persistedStore, intlManager })
+
+	let disposeAppContextMenu = createAppContextMenu({
+		appType: appConfig.appType,
+		intlManager,
+	})
+
+	intlManager.on('locale-state', () => {
+		disposeAppContextMenu()
+
+		disposeAppContextMenu = createAppContextMenu({
+			appType: appConfig.appType,
+			intlManager,
+		})
+	})
 
 	await app.whenReady()
 
@@ -345,4 +353,111 @@ function loadRootKey({ persistedStore }: { persistedStore: PersistedStore }) {
 		: storedRootKey
 
 	return rootKey
+}
+
+const messages = defineMessages({
+	contextMenuCopy: {
+		id: 'main.app.contextMenuCopy',
+		defaultMessage: 'Copy',
+		description: 'Context menu item label for copying text',
+	},
+	contextMenuCopyImage: {
+		id: 'main.app.contextMenuCopyImage',
+		defaultMessage: 'Copy Image',
+		description: 'Context menu item label for copying an image',
+	},
+	contextMenuCopyImageAddress: {
+		id: 'main.app.contextMenuCopyImageAddress',
+		defaultMessage: 'Copy Image Address',
+		description: 'Context menu item label for copying the URL of an image',
+	},
+	contextMenuCopyLink: {
+		id: 'main.app.contextMenuCopyLink',
+		defaultMessage: 'Copy Link',
+		description: 'Context menu item label for copying a link',
+	},
+	contextMenuCut: {
+		id: 'main.app.contextMenuCut',
+		defaultMessage: 'Cut',
+		description: 'Context menu item label for cutting text',
+	},
+	contextMenuInspectElement: {
+		id: 'main.app.contextMenuInspectElement',
+		defaultMessage: 'Inspect',
+		description: 'Context menu item label for inspecting an element',
+	},
+	contextMenuLearnSpelling: {
+		id: 'main.app.contextMenuLearnSpelling',
+		defaultMessage: 'Learn Spelling {placeholder}',
+		description:
+			'Context menu item label for learning the spelling of the selected text',
+	},
+	contextMenuLookUpSelection: {
+		id: 'main.app.contextMenuLookUpSelection',
+		defaultMessage: 'Look up {placeholder}',
+		description: 'Context menu item label for looking up selected text',
+	},
+	contextMenuPaste: {
+		id: 'main.app.contextMenuPaste',
+		defaultMessage: 'Paste',
+		description: 'Context menu item label for paste',
+	},
+	contextMenuSaveImageAs: {
+		id: 'main.app.contextMenuSaveImageAs',
+		defaultMessage: 'Save Image As…',
+		description: 'Context menu item label for saving an image as…',
+	},
+	contextMenuSelectAll: {
+		id: 'main.app.contextMenuSelectAll',
+		defaultMessage: 'Select All',
+		description: 'Context menu item label for selecting all',
+	},
+})
+
+function createAppContextMenu({
+	appType,
+	intlManager,
+}: {
+	appType: AppType
+	intlManager: IntlManager
+}) {
+	return contextMenu({
+		showCopyImage: true,
+		showCopyImageAddress: true,
+		showCopyLink: true,
+		showInspectElement: appType !== 'production',
+		showLearnSpelling: true,
+		showSaveImage: false,
+		showSaveImageAs: true,
+		showSearchWithGoogle: false,
+		labels: {
+			copy: intlManager.formatMessage(messages.contextMenuCopy),
+			copyImage: intlManager.formatMessage(messages.contextMenuCopyImage),
+			copyImageAddress: intlManager.formatMessage(
+				messages.contextMenuCopyImageAddress,
+			),
+			copyLink: intlManager.formatMessage(messages.contextMenuCopyLink),
+			cut: intlManager.formatMessage(messages.contextMenuCut),
+			inspect: intlManager.formatMessage(messages.contextMenuInspectElement),
+			learnSpelling: intlManager.formatMessage(
+				messages.contextMenuLearnSpelling,
+				{
+					// NOTE: Kind of awkward but need `{selection}` to be literally inlined for the replacement to work
+					// https://github.com/sindresorhus/electron-context-menu#labels
+					placeholder: '"{selection}"',
+				},
+			),
+			lookUpSelection: intlManager.formatMessage(
+				messages.contextMenuLookUpSelection,
+				{
+					// NOTE: Kind of awkward but need `{selection}` to be literally inlined for the replacement to work
+					// https://github.com/sindresorhus/electron-context-menu#labels
+					placeholder: '"{selection}"',
+				},
+			),
+			paste: intlManager.formatMessage(messages.contextMenuPaste),
+			saveImageAs: intlManager.formatMessage(messages.contextMenuSaveImageAs),
+			selectAll: intlManager.formatMessage(messages.contextMenuSelectAll),
+		},
+	})
 }

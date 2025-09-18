@@ -160,7 +160,9 @@ function ImageButtonLink({
 				<Box
 					component="span"
 					className="MuiImageBackdrop-root"
+					aria-hidden
 					sx={{
+						pointerEvents: 'none',
 						position: 'absolute',
 						left: 0,
 						right: 0,
