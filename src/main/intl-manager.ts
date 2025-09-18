@@ -1,11 +1,11 @@
+import { readFileSync } from 'node:fs'
 import { createIntl, createIntlCache, type IntlShape } from '@formatjs/intl'
+import { captureException } from '@sentry/electron'
 import debug from 'debug'
 import { app } from 'electron/main'
+import { TypedEmitter } from 'tiny-typed-emitter'
 import * as v from 'valibot'
 
-import enTranslations from '../../translations/main/en.json' with { type: 'json' }
-import esTranslations from '../../translations/main/es.json' with { type: 'json' }
-import ptTranslations from '../../translations/main/pt.json' with { type: 'json' }
 import {
 	SupportedLanguageTagSchema,
 	type LocaleSource,
@@ -14,15 +14,18 @@ import {
 } from '../shared/intl.ts'
 import type { PersistedStateV1 } from './persisted-store.ts'
 
-const log = debug('comapeo:main:intl')
+const log = debug('comapeo:main:intl-manager')
 
-const messages: { [key in SupportedLanguageTag]?: Record<string, unknown> } = {
-	en: enTranslations,
-	es: esTranslations,
-	pt: ptTranslations,
+const messagesCache = new Map<SupportedLanguageTag, Record<string, unknown>>(
+	// Load the English messages immediately
+	[['en', loadMessages('en') as Record<string, unknown>]],
+)
+
+type IntlManagerEvents = {
+	'locale-state': (state: LocaleState) => void
 }
 
-export class Intl {
+export class IntlManager extends TypedEmitter<IntlManagerEvents> {
 	static cache = createIntlCache()
 
 	#intl: IntlShape<SupportedLanguageTag>
@@ -34,6 +37,8 @@ export class Intl {
 	}: {
 		initialLocale: PersistedStateV1['locale']
 	}) {
+		super()
+
 		const { value, source } = this.#getResolvedLocale(initialLocale)
 
 		this.#intl = this.#createIntl(value)
@@ -41,10 +46,31 @@ export class Intl {
 	}
 
 	#createIntl(locale: SupportedLanguageTag): IntlShape<SupportedLanguageTag> {
-		const localeMessages = messages[locale]
+		// Always use the English messages for fallback purposes
+		let messages = messagesCache.get('en')!
 
-		if (!localeMessages) {
-			log(`Could not find translated messages for language: ${locale}`)
+		const baseTag = locale.split('-')[0]
+
+		if (v.is(SupportedLanguageTagSchema, baseTag)) {
+			let localeMessages = messagesCache.get(baseTag)
+
+			if (!localeMessages) {
+				log(`Loading and caching messages for '${locale}'`)
+
+				try {
+					localeMessages = loadMessages(baseTag) as Record<string, unknown>
+					messagesCache.set(baseTag, localeMessages)
+				} catch (err) {
+					captureException(err)
+				}
+			}
+
+			messages = {
+				...messages,
+				...localeMessages,
+			}
+		} else {
+			log(`Could not extract base tag from language tag: ${locale}`)
 		}
 
 		return createIntl(
@@ -52,14 +78,9 @@ export class Intl {
 				locale,
 				defaultLocale: 'en',
 				// @ts-expect-error Not worth fixing
-				messages: {
-					// Always load the English translations
-					...messages['en'],
-					// Override with the selected locale's translations
-					...localeMessages,
-				},
+				messages,
 			},
-			Intl.cache,
+			IntlManager.cache,
 		)
 	}
 
@@ -112,6 +133,8 @@ export class Intl {
 
 		this.#intl = this.#createIntl(value)
 		this.#localeSource = source
+
+		this.emit('locale-state', this.localeState)
 	}
 
 	// Exposing mostly for convenience of usage
@@ -144,4 +167,13 @@ function getBestMatchingLanguageFromSystemPreferences() {
 	}
 
 	return null
+}
+
+function loadMessages(baseTag: SupportedLanguageTag) {
+	return JSON.parse(
+		readFileSync(
+			new URL(`../../translations/main/${baseTag}.json`, import.meta.url),
+			{ encoding: 'utf-8' },
+		),
+	) as unknown
 }

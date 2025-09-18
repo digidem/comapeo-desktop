@@ -21,7 +21,7 @@ import {
 	FilesSelectParamsSchema,
 	ImportSMPFileParamsSchema,
 } from '../shared/ipc.ts'
-import { Intl } from './intl.ts'
+import { IntlManager } from './intl-manager.ts'
 import { setUpMainIPC } from './ipc.ts'
 import type { PersistedStore } from './persisted-store.ts'
 import { ServiceErrorMessageSchema } from './service-error.ts'
@@ -77,19 +77,19 @@ export async function start({
 		APP_STATE.tryingToQuitApp = false
 	})
 
-	const intl = new Intl({
+	const intlManager = new IntlManager({
 		initialLocale: persistedStore.getState().locale,
 	})
 
 	persistedStore.subscribe((current, previous) => {
 		if (previous.locale !== current.locale) {
-			intl.updateLocale(current.locale)
+			intlManager.updateLocale(current.locale)
 		}
 	})
 
 	app.setAboutPanelOptions({ applicationVersion: appConfig.appVersion })
 
-	setUpMainIPC({ persistedStore, intl })
+	setUpMainIPC({ persistedStore, intlManager })
 
 	await app.whenReady()
 
