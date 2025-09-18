@@ -85,15 +85,15 @@ export async function start({
 
 	setUpMainIPC({ persistedStore, intlManager })
 
-	let disposeContextMenu = createAppContextMenu({
+	let disposeAppContextMenu = createAppContextMenu({
 		appType: appConfig.appType,
 		intlManager,
 	})
 
 	intlManager.on('locale-state', () => {
-		disposeContextMenu()
+		disposeAppContextMenu()
 
-		disposeContextMenu = createAppContextMenu({
+		disposeAppContextMenu = createAppContextMenu({
 			appType: appConfig.appType,
 			intlManager,
 		})
