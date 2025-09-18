@@ -12,11 +12,7 @@ import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
-import {
-	useMutation,
-	useQueryClient,
-	useSuspenseQuery,
-} from '@tanstack/react-query'
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
@@ -38,10 +34,9 @@ export const Route = createFileRoute('/onboarding/privacy-policy')({
 
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
-	const queryClient = useQueryClient()
 
 	const setDiagnosticsEnabledMutation = useMutation(
-		setDiagnosticsEnabledMutationOptions(queryClient),
+		setDiagnosticsEnabledMutationOptions(),
 	)
 
 	const { data: diagnosticsEnabled } = useSuspenseQuery(

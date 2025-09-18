@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { Navigate, createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
@@ -88,16 +88,14 @@ function RouteComponent() {
 
 	const cancelInvite = useRequestCancelInvite({ projectId })
 
-	const queryClient = useQueryClient()
-
 	useEffect(
 		function cancelInviteOnBrowserRefresh() {
 			function onBrowserUnload() {
 				cancelInvite.mutate(
 					{ deviceId },
 					{
-						onSuccess: () => {
-							queryClient.invalidateQueries({
+						onSuccess: (_data, _variables, _mutateResult, context) => {
+							context.client.invalidateQueries({
 								queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'invites'],
 							})
 						},
@@ -111,7 +109,7 @@ function RouteComponent() {
 				window.removeEventListener('beforeunload', onBrowserUnload)
 			}
 		},
-		[deviceId, cancelInvite, queryClient],
+		[deviceId, cancelInvite],
 	)
 
 	const deferredInviteStatus = useDeferredValue(invite.status)

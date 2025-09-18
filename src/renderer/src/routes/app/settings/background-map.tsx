@@ -8,11 +8,7 @@ import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import {
-	useMutation,
-	useQueryClient,
-	useSuspenseQuery,
-} from '@tanstack/react-query'
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
@@ -114,8 +110,6 @@ const REMOVE_CUSTOM_MAP_MUTATION_KEY = createGlobalMutationsKey([
 function CustomMap() {
 	const { formatMessage: t } = useIntl()
 
-	const queryClient = useQueryClient()
-
 	const { data: styleUrl } = useMapStyleUrl()
 
 	const { update: updateRefreshToken } = useRefreshTokensActions()
@@ -126,12 +120,12 @@ function CustomMap() {
 	})
 
 	const importSMPFile = useMutation({
-		...importSMPFileMutationOptions({ queryClient }),
+		...importSMPFileMutationOptions(),
 		mutationKey: IMPORT_SMP_FILE_MUTATION_KEY,
 	})
 
 	const removeCustomMap = useMutation({
-		...removeSMPFileMutationOptions({ queryClient }),
+		...removeSMPFileMutationOptions(),
 		mutationKey: REMOVE_CUSTOM_MAP_MUTATION_KEY,
 	})
 
