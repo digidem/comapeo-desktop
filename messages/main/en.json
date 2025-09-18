@@ -1,5 +1,46 @@
 {
-  "main.app.importConfig": {
-    "message": "Import Config"
+  "main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "Copy"
+  },
+  "main.app.contextMenuCopyImage": {
+    "description": "Context menu item label for copying an image",
+    "message": "Copy Image"
+  },
+  "main.app.contextMenuCopyImageAddress": {
+    "description": "Context menu item label for copying the URL of an image",
+    "message": "Copy Image Address"
+  },
+  "main.app.contextMenuCopyLink": {
+    "description": "Context menu item label for copying a link",
+    "message": "Copy Link"
+  },
+  "main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "Cut"
+  },
+  "main.app.contextMenuInspect": {
+    "description": "Context menu item label for inspecting an element",
+    "message": "Inspect"
+  },
+  "main.app.contextMenuLearnSpelling": {
+    "description": "Context menu item label for learning the spelling of the selected text",
+    "message": "Learn Spelling {placeholder}"
+  },
+  "main.app.contextMenuLookUpSelection": {
+    "description": "Context menu item label for looking up selected text",
+    "message": "Look up {placeholder}"
+  },
+  "main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "Paste"
+  },
+  "main.app.contextMenuSaveImageAs": {
+    "description": "Context menu item label for saving an image as…",
+    "message": "Save Image As…"
+  },
+  "main.app.contextMenuSelectAll": {
+    "description": "Context menu item label for selecting all",
+    "message": "Select All"
   }
 }
