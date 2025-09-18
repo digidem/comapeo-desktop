@@ -62,7 +62,7 @@
 		"@mapeo/default-config": "5.0.0",
 		"@sentry/electron": "7.0.0",
 		"atomically": "2.0.3",
-		"debug": "4.4.1",
+		"debug": "4.4.3",
 		"electron-context-menu": "4.1.1",
 		"electron-squirrel-startup": "1.0.1",
 		"fastify": "4.29.1",
