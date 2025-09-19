@@ -1,5 +1,14 @@
 {
-  "main.app.importConfig": {
-    "message": "Leta Usanidi"
+  "main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "Nakili"
+  },
+  "main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "Kata"
+  },
+  "main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "Bandika"
   }
 }
