@@ -1,5 +1,46 @@
 {
-  "main.app.importConfig": {
-    "message": "Importar configuração"
+  "main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "Copiar"
+  },
+  "main.app.contextMenuCopyImage": {
+    "description": "Context menu item label for copying an image",
+    "message": "Copiar imagem"
+  },
+  "main.app.contextMenuCopyImageAddress": {
+    "description": "Context menu item label for copying the URL of an image",
+    "message": "Copiar endereço da imagem"
+  },
+  "main.app.contextMenuCopyLink": {
+    "description": "Context menu item label for copying a link",
+    "message": "Copiar link"
+  },
+  "main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "Cortar"
+  },
+  "main.app.contextMenuInspectElement": {
+    "description": "Context menu item label for inspecting an element",
+    "message": "Visualizar"
+  },
+  "main.app.contextMenuLearnSpelling": {
+    "description": "Context menu item label for learning the spelling of the selected text",
+    "message": "Aprenda Ortografia {placeholder}"
+  },
+  "main.app.contextMenuLookUpSelection": {
+    "description": "Context menu item label for looking up selected text",
+    "message": "Olhe para {placeholder}"
+  },
+  "main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "Colar"
+  },
+  "main.app.contextMenuSaveImageAs": {
+    "description": "Context menu item label for saving an image as…",
+    "message": "Salvar imagem como…"
+  },
+  "main.app.contextMenuSelectAll": {
+    "description": "Context menu item label for selecting all",
+    "message": "Selecionar Todos"
   }
 }
