@@ -1,5 +1,42 @@
 {
-  "main.app.importConfig": {
-    "message": "設定をインポート"
+  "main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "コピー"
+  },
+  "main.app.contextMenuCopyImage": {
+    "description": "Context menu item label for copying an image",
+    "message": "画像をコピー"
+  },
+  "main.app.contextMenuCopyImageAddress": {
+    "description": "Context menu item label for copying the URL of an image",
+    "message": "画像アドレスをコピー"
+  },
+  "main.app.contextMenuCopyLink": {
+    "description": "Context menu item label for copying a link",
+    "message": "リンクをコピー"
+  },
+  "main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "切り取り"
+  },
+  "main.app.contextMenuInspectElement": {
+    "description": "Context menu item label for inspecting an element",
+    "message": "調査"
+  },
+  "main.app.contextMenuLearnSpelling": {
+    "description": "Context menu item label for learning the spelling of the selected text",
+    "message": "スペルを学ぶ {placeholder}"
+  },
+  "main.app.contextMenuLookUpSelection": {
+    "description": "Context menu item label for looking up selected text",
+    "message": "{placeholder} を検索"
+  },
+  "main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "貼り付け"
+  },
+  "main.app.contextMenuSelectAll": {
+    "description": "Context menu item label for selecting all",
+    "message": "すべて選択"
   }
 }
