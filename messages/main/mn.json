@@ -1,5 +1,14 @@
 {
-  "main.app.importConfig": {
-    "message": "Импортын тохиргоо"
+  "main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "Хуулах"
+  },
+  "main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "Зөөх"
+  },
+  "main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "Буулгах"
   }
 }
