@@ -1,5 +1,14 @@
 {
-  "main.app.importConfig": {
-    "message": "Nhập cấu hình"
+  "main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "Sao chép"
+  },
+  "main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "Cắt"
+  },
+  "main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "Dán"
   }
 }

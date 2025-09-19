@@ -1,5 +1,14 @@
 {
-  "main.app.importConfig": {
-    "message": "นำเข้าไฟล์โครงสร้าง"
+  "main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "คัดลอก"
+  },
+  "main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "ตัด"
+  },
+  "main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "วาง"
   }
 }

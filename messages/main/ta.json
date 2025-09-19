@@ -1,5 +1,14 @@
 {
-  "main.app.importConfig": {
-    "message": "இறக்குமதி கட்டமைப்பு"
+  "main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "நகலெடு"
+  },
+  "main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "வெட்டு (Cut)"
+  },
+  "main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "ஒட்டுக (Paste)"
   }
 }
