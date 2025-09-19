@@ -1,5 +1,14 @@
 {
-  "main.app.importConfig": {
-    "message": "នាំចូលការកំណត់រចនាសម្ព័ន្ធ"
+  "main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "ចម្លង"
+  },
+  "main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "កាត់"
+  },
+  "main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "ផាស"
   }
 }
