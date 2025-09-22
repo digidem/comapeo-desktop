@@ -7,11 +7,7 @@ import RadioGroup from '@mui/material/RadioGroup'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
-import {
-	useMutation,
-	useQueryClient,
-	useSuspenseQuery,
-} from '@tanstack/react-query'
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import { parse } from 'valibot'
@@ -39,15 +35,11 @@ function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 	const router = useRouter()
 
-	const queryClient = useQueryClient()
-
 	const { data: coordinateFormat } = useSuspenseQuery(
 		getCoordinateFormatQueryOptions(),
 	)
 
-	const setCoordinateFormat = useMutation(
-		setCoordinateFormatMutationOptions(queryClient),
-	)
+	const setCoordinateFormat = useMutation(setCoordinateFormatMutationOptions())
 
 	return (
 		<>

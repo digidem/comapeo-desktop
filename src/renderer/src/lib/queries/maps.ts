@@ -1,8 +1,4 @@
-import {
-	QueryClient,
-	queryOptions,
-	type UseMutationOptions,
-} from '@tanstack/react-query'
+import { queryOptions, type UseMutationOptions } from '@tanstack/react-query'
 import * as v from 'valibot'
 
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../comapeo'
@@ -51,32 +47,32 @@ export function getCustomMapInfoQueryOptions({
 	})
 }
 
-export function importSMPFileMutationOptions({
-	queryClient,
-}: {
-	queryClient: QueryClient
-}): UseMutationOptions<void, Error, { filePath: string }> {
+export function importSMPFileMutationOptions(): UseMutationOptions<
+	void,
+	Error,
+	{ filePath: string }
+> {
 	return {
 		mutationFn: async (opts) => {
 			return window.runtime.importSMPFile(opts.filePath)
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: MAPS_BASE_QUERY_KEY })
+		onSuccess: (_data, _variables, _mutateResult, context) => {
+			context.client.invalidateQueries({ queryKey: MAPS_BASE_QUERY_KEY })
 		},
 	}
 }
 
-export function removeSMPFileMutationOptions({
-	queryClient,
-}: {
-	queryClient: QueryClient
-}): UseMutationOptions<void, Error, undefined> {
+export function removeSMPFileMutationOptions(): UseMutationOptions<
+	void,
+	Error,
+	undefined
+> {
 	return {
 		mutationFn: async () => {
 			return window.runtime.removeSMPFile()
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: MAPS_BASE_QUERY_KEY })
+		onSuccess: (_data, _variables, _mutateResult, context) => {
+			context.client.invalidateQueries({ queryKey: MAPS_BASE_QUERY_KEY })
 		},
 	}
 }

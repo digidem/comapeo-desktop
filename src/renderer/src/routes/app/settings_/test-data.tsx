@@ -21,7 +21,7 @@ import Snackbar from '@mui/material/Snackbar'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useStore } from '@tanstack/react-form'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
 import { bboxPolygon } from '@turf/bbox-polygon'
 import { featureCollection, lengthToDegrees } from '@turf/helpers'
@@ -658,8 +658,6 @@ const CREATE_TEST_TRACK_MUTATION_KEY = createGlobalMutationsKey([
 ])
 
 function useCreateTestObservations({ projectId }: { projectId: string }) {
-	const queryClient = useQueryClient()
-
 	const { data: deviceInfo } = useOwnDeviceInfo()
 
 	const { data: presets } = useManyDocs({ projectId, docType: 'preset' })
@@ -726,8 +724,8 @@ function useCreateTestObservations({ projectId }: { projectId: string }) {
 
 			return Promise.all(promises)
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({
+		onSuccess: (_data, _variables, _mutateResult, context) => {
+			context.client.invalidateQueries({
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',
@@ -740,8 +738,6 @@ function useCreateTestObservations({ projectId }: { projectId: string }) {
 }
 
 function useCreateTestTrack({ projectId }: { projectId: string }) {
-	const queryClient = useQueryClient()
-
 	const { data: deviceInfo } = useOwnDeviceInfo()
 
 	const { data: presets } = useManyDocs({ projectId, docType: 'preset' })
@@ -799,8 +795,8 @@ function useCreateTestTrack({ projectId }: { projectId: string }) {
 				},
 			})
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({
+		onSuccess: (_data, _variables, _mutateResult, context) => {
+			context.client.invalidateQueries({
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'track'],
 			})
 		},
