@@ -123,8 +123,6 @@ export class MetricsScheduler<Data> {
 				return
 			}
 
-			clearInterval(this.#periodicCheckIntervalId)
-
 			this.#periodicCheckIntervalId = setInterval(
 				this.#scheduleUpdate,
 				this.#sendInterval,
