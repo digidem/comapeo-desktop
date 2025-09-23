@@ -130,10 +130,10 @@ export async function start({
 	})
 
 	if (persistedStore.getState().diagnosticsEnabled) {
-		log('Enabling app diagnostics metrics')
+		log('Enabling app diagnostics metrics on init')
 		appDiagnosticsMetrics.setEnabled(true)
 
-		log('Enabling device diagnostics metrics')
+		log('Enabling device diagnostics metrics on init')
 		deviceDiagnosticsMetrics.setEnabled(true)
 	}
 
