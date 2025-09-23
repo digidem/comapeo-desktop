@@ -25,6 +25,7 @@ import {
 import { IntlManager } from './intl-manager.ts'
 import { setUpMainIPC } from './ipc.ts'
 import { createAppDiagnosticsMetricsScheduler } from './metrics/app-diagnostics-metrics.ts'
+import { DeviceDiagnosticsMetrics } from './metrics/device-diagnostics-metrics.ts'
 import type { PersistedStore } from './persisted-store.ts'
 import { ServiceErrorMessageSchema } from './service-error.ts'
 
@@ -120,17 +121,31 @@ export async function start({
 		storageFilePath: join(metricsDirectory, 'app-diagnostics.json'),
 	})
 
+	const deviceDiagnosticsMetrics = new DeviceDiagnosticsMetrics({
+		appConfig,
+		getMetricsDeviceId: () => {
+			return persistedStore.getState().metricsDeviceId
+		},
+		storageFilePath: join(metricsDirectory, 'device-diagnostics.json'),
+	})
+
 	if (persistedStore.getState().diagnosticsEnabled) {
-		log('Enabling app diagnostics metrics')
+		log('Enabling app diagnostics metrics on init')
 		appDiagnosticsMetrics.setEnabled(true)
+
+		log('Enabling device diagnostics metrics on init')
+		deviceDiagnosticsMetrics.setEnabled(true)
 	}
 
 	persistedStore.subscribe((current, previous) => {
 		if (previous.diagnosticsEnabled !== current.diagnosticsEnabled) {
-			log(
-				`${current.diagnosticsEnabled ? 'Enabling' : 'Disabling'} app diagnostics metrics`,
-			)
+			const action = current.diagnosticsEnabled ? 'Enabling' : 'Disabling'
+
+			log(`${action} app diagnostics metrics`)
 			appDiagnosticsMetrics.setEnabled(current.diagnosticsEnabled)
+
+			log(`${action} device diagnostics metrics`)
+			deviceDiagnosticsMetrics.setEnabled(current.diagnosticsEnabled)
 		}
 	})
 
