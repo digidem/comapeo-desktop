@@ -3,7 +3,7 @@ import { createStore, useStore } from 'zustand'
 
 export type RefreshTokensStore = ReturnType<typeof createRefreshTokensStore>
 
-type RefreshTokensState = { maps: string }
+export type RefreshTokensState = { maps: string }
 
 export function createRefreshTokensStore(opts?: {
 	initialValue: RefreshTokensState
@@ -48,8 +48,4 @@ export function useRefreshTokensState<T>(
 export function useRefreshTokensActions() {
 	const store = useRefreshTokensStore()
 	return store.actions
-}
-
-export function mapsRefreshTokenSelector(state: RefreshTokensState) {
-	return state.maps
 }
