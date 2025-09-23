@@ -27,7 +27,7 @@ const AppDiagnosticsDataSchema = v.object({
 type AppDiagnosticsData = v.InferOutput<typeof AppDiagnosticsDataSchema>
 
 // NOTE: 5 minutes
-const APP_DIAGNOSTICS_SEND_INTERVAL = 5 * 1000 * 60
+const DEFAULT_SEND_INTERVAL = 5 * 1000 * 60
 
 export function createAppDiagnosticsMetricsScheduler({
 	appConfig,
@@ -159,7 +159,7 @@ export function createAppDiagnosticsMetricsScheduler({
 				return false
 			}
 		},
-		sendInterval: APP_DIAGNOSTICS_SEND_INTERVAL,
+		sendInterval: DEFAULT_SEND_INTERVAL,
 	})
 }
 
