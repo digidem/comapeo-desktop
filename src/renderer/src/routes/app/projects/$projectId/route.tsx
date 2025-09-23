@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Outlet, createFileRoute, notFound } from '@tanstack/react-router'
@@ -45,7 +46,6 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 	loader: async ({ context, params, preload }) => {
 		const {
 			activeProjectId,
-			clientApi,
 			projectApi,
 			queryClient,
 			localeState: { value: lang },
@@ -53,12 +53,6 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 		const { projectId } = params
 
 		await Promise.all([
-			queryClient.ensureQueryData({
-				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'maps', 'stylejson_url'],
-				queryFn: async () => {
-					return clientApi.getMapStyleJsonUrl()
-				},
-			}),
 			// TODO: Not ideal but requires changes in @comapeo/core-react
 			queryClient.ensureQueryData({
 				queryKey: [
@@ -132,5 +126,27 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 })
 
 function RouteComponent() {
-	return <TwoPanelLayout start={<Outlet />} end={<DisplayedDataMap />} />
+	return (
+		<TwoPanelLayout
+			start={<Outlet />}
+			end={
+				<Suspense
+					fallback={
+						<Box
+							display="flex"
+							flex={1}
+							justifyContent="center"
+							alignItems="center"
+							bgcolor={BLACK}
+							sx={{ opacity: 0.5 }}
+						>
+							<CircularProgress />
+						</Box>
+					}
+				>
+					<DisplayedDataMap />
+				</Suspense>
+			}
+		/>
+	)
 }

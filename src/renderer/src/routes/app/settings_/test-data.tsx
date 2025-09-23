@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { Suspense, useMemo, useState } from 'react'
 import {
 	useCreateDocument,
 	useManyDocs,
@@ -41,15 +41,11 @@ import {
 import { GenericRoutePendingComponent } from '../../../components/generic-route-pending-component'
 import { Icon } from '../../../components/icon'
 import { Map } from '../../../components/map'
-import {
-	mapsRefreshTokenSelector,
-	useRefreshTokensState,
-} from '../../../contexts/refresh-tokens-store-context'
 import { useAppForm } from '../../../hooks/forms'
+import { useMapsRefreshToken } from '../../../hooks/maps'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
 import { createGlobalMutationsKey } from '../../../lib/queries/global-mutations'
 
-// TODO: This technically should live in project settings
 export const Route = createFileRoute('/app/settings_/test-data')({
 	beforeLoad: () => {
 		if (
@@ -79,12 +75,6 @@ export const Route = createFileRoute('/app/settings_/test-data')({
 					return clientApi.getProject(activeProjectId)
 				},
 			}),
-			queryClient.ensureQueryData({
-				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'maps', 'stylejson_url'],
-				queryFn: async () => {
-					return clientApi.getMapStyleJsonUrl()
-				},
-			}),
 		])
 	},
 	pendingComponent: () => {
@@ -97,6 +87,8 @@ export const Route = createFileRoute('/app/settings_/test-data')({
 						flex={1}
 						justifyContent="center"
 						alignItems="center"
+						bgcolor={BLACK}
+						sx={{ opacity: 0.5 }}
 					>
 						<CircularProgress />
 					</Box>
@@ -112,9 +104,6 @@ const MIN_OBSERVATION_COUNT = 1
 const MAX_OBSERVATION_COUNT = 1000
 const DEFAULT_BOUNDED_DISTANCE_KM = 50
 const MIN_BOUNDED_DISTANCE_KM = 0.1
-const MAP_MAX_BOUNDS: [number, number, number, number] = [
-	-179.99999, -89.99999, 179.99999, 89.99999,
-]
 
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
@@ -260,13 +249,6 @@ function RouteComponent() {
 			distance: boundedDistance,
 		})
 	}, [boundedDistance, coordinates])
-
-	const data = featureCollection(boundingBox ? [bboxPolygon(boundingBox)] : [])
-
-	const mapsRefreshToken = useRefreshTokensState(mapsRefreshTokenSelector)
-	const { data: mapStyleUrl } = useMapStyleUrl({
-		refreshToken: mapsRefreshToken,
-	})
 
 	const errorDialogProps: ErrorDialogProps =
 		createTestObservations.status === 'error'
@@ -569,57 +551,31 @@ function RouteComponent() {
 					</Stack>
 				}
 				end={
-					<Map
-						mapStyle={mapStyleUrl}
-						initialViewState={{
-							fitBoundsOptions: {
-								padding: 40,
-								maxZoom: 12,
-							},
-							...(coordinates.latitude === 0 && coordinates.longitude === 0
-								? coordinates
-								: { bounds: boundingBox }),
-						}}
-						maxBounds={MAP_MAX_BOUNDS}
-						onClick={(event) => {
-							form.setFieldValue('latitude', event.lngLat.lat)
-							form.setFieldValue('longitude', event.lngLat.lng)
-						}}
-						touchZoomRotate={false}
-						dragRotate={false}
-						pitchWithRotate={false}
+					<Suspense
+						fallback={
+							<Box
+								display="flex"
+								flex={1}
+								justifyContent="center"
+								alignItems="center"
+								bgcolor={BLACK}
+								sx={{ opacity: 0.5 }}
+							>
+								<CircularProgress />
+							</Box>
+						}
 					>
-						<Source id="selection" type="geojson" data={data}>
-							<Layer type="symbol" id="point" />
-
-							<Layer
-								type="fill"
-								id="radius"
-								paint={{
-									'fill-color': BLACK,
-									'fill-opacity': 0.2,
-									'fill-outline-color': BLACK,
+						<Box display="flex" flex={1}>
+							<DisplayedMap
+								boundingBox={boundingBox}
+								coordinates={coordinates}
+								onChange={({ longitude, latitude }) => {
+									form.setFieldValue('latitude', latitude)
+									form.setFieldValue('longitude', longitude)
 								}}
 							/>
-							<Layer
-								type="line"
-								id="border"
-								paint={{ 'line-width': 1, 'line-color': BLACK }}
-							/>
-						</Source>
-
-						{coordinates ? (
-							<Marker
-								draggable
-								latitude={coordinates.latitude}
-								longitude={coordinates.longitude}
-								onDragEnd={(event) => {
-									form.setFieldValue('latitude', event.lngLat.lat)
-									form.setFieldValue('longitude', event.lngLat.lng)
-								}}
-							/>
-						) : null}
-					</Map>
+						</Box>
+					</Suspense>
 				}
 			/>
 			<Snackbar
@@ -646,6 +602,87 @@ function RouteComponent() {
 
 			<ErrorDialog {...errorDialogProps} />
 		</>
+	)
+}
+
+const MAP_MAX_BOUNDS: [number, number, number, number] = [
+	-179.99999, -89.99999, 179.99999, 89.99999,
+]
+
+function DisplayedMap({
+	boundingBox,
+	coordinates,
+	onChange,
+}: {
+	boundingBox?: [number, number, number, number]
+	coordinates: { latitude: number; longitude: number }
+	onChange: (coordinate: { latitude: number; longitude: number }) => void
+}) {
+	const boundingBoxFeatureCollection = featureCollection(
+		boundingBox ? [bboxPolygon(boundingBox)] : [],
+	)
+
+	const mapsRefreshToken = useMapsRefreshToken()
+	const { data: mapStyleUrl } = useMapStyleUrl({
+		refreshToken: mapsRefreshToken,
+	})
+
+	return (
+		<Map
+			mapStyle={mapStyleUrl}
+			initialViewState={{
+				fitBoundsOptions: {
+					padding: 40,
+					maxZoom: 12,
+				},
+				...(coordinates.latitude === 0 && coordinates.longitude === 0
+					? coordinates
+					: { bounds: boundingBox }),
+			}}
+			maxBounds={MAP_MAX_BOUNDS}
+			onClick={(event) => {
+				onChange({
+					latitude: event.lngLat.lat,
+					longitude: event.lngLat.lng,
+				})
+			}}
+			touchZoomRotate={false}
+			dragRotate={false}
+			pitchWithRotate={false}
+		>
+			<Source id="selection" type="geojson" data={boundingBoxFeatureCollection}>
+				<Layer type="symbol" id="point" />
+
+				<Layer
+					type="fill"
+					id="radius"
+					paint={{
+						'fill-color': BLACK,
+						'fill-opacity': 0.2,
+						'fill-outline-color': BLACK,
+					}}
+				/>
+				<Layer
+					type="line"
+					id="border"
+					paint={{ 'line-width': 1, 'line-color': BLACK }}
+				/>
+			</Source>
+
+			{coordinates ? (
+				<Marker
+					draggable
+					latitude={coordinates.latitude}
+					longitude={coordinates.longitude}
+					onDragEnd={(event) => {
+						onChange({
+							latitude: event.lngLat.lat,
+							longitude: event.lngLat.lng,
+						})
+					}}
+				/>
+			) : null}
+		</Map>
 	)
 }
 
