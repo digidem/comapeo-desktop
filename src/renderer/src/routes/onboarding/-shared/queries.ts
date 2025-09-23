@@ -20,7 +20,11 @@ export function useOnboardingRejectInvite() {
 
 	return useMutation({
 		mutationKey: ONBOARDING_REJECT_INVITE_MUTATION_KEY,
-		mutationFn: rejectInvite.mutateAsync,
+		mutationFn: async (
+			variables: Parameters<(typeof rejectInvite)['mutateAsync']>[0],
+		) => {
+			return rejectInvite.mutateAsync(variables)
+		},
 	})
 }
 
@@ -29,7 +33,11 @@ export function useOnboardingAcceptInvite() {
 
 	return useMutation({
 		mutationKey: ONBOARDING_ACCEPT_INVITE_MUTATION_KEY,
-		mutationFn: acceptInvite.mutateAsync,
+		mutationFn: async (
+			variables: Parameters<(typeof acceptInvite)['mutateAsync']>[0],
+		) => {
+			return acceptInvite.mutateAsync(variables)
+		},
 	})
 }
 

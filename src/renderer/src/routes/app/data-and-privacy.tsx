@@ -34,12 +34,8 @@ export const Route = createFileRoute('/app/data-and-privacy')({
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 
-	const queryClient = Route.useRouteContext({
-		select: ({ queryClient }) => queryClient,
-	})
-
 	const setDiagnosticsEnabledMutation = useMutation(
-		setDiagnosticsEnabledMutationOptions(queryClient),
+		setDiagnosticsEnabledMutationOptions(),
 	)
 
 	const { data: diagnosticsEnabled } = useSuspenseQuery(

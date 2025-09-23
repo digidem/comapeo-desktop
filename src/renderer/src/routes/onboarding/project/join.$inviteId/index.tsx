@@ -8,7 +8,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { captureException } from '@sentry/react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import {
 	createFileRoute,
 	redirect,
@@ -82,10 +82,7 @@ function RouteComponent() {
 	const rejectInvite = useOnboardingRejectInvite()
 	const acceptInvite = useOnboardingAcceptInvite()
 
-	const queryClient = useQueryClient()
-	const setActiveProjectId = useMutation(
-		setActiveProjectIdMutationOptions(queryClient),
-	)
+	const setActiveProjectId = useMutation(setActiveProjectIdMutationOptions())
 
 	useEffect(() => {
 		// Navigate away from the page if the invite gets cancelled from the invitor's side.

@@ -1,8 +1,4 @@
-import {
-	QueryClient,
-	queryOptions,
-	type UseMutationOptions,
-} from '@tanstack/react-query'
+import { queryOptions, type UseMutationOptions } from '@tanstack/react-query'
 
 import type { RuntimeApi } from '../../../../preload/runtime'
 import { BASE_QUERY_KEY as LANGUAGE_BASE_QUERY_KEY } from './intl'
@@ -47,13 +43,13 @@ export function getLocaleStateQueryOptions() {
 	})
 }
 
-export function setActiveProjectIdMutationOptions(queryClient: QueryClient) {
+export function setActiveProjectIdMutationOptions() {
 	return {
 		mutationFn: async (vars) => {
 			return window.runtime.setActiveProjectId(vars)
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({
+		onSuccess: (_data, _variables, _mutateResult, context) => {
+			context.client.invalidateQueries({
 				queryKey: [BASE_QUERY_KEY, 'activeProjectId'],
 			})
 		},
@@ -64,13 +60,13 @@ export function setActiveProjectIdMutationOptions(queryClient: QueryClient) {
 	>
 }
 
-export function setCoordinateFormatMutationOptions(queryClient: QueryClient) {
+export function setCoordinateFormatMutationOptions() {
 	return {
 		mutationFn: async (vars) => {
 			return window.runtime.setCoordinateFormat(vars)
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({
+		onSuccess: (_data, _variables, _mutateResult, context) => {
+			context.client.invalidateQueries({
 				queryKey: [BASE_QUERY_KEY, 'coordinateFormat'],
 			})
 		},
@@ -81,13 +77,13 @@ export function setCoordinateFormatMutationOptions(queryClient: QueryClient) {
 	>
 }
 
-export function setDiagnosticsEnabledMutationOptions(queryClient: QueryClient) {
+export function setDiagnosticsEnabledMutationOptions() {
 	return {
 		mutationFn: async (vars) => {
 			return window.runtime.setDiagnosticsEnabled(vars)
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({
+		onSuccess: (_data, _variables, _mutateResult, context) => {
+			context.client.invalidateQueries({
 				queryKey: [BASE_QUERY_KEY, 'diagnosticsEnabled'],
 			})
 		},
@@ -98,14 +94,14 @@ export function setDiagnosticsEnabledMutationOptions(queryClient: QueryClient) {
 	>
 }
 
-export function setLocaleMutationOptions(queryClient: QueryClient) {
+export function setLocaleMutationOptions() {
 	return {
 		mutationFn: async (vars) => {
 			return window.runtime.setLocale(vars)
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: [BASE_QUERY_KEY, 'locale'] })
-			queryClient.invalidateQueries({ queryKey: [LANGUAGE_BASE_QUERY_KEY] })
+		onSuccess: (_data, _variables, _mutateResult, context) => {
+			context.client.invalidateQueries({ queryKey: [BASE_QUERY_KEY, 'locale'] })
+			context.client.invalidateQueries({ queryKey: [LANGUAGE_BASE_QUERY_KEY] })
 		},
 	} satisfies UseMutationOptions<
 		void,

@@ -4,7 +4,7 @@ import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
@@ -28,11 +28,7 @@ function RouteComponent() {
 
 	const createProject = useOnboardingCreateProject()
 
-	const queryClient = useQueryClient()
-
-	const setActiveProjectId = useMutation(
-		setActiveProjectIdMutationOptions(queryClient),
-	)
+	const setActiveProjectId = useMutation(setActiveProjectIdMutationOptions())
 
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
