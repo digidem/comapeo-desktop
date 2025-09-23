@@ -84,6 +84,8 @@ jobs:
       - name: Create distributables
         env:
           APP_TYPE: ${{ inputs.app_type }}
+          COMAPEO_METRICS_ACCESS_TOKEN: ${{ secrets.COMAPEO_METRICS_ACCESS_TOKEN }}
+          COMAPEO_DIAGNOSTICS_METRICS_URL: ${{ secrets.COMAPEO_DIAGNOSTICS_METRICS_URL }}
           ONLINE_STYLE_URL: ${{ secrets.ONLINE_STYLE_URL }}
           VITE_FEATURE_TEST_DATA_UI: ${{ env.APP_TYPE == 'production' && 'false' || 'true' }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
