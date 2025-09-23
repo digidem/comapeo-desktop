@@ -28,6 +28,7 @@ export const PersistedStateV1Schema = v.object({
 		}),
 		() => generateSentryUser(),
 	),
+	metricsDeviceId: v.optional(v.string(), () => generateMetricsDeviceId()),
 })
 
 export type PersistedStateV1 = v.InferOutput<typeof PersistedStateV1Schema>
@@ -128,4 +129,8 @@ function shouldRotateSentryUser(idMonth: string): boolean {
 	const currentIdMonth = `${now.getUTCFullYear()}-${now.getUTCMonth()}`
 
 	return currentIdMonth !== idMonth
+}
+
+function generateMetricsDeviceId() {
+	return randomBytes(16).toString('hex')
 }

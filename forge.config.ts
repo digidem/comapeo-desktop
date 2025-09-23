@@ -32,6 +32,8 @@ import type {
 const {
 	APP_TYPE,
 	ASAR,
+	COMAPEO_DIAGNOSTICS_METRICS_URL,
+	COMAPEO_METRICS_ACCESS_TOKEN,
 	ONLINE_STYLE_URL,
 	USER_DATA_PATH,
 	VITE_MAPBOX_ACCESS_TOKEN,
@@ -59,6 +61,8 @@ const {
 			),
 			'true',
 		),
+		COMAPEO_METRICS_ACCESS_TOKEN: v.optional(v.string()),
+		COMAPEO_DIAGNOSTICS_METRICS_URL: v.optional(v.pipe(v.string(), v.url())),
 		ONLINE_STYLE_URL: v.optional(v.pipe(v.string(), v.url())),
 		USER_DATA_PATH: v.optional(v.string()),
 		VITE_MAPBOX_ACCESS_TOKEN: v.optional(v.string()),
@@ -139,10 +143,14 @@ class CoMapeoDesktopForgePlugin extends PluginBase<CoMapeoDesktopForgePluginConf
 
 		const appConfig: AppConfig = {
 			appType: APP_TYPE,
+			appVersion: this.config.appVersion,
 			asar: ASAR,
+			metrics: {
+				accessToken: COMAPEO_METRICS_ACCESS_TOKEN,
+				diagnosticsUrl: COMAPEO_DIAGNOSTICS_METRICS_URL,
+			},
 			onlineStyleUrl: onlineStyleUrl?.toString(),
 			userDataPath: USER_DATA_PATH,
-			appVersion: this.config.appVersion,
 			win32AppUserModelId:
 				process.platform === 'win32'
 					? this.config.win32AppUserModelId
