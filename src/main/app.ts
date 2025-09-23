@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto'
-import { copyFile, rm } from 'node:fs/promises'
+import { copyFile, mkdir, rm } from 'node:fs/promises'
 import { basename, isAbsolute, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineMessages } from '@formatjs/intl'
@@ -24,6 +24,7 @@ import {
 } from '../shared/ipc.ts'
 import { IntlManager } from './intl-manager.ts'
 import { setUpMainIPC } from './ipc.ts'
+import { createAppDiagnosticsMetricsScheduler } from './metrics.ts'
 import type { PersistedStore } from './persisted-store.ts'
 import { ServiceErrorMessageSchema } from './service-error.ts'
 
@@ -54,6 +55,8 @@ export async function start({
 	appConfig: AppConfig
 	persistedStore: PersistedStore
 }): Promise<void> {
+	app.setAboutPanelOptions({ applicationVersion: appConfig.appVersion })
+
 	// Quit when all windows are closed, except on macOS. There, it's common
 	// for applications and their menu bar to stay active until the user quits
 	// explicitly with Cmd + Q.
@@ -81,8 +84,6 @@ export async function start({
 		}
 	})
 
-	app.setAboutPanelOptions({ applicationVersion: appConfig.appVersion })
-
 	setUpMainIPC({ persistedStore, intlManager })
 
 	let disposeAppContextMenu = createAppContextMenu({
@@ -99,11 +100,43 @@ export async function start({
 		})
 	})
 
+	const comapeoUserDataDirectory = join(app.getPath('userData'), 'comapeo')
+
+	const metricsDirectory = join(comapeoUserDataDirectory, 'metrics')
+
+	await mkdir(metricsDirectory, { recursive: true })
+
+	const appDiagnosticsMetrics = createAppDiagnosticsMetricsScheduler({
+		appConfig,
+		getLocaleInfo: () => {
+			return {
+				appLocale: intlManager.localeState.value,
+				deviceLocale: app.getPreferredSystemLanguages()[0]!,
+			}
+		},
+		getMetricsDeviceId: () => {
+			return persistedStore.getState().metricsDeviceId
+		},
+		storageFilePath: join(metricsDirectory, 'app-diagnostics.json'),
+	})
+
+	if (persistedStore.getState().diagnosticsEnabled) {
+		log('Enabling app diagnostics metrics')
+		appDiagnosticsMetrics.setEnabled(true)
+	}
+
+	persistedStore.subscribe((current, previous) => {
+		if (previous.diagnosticsEnabled !== current.diagnosticsEnabled) {
+			log(
+				`${current.diagnosticsEnabled ? 'Enabling' : 'Disabling'} app diagnostics metrics`,
+			)
+			appDiagnosticsMetrics.setEnabled(current.diagnosticsEnabled)
+		}
+	})
+
 	await app.whenReady()
 
 	const rootKey = loadRootKey({ persistedStore })
-
-	const comapeoUserDataDirectory = join(app.getPath('userData'), 'comapeo')
 
 	const coreProcessArgs = [
 		`--rootKey=${rootKey}`,
