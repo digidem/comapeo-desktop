@@ -62,6 +62,27 @@ export class MetricsScheduler<Data> {
 		}
 	}
 
+	setEnabled(isEnabled: boolean) {
+		this.#isEnabled = isEnabled
+
+		if (isEnabled) {
+			if (this.#periodicCheckIntervalId) {
+				return
+			}
+
+			this.#periodicCheckIntervalId = setInterval(
+				this.#scheduleUpdate,
+				this.#sendInterval,
+			)
+		} else {
+			clearInterval(this.#periodicCheckIntervalId)
+
+			this.#periodicCheckIntervalId = undefined
+		}
+
+		this.#scheduleUpdate()
+	}
+
 	async #doUpdate() {
 		if (!this.#isEnabled) {
 			await this.#storage.remove()
@@ -113,27 +134,6 @@ export class MetricsScheduler<Data> {
 			queue = updateQueueHighWatermark(queue)
 			await this.#storage.set(queue)
 		}
-	}
-
-	setEnabled(isEnabled: boolean) {
-		this.#isEnabled = isEnabled
-
-		if (isEnabled) {
-			if (this.#periodicCheckIntervalId) {
-				return
-			}
-
-			this.#periodicCheckIntervalId = setInterval(
-				this.#scheduleUpdate,
-				this.#sendInterval,
-			)
-		} else {
-			clearInterval(this.#periodicCheckIntervalId)
-
-			this.#periodicCheckIntervalId = undefined
-		}
-
-		this.#scheduleUpdate()
 	}
 }
 
