@@ -1,5 +1,42 @@
 {
-  "main.app.importConfig": {
-    "message": "Konfiguration importieren"
+  "main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "Kopieren"
+  },
+  "main.app.contextMenuCopyImage": {
+    "description": "Context menu item label for copying an image",
+    "message": "Bild kopieren"
+  },
+  "main.app.contextMenuCopyImageAddress": {
+    "description": "Context menu item label for copying the URL of an image",
+    "message": "Bildadresse kopieren"
+  },
+  "main.app.contextMenuCopyLink": {
+    "description": "Context menu item label for copying a link",
+    "message": "Link kopieren"
+  },
+  "main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "Schneide"
+  },
+  "main.app.contextMenuInspectElement": {
+    "description": "Context menu item label for inspecting an element",
+    "message": "Prüfen"
+  },
+  "main.app.contextMenuLookUpSelection": {
+    "description": "Context menu item label for looking up selected text",
+    "message": "{placeholder} suchen"
+  },
+  "main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "Einfügen"
+  },
+  "main.app.contextMenuSaveImageAs": {
+    "description": "Context menu item label for saving an image as…",
+    "message": "Bild speichern als…"
+  },
+  "main.app.contextMenuSelectAll": {
+    "description": "Context menu item label for selecting all",
+    "message": "Alle auswählen"
   }
 }
