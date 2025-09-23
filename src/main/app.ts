@@ -24,7 +24,7 @@ import {
 } from '../shared/ipc.ts'
 import { IntlManager } from './intl-manager.ts'
 import { setUpMainIPC } from './ipc.ts'
-import { createAppDiagnosticsMetricsScheduler } from './metrics.ts'
+import { createAppDiagnosticsMetricsScheduler } from './metrics/app-diagnostics-metrics.ts'
 import type { PersistedStore } from './persisted-store.ts'
 import { ServiceErrorMessageSchema } from './service-error.ts'
 
