@@ -66,7 +66,7 @@ function RouteComponent() {
 
 	const { projectId, ...blobId } = Route.useParams()
 
-	const errorResetKey = `${blobId.driveId}/${blobId.variant}/${blobId.type}/${blobId.name}`
+	const errorResetKey = `${blobId.driveId}/${blobId.type}/${blobId.variant}/${blobId.name}`
 
 	return (
 		<Stack direction="column" flex={1} overflow="auto">
