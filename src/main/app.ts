@@ -6,6 +6,7 @@ import { defineMessages } from '@formatjs/intl'
 import { captureException } from '@sentry/electron'
 import debug from 'debug'
 import contextMenu from 'electron-context-menu'
+import { CancelError, download } from 'electron-dl'
 import {
 	BrowserWindow,
 	app,
@@ -19,6 +20,7 @@ import * as v from 'valibot'
 import type { NewClientMessage } from '../services/core.ts'
 import type { AppConfig, AppType, SentryEnvironment } from '../shared/app.ts'
 import {
+	DownloadURLParamsSchema,
 	FilesSelectParamsSchema,
 	ImportSMPFileParamsSchema,
 } from '../shared/ipc.ts'
@@ -367,6 +369,24 @@ function initMainWindow({
 	mainWindow.webContents.ipc.handle('files:remove_smp_file', async () => {
 		await rm(join(customMapsDirectory, 'default.smp'), { force: true })
 	})
+
+	mainWindow.webContents.ipc.handle(
+		'shell:download-url',
+		async (_event, params) => {
+			v.assert(DownloadURLParamsSchema, params)
+
+			try {
+				await download(mainWindow, params.url, { saveAs: params.saveAs })
+			} catch (err) {
+				if (err instanceof CancelError) {
+					log(`Cancelled download for ${params.url}`)
+					return
+				}
+
+				throw err
+			}
+		},
+	)
 
 	APP_STATE.browserWindows.set(mainWindow, { type: 'main' })
 

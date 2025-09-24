@@ -92,7 +92,9 @@ export function DisplayedDataMap() {
 			for (const m of matches) {
 				if (
 					m.routeId ===
-					'/app/projects/$projectId/observations/$observationDocId/'
+						'/app/projects/$projectId/observations/$observationDocId/' ||
+					m.routeId ===
+						'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
 				) {
 					return {
 						type: 'observation' as const,
@@ -421,6 +423,8 @@ export function DisplayedDataMap() {
 	const showZoomToDataControl =
 		currentRoute.routeId !==
 			'/app/projects/$projectId/observations/$observationDocId/' &&
+		currentRoute.routeId !==
+			'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name' &&
 		currentRoute.routeId !== '/app/projects/$projectId/tracks/$trackDocId/'
 
 	return (
@@ -508,8 +512,10 @@ export function DisplayedDataMap() {
 				</Source>
 
 				{observationFeatureToShowCategoryIconOn &&
-				currentRoute.routeId ===
-					'/app/projects/$projectId/observations/$observationDocId/' ? (
+				(currentRoute.routeId ===
+					'/app/projects/$projectId/observations/$observationDocId/' ||
+					currentRoute.routeId ===
+						'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name') ? (
 					<Suspense>
 						<Marker
 							style={enableMapInteractions ? undefined : { cursor: 'default' }}

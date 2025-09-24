@@ -109,6 +109,22 @@
     "description": "Text displayed when hovering over map control for zooming to data.",
     "message": "Zoom to data"
   },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.audioNavTitle": {
+    "description": "Title of the audio attachment page.",
+    "message": "Audio Recording"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
+    "description": "Label text for download button",
+    "message": "Download"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.photoNavTitle": {
+    "description": "Title of the photo attachment page.",
+    "message": "Photo Info"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.playerUnavailable": {
+    "description": "Alert text indicating inability to play audio attachment.",
+    "message": "Player unavailable. Download file to preview."
+  },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
     "message": "Invite"
@@ -153,6 +169,10 @@
     "description": "Text displayed if a boolean field is answered with \"true\"",
     "message": "TRUE"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.mediaAttachmentsSectionTitle": {
+    "description": "Title for media attachments section.",
+    "message": "Media Attachments"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
     "message": "Observation"
@@ -172,10 +192,6 @@
   "routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound": {
     "description": "Text displayed when observation cannot be found.",
     "message": "Could not find observation with ID {docId}"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.onlyPreviewsAvailable": {
-    "description": "Text displayed when only preview-quality attachments are available.",
-    "message": "Only previews available"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.unableToGetDurationTime": {
     "description": "Text displayed when the duration of an audio attachment cannot be determined.",

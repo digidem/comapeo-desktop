@@ -1,5 +1,6 @@
-import { use, type ReactNode } from 'react'
+import { use } from 'react'
 import { useAttachmentUrl } from '@comapeo/core-react'
+import type { Attachment } from '@comapeo/core/dist/types'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
@@ -9,16 +10,11 @@ import type { SxProps } from '@mui/material/styles'
 
 import { BLUE_GREY, DARK_GREY } from '../../../../../../colors'
 import { Icon } from '../../../../../../components/icon'
-import {
-	ButtonBaseLink,
-	IconButtonLink,
-	type ButtonBaseLinkComponentProps,
-} from '../../../../../../components/link'
-import { SuspenseImage } from '../../../../../../components/suspense-image'
-import { type Attachment } from '../../../../../../lib/comapeo'
-import { imageSrcResource } from '../../../../../../lib/image'
+import { IconButtonLink } from '../../../../../../components/link'
 import { audioInfoResource } from '../../../../../../lib/resources/audio'
 import { getFormattedDuration } from '../../../../../../lib/time'
+import { ImageButtonLink } from './-components/image-button-link'
+import { PhotoAttachmentImage } from './-components/photo-attachment-image'
 
 const ATTACHMENT_CONTAINER_HEIGHT_PX = 128
 
@@ -33,7 +29,7 @@ const BASE_ATTACHMENT_CONTAINER_STYLE: SxProps = {
 	aspectRatio: 1,
 }
 
-export function AttachmentPreview({
+export function ObservationAttachmentPreview({
 	attachment,
 	projectId,
 }: {
@@ -46,10 +42,14 @@ export function AttachmentPreview({
 				<ImageButtonLink
 					height={128}
 					borderColor={BLUE_GREY}
-					// TODO: Open some kind of lightbox modal?
-					onClick={() => {
-						alert('Not implemented yet')
-					}}
+					to="/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name"
+					params={(prev) => ({
+						...prev,
+						driveId: attachment.driveDiscoveryId,
+						type: 'photo' as const,
+						variant: 'original' as const,
+						name: attachment.name,
+					})}
 				>
 					<PhotoAttachmentImage
 						attachmentDriveId={attachment.driveDiscoveryId}
@@ -63,10 +63,14 @@ export function AttachmentPreview({
 			return (
 				<IconButtonLink
 					sx={BASE_ATTACHMENT_CONTAINER_STYLE}
-					// TODO: Open some kind of lightbox modal
-					onClick={() => {
-						alert('Not implemented yet')
-					}}
+					to="/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name"
+					params={(prev) => ({
+						...prev,
+						driveId: attachment.driveDiscoveryId,
+						type: 'audio' as const,
+						variant: 'original' as const,
+						name: attachment.name,
+					})}
 				>
 					<Stack
 						direction="column"
@@ -110,103 +114,19 @@ export function AttachmentPreview({
 	}
 }
 
-export function AttachmentError({ onClick }: { onClick: () => void }) {
-	return (
-		<IconButton sx={BASE_ATTACHMENT_CONTAINER_STYLE} onClick={onClick}>
-			<Icon name="material-error" color="error" size={30} />
-		</IconButton>
-	)
-}
-
-export function AttachmentPending() {
+export function ObservationAttachmentError() {
 	return (
 		<Box sx={BASE_ATTACHMENT_CONTAINER_STYLE}>
-			<CircularProgress disableShrink size={30} />
+			<Icon name="material-error" color="error" size={30} />
 		</Box>
 	)
 }
 
-// Adapted from https://mui.com/material-ui/react-button/#complex-button
-function ImageButtonLink({
-	borderColor,
-	children,
-	height,
-	...linkProps
-}: Pick<ButtonBaseLinkComponentProps, 'to' | 'params' | 'onClick'> & {
-	children: ReactNode
-	height: number
-	borderColor: string
-}) {
+export function ObservationAttachmentPending() {
 	return (
-		<ButtonBaseLink
-			{...linkProps}
-			focusRipple
-			sx={{
-				'&:hover': {
-					'& .MuiImageBackdrop-root': {
-						opacity: 0.15,
-					},
-				},
-			}}
-		>
-			<Box
-				height={height}
-				position="relative"
-				display="flex"
-				overflow="hidden"
-				borderRadius={2}
-				border={`1px solid ${borderColor}`}
-			>
-				<Box
-					component="span"
-					className="MuiImageBackdrop-root"
-					aria-hidden
-					sx={{
-						pointerEvents: 'none',
-						position: 'absolute',
-						left: 0,
-						right: 0,
-						top: 0,
-						bottom: 0,
-						opacity: 0,
-						backgroundColor: (theme) => theme.palette.common.black,
-						transition: (theme) => theme.transitions.create('opacity'),
-					}}
-				/>
-				{children}
-			</Box>
-		</ButtonBaseLink>
-	)
-}
-
-function PhotoAttachmentImage({
-	attachmentDriveId,
-	attachmentName,
-	projectId,
-}: {
-	attachmentDriveId: string
-	attachmentName: string
-	projectId: string
-}) {
-	const { data: url } = useAttachmentUrl({
-		projectId,
-		blobId: {
-			driveId: attachmentDriveId,
-			name: attachmentName,
-			variant: 'preview',
-			type: 'photo',
-		},
-	})
-
-	const src = use(imageSrcResource(url))
-
-	return (
-		<SuspenseImage
-			src={src}
-			style={{
-				objectFit: 'cover',
-			}}
-		/>
+		<Box sx={BASE_ATTACHMENT_CONTAINER_STYLE}>
+			<CircularProgress disableShrink size={30} />
+		</Box>
 	)
 }
 

@@ -46,6 +46,9 @@ const runtimeApi = {
 	},
 
 	// Shell
+	downloadURL: async (params) => {
+		await ipcRenderer.invoke('shell:download-url', params)
+	},
 	openExternalURL: async (url) => {
 		return ipcRenderer.invoke('shell:open-external-url', url)
 	},

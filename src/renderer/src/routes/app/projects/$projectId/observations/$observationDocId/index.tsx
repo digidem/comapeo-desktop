@@ -30,10 +30,10 @@ import {
 	getLocaleStateQueryOptions,
 } from '../../../../../../lib/queries/app-settings'
 import {
-	AttachmentError,
-	AttachmentPending,
-	AttachmentPreview,
-} from './-attachment-preview'
+	ObservationAttachmentError,
+	ObservationAttachmentPending,
+	ObservationAttachmentPreview,
+} from './-observation-attachment'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/observations/$observationDocId/',
@@ -266,37 +266,35 @@ function RouteComponent() {
 					</Stack>
 
 					<Stack direction="column" gap={2} overflow="auto">
-						<Stack
-							direction="row"
-							overflow="auto"
-							paddingBlock={4}
-							paddingInline={6}
-							gap={4}
-						>
-							{observation.attachments.map((attachment) => {
-								const key = `${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`
-								return (
-									<ErrorBoundary
-										key={key}
-										getResetKey={() => key}
-										fallback={() => (
-											<AttachmentError
-												// TODO: Open some error dialog
-												onClick={() => {
-													alert('Not implemented yet')
-												}}
-											/>
-										)}
-									>
-										<Suspense fallback={<AttachmentPending />}>
-											<AttachmentPreview
-												attachment={attachment}
-												projectId={projectId}
-											/>
-										</Suspense>
-									</ErrorBoundary>
-								)
-							})}
+						<Stack direction="column" paddingInline={6} gap={4}>
+							<Typography
+								component="h2"
+								variant="body1"
+								textTransform="uppercase"
+							>
+								{t(m.mediaAttachmentsSectionTitle)}
+							</Typography>
+
+							<Box display="flex" flexWrap="wrap" gap={4} overflow="auto">
+								{observation.attachments.map((attachment) => {
+									const key = `${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`
+
+									return (
+										<ErrorBoundary
+											key={key}
+											getResetKey={() => key}
+											fallback={() => <ObservationAttachmentError />}
+										>
+											<Suspense fallback={<ObservationAttachmentPending />}>
+												<ObservationAttachmentPreview
+													attachment={attachment}
+													projectId={projectId}
+												/>
+											</Suspense>
+										</ErrorBoundary>
+									)
+								})}
+							</Box>
 						</Stack>
 					</Stack>
 
@@ -387,12 +385,6 @@ const m = defineMessages({
 		defaultMessage: 'Notes',
 		description: 'Title for notes section.',
 	},
-	onlyPreviewsAvailable: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.onlyPreviewsAvailable',
-		defaultMessage: 'Only previews available',
-		description:
-			'Text displayed when only preview-quality attachments are available.',
-	},
 	unableToGetDurationTime: {
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.unableToGetDurationTime',
 		defaultMessage: 'Unable to get duration time.',
@@ -428,5 +420,10 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound',
 		defaultMessage: 'Could not find observation with ID {docId}',
 		description: 'Text displayed when observation cannot be found.',
+	},
+	mediaAttachmentsSectionTitle: {
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.mediaAttachmentsSectionTitle',
+		defaultMessage: 'Media Attachments',
+		description: 'Title for media attachments section.',
 	},
 })

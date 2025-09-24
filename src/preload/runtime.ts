@@ -21,6 +21,7 @@ export type RuntimeApi = {
 	getWifiConnections: () => Promise<Array<Systeminformation.WifiConnectionData>>
 
 	// Shell
+	downloadURL: (params: { url: string; saveAs: boolean }) => Promise<void>
 	openExternalURL: (url: string) => Promise<void>
 
 	// Settings (get)
