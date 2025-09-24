@@ -15,3 +15,8 @@ export const ImportSMPFileParamsSchema = v.object({
 })
 
 export type FilesSelectParams = v.InferInput<typeof FilesSelectParamsSchema>
+
+export const DownloadURLParamsSchema = v.object({
+	url: v.pipe(v.string(), v.url()),
+	saveAs: v.boolean(),
+})

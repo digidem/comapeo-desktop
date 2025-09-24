@@ -24,3 +24,15 @@ export function openExternalURLMutationOptions() {
 		Parameters<RuntimeApi['openExternalURL']>[0]
 	>
 }
+
+export function downloadURLMutationOptions() {
+	return {
+		mutationFn: async (vars) => {
+			return window.runtime.downloadURL(vars)
+		},
+	} satisfies UseMutationOptions<
+		void,
+		Error,
+		Parameters<RuntimeApi['downloadURL']>[0]
+	>
+}
