@@ -192,7 +192,7 @@ function RouteComponent() {
 								<Box>
 									<Icon
 										name="material-play-arrow-filled"
-										size={80}
+										size={160}
 										htmlColor={LIGHT_GREY}
 									/>
 								</Box>
