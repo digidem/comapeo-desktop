@@ -193,7 +193,7 @@ function PhotoAttachmentImage({
 		blobId: {
 			driveId: attachmentDriveId,
 			name: attachmentName,
-			variant: 'preview',
+			variant: 'original',
 			type: 'photo',
 		},
 	})
