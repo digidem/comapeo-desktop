@@ -2,7 +2,6 @@ import { Suspense } from 'react'
 import { useManyDocs, useSingleDocByDocId } from '@comapeo/core-react'
 import type { Field, Preset } from '@comapeo/schema'
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
@@ -31,10 +30,10 @@ import {
 	getLocaleStateQueryOptions,
 } from '../../../../../../lib/queries/app-settings'
 import {
-	AttachmentError,
-	AttachmentPending,
-	AttachmentPreview,
-} from './-attachment-preview'
+	ObservationAttachmentError,
+	ObservationAttachmentPending,
+	ObservationAttachmentPreview,
+} from './-observation-attachment'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/observations/$observationDocId/',
@@ -279,21 +278,15 @@ function RouteComponent() {
 							<Box display="flex" flexWrap="wrap" gap={4} overflow="auto">
 								{observation.attachments.map((attachment) => {
 									const key = `${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`
+
 									return (
 										<ErrorBoundary
 											key={key}
 											getResetKey={() => key}
-											fallback={() => (
-												<AttachmentError
-													// TODO: Open some error dialog
-													onClick={() => {
-														alert('Not implemented yet')
-													}}
-												/>
-											)}
+											fallback={() => <ObservationAttachmentError />}
 										>
-											<Suspense fallback={<AttachmentPending />}>
-												<AttachmentPreview
+											<Suspense fallback={<ObservationAttachmentPending />}>
+												<ObservationAttachmentPreview
 													attachment={attachment}
 													projectId={projectId}
 												/>
@@ -302,19 +295,6 @@ function RouteComponent() {
 									)
 								})}
 							</Box>
-
-							{observation.attachments.length > 0 ? (
-								<Box display="flex" flexDirection="row" justifyContent="center">
-									<Button
-										fullWidth
-										variant="outlined"
-										sx={{ maxWidth: 400 }}
-										startIcon={<Icon name="material-file-download" />}
-									>
-										Download Attachments
-									</Button>
-								</Box>
-							) : null}
 						</Stack>
 					</Stack>
 
@@ -404,12 +384,6 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.notesSectionTitle',
 		defaultMessage: 'Notes',
 		description: 'Title for notes section.',
-	},
-	onlyPreviewsAvailable: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.onlyPreviewsAvailable',
-		defaultMessage: 'Only previews available',
-		description:
-			'Text displayed when only preview-quality attachments are available.',
 	},
 	unableToGetDurationTime: {
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.unableToGetDurationTime',

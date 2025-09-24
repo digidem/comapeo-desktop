@@ -47,6 +47,7 @@ import { Route as AppProjectsProjectIdObservationsObservationDocIdIndexRouteImpo
 import { Route as AppProjectsProjectIdInviteDevicesDeviceIdRouteRouteImport } from './../routes/app/projects/$projectId_/invite/devices/$deviceId/route'
 import { Route as AppProjectsProjectIdInviteDevicesDeviceIdSendRouteImport } from './../routes/app/projects/$projectId_/invite/devices/$deviceId/send'
 import { Route as AppProjectsProjectIdInviteDevicesDeviceIdRoleRouteImport } from './../routes/app/projects/$projectId_/invite/devices/$deviceId/role'
+import { Route as AppProjectsProjectIdObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRouteImport } from './../routes/app/projects/$projectId/observations/$observationDocId/attachments/$driveId.$type.$variant.$name'
 
 const WelcomeRoute = WelcomeRouteImport.update({
   id: '/welcome',
@@ -261,6 +262,14 @@ const AppProjectsProjectIdInviteDevicesDeviceIdRoleRoute =
     path: '/role',
     getParentRoute: () => AppProjectsProjectIdInviteDevicesDeviceIdRouteRoute,
   } as any)
+const AppProjectsProjectIdObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRoute =
+  AppProjectsProjectIdObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRouteImport.update(
+    {
+      id: '/observations/$observationDocId/attachments/$driveId/$type/$variant/$name',
+      path: '/observations/$observationDocId/attachments/$driveId/$type/$variant/$name',
+      getParentRoute: () => AppProjectsProjectIdRouteRoute,
+    } as any,
+  )
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -301,6 +310,7 @@ export interface FileRoutesByFullPath {
   '/app/projects/$projectId/invite/devices': typeof AppProjectsProjectIdInviteDevicesIndexRoute
   '/app/projects/$projectId/invite/devices/$deviceId/role': typeof AppProjectsProjectIdInviteDevicesDeviceIdRoleRoute
   '/app/projects/$projectId/invite/devices/$deviceId/send': typeof AppProjectsProjectIdInviteDevicesDeviceIdSendRoute
+  '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name': typeof AppProjectsProjectIdObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -336,6 +346,7 @@ export interface FileRoutesByTo {
   '/app/projects/$projectId/invite/devices': typeof AppProjectsProjectIdInviteDevicesIndexRoute
   '/app/projects/$projectId/invite/devices/$deviceId/role': typeof AppProjectsProjectIdInviteDevicesDeviceIdRoleRoute
   '/app/projects/$projectId/invite/devices/$deviceId/send': typeof AppProjectsProjectIdInviteDevicesDeviceIdSendRoute
+  '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name': typeof AppProjectsProjectIdObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -377,6 +388,7 @@ export interface FileRoutesById {
   '/app/projects/$projectId_/invite/devices/': typeof AppProjectsProjectIdInviteDevicesIndexRoute
   '/app/projects/$projectId_/invite/devices/$deviceId/role': typeof AppProjectsProjectIdInviteDevicesDeviceIdRoleRoute
   '/app/projects/$projectId_/invite/devices/$deviceId/send': typeof AppProjectsProjectIdInviteDevicesDeviceIdSendRoute
+  '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name': typeof AppProjectsProjectIdObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -419,6 +431,7 @@ export interface FileRouteTypes {
     | '/app/projects/$projectId/invite/devices'
     | '/app/projects/$projectId/invite/devices/$deviceId/role'
     | '/app/projects/$projectId/invite/devices/$deviceId/send'
+    | '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -454,6 +467,7 @@ export interface FileRouteTypes {
     | '/app/projects/$projectId/invite/devices'
     | '/app/projects/$projectId/invite/devices/$deviceId/role'
     | '/app/projects/$projectId/invite/devices/$deviceId/send'
+    | '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
   id:
     | '__root__'
     | '/'
@@ -494,6 +508,7 @@ export interface FileRouteTypes {
     | '/app/projects/$projectId_/invite/devices/'
     | '/app/projects/$projectId_/invite/devices/$deviceId/role'
     | '/app/projects/$projectId_/invite/devices/$deviceId/send'
+    | '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -771,6 +786,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsProjectIdInviteDevicesDeviceIdRoleRouteImport
       parentRoute: typeof AppProjectsProjectIdInviteDevicesDeviceIdRouteRoute
     }
+    '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name': {
+      id: '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
+      path: '/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
+      fullPath: '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
+      preLoaderRoute: typeof AppProjectsProjectIdObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRouteImport
+      parentRoute: typeof AppProjectsProjectIdRouteRoute
+    }
   }
 }
 
@@ -797,6 +819,7 @@ interface AppProjectsProjectIdRouteRouteChildren {
   AppProjectsProjectIdIndexRoute: typeof AppProjectsProjectIdIndexRoute
   AppProjectsProjectIdObservationsObservationDocIdIndexRoute: typeof AppProjectsProjectIdObservationsObservationDocIdIndexRoute
   AppProjectsProjectIdTracksTrackDocIdIndexRoute: typeof AppProjectsProjectIdTracksTrackDocIdIndexRoute
+  AppProjectsProjectIdObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRoute: typeof AppProjectsProjectIdObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRoute
 }
 
 const AppProjectsProjectIdRouteRouteChildren: AppProjectsProjectIdRouteRouteChildren =
@@ -806,6 +829,8 @@ const AppProjectsProjectIdRouteRouteChildren: AppProjectsProjectIdRouteRouteChil
       AppProjectsProjectIdObservationsObservationDocIdIndexRoute,
     AppProjectsProjectIdTracksTrackDocIdIndexRoute:
       AppProjectsProjectIdTracksTrackDocIdIndexRoute,
+    AppProjectsProjectIdObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRoute:
+      AppProjectsProjectIdObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRoute,
   }
 
 const AppProjectsProjectIdRouteRouteWithChildren =

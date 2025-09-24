@@ -25,6 +25,7 @@ export const iconNames = [
 	'material-settings',
 	'material-send-filled',
 	'material-question-mark',
+	'material-play-arrow-filled',
 	'material-place',
 	'material-phone-android',
 	'material-person-add',
