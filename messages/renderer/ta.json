@@ -23,6 +23,10 @@
     "description": "Text displayed when hovering over map control for zooming to data.",
     "message": "தரவைப் பெரிதாக்கவும்"
   },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
+    "description": "Label text for download button",
+    "message": "பதிவிறக்கு"
+  },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
     "message": "அழைக்கவும்"
@@ -87,17 +91,17 @@
     "description": "Label for save button.",
     "message": "சேமிக்கவும்"
   },
-  "routes.app.projects.$projectId_.settings.team.deviceNameColumnTitle": {
-    "description": "Title used for column containing device name of project members.",
-    "message": "சாதனத்தின் பெயர்"
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectButton": {
+    "description": "Button text to initiate leave project flow.",
+    "message": "திட்டத்தை விட்டு வெளியேறவும்"
   },
-  "routes.app.projects.$projectId_.settings.team.inviteDevice": {
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectNavTitle": {
+    "description": "Title of the team collaborator info page when the leave project flow is initiated.",
+    "message": "திட்டத்தை விட்டு வெளியேறவும்"
+  },
+  "routes.app.projects.$projectId_.settings.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "சாதனத்தை அழைக்கவும்"
-  },
-  "routes.app.projects.$projectId_.settings.team.leaveProject": {
-    "description": "Text for button that initiates steps for leaving project.",
-    "message": "திட்டத்தை விட்டு வெளியேறவும்"
   },
   "routes.app.settings.background-map.close": {
     "description": "Text displayed for closing dialogs",
