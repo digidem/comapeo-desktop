@@ -521,35 +521,35 @@
     "description": "Label for save button.",
     "message": "Save"
   },
-  "routes.app.projects.$projectId_.settings.team.coordinatorsSectionDescription": {
+  "routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionDescription": {
     "description": "Description of the coordinators section in the team page.",
     "message": "Coordinators can invite devices, edit and delete data, and manage project details."
   },
-  "routes.app.projects.$projectId_.settings.team.coordinatorsSectionTitle": {
+  "routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionTitle": {
     "description": "Title of the coordinators section in the team page.",
     "message": "Coordinators"
   },
-  "routes.app.projects.$projectId_.settings.team.inviteDevice": {
+  "routes.app.projects.$projectId_.settings.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Invite Device"
   },
-  "routes.app.projects.$projectId_.settings.team.navTitle": {
+  "routes.app.projects.$projectId_.settings.team.index.navTitle": {
     "description": "Title of the project settings team page.",
     "message": "Team"
   },
-  "routes.app.projects.$projectId_.settings.team.noParticipants": {
+  "routes.app.projects.$projectId_.settings.team.index.noParticipants": {
     "description": "Text indicating that no participants are part of the project yet.",
     "message": "No Participants have been added to this project."
   },
-  "routes.app.projects.$projectId_.settings.team.participantsSectionDescription": {
+  "routes.app.projects.$projectId_.settings.team.index.participantsSectionDescription": {
     "description": "Description of the participants section in the team page.",
     "message": "Participants can take and share observations. They cannot manage users or project details."
   },
-  "routes.app.projects.$projectId_.settings.team.participantsSectionTitle": {
+  "routes.app.projects.$projectId_.settings.team.index.participantsSectionTitle": {
     "description": "Title of the participants section in the team page.",
     "message": "Participants"
   },
-  "routes.app.projects.$projectId_.settings.team.thisDevice": {
+  "routes.app.projects.$projectId_.settings.team.index.thisDevice": {
     "description": "Text indicating that the listed device refers to the one currently being used.",
     "message": "This Device"
   },

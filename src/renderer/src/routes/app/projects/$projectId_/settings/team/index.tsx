@@ -11,65 +11,64 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { DeviceIcon } from '../../-shared/device-icon'
-import { BLUE_GREY, DARK_GREY } from '../../../../../colors'
-import { Icon } from '../../../../../components/icon'
-import { ButtonLink, ListItemButtonLink } from '../../../../../components/link'
-import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
+import { DeviceIcon } from '../../../-shared/device-icon'
+import { BLUE_GREY, DARK_GREY } from '../../../../../../colors'
+import { Icon } from '../../../../../../components/icon'
+import {
+	ButtonLink,
+	ListItemButtonLink,
+} from '../../../../../../components/link'
+import { useIconSizeBasedOnTypography } from '../../../../../../hooks/icon'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 	MEMBER_ROLE_ID,
-} from '../../../../../lib/comapeo'
+} from '../../../../../../lib/comapeo'
 
-export const Route = createFileRoute('/app/projects/$projectId_/settings/team')(
-	{
-		loader: async ({ context, params }) => {
-			const { clientApi, projectApi, queryClient } = context
-			const { projectId } = params
+export const Route = createFileRoute(
+	'/app/projects/$projectId_/settings/team/',
+)({
+	loader: async ({ context, params }) => {
+		const { clientApi, projectApi, queryClient } = context
+		const { projectId } = params
 
-			await Promise.all([
-				// TODO: Not ideal but requires changes in @comapeo/core-react
-				queryClient.ensureQueryData({
-					queryKey: [
-						COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-						'client',
-						'device_info',
-					],
-					queryFn: async () => {
-						return clientApi.getDeviceInfo()
-					},
-				}),
-				// TODO: Not ideal but requires changes in @comapeo/core-react
-				queryClient.ensureQueryData({
-					queryKey: [
-						COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-						'projects',
-						projectId,
-						'role',
-					],
-					queryFn: async () => {
-						return projectApi.$getOwnRole()
-					},
-				}),
-				// TODO: Not ideal but requires changes in @comapeo/core-react
-				queryClient.ensureQueryData({
-					queryKey: [
-						COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-						'projects',
-						projectId,
-						'members',
-					],
-					queryFn: async () => {
-						return projectApi.$member.getMany()
-					},
-				}),
-			])
-		},
-		component: RouteComponent,
+		await Promise.all([
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			queryClient.ensureQueryData({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
+				queryFn: async () => {
+					return clientApi.getDeviceInfo()
+				},
+			}),
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'role',
+				],
+				queryFn: async () => {
+					return projectApi.$getOwnRole()
+				},
+			}),
+			// TODO: Not ideal but requires changes in @comapeo/core-react
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'members',
+				],
+				queryFn: async () => {
+					return projectApi.$member.getMany()
+				},
+			}),
+		])
 	},
-)
+	component: RouteComponent,
+})
 
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
@@ -298,46 +297,46 @@ function MemberList({
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId_.settings.team.navTitle',
+		id: 'routes.app.projects.$projectId_.settings.team.index.navTitle',
 		defaultMessage: 'Team',
 		description: 'Title of the project settings team page.',
 	},
 	inviteDevice: {
-		id: 'routes.app.projects.$projectId_.settings.team.inviteDevice',
+		id: 'routes.app.projects.$projectId_.settings.team.index.inviteDevice',
 		defaultMessage: 'Invite Device',
 		description:
 			'Text for button that initiates steps for inviting device to project.',
 	},
 	coordinatorsSectionTitle: {
-		id: 'routes.app.projects.$projectId_.settings.team.coordinatorsSectionTitle',
+		id: 'routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionTitle',
 		defaultMessage: 'Coordinators',
 		description: 'Title of the coordinators section in the team page.',
 	},
 	coordinatorsSectionDescription: {
-		id: 'routes.app.projects.$projectId_.settings.team.coordinatorsSectionDescription',
+		id: 'routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionDescription',
 		defaultMessage:
 			'Coordinators can invite devices, edit and delete data, and manage project details.',
 		description: 'Description of the coordinators section in the team page.',
 	},
 	participantsSectionTitle: {
-		id: 'routes.app.projects.$projectId_.settings.team.participantsSectionTitle',
+		id: 'routes.app.projects.$projectId_.settings.team.index.participantsSectionTitle',
 		defaultMessage: 'Participants',
 		description: 'Title of the participants section in the team page.',
 	},
 	participantsSectionDescription: {
-		id: 'routes.app.projects.$projectId_.settings.team.participantsSectionDescription',
+		id: 'routes.app.projects.$projectId_.settings.team.index.participantsSectionDescription',
 		defaultMessage:
 			'Participants can take and share observations. They cannot manage users or project details.',
 		description: 'Description of the participants section in the team page.',
 	},
 	noParticipants: {
-		id: 'routes.app.projects.$projectId_.settings.team.noParticipants',
+		id: 'routes.app.projects.$projectId_.settings.team.index.noParticipants',
 		defaultMessage: 'No Participants have been added to this project.',
 		description:
 			'Text indicating that no participants are part of the project yet.',
 	},
 	thisDevice: {
-		id: 'routes.app.projects.$projectId_.settings.team.thisDevice',
+		id: 'routes.app.projects.$projectId_.settings.team.index.thisDevice',
 		defaultMessage: 'This Device',
 		description:
 			'Text indicating that the listed device refers to the one currently being used.',
