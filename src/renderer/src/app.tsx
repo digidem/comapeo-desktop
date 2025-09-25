@@ -118,7 +118,8 @@ initSentryElectron(
 
 const { platform } = window.runtime.getAppInfo()
 
-const MAIN_CONTENT_HEIGHT = `calc(100% - ${TITLE_BAR_HEIGHT})`
+const MAIN_CONTENT_HEIGHT =
+	platform === 'darwin' ? `calc(100% - ${TITLE_BAR_HEIGHT})` : '100%'
 
 const refreshTokensStore = createRefreshTokensStore()
 
@@ -134,7 +135,9 @@ export function App() {
 							<NetworkConnectionChangeListener />
 
 							<Box height="100dvh">
-								<AppTitleBar platform={platform} />
+								{platform === 'darwin' ? (
+									<AppTitleBar platform={platform} />
+								) : null}
 
 								<Box height={MAIN_CONTENT_HEIGHT}>
 									<Suspense
