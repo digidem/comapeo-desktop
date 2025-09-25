@@ -445,7 +445,7 @@ function getPropertiesForAppType(appType: AppType): {
 	win32AppUserModelId: string
 	win32ProductName: string
 } {
-	const baseAppBundleId = 'com.comapeo'
+	const baseAppBundleId = 'app.comapeo'
 	const baseExecutableName = 'comapeo-desktop'
 	const baseAppNameExternal = packageJSON.productName
 	const baseAppNameInternal = packageJSON.name
