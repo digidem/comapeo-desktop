@@ -70,18 +70,6 @@ jobs:
           git branch ${{ steps.branches.outputs.release }}
           git checkout -b ${{ steps.branches.outputs.rc }}
 
-      - name: Generate release notes
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: |
-          ./scripts/generate-release-notes.sh
-
-          # Format the release notes
-          npx prettier --write release-notes/**/*.md
-
-          git add release-notes/
-          git commit -m "docs: add release notes for v${{ steps.version.outputs.releaseShort }}"
-
       - name: Set target release version in package.json
         run: |
           npm version ${{ steps.version.outputs.releaseVersion }} --no-git-tag-version
