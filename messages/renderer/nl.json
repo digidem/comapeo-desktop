@@ -109,6 +109,22 @@
     "description": "Text displayed when hovering over map control for zooming to data.",
     "message": "Zoom naar data"
   },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.audioNavTitle": {
+    "description": "Title of the audio attachment page.",
+    "message": "Audio opnemen"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
+    "description": "Label text for download button",
+    "message": "Downloaden"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.photoNavTitle": {
+    "description": "Title of the photo attachment page.",
+    "message": "Foto Info"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.playerUnavailable": {
+    "description": "Alert text indicating inability to play audio attachment.",
+    "message": "Speler niet beschikbaar. Download bestand om een voorbeeld te bekijken."
+  },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
     "message": "Uitnodigen"
@@ -153,6 +169,10 @@
     "description": "Text displayed if a boolean field is answered with \"true\"",
     "message": "WAAR"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.mediaAttachmentsSectionTitle": {
+    "description": "Title for media attachments section.",
+    "message": "Media bijlagen"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
     "message": "Waarneming"
@@ -172,10 +192,6 @@
   "routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound": {
     "description": "Text displayed when observation cannot be found.",
     "message": "Kan waarneming met ID {docId} niet vinden"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.onlyPreviewsAvailable": {
-    "description": "Text displayed when only preview-quality attachments are available.",
-    "message": "Alleen voorbeelden beschikbaar"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.unableToGetDurationTime": {
     "description": "Text displayed when the duration of an audio attachment cannot be determined.",
@@ -489,49 +505,81 @@
     "description": "Label for save button.",
     "message": "Opslaan"
   },
-  "routes.app.projects.$projectId_.settings.team.coordinatorsSectionDescription": {
+  "routes.app.projects.$projectId_.settings.team.$deviceId.addedOn": {
+    "description": "Text indicating date collaborator was added to the project.",
+    "message": "Toegevoegd op {value}"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.collaboratorNavTitle": {
+    "description": "Title of the team collaborator info page.",
+    "message": "Medewerker Info"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.confirmButton": {
+    "description": "Button text to confirm leaving project.",
+    "message": "Bevestigen"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.coordinator": {
+    "description": "Text indicating collaborator is a coordinator.",
+    "message": "Coördinator"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.lastCoordinatorWarning": {
+    "description": "Warning text about leaving the project as the last coordinator.",
+    "message": "U bent de laatste coördinator. Overweeg een ander apparaat tot coördinator te maken voordat u het project verlaat."
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectButton": {
+    "description": "Button text to initiate leave project flow.",
+    "message": "Project verlaten"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectExplainerDescription": {
+    "description": "Description for leave project explanation.",
+    "message": "<b>{name}</b> zal niet langer in staat zijn waarnemingen toe te voegen of uit te wisselen."
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectExplainerTitle": {
+    "description": "Title text for leave project explanation.",
+    "message": "Project verlaten?"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectNavTitle": {
+    "description": "Title of the team collaborator info page when the leave project flow is initiated.",
+    "message": "Project verlaten"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.participant": {
+    "description": "Text indicating collaborator is a participant.",
+    "message": "Deelnemer"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.thisDevice": {
+    "description": "Text indicating that user is viewing itslef.",
+    "message": "Dit apparaat!"
+  },
+  "routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionDescription": {
     "description": "Description of the coordinators section in the team page.",
     "message": "Coördinatoren kunnen apparaten, bewerken en verwijderen van gegevens, en projectdetails beheren."
   },
-  "routes.app.projects.$projectId_.settings.team.coordinatorsSectionTitle": {
+  "routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionTitle": {
     "description": "Title of the coordinators section in the team page.",
     "message": "Coördinatoren"
   },
-  "routes.app.projects.$projectId_.settings.team.dateAddedColumnTitle": {
-    "description": "Title used for column containing date added of project members.",
-    "message": "Datum toegevoegd"
-  },
-  "routes.app.projects.$projectId_.settings.team.deviceNameColumnTitle": {
-    "description": "Title used for column containing device name of project members.",
-    "message": "Apparaat Naam"
-  },
-  "routes.app.projects.$projectId_.settings.team.inviteDevice": {
+  "routes.app.projects.$projectId_.settings.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Apparaat Uitnodigen"
   },
-  "routes.app.projects.$projectId_.settings.team.leaveProject": {
-    "description": "Text for button that initiates steps for leaving project.",
-    "message": "Project verlaten"
-  },
-  "routes.app.projects.$projectId_.settings.team.navTitle": {
+  "routes.app.projects.$projectId_.settings.team.index.navTitle": {
     "description": "Title of the project settings team page.",
     "message": "Team"
   },
-  "routes.app.projects.$projectId_.settings.team.noParticipants": {
+  "routes.app.projects.$projectId_.settings.team.index.noParticipants": {
     "description": "Text indicating that no participants are part of the project yet.",
     "message": "Er zijn geen deelnemers aan dit project toegevoegd."
   },
-  "routes.app.projects.$projectId_.settings.team.participantsSectionDescription": {
+  "routes.app.projects.$projectId_.settings.team.index.participantsSectionDescription": {
     "description": "Description of the participants section in the team page.",
     "message": "Deelnemers kunnen waarnemingen aannemen en delen. Ze kunnen gebruikers of projectdetails niet beheren."
   },
-  "routes.app.projects.$projectId_.settings.team.participantsSectionTitle": {
+  "routes.app.projects.$projectId_.settings.team.index.participantsSectionTitle": {
     "description": "Title of the participants section in the team page.",
     "message": "Deelnemers"
   },
-  "routes.app.projects.$projectId_.settings.team.thisDevice": {
+  "routes.app.projects.$projectId_.settings.team.index.thisDevice": {
     "description": "Text indicating that the listed device refers to the one currently being used.",
-    "message": "Dit apparaat!"
+    "message": "Dit apparaat"
   },
   "routes.app.projects.-shared.device-icon.deviceTypeDesktop": {
     "description": "Text indicating that the member is a desktop device (displays when hovering over the icon).",

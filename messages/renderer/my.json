@@ -47,7 +47,7 @@
     "description": "Label for the project name input.",
     "message": "Enter a name for the Project"
   },
-  "routes.app.projects.$projectId_.settings.team.inviteDevice": {
+  "routes.app.projects.$projectId_.settings.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "ကိရိယာများကို ဖိတ်ခေါ်ပါ"
   },
