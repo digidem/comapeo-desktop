@@ -64,7 +64,7 @@ function RouteComponent() {
 
 	const router = useRouter()
 
-	const { projectId, ...blobId } = Route.useParams()
+	const { projectId, observationDocId, ...blobId } = Route.useParams()
 
 	const errorResetKey = `${blobId.driveId}/${blobId.type}/${blobId.variant}/${blobId.name}`
 
@@ -86,8 +86,8 @@ function RouteComponent() {
 						}
 
 						router.navigate({
-							to: '/app/projects/$projectId',
-							params: { projectId },
+							to: '/app/projects/$projectId/observations/$observationDocId',
+							params: { projectId, observationDocId },
 							replace: true,
 						})
 					}}
