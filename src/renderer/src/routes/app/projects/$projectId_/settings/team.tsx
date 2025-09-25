@@ -12,9 +12,9 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { DeviceIcon } from '../../-shared/device-icon'
-import { BLUE_GREY } from '../../../../../colors'
+import { BLUE_GREY, DARK_GREY } from '../../../../../colors'
 import { Icon } from '../../../../../components/icon'
-import { ButtonLink, TextLink } from '../../../../../components/link'
+import { ButtonLink, ListItemButtonLink } from '../../../../../components/link'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -147,6 +147,7 @@ function RouteComponent() {
 									sx={{ maxWidth: 400 }}
 									to="/app/projects/$projectId/invite"
 									params={{ projectId }}
+									startIcon={<Icon name="material-person-add" />}
 								>
 									{t(m.inviteDevice)}
 								</ButtonLink>
@@ -167,7 +168,7 @@ function RouteComponent() {
 							<Typography>{t(m.coordinatorsSectionDescription)}</Typography>
 						</Stack>
 
-						<DeviceList
+						<MemberList
 							canLeaveProject={canLeaveProject}
 							ownDeviceId={ownDeviceInfo.deviceId}
 							devices={coordinators}
@@ -187,7 +188,7 @@ function RouteComponent() {
 						</Stack>
 
 						{participants.length > 0 ? (
-							<DeviceList
+							<MemberList
 								canLeaveProject={canLeaveProject}
 								devices={participants}
 								ownDeviceId={ownDeviceInfo.deviceId}
@@ -205,11 +206,9 @@ function RouteComponent() {
 	)
 }
 
-function DeviceList({
-	canLeaveProject,
+function MemberList({
 	devices,
 	ownDeviceId,
-	projectId,
 }: {
 	canLeaveProject: boolean
 	devices: Array<
@@ -218,102 +217,79 @@ function DeviceList({
 	ownDeviceId: string
 	projectId: string
 }) {
-	const { formatMessage: t, formatDate } = useIntl()
+	const { formatMessage: t } = useIntl()
 
-	const iconSize = useIconSizeBasedOnTypography({
+	const deviceIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
-		multiplier: 1.5,
+	})
+
+	const actionIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+		multiplier: 1.25,
 	})
 
 	return (
 		<Stack direction="column" gap={4}>
-			<Stack direction="row" gap={2} justifyContent="space-between">
-				<Typography color="textSecondary">
-					{t(m.deviceNameColumnTitle)}
-				</Typography>
-
-				<Typography color="textSecondary">
-					{t(m.dateAddedColumnTitle)}
-				</Typography>
-			</Stack>
-
 			{devices.map((device) => {
 				const isSelf = device.deviceId === ownDeviceId
 
 				return (
-					<Stack
+					<ListItemButtonLink
 						key={device.deviceId}
-						direction="row"
-						gap={4}
-						padding={5}
-						border={`1px solid ${BLUE_GREY}`}
-						borderRadius={2}
+						disableGutters
+						sx={{
+							borderRadius: 2,
+							border: `1px solid ${BLUE_GREY}`,
+							flexGrow: 0,
+						}}
 					>
-						<DeviceIcon deviceType={device.deviceType} size={iconSize} />
-
 						<Stack
-							direction="column"
+							direction="row"
 							flex={1}
 							justifyContent="space-between"
+							alignItems="center"
 							overflow="auto"
+							padding={4}
 						>
-							<Typography
-								fontWeight={500}
-								textOverflow="ellipsis"
-								whiteSpace="nowrap"
-								overflow="hidden"
+							<Stack
+								direction="row"
+								alignItems="center"
+								gap={3}
+								overflow="auto"
 							>
-								{device.name}
-							</Typography>
-							<Typography
-								color="textSecondary"
-								textOverflow="ellipsis"
-								whiteSpace="nowrap"
-								overflow="hidden"
-							>
-								{device.deviceId.slice(0, 12)}
-							</Typography>
+								<DeviceIcon
+									deviceType={device.deviceType}
+									size={deviceIconSize}
+								/>
 
-							{isSelf ? (
 								<Typography
-									color="textSecondary"
 									textOverflow="ellipsis"
 									whiteSpace="nowrap"
 									overflow="hidden"
+									flex={1}
+									fontWeight={500}
 								>
-									{t(m.thisDevice)}
+									{device.name}
+
+									{isSelf ? (
+										<Typography
+											component="span"
+											color="textSecondary"
+											sx={{ marginInlineStart: 4 }}
+										>
+											{t(m.thisDevice)}
+										</Typography>
+									) : null}
 								</Typography>
-							) : null}
-						</Stack>
+							</Stack>
 
-						<Stack direction="column" justifyContent="space-between">
-							<Typography color="textSecondary" textAlign="end">
-								{device.joinedAt
-									? formatDate(device.joinedAt, {
-											year: 'numeric',
-											month: 'short',
-											day: '2-digit',
-										})
-									: null}
-							</Typography>
-
-							{canLeaveProject && isSelf ? (
-								<TextLink
-									// TODO: Navigate to leave project page
-									// to="/app/projects/$projectId/settings/leave"
-									params={{ projectId }}
-									onClick={() => {
-										alert('Not implemented yet')
-									}}
-									color="error"
-									underline="none"
-									textAlign="end"
-								>
-									{t(m.leaveProject)}
-								</TextLink>
-							) : null}
+							<Icon
+								name="material-chevron-right"
+								htmlColor={DARK_GREY}
+								size={actionIconSize}
+							/>
 						</Stack>
-					</Stack>
+					</ListItemButtonLink>
 				)
 			})}
 		</Stack>
@@ -354,23 +330,6 @@ const m = defineMessages({
 			'Participants can take and share observations. They cannot manage users or project details.',
 		description: 'Description of the participants section in the team page.',
 	},
-	deviceNameColumnTitle: {
-		id: 'routes.app.projects.$projectId_.settings.team.deviceNameColumnTitle',
-		defaultMessage: 'Device Name',
-		description:
-			'Title used for column containing device name of project members.',
-	},
-	dateAddedColumnTitle: {
-		id: 'routes.app.projects.$projectId_.settings.team.dateAddedColumnTitle',
-		defaultMessage: 'Date Added',
-		description:
-			'Title used for column containing date added of project members.',
-	},
-	leaveProject: {
-		id: 'routes.app.projects.$projectId_.settings.team.leaveProject',
-		defaultMessage: 'Leave Project',
-		description: 'Text for button that initiates steps for leaving project.',
-	},
 	noParticipants: {
 		id: 'routes.app.projects.$projectId_.settings.team.noParticipants',
 		defaultMessage: 'No Participants have been added to this project.',
@@ -379,7 +338,7 @@ const m = defineMessages({
 	},
 	thisDevice: {
 		id: 'routes.app.projects.$projectId_.settings.team.thisDevice',
-		defaultMessage: 'This Device!',
+		defaultMessage: 'This Device',
 		description:
 			'Text indicating that the listed device refers to the one currently being used.',
 	},

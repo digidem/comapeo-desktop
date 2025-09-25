@@ -529,21 +529,9 @@
     "description": "Title of the coordinators section in the team page.",
     "message": "Coordinators"
   },
-  "routes.app.projects.$projectId_.settings.team.dateAddedColumnTitle": {
-    "description": "Title used for column containing date added of project members.",
-    "message": "Date Added"
-  },
-  "routes.app.projects.$projectId_.settings.team.deviceNameColumnTitle": {
-    "description": "Title used for column containing device name of project members.",
-    "message": "Device Name"
-  },
   "routes.app.projects.$projectId_.settings.team.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Invite Device"
-  },
-  "routes.app.projects.$projectId_.settings.team.leaveProject": {
-    "description": "Text for button that initiates steps for leaving project.",
-    "message": "Leave Project"
   },
   "routes.app.projects.$projectId_.settings.team.navTitle": {
     "description": "Title of the project settings team page.",
@@ -563,7 +551,7 @@
   },
   "routes.app.projects.$projectId_.settings.team.thisDevice": {
     "description": "Text indicating that the listed device refers to the one currently being used.",
-    "message": "This Device!"
+    "message": "This Device"
   },
   "routes.app.projects.-shared.device-icon.deviceTypeDesktop": {
     "description": "Text indicating that the member is a desktop device (displays when hovering over the icon).",
