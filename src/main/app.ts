@@ -281,6 +281,7 @@ function initMainWindow({
 		backgroundColor: '#050F77',
 		titleBarStyle: 'hiddenInset',
 		titleBarOverlay: true,
+		accentColor: '#2348B2',
 		webPreferences: {
 			preload: MAIN_WINDOW_PRELOAD_PATH,
 			additionalArguments: [
