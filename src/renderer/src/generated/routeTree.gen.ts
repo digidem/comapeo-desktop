@@ -38,12 +38,13 @@ import { Route as AppProjectsProjectIdInviteIndexRouteImport } from './../routes
 import { Route as AppProjectsProjectIdExchangeIndexRouteImport } from './../routes/app/projects/$projectId_/exchange/index'
 import { Route as OnboardingProjectJoinInviteIdSuccessRouteImport } from './../routes/onboarding/project/join.$inviteId/success'
 import { Route as OnboardingProjectCreateProjectIdSuccessRouteImport } from './../routes/onboarding/project/create/$projectId.success'
-import { Route as AppProjectsProjectIdSettingsTeamRouteImport } from './../routes/app/projects/$projectId_/settings/team'
 import { Route as AppProjectsProjectIdSettingsInfoRouteImport } from './../routes/app/projects/$projectId_/settings/info'
 import { Route as AppProjectsProjectIdSettingsCategoriesRouteImport } from './../routes/app/projects/$projectId_/settings/categories'
+import { Route as AppProjectsProjectIdSettingsTeamIndexRouteImport } from './../routes/app/projects/$projectId_/settings/team/index'
 import { Route as AppProjectsProjectIdInviteDevicesIndexRouteImport } from './../routes/app/projects/$projectId_/invite/devices/index'
 import { Route as AppProjectsProjectIdTracksTrackDocIdIndexRouteImport } from './../routes/app/projects/$projectId/tracks/$trackDocId/index'
 import { Route as AppProjectsProjectIdObservationsObservationDocIdIndexRouteImport } from './../routes/app/projects/$projectId/observations/$observationDocId/index'
+import { Route as AppProjectsProjectIdSettingsTeamDeviceIdRouteImport } from './../routes/app/projects/$projectId_/settings/team/$deviceId'
 import { Route as AppProjectsProjectIdInviteDevicesDeviceIdRouteRouteImport } from './../routes/app/projects/$projectId_/invite/devices/$deviceId/route'
 import { Route as AppProjectsProjectIdInviteDevicesDeviceIdSendRouteImport } from './../routes/app/projects/$projectId_/invite/devices/$deviceId/send'
 import { Route as AppProjectsProjectIdInviteDevicesDeviceIdRoleRouteImport } from './../routes/app/projects/$projectId_/invite/devices/$deviceId/role'
@@ -208,12 +209,6 @@ const OnboardingProjectCreateProjectIdSuccessRoute =
     path: '/create/$projectId/success',
     getParentRoute: () => OnboardingProjectRouteRoute,
   } as any)
-const AppProjectsProjectIdSettingsTeamRoute =
-  AppProjectsProjectIdSettingsTeamRouteImport.update({
-    id: '/team',
-    path: '/team',
-    getParentRoute: () => AppProjectsProjectIdSettingsRouteRoute,
-  } as any)
 const AppProjectsProjectIdSettingsInfoRoute =
   AppProjectsProjectIdSettingsInfoRouteImport.update({
     id: '/info',
@@ -224,6 +219,12 @@ const AppProjectsProjectIdSettingsCategoriesRoute =
   AppProjectsProjectIdSettingsCategoriesRouteImport.update({
     id: '/categories',
     path: '/categories',
+    getParentRoute: () => AppProjectsProjectIdSettingsRouteRoute,
+  } as any)
+const AppProjectsProjectIdSettingsTeamIndexRoute =
+  AppProjectsProjectIdSettingsTeamIndexRouteImport.update({
+    id: '/team/',
+    path: '/team/',
     getParentRoute: () => AppProjectsProjectIdSettingsRouteRoute,
   } as any)
 const AppProjectsProjectIdInviteDevicesIndexRoute =
@@ -243,6 +244,12 @@ const AppProjectsProjectIdObservationsObservationDocIdIndexRoute =
     id: '/observations/$observationDocId/',
     path: '/observations/$observationDocId/',
     getParentRoute: () => AppProjectsProjectIdRouteRoute,
+  } as any)
+const AppProjectsProjectIdSettingsTeamDeviceIdRoute =
+  AppProjectsProjectIdSettingsTeamDeviceIdRouteImport.update({
+    id: '/team/$deviceId',
+    path: '/team/$deviceId',
+    getParentRoute: () => AppProjectsProjectIdSettingsRouteRoute,
   } as any)
 const AppProjectsProjectIdInviteDevicesDeviceIdRouteRoute =
   AppProjectsProjectIdInviteDevicesDeviceIdRouteRouteImport.update({
@@ -297,7 +304,6 @@ export interface FileRoutesByFullPath {
   '/onboarding/project/create': typeof OnboardingProjectCreateIndexRoute
   '/app/projects/$projectId/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
   '/app/projects/$projectId/settings/info': typeof AppProjectsProjectIdSettingsInfoRoute
-  '/app/projects/$projectId/settings/team': typeof AppProjectsProjectIdSettingsTeamRoute
   '/onboarding/project/create/$projectId/success': typeof OnboardingProjectCreateProjectIdSuccessRoute
   '/onboarding/project/join/$inviteId/success': typeof OnboardingProjectJoinInviteIdSuccessRoute
   '/app/projects/$projectId/exchange': typeof AppProjectsProjectIdExchangeIndexRoute
@@ -305,9 +311,11 @@ export interface FileRoutesByFullPath {
   '/app/projects/$projectId/settings/': typeof AppProjectsProjectIdSettingsIndexRoute
   '/onboarding/project/join/$inviteId': typeof OnboardingProjectJoinInviteIdIndexRoute
   '/app/projects/$projectId/invite/devices/$deviceId': typeof AppProjectsProjectIdInviteDevicesDeviceIdRouteRouteWithChildren
+  '/app/projects/$projectId/settings/team/$deviceId': typeof AppProjectsProjectIdSettingsTeamDeviceIdRoute
   '/app/projects/$projectId/observations/$observationDocId': typeof AppProjectsProjectIdObservationsObservationDocIdIndexRoute
   '/app/projects/$projectId/tracks/$trackDocId': typeof AppProjectsProjectIdTracksTrackDocIdIndexRoute
   '/app/projects/$projectId/invite/devices': typeof AppProjectsProjectIdInviteDevicesIndexRoute
+  '/app/projects/$projectId/settings/team': typeof AppProjectsProjectIdSettingsTeamIndexRoute
   '/app/projects/$projectId/invite/devices/$deviceId/role': typeof AppProjectsProjectIdInviteDevicesDeviceIdRoleRoute
   '/app/projects/$projectId/invite/devices/$deviceId/send': typeof AppProjectsProjectIdInviteDevicesDeviceIdSendRoute
   '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name': typeof AppProjectsProjectIdObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRoute
@@ -333,7 +341,6 @@ export interface FileRoutesByTo {
   '/onboarding/project/create': typeof OnboardingProjectCreateIndexRoute
   '/app/projects/$projectId/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
   '/app/projects/$projectId/settings/info': typeof AppProjectsProjectIdSettingsInfoRoute
-  '/app/projects/$projectId/settings/team': typeof AppProjectsProjectIdSettingsTeamRoute
   '/onboarding/project/create/$projectId/success': typeof OnboardingProjectCreateProjectIdSuccessRoute
   '/onboarding/project/join/$inviteId/success': typeof OnboardingProjectJoinInviteIdSuccessRoute
   '/app/projects/$projectId/exchange': typeof AppProjectsProjectIdExchangeIndexRoute
@@ -341,9 +348,11 @@ export interface FileRoutesByTo {
   '/app/projects/$projectId/settings': typeof AppProjectsProjectIdSettingsIndexRoute
   '/onboarding/project/join/$inviteId': typeof OnboardingProjectJoinInviteIdIndexRoute
   '/app/projects/$projectId/invite/devices/$deviceId': typeof AppProjectsProjectIdInviteDevicesDeviceIdRouteRouteWithChildren
+  '/app/projects/$projectId/settings/team/$deviceId': typeof AppProjectsProjectIdSettingsTeamDeviceIdRoute
   '/app/projects/$projectId/observations/$observationDocId': typeof AppProjectsProjectIdObservationsObservationDocIdIndexRoute
   '/app/projects/$projectId/tracks/$trackDocId': typeof AppProjectsProjectIdTracksTrackDocIdIndexRoute
   '/app/projects/$projectId/invite/devices': typeof AppProjectsProjectIdInviteDevicesIndexRoute
+  '/app/projects/$projectId/settings/team': typeof AppProjectsProjectIdSettingsTeamIndexRoute
   '/app/projects/$projectId/invite/devices/$deviceId/role': typeof AppProjectsProjectIdInviteDevicesDeviceIdRoleRoute
   '/app/projects/$projectId/invite/devices/$deviceId/send': typeof AppProjectsProjectIdInviteDevicesDeviceIdSendRoute
   '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name': typeof AppProjectsProjectIdObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRoute
@@ -375,7 +384,6 @@ export interface FileRoutesById {
   '/onboarding/project/create/': typeof OnboardingProjectCreateIndexRoute
   '/app/projects/$projectId_/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
   '/app/projects/$projectId_/settings/info': typeof AppProjectsProjectIdSettingsInfoRoute
-  '/app/projects/$projectId_/settings/team': typeof AppProjectsProjectIdSettingsTeamRoute
   '/onboarding/project/create/$projectId/success': typeof OnboardingProjectCreateProjectIdSuccessRoute
   '/onboarding/project/join/$inviteId/success': typeof OnboardingProjectJoinInviteIdSuccessRoute
   '/app/projects/$projectId_/exchange/': typeof AppProjectsProjectIdExchangeIndexRoute
@@ -383,9 +391,11 @@ export interface FileRoutesById {
   '/app/projects/$projectId_/settings/': typeof AppProjectsProjectIdSettingsIndexRoute
   '/onboarding/project/join/$inviteId/': typeof OnboardingProjectJoinInviteIdIndexRoute
   '/app/projects/$projectId_/invite/devices/$deviceId': typeof AppProjectsProjectIdInviteDevicesDeviceIdRouteRouteWithChildren
+  '/app/projects/$projectId_/settings/team/$deviceId': typeof AppProjectsProjectIdSettingsTeamDeviceIdRoute
   '/app/projects/$projectId/observations/$observationDocId/': typeof AppProjectsProjectIdObservationsObservationDocIdIndexRoute
   '/app/projects/$projectId/tracks/$trackDocId/': typeof AppProjectsProjectIdTracksTrackDocIdIndexRoute
   '/app/projects/$projectId_/invite/devices/': typeof AppProjectsProjectIdInviteDevicesIndexRoute
+  '/app/projects/$projectId_/settings/team/': typeof AppProjectsProjectIdSettingsTeamIndexRoute
   '/app/projects/$projectId_/invite/devices/$deviceId/role': typeof AppProjectsProjectIdInviteDevicesDeviceIdRoleRoute
   '/app/projects/$projectId_/invite/devices/$deviceId/send': typeof AppProjectsProjectIdInviteDevicesDeviceIdSendRoute
   '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name': typeof AppProjectsProjectIdObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRoute
@@ -418,7 +428,6 @@ export interface FileRouteTypes {
     | '/onboarding/project/create'
     | '/app/projects/$projectId/settings/categories'
     | '/app/projects/$projectId/settings/info'
-    | '/app/projects/$projectId/settings/team'
     | '/onboarding/project/create/$projectId/success'
     | '/onboarding/project/join/$inviteId/success'
     | '/app/projects/$projectId/exchange'
@@ -426,9 +435,11 @@ export interface FileRouteTypes {
     | '/app/projects/$projectId/settings/'
     | '/onboarding/project/join/$inviteId'
     | '/app/projects/$projectId/invite/devices/$deviceId'
+    | '/app/projects/$projectId/settings/team/$deviceId'
     | '/app/projects/$projectId/observations/$observationDocId'
     | '/app/projects/$projectId/tracks/$trackDocId'
     | '/app/projects/$projectId/invite/devices'
+    | '/app/projects/$projectId/settings/team'
     | '/app/projects/$projectId/invite/devices/$deviceId/role'
     | '/app/projects/$projectId/invite/devices/$deviceId/send'
     | '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
@@ -454,7 +465,6 @@ export interface FileRouteTypes {
     | '/onboarding/project/create'
     | '/app/projects/$projectId/settings/categories'
     | '/app/projects/$projectId/settings/info'
-    | '/app/projects/$projectId/settings/team'
     | '/onboarding/project/create/$projectId/success'
     | '/onboarding/project/join/$inviteId/success'
     | '/app/projects/$projectId/exchange'
@@ -462,9 +472,11 @@ export interface FileRouteTypes {
     | '/app/projects/$projectId/settings'
     | '/onboarding/project/join/$inviteId'
     | '/app/projects/$projectId/invite/devices/$deviceId'
+    | '/app/projects/$projectId/settings/team/$deviceId'
     | '/app/projects/$projectId/observations/$observationDocId'
     | '/app/projects/$projectId/tracks/$trackDocId'
     | '/app/projects/$projectId/invite/devices'
+    | '/app/projects/$projectId/settings/team'
     | '/app/projects/$projectId/invite/devices/$deviceId/role'
     | '/app/projects/$projectId/invite/devices/$deviceId/send'
     | '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
@@ -495,7 +507,6 @@ export interface FileRouteTypes {
     | '/onboarding/project/create/'
     | '/app/projects/$projectId_/settings/categories'
     | '/app/projects/$projectId_/settings/info'
-    | '/app/projects/$projectId_/settings/team'
     | '/onboarding/project/create/$projectId/success'
     | '/onboarding/project/join/$inviteId/success'
     | '/app/projects/$projectId_/exchange/'
@@ -503,9 +514,11 @@ export interface FileRouteTypes {
     | '/app/projects/$projectId_/settings/'
     | '/onboarding/project/join/$inviteId/'
     | '/app/projects/$projectId_/invite/devices/$deviceId'
+    | '/app/projects/$projectId_/settings/team/$deviceId'
     | '/app/projects/$projectId/observations/$observationDocId/'
     | '/app/projects/$projectId/tracks/$trackDocId/'
     | '/app/projects/$projectId_/invite/devices/'
+    | '/app/projects/$projectId_/settings/team/'
     | '/app/projects/$projectId_/invite/devices/$deviceId/role'
     | '/app/projects/$projectId_/invite/devices/$deviceId/send'
     | '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
@@ -723,13 +736,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingProjectCreateProjectIdSuccessRouteImport
       parentRoute: typeof OnboardingProjectRouteRoute
     }
-    '/app/projects/$projectId_/settings/team': {
-      id: '/app/projects/$projectId_/settings/team'
-      path: '/team'
-      fullPath: '/app/projects/$projectId/settings/team'
-      preLoaderRoute: typeof AppProjectsProjectIdSettingsTeamRouteImport
-      parentRoute: typeof AppProjectsProjectIdSettingsRouteRoute
-    }
     '/app/projects/$projectId_/settings/info': {
       id: '/app/projects/$projectId_/settings/info'
       path: '/info'
@@ -742,6 +748,13 @@ declare module '@tanstack/react-router' {
       path: '/categories'
       fullPath: '/app/projects/$projectId/settings/categories'
       preLoaderRoute: typeof AppProjectsProjectIdSettingsCategoriesRouteImport
+      parentRoute: typeof AppProjectsProjectIdSettingsRouteRoute
+    }
+    '/app/projects/$projectId_/settings/team/': {
+      id: '/app/projects/$projectId_/settings/team/'
+      path: '/team'
+      fullPath: '/app/projects/$projectId/settings/team'
+      preLoaderRoute: typeof AppProjectsProjectIdSettingsTeamIndexRouteImport
       parentRoute: typeof AppProjectsProjectIdSettingsRouteRoute
     }
     '/app/projects/$projectId_/invite/devices/': {
@@ -764,6 +777,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/projects/$projectId/observations/$observationDocId'
       preLoaderRoute: typeof AppProjectsProjectIdObservationsObservationDocIdIndexRouteImport
       parentRoute: typeof AppProjectsProjectIdRouteRoute
+    }
+    '/app/projects/$projectId_/settings/team/$deviceId': {
+      id: '/app/projects/$projectId_/settings/team/$deviceId'
+      path: '/team/$deviceId'
+      fullPath: '/app/projects/$projectId/settings/team/$deviceId'
+      preLoaderRoute: typeof AppProjectsProjectIdSettingsTeamDeviceIdRouteImport
+      parentRoute: typeof AppProjectsProjectIdSettingsRouteRoute
     }
     '/app/projects/$projectId_/invite/devices/$deviceId': {
       id: '/app/projects/$projectId_/invite/devices/$deviceId'
@@ -879,8 +899,9 @@ const AppProjectsProjectIdInviteRouteRouteWithChildren =
 interface AppProjectsProjectIdSettingsRouteRouteChildren {
   AppProjectsProjectIdSettingsCategoriesRoute: typeof AppProjectsProjectIdSettingsCategoriesRoute
   AppProjectsProjectIdSettingsInfoRoute: typeof AppProjectsProjectIdSettingsInfoRoute
-  AppProjectsProjectIdSettingsTeamRoute: typeof AppProjectsProjectIdSettingsTeamRoute
   AppProjectsProjectIdSettingsIndexRoute: typeof AppProjectsProjectIdSettingsIndexRoute
+  AppProjectsProjectIdSettingsTeamDeviceIdRoute: typeof AppProjectsProjectIdSettingsTeamDeviceIdRoute
+  AppProjectsProjectIdSettingsTeamIndexRoute: typeof AppProjectsProjectIdSettingsTeamIndexRoute
 }
 
 const AppProjectsProjectIdSettingsRouteRouteChildren: AppProjectsProjectIdSettingsRouteRouteChildren =
@@ -889,10 +910,12 @@ const AppProjectsProjectIdSettingsRouteRouteChildren: AppProjectsProjectIdSettin
       AppProjectsProjectIdSettingsCategoriesRoute,
     AppProjectsProjectIdSettingsInfoRoute:
       AppProjectsProjectIdSettingsInfoRoute,
-    AppProjectsProjectIdSettingsTeamRoute:
-      AppProjectsProjectIdSettingsTeamRoute,
     AppProjectsProjectIdSettingsIndexRoute:
       AppProjectsProjectIdSettingsIndexRoute,
+    AppProjectsProjectIdSettingsTeamDeviceIdRoute:
+      AppProjectsProjectIdSettingsTeamDeviceIdRoute,
+    AppProjectsProjectIdSettingsTeamIndexRoute:
+      AppProjectsProjectIdSettingsTeamIndexRoute,
   }
 
 const AppProjectsProjectIdSettingsRouteRouteWithChildren =

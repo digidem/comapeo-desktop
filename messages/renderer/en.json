@@ -521,49 +521,81 @@
     "description": "Label for save button.",
     "message": "Save"
   },
-  "routes.app.projects.$projectId_.settings.team.coordinatorsSectionDescription": {
+  "routes.app.projects.$projectId_.settings.team.$deviceId.addedOn": {
+    "description": "Text indicating date collaborator was added to the project.",
+    "message": "Added on {value}"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.collaboratorNavTitle": {
+    "description": "Title of the team collaborator info page.",
+    "message": "Collaborator Info"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.confirmButton": {
+    "description": "Button text to confirm leaving project.",
+    "message": "Confirm"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.coordinator": {
+    "description": "Text indicating collaborator is a coordinator.",
+    "message": "Coordinator"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.lastCoordinatorWarning": {
+    "description": "Warning text about leaving the project as the last coordinator.",
+    "message": "You're the last coordinator. Consider making another device a coordinator before leaving the project."
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectButton": {
+    "description": "Button text to initiate leave project flow.",
+    "message": "Leave Project"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectExplainerDescription": {
+    "description": "Description for leave project explanation.",
+    "message": "<b>{name}</b> will no longer be able to add or exchange observations."
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectExplainerTitle": {
+    "description": "Title text for leave project explanation.",
+    "message": "Leave Project?"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectNavTitle": {
+    "description": "Title of the team collaborator info page when the leave project flow is initiated.",
+    "message": "Leave Project"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.participant": {
+    "description": "Text indicating collaborator is a participant.",
+    "message": "Participant"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.thisDevice": {
+    "description": "Text indicating that user is viewing itslef.",
+    "message": "This Device!"
+  },
+  "routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionDescription": {
     "description": "Description of the coordinators section in the team page.",
     "message": "Coordinators can invite devices, edit and delete data, and manage project details."
   },
-  "routes.app.projects.$projectId_.settings.team.coordinatorsSectionTitle": {
+  "routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionTitle": {
     "description": "Title of the coordinators section in the team page.",
     "message": "Coordinators"
   },
-  "routes.app.projects.$projectId_.settings.team.dateAddedColumnTitle": {
-    "description": "Title used for column containing date added of project members.",
-    "message": "Date Added"
-  },
-  "routes.app.projects.$projectId_.settings.team.deviceNameColumnTitle": {
-    "description": "Title used for column containing device name of project members.",
-    "message": "Device Name"
-  },
-  "routes.app.projects.$projectId_.settings.team.inviteDevice": {
+  "routes.app.projects.$projectId_.settings.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Invite Device"
   },
-  "routes.app.projects.$projectId_.settings.team.leaveProject": {
-    "description": "Text for button that initiates steps for leaving project.",
-    "message": "Leave Project"
-  },
-  "routes.app.projects.$projectId_.settings.team.navTitle": {
+  "routes.app.projects.$projectId_.settings.team.index.navTitle": {
     "description": "Title of the project settings team page.",
     "message": "Team"
   },
-  "routes.app.projects.$projectId_.settings.team.noParticipants": {
+  "routes.app.projects.$projectId_.settings.team.index.noParticipants": {
     "description": "Text indicating that no participants are part of the project yet.",
     "message": "No Participants have been added to this project."
   },
-  "routes.app.projects.$projectId_.settings.team.participantsSectionDescription": {
+  "routes.app.projects.$projectId_.settings.team.index.participantsSectionDescription": {
     "description": "Description of the participants section in the team page.",
     "message": "Participants can take and share observations. They cannot manage users or project details."
   },
-  "routes.app.projects.$projectId_.settings.team.participantsSectionTitle": {
+  "routes.app.projects.$projectId_.settings.team.index.participantsSectionTitle": {
     "description": "Title of the participants section in the team page.",
     "message": "Participants"
   },
-  "routes.app.projects.$projectId_.settings.team.thisDevice": {
+  "routes.app.projects.$projectId_.settings.team.index.thisDevice": {
     "description": "Text indicating that the listed device refers to the one currently being used.",
-    "message": "This Device!"
+    "message": "This Device"
   },
   "routes.app.projects.-shared.device-icon.deviceTypeDesktop": {
     "description": "Text indicating that the member is a desktop device (displays when hovering over the icon).",

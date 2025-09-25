@@ -11,65 +11,61 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { DeviceIcon } from '../../-shared/device-icon'
-import { BLUE_GREY } from '../../../../../colors'
-import { Icon } from '../../../../../components/icon'
-import { ButtonLink, TextLink } from '../../../../../components/link'
-import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
+import { DeviceIcon } from '../../../-shared/device-icon'
+import { BLUE_GREY, DARK_GREY } from '../../../../../../colors'
+import { Icon } from '../../../../../../components/icon'
+import {
+	ButtonLink,
+	ListItemButtonLink,
+} from '../../../../../../components/link'
+import { useIconSizeBasedOnTypography } from '../../../../../../hooks/icon'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 	MEMBER_ROLE_ID,
-} from '../../../../../lib/comapeo'
+} from '../../../../../../lib/comapeo'
 
-export const Route = createFileRoute('/app/projects/$projectId_/settings/team')(
-	{
-		loader: async ({ context, params }) => {
-			const { clientApi, projectApi, queryClient } = context
-			const { projectId } = params
+export const Route = createFileRoute(
+	'/app/projects/$projectId_/settings/team/',
+)({
+	loader: async ({ context, params }) => {
+		const { clientApi, projectApi, queryClient } = context
+		const { projectId } = params
 
-			await Promise.all([
-				// TODO: Not ideal but requires changes in @comapeo/core-react
-				queryClient.ensureQueryData({
-					queryKey: [
-						COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-						'client',
-						'device_info',
-					],
-					queryFn: async () => {
-						return clientApi.getDeviceInfo()
-					},
-				}),
-				// TODO: Not ideal but requires changes in @comapeo/core-react
-				queryClient.ensureQueryData({
-					queryKey: [
-						COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-						'projects',
-						projectId,
-						'role',
-					],
-					queryFn: async () => {
-						return projectApi.$getOwnRole()
-					},
-				}),
-				// TODO: Not ideal but requires changes in @comapeo/core-react
-				queryClient.ensureQueryData({
-					queryKey: [
-						COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-						'projects',
-						projectId,
-						'members',
-					],
-					queryFn: async () => {
-						return projectApi.$member.getMany()
-					},
-				}),
-			])
-		},
-		component: RouteComponent,
+		await Promise.all([
+			queryClient.ensureQueryData({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
+				queryFn: async () => {
+					return clientApi.getDeviceInfo()
+				},
+			}),
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'role',
+				],
+				queryFn: async () => {
+					return projectApi.$getOwnRole()
+				},
+			}),
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'members',
+				],
+				queryFn: async () => {
+					return projectApi.$member.getMany()
+				},
+			}),
+		])
 	},
-)
+	component: RouteComponent,
+})
 
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
@@ -90,9 +86,6 @@ function RouteComponent() {
 	)
 
 	const participants = members.filter((m) => m.role.roleId === MEMBER_ROLE_ID)
-
-	const canLeaveProject =
-		coordinators.filter((c) => c.deviceId !== ownDeviceInfo.deviceId).length > 0
 
 	const sectionIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'h2',
@@ -147,6 +140,7 @@ function RouteComponent() {
 									sx={{ maxWidth: 400 }}
 									to="/app/projects/$projectId/invite"
 									params={{ projectId }}
+									startIcon={<Icon name="material-person-add" />}
 								>
 									{t(m.inviteDevice)}
 								</ButtonLink>
@@ -167,10 +161,9 @@ function RouteComponent() {
 							<Typography>{t(m.coordinatorsSectionDescription)}</Typography>
 						</Stack>
 
-						<DeviceList
-							canLeaveProject={canLeaveProject}
-							ownDeviceId={ownDeviceInfo.deviceId}
+						<MemberList
 							devices={coordinators}
+							ownDeviceId={ownDeviceInfo.deviceId}
 							projectId={projectId}
 						/>
 
@@ -187,8 +180,7 @@ function RouteComponent() {
 						</Stack>
 
 						{participants.length > 0 ? (
-							<DeviceList
-								canLeaveProject={canLeaveProject}
+							<MemberList
 								devices={participants}
 								ownDeviceId={ownDeviceInfo.deviceId}
 								projectId={projectId}
@@ -205,115 +197,94 @@ function RouteComponent() {
 	)
 }
 
-function DeviceList({
-	canLeaveProject,
+function MemberList({
 	devices,
 	ownDeviceId,
 	projectId,
 }: {
-	canLeaveProject: boolean
 	devices: Array<
 		Pick<MemberApi.MemberInfo, 'deviceId' | 'deviceType' | 'name' | 'joinedAt'>
 	>
 	ownDeviceId: string
 	projectId: string
 }) {
-	const { formatMessage: t, formatDate } = useIntl()
+	const { formatMessage: t } = useIntl()
 
-	const iconSize = useIconSizeBasedOnTypography({
+	const deviceIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
-		multiplier: 1.5,
+	})
+
+	const actionIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+		multiplier: 1.25,
 	})
 
 	return (
 		<Stack direction="column" gap={4}>
-			<Stack direction="row" gap={2} justifyContent="space-between">
-				<Typography color="textSecondary">
-					{t(m.deviceNameColumnTitle)}
-				</Typography>
-
-				<Typography color="textSecondary">
-					{t(m.dateAddedColumnTitle)}
-				</Typography>
-			</Stack>
-
 			{devices.map((device) => {
 				const isSelf = device.deviceId === ownDeviceId
 
-				return (
-					<Stack
-						key={device.deviceId}
-						direction="row"
-						gap={4}
-						padding={5}
-						border={`1px solid ${BLUE_GREY}`}
-						borderRadius={2}
-					>
-						<DeviceIcon deviceType={device.deviceType} size={iconSize} />
+				const displayedName = device.name || device.deviceId.slice(0, 12)
 
+				return (
+					<ListItemButtonLink
+						key={device.deviceId}
+						to="/app/projects/$projectId/settings/team/$deviceId"
+						params={{ projectId, deviceId: device.deviceId }}
+						disableGutters
+						sx={{
+							borderRadius: 2,
+							border: `1px solid ${BLUE_GREY}`,
+							flexGrow: 0,
+						}}
+					>
 						<Stack
-							direction="column"
+							direction="row"
 							flex={1}
 							justifyContent="space-between"
+							alignItems="center"
 							overflow="auto"
+							padding={4}
 						>
-							<Typography
-								fontWeight={500}
-								textOverflow="ellipsis"
-								whiteSpace="nowrap"
-								overflow="hidden"
+							<Stack
+								direction="row"
+								alignItems="center"
+								gap={3}
+								overflow="auto"
 							>
-								{device.name}
-							</Typography>
-							<Typography
-								color="textSecondary"
-								textOverflow="ellipsis"
-								whiteSpace="nowrap"
-								overflow="hidden"
-							>
-								{device.deviceId.slice(0, 12)}
-							</Typography>
+								<DeviceIcon
+									deviceType={device.deviceType}
+									size={deviceIconSize}
+								/>
 
-							{isSelf ? (
 								<Typography
-									color="textSecondary"
 									textOverflow="ellipsis"
 									whiteSpace="nowrap"
 									overflow="hidden"
+									flex={1}
+									fontWeight={500}
 								>
-									{t(m.thisDevice)}
+									{displayedName}
+
+									{isSelf ? (
+										<Typography
+											component="span"
+											color="textSecondary"
+											sx={{ marginInlineStart: 4 }}
+										>
+											{t(m.thisDevice)}
+										</Typography>
+									) : null}
 								</Typography>
-							) : null}
-						</Stack>
+							</Stack>
 
-						<Stack direction="column" justifyContent="space-between">
-							<Typography color="textSecondary" textAlign="end">
-								{device.joinedAt
-									? formatDate(device.joinedAt, {
-											year: 'numeric',
-											month: 'short',
-											day: '2-digit',
-										})
-									: null}
-							</Typography>
-
-							{canLeaveProject && isSelf ? (
-								<TextLink
-									// TODO: Navigate to leave project page
-									// to="/app/projects/$projectId/settings/leave"
-									params={{ projectId }}
-									onClick={() => {
-										alert('Not implemented yet')
-									}}
-									color="error"
-									underline="none"
-									textAlign="end"
-								>
-									{t(m.leaveProject)}
-								</TextLink>
-							) : null}
+							<Icon
+								name="material-chevron-right"
+								htmlColor={DARK_GREY}
+								size={actionIconSize}
+							/>
 						</Stack>
-					</Stack>
+					</ListItemButtonLink>
 				)
 			})}
 		</Stack>
@@ -322,64 +293,47 @@ function DeviceList({
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId_.settings.team.navTitle',
+		id: 'routes.app.projects.$projectId_.settings.team.index.navTitle',
 		defaultMessage: 'Team',
 		description: 'Title of the project settings team page.',
 	},
 	inviteDevice: {
-		id: 'routes.app.projects.$projectId_.settings.team.inviteDevice',
+		id: 'routes.app.projects.$projectId_.settings.team.index.inviteDevice',
 		defaultMessage: 'Invite Device',
 		description:
 			'Text for button that initiates steps for inviting device to project.',
 	},
 	coordinatorsSectionTitle: {
-		id: 'routes.app.projects.$projectId_.settings.team.coordinatorsSectionTitle',
+		id: 'routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionTitle',
 		defaultMessage: 'Coordinators',
 		description: 'Title of the coordinators section in the team page.',
 	},
 	coordinatorsSectionDescription: {
-		id: 'routes.app.projects.$projectId_.settings.team.coordinatorsSectionDescription',
+		id: 'routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionDescription',
 		defaultMessage:
 			'Coordinators can invite devices, edit and delete data, and manage project details.',
 		description: 'Description of the coordinators section in the team page.',
 	},
 	participantsSectionTitle: {
-		id: 'routes.app.projects.$projectId_.settings.team.participantsSectionTitle',
+		id: 'routes.app.projects.$projectId_.settings.team.index.participantsSectionTitle',
 		defaultMessage: 'Participants',
 		description: 'Title of the participants section in the team page.',
 	},
 	participantsSectionDescription: {
-		id: 'routes.app.projects.$projectId_.settings.team.participantsSectionDescription',
+		id: 'routes.app.projects.$projectId_.settings.team.index.participantsSectionDescription',
 		defaultMessage:
 			'Participants can take and share observations. They cannot manage users or project details.',
 		description: 'Description of the participants section in the team page.',
 	},
-	deviceNameColumnTitle: {
-		id: 'routes.app.projects.$projectId_.settings.team.deviceNameColumnTitle',
-		defaultMessage: 'Device Name',
-		description:
-			'Title used for column containing device name of project members.',
-	},
-	dateAddedColumnTitle: {
-		id: 'routes.app.projects.$projectId_.settings.team.dateAddedColumnTitle',
-		defaultMessage: 'Date Added',
-		description:
-			'Title used for column containing date added of project members.',
-	},
-	leaveProject: {
-		id: 'routes.app.projects.$projectId_.settings.team.leaveProject',
-		defaultMessage: 'Leave Project',
-		description: 'Text for button that initiates steps for leaving project.',
-	},
 	noParticipants: {
-		id: 'routes.app.projects.$projectId_.settings.team.noParticipants',
+		id: 'routes.app.projects.$projectId_.settings.team.index.noParticipants',
 		defaultMessage: 'No Participants have been added to this project.',
 		description:
 			'Text indicating that no participants are part of the project yet.',
 	},
 	thisDevice: {
-		id: 'routes.app.projects.$projectId_.settings.team.thisDevice',
-		defaultMessage: 'This Device!',
+		id: 'routes.app.projects.$projectId_.settings.team.index.thisDevice',
+		defaultMessage: 'This Device',
 		description:
 			'Text indicating that the listed device refers to the one currently being used.',
 	},
