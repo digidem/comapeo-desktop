@@ -9,6 +9,9 @@ import MUIButtonBase, {
 } from '@mui/material/ButtonBase'
 import MUIIconButton, { type IconButtonProps } from '@mui/material/IconButton'
 import MUILink, { type LinkProps as MUILinkProps } from '@mui/material/Link'
+import MUIListItemButton, {
+	type ListItemButtonProps as MUIListItemButtonProps,
+} from '@mui/material/ListItemButton'
 import { createLink, type LinkOptions } from '@tanstack/react-router'
 
 const ButtonLinkComponent = createLink((props: ButtonProps<'a'>) => {
@@ -65,4 +68,20 @@ export type ButtonBaseLinkComponentProps = Omit<
 
 export function ButtonBaseLink(props: ButtonBaseLinkComponentProps) {
 	return <ButtonBaseLinkComponent {...props} />
+}
+
+const ListItemButtonLinkComponent = createLink(
+	(props: MUIListItemButtonProps) => {
+		return <MUIListItemButton {...props} />
+	},
+)
+
+export type ListItemButtonLinkComponentProps = Omit<
+	ComponentProps<typeof ListItemButtonLinkComponent>,
+	keyof LinkOptions
+> &
+	LinkOptions
+
+export function ListItemButtonLink(props: ListItemButtonLinkComponentProps) {
+	return <ListItemButtonLinkComponent {...props} />
 }
