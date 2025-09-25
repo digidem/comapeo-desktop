@@ -9,7 +9,10 @@ import { defineMessages, useIntl } from 'react-intl'
 import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors'
 import { ErrorBoundary } from '../../../components/error-boundary'
 import { Icon } from '../../../components/icon'
-import { ButtonLink, IconButtonLink } from '../../../components/link'
+import {
+	ListItemButtonLink,
+	type ListItemButtonLinkComponentProps,
+} from '../../../components/link'
 import { useIconSizeBasedOnTypography } from '../../../hooks/icon'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
 import { getLanguageInfo } from '../../../lib/intl'
@@ -90,58 +93,53 @@ function RouteComponent() {
 			</Stack>
 
 			<SettingRow
-				icon={
+				to="/app/settings/device-name"
+				start={
 					<Icon
 						name="material-symbols-computer"
 						htmlColor={DARK_GREY}
 						size={rowIconSize}
 					/>
 				}
-				actionButton={
-					<ButtonLink
-						to="/app/settings/device-name"
-						variant="text"
-						sx={{ fontWeight: 400 }}
-					>
-						{t(m.editDeviceName)}
-					</ButtonLink>
-				}
+				end={<Typography color="primary">{t(m.editDeviceName)}</Typography>}
 				// TODO: What to do when this is undefined?
 				label={deviceInfo.name || ''}
 			/>
 
 			<SettingRow
-				icon={
+				to="/app/settings/language"
+				start={
 					<Icon
 						name="material-language"
 						htmlColor={DARK_GREY}
 						size={rowIconSize}
 					/>
 				}
-				actionButton={
-					<IconButtonLink to="/app/settings/language">
-						<Icon name="material-chevron-right" size={rowIconSize} />
-					</IconButtonLink>
+				end={
+					<Icon
+						name="material-chevron-right"
+						htmlColor={DARK_GREY}
+						size={rowIconSize}
+					/>
 				}
 				label={selectedLanguageName}
 			/>
 
 			<SettingRow
-				icon={
+				to="/app/settings/coordinate-system"
+				start={
 					<Icon
 						name="material-explore"
 						htmlColor={DARK_GREY}
 						size={rowIconSize}
 					/>
 				}
-				actionButton={
-					<IconButtonLink to="/app/settings/coordinate-system">
-						<Icon
-							name="material-chevron-right"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					</IconButtonLink>
+				end={
+					<Icon
+						name="material-chevron-right"
+						htmlColor={DARK_GREY}
+						size={rowIconSize}
+					/>
 				}
 				label={t(
 					coordinateFormat === 'utm'
@@ -153,17 +151,16 @@ function RouteComponent() {
 			/>
 
 			<SettingRow
-				icon={
+				to="/app/settings/background-map"
+				start={
 					<Icon name="material-map" htmlColor={DARK_GREY} size={rowIconSize} />
 				}
-				actionButton={
-					<IconButtonLink to="/app/settings/background-map">
-						<Icon
-							name="material-chevron-right"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					</IconButtonLink>
+				end={
+					<Icon
+						name="material-chevron-right"
+						htmlColor={DARK_GREY}
+						size={rowIconSize}
+					/>
 				}
 				label={
 					<Suspense>
@@ -175,21 +172,20 @@ function RouteComponent() {
 			{__APP_TYPE__ !== 'production' &&
 			import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
 				<SettingRow
-					icon={
+					to="/app/settings/test-data"
+					start={
 						<Icon
 							name="material-auto-fix-high"
 							htmlColor={DARK_GREY}
 							size={rowIconSize}
 						/>
 					}
-					actionButton={
-						<IconButtonLink to="/app/settings/test-data">
-							<Icon
-								name="material-chevron-right"
-								htmlColor={DARK_GREY}
-								size={rowIconSize}
-							/>
-						</IconButtonLink>
+					end={
+						<Icon
+							name="material-chevron-right"
+							htmlColor={DARK_GREY}
+							size={rowIconSize}
+						/>
 					}
 					label={t(m.createTestData)}
 				/>
@@ -198,38 +194,51 @@ function RouteComponent() {
 	)
 }
 
-// TODO: Make whole thing clickable?
 function SettingRow({
-	actionButton,
-	icon,
 	label,
-}: {
-	actionButton: ReactNode
-	icon: ReactNode
+	start,
+	end,
+	...linkProps
+}: Pick<ListItemButtonLinkComponentProps, 'to' | 'params'> & {
 	label: ReactNode
+	start: ReactNode
+	end: ReactNode
 }) {
 	return (
-		<Stack
-			direction="row"
-			justifyContent="space-between"
-			border={`1px solid ${BLUE_GREY}`}
-			borderRadius={2}
-			padding={4}
+		<ListItemButtonLink
+			{...linkProps}
+			disableGutters
+			sx={{
+				borderRadius: 2,
+				border: `1px solid ${BLUE_GREY}`,
+				flexGrow: 0,
+			}}
 		>
-			<Stack direction="row" alignItems="center" gap={3} overflow="auto">
-				{icon}
-				<Typography
-					textOverflow="ellipsis"
-					whiteSpace="nowrap"
-					overflow="hidden"
-					flex={1}
-					fontWeight={500}
-				>
-					{label}
-				</Typography>
+			<Stack
+				direction="row"
+				flex={1}
+				justifyContent="space-between"
+				alignItems="center"
+				overflow="auto"
+				padding={4}
+			>
+				<Stack direction="row" alignItems="center" gap={3} overflow="auto">
+					{start}
+
+					<Typography
+						textOverflow="ellipsis"
+						whiteSpace="nowrap"
+						overflow="hidden"
+						flex={1}
+						fontWeight={500}
+					>
+						{label}
+					</Typography>
+				</Stack>
+
+				{end}
 			</Stack>
-			{actionButton}
-		</Stack>
+		</ListItemButtonLink>
 	)
 }
 
