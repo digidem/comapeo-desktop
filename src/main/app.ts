@@ -292,6 +292,8 @@ function initMainWindow({
 		},
 	})
 
+	mainWindow.setAutoHideMenuBar(true)
+
 	if (isDevelopment) {
 		// TODO: Don't hard code ideally
 		mainWindow.loadURL('http://localhost:5173/')
