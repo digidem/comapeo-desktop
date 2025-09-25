@@ -34,14 +34,12 @@ export const Route = createFileRoute(
 		const { projectId } = params
 
 		await Promise.all([
-			// TODO: Not ideal but requires changes in @comapeo/core-react
 			queryClient.ensureQueryData({
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 				queryFn: async () => {
 					return clientApi.getDeviceInfo()
 				},
 			}),
-			// TODO: Not ideal but requires changes in @comapeo/core-react
 			queryClient.ensureQueryData({
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -53,7 +51,6 @@ export const Route = createFileRoute(
 					return projectApi.$getOwnRole()
 				},
 			}),
-			// TODO: Not ideal but requires changes in @comapeo/core-react
 			queryClient.ensureQueryData({
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -89,9 +86,6 @@ function RouteComponent() {
 	)
 
 	const participants = members.filter((m) => m.role.roleId === MEMBER_ROLE_ID)
-
-	const canLeaveProject =
-		coordinators.filter((c) => c.deviceId !== ownDeviceInfo.deviceId).length > 0
 
 	const sectionIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'h2',
@@ -168,9 +162,8 @@ function RouteComponent() {
 						</Stack>
 
 						<MemberList
-							canLeaveProject={canLeaveProject}
-							ownDeviceId={ownDeviceInfo.deviceId}
 							devices={coordinators}
+							ownDeviceId={ownDeviceInfo.deviceId}
 							projectId={projectId}
 						/>
 
@@ -188,7 +181,6 @@ function RouteComponent() {
 
 						{participants.length > 0 ? (
 							<MemberList
-								canLeaveProject={canLeaveProject}
 								devices={participants}
 								ownDeviceId={ownDeviceInfo.deviceId}
 								projectId={projectId}
@@ -208,8 +200,8 @@ function RouteComponent() {
 function MemberList({
 	devices,
 	ownDeviceId,
+	projectId,
 }: {
-	canLeaveProject: boolean
 	devices: Array<
 		Pick<MemberApi.MemberInfo, 'deviceId' | 'deviceType' | 'name' | 'joinedAt'>
 	>
@@ -232,9 +224,13 @@ function MemberList({
 			{devices.map((device) => {
 				const isSelf = device.deviceId === ownDeviceId
 
+				const displayedName = device.name || device.deviceId.slice(0, 12)
+
 				return (
 					<ListItemButtonLink
 						key={device.deviceId}
+						to="/app/projects/$projectId/settings/team/$deviceId"
+						params={{ projectId, deviceId: device.deviceId }}
 						disableGutters
 						sx={{
 							borderRadius: 2,
@@ -268,7 +264,7 @@ function MemberList({
 									flex={1}
 									fontWeight={500}
 								>
-									{device.name}
+									{displayedName}
 
 									{isSelf ? (
 										<Typography
