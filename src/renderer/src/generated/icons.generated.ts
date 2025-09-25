@@ -33,6 +33,7 @@ export const iconNames = [
 	'material-offline-bolt',
 	'material-map',
 	'material-manage-accounts-filled',
+	'material-logout',
 	'material-language',
 	'material-hiking',
 	'material-fmd-good-filled',

@@ -164,17 +164,15 @@ function RouteComponent() {
 							/>
 						}
 						action={
-							isAtLeastCoordinator ? (
-								<Box>
-									<TextLink
-										to="/app/projects/$projectId/settings/team"
-										params={{ projectId }}
-										underline="none"
-									>
-										{t(m.viewTeam)}
-									</TextLink>
-								</Box>
-							) : undefined
+							<Box>
+								<TextLink
+									to="/app/projects/$projectId/settings/team"
+									params={{ projectId }}
+									underline="none"
+								>
+									{t(m.viewTeam)}
+								</TextLink>
+							</Box>
 						}
 					/>
 
