@@ -33,6 +33,10 @@ import { GenericRouteNotFoundComponent } from './components/generic-route-not-fo
 import { GenericRoutePendingComponent } from './components/generic-route-pending-component'
 import { IntlProvider } from './contexts/intl'
 import {
+	LocalPeersStoreProvider,
+	createLocalPeersStore,
+} from './contexts/local-peers-store-context'
+import {
 	RefreshTokensStoreProvider,
 	createRefreshTokensStore,
 } from './contexts/refresh-tokens-store-context'
@@ -122,6 +126,9 @@ const MAIN_CONTENT_HEIGHT =
 	platform === 'darwin' ? `calc(100% - ${TITLE_BAR_HEIGHT})` : '100%'
 
 const refreshTokensStore = createRefreshTokensStore()
+const localPeersStore = createLocalPeersStore({ clientApi })
+
+localPeersStore.actions.subscribe()
 
 export function App() {
 	return (
@@ -153,24 +160,26 @@ export function App() {
 										}
 									>
 										<ClientApiProvider clientApi={clientApi}>
-											<WithInvitesListener>
-												<WithAddedRouteContext>
-													{({
-														activeProjectId,
-														formatMessage,
-														localeState,
-													}) => (
-														<RouterProvider
-															router={router}
-															context={{
-																activeProjectId,
-																formatMessage,
-																localeState,
-															}}
-														/>
-													)}
-												</WithAddedRouteContext>
-											</WithInvitesListener>
+											<LocalPeersStoreProvider value={localPeersStore}>
+												<WithInvitesListener>
+													<WithAddedRouteContext>
+														{({
+															activeProjectId,
+															formatMessage,
+															localeState,
+														}) => (
+															<RouterProvider
+																router={router}
+																context={{
+																	activeProjectId,
+																	formatMessage,
+																	localeState,
+																}}
+															/>
+														)}
+													</WithAddedRouteContext>
+												</WithInvitesListener>
+											</LocalPeersStoreProvider>
 										</ClientApiProvider>
 									</Suspense>
 								</Box>
