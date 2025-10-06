@@ -177,7 +177,6 @@ function RouteComponent() {
 					to="/app/projects/$projectId/invite/devices"
 					params={{ projectId }}
 					replace
-					reloadDocument
 				/>
 			)
 		}
@@ -220,14 +219,9 @@ function ReviewInvitation({
 				>
 					<IconButton
 						onClick={() => {
-							if (router.history.canGoBack()) {
-								router.history.back()
-								return
-							}
-
 							router.navigate({
-								to: '/app/projects/$projectId/invite/devices',
-								params: { projectId },
+								to: '/app/projects/$projectId/invite/devices/$deviceId/role',
+								params: { projectId, deviceId },
 								replace: true,
 							})
 						}}
@@ -446,7 +440,6 @@ function InviteRejected({
 						to="/app/projects/$projectId/invite"
 						params={{ projectId }}
 						replace
-						reloadDocument
 						fullWidth
 						variant="contained"
 						sx={{ maxWidth: 400, alignSelf: 'center' }}
@@ -558,7 +551,6 @@ function InviteAccepted({
 						to="/app/projects/$projectId/invite/devices"
 						params={{ projectId }}
 						replace
-						reloadDocument
 						fullWidth
 						variant="outlined"
 						sx={{ maxWidth: 400, alignSelf: 'center' }}
@@ -570,7 +562,6 @@ function InviteAccepted({
 						to="/app/projects/$projectId/settings/team"
 						params={{ projectId }}
 						replace
-						reloadDocument
 						fullWidth
 						variant="contained"
 						sx={{ maxWidth: 400, alignSelf: 'center' }}
