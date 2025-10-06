@@ -145,6 +145,7 @@ function RouteComponent() {
 					<ButtonLink
 						to="/app/projects/$projectId/invite/devices"
 						params={{ projectId }}
+						replace
 						type="button"
 						fullWidth
 						sx={{ maxWidth: 400 }}

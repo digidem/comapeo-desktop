@@ -94,18 +94,18 @@ function RouteComponent() {
 					<Divider sx={{ bgcolor: LIGHT_GREY }} />
 
 					<Stack direction="column" padding={6}>
-						<Typography>Not seeing a device?</Typography>
+						<Typography>{t(m.discoveryTroubleshootingTitle)}</Typography>
 
 						<List sx={{ listStyleType: 'disc', paddingInline: 8 }}>
 							<ListItem disablePadding sx={{ display: 'list-item' }}>
 								<Typography color="textPrimary" variant="body2">
-									Check that devices are on the same Wi-Fi network
+									{t(m.discoveryTroubleshootingSameNetwork)}
 								</Typography>
 							</ListItem>
 
 							<ListItem disablePadding sx={{ display: 'list-item' }}>
 								<Typography variant="body2" color="textPrimary">
-									Confirm that devices are using the same version of CoMapeo
+									{t(m.discoveryTroubleshootingSameVersion)}
 								</Typography>
 							</ListItem>
 						</List>
@@ -163,6 +163,7 @@ function InvitablePeersList({ projectId }: { projectId: string }) {
 										navigate({
 											to: '/app/projects/$projectId/invite/devices/$deviceId/role',
 											params: { projectId, deviceId: peer.deviceId },
+											replace: true,
 										})
 									}
 								: undefined
@@ -192,5 +193,23 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId_.invite.devices.index.gettingWifiInfo',
 		defaultMessage: 'Getting Wi-Fi information…',
 		description: 'Text displayed when waiting for Wi-Fi information.',
+	},
+	discoveryTroubleshootingTitle: {
+		id: 'routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingTitle',
+		defaultMessage: 'Not seeing a device?',
+		description: 'Title for device discovery troubleshooting section.',
+	},
+	discoveryTroubleshootingSameNetwork: {
+		id: 'routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameNetwork',
+		defaultMessage: 'Check that devices are on the same Wi-Fi network',
+		description:
+			'Text explaining that devices need to be on same Wi-Fi network.',
+	},
+	discoveryTroubleshootingSameVersion: {
+		id: 'routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameVersion',
+		defaultMessage:
+			'Confirm that devices are using the same version of CoMapeo',
+		description:
+			'Text explaining that devices need to be using same version of CoMapeo.',
 	},
 })
