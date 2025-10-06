@@ -349,6 +349,18 @@
     "description": "Text displayed when external device is disconnected.",
     "message": "切断済み"
   },
+  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameNetwork": {
+    "description": "Text explaining that devices need to be on same Wi-Fi network.",
+    "message": "デバイスが同じWi-Fiネットワーク上にあることを確認してください"
+  },
+  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameVersion": {
+    "description": "Text explaining that devices need to be using same version of CoMapeo.",
+    "message": "デバイスが同じバージョンの CoMapeo を使用していることを確認してください"
+  },
+  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingTitle": {
+    "description": "Title for device discovery troubleshooting section.",
+    "message": "デバイスが表示されませんか？"
+  },
   "routes.app.projects.$projectId_.invite.devices.index.navTitle": {
     "description": "Title of the device selection for invite page.",
     "message": "デバイスを選択"
