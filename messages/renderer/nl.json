@@ -353,6 +353,18 @@
     "description": "Text displayed when external device is disconnected.",
     "message": "Losgekoppeld"
   },
+  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameNetwork": {
+    "description": "Text explaining that devices need to be on same Wi-Fi network.",
+    "message": "Controleer of apparaten op hetzelfde wifi-netwerk zitten"
+  },
+  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameVersion": {
+    "description": "Text explaining that devices need to be using same version of CoMapeo.",
+    "message": "Bevestig dat apparaten dezelfde versie van CoMapeo gebruiken"
+  },
+  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingTitle": {
+    "description": "Title for device discovery troubleshooting section.",
+    "message": "Zie je geen apparaat?"
+  },
   "routes.app.projects.$projectId_.invite.devices.index.navTitle": {
     "description": "Title of the device selection for invite page.",
     "message": "Selecteer een apparaat"

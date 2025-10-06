@@ -365,6 +365,18 @@
     "description": "Text displayed when external device is disconnected.",
     "message": "Verbindung getrennt"
   },
+  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameNetwork": {
+    "description": "Text explaining that devices need to be on same Wi-Fi network.",
+    "message": "Überprüfen Sie, ob sich Geräte im gleichen Wi-Fi-Netzwerk befinden"
+  },
+  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameVersion": {
+    "description": "Text explaining that devices need to be using same version of CoMapeo.",
+    "message": "Bestätigen Sie, dass Geräte die selbe Version von CoMapeo verwenden"
+  },
+  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingTitle": {
+    "description": "Title for device discovery troubleshooting section.",
+    "message": "Gerät nicht sichtbar?"
+  },
   "routes.app.projects.$projectId_.invite.devices.index.gettingWifiInfo": {
     "description": "Text displayed when waiting for Wi-Fi information.",
     "message": "Lade Wi-Fi-Informationen…"
