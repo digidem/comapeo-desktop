@@ -105,7 +105,7 @@
 		"@eslint/compat": "1.4.0",
 		"@eslint/js": "9.37.0",
 		"@fontsource-variable/rubik": "5.2.8",
-		"@formatjs/cli": "6.7.2",
+		"@formatjs/cli": "6.7.3",
 		"@ianvs/prettier-plugin-sort-imports": "4.7.0",
 		"@mui/material": "7.3.2",
 		"@reforged/maker-appimage": "5.1.0",
