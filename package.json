@@ -138,7 +138,7 @@
 		"@vitejs/plugin-react": "5.0.4",
 		"concurrently": "9.2.1",
 		"date-fns": "4.1.0",
-		"dotenv": "17.2.2",
+		"dotenv": "17.2.3",
 		"electron": "38.1.2",
 		"eslint": "9.37.0",
 		"eslint-plugin-react-hooks": "6.1.1",
