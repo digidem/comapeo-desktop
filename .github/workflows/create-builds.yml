@@ -88,6 +88,23 @@ jobs:
       - name: Build translations
         run: node --run intl
 
+      - name: Set up Apple auth
+
+        if: ${{ startsWith(matrix.os.name, 'macos') }}
+        env:
+          KEY: ${{ secrets.APPLE_APP_STORE_CONNECT_AUTH_KEY }}
+          KEY_ID: ${{ secrets.APPLE_APP_STORE_CONNECT_KEY_ID }}
+          KEY_ISSUER: ${{ secrets.APPLE_APP_STORE_CONNECT_KEY_ISSUER }}
+          KEY_PATH: 'apple-auth-key.p8'
+        run: |
+          # Generate the key file
+          echo -n "$KEY" | base64 -d -o "$KEY_PATH"
+
+          # Set relevant env variables for subsequent job steps
+          echo "APPLE_API_KEY_ID=$KEY_ID" >> "$GITHUB_ENV"
+          echo "APPLE_API_KEY_ISSUER=$KEY_ISSUER" >> "$GITHUB_ENV"
+          echo "APPLE_API_KEY_PATH=$KEY_PATH" >> "$GITHUB_ENV"
+
       - name: Create distributables
         env:
           APP_TYPE: ${{ inputs.app_type }}

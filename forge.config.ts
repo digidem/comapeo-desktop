@@ -31,6 +31,9 @@ import type {
 
 const {
 	APP_TYPE,
+	APPLE_API_KEY_ID,
+	APPLE_API_KEY_ISSUER,
+	APPLE_API_KEY_PATH,
 	ASAR,
 	COMAPEO_DIAGNOSTICS_METRICS_URL,
 	COMAPEO_METRICS_ACCESS_TOKEN,
@@ -51,6 +54,9 @@ const {
 			),
 			'development',
 		),
+		APPLE_API_KEY_ID: v.optional(v.string()),
+		APPLE_API_KEY_ISSUER: v.optional(v.string()),
+		APPLE_API_KEY_PATH: v.optional(v.string()),
 		ASAR: v.optional(
 			v.pipe(
 				v.union(
@@ -217,6 +223,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase<CoMapeoDesktopForgePluginConf
 			/^\/\.nvmrc$/,
 			/^\/\.prettierignore$/,
 			/^\/\.tool-versions$/,
+			/^\/.*\.p8$/,
 			/\.test\.+/,
 			/^\/\.gitattributes$/,
 			/^\/crowdin.yml$/,
@@ -312,6 +319,32 @@ if (ASAR) {
 	plugins.push(new AutoUnpackNativesPlugin({}))
 }
 
+let osxNotarizeConfig: NonNullable<
+	ForgeConfig['packagerConfig']
+>['osxNotarize'] = undefined
+
+if (platform() === 'darwin') {
+	if (APPLE_API_KEY_ID && APPLE_API_KEY_ISSUER && APPLE_API_KEY_PATH) {
+		console.log('✅ App notarization enabled.')
+
+		osxNotarizeConfig = {
+			appleApiIssuer: APPLE_API_KEY_ISSUER,
+			appleApiKey: APPLE_API_KEY_PATH,
+			appleApiKeyId: APPLE_API_KEY_ID,
+		}
+	} else {
+		if (APP_TYPE === 'release-candidate' || APP_TYPE === 'production') {
+			throw new Error(
+				'APPLE_API_KEY_ID, and APPLE_API_KEY_ISSUER, and APPLE_API_KEY_PATH env variables must be set for app notarization.',
+			)
+		} else {
+			console.warn(
+				'⚠️ APPLE_API_KEY_ID, and APPLE_API_KEY_ISSUER, and APPLE_API_KEY_PATH env variables are not set. App will not be notarized.',
+			)
+		}
+	}
+}
+
 export default {
 	packagerConfig: {
 		asar: ASAR,
@@ -320,6 +353,7 @@ export default {
 		icon: './assets/icon',
 		name: properties.appNameExternal,
 		executableName: properties.executableName,
+		osxNotarize: osxNotarizeConfig,
 	},
 	rebuildConfig: {},
 	makers: [

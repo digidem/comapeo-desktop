@@ -71,3 +71,6 @@ dist/
 
 # App config
 app.config.json
+
+# Key files
+*.p8
