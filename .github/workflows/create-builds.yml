@@ -99,7 +99,7 @@ jobs:
           CERT_PATH="$RUNNER_TEMP/cert.p12"
           KEYCHAIN_PATH="$RUNNER_TEMP/app-signing.keychain-db"
           # Can be anything. Not sensitive due to ephemeral environment.
-          KEYCHAIN_PASSWORD="actions"
+          KEYCHAIN_PASSWORD="$(openssl rand -base64 16)"
 
           # Create certificate file
           echo -n "$CERT" | base64 -d -o "$CERT_PATH"
