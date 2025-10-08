@@ -126,6 +126,7 @@ jobs:
             echo "✅ Codesigning is set up correctly"
           else
             echo "⛔️ Codesigning is set up incorrectly"
+            exit 1
           fi
 
           # Set relevant env variables for subsequent job steps
