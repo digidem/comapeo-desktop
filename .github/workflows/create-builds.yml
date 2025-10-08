@@ -138,8 +138,9 @@ jobs:
           KEY: ${{ secrets.APPLE_APP_STORE_CONNECT_AUTH_KEY }}
           KEY_ID: ${{ secrets.APPLE_APP_STORE_CONNECT_KEY_ID }}
           KEY_ISSUER: ${{ secrets.APPLE_APP_STORE_CONNECT_KEY_ISSUER }}
-          KEY_PATH: 'apple-auth-key.p8'
         run: |
+          KEY_PATH="$RUNNER_TEMP/apple-auth-key.p8"
+
           # Generate the key file
           echo -n "$KEY" | base64 -d -o "$KEY_PATH"
 
