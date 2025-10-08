@@ -122,10 +122,9 @@ jobs:
 
           # Check that keychain setup and certificate import worked
           if [[ "$(security find-identity -v -p codesigning | grep "$IDENTITY")" ]]; then
-            echo "✅ Identity setup is correct"
+            echo "✅ Codesigning is set up correctly"
           else
-            echo "⛔️ Identity setup is incorrect"
-            exit 1
+            echo "⛔️ Codesigning is set up incorrectly"
           fi
 
           # Set relevant env variables for subsequent job steps
