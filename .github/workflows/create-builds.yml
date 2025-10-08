@@ -95,11 +95,11 @@ jobs:
           CERT: ${{ secrets.APPLE_SIGN_CERT }}
           CERT_PASSWORD: ${{ secrets.APPLE_SIGN_CERT_PASSWORD }}
           IDENTITY: ${{ vars.APPLE_SIGN_IDENTITY }}
-          # Can be anything. Not sensitive due to ephemeral environment.
-          KEYCHAIN_PASSWORD: 'actions'
         run: |
           CERT_PATH="$RUNNER_TEMP/cert.p12"
           KEYCHAIN_PATH="$RUNNER_TEMP/app-signing.keychain-db"
+          # Can be anything. Not sensitive due to ephemeral environment.
+          KEYCHAIN_PASSWORD="actions"
 
           # Create certificate file
           echo -n "$CERT" | base64 -d -o "$CERT_PATH"
