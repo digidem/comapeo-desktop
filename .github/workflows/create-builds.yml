@@ -131,7 +131,6 @@ jobs:
           echo "APPLE_SIGN_IDENTITY=$IDENTITY" >> "$GITHUB_ENV"
 
       - name: Set up Apple notarization
-
         if: ${{ startsWith(matrix.os.name, 'macos') }}
         env:
           KEY: ${{ secrets.APPLE_APP_STORE_CONNECT_AUTH_KEY }}
