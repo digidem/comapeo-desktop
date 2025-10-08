@@ -121,7 +121,8 @@ jobs:
           security default-keychain -d user -s "$KEY_CHAIN"
 
           # Check that keychain setup and certificate import worked
-          if [[ "$(security find-identity -v -p codesigning | grep "$IDENTITY")" ]]; then
+          if security find-identity -v -p codesigning | grep -q "$IDENTITY"
+          then
             echo "✅ Codesigning is set up correctly"
           else
             echo "⛔️ Codesigning is set up incorrectly"
