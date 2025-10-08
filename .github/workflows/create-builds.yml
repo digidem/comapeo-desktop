@@ -105,7 +105,7 @@ jobs:
           echo -n "$CERT" | base64 -d -o "$CERT_PATH"
 
           # Create temporary keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH" > /dev/null
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
 
           ### Update keychain settings
           security set-keychain-settings -lut 3600 "$KEYCHAIN_PATH"
