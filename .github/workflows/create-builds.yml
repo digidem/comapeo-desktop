@@ -14,10 +14,6 @@ on:
         description: 'SHA of commit to build'
         required: true
         type: string
-    outputs:
-      artifact-url:
-        description: 'URL pointing to the uploaded artifact'
-        value: ${{ jobs.builds.outputs.artifact-url }}
 
   workflow_dispatch:
     inputs:
@@ -59,8 +55,6 @@ jobs:
             { name: 'windows', image: 'windows-latest' },
           ]
     runs-on: ${{ matrix.os.image }}
-    outputs:
-      artifact-url: ${{ steps.artifact.outputs.artifact-url }}
     steps:
       - name: Create GitHub App Token
         uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
@@ -163,7 +157,6 @@ jobs:
         run: node --run forge:make
 
       - name: Upload artifact
-        id: artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: builds-${{ matrix.os.name }}-${{ env.BUILD_SHA }}
