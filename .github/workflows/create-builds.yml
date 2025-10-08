@@ -118,7 +118,7 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
 
           # Make keychain the default so identity can be found without specifying keychain
-          security default-keychain -d user -s "$KEY_CHAIN"
+          security default-keychain -d user -s "$KEYCHAIN_PATH"
 
           # Check that keychain setup and certificate import worked
           if security find-identity -v -p codesigning | grep -q "$IDENTITY"
