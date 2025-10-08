@@ -211,7 +211,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase<CoMapeoDesktopForgePluginConf
 			/^\/(\.github|\.husky|data|docs|messages|patches|\.tanstack|\.vscode|scripts)/,
 			// Unnecessary files
 			/^\/\.env/,
-			/^\/.*\.config\.js$/,
+			/^\/.*\.config\.(js|ts)$/,
 			/^\/\.eslintcache$/,
 			/^\/\.gitignore$/,
 			/^\/\.nvmrc$/,
