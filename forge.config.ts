@@ -31,6 +31,10 @@ import type {
 
 const {
 	APP_TYPE,
+	APPLE_API_KEY_ID,
+	APPLE_API_KEY_ISSUER,
+	APPLE_API_KEY_PATH,
+	APPLE_SIGN_IDENTITY,
 	ASAR,
 	COMAPEO_DIAGNOSTICS_METRICS_URL,
 	COMAPEO_METRICS_ACCESS_TOKEN,
@@ -51,6 +55,10 @@ const {
 			),
 			'development',
 		),
+		APPLE_API_KEY_ID: v.optional(v.string()),
+		APPLE_API_KEY_ISSUER: v.optional(v.string()),
+		APPLE_API_KEY_PATH: v.optional(v.string()),
+		APPLE_SIGN_IDENTITY: v.optional(v.string()),
 		ASAR: v.optional(
 			v.pipe(
 				v.union(
@@ -217,6 +225,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase<CoMapeoDesktopForgePluginConf
 			/^\/\.nvmrc$/,
 			/^\/\.prettierignore$/,
 			/^\/\.tool-versions$/,
+			/^\/.*\.p8$/,
 			/\.test\.+/,
 			/^\/\.gitattributes$/,
 			/^\/crowdin.yml$/,
@@ -312,8 +321,12 @@ if (ASAR) {
 	plugins.push(new AutoUnpackNativesPlugin({}))
 }
 
+const osxPackagerConfig =
+	platform() === 'darwin' ? getOsxPackagerConfig(APP_TYPE) : undefined
+
 export default {
 	packagerConfig: {
+		...osxPackagerConfig,
 		asar: ASAR,
 		// macOS: https://developer.apple.com/documentation/bundleresources/information-property-list/cfbundleidentifier
 		appBundleId: properties.appBundleId,
@@ -430,6 +443,71 @@ export default {
 	},
 	plugins,
 } satisfies ForgeConfig
+
+function getOsxPackagerConfig(
+	appType: AppType,
+):
+	| Required<
+			Pick<
+				NonNullable<ForgeConfig['packagerConfig']>,
+				'osxSign' | 'osxNotarize'
+			>
+	  >
+	| undefined {
+	const mustSignAndNotarize =
+		appType === 'release-candidate' || appType === 'production'
+
+	if (!APPLE_SIGN_IDENTITY) {
+		if (mustSignAndNotarize) {
+			throw new Error(
+				'App signing and notarization is required but APPLE_SIGN_IDENTITY env variable is not set.',
+			)
+		}
+
+		console.warn(
+			'⚠️ APPLE_SIGN_IDENTITY env variable is not set. App will not be signed and notarized.',
+		)
+
+		return undefined
+	}
+
+	if (!(APPLE_API_KEY_ID && APPLE_API_KEY_ISSUER && APPLE_API_KEY_PATH)) {
+		throw new Error(
+			'App notarization required but APPLE_API_KEY_ID, and APPLE_API_KEY_ISSUER, and APPLE_API_KEY_PATH env variables are not set.',
+		)
+	}
+
+	console.log('✅ App signing and notarization are enabled.')
+
+	return {
+		osxSign: {
+			identity: APPLE_SIGN_IDENTITY,
+			optionsForFile: () => {
+				return {
+					hardenedRuntime: true,
+					// NOTE: These get merged with `@electron/osx-sign`'s defaults (https://github.com/electron/osx-sign/tree/main/entitlements)
+					entitlements: [
+						// NOTE: Security entitlements related to enabling hardened runtime (https://developer.apple.com/documentation/security/hardened-runtime)
+						'com.apple.security.cs.allow-dyld-environment-variables',
+						'com.apple.security.cs.allow-jit',
+						'com.apple.security.cs.allow-unsigned-executable-memory',
+						'com.apple.security.cs.disable-library-validation',
+						// NOTE: Other security entitlements (https://developer.apple.com/documentation/bundleresources/security-entitlements)
+						'com.apple.security.files.user-selected.read-only',
+						'com.apple.security.files.user-selected.read-write',
+						'com.apple.security.network.client',
+						'com.apple.security.network.server',
+					],
+				}
+			},
+		},
+		osxNotarize: {
+			appleApiIssuer: APPLE_API_KEY_ISSUER,
+			appleApiKey: APPLE_API_KEY_PATH,
+			appleApiKeyId: APPLE_API_KEY_ID,
+		},
+	}
+}
 
 function getPropertiesForAppType(appType: AppType): {
 	appBundleId: string
