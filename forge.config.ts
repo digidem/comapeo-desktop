@@ -444,11 +444,15 @@ export default {
 	plugins,
 } satisfies ForgeConfig
 
-function getOsxPackagerConfig(appType: AppType):
-	| Required<{
-			osxSign: NonNullable<ForgeConfig['packagerConfig']>['osxSign']
-			osxNotarize: NonNullable<ForgeConfig['packagerConfig']>['osxNotarize']
-	  }>
+function getOsxPackagerConfig(
+	appType: AppType,
+):
+	| Required<
+			Pick<
+				NonNullable<ForgeConfig['packagerConfig']>,
+				'osxSign' | 'osxNotarize'
+			>
+	  >
 	| undefined {
 	const mustSignAndNotarize =
 		appType === 'release-candidate' || appType === 'production'
@@ -458,13 +462,13 @@ function getOsxPackagerConfig(appType: AppType):
 			throw new Error(
 				'App signing and notarization is required but APPLE_SIGN_IDENTITY env variable is not set.',
 			)
-		} else {
-			console.warn(
-				'⚠️ APPLE_SIGN_IDENTITY env variable is not set. App will not be signed and notarized.',
-			)
-
-			return undefined
 		}
+
+		console.warn(
+			'⚠️ APPLE_SIGN_IDENTITY env variable is not set. App will not be signed and notarized.',
+		)
+
+		return undefined
 	}
 
 	if (!(APPLE_API_KEY_ID && APPLE_API_KEY_ISSUER && APPLE_API_KEY_PATH)) {
