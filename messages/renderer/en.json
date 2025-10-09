@@ -365,6 +365,18 @@
     "description": "Text displayed when external device is disconnected.",
     "message": "Disconnected"
   },
+  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameNetwork": {
+    "description": "Text explaining that devices need to be on same Wi-Fi network.",
+    "message": "Check that devices are on the same Wi-Fi network"
+  },
+  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameVersion": {
+    "description": "Text explaining that devices need to be using same version of CoMapeo.",
+    "message": "Confirm that devices are using the same version of CoMapeo"
+  },
+  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingTitle": {
+    "description": "Title for device discovery troubleshooting section.",
+    "message": "Not seeing a device?"
+  },
   "routes.app.projects.$projectId_.invite.devices.index.gettingWifiInfo": {
     "description": "Text displayed when waiting for Wi-Fi information.",
     "message": "Getting Wi-Fi information…"

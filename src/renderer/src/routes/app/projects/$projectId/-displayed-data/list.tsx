@@ -11,7 +11,6 @@ import {
 import type { BlobApi } from '@comapeo/core'
 import {
 	useAttachmentUrl,
-	useDocumentCreatedBy,
 	useManyDocs,
 	useOwnDeviceInfo,
 } from '@comapeo/core-react'
@@ -219,7 +218,7 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 			>
 				{rowVirtualizer.getVirtualItems().map((row) => {
 					const { type, category, document } = sortedListData[row.index]!
-					const { createdAt, docId, originalVersionId } = document
+					const { createdAt, docId, createdBy } = document
 
 					const title =
 						type === 'track'
@@ -260,10 +259,7 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 								sx={{ borderBottom: `1px solid ${LIGHT_GREY}`, padding: 4 }}
 							>
 								<Suspense>
-									<SyncedIndicatorLine
-										projectId={projectId}
-										originalVersionId={originalVersionId}
-									/>
+									<SyncedIndicatorLine createdByDeviceId={createdBy} />
 								</Suspense>
 								<Stack direction="row" flex={1} gap={2} overflow="auto">
 									<Stack
@@ -378,20 +374,13 @@ function useVirtual(
 }
 
 function SyncedIndicatorLine({
-	projectId,
-	originalVersionId,
+	createdByDeviceId,
 }: {
-	projectId: string
-	originalVersionId: string
+	createdByDeviceId: string
 }) {
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
-	const { data: createdBy } = useDocumentCreatedBy({
-		projectId,
-		originalVersionId,
-	})
-
-	return ownDeviceInfo.deviceId !== createdBy ? (
+	return ownDeviceInfo.deviceId !== createdByDeviceId ? (
 		<Box
 			position="absolute"
 			width={8}

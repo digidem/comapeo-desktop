@@ -47,11 +47,6 @@ function RouteComponent() {
 			>
 				<IconButton
 					onClick={() => {
-						if (router.history.canGoBack()) {
-							router.history.back()
-							return
-						}
-
 						router.navigate({
 							to: '/app/projects/$projectId/invite/devices',
 							params: { projectId },
@@ -94,6 +89,7 @@ function RouteComponent() {
 								to: '/app/projects/$projectId/invite/devices/$deviceId/send',
 								params: { projectId, deviceId: peer.deviceId },
 								search: { role: 'participant' },
+								replace: true,
 							})
 						}}
 					/>
@@ -107,6 +103,7 @@ function RouteComponent() {
 								to: '/app/projects/$projectId/invite/devices/$deviceId/send',
 								params: { projectId, deviceId: peer.deviceId },
 								search: { role: 'coordinator' },
+								replace: true,
 							})
 						}}
 					/>
