@@ -26,6 +26,7 @@ jobs:
         shell: bash
         run: |
           version=$(cat package.json | jq '.devEngines.packageManager.version' --raw-output)
+          echo "Version detected: $version"
           npm install -g npm@$version
 
       - name: Install deps
@@ -56,6 +57,7 @@ jobs:
         shell: bash
         run: |
           version=$(cat package.json | jq '.devEngines.packageManager.version' --raw-output)
+          echo "Version detected: $version"
           npm install -g npm@$version
 
       - name: Install deps
