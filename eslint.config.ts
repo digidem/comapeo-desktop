@@ -5,7 +5,7 @@ import { includeIgnoreFile } from '@eslint/compat'
 import js from '@eslint/js'
 import pluginQuery from '@tanstack/eslint-plugin-query'
 import pluginRouter from '@tanstack/eslint-plugin-router'
-import * as pluginReactHooks from 'eslint-plugin-react-hooks'
+import pluginReactHooks from 'eslint-plugin-react-hooks'
 import { defineConfig } from 'eslint/config'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
@@ -74,8 +74,8 @@ export default defineConfig(
 		extends: [
 			react.configs['recommended-typescript'],
 			pluginRouter.configs['flat/recommended'],
-			// @ts-expect-error Fixed upstream but not published yet (https://github.com/facebook/react/issues/34745)
-			pluginReactHooks.configs['recommended-latest'],
+			// @ts-expect-error https://github.com/facebook/react/issues/34788
+			pluginReactHooks.configs.flat.recommended,
 			pluginQuery.configs['flat/recommended'],
 		],
 		rules: {
