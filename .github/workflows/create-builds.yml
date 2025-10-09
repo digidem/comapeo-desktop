@@ -83,7 +83,7 @@ jobs:
         run: node --run intl
 
         # Roughly follows https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
-      - name: Set up Apple codesigning
+      - name: Set up Apple code signing
         if: ${{ startsWith(matrix.os.name, 'macos') }}
         env:
           CERT: ${{ secrets.APPLE_SIGN_CERT }}
