@@ -76,6 +76,13 @@ jobs:
         with:
           node-version-file: .nvmrc
 
+      - name: Update npm version
+        shell: bash
+        run: |
+          version=$(cat package.json | jq '.devEngines.packageManager.version' --raw-output)
+          echo "Version detected: $version"
+          npm install -g npm@$version
+
       - name: Install dependencies
         run: npm ci
 
