@@ -23,6 +23,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Update npm version
+        shell: bash
         run: |
           version=$(cat package.json | jq '.devEngines.packageManager.version' --raw-output)
           npm install -g npm@$version
@@ -52,6 +53,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Update npm version
+        shell: bash
         run: |
           version=$(cat package.json | jq '.devEngines.packageManager.version' --raw-output)
           npm install -g npm@$version
