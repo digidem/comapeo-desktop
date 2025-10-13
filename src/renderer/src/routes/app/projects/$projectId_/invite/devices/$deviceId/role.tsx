@@ -13,7 +13,7 @@ import { DeviceRow } from '../-shared/device-row'
 import { BLUE_GREY } from '../../../../../../../colors'
 import { GenericRoutePendingComponent } from '../../../../../../../components/generic-route-pending-component'
 import { Icon } from '../../../../../../../components/icon'
-import { useLocalPeers } from '../../../../../../../hooks/peers'
+import { useLocalPeersState } from '../../../../../../../contexts/local-peers-store-context'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId_/invite/devices/$deviceId/role',
@@ -31,7 +31,9 @@ function RouteComponent() {
 	const { peerOnLoad } = Route.useRouteContext()
 	const { projectId, deviceId } = Route.useParams()
 
-	const updatedPeer = useLocalPeers().find((p) => p.deviceId === deviceId)
+	const updatedPeer = useLocalPeersState((peers) => {
+		return peers.find((p) => p.deviceId === deviceId)
+	})
 
 	const peer = updatedPeer || peerOnLoad
 

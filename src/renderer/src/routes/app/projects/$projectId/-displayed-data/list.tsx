@@ -364,6 +364,7 @@ function useVirtual(
 		[data],
 	)
 
+	// eslint-disable-next-line react-hooks/incompatible-library
 	return useVirtualizer({
 		count: data.length,
 		getScrollElement: () => listRef.current,

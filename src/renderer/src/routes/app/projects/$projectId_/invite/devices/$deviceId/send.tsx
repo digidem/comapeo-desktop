@@ -30,7 +30,7 @@ import { ErrorDialog } from '../../../../../../../components/error-dialog'
 import { GenericRoutePendingComponent } from '../../../../../../../components/generic-route-pending-component'
 import { Icon } from '../../../../../../../components/icon'
 import { ButtonLink } from '../../../../../../../components/link'
-import { useLocalPeers } from '../../../../../../../hooks/peers'
+import { useLocalPeersState } from '../../../../../../../contexts/local-peers-store-context'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -202,7 +202,9 @@ function ReviewInvitation({
 
 	const { role } = Route.useSearch()
 
-	const updatedPeer = useLocalPeers().find((p) => p.deviceId === deviceId)
+	const updatedPeer = useLocalPeersState((peers) => {
+		return peers.find((p) => p.deviceId === deviceId)
+	})
 
 	const peer = updatedPeer || peerOnLoad
 
@@ -385,7 +387,9 @@ function InviteRejected({
 
 	const { peerOnLoad } = Route.useRouteContext()
 
-	const updatedPeer = useLocalPeers().find((p) => p.deviceId === deviceId)
+	const updatedPeer = useLocalPeersState((peers) => {
+		return peers.find((p) => p.deviceId === deviceId)
+	})
 
 	const peer = updatedPeer || peerOnLoad
 
