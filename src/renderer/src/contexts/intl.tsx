@@ -85,7 +85,6 @@ export function IntlProvider({ children }: PropsWithChildren) {
 			messages={messagesToUse}
 			locale={persistedLocale}
 			defaultLocale="en"
-			wrapRichTextChunksInFragment
 			defaultRichTextElements={RICH_TEXT_MAPPINGS}
 		>
 			{children}
