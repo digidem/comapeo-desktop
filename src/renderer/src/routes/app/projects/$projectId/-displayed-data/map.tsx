@@ -14,6 +14,9 @@ import {
 import type { Observation, Preset, Track } from '@comapeo/schema'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
+import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
+import { captureMessage } from '@sentry/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import {
 	useChildMatches,
@@ -68,7 +71,11 @@ const DEFAULT_BOUNDING_BOX: [number, number, number, number] = [
 	-180, -90, 180, 90,
 ]
 
-const BASE_FIT_BOUNDS_OPTIONS: FitBoundsOptions = { padding: 40, maxZoom: 12 }
+const BASE_FIT_BOUNDS_OPTIONS: FitBoundsOptions = {
+	padding: 40,
+	maxZoom: 12,
+	linear: true,
+}
 
 export function DisplayedDataMap() {
 	const { formatMessage: t } = useIntl()
@@ -413,12 +420,24 @@ export function DisplayedDataMap() {
 	const enableMapInteractions =
 		currentRoute.routeId === '/app/projects/$projectId/'
 
-	const observationFeatureToShowCategoryIconOn =
-		documentToHighlight && documentToHighlight.type === 'observation'
-			? observationsFeatureCollection.features.find(
-					(f) => f.properties.docId === documentToHighlight.docId,
-				)
-			: undefined
+	const highlightedFeature = useMemo(() => {
+		if (!documentToHighlight) {
+			return undefined
+		}
+
+		const collectionToSearch =
+			documentToHighlight.type === 'observation'
+				? observationsFeatureCollection
+				: tracksFeatureCollection
+
+		return collectionToSearch.features.find(
+			(f) => f.properties.docId === documentToHighlight.docId,
+		)
+	}, [
+		documentToHighlight,
+		observationsFeatureCollection,
+		tracksFeatureCollection,
+	])
 
 	const showZoomToDataControl =
 		currentRoute.routeId !==
@@ -486,7 +505,7 @@ export function DisplayedDataMap() {
 					type="geojson"
 					id={TRACKS_SOURCE_ID}
 					data={tracksFeatureCollection}
-					// Need this in order for the feature-state querying to work when hovering
+					// NOTE: Need this in order for the feature-state querying to work when hovering
 					promoteId="docId"
 				>
 					<Layer
@@ -501,7 +520,7 @@ export function DisplayedDataMap() {
 					type="geojson"
 					id={OBSERVATIONS_SOURCE_ID}
 					data={observationsFeatureCollection}
-					// Need this in order for the feature-state querying to work when hovering
+					// NOTE: Need this in order for the feature-state querying to work when hovering
 					promoteId="docId"
 				>
 					<Layer
@@ -511,34 +530,48 @@ export function DisplayedDataMap() {
 					/>
 				</Source>
 
-				{observationFeatureToShowCategoryIconOn &&
-				(currentRoute.routeId ===
+				{(currentRoute.routeId ===
 					'/app/projects/$projectId/observations/$observationDocId/' ||
 					currentRoute.routeId ===
-						'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name') ? (
+						'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name') &&
+				highlightedFeature &&
+				highlightedFeature.geometry.type === 'Point' &&
+				highlightedFeature.properties.type === 'observation' ? (
 					<Suspense>
 						<Marker
 							style={enableMapInteractions ? undefined : { cursor: 'default' }}
-							longitude={
-								observationFeatureToShowCategoryIconOn.geometry.coordinates[0]!
-							}
-							latitude={
-								observationFeatureToShowCategoryIconOn.geometry.coordinates[1]!
-							}
+							longitude={highlightedFeature.geometry.coordinates[0]!}
+							latitude={highlightedFeature.geometry.coordinates[1]!}
 						>
 							<CategoryIconMarker
 								projectId={projectId}
-								documentId={
-									observationFeatureToShowCategoryIconOn.properties.docId
-								}
-								categoryDocumentId={
-									observationFeatureToShowCategoryIconOn.properties
-										.categoryDocId
-								}
+								documentId={highlightedFeature.properties.docId}
+								categoryDocumentId={highlightedFeature.properties.categoryDocId}
 								lang={lang}
 							/>
 						</Marker>
 					</Suspense>
+				) : null}
+
+				{(currentRoute.routeId ===
+					'/app/projects/$projectId/observations/$observationDocId/' ||
+					currentRoute.routeId ===
+						'/app/projects/$projectId/tracks/$trackDocId/') &&
+				!highlightedFeature ? (
+					<Box
+						position="absolute"
+						bottom={0}
+						top={0}
+						right={0}
+						left={0}
+						bgcolor={BLACK}
+						display="grid"
+						sx={{ placeItems: 'center', backgroundColor: alpha(BLACK, 0.5) }}
+					>
+						<Typography color="textInverted">
+							{t(m.cannotDisplayFeature)}
+						</Typography>
+					</Box>
 				) : null}
 			</Map>
 		</Box>
@@ -623,7 +656,10 @@ function observationsToFeatureCollection(
 	categories: Array<Preset>,
 ) {
 	const displayablePoints: Array<
-		Feature<Point, { docId: string; categoryDocId?: string }>
+		Feature<
+			Point,
+			{ type: 'observation'; docId: string; categoryDocId?: string }
+		>
 	> = []
 
 	for (const obs of observations) {
@@ -632,6 +668,7 @@ function observationsToFeatureCollection(
 
 			displayablePoints.push(
 				point([obs.lon, obs.lat], {
+					type: 'observation' as const,
 					docId: obs.docId,
 					categoryDocId: category?.docId,
 				}),
@@ -643,17 +680,45 @@ function observationsToFeatureCollection(
 }
 
 function tracksToFeatureCollection(tracks: Array<Track>) {
-	return featureCollection(
-		tracks.map((track) =>
-			lineString(
-				track.locations.map((location) => [
-					location.coords.longitude,
-					location.coords.latitude,
-				]),
-				{ docId: track.docId },
-			),
-		),
-	)
+	const displayableTracks = []
+
+	for (const t of tracks) {
+		if (t.locations.length === 0) {
+			captureMessage('Track has no locations', {
+				level: 'warning',
+				extra: { docId: t.docId },
+			})
+
+			continue
+		}
+
+		const locations = t.locations.map((location) => [
+			location.coords.longitude,
+			location.coords.latitude,
+		])
+
+		const featureProperties = {
+			type: 'track' as const,
+			docId: t.docId,
+		}
+
+		// NOTE: We still want to show tracks despite having only 1 location
+		// so we duplicate the lone point to make it a valid line string.
+		if (locations.length === 1) {
+			captureMessage('Track has only 1 location', {
+				level: 'warning',
+				extra: { docId: t.docId },
+			})
+
+			displayableTracks.push(
+				lineString(locations.concat(locations), featureProperties),
+			)
+		} else {
+			displayableTracks.push(lineString(locations, featureProperties))
+		}
+	}
+
+	return featureCollection(displayableTracks)
 }
 
 function createTrackLayerPaintProperty(
@@ -711,5 +776,11 @@ const m = defineMessages({
 		defaultMessage: 'Zoom to data',
 		description:
 			'Text displayed when hovering over map control for zooming to data.',
+	},
+	cannotDisplayFeature: {
+		id: 'routes.app.projects.$projectId.-displayed.data.map.cannotDisplayFeature',
+		defaultMessage: 'Cannot display feature',
+		description:
+			'Text displayed when map feature for selected data cannot be displayed',
 	},
 })
