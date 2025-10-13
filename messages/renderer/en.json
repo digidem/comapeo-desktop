@@ -101,6 +101,10 @@
     "description": "Title for list item that is a track.",
     "message": "Track"
   },
+  "routes.app.projects.$projectId.-displayed.data.map.cannotDisplayFeature": {
+    "description": "Text displayed when map feature for selected data cannot be displayed",
+    "message": "Cannot display feature"
+  },
   "routes.app.projects.$projectId.-displayed.data.map.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
