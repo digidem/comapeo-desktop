@@ -2,17 +2,17 @@ import { beginningOfMonthUtc, formatIsoUtc } from './lib/date.ts'
 import { OneAtATimeQueue } from './lib/one-at-a-time-queue.ts'
 import { maxBy } from './lib/utils.ts'
 
-export type RequiredReportFields = { dateGenerated: string }
+type RequiredReportFields = { dateGenerated: string }
 
-export type Report<Data> = RequiredReportFields & Data
+type Report<Data> = RequiredReportFields & Data
 
-export type Queue<Data = unknown> = {
+type Queue<Data = unknown> = {
 	/** An ISO date, such as `2012-03-04`, for the newest report successfully sent. */
 	highWatermark?: string
 	reports: Array<Report<Data>>
 }
 
-export type StorageAdaptor<Data = unknown> = {
+type StorageAdaptor<Data = unknown> = {
 	get: () => Promise<Queue<Data> | undefined> | (Queue<Data> | undefined)
 	set: (queue: Queue<Data>) => Promise<void> | void
 	remove: () => Promise<void> | void
