@@ -65,7 +65,7 @@ export const Route = createFileRoute(
 	},
 })
 
-export const SEND_INVITE_GLOBAL_MUTATIONS_KEY = createGlobalMutationsKey([
+const SEND_INVITE_GLOBAL_MUTATIONS_KEY = createGlobalMutationsKey([
 	'invite',
 	'send',
 ])
