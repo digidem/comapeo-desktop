@@ -101,7 +101,6 @@ function RouteComponent() {
 				<ButtonLink
 					to="/app/projects/$projectId/settings/categories"
 					params={{ projectId }}
-					reloadDocument
 					variant="outlined"
 					fullWidth
 					sx={{ maxWidth: 400 }}
@@ -111,7 +110,6 @@ function RouteComponent() {
 				<ButtonLink
 					to="/app/projects/$projectId/invite"
 					params={{ projectId }}
-					reloadDocument
 					variant="contained"
 					fullWidth
 					sx={{ maxWidth: 400 }}
