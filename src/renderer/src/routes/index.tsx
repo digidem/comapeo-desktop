@@ -52,6 +52,7 @@ export const Route = createFileRoute('/')({
 				to: '/app/projects/$projectId',
 				params: { projectId: projectToUse.projectId },
 				replace: true,
+				reloadDocument: true,
 			})
 		}
 
