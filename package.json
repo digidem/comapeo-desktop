@@ -160,7 +160,7 @@
 		"scroll-into-view-if-needed": "3.1.0",
 		"semver": "7.7.3",
 		"typescript": "5.9.3",
-		"typescript-eslint": "8.46.0",
+		"typescript-eslint": "8.46.1",
 		"utm": "1.1.1",
 		"vite": "7.1.9",
 		"vite-plugin-icons-spritesheet": "3.0.1",
