@@ -91,8 +91,3 @@ export function useLocalPeersState<T>(
 	const store = useLocalPeersStore()
 	return useStore(store.instance, selector!)
 }
-
-export function useLocalPeersActions() {
-	const store = useLocalPeersStore()
-	return store.actions
-}
