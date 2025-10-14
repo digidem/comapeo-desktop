@@ -56,11 +56,11 @@ Releases are conducted via GitHub Actions using manually triggered workflow disp
 
 2. Press the `Start Scheduled Release` button.
 
-   _TODO: add screenshot_
+   !["Start Scheduled Release" actions page](./images/start-scheduled-release-00.png)
 
 3. Press the `Run workflow` dropdown. It should already specify `main` as the default branch to use, which is what is desired in most cases.
 
-   _TODO: add screenshot_
+   !["Start Scheduled Release" actions page with "Run Workflow" dropdown showing](./images/start-scheduled-release-01.png)
 
 4. Run the workflow. This will create a RC pull request that targets a release branch with the next scheduled version and separately bumps the version on the `main` branch to prepare to the next scheduled release (whenever that may be).
 
@@ -70,11 +70,11 @@ Releases are conducted via GitHub Actions using manually triggered workflow disp
 
 2. Press the `Start Hotfix Release` button.
 
-   _TODO: add screenshot_
+   !["Start Hotfix Release" actions page](./images/start-hotfix-release-00.png)
 
 3. Press the `Run workflow` dropdown. It should already specify `main` as the default branch to use, which is what is desired in most cases. It will also require you to specify a version to hotfix. This should be the first component of the relevant release version you want to hotfix. For example, if the release version is `2.0`, you should specify `2`.
 
-   _TODO: add screenshot_
+   !["Start Hotfix Release" actions page with "Run Workflow" dropdown showing](./images/start-hotfix-release-01.png)
 
 4. Run the workflow. This will create a RC pull request that targets the relevant release version branch based on the input you provided in the dispatch.
 
