@@ -150,7 +150,7 @@ test.describe('onboarding', () => {
 			exact: true,
 		})
 		await expect(diagnosticCheckbox).toBeChecked()
-		await diagnosticCheckbox.uncheck()
+		await diagnosticCheckbox.uncheck({ timeout: 200 })
 
 		await page.getByRole('button', { name: 'Go back', exact: true }).click()
 		await page.getByRole('link', { name: 'Learn More', exact: true }).click()
