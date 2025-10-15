@@ -117,9 +117,7 @@ jobs:
         if: ${{ matrix.os.name != 'linux'}}
         run: node --run test-e2e
 
-        # NOTE: Addresses issue with app not launching
-        # https://github.com/microsoft/playwright/issues/11932
-        # https://github.com/microsoft/playwright/issues/34251
+        # NOTE: Addresses issue with app not launching (https://github.com/microsoft/playwright/issues/34251#issuecomment-2580645333)
       - name: Run e2e tests (Linux)
         if: ${{ matrix.os.name == 'linux'}}
         run: |
