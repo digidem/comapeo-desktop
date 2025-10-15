@@ -38,6 +38,7 @@ const {
 	ASAR,
 	COMAPEO_DIAGNOSTICS_METRICS_URL,
 	COMAPEO_METRICS_ACCESS_TOKEN,
+	COMAPEO_TEST,
 	ONLINE_STYLE_URL,
 	USER_DATA_PATH,
 	VITE_MAPBOX_ACCESS_TOKEN,
@@ -71,12 +72,25 @@ const {
 		),
 		COMAPEO_METRICS_ACCESS_TOKEN: v.optional(v.string()),
 		COMAPEO_DIAGNOSTICS_METRICS_URL: v.optional(v.pipe(v.string(), v.url())),
+		COMAPEO_TEST: v.optional(
+			v.pipe(
+				v.union(
+					[v.literal('true'), v.literal('false')],
+					"ASAR env variable must be 'true' or 'false'",
+				),
+				v.transform((v) => v === 'true'),
+			),
+		),
 		ONLINE_STYLE_URL: v.optional(v.pipe(v.string(), v.url())),
 		USER_DATA_PATH: v.optional(v.string()),
 		VITE_MAPBOX_ACCESS_TOKEN: v.optional(v.string()),
 	}),
 	process.env,
 )
+
+if (typeof COMAPEO_TEST === 'boolean' && APP_TYPE !== 'internal') {
+	throw new Error('COMAPEO_TEST can only be used when APP_TYPE is "internal"')
+}
 
 const RENDERER_VITE_CONFIG_PATH = fileURLToPath(
 	new URL('./src/renderer/vite.config.ts', import.meta.url),
@@ -216,7 +230,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase<CoMapeoDesktopForgePluginConf
 
 		const ignoresToAppend = [
 			// Unnecessary directories
-			/^\/(\.github|\.husky|data|docs|messages|patches|\.tanstack|\.vscode|scripts)/,
+			/^\/(\.github|\.husky|data|docs|messages|patches|\.tanstack|\.vscode|scripts|tests-e2e)/,
 			// Unnecessary files
 			/^\/\.env/,
 			/^\/.*\.config\.(js|ts)$/,
@@ -311,7 +325,8 @@ const plugins: Array<ForgeConfigPlugin> = [
 		[FuseV1Options.RunAsNode]: false,
 		[FuseV1Options.EnableCookieEncryption]: true,
 		[FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
-		[FuseV1Options.EnableNodeCliInspectArguments]: false,
+		// NOTE: See known issues in https://playwright.dev/docs/api/class-electron
+		[FuseV1Options.EnableNodeCliInspectArguments]: !!COMAPEO_TEST,
 		[FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
 		[FuseV1Options.OnlyLoadAppFromAsar]: ASAR,
 	}),
