@@ -117,10 +117,14 @@ jobs:
         if: ${{ matrix.os.name != 'linux'}}
         run: node --run test-e2e
 
-        # NOTE: https://github.com/microsoft/playwright/issues/11932
+        # NOTE: Addresses issue with app not launching
+        # https://github.com/microsoft/playwright/issues/11932
+        # https://github.com/microsoft/playwright/issues/34251
       - name: Run e2e tests (Linux)
         if: ${{ matrix.os.name == 'linux'}}
-        run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- node --run test-e2e
+        run: |
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- node --run test-e2e
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
