@@ -114,7 +114,13 @@ jobs:
         run: node --run forge:package
 
       - name: Run e2e tests
+        if: ${{ matrix.os.name != 'linux'}}
         run: node --run test-e2e
+
+        # NOTE: https://github.com/microsoft/playwright/issues/11932
+      - name: Run e2e tests (Linux)
+        if: ${{ matrix.os.name == 'linux'}}
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- node --run test-e2e
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
