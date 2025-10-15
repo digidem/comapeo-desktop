@@ -121,6 +121,6 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: report-${{ matrix.os.name }}-${{ github.sha }}
-          path: tests-e2e/report/
+          path: tests-e2e/playwright-report/
           overwrite: true
           retention-days: 30
