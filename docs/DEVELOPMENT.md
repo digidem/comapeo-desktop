@@ -95,9 +95,20 @@ npm start                  # Build translations, then build the app in developme
 
 ### Testing
 
+#### Unit tests
+
 The renderer app (aka React code) can run unit test with [Vitest](https://vitest.dev/) (and integration tests with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)).
 
 To run unit or integration tests run `node --run vitest:run`. See [vitest run](https://vitest.dev/guide/cli.html#vitest-run).
+
+#### End-to-end (e2e) tests
+
+These tests use [Playwright](https://playwright.dev/) and it's [experimental Electron support](https://playwright.dev/docs/api/class-electron). They require a packaged version of the app in order to be executed. The general steps are as follows:
+
+    1. Create the packaged application by running `COMAPEO_TEST=true APP_TYPE=internal node --run forge:package`. Specifying the environment variables is necessary.
+    2. Run the tests using `node --run test-e2e`.
+
+When the tests finish, you can view a HTML report of the results using `npx playwright show-report tests-e2e/playwright-report` (the console will print this instruction too).
 
 ## Translations
 

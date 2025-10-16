@@ -71,3 +71,64 @@ jobs:
 
       - name: Run tests
         run: node --run test
+
+  test-e2e:
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          [
+            { name: 'linux', image: 'ubuntu-latest' },
+            { name: 'macos', image: 'macos-latest' },
+            { name: 'macos-intel', image: 'macos-13' },
+            { name: 'windows', image: 'windows-latest' },
+          ]
+    runs-on: ${{ matrix.os.image }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Use Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          cache: 'npm'
+          node-version-file: '.nvmrc'
+
+      - name: Update npm version
+        shell: bash
+        run: |
+          version=$(cat package.json | jq '.devEngines.packageManager.version' --raw-output)
+          echo "Version detected: $version"
+          npm install -g npm@$version
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build translations
+        run: node --run intl
+
+      - name: Create packaged app
+        env:
+          APP_TYPE: 'internal'
+          COMAPEO_TEST: 'true'
+        run: node --run forge:package
+
+      - name: Run e2e tests
+        if: ${{ matrix.os.name != 'linux'}}
+        run: node --run test-e2e
+
+        # NOTE: Addresses issue with app not launching (https://github.com/microsoft/playwright/issues/34251#issuecomment-2580645333)
+      - name: Run e2e tests (Linux)
+        if: ${{ matrix.os.name == 'linux'}}
+        run: |
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- node --run test-e2e
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: playwright-report-${{ matrix.os.name }}-${{ github.sha }}
+          path: tests-e2e/playwright-report/
+          overwrite: true
+          retention-days: 30
