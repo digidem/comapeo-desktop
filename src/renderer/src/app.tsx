@@ -143,7 +143,7 @@ export function App() {
 
 							<Box height="100dvh">
 								{platform === 'darwin' ? (
-									<AppTitleBar platform={platform} />
+									<AppTitleBar platform={platform} testId="app-title-bar" />
 								) : null}
 
 								<Box height={MAIN_CONTENT_HEIGHT}>
