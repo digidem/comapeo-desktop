@@ -68,9 +68,9 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PR_NUMBER: ${{ inputs.pr_number || github.event.pull_request.number }}
-          ARTIFACTS_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts
+          RUN_URL: ${{ format('{0}/{1}/actions/runs/{2}', github.server_url, github.repository, github.run_id) }}
           COMMENT_BODY: |
-            :construction: Release candidate build based on ${{ env.BUILD_SHA }} (potential merge of ${{ env.PR_HEAD_SHA }}): ${{ env.ARTIFACTS_URL }}
+            :construction: Release candidate build based on ${{ env.BUILD_SHA }} (potential merge of ${{ env.PR_HEAD_SHA }}). Assets can be found in the `Artifacts` section of ${{ env.RUN_URL }}
 
         run: |
           gh pr comment $PR_NUMBER --body "$COMMENT_BODY" --repo "$GITHUB_REPOSITORY"

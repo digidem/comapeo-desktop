@@ -14,6 +14,7 @@ on:
         description: 'SHA of commit to build'
         required: true
         type: string
+
   workflow_dispatch:
     inputs:
       app_type:
@@ -50,7 +51,7 @@ jobs:
           [
             { name: 'linux', image: 'ubuntu-latest' },
             { name: 'macos', image: 'macos-latest' },
-            { name: 'macos-intel', image: 'macos-13' },
+            { name: 'macos-intel', image: 'macos-15-intel' },
             { name: 'windows', image: 'windows-latest' },
           ]
     runs-on: ${{ matrix.os.image }}
@@ -75,17 +76,85 @@ jobs:
         with:
           node-version-file: .nvmrc
 
+      - name: Update npm version
+        shell: bash
+        run: |
+          version=$(cat package.json | jq '.devEngines.packageManager.version' --raw-output)
+          echo "Version detected: $version"
+          npm install -g npm@$version
+
       - name: Install dependencies
         run: npm ci
 
       - name: Build translations
         run: node --run intl
 
+        # Roughly follows https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
+      - name: Set up Apple code signing
+        if: ${{ startsWith(matrix.os.name, 'macos') }}
+        env:
+          CERT: ${{ secrets.APPLE_SIGN_CERT }}
+          CERT_PASSWORD: ${{ secrets.APPLE_SIGN_CERT_PASSWORD }}
+          IDENTITY: ${{ vars.APPLE_SIGN_IDENTITY }}
+        run: |
+          CERT_PATH="$RUNNER_TEMP/cert.p12"
+          KEYCHAIN_PATH="$RUNNER_TEMP/app-signing.keychain-db"
+          # Can be anything. Not sensitive due to ephemeral environment.
+          KEYCHAIN_PASSWORD="$(openssl rand -base64 16)"
+
+          # Create certificate file
+          echo -n "$CERT" | base64 -d -o "$CERT_PATH"
+
+          # Create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          ### Update keychain settings
+          security set-keychain-settings -lut 3600 "$KEYCHAIN_PATH"
+
+          ### Unlock the keychain
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          # Import certificate into keychain
+          security import "$CERT_PATH" -P "$CERT_PASSWORD" -t cert -f pkcs12 -k "$KEYCHAIN_PATH" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH" > /dev/null
+
+          # Make keychain the default so identity can be found without specifying keychain
+          security default-keychain -d user -s "$KEYCHAIN_PATH"
+
+          # Check that keychain setup and certificate import worked
+          if security find-identity -v -p codesigning | grep -q "$IDENTITY"
+          then
+            echo "✅ Codesigning is set up correctly"
+          else
+            echo "⛔️ Codesigning is set up incorrectly"
+            exit 1
+          fi
+
+          # Set relevant env variables for subsequent job steps
+          echo "APPLE_SIGN_IDENTITY=$IDENTITY" >> "$GITHUB_ENV"
+
+      - name: Set up Apple notarization
+        if: ${{ startsWith(matrix.os.name, 'macos') }}
+        env:
+          KEY: ${{ secrets.APPLE_APP_STORE_CONNECT_AUTH_KEY }}
+          KEY_ID: ${{ secrets.APPLE_APP_STORE_CONNECT_KEY_ID }}
+          KEY_ISSUER: ${{ secrets.APPLE_APP_STORE_CONNECT_KEY_ISSUER }}
+        run: |
+          KEY_PATH="$RUNNER_TEMP/apple-auth-key.p8"
+
+          # Generate the key file
+          echo -n "$KEY" | base64 -d -o "$KEY_PATH"
+
+          # Set relevant env variables for subsequent job steps
+          echo "APPLE_API_KEY_ID=$KEY_ID" >> "$GITHUB_ENV"
+          echo "APPLE_API_KEY_ISSUER=$KEY_ISSUER" >> "$GITHUB_ENV"
+          echo "APPLE_API_KEY_PATH=$KEY_PATH" >> "$GITHUB_ENV"
+
       - name: Create distributables
         env:
           APP_TYPE: ${{ inputs.app_type }}
           COMAPEO_METRICS_ACCESS_TOKEN: ${{ secrets.COMAPEO_METRICS_ACCESS_TOKEN }}
-          COMAPEO_DIAGNOSTICS_METRICS_URL: ${{ secrets.COMAPEO_DIAGNOSTICS_METRICS_URL }}
+          COMAPEO_DIAGNOSTICS_METRICS_URL: ${{ vars.COMAPEO_DIAGNOSTICS_METRICS_URL }}
           ONLINE_STYLE_URL: ${{ secrets.ONLINE_STYLE_URL }}
           VITE_FEATURE_TEST_DATA_UI: ${{ env.APP_TYPE == 'production' && 'false' || 'true' }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -94,7 +163,7 @@ jobs:
           VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
         run: node --run forge:make
 
-      - name: Upload artifacts
+      - name: Upload artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: builds-${{ matrix.os.name }}-${{ env.BUILD_SHA }}

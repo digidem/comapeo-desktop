@@ -102,7 +102,7 @@ function RouteComponent() {
 				})
 			} else {
 				await setActiveProjectId.mutateAsync(null)
-				router.navigate({ to: '/onboarding/project' })
+				router.navigate({ to: '/onboarding/project', reloadDocument: true })
 			}
 		},
 	})

@@ -23,6 +23,10 @@
     "description": "Text displayed when hovering over map control for zooming to data.",
     "message": "Мэдээллийг томруулах"
   },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
+    "description": "Label text for download button",
+    "message": "Татах"
+  },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
     "message": "Урих"
@@ -87,17 +91,21 @@
     "description": "Label for save button.",
     "message": "Хадгалах"
   },
-  "routes.app.projects.$projectId_.settings.team.deviceNameColumnTitle": {
-    "description": "Title used for column containing device name of project members.",
-    "message": "Төхөөрөмжний нэр"
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectButton": {
+    "description": "Button text to initiate leave project flow.",
+    "message": "Төслийг орхих"
   },
-  "routes.app.projects.$projectId_.settings.team.inviteDevice": {
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectExplainerTitle": {
+    "description": "Title text for leave project explanation.",
+    "message": "Төслийг орхих?"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectNavTitle": {
+    "description": "Title of the team collaborator info page when the leave project flow is initiated.",
+    "message": "Төслийг орхих"
+  },
+  "routes.app.projects.$projectId_.settings.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Төхөөрөмж урих"
-  },
-  "routes.app.projects.$projectId_.settings.team.leaveProject": {
-    "description": "Text for button that initiates steps for leaving project.",
-    "message": "Төслийг орхих"
   },
   "routes.app.settings.background-map.close": {
     "description": "Text displayed for closing dialogs",

@@ -20,7 +20,6 @@ import {
 	IconButtonLink,
 	type ButtonLinkProps,
 } from '../../components/link'
-import type { ToRouteFullPath } from '../../lib/navigation'
 import { GLOBAL_MUTATIONS_BASE_KEY } from '../../lib/queries/global-mutations'
 
 export const Route = createFileRoute('/app')({
@@ -61,7 +60,15 @@ function RouteComponent() {
 	const syncState = useSyncState({ projectId: activeProjectId })
 	const syncEnabled = syncState?.data.isSyncEnabled
 
-	const pageHasEditing = checkPageHasEditing(currentRoute.fullPath)
+	const pageHasEditing =
+		currentRoute.routeId === '/app/settings/device-name' ||
+		currentRoute.routeId === '/app/settings/coordinate-system' ||
+		currentRoute.routeId === '/app/settings/language' ||
+		currentRoute.routeId === '/app/projects/$projectId_/settings/info' ||
+		currentRoute.routeId ===
+			'/app/projects/$projectId_/invite/devices/$deviceId/role' ||
+		currentRoute.routeId ===
+			'/app/projects/$projectId_/invite/devices/$deviceId/send'
 
 	const someGlobalMutationIsPending =
 		useIsMutating({ mutationKey: GLOBAL_MUTATIONS_BASE_KEY }) > 0
@@ -250,17 +257,6 @@ const SHARED_NAV_ITEM_PROPS = {
 		},
 	},
 } as const
-
-function checkPageHasEditing(currentPath: ToRouteFullPath) {
-	return (
-		currentPath === '/app/settings/device-name' ||
-		currentPath === '/app/settings/coordinate-system' ||
-		currentPath === '/app/settings/language' ||
-		currentPath === '/app/projects/$projectId/settings/info' ||
-		currentPath === '/app/projects/$projectId/invite/devices/$deviceId/role' ||
-		currentPath === '/app/projects/$projectId/invite/devices/$deviceId/send'
-	)
-}
 
 const m = defineMessages({
 	aboutTabLabel: {
