@@ -68,8 +68,6 @@ export default defineConfig((configEnv) => {
 				telemetry: false,
 			}),
 		],
-		test: {
-			environment: 'jsdom',
-		},
+		test: {},
 	}
 })
