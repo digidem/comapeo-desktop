@@ -11,7 +11,12 @@ export default {
 		'src/services/core.ts',
 		'src/shared/**/*.{js,ts}',
 	],
-	project: ['src/**/*.{js,ts,jsx,tsx}!', 'scripts/*.{js,ts}', '*.{js,ts}'],
+	project: [
+		'src/**/*.{js,ts,jsx,tsx}!',
+		'scripts/*.{js,ts}',
+		'tests-e2e/*.{js,ts}',
+		'*.{js,ts}',
+	],
 	ignore: ['**/*.generated.{js,ts}', 'src/renderer/src/generated/**'],
 	ignoreDependencies: ['@fontsource-variable/rubik', '@comapeo/fallback-smp'],
 	ignoreExportsUsedInFile: {
