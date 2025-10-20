@@ -11,4 +11,20 @@ export default defineConfig({
 		['list'],
 		['html', { open: 'never', outputFolder: 'tests-e2e/playwright-report' }],
 	],
+	projects: [
+		{
+			name: 'setup',
+			testMatch: /setup\.spec\.ts/,
+			teardown: 'teardown',
+		},
+		{
+			name: 'teardown',
+			testMatch: /teardown\.spec\.ts/,
+		},
+		{
+			name: 'onboarding',
+			testMatch: /onboarding\.spec\.ts/,
+			dependencies: ['setup'],
+		},
+	],
 })
