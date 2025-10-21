@@ -5,7 +5,7 @@ import {
 	type ElectronApplication,
 } from '@playwright/test'
 
-import { test } from './utils.ts'
+import { test, writeOutputsFile, type OnboardingOutputs } from './utils.ts'
 
 test.describe.configure({ mode: 'serial' })
 
@@ -22,6 +22,11 @@ test.beforeAll(async ({ appInfo }) => {
 test.afterAll(async () => {
 	await electronApp?.close()
 })
+
+const OUTPUTS: OnboardingOutputs = {
+	deviceName: 'Desktop (e2e)',
+	projectName: 'Project e2e',
+}
 
 test('welcome page', async () => {
 	const page = await electronApp.firstWindow()
@@ -208,12 +213,10 @@ test('device name step', async () => {
 		'0/60',
 	)
 
-	const validDeviceName = 'Desktop (e2e)'
-
-	await deviceNameInput.fill(validDeviceName)
+	await deviceNameInput.fill(OUTPUTS.deviceName)
 
 	await expect(page.locator('output[name="character-count"]')).toHaveText(
-		`${validDeviceName.length}/60`,
+		`${OUTPUTS.deviceName.length}/60`,
 	)
 
 	await page.getByRole('button', { name: 'Add Name', exact: true }).click()
@@ -309,12 +312,10 @@ test('create project', async () => {
 		'0/100',
 	)
 
-	const validProjectName = 'Project e2e'
-
-	await projectNameInput.fill(validProjectName)
+	await projectNameInput.fill(OUTPUTS.projectName)
 
 	await expect(page.locator('output[name="character-count"]')).toHaveText(
-		`${validProjectName.length}/100`,
+		`${OUTPUTS.projectName.length}/100`,
 	)
 
 	await page
@@ -353,4 +354,8 @@ test('create project success', async () => {
 	await expect(
 		page.getByRole('link', { name: 'Invite Collaborators', exact: true }),
 	).toBeVisible()
+})
+
+test('write outputs', async () => {
+	await writeOutputsFile('onboarding', OUTPUTS)
 })
