@@ -109,6 +109,7 @@ jobs:
         env:
           APP_TYPE: 'internal'
           COMAPEO_TEST: 'true'
+          VITE_FEATURE_TEST_DATA_UI: 'true'
         run: node --run forge:package
 
       - name: Run e2e tests
