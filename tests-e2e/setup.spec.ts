@@ -1,7 +1,12 @@
-import { writeFile } from 'node:fs/promises'
+import { mkdir } from 'node:fs/promises'
 import { _electron as electron } from '@playwright/test'
 
-import { USER_DATA_PATH_FILE, test } from './utils.ts'
+import {
+	OUTPUTS_DIR_PATH,
+	test,
+	writeOutputsFile,
+	type SetupOutputs,
+} from './utils.ts'
 
 test('setup', async ({ appInfo }) => {
 	const electronApp = await electron.launch({
@@ -10,11 +15,14 @@ test('setup', async ({ appInfo }) => {
 		timeout: 10_000,
 	})
 
-	const userDataPath = await electronApp.evaluate(async ({ app }) => {
-		return app.getPath('userData')
-	})
+	const outputs: SetupOutputs = {
+		userDataPath: await electronApp.evaluate(async ({ app }) => {
+			return app.getPath('userData')
+		}),
+	}
 
 	await electronApp.close()
 
-	await writeFile(USER_DATA_PATH_FILE, userDataPath, { encoding: 'utf-8' })
+	await mkdir(OUTPUTS_DIR_PATH)
+	await writeOutputsFile('setup', outputs)
 })

@@ -1,13 +1,26 @@
 import { readFile, rm } from 'node:fs/promises'
+import { join } from 'node:path'
+import { safeParse } from 'valibot'
 
-import { USER_DATA_PATH_FILE, test } from './utils.ts'
+import { OUTPUTS_DIR_PATH, SetupOutputsSchema, test } from './utils.ts'
 
 test('teardown', async () => {
-	const userDataPath = await readFile(USER_DATA_PATH_FILE, {
-		encoding: 'utf-8',
+	const content = await readFile(
+		join(OUTPUTS_DIR_PATH, 'setup.json'),
+		'utf-8',
+	).catch((err) => {
+		console.error(err)
+		return null
 	})
 
-	if (userDataPath) {
+	if (!content) {
+		return
+	}
+
+	const result = safeParse(SetupOutputsSchema, JSON.parse(content))
+
+	if (result.success) {
+		const { userDataPath } = result.output
 		console.log(`Removing user data at ${userDataPath}`)
 		await rm(userDataPath, { recursive: true })
 	}

@@ -1,3 +1,5 @@
+import { readFile, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { test as base } from '@playwright/test'
 import {
@@ -5,10 +7,7 @@ import {
 	parseElectronApp,
 	type ElectronAppInfo,
 } from 'electron-playwright-helpers'
-
-export const USER_DATA_PATH_FILE = fileURLToPath(
-	new URL('./results/user-data-path.txt', import.meta.url),
-)
+import * as v from 'valibot'
 
 export const test = base.extend<{ appInfo: ElectronAppInfo }>({
 	appInfo: (
@@ -28,3 +27,30 @@ export const test = base.extend<{ appInfo: ElectronAppInfo }>({
 		use(appInfo)
 	},
 })
+
+export const OUTPUTS_DIR_PATH = fileURLToPath(
+	new URL('./results/outputs', import.meta.url),
+)
+
+export async function writeOutputsFile(testName: string, value: unknown) {
+	return writeFile(
+		join(OUTPUTS_DIR_PATH, `${testName}.json`),
+		JSON.stringify(value),
+		'utf-8',
+	)
+}
+
+export async function readOutputsFile(testName: string) {
+	return readFile(join(OUTPUTS_DIR_PATH, `${testName}.json`), 'utf-8')
+}
+
+export const SetupOutputsSchema = v.object({
+	userDataPath: v.string(),
+})
+export type SetupOutputs = v.InferOutput<typeof SetupOutputsSchema>
+
+export const OnboardingOutputsSchema = v.object({
+	deviceName: v.string(),
+	projectName: v.string(),
+})
+export type OnboardingOutputs = v.InferOutput<typeof OnboardingOutputsSchema>
