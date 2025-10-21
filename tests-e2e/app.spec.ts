@@ -144,7 +144,8 @@ test.describe('app settings', () => {
 		await expect(settingsLinks).toHaveText([
 			// TODO: Should fix this in app using aria-label?
 			`${onboardingOutputs.deviceName}Edit`,
-			'English (System Preference)',
+			// TODO: The result of this will vary based on system language preferences.
+			/^English.*/,
 			'UTM Coordinates',
 			'Default Background',
 			'Create Test Data',
