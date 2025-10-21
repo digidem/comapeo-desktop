@@ -26,5 +26,10 @@ export default defineConfig({
 			testMatch: /onboarding\.spec\.ts/,
 			dependencies: ['setup'],
 		},
+		{
+			name: 'app',
+			testMatch: /app\.spec\.ts/,
+			dependencies: ['setup', 'onboarding'],
+		},
 	],
 })
