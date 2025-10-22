@@ -637,9 +637,9 @@
     "description": "Text indicating that the member device type is unspecified (displays when hovering over the icon).",
     "message": "Unspecified device type"
   },
-  "routes.app.projects.-shared.network-connection-info.notConnectedToWifi": {
-    "description": "Text displayed when Wi-Fi is not connected.",
-    "message": "Not connected to Wi-Fi"
+  "routes.app.projects.-shared.network-connection-info.wifiInfoUnavailable": {
+    "description": "Text displayed when Wi-Fi info is unavailable.",
+    "message": "Wi-Fi info unavailable."
   },
   "routes.app.route.aboutTabLabel": {
     "message": "About CoMapeo"
