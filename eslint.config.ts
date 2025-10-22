@@ -6,6 +6,7 @@ import js from '@eslint/js'
 import pluginQuery from '@tanstack/eslint-plugin-query'
 import pluginRouter from '@tanstack/eslint-plugin-router'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
+import pluginReactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig } from 'eslint/config'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
@@ -77,6 +78,7 @@ export default defineConfig(
 			// @ts-expect-error https://github.com/facebook/react/issues/34788
 			pluginReactHooks.configs.flat.recommended,
 			pluginQuery.configs['flat/recommended'],
+			pluginReactRefresh.configs.vite,
 		],
 		rules: {
 			'react-hooks/exhaustive-deps': 'error',
