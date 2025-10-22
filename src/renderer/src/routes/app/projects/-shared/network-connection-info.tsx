@@ -42,24 +42,23 @@ export function NetworkConnectionInfo({
 		>
 			{isRefetchingWifiConnection ? (
 				<Typography fontWeight={500}>{waitingText}</Typography>
-			) : wifiConnection ? (
-				<>
-					<WifiIcon offline={!netInfo.online} size={wifiIconSize} />
-					<Typography
-						fontWeight={500}
-						overflow="hidden"
-						textOverflow="ellipsis"
-						whiteSpace="nowrap"
-						flex={1}
-					>
-						{/* TODO: Should the effectiveType be translatable? */}
-						{wifiConnection.ssid} - {netInfo.effectiveType}
-					</Typography>
-				</>
 			) : (
 				<>
-					<WifiIcon offline size={wifiIconSize} />
-					<Typography fontWeight={500}>{t(m.notConnectedToWifi)}</Typography>
+					<WifiIcon
+						offline={!(netInfo.online || wifiConnection)}
+						size={wifiIconSize}
+					/>
+
+					<Typography fontWeight={500}>
+						{wifiConnection
+							? `${wifiConnection.ssid}${
+									netInfo.effectiveType
+										? // TODO: Should the effectiveType be translatable?
+											` - ${netInfo.effectiveType}`
+										: undefined
+								}`
+							: t(m.wifiInfoUnavailable)}
+					</Typography>
 				</>
 			)}
 		</Stack>
@@ -91,9 +90,9 @@ function WifiIcon({
 }
 
 const m = defineMessages({
-	notConnectedToWifi: {
-		id: 'routes.app.projects.-shared.network-connection-info.notConnectedToWifi',
-		defaultMessage: 'Not connected to Wi-Fi',
-		description: 'Text displayed when Wi-Fi is not connected.',
+	wifiInfoUnavailable: {
+		id: 'routes.app.projects.-shared.network-connection-info.wifiInfoUnavailable',
+		defaultMessage: 'Wi-Fi info unavailable.',
+		description: 'Text displayed when Wi-Fi info is unavailable.',
 	},
 })
