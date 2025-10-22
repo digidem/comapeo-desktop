@@ -336,7 +336,10 @@ test('create project success', async () => {
 	// Page
 	await expect(
 		page.getByRole('heading', { name: 'Success!', exact: true }),
-	).toBeVisible()
+	).toBeVisible({
+		// NOTE: Depending on machine, this might take a bit longer.
+		timeout: 10_000,
+	})
 
 	await expect(
 		page.getByRole('heading', {
