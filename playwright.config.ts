@@ -15,7 +15,6 @@ export default defineConfig({
 			name: 'setup',
 			testMatch: /setup\.spec\.ts/,
 			teardown: 'teardown',
-			retries: 1,
 		},
 		{
 			name: 'teardown',
