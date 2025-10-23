@@ -117,7 +117,7 @@ jobs:
         uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
         with:
           timeout_minutes: 5
-          max_attempts: 2
+          max_attempts: 3
           command: node --run test-e2e
 
         # NOTE: Addresses issue with app not launching (https://github.com/microsoft/playwright/issues/34251#issuecomment-2580645333)
@@ -126,7 +126,7 @@ jobs:
         uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
         with:
           timeout_minutes: 5
-          max_attempts: 2
+          max_attempts: 3
           command: |
             sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
             xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- node --run test-e2e
