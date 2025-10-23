@@ -329,7 +329,10 @@ test('create project success', async () => {
 	// Header
 	await expect(
 		page.getByRole('button', { name: 'Go back', exact: true }),
-	).not.toBeVisible()
+	).not.toBeVisible({
+		// NOTE: Depending on machine, project creation might take a bit longer.
+		timeout: 10_000,
+	})
 
 	// TODO: Assertions against the onboarding steps indicator
 
