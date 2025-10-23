@@ -9,6 +9,7 @@ import { useIsMutating } from '@tanstack/react-query'
 import {
 	Outlet,
 	createFileRoute,
+	redirect,
 	useChildMatches,
 	useNavigate,
 	useRouter,
@@ -17,6 +18,8 @@ import { defineMessages, useIntl } from 'react-intl'
 
 import { COMAPEO_BLUE, DARK_COMAPEO_BLUE, WHITE } from '../../colors'
 import { Icon } from '../../components/icon'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo'
+import { getActiveProjectIdQueryOptions } from '../../lib/queries/app-settings'
 import {
 	ONBOARDING_ACCEPT_INVITE_MUTATION_KEY,
 	ONBOARDING_CREATE_PROJECT_MUTATION_KEY,
@@ -25,6 +28,46 @@ import {
 } from './-shared/queries'
 
 export const Route = createFileRoute('/onboarding')({
+	beforeLoad: async ({ context }) => {
+		const { activeProjectId, clientApi, queryClient } = context
+
+		if (activeProjectId) {
+			throw redirect({
+				to: '/app/projects/$projectId',
+				params: { projectId: activeProjectId },
+				replace: true,
+			})
+		}
+
+		// NOTE: Accounts for when the active project ID is somehow missing
+		// but there are already projects that have been created/joined.
+		// The better solution is probably a project selection page of some sort,
+		// as opposed to automatic redirection to a valid project.
+
+		const projects = await queryClient.ensureQueryData({
+			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects'],
+			queryFn: async () => {
+				return clientApi.listProjects()
+			},
+		})
+
+		const projectToUse = projects[0]
+
+		if (projectToUse) {
+			await window.runtime.setActiveProjectId(projectToUse.projectId)
+
+			await queryClient.invalidateQueries({
+				queryKey: getActiveProjectIdQueryOptions().queryKey,
+			})
+
+			throw redirect({
+				to: '/app/projects/$projectId',
+				params: { projectId: projectToUse.projectId },
+				replace: true,
+				reloadDocument: true,
+			})
+		}
+	},
 	component: RouteComponent,
 })
 

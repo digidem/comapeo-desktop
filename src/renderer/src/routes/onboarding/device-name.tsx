@@ -115,6 +115,7 @@ function RouteComponent() {
 						<form.AppField name="deviceName">
 							{(field) => (
 								<field.TextField
+									id={field.name}
 									required
 									fullWidth
 									autoFocus
@@ -141,7 +142,11 @@ function RouteComponent() {
 											<Box component="span">
 												{field.state.meta.errors[0]?.message}
 											</Box>
-											<Box component="span">
+											<Box
+												component="output"
+												htmlFor={field.name}
+												name="character-count"
+											>
 												<form.Subscribe
 													selector={(state) =>
 														v._getGraphemeCount(state.values.deviceName)

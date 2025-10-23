@@ -101,6 +101,10 @@
     "description": "Title for list item that is a track.",
     "message": "Track"
   },
+  "routes.app.projects.$projectId.-displayed.data.map.cannotDisplayFeature": {
+    "description": "Text displayed when map feature for selected data cannot be displayed",
+    "message": "Cannot display feature"
+  },
   "routes.app.projects.$projectId.-displayed.data.map.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
@@ -365,6 +369,18 @@
     "description": "Text displayed when external device is disconnected.",
     "message": "Disconnected"
   },
+  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameNetwork": {
+    "description": "Text explaining that devices need to be on same Wi-Fi network.",
+    "message": "Check that devices are on the same Wi-Fi network"
+  },
+  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameVersion": {
+    "description": "Text explaining that devices need to be using same version of CoMapeo.",
+    "message": "Confirm that devices are using the same version of CoMapeo"
+  },
+  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingTitle": {
+    "description": "Title for device discovery troubleshooting section.",
+    "message": "Not seeing a device?"
+  },
   "routes.app.projects.$projectId_.invite.devices.index.gettingWifiInfo": {
     "description": "Text displayed when waiting for Wi-Fi information.",
     "message": "Getting Wi-Fi information…"
@@ -621,9 +637,9 @@
     "description": "Text indicating that the member device type is unspecified (displays when hovering over the icon).",
     "message": "Unspecified device type"
   },
-  "routes.app.projects.-shared.network-connection-info.notConnectedToWifi": {
-    "description": "Text displayed when Wi-Fi is not connected.",
-    "message": "Not connected to Wi-Fi"
+  "routes.app.projects.-shared.network-connection-info.wifiInfoUnavailable": {
+    "description": "Text displayed when Wi-Fi info is unavailable.",
+    "message": "Wi-Fi info unavailable."
   },
   "routes.app.route.aboutTabLabel": {
     "message": "About CoMapeo"
@@ -636,6 +652,10 @@
   },
   "routes.app.route.exchangeTabLabel": {
     "message": "Exchange"
+  },
+  "routes.app.route.projectTabAccessibleLabel": {
+    "description": "Accessible label for project tab link in navigation.",
+    "message": "View project."
   },
   "routes.app.settings.background-map.acceptedFileTypes": {
     "description": "Text describing what kind of files are usable for background maps.",
@@ -708,6 +728,10 @@
   "routes.app.settings.device-name.characterCount": {
     "description": "Displays number of characters in input out of the maximum allowed characters.",
     "message": "{count}/{max}"
+  },
+  "routes.app.settings.device-name.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Go back."
   },
   "routes.app.settings.device-name.inputLabel": {
     "description": "Label for the device name input.",

@@ -34,7 +34,7 @@ export function DeviceIcon({
 	)
 }
 
-export function getIconNameForDeviceType(
+function getIconNameForDeviceType(
 	deviceType: MemberApi.MemberInfo['deviceType'],
 ): IconName {
 	switch (deviceType) {
@@ -58,7 +58,7 @@ export function getIconNameForDeviceType(
 	}
 }
 
-export function getDeviceIconTitleMessage(
+function getDeviceIconTitleMessage(
 	deviceType: MemberApi.MemberInfo['deviceType'],
 ) {
 	switch (deviceType) {

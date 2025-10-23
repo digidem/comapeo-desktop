@@ -11,7 +11,13 @@ const FALLBACK_TITLE_BAR_HEIGHT_PX = 40
 // - https://github.com/WICG/window-controls-overlay/blob/main/explainer.md#css-environment-variables
 export const TITLE_BAR_HEIGHT = `env(titlebar-area-height, ${FALLBACK_TITLE_BAR_HEIGHT_PX}px)`
 
-export function AppTitleBar({ platform }: { platform: NodeJS.Platform }) {
+export function AppTitleBar({
+	platform,
+	testId,
+}: {
+	platform: NodeJS.Platform
+	testId?: string
+}) {
 	const { formatMessage: t } = useIntl()
 
 	return (
@@ -24,6 +30,7 @@ export function AppTitleBar({ platform }: { platform: NodeJS.Platform }) {
 			paddingX={6}
 			bgcolor={TITLE_BAR_COLOR}
 			sx={{ appRegion: 'drag', WebkitAppRegion: 'drag' }}
+			data-testid={testId}
 		>
 			<Typography color="textInverted">{t(m.appName)}</Typography>
 		</Box>
