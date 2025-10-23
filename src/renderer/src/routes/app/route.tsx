@@ -131,6 +131,7 @@ function RouteComponent() {
 									...SHARED_NAV_ITEM_PROPS.link.sx,
 									border: `2px solid currentColor`,
 								}}
+								aria-label={t(m.projectTabAccessibleLabel)}
 							>
 								<Icon name="comapeo-cards" size={30} />
 							</IconButtonLink>
@@ -274,5 +275,10 @@ const m = defineMessages({
 	appSettingsTabLabel: {
 		id: 'routes.app.route.appSettingsTabLabel',
 		defaultMessage: 'App Settings',
+	},
+	projectTabAccessibleLabel: {
+		id: 'routes.app.route.projectTabAccessibleLabel',
+		defaultMessage: 'View project.',
+		description: 'Accessible label for project tab link in navigation.',
 	},
 })

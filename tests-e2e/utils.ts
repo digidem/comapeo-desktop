@@ -54,3 +54,8 @@ export const OnboardingOutputsSchema = v.object({
 	projectName: v.string(),
 })
 export type OnboardingOutputs = v.InferOutput<typeof OnboardingOutputsSchema>
+
+export const AppOutputsSchema = v.object({
+	deviceName: v.string(),
+})
+export type AppOutputs = v.InferOutput<typeof AppOutputsSchema>
