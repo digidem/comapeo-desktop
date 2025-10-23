@@ -56,6 +56,7 @@ jobs:
       # reference the PR head commit in the comment so we know which commits are
       # included in the RC
       PR_HEAD_SHA: ${{ inputs.pr_head_sha || github.event.pull_request.head.sha }}
+      RUN_URL: ${{ format('{0}/{1}/actions/runs/{2}', github.server_url, github.repository, github.run_id) }}
     steps:
       - name: Create GitHub App Token
         uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
@@ -68,7 +69,6 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PR_NUMBER: ${{ inputs.pr_number || github.event.pull_request.number }}
-          RUN_URL: ${{ format('{0}/{1}/actions/runs/{2}', github.server_url, github.repository, github.run_id) }}
           COMMENT_BODY: |
             :construction: Release candidate build based on ${{ env.BUILD_SHA }} (potential merge of ${{ env.PR_HEAD_SHA }}). Assets can be found in the `Artifacts` section of ${{ env.RUN_URL }}
 
