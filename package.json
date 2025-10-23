@@ -56,6 +56,7 @@
 		"types:root": "tsc -p tsconfig.json",
 		"types:shared": "tsc -p src/shared/tsconfig.json",
 		"types:main": "tsc -p src/main/tsconfig.json",
+		"types:tests-e2e": "tsc -p tests-e2e/tsconfig.json",
 		"types:services": "tsc -p src/services/tsconfig.json",
 		"types:preload": "tsc -p src/preload/tsconfig.json",
 		"types:renderer": "tsc -p src/renderer/tsconfig.json",
