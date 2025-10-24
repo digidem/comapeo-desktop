@@ -633,6 +633,10 @@
   "routes.app.route.exchangeTabLabel": {
     "message": "交換"
   },
+  "routes.app.route.projectTabAccessibleLabel": {
+    "description": "Accessible label for project tab link in navigation.",
+    "message": "プロジェクトを表示"
+  },
   "routes.app.settings.background-map.acceptedFileTypes": {
     "description": "Text describing what kind of files are usable for background maps.",
     "message": "受け入れられるファイルの種類は .smp です"
@@ -704,6 +708,10 @@
   "routes.app.settings.device-name.characterCount": {
     "description": "Displays number of characters in input out of the maximum allowed characters.",
     "message": "{count}/{max}"
+  },
+  "routes.app.settings.device-name.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
   },
   "routes.app.settings.device-name.inputLabel": {
     "description": "Label for the device name input.",
