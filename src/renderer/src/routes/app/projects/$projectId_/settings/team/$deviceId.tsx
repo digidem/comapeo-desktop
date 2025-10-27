@@ -21,13 +21,13 @@ import { DeviceIcon } from '../../../-shared/device-icon'
 import { BLUE_GREY } from '../../../../../../colors'
 import { ErrorDialog } from '../../../../../../components/error-dialog'
 import { Icon } from '../../../../../../components/icon'
+import { useActiveProjectIdActions } from '../../../../../../contexts/active-project-id-store-context'
 import { useIconSizeBasedOnTypography } from '../../../../../../hooks/icon'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 } from '../../../../../../lib/comapeo'
-import { setActiveProjectIdMutationOptions } from '../../../../../../lib/queries/app-settings'
 import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations'
 
 export const Route = createFileRoute(
@@ -78,7 +78,7 @@ function RouteComponent() {
 
 	const leaveProject = useLeaveProject()
 
-	const setActiveProjectId = useMutation(setActiveProjectIdMutationOptions())
+	const activeProjectIdActions = useActiveProjectIdActions()
 
 	const leaveProjectAndNavigate = useMutation({
 		mutationKey: LEAVE_PROJECT_AND_NAVIGATE_MUTATION_KEY,
@@ -101,8 +101,16 @@ function RouteComponent() {
 					params: { projectId: projectToNavigateTo.projectId },
 				})
 			} else {
-				await setActiveProjectId.mutateAsync(null)
-				router.navigate({ to: '/onboarding/project', reloadDocument: true })
+				activeProjectIdActions.update(undefined)
+
+				// NOTE: Accounts for bug where `router.navigate()` doesn't account for hash router usage when trying to reload document
+				// (https://discord.com/channels/719702312431386674/1431138480096022680)
+				await router.navigate({
+					href: router.history.createHref(
+						router.buildLocation({ to: '/onboarding/project' }).href,
+					),
+					reloadDocument: true,
+				})
 			}
 		},
 	})

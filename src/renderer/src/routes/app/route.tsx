@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { useSyncState } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import List from '@mui/material/List'
@@ -23,23 +23,37 @@ import {
 import { GLOBAL_MUTATIONS_BASE_KEY } from '../../lib/queries/global-mutations'
 
 export const Route = createFileRoute('/app')({
-	beforeLoad: ({ context, matches }) => {
-		if (!context.activeProjectId) {
-			throw new Error('Router context is missing `activeProjectId`')
+	beforeLoad: ({ context, matches, preload }) => {
+		let activeProjectId = context.activeProjectIdStore.instance.getState()
+
+		if (!activeProjectId) {
+			for (const m of matches) {
+				if ('projectId' in m.params) {
+					activeProjectId = m.params.projectId
+
+					if (!preload) {
+						context.activeProjectIdStore.actions.update(activeProjectId)
+					}
+
+					continue
+				}
+			}
+		}
+
+		if (!activeProjectId) {
+			throw new Error('Could not determine most recent project ID')
 		}
 
 		// Redirect to project-specific "initial" page if the current route is the just /app
 		if (matches.at(-1)!.fullPath === '/app') {
 			throw redirect({
 				to: '/app/projects/$projectId',
-				params: { projectId: context.activeProjectId },
+				params: { projectId: activeProjectId },
 				replace: true,
 			})
 		}
 
-		return {
-			activeProjectId: context.activeProjectId,
-		}
+		return { activeProjectId }
 	},
 	component: RouteComponent,
 })
@@ -48,7 +62,7 @@ function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 
 	const activeProjectId = Route.useRouteContext({
-		select: ({ activeProjectId }) => activeProjectId,
+		select: (context) => context.activeProjectId,
 	})
 
 	const currentRoute = useChildMatches({
@@ -64,11 +78,11 @@ function RouteComponent() {
 		currentRoute.routeId === '/app/settings/device-name' ||
 		currentRoute.routeId === '/app/settings/coordinate-system' ||
 		currentRoute.routeId === '/app/settings/language' ||
-		currentRoute.routeId === '/app/projects/$projectId_/settings/info' ||
+		currentRoute.routeId === '/app/projects/$projectId/settings/info' ||
 		currentRoute.routeId ===
-			'/app/projects/$projectId_/invite/devices/$deviceId/role' ||
+			'/app/projects/$projectId/invite/devices/$deviceId/role' ||
 		currentRoute.routeId ===
-			'/app/projects/$projectId_/invite/devices/$deviceId/send'
+			'/app/projects/$projectId/invite/devices/$deviceId/send'
 
 	const someGlobalMutationIsPending =
 		useIsMutating({ mutationKey: GLOBAL_MUTATIONS_BASE_KEY }) > 0
@@ -106,7 +120,7 @@ function RouteComponent() {
 										)) ||
 									(syncEnabled &&
 										currentRoute.routeId ===
-											'/app/projects/$projectId_/exchange/')
+											'/app/projects/$projectId/exchange/')
 								}
 								to="/app/projects/$projectId"
 								params={{ projectId: activeProjectId }}
@@ -121,7 +135,7 @@ function RouteComponent() {
 										...SHARED_NAV_ITEM_PROPS.link.activeProps.sx,
 										color:
 											currentRoute.routeId ===
-											'/app/projects/$projectId_/exchange/'
+											'/app/projects/$projectId/exchange/'
 												? DARK_GREY
 												: COMAPEO_BLUE,
 										border: `2px solid currentColor`,
@@ -157,7 +171,7 @@ function RouteComponent() {
 									((pageHasEditing || someGlobalMutationIsPending) &&
 										!currentRoute.fullPath.startsWith('/app/settings')) ||
 									(currentRoute.routeId ===
-										'/app/projects/$projectId_/exchange/' &&
+										'/app/projects/$projectId/exchange/' &&
 										syncEnabled)
 								}
 								label={t(m.appSettingsTabLabel)}
@@ -170,7 +184,7 @@ function RouteComponent() {
 									((pageHasEditing || someGlobalMutationIsPending) &&
 										currentRoute.fullPath !== '/app/data-and-privacy') ||
 									(currentRoute.routeId ===
-										'/app/projects/$projectId_/exchange/' &&
+										'/app/projects/$projectId/exchange/' &&
 										syncEnabled)
 								}
 								label={t(m.dataAndPrivacyTabLabel)}
@@ -185,7 +199,7 @@ function RouteComponent() {
 									((pageHasEditing || someGlobalMutationIsPending) &&
 										currentRoute.fullPath !== '/app/about') ||
 									(currentRoute.routeId ===
-										'/app/projects/$projectId_/exchange/' &&
+										'/app/projects/$projectId/exchange/' &&
 										syncEnabled)
 								}
 								label={t(m.aboutTabLabel)}

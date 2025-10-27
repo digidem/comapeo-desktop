@@ -45,6 +45,7 @@ export default defineConfig((configEnv) => {
 				routesDirectory: fileURLToPath(
 					new URL('./src/routes', import.meta.url),
 				),
+				target: 'react',
 				generatedRouteTree: path.join(GENERATED_DIR, 'routeTree.gen.ts'),
 			}),
 			react(),

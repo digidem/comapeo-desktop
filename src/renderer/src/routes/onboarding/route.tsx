@@ -19,7 +19,6 @@ import { defineMessages, useIntl } from 'react-intl'
 import { COMAPEO_BLUE, DARK_COMAPEO_BLUE, WHITE } from '../../colors'
 import { Icon } from '../../components/icon'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo'
-import { getActiveProjectIdQueryOptions } from '../../lib/queries/app-settings'
 import {
 	ONBOARDING_ACCEPT_INVITE_MUTATION_KEY,
 	ONBOARDING_CREATE_PROJECT_MUTATION_KEY,
@@ -29,7 +28,9 @@ import {
 
 export const Route = createFileRoute('/onboarding')({
 	beforeLoad: async ({ context }) => {
-		const { activeProjectId, clientApi, queryClient } = context
+		const { activeProjectIdStore, clientApi, queryClient } = context
+
+		const activeProjectId = activeProjectIdStore.instance.getState()
 
 		if (activeProjectId) {
 			throw redirect({
@@ -54,17 +55,10 @@ export const Route = createFileRoute('/onboarding')({
 		const projectToUse = projects[0]
 
 		if (projectToUse) {
-			await window.runtime.setActiveProjectId(projectToUse.projectId)
-
-			await queryClient.invalidateQueries({
-				queryKey: getActiveProjectIdQueryOptions().queryKey,
-			})
-
 			throw redirect({
 				to: '/app/projects/$projectId',
 				params: { projectId: projectToUse.projectId },
 				replace: true,
-				reloadDocument: true,
 			})
 		}
 	},

@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
+import * as v from 'valibot'
 
 import { GREEN } from '../../../../colors'
 import { Icon } from '../../../../components/icon'
@@ -13,9 +14,14 @@ import { ButtonLink } from '../../../../components/link'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
 import { customNotFound } from '../../../../lib/navigation'
 
+const SearchParamsSchema = v.object({
+	projectId: v.optional(v.string()),
+})
+
 export const Route = createFileRoute(
 	'/onboarding/project/join/$inviteId/success',
 )({
+	validateSearch: SearchParamsSchema,
 	loader: async ({ context, params }) => {
 		const { clientApi, queryClient, formatMessage } = context
 		const { inviteId } = params
@@ -57,6 +63,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 	const { inviteId } = Route.useParams()
+	const { projectId } = Route.useSearch()
 
 	const { data: invite } = useSingleInvite({ inviteId })
 
@@ -89,7 +96,8 @@ function RouteComponent() {
 			</Container>
 
 			<ButtonLink
-				to="/app"
+				to={projectId ? '/app/projects/$projectId' : '/app'}
+				params={{ projectId }}
 				variant="contained"
 				fullWidth
 				sx={{ maxWidth: 400, alignSelf: 'center' }}

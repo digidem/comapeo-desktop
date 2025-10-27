@@ -28,10 +28,6 @@ export function setUpMainIPC({
 	})
 
 	// Settings (get)
-	ipcMain.handle('settings:get:activeProjectId', () => {
-		return persistedStore.getState().activeProjectId
-	})
-
 	ipcMain.handle('settings:get:coordinateFormat', () => {
 		return persistedStore.getState().coordinateFormat
 	})
