@@ -41,20 +41,6 @@ export function setUpMainIPC({
 	})
 
 	// Settings (set)
-	ipcMain.handle('activeProjectId:set', (_event, value) => {
-		v.assert(
-			v.union([
-				v.nonOptional(PersistedStateV1Schema.entries.activeProjectId),
-				v.null(),
-			]),
-			value,
-		)
-
-		persistedStore.setState({
-			activeProjectId: value === null ? undefined : value,
-		})
-	})
-
 	ipcMain.handle('settings:set:coordinateFormat', (_event, value) => {
 		v.assert(
 			v.nonOptional(PersistedStateV1Schema.entries.coordinateFormat),
@@ -74,5 +60,27 @@ export function setUpMainIPC({
 	ipcMain.handle('settings:set:locale', (_event, value) => {
 		v.assert(v.nonOptional(PersistedStateV1Schema.entries.locale), value)
 		persistedStore.setState({ locale: value })
+	})
+
+	// Active project ID
+
+	// NOTE: This is handled as a synchronous call, which is generally not recommended.
+	// This should only be used in initialization before mounting the rendered app.
+	ipcMain.on('activeProjectId:get', (event) => {
+		event.returnValue = persistedStore.getState().activeProjectId
+	})
+
+	ipcMain.handle('activeProjectId:set', (_event, value) => {
+		v.assert(
+			v.union([
+				v.nonOptional(PersistedStateV1Schema.entries.activeProjectId),
+				v.null(),
+			]),
+			value,
+		)
+
+		persistedStore.setState({
+			activeProjectId: value === null ? undefined : value,
+		})
 	})
 }
