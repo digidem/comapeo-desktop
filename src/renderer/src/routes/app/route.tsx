@@ -28,6 +28,8 @@ export const Route = createFileRoute('/app')({
 
 		if (!activeProjectId) {
 			for (const m of matches) {
+				// NOTE: We passively update the active project ID whenever we navigate
+				// to a relevant project-specific page.
 				if ('projectId' in m.params) {
 					activeProjectId = m.params.projectId
 
