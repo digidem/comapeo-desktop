@@ -347,7 +347,7 @@ function RouteComponent() {
 																	color={project.projectColor}
 																>
 																	{project.name
-																		? '${project.name} (${displayedProjectId})'
+																		? `${project.name} (${displayedProjectId})`
 																		: displayedProjectId}
 																</MenuItem>
 															)
