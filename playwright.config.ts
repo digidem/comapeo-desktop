@@ -6,6 +6,7 @@ export default defineConfig({
 	forbidOnly: !!process.env.CI,
 	workers: process.env.CI ? 1 : undefined,
 	maxFailures: 0,
+	timeout: process.env.CI ? 30_000 : 10_000,
 	reporter: [
 		['list'],
 		['html', { open: 'never', outputFolder: 'tests-e2e/playwright-report' }],
