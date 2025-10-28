@@ -19,7 +19,7 @@ import { selectFileMutationOptions } from '../../../../../lib/queries/file-syste
 import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations'
 
 export const Route = createFileRoute(
-	'/app/projects/$projectId_/settings/categories',
+	'/app/projects/$projectId/settings/categories',
 )({
 	loader: async ({ context, params }) => {
 		const { projectApi, queryClient } = context

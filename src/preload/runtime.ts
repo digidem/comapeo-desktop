@@ -25,13 +25,11 @@ export type RuntimeApi = {
 	openExternalURL: (url: string) => Promise<void>
 
 	// Settings (get)
-	getActiveProjectId: () => Promise<string | undefined>
 	getCoordinateFormat: () => Promise<CoordinateFormat>
 	getDiagnosticsEnabled: () => Promise<boolean>
 	getLocaleState: () => Promise<LocaleState>
 
 	// Settings (set)
-	setActiveProjectId: (value: string | null) => Promise<void>
 	setCoordinateFormat: (value: CoordinateFormat) => Promise<void>
 	setDiagnosticsEnabled: (value: boolean) => Promise<void>
 	setLocale: (value: Locale) => Promise<void>
@@ -42,4 +40,8 @@ export type RuntimeApi = {
 		environment: string
 		userId: string
 	}
+
+	// Active Project ID
+	getInitialProjectId: () => string | undefined
+	setActiveProjectId: (value: string | undefined) => Promise<void>
 }

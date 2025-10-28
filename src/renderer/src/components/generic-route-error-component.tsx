@@ -87,7 +87,15 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 				<Button
 					fullWidth
 					onClick={() => {
-						router.invalidate()
+						// NOTE: Accounts for bug where `router.navigate()` doesn't account for hash router usage when trying to reload document
+						// (https://discord.com/channels/719702312431386674/1431138480096022680)
+						router.navigate({
+							href: router.history.createHref(
+								router.buildLocation({ to: '.' }).href,
+							),
+							replace: true,
+							reloadDocument: true,
+						})
 					}}
 					sx={{ maxWidth: 400 }}
 				>
