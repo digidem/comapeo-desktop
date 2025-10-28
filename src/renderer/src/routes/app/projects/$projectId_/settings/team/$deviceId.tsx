@@ -31,7 +31,7 @@ import {
 import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations'
 
 export const Route = createFileRoute(
-	'/app/projects/$projectId_/settings/team/$deviceId',
+	'/app/projects/$projectId/settings/team/$deviceId',
 )({
 	loader: async ({ context, params }) => {
 		const { clientApi, projectApi, queryClient } = context
