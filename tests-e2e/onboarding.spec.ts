@@ -133,7 +133,8 @@ test('data and privacy step', async () => {
 		page.getByRole('heading', { name: 'Privacy Policy', exact: true }),
 	).toBeVisible()
 
-	const diagnosticCheckbox = page.getByLabel('Share Diagnostic Information', {
+	const diagnosticCheckbox = page.getByRole('checkbox', {
+		name: 'Share Diagnostic Information',
 		exact: true,
 	})
 	await expect(diagnosticCheckbox).toBeChecked()
@@ -144,7 +145,10 @@ test('data and privacy step', async () => {
 	await page.getByRole('link', { name: 'Learn More', exact: true }).click()
 
 	await expect(
-		page.getByLabel('Share Diagnostic Information', { exact: true }),
+		page.getByRole('checkbox', {
+			name: 'Share Diagnostic Information',
+			exact: true,
+		}),
 	).not.toBeChecked()
 
 	await page.getByRole('button', { name: 'Go back', exact: true }).click()
@@ -185,7 +189,10 @@ test('device name step', async () => {
 		page.getByText('Enter a Device Name', { exact: true }),
 	).toBeVisible()
 
-	const deviceNameInput = page.getByLabel('Device Name', { exact: true })
+	const deviceNameInput = page.getByRole('textbox', {
+		name: 'Device Name',
+		exact: true,
+	})
 
 	const invalidDeviceName = Array(100).fill('a').join('')
 
@@ -284,8 +291,10 @@ test('create project', async () => {
 		page.getByText('Enter a Project Name', { exact: true }),
 	).toBeVisible()
 
-	const projectNameInput = page.getByLabel('Project Name', { exact: true })
-
+	const projectNameInput = page.getByRole('textbox', {
+		name: 'Project Name',
+		exact: true,
+	})
 	const invalidProjectName = Array(120).fill('a').join('')
 
 	await projectNameInput.fill(invalidProjectName)
