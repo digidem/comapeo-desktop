@@ -649,6 +649,10 @@
   "routes.app.route.exchangeTabLabel": {
     "message": "Échanger"
   },
+  "routes.app.route.projectTabAccessibleLabel": {
+    "description": "Accessible label for project tab link in navigation.",
+    "message": "Voir le projet."
+  },
   "routes.app.settings.background-map.acceptedFileTypes": {
     "description": "Text describing what kind of files are usable for background maps.",
     "message": "Les types de fichiers acceptés sont .smp"
@@ -716,6 +720,10 @@
   "routes.app.settings.device-name.characterCount": {
     "description": "Displays number of characters in input out of the maximum allowed characters.",
     "message": "{count}/{max}"
+  },
+  "routes.app.settings.device-name.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Revenir en arrière."
   },
   "routes.app.settings.device-name.inputLabel": {
     "description": "Label for the device name input.",
