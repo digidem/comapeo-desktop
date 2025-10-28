@@ -1,5 +1,7 @@
 import { Suspense, type ReactNode } from 'react'
 import { useMapStyleUrl, useOwnDeviceInfo } from '@comapeo/core-react'
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -14,7 +16,6 @@ import {
 	type ListItemButtonLinkComponentProps,
 } from '../../../components/link'
 import { useIconSizeBasedOnTypography } from '../../../hooks/icon'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
 import { getLanguageInfo } from '../../../lib/intl'
 import {
 	getCoordinateFormatQueryOptions,
@@ -23,26 +24,47 @@ import {
 import { getCustomMapInfoQueryOptions } from '../../../lib/queries/maps'
 
 export const Route = createFileRoute('/app/settings/')({
-	loader: async ({ context }) => {
-		const { clientApi, queryClient } = context
-
-		await Promise.all([
-			// TODO: not ideal to do this but requires major changes to @comapeo/core-react
-			// copied from https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/client.ts#L21
-			queryClient.ensureQueryData({
-				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
-				queryFn: async () => {
-					return clientApi.getDeviceInfo()
-				},
-			}),
-			queryClient.ensureQueryData(getCoordinateFormatQueryOptions()),
-			queryClient.ensureQueryData(getLocaleStateQueryOptions()),
-		])
-	},
 	component: RouteComponent,
 })
 
 function RouteComponent() {
+	const { formatMessage: t } = useIntl()
+
+	return (
+		<Stack direction="column" padding={6} flex={1} overflow="auto" gap={6}>
+			<Stack
+				direction="column"
+				border={`1px solid ${BLUE_GREY}`}
+				borderRadius={2}
+				gap={4}
+				alignItems="center"
+				padding={6}
+			>
+				<Icon name="material-settings" size={100} htmlColor={DARKER_ORANGE} />
+
+				<Typography variant="h1" fontWeight={500}>
+					{t(m.title)}
+				</Typography>
+
+				<Typography color="textSecondary" textAlign="center">
+					{t(m.description)}
+				</Typography>
+			</Stack>
+
+			<Suspense
+				fallback={
+					<Box display="flex" justifyContent="center" alignItems="center">
+						<CircularProgress />
+					</Box>
+				}
+			>
+				<SettingsList />
+			</Suspense>
+		</Stack>
+	)
+}
+
+function SettingsList() {
 	const { formatMessage: t } = useIntl()
 
 	const { data: deviceInfo } = useOwnDeviceInfo()
@@ -72,26 +94,7 @@ function RouteComponent() {
 	})
 
 	return (
-		<Stack direction="column" padding={6} flex={1} overflow="auto" gap={6}>
-			<Stack
-				direction="column"
-				border={`1px solid ${BLUE_GREY}`}
-				borderRadius={2}
-				gap={4}
-				alignItems="center"
-				padding={6}
-			>
-				<Icon name="material-settings" size={100} htmlColor={DARKER_ORANGE} />
-
-				<Typography variant="h1" fontWeight={500}>
-					{t(m.title)}
-				</Typography>
-
-				<Typography color="textSecondary" textAlign="center">
-					{t(m.description)}
-				</Typography>
-			</Stack>
-
+		<>
 			<SettingRow
 				to="/app/settings/device-name"
 				start={
@@ -190,7 +193,7 @@ function RouteComponent() {
 					label={t(m.createTestData)}
 				/>
 			) : null}
-		</Stack>
+		</>
 	)
 }
 
