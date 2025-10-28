@@ -53,6 +53,7 @@ function RouteComponent() {
 					borderBottom={`1px solid ${BLUE_GREY}`}
 				>
 					<IconButton
+						aria-label={t(m.goBackAccessibleLabel)}
 						onClick={() => {
 							if (router.history.canGoBack()) {
 								router.history.back()
@@ -64,11 +65,7 @@ function RouteComponent() {
 					>
 						<Icon name="material-arrow-back" size={30} />
 					</IconButton>
-					<Typography
-						variant="h1"
-						fontWeight={500}
-						id="coordinate-system-selection-label"
-					>
+					<Typography variant="h1" fontWeight={500}>
 						{t(m.navTitle)}
 					</Typography>
 				</Stack>
@@ -179,5 +176,10 @@ const m = defineMessages({
 		id: 'routes.app.settings.language.followSystemOptionLabel',
 		defaultMessage: 'Follow system preferences',
 		description: 'Option label for following system preference for language.',
+	},
+	goBackAccessibleLabel: {
+		id: 'routes.app.settings.language.goBackAccessibleLabel',
+		defaultMessage: 'Go back.',
+		description: 'Accessible label for back button.',
 	},
 })

@@ -42,7 +42,7 @@ function RouteComponent() {
 			>
 				<Icon name="material-settings" size={100} htmlColor={DARKER_ORANGE} />
 
-				<Typography variant="h1" fontWeight={500}>
+				<Typography variant="h1" fontWeight={500} textAlign="center">
 					{t(m.title)}
 				</Typography>
 
@@ -105,6 +105,7 @@ function SettingsList() {
 					/>
 				}
 				end={<Typography color="primary">{t(m.editDeviceName)}</Typography>}
+				aria-label={t(m.deviceNameSettingsAccessibleLabel)}
 				// TODO: What to do when this is undefined?
 				label={deviceInfo.name || ''}
 			/>
@@ -125,6 +126,7 @@ function SettingsList() {
 						size={rowIconSize}
 					/>
 				}
+				aria-label={t(m.languageSettingsAccessibleLabel)}
 				label={selectedLanguageName}
 			/>
 
@@ -327,5 +329,17 @@ const m = defineMessages({
 		id: 'routes.app.settings.index.createTestData',
 		defaultMessage: 'Create Test Data',
 		description: 'Label for item that navigates to test data creation page.',
+	},
+	deviceNameSettingsAccessibleLabel: {
+		id: 'routes.app.settings.index.deviceNameSettingsAccessibleLabel',
+		defaultMessage: 'Go to device name settings.',
+		description:
+			'Accessible label for link item that navigates to device name settings page.',
+	},
+	languageSettingsAccessibleLabel: {
+		id: 'routes.app.settings.index.languageSettingsAccessibleLabel',
+		defaultMessage: 'Go to language settings.',
+		description:
+			'Accessible label for link item that navigates to language settings page.',
 	},
 })
