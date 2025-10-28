@@ -37,7 +37,7 @@ export const Route = createFileRoute('/app')({
 						context.activeProjectIdStore.actions.update(activeProjectId)
 					}
 
-					continue
+					break
 				}
 			}
 		}
