@@ -86,11 +86,15 @@ const runtimeApi = {
 
 	// Active project ID
 	getInitialProjectId: () => {
-		const projectId = getProcessArgValue('comapeo-initial-project-id')
+		let projectId = getProcessArgValue('comapeo-initial-project-id')
 
-		if (projectId === 'undefined') {
-			return undefined
+		if (projectId !== 'undefined') {
+			return projectId
 		}
+
+		// NOTE: Accounts for edge case where a manual reload of the window happens on the first usage of the app.
+		// This is only used in initialization before mounting the rendered app.
+		projectId = ipcRenderer.sendSync('activeProjectId:get')
 
 		return projectId
 	},
