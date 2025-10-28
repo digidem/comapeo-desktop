@@ -41,7 +41,7 @@ export function setUpMainIPC({
 	})
 
 	// Settings (set)
-	ipcMain.handle('settings:set:activeProjectId', (_event, value) => {
+	ipcMain.handle('activeProjectId:set', (_event, value) => {
 		v.assert(
 			v.union([
 				v.nonOptional(PersistedStateV1Schema.entries.activeProjectId),
