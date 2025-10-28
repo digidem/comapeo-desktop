@@ -103,6 +103,9 @@ function RouteComponent() {
 										onError: (err) => {
 											captureException(err)
 										},
+										onSuccess: () => {
+											router.invalidate()
+										},
 									},
 								)
 							}}

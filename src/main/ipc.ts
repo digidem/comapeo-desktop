@@ -28,10 +28,6 @@ export function setUpMainIPC({
 	})
 
 	// Settings (get)
-	ipcMain.handle('settings:get:activeProjectId', () => {
-		return persistedStore.getState().activeProjectId
-	})
-
 	ipcMain.handle('settings:get:coordinateFormat', () => {
 		return persistedStore.getState().coordinateFormat
 	})
@@ -45,7 +41,7 @@ export function setUpMainIPC({
 	})
 
 	// Settings (set)
-	ipcMain.handle('settings:set:activeProjectId', (_event, value) => {
+	ipcMain.handle('activeProjectId:set', (_event, value) => {
 		v.assert(
 			v.union([
 				v.nonOptional(PersistedStateV1Schema.entries.activeProjectId),

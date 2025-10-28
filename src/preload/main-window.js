@@ -54,9 +54,6 @@ const runtimeApi = {
 	},
 
 	// Settings (get)
-	getActiveProjectId: async () => {
-		return ipcRenderer.invoke('settings:get:activeProjectId')
-	},
 	getCoordinateFormat: async () => {
 		return ipcRenderer.invoke('settings:get:coordinateFormat')
 	},
@@ -68,9 +65,6 @@ const runtimeApi = {
 	},
 
 	// Settings (set)
-	setActiveProjectId: async (value) => {
-		return ipcRenderer.invoke('settings:set:activeProjectId', value)
-	},
 	setCoordinateFormat: async (value) => {
 		return ipcRenderer.invoke('settings:set:coordinateFormat', value)
 	},
@@ -88,6 +82,20 @@ const runtimeApi = {
 		const userId = getProcessArgValue('comapeo-sentry-user-id')
 
 		return { enabled, environment, userId }
+	},
+
+	// Active project ID
+	getInitialProjectId: () => {
+		const projectId = getProcessArgValue('comapeo-initial-project-id')
+
+		if (projectId === 'undefined') {
+			return undefined
+		}
+
+		return projectId
+	},
+	setActiveProjectId: async (value) => {
+		return ipcRenderer.invoke('activeProjectId:set', value || null)
 	},
 }
 

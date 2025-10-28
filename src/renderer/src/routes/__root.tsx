@@ -4,9 +4,10 @@ import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 import type { IntlShape } from 'react-intl'
 
 import type { LocaleState } from '../../../shared/intl'
+import type { ActiveProjectIdStore } from '../contexts/active-project-id-store-context'
 
 export interface RootRouterContext {
-	activeProjectId: string | null
+	activeProjectIdStore: ActiveProjectIdStore
 	clientApi: MapeoClientApi
 	localeState: LocaleState
 	queryClient: QueryClient

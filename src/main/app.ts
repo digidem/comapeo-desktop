@@ -181,10 +181,6 @@ export async function start({
 		}
 	})
 
-	const persisted = persistedStore.getState()
-	const sentryUserId = persisted.sentryUser.id
-	const diagnosticsEnabled = persisted.diagnosticsEnabled
-
 	let sentryEnvironment: SentryEnvironment = 'development'
 
 	if (appConfig.appType === 'release-candidate') {
@@ -212,7 +208,13 @@ export async function start({
 		} else {
 			log('Main window does not exist - creating new main window')
 
+			const persisted = persistedStore.getState()
+			const diagnosticsEnabled = persisted.diagnosticsEnabled
+			const activeProjectId = persisted.activeProjectId
+			const sentryUserId = persisted.sentryUser.id
+
 			const mainWindow = initMainWindow({
+				activeProjectId,
 				appVersion: appConfig.appVersion,
 				coreService,
 				comapeoUserDataDirectory,
@@ -230,7 +232,13 @@ export async function start({
 		}
 	})
 
+	const persisted = persistedStore.getState()
+	const activeProjectId = persisted.activeProjectId
+	const diagnosticsEnabled = persisted.diagnosticsEnabled
+	const sentryUserId = persisted.sentryUser.id
+
 	const mainWindow = initMainWindow({
+		activeProjectId,
 		appVersion: appConfig.appVersion,
 		coreService,
 		comapeoUserDataDirectory,
@@ -250,12 +258,14 @@ export async function start({
 }
 
 function initMainWindow({
+	activeProjectId,
 	appVersion,
 	coreService,
 	comapeoUserDataDirectory,
 	isDevelopment,
 	sentryConfig,
 }: {
+	activeProjectId?: string
 	appVersion: string
 	coreService: UtilityProcess
 	comapeoUserDataDirectory: string
@@ -289,6 +299,7 @@ function initMainWindow({
 				`--comapeo-sentry-user-id=${sentryConfig.userId}`,
 				`--comapeo-sentry-enabled=${sentryConfig.enabled}`,
 				`--comapeo-sentry-environment=${sentryConfig.environment}`,
+				`--comapeo-initial-project-id=${activeProjectId}`,
 			],
 		},
 	})
