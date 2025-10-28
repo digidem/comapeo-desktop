@@ -291,7 +291,8 @@ test.describe('app settings', () => {
 			})
 
 			await expect(languageSettingsLink).toHaveText(
-				'English (System Preference)',
+				// TODO: The result of this will vary based on system language preferences.
+				/^English.*/,
 			)
 
 			await languageSettingsLink.click()
