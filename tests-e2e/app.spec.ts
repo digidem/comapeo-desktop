@@ -113,7 +113,8 @@ test('data and privacy page', async () => {
 		'You can opt-out of sharing diagnostic information at any time.',
 	])
 
-	const diagnosticCheckbox = main.getByLabel('Share Diagnostic Information', {
+	const diagnosticCheckbox = main.getByRole('checkbox', {
+		name: 'Share Diagnostic Information',
 		exact: true,
 	})
 	await expect(diagnosticCheckbox).not.toBeChecked()
@@ -163,7 +164,16 @@ test.describe('app settings', () => {
 
 		const main = page.getByRole('main')
 
-		await main.getByRole('link', { name: onboardingOutputs.deviceName }).click()
+		const deviceNameSettingsLink = main.getByRole('link', {
+			name: 'Go to device name settings.',
+			exact: true,
+		})
+
+		await expect(deviceNameSettingsLink).toHaveText(
+			`${onboardingOutputs.deviceName}Edit`,
+		)
+
+		await deviceNameSettingsLink.click()
 
 		// Navigation
 		await expect(
@@ -190,7 +200,10 @@ test.describe('app settings', () => {
 			main.getByRole('heading', { name: 'Device Name', exact: true }),
 		).toBeVisible()
 
-		const deviceNameInput = main.getByLabel('Device Name', { exact: true })
+		const deviceNameInput = main.getByRole('textbox', {
+			name: 'Device Name',
+			exact: true,
+		})
 
 		//// Input (initial state)
 		await expect(deviceNameInput).toHaveValue(onboardingOutputs.deviceName)
@@ -234,24 +247,22 @@ test.describe('app settings', () => {
 		//// Restoration of input initial state when navigating away without saving
 		await main.getByRole('button', { name: 'Go back.', exact: true }).click()
 
-		await page.getByRole('link', { name: onboardingOutputs.deviceName }).click()
+		await page
+			.getByRole('link', { name: 'Go to device name settings.', exact: true })
+			.click()
 
-		await expect(main.getByLabel('Device Name', { exact: true })).toHaveValue(
-			onboardingOutputs.deviceName,
-		)
+		await expect(deviceNameInput).toHaveValue(onboardingOutputs.deviceName)
 
 		await main.getByRole('button', { name: 'Cancel', exact: true }).click()
 
-		await page.getByRole('link', { name: onboardingOutputs.deviceName }).click()
+		await page
+			.getByRole('link', { name: 'Go to device name settings.', exact: true })
+			.click()
 
-		await expect(main.getByLabel('Device Name', { exact: true })).toHaveValue(
-			onboardingOutputs.deviceName,
-		)
+		await expect(deviceNameInput).toHaveValue(onboardingOutputs.deviceName)
 
 		//// Saving updated device name
-		await main
-			.getByLabel('Device Name', { exact: true })
-			.fill(OUTPUTS.deviceName)
+		await deviceNameInput.fill(OUTPUTS.deviceName)
 
 		await main
 			.getByRole('button', {
@@ -261,8 +272,160 @@ test.describe('app settings', () => {
 			.click()
 
 		await expect(
-			main.getByRole('link', { name: OUTPUTS.deviceName }),
-		).toBeVisible()
+			main.getByRole('link', {
+				name: 'Go to device name settings.',
+				exact: true,
+			}),
+		).toHaveText(`${OUTPUTS.deviceName}Edit`)
+	})
+
+	test('language', async () => {
+		const page = await electronApp.firstWindow()
+
+		const main = page.getByRole('main')
+
+		{
+			const languageSettingsLink = main.getByRole('link', {
+				name: 'Go to language settings.',
+				exact: true,
+			})
+
+			await expect(languageSettingsLink).toHaveText(
+				'English (System Preference)',
+			)
+
+			await languageSettingsLink.click()
+		}
+
+		// Navigation
+		{
+			await expect(
+				page
+					.getByRole('navigation')
+					.getByRole('link', { name: 'App Settings', exact: true }),
+			).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+
+			const disabledNavLinks = page
+				.getByRole('navigation')
+				.getByRole('link', { disabled: true })
+
+			await expect(disabledNavLinks.first()).toHaveAccessibleName(
+				'View project.',
+			)
+
+			await expect(disabledNavLinks).toHaveText([
+				'',
+				'Exchange',
+				'Data & Privacy',
+				'About CoMapeo',
+			])
+		}
+
+		// Main
+		{
+			await expect(
+				main.getByRole('heading', { name: 'Language', exact: true }),
+			).toBeVisible()
+
+			//// Initial state
+			const systemPreferencesOption = main.getByRole('radio', {
+				name: 'Follow system preferences',
+				exact: true,
+			})
+
+			await expect(systemPreferencesOption).toHaveValue('system')
+			await expect(systemPreferencesOption).toBeChecked()
+
+			const allLanguages = (
+				await import('../languages.json', {
+					with: { type: 'json' },
+				})
+			).default
+
+			const translatedLanguages = (
+				await import(
+					'../src/renderer/src/generated/translated-languages.generated.json',
+					{ with: { type: 'json' } }
+				)
+			).default
+
+			for (const languageCode of translatedLanguages) {
+				const { nativeName, englishName } =
+					allLanguages[languageCode as keyof typeof allLanguages]!
+
+				const option = main.getByRole('radio', {
+					name: `${nativeName} ${englishName}`,
+				})
+
+				await expect(option).toHaveValue(languageCode)
+				await expect(option).not.toBeChecked()
+			}
+		}
+
+		//// Updating selected value
+		{
+			await main.getByRole('radio', { name: 'Portuguese' }).check()
+
+			await expect(
+				main.getByRole('heading', { name: 'Idioma', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				main.getByRole('radio', {
+					name: 'Seguir preferências do sistema',
+					exact: true,
+				}),
+			).toBeVisible()
+
+			await expect(page.getByRole('navigation').getByRole('link')).toHaveText([
+				'',
+				'Trocar',
+				'Configurações do Aplicativo',
+				'Dados & Privacidade',
+				'Sobre o CoMapeo',
+			])
+
+			await main
+				.getByRole('button', {
+					// TODO: This needs to be updated when the relevant translation is available
+					name: 'Go back.',
+					exact: true,
+				})
+				.click()
+
+			const languageSettingsLink = main.getByRole('link', {
+				// TODO: This needs to be updated when the relevant translation is available
+				name: 'Go to language settings.',
+				exact: true,
+			})
+
+			await expect(languageSettingsLink).toHaveText('Português')
+
+			await languageSettingsLink.click()
+		}
+
+		//// Returning to language settings page and restoring selection
+		{
+			await expect(
+				main.getByRole('radio', { name: 'Portuguese', checked: true }),
+			).toBeVisible()
+
+			await main
+				.getByRole('radio', {
+					name: 'Seguir preferências do sistema',
+					exact: true,
+					checked: false,
+				})
+				.check()
+
+			await main
+				.getByRole('button', {
+					// TODO: This needs to be updated when the relevant translation is available
+					name: 'Go back.',
+					exact: true,
+				})
+				.click()
+		}
 	})
 })
 
