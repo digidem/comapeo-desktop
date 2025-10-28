@@ -138,11 +138,7 @@ function RouteComponent() {
 				>
 					<Icon name="material-arrow-back" size={30} />
 				</IconButton>
-				<Typography
-					variant="h1"
-					fontWeight={500}
-					id="coordinate-system-selection-label"
-				>
+				<Typography variant="h1" fontWeight={500}>
 					{t(m.navTitle)}
 				</Typography>
 			</Stack>

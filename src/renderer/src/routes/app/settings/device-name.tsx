@@ -97,6 +97,7 @@ function RouteComponent() {
 					borderBottom={`1px solid ${BLUE_GREY}`}
 				>
 					<IconButton
+						aria-label={t(m.goBackAccessibleLabel)}
 						onClick={() => {
 							if (form.state.isSubmitting) {
 								return
@@ -109,7 +110,6 @@ function RouteComponent() {
 
 							router.navigate({ to: '/app/settings', replace: true })
 						}}
-						aria-label={t(m.goBackAccessibleLabel)}
 					>
 						<Icon name="material-arrow-back" size={30} />
 					</IconButton>
