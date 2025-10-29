@@ -168,6 +168,7 @@ function SettingsList() {
 						size={rowIconSize}
 					/>
 				}
+				aria-label={t(m.backgroundMapSettingsAccessibleLabel)}
 				label={
 					<Suspense>
 						<BackgroundMapLabel styleUrl={styleUrl} />
@@ -348,5 +349,11 @@ const m = defineMessages({
 		defaultMessage: 'Go to coordinate system settings.',
 		description:
 			'Accessible label for link item that navigates to coordinate system settings page.',
+	},
+	backgroundMapSettingsAccessibleLabel: {
+		id: 'routes.app.settings.index.backgroundMapSettingsAccessibleLabel',
+		defaultMessage: 'Go to background map settings.',
+		description:
+			'Accessible label for link item that navigates to background map settings page.',
 	},
 })
