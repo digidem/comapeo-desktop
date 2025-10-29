@@ -1,9 +1,11 @@
+import { fileURLToPath } from 'url'
 import { hexToRgb } from '@mui/material/styles'
 import {
 	_electron as electron,
 	expect,
 	type ElectronApplication,
 } from '@playwright/test'
+import { stubDialog } from 'electron-playwright-helpers'
 import * as v from 'valibot'
 
 import { COMAPEO_BLUE } from '../src/renderer/src/colors.ts'
@@ -552,6 +554,200 @@ test.describe('app settings', () => {
 			await expect(utmOption).toBeChecked()
 
 			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+		}
+	})
+
+	test('background map', async () => {
+		const page = await electronApp.firstWindow()
+
+		const main = page.getByRole('main')
+
+		{
+			const backgroundMapSettingsLink = main.getByRole('link', {
+				name: 'Go to background map settings.',
+				exact: true,
+			})
+
+			await expect(backgroundMapSettingsLink).toHaveText('Default Background')
+
+			await backgroundMapSettingsLink.click()
+		}
+
+		// Navigation
+		{
+			await expect(
+				page
+					.getByRole('navigation')
+					.getByRole('link', { name: 'App Settings', exact: true }),
+			).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+		}
+
+		// Main
+		await expect(
+			main.getByRole('heading', { name: 'Background Map', exact: true }),
+		).toBeVisible()
+
+		await expect(
+			main.getByText(
+				'Custom background maps are viewable offline and only on this device.',
+				{ exact: true },
+			),
+		).toBeVisible()
+
+		await expect(
+			main.getByText('Accepted file types are .smp', { exact: true }),
+		).toBeVisible()
+
+		//// Choose file (cancelled)
+		{
+			const chooseFileButton = main.getByRole('button', {
+				name: 'Choose File',
+				exact: true,
+			})
+
+			await stubDialog(electronApp, 'showOpenDialog', {
+				canceled: true,
+				filePaths: [],
+			})
+
+			await chooseFileButton.click()
+
+			await expect(page.getByRole('dialog')).not.toBeVisible()
+		}
+
+		//// Choose file (bad file)
+		{
+			const chooseFileButton = main.getByRole('button', {
+				name: 'Choose File',
+				exact: true,
+			})
+
+			await stubDialog(electronApp, 'showOpenDialog', {
+				canceled: false,
+				filePaths: [
+					fileURLToPath(new URL('./assets/bad-map.smp', import.meta.url)),
+				],
+			})
+
+			await chooseFileButton.click()
+
+			const dialog = page.getByRole('dialog')
+			await expect(
+				dialog.getByRole('heading', { name: 'Updated!', exact: true }),
+			).toBeVisible()
+			await expect(
+				dialog.getByText('CoMapeo is now using the latest background map.'),
+			).toBeVisible()
+			await dialog.getByRole('button', { name: 'Close', exact: true }).click()
+			await expect(dialog).not.toBeVisible()
+
+			await expect(
+				main.getByText(
+					'Could not get custom map information from file. Please remove it or choose a different file.',
+				),
+			).toBeVisible()
+
+			const removeMapButton = main.getByRole('button', {
+				name: 'Remove Map',
+				exact: true,
+			})
+			await expect(removeMapButton).toBeVisible()
+
+			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+
+			const backgroundMapSettingsLink = main.getByRole('link', {
+				name: 'Go to background map settings.',
+				exact: true,
+			})
+			await expect(backgroundMapSettingsLink).toHaveText('Custom Background')
+			await backgroundMapSettingsLink.click()
+
+			await removeMapButton.click()
+			await expect(
+				main.getByText(
+					'Could not get custom map information from file. Please remove it or choose a different file.',
+				),
+			).not.toBeVisible()
+			await expect(removeMapButton).not.toBeVisible()
+		}
+
+		//// Choose file (good file)
+		{
+			await stubDialog(electronApp, 'showOpenDialog', {
+				canceled: false,
+				filePaths: [
+					fileURLToPath(
+						new URL('./assets/maplibre-demotiles.smp', import.meta.url),
+					),
+				],
+			})
+
+			await main
+				.getByRole('button', { name: 'Choose File', exact: true })
+				.click()
+
+			const dialog = page.getByRole('dialog')
+			await expect(
+				dialog.getByRole('heading', { name: 'Updated!', exact: true }),
+			).toBeVisible()
+			await expect(
+				dialog.getByText('CoMapeo is now using the latest background map.'),
+			).toBeVisible()
+			await dialog.getByRole('button', { name: 'Close', exact: true }).click()
+			await expect(dialog).not.toBeVisible()
+
+			await expect(
+				main.getByRole('button', {
+					name: 'Choose File',
+					exact: true,
+				}),
+			).not.toBeVisible()
+
+			await expect(main.getByText('Map Name')).toBeVisible()
+			await expect(main.getByText('Date Added')).toBeVisible()
+
+			await expect(main.getByText('MapLibre')).toBeVisible()
+			await expect(main.getByText(/^\d MB$/)).toBeVisible()
+
+			// TODO: Ideally check for the actual values
+			const addedAt = main.getByRole('time')
+			await expect(addedAt).not.toBeEmpty()
+			await expect(addedAt).toHaveAttribute('datetime')
+
+			await expect(
+				main.getByRole('button', { name: 'Remove Map', exact: true }),
+			).toBeVisible()
+
+			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+
+			const backgroundMapSettingsLink = main.getByRole('link', {
+				name: 'Go to background map settings.',
+				exact: true,
+			})
+			await expect(backgroundMapSettingsLink).toHaveText('MapLibre')
+			await backgroundMapSettingsLink.click()
+		}
+
+		// Remove file
+		{
+			await main
+				.getByRole('button', { name: 'Remove Map', exact: true })
+				.click()
+
+			await expect(
+				main.getByRole('button', { name: 'Choose File', exact: true }),
+			).toBeVisible()
+			await expect(
+				main.getByText('Accepted file types are .smp', { exact: true }),
+			).toBeVisible()
+
+			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+			await expect(
+				main.getByRole('link', {
+					name: 'Go to background map settings.',
+					exact: true,
+				}),
+			).toHaveText('Default Background')
 		}
 	})
 })

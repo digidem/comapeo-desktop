@@ -681,6 +681,10 @@
     "description": "Description of how custom background maps work.",
     "message": "Custom background maps are viewable offline and only on this device."
   },
+  "routes.app.settings.background-map.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Go back."
+  },
   "routes.app.settings.background-map.mapNameColumnLabel": {
     "description": "Column label text for map name.",
     "message": "Map Name"
@@ -756,6 +760,10 @@
   "routes.app.settings.device-name.save": {
     "description": "Label for save button.",
     "message": "Save"
+  },
+  "routes.app.settings.index.backgroundMapSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to background map settings page.",
+    "message": "Go to background map settings."
   },
   "routes.app.settings.index.coordinateSystemSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to coordinate system settings page.",
