@@ -105,7 +105,7 @@
 		"@emotion/react": "11.14.0",
 		"@emotion/styled": "11.14.1",
 		"@eslint-react/eslint-plugin": "2.2.4",
-		"@eslint/compat": "1.4.0",
+		"@eslint/compat": "1.4.1",
 		"@eslint/js": "9.38.0",
 		"@fontsource-variable/rubik": "5.2.8",
 		"@formatjs/cli": "6.7.4",
