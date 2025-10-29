@@ -117,6 +117,7 @@ test('data and privacy page', async () => {
 		name: 'Share Diagnostic Information',
 		exact: true,
 	})
+	// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
 	await expect(diagnosticCheckbox).not.toBeChecked()
 	await diagnosticCheckbox.click()
 	await expect(diagnosticCheckbox).toBeChecked()
@@ -365,7 +366,10 @@ test.describe('app settings', () => {
 
 		//// Updating selected value
 		{
-			await main.getByRole('radio', { name: 'Portuguese' }).check()
+			const portugueseOption = main.getByRole('radio', { name: 'Portuguese' })
+			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
+			await portugueseOption.click()
+			await expect(portugueseOption).toBeChecked()
 
 			await expect(
 				main.getByRole('heading', { name: 'Idioma', exact: true }),
@@ -411,13 +415,14 @@ test.describe('app settings', () => {
 				main.getByRole('radio', { name: 'Portuguese', checked: true }),
 			).toBeVisible()
 
-			await main
-				.getByRole('radio', {
-					name: 'Seguir preferências do sistema',
-					exact: true,
-					checked: false,
-				})
-				.check()
+			const systemPreferencesOption = main.getByRole('radio', {
+				name: 'Seguir preferências do sistema',
+				exact: true,
+			})
+			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
+			await expect(systemPreferencesOption).not.toBeChecked()
+			await systemPreferencesOption.click()
+			await expect(systemPreferencesOption).toBeChecked()
 
 			await main
 				.getByRole('button', {
@@ -510,12 +515,13 @@ test.describe('app settings', () => {
 
 		//// Updating selected value
 		{
-			await main
-				.getByRole('radio', {
-					name: 'DD (Decimal Degrees)',
-					exact: true,
-				})
-				.check()
+			const ddOption = main.getByRole('radio', {
+				name: 'DD (Decimal Degrees)',
+				exact: true,
+			})
+			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
+			await ddOption.click()
+			await expect(ddOption).toBeChecked()
 
 			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
 
@@ -537,12 +543,13 @@ test.describe('app settings', () => {
 				}),
 			).toBeVisible()
 
-			await main
-				.getByRole('radio', {
-					name: 'UTM (Universal Transverse Mercator)',
-					exact: true,
-				})
-				.check()
+			const utmOption = main.getByRole('radio', {
+				name: 'UTM (Universal Transverse Mercator)',
+				exact: true,
+			})
+			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
+			await utmOption.click()
+			await expect(utmOption).toBeChecked()
 
 			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
 		}
