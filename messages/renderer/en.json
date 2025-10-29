@@ -713,6 +713,10 @@
     "description": "Label for the degrees/minutes/seconds option.",
     "message": "DMS (Decimal/Minutes/Seconds)"
   },
+  "routes.app.settings.coordinate-system.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Go back."
+  },
   "routes.app.settings.coordinate-system.title": {
     "description": "Title of the coordinate system settings page.",
     "message": "Coordinate System"
@@ -752,6 +756,10 @@
   "routes.app.settings.device-name.save": {
     "description": "Label for save button.",
     "message": "Save"
+  },
+  "routes.app.settings.index.coordinateSystemSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to coordinate system settings page.",
+    "message": "Go to coordinate system settings."
   },
   "routes.app.settings.index.createTestData": {
     "description": "Label for item that navigates to test data creation page.",

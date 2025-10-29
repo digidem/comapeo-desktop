@@ -146,6 +146,7 @@ function SettingsList() {
 						size={rowIconSize}
 					/>
 				}
+				aria-label={t(m.coordinateSystemSettingsAccessibleLabel)}
 				label={t(
 					coordinateFormat === 'utm'
 						? m.utmCoordinates
@@ -341,5 +342,11 @@ const m = defineMessages({
 		defaultMessage: 'Go to language settings.',
 		description:
 			'Accessible label for link item that navigates to language settings page.',
+	},
+	coordinateSystemSettingsAccessibleLabel: {
+		id: 'routes.app.settings.index.coordinateSystemSettingsAccessibleLabel',
+		defaultMessage: 'Go to coordinate system settings.',
+		description:
+			'Accessible label for link item that navigates to coordinate system settings page.',
 	},
 })
