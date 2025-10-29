@@ -323,19 +323,19 @@ test.describe('app settings', () => {
 		}
 
 		// Main
-		{
-			await expect(
-				main.getByRole('heading', { name: 'Language', exact: true }),
-			).toBeVisible()
+		await expect(
+			main.getByRole('heading', { name: 'Language', exact: true }),
+		).toBeVisible()
 
-			//// Initial state
+		//// Initial state
+		{
 			const systemPreferencesOption = main.getByRole('radio', {
 				name: 'Follow system preferences',
 				exact: true,
+				checked: true,
 			})
 
 			await expect(systemPreferencesOption).toHaveValue('system')
-			await expect(systemPreferencesOption).toBeChecked()
 
 			const allLanguages = (
 				await import('../languages.json', {
@@ -426,6 +426,125 @@ test.describe('app settings', () => {
 					exact: true,
 				})
 				.click()
+		}
+	})
+
+	test('coordinate system', async () => {
+		const page = await electronApp.firstWindow()
+
+		const main = page.getByRole('main')
+
+		{
+			const coordinateSystemSettingsLink = main.getByRole('link', {
+				name: 'Go to coordinate system settings.',
+				exact: true,
+			})
+
+			await expect(coordinateSystemSettingsLink).toHaveText('UTM Coordinates')
+
+			await coordinateSystemSettingsLink.click()
+		}
+
+		// Navigation
+		{
+			await expect(
+				page
+					.getByRole('navigation')
+					.getByRole('link', { name: 'App Settings', exact: true }),
+			).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+
+			const disabledNavLinks = page
+				.getByRole('navigation')
+				.getByRole('link', { disabled: true })
+
+			await expect(disabledNavLinks.first()).toHaveAccessibleName(
+				'View project.',
+			)
+
+			await expect(disabledNavLinks).toHaveText([
+				'',
+				'Exchange',
+				'Data & Privacy',
+				'About CoMapeo',
+			])
+		}
+
+		// Main
+		{
+			const pageTitle = main.getByRole('heading', {
+				name: 'Coordinate System',
+				exact: true,
+			})
+
+			await expect(pageTitle).toBeVisible()
+			await expect(pageTitle).toHaveId('coordinate-system-selection-label')
+		}
+
+		//// Initial state
+		{
+			const radioGroup = main.getByRole('radiogroup')
+			await expect(radioGroup).toHaveAttribute(
+				'aria-labelledby',
+				'coordinate-system-selection-label',
+			)
+			await expect(radioGroup).toHaveAccessibleName('Coordinate System')
+
+			const utmOption = main.getByRole('radio', {
+				name: 'UTM (Universal Transverse Mercator)',
+				exact: true,
+				checked: true,
+			})
+			await expect(utmOption).toHaveValue('utm')
+
+			const uncheckedOptions = main.getByRole('radio', { checked: false })
+			await expect(uncheckedOptions).toHaveCount(2)
+			await expect(uncheckedOptions.first()).toHaveAccessibleName(
+				'DD (Decimal Degrees)',
+			)
+			await expect(uncheckedOptions.first()).toHaveValue('dd')
+			await expect(uncheckedOptions.last()).toHaveAccessibleName(
+				'DMS (Decimal/Minutes/Seconds)',
+			)
+			await expect(uncheckedOptions.last()).toHaveValue('dms')
+		}
+
+		//// Updating selected value
+		{
+			await main
+				.getByRole('radio', {
+					name: 'DD (Decimal Degrees)',
+					exact: true,
+				})
+				.check()
+
+			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+
+			const coordinateSystemSettingsLink = main.getByRole('link', {
+				name: 'Go to coordinate system settings.',
+				exact: true,
+			})
+			await expect(coordinateSystemSettingsLink).toHaveText('DD Coordinates')
+			await coordinateSystemSettingsLink.click()
+		}
+
+		//// Return to coordinate system settings page and restore selection
+		{
+			await expect(
+				main.getByRole('radio', {
+					name: 'DD (Decimal Degrees)',
+					exact: true,
+					checked: true,
+				}),
+			).toBeVisible()
+
+			await main
+				.getByRole('radio', {
+					name: 'UTM (Universal Transverse Mercator)',
+					exact: true,
+				})
+				.check()
+
+			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
 		}
 	})
 })
