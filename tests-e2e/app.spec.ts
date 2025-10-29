@@ -752,6 +752,104 @@ test.describe('app settings', () => {
 	})
 })
 
+test.describe('exchange', () => {
+	test('solo ', async () => {
+		const page = await electronApp.firstWindow()
+
+		await page
+			.getByRole('navigation')
+			.getByText('Exchange', { exact: true })
+			.click()
+
+		// Navigation
+		await expect(
+			page
+				.getByRole('navigation')
+				.getByRole('link', { name: 'Exchange', exact: true }),
+		).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+
+		const main = page.getByRole('main')
+
+		// Main
+
+		//// Initial state
+		{
+			const networkConnectionInfo = main.getByTestId(
+				'exchange-network-connection-info',
+			)
+			await expect(networkConnectionInfo).toHaveText(
+				'Getting Wi-Fi information…',
+				{ timeout: 0 },
+			)
+			await expect(networkConnectionInfo).not.toHaveText(
+				'Getting Wi-Fi information…',
+				{ timeout: 10_000 },
+			)
+			// TODO: Ideally check for actual values
+			await expect(networkConnectionInfo).not.toBeEmpty()
+
+			await expect(
+				main.getByRole('heading', { name: 'No Devices Found', exact: true }),
+			).toBeVisible()
+
+			await expect(main.getByRole('progressbar')).not.toBeVisible()
+
+			// TODO: Will need to update when exchange settings can be configured
+			await expect(
+				main.getByText('Exchange everything.', { exact: true }),
+			).toBeVisible()
+			await expect(main.getByText('Full size photos and audio.')).toBeVisible()
+			await expect(main.getByText('Uses more storage.')).toBeVisible()
+		}
+
+		//// Start exchange
+		{
+			const startButton = main.getByRole('button', {
+				name: 'Start',
+				exact: true,
+			})
+			await expect(startButton).toBeVisible()
+			await startButton.click()
+
+			const disabledNavLinks = page
+				.getByRole('navigation')
+				.getByRole('link', { disabled: true })
+
+			await expect(disabledNavLinks.first()).toHaveAccessibleName(
+				'View project.',
+			)
+
+			await expect(disabledNavLinks).toHaveText([
+				'',
+				'App Settings',
+				'Data & Privacy',
+				'About CoMapeo',
+			])
+
+			await expect(
+				main.getByRole('heading', { name: 'Waiting for Devices', exact: true }),
+			).toBeVisible()
+
+			await expect(main.getByRole('progressbar')).toBeVisible()
+
+			await expect(main.getByText(/^\d%$/)).toBeVisible()
+		}
+
+		//// Stop exchange
+		{
+			const stopButton = main.getByRole('button', { name: 'Stop', exact: true })
+			await expect(stopButton).toBeVisible()
+			await stopButton.click()
+
+			const disabledNavLinks = page
+				.getByRole('navigation')
+				.getByRole('link', { disabled: true })
+
+			await expect(disabledNavLinks).toHaveCount(0)
+		}
+	})
+})
+
 test('write outputs', async () => {
 	await writeOutputsFile('app', OUTPUTS)
 })

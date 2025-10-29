@@ -23,6 +23,7 @@ export function NetworkConnectionInfo({
 			select: (connections) => {
 				return connections[0]
 			},
+			refetchOnWindowFocus: false,
 		})
 
 	const netInfo = useBrowserNetInfo()

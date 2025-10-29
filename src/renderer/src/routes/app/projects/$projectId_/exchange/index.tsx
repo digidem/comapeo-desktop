@@ -132,6 +132,7 @@ function RouteComponent() {
 								border={`1px solid ${BLUE_GREY}`}
 								padding={4}
 								overflow="auto"
+								data-testid="exchange-network-connection-info"
 							>
 								<Suspense
 									fallback={
