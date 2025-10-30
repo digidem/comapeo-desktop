@@ -794,7 +794,9 @@ function useCreateTestTrack({ projectId }: { projectId: string }) {
 		}) => {
 			const randomPreset = Math.random() > 0.5 ? draw(presets) : null
 
-			const locations: Track['locations'] = []
+			// NOTE: This is technically invalid if observations.length < 2 but helpful to allow this
+			// to test handling of invalid data.
+			const locations = [] as unknown as Track['locations']
 			const observationRefs: Track['observationRefs'] = []
 
 			for (const observation of observations) {
