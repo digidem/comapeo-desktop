@@ -661,6 +661,10 @@
     "description": "Description of how custom background maps work.",
     "message": "カスタムバックグラウンドマップは、このデバイスでのみオフラインで表示できます。"
   },
+  "routes.app.settings.background-map.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
+  },
   "routes.app.settings.background-map.mapNameColumnLabel": {
     "description": "Column label text for map name.",
     "message": "地図名"
@@ -692,6 +696,10 @@
   "routes.app.settings.coordinate-system.dmsOptionLabel": {
     "description": "Label for the degrees/minutes/seconds option.",
     "message": "DMS (小数点/分/秒)"
+  },
+  "routes.app.settings.coordinate-system.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
   },
   "routes.app.settings.coordinate-system.title": {
     "description": "Title of the coordinate system settings page.",
@@ -733,6 +741,14 @@
     "description": "Label for save button.",
     "message": "保存"
   },
+  "routes.app.settings.index.backgroundMapSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to background map settings page.",
+    "message": "バックグラウンドマップの設定に移動します。"
+  },
+  "routes.app.settings.index.coordinateSystemSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to coordinate system settings page.",
+    "message": "座標系の設定に移動します。"
+  },
   "routes.app.settings.index.createTestData": {
     "description": "Label for item that navigates to test data creation page.",
     "message": "テストデータの作成"
@@ -753,6 +769,10 @@
     "description": "Description of the settings page.",
     "message": "CoMapeoは以下に設定されています。"
   },
+  "routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to device name settings page.",
+    "message": "デバイス名の設定に移動します。"
+  },
   "routes.app.settings.index.dmsCoordinates": {
     "description": "Label for Degrees/Minutes/Seconds coordinate system.",
     "message": "DMS Coordinates"
@@ -765,6 +785,10 @@
     "description": "Label for selected language based on the system preferences.",
     "message": "{name} (システム環境設定)"
   },
+  "routes.app.settings.index.languageSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to language settings page.",
+    "message": "言語設定に移動します。"
+  },
   "routes.app.settings.index.title": {
     "description": "Title of the settings page.",
     "message": "アプリの設定"
@@ -776,6 +800,10 @@
   "routes.app.settings.language.followSystemOptionLabel": {
     "description": "Option label for following system preference for language.",
     "message": "システム設定に従ってください"
+  },
+  "routes.app.settings.language.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
   },
   "routes.app.settings.language.title": {
     "description": "Title of the language settings page.",
