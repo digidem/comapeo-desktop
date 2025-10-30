@@ -59,9 +59,8 @@ export function CategoryIconImage({
 	const { data: iconUrl } = useIconUrl({
 		projectId,
 		iconId: iconDocumentId,
-		mimeType: 'image/png',
+		mimeType: 'image/svg+xml',
 		size: 'small',
-		pixelDensity: 3,
 	})
 
 	return (
