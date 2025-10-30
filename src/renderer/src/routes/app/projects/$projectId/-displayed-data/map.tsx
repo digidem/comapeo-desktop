@@ -582,7 +582,6 @@ const ICON_SIZE = 20
 
 function CategoryIconMarker({
 	projectId,
-	documentId,
 	categoryDocumentId,
 	lang,
 }: {
@@ -591,14 +590,7 @@ function CategoryIconMarker({
 	categoryDocumentId?: string
 	lang: string
 }) {
-	const { data: document } = useSingleDocByDocId({
-		projectId,
-		docType: 'observation',
-		docId: documentId,
-		lang,
-	})
-
-	const categoryDocIdToUse = categoryDocumentId || document.presetRef?.docId
+	const categoryDocIdToUse = categoryDocumentId
 
 	return categoryDocIdToUse ? (
 		<CategoryIcon
