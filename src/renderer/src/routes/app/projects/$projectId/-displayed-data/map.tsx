@@ -543,12 +543,23 @@ export function DisplayedDataMap() {
 							longitude={highlightedFeature.geometry.coordinates[0]!}
 							latitude={highlightedFeature.geometry.coordinates[1]!}
 						>
-							<CategoryIconMarker
-								projectId={projectId}
-								documentId={highlightedFeature.properties.docId}
-								categoryDocumentId={highlightedFeature.properties.categoryDocId}
-								lang={lang}
-							/>
+							{highlightedFeature.properties.categoryDocId ? (
+								<CategoryIcon
+									categoryDocumentId={
+										highlightedFeature.properties.categoryDocId
+									}
+									projectId={projectId}
+									lang={lang}
+								/>
+							) : (
+								<CategoryIconContainer
+									color={BLUE_GREY}
+									applyBoxShadow
+									padding={1}
+								>
+									<Icon name="material-place" size={ICON_SIZE} />
+								</CategoryIconContainer>
+							)}
 						</Marker>
 					</Suspense>
 				) : null}
@@ -579,31 +590,6 @@ export function DisplayedDataMap() {
 }
 
 const ICON_SIZE = 20
-
-function CategoryIconMarker({
-	projectId,
-	categoryDocumentId,
-	lang,
-}: {
-	projectId: string
-	documentId: string
-	categoryDocumentId?: string
-	lang: string
-}) {
-	const categoryDocIdToUse = categoryDocumentId
-
-	return categoryDocIdToUse ? (
-		<CategoryIcon
-			categoryDocumentId={categoryDocIdToUse}
-			projectId={projectId}
-			lang={lang}
-		/>
-	) : (
-		<CategoryIconContainer color={BLUE_GREY} applyBoxShadow padding={1}>
-			<Icon name="material-place" size={ICON_SIZE} />
-		</CategoryIconContainer>
-	)
-}
 
 function CategoryIcon({
 	categoryDocumentId,
