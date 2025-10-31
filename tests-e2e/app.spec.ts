@@ -392,17 +392,10 @@ test.describe('app settings', () => {
 				'Sobre o CoMapeo',
 			])
 
-			await main
-				.getByRole('button', {
-					// TODO: This needs to be updated when the relevant translation is available
-					name: 'Go back.',
-					exact: true,
-				})
-				.click()
+			await main.getByRole('button', { name: 'Voltar.', exact: true }).click()
 
 			const languageSettingsLink = main.getByRole('link', {
-				// TODO: This needs to be updated when the relevant translation is available
-				name: 'Go to language settings.',
+				name: 'Vá para as configurações de idioma.',
 				exact: true,
 			})
 
@@ -426,13 +419,7 @@ test.describe('app settings', () => {
 			await systemPreferencesOption.click()
 			await expect(systemPreferencesOption).toBeChecked()
 
-			await main
-				.getByRole('button', {
-					// TODO: This needs to be updated when the relevant translation is available
-					name: 'Go back.',
-					exact: true,
-				})
-				.click()
+			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
 		}
 	})
 
