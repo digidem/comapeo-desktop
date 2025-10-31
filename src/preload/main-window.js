@@ -86,19 +86,25 @@ const runtimeApi = {
 
 	// Active project ID
 	getInitialProjectId: () => {
-		let projectId = getProcessArgValue('comapeo-initial-project-id')
+		const sessionValue = sessionStorage.getItem('activeProjectId')
 
-		if (projectId !== 'undefined') {
-			return projectId
+		// NOTE: Some entry in session storage, use that as the source of truth.
+		// This accounts for race conditions that can happen due to the async nature of updating the active project ID in config storage.
+		// e.g. manual page refresh right after leaving a project
+		if (typeof sessionValue === 'string') {
+			return sessionValue.length > 0 ? sessionValue : undefined
 		}
 
-		// NOTE: Accounts for edge case where a manual reload of the window happens on the first usage of the app.
-		// This is only used in initialization before mounting the rendered app.
-		projectId = ipcRenderer.sendSync('activeProjectId:get')
+		// NOTE: No entry in session storage, get initial value from process arg.
+		const processArgValue = getProcessArgValue('comapeo-initial-project-id')
 
-		return projectId
+		if (processArgValue === 'undefined') {
+			return undefined
+		}
+
+		return processArgValue
 	},
-	setActiveProjectId: async (value) => {
+	setActiveProjectId: (value) => {
 		return ipcRenderer.invoke('activeProjectId:set', value || null)
 	},
 }

@@ -22,7 +22,10 @@ export const Route = createFileRoute(
 	'/onboarding/project/join/$inviteId/success',
 )({
 	validateSearch: SearchParamsSchema,
-	loader: async ({ context, params }) => {
+	loaderDeps: ({ search }) => {
+		return { projectId: search.projectId }
+	},
+	loader: async ({ context, params, deps }) => {
 		const { clientApi, queryClient, formatMessage } = context
 		const { inviteId } = params
 
@@ -55,6 +58,12 @@ export const Route = createFileRoute(
 				params: { inviteId },
 				replace: true,
 			})
+		}
+
+		// NOTE: Update the stored active project ID non-reactively (not using ActiveProjectIdStore)
+		// as we don't want to automatically recalculate loaders that may cause redirects.
+		if (deps.projectId) {
+			await window.runtime.setActiveProjectId(deps.projectId)
 		}
 	},
 	component: RouteComponent,

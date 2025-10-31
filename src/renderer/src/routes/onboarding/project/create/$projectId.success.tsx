@@ -58,6 +58,10 @@ export const Route = createFileRoute(
 		if (!settings.name) {
 			throw redirect({ to: '/onboarding/project/create' })
 		}
+
+		// NOTE: Update the stored active project ID non-reactively (not using ActiveProjectIdStore)
+		// as we don't want to automatically recalculate loaders that may cause redirects.
+		await window.runtime.setActiveProjectId(params.projectId)
 	},
 	component: RouteComponent,
 	notFoundComponent: NotFoundComponent,
