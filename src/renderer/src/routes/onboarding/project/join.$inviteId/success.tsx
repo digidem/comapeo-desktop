@@ -22,8 +22,12 @@ export const Route = createFileRoute(
 	'/onboarding/project/join/$inviteId/success',
 )({
 	validateSearch: SearchParamsSchema,
-	loader: async ({ context, params }) => {
-		const { clientApi, queryClient, formatMessage } = context
+	loaderDeps: ({ search }) => {
+		return { projectId: search.projectId }
+	},
+	loader: async ({ context, params, deps }) => {
+		const { activeProjectIdStore, clientApi, queryClient, formatMessage } =
+			context
 		const { inviteId } = params
 
 		let invite: Invite
@@ -55,6 +59,10 @@ export const Route = createFileRoute(
 				params: { inviteId },
 				replace: true,
 			})
+		}
+
+		if (deps.projectId) {
+			activeProjectIdStore.actions.update(deps.projectId)
 		}
 	},
 	component: RouteComponent,
