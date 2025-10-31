@@ -21,7 +21,7 @@ export const Route = createFileRoute(
 	'/onboarding/project/create/$projectId/success',
 )({
 	loader: async ({ context, params }) => {
-		const { clientApi, queryClient } = context
+		const { activeProjectIdStore, clientApi, queryClient } = context
 		const { projectId } = params
 
 		let projectApi
@@ -58,6 +58,8 @@ export const Route = createFileRoute(
 		if (!settings.name) {
 			throw redirect({ to: '/onboarding/project/create' })
 		}
+
+		activeProjectIdStore.actions.update(params.projectId)
 	},
 	component: RouteComponent,
 	notFoundComponent: NotFoundComponent,
