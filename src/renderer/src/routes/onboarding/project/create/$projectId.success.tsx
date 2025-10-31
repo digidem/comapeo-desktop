@@ -21,7 +21,7 @@ export const Route = createFileRoute(
 	'/onboarding/project/create/$projectId/success',
 )({
 	loader: async ({ context, params }) => {
-		const { clientApi, queryClient } = context
+		const { activeProjectIdStore, clientApi, queryClient } = context
 		const { projectId } = params
 
 		let projectApi
@@ -59,9 +59,7 @@ export const Route = createFileRoute(
 			throw redirect({ to: '/onboarding/project/create' })
 		}
 
-		// NOTE: Update the stored active project ID non-reactively (not using ActiveProjectIdStore)
-		// as we don't want to automatically recalculate loaders that may cause redirects.
-		await window.runtime.setActiveProjectId(params.projectId)
+		activeProjectIdStore.actions.update(params.projectId)
 	},
 	component: RouteComponent,
 	notFoundComponent: NotFoundComponent,

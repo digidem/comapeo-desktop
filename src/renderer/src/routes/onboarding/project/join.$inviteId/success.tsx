@@ -26,7 +26,8 @@ export const Route = createFileRoute(
 		return { projectId: search.projectId }
 	},
 	loader: async ({ context, params, deps }) => {
-		const { clientApi, queryClient, formatMessage } = context
+		const { activeProjectIdStore, clientApi, queryClient, formatMessage } =
+			context
 		const { inviteId } = params
 
 		let invite: Invite
@@ -60,10 +61,8 @@ export const Route = createFileRoute(
 			})
 		}
 
-		// NOTE: Update the stored active project ID non-reactively (not using ActiveProjectIdStore)
-		// as we don't want to automatically recalculate loaders that may cause redirects.
 		if (deps.projectId) {
-			await window.runtime.setActiveProjectId(deps.projectId)
+			activeProjectIdStore.actions.update(deps.projectId)
 		}
 	},
 	component: RouteComponent,
