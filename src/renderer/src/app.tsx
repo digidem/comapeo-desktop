@@ -135,7 +135,11 @@ const activeProjectIdStore = createActiveProjectIdStore({
 })
 
 activeProjectIdStore.instance.subscribe((state) => {
-	sessionStorage.setItem('activeProjectId', state === undefined ? '' : state)
+	sessionStorage.setItem(
+		// NOTE: Used by `window.runtime.getInitialProjectId()`
+		'comapeo:active_project_id',
+		state === undefined ? '' : state,
+	)
 
 	window.runtime.setActiveProjectId(state).catch((err) => {
 		captureException(err)

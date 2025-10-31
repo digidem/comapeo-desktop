@@ -86,7 +86,7 @@ const runtimeApi = {
 
 	// Active project ID
 	getInitialProjectId: () => {
-		const sessionValue = sessionStorage.getItem('activeProjectId')
+		const sessionValue = sessionStorage.getItem('comapeo:active_project_id')
 
 		// NOTE: Some entry in session storage, use that as the source of truth.
 		// This accounts for race conditions that can happen due to the async nature of updating the active project ID in config storage.
