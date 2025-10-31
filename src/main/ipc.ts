@@ -63,13 +63,6 @@ export function setUpMainIPC({
 	})
 
 	// Active project ID
-
-	// NOTE: This is handled as a synchronous call, which is generally not recommended.
-	// This should only be used in initialization before mounting the rendered app.
-	ipcMain.on('activeProjectId:get', (event) => {
-		event.returnValue = persistedStore.getState().activeProjectId
-	})
-
 	ipcMain.handle('activeProjectId:set', (_event, value) => {
 		v.assert(
 			v.union([

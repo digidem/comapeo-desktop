@@ -426,7 +426,7 @@ function ObservationCategory({
 						projectId={projectId}
 						iconDocumentId={categoryIconDocumentId}
 						altText={t(m.categoryIconAlt, { name })}
-						imageStyle={{ aspectRatio: 1, maxHeight: 12, objectFit: 'cover' }}
+						imageStyle={{ aspectRatio: 1, height: 12, objectFit: 'contain' }}
 					/>
 				) : (
 					<Box
