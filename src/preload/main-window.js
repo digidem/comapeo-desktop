@@ -104,7 +104,7 @@ const runtimeApi = {
 
 		return processArgValue
 	},
-	setActiveProjectId: (value) => {
+	setActiveProjectId: async (value) => {
 		return ipcRenderer.invoke('activeProjectId:set', value || null)
 	},
 }
