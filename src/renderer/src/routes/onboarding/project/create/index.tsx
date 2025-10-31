@@ -4,8 +4,7 @@ import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
-import { useMutation } from '@tanstack/react-query'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
@@ -15,7 +14,6 @@ import { ErrorDialog } from '../../../../components/error-dialog'
 import { Icon } from '../../../../components/icon'
 import { useAppForm } from '../../../../hooks/forms'
 import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../../../lib/constants'
-import { setActiveProjectIdMutationOptions } from '../../../../lib/queries/app-settings'
 import { createProjectNameSchema } from '../../../../lib/validators/project'
 
 export const Route = createFileRoute('/onboarding/project/create/')({
@@ -24,11 +22,9 @@ export const Route = createFileRoute('/onboarding/project/create/')({
 
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
-	const navigate = useNavigate()
+	const router = useRouter()
 
 	const createProject = useOnboardingCreateProject()
-
-	const setActiveProjectId = useMutation(setActiveProjectIdMutationOptions())
 
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
@@ -58,13 +54,12 @@ function RouteComponent() {
 			let projectId: string
 			try {
 				projectId = await createProject.mutateAsync({ name: projectName })
-				await setActiveProjectId.mutateAsync(projectId)
 			} catch (err) {
 				captureException(err)
 				return
 			}
 
-			navigate({
+			router.navigate({
 				to: '/onboarding/project/create/$projectId/success',
 				params: { projectId },
 			})
@@ -81,15 +76,7 @@ function RouteComponent() {
 						createProject.reset()
 					},
 				}
-			: setActiveProjectId.status === 'error'
-				? {
-						open: true,
-						errorMessage: setActiveProjectId.error.toString(),
-						onClose: () => {
-							setActiveProjectId.reset()
-						},
-					}
-				: { open: false, onClose: () => {} }
+			: { open: false, onClose: () => {} }
 
 	return (
 		<>
@@ -132,6 +119,7 @@ function RouteComponent() {
 						<form.AppField name="projectName">
 							{(field) => (
 								<field.TextField
+									id={field.name}
 									required
 									fullWidth
 									autoFocus
@@ -158,7 +146,11 @@ function RouteComponent() {
 											<Box component="span">
 												{field.state.meta.errors[0]?.message}
 											</Box>
-											<Box component="span">
+											<Box
+												component="output"
+												htmlFor={field.name}
+												name="character-count"
+											>
 												<form.Subscribe
 													selector={(state) =>
 														v._getGraphemeCount(state.values.projectName)

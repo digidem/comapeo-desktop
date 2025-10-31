@@ -9,6 +9,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
 import { init as initSentryElectron } from '@sentry/electron/renderer'
 import {
+	captureException,
 	init as initSentryReact,
 	tanstackRouterBrowserTracingIntegration,
 } from '@sentry/react'
@@ -31,17 +32,22 @@ import { AppTitleBar, TITLE_BAR_HEIGHT } from './components/app-title-bar'
 import { GenericRouteErrorComponent } from './components/generic-route-error-component'
 import { GenericRouteNotFoundComponent } from './components/generic-route-not-found-component'
 import { GenericRoutePendingComponent } from './components/generic-route-pending-component'
+import {
+	ActiveProjectIdStoreProvider,
+	createActiveProjectIdStore,
+} from './contexts/active-project-id-store-context'
 import { IntlProvider } from './contexts/intl'
+import {
+	LocalPeersStoreProvider,
+	createLocalPeersStore,
+} from './contexts/local-peers-store-context'
 import {
 	RefreshTokensStoreProvider,
 	createRefreshTokensStore,
 } from './contexts/refresh-tokens-store-context'
 import { routeTree } from './generated/routeTree.gen'
 import { useNetworkConnectionChangeListener } from './hooks/network'
-import {
-	getActiveProjectIdQueryOptions,
-	getLocaleStateQueryOptions,
-} from './lib/queries/app-settings'
+import { getLocaleStateQueryOptions } from './lib/queries/app-settings'
 import { theme } from './theme'
 
 const queryClient = new QueryClient({
@@ -71,7 +77,8 @@ const router = createRouter({
 	context: {
 		queryClient,
 		clientApi,
-		activeProjectId: null,
+		// NOTE: Populated at render time
+		activeProjectIdStore: undefined!,
 		// NOTE: Populated at render time
 		localeState: undefined!,
 		// NOTE: Populated at render time
@@ -122,6 +129,24 @@ const MAIN_CONTENT_HEIGHT =
 	platform === 'darwin' ? `calc(100% - ${TITLE_BAR_HEIGHT})` : '100%'
 
 const refreshTokensStore = createRefreshTokensStore()
+const localPeersStore = createLocalPeersStore({ clientApi })
+const activeProjectIdStore = createActiveProjectIdStore({
+	initialValue: window.runtime.getInitialProjectId(),
+})
+
+activeProjectIdStore.instance.subscribe((state) => {
+	sessionStorage.setItem(
+		// NOTE: Used by `window.runtime.getInitialProjectId()`
+		'comapeo:active_project_id',
+		state === undefined ? '' : state,
+	)
+
+	window.runtime.setActiveProjectId(state).catch((err) => {
+		captureException(err)
+	})
+})
+
+localPeersStore.actions.subscribe()
 
 export function App() {
 	return (
@@ -130,53 +155,53 @@ export function App() {
 				<CssBaseline enableColorScheme />
 
 				<RefreshTokensStoreProvider value={refreshTokensStore}>
-					<QueryClientProvider client={queryClient}>
-						<IntlProvider>
-							<NetworkConnectionChangeListener />
+					<ActiveProjectIdStoreProvider value={activeProjectIdStore}>
+						<QueryClientProvider client={queryClient}>
+							<IntlProvider>
+								<NetworkConnectionChangeListener />
 
-							<Box height="100dvh">
-								{platform === 'darwin' ? (
-									<AppTitleBar platform={platform} />
-								) : null}
+								<Box height="100dvh">
+									{platform === 'darwin' ? (
+										<AppTitleBar platform={platform} testId="app-title-bar" />
+									) : null}
 
-								<Box height={MAIN_CONTENT_HEIGHT}>
-									<Suspense
-										fallback={
-											<Box
-												display="flex"
-												justifyContent="center"
-												alignItems="center"
-												height="100%"
-											>
-												<CircularProgress />
-											</Box>
-										}
-									>
-										<ClientApiProvider clientApi={clientApi}>
-											<WithInvitesListener>
-												<WithAddedRouteContext>
-													{({
-														activeProjectId,
-														formatMessage,
-														localeState,
-													}) => (
-														<RouterProvider
-															router={router}
-															context={{
-																activeProjectId,
-																formatMessage,
-																localeState,
-															}}
-														/>
-													)}
-												</WithAddedRouteContext>
-											</WithInvitesListener>
-										</ClientApiProvider>
-									</Suspense>
+									<Box height={MAIN_CONTENT_HEIGHT}>
+										<Suspense
+											fallback={
+												<Box
+													display="flex"
+													justifyContent="center"
+													alignItems="center"
+													height="100%"
+												>
+													<CircularProgress />
+												</Box>
+											}
+										>
+											<ClientApiProvider clientApi={clientApi}>
+												<LocalPeersStoreProvider value={localPeersStore}>
+													<WithInvitesListener>
+														<WithAddedRouteContext>
+															{({ formatMessage, localeState }) => (
+																<RouterProvider
+																	router={router}
+																	context={{
+																		activeProjectIdStore,
+																		formatMessage,
+																		localeState,
+																	}}
+																/>
+															)}
+														</WithAddedRouteContext>
+													</WithInvitesListener>
+												</LocalPeersStoreProvider>
+											</ClientApiProvider>
+										</Suspense>
+									</Box>
 								</Box>
-							</Box>
-						</IntlProvider>
-					</QueryClientProvider>
+							</IntlProvider>
+						</QueryClientProvider>
+					</ActiveProjectIdStoreProvider>
 				</RefreshTokensStoreProvider>
 			</ThemeProvider>
 		</StrictMode>
@@ -198,18 +223,13 @@ function WithAddedRouteContext({
 	children,
 }: {
 	children: (props: {
-		activeProjectId: string | null
 		formatMessage: IntlShape['formatMessage']
 		localeState: LocaleState
 	}) => ReactElement
 }) {
 	const { formatMessage } = useIntl()
 
-	const { data: activeProjectId } = useSuspenseQuery(
-		getActiveProjectIdQueryOptions(),
-	)
-
 	const { data: localeState } = useSuspenseQuery(getLocaleStateQueryOptions())
 
-	return children({ activeProjectId, formatMessage, localeState })
+	return children({ formatMessage, localeState })
 }

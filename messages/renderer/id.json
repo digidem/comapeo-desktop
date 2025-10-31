@@ -75,17 +75,21 @@
     "description": "Label for save button.",
     "message": "Simpan"
   },
-  "routes.app.projects.$projectId_.settings.team.deviceNameColumnTitle": {
-    "description": "Title used for column containing device name of project members.",
-    "message": "Nama Perangkat"
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectButton": {
+    "description": "Button text to initiate leave project flow.",
+    "message": "Tinggalkan Proyek"
   },
-  "routes.app.projects.$projectId_.settings.team.inviteDevice": {
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectExplainerTitle": {
+    "description": "Title text for leave project explanation.",
+    "message": "Tinggalkan Proyek?"
+  },
+  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectNavTitle": {
+    "description": "Title of the team collaborator info page when the leave project flow is initiated.",
+    "message": "Tinggalkan Proyek"
+  },
+  "routes.app.projects.$projectId_.settings.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Undang Perangkat"
-  },
-  "routes.app.projects.$projectId_.settings.team.leaveProject": {
-    "description": "Text for button that initiates steps for leaving project.",
-    "message": "Tinggalkan Proyek"
   },
   "routes.app.settings.background-map.close": {
     "description": "Text displayed for closing dialogs",

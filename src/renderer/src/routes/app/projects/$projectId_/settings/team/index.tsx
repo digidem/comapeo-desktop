@@ -26,46 +26,50 @@ import {
 	MEMBER_ROLE_ID,
 } from '../../../../../../lib/comapeo'
 
-export const Route = createFileRoute(
-	'/app/projects/$projectId_/settings/team/',
-)({
-	loader: async ({ context, params }) => {
-		const { clientApi, projectApi, queryClient } = context
-		const { projectId } = params
+export const Route = createFileRoute('/app/projects/$projectId/settings/team/')(
+	{
+		loader: async ({ context, params }) => {
+			const { clientApi, projectApi, queryClient } = context
+			const { projectId } = params
 
-		await Promise.all([
-			queryClient.ensureQueryData({
-				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
-				queryFn: async () => {
-					return clientApi.getDeviceInfo()
-				},
-			}),
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'role',
-				],
-				queryFn: async () => {
-					return projectApi.$getOwnRole()
-				},
-			}),
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'members',
-				],
-				queryFn: async () => {
-					return projectApi.$member.getMany()
-				},
-			}),
-		])
+			await Promise.all([
+				queryClient.ensureQueryData({
+					queryKey: [
+						COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+						'client',
+						'device_info',
+					],
+					queryFn: async () => {
+						return clientApi.getDeviceInfo()
+					},
+				}),
+				queryClient.ensureQueryData({
+					queryKey: [
+						COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+						'projects',
+						projectId,
+						'role',
+					],
+					queryFn: async () => {
+						return projectApi.$getOwnRole()
+					},
+				}),
+				queryClient.ensureQueryData({
+					queryKey: [
+						COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+						'projects',
+						projectId,
+						'members',
+					],
+					queryFn: async () => {
+						return projectApi.$member.getMany()
+					},
+				}),
+			])
+		},
+		component: RouteComponent,
 	},
-	component: RouteComponent,
-})
+)
 
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()

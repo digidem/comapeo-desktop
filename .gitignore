@@ -71,3 +71,10 @@ dist/
 
 # App config
 app.config.json
+
+# Key files
+*.p8
+
+# artifacts from e2e tests
+tests-e2e/playwright-report/
+tests-e2e/results/

@@ -69,9 +69,16 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           node-version-file: .nvmrc
+
+      - name: Update npm version
+        shell: bash
+        run: |
+          version=$(cat package.json | jq '.devEngines.packageManager.version' --raw-output)
+          echo "Version detected: $version"
+          npm install -g npm@$version
 
       - name: Parse version
         id: version

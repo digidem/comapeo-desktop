@@ -5,17 +5,6 @@ import { BASE_QUERY_KEY as LANGUAGE_BASE_QUERY_KEY } from './intl'
 
 const BASE_QUERY_KEY = 'app-settings'
 
-export function getActiveProjectIdQueryOptions() {
-	return queryOptions({
-		queryKey: [BASE_QUERY_KEY, 'activeProjectId'],
-		queryFn: async () => {
-			// Query functions cannot return undefined so we return null in this case
-			const result = await window.runtime.getActiveProjectId()
-			return result === undefined ? null : result
-		},
-	})
-}
-
 export function getCoordinateFormatQueryOptions() {
 	return queryOptions({
 		queryKey: [BASE_QUERY_KEY, 'coordinateFormat'],
@@ -41,23 +30,6 @@ export function getLocaleStateQueryOptions() {
 			return window.runtime.getLocaleState()
 		},
 	})
-}
-
-export function setActiveProjectIdMutationOptions() {
-	return {
-		mutationFn: async (vars) => {
-			return window.runtime.setActiveProjectId(vars)
-		},
-		onSuccess: (_data, _variables, _mutateResult, context) => {
-			context.client.invalidateQueries({
-				queryKey: [BASE_QUERY_KEY, 'activeProjectId'],
-			})
-		},
-	} satisfies UseMutationOptions<
-		void,
-		Error,
-		Parameters<RuntimeApi['setActiveProjectId']>[0]
-	>
 }
 
 export function setCoordinateFormatMutationOptions() {

@@ -13,10 +13,10 @@ import { DeviceRow } from '../-shared/device-row'
 import { BLUE_GREY } from '../../../../../../../colors'
 import { GenericRoutePendingComponent } from '../../../../../../../components/generic-route-pending-component'
 import { Icon } from '../../../../../../../components/icon'
-import { useLocalPeers } from '../../../../../../../hooks/peers'
+import { useLocalPeersState } from '../../../../../../../contexts/local-peers-store-context'
 
 export const Route = createFileRoute(
-	'/app/projects/$projectId_/invite/devices/$deviceId/role',
+	'/app/projects/$projectId/invite/devices/$deviceId/role',
 )({
 	pendingComponent: GenericRoutePendingComponent,
 	component: RouteComponent,
@@ -31,7 +31,9 @@ function RouteComponent() {
 	const { peerOnLoad } = Route.useRouteContext()
 	const { projectId, deviceId } = Route.useParams()
 
-	const updatedPeer = useLocalPeers().find((p) => p.deviceId === deviceId)
+	const updatedPeer = useLocalPeersState((peers) => {
+		return peers.find((p) => p.deviceId === deviceId)
+	})
 
 	const peer = updatedPeer || peerOnLoad
 
@@ -47,11 +49,6 @@ function RouteComponent() {
 			>
 				<IconButton
 					onClick={() => {
-						if (router.history.canGoBack()) {
-							router.history.back()
-							return
-						}
-
 						router.navigate({
 							to: '/app/projects/$projectId/invite/devices',
 							params: { projectId },
@@ -94,6 +91,7 @@ function RouteComponent() {
 								to: '/app/projects/$projectId/invite/devices/$deviceId/send',
 								params: { projectId, deviceId: peer.deviceId },
 								search: { role: 'participant' },
+								replace: true,
 							})
 						}}
 					/>
@@ -107,6 +105,7 @@ function RouteComponent() {
 								to: '/app/projects/$projectId/invite/devices/$deviceId/send',
 								params: { projectId, deviceId: peer.deviceId },
 								search: { role: 'coordinator' },
+								replace: true,
 							})
 						}}
 					/>

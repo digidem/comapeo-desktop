@@ -28,10 +28,6 @@ export function setUpMainIPC({
 	})
 
 	// Settings (get)
-	ipcMain.handle('settings:get:activeProjectId', () => {
-		return persistedStore.getState().activeProjectId
-	})
-
 	ipcMain.handle('settings:get:coordinateFormat', () => {
 		return persistedStore.getState().coordinateFormat
 	})
@@ -45,20 +41,6 @@ export function setUpMainIPC({
 	})
 
 	// Settings (set)
-	ipcMain.handle('settings:set:activeProjectId', (_event, value) => {
-		v.assert(
-			v.union([
-				v.nonOptional(PersistedStateV1Schema.entries.activeProjectId),
-				v.null(),
-			]),
-			value,
-		)
-
-		persistedStore.setState({
-			activeProjectId: value === null ? undefined : value,
-		})
-	})
-
 	ipcMain.handle('settings:set:coordinateFormat', (_event, value) => {
 		v.assert(
 			v.nonOptional(PersistedStateV1Schema.entries.coordinateFormat),
@@ -78,5 +60,20 @@ export function setUpMainIPC({
 	ipcMain.handle('settings:set:locale', (_event, value) => {
 		v.assert(v.nonOptional(PersistedStateV1Schema.entries.locale), value)
 		persistedStore.setState({ locale: value })
+	})
+
+	// Active project ID
+	ipcMain.handle('activeProjectId:set', (_event, value) => {
+		v.assert(
+			v.union([
+				v.nonOptional(PersistedStateV1Schema.entries.activeProjectId),
+				v.null(),
+			]),
+			value,
+		)
+
+		persistedStore.setState({
+			activeProjectId: value === null ? undefined : value,
+		})
 	})
 }

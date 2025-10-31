@@ -1,11 +1,10 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../lib/comapeo'
-import { getActiveProjectIdQueryOptions } from '../lib/queries/app-settings'
 
 export const Route = createFileRoute('/')({
 	beforeLoad: async ({ context }) => {
-		const { queryClient, clientApi, activeProjectId } = context
+		const { queryClient, clientApi, activeProjectIdStore } = context
 
 		const ownDeviceInfo = await queryClient.ensureQueryData({
 			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
@@ -18,6 +17,8 @@ export const Route = createFileRoute('/')({
 		if (!ownDeviceInfo.name) {
 			throw redirect({ to: '/welcome', replace: true })
 		}
+
+		const activeProjectId = activeProjectIdStore.instance.getState()
 
 		if (activeProjectId) {
 			throw redirect({
@@ -42,17 +43,10 @@ export const Route = createFileRoute('/')({
 		const projectToUse = projects[0]
 
 		if (projectToUse) {
-			await window.runtime.setActiveProjectId(projectToUse.projectId)
-
-			await queryClient.invalidateQueries({
-				queryKey: getActiveProjectIdQueryOptions().queryKey,
-			})
-
 			throw redirect({
 				to: '/app/projects/$projectId',
 				params: { projectId: projectToUse.projectId },
 				replace: true,
-				reloadDocument: true,
 			})
 		}
 

@@ -1,4 +1,7 @@
-import { useImportProjectConfig, useProjectSettings } from '@comapeo/core-react'
+import {
+	useImportProjectCategories,
+	useProjectSettings,
+} from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
@@ -19,7 +22,7 @@ import { selectFileMutationOptions } from '../../../../../lib/queries/file-syste
 import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations'
 
 export const Route = createFileRoute(
-	'/app/projects/$projectId_/settings/categories',
+	'/app/projects/$projectId/settings/categories',
 )({
 	loader: async ({ context, params }) => {
 		const { projectApi, queryClient } = context
@@ -58,7 +61,7 @@ function RouteComponent() {
 
 	const selectFile = useMutation(selectFileMutationOptions())
 
-	const importCategoriesFile = useImportProjectConfig({ projectId })
+	const importCategoriesFile = useImportProjectCategories({ projectId })
 
 	const selectAndImportMutation = useMutation({
 		mutationKey: SELECT_AND_IMPORT_CATEGORY_MUTATION_KEY,
@@ -71,11 +74,7 @@ function RouteComponent() {
 				return
 			}
 
-			// TODO: Does not throw even in egregious cases: https://github.com/digidem/comapeo-core/issues/1082
-			// TODO: Surface config errors/warnings?
-			const _configErrors = await importCategoriesFile.mutateAsync({
-				configPath: fileInfo.path,
-			})
+			return importCategoriesFile.mutateAsync({ filePath: fileInfo.path })
 		},
 	})
 

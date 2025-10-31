@@ -59,6 +59,43 @@ export function CategoryIconImage({
 	const { data: iconUrl } = useIconUrl({
 		projectId,
 		iconId: iconDocumentId,
+		mimeType: 'image/svg+xml',
+		size: 'small',
+	})
+
+	return (
+		<ErrorBoundary
+			getResetKey={() => iconUrl}
+			fallback={() => (
+				<LegacyCategoryIconImage
+					altText={altText}
+					projectId={projectId}
+					iconDocumentId={iconDocumentId}
+					imageStyle={imageStyle}
+				/>
+			)}
+		>
+			<Suspense fallback={<CircularProgress disableShrink />}>
+				<SuspenseImage src={iconUrl} alt={altText} style={imageStyle} />
+			</Suspense>
+		</ErrorBoundary>
+	)
+}
+
+function LegacyCategoryIconImage({
+	altText,
+	projectId,
+	iconDocumentId,
+	imageStyle,
+}: {
+	altText: string
+	iconDocumentId: string
+	projectId: string
+	imageStyle?: CSSProperties
+}) {
+	const { data: iconUrl } = useIconUrl({
+		projectId,
+		iconId: iconDocumentId,
 		mimeType: 'image/png',
 		size: 'small',
 		pixelDensity: 3,

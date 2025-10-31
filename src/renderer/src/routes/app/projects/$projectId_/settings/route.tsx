@@ -6,7 +6,7 @@ import { LIGHT_GREY } from '../../../../../colors'
 import { GenericRoutePendingComponent } from '../../../../../components/generic-route-pending-component'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
 
-export const Route = createFileRoute('/app/projects/$projectId_/settings')({
+export const Route = createFileRoute('/app/projects/$projectId/settings')({
 	beforeLoad: async ({ context, params }) => {
 		const { clientApi, queryClient } = context
 		const { projectId } = params

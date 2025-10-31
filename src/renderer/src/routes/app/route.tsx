@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { useSyncState } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import List from '@mui/material/List'
@@ -20,27 +20,42 @@ import {
 	IconButtonLink,
 	type ButtonLinkProps,
 } from '../../components/link'
-import type { ToRouteFullPath } from '../../lib/navigation'
 import { GLOBAL_MUTATIONS_BASE_KEY } from '../../lib/queries/global-mutations'
 
 export const Route = createFileRoute('/app')({
-	beforeLoad: ({ context, matches }) => {
-		if (!context.activeProjectId) {
-			throw new Error('Router context is missing `activeProjectId`')
+	beforeLoad: ({ context, matches, preload }) => {
+		let activeProjectId = context.activeProjectIdStore.instance.getState()
+
+		if (!activeProjectId) {
+			for (const m of matches) {
+				// NOTE: We passively update the active project ID whenever we navigate
+				// to a relevant project-specific page.
+				if ('projectId' in m.params) {
+					activeProjectId = m.params.projectId
+
+					if (!preload) {
+						context.activeProjectIdStore.actions.update(activeProjectId)
+					}
+
+					break
+				}
+			}
+		}
+
+		if (!activeProjectId) {
+			throw new Error('Could not determine most recent project ID')
 		}
 
 		// Redirect to project-specific "initial" page if the current route is the just /app
 		if (matches.at(-1)!.fullPath === '/app') {
 			throw redirect({
 				to: '/app/projects/$projectId',
-				params: { projectId: context.activeProjectId },
+				params: { projectId: activeProjectId },
 				replace: true,
 			})
 		}
 
-		return {
-			activeProjectId: context.activeProjectId,
-		}
+		return { activeProjectId }
 	},
 	component: RouteComponent,
 })
@@ -49,7 +64,7 @@ function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 
 	const activeProjectId = Route.useRouteContext({
-		select: ({ activeProjectId }) => activeProjectId,
+		select: (context) => context.activeProjectId,
 	})
 
 	const currentRoute = useChildMatches({
@@ -61,7 +76,15 @@ function RouteComponent() {
 	const syncState = useSyncState({ projectId: activeProjectId })
 	const syncEnabled = syncState?.data.isSyncEnabled
 
-	const pageHasEditing = checkPageHasEditing(currentRoute.fullPath)
+	const pageHasEditing =
+		currentRoute.routeId === '/app/settings/device-name' ||
+		currentRoute.routeId === '/app/settings/coordinate-system' ||
+		currentRoute.routeId === '/app/settings/language' ||
+		currentRoute.routeId === '/app/projects/$projectId/settings/info' ||
+		currentRoute.routeId ===
+			'/app/projects/$projectId/invite/devices/$deviceId/role' ||
+		currentRoute.routeId ===
+			'/app/projects/$projectId/invite/devices/$deviceId/send'
 
 	const someGlobalMutationIsPending =
 		useIsMutating({ mutationKey: GLOBAL_MUTATIONS_BASE_KEY }) > 0
@@ -99,7 +122,7 @@ function RouteComponent() {
 										)) ||
 									(syncEnabled &&
 										currentRoute.routeId ===
-											'/app/projects/$projectId_/exchange/')
+											'/app/projects/$projectId/exchange/')
 								}
 								to="/app/projects/$projectId"
 								params={{ projectId: activeProjectId }}
@@ -114,7 +137,7 @@ function RouteComponent() {
 										...SHARED_NAV_ITEM_PROPS.link.activeProps.sx,
 										color:
 											currentRoute.routeId ===
-											'/app/projects/$projectId_/exchange/'
+											'/app/projects/$projectId/exchange/'
 												? DARK_GREY
 												: COMAPEO_BLUE,
 										border: `2px solid currentColor`,
@@ -124,6 +147,7 @@ function RouteComponent() {
 									...SHARED_NAV_ITEM_PROPS.link.sx,
 									border: `2px solid currentColor`,
 								}}
+								aria-label={t(m.projectTabAccessibleLabel)}
 							>
 								<Icon name="comapeo-cards" size={30} />
 							</IconButtonLink>
@@ -149,7 +173,7 @@ function RouteComponent() {
 									((pageHasEditing || someGlobalMutationIsPending) &&
 										!currentRoute.fullPath.startsWith('/app/settings')) ||
 									(currentRoute.routeId ===
-										'/app/projects/$projectId_/exchange/' &&
+										'/app/projects/$projectId/exchange/' &&
 										syncEnabled)
 								}
 								label={t(m.appSettingsTabLabel)}
@@ -162,7 +186,7 @@ function RouteComponent() {
 									((pageHasEditing || someGlobalMutationIsPending) &&
 										currentRoute.fullPath !== '/app/data-and-privacy') ||
 									(currentRoute.routeId ===
-										'/app/projects/$projectId_/exchange/' &&
+										'/app/projects/$projectId/exchange/' &&
 										syncEnabled)
 								}
 								label={t(m.dataAndPrivacyTabLabel)}
@@ -177,7 +201,7 @@ function RouteComponent() {
 									((pageHasEditing || someGlobalMutationIsPending) &&
 										currentRoute.fullPath !== '/app/about') ||
 									(currentRoute.routeId ===
-										'/app/projects/$projectId_/exchange/' &&
+										'/app/projects/$projectId/exchange/' &&
 										syncEnabled)
 								}
 								label={t(m.aboutTabLabel)}
@@ -251,17 +275,6 @@ const SHARED_NAV_ITEM_PROPS = {
 	},
 } as const
 
-function checkPageHasEditing(currentPath: ToRouteFullPath) {
-	return (
-		currentPath === '/app/settings/device-name' ||
-		currentPath === '/app/settings/coordinate-system' ||
-		currentPath === '/app/settings/language' ||
-		currentPath === '/app/projects/$projectId/settings/info' ||
-		currentPath === '/app/projects/$projectId/invite/devices/$deviceId/role' ||
-		currentPath === '/app/projects/$projectId/invite/devices/$deviceId/send'
-	)
-}
-
 const m = defineMessages({
 	aboutTabLabel: {
 		id: 'routes.app.route.aboutTabLabel',
@@ -278,5 +291,10 @@ const m = defineMessages({
 	appSettingsTabLabel: {
 		id: 'routes.app.route.appSettingsTabLabel',
 		defaultMessage: 'App Settings',
+	},
+	projectTabAccessibleLabel: {
+		id: 'routes.app.route.projectTabAccessibleLabel',
+		defaultMessage: 'View project.',
+		description: 'Accessible label for project tab link in navigation.',
 	},
 })

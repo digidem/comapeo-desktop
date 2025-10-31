@@ -8,13 +8,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { captureException } from '@sentry/react'
-import { useMutation } from '@tanstack/react-query'
-import {
-	createFileRoute,
-	redirect,
-	useNavigate,
-	useRouter,
-} from '@tanstack/react-router'
+import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import {
@@ -32,7 +26,6 @@ import {
 import { Icon } from '../../../../components/icon'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
 import { customNotFound } from '../../../../lib/navigation'
-import { setActiveProjectIdMutationOptions } from '../../../../lib/queries/app-settings'
 
 export const Route = createFileRoute('/onboarding/project/join/$inviteId/')({
 	loader: async ({ context, params }) => {
@@ -74,15 +67,13 @@ const BOX_SHADOW = `0px 1px 5px 0px ${alpha(BLACK, 0.25)}`
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 	const router = useRouter()
-	const navigate = useNavigate()
+
 	const { inviteId } = Route.useParams()
 
 	const { data: invite } = useSingleInvite({ inviteId })
 
 	const rejectInvite = useOnboardingRejectInvite()
 	const acceptInvite = useOnboardingAcceptInvite()
-
-	const setActiveProjectId = useMutation(setActiveProjectIdMutationOptions())
 
 	useEffect(() => {
 		// Navigate away from the page if the invite gets cancelled from the invitor's side.
@@ -92,9 +83,9 @@ function RouteComponent() {
 				return
 			}
 
-			navigate({ to: '/onboarding/project', replace: true })
+			router.navigate({ to: '/onboarding/project', replace: true })
 		}
-	}, [invite.state, router, navigate])
+	}, [invite.state, router])
 
 	return (
 		<>
@@ -186,7 +177,10 @@ function RouteComponent() {
 											return
 										}
 
-										navigate({ to: '/onboarding/project', replace: true })
+										router.navigate({
+											to: '/onboarding/project',
+											replace: true,
+										})
 									},
 								},
 							)
@@ -219,17 +213,19 @@ function RouteComponent() {
 									onError: (err) => {
 										captureException(err)
 									},
-									onSuccess: (data) => {
-										setActiveProjectId.mutate(data, {
-											onError: (err) => {
-												captureException(err)
-											},
-											onSuccess: () => {
-												navigate({
-													to: '/onboarding/project/join/$inviteId/success',
-													params: { inviteId },
-												})
-											},
+									onSuccess: async (projectId) => {
+										// TODO: There seems to be a race condition between this
+										// finishing and the invite state being updated to reflect success.
+										return new Promise((res) => {
+											setTimeout(() => {
+												router
+													.navigate({
+														to: '/onboarding/project/join/$inviteId/success',
+														params: { inviteId },
+														search: { projectId },
+													})
+													.then(res)
+											}, 100)
 										})
 									},
 								},

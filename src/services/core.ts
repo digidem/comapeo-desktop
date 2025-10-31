@@ -6,6 +6,7 @@ import { parseArgs } from 'node:util'
 import { FastifyController, MapeoManager } from '@comapeo/core'
 import { createMapeoServer } from '@comapeo/ipc/server.js'
 import ciao, { type Protocol } from '@homebridge/ciao'
+import * as Sentry from '@sentry/electron/utility'
 import debug from 'debug'
 import type { MessagePortMain } from 'electron'
 import Fastify from 'fastify'
@@ -13,6 +14,8 @@ import sodium from 'sodium-native'
 import * as v from 'valibot'
 
 import type { ServiceErrorMessage } from '../main/service-error.js'
+
+Sentry.init()
 
 const log = debug('comapeo:services:core')
 

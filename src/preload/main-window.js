@@ -54,9 +54,6 @@ const runtimeApi = {
 	},
 
 	// Settings (get)
-	getActiveProjectId: async () => {
-		return ipcRenderer.invoke('settings:get:activeProjectId')
-	},
 	getCoordinateFormat: async () => {
 		return ipcRenderer.invoke('settings:get:coordinateFormat')
 	},
@@ -68,9 +65,6 @@ const runtimeApi = {
 	},
 
 	// Settings (set)
-	setActiveProjectId: async (value) => {
-		return ipcRenderer.invoke('settings:set:activeProjectId', value)
-	},
 	setCoordinateFormat: async (value) => {
 		return ipcRenderer.invoke('settings:set:coordinateFormat', value)
 	},
@@ -88,6 +82,30 @@ const runtimeApi = {
 		const userId = getProcessArgValue('comapeo-sentry-user-id')
 
 		return { enabled, environment, userId }
+	},
+
+	// Active project ID
+	getInitialProjectId: () => {
+		const sessionValue = sessionStorage.getItem('comapeo:active_project_id')
+
+		// NOTE: Some entry in session storage, use that as the source of truth.
+		// This accounts for race conditions that can happen due to the async nature of updating the active project ID in config storage.
+		// e.g. manual page refresh right after leaving a project
+		if (typeof sessionValue === 'string') {
+			return sessionValue.length > 0 ? sessionValue : undefined
+		}
+
+		// NOTE: No entry in session storage, get initial value from process arg.
+		const processArgValue = getProcessArgValue('comapeo-initial-project-id')
+
+		if (processArgValue === 'undefined') {
+			return undefined
+		}
+
+		return processArgValue
+	},
+	setActiveProjectId: async (value) => {
+		return ipcRenderer.invoke('activeProjectId:set', value || null)
 	},
 }
 

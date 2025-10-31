@@ -48,7 +48,7 @@ import {
 	type SyncStage,
 } from '../../../../../lib/sync'
 
-export const Route = createFileRoute('/app/projects/$projectId_/exchange/')({
+export const Route = createFileRoute('/app/projects/$projectId/exchange/')({
 	beforeLoad: async ({ context, params }) => {
 		const { clientApi, queryClient } = context
 		const { projectId } = params
@@ -132,6 +132,7 @@ function RouteComponent() {
 								border={`1px solid ${BLUE_GREY}`}
 								padding={4}
 								overflow="auto"
+								data-testid="exchange-network-connection-info"
 							>
 								<Suspense
 									fallback={

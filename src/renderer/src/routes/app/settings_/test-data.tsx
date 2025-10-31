@@ -46,7 +46,7 @@ import { useMapsRefreshToken } from '../../../hooks/maps'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
 import { createGlobalMutationsKey } from '../../../lib/queries/global-mutations'
 
-export const Route = createFileRoute('/app/settings_/test-data')({
+export const Route = createFileRoute('/app/settings/test-data')({
 	beforeLoad: () => {
 		if (
 			__APP_TYPE__ === 'production' ||
@@ -194,6 +194,7 @@ function RouteComponent() {
 
 			setNotification({
 				type: 'success',
+				// eslint-disable-next-line react-hooks/purity
 				id: `id_${Date.now()}`,
 				message: `${t(m.observationCreateSuccess, {
 					count: parsedValue.observationCount,
@@ -793,7 +794,9 @@ function useCreateTestTrack({ projectId }: { projectId: string }) {
 		}) => {
 			const randomPreset = Math.random() > 0.5 ? draw(presets) : null
 
-			const locations: Track['locations'] = []
+			// NOTE: This is technically invalid if observations.length < 2 but helpful to allow this
+			// to test handling of invalid data.
+			const locations = [] as unknown as Track['locations']
 			const observationRefs: Track['observationRefs'] = []
 
 			for (const observation of observations) {

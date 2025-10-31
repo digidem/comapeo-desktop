@@ -50,6 +50,7 @@ function RouteComponent() {
 					borderBottom={`1px solid ${BLUE_GREY}`}
 				>
 					<IconButton
+						aria-label={t(m.goBackAccessibleLabel)}
 						onClick={() => {
 							if (router.history.canGoBack()) {
 								router.history.back()
@@ -397,11 +398,13 @@ function CustomMapInfo({
 					</Stack>
 
 					<Typography variant="body2" color="textSecondary">
-						{formatDate(customMapInfo.data.created, {
-							year: 'numeric',
-							month: 'long',
-							day: 'numeric',
-						})}
+						<time dateTime={customMapInfo.data.created.toISOString()}>
+							{formatDate(customMapInfo.data.created, {
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric',
+							})}
+						</time>
 					</Typography>
 				</Stack>
 
@@ -530,5 +533,10 @@ const m = defineMessages({
 		id: 'routes.app.settings.background-map.close',
 		defaultMessage: 'Close',
 		description: 'Text displayed for closing dialogs',
+	},
+	goBackAccessibleLabel: {
+		id: 'routes.app.settings.background-map.goBackAccessibleLabel',
+		defaultMessage: 'Go back.',
+		description: 'Accessible label for back button.',
 	},
 })

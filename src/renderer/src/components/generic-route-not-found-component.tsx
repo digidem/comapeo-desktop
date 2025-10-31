@@ -3,11 +3,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import {
-	useNavigate,
-	useRouter,
-	type NotFoundRouteProps,
-} from '@tanstack/react-router'
+import { useRouter, type NotFoundRouteProps } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
@@ -24,7 +20,6 @@ export function GenericRouteNotFoundComponent({
 	backgroundColor?: CSSProperties['backgroundColor']
 }) {
 	const router = useRouter()
-	const navigate = useNavigate()
 
 	const { formatMessage: t } = useIntl()
 
@@ -87,7 +82,14 @@ export function GenericRouteNotFoundComponent({
 							fullWidth
 							variant="outlined"
 							onClick={() => {
-								navigate({ to: '/', reloadDocument: true })
+								// NOTE: Accounts for bug where `router.navigate()` doesn't account for hash router usage when trying to reload document
+								// (https://discord.com/channels/719702312431386674/1431138480096022680)
+								router.navigate({
+									href: router.history.createHref(
+										router.buildLocation({ to: '/' }).href,
+									),
+									reloadDocument: true,
+								})
 							}}
 							sx={{ maxWidth: 400, alignSelf: 'center' }}
 						>

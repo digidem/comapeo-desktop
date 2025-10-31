@@ -97,6 +97,7 @@ function RouteComponent() {
 					borderBottom={`1px solid ${BLUE_GREY}`}
 				>
 					<IconButton
+						aria-label={t(m.goBackAccessibleLabel)}
 						onClick={() => {
 							if (form.state.isSubmitting) {
 								return
@@ -164,7 +165,11 @@ function RouteComponent() {
 												<Box component="span">
 													{field.state.meta.errors[0]?.message}
 												</Box>
-												<Box component="span">
+												<Box
+													component="output"
+													htmlFor={field.name}
+													name="character-count"
+												>
 													<form.Subscribe
 														selector={(state) =>
 															v._getGraphemeCount(state.values.deviceName)
@@ -287,5 +292,10 @@ const m = defineMessages({
 		id: 'routes.app.settings.device-name.maxLengthError',
 		defaultMessage: 'Too long, try a shorter name.',
 		description: 'Error message for device name that is too long.',
+	},
+	goBackAccessibleLabel: {
+		id: 'routes.app.settings.device-name.goBackAccessibleLabel',
+		defaultMessage: 'Go back.',
+		description: 'Accessible label for back button.',
 	},
 })

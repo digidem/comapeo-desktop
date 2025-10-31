@@ -40,28 +40,26 @@ import {
 	createProjectNameSchema,
 } from '../../../../../lib/validators/project'
 
-export const Route = createFileRoute('/app/projects/$projectId_/settings/info')(
-	{
-		loader: async ({ context, params }) => {
-			const { projectApi, queryClient } = context
-			const { projectId } = params
+export const Route = createFileRoute('/app/projects/$projectId/settings/info')({
+	loader: async ({ context, params }) => {
+		const { projectApi, queryClient } = context
+		const { projectId } = params
 
-			// TODO: Not ideal but requires changes in @comapeo/core-react
-			await queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'project_settings',
-				],
-				queryFn: async () => {
-					return projectApi.$getProjectSettings()
-				},
-			})
-		},
-		component: RouteComponent,
+		// TODO: Not ideal but requires changes in @comapeo/core-react
+		await queryClient.ensureQueryData({
+			queryKey: [
+				COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+				'projects',
+				projectId,
+				'project_settings',
+			],
+			queryFn: async () => {
+				return projectApi.$getProjectSettings()
+			},
+		})
 	},
-)
+	component: RouteComponent,
+})
 
 const FORM_ID = 'project-settings-form'
 

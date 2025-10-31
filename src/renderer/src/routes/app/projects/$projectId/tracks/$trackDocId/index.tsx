@@ -1,6 +1,5 @@
 import { Suspense, useMemo } from 'react'
 import {
-	useDocumentCreatedBy,
 	useManyDocs,
 	useOwnDeviceInfo,
 	useSingleDocByDocId,
@@ -139,11 +138,7 @@ function RouteComponent() {
 				>
 					<Icon name="material-arrow-back" size={30} />
 				</IconButton>
-				<Typography
-					variant="h1"
-					fontWeight={500}
-					id="coordinate-system-selection-label"
-				>
+				<Typography variant="h1" fontWeight={500}>
 					{t(m.navTitle)}
 				</Typography>
 			</Stack>
@@ -294,7 +289,7 @@ function TrackObservationsList({
 	return (
 		<List component="ul" disablePadding>
 			{trackObservations.map(({ document, category }) => {
-				const { createdAt, docId, originalVersionId } = document
+				const { createdAt, docId, createdBy } = document
 
 				const title = category?.name || t(m.observationCategoryNameFallback)
 
@@ -312,10 +307,7 @@ function TrackObservationsList({
 						sx={{ paddingInline: 6, paddingBlock: 4 }}
 					>
 						<Suspense>
-							<SyncedIndicatorLine
-								projectId={projectId}
-								originalVersionId={originalVersionId}
-							/>
+							<SyncedIndicatorLine createdByDeviceId={createdBy} />
 						</Suspense>
 
 						<Stack direction="row" flex={1} gap={2} overflow="auto">
@@ -399,20 +391,13 @@ function TrackObservationsList({
 }
 
 function SyncedIndicatorLine({
-	projectId,
-	originalVersionId,
+	createdByDeviceId,
 }: {
-	projectId: string
-	originalVersionId: string
+	createdByDeviceId: string
 }) {
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
-	const { data: createdBy } = useDocumentCreatedBy({
-		projectId,
-		originalVersionId,
-	})
-
-	return ownDeviceInfo.deviceId !== createdBy ? (
+	return ownDeviceInfo.deviceId !== createdByDeviceId ? (
 		<Box
 			position="absolute"
 			width={8}
