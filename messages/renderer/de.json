@@ -681,6 +681,10 @@
     "description": "Description of how custom background maps work.",
     "message": "Benutzerdefinierte Hintergrundkarten sind offline und nur auf diesem Gerät sichtbar."
   },
+  "routes.app.settings.background-map.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Gehe zurück."
+  },
   "routes.app.settings.background-map.mapNameColumnLabel": {
     "description": "Column label text for map name.",
     "message": "Kartenname"
@@ -712,6 +716,10 @@
   "routes.app.settings.coordinate-system.dmsOptionLabel": {
     "description": "Label for the degrees/minutes/seconds option.",
     "message": "DMS (Dezimal/Minuten/Sekunden)"
+  },
+  "routes.app.settings.coordinate-system.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Gehe zurück."
   },
   "routes.app.settings.coordinate-system.title": {
     "description": "Title of the coordinate system settings page.",
@@ -753,6 +761,14 @@
     "description": "Label for save button.",
     "message": "Speichern"
   },
+  "routes.app.settings.index.backgroundMapSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to background map settings page.",
+    "message": "Gehe zu den Hintergrundkarten-Einstellungen."
+  },
+  "routes.app.settings.index.coordinateSystemSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to coordinate system settings page.",
+    "message": "Gehe zu den Koordinatensystemeinstellungen."
+  },
   "routes.app.settings.index.createTestData": {
     "description": "Label for item that navigates to test data creation page.",
     "message": "Testdaten erstellen"
@@ -773,6 +789,10 @@
     "description": "Description of the settings page.",
     "message": "CoMapeo wird auf folgendes gesetzt."
   },
+  "routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to device name settings page.",
+    "message": "Gehe zu den Gerätenamen-Einstellungen."
+  },
   "routes.app.settings.index.dmsCoordinates": {
     "description": "Label for Degrees/Minutes/Seconds coordinate system.",
     "message": "DMS Coordinates"
@@ -785,6 +805,10 @@
     "description": "Label for selected language based on the system preferences.",
     "message": "{name} (Systemeinstellung)"
   },
+  "routes.app.settings.index.languageSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to language settings page.",
+    "message": "Gehe zu den Spracheinstellungen."
+  },
   "routes.app.settings.index.title": {
     "description": "Title of the settings page.",
     "message": "App-Einstellungen"
@@ -796,6 +820,10 @@
   "routes.app.settings.language.followSystemOptionLabel": {
     "description": "Option label for following system preference for language.",
     "message": "Systemeinstellungen folgen"
+  },
+  "routes.app.settings.language.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Gehe zurück."
   },
   "routes.app.settings.language.title": {
     "description": "Title of the language settings page.",
