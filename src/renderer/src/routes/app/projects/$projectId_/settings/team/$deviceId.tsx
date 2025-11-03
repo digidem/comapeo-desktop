@@ -1,4 +1,5 @@
 import { Suspense, useState } from 'react'
+import type { MemberApi } from '@comapeo/core'
 import {
 	useClientApi,
 	useLeaveProject,
@@ -76,6 +77,9 @@ function RouteComponent() {
 
 	const clientApi = useClientApi()
 
+	const { data: ownDeviceInfo } = useOwnDeviceInfo()
+	const { data: members } = useManyMembers({ projectId })
+
 	const leaveProject = useLeaveProject()
 
 	const activeProjectIdActions = useActiveProjectIdActions()
@@ -83,6 +87,13 @@ function RouteComponent() {
 	const leaveProjectAndNavigate = useMutation({
 		mutationKey: LEAVE_PROJECT_AND_NAVIGATE_MUTATION_KEY,
 		mutationFn: async ({ projectId }: { projectId: string }) => {
+			if (!canLeaveProject(members, ownDeviceInfo.deviceId)) {
+				// NOTE: Copied from https://github.com/digidem/comapeo-core/blob/434ff2c4427618a4b09f684d8a777e2e51005e07/src/mapeo-project.js#L1335
+				throw new Error(
+					'Cannot leave a project that does not have an external creator or another coordinator',
+				)
+			}
+
 			return leaveProject.mutateAsync({ projectId })
 		},
 		onSuccess: async () => {
@@ -408,6 +419,31 @@ function LeaveProjectContent({
 			</Box>
 		</Stack>
 	)
+}
+
+// NOTE: Restrictions around this will change (see https://github.com/digidem/comapeo-core/issues/1134)
+function canLeaveProject(
+	members: Array<MemberApi.MemberInfo>,
+	ownDeviceId: string,
+) {
+	for (const m of members) {
+		if (m.deviceId === ownDeviceId) {
+			if (members.length === 1) {
+				return true
+			}
+
+			continue
+		}
+
+		if (
+			m.role.roleId === CREATOR_ROLE_ID ||
+			m.role.roleId === COORDINATOR_ROLE_ID
+		) {
+			return true
+		}
+	}
+
+	return false
 }
 
 const m = defineMessages({
