@@ -27,6 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tag_version: ${{ steps.version.outputs.release_version_short }}
+      release_url: ${{ steps.release.outputs.release_url }}
     steps:
       - name: Create GitHub App Token
         uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
@@ -49,6 +50,7 @@ jobs:
         uses: ./.github/parse-version
 
       - name: Create release on GitHub
+        id: release
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           REPOSITORY: ${{ github.repository }}
@@ -60,6 +62,7 @@ jobs:
             --generate-notes \
             --title "$TAG_NAME" \
             "$TAG_NAME")
+          echo "release_url=$release_url" >> $GITHUB_OUTPUT
 
   build:
     name: Create builds
@@ -106,7 +109,7 @@ jobs:
     needs: [create_release, upload_builds]
     runs-on: ubuntu-latest
     env:
-      RELEASE_URL: ${{ needs.create_release.result.release_url }}
+      RELEASE_URL: ${{ needs.create_release.outputs.release_url }}
     steps:
       - name: Create GitHub App Token
         uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
