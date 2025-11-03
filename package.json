@@ -118,7 +118,7 @@
 		"@tanstack/eslint-plugin-query": "5.91.2",
 		"@tanstack/eslint-plugin-router": "1.133.19",
 		"@tanstack/react-form": "1.23.8",
-		"@tanstack/react-query": "5.90.5",
+		"@tanstack/react-query": "5.90.6",
 		"@tanstack/react-router": "1.133.36",
 		"@tanstack/react-virtual": "3.13.12",
 		"@tanstack/router-plugin": "1.133.36",
