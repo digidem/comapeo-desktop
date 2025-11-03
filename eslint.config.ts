@@ -75,7 +75,6 @@ export default defineConfig(
 		extends: [
 			react.configs['recommended-typescript'],
 			pluginRouter.configs['flat/recommended'],
-			// @ts-expect-error https://github.com/facebook/react/issues/34788
 			pluginReactHooks.configs.flat.recommended,
 			pluginQuery.configs['flat/recommended'],
 			pluginReactRefresh.configs.vite,
