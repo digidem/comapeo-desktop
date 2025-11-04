@@ -501,18 +501,7 @@ function getOsxPackagerConfig(
 				return {
 					hardenedRuntime: true,
 					// NOTE: These get merged with `@electron/osx-sign`'s defaults (https://github.com/electron/osx-sign/tree/main/entitlements)
-					entitlements: [
-						// NOTE: Security entitlements related to enabling hardened runtime (https://developer.apple.com/documentation/security/hardened-runtime)
-						'com.apple.security.cs.allow-dyld-environment-variables',
-						'com.apple.security.cs.allow-jit',
-						'com.apple.security.cs.allow-unsigned-executable-memory',
-						'com.apple.security.cs.disable-library-validation',
-						// NOTE: Other security entitlements (https://developer.apple.com/documentation/bundleresources/security-entitlements)
-						'com.apple.security.files.user-selected.read-only',
-						'com.apple.security.files.user-selected.read-write',
-						'com.apple.security.network.client',
-						'com.apple.security.network.server',
-					],
+					entitlements: './assets/entitlements.plist',
 				}
 			},
 		},
