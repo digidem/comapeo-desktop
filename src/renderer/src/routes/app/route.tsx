@@ -20,11 +20,19 @@ import {
 	IconButtonLink,
 	type ButtonLinkProps,
 } from '../../components/link'
+import {
+	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+	COORDINATOR_ROLE_ID,
+	CREATOR_ROLE_ID,
+	MEMBER_ROLE_ID,
+} from '../../lib/comapeo'
 import { GLOBAL_MUTATIONS_BASE_KEY } from '../../lib/queries/global-mutations'
 
 export const Route = createFileRoute('/app')({
-	beforeLoad: ({ context, matches, preload }) => {
-		let activeProjectId = context.activeProjectIdStore.instance.getState()
+	beforeLoad: async ({ context, matches, preload, buildLocation }) => {
+		const { activeProjectIdStore, clientApi, queryClient, history } = context
+
+		let activeProjectId = activeProjectIdStore.instance.getState()
 
 		if (!activeProjectId) {
 			for (const m of matches) {
@@ -34,7 +42,7 @@ export const Route = createFileRoute('/app')({
 					activeProjectId = m.params.projectId
 
 					if (!preload) {
-						context.activeProjectIdStore.actions.update(activeProjectId)
+						activeProjectIdStore.actions.update(activeProjectId)
 					}
 
 					break
@@ -44,6 +52,48 @@ export const Route = createFileRoute('/app')({
 
 		if (!activeProjectId) {
 			throw new Error('Could not determine most recent project ID')
+		}
+
+		const projectApi = await queryClient.ensureQueryData({
+			queryKey: [
+				COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+				'projects',
+				activeProjectId,
+			],
+			queryFn: async () => {
+				return clientApi.getProject(activeProjectId)
+			},
+		})
+
+		const role = await queryClient.ensureQueryData({
+			queryKey: [
+				COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+				'projects',
+				activeProjectId,
+				'role',
+			],
+			queryFn: async () => {
+				return projectApi.$getOwnRole()
+			},
+		})
+
+		// NOTE: No longer have proper access to the project.
+		// Reset the active project ID state and redirect to the index route
+		if (
+			!(
+				role.roleId === CREATOR_ROLE_ID ||
+				role.roleId === COORDINATOR_ROLE_ID ||
+				role.roleId === MEMBER_ROLE_ID
+			)
+		) {
+			activeProjectIdStore.actions.update(undefined)
+
+			// NOTE: Accounts for bug where `router.navigate()` doesn't account for hash router usage when trying to reload document
+			// (https://discord.com/channels/719702312431386674/1431138480096022680)
+			throw redirect({
+				href: history.createHref(buildLocation({ to: '/' }).href),
+				reloadDocument: true,
+			})
 		}
 
 		// Redirect to project-specific "initial" page if the current route is the just /app
