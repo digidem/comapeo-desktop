@@ -1,6 +1,10 @@
 import type { MapeoClientApi } from '@comapeo/ipc/client.js'
 import type { QueryClient } from '@tanstack/react-query'
-import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
+import {
+	Outlet,
+	createRootRouteWithContext,
+	type RouterHistory,
+} from '@tanstack/react-router'
 import type { IntlShape } from 'react-intl'
 
 import type { LocaleState } from '../../../shared/intl'
@@ -9,9 +13,10 @@ import type { ActiveProjectIdStore } from '../contexts/active-project-id-store-c
 export interface RootRouterContext {
 	activeProjectIdStore: ActiveProjectIdStore
 	clientApi: MapeoClientApi
+	formatMessage: IntlShape['formatMessage']
+	history: RouterHistory
 	localeState: LocaleState
 	queryClient: QueryClient
-	formatMessage: IntlShape['formatMessage']
 }
 
 export const Route = createRootRouteWithContext<RootRouterContext>()({
