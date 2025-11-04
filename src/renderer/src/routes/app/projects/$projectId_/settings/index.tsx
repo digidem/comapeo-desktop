@@ -2,6 +2,8 @@ import { type ReactNode } from 'react'
 import { useOwnRoleInProject, useProjectSettings } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
@@ -96,6 +98,7 @@ function RouteComponent() {
 				borderBottom={`1px solid ${BLUE_GREY}`}
 			>
 				<IconButton
+					aria-label={t(m.goBackAccessibleLabel)}
 					onClick={() => {
 						if (router.history.canGoBack()) {
 							router.history.back()
@@ -123,7 +126,14 @@ function RouteComponent() {
 				flexDirection="column"
 				flex={1}
 			>
-				<Stack direction="column" flexDirection="column" flex={1} gap={6}>
+				<Stack
+					component={List}
+					disablePadding
+					direction="column"
+					flexDirection="column"
+					flex={1}
+					gap={6}
+				>
 					<SettingsItem
 						title={projectSettings.name || t(m.unnamedProject)}
 						description={projectSettings.projectDescription}
@@ -219,6 +229,9 @@ function SettingsItem({
 }) {
 	return (
 		<Stack
+			component={ListItem}
+			disableGutters
+			disablePadding
 			direction="row"
 			gap={5}
 			borderRadius={2}
@@ -296,5 +309,10 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId_.settings.index.updateCategoriesSet',
 		defaultMessage: 'Update Set',
 		description: 'Text for link that navigates to project categories set page.',
+	},
+	goBackAccessibleLabel: {
+		id: 'routes.app.projects.$projectId_.settings.index.goBackAccessibleLabel',
+		defaultMessage: 'Go back.',
+		description: 'Accessible label for back button.',
 	},
 })
