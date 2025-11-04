@@ -774,6 +774,7 @@ test.describe('exchange', () => {
 			)
 			// TODO: Ideally check for actual values
 			await expect(networkConnectionInfo).not.toBeEmpty()
+			await expect(networkConnectionInfo).not.toHaveText('&lt;redacted&gt;')
 
 			await expect(
 				main.getByRole('heading', { name: 'No Devices Found', exact: true }),
