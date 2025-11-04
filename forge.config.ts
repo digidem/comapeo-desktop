@@ -465,7 +465,7 @@ function getOsxPackagerConfig(
 	| Required<
 			Pick<
 				NonNullable<ForgeConfig['packagerConfig']>,
-				'osxSign' | 'osxNotarize'
+				'osxSign' | 'osxNotarize' | 'extendInfo'
 			>
 	  >
 	| undefined {
@@ -495,6 +495,10 @@ function getOsxPackagerConfig(
 	console.log('✅ App signing and notarization are enabled.')
 
 	return {
+		extendInfo: {
+			NSLocationUsageDescription:
+				'This app requires access to your location to retrieve Wi-Fi information.',
+		},
 		osxSign: {
 			identity: APPLE_SIGN_IDENTITY,
 			optionsForFile: () => {
@@ -512,6 +516,7 @@ function getOsxPackagerConfig(
 						'com.apple.security.files.user-selected.read-write',
 						'com.apple.security.network.client',
 						'com.apple.security.network.server',
+						'com.apple.security.personal-information.location',
 					],
 				}
 			},
