@@ -75,14 +75,15 @@ const router = createRouter({
 	routeTree,
 	history: hashHistory,
 	context: {
-		queryClient,
 		clientApi,
+		history: hashHistory,
+		queryClient,
 		// NOTE: Populated at render time
 		activeProjectIdStore: undefined!,
 		// NOTE: Populated at render time
-		localeState: undefined!,
-		// NOTE: Populated at render time
 		formatMessage: undefined!,
+		// NOTE: Populated at render time
+		localeState: undefined!,
 	},
 	defaultPreload: 'intent',
 	// Since we're using React Query, we don't want loader calls to ever be stale
