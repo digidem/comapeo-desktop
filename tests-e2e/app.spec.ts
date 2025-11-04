@@ -837,6 +837,100 @@ test.describe('exchange', () => {
 	})
 })
 
+test.describe('project settings', () => {
+	test('index', async () => {
+		const page = await electronApp.firstWindow()
+
+		const main = page.getByRole('main')
+
+		// Navigation
+		{
+			const projectNavLink = page
+				.getByRole('navigation')
+				.getByRole('link', { name: 'View project.', exact: true })
+
+			await projectNavLink.click()
+
+			await expect(projectNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+
+			await main.getByRole('link', { name: 'View', exact: true }).click()
+
+			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+
+			await main.getByRole('link', { name: 'View', exact: true }).click()
+
+			await expect(projectNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+		}
+
+		// Main
+		{
+			await expect(
+				main.getByRole('heading', { name: 'Project Settings', exact: true }),
+			).toBeVisible()
+
+			const settingsItems = main.getByRole('listitem')
+
+			await expect(settingsItems).toHaveCount(3)
+
+			//// Project info settings item
+			const projectInfoItem = settingsItems.first()
+
+			await expect(
+				projectInfoItem.getByRole('heading', {
+					name: onboardingOutputs.projectName,
+					exact: true,
+				}),
+			).toBeVisible()
+			await expect(
+				projectInfoItem.getByRole('link', {
+					name: 'Edit Info',
+					exact: true,
+				}),
+			).toBeVisible()
+
+			//// Collaborators settings item
+			const collaboratorsItem = settingsItems.nth(1)
+
+			await expect(
+				collaboratorsItem.getByRole('heading', {
+					name: 'Collaborators',
+					exact: true,
+				}),
+			).toBeVisible()
+			await expect(
+				collaboratorsItem.getByText(
+					'This device is a coordinator on this project.',
+				),
+			).toBeVisible()
+			await expect(
+				collaboratorsItem.getByRole('link', {
+					name: 'View Team',
+					exact: true,
+				}),
+			).toBeVisible()
+
+			//// Categories set settings item
+			const categoriesSetItem = settingsItems.last()
+
+			await expect(
+				categoriesSetItem.getByRole('heading', {
+					name: 'Categories Set',
+					exact: true,
+				}),
+			).toBeVisible()
+			await expect(
+				categoriesSetItem.getByText('CoMapeo Default Config'),
+			).toBeVisible()
+			await expect(
+				categoriesSetItem.getByRole('link', {
+					name: 'Update Set',
+					exact: true,
+				}),
+			).toBeVisible()
+		}
+	})
+})
+
 test('write outputs', async () => {
 	await writeOutputsFile('app', OUTPUTS)
 })
