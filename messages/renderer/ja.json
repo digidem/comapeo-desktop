@@ -409,6 +409,10 @@
     "description": "Explanation for default categories",
     "message": "デフォルトのカテゴリは、観察記録を即座に整理するのに役立ちます。"
   },
+  "routes.app.projects.$projectId_.settings.categories.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
+  },
   "routes.app.projects.$projectId_.settings.categories.missingCategoriesName": {
     "description": "Text indicating that project is missing categories set name.",
     "message": "カテゴリセットの名前が見つかりません。"

@@ -429,6 +429,10 @@
     "description": "Explanation for default categories",
     "message": "Las categorías por defecto te ayudan a empezar a organizar tus observaciones al instante."
   },
+  "routes.app.projects.$projectId_.settings.categories.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Regresar."
+  },
   "routes.app.projects.$projectId_.settings.categories.missingCategoriesName": {
     "description": "Text indicating that project is missing categories set name.",
     "message": "No se ha encontrado un nombre para las categorías."
