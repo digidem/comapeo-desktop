@@ -461,6 +461,10 @@
     "description": "Text for link that navigates to page for editing project settings.",
     "message": "Info bearbeiten"
   },
+  "routes.app.projects.$projectId_.settings.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Gehe zurück."
+  },
   "routes.app.projects.$projectId_.settings.index.navTitle": {
     "description": "Title of the project settings page.",
     "message": "Projekteinstellungen"
@@ -484,6 +488,10 @@
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",
     "message": "Abbrechen"
+  },
+  "routes.app.projects.$projectId_.settings.info.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Gehe zurück."
   },
   "routes.app.projects.$projectId_.settings.info.maxProjectDescriptionLengthError": {
     "description": "Error message for project description that is too long.",
