@@ -57,5 +57,11 @@ export type OnboardingOutputs = v.InferOutput<typeof OnboardingOutputsSchema>
 
 export const AppOutputsSchema = v.object({
 	deviceName: v.string(),
+	projectName: v.string(),
+	projectDescription: v.string(),
+	projectColor: v.object({
+		name: v.string(),
+		hexCode: v.pipe(v.string(), v.hexColor()),
+	}),
 })
 export type AppOutputs = v.InferOutput<typeof AppOutputsSchema>
