@@ -157,6 +157,7 @@ function RouteComponent() {
 					borderBottom={`1px solid ${BLUE_GREY}`}
 				>
 					<IconButton
+						aria-label={t(m.goBackAccessibleLabel)}
 						onClick={() => {
 							if (router.history.canGoBack()) {
 								router.history.back()
@@ -220,7 +221,11 @@ function RouteComponent() {
 														<Box component="span">
 															{field.state.meta.errors[0]?.message}
 														</Box>
-														<Box component="span">
+														<Box
+															component="output"
+															htmlFor={field.name}
+															name="character-count"
+														>
 															<form.Subscribe
 																selector={(state) =>
 																	state.values.projectName
@@ -270,7 +275,11 @@ function RouteComponent() {
 														<Box component="span">
 															{field.state.meta.errors[0]?.message}
 														</Box>
-														<Box component="span">
+														<Box
+															component="output"
+															htmlFor={field.name}
+															name="character-count"
+														>
 															<form.Subscribe
 																selector={(state) =>
 																	state.values.projectDescription
@@ -486,6 +495,7 @@ function ProjectColorCheckboxControl({
 			{...checkboxProps}
 			disableTouchRipple
 			sx={{ padding: 0 }}
+			value={projectColor}
 			checkedIcon={
 				<Box
 					width={100}
@@ -584,5 +594,10 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId_.settings.info.cancel',
 		defaultMessage: 'Cancel',
 		description: 'Label for cancel button.',
+	},
+	goBackAccessibleLabel: {
+		id: 'routes.app.projects.$projectId_.settings.info.goBackAccessibleLabel',
+		defaultMessage: 'Go back.',
+		description: 'Accessible label for back button.',
 	},
 })

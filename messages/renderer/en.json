@@ -489,6 +489,10 @@
     "description": "Label for cancel button.",
     "message": "Cancel"
   },
+  "routes.app.projects.$projectId_.settings.info.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Go back."
+  },
   "routes.app.projects.$projectId_.settings.info.maxProjectDescriptionLengthError": {
     "description": "Error message for project description that is too long.",
     "message": "Too long, try a shorter description."

@@ -8,7 +8,14 @@ import {
 import { stubDialog } from 'electron-playwright-helpers'
 import * as v from 'valibot'
 
-import { COMAPEO_BLUE } from '../src/renderer/src/colors.ts'
+import {
+	COMAPEO_BLUE,
+	PROJECT_BLUE,
+	PROJECT_GREEN,
+	PROJECT_GREY,
+	PROJECT_ORANGE,
+	PROJECT_RED,
+} from '../src/renderer/src/colors.ts'
 import {
 	OnboardingOutputsSchema,
 	readOutputsFile,
@@ -26,6 +33,9 @@ let onboardingOutputs: OnboardingOutputs
 
 const OUTPUTS: AppOutputs = {
 	deviceName: 'Desktop e2e Updated',
+	projectName: 'Project e2e Updated',
+	projectDescription: 'Updated project description for e2e tests',
+	projectColor: { name: 'Orange', hexCode: PROJECT_ORANGE },
 }
 
 test.beforeAll(async ({ appInfo }) => {
@@ -928,6 +938,426 @@ test.describe('project settings', () => {
 					exact: true,
 				}),
 			).toBeVisible()
+		}
+	})
+
+	test('project info', async () => {
+		const page = await electronApp.firstWindow()
+
+		const main = page.getByRole('main')
+
+		await main.getByRole('link', { name: 'Edit Info', exact: true }).click()
+
+		// Navigation
+		{
+			await expect(
+				page.getByRole('navigation').getByRole('link', {
+					name: 'View project.',
+					exact: true,
+					disabled: false,
+				}),
+			).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+
+			const disabledNavLinks = page
+				.getByRole('navigation')
+				.getByRole('link', { disabled: true })
+
+			await expect(disabledNavLinks).toHaveCount(4)
+			await expect(disabledNavLinks).toHaveText([
+				'Exchange',
+				'App Settings',
+				'Data & Privacy',
+				'About CoMapeo',
+			])
+		}
+
+		// Main
+		await expect(
+			main.getByRole('heading', { name: 'Edit Info', exact: true }),
+		).toBeVisible()
+
+		//// Initial state
+		{
+			const projectNameInput = main.getByRole('textbox', {
+				name: 'Project Name',
+				exact: true,
+			})
+
+			await expect(projectNameInput).toBeVisible()
+			await expect(projectNameInput).toHaveValue(onboardingOutputs.projectName)
+
+			const projectDescriptionInput = main.getByRole('textbox', {
+				name: 'Project Description',
+				exact: true,
+			})
+
+			await expect(projectDescriptionInput).toBeVisible()
+			await expect(projectDescriptionInput).toHaveValue('')
+
+			// Project color
+			{
+				const projectColorInput = main.getByLabel('Project Card Color', {
+					exact: true,
+				})
+
+				await expect(projectColorInput).toBeVisible()
+
+				await expect(
+					projectColorInput.getByRole('checkbox', { checked: true }),
+				).toHaveCount(0)
+				const colorCheckboxes = projectColorInput.getByRole('checkbox')
+
+				const expectedColorOptions = [
+					{ name: 'Orange', hexCode: PROJECT_ORANGE },
+					{ name: 'Blue', hexCode: PROJECT_BLUE },
+					{ name: 'Green', hexCode: PROJECT_GREEN },
+					{ name: 'Red', hexCode: PROJECT_RED },
+					{ name: 'Grey', hexCode: PROJECT_GREY },
+				]
+
+				await expect(colorCheckboxes).toHaveCount(expectedColorOptions.length)
+
+				for (const [
+					index,
+					{ name, hexCode },
+				] of expectedColorOptions.entries()) {
+					const checkbox = colorCheckboxes.nth(index)
+					await expect(checkbox).toHaveAccessibleName(name)
+					await expect(checkbox).toHaveAttribute('value', hexCode)
+					await expect(checkbox).toHaveAttribute(
+						'name',
+						`option-${name.toLowerCase()}`,
+					)
+				}
+			}
+
+			await expect(
+				main.getByRole('button', { name: 'Cancel', exact: true }),
+			).toBeVisible()
+			await expect(
+				main.getByRole('button', { name: 'Save', exact: true }),
+			).toBeVisible()
+		}
+
+		await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+		await main.getByRole('link', { name: 'Edit Info', exact: true }).click()
+
+		//// Cancel changes (back button)
+		{
+			// Update inputs
+			await main
+				.getByRole('textbox', {
+					name: 'Project Name',
+					exact: true,
+				})
+				.fill('Name in back button test')
+
+			await main
+				.getByRole('textbox', {
+					name: 'Project Description',
+					exact: true,
+				})
+				.fill('Description in back button test')
+
+			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
+			await main
+				.getByLabel('Project Card Color', { exact: true })
+				.getByRole('checkbox', { name: 'Green', exact: true })
+				.click()
+			await expect(
+				main
+					.getByLabel('Project Card Color', { exact: true })
+					.getByRole('checkbox', { name: 'Green', exact: true }),
+			).toBeChecked()
+
+			// Leave and re-enter using back button
+			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+			await main.getByRole('link', { name: 'Edit Info', exact: true }).click()
+
+			// Assert inputs state
+			const projectNameInput = main.getByRole('textbox', {
+				name: 'Project Name',
+				exact: true,
+			})
+
+			await expect(projectNameInput).toBeVisible()
+			await expect(projectNameInput).toHaveValue(onboardingOutputs.projectName)
+
+			const projectDescriptionInput = main.getByRole('textbox', {
+				name: 'Project Description',
+				exact: true,
+			})
+
+			await expect(projectDescriptionInput).toBeVisible()
+			await expect(projectDescriptionInput).toHaveValue('')
+
+			const projectColorInput = main.getByLabel('Project Card Color', {
+				exact: true,
+			})
+
+			await expect(projectColorInput).toBeVisible()
+
+			await expect(
+				projectColorInput.getByRole('checkbox', { checked: true }),
+			).toHaveCount(0)
+		}
+
+		//// Cancel changes (cancel button)
+		{
+			// Update inputs
+			await main
+				.getByRole('textbox', {
+					name: 'Project Name',
+					exact: true,
+				})
+				.fill('Name in cancel button test')
+
+			await main
+				.getByRole('textbox', {
+					name: 'Project Description',
+					exact: true,
+				})
+				.fill('Description in cancel button test')
+
+			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
+			await main
+				.getByLabel('Project Card Color', { exact: true })
+				.getByRole('checkbox', { name: 'Blue', exact: true })
+				.click()
+			await expect(
+				main
+					.getByLabel('Project Card Color', { exact: true })
+					.getByRole('checkbox', {
+						name: 'Blue',
+						exact: true,
+					}),
+			).toBeChecked()
+
+			// Leave using cancel button and re-enter
+			await main.getByRole('button', { name: 'Cancel', exact: true }).click()
+			await main.getByRole('link', { name: 'Edit Info', exact: true }).click()
+
+			// Assert inputs state
+			const projectNameInput = main.getByRole('textbox', {
+				name: 'Project Name',
+				exact: true,
+			})
+
+			await expect(projectNameInput).toBeVisible()
+			await expect(projectNameInput).toHaveValue(onboardingOutputs.projectName)
+
+			const projectDescriptionInput = main.getByRole('textbox', {
+				name: 'Project Description',
+				exact: true,
+			})
+
+			await expect(projectDescriptionInput).toBeVisible()
+			await expect(projectDescriptionInput).toHaveValue('')
+
+			const projectColorInput = main.getByLabel('Project Card Color', {
+				exact: true,
+			})
+
+			await expect(projectColorInput).toBeVisible()
+
+			await expect(
+				projectColorInput.getByRole('checkbox', { checked: true }),
+			).toHaveCount(0)
+
+			await expect(
+				main.getByRole('button', { name: 'Cancel', exact: true }),
+			).toBeVisible()
+			await expect(
+				main.getByRole('button', { name: 'Save', exact: true }),
+			).toBeVisible()
+		}
+
+		//// Input validation
+
+		//// Project name
+		{
+			// Too long
+			const projectNameInput = main.getByRole('textbox', {
+				name: 'Project Name',
+				exact: true,
+			})
+
+			const invalidProjectName = Array(101).fill('a').join('')
+
+			await projectNameInput.fill(invalidProjectName)
+
+			await expect(
+				main.getByText('Too long, try a shorter name.', { exact: true }),
+			).toBeVisible()
+
+			await expect(
+				main.locator('output[for="projectName"][name="character-count"]'),
+			).toHaveText(`${invalidProjectName.length}/100`)
+
+			{
+				// Save button does nothing
+				const currentUrl = page.url()
+
+				await main
+					.getByRole('button', { name: 'Save', exact: true })
+					.click({ force: true })
+
+				expect(page.url()).toStrictEqual(currentUrl)
+			}
+
+			// Too short
+			await projectNameInput.clear()
+
+			await expect(
+				main.getByText('Enter a Project Name', { exact: true }),
+			).toBeVisible()
+
+			await expect(
+				main.locator('output[for="projectName"][name="character-count"]'),
+			).toHaveText('0/100')
+
+			await main
+				.getByRole('button', { name: 'Save', exact: true })
+				.click({ force: true })
+
+			{
+				// Save button does nothing
+				const currentUrl = page.url()
+
+				await main
+					.getByRole('button', { name: 'Save', exact: true })
+					.click({ force: true })
+
+				expect(page.url()).toStrictEqual(currentUrl)
+			}
+		}
+
+		//// Project description
+		{
+			const projectDescriptionInput = main.getByRole('textbox', {
+				name: 'Project Description',
+				exact: true,
+			})
+
+			const invalidProjectName = Array(61).fill('a').join('')
+
+			await projectDescriptionInput.fill(invalidProjectName)
+
+			// Too long
+			await expect(
+				main.getByText('Too long, try a shorter description.', { exact: true }),
+			).toBeVisible()
+
+			await expect(
+				main.locator(
+					'output[for="projectDescription"][name="character-count"]',
+				),
+			).toHaveText(`${invalidProjectName.length}/60`)
+
+			// Save button does nothing
+			const currentUrl = page.url()
+
+			await main
+				.getByRole('button', { name: 'Save', exact: true })
+				.click({ force: true })
+
+			expect(page.url()).toStrictEqual(currentUrl)
+		}
+
+		await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+		await main.getByRole('link', { name: 'Edit Info', exact: true }).click()
+
+		//// Updating and saving project info
+		{
+			await main
+				.getByRole('textbox', {
+					name: 'Project Name',
+					exact: true,
+				})
+				.fill(OUTPUTS.projectName)
+
+			main
+				.getByRole('textbox', {
+					name: 'Project Description',
+					exact: true,
+				})
+				.fill(OUTPUTS.projectDescription)
+
+			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
+			await main
+				.getByLabel('Project Card Color', { exact: true })
+				.getByRole('checkbox', { name: OUTPUTS.projectColor.name, exact: true })
+				.click()
+			await expect(
+				main
+					.getByLabel('Project Card Color', { exact: true })
+					.getByRole('checkbox', {
+						name: OUTPUTS.projectColor.name,
+						exact: true,
+					}),
+			).toBeChecked()
+
+			main.getByRole('button', { name: 'Save', exact: true }).click()
+
+			// Check relevant changes are reflected in project settings index page
+			{
+				const projectInfoItem = main.getByRole('listitem').first()
+
+				await expect(
+					projectInfoItem.getByRole('heading', {
+						name: OUTPUTS.projectName,
+						exact: true,
+					}),
+				).toBeVisible()
+
+				await expect(
+					projectInfoItem.getByText(OUTPUTS.projectDescription, {
+						exact: true,
+					}),
+				).toBeVisible()
+
+				await projectInfoItem
+					.getByRole('link', {
+						name: 'Edit Info',
+						exact: true,
+					})
+					.click()
+			}
+
+			// Check changes are present when re-entering project info settings page
+			{
+				const projectNameInput = main.getByRole('textbox', {
+					name: 'Project Name',
+					exact: true,
+				})
+
+				await expect(projectNameInput).toHaveValue(OUTPUTS.projectName)
+
+				const projectDescriptionInput = main.getByRole('textbox', {
+					name: 'Project Description',
+					exact: true,
+				})
+
+				await expect(projectDescriptionInput).toHaveValue(
+					OUTPUTS.projectDescription,
+				)
+
+				await expect(
+					main
+						.getByLabel('Project Card Color', {
+							exact: true,
+						})
+						.getByRole('checkbox', {
+							name: OUTPUTS.projectColor.name,
+							exact: true,
+							checked: true,
+						}),
+				).toBeVisible()
+
+				await main
+					.getByRole('button', { name: 'Go back.', exact: true })
+					.click()
+			}
 		}
 	})
 })
