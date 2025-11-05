@@ -441,6 +441,10 @@
     "description": "Text for link that navigates to page for editing project settings.",
     "message": "情報を編集"
   },
+  "routes.app.projects.$projectId_.settings.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
+  },
   "routes.app.projects.$projectId_.settings.index.navTitle": {
     "description": "Title of the project settings page.",
     "message": "プロジェクトの設定"
