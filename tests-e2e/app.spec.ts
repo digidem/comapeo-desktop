@@ -1,3 +1,4 @@
+import { createRequire } from 'node:module'
 import { fileURLToPath } from 'url'
 import { hexToRgb } from '@mui/material/styles'
 import {
@@ -1357,6 +1358,201 @@ test.describe('project settings', () => {
 				await main
 					.getByRole('button', { name: 'Go back.', exact: true })
 					.click()
+			}
+		}
+	})
+
+	test('categories', async () => {
+		const page = await electronApp.firstWindow()
+
+		const main = page.getByRole('main')
+
+		await main.getByRole('link', { name: 'Update Set', exact: true }).click()
+
+		// Navigation
+		{
+			const navLinks = page
+				.getByRole('navigation')
+				.getByRole('link', { disabled: false })
+
+			await expect(navLinks.first()).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+			await expect(navLinks.first()).toHaveAccessibleName('View project.')
+
+			await expect(navLinks).toHaveText([
+				'',
+				'Exchange',
+				'App Settings',
+				'Data & Privacy',
+				'About CoMapeo',
+			])
+		}
+
+		// Main
+		await expect(
+			main.getByRole('heading', { name: 'Categories Set', exact: true }),
+		).toBeVisible()
+
+		//// Initial state
+		{
+			await expect(
+				main.getByRole('heading', {
+					name: 'CoMapeo Default Config',
+					exact: true,
+				}),
+			).toBeVisible()
+
+			// TODO: Ideally check for the actual values
+			await expect(main.getByText(/^Added .+/)).toBeVisible()
+			const addedAt = main.getByRole('time')
+			await expect(addedAt).not.toBeEmpty()
+			await expect(addedAt).toHaveAttribute('datetime')
+
+			await expect(
+				main.getByRole('button', { name: 'Upload New Set', exact: true }),
+			).toBeVisible()
+		}
+
+		//// Choose file (cancelled)
+		{
+			await stubDialog(electronApp, 'showOpenDialog', {
+				canceled: true,
+				filePaths: [],
+			})
+
+			await main
+				.getByRole('button', { name: 'Upload New Set', exact: true })
+				.click()
+
+			await expect(page.getByRole('dialog')).not.toBeVisible()
+		}
+
+		//// Choose file (bad file)
+		{
+			await stubDialog(electronApp, 'showOpenDialog', {
+				canceled: false,
+				filePaths: [
+					fileURLToPath(
+						new URL(
+							'./assets/bad-categories-archive.comapeocat',
+							import.meta.url,
+						),
+					),
+				],
+			})
+
+			await main
+				.getByRole('button', { name: 'Upload New Set', exact: true })
+				.click()
+
+			const dialog = page.getByRole('dialog')
+
+			await expect(
+				dialog.getByRole('heading', {
+					name: 'Something Went Wrong',
+					exact: true,
+				}),
+			).toBeVisible()
+
+			await expect(
+				dialog.getByRole('button', { name: 'Advanced', exact: true }),
+			).toBeVisible()
+
+			await dialog.getByRole('button', { name: 'Close', exact: true }).click()
+
+			await expect(dialog).not.toBeVisible()
+		}
+
+		//// Choose file (good file)
+		// TODO: Confirm that categories are being used in app
+		{
+			await stubDialog(electronApp, 'showOpenDialog', {
+				canceled: false,
+				filePaths: [
+					fileURLToPath(
+						new URL(
+							'./assets/good-categories-archive.comapeocat',
+							import.meta.url,
+						),
+					),
+				],
+			})
+
+			await main
+				.getByRole('button', { name: 'Upload New Set', exact: true })
+				.click()
+
+			await expect(
+				main.getByRole('heading', { name: 'Test Categories', exact: true }),
+			).toBeVisible()
+
+			await expect(main.getByText(/^Added .+/)).toBeVisible()
+
+			// TODO: Ideally check for the actual values
+			const addedAt = main.getByRole('time')
+			await expect(addedAt).not.toBeEmpty()
+			await expect(addedAt).toHaveAttribute('datetime')
+
+			// Check relevant changes are reflected in project settings index page
+			{
+				await main
+					.getByRole('button', { name: 'Go back.', exact: true })
+					.click()
+
+				const categoriesSetItem = main.getByRole('listitem').last()
+
+				await expect(
+					categoriesSetItem.getByText('Test Categories', { exact: true }),
+				).toBeVisible()
+
+				await categoriesSetItem
+					.getByRole('link', {
+						name: 'Update Set',
+						exact: true,
+					})
+					.click()
+			}
+		}
+
+		//// Update file (restore default categories)
+		// TODO: Confirm that categories are being used in app
+		{
+			await stubDialog(electronApp, 'showOpenDialog', {
+				canceled: false,
+				filePaths: [
+					createRequire(import.meta.url).resolve('@mapeo/default-config'),
+				],
+			})
+
+			await main
+				.getByRole('button', { name: 'Upload New Set', exact: true })
+				.click()
+
+			await expect(
+				main.getByRole('heading', {
+					name: 'CoMapeo Default Config',
+					exact: true,
+				}),
+			).toBeVisible()
+
+			// TODO: Ideally check for the actual values
+			await expect(main.getByText(/^Added .+/)).toBeVisible()
+			const addedAt = main.getByRole('time')
+			await expect(addedAt).not.toBeEmpty()
+			await expect(addedAt).toHaveAttribute('datetime')
+
+			// Check relevant changes are reflected in project settings index page
+			{
+				await main
+					.getByRole('button', { name: 'Go back.', exact: true })
+					.click()
+
+				const categoriesSetItem = main.getByRole('listitem').last()
+
+				await expect(
+					categoriesSetItem.getByText('CoMapeo Default Config', {
+						exact: true,
+					}),
+				).toBeVisible()
 			}
 		}
 	})

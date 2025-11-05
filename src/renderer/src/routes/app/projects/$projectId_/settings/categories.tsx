@@ -90,6 +90,7 @@ function RouteComponent() {
 					borderBottom={`1px solid ${BLUE_GREY}`}
 				>
 					<IconButton
+						aria-label={t(m.goBackAccessibleLabel)}
 						onClick={() => {
 							if (selectAndImportMutation.status === 'pending') {
 								return
@@ -153,11 +154,18 @@ function RouteComponent() {
 								fontWeight={500}
 							>
 								{t(m.dateAdded, {
-									date: formatDate(projectSettings.configMetadata.importDate, {
-										year: 'numeric',
-										month: 'long',
-										day: 'numeric',
-									}),
+									date: (
+										<time
+											key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
+											dateTime={projectSettings.configMetadata.importDate}
+										>
+											{formatDate(projectSettings.configMetadata.importDate, {
+												year: 'numeric',
+												month: 'long',
+												day: 'numeric',
+											})}
+										</time>
+									),
 								})}
 							</Typography>
 						) : null}
@@ -252,5 +260,10 @@ const m = defineMessages({
 		defaultMessage:
 			'Use custom categories by importing new categories set files below.',
 		description: 'Explanation for custom categories',
+	},
+	goBackAccessibleLabel: {
+		id: 'routes.app.projects.$projectId_.settings.categories.goBackAccessibleLabel',
+		defaultMessage: 'Go back.',
+		description: 'Accessible label for back button.',
 	},
 })
