@@ -404,28 +404,6 @@ export default {
 			// This leads to the desired outcome of properly isolated application data when having several apps on the same machine.
 			packageJson.productName = properties.appNameExternal
 
-			// NOTE: Kind of hacky but has the following desired effects:
-			//   - Uses the correct version for the file name of the asset that is generated in Forge's `make` step.
-			//   - Uses the correct version for the GitHub release that the GitHub publisher should upload builds to.
-			//
-			// TODO: We should probably just stop using the GitHub publisher and remove the need for this in favor of using GitHub Actions.
-			if (APP_TYPE === 'production') {
-				const parsed = semver.parse(packageJson.version)
-
-				if (!parsed) {
-					throw new Error(
-						`Unable to parse package.json version: ${packageJson.version}`,
-					)
-				}
-
-				const { minor, patch } = parsed
-
-				// NOTE: We update the version here to align with our release version format (i.e. no major).
-				// As noted in the Forge documentation, this does not affect the application metadata that's used by Forge
-				// when packaging (https://www.electronforge.io/config/hooks#readpackagejson).
-				packageJson.version = `${minor}.${patch}`
-			}
-
 			return packageJson
 		},
 		// NOTE: Creates an output directory at `out/distributables` that contains just the distributable assets.
