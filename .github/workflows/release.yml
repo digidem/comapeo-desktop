@@ -44,6 +44,9 @@ jobs:
             package.json
           sparse-checkout-cone-mode: false
 
+      - run: npm install --no-save semver
+        shell: bash
+
       # Has format of v<minor>.<patch>
       - name: Extract tag name
         id: tag_name
