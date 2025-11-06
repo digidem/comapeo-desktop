@@ -26,7 +26,7 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     outputs:
-      tag_name: ${{ steps.version.outputs.releaseShort }}
+      tag_name: ${{ steps.tag_name.outputs.tag_name }}
       release_url: ${{ steps.release.outputs.release_url }}
     steps:
       - name: Create GitHub App Token
@@ -42,19 +42,21 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           sparse-checkout: |
             package.json
-            .github/parse-version/action.yml
           sparse-checkout-cone-mode: false
 
-      - name: Parse version
-        id: version
-        uses: ./.github/parse-version
+      # Has format of v<minor>.<patch>
+      - name: Extract tag name
+        id: tag_name
+        run: |
+          tag_version=$(node -e "const {version} = require('./package.json'); const semver = require('semver'); const parsed = semver.parse(version); console.log(parsed.minor + '.' + parsed.patch);")
+          echo "tag_name=v$tag_version" >> $GITHUB_OUTPUT
 
       - name: Create release on GitHub
         id: release
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           REPOSITORY: ${{ github.repository }}
-          TAG_NAME: ${{ steps.version.outputs.releaseShort }}
+          TAG_NAME: ${{ steps.tag_name.outputs.tag_name }}
         run: |
           release_url=$(gh release create "$TAG_NAME" --repo "$REPOSITORY" --draft --generate-notes --title "$TAG_NAME")
           echo "release_url=$release_url" >> $GITHUB_OUTPUT
