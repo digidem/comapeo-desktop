@@ -56,12 +56,7 @@ jobs:
           REPOSITORY: ${{ github.repository }}
           TAG_NAME: ${{ steps.version.outputs.release_version_short }}
         run: |
-          release_url=$(gh release create \
-            --repo "$REPOSITORY" \
-            --draft \
-            --generate-notes \
-            --title "$TAG_NAME" \
-            "$TAG_NAME")
+          release_url=$(gh release create "$TAG_NAME" --repo "$REPOSITORY" --draft --generate-notes --title "$TAG_NAME")
           echo "release_url=$release_url" >> $GITHUB_OUTPUT
 
   build:
@@ -98,11 +93,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           REPOSITORY: ${{ github.repository }}
           TAG_NAME: ${{ needs.create_release.outputs.tag_version }}
-        run: |
-          gh release upload --clobber \
-            "$TAG_NAME" \
-            --repo "$REPOSITORY" \
-            *
+        run: gh release upload "$TAG_NAME" * --clobber --repo "$REPOSITORY"
 
   comment:
     name: Comment
