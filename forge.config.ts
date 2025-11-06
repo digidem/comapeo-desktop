@@ -359,7 +359,7 @@ export default {
 			// https://www.electronforge.io/config/makers/squirrel.windows#spaces-in-the-app-name
 			name: properties.win32ProductName,
 			exe: `${properties.executableName}.exe`,
-			setupExe: `${properties.executableName}-${properties.appVersion}-win32-${arch}-setup.exe`,
+			setupExe: `${properties.executableName}-${packageJSON.version}-win32-${arch}-setup.exe`,
 			noMsi: true,
 		})),
 		new MakerDMG({ icon: './assets/icon.icns' }),
