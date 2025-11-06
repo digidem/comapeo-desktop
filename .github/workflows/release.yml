@@ -26,7 +26,7 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     outputs:
-      tag_version: ${{ steps.version.outputs.release_version_short }}
+      tag_name: ${{ steps.version.outputs.releaseShort }}
       release_url: ${{ steps.release.outputs.release_url }}
     steps:
       - name: Create GitHub App Token
@@ -54,7 +54,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           REPOSITORY: ${{ github.repository }}
-          TAG_NAME: ${{ steps.version.outputs.release_version_short }}
+          TAG_NAME: ${{ steps.version.outputs.releaseShort }}
         run: |
           release_url=$(gh release create "$TAG_NAME" --repo "$REPOSITORY" --draft --generate-notes --title "$TAG_NAME")
           echo "release_url=$release_url" >> $GITHUB_OUTPUT
@@ -92,7 +92,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           REPOSITORY: ${{ github.repository }}
-          TAG_NAME: ${{ needs.create_release.outputs.tag_version }}
+          TAG_NAME: ${{ needs.create_release.outputs.tag_name }}
         run: gh release upload "$TAG_NAME" * --clobber --repo "$REPOSITORY"
 
   comment:
