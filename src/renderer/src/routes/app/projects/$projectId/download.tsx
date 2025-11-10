@@ -23,6 +23,7 @@ import { useAppForm } from '../../../../hooks/forms'
 import { getLocaleStateQueryOptions } from '../../../../lib/queries/app-settings'
 import { selectDirectoryMutationOptions } from '../../../../lib/queries/file-system'
 import { createGlobalMutationsKey } from '../../../../lib/queries/global-mutations'
+import { showItemInFolderMutationOptions } from '../../../../lib/queries/system'
 
 export const Route = createFileRoute('/app/projects/$projectId/download')({
 	component: RouteComponent,
@@ -60,18 +61,20 @@ function RouteComponent() {
 
 	const [successState, setSuccessState] = useState<{
 		dataDownloaded: DataToDownload
+		savedToPath: string
 	} | null>(null)
 
 	return successState ? (
 		<SuccessPanel
 			dataDownloaded={successState.dataDownloaded}
 			onDone={navigateBack}
+			savedToPath={successState.savedToPath}
 		/>
 	) : (
 		<DownloadForm
 			onBack={navigateBack}
-			onSuccess={(dataDownloaded) => {
-				setSuccessState({ dataDownloaded })
+			onSuccess={({ dataDownloaded, savedToPath }) => {
+				setSuccessState({ dataDownloaded, savedToPath })
 			}}
 			projectId={projectId}
 		/>
@@ -81,19 +84,15 @@ function RouteComponent() {
 function SuccessPanel({
 	dataDownloaded,
 	onDone,
+	savedToPath,
 }: {
 	dataDownloaded: DataToDownload
 	onDone: () => void
+	savedToPath: string
 }) {
 	const { formatMessage: t } = useIntl()
 
-	const descriptionText = t(
-		dataDownloaded === 'observations'
-			? m.successPanelDescriptionObservations
-			: dataDownloaded === 'observations-with-media'
-				? m.successPanelDescriptionObservationsWithMedia
-				: m.successPanelDescriptionTracks,
-	)
+	const showItemInFolder = useMutation(showItemInFolderMutationOptions())
 
 	return (
 		<Stack
@@ -118,9 +117,26 @@ function SuccessPanel({
 						{t(m.successPanelTitle)}
 					</Typography>
 
-					<Typography component="p" variant="h3" textAlign="center">
-						{descriptionText}
+					<Typography component="p" variant="h2" textAlign="center">
+						{t(
+							dataDownloaded === 'observations'
+								? m.successPanelDescriptionObservations
+								: dataDownloaded === 'observations-with-media'
+									? m.successPanelDescriptionObservationsWithMedia
+									: m.successPanelDescriptionTracks,
+						)}
 					</Typography>
+
+					<Button
+						fullWidth
+						variant="outlined"
+						sx={{ maxWidth: 400 }}
+						onClick={() => {
+							showItemInFolder.mutate(savedToPath)
+						}}
+					>
+						{t(m.successPanelViewInFileManager)}
+					</Button>
 				</Stack>
 			</Container>
 
@@ -136,7 +152,6 @@ function SuccessPanel({
 				zIndex={1}
 			>
 				<Button
-					variant="outlined"
 					fullWidth
 					sx={{ maxWidth: 400 }}
 					onClick={() => {
@@ -160,7 +175,10 @@ function DownloadForm({
 	projectId,
 }: {
 	onBack: () => void
-	onSuccess: (dataDownloaded: DataToDownload) => void
+	onSuccess: (opts: {
+		dataDownloaded: DataToDownload
+		savedToPath: string
+	}) => void
 	projectId: string
 }) {
 	const { formatMessage: t } = useIntl()
@@ -220,7 +238,7 @@ function DownloadForm({
 			})
 
 			if (savedToPath) {
-				onSuccess(parsedValue.dataToDownload)
+				onSuccess({ dataDownloaded: parsedValue.dataToDownload, savedToPath })
 			}
 		},
 	})
@@ -451,21 +469,28 @@ const m = defineMessages({
 	successPanelDescriptionObservations: {
 		id: 'routes.app.projects.$projectId.download.successPanelDescriptionObservations',
 		defaultMessage:
-			'<b>All observations</b> have been downloaded to your device.',
+			'<b>All observations</b><br></br> have been downloaded to your device.',
 		description:
 			'Description text for success panel when downloading observations.',
 	},
 	successPanelDescriptionObservationsWithMedia: {
 		id: 'routes.app.projects.$projectId.download.successPanelDescriptionObservationsWithMedia',
 		defaultMessage:
-			'<b>All observations with media</b> have been downloaded to your device.',
+			'<b>All observations with media</b><br></br> have been downloaded to your device.',
 		description:
 			'Description text for success panel when downloading observations with media.',
 	},
 	successPanelDescriptionTracks: {
 		id: 'routes.app.projects.$projectId.download.successPanelDescriptionTracks',
-		defaultMessage: '<b>All tracks</b> have been downloaded to your device.',
+		defaultMessage:
+			'<b>All tracks</b><br></br> have been downloaded to your device.',
 		description: 'Description text for success panel when downloading tracks.',
+	},
+	successPanelViewInFileManager: {
+		id: 'routes.app.projects.$projectId.download.successPanelViewInFileManager',
+		defaultMessage: 'View in file manager',
+		description:
+			'Button text for viewing the downloaded file in the system file manager.',
 	},
 	successPanelDone: {
 		id: 'routes.app.projects.$projectId.download.successPanelDone',

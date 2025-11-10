@@ -187,15 +187,15 @@
   },
   "routes.app.projects.$projectId.download.successPanelDescriptionObservations": {
     "description": "Description text for success panel when downloading observations.",
-    "message": "<b>All observations</b> have been downloaded to your device."
+    "message": "<b>All observations</b><br></br> have been downloaded to your device."
   },
   "routes.app.projects.$projectId.download.successPanelDescriptionObservationsWithMedia": {
     "description": "Description text for success panel when downloading observations with media.",
-    "message": "<b>All observations with media</b> have been downloaded to your device."
+    "message": "<b>All observations with media</b><br></br> have been downloaded to your device."
   },
   "routes.app.projects.$projectId.download.successPanelDescriptionTracks": {
     "description": "Description text for success panel when downloading tracks.",
-    "message": "<b>All tracks</b> have been downloaded to your device."
+    "message": "<b>All tracks</b><br></br> have been downloaded to your device."
   },
   "routes.app.projects.$projectId.download.successPanelDone": {
     "description": "Button text for exiting success panel.",
@@ -204,6 +204,10 @@
   "routes.app.projects.$projectId.download.successPanelTitle": {
     "description": "Title text for success panel.",
     "message": "Success!"
+  },
+  "routes.app.projects.$projectId.download.successPanelViewInFileManager": {
+    "description": "Button text for viewing the downloaded file in the system file manager.",
+    "message": "View in file manager"
   },
   "routes.app.projects.$projectId.download.tracksOptionDescription": {
     "description": "Description of tracks option.",

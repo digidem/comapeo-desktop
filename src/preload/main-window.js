@@ -60,6 +60,16 @@ const runtimeApi = {
 	openExternalURL: async (url) => {
 		return ipcRenderer.invoke('shell:open-external-url', url)
 	},
+	showItemInFolder: async (filePath) => {
+		const error = await ipcRenderer.invoke(
+			'shell:show-item-in-folder',
+			filePath,
+		)
+
+		if (typeof error === 'string' && error.length > 0) {
+			throw new Error(error)
+		}
+	},
 
 	// Settings (get)
 	getCoordinateFormat: async () => {

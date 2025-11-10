@@ -22,6 +22,11 @@ export function setUpMainIPC({
 		return shell.openExternal(url)
 	})
 
+	ipcMain.handle('shell:show-item-in-folder', (_event, filePath) => {
+		v.assert(v.string(), filePath)
+		return shell.showItemInFolder(filePath)
+	})
+
 	// System
 	ipcMain.handle('system:get:wifiConnections', () => {
 		return si.wifiConnections()

@@ -36,3 +36,15 @@ export function downloadURLMutationOptions() {
 		Parameters<RuntimeApi['downloadURL']>[0]
 	>
 }
+
+export function showItemInFolderMutationOptions() {
+	return {
+		mutationFn: async (vars) => {
+			return window.runtime.showItemInFolder(vars)
+		},
+	} satisfies UseMutationOptions<
+		void,
+		Error,
+		Parameters<RuntimeApi['showItemInFolder']>[0]
+	>
+}
