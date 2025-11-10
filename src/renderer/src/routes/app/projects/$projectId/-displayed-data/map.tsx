@@ -417,9 +417,6 @@ export function DisplayedDataMap() {
 		],
 	)
 
-	const enableMapInteractions =
-		currentRoute.routeId === '/app/projects/$projectId/'
-
 	const highlightedFeature = useMemo(() => {
 		if (!documentToHighlight) {
 			return undefined
@@ -445,6 +442,13 @@ export function DisplayedDataMap() {
 		currentRoute.routeId !==
 			'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name' &&
 		currentRoute.routeId !== '/app/projects/$projectId/tracks/$trackDocId/'
+
+	const enableMouseInteractions =
+		currentRoute.routeId === '/app/projects/$projectId/'
+
+	const enableMovementInteractions =
+		currentRoute.routeId === '/app/projects/$projectId/' ||
+		currentRoute.routeId === '/app/projects/$projectId/download'
 
 	return (
 		<Box position="relative" display="flex" flex={1}>
@@ -480,15 +484,19 @@ export function DisplayedDataMap() {
 				onLoad={() => {
 					setMapLoaded(true)
 				}}
-				onClick={enableMapInteractions ? onMapClick : undefined}
-				onMouseMove={enableMapInteractions ? onMapMouseMove : undefined}
-				dragPan={enableMapInteractions}
-				scrollZoom={enableMapInteractions}
+				onClick={enableMouseInteractions ? onMapClick : undefined}
+				onMouseMove={enableMouseInteractions ? onMapMouseMove : undefined}
+				dragPan={enableMovementInteractions}
+				scrollZoom={enableMovementInteractions}
 				touchPitch={false}
 				dragRotate={false}
 				pitchWithRotate={false}
 				touchZoomRotate={false}
-				cursor={enableMapInteractions ? undefined : 'default'}
+				cursor={
+					enableMouseInteractions || enableMovementInteractions
+						? undefined
+						: 'default'
+				}
 			>
 				<ScaleControl />
 				<NavigationControl showCompass={false} />
@@ -539,7 +547,11 @@ export function DisplayedDataMap() {
 				highlightedFeature.properties.type === 'observation' ? (
 					<Suspense>
 						<Marker
-							style={enableMapInteractions ? undefined : { cursor: 'default' }}
+							style={
+								enableMouseInteractions || enableMovementInteractions
+									? undefined
+									: { cursor: 'default' }
+							}
 							longitude={highlightedFeature.geometry.coordinates[0]!}
 							latitude={highlightedFeature.geometry.coordinates[1]!}
 						>

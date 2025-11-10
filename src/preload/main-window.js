@@ -15,11 +15,19 @@ window.onmessage = (event) => {
  */
 const runtimeApi = {
 	// Files
-	async selectFile(extensionFilters) {
+	async selectFile(opts) {
 		/** @type {unknown} */
-		const result = await ipcRenderer.invoke('files:select', {
-			extensionFilters,
-		})
+		const result = await ipcRenderer.invoke('files:select_file', opts)
+
+		if (!result) return undefined
+
+		validateSelectedFileResult(result)
+
+		return result
+	},
+	async selectDirectory(opts) {
+		/** @type {unknown} */
+		const result = await ipcRenderer.invoke('files:select_directory', opts)
 
 		if (!result) return undefined
 
