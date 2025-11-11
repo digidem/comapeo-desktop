@@ -428,9 +428,20 @@ export default {
 			const artifacts = makeResults.flatMap((result) => result.artifacts)
 
 			await Promise.all(
-				artifacts.map((a) =>
-					fs.cp(a, path.join(destinationDir, path.basename(a))),
-				),
+				artifacts.map((a) => {
+					const parsedArtifact = path.parse(a)
+
+					let name = parsedArtifact.name
+
+					if (name.includes(' ')) {
+						console.log(`⚠️ Replacing spaces in "${name}" with underscores`)
+						name = name.replaceAll(' ', '_')
+					}
+
+					const basenameToUse = `${name}${parsedArtifact.ext}`
+
+					return fs.cp(a, path.join(destinationDir, basenameToUse))
+				}),
 			)
 		},
 	},
