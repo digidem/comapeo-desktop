@@ -8,6 +8,9 @@
 - [Developing locally](#developing-locally)
   - [Helpful tips about workflow](#helpful-tips-about-workflow)
   - [Helpful tips about configuration](#helpful-tips-about-configuration)
+- [Testing](#testing)
+  - [Unit tests](#unit-tests)
+  - [End-to-end (e2e) tests](#end-to-end-e2e-tests)
 - [Translations](#translations)
   - [Translations workflow](#translations-workflow)
 - [Building the app](#building-the-app)
@@ -44,7 +47,7 @@ The following use cases should generally be defined and set up in a preload scri
 - any usage of Electron's renderer modules
 - usage of a Node API (either directly or through a module) that's supported by the preload script sandbox
 
-For example, in [`src/preload/main-window.js`](../src/preload/main-window.js), we expose an API to interact with the main process on `window.runtime`. This may change in the future but it's actually quite nice because it becomes more accessible for debugging purposes (e.g. testing the API using the devtools console).
+For example, in [`src/preload/main-window.js`](../src/preload/main-window.js), we expose an API to interact with the main process on `window.runtime`. This may change in the future but it's convenient for debugging purposes (e.g. testing the API using the devtools console).
 
 ## Developing locally
 
@@ -52,11 +55,7 @@ Make sure you have the desired Node version installed. For this project we encou
 
 ### Environment variables
 
-Create a copy of the [`.env.template`](../.env.template) and call it `.env`. Update the following variables:
-
-- `SENTRY_AUTH_TOKEN`: Auth token used for enabling Sentry integration. Reach out to the maintainers for setting this up.
-- `SENTRY_ORG`: Organization name on Sentry. Reach out to the maintainers for setting this up.
-- `SENTRY_PROJECT`: Project name on Sentry. Reach out to the maintainers for setting this up.
+If you need to use environment overrides, create a copy of the [`.env.template`](../.env.template) and call it `.env`.
 
 If you're planning to use a different online map style, you'll need to specify a couple of other environment variables:
 
@@ -70,23 +69,25 @@ If you're planning to use a different online map style, you'll need to specify a
 Run the following commands to start the app:
 
 ```sh
-npm install                # Install dependencies
-npm start                  # Build translations, then build the app in development mode and start the development server
+npm install        # Install dependencies
+node --run start   # Build translations, then build the app in development mode and start the development server
 ```
 
 ### Helpful tips about workflow
 
-- Changes in the `src/renderer/` should immediately automatically be reflected in the app
-- Changes in the `src/preload/` require the window to be refreshed to be reflected in the relevant window. Either go to the `View > Reload` menu option or use the keyboard shortcut (e.g. <kbd>CMD + R</kbd> on macOS, <kbd>CTRL + R</kbd> on Linux, Windows)
-- Changes to `src/main/` or `src/services/` require restarting the app. You can either:
-  1. Stop the process that is running `npm start` and rerun it.
-  2. Type <kbd>R + S + Enter</kbd> in the process that is running `npm start`, which tells Forge to restart the main process.
-- In development, the `userData` directory is set to the `<root>/data/` directory by default. On macOS, the logs directory is set to `<root>/logs` by default. This provides the following benefits:
-  - Avoids conflicting with the existing app if it's installed. Assuming the same app id is used, Electron will default to using the OS-specific user data directory, which means that if you have a production version of the app installed, starting the development version will read and write from the production user data directory. Most of the time this is not desired (you generally don't want to mix production data and settings with your development environment). If it is desired, comment out the line that calls `app.setPath('userData', ...)` in [`src/main/index.js`](../src/main/index.js)
-  - Easier to debug because you don't have to spend as much time to figure out which directory to look at (it's different depending on the operating system)
-- If you want to change the `userData` directory, define an environment variable called `USER_DATA_PATH` that can be used when calling `npm start`. For example, running `USER_DATA_PATH=./my_data npm start` will create a `my_data` directory relative to the project root. This is useful for creating different "profiles" and isolating data for the purpose of testing features or reproducing bugs
+- When running the dev server:
+  - Changes in the `src/renderer/` will be reflected in the app immediately
+  - Changes in the `src/preload/` require the window to be refreshed to be reflected in the relevant window. Either go to the `View > Reload` menu option or use the keyboard shortcut (e.g. <kbd>CMD + R</kbd> on macOS, <kbd>CTRL + R</kbd> on Linux, Windows)
+  - Changes to `src/main/` or `src/services/` require restarting the app. You can either:
+    1. Stop the process that is running `npm start` and rerun it.
+    2. Type <kbd>R + S + Enter</kbd> in the process that is running `node --run start`, which tells Forge to restart the main process.
+
+- In development, the `userData` directory is set to the `<project_root>/data/` directory by default. On macOS, the logs directory is set to `<project_root>/logs` by default. This provides the following benefits:
+  - Avoids conflicting with the existing app if it's installed. Assuming the same app ID is used, Electron will default to using the OS-specific user data directory, which means that if you have a production version of the app installed, starting the development version will read and write from the production user data directory. Most of the time this is not desired (you generally don't want to mix production data and settings with your development environment). If it is desired, you will need to adjust the code that calls `app.setPath('userData', ...)` in [`src/main/index.ts`](../src/main/index.ts).
+  - Easier to debug because you don't have to spend as much time to figure out which directory to look at (it's different depending on the operating system).
+- If you want to change the `userData` directory, define an environment variable called `USER_DATA_PATH` that can be used when calling `node --run start`. For example, running `USER_DATA_PATH=./my_data node --run start` will create a `my_data` directory relative to the project root. This is useful for creating different "profiles" and isolating data for the purpose of testing features or reproducing bugs
 - **If you are installing a package that is only going to be used by code the renderer (e.g. a React component library), you most likely should install it as a dev dependency instead of a direct dependency**. This differs from typical development workflows you see elsewhere, but the reasoning is that during the packaging stage of the app, [`@electron/packager`](https://github.com/electron/packager) avoids copying dev dependencies found in the `node_modules` directory. Since we bundle our renderer code, we do not need to copy over these dependencies, which results in a significant decrease in disk space occupied by the app.
-- We use [`debug`](https://github.com/debug-js/debug) for much of our logging in the main process. In order to see them, you can specify the `DEBUG` environment variable when running the app e.g. `DEBUG=comapeo:* npm start`.
+- We use [`debug`](https://github.com/debug-js/debug) for much of our logging in the main process. In order to see them, you can specify the `DEBUG` environment variable when running the app e.g. `DEBUG=comapeo:* node --run start`.
 
 ### Helpful tips about configuration
 
@@ -97,13 +98,11 @@ npm start                  # Build translations, then build the app in developme
 
 #### Unit tests
 
-The renderer app (aka React code) can run unit test with [Vitest](https://vitest.dev/) (and integration tests with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)).
-
-To run unit or integration tests run `node --run vitest:run`. See [vitest run](https://vitest.dev/guide/cli.html#vitest-run).
+The renderer app (aka React code) can run unit tests with [Vitest](https://vitest.dev/) using `node --run vitest:run`. See [vitest run](https://vitest.dev/guide/cli.html#vitest-run) for more details.
 
 #### End-to-end (e2e) tests
 
-These tests use [Playwright](https://playwright.dev/) and it's [experimental Electron support](https://playwright.dev/docs/api/class-electron). They require a packaged version of the app in order to be executed. The general steps are as follows:
+These tests use [Playwright](https://playwright.dev/) and its [experimental Electron support](https://playwright.dev/docs/api/class-electron). They require a packaged version of the app in order to be executed. The general steps are as follows:
 
     1. Create the packaged application by running `COMAPEO_TEST=true APP_TYPE=internal node --run forge:package`. Specifying the environment variables is necessary.
     2. Run the tests using `node --run test-e2e`.
@@ -114,28 +113,28 @@ When the tests finish, you can view a HTML report of the results using `npx play
 
 The `messages/` directory contains the translation strings used by the app. Within this directory are directories for the main process (`messages/main/`) and renderer process (`messages/renderer/`). Messages found in `messages/main/` are typically needed for translating text that lives in native UI (e.g. the menu bar), whereas messages in `messages/renderer/` are needed for translating text that's used in the rendered web app.
 
-In order to update translations, run `node --run intl`, which will extract messages and place them in the relevant `messages/` directory and then compile those messages into translated strings and place them in the `translations/` directory. For the renderer process specifically, it also generates a JSON file called [`translated-languages-list.json`](../src/renderer/translated-languages.generated.json), which is used to by the app to know which languages are displayable without having to do that calculation it at runtime.
+In order to update translations, run `node --run intl`, which will extract messages and place them in the relevant `messages/` directory and then compile those messages into translated strings and place them in the `translations/` directory. For the renderer process specifically, it also generates a JSON file called [`translated-languages-list.json`](../src/renderer/src/generated/translated-languages.generated.json), which is used to by the app to know which languages are displayable without having to do that calculation it at runtime.
 
 ### Translations workflow
 
 - For the main process:
-  1. Use `defineMessage` (or `defineMessages`) from `@formatjs/intl` to create messages and use in the main process code.
-  2. Run `node --run intl:main` (or`node --run intl`).
+  1. Use `defineMessages` from `@formatjs/intl` to create messages and use in the main process code.
+  2. Run `node --run intl:main` (or `node --run intl`).
 
 - For the renderer process:
-  1. Use `defineMessage` (or `defineMessages`) from `react-intl` to create messages and use in the renderer process code.
-  2. Run `node --run intl:renderer` (or`node --run intl`).
+  1. Use `defineMessages` from `react-intl` to create messages and use in the renderer process code.
+  2. Run `node --run intl:renderer` (or `node --run intl`).
 
 ## Building the app
 
 The [Electron Forge docs](https://www.electronforge.io/) are pretty informative (especially https://www.electronforge.io/core-concepts/build-lifecycle) but in a nutshell:
 
-- `node --run forge:package`: generate an executable app bundle i.e. an executable that you can run in the command-line.
+- `APP_TYPE=internal node --run forge:package`: generate an executable app bundle i.e. an executable that you can run in the command-line.
 
-- `node --run forge:make`: generate an distributable installer or archives that you can install by opening using your filesystem.
+- `APP_TYPE=internal node --run forge:make`: generate a distributable installer or archives that you can install by opening using your filesystem.
 
 All commands place the built assets in the `out/` directory.
 
 If you're running into an error with any of the Forge-related commands but not seeing any output in the console, you probably have to prefix the command with `DEBUG=electron-forge` e.g. `DEBUG=electron-forge node --run forge:package`.
 
-By default, we package the app in the [ASAR](https://github.com/electron/asar) format. However, it can be helpful to avoid doing that for debugging purposes (e.g. building locally), in which case you can specify a `ASAR=false` environment variable when running the relevant Forge command e.g. `ASAR=false node --run forge:package`.
+By default, we package the app in the [ASAR](https://github.com/electron/asar) format. However, it can be helpful to avoid doing that for debugging purposes (e.g. building locally), in which case you can specify a `ASAR=false` environment variable when running the relevant Forge command e.g. `ASAR=false APP_TYPE=internal node --run forge:package`.
