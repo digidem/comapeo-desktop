@@ -113,6 +113,26 @@
     "description": "Title of the audio attachment page.",
     "message": "音声録音"
   },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "削除"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "取消"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogConfirm": {
+    "description": "Text for confirm button in delete attachment confirmation dialog",
+    "message": "削除する"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogTitle": {
+    "description": "Title text for delete attachment confirmation dialog",
+    "message": "削除 {type, select, photo {写真} audio {音声録音} other {アタッチメント}}"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteSuccessPanelTitle": {
+    "description": "Title text for the successful deletion panel.",
+    "message": "{type, select, photo {写真} audio {音声録音} other {添付ファイル}} 削除"
+  },
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
     "description": "Label text for download button",
     "message": "ダウンロード"
@@ -124,6 +144,10 @@
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.playerUnavailable": {
     "description": "Alert text indicating inability to play audio attachment.",
     "message": "プレイヤーは利用できません。プレビューするにはファイルをダウンロードしてください。"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.returnToObservation": {
+    "description": "Button text for the successful deletion panel.",
+    "message": "観察記録に戻る"
   },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
