@@ -117,6 +117,26 @@
     "description": "Title of the audio attachment page.",
     "message": "Enregistrement audio"
   },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "Effacer"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "Annuler"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogConfirm": {
+    "description": "Text for confirm button in delete attachment confirmation dialog",
+    "message": "Oui, supprimer"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogTitle": {
+    "description": "Title text for delete attachment confirmation dialog",
+    "message": "Supprimez {type, select, photo {Photo} audio {Enregistrement audio} other {Pièce jointe}}?"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteSuccessPanelTitle": {
+    "description": "Title text for the successful deletion panel.",
+    "message": "{type, select, photo {Photo} audio {Enregistrement audio} other {Pièce jointe}} Supprimée"
+  },
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
     "description": "Label text for download button",
     "message": "Télécharger"
@@ -128,6 +148,10 @@
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.playerUnavailable": {
     "description": "Alert text indicating inability to play audio attachment.",
     "message": "Lecteur indisponible. Télécharger le fichier pour l'aperçu."
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.returnToObservation": {
+    "description": "Button text for the successful deletion panel.",
+    "message": "Retourner à l’observation"
   },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
