@@ -117,6 +117,26 @@
     "description": "Title of the audio attachment page.",
     "message": "Grabación de audio"
   },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "Borrar"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "Cancelar"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogConfirm": {
+    "description": "Text for confirm button in delete attachment confirmation dialog",
+    "message": "Sí, eliminar"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogTitle": {
+    "description": "Title text for delete attachment confirmation dialog",
+    "message": "Eliminar {type, select, photo {Foto} audio {Grabación de audio} other {Adjunto}}?"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteSuccessPanelTitle": {
+    "description": "Title text for the successful deletion panel.",
+    "message": "{type, select, photo {Foto} audio {Grabación de audio} other {Adjunto}} Eliminado"
+  },
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
     "description": "Label text for download button",
     "message": "Descargar"
@@ -128,6 +148,10 @@
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.playerUnavailable": {
     "description": "Alert text indicating inability to play audio attachment.",
     "message": "Jugador no disponible. Descargar archivo para previsualizar."
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.returnToObservation": {
+    "description": "Button text for the successful deletion panel.",
+    "message": "Volver a la observación"
   },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
