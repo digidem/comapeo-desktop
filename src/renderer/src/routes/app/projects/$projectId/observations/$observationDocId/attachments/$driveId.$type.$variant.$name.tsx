@@ -580,6 +580,7 @@ function DeleteAttachmentConfirmationDialog({
 						onClick={() => {
 							onConfirm()
 						}}
+						startIcon={<Icon name="material-symbols-delete" />}
 						sx={{ maxWidth: 400 }}
 					>
 						{t(m.deleteAttachmentDialogConfirm)}
