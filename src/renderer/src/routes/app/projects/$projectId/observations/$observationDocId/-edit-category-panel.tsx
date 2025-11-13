@@ -13,7 +13,11 @@ import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
+import {
+	useIsMutating,
+	useMutation,
+	useSuspenseQuery,
+} from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY } from '../../../../../../colors'
@@ -27,6 +31,12 @@ import { getMatchingCategoryForDocument } from '../../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../../lib/queries/app-settings'
 import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations'
 
+const UPDATE_OBSERVATION_CATEGORY_MUTATION_KEY = createGlobalMutationsKey([
+	'observations',
+	'category',
+	'update',
+])
+
 export function EditCategoryPanel({
 	projectId,
 	observationDocId,
@@ -37,6 +47,12 @@ export function EditCategoryPanel({
 	onClose: (success: boolean) => void
 }) {
 	const { formatMessage: t } = useIntl()
+
+	const isCategoryUpdatePending =
+		useIsMutating({
+			mutationKey: UPDATE_OBSERVATION_CATEGORY_MUTATION_KEY,
+			exact: true,
+		}) > 0
 
 	return (
 		<Stack direction="column" flex={1} overflow="auto">
@@ -49,7 +65,13 @@ export function EditCategoryPanel({
 				borderBottom={`1px solid ${BLUE_GREY}`}
 			>
 				<IconButton
+					aria-disabled={isCategoryUpdatePending}
+					aria-label={t(m.closePanelAccessibleLabel)}
 					onClick={() => {
+						if (isCategoryUpdatePending) {
+							return
+						}
+
 						onClose(false)
 					}}
 				>
@@ -86,12 +108,6 @@ export function EditCategoryPanel({
 		</Stack>
 	)
 }
-
-const UPDATE_OBSERVATION_CATEGORY_MUTATION_KEY = createGlobalMutationsKey([
-	'observations',
-	'category',
-	'update',
-])
 
 function CategoriesList({
 	projectId,
@@ -261,6 +277,11 @@ function CategoriesList({
 }
 
 const m = defineMessages({
+	closePanelAccessibleLabel: {
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel',
+		defaultMessage: 'Close.',
+		description: 'Accessible label for button to close panel.',
+	},
 	editCategoryPanelTitle: {
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle',
 		defaultMessage: 'Change Category',
