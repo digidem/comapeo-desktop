@@ -128,8 +128,7 @@ function SuccessPanel({
 					</Typography>
 
 					<Button
-						fullWidth
-						variant="outlined"
+						variant="text"
 						sx={{ maxWidth: 400 }}
 						onClick={() => {
 							showItemInFolder.mutate(savedToPath)
