@@ -148,15 +148,15 @@ function CategoriesList({
 		projectId,
 	})
 
-	// NOTE: Make sure that this is derived the same way as in the ObservationDetailsPanel
-	const currentCategory = getMatchingCategoryForDocument(
-		observation,
-		allCategories,
-	)
-
 	const updateObservationCategory = useMutation({
 		mutationKey: UPDATE_OBSERVATION_CATEGORY_MUTATION_KEY,
 		mutationFn: async ({ category }: { category: Preset }) => {
+			// NOTE: Make sure that this is derived the same way as in the ObservationDetailsPanel
+			const currentCategory = getMatchingCategoryForDocument(
+				observation,
+				allCategories,
+			)
+
 			let newTags: Observation['tags']
 
 			if (currentCategory) {
