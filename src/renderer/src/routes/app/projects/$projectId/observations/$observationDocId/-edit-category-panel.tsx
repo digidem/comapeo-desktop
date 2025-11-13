@@ -148,6 +148,7 @@ function CategoriesList({
 		projectId,
 	})
 
+	// NOTE: Make sure that this is derived the same way as in the ObservationDetailsPanel
 	const currentCategory = getMatchingCategoryForDocument(
 		observation,
 		allCategories,

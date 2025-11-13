@@ -173,14 +173,14 @@ function RouteComponent() {
 		<EditCategoryPanel
 			projectId={projectId}
 			observationDocId={observationDocId}
-			onClose={(categoryId) => {
-				setCategoryEditStatus(categoryId ? 'success' : 'idle')
+			onClose={(success) => {
+				setCategoryEditStatus(success ? 'success' : 'idle')
 			}}
 		/>
 	) : (
 		<ObservationDetailsPanel
 			observationDocId={observationDocId}
-			onChangeCategory={() => {
+			onEditCategory={() => {
 				setCategoryEditStatus('pending')
 			}}
 			projectId={projectId}
@@ -191,13 +191,13 @@ function RouteComponent() {
 
 function ObservationDetailsPanel({
 	observationDocId,
-	onChangeCategory,
+	onEditCategory,
 	projectId,
 	showCategoryUpdatedIndicator,
 }: {
 	observationDocId: string
 	projectId: string
-	onChangeCategory: () => void
+	onEditCategory: () => void
 	showCategoryUpdatedIndicator: boolean
 }) {
 	const { formatDate, formatMessage: t } = useIntl()
@@ -363,7 +363,7 @@ function ObservationDetailsPanel({
 										<Button
 											variant="text"
 											onClick={() => {
-												onChangeCategory()
+												onEditCategory()
 											}}
 										>
 											{t(m.changeCategory)}
