@@ -1,7 +1,13 @@
-import { Suspense } from 'react'
-import { useManyDocs, useSingleDocByDocId } from '@comapeo/core-react'
+import { Suspense, useEffect, useState } from 'react'
+import {
+	useManyDocs,
+	useOwnDeviceInfo,
+	useOwnRoleInProject,
+	useSingleDocByDocId,
+} from '@comapeo/core-react'
 import type { Field, Preset } from '@comapeo/schema'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
@@ -10,7 +16,12 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARKER_ORANGE } from '../../../../../../colors'
+import {
+	BLUE_GREY,
+	DARKER_ORANGE,
+	GREEN,
+	WHITE,
+} from '../../../../../../colors'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -20,6 +31,8 @@ import { GenericRouteNotFoundComponent } from '../../../../../../components/gene
 import { Icon } from '../../../../../../components/icon'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+	COORDINATOR_ROLE_ID,
+	CREATOR_ROLE_ID,
 	getMatchingCategoryForDocument,
 	getRenderableFieldInfo,
 } from '../../../../../../lib/comapeo'
@@ -29,6 +42,7 @@ import {
 	getCoordinateFormatQueryOptions,
 	getLocaleStateQueryOptions,
 } from '../../../../../../lib/queries/app-settings'
+import { EditCategoryPanel } from './-edit-category-panel'
 import {
 	ObservationAttachmentError,
 	ObservationAttachmentPending,
@@ -40,6 +54,7 @@ export const Route = createFileRoute(
 )({
 	loader: async ({ context, params }) => {
 		const {
+			clientApi,
 			projectApi,
 			queryClient,
 			localeState: { value: lang },
@@ -73,7 +88,34 @@ export const Route = createFileRoute(
 		}
 
 		await Promise.all([
-			// TODO: Not ideal but requires changes to core-react
+			queryClient.ensureQueryData({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
+				queryFn: async () => {
+					return clientApi.getDeviceInfo()
+				},
+			}),
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'role',
+				],
+				queryFn: async () => {
+					return projectApi.$getOwnRole()
+				},
+			}),
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'role',
+				],
+				queryFn: async () => {
+					return projectApi.$getOwnRole()
+				},
+			}),
 			queryClient.ensureQueryData({
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -86,7 +128,6 @@ export const Route = createFileRoute(
 					return projectApi.preset.getMany({ lang })
 				},
 			}),
-			// TODO: Not ideal but requires changes to core-react
 			queryClient.ensureQueryData({
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -106,10 +147,62 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-	const { formatMessage: t, formatDate } = useIntl()
-	const router = useRouter()
+	const [categoryEditStatus, setCategoryEditStatus] = useState<
+		'idle' | 'pending' | 'success'
+	>('idle')
 
 	const { projectId, observationDocId } = Route.useParams()
+
+	useEffect(() => {
+		let timeoutId: number | undefined
+
+		if (categoryEditStatus === 'success') {
+			timeoutId = window.setTimeout(() => {
+				setCategoryEditStatus('idle')
+			}, 5_000)
+		}
+
+		return () => {
+			if (timeoutId !== undefined) {
+				clearTimeout(timeoutId)
+			}
+		}
+	}, [categoryEditStatus, setCategoryEditStatus])
+
+	return categoryEditStatus === 'pending' ? (
+		<EditCategoryPanel
+			projectId={projectId}
+			observationDocId={observationDocId}
+			onClose={(categoryId) => {
+				setCategoryEditStatus(categoryId ? 'success' : 'idle')
+			}}
+		/>
+	) : (
+		<ObservationDetailsPanel
+			observationDocId={observationDocId}
+			onChangeCategory={() => {
+				setCategoryEditStatus('pending')
+			}}
+			projectId={projectId}
+			showCategoryUpdatedIndicator={categoryEditStatus === 'success'}
+		/>
+	)
+}
+
+function ObservationDetailsPanel({
+	observationDocId,
+	onChangeCategory,
+	projectId,
+	showCategoryUpdatedIndicator,
+}: {
+	observationDocId: string
+	projectId: string
+	onChangeCategory: () => void
+	showCategoryUpdatedIndicator: boolean
+}) {
+	const { formatDate, formatMessage: t } = useIntl()
+
+	const router = useRouter()
 
 	const { data: lang } = useSuspenseQuery({
 		...getLocaleStateQueryOptions(),
@@ -143,6 +236,15 @@ function RouteComponent() {
 
 	const fieldsToDisplay = category ? getFieldsToDisplay(category, fields) : []
 
+	const { data: ownRole } = useOwnRoleInProject({ projectId })
+
+	const { data: ownDeviceInfo } = useOwnDeviceInfo()
+
+	const canEdit =
+		ownRole.roleId === COORDINATOR_ROLE_ID ||
+		ownRole.roleId === CREATOR_ROLE_ID ||
+		observation.createdBy === ownDeviceInfo.deviceId
+
 	return (
 		<Stack direction="column" flex={1} overflow="auto">
 			<Stack
@@ -169,6 +271,7 @@ function RouteComponent() {
 				>
 					<Icon name="material-arrow-back" size={30} />
 				</IconButton>
+
 				<Typography variant="h1" fontWeight={500}>
 					{t(m.navTitle)}
 				</Typography>
@@ -188,45 +291,86 @@ function RouteComponent() {
 							})}
 						</Typography>
 					</Box>
+
 					<Stack direction="column" paddingInline={6}>
 						<Box border={`1px solid ${BLUE_GREY}`} borderRadius={2}>
-							{category ? (
-								<Stack direction="row" alignItems="center" gap={4} padding={4}>
-									<CategoryIconContainer
-										color={category.color || BLUE_GREY}
-										applyBoxShadow
-									>
-										{category.iconRef?.docId ? (
-											<CategoryIconImage
-												altText={t(m.categoryIconAlt, {
-													name:
-														category.name ||
-														t(m.observationCategoryNameFallback),
-												})}
-												iconDocumentId={category.iconRef.docId}
-												projectId={projectId}
-												imageStyle={{ width: 48, aspectRatio: 1 }}
-											/>
+							<Stack
+								direction="row"
+								alignItems="center"
+								justifyContent="space-between"
+								flexWrap="wrap"
+								gap={4}
+								padding={4}
+							>
+								<Stack direction="row" alignItems="center" gap={4}>
+									<Box position="relative">
+										{category ? (
+											<CategoryIconContainer
+												color={category.color || BLUE_GREY}
+												applyBoxShadow
+											>
+												{category.iconRef?.docId ? (
+													<CategoryIconImage
+														altText={t(m.categoryIconAlt, {
+															name:
+																category.name ||
+																t(m.observationCategoryNameFallback),
+														})}
+														iconDocumentId={category.iconRef.docId}
+														projectId={projectId}
+														imageStyle={{ width: 48, aspectRatio: 1 }}
+													/>
+												) : (
+													<Icon name="material-place" size={40} />
+												)}
+											</CategoryIconContainer>
 										) : (
-											<Icon name="material-place" size={40} />
+											<CategoryIconContainer color={BLUE_GREY} applyBoxShadow>
+												<Icon name="material-place" size={40} />
+											</CategoryIconContainer>
 										)}
-									</CategoryIconContainer>
+
+										{showCategoryUpdatedIndicator ? (
+											<Box
+												bgcolor={GREEN}
+												right={(theme) => theme.spacing(-1)}
+												bottom={(theme) => theme.spacing(-1)}
+												sx={{
+													position: 'absolute',
+													borderRadius: '50%',
+													padding: 1,
+													display: 'flex',
+												}}
+											>
+												<Icon
+													name="material-check"
+													htmlColor={WHITE}
+													size={20}
+												/>
+											</Box>
+										) : null}
+									</Box>
 
 									<Typography variant="h2" fontWeight={500}>
-										{category.name}
+										{category
+											? category.name
+											: t(m.observationCategoryNameFallback)}
 									</Typography>
 								</Stack>
-							) : (
-								<Stack direction="row" alignItems="center" gap={3} padding={4}>
-									<CategoryIconContainer color={BLUE_GREY} applyBoxShadow>
-										<Icon name="material-place" size={40} />
-									</CategoryIconContainer>
 
-									<Typography variant="h2" fontWeight={500}>
-										{t(m.observationCategoryNameFallback)}
-									</Typography>
-								</Stack>
-							)}
+								{canEdit ? (
+									<Box display="flex" flex={0} justifyContent="center">
+										<Button
+											variant="text"
+											onClick={() => {
+												onChangeCategory()
+											}}
+										>
+											{t(m.changeCategory)}
+										</Button>
+									</Box>
+								) : null}
+							</Stack>
 
 							<Divider variant="fullWidth" sx={{ color: BLUE_GREY }} />
 
@@ -421,5 +565,10 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.mediaAttachmentsSectionTitle',
 		defaultMessage: 'Media Attachments',
 		description: 'Title for media attachments section.',
+	},
+	changeCategory: {
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory',
+		defaultMessage: 'Change',
+		description: 'Text for button to change category.',
 	},
 })
