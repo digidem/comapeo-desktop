@@ -27,7 +27,6 @@ import {
 } from '../../../../../../components/category-icon'
 import { ErrorDialog } from '../../../../../../components/error-dialog'
 import { Icon } from '../../../../../../components/icon'
-import { getMatchingCategoryForDocument } from '../../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../../lib/queries/app-settings'
 import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations'
 
@@ -151,11 +150,12 @@ function CategoriesList({
 	const updateObservationCategory = useMutation({
 		mutationKey: UPDATE_OBSERVATION_CATEGORY_MUTATION_KEY,
 		mutationFn: async ({ category }: { category: Preset }) => {
-			// NOTE: Make sure that this is derived the same way as in the ObservationDetailsPanel
-			const currentCategory = getMatchingCategoryForDocument(
-				observation,
-				allCategories,
-			)
+			// NOTE: For calculating updated tags, use the category that the observation document references,
+			// not the "best matching" category derived from the tags. This is because the existing tags are set by
+			// the referenced category on the document, not by the match that we use tag-based heuristics for.
+			const currentCategory = observation.presetRef
+				? allCategories.find((c) => c.docId === observation.presetRef?.docId)
+				: undefined
 
 			let newTags: Observation['tags']
 
