@@ -17,6 +17,7 @@ import {
 import type { Observation, Preset, Track } from '@comapeo/schema'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
+import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import Stack from '@mui/material/Stack'
@@ -41,7 +42,7 @@ import {
 } from '../../../../../components/category-icon'
 import { ErrorBoundary } from '../../../../../components/error-boundary'
 import { Icon } from '../../../../../components/icon'
-import { TextLink } from '../../../../../components/link'
+import { ButtonLink, TextLink } from '../../../../../components/link'
 import { SuspenseImage } from '../../../../../components/suspense-image'
 import {
 	getMatchingCategoryForDocument,
@@ -200,144 +201,171 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 	)
 
 	return sortedListData.length > 0 ? (
-		<List
-			component="ul"
-			ref={listRef}
-			disablePadding
-			onFocus={onFocus}
-			onMouseMove={onMouseMove}
-			sx={{
-				overflow: 'auto',
-				scrollbarColor: 'initial',
-			}}
-		>
+		<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
 			<Box
-				position="relative"
-				height={`${rowVirtualizer.getTotalSize()}px`}
-				width="100%"
+				display="flex"
+				flexDirection="row"
+				justifyContent="center"
+				padding={6}
 			>
-				{rowVirtualizer.getVirtualItems().map((row) => {
-					const { type, category, document } = sortedListData[row.index]!
-					const { createdAt, docId, createdBy } = document
-
-					const title =
-						type === 'track'
-							? t(m.trackItemTitle)
-							: category?.name || t(m.observationCategoryNameFallback)
-
-					return (
-						<Box
-							key={row.key}
-							sx={{
-								position: 'absolute',
-								top: 0,
-								left: 0,
-								width: '100%',
-								height: `${row.size}px`,
-								transform: `translateY(${row.start}px)`,
-							}}
-						>
-							<ListItemButton
-								data-datatype={type}
-								data-docid={docId}
-								disableGutters
-								disableTouchRipple
-								selected={docId === highlightedDocument?.docId}
-								onClick={() => {
-									if (type === 'observation') {
-										navigate({
-											to: './observations/$observationDocId',
-											params: { observationDocId: docId },
-										})
-									} else {
-										navigate({
-											to: './tracks/$trackDocId',
-											params: { trackDocId: docId },
-										})
-									}
-								}}
-								sx={{ borderBottom: `1px solid ${LIGHT_GREY}`, padding: 4 }}
-							>
-								<Suspense>
-									<SyncedIndicatorLine createdByDeviceId={createdBy} />
-								</Suspense>
-								<Stack direction="row" flex={1} gap={2} overflow="auto">
-									<Stack
-										direction="column"
-										flex={1}
-										justifyContent="center"
-										overflow="hidden"
-									>
-										<Typography
-											fontWeight={500}
-											textOverflow="ellipsis"
-											whiteSpace="nowrap"
-											overflow="hidden"
-										>
-											{title}
-										</Typography>
-
-										<Typography
-											textOverflow="ellipsis"
-											whiteSpace="nowrap"
-											overflow="hidden"
-										>
-											{formatDate(createdAt, {
-												year: 'numeric',
-												month: 'short',
-												day: '2-digit',
-												minute: '2-digit',
-												hour: '2-digit',
-												hourCycle: 'h12',
-											})}
-										</Typography>
-									</Stack>
-
-									<Box
-										display="flex"
-										justifyContent="center"
-										alignItems="center"
-										width={CATEGORY_CONTAINER_SIZE_PX}
-										sx={{ aspectRatio: 1 }}
-									>
-										<Box flex={1}>
-											<Suspense
-												fallback={
-													<Box
-														display="flex"
-														justifyContent="center"
-														alignItems="center"
-													>
-														<CircularProgress disableShrink size={30} />
-													</Box>
-												}
-											>
-												{type === 'observation' ? (
-													<ObservationCategory
-														attachments={document.attachments}
-														categoryColor={category?.color}
-														categoryName={category?.name}
-														categoryIconDocumentId={category?.iconRef?.docId}
-														projectId={projectId}
-													/>
-												) : (
-													<TrackCategory
-														categoryIconDocumentId={category?.iconRef?.docId}
-														categoryColor={category?.color}
-														categoryName={category?.name}
-														projectId={projectId}
-													/>
-												)}
-											</Suspense>
-										</Box>
-									</Box>
-								</Stack>
-							</ListItemButton>
-						</Box>
-					)
-				})}
+				<ButtonLink
+					fullWidth
+					startIcon={<Icon name="material-file-download" />}
+					variant="outlined"
+					to="/app/projects/$projectId/download"
+					params={{ projectId }}
+				>
+					{t(m.downloadObservations)}
+				</ButtonLink>
 			</Box>
-		</List>
+
+			<Divider sx={{ bgcolor: LIGHT_GREY }} />
+
+			<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
+				<List
+					component="ul"
+					ref={listRef}
+					disablePadding
+					onFocus={onFocus}
+					onMouseMove={onMouseMove}
+					sx={{
+						overflow: 'auto',
+						scrollbarColor: 'initial',
+					}}
+				>
+					<Box
+						position="relative"
+						height={`${rowVirtualizer.getTotalSize()}px`}
+						width="100%"
+					>
+						{rowVirtualizer.getVirtualItems().map((row) => {
+							const { type, category, document } = sortedListData[row.index]!
+							const { createdAt, docId, createdBy } = document
+
+							const title =
+								type === 'track'
+									? t(m.trackItemTitle)
+									: category?.name || t(m.observationCategoryNameFallback)
+
+							return (
+								<Box
+									key={row.key}
+									sx={{
+										position: 'absolute',
+										top: 0,
+										left: 0,
+										width: '100%',
+										height: `${row.size}px`,
+										transform: `translateY(${row.start}px)`,
+									}}
+								>
+									<ListItemButton
+										data-datatype={type}
+										data-docid={docId}
+										disableGutters
+										disableTouchRipple
+										selected={docId === highlightedDocument?.docId}
+										onClick={() => {
+											if (type === 'observation') {
+												navigate({
+													to: './observations/$observationDocId',
+													params: { observationDocId: docId },
+												})
+											} else {
+												navigate({
+													to: './tracks/$trackDocId',
+													params: { trackDocId: docId },
+												})
+											}
+										}}
+										sx={{ borderBottom: `1px solid ${LIGHT_GREY}`, padding: 4 }}
+									>
+										<Suspense>
+											<SyncedIndicatorLine createdByDeviceId={createdBy} />
+										</Suspense>
+										<Stack direction="row" flex={1} gap={2} overflow="auto">
+											<Stack
+												direction="column"
+												flex={1}
+												justifyContent="center"
+												overflow="hidden"
+											>
+												<Typography
+													fontWeight={500}
+													textOverflow="ellipsis"
+													whiteSpace="nowrap"
+													overflow="hidden"
+												>
+													{title}
+												</Typography>
+
+												<Typography
+													textOverflow="ellipsis"
+													whiteSpace="nowrap"
+													overflow="hidden"
+												>
+													{formatDate(createdAt, {
+														year: 'numeric',
+														month: 'short',
+														day: '2-digit',
+														minute: '2-digit',
+														hour: '2-digit',
+														hourCycle: 'h12',
+													})}
+												</Typography>
+											</Stack>
+
+											<Box
+												display="flex"
+												justifyContent="center"
+												alignItems="center"
+												width={CATEGORY_CONTAINER_SIZE_PX}
+												sx={{ aspectRatio: 1 }}
+											>
+												<Box flex={1}>
+													<Suspense
+														fallback={
+															<Box
+																display="flex"
+																justifyContent="center"
+																alignItems="center"
+															>
+																<CircularProgress disableShrink size={30} />
+															</Box>
+														}
+													>
+														{type === 'observation' ? (
+															<ObservationCategory
+																attachments={document.attachments}
+																categoryColor={category?.color}
+																categoryName={category?.name}
+																categoryIconDocumentId={
+																	category?.iconRef?.docId
+																}
+																projectId={projectId}
+															/>
+														) : (
+															<TrackCategory
+																categoryIconDocumentId={
+																	category?.iconRef?.docId
+																}
+																categoryColor={category?.color}
+																categoryName={category?.name}
+																projectId={projectId}
+															/>
+														)}
+													</Suspense>
+												</Box>
+											</Box>
+										</Stack>
+									</ListItemButton>
+								</Box>
+							)
+						})}
+					</Box>
+				</List>
+			</Box>
+		</Box>
 	) : (
 		<AddObservationsCard projectId={projectId} />
 	)
@@ -672,5 +700,10 @@ const m = defineMessages({
 		defaultMessage: 'Icon for {name} category',
 		description:
 			'Alt text for icon image displayed for category (used for accessibility tools).',
+	},
+	downloadObservations: {
+		id: 'routes.app.projects.$projectId.-displayed.data.list.downloadObservations',
+		defaultMessage: 'Download Observations',
+		description: 'Link text to navigate to download observations page.',
 	},
 })

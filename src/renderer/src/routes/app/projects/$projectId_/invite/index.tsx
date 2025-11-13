@@ -14,7 +14,7 @@ import { ButtonLink } from '../../../../../components/link'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
 
 export const Route = createFileRoute('/app/projects/$projectId/invite/')({
-	loader: async ({ context, params }) => {
+	beforeLoad: async ({ context, params }) => {
 		const { projectApi, queryClient } = context
 		const { projectId } = params
 

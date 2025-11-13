@@ -21,7 +21,8 @@ import type { NewClientMessage } from '../services/core.ts'
 import type { AppConfig, AppType, SentryEnvironment } from '../shared/app.ts'
 import {
 	DownloadURLParamsSchema,
-	FilesSelectParamsSchema,
+	FilesSelectDirectoryParamsSchema,
+	FilesSelectFileParamsSchema,
 	ImportSMPFileParamsSchema,
 } from '../shared/ipc.ts'
 import { IntlManager } from './intl-manager.ts'
@@ -347,22 +348,48 @@ function initMainWindow({
 	})
 
 	// Set up IPC specific to the main window
-	mainWindow.webContents.ipc.handle('files:select', async (_event, params) => {
-		v.assert(FilesSelectParamsSchema, params)
+	mainWindow.webContents.ipc.handle(
+		'files:select_file',
+		async (_event, params) => {
+			v.assert(FilesSelectFileParamsSchema, params)
 
-		const result = await dialog.showOpenDialog(mainWindow, {
-			properties: ['openFile'],
-			filters: params?.extensionFilters
-				? [{ name: 'Custom file type', extensions: params.extensionFilters }]
-				: undefined,
-		})
+			const result = await dialog.showOpenDialog(mainWindow, {
+				buttonLabel: params?.actionLabel,
+				properties: ['openFile'],
+				filters: params?.extensionFilters
+					? [{ name: 'Custom file type', extensions: params.extensionFilters }]
+					: undefined,
+			})
 
-		const selectedFilePath = result.filePaths[0]
+			const selectedFilePath = result.filePaths[0]
 
-		if (!selectedFilePath) return undefined
+			if (!selectedFilePath) {
+				return undefined
+			}
 
-		return { name: basename(selectedFilePath), path: selectedFilePath }
-	})
+			return { name: basename(selectedFilePath), path: selectedFilePath }
+		},
+	)
+
+	mainWindow.webContents.ipc.handle(
+		'files:select_directory',
+		async (_event, params) => {
+			v.assert(FilesSelectDirectoryParamsSchema, params)
+
+			const result = await dialog.showOpenDialog(mainWindow, {
+				buttonLabel: params?.actionLabel,
+				properties: ['openDirectory', 'createDirectory', 'promptToCreate'],
+			})
+
+			const selectedFilePath = result.filePaths[0]
+
+			if (!selectedFilePath) {
+				return undefined
+			}
+
+			return { name: basename(selectedFilePath), path: selectedFilePath }
+		},
+	)
 
 	// NOTE: Must match what's set up in core service (see `CUSTOM_MAPS_DIR_NAME` variable)
 	const customMapsDirectory = join(comapeoUserDataDirectory, 'maps')
