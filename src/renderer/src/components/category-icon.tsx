@@ -34,7 +34,6 @@ export function CategoryIconContainer({
 			bgcolor={WHITE}
 			borderRadius="50%"
 			padding={padding}
-			overflow="hidden"
 			border={`3px solid ${color}`}
 			boxShadow={
 				applyBoxShadow ? `0px 0px 10px ${alpha(color, 0.25)}` : undefined
@@ -75,7 +74,14 @@ export function CategoryIconImage({
 				/>
 			)}
 		>
-			<Suspense fallback={<CircularProgress disableShrink />}>
+			<Suspense
+				fallback={
+					<CircularProgress
+						disableShrink
+						size={imageStyle?.width || imageStyle?.height}
+					/>
+				}
+			>
 				<SuspenseImage src={iconUrl} alt={altText} style={imageStyle} />
 			</Suspense>
 		</ErrorBoundary>
@@ -116,7 +122,14 @@ function LegacyCategoryIconImage({
 				</Box>
 			)}
 		>
-			<Suspense fallback={<CircularProgress disableShrink />}>
+			<Suspense
+				fallback={
+					<CircularProgress
+						disableShrink
+						size={imageStyle?.width || imageStyle?.height}
+					/>
+				}
+			>
 				<SuspenseImage src={iconUrl} alt={altText} style={imageStyle} />
 			</Suspense>
 		</ErrorBoundary>
