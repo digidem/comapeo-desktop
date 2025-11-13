@@ -443,10 +443,14 @@ export function DisplayedDataMap() {
 			'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name' &&
 		currentRoute.routeId !== '/app/projects/$projectId/tracks/$trackDocId/'
 
-	const enableMouseInteractions =
+	const enableMouseHoverInteractions =
 		currentRoute.routeId === '/app/projects/$projectId/'
 
-	const enableMovementInteractions =
+	const enableMouseClickInteractions =
+		currentRoute.routeId === '/app/projects/$projectId/' ||
+		currentRoute.routeId === '/app/projects/$projectId/download'
+
+	const enableMapMovementInteractions =
 		currentRoute.routeId === '/app/projects/$projectId/' ||
 		currentRoute.routeId === '/app/projects/$projectId/download'
 
@@ -484,16 +488,18 @@ export function DisplayedDataMap() {
 				onLoad={() => {
 					setMapLoaded(true)
 				}}
-				onClick={enableMouseInteractions ? onMapClick : undefined}
-				onMouseMove={enableMouseInteractions ? onMapMouseMove : undefined}
-				dragPan={enableMovementInteractions}
-				scrollZoom={enableMovementInteractions}
+				onClick={enableMouseClickInteractions ? onMapClick : undefined}
+				onMouseMove={enableMouseHoverInteractions ? onMapMouseMove : undefined}
+				dragPan={enableMapMovementInteractions}
+				scrollZoom={enableMapMovementInteractions}
 				touchPitch={false}
 				dragRotate={false}
 				pitchWithRotate={false}
 				touchZoomRotate={false}
 				cursor={
-					enableMouseInteractions || enableMovementInteractions
+					enableMouseClickInteractions ||
+					enableMouseHoverInteractions ||
+					enableMapMovementInteractions
 						? undefined
 						: 'default'
 				}
@@ -548,7 +554,9 @@ export function DisplayedDataMap() {
 					<Suspense>
 						<Marker
 							style={
-								enableMouseInteractions || enableMovementInteractions
+								enableMouseClickInteractions ||
+								enableMouseHoverInteractions ||
+								enableMapMovementInteractions
 									? undefined
 									: { cursor: 'default' }
 							}
