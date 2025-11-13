@@ -6,9 +6,13 @@ import type { SelectedFile } from '../shared/ipc.ts'
 
 export type RuntimeApi = {
 	// Files
-	selectFile: (
-		extensionFilters?: Array<string>,
-	) => Promise<SelectedFile | undefined>
+	selectFile: (opts?: {
+		actionLabel?: string
+		extensionFilters?: Array<string>
+	}) => Promise<SelectedFile | undefined>
+	selectDirectory: (opts?: {
+		actionLabel?: string
+	}) => Promise<SelectedFile | undefined>
 	importSMPFile: (filePath: string) => Promise<void>
 	removeSMPFile: () => Promise<void>
 
@@ -23,6 +27,7 @@ export type RuntimeApi = {
 	// Shell
 	downloadURL: (params: { url: string; saveAs: boolean }) => Promise<void>
 	openExternalURL: (url: string) => Promise<void>
+	showItemInFolder: (path: string) => Promise<void>
 
 	// Settings (get)
 	getCoordinateFormat: () => Promise<CoordinateFormat>

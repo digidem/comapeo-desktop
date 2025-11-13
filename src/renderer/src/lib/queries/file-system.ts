@@ -9,11 +9,23 @@ import type { SelectedFile } from '../../../../shared/ipc'
 export function selectFileMutationOptions(): UseMutationOptions<
 	SelectedFile | undefined,
 	Error,
-	{ extensionFilters: Array<string> } | undefined
+	{ actionLabel?: string; extensionFilters: Array<string> } | undefined
 > {
 	return {
 		mutationFn: async (opts) => {
-			return window.runtime.selectFile(opts?.extensionFilters)
+			return window.runtime.selectFile(opts)
+		},
+	}
+}
+
+export function selectDirectoryMutationOptions(): UseMutationOptions<
+	SelectedFile | undefined,
+	Error,
+	{ actionLabel?: string } | undefined
+> {
+	return {
+		mutationFn: async (opts) => {
+			return window.runtime.selectDirectory(opts)
 		},
 	}
 }

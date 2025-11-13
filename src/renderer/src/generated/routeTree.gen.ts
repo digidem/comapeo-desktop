@@ -30,6 +30,7 @@ import { Route as AppSettingsBackgroundMapRouteImport } from './../routes/app/se
 import { Route as AppProjectsProjectIdRouteRouteImport } from './../routes/app/projects/$projectId/route'
 import { Route as OnboardingProjectCreateIndexRouteImport } from './../routes/onboarding/project/create/index'
 import { Route as AppProjectsProjectIdIndexRouteImport } from './../routes/app/projects/$projectId/index'
+import { Route as AppProjectsProjectIdDownloadRouteImport } from './../routes/app/projects/$projectId/download'
 import { Route as AppProjectsProjectIdSettingsRouteRouteImport } from './../routes/app/projects/$projectId_/settings/route'
 import { Route as AppProjectsProjectIdInviteRouteRouteImport } from './../routes/app/projects/$projectId_/invite/route'
 import { Route as OnboardingProjectJoinInviteIdIndexRouteImport } from './../routes/onboarding/project/join.$inviteId/index'
@@ -159,6 +160,12 @@ const AppProjectsProjectIdIndexRoute =
   AppProjectsProjectIdIndexRouteImport.update({
     id: '/',
     path: '/',
+    getParentRoute: () => AppProjectsProjectIdRouteRoute,
+  } as any)
+const AppProjectsProjectIdDownloadRoute =
+  AppProjectsProjectIdDownloadRouteImport.update({
+    id: '/download',
+    path: '/download',
     getParentRoute: () => AppProjectsProjectIdRouteRoute,
   } as any)
 const AppProjectsProjectIdSettingsRouteRoute =
@@ -300,6 +307,7 @@ export interface FileRoutesByFullPath {
   '/onboarding/project/': typeof OnboardingProjectIndexRoute
   '/app/projects/$projectId/invite': typeof AppProjectsProjectIdInviteRouteRouteWithChildren
   '/app/projects/$projectId/settings': typeof AppProjectsProjectIdSettingsRouteRouteWithChildren
+  '/app/projects/$projectId/download': typeof AppProjectsProjectIdDownloadRoute
   '/app/projects/$projectId/': typeof AppProjectsProjectIdIndexRoute
   '/onboarding/project/create': typeof OnboardingProjectCreateIndexRoute
   '/app/projects/$projectId/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
@@ -337,6 +345,7 @@ export interface FileRoutesByTo {
   '/app/settings/test-data': typeof AppSettingsTestDataRoute
   '/app/settings': typeof AppSettingsIndexRoute
   '/onboarding/project': typeof OnboardingProjectIndexRoute
+  '/app/projects/$projectId/download': typeof AppProjectsProjectIdDownloadRoute
   '/app/projects/$projectId': typeof AppProjectsProjectIdIndexRoute
   '/onboarding/project/create': typeof OnboardingProjectCreateIndexRoute
   '/app/projects/$projectId/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
@@ -380,6 +389,7 @@ export interface FileRoutesById {
   '/onboarding/project/': typeof OnboardingProjectIndexRoute
   '/app/projects/$projectId/invite': typeof AppProjectsProjectIdInviteRouteRouteWithChildren
   '/app/projects/$projectId/settings': typeof AppProjectsProjectIdSettingsRouteRouteWithChildren
+  '/app/projects/$projectId/download': typeof AppProjectsProjectIdDownloadRoute
   '/app/projects/$projectId/': typeof AppProjectsProjectIdIndexRoute
   '/onboarding/project/create/': typeof OnboardingProjectCreateIndexRoute
   '/app/projects/$projectId/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
@@ -424,6 +434,7 @@ export interface FileRouteTypes {
     | '/onboarding/project/'
     | '/app/projects/$projectId/invite'
     | '/app/projects/$projectId/settings'
+    | '/app/projects/$projectId/download'
     | '/app/projects/$projectId/'
     | '/onboarding/project/create'
     | '/app/projects/$projectId/settings/categories'
@@ -461,6 +472,7 @@ export interface FileRouteTypes {
     | '/app/settings/test-data'
     | '/app/settings'
     | '/onboarding/project'
+    | '/app/projects/$projectId/download'
     | '/app/projects/$projectId'
     | '/onboarding/project/create'
     | '/app/projects/$projectId/settings/categories'
@@ -503,6 +515,7 @@ export interface FileRouteTypes {
     | '/onboarding/project/'
     | '/app/projects/$projectId/invite'
     | '/app/projects/$projectId/settings'
+    | '/app/projects/$projectId/download'
     | '/app/projects/$projectId/'
     | '/onboarding/project/create/'
     | '/app/projects/$projectId/settings/categories'
@@ -680,6 +693,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsProjectIdIndexRouteImport
       parentRoute: typeof AppProjectsProjectIdRouteRoute
     }
+    '/app/projects/$projectId/download': {
+      id: '/app/projects/$projectId/download'
+      path: '/download'
+      fullPath: '/app/projects/$projectId/download'
+      preLoaderRoute: typeof AppProjectsProjectIdDownloadRouteImport
+      parentRoute: typeof AppProjectsProjectIdRouteRoute
+    }
     '/app/projects/$projectId/settings': {
       id: '/app/projects/$projectId/settings'
       path: '/projects/$projectId/settings'
@@ -836,6 +856,7 @@ const AppSettingsRouteRouteWithChildren =
   AppSettingsRouteRoute._addFileChildren(AppSettingsRouteRouteChildren)
 
 interface AppProjectsProjectIdRouteRouteChildren {
+  AppProjectsProjectIdDownloadRoute: typeof AppProjectsProjectIdDownloadRoute
   AppProjectsProjectIdIndexRoute: typeof AppProjectsProjectIdIndexRoute
   AppProjectsProjectIdObservationsObservationDocIdIndexRoute: typeof AppProjectsProjectIdObservationsObservationDocIdIndexRoute
   AppProjectsProjectIdTracksTrackDocIdIndexRoute: typeof AppProjectsProjectIdTracksTrackDocIdIndexRoute
@@ -844,6 +865,7 @@ interface AppProjectsProjectIdRouteRouteChildren {
 
 const AppProjectsProjectIdRouteRouteChildren: AppProjectsProjectIdRouteRouteChildren =
   {
+    AppProjectsProjectIdDownloadRoute: AppProjectsProjectIdDownloadRoute,
     AppProjectsProjectIdIndexRoute: AppProjectsProjectIdIndexRoute,
     AppProjectsProjectIdObservationsObservationDocIdIndexRoute:
       AppProjectsProjectIdObservationsObservationDocIdIndexRoute,
