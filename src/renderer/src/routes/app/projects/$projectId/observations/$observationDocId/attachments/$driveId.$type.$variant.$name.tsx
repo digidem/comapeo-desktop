@@ -1,10 +1,12 @@
 import { Suspense, useState } from 'react'
 import {
 	useAttachmentUrl,
+	useOwnDeviceInfo,
 	useOwnRoleInProject,
 	useSingleDocByDocId,
 	useUpdateDocument,
 } from '@comapeo/core-react'
+import type { Observation } from '@comapeo/schema'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -106,6 +108,31 @@ export const Route = createFileRoute(
 				params: { projectId, observationDocId },
 			})
 		}
+	},
+	loader: async ({ context, params }) => {
+		const { clientApi, projectApi, queryClient } = context
+
+		const { projectId } = params
+
+		await Promise.all([
+			queryClient.ensureQueryData({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
+				queryFn: async () => {
+					return clientApi.getDeviceInfo()
+				},
+			}),
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'role',
+				],
+				queryFn: async () => {
+					return projectApi.$getOwnRole()
+				},
+			}),
+		])
 	},
 	component: RouteComponent,
 })
@@ -221,12 +248,29 @@ function AttachmentPanel({
 
 	const router = useRouter()
 
+	const { data: lang } = useSuspenseQuery({
+		...getLocaleStateQueryOptions(),
+		select: (state) => {
+			return state.value
+		},
+	})
+
+	const { data: observation } = useSingleDocByDocId({
+		projectId,
+		docType: 'observation',
+		docId: observationDocId,
+		lang,
+	})
+
 	const { data: ownRole } = useOwnRoleInProject({ projectId })
+	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
 	const errorResetKey = `${blobId.driveId}/${blobId.type}/${blobId.variant}/${blobId.name}`
 
 	const canEdit =
-		ownRole.roleId === COORDINATOR_ROLE_ID || ownRole.roleId === CREATOR_ROLE_ID
+		ownRole.roleId === COORDINATOR_ROLE_ID ||
+		ownRole.roleId === CREATOR_ROLE_ID ||
+		observation.createdBy === ownDeviceInfo.deviceId
 
 	return (
 		<Stack direction="column" flex={1} overflow="auto">
@@ -370,7 +414,7 @@ function AttachmentPanel({
 							{canEdit ? (
 								<DeleteButton
 									projectId={projectId}
-									observationDocId={observationDocId}
+									observation={observation}
 									blobId={blobId}
 									onSuccess={onDeleteSuccess}
 								/>
@@ -392,32 +436,18 @@ const DELETE_ATTACHMENT_MUTATION_KEY = createGlobalMutationsKey([
 
 function DeleteButton({
 	blobId,
-	observationDocId,
+	observation,
 	onSuccess,
 	projectId,
 }: {
 	blobId: BlobId
-	observationDocId: string
+	observation: Observation
 	onSuccess: () => void
 	projectId: string
 }) {
 	const [showConfirmation, setShowConfirmation] = useState(false)
 
 	const { formatMessage: t } = useIntl()
-
-	const { data: lang } = useSuspenseQuery({
-		...getLocaleStateQueryOptions(),
-		select: (state) => {
-			return state.value
-		},
-	})
-
-	const { data: observation } = useSingleDocByDocId({
-		projectId,
-		docType: 'observation',
-		docId: observationDocId,
-		lang,
-	})
 
 	const updateObservation = useUpdateDocument({
 		projectId,
