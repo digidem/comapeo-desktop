@@ -39,6 +39,18 @@
     "description": "Label text for download button",
     "message": "Pakua"
   },
+  "routes.app.projects.$projectId.download.download": {
+    "description": "Title of the download page.",
+    "message": "Pakua"
+  },
+  "routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "Imekamilika"
+  },
+  "routes.app.projects.$projectId.download.successPanelTitle": {
+    "description": "Title text for success panel.",
+    "message": "Imefaulu!"
+  },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
     "message": "Alika"
@@ -46,6 +58,18 @@
   "routes.app.projects.$projectId.index.view": {
     "description": "Link text to navigate to project settings page.",
     "message": "Tazama"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Open Settings."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Uchunguzi"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "Badilisha"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
