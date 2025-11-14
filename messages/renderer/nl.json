@@ -89,6 +89,10 @@
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Pictogram voor {name} categorie"
   },
+  "routes.app.projects.$projectId.-displayed.data.list.downloadObservations": {
+    "description": "Link text to navigate to download observations page.",
+    "message": "Waarnemingen downloaden"
+  },
   "routes.app.projects.$projectId.-displayed.data.list.goToExchange": {
     "description": "Link text to navigate to Exchange page.",
     "message": "Ga naar Exchange"
@@ -153,6 +157,66 @@
     "description": "Button text for the successful deletion panel.",
     "message": "Terug naar waarneming"
   },
+  "routes.app.projects.$projectId.download.allObservationsOptionDescription": {
+    "description": "Description of the all observations download option.",
+    "message": "Alleen tekst als een GeoJSON-bestand"
+  },
+  "routes.app.projects.$projectId.download.allObservationsOptionTitle": {
+    "description": "Title of the all observations download option.",
+    "message": "Alle waarnemingen"
+  },
+  "routes.app.projects.$projectId.download.allObservationsWithMedia": {
+    "description": "Title of the all observations with media download option.",
+    "message": "Alle waarnemingen met media"
+  },
+  "routes.app.projects.$projectId.download.allObservationsWithMediaOptionDescription": {
+    "description": "Description of the all observations with media download option.",
+    "message": "Afbeeldingen, audio en video in een .zip-bestand"
+  },
+  "routes.app.projects.$projectId.download.download": {
+    "description": "Title of the download page.",
+    "message": "Downloaden"
+  },
+  "routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
+    "description": "Accessible label of download options form input.",
+    "message": "Gegevens om te downloaden"
+  },
+  "routes.app.projects.$projectId.download.navTitle": {
+    "description": "Title of the download observations page.",
+    "message": "Waarnemingen downloaden"
+  },
+  "routes.app.projects.$projectId.download.successPanelDescriptionObservations": {
+    "description": "Description text for success panel when downloading observations.",
+    "message": "<b>Alle waarnemingen</b><br></br> zijn gedownload naar uw apparaat."
+  },
+  "routes.app.projects.$projectId.download.successPanelDescriptionObservationsWithMedia": {
+    "description": "Description text for success panel when downloading observations with media.",
+    "message": "<b>Alle waarnemingen met media</b><br></br> zijn gedownload naar uw apparaat."
+  },
+  "routes.app.projects.$projectId.download.successPanelDescriptionTracks": {
+    "description": "Description text for success panel when downloading tracks.",
+    "message": "<b>Alle tracks</b><br></br> zijn gedownload naar uw apparaat."
+  },
+  "routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "Voltooid"
+  },
+  "routes.app.projects.$projectId.download.successPanelTitle": {
+    "description": "Title text for success panel.",
+    "message": "Voltooid!"
+  },
+  "routes.app.projects.$projectId.download.successPanelViewInFileManager": {
+    "description": "Button text for viewing the downloaded file in the system file manager.",
+    "message": "Bekijken in bestandsbeheer"
+  },
+  "routes.app.projects.$projectId.download.tracksOptionDescription": {
+    "description": "Description of tracks option.",
+    "message": "Alleen tekst als een GeoJSON-bestand"
+  },
+  "routes.app.projects.$projectId.download.tracksOptionTitle": {
+    "description": "Title of the tracks option.",
+    "message": "Nummers"
+  },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
     "message": "Uitnodigen"
@@ -173,9 +237,29 @@
     "description": "Indicates that user is a participant on the current project.",
     "message": "Je bent een deelnemer in dit project."
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Pictogram voor {name} categorie"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Open Settings."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
+    "description": "Title for edit category panel.",
+    "message": "Wijzig categorie"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Waarneming"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Pictogram voor {name} categorie"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "Wijzigen"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
