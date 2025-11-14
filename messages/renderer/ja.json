@@ -85,6 +85,10 @@
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "{name} カテゴリのアイコン"
   },
+  "routes.app.projects.$projectId.-displayed.data.list.downloadObservations": {
+    "description": "Link text to navigate to download observations page.",
+    "message": "観察記録をダウンロード"
+  },
   "routes.app.projects.$projectId.-displayed.data.list.goToExchange": {
     "description": "Link text to navigate to Exchange page.",
     "message": "取引に移動"
@@ -149,6 +153,66 @@
     "description": "Button text for the successful deletion panel.",
     "message": "観察記録に戻る"
   },
+  "routes.app.projects.$projectId.download.allObservationsOptionDescription": {
+    "description": "Description of the all observations download option.",
+    "message": "GeoJSONファイルとしてのみテキスト"
+  },
+  "routes.app.projects.$projectId.download.allObservationsOptionTitle": {
+    "description": "Title of the all observations download option.",
+    "message": "すべての観察記録"
+  },
+  "routes.app.projects.$projectId.download.allObservationsWithMedia": {
+    "description": "Title of the all observations with media download option.",
+    "message": "すべての観察記録とメディア"
+  },
+  "routes.app.projects.$projectId.download.allObservationsWithMediaOptionDescription": {
+    "description": "Description of the all observations with media download option.",
+    "message": ".zip ファイル内のイメージ、オーディオ、およびビデオ"
+  },
+  "routes.app.projects.$projectId.download.download": {
+    "description": "Title of the download page.",
+    "message": "ダウンロード"
+  },
+  "routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
+    "description": "Accessible label of download options form input.",
+    "message": "ダウンロードするデータ"
+  },
+  "routes.app.projects.$projectId.download.navTitle": {
+    "description": "Title of the download observations page.",
+    "message": "観察記録をダウンロード"
+  },
+  "routes.app.projects.$projectId.download.successPanelDescriptionObservations": {
+    "description": "Description text for success panel when downloading observations.",
+    "message": "<b>すべての観察記録</b><br></br> がお使いのデバイスにダウンロードされました。"
+  },
+  "routes.app.projects.$projectId.download.successPanelDescriptionObservationsWithMedia": {
+    "description": "Description text for success panel when downloading observations with media.",
+    "message": "<b></b><br></br> のすべての観察記録がお使いのデバイスにダウンロードされました。"
+  },
+  "routes.app.projects.$projectId.download.successPanelDescriptionTracks": {
+    "description": "Description text for success panel when downloading tracks.",
+    "message": "<b>すべてのトラック</b><br></br> はお使いのデバイスにダウンロードされました。"
+  },
+  "routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "完了"
+  },
+  "routes.app.projects.$projectId.download.successPanelTitle": {
+    "description": "Title text for success panel.",
+    "message": "成功！"
+  },
+  "routes.app.projects.$projectId.download.successPanelViewInFileManager": {
+    "description": "Button text for viewing the downloaded file in the system file manager.",
+    "message": "ファイルマネージャーで表示"
+  },
+  "routes.app.projects.$projectId.download.tracksOptionDescription": {
+    "description": "Description of tracks option.",
+    "message": "GeoJSONファイルとしてのみテキスト"
+  },
+  "routes.app.projects.$projectId.download.tracksOptionTitle": {
+    "description": "Title of the tracks option.",
+    "message": "トラック"
+  },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
     "message": "招待"
@@ -169,9 +233,29 @@
     "description": "Indicates that user is a participant on the current project.",
     "message": "あなたはこのプロジェクトの参加者です。"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "{name} カテゴリのアイコン"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Open Settings."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
+    "description": "Title for edit category panel.",
+    "message": "カテゴリの変更"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "観察記録"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "{name} カテゴリのアイコン"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "変更"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
