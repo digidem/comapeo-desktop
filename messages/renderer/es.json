@@ -89,6 +89,10 @@
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icono para la categoría {name}"
   },
+  "routes.app.projects.$projectId.-displayed.data.list.downloadObservations": {
+    "description": "Link text to navigate to download observations page.",
+    "message": "Descargar observaciones"
+  },
   "routes.app.projects.$projectId.-displayed.data.list.goToExchange": {
     "description": "Link text to navigate to Exchange page.",
     "message": "Ir a Exchange"
@@ -153,6 +157,58 @@
     "description": "Button text for the successful deletion panel.",
     "message": "Volver a la observación"
   },
+  "routes.app.projects.$projectId.download.allObservationsOptionDescription": {
+    "description": "Description of the all observations download option.",
+    "message": "Texto sólo como un archivo GeoJSON"
+  },
+  "routes.app.projects.$projectId.download.allObservationsOptionTitle": {
+    "description": "Title of the all observations download option.",
+    "message": "Todas las observaciones"
+  },
+  "routes.app.projects.$projectId.download.allObservationsWithMedia": {
+    "description": "Title of the all observations with media download option.",
+    "message": "Todas las observaciones con medios"
+  },
+  "routes.app.projects.$projectId.download.allObservationsWithMediaOptionDescription": {
+    "description": "Description of the all observations with media download option.",
+    "message": "Imágenes, audio y vídeo en un archivo .zip"
+  },
+  "routes.app.projects.$projectId.download.download": {
+    "description": "Title of the download page.",
+    "message": "Descargar"
+  },
+  "routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
+    "description": "Accessible label of download options form input.",
+    "message": "Datos a descargar"
+  },
+  "routes.app.projects.$projectId.download.navTitle": {
+    "description": "Title of the download observations page.",
+    "message": "Descargar observaciones"
+  },
+  "routes.app.projects.$projectId.download.successPanelDescriptionTracks": {
+    "description": "Description text for success panel when downloading tracks.",
+    "message": "<b>Todas las pistas</b><br></br> han sido descargadas a tu dispositivo."
+  },
+  "routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "Listo"
+  },
+  "routes.app.projects.$projectId.download.successPanelTitle": {
+    "description": "Title text for success panel.",
+    "message": "¡Éxito!"
+  },
+  "routes.app.projects.$projectId.download.successPanelViewInFileManager": {
+    "description": "Button text for viewing the downloaded file in the system file manager.",
+    "message": "Ver en el gestor de archivos"
+  },
+  "routes.app.projects.$projectId.download.tracksOptionDescription": {
+    "description": "Description of tracks option.",
+    "message": "Texto sólo como un archivo GeoJSON"
+  },
+  "routes.app.projects.$projectId.download.tracksOptionTitle": {
+    "description": "Title of the tracks option.",
+    "message": "Trayectos"
+  },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
     "message": "Invitar"
@@ -173,9 +229,29 @@
     "description": "Indicates that user is a participant on the current project.",
     "message": "Eres un participante en este proyecto."
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Icono para la categoría {name}"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Abrir ajustes."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
+    "description": "Title for edit category panel.",
+    "message": "Cambiar categoría"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Observación"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icono para la categoría {name}"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "Cambiar"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
