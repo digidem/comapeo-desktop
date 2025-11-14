@@ -3,6 +3,10 @@
     "description": "Button text for the close button in the error dialog.",
     "message": "Open Settings"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Open Settings."
+  },
   "routes.app.projects.$projectId_.exchange.index.complete": {
     "description": "Text displayed when exchange is completed with all devices.",
     "message": "Complete! You're up to date"
