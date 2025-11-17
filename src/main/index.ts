@@ -58,8 +58,8 @@ if (appConfig.appType === 'development') {
 	app.setName(`${app.name} Dev`)
 
 	// Update some of the application paths used during development. This helps to avoid conflicts with production installations and helps debugging in some cases.
-	//   - Sets the user data directory to `<root>/data/`, which can be overridden if `USER_DATA_PATH` is specified.
-	//   - Sets the logs directory to `<root>/logs/` for macOS.
+	//   - Sets the user data directory to `<project_root>/data/default/`, which can be overridden if `USER_DATA_PATH` is specified.
+	//   - Sets the logs directory to `<project_root>/logs/default/` for macOS.
 	const appPath = app.getAppPath()
 
 	let userDataPath: string
@@ -69,7 +69,7 @@ if (appConfig.appType === 'development') {
 			? path.resolve(appConfig.userDataPath)
 			: path.resolve(appPath, appConfig.userDataPath)
 	} else {
-		userDataPath = path.join(appPath, 'data')
+		userDataPath = path.join(appPath, 'data', 'default')
 	}
 
 	log(`Setting user data path to ${userDataPath}`)
@@ -78,7 +78,7 @@ if (appConfig.appType === 'development') {
 
 	// Logs are stored within the user data path on Windows and Linux, so no need to adjust it here.
 	if (platform() === 'darwin') {
-		const logsPath = path.join(appPath, 'logs')
+		const logsPath = path.join(appPath, 'logs', 'default')
 
 		log(`Setting logs path to ${logsPath}`)
 
