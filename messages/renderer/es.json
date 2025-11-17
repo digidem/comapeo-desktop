@@ -783,7 +783,7 @@
   },
   "routes.app.settings.background-map.customMapInfoError": {
     "description": "Text displayed when info about a custom map cannot be retrieved.",
-    "message": "No se pudo obtener la información del mapa personalizado del archivo. Por favor, elimínala o elige un archivo diferente."
+    "message": "No se pudo obtener información del archivo del mapa personalizado. Por favor, elimínalo o elige un archivo diferente."
   },
   "routes.app.settings.background-map.dateAdded": {
     "description": "Column label text for date added.",
@@ -1076,7 +1076,7 @@
     "message": "Tú tienes el control"
   },
   "routes.onboarding.privacy-policy.controlDescription": {
-    "message": "Puede optar por no enviar cualquier información a Awana Digital.<br></br><br></br>Usted elige dónde se almacenan sus datos y con quién se comparte. Puedes elegir compartir datos anónimos y resumidos sobre cómo usar CoMapeo con Awana Digital.<br></br><br></br>Siempre seremos transparentes sobre la información que decidas compartir con el fin de mejorar la aplicación, y esta información nunca incluirá fotos, vídeos, audio, texto o ubicaciones precisas que haya introducido en CoMapeo."
+    "message": "Puede optar por no enviar cualquier información a Awana Digital.<br></br><br></br>Tú eliges dónde se almacenan tus datos y con quién se comparte. Puedes elegir compartir datos anónimos y resumidos sobre cómo usas CoMapeo con Awana Digital.<br></br><br></br>Siempre seremos transparentes sobre la información que decidas compartir con el fin de mejorar la aplicación. Esta información nunca incluirá fotos, vídeos, audios, texto o ubicaciones precisas que hayas introducido en CoMapeo."
   },
   "routes.onboarding.privacy-policy.country": {
     "message": "<b>País</b>: El país donde se está utilizando CoMapeo."
@@ -1232,7 +1232,7 @@
     "message": "Ver y administrar las observaciones recolectadas con CoMapeo Mobile."
   },
   "routes.welcome.collaborate": {
-    "message": "Colabora con otras personas"
+    "message": "Colabora en proyectos"
   },
   "routes.welcome.comapeoDesktop": {
     "message": "<b><orange>Co</orange>Mapeo</b> <blue>Escritorio</blue>"
@@ -1244,7 +1244,7 @@
     "message": "¡Comienza ya!"
   },
   "routes.welcome.mapAnywhere": {
-    "message": "Mapea en cualquier lugar y en todas partes"
+    "message": "Mapea en cualquier lugar y en todos lados"
   },
   "routes.welcome.ownData": {
     "message": "Controla tu información y hazla tuya"
