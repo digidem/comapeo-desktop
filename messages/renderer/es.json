@@ -167,7 +167,7 @@
   },
   "routes.app.projects.$projectId.download.allObservationsWithMedia": {
     "description": "Title of the all observations with media download option.",
-    "message": "Todas las observaciones con medios"
+    "message": "Todas las observaciones y archivos multimedia"
   },
   "routes.app.projects.$projectId.download.allObservationsWithMediaOptionDescription": {
     "description": "Description of the all observations with media download option.",
@@ -699,7 +699,7 @@
   },
   "routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionTitle": {
     "description": "Title of the coordinators section in the team page.",
-    "message": "Persona Coordinadora"
+    "message": "Coordinadores"
   },
   "routes.app.projects.$projectId_.settings.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
@@ -899,7 +899,7 @@
   },
   "routes.app.settings.index.description": {
     "description": "Description of the settings page.",
-    "message": "CoMapeo está configurado a lo siguiente."
+    "message": "CoMapeo está configurado para lo siguiente."
   },
   "routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to device name settings page.",
@@ -1124,7 +1124,7 @@
     "message": "¿Qué no se recopila?"
   },
   "routes.onboarding.privacy-policy.whatIsNotCollectedDescription": {
-    "message": "No recopilamos ningún dato personal ni ningún dato que pueda ser utilizado para identificar o rastrear a una persona usuaria o un dispositivo. Los identificadores de dispositivo utilizados para agregar información son aleatorios, anónimos, y cambian cada mes. La información de diagnóstico no incluye datos sobre cómo usas la aplicación, y nunca incluye ninguno de los datos que has recopilado con la aplicación. No recolectamos tu ubicación precisa o gruesa, sólo el país donde estás utilizando CoMapeo."
+    "message": "No recopilamos ningún dato personal ni ningún dato que pueda ser utilizado para identificar o rastrear a un usuario o un dispositivo. Los identificadores de dispositivo utilizados para agregar información son aleatorios, anónimos, y cambian cada mes. La información de diagnóstico no incluye datos sobre cómo usas la aplicación, y nunca incluye los datos que has recopilado. No recolectamos tu ubicación precisa o aproximada, sólo el país donde estás utilizando CoMapeo."
   },
   "routes.onboarding.privacy-policy.whyIsThisDataCollected": {
     "message": "¿Por qué se recolectan estos datos?"
@@ -1247,6 +1247,6 @@
     "message": "Mapea en cualquier lugar y en todos lados"
   },
   "routes.welcome.ownData": {
-    "message": "Controla tu información y hazla tuya"
+    "message": "Controla y maneja tus datos"
   }
 }
