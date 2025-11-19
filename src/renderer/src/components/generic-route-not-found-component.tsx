@@ -16,7 +16,7 @@ const CustomNotFoundDataPropSchema = v.looseObject({
 export function GenericRouteNotFoundComponent({
 	backgroundColor,
 	data,
-}: NotFoundRouteProps & {
+}: Omit<NotFoundRouteProps, 'routeId' | 'isNotFound'> & {
 	backgroundColor?: CSSProperties['backgroundColor']
 }) {
 	const router = useRouter()
