@@ -106,12 +106,4 @@ export default defineConfig(
 			},
 		},
 	},
-	// Applies to all contexts
-	{
-		name: 'shared',
-		languageOptions: {
-			ecmaVersion: 2022,
-			sourceType: 'module',
-		},
-	},
 )
