@@ -207,40 +207,29 @@ function RouteComponent() {
 
 				<Divider />
 
-				<Stack direction="column" flex={1}>
-					<Box padding={6}>
-						<Typography
-							component="h2"
-							variant="body1"
-							textTransform="uppercase"
+				<Suspense
+					fallback={
+						<Box
+							display="flex"
+							flexDirection="column"
+							justifyContent="center"
+							alignItems="center"
+							flex={1}
+							padding={6}
 						>
-							{t(m.observationsSectionTitle, {
-								count: track.observationRefs.length,
-							})}
-						</Typography>
-					</Box>
-
-					<Suspense
-						fallback={
-							<Box
-								display="flex"
-								flexDirection="column"
-								justifyContent="center"
-								alignItems="center"
-							>
-								<CircularProgress disableShrink size={40} />
-							</Box>
-						}
-					>
-						<TrackObservationsList
-							projectId={projectId}
-							trackObservationDocIds={track.observationRefs.map(
-								({ docId }) => docId,
-							)}
-							lang={lang}
-						/>
-					</Suspense>
-				</Stack>
+							<CircularProgress disableShrink size={40} />
+						</Box>
+					}
+				>
+					<TrackObservationsSection
+						projectId={projectId}
+						trackDocId={trackDocId}
+						trackObservationDocIds={track.observationRefs.map(
+							({ docId }) => docId,
+						)}
+						lang={lang}
+					/>
+				</Suspense>
 			</Box>
 		</Stack>
 	)
@@ -248,12 +237,14 @@ function RouteComponent() {
 
 const CATEGORY_CONTAINER_SIZE_PX = 64
 
-function TrackObservationsList({
+function TrackObservationsSection({
 	projectId,
+	trackDocId,
 	trackObservationDocIds,
 	lang,
 }: {
 	projectId: string
+	trackDocId: string
 	trackObservationDocIds: Array<string>
 	lang: string
 }) {
@@ -272,9 +263,11 @@ function TrackObservationsList({
 		lang,
 	})
 
-	const trackObservations = useMemo(() => {
+	const displayedTrackObservations = useMemo(() => {
 		return allObservations
-			.filter((o) => trackObservationDocIds.includes(o.docId))
+			.filter((o) => {
+				return !o.deleted && trackObservationDocIds.includes(o.docId)
+			})
 			.map((o) => {
 				return {
 					document: o,
@@ -287,106 +280,117 @@ function TrackObservationsList({
 	}, [allObservations, categories, trackObservationDocIds])
 
 	return (
-		<List component="ul" disablePadding>
-			{trackObservations.map(({ document, category }) => {
-				const { createdAt, docId, createdBy } = document
+		<Stack direction="column" flex={1}>
+			<Box padding={6}>
+				<Typography component="h2" variant="body1" textTransform="uppercase">
+					{t(m.observationsSectionTitle, {
+						count: displayedTrackObservations.length,
+					})}
+				</Typography>
+			</Box>
 
-				const title = category?.name || t(m.observationCategoryNameFallback)
+			<List component="ul" disablePadding>
+				{displayedTrackObservations.map(({ document, category }) => {
+					const { createdAt, docId, createdBy } = document
 
-				return (
-					<ListItemButton
-						key={docId}
-						disableGutters
-						disableTouchRipple
-						onClick={() => {
-							navigate({
-								to: '/app/projects/$projectId/observations/$observationDocId',
-								params: { observationDocId: docId },
-							})
-						}}
-						sx={{ paddingInline: 6, paddingBlock: 4 }}
-					>
-						<Suspense>
-							<SyncedIndicatorLine createdByDeviceId={createdBy} />
-						</Suspense>
+					const title = category?.name || t(m.observationCategoryNameFallback)
 
-						<Stack direction="row" flex={1} gap={2} overflow="auto">
-							<Stack
-								direction="column"
-								flex={1}
-								justifyContent="center"
-								overflow="hidden"
-							>
-								<Typography
-									fontWeight={500}
-									textOverflow="ellipsis"
-									whiteSpace="nowrap"
+					return (
+						<ListItemButton
+							key={docId}
+							disableGutters
+							disableTouchRipple
+							onClick={() => {
+								navigate({
+									to: '/app/projects/$projectId/observations/$observationDocId',
+									params: { observationDocId: docId },
+									search: { fromTrackDocId: trackDocId },
+								})
+							}}
+							sx={{ paddingInline: 6, paddingBlock: 4 }}
+						>
+							<Suspense>
+								<SyncedIndicatorLine createdByDeviceId={createdBy} />
+							</Suspense>
+
+							<Stack direction="row" flex={1} gap={2} overflow="auto">
+								<Stack
+									direction="column"
+									flex={1}
+									justifyContent="center"
 									overflow="hidden"
 								>
-									{title}
-								</Typography>
-
-								<Typography
-									textOverflow="ellipsis"
-									whiteSpace="nowrap"
-									overflow="hidden"
-								>
-									{formatDate(createdAt, {
-										year: 'numeric',
-										month: 'short',
-										day: '2-digit',
-										minute: '2-digit',
-										hour: '2-digit',
-										hourCycle: 'h12',
-									})}
-								</Typography>
-							</Stack>
-
-							<Box
-								display="flex"
-								justifyContent="center"
-								alignItems="center"
-								width={CATEGORY_CONTAINER_SIZE_PX}
-								sx={{ aspectRatio: 1 }}
-							>
-								<Box flex={1}>
-									<Suspense
-										fallback={
-											<Box
-												display="flex"
-												justifyContent="center"
-												alignItems="center"
-											>
-												<CircularProgress disableShrink size={30} />
-											</Box>
-										}
+									<Typography
+										fontWeight={500}
+										textOverflow="ellipsis"
+										whiteSpace="nowrap"
+										overflow="hidden"
 									>
-										{category?.iconRef?.docId ? (
-											<CategoryIconContainer
-												color={category.color || BLUE_GREY}
-											>
-												<CategoryIconImage
-													projectId={projectId}
-													iconDocumentId={category.iconRef.docId}
-													altText={t(m.categoryIconAlt, {
-														name: category?.name || t(m.tracks),
-													})}
-													imageStyle={{ width: '100%', aspectRatio: 1 }}
-												/>
-											</CategoryIconContainer>
-										) : (
-											<CategoryIconContainer color={BLACK}>
-												<Icon name="material-hiking" size={40} />
-											</CategoryIconContainer>
-										)}
-									</Suspense>
+										{title}
+									</Typography>
+
+									<Typography
+										textOverflow="ellipsis"
+										whiteSpace="nowrap"
+										overflow="hidden"
+									>
+										{formatDate(createdAt, {
+											year: 'numeric',
+											month: 'short',
+											day: '2-digit',
+											minute: '2-digit',
+											hour: '2-digit',
+											hourCycle: 'h12',
+										})}
+									</Typography>
+								</Stack>
+
+								<Box
+									display="flex"
+									justifyContent="center"
+									alignItems="center"
+									width={CATEGORY_CONTAINER_SIZE_PX}
+									sx={{ aspectRatio: 1 }}
+								>
+									<Box flex={1}>
+										<Suspense
+											fallback={
+												<Box
+													display="flex"
+													justifyContent="center"
+													alignItems="center"
+												>
+													<CircularProgress disableShrink size={30} />
+												</Box>
+											}
+										>
+											{category?.iconRef?.docId ? (
+												<CategoryIconContainer
+													color={category.color || BLUE_GREY}
+												>
+													<CategoryIconImage
+														projectId={projectId}
+														iconDocumentId={category.iconRef.docId}
+														altText={t(m.categoryIconAlt, {
+															name: category?.name || t(m.tracks),
+														})}
+														imageStyle={{ width: '100%', aspectRatio: 1 }}
+													/>
+												</CategoryIconContainer>
+											) : (
+												<CategoryIconContainer color={BLACK}>
+													<Icon name="material-hiking" size={40} />
+												</CategoryIconContainer>
+											)}
+										</Suspense>
+									</Box>
 								</Box>
-							</Box>
-						</Stack>
-					</ListItemButton>
-				)
-			})}
-		</List>
+							</Stack>
+						</ListItemButton>
+					)
+				})}
+			</List>
+		</Stack>
 	)
 }
 

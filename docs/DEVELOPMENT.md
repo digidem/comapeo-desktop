@@ -82,11 +82,11 @@ node --run start   # Build translations, then build the app in development mode 
     1. Stop the process that is running `npm start` and rerun it.
     2. Type <kbd>R + S + Enter</kbd> in the process that is running `node --run start`, which tells Forge to restart the main process.
 
-- In development, the `userData` directory is set to the `<project_root>/data/` directory by default. On macOS, the logs directory is set to `<project_root>/logs` by default. This provides the following benefits:
+- In development, the `userData` directory is set to the `<project_root>/data/default/` directory by default. On macOS, the logs directory is set to `<project_root>/logs/default/` by default. This provides the following benefits:
   - Avoids conflicting with the existing app if it's installed. Assuming the same app ID is used, Electron will default to using the OS-specific user data directory, which means that if you have a production version of the app installed, starting the development version will read and write from the production user data directory. Most of the time this is not desired (you generally don't want to mix production data and settings with your development environment). If it is desired, you will need to adjust the code that calls `app.setPath('userData', ...)` in [`src/main/index.ts`](../src/main/index.ts).
   - Easier to debug because you don't have to spend as much time to figure out which directory to look at (it's different depending on the operating system).
-- If you want to change the `userData` directory, define an environment variable called `USER_DATA_PATH` that can be used when calling `node --run start`. For example, running `USER_DATA_PATH=./my_data node --run start` will create a `my_data` directory relative to the project root. This is useful for creating different "profiles" and isolating data for the purpose of testing features or reproducing bugs
-- **If you are installing a package that is only going to be used by code the renderer (e.g. a React component library), you most likely should install it as a dev dependency instead of a direct dependency**. This differs from typical development workflows you see elsewhere, but the reasoning is that during the packaging stage of the app, [`@electron/packager`](https://github.com/electron/packager) avoids copying dev dependencies found in the `node_modules` directory. Since we bundle our renderer code, we do not need to copy over these dependencies, which results in a significant decrease in disk space occupied by the app.
+- If you want to change the `userData` directory, define an environment variable called `USER_DATA_PATH` that can be used when calling `node --run start`. For example, running `USER_DATA_PATH=./data/custom node --run start` will create and use the `data/custom` directory relative to the project root. This is useful for creating different "profiles" and isolating data for the purpose of working on features or reproducing bugs.
+- **If you are installing a package that is only going to be used by code in the renderer (e.g. a React component library), you most likely should install it as a dev dependency instead of a direct dependency**. This differs from typical development workflows you see elsewhere, but the reasoning is that during the packaging stage of the app [`@electron/packager`](https://github.com/electron/packager) avoids copying dev dependencies found in the `node_modules` directory. Since we bundle our renderer code, we do not need to copy over these dependencies, which results in a significant decrease in disk space occupied by the app.
 - We use [`debug`](https://github.com/debug-js/debug) for much of our logging in the main process. In order to see them, you can specify the `DEBUG` environment variable when running the app e.g. `DEBUG=comapeo:* node --run start`.
 
 ### Helpful tips about configuration
@@ -104,8 +104,9 @@ The renderer app (aka React code) can run unit tests with [Vitest](https://vites
 
 These tests use [Playwright](https://playwright.dev/) and its [experimental Electron support](https://playwright.dev/docs/api/class-electron). They require a packaged version of the app in order to be executed. The general steps are as follows:
 
-    1. Create the packaged application by running `COMAPEO_TEST=true APP_TYPE=internal node --run forge:package`. Specifying the environment variables is necessary.
-    2. Run the tests using `node --run test-e2e`.
+1. Create the packaged application by running `COMAPEO_TEST=true APP_TYPE=internal node --run forge:package`. Specifying the environment variables is necessary.
+
+2. Run the tests using `node --run test-e2e`.
 
 When the tests finish, you can view a HTML report of the results using `npx playwright show-report tests-e2e/playwright-report` (the console will print this instruction too).
 
