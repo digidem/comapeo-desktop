@@ -31,6 +31,14 @@
     "description": "Text for button to change category.",
     "message": "ပြောင်းလဲသည်"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
+    "description": "Text for delete observation button.",
+    "message": "ပယ်ဖျက်သည်"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "ပယ်ဖျက်သည်"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
     "description": "Fallback text displayed if field has no meaningful value.",
     "message": "အဖြေမရှိပါ"
