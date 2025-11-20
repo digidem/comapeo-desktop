@@ -15,6 +15,42 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "अवलाेकन"
   },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "मेटाउने"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "रद्द"
+  },
+  "routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "भयाे"
+  },
+  "routes.app.projects.$projectId.download.successPanelTitle": {
+    "description": "Title text for success panel.",
+    "message": "सफल!"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Open Settings."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "अवलाेकन"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "परिवर्तन"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
+    "description": "Text for delete observation button.",
+    "message": "मेटाउने"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "रद्द"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
     "message": "विवरणहरू"

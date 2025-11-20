@@ -19,13 +19,49 @@
     "description": "Text displayed when hovering over map control for zooming to data.",
     "message": "ពង្រីកទៅកាន់ទិន្នន័យ"
   },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "លុប"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "បោះបង់"
+  },
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
     "description": "Label text for download button",
     "message": "ទាញយក"
   },
+  "routes.app.projects.$projectId.download.download": {
+    "description": "Title of the download page.",
+    "message": "ទាញយក"
+  },
+  "routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "រួចរាល់"
+  },
   "routes.app.projects.$projectId.index.view": {
     "description": "Link text to navigate to project settings page.",
     "message": "ទិដ្ឋភាព"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Open Settings."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "ការសង្កេត"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "ផ្លាស់ប្តូរ"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
+    "description": "Text for delete observation button.",
+    "message": "លុប"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "បោះបង់"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
