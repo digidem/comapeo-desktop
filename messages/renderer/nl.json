@@ -261,6 +261,34 @@
     "description": "Text for button to change category.",
     "message": "Wijzigen"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
+    "description": "Text for delete observation button.",
+    "message": "Verwijderen"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "Annuleren"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogConfirm": {
+    "description": "Text for confirmation button of delete observation confirmation dialog.",
+    "message": "Ja, verwijderen"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogTitle": {
+    "description": "Text for title of delete observation confirmation dialog.",
+    "message": "Waarneming verwijderen?"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelReturnToObservations": {
+    "description": "Text for button to return to observations list in successful observation deletion panel.",
+    "message": "Terug naar de observatielijst"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelReturnToTrack": {
+    "description": "Text for button to return to track in successful observation deletion panel.",
+    "message": "Terug naar track"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelTitle": {
+    "description": "Title text for the successful observation deletion panel.",
+    "message": "Waarneming verwijderd"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
     "message": "Details"
