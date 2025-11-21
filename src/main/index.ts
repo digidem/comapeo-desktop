@@ -108,6 +108,7 @@ Sentry.init({
 	// NOTE: Only works on app startup. Any changes to `diagnosticsEnabled` while the app is running will not
 	// take effect here until the app is restarted.
 	enabled: persistedStoreState.diagnosticsEnabled,
+	enableMetrics: false,
 	sendDefaultPii: false,
 	// TODO: Enable tracing based on user consent in production
 	tracesSampleRate: sentryEnvironment === 'production' ? 0 : 1.0,
