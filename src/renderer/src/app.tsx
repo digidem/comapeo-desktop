@@ -36,6 +36,10 @@ import {
 	ActiveProjectIdStoreProvider,
 	createActiveProjectIdStore,
 } from './contexts/active-project-id-store-context'
+import {
+	GlobalEditingStateStoreProvider,
+	createGlobalEditingStateStore,
+} from './contexts/global-editing-state-store-context'
 import { IntlProvider } from './contexts/intl'
 import {
 	LocalPeersStoreProvider,
@@ -129,6 +133,7 @@ const { platform } = window.runtime.getAppInfo()
 const MAIN_CONTENT_HEIGHT =
 	platform === 'darwin' ? `calc(100% - ${TITLE_BAR_HEIGHT})` : '100%'
 
+const globalEditingStateStore = createGlobalEditingStateStore()
 const refreshTokensStore = createRefreshTokensStore()
 const localPeersStore = createLocalPeersStore({ clientApi })
 const activeProjectIdStore = createActiveProjectIdStore({
@@ -156,53 +161,55 @@ export function App() {
 				<CssBaseline enableColorScheme />
 
 				<RefreshTokensStoreProvider value={refreshTokensStore}>
-					<ActiveProjectIdStoreProvider value={activeProjectIdStore}>
-						<QueryClientProvider client={queryClient}>
-							<IntlProvider>
-								<NetworkConnectionChangeListener />
+					<GlobalEditingStateStoreProvider value={globalEditingStateStore}>
+						<ActiveProjectIdStoreProvider value={activeProjectIdStore}>
+							<QueryClientProvider client={queryClient}>
+								<IntlProvider>
+									<NetworkConnectionChangeListener />
 
-								<Box height="100dvh">
-									{platform === 'darwin' ? (
-										<AppTitleBar platform={platform} testId="app-title-bar" />
-									) : null}
+									<Box height="100dvh">
+										{platform === 'darwin' ? (
+											<AppTitleBar platform={platform} testId="app-title-bar" />
+										) : null}
 
-									<Box height={MAIN_CONTENT_HEIGHT}>
-										<Suspense
-											fallback={
-												<Box
-													display="flex"
-													justifyContent="center"
-													alignItems="center"
-													height="100%"
-												>
-													<CircularProgress />
-												</Box>
-											}
-										>
-											<ClientApiProvider clientApi={clientApi}>
-												<LocalPeersStoreProvider value={localPeersStore}>
-													<WithInvitesListener>
-														<WithAddedRouteContext>
-															{({ formatMessage, localeState }) => (
-																<RouterProvider
-																	router={router}
-																	context={{
-																		activeProjectIdStore,
-																		formatMessage,
-																		localeState,
-																	}}
-																/>
-															)}
-														</WithAddedRouteContext>
-													</WithInvitesListener>
-												</LocalPeersStoreProvider>
-											</ClientApiProvider>
-										</Suspense>
+										<Box height={MAIN_CONTENT_HEIGHT}>
+											<Suspense
+												fallback={
+													<Box
+														display="flex"
+														justifyContent="center"
+														alignItems="center"
+														height="100%"
+													>
+														<CircularProgress />
+													</Box>
+												}
+											>
+												<ClientApiProvider clientApi={clientApi}>
+													<LocalPeersStoreProvider value={localPeersStore}>
+														<WithInvitesListener>
+															<WithAddedRouteContext>
+																{({ formatMessage, localeState }) => (
+																	<RouterProvider
+																		router={router}
+																		context={{
+																			activeProjectIdStore,
+																			formatMessage,
+																			localeState,
+																		}}
+																	/>
+																)}
+															</WithAddedRouteContext>
+														</WithInvitesListener>
+													</LocalPeersStoreProvider>
+												</ClientApiProvider>
+											</Suspense>
+										</Box>
 									</Box>
-								</Box>
-							</IntlProvider>
-						</QueryClientProvider>
-					</ActiveProjectIdStoreProvider>
+								</IntlProvider>
+							</QueryClientProvider>
+						</ActiveProjectIdStoreProvider>
+					</GlobalEditingStateStoreProvider>
 				</RefreshTokensStoreProvider>
 			</ThemeProvider>
 		</StrictMode>
