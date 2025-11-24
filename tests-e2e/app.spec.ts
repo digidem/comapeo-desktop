@@ -931,7 +931,7 @@ test.describe('project settings', () => {
 				}),
 			).toBeVisible()
 			await expect(
-				categoriesSetItem.getByText('CoMapeo Default Config'),
+				categoriesSetItem.getByText('CoMapeo Default Categories'),
 			).toBeVisible()
 			await expect(
 				categoriesSetItem.getByRole('link', {
@@ -1396,7 +1396,7 @@ test.describe('project settings', () => {
 		{
 			await expect(
 				main.getByRole('heading', {
-					name: 'CoMapeo Default Config',
+					name: 'CoMapeo Default Categories',
 					exact: true,
 				}),
 			).toBeVisible()
@@ -1519,7 +1519,7 @@ test.describe('project settings', () => {
 			await stubDialog(electronApp, 'showOpenDialog', {
 				canceled: false,
 				filePaths: [
-					createRequire(import.meta.url).resolve('@mapeo/default-config'),
+					createRequire(import.meta.url).resolve('@comapeo/default-categories'),
 				],
 			})
 
@@ -1529,7 +1529,7 @@ test.describe('project settings', () => {
 
 			await expect(
 				main.getByRole('heading', {
-					name: 'CoMapeo Default Config',
+					name: 'CoMapeo Default Categories',
 					exact: true,
 				}),
 			).toBeVisible()
@@ -1549,7 +1549,7 @@ test.describe('project settings', () => {
 				const categoriesSetItem = main.getByRole('listitem').last()
 
 				await expect(
-					categoriesSetItem.getByText('CoMapeo Default Config', {
+					categoriesSetItem.getByText('CoMapeo Default Categories', {
 						exact: true,
 					}),
 				).toBeVisible()

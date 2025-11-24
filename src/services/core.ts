@@ -38,7 +38,7 @@ const DATABASE_MIGRATIONS_DIRECTORY = fileURLToPath(
 
 const DEFAULT_CONFIG_PATH = fileURLToPath(
 	import.meta.resolve(
-		'@mapeo/default-config/dist/mapeo-default-config.comapeocat',
+		'@comapeo/default-categories/dist/comapeo-default-categories.comapeocat',
 	),
 )
 

@@ -34,6 +34,7 @@ import { ErrorBoundary } from '../../../../../../components/error-boundary'
 import { ErrorDialog } from '../../../../../../components/error-dialog'
 import { GenericRouteNotFoundComponent } from '../../../../../../components/generic-route-not-found-component'
 import { Icon } from '../../../../../../components/icon'
+import { useGlobalEditingState } from '../../../../../../contexts/global-editing-state-store-context'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -49,6 +50,7 @@ import {
 } from '../../../../../../lib/queries/app-settings'
 import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations'
 import { EditCategoryPanel } from './-edit-category-panel'
+import { EditableNotesSection, ReadOnlyNotesSection } from './-notes-section'
 import {
 	ObservationAttachmentError,
 	ObservationAttachmentPending,
@@ -262,7 +264,11 @@ function DeleteObservationSuccessPanel({
 					gap={6}
 				>
 					<Box padding={6}>
-						<Icon name="material-check-circle" htmlColor={GREEN} size={160} />
+						<Icon
+							name="material-check-circle-rounded"
+							htmlColor={GREEN}
+							size={160}
+						/>
 					</Box>
 
 					<Typography variant="h1" fontWeight={500} textAlign="center">
@@ -392,6 +398,8 @@ function ObservationDetailsPanel({
 		},
 	})
 
+	const isEditing = useGlobalEditingState()
+
 	return (
 		<>
 			<Stack direction="column" flex={1} overflow="auto">
@@ -404,6 +412,7 @@ function ObservationDetailsPanel({
 					borderBottom={`1px solid ${BLUE_GREY}`}
 				>
 					<IconButton
+						disabled={isEditing}
 						onClick={() => {
 							if (deleteObservation.status === 'pending') {
 								return
@@ -519,6 +528,7 @@ function ObservationDetailsPanel({
 									{canEdit ? (
 										<Box display="flex" flex={0} justifyContent="center">
 											<Button
+												disabled={isEditing}
 												variant="text"
 												onClick={() => {
 													onEditCategory()
@@ -551,17 +561,17 @@ function ObservationDetailsPanel({
 								</Stack>
 							</Box>
 						</Stack>
-						<Stack direction="column" paddingInline={6} gap={4}>
-							<Typography
-								component="h2"
-								variant="body1"
-								textTransform="uppercase"
-							>
-								{t(m.notesSectionTitle)}
-							</Typography>
 
-							<Typography>{observation.tags.notes}</Typography>
-						</Stack>
+						{canEdit ? (
+							<EditableNotesSection
+								observationDocId={observationDocId}
+								projectId={projectId}
+							/>
+						) : (
+							<ReadOnlyNotesSection
+								notes={observation.tags.notes?.toString()}
+							/>
+						)}
 
 						<Stack direction="column" gap={2} overflow="auto">
 							<Stack direction="column" paddingInline={6} gap={4}>
@@ -651,6 +661,7 @@ function ObservationDetailsPanel({
 							padding={6}
 						>
 							<IconButton
+								disabled={isEditing}
 								aria-labelledby="delete-observation-button-label"
 								sx={{ border: `1px solid ${BLUE_GREY}` }}
 								onClick={() => {
@@ -660,7 +671,10 @@ function ObservationDetailsPanel({
 								<Icon name="material-symbols-delete" />
 							</IconButton>
 
-							<Typography id="delete-observation-button-label">
+							<Typography
+								id="delete-observation-button-label"
+								color={isEditing ? 'textDisabled' : undefined}
+							>
 								{t(m.deleteObservationButtonText)}
 							</Typography>
 						</Stack>
@@ -791,11 +805,6 @@ const m = defineMessages({
 		defaultMessage: 'No location',
 		description:
 			'Fallback for location when observation does not have location specified.',
-	},
-	notesSectionTitle: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.notesSectionTitle',
-		defaultMessage: 'Notes',
-		description: 'Title for notes section.',
 	},
 	unableToGetDurationTime: {
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.unableToGetDurationTime',
