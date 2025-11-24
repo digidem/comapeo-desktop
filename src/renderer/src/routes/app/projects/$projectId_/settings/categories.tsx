@@ -44,7 +44,7 @@ export const Route = createFileRoute(
 	component: RouteComponent,
 })
 
-const DEFAULT_CATEGORIES_NAME = `@mapeo/default-config`
+const DEFAULT_CATEGORIES_NAME = `@comapeo/default-categories`
 
 const SELECT_AND_IMPORT_CATEGORY_MUTATION_KEY = createGlobalMutationsKey([
 	'category',
