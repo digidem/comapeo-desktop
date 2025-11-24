@@ -86,7 +86,11 @@ function RouteComponent() {
 		>
 			<Container maxWidth="sm" component={Stack} direction="column" gap={5}>
 				<Box alignSelf="center">
-					<Icon name="material-check-circle" size={80} htmlColor={GREEN} />
+					<Icon
+						name="material-check-circle-rounded"
+						size={80}
+						htmlColor={GREEN}
+					/>
 				</Box>
 
 				<Typography variant="h1" fontWeight={500} textAlign="center">

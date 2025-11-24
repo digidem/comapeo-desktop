@@ -20,6 +20,7 @@ import {
 	IconButtonLink,
 	type ButtonLinkProps,
 } from '../../components/link'
+import { useGlobalEditingState } from '../../contexts/global-editing-state-store-context'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -136,6 +137,8 @@ function RouteComponent() {
 		currentRoute.routeId ===
 			'/app/projects/$projectId/invite/devices/$deviceId/send'
 
+	const isEditing = useGlobalEditingState()
+
 	const someGlobalMutationIsPending =
 		useIsMutating({ mutationKey: GLOBAL_MUTATIONS_BASE_KEY }) > 0
 
@@ -166,7 +169,9 @@ function RouteComponent() {
 							<IconButtonLink
 								{...SHARED_NAV_ITEM_PROPS.link}
 								disabled={
-									((pageHasEditing || someGlobalMutationIsPending) &&
+									((pageHasEditing ||
+										isEditing ||
+										someGlobalMutationIsPending) &&
 										!currentRoute.fullPath.startsWith(
 											'/app/projects/$projectId',
 										)) ||
@@ -208,7 +213,9 @@ function RouteComponent() {
 								to="/app/projects/$projectId/exchange"
 								params={{ projectId: activeProjectId }}
 								disabled={
-									(pageHasEditing || someGlobalMutationIsPending) &&
+									(pageHasEditing ||
+										isEditing ||
+										someGlobalMutationIsPending) &&
 									!currentRoute.fullPath.startsWith(
 										'/app/projects/$projectId/exchange',
 									)
@@ -220,7 +227,9 @@ function RouteComponent() {
 							<LabeledNavItem
 								to="/app/settings"
 								disabled={
-									((pageHasEditing || someGlobalMutationIsPending) &&
+									((pageHasEditing ||
+										isEditing ||
+										someGlobalMutationIsPending) &&
 										!currentRoute.fullPath.startsWith('/app/settings')) ||
 									(currentRoute.routeId ===
 										'/app/projects/$projectId/exchange/' &&
@@ -233,7 +242,9 @@ function RouteComponent() {
 							<LabeledNavItem
 								to="/app/data-and-privacy"
 								disabled={
-									((pageHasEditing || someGlobalMutationIsPending) &&
+									((pageHasEditing ||
+										isEditing ||
+										someGlobalMutationIsPending) &&
 										currentRoute.fullPath !== '/app/data-and-privacy') ||
 									(currentRoute.routeId ===
 										'/app/projects/$projectId/exchange/' &&
@@ -248,7 +259,9 @@ function RouteComponent() {
 							<LabeledNavItem
 								to="/app/about"
 								disabled={
-									((pageHasEditing || someGlobalMutationIsPending) &&
+									((pageHasEditing ||
+										isEditing ||
+										someGlobalMutationIsPending) &&
 										currentRoute.fullPath !== '/app/about') ||
 									(currentRoute.routeId ===
 										'/app/projects/$projectId/exchange/' &&

@@ -189,7 +189,11 @@ function DeleteSuccessPanel({
 					gap={6}
 				>
 					<Box padding={6}>
-						<Icon name="material-check-circle" htmlColor={GREEN} size={160} />
+						<Icon
+							name="material-check-circle-rounded"
+							htmlColor={GREEN}
+							size={160}
+						/>
 					</Box>
 
 					<Typography variant="h1" fontWeight={500} textAlign="center">
