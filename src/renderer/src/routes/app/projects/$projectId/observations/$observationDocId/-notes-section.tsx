@@ -1,30 +1,19 @@
-import { useEffect, useState } from 'react'
 import { useSingleDocByDocId, useUpdateDocument } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import ButtonBase from '@mui/material/ButtonBase'
-import CircularProgress from '@mui/material/CircularProgress'
-import Fade from '@mui/material/Fade'
 import Stack from '@mui/material/Stack'
-import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import {
-	COMAPEO_BLUE,
-	GREEN,
-	LIGHT_COMAPEO_BLUE,
-} from '../../../../../../colors'
 import { ErrorDialog } from '../../../../../../components/error-dialog'
 import { Icon } from '../../../../../../components/icon'
 import { useGlobalEditingStateActions } from '../../../../../../contexts/global-editing-state-store-context'
 import { useAppForm } from '../../../../../../hooks/forms'
-import { useIconSizeBasedOnTypography } from '../../../../../../hooks/icon'
 import { getLocaleStateQueryOptions } from '../../../../../../lib/queries/app-settings'
 import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations'
+import { EditableSection } from './-components/editable-section'
 
 export function ReadOnlyNotesSection({ notes }: { notes?: string }) {
 	const { formatMessage: t } = useIntl()
@@ -57,11 +46,6 @@ export function EditableNotesSection({
 	projectId: string
 }) {
 	const { formatMessage: t } = useIntl()
-
-	const iconSize = useIconSizeBasedOnTypography({
-		multiplier: 0.6,
-		typographyVariant: 'body1',
-	})
 
 	const { data: lang } = useSuspenseQuery({
 		...getLocaleStateQueryOptions(),
@@ -99,149 +83,53 @@ export function EditableNotesSection({
 
 	const globalEditingStateActions = useGlobalEditingStateActions()
 
-	const [editState, setEditState] = useState<'idle' | 'active' | 'success'>(
-		'idle',
-	)
-
-	useEffect(() => {
-		let timeoutId: number | undefined
-
-		if (editState === 'success') {
-			timeoutId = window.setTimeout(() => {
-				setEditState('idle')
-			}, 5_000)
-		}
-
-		return () => {
-			if (timeoutId !== undefined) {
-				clearTimeout(timeoutId)
-			}
-		}
-	}, [editState, setEditState])
-
 	return (
 		<>
-			<Stack
-				direction="column"
-				paddingInline={6}
-				gap={4}
-				flex={1}
-				flexWrap="wrap"
-			>
-				<Stack direction="row" gap={2}>
-					<Typography
-						id="notes-section-title"
-						component="h2"
-						variant="body1"
-						textTransform="uppercase"
-					>
-						{t(m.title)}
-					</Typography>
-
-					{updateObservationNotes.status === 'pending' ? (
-						<Box display="flex" justifyContent="center" alignItems="center">
-							<CircularProgress disableShrink size={iconSize} />
-						</Box>
-					) : editState === 'success' ? (
-						<Icon
-							name="material-check-circle-rounded"
-							size={iconSize}
-							htmlColor={GREEN}
-						/>
-					) : (
-						<Icon
-							name="material-edit-filled"
-							size={iconSize}
-							htmlColor={editState === 'active' ? COMAPEO_BLUE : undefined}
-						/>
-					)}
-				</Stack>
-
-				{editState === 'active' ? (
+			<EditableSection
+				sectionTitle={t(m.title)}
+				tooltipText={t(m.editNotesTooltip)}
+				editIsPending={updateObservationNotes.status === 'pending'}
+				renderWhenEditing={({ updateEditState }) => (
 					<NotesEditor
 						initialValue={observation.tags.notes}
 						onCancel={() => {
-							setEditState('idle')
+							updateEditState('idle')
 							globalEditingStateActions.update(false)
 						}}
 						onSave={async (notes: string) => {
-							setEditState('idle')
+							updateEditState('idle')
 
 							try {
 								await updateObservationNotes.mutateAsync({ notes })
-								setEditState('success')
+								updateEditState('success')
 							} finally {
 								globalEditingStateActions.update(false)
 							}
 						}}
 					/>
-				) : (
-					<Tooltip
-						title={t(m.editNotesTooltip)}
-						slots={{ transition: Fade }}
-						slotProps={{
-							tooltip: {
-								sx: (theme) => ({
-									backgroundColor: theme.palette.common.white,
-									color: theme.palette.text.primary,
-									boxShadow: theme.shadows[5],
-								}),
-							},
-							popper: {
-								disablePortal: true,
-								modifiers: [{ name: 'offset', options: { offset: [0, -12] } }],
-							},
-						}}
-					>
-						<Box component="span" display="flex">
-							<ButtonBase
-								disabled={updateObservationNotes.status === 'pending'}
-								onClick={() => {
-									setEditState('active')
-									globalEditingStateActions.update(true)
-								}}
-								sx={{
-									':hover, :focus': {
-										backgroundColor: alpha(LIGHT_COMAPEO_BLUE, 0.5),
-										transition: (theme) =>
-											theme.transitions.create('background-color'),
-									},
-									':disabled': {
-										color: (theme) => theme.palette.text.disabled,
-									},
-									padding: 2,
-									display: 'inline-flex',
-									justifyContent: 'flex-start',
-									textAlign: 'start',
-									borderRadius: 1,
-									overflowWrap: 'anywhere',
-									flex: 1,
-								}}
-							>
-								{updateObservationNotes.status === 'pending' ||
-								(updateObservationNotes.status === 'success' &&
-									observationIsRefetching) ? (
-									<Typography
-										fontStyle={
-											updateObservationNotes.variables.notes.length === 0
-												? 'italic'
-												: undefined
-										}
-									>
-										{updateObservationNotes.variables.notes || t(m.noNotes)}
-									</Typography>
-								) : observation.tags.notes === undefined ||
-								  observation.tags.notes === null ||
-								  observation.tags.notes.toString().length === 0 ? (
-									<Typography fontStyle="italic">{t(m.noNotes)}</Typography>
-								) : (
-									<Typography>{observation.tags.notes}</Typography>
-								)}
-							</ButtonBase>
-						</Box>
-					</Tooltip>
 				)}
-			</Stack>
+				renderWhenIdle={
+					updateObservationNotes.status === 'pending' ||
+					(updateObservationNotes.status === 'success' &&
+						observationIsRefetching) ? (
+						<Typography
+							fontStyle={
+								updateObservationNotes.variables.notes.length === 0
+									? 'italic'
+									: undefined
+							}
+						>
+							{updateObservationNotes.variables.notes || t(m.noNotes)}
+						</Typography>
+					) : observation.tags.notes === undefined ||
+					  observation.tags.notes === null ||
+					  observation.tags.notes.toString().length === 0 ? (
+						<Typography fontStyle="italic">{t(m.noNotes)}</Typography>
+					) : (
+						<Typography>{observation.tags.notes}</Typography>
+					)
+				}
+			/>
 
 			<ErrorDialog
 				open={updateObservationNotes.status === 'error'}
