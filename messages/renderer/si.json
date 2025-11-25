@@ -63,6 +63,14 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "නිරීක්ෂණ"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "අවලංගු කරන්න"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "සුරකින්න"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
     "description": "Text for button to change category.",
     "message": "වෙනස් කරන්න"
