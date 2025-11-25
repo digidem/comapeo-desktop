@@ -51,6 +51,14 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "ការសង្កេត"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "បោះបង់"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "រក្សាទុក"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
     "description": "Text for button to change category.",
     "message": "ផ្លាស់ប្តូរ"
