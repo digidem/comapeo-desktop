@@ -27,6 +27,10 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "လေ့လာတွေ့ရှိချက်များ"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "ပယ်ဖျက်သည်"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
     "description": "Text for button to change category.",
     "message": "ပြောင်းလဲသည်"
