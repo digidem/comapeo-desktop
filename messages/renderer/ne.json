@@ -39,6 +39,14 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "अवलाेकन"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "रद्द"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "संग्रह"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
     "description": "Text for button to change category.",
     "message": "परिवर्तन"
