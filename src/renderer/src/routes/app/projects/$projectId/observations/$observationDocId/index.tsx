@@ -34,13 +34,16 @@ import { ErrorBoundary } from '../../../../../../components/error-boundary'
 import { ErrorDialog } from '../../../../../../components/error-dialog'
 import { GenericRouteNotFoundComponent } from '../../../../../../components/generic-route-not-found-component'
 import { Icon } from '../../../../../../components/icon'
-import { useGlobalEditingState } from '../../../../../../contexts/global-editing-state-store-context'
+import {
+	useGlobalEditingState,
+	useGlobalEditingStateActions,
+} from '../../../../../../contexts/global-editing-state-store-context'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 	getMatchingCategoryForDocument,
-	getRenderableFieldInfo,
+	type ObservationTagValue,
 } from '../../../../../../lib/comapeo'
 import { formatCoords } from '../../../../../../lib/coordinate-format'
 import { customNotFound } from '../../../../../../lib/navigation'
@@ -50,12 +53,14 @@ import {
 } from '../../../../../../lib/queries/app-settings'
 import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations'
 import { EditCategoryPanel } from './-edit-category-panel'
+import { EditableFieldSection, ReadOnlyFieldSection } from './-field-sections'
 import { EditableNotesSection, ReadOnlyNotesSection } from './-notes-section'
 import {
 	ObservationAttachmentError,
 	ObservationAttachmentPending,
 	ObservationAttachmentPreview,
 } from './-observation-attachment'
+import { getDisplayedTagValue, type EditableField } from './shared'
 
 const SearchParamsSchema = v.object({
 	fromTrackDocId: v.optional(v.string()),
@@ -398,7 +403,17 @@ function ObservationDetailsPanel({
 		},
 	})
 
-	const isEditing = useGlobalEditingState()
+	const globalEditingStateActions = useGlobalEditingStateActions()
+	const globalEditingEntries = useGlobalEditingState()
+
+	const isEditing = globalEditingEntries.length > 0
+
+	const globalEditIdPrefix = `observations_${observationDocId}_edit`
+	const activeObservationDetailsGlobalEditId = globalEditingEntries.find((e) =>
+		e.startsWith(globalEditIdPrefix),
+	)
+
+	const notesGlobalEditId = `${globalEditIdPrefix}_notes`
 
 	return (
 		<>
@@ -564,6 +579,16 @@ function ObservationDetailsPanel({
 
 						{canEdit ? (
 							<EditableNotesSection
+								disabled={
+									!!activeObservationDetailsGlobalEditId &&
+									activeObservationDetailsGlobalEditId !== notesGlobalEditId
+								}
+								onStartEditMode={() => {
+									globalEditingStateActions.add(notesGlobalEditId)
+								}}
+								onStopEditMode={() => {
+									globalEditingStateActions.remove(notesGlobalEditId)
+								}}
 								observationDocId={observationDocId}
 								projectId={projectId}
 							/>
@@ -618,30 +643,124 @@ function ObservationDetailsPanel({
 
 								<Stack direction="column" gap={3}>
 									{fieldsToDisplay.map((field) => {
-										const { label, answer } = getRenderableFieldInfo({
-											field,
-											tags: observation.tags,
-											answerTypeToTranslatedString: {
-												true: t(m.fieldAnswerTrue),
-												false: t(m.fieldAnswerFalse),
-												null: t(m.fieldAnswerNull),
-											},
-										})
+										const globalEditId = `${globalEditIdPrefix}_fields_${field.docId}`
+										const existingTagValue = observation.tags[field.tagKey]
+
+										if (!canEdit || !isEditableField(field)) {
+											return (
+												<ReadOnlyFieldSection
+													key={field.docId}
+													label={field.label}
+													value={
+														existingTagValue === undefined
+															? undefined
+															: getDisplayedTagValue({
+																	tagValue: existingTagValue,
+																	formatMessage: t,
+																	selectionOptions:
+																		field.type === 'selectOne' ||
+																		field.type === 'selectMultiple'
+																			? field.options
+																			: undefined,
+																})
+													}
+												/>
+											)
+										}
+
+										if (existingTagValue === undefined) {
+											return (
+												<EditableFieldSection
+													key={field.docId}
+													field={field}
+													disabled={
+														!!activeObservationDetailsGlobalEditId &&
+														activeObservationDetailsGlobalEditId !==
+															globalEditId
+													}
+													onStartEditMode={() => {
+														globalEditingStateActions.add(globalEditId)
+													}}
+													onStopEditMode={() => {
+														globalEditingStateActions.remove(globalEditId)
+													}}
+													initialTagValue={existingTagValue}
+													observationDocId={observationDocId}
+													projectId={projectId}
+												/>
+											)
+										}
+
+										const coercedTagValue =
+											existingTagValue === undefined
+												? undefined
+												: tryToCoerceTagValue(existingTagValue, field.type)
+
+										// If the tag value cannot be coerced, render it as non-editable
+										if (coercedTagValue === undefined) {
+											return (
+												<ReadOnlyFieldSection
+													key={field.docId}
+													label={field.label}
+													value={
+														existingTagValue === undefined
+															? undefined
+															: getDisplayedTagValue({
+																	tagValue: existingTagValue,
+																	formatMessage: t,
+																	selectionOptions:
+																		field.type === 'selectOne' ||
+																		field.type === 'selectMultiple'
+																			? field.options
+																			: undefined,
+																})
+													}
+												/>
+											)
+										}
 
 										return (
-											<Stack key={field.docId} direction="column" gap={2}>
-												<Typography component="h3" variant="body1">
-													{label}
-												</Typography>
-
-												<Typography
-													fontStyle={answer.length === 0 ? 'italic' : undefined}
-												>
-													{answer.length > 0
-														? answer
-														: t(m.fieldAnswerNoAnswer)}
-												</Typography>
-											</Stack>
+											<ErrorBoundary
+												key={field.docId}
+												getResetKey={() => field.docId}
+												fallback={() => (
+													<ReadOnlyFieldSection
+														key={field.docId}
+														label={field.label}
+														value={
+															existingTagValue === undefined
+																? undefined
+																: getDisplayedTagValue({
+																		tagValue: existingTagValue,
+																		formatMessage: t,
+																		selectionOptions:
+																			field.type === 'selectOne' ||
+																			field.type === 'selectMultiple'
+																				? field.options
+																				: undefined,
+																	})
+														}
+													/>
+												)}
+											>
+												<EditableFieldSection
+													field={field}
+													disabled={
+														!!activeObservationDetailsGlobalEditId &&
+														activeObservationDetailsGlobalEditId !==
+															globalEditId
+													}
+													onStartEditMode={() => {
+														globalEditingStateActions.add(globalEditId)
+													}}
+													onStopEditMode={() => {
+														globalEditingStateActions.remove(globalEditId)
+													}}
+													initialTagValue={coercedTagValue}
+													observationDocId={observationDocId}
+													projectId={projectId}
+												/>
+											</ErrorBoundary>
 										)
 									})}
 								</Stack>
@@ -769,6 +888,133 @@ function ObservationDetailsPanel({
 	)
 }
 
+function isEditableField(field: Field): field is EditableField {
+	if (field.type === 'UNRECOGNIZED' || field.type === 'type_unspecified') {
+		return false
+	}
+
+	if (
+		(field.type === 'selectMultiple' || field.type === 'selectOne') &&
+		field.options === undefined
+	) {
+		return false
+	}
+
+	return true
+}
+
+/**
+ * Coerce a tag value into another value that is compatible with a given field
+ * definition.
+ *
+ * @param tagValue The value to attempt to coerce.
+ * @param fieldType The field to use for coercion to another value.
+ *
+ * @returns The coerced tag value. If `undefined`, that means that the input tag
+ *   value could not be coerced.
+ */
+function tryToCoerceTagValue(
+	tagValue: ObservationTagValue,
+	fieldType: EditableField['type'],
+): ObservationTagValue | undefined {
+	if (Array.isArray(tagValue)) {
+		switch (fieldType) {
+			case 'number': {
+				const [firstElement, ...rest] = tagValue
+
+				if (firstElement === undefined) {
+					return undefined
+				}
+
+				return rest.length > 0
+					? undefined
+					: tryToCoerceTagValue(firstElement, fieldType)
+			}
+			case 'text': {
+				return tagValue.join(', ')
+			}
+			case 'selectOne': {
+				if (tagValue.length > 1) {
+					return undefined
+				}
+
+				return tagValue[0]
+			}
+			case 'selectMultiple': {
+				return tagValue
+			}
+		}
+	}
+
+	switch (fieldType) {
+		case 'number': {
+			if (tagValue === null) {
+				return undefined
+			}
+
+			if (typeof tagValue === 'string') {
+				const parsed = parseFloat(tagValue)
+				if (isNaN(parsed)) {
+					return undefined
+				}
+
+				return parsed
+			}
+
+			if (typeof tagValue === 'number') {
+				return tagValue
+			}
+
+			if (typeof tagValue === 'boolean') {
+				return undefined
+			}
+
+			return undefined
+		}
+		case 'text': {
+			if (tagValue === null) {
+				return ''
+			}
+
+			if (typeof tagValue === 'string') {
+				return tagValue
+			}
+
+			if (typeof tagValue === 'number') {
+				return tagValue.toString(10)
+			}
+
+			if (typeof tagValue === 'boolean') {
+				return tagValue ? 'true' : 'false'
+			}
+
+			return undefined
+		}
+		case 'selectOne': {
+			if (
+				tagValue === null ||
+				typeof tagValue === 'string' ||
+				typeof tagValue === 'boolean'
+			) {
+				return tagValue
+			}
+
+			return undefined
+		}
+		case 'selectMultiple': {
+			if (
+				tagValue === null ||
+				typeof tagValue === 'string' ||
+				typeof tagValue === 'boolean'
+			) {
+				return [tagValue]
+			}
+
+			return undefined
+		}
+	}
+}
+
 function getFieldsToDisplay(category: Preset, fields: Array<Field>) {
 	const result: Array<Field> = []
 
@@ -816,26 +1062,6 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle',
 		defaultMessage: 'Details',
 		description: 'Title for details section.',
-	},
-	fieldAnswerNoAnswer: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer',
-		defaultMessage: 'No answer',
-		description: 'Fallback text displayed if field has no meaningful value.',
-	},
-	fieldAnswerTrue: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerTrue',
-		defaultMessage: 'TRUE',
-		description: 'Text displayed if a boolean field is answered with "true"',
-	},
-	fieldAnswerFalse: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerFalse',
-		defaultMessage: 'FALSE',
-		description: 'Text displayed if a boolean field is answered with "false"',
-	},
-	fieldAnswerNull: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNull',
-		defaultMessage: 'NULL',
-		description: 'Text displayed if a field is answered with "null"',
 	},
 	observationNotFound: {
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound',

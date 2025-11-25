@@ -5,18 +5,23 @@ export type GlobalEditingStateStore = ReturnType<
 	typeof createGlobalEditingStateStore
 >
 
-export type GlobalEditingState = boolean
+export type GlobalEditingState = {
+	activeEdits: Array<string>
+}
 
-export function createGlobalEditingStateStore(opts?: {
-	initialValue: GlobalEditingState
-}) {
+export function createGlobalEditingStateStore() {
 	const store = createStore<GlobalEditingState>(() => {
-		return !!opts?.initialValue
+		return { activeEdits: [] }
 	})
 
 	const actions = {
-		update: (value: GlobalEditingState) => {
-			store.setState(value)
+		add: (value: string) => {
+			store.setState((prev) => ({ activeEdits: [...prev.activeEdits, value] }))
+		},
+		remove: (value: string) => {
+			store.setState((prev) => ({
+				activeEdits: prev.activeEdits.filter((e) => e !== value),
+			}))
 		},
 	}
 
@@ -38,9 +43,13 @@ function useGlobalEditingStateStore() {
 	return value
 }
 
-export function useGlobalEditingState(): GlobalEditingState {
+function activeEditsSelector(state: GlobalEditingState) {
+	return state.activeEdits
+}
+
+export function useGlobalEditingState(): GlobalEditingState['activeEdits'] {
 	const store = useGlobalEditingStateStore()
-	return useStore(store.instance)
+	return useStore(store.instance, activeEditsSelector)
 }
 
 export function useGlobalEditingStateActions() {

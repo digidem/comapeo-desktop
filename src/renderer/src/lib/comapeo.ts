@@ -1,9 +1,13 @@
 import type { MemberApi } from '@comapeo/core'
-import type { Field, Observation, Preset, Track } from '@comapeo/schema'
+import type { Observation, Preset, Track } from '@comapeo/schema'
 
 export type Attachment = Observation['attachments'][number]
 
 export type DeviceType = NonNullable<MemberApi.MemberInfo['deviceType']>
+
+export type ObservationTagValue = Observation['tags'][keyof Observation['tags']]
+export type TrackTagValue = Track['tags'][keyof Track['tags']]
+export type TagValue = ObservationTagValue | TrackTagValue
 
 // https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/shared.ts#L6C1-L6C52
 export const COMAPEO_CORE_REACT_ROOT_QUERY_KEY = '@comapeo/core-react' as const
@@ -91,52 +95,4 @@ export function memberIsActiveRemoteArchive(
 	if (!member.selfHostedServerDetails) return false
 	if (member.role.roleId !== MEMBER_ROLE_ID) return false
 	return true
-}
-
-export function getRenderableFieldInfo({
-	field,
-	tags,
-	answerTypeToTranslatedString,
-}: {
-	field: Field
-	tags: Observation['tags'] | Track['tags']
-	answerTypeToTranslatedString: {
-		true: string
-		false: string
-		null: string
-	}
-}): { label: string; answer: string } {
-	const { label, tagKey } = field
-
-	const correspondingFieldValueFromTags = tags[tagKey]
-
-	const renderedValue = (
-		Array.isArray(correspondingFieldValueFromTags)
-			? correspondingFieldValueFromTags
-			: [correspondingFieldValueFromTags]
-	)
-		// Only keep answers with a meaningful value i.e. no `undefined`, `''` (can happen if an answer is deleted by the user) or whitespace-only strings.
-		.filter((value): value is string | boolean | number | null => {
-			if (typeof value === 'string' && value.trim().length === 0) {
-				return false
-			}
-
-			return value !== undefined
-		})
-		.map((value) => {
-			if (typeof value === 'string' || typeof value === 'number') {
-				return value
-			}
-
-			if (typeof value === 'boolean') {
-				return answerTypeToTranslatedString[value ? 'true' : 'false']
-			}
-
-			if (value === null) {
-				return answerTypeToTranslatedString['null']
-			}
-		})
-		.join(', ')
-
-	return { label, answer: renderedValue }
 }

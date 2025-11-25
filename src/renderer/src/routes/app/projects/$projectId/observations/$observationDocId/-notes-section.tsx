@@ -3,13 +3,13 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
 import { ErrorDialog } from '../../../../../../components/error-dialog'
 import { Icon } from '../../../../../../components/icon'
-import { useGlobalEditingStateActions } from '../../../../../../contexts/global-editing-state-store-context'
 import { useAppForm } from '../../../../../../hooks/forms'
 import { getLocaleStateQueryOptions } from '../../../../../../lib/queries/app-settings'
 import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations'
@@ -39,10 +39,16 @@ export function ReadOnlyNotesSection({ notes }: { notes?: string }) {
 }
 
 export function EditableNotesSection({
+	disabled,
 	observationDocId,
+	onStartEditMode,
+	onStopEditMode,
 	projectId,
 }: {
+	disabled?: boolean
 	observationDocId: string
+	onStartEditMode: () => void
+	onStopEditMode: () => void
 	projectId: string
 }) {
 	const { formatMessage: t } = useIntl()
@@ -65,71 +71,81 @@ export function EditableNotesSection({
 		docType: 'observation',
 	})
 
+	const updateObservationNotesMutationKey = createGlobalMutationsKey([
+		'observations',
+		observationDocId,
+		'edit',
+		'notes',
+	])
+
 	const updateObservationNotes = useMutation({
-		mutationKey: UPDATE_OBSERVATION_NOTES_MUTATION_KEY,
+		mutationKey: updateObservationNotesMutationKey,
 		mutationFn: async ({ notes }: { notes: string }) => {
 			return updateObservationDocument.mutateAsync({
 				versionId: observation.versionId,
 				value: {
 					...observation,
-					tags: {
-						...observation.tags,
-						notes,
-					},
+					tags: { ...observation.tags, notes },
 				},
 			})
 		},
 	})
 
-	const globalEditingStateActions = useGlobalEditingStateActions()
-
 	return (
 		<>
-			<EditableSection
-				sectionTitle={t(m.title)}
-				tooltipText={t(m.editNotesTooltip)}
-				editIsPending={updateObservationNotes.status === 'pending'}
-				renderWhenEditing={({ updateEditState }) => (
-					<NotesEditor
-						initialValue={observation.tags.notes}
-						onCancel={() => {
-							updateEditState('idle')
-							globalEditingStateActions.update(false)
-						}}
-						onSave={async (notes: string) => {
-							updateEditState('idle')
-
-							try {
-								await updateObservationNotes.mutateAsync({ notes })
-								updateEditState('success')
-							} finally {
-								globalEditingStateActions.update(false)
-							}
-						}}
-					/>
-				)}
-				renderWhenIdle={
-					updateObservationNotes.status === 'pending' ||
-					(updateObservationNotes.status === 'success' &&
-						observationIsRefetching) ? (
-						<Typography
-							fontStyle={
-								updateObservationNotes.variables.notes.length === 0
-									? 'italic'
-									: undefined
-							}
-						>
-							{updateObservationNotes.variables.notes || t(m.noNotes)}
+			<Box paddingInline={6}>
+				<EditableSection
+					disabled={disabled}
+					sectionTitle={
+						<Typography variant="inherit" textTransform="uppercase">
+							{t(m.title)}
 						</Typography>
-					) : observation.tags.notes === undefined ||
-					  observation.tags.notes === null ||
-					  observation.tags.notes.toString().length === 0 ? (
-						<Typography fontStyle="italic">{t(m.noNotes)}</Typography>
-					) : (
-						<Typography>{observation.tags.notes}</Typography>
-					)
-				}
-			/>
+					}
+					tooltipText={t(m.editNotesTooltip)}
+					editIsPending={updateObservationNotes.status === 'pending'}
+					onStartEditMode={onStartEditMode}
+					renderWhenEditing={({ updateEditState }) => (
+						<NotesEditor
+							initialValue={observation.tags.notes}
+							onCancel={() => {
+								updateEditState('idle')
+								onStopEditMode()
+							}}
+							onSave={async (notes: string) => {
+								updateEditState('idle')
+
+								try {
+									await updateObservationNotes.mutateAsync({ notes })
+									updateEditState('success')
+								} finally {
+									onStopEditMode()
+								}
+							}}
+						/>
+					)}
+					renderWhenIdle={
+						updateObservationNotes.status === 'pending' ||
+						(updateObservationNotes.status === 'success' &&
+							observationIsRefetching) ? (
+							<Typography
+								fontStyle={
+									updateObservationNotes.variables.notes.length === 0
+										? 'italic'
+										: undefined
+								}
+							>
+								{updateObservationNotes.variables.notes || t(m.noNotes)}
+							</Typography>
+						) : observation.tags.notes === undefined ||
+						  observation.tags.notes === null ||
+						  observation.tags.notes.toString().length === 0 ? (
+							<Typography fontStyle="italic">{t(m.noNotes)}</Typography>
+						) : (
+							<Typography>{observation.tags.notes}</Typography>
+						)
+					}
+				/>
+			</Box>
 
 			<ErrorDialog
 				open={updateObservationNotes.status === 'error'}
@@ -145,12 +161,6 @@ export function EditableNotesSection({
 const NotesEditorSchema = v.object({
 	notes: v.pipe(v.string(), v.trim()),
 })
-
-const UPDATE_OBSERVATION_NOTES_MUTATION_KEY = createGlobalMutationsKey([
-	'observation',
-	'notes',
-	'update',
-])
 
 const FORM_ID = 'observation-notes-editor-form'
 
@@ -181,7 +191,9 @@ function NotesEditor({
 			onSubmit={(event) => {
 				event.preventDefault()
 				if (form.state.isSubmitting) return
-				form.handleSubmit()
+				form.handleSubmit().catch((err) => {
+					captureException(err)
+				})
 			}}
 		>
 			<Stack direction="column" gap={4}>
