@@ -241,6 +241,30 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "Observation"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.accessibleNotesInputLabel": {
+    "description": "Accessible label for notes input field.",
+    "message": "Notes"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Annuler"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.editNotesTooltip": {
+    "description": "Text for tooltip when hovering over notes.",
+    "message": "Cliquez pour modifier"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.noNotes": {
+    "description": "Text for when notes are empty.",
+    "message": "Pas de notes."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "Enregistrer"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.title": {
+    "description": "Title for notes section.",
+    "message": "Notes"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icône pour la catégorie {name}"
@@ -308,10 +332,6 @@
   "routes.app.projects.$projectId.observations.$observationDocId.index.noLocation": {
     "description": "Fallback for location when observation does not have location specified.",
     "message": "Aucun emplacement"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.notesSectionTitle": {
-    "description": "Title for notes section.",
-    "message": "Notes"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
