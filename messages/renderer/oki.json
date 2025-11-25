@@ -11,6 +11,10 @@
     "description": "Accessible label for button to close panel.",
     "message": "Open Settings."
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Noomtee"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
     "description": "Text for cancel button of delete observation confirmation dialog.",
     "message": "Noomtee"
