@@ -7,10 +7,7 @@ export default {
 	singleQuote: true,
 	arrowParens: 'always',
 	trailingComma: 'all',
-	plugins: [
-		'@ianvs/prettier-plugin-sort-imports',
-		'./node_modules/prettier-plugin-jsdoc/dist/index.js',
-	],
+	plugins: ['@ianvs/prettier-plugin-sort-imports', 'prettier-plugin-jsdoc'],
 	/**
 	 * Configuration @ianvs/prettier-plugin-sort-imports
 	 */
