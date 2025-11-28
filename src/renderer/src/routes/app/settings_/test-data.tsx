@@ -126,9 +126,7 @@ function RouteComponent() {
 				v.minLength(1, requiredError),
 				v.trim(),
 				v.digits(t(m.invalidObservationCountFormat)),
-				v.transform((value) => {
-					return Number(value)
-				}),
+				v.toNumber(),
 				v.minValue(
 					MIN_OBSERVATION_COUNT,
 					t(m.minObservationCountError, {
@@ -147,9 +145,7 @@ function RouteComponent() {
 				v.minLength(1, requiredError),
 				v.trim(),
 				v.decimal(t(m.invalidBoundedDistanceFormat)),
-				v.transform((value) => {
-					return Number.parseFloat(value)
-				}),
+				v.toNumber(),
 				v.minValue(
 					MIN_BOUNDED_DISTANCE_KM,
 					t(m.minBoundedDistanceError, { value: MIN_BOUNDED_DISTANCE_KM }),

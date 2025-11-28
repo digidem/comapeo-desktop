@@ -85,7 +85,7 @@
 		"sodium-native": "4.3.3",
 		"systeminformation": "5.27.11",
 		"tiny-typed-emitter": "2.1.0",
-		"valibot": "1.1.0",
+		"valibot": "1.2.0",
 		"zustand": "5.0.8"
 	},
 	"devDependencies": {
