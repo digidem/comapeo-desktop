@@ -137,7 +137,7 @@ function RouteComponent() {
 		currentRoute.routeId ===
 			'/app/projects/$projectId/invite/devices/$deviceId/send'
 
-	const isEditing = useGlobalEditingState()
+	const isEditing = useGlobalEditingState().length > 0
 
 	const someGlobalMutationIsPending =
 		useIsMutating({ mutationKey: GLOBAL_MUTATIONS_BASE_KEY }) > 0
