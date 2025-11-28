@@ -24,7 +24,6 @@ import {
 	BLUE_GREY,
 	DARKER_ORANGE,
 	GREEN,
-	LIGHT_GREY,
 	WHITE,
 } from '../../../../../../colors'
 import {
