@@ -345,7 +345,7 @@
     "description": "Title for details section.",
     "message": "Details"
   },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.locationPlusMinus": {
+  "routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy": {
     "description": "Displayed accuracy for observation location in meters.",
     "message": "± {value}m"
   },

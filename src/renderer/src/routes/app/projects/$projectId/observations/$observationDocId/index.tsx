@@ -575,7 +575,7 @@ function ObservationDetailsPanel({
 											{typeof observation.metadata?.position?.coords
 												.accuracy === 'number' ? (
 												<Box component="span" marginInlineStart={4}>
-													{t(m.locationPlusMinus, {
+													{t(m.locationAccuracy, {
 														value:
 															observation.metadata?.position?.coords.accuracy.toFixed(
 																0,
@@ -1126,8 +1126,8 @@ const m = defineMessages({
 		description:
 			'Text for button to return to track in successful observation deletion panel.',
 	},
-	locationPlusMinus: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.locationPlusMinus',
+	locationAccuracy: {
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy',
 		defaultMessage: '± {value}m',
 		description: 'Displayed accuracy for observation location in meters.',
 	},
