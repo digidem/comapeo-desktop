@@ -345,9 +345,9 @@
     "description": "Title for details section.",
     "message": "Details"
   },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.mediaAttachmentsSectionTitle": {
-    "description": "Title for media attachments section.",
-    "message": "Media Attachments"
+  "routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy": {
+    "description": "Displayed accuracy for observation location in meters.",
+    "message": "± {value}m"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
