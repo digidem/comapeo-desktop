@@ -24,6 +24,7 @@ import {
 	BLUE_GREY,
 	DARKER_ORANGE,
 	GREEN,
+	LIGHT_GREY,
 	WHITE,
 } from '../../../../../../colors'
 import {
@@ -563,19 +564,61 @@ function ObservationDetailsPanel({
 										htmlColor={DARKER_ORANGE}
 									/>
 
-									<Typography>
-										{typeof observation.lon === 'number' &&
-										typeof observation.lat === 'number'
-											? formatCoords({
-													lon: observation.lon,
-													lat: observation.lat,
-													format: coordinateFormat,
-												})
-											: t(m.noLocation)}
-									</Typography>
+									{typeof observation.lon === 'number' &&
+									typeof observation.lat === 'number' ? (
+										<Typography>
+											{formatCoords({
+												lon: observation.lon,
+												lat: observation.lat,
+												format: coordinateFormat,
+											})}
+
+											{typeof observation.metadata?.position?.coords
+												.accuracy === 'number' ? (
+												<Box component="span" marginInlineStart={4}>
+													{t(m.locationPlusMinus, {
+														value:
+															observation.metadata?.position?.coords.accuracy.toFixed(
+																0,
+															),
+													})}
+												</Box>
+											) : null}
+										</Typography>
+									) : (
+										<Typography>{t(m.noLocation)}</Typography>
+									)}
 								</Stack>
 							</Box>
 						</Stack>
+
+						<Stack direction="column" gap={2} overflow="auto" paddingInline={6}>
+							<Box display="flex" flexWrap="wrap" gap={4} overflow="auto">
+								{observation.attachments.map((attachment) => {
+									const key = `${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`
+
+									return (
+										<ErrorBoundary
+											key={key}
+											getResetKey={() => key}
+											fallback={() => <ObservationAttachmentError />}
+										>
+											<Suspense fallback={<ObservationAttachmentPending />}>
+												<ObservationAttachmentPreview
+													attachment={attachment}
+													projectId={projectId}
+												/>
+											</Suspense>
+										</ErrorBoundary>
+									)
+								})}
+							</Box>
+						</Stack>
+
+						<Divider
+							variant="fullWidth"
+							sx={{ bgcolor: BLUE_GREY, marginInline: 6 }}
+						/>
 
 						{canEdit ? (
 							<EditableNotesSection
@@ -598,38 +641,10 @@ function ObservationDetailsPanel({
 							/>
 						)}
 
-						<Stack direction="column" gap={2} overflow="auto">
-							<Stack direction="column" paddingInline={6} gap={4}>
-								<Typography
-									component="h2"
-									variant="body1"
-									textTransform="uppercase"
-								>
-									{t(m.mediaAttachmentsSectionTitle)}
-								</Typography>
-
-								<Box display="flex" flexWrap="wrap" gap={4} overflow="auto">
-									{observation.attachments.map((attachment) => {
-										const key = `${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`
-
-										return (
-											<ErrorBoundary
-												key={key}
-												getResetKey={() => key}
-												fallback={() => <ObservationAttachmentError />}
-											>
-												<Suspense fallback={<ObservationAttachmentPending />}>
-													<ObservationAttachmentPreview
-														attachment={attachment}
-														projectId={projectId}
-													/>
-												</Suspense>
-											</ErrorBoundary>
-										)
-									})}
-								</Box>
-							</Stack>
-						</Stack>
+						<Divider
+							variant="fullWidth"
+							sx={{ bgcolor: BLUE_GREY, marginInline: 6 }}
+						/>
 
 						{fieldsToDisplay.length > 0 ? (
 							<Stack direction="column" paddingInline={6} gap={4}>
@@ -1068,11 +1083,6 @@ const m = defineMessages({
 		defaultMessage: 'Could not find observation with ID {docId}',
 		description: 'Text displayed when observation cannot be found.',
 	},
-	mediaAttachmentsSectionTitle: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.mediaAttachmentsSectionTitle',
-		defaultMessage: 'Media Attachments',
-		description: 'Title for media attachments section.',
-	},
 	changeCategory: {
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory',
 		defaultMessage: 'Change',
@@ -1116,5 +1126,10 @@ const m = defineMessages({
 		defaultMessage: 'Return to Track',
 		description:
 			'Text for button to return to track in successful observation deletion panel.',
+	},
+	locationPlusMinus: {
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.locationPlusMinus',
+		defaultMessage: '± {value}m',
+		description: 'Displayed accuracy for observation location in meters.',
 	},
 })
