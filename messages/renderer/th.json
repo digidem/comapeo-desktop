@@ -63,6 +63,18 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "การสังเกต"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "ยกเลิก"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "บันทึก"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "ไม่มีการตอบรับ"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
     "description": "Text for cancel button.",
     "message": "ยกเลิก"
@@ -86,10 +98,6 @@
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
     "message": "รายละเอียด"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
-    "description": "Fallback text displayed if field has no meaningful value.",
-    "message": "ไม่มีการตอบรับ"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
