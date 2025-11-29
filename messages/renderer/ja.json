@@ -249,6 +249,34 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "観察記録"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "取消"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "保存"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.editNotesTooltip": {
+    "description": "Text for tooltip when hovering over notes.",
+    "message": "クリックして編集"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "回答なし"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerFalse": {
+    "description": "Text displayed if a boolean field is answered with \"false\"",
+    "message": "FALSE"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerNull": {
+    "description": "Text displayed if a field is answered with \"null\"",
+    "message": "NULL"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerTrue": {
+    "description": "Text displayed if a boolean field is answered with \"true\"",
+    "message": "TRUE"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.accessibleNotesInputLabel": {
     "description": "Accessible label for notes input field.",
     "message": "メモ"
@@ -313,25 +341,9 @@
     "description": "Title for details section.",
     "message": "詳細情報"
   },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerFalse": {
-    "description": "Text displayed if a boolean field is answered with \"false\"",
-    "message": "FALSE"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
-    "description": "Fallback text displayed if field has no meaningful value.",
-    "message": "回答なし"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNull": {
-    "description": "Text displayed if a field is answered with \"null\"",
-    "message": "NULL"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerTrue": {
-    "description": "Text displayed if a boolean field is answered with \"true\"",
-    "message": "TRUE"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.mediaAttachmentsSectionTitle": {
-    "description": "Title for media attachments section.",
-    "message": "メディア添付ファイル"
+  "routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy": {
+    "description": "Displayed accuracy for observation location in meters.",
+    "message": "± {value}m"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
