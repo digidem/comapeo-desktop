@@ -63,6 +63,18 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "அவதானிப்புகள்"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "ரத்து செய்க"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "சேமிக்கவும்"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "பதில் இல்லை"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
     "description": "Text for cancel button.",
     "message": "ரத்து செய்க"
@@ -86,10 +98,6 @@
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
     "message": "விபரங்கள்"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
-    "description": "Fallback text displayed if field has no meaningful value.",
-    "message": "பதில் இல்லை"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
