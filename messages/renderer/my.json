@@ -27,6 +27,14 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "လေ့လာတွေ့ရှိချက်များ"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "ပယ်ဖျက်သည်"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "အဖြေမရှိပါ"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
     "description": "Text for cancel button.",
     "message": "ပယ်ဖျက်သည်"
@@ -42,10 +50,6 @@
   "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
     "description": "Text for cancel button of delete observation confirmation dialog.",
     "message": "ပယ်ဖျက်သည်"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
-    "description": "Fallback text displayed if field has no meaningful value.",
-    "message": "အဖြေမရှိပါ"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
