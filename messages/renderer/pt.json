@@ -253,6 +253,34 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "Observação"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Cancelar"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "Salvar"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.editNotesTooltip": {
+    "description": "Text for tooltip when hovering over notes.",
+    "message": "Clique para Editar"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "Sem resposta"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerFalse": {
+    "description": "Text displayed if a boolean field is answered with \"false\"",
+    "message": "Falso"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerNull": {
+    "description": "Text displayed if a field is answered with \"null\"",
+    "message": "NULO"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerTrue": {
+    "description": "Text displayed if a boolean field is answered with \"true\"",
+    "message": "Verdadeiro"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.accessibleNotesInputLabel": {
     "description": "Accessible label for notes input field.",
     "message": "Observações"
@@ -316,26 +344,6 @@
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
     "message": "Detalhes"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerFalse": {
-    "description": "Text displayed if a boolean field is answered with \"false\"",
-    "message": "Falso"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
-    "description": "Fallback text displayed if field has no meaningful value.",
-    "message": "Sem resposta"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNull": {
-    "description": "Text displayed if a field is answered with \"null\"",
-    "message": "NULO"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerTrue": {
-    "description": "Text displayed if a boolean field is answered with \"true\"",
-    "message": "Verdadeiro"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.mediaAttachmentsSectionTitle": {
-    "description": "Title for media attachments section.",
-    "message": "Anexos de mídia"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
