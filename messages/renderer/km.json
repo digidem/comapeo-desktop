@@ -51,6 +51,18 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "ការសង្កេត"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "បោះបង់"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "រក្សាទុក"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "គ្មាន​ចម្លើយ"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
     "description": "Text for cancel button.",
     "message": "បោះបង់"
@@ -74,10 +86,6 @@
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
     "message": "ព័ត៌មានលម្អិត"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
-    "description": "Fallback text displayed if field has no meaningful value.",
-    "message": "គ្មាន​ចម្លើយ"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
