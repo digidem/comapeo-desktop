@@ -22,7 +22,11 @@ export default {
 		'src/renderer/src/generated/**',
 		'tests-e2e/utils.ts',
 	],
-	ignoreDependencies: ['@fontsource-variable/rubik', '@comapeo/fallback-smp'],
+	ignoreDependencies: [
+		'@fontsource-variable/rubik',
+		'@comapeo/fallback-smp',
+		'@comapeo/default-categories',
+	],
 	ignoreExportsUsedInFile: {
 		interface: true,
 		type: true,

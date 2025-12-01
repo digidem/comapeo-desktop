@@ -128,15 +128,7 @@ export function TextFieldEditor({
 const NumberFieldEditorSchema = v.object({
 	answer: v.union([
 		v.undefined(),
-		v.pipe(
-			v.string(),
-			v.minLength(1),
-			v.trim(),
-			v.digits(),
-			v.transform((value) => {
-				return Number(value)
-			}),
-		),
+		v.pipe(v.string(), v.minLength(1), v.trim(), v.digits(), v.toNumber()),
 	]),
 })
 

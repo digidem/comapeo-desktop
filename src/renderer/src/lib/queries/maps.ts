@@ -7,11 +7,7 @@ import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../comapeo'
 const MAPS_BASE_QUERY_KEY = [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'maps'] as const
 
 const CustomMapInfoSchema = v.object({
-	created: v.pipe(
-		v.string(),
-		v.isoTimestamp(),
-		v.transform((input) => new Date(input)),
-	),
+	created: v.pipe(v.string(), v.isoTimestamp(), v.toDate()),
 	name: v.string(),
 	size: v.pipe(v.number(), v.minValue(0)),
 })
