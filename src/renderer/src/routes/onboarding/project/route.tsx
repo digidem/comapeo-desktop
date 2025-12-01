@@ -1,44 +1,78 @@
-import type { ReactNode } from 'react'
-import Stack from '@mui/material/Stack'
-import { Outlet, createFileRoute } from '@tanstack/react-router'
+import { useIsMutating } from '@tanstack/react-query'
+import {
+	Outlet,
+	createFileRoute,
+	redirect,
+	useChildMatches,
+	useRouter,
+} from '@tanstack/react-router'
 
-import { LIGHT_GREY } from '../../../colors'
-import { GenericRouteNotFoundComponent } from '../../../components/generic-route-not-found-component'
+import { BasicLayout } from '../-layouts'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
+import { ONBOARDING_BASE_MUTATION_KEY } from './-shared'
 
 export const Route = createFileRoute('/onboarding/project')({
-	notFoundComponent: ({ data }) => {
-		return (
-			<Wrapper>
-				<GenericRouteNotFoundComponent
-					data={data}
-					backgroundColor={LIGHT_GREY}
-				/>
-			</Wrapper>
-		)
+	loader: async ({ context }) => {
+		const { clientApi, queryClient } = context
+
+		const ownDeviceInfo = await queryClient.ensureQueryData({
+			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
+			queryFn: async () => {
+				return clientApi.getDeviceInfo()
+			},
+		})
+
+		if (!ownDeviceInfo.name) {
+			throw redirect({
+				to: '/onboarding/device-name',
+				replace: true,
+			})
+		}
 	},
 	component: RouteComponent,
 })
 
 function RouteComponent() {
-	return (
-		<Wrapper>
-			<Outlet />
-		</Wrapper>
-	)
-}
+	const router = useRouter()
 
-function Wrapper({ children }: { children: ReactNode }) {
+	const currentRoute = useChildMatches({
+		select: (matches) => {
+			return matches.at(-1)!
+		},
+	})
+
+	const hideBack =
+		currentRoute.routeId === '/onboarding/project/create/$projectId/success' ||
+		currentRoute.routeId === '/onboarding/project/join/$inviteId/success'
+
+	const isOnboardingMutationPending =
+		useIsMutating({ mutationKey: ONBOARDING_BASE_MUTATION_KEY }) > 0
+
 	return (
-		<Stack
-			display="flex"
-			direction="column"
-			flex={1}
-			bgcolor={LIGHT_GREY}
-			padding={5}
-			borderRadius={2}
-			overflow="auto"
+		<BasicLayout
+			backStatus={
+				hideBack
+					? 'hidden'
+					: isOnboardingMutationPending
+						? 'disabled'
+						: 'enabled'
+			}
+			onBack={() => {
+				if (isOnboardingMutationPending) {
+					return
+				}
+
+				if (router.history.canGoBack()) {
+					router.history.back()
+				} else {
+					router.navigate({
+						to: '/onboarding/project',
+						replace: true,
+					})
+				}
+			}}
 		>
-			{children}
-		</Stack>
+			<Outlet />
+		</BasicLayout>
 	)
 }

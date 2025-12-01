@@ -26,8 +26,6 @@ export const Route = createFileRoute(
 
 		let projectApi
 		try {
-			// TODO: Not ideal but requires notable changes to @comapeo/core-react
-			// Copied from https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/projects.ts#L30
 			projectApi = await queryClient.ensureQueryData({
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects', projectId],
 				queryFn: async () => {
@@ -39,8 +37,6 @@ export const Route = createFileRoute(
 			throw redirect({ to: '/onboarding/project/create' })
 		}
 
-		// TODO: Not ideal but requires notable changes to @comapeo/core-react
-		// Copied from https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/projects.ts#L38
 		const settings = await queryClient.ensureQueryData({
 			queryKey: [
 				COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -78,7 +74,6 @@ function RouteComponent() {
 			justifyContent="space-between"
 			flex={1}
 			gap={10}
-			padding={5}
 		>
 			<Container maxWidth="sm" component={Stack} direction="column" gap={5}>
 				<Box alignSelf="center">
@@ -105,22 +100,25 @@ function RouteComponent() {
 
 			<Stack direction="row" justifyContent="center" gap={5}>
 				<ButtonLink
-					to="/app/projects/$projectId/settings/categories"
+					to="/app/projects/$projectId/invite"
 					params={{ projectId }}
 					variant="outlined"
 					fullWidth
-					sx={{ maxWidth: 400 }}
-				>
-					{t(m.updateCategoriesSet)}
-				</ButtonLink>
-				<ButtonLink
-					to="/app/projects/$projectId/invite"
-					params={{ projectId }}
-					variant="contained"
-					fullWidth
+					startIcon={<Icon name="material-people-filled" />}
 					sx={{ maxWidth: 400 }}
 				>
 					{t(m.inviteCollaborators)}
+				</ButtonLink>
+
+				<ButtonLink
+					to="/app/projects/$projectId"
+					params={{ projectId }}
+					variant="contained"
+					fullWidth
+					startIcon={<Icon name="material-map-filled" />}
+					sx={{ maxWidth: 400 }}
+				>
+					{t(m.startUsingCoMapeo)}
 				</ButtonLink>
 			</Stack>
 		</Stack>
@@ -182,28 +180,33 @@ const m = defineMessages({
 	title: {
 		id: 'routes.onboarding.project.create.$projectId.success.title',
 		defaultMessage: 'Success!',
+		description: 'Title for onboarding project creation success page.',
 	},
 	description: {
 		id: 'routes.onboarding.project.create.$projectId.success.description',
-		defaultMessage: 'You created<br></br><b>{projectName}</b>',
+		defaultMessage: '<b>{projectName}</b><br></br>created.',
+		description: 'Description for onboarding project creation success page.',
 	},
-	updateCategoriesSet: {
-		id: 'routes.onboarding.project.create.$projectId.success.updateCategoriesSet',
-		defaultMessage: 'Update Categories Set',
+	startUsingCoMapeo: {
+		id: 'routes.onboarding.project.create.$projectId.success.startUsingCoMapeo',
+		defaultMessage: 'Start Using CoMapeo',
+		description: 'Text for link to navigate to main app.',
 	},
 	inviteCollaborators: {
 		id: 'routes.onboarding.project.create.$projectId.success.inviteCollaborators',
 		defaultMessage: 'Invite Collaborators',
+		description: 'Text for link to navigate to invite collaborators page.',
 	},
 	notFound: {
 		id: 'routes.onboarding.project.create.$projectId.notFound',
 		defaultMessage: 'Could not find project with ID {projectId}',
+		description: 'Text displayed when project is not found.',
 	},
 	goBack: {
 		id: 'routes.onboarding.project.create.$projectId.success.goBack',
 		defaultMessage: 'Go back',
+		description: 'Text for button to navigate back when project is not found.',
 	},
-
 	projectNotFound: {
 		id: 'routes.onboarding.project.create.$projectId.success.projectNotFound',
 		defaultMessage: 'Could not find invite with ID {inviteId}',

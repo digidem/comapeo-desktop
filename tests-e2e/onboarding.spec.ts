@@ -236,7 +236,38 @@ test('project step', async () => {
 	await page.getByRole('button', { name: 'Go back', exact: true }).click()
 	await page.goForward()
 
-	// TODO: Assertions against the onboarding steps indicator
+	// TODO: Assertions against the onboarding steps indicator being present
+
+	// Page
+	await expect(
+		page.getByRole('heading', {
+			name: `${OUTPUTS.deviceName} is ready!`,
+			exact: true,
+		}),
+	).toBeVisible()
+
+	await expect(
+		page.getByRole('heading', {
+			name: 'Choose from below to start your first project.',
+			exact: true,
+		}),
+	).toBeVisible()
+
+	await expect(
+		page.getByRole('link', { name: 'Start New Project', exact: true }),
+	).toBeVisible()
+
+	await page.getByRole('link', { name: 'Join a Project', exact: true }).click()
+})
+
+test('join project', async () => {
+	const page = await electronApp.firstWindow()
+
+	// Header
+	await page.getByRole('button', { name: 'Go back', exact: true }).click()
+	await page.goForward()
+
+	// TODO: Assertions against the onboarding steps indicator no longer being present
 
 	// Page
 	await expect(
@@ -245,19 +276,17 @@ test('project step', async () => {
 
 	await expect(
 		page.getByRole('heading', {
-			name: 'Ask a monitoring coordinator to join their Project.',
+			name: 'Coordinate with your team to receive a project invitation.',
 			exact: true,
 		}),
 	).toBeVisible()
 
-	await expect(
-		page.getByText('Starting a new territory monitoring project?', {
-			exact: true,
-		}),
-	).toBeVisible()
+	// TODO: Simulate invites being received
+
+	await page.getByRole('button', { name: 'Go back', exact: true }).click()
 
 	await page
-		.getByRole('link', { name: 'Create a Project', exact: true })
+		.getByRole('link', { name: 'Start New Project', exact: true })
 		.click()
 })
 
@@ -268,11 +297,11 @@ test('create project', async () => {
 	await page.getByRole('button', { name: 'Go back', exact: true }).click()
 	await page.goForward()
 
-	// TODO: Assertions against the onboarding steps indicator
+	// TODO: Assertions against the onboarding steps indicator no longer being present
 
 	// Page
 	await expect(
-		page.getByRole('heading', { name: 'Create a Project', exact: true }),
+		page.getByRole('heading', { name: 'Start New Project', exact: true }),
 	).toBeVisible()
 
 	await expect(
@@ -284,7 +313,7 @@ test('create project', async () => {
 	)
 
 	await page
-		.getByRole('button', { name: 'Create Project', exact: true })
+		.getByRole('button', { name: 'Create', exact: true })
 		.click({ force: true })
 
 	await expect(
@@ -308,7 +337,7 @@ test('create project', async () => {
 	)
 
 	await page
-		.getByRole('button', { name: 'Create Project', exact: true })
+		.getByRole('button', { name: 'Create', exact: true })
 		.click({ force: true })
 
 	await projectNameInput.fill('')
@@ -327,9 +356,7 @@ test('create project', async () => {
 		`${OUTPUTS.projectName.length}/100`,
 	)
 
-	await page
-		.getByRole('button', { name: 'Create Project', exact: true })
-		.click()
+	await page.getByRole('button', { name: 'Create', exact: true }).click()
 })
 
 test('create project success', async () => {
@@ -352,7 +379,7 @@ test('create project success', async () => {
 
 	await expect(
 		page.getByRole('heading', {
-			name: 'You created Project e2e',
+			name: `${OUTPUTS.projectName} created.`,
 			exact: true,
 		}),
 	).toBeVisible()
@@ -360,11 +387,11 @@ test('create project success', async () => {
 	// TODO: Ideally test that clicking each of these has expected behavior
 
 	await expect(
-		page.getByRole('link', { name: 'Update Categories Set', exact: true }),
+		page.getByRole('link', { name: 'Invite Collaborators', exact: true }),
 	).toBeVisible()
 
 	await expect(
-		page.getByRole('link', { name: 'Invite Collaborators', exact: true }),
+		page.getByRole('link', { name: 'Start Using CoMapeo', exact: true }),
 	).toBeVisible()
 })
 

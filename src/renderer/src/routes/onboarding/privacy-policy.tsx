@@ -13,16 +13,17 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY, LIGHT_GREY, WHITE } from '../../colors'
+import { BLUE_GREY, DARK_GREY, LIGHT_GREY } from '../../colors'
 import { ErrorDialog } from '../../components/error-dialog'
 import { Icon } from '../../components/icon'
 import {
 	getDiagnosticsEnabledQueryOptions,
 	setDiagnosticsEnabledMutationOptions,
 } from '../../lib/queries/app-settings'
+import { StepLayout } from './-layouts'
 
 export const Route = createFileRoute('/onboarding/privacy-policy')({
 	loader: async ({ context }) => {
@@ -33,6 +34,8 @@ export const Route = createFileRoute('/onboarding/privacy-policy')({
 })
 
 function RouteComponent() {
+	const router = useRouter()
+
 	const { formatMessage: t } = useIntl()
 
 	const setDiagnosticsEnabledMutation = useMutation(
@@ -45,17 +48,18 @@ function RouteComponent() {
 
 	return (
 		<>
-			<Stack
-				display="flex"
-				direction="column"
-				justifyContent="space-between"
-				flex={1}
-				gap={10}
-				paddingX={5}
-				paddingY={10}
-				borderRadius={2}
-				bgcolor={WHITE}
-				overflow="auto"
+			<StepLayout
+				stepNumber={1}
+				onBack={() => {
+					if (router.history.canGoBack()) {
+						router.history.back()
+					} else {
+						router.navigate({
+							to: '/onboarding/data-and-privacy',
+							replace: true,
+						})
+					}
+				}}
 			>
 				<Container component={Stack} maxWidth="sm" direction="column" gap={10}>
 					<Typography variant="h1" fontWeight={500} textAlign="center">
@@ -234,7 +238,7 @@ function RouteComponent() {
 						</Stack>
 					</Stack>
 				</Container>
-			</Stack>
+			</StepLayout>
 
 			<ErrorDialog
 				open={setDiagnosticsEnabledMutation.status === 'error'}

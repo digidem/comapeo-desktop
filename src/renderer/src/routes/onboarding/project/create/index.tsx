@@ -1,14 +1,16 @@
 import { useMemo } from 'react'
+import { useCreateProject } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
+import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { useOnboardingCreateProject } from '../../-shared/queries'
+import { ONBOARDING_BASE_MUTATION_KEY } from '../-shared'
 import { DARKER_ORANGE, WHITE } from '../../../../colors'
 import { ErrorDialog } from '../../../../components/error-dialog'
 import { Icon } from '../../../../components/icon'
@@ -21,10 +23,17 @@ export const Route = createFileRoute('/onboarding/project/create/')({
 })
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
 	const router = useRouter()
 
-	const createProject = useOnboardingCreateProject()
+	const { formatMessage: t } = useIntl()
+
+	const createProject = useCreateProject()
+	const createOnboardingProject = useMutation({
+		mutationKey: [...ONBOARDING_BASE_MUTATION_KEY, 'project', 'create'],
+		mutationFn: async (opts?: { name?: string; configPath?: string }) => {
+			return createProject.mutateAsync(opts)
+		},
+	})
 
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
@@ -53,7 +62,9 @@ function RouteComponent() {
 
 			let projectId: string
 			try {
-				projectId = await createProject.mutateAsync({ name: projectName })
+				projectId = await createOnboardingProject.mutateAsync({
+					name: projectName,
+				})
 			} catch (err) {
 				captureException(err)
 				return
@@ -67,31 +78,24 @@ function RouteComponent() {
 	})
 
 	const errorDialogProps =
-		createProject.status === 'error'
+		createOnboardingProject.status === 'error'
 			? {
 					open: true,
 
-					errorMessage: createProject.error.toString(),
+					errorMessage: createOnboardingProject.error.toString(),
 					onClose: () => {
-						createProject.reset()
+						createOnboardingProject.reset()
 					},
 				}
 			: { open: false, onClose: () => {} }
 
 	return (
 		<>
-			<Stack
-				display="flex"
-				direction="column"
-				justifyContent="space-between"
-				flex={1}
-				gap={10}
-				padding={5}
-			>
-				<Container maxWidth="sm" component={Stack} direction="column" gap={5}>
+			<Container maxWidth="sm" component={Stack} direction="column" gap={10}>
+				<Stack direction="column" gap={5}>
 					<Box alignSelf="center">
 						<Icon
-							name="material-symbols-new-window"
+							name="material-manage-accounts-filled"
 							htmlColor={DARKER_ORANGE}
 							size={80}
 						/>
@@ -100,100 +104,101 @@ function RouteComponent() {
 					<Typography variant="h1" fontWeight={500} textAlign="center">
 						{t(m.title)}
 					</Typography>
+				</Stack>
 
-					<Typography variant="h2" fontWeight={400} textAlign="center">
-						{t(m.description)}
-					</Typography>
+				<Typography variant="h2" fontWeight={400} textAlign="center">
+					{t(m.description)}
+				</Typography>
 
-					<Box
-						component="form"
-						id="device-name-form"
-						noValidate
-						autoComplete="off"
-						onSubmit={(event) => {
-							event.preventDefault()
-							if (form.state.isSubmitting) return
-							form.handleSubmit()
-						}}
-					>
-						<form.AppField name="projectName">
-							{(field) => (
-								<field.TextField
-									id={field.name}
-									required
-									fullWidth
-									autoFocus
-									label={t(m.projectName)}
-									value={field.state.value}
-									error={!field.state.meta.isValid}
-									onChange={(event) => {
-										field.handleChange(event.target.value)
-									}}
-									slotProps={{
-										input: {
-											style: {
-												backgroundColor: WHITE,
-											},
-										},
-									}}
-									onBlur={field.handleBlur}
-									helperText={
-										<Stack
-											component="span"
-											direction="row"
-											justifyContent="space-between"
-										>
-											<Box component="span">
-												{field.state.meta.errors[0]?.message}
-											</Box>
-											<Box
-												component="output"
-												htmlFor={field.name}
-												name="character-count"
-											>
-												<form.Subscribe
-													selector={(state) =>
-														v._getGraphemeCount(state.values.projectName)
-													}
-												>
-													{(count) =>
-														t(m.characterCount, {
-															count,
-															max: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
-														})
-													}
-												</form.Subscribe>
-											</Box>
-										</Stack>
-									}
-								/>
-							)}
-						</form.AppField>
-					</Box>
-				</Container>
-
-				<Box display="flex" justifyContent="center">
-					<form.Subscribe
-						selector={(state) => [state.canSubmit, state.isSubmitting]}
-					>
-						{([canSubmit, isSubmitting]) => (
-							<form.SubmitButton
+				<Box
+					component="form"
+					id="device-name-form"
+					noValidate
+					autoComplete="off"
+					onSubmit={(event) => {
+						event.preventDefault()
+						if (form.state.isSubmitting) return
+						form.handleSubmit()
+					}}
+				>
+					<form.AppField name="projectName">
+						{(field) => (
+							<field.TextField
+								id={field.name}
+								required
 								fullWidth
-								form="device-name-form"
-								variant="contained"
-								type="submit"
-								aria-disabled={!canSubmit || isSubmitting}
-								// TODO: Maybe use spin-delay?
-								loading={isSubmitting}
-								loadingPosition="start"
-								sx={{ maxWidth: 400 }}
-							>
-								{t(m.createProject)}
-							</form.SubmitButton>
+								autoFocus
+								label={t(m.projectName)}
+								value={field.state.value}
+								error={!field.state.meta.isValid}
+								onChange={(event) => {
+									field.handleChange(event.target.value)
+								}}
+								slotProps={{
+									input: {
+										style: {
+											backgroundColor: WHITE,
+										},
+									},
+								}}
+								onBlur={field.handleBlur}
+								helperText={
+									<Stack
+										component="span"
+										direction="row"
+										justifyContent="space-between"
+									>
+										<Box component="span">
+											{field.state.meta.errors[0]?.message}
+										</Box>
+										<Box
+											component="output"
+											htmlFor={field.name}
+											name="character-count"
+										>
+											<form.Subscribe
+												selector={(state) =>
+													v._getGraphemeCount(state.values.projectName)
+												}
+											>
+												{(count) =>
+													t(m.characterCount, {
+														count,
+														max: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
+													})
+												}
+											</form.Subscribe>
+										</Box>
+									</Stack>
+								}
+							/>
 						)}
-					</form.Subscribe>
+					</form.AppField>
 				</Box>
-			</Stack>
+			</Container>
+
+			<Box display="flex" justifyContent="center">
+				<form.Subscribe
+					selector={(state) => [state.canSubmit, state.isSubmitting]}
+				>
+					{([canSubmit, isSubmitting]) => (
+						<form.SubmitButton
+							fullWidth
+							form="device-name-form"
+							variant="contained"
+							type="submit"
+							aria-disabled={!canSubmit || isSubmitting}
+							// TODO: Maybe use spin-delay?
+							loading={isSubmitting}
+							loadingPosition="start"
+							sx={{ maxWidth: 400 }}
+							startIcon={<Icon name="material-check-circle-outline-rounded" />}
+						>
+							{t(m.createButton)}
+						</form.SubmitButton>
+					)}
+				</form.Subscribe>
+			</Box>
 
 			<ErrorDialog {...errorDialogProps} />
 		</>
@@ -203,30 +208,37 @@ function RouteComponent() {
 const m = defineMessages({
 	title: {
 		id: 'routes.onboarding.project.create.index.title',
-		defaultMessage: 'Create a Project',
+		defaultMessage: 'Start New Project',
+		description: 'Page title for onboarding project creation page.',
 	},
 	description: {
 		id: 'routes.onboarding.project.create.index.description',
 		defaultMessage: 'Name your project.',
+		description: 'Page description for onboarding project creation page.',
 	},
 	projectName: {
 		id: 'routes.onboarding.project.create.index.projectName',
 		defaultMessage: 'Project Name',
+		description: 'Input label for onboarding project creation page.',
 	},
 	minLengthError: {
 		id: 'routes.onboarding.project.create.index.minLengthError',
 		defaultMessage: 'Enter a Project Name',
+		description: 'Error message for when project name is too short.',
 	},
 	maxLengthError: {
 		id: 'routes.onboarding.project.create.index.maxLengthError',
 		defaultMessage: 'Too long, try a shorter name.',
+		description: 'Error message for when project name is too long.',
 	},
-	createProject: {
-		id: 'routes.onboarding.project.create.index.createProject',
-		defaultMessage: 'Create Project',
+	createButton: {
+		id: 'routes.onboarding.project.create.index.createButton',
+		defaultMessage: 'Create',
+		description: 'Text for button to create project.',
 	},
 	characterCount: {
 		id: 'routes.onboarding.project.create.index.characterCount',
 		defaultMessage: '{count}/{max}',
+		description: 'Character count for project name input.',
 	},
 })
