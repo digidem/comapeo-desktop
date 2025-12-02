@@ -407,15 +407,7 @@
   },
   "routes.app.projects.$projectId_.exchange.index.devicesFound": {
     "description": "Text displayed when other devices have been found.",
-    "message": "Devices Found"
-  },
-  "routes.app.projects.$projectId_.exchange.index.exchangeEverythingDescription": {
-    "description": "Description of 'exchange everything' setting",
-    "message": "Full size photos and audio.<br></br>Uses more storage."
-  },
-  "routes.app.projects.$projectId_.exchange.index.exchangeEverythingTitle": {
-    "description": "Title displayed when exchange setting is set to 'exchange everything'",
-    "message": "Exchange everything."
+    "message": "Devices found."
   },
   "routes.app.projects.$projectId_.exchange.index.exchanging": {
     "description": "Text displayed when exchanging with other devices.",
@@ -425,9 +417,9 @@
     "description": "Text displayed when waiting for Wi-Fi information.",
     "message": "Getting Wi-Fi information…"
   },
-  "routes.app.projects.$projectId_.exchange.index.noDevicesFound": {
-    "description": "Text displayed when no devices have been found.",
-    "message": "No Devices Found"
+  "routes.app.projects.$projectId_.exchange.index.lookingForDevices": {
+    "description": "Text displayed when no other devices have been found.",
+    "message": "Looking for devices…"
   },
   "routes.app.projects.$projectId_.exchange.index.remoteArchiveConnected": {
     "description": "Text indicating that some remote archive is connected.",

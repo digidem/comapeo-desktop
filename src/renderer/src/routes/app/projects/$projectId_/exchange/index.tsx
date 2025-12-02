@@ -15,7 +15,6 @@ import LinearProgress, {
 } from '@mui/material/LinearProgress'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
 import { captureException } from '@sentry/react'
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -23,13 +22,11 @@ import { defineMessages, useIntl } from 'react-intl'
 import { NetworkConnectionInfo } from '../../-shared/network-connection-info'
 import { TwoPanelLayout } from '../../../-components/two-panel-layout'
 import {
-	BLACK,
 	BLUE_GREY,
 	COMAPEO_BLUE,
 	DARKER_ORANGE,
 	GREEN,
 	LIGHT_GREY,
-	WHITE,
 } from '../../../../../colors'
 import { ErrorDialog } from '../../../../../components/error-dialog'
 import { GenericRoutePendingComponent } from '../../../../../components/generic-route-pending-component'
@@ -78,8 +75,6 @@ export const Route = createFileRoute('/app/projects/$projectId/exchange/')({
 	component: RouteComponent,
 })
 
-const ICON_BOX_SHADOW = `0px 2px 20px 0px ${alpha(BLACK, 0.4)}`
-
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 
@@ -108,6 +103,10 @@ function RouteComponent() {
 						},
 					}
 				: { open: false, onClose: () => {} }
+
+	const connectedPeersCount = syncState
+		? getConnectedPeersCount(syncState.remoteDeviceSyncState)
+		: 0
 
 	return (
 		<>
@@ -146,14 +145,7 @@ function RouteComponent() {
 							</Box>
 						</Box>
 
-						<Stack
-							direction="column"
-							gap={5}
-							borderRadius={2}
-							border={`1px solid ${BLUE_GREY}`}
-							flex={1}
-							paddingBlock={10}
-						>
+						<Stack direction="column" gap={5} flex={1} paddingBlock={10}>
 							<Box
 								display="flex"
 								flexDirection="row"
@@ -167,28 +159,15 @@ function RouteComponent() {
 									flexDirection="column"
 									padding={2}
 									borderRadius="50%"
-									border={`12px solid ${DARKER_ORANGE}`}
-									position="relative"
+									border={`12px solid ${connectedPeersCount > 0 ? DARKER_ORANGE : BLUE_GREY}`}
 								>
 									<Icon
-										name="material-bolt"
-										htmlColor={DARKER_ORANGE}
+										name="material-bolt-sharp"
+										htmlColor={
+											connectedPeersCount > 0 ? DARKER_ORANGE : BLUE_GREY
+										}
 										size={128}
 									/>
-									<Box
-										position="absolute"
-										right={-12}
-										bottom={-12}
-										zIndex={1}
-										display="flex"
-										flexDirection="column"
-										padding={2}
-										borderRadius="50%"
-										bgcolor={DARKER_ORANGE}
-										boxShadow={ICON_BOX_SHADOW}
-									>
-										<Icon name="material-symbols-stars-2" htmlColor={WHITE} />
-									</Box>
 								</Box>
 							</Box>
 
@@ -204,15 +183,6 @@ function RouteComponent() {
 							) : (
 								<CircularProgress />
 							)}
-
-							<Stack direction="column" gap={2}>
-								<Typography fontWeight={500} textAlign="center">
-									{t(m.exchangeEverythingTitle)}
-								</Typography>
-								<Typography color="textSecondary" textAlign="center">
-									{t(m.exchangeEverythingDescription)}
-								</Typography>
-							</Stack>
 						</Stack>
 
 						<Box
@@ -232,7 +202,7 @@ function RouteComponent() {
 										name={
 											syncState?.data.isSyncEnabled
 												? 'material-square-filled'
-												: 'material-bolt'
+												: 'material-bolt-sharp'
 										}
 									/>
 								}
@@ -343,7 +313,7 @@ function getExchangeStateTitle(syncStage: SyncStage, syncEnabled: boolean) {
 		case 'idle': {
 			return syncStage.connectedPeersCount > 0
 				? m.devicesFound
-				: m.noDevicesFound
+				: m.lookingForDevices
 		}
 		case 'waiting': {
 			return m.waitingForDevices
@@ -390,7 +360,7 @@ function SyncProgress({
 			{stage.name === 'complete-full' ? (
 				<Icon name="material-check" htmlColor={GREEN} />
 			) : stage.name !== 'waiting' ? (
-				<Icon name="material-bolt" htmlColor={COMAPEO_BLUE} />
+				<Icon name="material-bolt-sharp" htmlColor={COMAPEO_BLUE} />
 			) : null}
 
 			<LinearProgress {...progressProps} />
@@ -415,15 +385,15 @@ const m = defineMessages({
 		defaultMessage: 'Waiting for Devices',
 		description: 'Text displayed when waiting for other devices to be found.',
 	},
+	lookingForDevices: {
+		id: 'routes.app.projects.$projectId_.exchange.index.lookingForDevices',
+		defaultMessage: 'Looking for devices…',
+		description: 'Text displayed when no other devices have been found.',
+	},
 	devicesFound: {
 		id: 'routes.app.projects.$projectId_.exchange.index.devicesFound',
-		defaultMessage: 'Devices Found',
+		defaultMessage: 'Devices found.',
 		description: 'Text displayed when other devices have been found.',
-	},
-	noDevicesFound: {
-		id: 'routes.app.projects.$projectId_.exchange.index.noDevicesFound',
-		defaultMessage: 'No Devices Found',
-		description: 'Text displayed when no devices have been found.',
 	},
 	exchanging: {
 		id: 'routes.app.projects.$projectId_.exchange.index.exchanging',
@@ -445,17 +415,6 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId_.exchange.index.upToDate',
 		defaultMessage: 'Up to date!',
 		description: 'Text displayed when exchangable data is up to date.',
-	},
-	exchangeEverythingTitle: {
-		id: 'routes.app.projects.$projectId_.exchange.index.exchangeEverythingTitle',
-		defaultMessage: 'Exchange everything.',
-		description:
-			"Title displayed when exchange setting is set to 'exchange everything'",
-	},
-	exchangeEverythingDescription: {
-		id: 'routes.app.projects.$projectId_.exchange.index.exchangeEverythingDescription',
-		defaultMessage: 'Full size photos and audio.<br></br>Uses more storage.',
-		description: "Description of 'exchange everything' setting",
 	},
 	start: {
 		id: 'routes.app.projects.$projectId_.exchange.index.start',

@@ -788,17 +788,13 @@ test.describe('exchange', () => {
 			await expect(networkConnectionInfo).not.toHaveText('&lt;redacted&gt;')
 
 			await expect(
-				main.getByRole('heading', { name: 'No Devices Found', exact: true }),
+				main.getByRole('heading', {
+					name: 'Looking for devices…',
+					exact: true,
+				}),
 			).toBeVisible()
 
 			await expect(main.getByRole('progressbar')).not.toBeVisible()
-
-			// TODO: Will need to update when exchange settings can be configured
-			await expect(
-				main.getByText('Exchange everything.', { exact: true }),
-			).toBeVisible()
-			await expect(main.getByText('Full size photos and audio.')).toBeVisible()
-			await expect(main.getByText('Uses more storage.')).toBeVisible()
 		}
 
 		//// Start exchange
