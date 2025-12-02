@@ -238,41 +238,10 @@ function RouteComponent() {
 								label={t(m.appSettingsTabLabel)}
 								icon={<Icon name="material-settings" size={30} />}
 							/>
-
-							<LabeledNavItem
-								to="/app/data-and-privacy"
-								disabled={
-									((pageHasEditing ||
-										isEditing ||
-										someGlobalMutationIsPending) &&
-										currentRoute.fullPath !== '/app/data-and-privacy') ||
-									(currentRoute.routeId ===
-										'/app/projects/$projectId/exchange/' &&
-										syncEnabled)
-								}
-								label={t(m.dataAndPrivacyTabLabel)}
-								icon={
-									<Icon name="material-symbols-encrypted-weight400" size={30} />
-								}
-							/>
-
-							<LabeledNavItem
-								to="/app/about"
-								disabled={
-									((pageHasEditing ||
-										isEditing ||
-										someGlobalMutationIsPending) &&
-										currentRoute.fullPath !== '/app/about') ||
-									(currentRoute.routeId ===
-										'/app/projects/$projectId/exchange/' &&
-										syncEnabled)
-								}
-								label={t(m.aboutTabLabel)}
-								icon={<Icon name="material-symbols-info" size={30} />}
-							/>
 						</Stack>
 					</List>
 				</Box>
+
 				<Box component="main" display="flex" overflow="auto">
 					<Outlet />
 				</Box>
@@ -339,25 +308,17 @@ const SHARED_NAV_ITEM_PROPS = {
 } as const
 
 const m = defineMessages({
-	aboutTabLabel: {
-		id: 'routes.app.route.aboutTabLabel',
-		defaultMessage: 'About CoMapeo',
+	projectTabAccessibleLabel: {
+		id: 'routes.app.route.projectTabAccessibleLabel',
+		defaultMessage: 'View project.',
+		description: 'Accessible label for project tab link in navigation.',
 	},
 	exchangeTabLabel: {
 		id: 'routes.app.route.exchangeTabLabel',
 		defaultMessage: 'Exchange',
 	},
-	dataAndPrivacyTabLabel: {
-		id: 'routes.app.route.dataAndPrivacyTabLabel',
-		defaultMessage: 'Data & Privacy',
-	},
 	appSettingsTabLabel: {
 		id: 'routes.app.route.appSettingsTabLabel',
-		defaultMessage: 'App Settings',
-	},
-	projectTabAccessibleLabel: {
-		id: 'routes.app.route.projectTabAccessibleLabel',
-		defaultMessage: 'View project.',
-		description: 'Accessible label for project tab link in navigation.',
+		defaultMessage: 'Settings',
 	},
 })
