@@ -33,6 +33,7 @@ export const iconNames = [
 	'material-people-filled',
 	'material-offline-bolt',
 	'material-map',
+	'material-map-filled',
 	'material-manage-accounts-filled',
 	'material-logout',
 	'material-language',

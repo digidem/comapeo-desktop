@@ -4,31 +4,36 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { DARKER_ORANGE, DARK_GREY, LIGHT_GREY } from '../../colors'
+import { DARKER_ORANGE, DARK_GREY } from '../../colors'
 import { Icon } from '../../components/icon'
 import { ButtonLink } from '../../components/link'
+import { StepLayout } from './-layouts'
 
 export const Route = createFileRoute('/onboarding/data-and-privacy')({
 	component: RouteComponent,
 })
 
 function RouteComponent() {
+	const router = useRouter()
+
 	const { formatMessage: t } = useIntl()
 
 	return (
-		<Stack
-			display="flex"
-			direction="column"
-			justifyContent="space-between"
-			flex={1}
-			gap={10}
-			bgcolor={LIGHT_GREY}
-			padding={5}
-			borderRadius={2}
-			overflow="auto"
+		<StepLayout
+			stepNumber={1}
+			onBack={() => {
+				if (router.history.canGoBack()) {
+					router.history.back()
+				} else {
+					router.navigate({
+						to: '/welcome',
+						replace: true,
+					})
+				}
+			}}
 		>
 			<Container maxWidth="sm" component={Stack} direction="column" gap={5}>
 				<Box alignSelf="center">
@@ -80,7 +85,7 @@ function RouteComponent() {
 					{t(m.next)}
 				</ButtonLink>
 			</Stack>
-		</Stack>
+		</StepLayout>
 	)
 }
 
@@ -101,6 +106,7 @@ const m = defineMessages({
 	next: {
 		id: 'routes.onboarding.data-and-privacy.next',
 		defaultMessage: 'Next',
+		description: 'Text for link to next step in onboarding.',
 	},
 	dataStays: {
 		id: 'routes.onboarding.data-and-privacy.dataStays',

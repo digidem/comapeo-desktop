@@ -4,23 +4,25 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { captureException } from '@sentry/react'
+import { useStore } from '@tanstack/react-form'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../colors'
+import { DARKER_ORANGE, WHITE } from '../../colors'
 import { ErrorDialog } from '../../components/error-dialog'
 import { Icon } from '../../components/icon'
 import { useAppForm } from '../../hooks/forms'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo'
 import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../lib/constants'
 import { createDeviceNameSchema } from '../../lib/validators/device'
+import { StepLayout } from './-layouts'
 
 export const Route = createFileRoute('/onboarding/device-name')({
 	loader: async ({ context }) => {
 		const { clientApi, queryClient } = context
 
-		// TODO: not ideal to do this but requires major changes to @comapeo/core-react
 		await queryClient.ensureQueryData({
 			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 			queryFn: async () => {
@@ -32,8 +34,9 @@ export const Route = createFileRoute('/onboarding/device-name')({
 })
 
 function RouteComponent() {
+	const router = useRouter()
+
 	const { formatMessage: t } = useIntl()
-	const navigate = useNavigate()
 
 	const { data: deviceInfo } = useOwnDeviceInfo()
 	const setOwnDeviceInfo = useSetOwnDeviceInfo()
@@ -61,41 +64,52 @@ function RouteComponent() {
 		onSubmit: async ({ value }) => {
 			const parsedDeviceName = v.parse(deviceNameSchema, value.deviceName)
 
-			// TODO: Catch error and report to Sentry
 			await setOwnDeviceInfo.mutateAsync({
 				deviceType: 'desktop',
 				name: parsedDeviceName,
 			})
 
-			navigate({ to: '/onboarding/project' })
+			await router.navigate({ to: '/onboarding/project' })
 		},
+	})
+
+	const isSubmitting = useStore(form.store, (state) => {
+		return state.isSubmitting
 	})
 
 	return (
 		<>
-			<Stack
-				display="flex"
-				direction="column"
-				justifyContent="space-between"
-				flex={1}
-				gap={10}
-				bgcolor={LIGHT_GREY}
-				padding={5}
-				borderRadius={2}
-				overflow="auto"
+			<StepLayout
+				stepNumber={2}
+				onBack={
+					isSubmitting
+						? undefined
+						: () => {
+								if (router.history.canGoBack()) {
+									router.history.back()
+								} else {
+									router.navigate({
+										to: '/onboarding/data-and-privacy',
+										replace: true,
+									})
+								}
+							}
+				}
 			>
-				<Container maxWidth="sm" component={Stack} direction="column" gap={5}>
-					<Box alignSelf="center">
-						<Icon
-							name="material-symbols-computer"
-							htmlColor={DARKER_ORANGE}
-							size={80}
-						/>
-					</Box>
+				<Container maxWidth="sm" component={Stack} direction="column" gap={10}>
+					<Stack direction="column" gap={5}>
+						<Box alignSelf="center">
+							<Icon
+								name="material-symbols-computer"
+								htmlColor={DARKER_ORANGE}
+								size={80}
+							/>
+						</Box>
 
-					<Typography variant="h1" fontWeight={500} textAlign="center">
-						{t(m.title)}
-					</Typography>
+						<Typography variant="h1" fontWeight={500} textAlign="center">
+							{t(m.title)}
+						</Typography>
+					</Stack>
 
 					<Typography variant="h2" fontWeight={400} textAlign="center">
 						{t(m.description)}
@@ -108,8 +122,14 @@ function RouteComponent() {
 						autoComplete="off"
 						onSubmit={(event) => {
 							event.preventDefault()
-							if (form.state.isSubmitting) return
-							form.handleSubmit()
+
+							if (form.state.isSubmitting) {
+								return
+							}
+
+							form.handleSubmit().catch((err) => {
+								captureException(err)
+							})
 						}}
 					>
 						<form.AppField name="deviceName">
@@ -184,7 +204,7 @@ function RouteComponent() {
 						)}
 					</form.Subscribe>
 				</Box>
-			</Stack>
+			</StepLayout>
 
 			<ErrorDialog
 				open={setOwnDeviceInfo.status === 'error'}

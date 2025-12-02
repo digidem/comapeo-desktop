@@ -1077,6 +1077,14 @@
     "description": "Message displayed when track creation succeeds.",
     "message": "Created {count, plural, one {# track} other {# tracks}}."
   },
+  "routes.onboarding.-layouts.goBack": {
+    "description": "Button text for button to navigate back in onboarding steps.",
+    "message": "Go back"
+  },
+  "routes.onboarding.-layouts.step": {
+    "description": "Text indicating step number in onboarding.",
+    "message": "Step {value}"
+  },
   "routes.onboarding.data-and-privacy.dataEncrypted": {
     "message": "All data stays fully encrypted."
   },
@@ -1090,6 +1098,7 @@
     "message": "Learn More"
   },
   "routes.onboarding.data-and-privacy.next": {
+    "description": "Text for link to next step in onboarding.",
     "message": "Next"
   },
   "routes.onboarding.data-and-privacy.privateByDefault": {
@@ -1213,106 +1222,112 @@
     "message": "Crash data and app errors together with the device and app info provide Awana Digital with the information we need to fix errors and bugs in the app.<br></br><br></br>The performance data helps us improve the responsiveness of the app and identify errors.<br></br><br></br>The country where CoMapeo is being used and the language of the UI helps us understand minimal information about CoMapeo users: \"How many CoMapeo users are there in each country?\""
   },
   "routes.onboarding.project.create.$projectId.notFound": {
+    "description": "Text displayed when project is not found.",
     "message": "Could not find project with ID {projectId}"
   },
   "routes.onboarding.project.create.$projectId.success.description": {
-    "message": "You created<br></br><b>{projectName}</b>"
+    "description": "Description for onboarding project creation success page.",
+    "message": "<b>{projectName}</b><br></br>created."
   },
   "routes.onboarding.project.create.$projectId.success.goBack": {
+    "description": "Text for button to navigate back when project is not found.",
     "message": "Go back"
   },
   "routes.onboarding.project.create.$projectId.success.inviteCollaborators": {
+    "description": "Text for link to navigate to invite collaborators page.",
     "message": "Invite Collaborators"
   },
   "routes.onboarding.project.create.$projectId.success.projectNotFound": {
     "description": "Text displayed when invite cannot be found.",
     "message": "Could not find invite with ID {inviteId}"
   },
+  "routes.onboarding.project.create.$projectId.success.startUsingCoMapeo": {
+    "description": "Text for link to navigate to main app.",
+    "message": "Start Using CoMapeo"
+  },
   "routes.onboarding.project.create.$projectId.success.title": {
+    "description": "Title for onboarding project creation success page.",
     "message": "Success!"
   },
-  "routes.onboarding.project.create.$projectId.success.updateCategoriesSet": {
-    "message": "Update Categories Set"
-  },
   "routes.onboarding.project.create.index.characterCount": {
+    "description": "Character count for project name input.",
     "message": "{count}/{max}"
   },
-  "routes.onboarding.project.create.index.createProject": {
-    "message": "Create Project"
+  "routes.onboarding.project.create.index.createButton": {
+    "description": "Text for button to create project.",
+    "message": "Create"
   },
   "routes.onboarding.project.create.index.description": {
+    "description": "Page description for onboarding project creation page.",
     "message": "Name your project."
   },
   "routes.onboarding.project.create.index.maxLengthError": {
+    "description": "Error message for when project name is too long.",
     "message": "Too long, try a shorter name."
   },
   "routes.onboarding.project.create.index.minLengthError": {
+    "description": "Error message for when project name is too short.",
     "message": "Enter a Project Name"
   },
   "routes.onboarding.project.create.index.projectName": {
+    "description": "Input label for onboarding project creation page.",
     "message": "Project Name"
   },
   "routes.onboarding.project.create.index.title": {
-    "message": "Create a Project"
+    "description": "Page title for onboarding project creation page.",
+    "message": "Start New Project"
   },
-  "routes.onboarding.project.createProject": {
-    "message": "Create a Project"
+  "routes.onboarding.project.index.description": {
+    "description": "Description shown about actions to take in the project onboarding landing page.",
+    "message": "Choose from below to start your first project."
   },
-  "routes.onboarding.project.description": {
-    "message": "Ask a monitoring coordinator to join their Project."
-  },
-  "routes.onboarding.project.join.$inviteId.index.declineInvite": {
-    "message": "Decline Invite"
-  },
-  "routes.onboarding.project.join.$inviteId.index.description": {
-    "message": "You're invited to…"
-  },
-  "routes.onboarding.project.join.$inviteId.index.inviteNotFound": {
-    "description": "Text displayed when invite cannot be found.",
-    "message": "Could not find invite with ID {inviteId}"
-  },
-  "routes.onboarding.project.join.$inviteId.index.joinAs": {
-    "message": "Join as a {role, select, coordinator {coordinator} other {participant}}?"
-  },
-  "routes.onboarding.project.join.$inviteId.index.joinProject": {
-    "message": "Join Project"
-  },
-  "routes.onboarding.project.join.$inviteId.index.responseError": {
-    "message": "Something went wrong. Try again."
-  },
-  "routes.onboarding.project.join.$inviteId.index.title": {
+  "routes.onboarding.project.index.joinProjectButton": {
+    "description": "Text for link to join a project.",
     "message": "Join a Project"
   },
+  "routes.onboarding.project.index.startProjectButton": {
+    "description": "Text for link to start a project.",
+    "message": "Start New Project"
+  },
+  "routes.onboarding.project.index.title": {
+    "description": "Title for the project onboarding landing page.",
+    "message": "{name} is ready!"
+  },
   "routes.onboarding.project.join.$inviteId.success.description": {
-    "message": "You joined<br></br><b>{projectName}</b>"
+    "description": "Description for onboarding joining project success page.",
+    "message": "<b>{deviceName}</b><br></br>joined<br></br><b>{projectName}</b>."
   },
   "routes.onboarding.project.join.$inviteId.success.inviteNotFound": {
     "description": "Text displayed when invite cannot be found.",
     "message": "Could not find invite with ID {inviteId}"
   },
   "routes.onboarding.project.join.$inviteId.success.startUsingCoMapeo": {
+    "description": "Text for link to navigate to main app.",
     "message": "Start Using CoMapeo"
   },
   "routes.onboarding.project.join.$inviteId.success.title": {
+    "description": "Title for onboarding joining project success page.",
     "message": "Success!"
   },
-  "routes.onboarding.project.limitedToDevices": {
-    "message": "Sharing observations and data are limited to devices within each Project."
+  "routes.onboarding.project.join.index.acceptButton": {
+    "description": "Text for button to accept invitation.",
+    "message": "Accept"
   },
-  "routes.onboarding.project.securelyStore": {
-    "message": "Projects help teams securely store and share their territory monitoring data and observations."
+  "routes.onboarding.project.join.index.declineButton": {
+    "description": "Text for button to decline invitation.",
+    "message": "Decline"
   },
-  "routes.onboarding.project.startingNewProject": {
-    "message": "Starting a new territory monitoring project?"
+  "routes.onboarding.project.join.index.description": {
+    "description": "Description for onboarding join project landing page.",
+    "message": "Coordinate with your team to receive a project invitation."
   },
-  "routes.onboarding.project.title": {
+  "routes.onboarding.project.join.index.inviteDescription": {
+    "description": "Description for invite containing role being invited as.",
+    "message": "Join as a {role, select, coordinator {coordinator} other {participant}}?"
+  },
+  "routes.onboarding.project.join.index.title": {
+    "description": "Title for onboarding join project landing page.",
     "message": "Join a Project"
-  },
-  "routes.onboarding.route.goBack": {
-    "message": "Go back"
-  },
-  "routes.onboarding.route.step": {
-    "message": "Step {value}"
   },
   "routes.welcome.appDescription": {
     "message": "View and manage observations collected with CoMapeo Mobile."

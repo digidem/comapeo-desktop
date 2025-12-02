@@ -1,4 +1,4 @@
-import { useSingleInvite } from '@comapeo/core-react'
+import { useOwnDeviceInfo, useSingleInvite } from '@comapeo/core-react'
 import type { Invite } from '@comapeo/core/dist/invite/invite-api'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
@@ -8,11 +8,11 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { GREEN } from '../../../../colors'
-import { Icon } from '../../../../components/icon'
-import { ButtonLink } from '../../../../components/link'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
-import { customNotFound } from '../../../../lib/navigation'
+import { GREEN } from '../../../../../colors'
+import { Icon } from '../../../../../components/icon'
+import { ButtonLink } from '../../../../../components/link'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
+import { customNotFound } from '../../../../../lib/navigation'
 
 const SearchParamsSchema = v.object({
 	projectId: v.optional(v.string()),
@@ -32,7 +32,6 @@ export const Route = createFileRoute(
 
 		let invite: Invite
 		try {
-			// TODO: Not ideal but requires changes in @comapeo/core-react
 			invite = await queryClient.ensureQueryData({
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'invites', { inviteId }],
 				queryFn: async () => {
@@ -55,8 +54,7 @@ export const Route = createFileRoute(
 		// Redirect if the invite response did not actually succeed
 		if (invite.state !== 'joined') {
 			throw redirect({
-				to: '/onboarding/project/join/$inviteId',
-				params: { inviteId },
+				to: '/onboarding/project',
 				replace: true,
 			})
 		}
@@ -75,6 +73,8 @@ function RouteComponent() {
 
 	const { data: invite } = useSingleInvite({ inviteId })
 
+	const { data: ownDeviceInfo } = useOwnDeviceInfo()
+
 	return (
 		<Stack
 			display="flex"
@@ -82,7 +82,6 @@ function RouteComponent() {
 			justifyContent="space-between"
 			flex={1}
 			gap={10}
-			padding={5}
 		>
 			<Container maxWidth="sm" component={Stack} direction="column" gap={5}>
 				<Box alignSelf="center">
@@ -103,7 +102,10 @@ function RouteComponent() {
 					textAlign="center"
 					lineHeight={1.5}
 				>
-					{t(m.description, { projectName: invite.projectName })}
+					{t(m.description, {
+						deviceName: ownDeviceInfo.name,
+						projectName: invite.projectName,
+					})}
 				</Typography>
 			</Container>
 
@@ -113,7 +115,7 @@ function RouteComponent() {
 				variant="contained"
 				fullWidth
 				sx={{ maxWidth: 400, alignSelf: 'center' }}
-				loadingPosition="start"
+				startIcon={<Icon name="material-map-filled" />}
 			>
 				{t(m.startUsingCoMapeo)}
 			</ButtonLink>
@@ -125,14 +127,18 @@ const m = defineMessages({
 	title: {
 		id: 'routes.onboarding.project.join.$inviteId.success.title',
 		defaultMessage: 'Success!',
+		description: 'Title for onboarding joining project success page.',
 	},
 	description: {
 		id: 'routes.onboarding.project.join.$inviteId.success.description',
-		defaultMessage: 'You joined<br></br><b>{projectName}</b>',
+		defaultMessage:
+			'<b>{deviceName}</b><br></br>joined<br></br><b>{projectName}</b>.',
+		description: 'Description for onboarding joining project success page.',
 	},
 	startUsingCoMapeo: {
 		id: 'routes.onboarding.project.join.$inviteId.success.startUsingCoMapeo',
 		defaultMessage: 'Start Using CoMapeo',
+		description: 'Text for link to navigate to main app.',
 	},
 	inviteNotFound: {
 		id: 'routes.onboarding.project.join.$inviteId.success.inviteNotFound',
