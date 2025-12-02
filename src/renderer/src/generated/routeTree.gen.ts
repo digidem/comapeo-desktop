@@ -16,8 +16,6 @@ import { Route as IndexRouteImport } from './../routes/index'
 import { Route as OnboardingPrivacyPolicyRouteImport } from './../routes/onboarding/privacy-policy'
 import { Route as OnboardingDeviceNameRouteImport } from './../routes/onboarding/device-name'
 import { Route as OnboardingDataAndPrivacyRouteImport } from './../routes/onboarding/data-and-privacy'
-import { Route as AppDataAndPrivacyRouteImport } from './../routes/app/data-and-privacy'
-import { Route as AppAboutRouteImport } from './../routes/app/about'
 import { Route as OnboardingProjectRouteRouteImport } from './../routes/onboarding/project/route'
 import { Route as AppSettingsRouteRouteImport } from './../routes/app/settings/route'
 import { Route as OnboardingProjectIndexRouteImport } from './../routes/onboarding/project_/index'
@@ -87,16 +85,6 @@ const OnboardingDataAndPrivacyRoute =
     path: '/data-and-privacy',
     getParentRoute: () => OnboardingRouteRoute,
   } as any)
-const AppDataAndPrivacyRoute = AppDataAndPrivacyRouteImport.update({
-  id: '/data-and-privacy',
-  path: '/data-and-privacy',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppAboutRoute = AppAboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => AppRouteRoute,
-} as any)
 const OnboardingProjectRouteRoute = OnboardingProjectRouteRouteImport.update({
   id: '/project',
   path: '/project',
@@ -292,8 +280,6 @@ export interface FileRoutesByFullPath {
   '/welcome': typeof WelcomeRoute
   '/app/settings': typeof AppSettingsRouteRouteWithChildren
   '/onboarding/project': typeof OnboardingProjectIndexRoute
-  '/app/about': typeof AppAboutRoute
-  '/app/data-and-privacy': typeof AppDataAndPrivacyRoute
   '/onboarding/data-and-privacy': typeof OnboardingDataAndPrivacyRoute
   '/onboarding/device-name': typeof OnboardingDeviceNameRoute
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
@@ -333,8 +319,6 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/welcome': typeof WelcomeRoute
   '/onboarding/project': typeof OnboardingProjectIndexRoute
-  '/app/about': typeof AppAboutRoute
-  '/app/data-and-privacy': typeof AppDataAndPrivacyRoute
   '/onboarding/data-and-privacy': typeof OnboardingDataAndPrivacyRoute
   '/onboarding/device-name': typeof OnboardingDeviceNameRoute
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
@@ -373,8 +357,6 @@ export interface FileRoutesById {
   '/welcome': typeof WelcomeRoute
   '/app/settings': typeof AppSettingsRouteRouteWithChildren
   '/onboarding/project': typeof OnboardingProjectRouteRouteWithChildren
-  '/app/about': typeof AppAboutRoute
-  '/app/data-and-privacy': typeof AppDataAndPrivacyRoute
   '/onboarding/data-and-privacy': typeof OnboardingDataAndPrivacyRoute
   '/onboarding/device-name': typeof OnboardingDeviceNameRoute
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
@@ -418,8 +400,6 @@ export interface FileRouteTypes {
     | '/welcome'
     | '/app/settings'
     | '/onboarding/project'
-    | '/app/about'
-    | '/app/data-and-privacy'
     | '/onboarding/data-and-privacy'
     | '/onboarding/device-name'
     | '/onboarding/privacy-policy'
@@ -459,8 +439,6 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/welcome'
     | '/onboarding/project'
-    | '/app/about'
-    | '/app/data-and-privacy'
     | '/onboarding/data-and-privacy'
     | '/onboarding/device-name'
     | '/onboarding/privacy-policy'
@@ -498,8 +476,6 @@ export interface FileRouteTypes {
     | '/welcome'
     | '/app/settings'
     | '/onboarding/project'
-    | '/app/about'
-    | '/app/data-and-privacy'
     | '/onboarding/data-and-privacy'
     | '/onboarding/device-name'
     | '/onboarding/privacy-policy'
@@ -592,20 +568,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/onboarding/data-and-privacy'
       preLoaderRoute: typeof OnboardingDataAndPrivacyRouteImport
       parentRoute: typeof OnboardingRouteRoute
-    }
-    '/app/data-and-privacy': {
-      id: '/app/data-and-privacy'
-      path: '/data-and-privacy'
-      fullPath: '/app/data-and-privacy'
-      preLoaderRoute: typeof AppDataAndPrivacyRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/about': {
-      id: '/app/about'
-      path: '/about'
-      fullPath: '/app/about'
-      preLoaderRoute: typeof AppAboutRouteImport
-      parentRoute: typeof AppRouteRoute
     }
     '/onboarding/project': {
       id: '/onboarding/project'
@@ -945,8 +907,6 @@ const AppProjectsProjectIdSettingsRouteRouteWithChildren =
 
 interface AppRouteRouteChildren {
   AppSettingsRouteRoute: typeof AppSettingsRouteRouteWithChildren
-  AppAboutRoute: typeof AppAboutRoute
-  AppDataAndPrivacyRoute: typeof AppDataAndPrivacyRoute
   AppProjectsProjectIdRouteRoute: typeof AppProjectsProjectIdRouteRouteWithChildren
   AppSettingsTestDataRoute: typeof AppSettingsTestDataRoute
   AppProjectsProjectIdInviteRouteRoute: typeof AppProjectsProjectIdInviteRouteRouteWithChildren
@@ -956,8 +916,6 @@ interface AppRouteRouteChildren {
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppSettingsRouteRoute: AppSettingsRouteRouteWithChildren,
-  AppAboutRoute: AppAboutRoute,
-  AppDataAndPrivacyRoute: AppDataAndPrivacyRoute,
   AppProjectsProjectIdRouteRoute: AppProjectsProjectIdRouteRouteWithChildren,
   AppSettingsTestDataRoute: AppSettingsTestDataRoute,
   AppProjectsProjectIdInviteRouteRoute:

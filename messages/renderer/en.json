@@ -47,36 +47,6 @@
     "description": "Button text for try again button.",
     "message": "Try Again"
   },
-  "routes.app.about.title": {
-    "message": "About CoMapeo"
-  },
-  "routes.app.about.version": {
-    "message": "CoMapeo Version"
-  },
-  "routes.app.data-and-privacy.description": {
-    "message": "CoMapeo respects your privacy and autonomy"
-  },
-  "routes.app.data-and-privacy.diagnosticInformationDescription": {
-    "message": "Anonymized information about your device, app crashes, errors and performance helps Awana Digital improve the app and fix errors."
-  },
-  "routes.app.data-and-privacy.diagnosticInformationOptOut": {
-    "message": "You can opt-out of sharing diagnostic information at any time."
-  },
-  "routes.app.data-and-privacy.diagnosticInformationPersonalInfo": {
-    "message": "This never includes any of your data or personal information."
-  },
-  "routes.app.data-and-privacy.diagnosticInformationTitle": {
-    "message": "Diagnostic Information"
-  },
-  "routes.app.data-and-privacy.learnMore": {
-    "message": "Learn More"
-  },
-  "routes.app.data-and-privacy.shareDiagnosticInformation": {
-    "message": "Share Diagnostic Information"
-  },
-  "routes.app.data-and-privacy.title": {
-    "message": "Data & Privacy"
-  },
   "routes.app.projects.$projectId.-displayed.data.list.addObservationsDescription": {
     "description": "Description of card that is displayed when project has no observations to display.",
     "message": "Use Exchange to add Collaborator Observations"
@@ -813,14 +783,8 @@
     "description": "Text displayed when Wi-Fi info is unavailable.",
     "message": "Wi-Fi info unavailable."
   },
-  "routes.app.route.aboutTabLabel": {
-    "message": "About CoMapeo"
-  },
   "routes.app.route.appSettingsTabLabel": {
-    "message": "App Settings"
-  },
-  "routes.app.route.dataAndPrivacyTabLabel": {
-    "message": "Data & Privacy"
+    "message": "Settings"
   },
   "routes.app.route.exchangeTabLabel": {
     "message": "Exchange"
@@ -828,6 +792,30 @@
   "routes.app.route.projectTabAccessibleLabel": {
     "description": "Accessible label for project tab link in navigation.",
     "message": "View project."
+  },
+  "routes.app.settings.-data-and-pritvacy-section.diagnosticInformationPersonalInfo": {
+    "message": "This never includes any of your data or personal information."
+  },
+  "routes.app.settings.-data-and-privacy-section.description": {
+    "message": "CoMapeo respects your privacy and autonomy"
+  },
+  "routes.app.settings.-data-and-privacy-section.diagnosticInformationDescription": {
+    "message": "Anonymized information about your device, app crashes, errors and performance helps Awana Digital improve the app and fix errors."
+  },
+  "routes.app.settings.-data-and-privacy-section.diagnosticInformationOptOut": {
+    "message": "You can opt-out of sharing diagnostic information at any time."
+  },
+  "routes.app.settings.-data-and-privacy-section.diagnosticInformationTitle": {
+    "message": "Diagnostic Information"
+  },
+  "routes.app.settings.-data-and-privacy-section.learnMore": {
+    "message": "Learn More"
+  },
+  "routes.app.settings.-data-and-privacy-section.shareDiagnosticInformation": {
+    "message": "Share Diagnostic Information"
+  },
+  "routes.app.settings.-data-and-privacy-section.title": {
+    "message": "Data & Privacy"
   },
   "routes.app.settings.background-map.acceptedFileTypes": {
     "description": "Text describing what kind of files are usable for background maps.",
@@ -933,6 +921,10 @@
     "description": "Label for save button.",
     "message": "Save"
   },
+  "routes.app.settings.index.aboutCoMapeoVersionLabel": {
+    "description": "Label for CoMapeo version",
+    "message": "CoMapeo Version"
+  },
   "routes.app.settings.index.backgroundMapSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to background map settings page.",
     "message": "Go to background map settings."
@@ -957,10 +949,6 @@
     "description": "Name of the background map used if a custom one is not set.",
     "message": "Default Background"
   },
-  "routes.app.settings.index.description": {
-    "description": "Description of the settings page.",
-    "message": "CoMapeo is set to the following."
-  },
   "routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to device name settings page.",
     "message": "Go to device name settings."
@@ -981,9 +969,17 @@
     "description": "Accessible label for link item that navigates to language settings page.",
     "message": "Go to language settings."
   },
+  "routes.app.settings.index.sectionTitleAboutCoMapeo": {
+    "description": "Text for data and privacy section title",
+    "message": "About CoMapeo"
+  },
+  "routes.app.settings.index.sectionTitleGeneral": {
+    "description": "Text for general settings section title",
+    "message": "General"
+  },
   "routes.app.settings.index.title": {
     "description": "Title of the settings page.",
-    "message": "App Settings"
+    "message": "CoMapeo Settings"
   },
   "routes.app.settings.index.utmCoordinates": {
     "description": "Label for Universal Transverse Mercator coordinate system.",

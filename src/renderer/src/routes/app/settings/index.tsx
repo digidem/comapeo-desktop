@@ -1,7 +1,7 @@
 import { Suspense, type ReactNode } from 'react'
 import { useMapStyleUrl, useOwnDeviceInfo } from '@comapeo/core-react'
-import Box from '@mui/material/Box'
-import CircularProgress from '@mui/material/CircularProgress'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -22,6 +22,7 @@ import {
 	getLocaleStateQueryOptions,
 } from '../../../lib/queries/app-settings'
 import { getCustomMapInfoQueryOptions } from '../../../lib/queries/maps'
+import { DataAndPrivacySection } from './-data-and-privacy-section'
 
 export const Route = createFileRoute('/app/settings/')({
 	component: RouteComponent,
@@ -31,35 +32,20 @@ function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 
 	return (
-		<Stack direction="column" padding={6} flex={1} overflow="auto" gap={6}>
-			<Stack
-				direction="column"
-				border={`1px solid ${BLUE_GREY}`}
-				borderRadius={2}
-				gap={4}
-				alignItems="center"
-				padding={6}
-			>
+		<Stack direction="column" padding={6} flex={1} overflow="auto" gap={10}>
+			<Stack direction="column" gap={4} alignItems="center">
 				<Icon name="material-settings" size={100} htmlColor={DARKER_ORANGE} />
 
 				<Typography variant="h1" fontWeight={500} textAlign="center">
 					{t(m.title)}
 				</Typography>
-
-				<Typography color="textSecondary" textAlign="center">
-					{t(m.description)}
-				</Typography>
 			</Stack>
 
-			<Suspense
-				fallback={
-					<Box display="flex" justifyContent="center" alignItems="center">
-						<CircularProgress />
-					</Box>
-				}
-			>
-				<SettingsList />
-			</Suspense>
+			<SettingsList />
+
+			<DataAndPrivacySection />
+
+			<AboutCoMapeoSection />
 		</Stack>
 	)
 }
@@ -94,95 +80,39 @@ function SettingsList() {
 	})
 
 	return (
-		<>
-			<SettingRow
-				to="/app/settings/device-name"
-				start={
-					<Icon
-						name="material-symbols-computer"
-						htmlColor={DARK_GREY}
-						size={rowIconSize}
-					/>
-				}
-				end={<Typography color="primary">{t(m.editDeviceName)}</Typography>}
-				aria-label={t(m.deviceNameSettingsAccessibleLabel)}
-				// TODO: What to do when this is undefined?
-				label={deviceInfo.name || ''}
-			/>
+		<Stack direction="column" gap={4}>
+			<Typography
+				component="h2"
+				variant="body2"
+				sx={{ textTransform: 'uppercase' }}
+			>
+				{t(m.sectionTitleGeneral)}
+			</Typography>
 
-			<SettingRow
-				to="/app/settings/language"
-				start={
-					<Icon
-						name="material-language"
-						htmlColor={DARK_GREY}
-						size={rowIconSize}
-					/>
-				}
-				end={
-					<Icon
-						name="material-chevron-right"
-						htmlColor={DARK_GREY}
-						size={rowIconSize}
-					/>
-				}
-				aria-label={t(m.languageSettingsAccessibleLabel)}
-				label={selectedLanguageName}
-			/>
-
-			<SettingRow
-				to="/app/settings/coordinate-system"
-				start={
-					<Icon
-						name="material-explore"
-						htmlColor={DARK_GREY}
-						size={rowIconSize}
-					/>
-				}
-				end={
-					<Icon
-						name="material-chevron-right"
-						htmlColor={DARK_GREY}
-						size={rowIconSize}
-					/>
-				}
-				aria-label={t(m.coordinateSystemSettingsAccessibleLabel)}
-				label={t(
-					coordinateFormat === 'utm'
-						? m.utmCoordinates
-						: coordinateFormat === 'dd'
-							? m.ddCoordinates
-							: m.dmsCoordinates,
-				)}
-			/>
-
-			<SettingRow
-				to="/app/settings/background-map"
-				start={
-					<Icon name="material-map" htmlColor={DARK_GREY} size={rowIconSize} />
-				}
-				end={
-					<Icon
-						name="material-chevron-right"
-						htmlColor={DARK_GREY}
-						size={rowIconSize}
-					/>
-				}
-				aria-label={t(m.backgroundMapSettingsAccessibleLabel)}
-				label={
-					<Suspense>
-						<BackgroundMapLabel styleUrl={styleUrl} />
-					</Suspense>
-				}
-			/>
-
-			{__APP_TYPE__ !== 'production' &&
-			import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
+			<List
+				disablePadding
+				sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+			>
 				<SettingRow
-					to="/app/settings/test-data"
+					to="/app/settings/device-name"
 					start={
 						<Icon
-							name="material-auto-fix-high"
+							name="material-symbols-computer"
+							htmlColor={DARK_GREY}
+							size={rowIconSize}
+						/>
+					}
+					end={<Typography color="primary">{t(m.editDeviceName)}</Typography>}
+					aria-label={t(m.deviceNameSettingsAccessibleLabel)}
+					// TODO: What to do when this is undefined?
+					label={deviceInfo.name || ''}
+				/>
+
+				<SettingRow
+					to="/app/settings/language"
+					start={
+						<Icon
+							name="material-language"
 							htmlColor={DARK_GREY}
 							size={rowIconSize}
 						/>
@@ -194,10 +124,83 @@ function SettingsList() {
 							size={rowIconSize}
 						/>
 					}
-					label={t(m.createTestData)}
+					aria-label={t(m.languageSettingsAccessibleLabel)}
+					label={selectedLanguageName}
 				/>
-			) : null}
-		</>
+
+				<SettingRow
+					to="/app/settings/coordinate-system"
+					start={
+						<Icon
+							name="material-explore-filled"
+							htmlColor={DARK_GREY}
+							size={rowIconSize}
+						/>
+					}
+					end={
+						<Icon
+							name="material-chevron-right"
+							htmlColor={DARK_GREY}
+							size={rowIconSize}
+						/>
+					}
+					aria-label={t(m.coordinateSystemSettingsAccessibleLabel)}
+					label={t(
+						coordinateFormat === 'utm'
+							? m.utmCoordinates
+							: coordinateFormat === 'dd'
+								? m.ddCoordinates
+								: m.dmsCoordinates,
+					)}
+				/>
+
+				<SettingRow
+					to="/app/settings/background-map"
+					start={
+						<Icon
+							name="material-layers-outlined"
+							htmlColor={DARK_GREY}
+							size={rowIconSize}
+						/>
+					}
+					end={
+						<Icon
+							name="material-chevron-right"
+							htmlColor={DARK_GREY}
+							size={rowIconSize}
+						/>
+					}
+					aria-label={t(m.backgroundMapSettingsAccessibleLabel)}
+					label={
+						<Suspense>
+							<BackgroundMapLabel styleUrl={styleUrl} />
+						</Suspense>
+					}
+				/>
+
+				{__APP_TYPE__ !== 'production' &&
+				import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
+					<SettingRow
+						to="/app/settings/test-data"
+						start={
+							<Icon
+								name="material-auto-fix-high"
+								htmlColor={DARK_GREY}
+								size={rowIconSize}
+							/>
+						}
+						end={
+							<Icon
+								name="material-chevron-right"
+								htmlColor={DARK_GREY}
+								size={rowIconSize}
+							/>
+						}
+						label={t(m.createTestData)}
+					/>
+				) : null}
+			</List>
+		</Stack>
 	)
 }
 
@@ -280,16 +283,51 @@ function BackgroundMapText({ styleUrl }: { styleUrl: string }) {
 	return customMapInfo.data.name
 }
 
+function AboutCoMapeoSection() {
+	const { formatMessage: t } = useIntl()
+
+	return (
+		<Stack direction="column" gap={4}>
+			<Stack direction="column" gap={4}>
+				<Typography
+					component="h2"
+					variant="body2"
+					sx={{ textTransform: 'uppercase' }}
+				>
+					{t(m.sectionTitleAboutCoMapeo)}
+				</Typography>
+
+				<Stack
+					direction="column"
+					border={`1px solid ${BLUE_GREY}`}
+					borderRadius={2}
+					gap={4}
+					flex={1}
+				>
+					<List>
+						<ListItem>
+							<Stack direction="column" gap={3}>
+								<Typography component="h3" variant="body1" fontWeight={500}>
+									{t(m.aboutCoMapeoVersionLabel)}
+								</Typography>
+
+								<Typography>
+									{window.runtime.getAppInfo().appVersion}
+								</Typography>
+							</Stack>
+						</ListItem>
+					</List>
+				</Stack>
+			</Stack>
+		</Stack>
+	)
+}
+
 const m = defineMessages({
 	title: {
 		id: 'routes.app.settings.index.title',
-		defaultMessage: 'App Settings',
+		defaultMessage: 'CoMapeo Settings',
 		description: 'Title of the settings page.',
-	},
-	description: {
-		id: 'routes.app.settings.index.description',
-		defaultMessage: 'CoMapeo is set to the following.',
-		description: 'Description of the settings page.',
 	},
 	editDeviceName: {
 		id: 'routes.app.settings.index.editDeviceName',
@@ -355,5 +393,20 @@ const m = defineMessages({
 		defaultMessage: 'Go to background map settings.',
 		description:
 			'Accessible label for link item that navigates to background map settings page.',
+	},
+	sectionTitleGeneral: {
+		id: 'routes.app.settings.index.sectionTitleGeneral',
+		defaultMessage: 'General',
+		description: 'Text for general settings section title',
+	},
+	sectionTitleAboutCoMapeo: {
+		id: 'routes.app.settings.index.sectionTitleAboutCoMapeo',
+		defaultMessage: 'About CoMapeo',
+		description: 'Text for data and privacy section title',
+	},
+	aboutCoMapeoVersionLabel: {
+		id: 'routes.app.settings.index.aboutCoMapeoVersionLabel',
+		defaultMessage: 'CoMapeo Version',
+		description: 'Label for CoMapeo version',
 	},
 })

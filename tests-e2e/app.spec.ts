@@ -56,96 +56,14 @@ test.afterAll(async () => {
 	await electronApp?.close()
 })
 
-test('about page', async () => {
-	const page = await electronApp.firstWindow()
-
-	// Navigation
-	const navLink = page
-		.getByRole('navigation')
-		.getByRole('link', { name: 'About CoMapeo', exact: true })
-	await navLink.click()
-	await expect(navLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
-
-	// Main
-	const main = page.getByRole('main')
-
-	await expect(
-		main.getByRole('heading', { name: 'About CoMapeo', exact: true }),
-	).toBeVisible()
-
-	await expect(
-		main.getByRole('heading', { name: 'CoMapeo Version', exact: true }),
-	).toBeVisible()
-
-	// TODO: Assert version number?
-})
-
-test('data and privacy page', async () => {
-	const page = await electronApp.firstWindow()
-
-	// Navigation
-	const navLink = page
-		.getByRole('navigation')
-		.getByRole('link', { name: 'Data & Privacy', exact: true })
-	await navLink.click()
-	await expect(navLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
-
-	// Main
-	const main = page.getByRole('main')
-
-	await expect(
-		main.getByRole('heading', { name: 'Data & Privacy', exact: true }),
-	).toBeVisible()
-
-	await expect(
-		main.getByText('CoMapeo respects your privacy and autonomy', {
-			exact: true,
-		}),
-	).toBeVisible()
-
-	// TODO: Assert behavior of `Learn More` button
-	await expect(
-		main.getByRole('button', { name: 'Learn More', exact: true }),
-	).toBeVisible()
-
-	await expect(
-		main.getByRole('heading', { name: 'Diagnostic Information', exact: true }),
-	).toBeVisible()
-
-	await expect(
-		main.getByText(
-			'Anonymized information about your device, app crashes, errors and performance helps Awana Digital improve the app and fix errors.',
-			{ exact: true },
-		),
-	).toBeVisible()
-
-	const infoListItems = main.getByRole('listitem')
-
-	await expect(infoListItems).toHaveText([
-		'This never includes any of your data or personal information.',
-		'You can opt-out of sharing diagnostic information at any time.',
-	])
-
-	const diagnosticCheckbox = main.getByRole('checkbox', {
-		name: 'Share Diagnostic Information',
-		exact: true,
-	})
-	// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
-	await expect(diagnosticCheckbox).not.toBeChecked()
-	await diagnosticCheckbox.click()
-	await expect(diagnosticCheckbox).toBeChecked()
-	await diagnosticCheckbox.click()
-	await expect(diagnosticCheckbox).not.toBeChecked()
-})
-
-test.describe('app settings', () => {
+test.describe('CoMapeo settings', () => {
 	test('index', async () => {
 		const page = await electronApp.firstWindow()
 
 		// Navigation
 		const navLink = page
 			.getByRole('navigation')
-			.getByRole('link', { name: 'App Settings', exact: true })
+			.getByRole('link', { name: 'Settings', exact: true })
 		await navLink.click()
 		await expect(navLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
 
@@ -153,14 +71,18 @@ test.describe('app settings', () => {
 		const main = page.getByRole('main')
 
 		await expect(
-			main.getByRole('heading', { name: 'App Settings', exact: true }),
+			main.getByRole('heading', { name: 'CoMapeo Settings', exact: true }),
 		).toBeVisible()
 
+		/// General section
 		await expect(
-			main.getByText('CoMapeo is set to the following.', { exact: true }),
+			main.getByRole('heading', {
+				name: 'General',
+				exact: true,
+			}),
 		).toBeVisible()
 
-		const settingsLinks = main.getByRole('link')
+		const settingsLinks = main.getByRole('list').getByRole('link')
 
 		await expect(settingsLinks).toHaveText([
 			// TODO: Should fix this in app using aria-label?
@@ -171,6 +93,80 @@ test.describe('app settings', () => {
 			'Default Background',
 			'Create Test Data',
 		])
+
+		/// Data and Privacy section
+		await expect(
+			main.getByRole('heading', {
+				name: 'Data & Privacy',
+				exact: true,
+			}),
+		).toBeVisible()
+
+		await expect(
+			main.getByText('CoMapeo respects your privacy and autonomy', {
+				exact: true,
+			}),
+		).toBeVisible()
+
+		// TODO: Assert behavior of `Learn More` button
+		await expect(
+			main.getByRole('link', { name: 'Learn More', exact: true }),
+		).toBeVisible()
+
+		await expect(
+			main.getByRole('heading', {
+				name: 'Diagnostic Information',
+				exact: true,
+			}),
+		).toBeVisible()
+
+		await expect(
+			main.getByText(
+				'Anonymized information about your device, app crashes, errors and performance helps Awana Digital improve the app and fix errors.',
+				{ exact: true },
+			),
+		).toBeVisible()
+
+		await expect(
+			main
+				.getByRole('listitem')
+				.getByText(
+					'This never includes any of your data or personal information.',
+					{ exact: true },
+				),
+		).toBeVisible()
+
+		await expect(
+			main
+				.getByRole('listitem')
+				.getByText(
+					'You can opt-out of sharing diagnostic information at any time.',
+					{ exact: true },
+				),
+		).toBeVisible()
+
+		const diagnosticCheckbox = main.getByRole('checkbox', {
+			name: 'Share Diagnostic Information',
+			exact: true,
+		})
+		// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
+		await expect(diagnosticCheckbox).not.toBeChecked()
+		await diagnosticCheckbox.click()
+		await expect(diagnosticCheckbox).toBeChecked()
+		await diagnosticCheckbox.click()
+		await expect(diagnosticCheckbox).not.toBeChecked()
+
+		/// About CoMapeo section
+		await expect(
+			main.getByRole('heading', {
+				name: 'About CoMapeo',
+				exact: true,
+			}),
+		).toBeVisible()
+
+		await expect(
+			main.getByRole('heading', { name: 'CoMapeo Version', exact: true }),
+		).toBeVisible()
 	})
 
 	test('device name', async () => {
@@ -193,7 +189,7 @@ test.describe('app settings', () => {
 		await expect(
 			page
 				.getByRole('navigation')
-				.getByRole('link', { name: 'App Settings', exact: true }),
+				.getByRole('link', { name: 'Settings', exact: true }),
 		).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
 
 		const disabledNavLinks = page
@@ -202,12 +198,7 @@ test.describe('app settings', () => {
 
 		await expect(disabledNavLinks.first()).toHaveAccessibleName('View project.')
 
-		await expect(disabledNavLinks).toHaveText([
-			'',
-			'Exchange',
-			'Data & Privacy',
-			'About CoMapeo',
-		])
+		await expect(disabledNavLinks).toHaveText(['', 'Exchange'])
 
 		// Main
 		await expect(
@@ -317,7 +308,7 @@ test.describe('app settings', () => {
 			await expect(
 				page
 					.getByRole('navigation')
-					.getByRole('link', { name: 'App Settings', exact: true }),
+					.getByRole('link', { name: 'Settings', exact: true }),
 			).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
 
 			const disabledNavLinks = page
@@ -328,12 +319,7 @@ test.describe('app settings', () => {
 				'View project.',
 			)
 
-			await expect(disabledNavLinks).toHaveText([
-				'',
-				'Exchange',
-				'Data & Privacy',
-				'About CoMapeo',
-			])
+			await expect(disabledNavLinks).toHaveText(['', 'Exchange'])
 		}
 
 		// Main
@@ -399,8 +385,6 @@ test.describe('app settings', () => {
 				'',
 				'Trocar',
 				'Configurações do Aplicativo',
-				'Dados & Privacidade',
-				'Sobre o CoMapeo',
 			])
 
 			await main.getByRole('button', { name: 'Voltar.', exact: true }).click()
@@ -455,7 +439,7 @@ test.describe('app settings', () => {
 			await expect(
 				page
 					.getByRole('navigation')
-					.getByRole('link', { name: 'App Settings', exact: true }),
+					.getByRole('link', { name: 'Settings', exact: true }),
 			).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
 
 			const disabledNavLinks = page
@@ -466,12 +450,7 @@ test.describe('app settings', () => {
 				'View project.',
 			)
 
-			await expect(disabledNavLinks).toHaveText([
-				'',
-				'Exchange',
-				'Data & Privacy',
-				'About CoMapeo',
-			])
+			await expect(disabledNavLinks).toHaveText(['', 'Exchange'])
 		}
 
 		// Main
@@ -576,7 +555,7 @@ test.describe('app settings', () => {
 			await expect(
 				page
 					.getByRole('navigation')
-					.getByRole('link', { name: 'App Settings', exact: true }),
+					.getByRole('link', { name: 'Settings', exact: true }),
 			).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
 		}
 
@@ -814,12 +793,7 @@ test.describe('exchange', () => {
 				'View project.',
 			)
 
-			await expect(disabledNavLinks).toHaveText([
-				'',
-				'App Settings',
-				'Data & Privacy',
-				'About CoMapeo',
-			])
+			await expect(disabledNavLinks).toHaveText(['', 'Settings'])
 
 			await expect(
 				main.getByRole('heading', { name: 'Waiting for Devices', exact: true }),
@@ -959,13 +933,7 @@ test.describe('project settings', () => {
 				.getByRole('navigation')
 				.getByRole('link', { disabled: true })
 
-			await expect(disabledNavLinks).toHaveCount(4)
-			await expect(disabledNavLinks).toHaveText([
-				'Exchange',
-				'App Settings',
-				'Data & Privacy',
-				'About CoMapeo',
-			])
+			await expect(disabledNavLinks).toHaveText(['Exchange', 'Settings'])
 		}
 
 		// Main
@@ -1374,13 +1342,7 @@ test.describe('project settings', () => {
 			await expect(navLinks.first()).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
 			await expect(navLinks.first()).toHaveAccessibleName('View project.')
 
-			await expect(navLinks).toHaveText([
-				'',
-				'Exchange',
-				'App Settings',
-				'Data & Privacy',
-				'About CoMapeo',
-			])
+			await expect(navLinks).toHaveText(['', 'Exchange', 'Settings'])
 		}
 
 		// Main
