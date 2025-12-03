@@ -1,5 +1,4 @@
-import { type ReactNode } from 'react'
-import { useSyncState } from '@comapeo/core-react'
+import { useOwnRoleInProject, useSyncState } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -15,11 +14,7 @@ import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, COMAPEO_BLUE, DARK_GREY, WHITE } from '../../colors'
 import { Icon } from '../../components/icon'
-import {
-	ButtonLink,
-	IconButtonLink,
-	type ButtonLinkProps,
-} from '../../components/link'
+import { ButtonLink, type ButtonLinkProps } from '../../components/link'
 import { useGlobalEditingState } from '../../contexts/global-editing-state-store-context'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -124,6 +119,11 @@ function RouteComponent() {
 		},
 	})
 
+	const { data: role } = useOwnRoleInProject({ projectId: activeProjectId })
+
+	const isCoordinator =
+		role.roleId === CREATOR_ROLE_ID || role.roleId === COORDINATOR_ROLE_ID
+
 	const syncState = useSyncState({ projectId: activeProjectId })
 	const syncEnabled = syncState?.data.isSyncEnabled
 
@@ -158,86 +158,244 @@ function RouteComponent() {
 							display: 'flex',
 							flexDirection: 'column',
 							justifyContent: 'space-between',
-							flex: 0,
-							padding: 4,
-							gap: 5,
+							paddingInline: 3,
+							paddingBlock: 4,
+							gap: 10,
 							textAlign: 'center',
-							alignItems: 'center',
+							alignItems: 'stretch',
 						}}
 					>
-						<ListItem {...SHARED_NAV_ITEM_PROPS.listItem}>
-							<IconButtonLink
-								{...SHARED_NAV_ITEM_PROPS.link}
-								disabled={
-									((pageHasEditing ||
-										isEditing ||
-										someGlobalMutationIsPending) &&
-										!currentRoute.fullPath.startsWith(
-											'/app/projects/$projectId',
-										)) ||
-									(syncEnabled &&
-										currentRoute.routeId ===
-											'/app/projects/$projectId/exchange/')
-								}
-								to="/app/projects/$projectId"
-								params={{ projectId: activeProjectId }}
-								onClick={(event) => {
-									if (someGlobalMutationIsPending) {
-										event.preventDefault()
-									}
-								}}
-								activeProps={{
-									...SHARED_NAV_ITEM_PROPS.link.activeProps,
-									sx: {
-										...SHARED_NAV_ITEM_PROPS.link.activeProps.sx,
-										color:
-											currentRoute.routeId ===
-											'/app/projects/$projectId/exchange/'
-												? DARK_GREY
-												: COMAPEO_BLUE,
-										border: `2px solid currentColor`,
-									},
-								}}
-								sx={{
-									...SHARED_NAV_ITEM_PROPS.link.sx,
-									border: `2px solid currentColor`,
-								}}
-								aria-label={t(m.projectTabAccessibleLabel)}
+						<Stack direction="column" gap={5}>
+							<ListItem
+								dense
+								disableGutters
+								disablePadding
+								sx={{ justifyContent: 'center' }}
 							>
-								<Icon name="comapeo-cards" size={30} />
-							</IconButtonLink>
-						</ListItem>
+								<ButtonLink
+									to="/app/projects/$projectId"
+									params={{ projectId: activeProjectId }}
+									disabled={
+										pageHasEditing ||
+										isEditing ||
+										someGlobalMutationIsPending ||
+										(syncEnabled &&
+											currentRoute.routeId ===
+												'/app/projects/$projectId/exchange/')
+									}
+									onClick={(event) => {
+										if (someGlobalMutationIsPending) {
+											event.preventDefault()
+										}
+									}}
+									fullWidth
+									variant="text"
+									color="inherit"
+									inactiveProps={BASE_INACTIVE_LINK_PROPS}
+									activeProps={
+										// NOTE: Subroutes of the project that also live as nav rail tabs
+										currentRoute.routeId.startsWith(
+											'/app/projects/$projectId/exchange',
+										) ||
+										currentRoute.routeId.startsWith(
+											'/app/projects/$projectId/settings',
+										) ||
+										currentRoute.routeId.startsWith(
+											'/app/projects/$projectId/team',
+										)
+											? BASE_INACTIVE_LINK_PROPS
+											: BASE_ACTIVE_LINK_PROPS
+									}
+									aria-label={t(m.projectTabAccessibleLabel)}
+								>
+									<Box
+										display="flex"
+										justifyContent="center"
+										alignItems="center"
+										paddingBlock={4}
+										flex={1}
+									>
+										<Icon name="noun-project-notebook" size={32} />
+									</Box>
+								</ButtonLink>
+							</ListItem>
+
+							<ListItem
+								dense
+								disableGutters
+								disablePadding
+								sx={{ justifyContent: 'center' }}
+							>
+								<ButtonLink
+									to="/app/projects/$projectId/exchange"
+									params={{ projectId: activeProjectId }}
+									disabled={
+										(pageHasEditing ||
+											isEditing ||
+											someGlobalMutationIsPending) &&
+										!currentRoute.fullPath.startsWith(
+											'/app/projects/$projectId/exchange',
+										)
+									}
+									onClick={(event) => {
+										if (someGlobalMutationIsPending) {
+											event.preventDefault()
+										}
+									}}
+									fullWidth
+									variant="text"
+									color="inherit"
+									inactiveProps={BASE_INACTIVE_LINK_PROPS}
+									activeProps={BASE_ACTIVE_LINK_PROPS}
+									aria-label={t(m.exchangeTabAccessibleLabel)}
+								>
+									<Box
+										display="flex"
+										justifyContent="center"
+										alignItems="center"
+										paddingBlock={4}
+										flex={1}
+									>
+										<Icon name="material-offline-bolt-filled" size={36} />
+									</Box>
+								</ButtonLink>
+							</ListItem>
+						</Stack>
 
 						<Stack direction="column" gap={5}>
-							<LabeledNavItem
-								to="/app/projects/$projectId/exchange"
-								params={{ projectId: activeProjectId }}
-								disabled={
-									(pageHasEditing ||
-										isEditing ||
-										someGlobalMutationIsPending) &&
-									!currentRoute.fullPath.startsWith(
-										'/app/projects/$projectId/exchange',
-									)
-								}
-								label={t(m.exchangeTabLabel)}
-								icon={<Icon name="material-offline-bolt" size={30} />}
-							/>
+							<ListItem
+								dense
+								disableGutters
+								disablePadding
+								sx={{ justifyContent: 'center' }}
+							>
+								<ButtonLink
+									to="/app/projects/$projectId/team"
+									params={{ projectId: activeProjectId }}
+									disabled={
+										((pageHasEditing ||
+											isEditing ||
+											someGlobalMutationIsPending) &&
+											!currentRoute.routeId.startsWith(
+												'/app/projects/$projectId/team',
+											)) ||
+										(syncEnabled &&
+											currentRoute.routeId ===
+												'/app/projects/$projectId/exchange/')
+									}
+									onClick={(event) => {
+										if (someGlobalMutationIsPending) {
+											event.preventDefault()
+										}
+									}}
+									fullWidth
+									variant="text"
+									color="inherit"
+									inactiveProps={BASE_INACTIVE_LINK_PROPS}
+									activeProps={BASE_ACTIVE_LINK_PROPS}
+								>
+									<Stack
+										direction="column"
+										alignItems="center"
+										flexWrap="wrap"
+										textAlign="center"
+										gap={2}
+									>
+										<Icon name="material-people-filled" size={36} />
 
-							<LabeledNavItem
-								to="/app/settings"
-								disabled={
-									((pageHasEditing ||
-										isEditing ||
-										someGlobalMutationIsPending) &&
-										!currentRoute.fullPath.startsWith('/app/settings')) ||
-									(currentRoute.routeId ===
-										'/app/projects/$projectId/exchange/' &&
-										syncEnabled)
-								}
-								label={t(m.appSettingsTabLabel)}
-								icon={<Icon name="material-settings" size={30} />}
-							/>
+										{t(m.teamTabLabel)}
+									</Stack>
+								</ButtonLink>
+							</ListItem>
+
+							{isCoordinator ? (
+								<ListItem
+									dense
+									disableGutters
+									disablePadding
+									sx={{ justifyContent: 'center' }}
+								>
+									<ButtonLink
+										to="/app/projects/$projectId/settings"
+										params={{ projectId: activeProjectId }}
+										disabled={
+											((pageHasEditing ||
+												isEditing ||
+												someGlobalMutationIsPending) &&
+												!currentRoute.routeId.startsWith(
+													'/app/projects/$projectId/settings',
+												)) ||
+											(syncEnabled &&
+												currentRoute.routeId ===
+													'/app/projects/$projectId/exchange/')
+										}
+										onClick={(event) => {
+											if (someGlobalMutationIsPending) {
+												event.preventDefault()
+											}
+										}}
+										fullWidth
+										variant="text"
+										color="inherit"
+										inactiveProps={BASE_INACTIVE_LINK_PROPS}
+										activeProps={BASE_ACTIVE_LINK_PROPS}
+									>
+										<Stack
+											direction="column"
+											alignItems="center"
+											flexWrap="wrap"
+											textAlign="center"
+											gap={2}
+										>
+											<Icon name="material-manage-accounts-filled" size={36} />
+
+											{t(m.toolsTabLabel)}
+										</Stack>
+									</ButtonLink>
+								</ListItem>
+							) : null}
+
+							<ListItem
+								dense
+								disableGutters
+								disablePadding
+								sx={{ justifyContent: 'center' }}
+							>
+								<ButtonLink
+									to="/app/settings"
+									disabled={
+										((pageHasEditing ||
+											isEditing ||
+											someGlobalMutationIsPending) &&
+											!currentRoute.routeId.startsWith('/app/settings')) ||
+										(currentRoute.routeId ===
+											'/app/projects/$projectId/exchange/' &&
+											syncEnabled)
+									}
+									onClick={(event) => {
+										if (someGlobalMutationIsPending) {
+											event.preventDefault()
+										}
+									}}
+									fullWidth
+									variant="text"
+									color="inherit"
+									inactiveProps={BASE_INACTIVE_LINK_PROPS}
+									activeProps={BASE_ACTIVE_LINK_PROPS}
+								>
+									<Stack
+										direction="column"
+										alignItems="center"
+										flexWrap="wrap"
+										textAlign="center"
+										gap={2}
+									>
+										<Icon name="material-settings" size={32} />
+
+										{t(m.appSettingsTabLabel)}
+									</Stack>
+								</ButtonLink>
+							</ListItem>
 						</Stack>
 					</List>
 				</Box>
@@ -250,62 +408,25 @@ function RouteComponent() {
 	)
 }
 
-function LabeledNavItem({
-	icon,
-	label,
-	...linkOptions
-}: ButtonLinkProps & {
-	icon: ReactNode
-	label: string
-}) {
-	return (
-		<ListItem {...SHARED_NAV_ITEM_PROPS.listItem}>
-			<ButtonLink
-				{...SHARED_NAV_ITEM_PROPS.link}
-				{...linkOptions}
-				variant="text"
-				color="inherit"
-				size="small"
-				sx={{
-					...SHARED_NAV_ITEM_PROPS.link.sx,
-					color: DARK_GREY,
-				}}
-			>
-				<Stack
-					direction="column"
-					alignItems="center"
-					flexWrap="wrap"
-					textAlign="center"
-				>
-					{icon}
-					{label}
-				</Stack>
-			</ButtonLink>
-		</ListItem>
-	)
-}
+const BASE_INACTIVE_LINK_PROPS = {
+	sx: {
+		padding: 2,
+		borderRadius: 2,
+		color: DARK_GREY,
+	},
+} satisfies ButtonLinkProps['inactiveProps']
 
-const SHARED_NAV_ITEM_PROPS = {
-	listItem: {
-		dense: true,
-		disablePadding: true,
-		disableGutters: true,
-		sx: {
-			justifyContent: 'center',
+const BASE_ACTIVE_LINK_PROPS = {
+	sx: {
+		padding: 2,
+		borderRadius: 2,
+		color: COMAPEO_BLUE,
+		background: (theme) => theme.lighten(theme.palette.primary.light, 0.5),
+		'&:hover, &:focus-within': {
+			background: (theme) => theme.palette.primary.light,
 		},
 	},
-	link: {
-		activeProps: {
-			sx: {
-				color: COMAPEO_BLUE,
-				borderRadius: 2,
-			},
-		},
-		sx: {
-			borderRadius: 2,
-		},
-	},
-} as const
+} satisfies ButtonLinkProps['activeProps']
 
 const m = defineMessages({
 	projectTabAccessibleLabel: {
@@ -313,12 +434,24 @@ const m = defineMessages({
 		defaultMessage: 'View project.',
 		description: 'Accessible label for project tab link in navigation.',
 	},
-	exchangeTabLabel: {
-		id: 'routes.app.route.exchangeTabLabel',
-		defaultMessage: 'Exchange',
+	exchangeTabAccessibleLabel: {
+		id: 'routes.app.route.exchangeTabAccessibleLabel',
+		defaultMessage: 'View exchange.',
+		description: 'Accessible label for exchange tab link in navigation.',
+	},
+	teamTabLabel: {
+		id: 'routes.app.route.teamTabLabel',
+		defaultMessage: 'Team',
+		description: 'Label for team tab link in navigation.',
+	},
+	toolsTabLabel: {
+		id: 'routes.app.route.toolsTabLabel',
+		defaultMessage: 'Tools',
+		description: 'Label for tools tab link in navigation.',
 	},
 	appSettingsTabLabel: {
 		id: 'routes.app.route.appSettingsTabLabel',
 		defaultMessage: 'Settings',
+		description: 'Label for CoMapeo settings tab link in navigation.',
 	},
 })

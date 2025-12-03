@@ -18,49 +18,53 @@ import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { DeviceIcon } from '../../../-shared/device-icon'
-import { BLUE_GREY } from '../../../../../../colors'
-import { ErrorDialog } from '../../../../../../components/error-dialog'
-import { Icon } from '../../../../../../components/icon'
-import { useActiveProjectIdActions } from '../../../../../../contexts/active-project-id-store-context'
-import { useIconSizeBasedOnTypography } from '../../../../../../hooks/icon'
+import { DeviceIcon } from '../../-shared/device-icon'
+import { BLUE_GREY } from '../../../../../colors'
+import { ErrorDialog } from '../../../../../components/error-dialog'
+import { Icon } from '../../../../../components/icon'
+import { useActiveProjectIdActions } from '../../../../../contexts/active-project-id-store-context'
+import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
-} from '../../../../../../lib/comapeo'
-import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations'
+} from '../../../../../lib/comapeo'
+import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations'
 
-export const Route = createFileRoute(
-	'/app/projects/$projectId/settings/team/$deviceId',
-)({
-	loader: async ({ context, params }) => {
-		const { clientApi, projectApi, queryClient } = context
-		const { projectId, deviceId } = params
+export const Route = createFileRoute('/app/projects/$projectId/team/$deviceId')(
+	{
+		loader: async ({ context, params }) => {
+			const { clientApi, projectApi, queryClient } = context
+			const { projectId, deviceId } = params
 
-		await Promise.all([
-			queryClient.ensureQueryData({
-				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
-				queryFn: async () => {
-					return clientApi.getDeviceInfo()
-				},
-			}),
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'members',
-					deviceId,
-				],
-				queryFn: async () => {
-					return projectApi.$member.getById(deviceId)
-				},
-			}),
-		])
+			await Promise.all([
+				queryClient.ensureQueryData({
+					queryKey: [
+						COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+						'client',
+						'device_info',
+					],
+					queryFn: async () => {
+						return clientApi.getDeviceInfo()
+					},
+				}),
+				queryClient.ensureQueryData({
+					queryKey: [
+						COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+						'projects',
+						projectId,
+						'members',
+						deviceId,
+					],
+					queryFn: async () => {
+						return projectApi.$member.getById(deviceId)
+					},
+				}),
+			])
+		},
+		component: RouteComponent,
 	},
-	component: RouteComponent,
-})
+)
 
 const LEAVE_PROJECT_AND_NAVIGATE_MUTATION_KEY = createGlobalMutationsKey([
 	'leave_project_and_navigate',
@@ -153,7 +157,7 @@ function RouteComponent() {
 									}
 
 									router.navigate({
-										to: '/app/projects/$projectId/settings/team',
+										to: '/app/projects/$projectId/team',
 										params: { projectId },
 										replace: true,
 									})
@@ -448,61 +452,61 @@ function canLeaveProject(
 
 const m = defineMessages({
 	collaboratorNavTitle: {
-		id: 'routes.app.projects.$projectId_.settings.team.$deviceId.collaboratorNavTitle',
+		id: 'routes.app.projects.$projectId_.team.$deviceId.collaboratorNavTitle',
 		defaultMessage: 'Collaborator Info',
 		description: 'Title of the team collaborator info page.',
 	},
 	leaveProjectNavTitle: {
-		id: 'routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectNavTitle',
+		id: 'routes.app.projects.$projectId_.team.$deviceId.leaveProjectNavTitle',
 		defaultMessage: 'Leave Project',
 		description:
 			'Title of the team collaborator info page when the leave project flow is initiated.',
 	},
 	thisDevice: {
-		id: 'routes.app.projects.$projectId_.settings.team.$deviceId.thisDevice',
+		id: 'routes.app.projects.$projectId_.team.$deviceId.thisDevice',
 		defaultMessage: 'This Device!',
 		description: 'Text indicating that user is viewing itslef.',
 	},
 	coordinator: {
-		id: 'routes.app.projects.$projectId_.settings.team.$deviceId.coordinator',
+		id: 'routes.app.projects.$projectId_.team.$deviceId.coordinator',
 		defaultMessage: 'Coordinator',
 		description: 'Text indicating collaborator is a coordinator.',
 	},
 	participant: {
-		id: 'routes.app.projects.$projectId_.settings.team.$deviceId.participant',
+		id: 'routes.app.projects.$projectId_.team.$deviceId.participant',
 		defaultMessage: 'Participant',
 		description: 'Text indicating collaborator is a participant.',
 	},
 	addedOn: {
-		id: 'routes.app.projects.$projectId_.settings.team.$deviceId.addedOn',
+		id: 'routes.app.projects.$projectId_.team.$deviceId.addedOn',
 		defaultMessage: 'Added on {value}',
 		description: 'Text indicating date collaborator was added to the project.',
 	},
 	leaveProjectButton: {
-		id: 'routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectButton',
+		id: 'routes.app.projects.$projectId_.team.$deviceId.leaveProjectButton',
 		defaultMessage: 'Leave Project',
 		description: 'Button text to initiate leave project flow.',
 	},
 	lastCoordinatorWarning: {
-		id: 'routes.app.projects.$projectId_.settings.team.$deviceId.lastCoordinatorWarning',
+		id: 'routes.app.projects.$projectId_.team.$deviceId.lastCoordinatorWarning',
 		defaultMessage:
 			"You're the last coordinator. Consider making another device a coordinator before leaving the project.",
 		description:
 			'Warning text about leaving the project as the last coordinator.',
 	},
 	leaveProjectExplainerTitle: {
-		id: 'routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectExplainerTitle',
+		id: 'routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerTitle',
 		defaultMessage: 'Leave Project?',
 		description: 'Title text for leave project explanation.',
 	},
 	leaveProjectExplainerDescription: {
-		id: 'routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectExplainerDescription',
+		id: 'routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerDescription',
 		defaultMessage:
 			'<b>{name}</b> will no longer be able to add or exchange observations.',
 		description: 'Description for leave project explanation.',
 	},
 	confirmButton: {
-		id: 'routes.app.projects.$projectId_.settings.team.$deviceId.confirmButton',
+		id: 'routes.app.projects.$projectId_.team.$deviceId.confirmButton',
 		defaultMessage: 'Confirm',
 		description: 'Button text to confirm leaving project.',
 	},

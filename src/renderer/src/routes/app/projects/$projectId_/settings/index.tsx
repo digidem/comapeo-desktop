@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react'
-import { useOwnRoleInProject, useProjectSettings } from '@comapeo/core-react'
+import { useProjectSettings } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
@@ -13,23 +13,14 @@ import { BLUE_GREY, DARK_GREY } from '../../../../../colors'
 import { Icon } from '../../../../../components/icon'
 import { TextLink } from '../../../../../components/link'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
-import {
-	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-	COORDINATOR_ROLE_ID,
-	CREATOR_ROLE_ID,
-} from '../../../../../lib/comapeo'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
 
 export const Route = createFileRoute('/app/projects/$projectId/settings/')({
 	loader: async ({ context, params }) => {
-		const {
-			projectApi,
-			queryClient,
-			localeState: { value: lang },
-		} = context
+		const { projectApi, queryClient } = context
 		const { projectId } = params
 
 		await Promise.all([
-			// TODO: Not ideal but requires changes in @comapeo/core-react
 			queryClient.ensureQueryData({
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -39,31 +30,6 @@ export const Route = createFileRoute('/app/projects/$projectId/settings/')({
 				],
 				queryFn: async () => {
 					return projectApi.$getProjectSettings()
-				},
-			}),
-			// TODO: Not ideal but requires changes in @comapeo/core-react
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'role',
-				],
-				queryFn: async () => {
-					return projectApi.$getOwnRole()
-				},
-			}),
-			// TODO: Not ideal but requires changes in @comapeo/core-react
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'observations',
-					{ lang },
-				],
-				queryFn: async () => {
-					return projectApi.observation.getMany({ lang })
 				},
 			}),
 		])
@@ -77,10 +43,6 @@ function RouteComponent() {
 	const { projectId } = Route.useParams()
 
 	const { data: projectSettings } = useProjectSettings({ projectId })
-	const { data: role } = useOwnRoleInProject({ projectId })
-
-	const isAtLeastCoordinator =
-		role.roleId === COORDINATOR_ROLE_ID || role.roleId === CREATOR_ROLE_ID
 
 	const iconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'h1',
@@ -114,6 +76,7 @@ function RouteComponent() {
 				>
 					<Icon name="material-arrow-back" size={30} />
 				</IconButton>
+
 				<Typography variant="h1" fontWeight={500}>
 					{t(m.navTitle)}
 				</Typography>
@@ -145,42 +108,13 @@ function RouteComponent() {
 							/>
 						}
 						action={
-							isAtLeastCoordinator ? (
-								<Box>
-									<TextLink
-										to="/app/projects/$projectId/settings/info"
-										params={{ projectId }}
-										underline="none"
-									>
-										{t(m.editInfo)}
-									</TextLink>
-								</Box>
-							) : undefined
-						}
-					/>
-
-					<SettingsItem
-						title={t(m.collaborators)}
-						description={t(
-							isAtLeastCoordinator
-								? m.deviceIsCoordinator
-								: m.deviceIsParticipant,
-						)}
-						icon={
-							<Icon
-								name="material-manage-accounts-filled"
-								htmlColor={DARK_GREY}
-								size={iconSize}
-							/>
-						}
-						action={
 							<Box>
 								<TextLink
-									to="/app/projects/$projectId/settings/team"
+									to="/app/projects/$projectId/settings/info"
 									params={{ projectId }}
 									underline="none"
 								>
-									{t(m.viewTeam)}
+									{t(m.editInfo)}
 								</TextLink>
 							</Box>
 						}
@@ -197,17 +131,15 @@ function RouteComponent() {
 							/>
 						}
 						action={
-							isAtLeastCoordinator ? (
-								<Box>
-									<TextLink
-										to="/app/projects/$projectId/settings/categories"
-										params={{ projectId }}
-										underline="none"
-									>
-										{t(m.updateCategoriesSet)}
-									</TextLink>
-								</Box>
-							) : undefined
+							<Box>
+								<TextLink
+									to="/app/projects/$projectId/settings/categories"
+									params={{ projectId }}
+									underline="none"
+								>
+									{t(m.updateCategoriesSet)}
+								</TextLink>
+							</Box>
 						}
 					/>
 				</Stack>
@@ -273,37 +205,10 @@ const m = defineMessages({
 		description:
 			'Text for link that navigates to page for editing project settings.',
 	},
-	collaborators: {
-		id: 'routes.app.projects.$projectId_.settings.index.collaborators',
-		defaultMessage: 'Collaborators',
-		description: 'Text for item that navigates to project collaborators page.',
-	},
 	categoriesSet: {
 		id: 'routes.app.projects.$projectId_.settings.index.categoriesSet',
 		defaultMessage: 'Categories Set',
 		description: 'Text for item that navigates to project categories set page.',
-	},
-	deviceIsCoordinator: {
-		id: 'routes.app.projects.$projectId_.settings.index.deviceIsCoordinator',
-		defaultMessage: 'This device is a coordinator on this project.',
-		description:
-			'Indicates that device is a coordinator on the current project.',
-	},
-	deviceIsParticipant: {
-		id: 'routes.app.projects.$projectId_.settings.index.deviceIsParticpant',
-		defaultMessage: 'This device is a participant on this project.',
-		description:
-			'Indicates that device is a participant on the current project.',
-	},
-	viewTeam: {
-		id: 'routes.app.projects.$projectId_.settings.index.viewTeam',
-		defaultMessage: 'View Team',
-		description: 'Text for link that navigates to project team page.',
-	},
-	noProjectDescription: {
-		id: 'routes.app.projects.$projectId_.settings.index.noProjectDescription',
-		defaultMessage: 'No project description.',
-		description: 'Indicates that the project does not have a description.',
 	},
 	updateCategoriesSet: {
 		id: 'routes.app.projects.$projectId_.settings.index.updateCategoriesSet',
