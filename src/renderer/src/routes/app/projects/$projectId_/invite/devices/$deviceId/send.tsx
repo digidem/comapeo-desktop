@@ -563,7 +563,7 @@ function InviteAccepted({
 					</ButtonLink>
 
 					<ButtonLink
-						to="/app/projects/$projectId/settings/team"
+						to="/app/projects/$projectId/team"
 						params={{ projectId }}
 						replace
 						fullWidth

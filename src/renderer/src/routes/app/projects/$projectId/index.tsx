@@ -101,32 +101,30 @@ function RouteComponent() {
 						</Typography>
 					</Stack>
 
-					<Stack direction="row" gap={5} justifyContent="center">
-						<ButtonLink
-							fullWidth
-							variant="outlined"
-							to="/app/projects/$projectId/settings"
-							params={{ projectId }}
-							sx={{ maxWidth: 400 }}
-						>
-							{t(m.view)}
-						</ButtonLink>
+					{isAtLeastCoordinator ? (
+						<Stack direction="row" gap={5} justifyContent="center">
+							<ButtonLink
+								fullWidth
+								variant="outlined"
+								to="/app/projects/$projectId/settings"
+								params={{ projectId }}
+								sx={{ maxWidth: 400 }}
+							>
+								{t(m.view)}
+							</ButtonLink>
 
-						<ButtonLink
-							fullWidth
-							variant="contained"
-							to="/app/projects/$projectId/invite"
-							params={{ projectId }}
-							disabled={!isAtLeastCoordinator}
-							startIcon={<Icon name="material-person-add" />}
-							sx={{
-								maxWidth: 400,
-								visibility: isAtLeastCoordinator ? undefined : 'hidden',
-							}}
-						>
-							{t(m.invite)}
-						</ButtonLink>
-					</Stack>
+							<ButtonLink
+								fullWidth
+								variant="contained"
+								to="/app/projects/$projectId/invite"
+								params={{ projectId }}
+								startIcon={<Icon name="material-person-add" />}
+								sx={{ maxWidth: 400 }}
+							>
+								{t(m.invite)}
+							</ButtonLink>
+						</Stack>
+					) : null}
 				</Stack>
 			</Box>
 
