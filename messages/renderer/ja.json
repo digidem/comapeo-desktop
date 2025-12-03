@@ -43,36 +43,6 @@
     "description": "Button text for try again button.",
     "message": "もう一度試す"
   },
-  "routes.app.about.title": {
-    "message": "CoMapeoについて"
-  },
-  "routes.app.about.version": {
-    "message": "CoMapeo バージョン"
-  },
-  "routes.app.data-and-privacy.description": {
-    "message": "CoMapeoはあなたのプライバシーと自律性を尊重します"
-  },
-  "routes.app.data-and-privacy.diagnosticInformationDescription": {
-    "message": "デバイスに関する匿名化された情報、アプリのクラッシュ、エラー、パフォーマンスは、Awana Digitalがアプリを改善し、エラーを修正するのに役立ちます。"
-  },
-  "routes.app.data-and-privacy.diagnosticInformationOptOut": {
-    "message": "診断情報の共有をいつでもオプトアウトすることができます。"
-  },
-  "routes.app.data-and-privacy.diagnosticInformationPersonalInfo": {
-    "message": "これには、お客様のデータや個人情報は一切含まれません。"
-  },
-  "routes.app.data-and-privacy.diagnosticInformationTitle": {
-    "message": "診断情報"
-  },
-  "routes.app.data-and-privacy.learnMore": {
-    "message": "もっと詳しく"
-  },
-  "routes.app.data-and-privacy.shareDiagnosticInformation": {
-    "message": "診断情報を共有"
-  },
-  "routes.app.data-and-privacy.title": {
-    "message": "データ & プライバシー"
-  },
   "routes.app.projects.$projectId.-displayed.data.list.addObservationsDescription": {
     "description": "Description of card that is displayed when project has no observations to display.",
     "message": "Exchangeを使用してコラボレーターの観察記録を追加"
@@ -84,6 +54,10 @@
   "routes.app.projects.$projectId.-displayed.data.list.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "{name} カテゴリのアイコン"
+  },
+  "routes.app.projects.$projectId.-displayed.data.list.downloadObservations": {
+    "description": "Link text to navigate to download observations page.",
+    "message": "観察記録をダウンロード"
   },
   "routes.app.projects.$projectId.-displayed.data.list.goToExchange": {
     "description": "Link text to navigate to Exchange page.",
@@ -113,6 +87,26 @@
     "description": "Title of the audio attachment page.",
     "message": "音声録音"
   },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "削除"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "取消"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogConfirm": {
+    "description": "Text for confirm button in delete attachment confirmation dialog",
+    "message": "削除する"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogTitle": {
+    "description": "Title text for delete attachment confirmation dialog",
+    "message": "削除 {type, select, photo {写真} audio {音声録音} other {アタッチメント}}"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteSuccessPanelTitle": {
+    "description": "Title text for the successful deletion panel.",
+    "message": "{type, select, photo {写真} audio {音声録音} other {添付ファイル}} 削除"
+  },
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
     "description": "Label text for download button",
     "message": "ダウンロード"
@@ -124,6 +118,70 @@
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.playerUnavailable": {
     "description": "Alert text indicating inability to play audio attachment.",
     "message": "プレイヤーは利用できません。プレビューするにはファイルをダウンロードしてください。"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.returnToObservation": {
+    "description": "Button text for the successful deletion panel.",
+    "message": "観察記録に戻る"
+  },
+  "routes.app.projects.$projectId.download.allObservationsOptionDescription": {
+    "description": "Description of the all observations download option.",
+    "message": "GeoJSONファイルとしてのみテキスト"
+  },
+  "routes.app.projects.$projectId.download.allObservationsOptionTitle": {
+    "description": "Title of the all observations download option.",
+    "message": "すべての観察記録"
+  },
+  "routes.app.projects.$projectId.download.allObservationsWithMedia": {
+    "description": "Title of the all observations with media download option.",
+    "message": "すべての観察記録とメディア"
+  },
+  "routes.app.projects.$projectId.download.allObservationsWithMediaOptionDescription": {
+    "description": "Description of the all observations with media download option.",
+    "message": ".zip ファイル内のイメージ、オーディオ、およびビデオ"
+  },
+  "routes.app.projects.$projectId.download.download": {
+    "description": "Title of the download page.",
+    "message": "ダウンロード"
+  },
+  "routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
+    "description": "Accessible label of download options form input.",
+    "message": "ダウンロードするデータ"
+  },
+  "routes.app.projects.$projectId.download.navTitle": {
+    "description": "Title of the download observations page.",
+    "message": "観察記録をダウンロード"
+  },
+  "routes.app.projects.$projectId.download.successPanelDescriptionObservations": {
+    "description": "Description text for success panel when downloading observations.",
+    "message": "<b>すべての観察記録</b><br></br> がお使いのデバイスにダウンロードされました。"
+  },
+  "routes.app.projects.$projectId.download.successPanelDescriptionObservationsWithMedia": {
+    "description": "Description text for success panel when downloading observations with media.",
+    "message": "<b></b><br></br> のすべての観察記録がお使いのデバイスにダウンロードされました。"
+  },
+  "routes.app.projects.$projectId.download.successPanelDescriptionTracks": {
+    "description": "Description text for success panel when downloading tracks.",
+    "message": "<b>すべてのトラック</b><br></br> はお使いのデバイスにダウンロードされました。"
+  },
+  "routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "完了"
+  },
+  "routes.app.projects.$projectId.download.successPanelTitle": {
+    "description": "Title text for success panel.",
+    "message": "成功！"
+  },
+  "routes.app.projects.$projectId.download.successPanelViewInFileManager": {
+    "description": "Button text for viewing the downloaded file in the system file manager.",
+    "message": "ファイルマネージャーで表示"
+  },
+  "routes.app.projects.$projectId.download.tracksOptionDescription": {
+    "description": "Description of tracks option.",
+    "message": "GeoJSONファイルとしてのみテキスト"
+  },
+  "routes.app.projects.$projectId.download.tracksOptionTitle": {
+    "description": "Title of the tracks option.",
+    "message": "トラック"
   },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
@@ -145,33 +203,117 @@
     "description": "Indicates that user is a participant on the current project.",
     "message": "あなたはこのプロジェクトの参加者です。"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "{name} カテゴリのアイコン"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Open Settings."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
+    "description": "Title for edit category panel.",
+    "message": "カテゴリの変更"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "観察記録"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "取消"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "保存"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.editNotesTooltip": {
+    "description": "Text for tooltip when hovering over notes.",
+    "message": "クリックして編集"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "回答なし"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerFalse": {
+    "description": "Text displayed if a boolean field is answered with \"false\"",
+    "message": "FALSE"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerNull": {
+    "description": "Text displayed if a field is answered with \"null\"",
+    "message": "NULL"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerTrue": {
+    "description": "Text displayed if a boolean field is answered with \"true\"",
+    "message": "TRUE"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.accessibleNotesInputLabel": {
+    "description": "Accessible label for notes input field.",
+    "message": "メモ"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "取消"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.editNotesTooltip": {
+    "description": "Text for tooltip when hovering over notes.",
+    "message": "クリックして編集"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.noNotes": {
+    "description": "Text for when notes are empty.",
+    "message": "メモはありません。"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "保存"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.title": {
+    "description": "Title for notes section.",
+    "message": "メモ"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "{name} カテゴリのアイコン"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "変更"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
+    "description": "Text for delete observation button.",
+    "message": "削除"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "取消"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogConfirm": {
+    "description": "Text for confirmation button of delete observation confirmation dialog.",
+    "message": "削除する"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogTitle": {
+    "description": "Text for title of delete observation confirmation dialog.",
+    "message": "観察記録を削除しますか？"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelReturnToObservations": {
+    "description": "Text for button to return to observations list in successful observation deletion panel.",
+    "message": "観測記録リストに戻る"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelReturnToTrack": {
+    "description": "Text for button to return to track in successful observation deletion panel.",
+    "message": "トラックに戻る"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelTitle": {
+    "description": "Title text for the successful observation deletion panel.",
+    "message": "観察記録を削除しました"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
     "message": "詳細情報"
   },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerFalse": {
-    "description": "Text displayed if a boolean field is answered with \"false\"",
-    "message": "FALSE"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
-    "description": "Fallback text displayed if field has no meaningful value.",
-    "message": "回答なし"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNull": {
-    "description": "Text displayed if a field is answered with \"null\"",
-    "message": "NULL"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerTrue": {
-    "description": "Text displayed if a boolean field is answered with \"true\"",
-    "message": "TRUE"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.mediaAttachmentsSectionTitle": {
-    "description": "Title for media attachments section.",
-    "message": "メディア添付ファイル"
+  "routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy": {
+    "description": "Displayed accuracy for observation location in meters.",
+    "message": "± {value}m"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
@@ -180,10 +322,6 @@
   "routes.app.projects.$projectId.observations.$observationDocId.index.noLocation": {
     "description": "Fallback for location when observation does not have location specified.",
     "message": "位置情報がありません"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.notesSectionTitle": {
-    "description": "Title for notes section.",
-    "message": "メモ"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
@@ -235,19 +373,7 @@
   },
   "routes.app.projects.$projectId_.exchange.index.devicesFound": {
     "description": "Text displayed when other devices have been found.",
-    "message": "デバイスが見つかりました"
-  },
-  "routes.app.projects.$projectId_.exchange.index.exchangeEverythingDescription": {
-    "description": "Description of 'exchange everything' setting",
-    "message": "フルサイズの写真とオーディオ。<br></br>ストレージを使用します。"
-  },
-  "routes.app.projects.$projectId_.exchange.index.exchangeEverythingTitle": {
-    "description": "Title displayed when exchange setting is set to 'exchange everything'",
-    "message": "すべてを交換します。"
-  },
-  "routes.app.projects.$projectId_.exchange.index.noDevicesFound": {
-    "description": "Text displayed when no devices have been found.",
-    "message": "デバイスが見つかりませんでした"
+    "message": "Devices found"
   },
   "routes.app.projects.$projectId_.exchange.index.remoteArchiveConnected": {
     "description": "Text indicating that some remote archive is connected.",
@@ -633,14 +759,8 @@
     "description": "Text displayed when Wi-Fi info is unavailable.",
     "message": "Wi-Fi info unavailable."
   },
-  "routes.app.route.aboutTabLabel": {
-    "message": "CoMapeoについて"
-  },
   "routes.app.route.appSettingsTabLabel": {
-    "message": "アプリの設定"
-  },
-  "routes.app.route.dataAndPrivacyTabLabel": {
-    "message": "データ & プライバシー"
+    "message": "設定"
   },
   "routes.app.route.exchangeTabLabel": {
     "message": "交換"
@@ -648,6 +768,30 @@
   "routes.app.route.projectTabAccessibleLabel": {
     "description": "Accessible label for project tab link in navigation.",
     "message": "プロジェクトを表示"
+  },
+  "routes.app.settings.-data-and-pritvacy-section.diagnosticInformationPersonalInfo": {
+    "message": "これには、お客様のデータや個人情報は一切含まれません。"
+  },
+  "routes.app.settings.-data-and-privacy-section.description": {
+    "message": "CoMapeoはあなたのプライバシーと自律性を尊重します"
+  },
+  "routes.app.settings.-data-and-privacy-section.diagnosticInformationDescription": {
+    "message": "デバイスに関する匿名化された情報、アプリのクラッシュ、エラー、パフォーマンスは、Awana Digitalがアプリを改善し、エラーを修正するのに役立ちます。"
+  },
+  "routes.app.settings.-data-and-privacy-section.diagnosticInformationOptOut": {
+    "message": "診断情報の共有をいつでもオプトアウトすることができます。"
+  },
+  "routes.app.settings.-data-and-privacy-section.diagnosticInformationTitle": {
+    "message": "診断情報"
+  },
+  "routes.app.settings.-data-and-privacy-section.learnMore": {
+    "message": "もっと詳しく"
+  },
+  "routes.app.settings.-data-and-privacy-section.shareDiagnosticInformation": {
+    "message": "診断情報を共有"
+  },
+  "routes.app.settings.-data-and-privacy-section.title": {
+    "message": "データ & プライバシー"
   },
   "routes.app.settings.background-map.acceptedFileTypes": {
     "description": "Text describing what kind of files are usable for background maps.",
@@ -753,6 +897,10 @@
     "description": "Label for save button.",
     "message": "保存"
   },
+  "routes.app.settings.index.aboutCoMapeoVersionLabel": {
+    "description": "Label for CoMapeo version",
+    "message": "CoMapeo バージョン"
+  },
   "routes.app.settings.index.backgroundMapSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to background map settings page.",
     "message": "バックグラウンドマップの設定に移動します。"
@@ -777,10 +925,6 @@
     "description": "Name of the background map used if a custom one is not set.",
     "message": "デフォルトの背景"
   },
-  "routes.app.settings.index.description": {
-    "description": "Description of the settings page.",
-    "message": "CoMapeoは以下に設定されています。"
-  },
   "routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to device name settings page.",
     "message": "デバイス名の設定に移動します。"
@@ -801,9 +945,17 @@
     "description": "Accessible label for link item that navigates to language settings page.",
     "message": "言語設定に移動します。"
   },
+  "routes.app.settings.index.sectionTitleAboutCoMapeo": {
+    "description": "Text for data and privacy section title",
+    "message": "CoMapeoについて"
+  },
+  "routes.app.settings.index.sectionTitleGeneral": {
+    "description": "Text for general settings section title",
+    "message": "全般"
+  },
   "routes.app.settings.index.title": {
     "description": "Title of the settings page.",
-    "message": "アプリの設定"
+    "message": "CoMapeoの設定"
   },
   "routes.app.settings.index.utmCoordinates": {
     "description": "Label for Universal Transverse Mercator coordinate system.",
@@ -889,6 +1041,14 @@
     "description": "Message displayed when track creation succeeds.",
     "message": "作成されました {count, plural, one {# トラック} other {# トラック}}"
   },
+  "routes.onboarding.-layouts.goBack": {
+    "description": "Button text for button to navigate back in onboarding steps.",
+    "message": "戻る"
+  },
+  "routes.onboarding.-layouts.step": {
+    "description": "Text indicating step number in onboarding.",
+    "message": "手順 {value}"
+  },
   "routes.onboarding.data-and-privacy.dataEncrypted": {
     "message": "すべてのデータは完全に暗号化されたままです。"
   },
@@ -902,6 +1062,7 @@
     "message": "もっと詳しく"
   },
   "routes.onboarding.data-and-privacy.next": {
+    "description": "Text for link to next step in onboarding.",
     "message": "次へ"
   },
   "routes.onboarding.data-and-privacy.privateByDefault": {
@@ -1010,103 +1171,112 @@
     "message": "なぜこのデータが収集されるのですか?"
   },
   "routes.onboarding.project.create.$projectId.notFound": {
+    "description": "Text displayed when project is not found.",
     "message": "ID {projectId} のプロジェクトが見つかりませんでした"
   },
   "routes.onboarding.project.create.$projectId.success.description": {
-    "message": "あなたは<br></br><b>{projectName}</b> を作成しました"
+    "description": "Description for onboarding project creation success page.",
+    "message": "<b>{projectName}</b><br></br>が作成されました。"
   },
   "routes.onboarding.project.create.$projectId.success.goBack": {
+    "description": "Text for button to navigate back when project is not found.",
     "message": "戻る"
   },
   "routes.onboarding.project.create.$projectId.success.inviteCollaborators": {
+    "description": "Text for link to navigate to invite collaborators page.",
     "message": "コラボレーターを招待"
   },
   "routes.onboarding.project.create.$projectId.success.projectNotFound": {
     "description": "Text displayed when invite cannot be found.",
     "message": "ID {inviteId} の招待状が見つかりませんでした"
   },
+  "routes.onboarding.project.create.$projectId.success.startUsingCoMapeo": {
+    "description": "Text for link to navigate to main app.",
+    "message": "CoMapeoの使用を開始"
+  },
   "routes.onboarding.project.create.$projectId.success.title": {
+    "description": "Title for onboarding project creation success page.",
     "message": "成功！"
   },
-  "routes.onboarding.project.create.$projectId.success.updateCategoriesSet": {
-    "message": "カテゴリセットを更新"
-  },
   "routes.onboarding.project.create.index.characterCount": {
+    "description": "Character count for project name input.",
     "message": "{count}/{max}"
   },
-  "routes.onboarding.project.create.index.createProject": {
-    "message": "プロジェクトを作成"
+  "routes.onboarding.project.create.index.createButton": {
+    "description": "Text for button to create project.",
+    "message": "Create Project"
   },
   "routes.onboarding.project.create.index.description": {
+    "description": "Page description for onboarding project creation page.",
     "message": "プロジェクトに名前を付けます。"
   },
   "routes.onboarding.project.create.index.maxLengthError": {
+    "description": "Error message for when project name is too long.",
     "message": "長すぎます。短い名前を入力してください。"
   },
   "routes.onboarding.project.create.index.minLengthError": {
+    "description": "Error message for when project name is too short.",
     "message": "プロジェクト名を入力"
   },
   "routes.onboarding.project.create.index.projectName": {
+    "description": "Input label for onboarding project creation page.",
     "message": "Enter a name for the Project"
   },
   "routes.onboarding.project.create.index.title": {
-    "message": "プロジェクトを作成"
+    "description": "Page title for onboarding project creation page.",
+    "message": "Create a Project"
   },
-  "routes.onboarding.project.createProject": {
-    "message": "プロジェクトを作成"
+  "routes.onboarding.project.index.description": {
+    "description": "Description shown about actions to take in the project onboarding landing page.",
+    "message": "最初のプロジェクトを開始するには、以下から選択してください。"
   },
-  "routes.onboarding.project.description": {
-    "message": "監視コーディネーターにプロジェクトに参加するよう依頼します。"
-  },
-  "routes.onboarding.project.join.$inviteId.index.declineInvite": {
-    "message": "招待を拒否する"
-  },
-  "routes.onboarding.project.join.$inviteId.index.inviteNotFound": {
-    "description": "Text displayed when invite cannot be found.",
-    "message": "ID {inviteId} の招待状が見つかりませんでした"
-  },
-  "routes.onboarding.project.join.$inviteId.index.joinAs": {
-    "message": "{role, select, coordinator {コーディネーターとして参加しましょう} other {参加者}}"
-  },
-  "routes.onboarding.project.join.$inviteId.index.joinProject": {
+  "routes.onboarding.project.index.joinProjectButton": {
+    "description": "Text for link to join a project.",
     "message": "プロジェクトに参加"
   },
-  "routes.onboarding.project.join.$inviteId.index.responseError": {
-    "message": "何か問題が発生しました。もう一度お試しください。"
+  "routes.onboarding.project.index.startProjectButton": {
+    "description": "Text for link to start a project.",
+    "message": "Create a Project"
   },
-  "routes.onboarding.project.join.$inviteId.index.title": {
-    "message": "プロジェクトに参加"
+  "routes.onboarding.project.index.title": {
+    "description": "Title for the project onboarding landing page.",
+    "message": "{name} の準備ができました！"
   },
   "routes.onboarding.project.join.$inviteId.success.description": {
-    "message": "<br></br><b>{projectName}</b> に参加しました"
+    "description": "Description for onboarding joining project success page.",
+    "message": "<b>{deviceName}</b><br></br>が<br></br><b>{projectName}</b> に参加しました。"
   },
   "routes.onboarding.project.join.$inviteId.success.inviteNotFound": {
     "description": "Text displayed when invite cannot be found.",
     "message": "ID {inviteId} の招待状が見つかりませんでした"
   },
   "routes.onboarding.project.join.$inviteId.success.startUsingCoMapeo": {
+    "description": "Text for link to navigate to main app.",
     "message": "CoMapeoの使用を開始"
   },
   "routes.onboarding.project.join.$inviteId.success.title": {
+    "description": "Title for onboarding joining project success page.",
     "message": "成功！"
   },
-  "routes.onboarding.project.limitedToDevices": {
-    "message": "観察記録やデータは、各プロジェクト内のデバイスに限定されます。"
+  "routes.onboarding.project.join.index.acceptButton": {
+    "description": "Text for button to accept invitation.",
+    "message": "同意する"
   },
-  "routes.onboarding.project.securelyStore": {
-    "message": "プロジェクトにより、チームはテリトリーの監視データと観測データを安全に保存し、共有することができます。"
+  "routes.onboarding.project.join.index.declineButton": {
+    "description": "Text for button to decline invitation.",
+    "message": "同意しない"
   },
-  "routes.onboarding.project.startingNewProject": {
-    "message": "新しいテリトリー監視プロジェクトを開始しますか？"
+  "routes.onboarding.project.join.index.description": {
+    "description": "Description for onboarding join project landing page.",
+    "message": "プロジェクトの招待状を受け取るには、チームと調整してください。"
   },
-  "routes.onboarding.project.title": {
+  "routes.onboarding.project.join.index.inviteDescription": {
+    "description": "Description for invite containing role being invited as.",
+    "message": "{role, select, coordinator {コーディネーターとして参加しましょう} other {参加者}}"
+  },
+  "routes.onboarding.project.join.index.title": {
+    "description": "Title for onboarding join project landing page.",
     "message": "プロジェクトに参加"
-  },
-  "routes.onboarding.route.goBack": {
-    "message": "戻る"
-  },
-  "routes.onboarding.route.step": {
-    "message": "手順 {value}"
   },
   "routes.welcome.appDescription": {
     "message": "CoMapeo Mobileで収集した観察記録を表示および管理します。"
