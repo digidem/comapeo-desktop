@@ -47,36 +47,6 @@
     "description": "Button text for try again button.",
     "message": "Inténtalo de nuevo"
   },
-  "routes.app.about.title": {
-    "message": "Acerca de CoMapeo"
-  },
-  "routes.app.about.version": {
-    "message": "Versión de CoMapeo"
-  },
-  "routes.app.data-and-privacy.description": {
-    "message": "CoMapeo respeta su privacidad y autonomía"
-  },
-  "routes.app.data-and-privacy.diagnosticInformationDescription": {
-    "message": "La información anonimizada sobre su dispositivo, los errores de las aplicaciones, los errores y el rendimiento ayuda a Awana Digital a mejorar la aplicación y a corregir errores."
-  },
-  "routes.app.data-and-privacy.diagnosticInformationOptOut": {
-    "message": "Puedes optar por no compartir información de diagnóstico en cualquier momento."
-  },
-  "routes.app.data-and-privacy.diagnosticInformationPersonalInfo": {
-    "message": "Esto nunca incluye ninguno de tus datos o datos personales."
-  },
-  "routes.app.data-and-privacy.diagnosticInformationTitle": {
-    "message": "Información de diagnóstico"
-  },
-  "routes.app.data-and-privacy.learnMore": {
-    "message": "Aprende más"
-  },
-  "routes.app.data-and-privacy.shareDiagnosticInformation": {
-    "message": "Compartir información de diagnóstico"
-  },
-  "routes.app.data-and-privacy.title": {
-    "message": "Datos y privacidad"
-  },
   "routes.app.projects.$projectId.-displayed.data.list.addObservationsDescription": {
     "description": "Description of card that is displayed when project has no observations to display.",
     "message": "Utilice Exchange para añadir observaciones de colaborador"
@@ -88,6 +58,10 @@
   "routes.app.projects.$projectId.-displayed.data.list.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icono para la categoría {name}"
+  },
+  "routes.app.projects.$projectId.-displayed.data.list.downloadObservations": {
+    "description": "Link text to navigate to download observations page.",
+    "message": "Descargar observaciones"
   },
   "routes.app.projects.$projectId.-displayed.data.list.goToExchange": {
     "description": "Link text to navigate to Exchange page.",
@@ -117,6 +91,26 @@
     "description": "Title of the audio attachment page.",
     "message": "Grabación de audio"
   },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "Borrar"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "Cancelar"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogConfirm": {
+    "description": "Text for confirm button in delete attachment confirmation dialog",
+    "message": "Sí, eliminar"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogTitle": {
+    "description": "Title text for delete attachment confirmation dialog",
+    "message": "Eliminar {type, select, photo {Foto} audio {Grabación de audio} other {Adjunto}}?"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteSuccessPanelTitle": {
+    "description": "Title text for the successful deletion panel.",
+    "message": "{type, select, photo {Foto} audio {Grabación de audio} other {Adjunto}} Eliminado"
+  },
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
     "description": "Label text for download button",
     "message": "Descargar"
@@ -128,6 +122,62 @@
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.playerUnavailable": {
     "description": "Alert text indicating inability to play audio attachment.",
     "message": "Jugador no disponible. Descargar archivo para previsualizar."
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.returnToObservation": {
+    "description": "Button text for the successful deletion panel.",
+    "message": "Volver a la observación"
+  },
+  "routes.app.projects.$projectId.download.allObservationsOptionDescription": {
+    "description": "Description of the all observations download option.",
+    "message": "Texto sólo como un archivo GeoJSON"
+  },
+  "routes.app.projects.$projectId.download.allObservationsOptionTitle": {
+    "description": "Title of the all observations download option.",
+    "message": "Todas las observaciones"
+  },
+  "routes.app.projects.$projectId.download.allObservationsWithMedia": {
+    "description": "Title of the all observations with media download option.",
+    "message": "Todas las observaciones y archivos multimedia"
+  },
+  "routes.app.projects.$projectId.download.allObservationsWithMediaOptionDescription": {
+    "description": "Description of the all observations with media download option.",
+    "message": "Imágenes, audio y vídeo en un archivo .zip"
+  },
+  "routes.app.projects.$projectId.download.download": {
+    "description": "Title of the download page.",
+    "message": "Descargar"
+  },
+  "routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
+    "description": "Accessible label of download options form input.",
+    "message": "Datos a descargar"
+  },
+  "routes.app.projects.$projectId.download.navTitle": {
+    "description": "Title of the download observations page.",
+    "message": "Descargar observaciones"
+  },
+  "routes.app.projects.$projectId.download.successPanelDescriptionTracks": {
+    "description": "Description text for success panel when downloading tracks.",
+    "message": "<b>Todas las pistas</b><br></br> han sido descargadas a tu dispositivo."
+  },
+  "routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "Listo"
+  },
+  "routes.app.projects.$projectId.download.successPanelTitle": {
+    "description": "Title text for success panel.",
+    "message": "¡Éxito!"
+  },
+  "routes.app.projects.$projectId.download.successPanelViewInFileManager": {
+    "description": "Button text for viewing the downloaded file in the system file manager.",
+    "message": "Ver en el gestor de archivos"
+  },
+  "routes.app.projects.$projectId.download.tracksOptionDescription": {
+    "description": "Description of tracks option.",
+    "message": "Texto sólo como un archivo GeoJSON"
+  },
+  "routes.app.projects.$projectId.download.tracksOptionTitle": {
+    "description": "Title of the tracks option.",
+    "message": "Trayectos"
   },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
@@ -149,33 +199,117 @@
     "description": "Indicates that user is a participant on the current project.",
     "message": "Eres un participante en este proyecto."
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Icono para la categoría {name}"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Abrir ajustes."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
+    "description": "Title for edit category panel.",
+    "message": "Cambiar categoría"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Observación"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Cancelar"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "Guardar"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.editNotesTooltip": {
+    "description": "Text for tooltip when hovering over notes.",
+    "message": "Haga clic para editar"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "Sin respuesta"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerFalse": {
+    "description": "Text displayed if a boolean field is answered with \"false\"",
+    "message": "FABRICAR"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerNull": {
+    "description": "Text displayed if a field is answered with \"null\"",
+    "message": "NÚLL"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerTrue": {
+    "description": "Text displayed if a boolean field is answered with \"true\"",
+    "message": "TRUE"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.accessibleNotesInputLabel": {
+    "description": "Accessible label for notes input field.",
+    "message": "Notas"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Cancelar"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.editNotesTooltip": {
+    "description": "Text for tooltip when hovering over notes.",
+    "message": "Haga clic para editar"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.noNotes": {
+    "description": "Text for when notes are empty.",
+    "message": "No hay notas."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "Guardar"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.title": {
+    "description": "Title for notes section.",
+    "message": "Notas"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icono para la categoría {name}"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "Cambiar"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
+    "description": "Text for delete observation button.",
+    "message": "Borrar"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "Cancelar"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogConfirm": {
+    "description": "Text for confirmation button of delete observation confirmation dialog.",
+    "message": "Sí, eliminar"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogTitle": {
+    "description": "Text for title of delete observation confirmation dialog.",
+    "message": "¿Eliminar observación?"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelReturnToObservations": {
+    "description": "Text for button to return to observations list in successful observation deletion panel.",
+    "message": "Volver a la lista de observaciones"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelReturnToTrack": {
+    "description": "Text for button to return to track in successful observation deletion panel.",
+    "message": "Volver a la pista"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelTitle": {
+    "description": "Title text for the successful observation deletion panel.",
+    "message": "Observación eliminada"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
     "message": "Detalles"
   },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerFalse": {
-    "description": "Text displayed if a boolean field is answered with \"false\"",
-    "message": "FABRICAR"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
-    "description": "Fallback text displayed if field has no meaningful value.",
-    "message": "Sin respuesta"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNull": {
-    "description": "Text displayed if a field is answered with \"null\"",
-    "message": "NÚLL"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerTrue": {
-    "description": "Text displayed if a boolean field is answered with \"true\"",
-    "message": "TRUE"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.mediaAttachmentsSectionTitle": {
-    "description": "Title for media attachments section.",
-    "message": "Adjuntos de medios"
+  "routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy": {
+    "description": "Displayed accuracy for observation location in meters.",
+    "message": "± {value}m"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
@@ -184,10 +318,6 @@
   "routes.app.projects.$projectId.observations.$observationDocId.index.noLocation": {
     "description": "Fallback for location when observation does not have location specified.",
     "message": "Sin ubicación"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.notesSectionTitle": {
-    "description": "Title for notes section.",
-    "message": "Notas"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
@@ -239,15 +369,7 @@
   },
   "routes.app.projects.$projectId_.exchange.index.devicesFound": {
     "description": "Text displayed when other devices have been found.",
-    "message": "Dispositivos encontrados"
-  },
-  "routes.app.projects.$projectId_.exchange.index.exchangeEverythingDescription": {
-    "description": "Description of 'exchange everything' setting",
-    "message": "Fotos de tamaño completo y audio.<br></br>Utiliza más almacenamiento."
-  },
-  "routes.app.projects.$projectId_.exchange.index.exchangeEverythingTitle": {
-    "description": "Title displayed when exchange setting is set to 'exchange everything'",
-    "message": "Intercambiar todo."
+    "message": "Devices found"
   },
   "routes.app.projects.$projectId_.exchange.index.exchanging": {
     "description": "Text displayed when exchanging with other devices.",
@@ -257,9 +379,9 @@
     "description": "Text displayed when waiting for Wi-Fi information.",
     "message": "Obteniendo información Wi-Fi…"
   },
-  "routes.app.projects.$projectId_.exchange.index.noDevicesFound": {
-    "description": "Text displayed when no devices have been found.",
-    "message": "No se encontraron dispositivos"
+  "routes.app.projects.$projectId_.exchange.index.lookingForDevices": {
+    "description": "Text displayed when no other devices have been found.",
+    "message": "Buscando dispositivos…"
   },
   "routes.app.projects.$projectId_.exchange.index.remoteArchiveConnected": {
     "description": "Text indicating that some remote archive is connected.",
@@ -599,7 +721,7 @@
   },
   "routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionTitle": {
     "description": "Title of the coordinators section in the team page.",
-    "message": "Persona Coordinadora"
+    "message": "Coordinadores"
   },
   "routes.app.projects.$projectId_.settings.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
@@ -653,14 +775,8 @@
     "description": "Text displayed when Wi-Fi info is unavailable.",
     "message": "Wi-Fi info unavailable."
   },
-  "routes.app.route.aboutTabLabel": {
-    "message": "Acerca de CoMapeo"
-  },
   "routes.app.route.appSettingsTabLabel": {
-    "message": "Ajustes de la aplicación"
-  },
-  "routes.app.route.dataAndPrivacyTabLabel": {
-    "message": "Datos y privacidad"
+    "message": "Ajustes"
   },
   "routes.app.route.exchangeTabLabel": {
     "message": "Intercambiar"
@@ -668,6 +784,30 @@
   "routes.app.route.projectTabAccessibleLabel": {
     "description": "Accessible label for project tab link in navigation.",
     "message": "Ver proyecto."
+  },
+  "routes.app.settings.-data-and-pritvacy-section.diagnosticInformationPersonalInfo": {
+    "message": "Esto nunca incluye ninguno de tus datos o información personal."
+  },
+  "routes.app.settings.-data-and-privacy-section.description": {
+    "message": "CoMapeo respeta su privacidad y autonomía"
+  },
+  "routes.app.settings.-data-and-privacy-section.diagnosticInformationDescription": {
+    "message": "La información anonimizada sobre su dispositivo, los errores de las aplicaciones, los errores y el rendimiento ayuda a Awana Digital a mejorar la aplicación y a corregir errores."
+  },
+  "routes.app.settings.-data-and-privacy-section.diagnosticInformationOptOut": {
+    "message": "Puedes optar por no compartir información de diagnóstico en cualquier momento."
+  },
+  "routes.app.settings.-data-and-privacy-section.diagnosticInformationTitle": {
+    "message": "Información de diagnóstico"
+  },
+  "routes.app.settings.-data-and-privacy-section.learnMore": {
+    "message": "Aprende más"
+  },
+  "routes.app.settings.-data-and-privacy-section.shareDiagnosticInformation": {
+    "message": "Compartir información de diagnóstico"
+  },
+  "routes.app.settings.-data-and-privacy-section.title": {
+    "message": "Datos y privacidad"
   },
   "routes.app.settings.background-map.acceptedFileTypes": {
     "description": "Text describing what kind of files are usable for background maps.",
@@ -683,7 +823,7 @@
   },
   "routes.app.settings.background-map.customMapInfoError": {
     "description": "Text displayed when info about a custom map cannot be retrieved.",
-    "message": "No se pudo obtener la información del mapa personalizado del archivo. Por favor, elimínala o elige un archivo diferente."
+    "message": "No se pudo obtener información del archivo del mapa personalizado. Por favor, elimínalo o elige un archivo diferente."
   },
   "routes.app.settings.background-map.dateAdded": {
     "description": "Column label text for date added.",
@@ -773,6 +913,10 @@
     "description": "Label for save button.",
     "message": "Guardar"
   },
+  "routes.app.settings.index.aboutCoMapeoVersionLabel": {
+    "description": "Label for CoMapeo version",
+    "message": "Versión de CoMapeo"
+  },
   "routes.app.settings.index.backgroundMapSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to background map settings page.",
     "message": "Ir a la configuración del mapa de fondo."
@@ -797,10 +941,6 @@
     "description": "Name of the background map used if a custom one is not set.",
     "message": "Fondo por defecto"
   },
-  "routes.app.settings.index.description": {
-    "description": "Description of the settings page.",
-    "message": "CoMapeo está configurado a lo siguiente."
-  },
   "routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to device name settings page.",
     "message": "Ir a la configuración del nombre del dispositivo."
@@ -821,9 +961,17 @@
     "description": "Accessible label for link item that navigates to language settings page.",
     "message": "Ir a la configuración de idioma."
   },
+  "routes.app.settings.index.sectionTitleAboutCoMapeo": {
+    "description": "Text for data and privacy section title",
+    "message": "Acerca de CoMapeo"
+  },
+  "routes.app.settings.index.sectionTitleGeneral": {
+    "description": "Text for general settings section title",
+    "message": "General"
+  },
   "routes.app.settings.index.title": {
     "description": "Title of the settings page.",
-    "message": "Ajustes de la aplicación"
+    "message": "Ajustes de CoMapeo"
   },
   "routes.app.settings.index.utmCoordinates": {
     "description": "Label for Universal Transverse Mercator coordinate system.",
@@ -909,6 +1057,14 @@
     "description": "Message displayed when track creation succeeds.",
     "message": "¡Creado {count, plural, one {# pista} other {# pistas}}."
   },
+  "routes.onboarding.-layouts.goBack": {
+    "description": "Button text for button to navigate back in onboarding steps.",
+    "message": "Regresar"
+  },
+  "routes.onboarding.-layouts.step": {
+    "description": "Text indicating step number in onboarding.",
+    "message": "Paso {value}"
+  },
   "routes.onboarding.data-and-privacy.dataEncrypted": {
     "message": "Toda la información permanece completamente cifrada."
   },
@@ -922,6 +1078,7 @@
     "message": "Aprende más"
   },
   "routes.onboarding.data-and-privacy.next": {
+    "description": "Text for link to next step in onboarding.",
     "message": "Siguiente"
   },
   "routes.onboarding.data-and-privacy.privateByDefault": {
@@ -976,7 +1133,7 @@
     "message": "Tú tienes el control"
   },
   "routes.onboarding.privacy-policy.controlDescription": {
-    "message": "Puede optar por no enviar cualquier información a Awana Digital.<br></br><br></br>Usted elige dónde se almacenan sus datos y con quién se comparte. Puedes elegir compartir datos anónimos y resumidos sobre cómo usar CoMapeo con Awana Digital.<br></br><br></br>Siempre seremos transparentes sobre la información que decidas compartir con el fin de mejorar la aplicación, y esta información nunca incluirá fotos, vídeos, audio, texto o ubicaciones precisas que haya introducido en CoMapeo."
+    "message": "Puede optar por no enviar cualquier información a Awana Digital.<br></br><br></br>Tú eliges dónde se almacenan tus datos y con quién se comparte. Puedes elegir compartir datos anónimos y resumidos sobre cómo usas CoMapeo con Awana Digital.<br></br><br></br>Siempre seremos transparentes sobre la información que decidas compartir con el fin de mejorar la aplicación. Esta información nunca incluirá fotos, vídeos, audios, texto o ubicaciones precisas que hayas introducido en CoMapeo."
   },
   "routes.onboarding.privacy-policy.country": {
     "message": "<b>País</b>: El país donde se está utilizando CoMapeo."
@@ -1024,115 +1181,120 @@
     "message": "¿Qué no se recopila?"
   },
   "routes.onboarding.privacy-policy.whatIsNotCollectedDescription": {
-    "message": "No recopilamos ningún dato personal ni ningún dato que pueda ser utilizado para identificar o rastrear a una persona usuaria o un dispositivo. Los identificadores de dispositivo utilizados para agregar información son aleatorios, anónimos, y cambian cada mes. La información de diagnóstico no incluye datos sobre cómo usas la aplicación, y nunca incluye ninguno de los datos que has recopilado con la aplicación. No recolectamos tu ubicación precisa o gruesa, sólo el país donde estás utilizando CoMapeo."
+    "message": "No recopilamos ningún dato personal ni ningún dato que pueda ser utilizado para identificar o rastrear a un usuario o un dispositivo. Los identificadores de dispositivo utilizados para agregar información son aleatorios, anónimos, y cambian cada mes. La información de diagnóstico no incluye datos sobre cómo usas la aplicación, y nunca incluye los datos que has recopilado. No recolectamos tu ubicación precisa o aproximada, sólo el país donde estás utilizando CoMapeo."
   },
   "routes.onboarding.privacy-policy.whyIsThisDataCollected": {
     "message": "¿Por qué se recolectan estos datos?"
   },
   "routes.onboarding.project.create.$projectId.notFound": {
+    "description": "Text displayed when project is not found.",
     "message": "No se pudo encontrar el proyecto con ID {projectId}"
   },
   "routes.onboarding.project.create.$projectId.success.description": {
-    "message": "Creaste<br></br><b>{projectName}</b>"
+    "description": "Description for onboarding project creation success page.",
+    "message": "<b>{projectName}</b><br></br>creado."
   },
   "routes.onboarding.project.create.$projectId.success.goBack": {
+    "description": "Text for button to navigate back when project is not found.",
     "message": "Regresar"
   },
   "routes.onboarding.project.create.$projectId.success.inviteCollaborators": {
+    "description": "Text for link to navigate to invite collaborators page.",
     "message": "Invita colaboradores"
   },
   "routes.onboarding.project.create.$projectId.success.projectNotFound": {
     "description": "Text displayed when invite cannot be found.",
     "message": "No se pudo encontrar la invitación con ID {inviteId}"
   },
+  "routes.onboarding.project.create.$projectId.success.startUsingCoMapeo": {
+    "description": "Text for link to navigate to main app.",
+    "message": "Empezar a usar CoMapeo"
+  },
   "routes.onboarding.project.create.$projectId.success.title": {
+    "description": "Title for onboarding project creation success page.",
     "message": "¡Éxito!"
   },
-  "routes.onboarding.project.create.$projectId.success.updateCategoriesSet": {
-    "message": "Actualizar conjunto de categorías"
-  },
   "routes.onboarding.project.create.index.characterCount": {
+    "description": "Character count for project name input.",
     "message": "{count}/{max}"
   },
-  "routes.onboarding.project.create.index.createProject": {
+  "routes.onboarding.project.create.index.createButton": {
+    "description": "Text for button to create project.",
     "message": "Crear proyecto"
   },
   "routes.onboarding.project.create.index.description": {
+    "description": "Page description for onboarding project creation page.",
     "message": "Nombra su proyecto."
   },
   "routes.onboarding.project.create.index.maxLengthError": {
+    "description": "Error message for when project name is too long.",
     "message": "Demasiado largo, pruebe un nombre más corto."
   },
   "routes.onboarding.project.create.index.minLengthError": {
+    "description": "Error message for when project name is too short.",
     "message": "Introduzca un nombre de proyecto"
   },
   "routes.onboarding.project.create.index.projectName": {
+    "description": "Input label for onboarding project creation page.",
     "message": "Introduce un nombre para el Proyecto"
   },
   "routes.onboarding.project.create.index.title": {
+    "description": "Page title for onboarding project creation page.",
     "message": "Crear un Proyecto"
   },
-  "routes.onboarding.project.createProject": {
+  "routes.onboarding.project.index.description": {
+    "description": "Description shown about actions to take in the project onboarding landing page.",
+    "message": "Elija de abajo para iniciar su primer proyecto."
+  },
+  "routes.onboarding.project.index.joinProjectButton": {
+    "description": "Text for link to join a project.",
+    "message": "Unirse a un proyecto"
+  },
+  "routes.onboarding.project.index.startProjectButton": {
+    "description": "Text for link to start a project.",
     "message": "Crear un Proyecto"
   },
-  "routes.onboarding.project.description": {
-    "message": "Pídele a un coordinador de monitorización que se una a su proyecto."
-  },
-  "routes.onboarding.project.join.$inviteId.index.declineInvite": {
-    "message": "Rechazar invitación"
-  },
-  "routes.onboarding.project.join.$inviteId.index.description": {
-    "message": "Has sido invitado a…"
-  },
-  "routes.onboarding.project.join.$inviteId.index.inviteNotFound": {
-    "description": "Text displayed when invite cannot be found.",
-    "message": "No se pudo encontrar la invitación con ID {inviteId}"
-  },
-  "routes.onboarding.project.join.$inviteId.index.joinAs": {
-    "message": "¡Únete como coordinador {role, select, coordinator {} other {¡participante}}?"
-  },
-  "routes.onboarding.project.join.$inviteId.index.joinProject": {
-    "message": "Unirse a un proyecto"
-  },
-  "routes.onboarding.project.join.$inviteId.index.responseError": {
-    "message": "Algo salió mal. Inténtelo de nuevo."
-  },
-  "routes.onboarding.project.join.$inviteId.index.title": {
-    "message": "Unirse a un proyecto"
+  "routes.onboarding.project.index.title": {
+    "description": "Title for the project onboarding landing page.",
+    "message": "¡{name} está listo!"
   },
   "routes.onboarding.project.join.$inviteId.success.inviteNotFound": {
     "description": "Text displayed when invite cannot be found.",
     "message": "No se pudo encontrar la invitación con ID {inviteId}"
   },
   "routes.onboarding.project.join.$inviteId.success.startUsingCoMapeo": {
+    "description": "Text for link to navigate to main app.",
     "message": "Empezar a usar CoMapeo"
   },
   "routes.onboarding.project.join.$inviteId.success.title": {
+    "description": "Title for onboarding joining project success page.",
     "message": "¡Éxito!"
   },
-  "routes.onboarding.project.limitedToDevices": {
-    "message": "Compartiendo observaciones y datos se limitan a dispositivos dentro de cada proyecto."
+  "routes.onboarding.project.join.index.acceptButton": {
+    "description": "Text for button to accept invitation.",
+    "message": "Aceptar"
   },
-  "routes.onboarding.project.securelyStore": {
-    "message": "Los proyectos ayudan a los equipos a almacenar y compartir de forma segura sus datos y observaciones de monitoreo del territorio."
+  "routes.onboarding.project.join.index.declineButton": {
+    "description": "Text for button to decline invitation.",
+    "message": "Rechazar"
   },
-  "routes.onboarding.project.startingNewProject": {
-    "message": "¿Iniciar un nuevo proyecto de monitorización del territorio?"
+  "routes.onboarding.project.join.index.description": {
+    "description": "Description for onboarding join project landing page.",
+    "message": "Coordine con su equipo para recibir una invitación al proyecto."
   },
-  "routes.onboarding.project.title": {
+  "routes.onboarding.project.join.index.inviteDescription": {
+    "description": "Description for invite containing role being invited as.",
+    "message": "¡Únete como coordinador {role, select, coordinator {} other {¡participante}}?"
+  },
+  "routes.onboarding.project.join.index.title": {
+    "description": "Title for onboarding join project landing page.",
     "message": "Unirse a un proyecto"
-  },
-  "routes.onboarding.route.goBack": {
-    "message": "Regresar"
-  },
-  "routes.onboarding.route.step": {
-    "message": "Paso {value}"
   },
   "routes.welcome.appDescription": {
     "message": "Ver y administrar las observaciones recolectadas con CoMapeo Mobile."
   },
   "routes.welcome.collaborate": {
-    "message": "Colabora con otras personas"
+    "message": "Colabora en proyectos"
   },
   "routes.welcome.comapeoDesktop": {
     "message": "<b><orange>Co</orange>Mapeo</b> <blue>Escritorio</blue>"
@@ -1144,9 +1306,9 @@
     "message": "¡Comienza ya!"
   },
   "routes.welcome.mapAnywhere": {
-    "message": "Mapea en cualquier lugar y en todas partes"
+    "message": "Mapea en cualquier lugar y en todos lados"
   },
   "routes.welcome.ownData": {
-    "message": "Controla tu información y hazla tuya"
+    "message": "Controla y maneja tus datos"
   }
 }
