@@ -19,17 +19,69 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "Pengamatan"
   },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "Hapus"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "Batal"
+  },
+  "routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "Selesai"
+  },
+  "routes.app.projects.$projectId.download.successPanelTitle": {
+    "description": "Title text for success panel.",
+    "message": "Berhasil!"
+  },
   "routes.app.projects.$projectId.index.invite": {
     "description": "Link text to navigate to invite collaborators page.",
     "message": "Undang"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Open Settings."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Pengamatan"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Batal"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "Simpan"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "Tidak ada jawaban"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Batal"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "Simpan"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "Ubah"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
+    "description": "Text for delete observation button.",
+    "message": "Hapus"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "Batal"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
     "message": "Rincian"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
-    "description": "Fallback text displayed if field has no meaningful value.",
-    "message": "Tidak ada jawaban"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
@@ -46,6 +98,10 @@
   "routes.app.projects.$projectId_.exchange.index.complete": {
     "description": "Text displayed when exchange is completed with all devices.",
     "message": "Complete! You're up to date"
+  },
+  "routes.app.projects.$projectId_.exchange.index.devicesFound": {
+    "description": "Text displayed when other devices have been found.",
+    "message": "Devices found"
   },
   "routes.app.projects.$projectId_.exchange.index.upToDate": {
     "description": "Text displayed when exchangable data is up to date.",
@@ -91,6 +147,9 @@
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Undang Perangkat"
   },
+  "routes.app.route.appSettingsTabLabel": {
+    "message": "Pengaturan"
+  },
   "routes.app.settings.background-map.close": {
     "description": "Text displayed for closing dialogs",
     "message": "Open Settings"
@@ -128,6 +187,7 @@
     "message": "Create Project"
   },
   "routes.onboarding.data-and-privacy.next": {
+    "description": "Text for link to next step in onboarding.",
     "message": "Lanjut"
   },
   "routes.onboarding.device-name.description": {
@@ -137,30 +197,35 @@
     "message": "Nama Perangkat"
   },
   "routes.onboarding.project.create.$projectId.success.title": {
+    "description": "Title for onboarding project creation success page.",
     "message": "Berhasil!"
   },
-  "routes.onboarding.project.create.index.createProject": {
-    "message": "Buat proyek"
+  "routes.onboarding.project.create.index.createButton": {
+    "description": "Text for button to create project.",
+    "message": "Create Project"
   },
   "routes.onboarding.project.create.index.projectName": {
+    "description": "Input label for onboarding project creation page.",
     "message": "Enter a name for the Project"
   },
   "routes.onboarding.project.create.index.title": {
-    "message": "Buat proyek"
+    "description": "Page title for onboarding project creation page.",
+    "message": "Create a Project"
   },
-  "routes.onboarding.project.createProject": {
-    "message": "Buat proyek"
-  },
-  "routes.onboarding.project.join.$inviteId.index.declineInvite": {
-    "message": "Tolak Undangan"
-  },
-  "routes.onboarding.project.join.$inviteId.index.title": {
+  "routes.onboarding.project.index.joinProjectButton": {
+    "description": "Text for link to join a project.",
     "message": "Bergabung dengan Proyek"
   },
+  "routes.onboarding.project.index.startProjectButton": {
+    "description": "Text for link to start a project.",
+    "message": "Create a Project"
+  },
   "routes.onboarding.project.join.$inviteId.success.title": {
+    "description": "Title for onboarding joining project success page.",
     "message": "Berhasil!"
   },
-  "routes.onboarding.project.title": {
+  "routes.onboarding.project.join.index.title": {
+    "description": "Title for onboarding join project landing page.",
     "message": "Bergabung dengan Proyek"
   },
   "routes.welcome.collaborate": {
