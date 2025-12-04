@@ -3,6 +3,7 @@ import { useProjectSettings } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { createFileRoute } from '@tanstack/react-router'
@@ -88,48 +89,55 @@ function SettingsList({ projectId }: { projectId: string }) {
 			flex={1}
 			gap={4}
 		>
-			<SettingRow
-				to="/app/projects/$projectId/settings/info"
-				params={{ projectId }}
-				start={
-					<Icon
-						name="noun-project-notebook"
-						htmlColor={DARK_GREY}
-						size={iconSize}
-					/>
-				}
-				end={
-					<Typography color="primary">
-						{t(m.projectSettingsActionLabel)}
-					</Typography>
-				}
-				label={projectSettings.name || t(m.unnamedProject)}
-			/>
+			<ListItem disableGutters disablePadding>
+				<SettingLink
+					to="/app/projects/$projectId/settings/info"
+					params={{ projectId }}
+					start={
+						<Icon
+							name="noun-project-notebook"
+							htmlColor={DARK_GREY}
+							size={iconSize}
+						/>
+					}
+					end={
+						<Typography color="primary">
+							{t(m.projectInfoActionLabel)}
+						</Typography>
+					}
+					label={projectSettings.name || t(m.unnamedProject)}
+					aria-label={t(m.projectSettingsLinkAccessibleLabel)}
+				/>
+			</ListItem>
 
-			<SettingRow
-				to="/app/projects/$projectId/settings/categories"
-				params={{ projectId }}
-				start={
-					<Icon
-						name="material-symbols-apps"
-						htmlColor={DARK_GREY}
-						size={iconSize}
-					/>
-				}
-				end={
-					<Typography color="primary">
-						{t(m.categoriesSettingActionLabel)}
-					</Typography>
-				}
-				label={
-					projectSettings.configMetadata?.name || t(m.defaultCoMapeoCategories)
-				}
-			/>
+			<ListItem disableGutters disablePadding>
+				<SettingLink
+					to="/app/projects/$projectId/settings/categories"
+					params={{ projectId }}
+					start={
+						<Icon
+							name="material-symbols-apps"
+							htmlColor={DARK_GREY}
+							size={iconSize}
+						/>
+					}
+					end={
+						<Typography color="primary">
+							{t(m.categoriesActionLabel)}
+						</Typography>
+					}
+					label={
+						projectSettings.configMetadata?.name ||
+						t(m.fallbackCategoriesSetName)
+					}
+					aria-label={t(m.categoriesLinkAccessibleLabel)}
+				/>
+			</ListItem>
 		</Stack>
 	)
 }
 
-function SettingRow({
+function SettingLink({
 	label,
 	start,
 	end,
@@ -144,11 +152,7 @@ function SettingRow({
 			{...linkProps}
 			disableGutters
 			disableTouchRipple
-			sx={{
-				borderRadius: 2,
-				border: `1px solid ${BLUE_GREY}`,
-				flexGrow: 0,
-			}}
+			sx={{ borderRadius: 2, border: `1px solid ${BLUE_GREY}` }}
 		>
 			<Stack
 				direction="row"
@@ -189,19 +193,31 @@ const m = defineMessages({
 		defaultMessage: 'Unnamed Project',
 		description: 'Fallback for when current project is missing a name.',
 	},
-	projectSettingsActionLabel: {
-		id: 'routes.app.projects.$projectId_.settings.index.projectSettingsActionLabel',
+	projectInfoActionLabel: {
+		id: 'routes.app.projects.$projectId_.settings.index.projectInfoActionLabel',
 		defaultMessage: 'Edit',
 		description: 'Text for action to update project info.',
 	},
-	defaultCoMapeoCategories: {
-		id: 'routes.app.projects.$projectId_.settings.index.defaultCoMapeoCategories',
-		defaultMessage: 'CoMapeo Categories',
-		description: 'Name of the default CoMapeo categories set.',
+	projectSettingsLinkAccessibleLabel: {
+		id: 'routes.app.projects.$projectId_.settings.index.projectSettingsLinkAccessibleLabel',
+		defaultMessage: 'Go to project info settings.',
+		description:
+			'Accessible label for link item that navigates to project info settings page.',
 	},
-	categoriesSettingActionLabel: {
-		id: 'routes.app.projects.$projectId_.settings.index.categoriesSettingActionLabel',
+	fallbackCategoriesSetName: {
+		id: 'routes.app.projects.$projectId_.settings.index.fallbackCategoriesSetName',
+		defaultMessage: 'CoMapeo Categories',
+		description: 'Text shown when project does not use a categories set.',
+	},
+	categoriesActionLabel: {
+		id: 'routes.app.projects.$projectId_.settings.index.categoriesActionLabel',
 		defaultMessage: 'Update',
 		description: 'Text for action to update categories set.',
+	},
+	categoriesLinkAccessibleLabel: {
+		id: 'routes.app.projects.$projectId_.settings.index.categoriesLinkAccessibleLabel',
+		defaultMessage: 'Go to categories settings.',
+		description:
+			'Accessible label for link item that navigates to project info settings page.',
 	},
 })

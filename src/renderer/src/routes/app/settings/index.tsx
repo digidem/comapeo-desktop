@@ -103,98 +103,29 @@ function SettingsList() {
 				disablePadding
 				sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
 			>
-				<SettingRow
-					to="/app/settings/device-name"
-					start={
-						<Icon
-							name="material-symbols-computer"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					}
-					end={<Typography color="primary">{t(m.editDeviceName)}</Typography>}
-					aria-label={t(m.deviceNameSettingsAccessibleLabel)}
-					// TODO: What to do when this is undefined?
-					label={deviceInfo.name || ''}
-				/>
-
-				<SettingRow
-					to="/app/settings/language"
-					start={
-						<Icon
-							name="material-language"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					}
-					end={
-						<Icon
-							name="material-chevron-right"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					}
-					aria-label={t(m.languageSettingsAccessibleLabel)}
-					label={selectedLanguageName}
-				/>
-
-				<SettingRow
-					to="/app/settings/coordinate-system"
-					start={
-						<Icon
-							name="material-explore-filled"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					}
-					end={
-						<Icon
-							name="material-chevron-right"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					}
-					aria-label={t(m.coordinateSystemSettingsAccessibleLabel)}
-					label={t(
-						coordinateFormat === 'utm'
-							? m.utmCoordinates
-							: coordinateFormat === 'dd'
-								? m.ddCoordinates
-								: m.dmsCoordinates,
-					)}
-				/>
-
-				<SettingRow
-					to="/app/settings/background-map"
-					start={
-						<Icon
-							name="material-layers-outlined"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					}
-					end={
-						<Icon
-							name="material-chevron-right"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					}
-					aria-label={t(m.backgroundMapSettingsAccessibleLabel)}
-					label={
-						<Suspense>
-							<BackgroundMapLabel styleUrl={styleUrl} />
-						</Suspense>
-					}
-				/>
-
-				{__APP_TYPE__ !== 'production' &&
-				import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
-					<SettingRow
-						to="/app/settings/test-data"
+				<ListItem disableGutters disablePadding>
+					<SettingLink
+						to="/app/settings/device-name"
 						start={
 							<Icon
-								name="material-auto-fix-high"
+								name="material-symbols-computer"
+								htmlColor={DARK_GREY}
+								size={rowIconSize}
+							/>
+						}
+						end={<Typography color="primary">{t(m.editDeviceName)}</Typography>}
+						aria-label={t(m.deviceNameSettingsAccessibleLabel)}
+						// TODO: What to do when this is undefined?
+						label={deviceInfo.name || ''}
+					/>
+				</ListItem>
+
+				<ListItem disableGutters disablePadding>
+					<SettingLink
+						to="/app/settings/language"
+						start={
+							<Icon
+								name="material-language"
 								htmlColor={DARK_GREY}
 								size={rowIconSize}
 							/>
@@ -206,15 +137,94 @@ function SettingsList() {
 								size={rowIconSize}
 							/>
 						}
-						label={t(m.createTestData)}
+						aria-label={t(m.languageSettingsAccessibleLabel)}
+						label={selectedLanguageName}
 					/>
+				</ListItem>
+
+				<ListItem disableGutters disablePadding>
+					<SettingLink
+						to="/app/settings/coordinate-system"
+						start={
+							<Icon
+								name="material-explore-filled"
+								htmlColor={DARK_GREY}
+								size={rowIconSize}
+							/>
+						}
+						end={
+							<Icon
+								name="material-chevron-right"
+								htmlColor={DARK_GREY}
+								size={rowIconSize}
+							/>
+						}
+						aria-label={t(m.coordinateSystemSettingsAccessibleLabel)}
+						label={t(
+							coordinateFormat === 'utm'
+								? m.utmCoordinates
+								: coordinateFormat === 'dd'
+									? m.ddCoordinates
+									: m.dmsCoordinates,
+						)}
+					/>
+				</ListItem>
+
+				<ListItem disableGutters disablePadding>
+					<SettingLink
+						to="/app/settings/background-map"
+						start={
+							<Icon
+								name="material-layers-outlined"
+								htmlColor={DARK_GREY}
+								size={rowIconSize}
+							/>
+						}
+						end={
+							<Icon
+								name="material-chevron-right"
+								htmlColor={DARK_GREY}
+								size={rowIconSize}
+							/>
+						}
+						aria-label={t(m.backgroundMapSettingsAccessibleLabel)}
+						label={
+							<Suspense>
+								<BackgroundMapLabel styleUrl={styleUrl} />
+							</Suspense>
+						}
+					/>
+				</ListItem>
+
+				{__APP_TYPE__ !== 'production' &&
+				import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
+					<ListItem disableGutters disablePadding>
+						<SettingLink
+							to="/app/settings/test-data"
+							start={
+								<Icon
+									name="material-auto-fix-high"
+									htmlColor={DARK_GREY}
+									size={rowIconSize}
+								/>
+							}
+							end={
+								<Icon
+									name="material-chevron-right"
+									htmlColor={DARK_GREY}
+									size={rowIconSize}
+								/>
+							}
+							label={t(m.createTestData)}
+						/>
+					</ListItem>
 				) : null}
 			</List>
 		</Stack>
 	)
 }
 
-function SettingRow({
+function SettingLink({
 	label,
 	start,
 	end,
@@ -229,11 +239,7 @@ function SettingRow({
 			{...linkProps}
 			disableGutters
 			disableTouchRipple
-			sx={{
-				borderRadius: 2,
-				border: `1px solid ${BLUE_GREY}`,
-				flexGrow: 0,
-			}}
+			sx={{ borderRadius: 2, border: `1px solid ${BLUE_GREY}` }}
 		>
 			<Stack
 				direction="row"
