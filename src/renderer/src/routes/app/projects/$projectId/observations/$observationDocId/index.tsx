@@ -60,7 +60,7 @@ import {
 	ObservationAttachmentPending,
 	ObservationAttachmentPreview,
 } from './-observation-attachment'
-import { getDisplayedTagValue, type EditableField } from './shared'
+import { getDisplayedTagValue, type EditableField } from './-shared'
 
 const SearchParamsSchema = v.object({
 	fromTrackDocId: v.optional(v.string()),

@@ -19,7 +19,7 @@ import {
 	SingleSelectFieldEditor,
 	TextFieldEditor,
 } from './-field-editors'
-import { getDisplayedTagValue, type EditableField } from './shared'
+import { getDisplayedTagValue, type EditableField } from './-shared'
 
 export function ReadOnlyFieldSection({
 	label,
