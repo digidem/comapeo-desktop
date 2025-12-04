@@ -739,6 +739,22 @@
     "description": "Title of the participants section in the team page.",
     "message": "Participants"
   },
+  "routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionDescription": {
+    "description": "Description of the past collaborators section in the team page.",
+    "message": "Devices no longer contributing to this project."
+  },
+  "routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionTitle": {
+    "description": "Title of the past collaborators section in the team page.",
+    "message": "Past Collaborators"
+  },
+  "routes.app.projects.$projectId_.team.index.remoteArchivesSectionDescription": {
+    "description": "Description of the remote archives section in the team page.",
+    "message": "This project is sharing with a secure, encrypted server."
+  },
+  "routes.app.projects.$projectId_.team.index.remoteArchivesSectionTitle": {
+    "description": "Title of the remote archives section in the team page.",
+    "message": "Remote Archive"
+  },
   "routes.app.projects.$projectId_.team.index.thisDevice": {
     "description": "Text indicating that the listed device refers to the one currently being used.",
     "message": "This device"
