@@ -119,11 +119,12 @@
     "description": "Label for save button.",
     "message": "संग्रह"
   },
-  "routes.app.projects.$projectId_.settings.team.index.inviteDevice": {
+  "routes.app.projects.$projectId_.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "उपकरणलाई निमन्त्रणा"
   },
   "routes.app.route.appSettingsTabLabel": {
+    "description": "Label for CoMapeo settings tab link in navigation.",
     "message": "सेटिङ"
   },
   "routes.app.settings.background-map.close": {
