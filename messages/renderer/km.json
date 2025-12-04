@@ -140,6 +140,7 @@
     "message": "រក្សាទុក"
   },
   "routes.app.route.appSettingsTabLabel": {
+    "description": "Label for CoMapeo settings tab link in navigation.",
     "message": "ការកំណត់"
   },
   "routes.app.settings.background-map.close": {
