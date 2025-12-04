@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import type { MemberApi } from '@comapeo/core'
 import {
 	useManyMembers,
@@ -5,17 +6,17 @@ import {
 	useOwnRoleInProject,
 } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
-import IconButton from '@mui/material/IconButton'
+import CircularProgress from '@mui/material/CircularProgress'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { DeviceIcon } from '../../-shared/device-icon'
 import { ListRowLink } from '../../../-components/list-row-link'
-import { BLUE_GREY, DARK_GREY } from '../../../../../colors'
+import { DARKER_ORANGE, DARK_GREY } from '../../../../../colors'
 import { Icon } from '../../../../../components/icon'
 import { ButtonLink } from '../../../../../components/link'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
@@ -67,15 +68,76 @@ export const Route = createFileRoute('/app/projects/$projectId/team/')({
 
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
-	const router = useRouter()
+
 	const { projectId } = Route.useParams()
 
-	const { data: members } = useManyMembers({ projectId })
+	return (
+		<Stack direction="column" flex={1} overflow="auto" gap={10} padding={6}>
+			<Stack direction="column" gap={4} alignItems="center">
+				<Icon
+					name="material-people-filled"
+					size={120}
+					htmlColor={DARKER_ORANGE}
+				/>
+
+				<Typography variant="h1" fontWeight={500} textAlign="center">
+					{t(m.navTitle)}
+				</Typography>
+			</Stack>
+
+			<Suspense
+				fallback={
+					<Box display="flex" flexDirection="row" justifyContent="center">
+						<CircularProgress disableShrink />
+					</Box>
+				}
+			>
+				<InviteButtonSection projectId={projectId} />
+
+				<Stack
+					direction="column"
+					flex={1}
+					justifyContent="space-between"
+					overflow="auto"
+				>
+					<MembersSections projectId={projectId} />
+				</Stack>
+			</Suspense>
+		</Stack>
+	)
+}
+
+function InviteButtonSection({ projectId }: { projectId: string }) {
+	const { formatMessage: t } = useIntl()
+
 	const { data: role } = useOwnRoleInProject({ projectId })
-	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
 	const isAtLeastCoordinator =
 		role.roleId === COORDINATOR_ROLE_ID || role.roleId === CREATOR_ROLE_ID
+
+	if (!isAtLeastCoordinator) {
+		return null
+	}
+
+	return (
+		<ButtonLink
+			fullWidth
+			variant="outlined"
+			sx={{ maxWidth: 400, alignSelf: 'center' }}
+			to="/app/projects/$projectId/invite"
+			params={{ projectId }}
+			startIcon={<Icon name="material-person-add" />}
+		>
+			{t(m.inviteDevice)}
+		</ButtonLink>
+	)
+}
+
+function MembersSections({ projectId }: { projectId: string }) {
+	const { formatMessage: t } = useIntl()
+
+	const { data: members } = useManyMembers({ projectId })
+	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
 	const coordinators = members.filter(
 		(m) =>
@@ -91,107 +153,46 @@ function RouteComponent() {
 	})
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
-			<Stack
-				direction="row"
-				alignItems="center"
-				component="nav"
-				gap={4}
-				padding={4}
-				borderBottom={`1px solid ${BLUE_GREY}`}
-			>
-				<IconButton
-					onClick={() => {
-						if (router.history.canGoBack()) {
-							router.history.back()
-							return
-						}
+		<Stack direction="column" gap={6}>
+			<Stack direction="column" gap={2}>
+				<Stack direction="row" gap={4} alignItems="center">
+					<Icon name="material-manage-accounts-filled" size={sectionIconSize} />
 
-						router.navigate({
-							to: '/app/projects/$projectId/settings',
-							params: { projectId },
-							replace: true,
-						})
-					}}
-				>
-					<Icon name="material-arrow-back" size={30} />
-				</IconButton>
+					<Typography variant="h2" fontWeight={500}>
+						{t(m.coordinatorsSectionTitle)}
+					</Typography>
+				</Stack>
 
-				<Typography variant="h1" fontWeight={500}>
-					{t(m.navTitle)}
-				</Typography>
+				<Typography>{t(m.coordinatorsSectionDescription)}</Typography>
 			</Stack>
 
-			<Stack
-				direction="column"
-				flex={1}
-				justifyContent="space-between"
-				overflow="auto"
-			>
-				<Box padding={6}>
-					<Stack direction="column" gap={6}>
-						{isAtLeastCoordinator ? (
-							<Box display="flex" justifyContent="center">
-								<ButtonLink
-									fullWidth
-									variant="outlined"
-									sx={{ maxWidth: 400 }}
-									to="/app/projects/$projectId/invite"
-									params={{ projectId }}
-									startIcon={<Icon name="material-person-add" />}
-								>
-									{t(m.inviteDevice)}
-								</ButtonLink>
-							</Box>
-						) : null}
+			<MemberList
+				devices={coordinators}
+				ownDeviceId={ownDeviceInfo.deviceId}
+				projectId={projectId}
+			/>
 
-						<Stack direction="column" gap={2}>
-							<Stack direction="row" gap={4} alignItems="center">
-								<Icon
-									name="material-manage-accounts-filled"
-									size={sectionIconSize}
-								/>
+			<Stack direction="column" gap={2}>
+				<Stack direction="row" gap={4} alignItems="center">
+					<Icon name="material-people-filled" size={sectionIconSize} />
 
-								<Typography variant="h2" fontWeight={500}>
-									{t(m.coordinatorsSectionTitle)}
-								</Typography>
-							</Stack>
+					<Typography variant="h2" fontWeight={500}>
+						{t(m.participantsSectionTitle)}
+					</Typography>
+				</Stack>
 
-							<Typography>{t(m.coordinatorsSectionDescription)}</Typography>
-						</Stack>
-
-						<MemberList
-							devices={coordinators}
-							ownDeviceId={ownDeviceInfo.deviceId}
-							projectId={projectId}
-						/>
-
-						<Stack direction="column" gap={2}>
-							<Stack direction="row" gap={4} alignItems="center">
-								<Icon name="material-people-filled" size={sectionIconSize} />
-
-								<Typography variant="h2" fontWeight={500}>
-									{t(m.participantsSectionTitle)}
-								</Typography>
-							</Stack>
-
-							<Typography>{t(m.participantsSectionDescription)}</Typography>
-						</Stack>
-
-						{participants.length > 0 ? (
-							<MemberList
-								devices={participants}
-								ownDeviceId={ownDeviceInfo.deviceId}
-								projectId={projectId}
-							/>
-						) : (
-							<Typography color="textSecondary">
-								{t(m.noParticipants)}
-							</Typography>
-						)}
-					</Stack>
-				</Box>
+				<Typography>{t(m.participantsSectionDescription)}</Typography>
 			</Stack>
+
+			{participants.length > 0 ? (
+				<MemberList
+					devices={participants}
+					ownDeviceId={ownDeviceInfo.deviceId}
+					projectId={projectId}
+				/>
+			) : (
+				<Typography color="textSecondary">{t(m.noParticipants)}</Typography>
+			)}
 		</Stack>
 	)
 }
@@ -278,7 +279,7 @@ const m = defineMessages({
 	navTitle: {
 		id: 'routes.app.projects.$projectId_.team.index.navTitle',
 		defaultMessage: 'Team',
-		description: 'Title of the project settings team page.',
+		description: 'Title of the team page.',
 	},
 	inviteDevice: {
 		id: 'routes.app.projects.$projectId_.team.index.inviteDevice',

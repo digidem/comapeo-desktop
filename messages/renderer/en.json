@@ -724,7 +724,7 @@
     "message": "View member {name}."
   },
   "routes.app.projects.$projectId_.team.index.navTitle": {
-    "description": "Title of the project settings team page.",
+    "description": "Title of the team page.",
     "message": "Team"
   },
   "routes.app.projects.$projectId_.team.index.noParticipants": {
