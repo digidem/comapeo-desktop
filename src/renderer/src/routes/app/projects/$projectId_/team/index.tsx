@@ -14,9 +14,10 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { DeviceIcon } from '../../-shared/device-icon'
+import { ListRowLink } from '../../../-components/list-row-link'
 import { BLUE_GREY, DARK_GREY } from '../../../../../colors'
 import { Icon } from '../../../../../components/icon'
-import { ButtonLink, ListItemButtonLink } from '../../../../../components/link'
+import { ButtonLink } from '../../../../../components/link'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -155,6 +156,7 @@ function RouteComponent() {
 									{t(m.coordinatorsSectionTitle)}
 								</Typography>
 							</Stack>
+
 							<Typography>{t(m.coordinatorsSectionDescription)}</Typography>
 						</Stack>
 
@@ -226,74 +228,45 @@ function MemberList({
 
 				const displayedName = device.name || device.deviceId.slice(0, 12)
 
-				const deviceNameLabelId = `device-name-label-${device.deviceId}`
-
 				return (
-					<ListItem
-						disablePadding
-						disableGutters
-						key={device.deviceId}
-						sx={{ display: 'flex', flexDirection: 'row', flexGrow: 0 }}
-					>
-						<ListItemButtonLink
+					<ListItem key={device.deviceId} disablePadding disableGutters>
+						<ListRowLink
 							to="/app/projects/$projectId/team/$deviceId"
 							params={{ projectId, deviceId: device.deviceId }}
-							disableGutters
-							sx={{
-								borderRadius: 2,
-								border: `1px solid ${BLUE_GREY}`,
-							}}
-							aria-labelledby={deviceNameLabelId}
-						>
-							<Stack
-								direction="row"
-								flex={1}
-								justifyContent="space-between"
-								alignItems="center"
-								overflow="auto"
-								padding={4}
-							>
-								<Stack
-									direction="row"
-									alignItems="center"
-									gap={3}
-									overflow="auto"
-								>
-									<DeviceIcon
-										deviceType={device.deviceType}
-										size={deviceIconSize}
-									/>
+							aria-label={t(m.memberLinkAccessibleLabel, {
+								name: displayedName,
+							})}
+							label={
+								isSelf ? (
+									<>
+										<Box component="span">{displayedName}</Box>
 
-									<Typography
-										textOverflow="ellipsis"
-										whiteSpace="nowrap"
-										overflow="hidden"
-										flex={1}
-										fontWeight={500}
-									>
-										<Box component="span" id={deviceNameLabelId}>
-											{displayedName}
-										</Box>
-
-										{isSelf ? (
-											<Typography
-												component="span"
-												color="textSecondary"
-												sx={{ marginInlineStart: 4 }}
-											>
-												{t(m.thisDevice)}
-											</Typography>
-										) : null}
-									</Typography>
-								</Stack>
-
+										<Typography
+											component="span"
+											color="textSecondary"
+											sx={{ marginInlineStart: 4 }}
+										>
+											{t(m.thisDevice)}
+										</Typography>
+									</>
+								) : (
+									displayedName
+								)
+							}
+							start={
+								<DeviceIcon
+									deviceType={device.deviceType}
+									size={deviceIconSize}
+								/>
+							}
+							end={
 								<Icon
 									name="material-chevron-right"
 									htmlColor={DARK_GREY}
 									size={actionIconSize}
 								/>
-							</Stack>
-						</ListItemButtonLink>
+							}
+						/>
 					</ListItem>
 				)
 			})}
@@ -343,8 +316,13 @@ const m = defineMessages({
 	},
 	thisDevice: {
 		id: 'routes.app.projects.$projectId_.team.index.thisDevice',
-		defaultMessage: 'This Device',
+		defaultMessage: 'This device',
 		description:
 			'Text indicating that the listed device refers to the one currently being used.',
+	},
+	memberLinkAccessibleLabel: {
+		id: 'routes.app.projects.$projectId_.team.index.memberLinkAccessibleLabel',
+		defaultMessage: 'View member {name}.',
+		description: 'Accessible label for link that navigates to member details.',
 	},
 })

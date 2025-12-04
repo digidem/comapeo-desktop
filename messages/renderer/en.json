@@ -719,6 +719,10 @@
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Invite Device"
   },
+  "routes.app.projects.$projectId_.team.index.memberLinkAccessibleLabel": {
+    "description": "Accessible label for link that navigates to member details.",
+    "message": "View member {name}."
+  },
   "routes.app.projects.$projectId_.team.index.navTitle": {
     "description": "Title of the project settings team page.",
     "message": "Team"
@@ -737,7 +741,7 @@
   },
   "routes.app.projects.$projectId_.team.index.thisDevice": {
     "description": "Text indicating that the listed device refers to the one currently being used.",
-    "message": "This Device"
+    "message": "This device"
   },
   "routes.app.projects.-shared.device-icon.deviceTypeDesktop": {
     "description": "Text indicating that the member is a desktop device (displays when hovering over the icon).",
