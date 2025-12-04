@@ -22,6 +22,7 @@ export const iconNames = [
 	'material-symbols-encrypted-weight200',
 	'material-symbols-delete',
 	'material-symbols-computer',
+	'material-symbols-apps',
 	'material-square-filled',
 	'material-settings',
 	'material-send-filled',
