@@ -1,5 +1,7 @@
 import { Suspense, type ReactNode } from 'react'
 import { useMapStyleUrl, useOwnDeviceInfo } from '@comapeo/core-react'
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
@@ -34,18 +36,26 @@ function RouteComponent() {
 	return (
 		<Stack direction="column" padding={6} flex={1} overflow="auto" gap={10}>
 			<Stack direction="column" gap={4} alignItems="center">
-				<Icon name="material-settings" size={100} htmlColor={DARKER_ORANGE} />
+				<Icon name="material-settings" size={120} htmlColor={DARKER_ORANGE} />
 
 				<Typography variant="h1" fontWeight={500} textAlign="center">
 					{t(m.title)}
 				</Typography>
 			</Stack>
 
-			<SettingsList />
+			<Suspense
+				fallback={
+					<Box display="flex" flexDirection="row" justifyContent="center">
+						<CircularProgress disableShrink />
+					</Box>
+				}
+			>
+				<SettingsList />
 
-			<DataAndPrivacySection />
+				<DataAndPrivacySection />
 
-			<AboutCoMapeoSection />
+				<AboutCoMapeoSection />
+			</Suspense>
 		</Stack>
 	)
 }
@@ -218,6 +228,7 @@ function SettingRow({
 		<ListItemButtonLink
 			{...linkProps}
 			disableGutters
+			disableTouchRipple
 			sx={{
 				borderRadius: 2,
 				border: `1px solid ${BLUE_GREY}`,
