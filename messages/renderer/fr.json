@@ -563,18 +563,6 @@
     "description": "Text for item that navigates to project categories set page.",
     "message": "Jeu de catégories"
   },
-  "routes.app.projects.$projectId_.settings.index.collaborators": {
-    "description": "Text for item that navigates to project collaborators page.",
-    "message": "Collaborateurs"
-  },
-  "routes.app.projects.$projectId_.settings.index.deviceIsCoordinator": {
-    "description": "Indicates that device is a coordinator on the current project.",
-    "message": "Cet appareil est un coordinateur de ce projet."
-  },
-  "routes.app.projects.$projectId_.settings.index.deviceIsParticpant": {
-    "description": "Indicates that device is a participant on the current project.",
-    "message": "Cet appareil est un participant à ce projet."
-  },
   "routes.app.projects.$projectId_.settings.index.editInfo": {
     "description": "Text for link that navigates to page for editing project settings.",
     "message": "Modifier les infos"
@@ -587,10 +575,6 @@
     "description": "Title of the project settings page.",
     "message": "Paramètres du projet"
   },
-  "routes.app.projects.$projectId_.settings.index.noProjectDescription": {
-    "description": "Indicates that the project does not have a description.",
-    "message": "Aucune description du projet."
-  },
   "routes.app.projects.$projectId_.settings.index.unnamedProject": {
     "description": "Fallback for when current project is missing a name.",
     "message": "Projet sans nom"
@@ -598,10 +582,6 @@
   "routes.app.projects.$projectId_.settings.index.updateCategoriesSet": {
     "description": "Text for link that navigates to project categories set page.",
     "message": "Mettre à jour le jeu"
-  },
-  "routes.app.projects.$projectId_.settings.index.viewTeam": {
-    "description": "Text for link that navigates to project team page.",
-    "message": "Voir l'équipe"
   },
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",
@@ -663,79 +643,79 @@
     "description": "Label for save button.",
     "message": "Enregistrer"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.addedOn": {
+  "routes.app.projects.$projectId_.team.$deviceId.addedOn": {
     "description": "Text indicating date collaborator was added to the project.",
     "message": "Ajouté le {value}"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.collaboratorNavTitle": {
+  "routes.app.projects.$projectId_.team.$deviceId.collaboratorNavTitle": {
     "description": "Title of the team collaborator info page.",
     "message": "Informations sur le collaborateur"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.confirmButton": {
+  "routes.app.projects.$projectId_.team.$deviceId.confirmButton": {
     "description": "Button text to confirm leaving project.",
     "message": "Valider"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.coordinator": {
+  "routes.app.projects.$projectId_.team.$deviceId.coordinator": {
     "description": "Text indicating collaborator is a coordinator.",
     "message": "Coordonnateur"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.lastCoordinatorWarning": {
+  "routes.app.projects.$projectId_.team.$deviceId.lastCoordinatorWarning": {
     "description": "Warning text about leaving the project as the last coordinator.",
     "message": "Vous êtes le dernier coordinateur. Pensez à faire d'un autre appareil un coordinator avant de quitter le projet."
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectButton": {
+  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectButton": {
     "description": "Button text to initiate leave project flow.",
     "message": "Quitter le projet"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectExplainerDescription": {
+  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerDescription": {
     "description": "Description for leave project explanation.",
     "message": "<b>{name}</b> ne pourra plus ajouter ou échanger des observations."
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectExplainerTitle": {
+  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerTitle": {
     "description": "Title text for leave project explanation.",
     "message": "Quitter le projet?"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectNavTitle": {
+  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectNavTitle": {
     "description": "Title of the team collaborator info page when the leave project flow is initiated.",
     "message": "Quitter le projet"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.participant": {
+  "routes.app.projects.$projectId_.team.$deviceId.participant": {
     "description": "Text indicating collaborator is a participant.",
     "message": "Participant"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.thisDevice": {
+  "routes.app.projects.$projectId_.team.$deviceId.thisDevice": {
     "description": "Text indicating that user is viewing itslef.",
     "message": "Cet appareil !"
   },
-  "routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionDescription": {
+  "routes.app.projects.$projectId_.team.index.coordinatorsSectionDescription": {
     "description": "Description of the coordinators section in the team page.",
     "message": "Les coordinateurs peuvent inviter des appareils, modifier et supprimer des données et gérer les détails du projet."
   },
-  "routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionTitle": {
+  "routes.app.projects.$projectId_.team.index.coordinatorsSectionTitle": {
     "description": "Title of the coordinators section in the team page.",
     "message": "Coordonnateurs"
   },
-  "routes.app.projects.$projectId_.settings.team.index.inviteDevice": {
+  "routes.app.projects.$projectId_.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Inviter un appareil"
   },
-  "routes.app.projects.$projectId_.settings.team.index.navTitle": {
+  "routes.app.projects.$projectId_.team.index.navTitle": {
     "description": "Title of the project settings team page.",
     "message": "Equipe"
   },
-  "routes.app.projects.$projectId_.settings.team.index.noParticipants": {
+  "routes.app.projects.$projectId_.team.index.noParticipants": {
     "description": "Text indicating that no participants are part of the project yet.",
     "message": "Aucun participant n'a été ajouté à ce projet."
   },
-  "routes.app.projects.$projectId_.settings.team.index.participantsSectionDescription": {
+  "routes.app.projects.$projectId_.team.index.participantsSectionDescription": {
     "description": "Description of the participants section in the team page.",
     "message": "Les participants peuvent prendre et partager des observations. Ils ne peuvent pas gérer les utilisateurs ou les détails du projet."
   },
-  "routes.app.projects.$projectId_.settings.team.index.participantsSectionTitle": {
+  "routes.app.projects.$projectId_.team.index.participantsSectionTitle": {
     "description": "Title of the participants section in the team page.",
     "message": "Participants"
   },
-  "routes.app.projects.$projectId_.settings.team.index.thisDevice": {
+  "routes.app.projects.$projectId_.team.index.thisDevice": {
     "description": "Text indicating that the listed device refers to the one currently being used.",
     "message": "Cet appareil"
   },
@@ -768,14 +748,24 @@
     "message": "Wi-Fi info unavailable."
   },
   "routes.app.route.appSettingsTabLabel": {
+    "description": "Label for CoMapeo settings tab link in navigation.",
     "message": "Paramètres"
   },
-  "routes.app.route.exchangeTabLabel": {
-    "message": "Échanger"
+  "routes.app.route.exchangeTabAccessibleLabel": {
+    "description": "Accessible label for exchange tab link in navigation.",
+    "message": "Voir les échanges."
   },
   "routes.app.route.projectTabAccessibleLabel": {
     "description": "Accessible label for project tab link in navigation.",
     "message": "Voir le projet."
+  },
+  "routes.app.route.teamTabLabel": {
+    "description": "Label for team tab link in navigation.",
+    "message": "Equipe"
+  },
+  "routes.app.route.toolsTabLabel": {
+    "description": "Label for tools tab link in navigation.",
+    "message": "Outils"
   },
   "routes.app.settings.-data-and-pritvacy-section.diagnosticInformationPersonalInfo": {
     "message": "Cela ne comprend jamais vos données ou vos informations personnelles."
