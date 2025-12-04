@@ -72,17 +72,17 @@ export function getDisplayedTagValue({
 
 const m = defineMessages({
 	fieldAnswerTrue: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerTrue',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerTrue',
 		defaultMessage: 'TRUE',
 		description: 'Text displayed if a boolean field is answered with "true"',
 	},
 	fieldAnswerFalse: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerFalse',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerFalse',
 		defaultMessage: 'FALSE',
 		description: 'Text displayed if a boolean field is answered with "false"',
 	},
 	fieldAnswerNull: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerNull',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerNull',
 		defaultMessage: 'NULL',
 		description: 'Text displayed if a field is answered with "null"',
 	},

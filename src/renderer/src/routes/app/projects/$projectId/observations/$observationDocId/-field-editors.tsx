@@ -18,7 +18,7 @@ import {
 	type EditableNumberField,
 	type EditableSingleSelectField,
 	type EditableTextField,
-} from './shared'
+} from './-shared'
 
 const TextFieldEditorSchema = v.object({
 	answer: v.union([v.undefined(), v.pipe(v.string(), v.trim())]),

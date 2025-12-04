@@ -239,18 +239,6 @@
     "description": "Fallback text displayed if field has no meaningful value.",
     "message": "No answer"
   },
-  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerFalse": {
-    "description": "Text displayed if a boolean field is answered with \"false\"",
-    "message": "FALSE"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerNull": {
-    "description": "Text displayed if a field is answered with \"null\"",
-    "message": "NULL"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerTrue": {
-    "description": "Text displayed if a boolean field is answered with \"true\"",
-    "message": "TRUE"
-  },
   "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.accessibleNotesInputLabel": {
     "description": "Accessible label for notes input field.",
     "message": "Notes"
@@ -274,6 +262,18 @@
   "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.title": {
     "description": "Title for notes section.",
     "message": "Notes"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerFalse": {
+    "description": "Text displayed if a boolean field is answered with \"false\"",
+    "message": "FALSE"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerNull": {
+    "description": "Text displayed if a field is answered with \"null\"",
+    "message": "NULL"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerTrue": {
+    "description": "Text displayed if a boolean field is answered with \"true\"",
+    "message": "TRUE"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
