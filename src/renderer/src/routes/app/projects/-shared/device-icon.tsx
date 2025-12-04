@@ -15,15 +15,16 @@ export function DeviceIcon({
 	size: string | number
 }) {
 	const { formatMessage: t } = useIntl()
+
 	return (
 		<Box
 			display="flex"
 			justifyContent="center"
 			alignItems="center"
-			borderRadius={`calc(${size} * 2)`}
+			borderRadius={`calc(${size} * 1.5)`}
 			bgcolor={LIGHT_GREY}
-			height={`calc(${size} * 2)`}
-			width={`calc(${size} * 2)`}
+			height={`calc(${size} * 1.5)`}
+			width={`calc(${size} * 1.5)`}
 		>
 			<Icon
 				titleAccess={t(getDeviceIconTitleMessage(deviceType))}
@@ -48,7 +49,7 @@ function getIconNameForDeviceType(
 			return 'material-phone-android'
 		}
 		case 'selfHostedServer': {
-			return 'material-symbols-encrypted-weight400'
+			return 'material-offline-bolt-outlined'
 		}
 		case 'UNRECOGNIZED':
 		case 'device_type_unspecified':
