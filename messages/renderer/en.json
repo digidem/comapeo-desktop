@@ -575,29 +575,25 @@
     "description": "Label for button to upload new categories set.",
     "message": "Upload New Set"
   },
-  "routes.app.projects.$projectId_.settings.index.categoriesSet": {
-    "description": "Text for item that navigates to project categories set page.",
-    "message": "Categories Set"
+  "routes.app.projects.$projectId_.settings.index.categoriesSettingActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "Update"
   },
-  "routes.app.projects.$projectId_.settings.index.editInfo": {
-    "description": "Text for link that navigates to page for editing project settings.",
-    "message": "Edit Info"
-  },
-  "routes.app.projects.$projectId_.settings.index.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "Go back."
+  "routes.app.projects.$projectId_.settings.index.defaultCoMapeoCategories": {
+    "description": "Name of the default CoMapeo categories set.",
+    "message": "CoMapeo Categories"
   },
   "routes.app.projects.$projectId_.settings.index.navTitle": {
-    "description": "Title of the project settings page.",
-    "message": "Project Settings"
+    "description": "Title of the coordinator tools page.",
+    "message": "Coordinator Tools"
+  },
+  "routes.app.projects.$projectId_.settings.index.projectSettingsActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "Edit"
   },
   "routes.app.projects.$projectId_.settings.index.unnamedProject": {
     "description": "Fallback for when current project is missing a name.",
     "message": "Unnamed Project"
-  },
-  "routes.app.projects.$projectId_.settings.index.updateCategoriesSet": {
-    "description": "Text for link that navigates to project categories set page.",
-    "message": "Update Set"
   },
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",

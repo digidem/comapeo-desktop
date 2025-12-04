@@ -1,17 +1,19 @@
-import { type ReactNode } from 'react'
+import { Suspense, type ReactNode } from 'react'
 import { useProjectSettings } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
-import IconButton from '@mui/material/IconButton'
+import CircularProgress from '@mui/material/CircularProgress'
 import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY } from '../../../../../colors'
+import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../../../colors'
 import { Icon } from '../../../../../components/icon'
-import { TextLink } from '../../../../../components/link'
+import {
+	ListItemButtonLink,
+	type ListItemButtonLinkComponentProps,
+} from '../../../../../components/link'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
 
@@ -20,204 +22,186 @@ export const Route = createFileRoute('/app/projects/$projectId/settings/')({
 		const { projectApi, queryClient } = context
 		const { projectId } = params
 
-		await Promise.all([
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'project_settings',
-				],
-				queryFn: async () => {
-					return projectApi.$getProjectSettings()
-				},
-			}),
-		])
+		await queryClient.ensureQueryData({
+			queryKey: [
+				COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+				'projects',
+				projectId,
+				'project_settings',
+			],
+			queryFn: async () => {
+				return projectApi.$getProjectSettings()
+			},
+		})
 	},
 	component: RouteComponent,
 })
 
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
-	const router = useRouter()
+
 	const { projectId } = Route.useParams()
 
-	const { data: projectSettings } = useProjectSettings({ projectId })
-
-	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
-		multiplier: 1.25,
-	})
-
 	return (
-		<Stack direction="column" flex={1}>
-			<Stack
-				direction="row"
-				alignItems="center"
-				component="nav"
-				gap={4}
-				padding={4}
-				borderBottom={`1px solid ${BLUE_GREY}`}
-			>
-				<IconButton
-					aria-label={t(m.goBackAccessibleLabel)}
-					onClick={() => {
-						if (router.history.canGoBack()) {
-							router.history.back()
-							return
-						}
-
-						router.navigate({
-							to: '/app/projects/$projectId',
-							params: { projectId },
-							replace: true,
-						})
-					}}
-				>
-					<Icon name="material-arrow-back" size={30} />
-				</IconButton>
+		<Stack direction="column" flex={1} overflow="auto" padding={6} gap={10}>
+			<Stack direction="column" alignItems="center" gap={4}>
+				<Icon
+					name="material-manage-accounts-filled"
+					size={120}
+					htmlColor={DARKER_ORANGE}
+				/>
 
 				<Typography variant="h1" fontWeight={500}>
 					{t(m.navTitle)}
 				</Typography>
 			</Stack>
 
-			<Box
-				padding={6}
-				overflow="auto"
-				display="flex"
-				flexDirection="column"
-				flex={1}
+			<Suspense
+				fallback={
+					<Box display="flex" flexDirection="row" justifyContent="center">
+						<CircularProgress disableShrink />
+					</Box>
+				}
 			>
-				<Stack
-					component={List}
-					disablePadding
-					direction="column"
-					flexDirection="column"
-					flex={1}
-					gap={6}
-				>
-					<SettingsItem
-						title={projectSettings.name || t(m.unnamedProject)}
-						description={projectSettings.projectDescription}
-						icon={
-							<Icon
-								name="comapeo-cards"
-								htmlColor={DARK_GREY}
-								size={iconSize}
-							/>
-						}
-						action={
-							<Box>
-								<TextLink
-									to="/app/projects/$projectId/settings/info"
-									params={{ projectId }}
-									underline="none"
-								>
-									{t(m.editInfo)}
-								</TextLink>
-							</Box>
-						}
-					/>
-
-					<SettingsItem
-						title={t(m.categoriesSet)}
-						description={projectSettings.configMetadata?.name || 'No name'}
-						icon={
-							<Icon
-								name="material-category"
-								htmlColor={DARK_GREY}
-								size={iconSize}
-							/>
-						}
-						action={
-							<Box>
-								<TextLink
-									to="/app/projects/$projectId/settings/categories"
-									params={{ projectId }}
-									underline="none"
-								>
-									{t(m.updateCategoriesSet)}
-								</TextLink>
-							</Box>
-						}
-					/>
-				</Stack>
-			</Box>
+				<SettingsList projectId={projectId} />
+			</Suspense>
 		</Stack>
 	)
 }
 
-function SettingsItem({
-	action,
-	description,
-	icon,
-	title,
-}: {
-	action?: ReactNode
-	description?: string
-	icon: ReactNode
-	title: string
-}) {
+function SettingsList({ projectId }: { projectId: string }) {
+	const { formatMessage: t } = useIntl()
+
+	const { data: projectSettings } = useProjectSettings({ projectId })
+
+	const iconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+		multiplier: 1.25,
+	})
+
 	return (
 		<Stack
-			component={ListItem}
-			disableGutters
+			component={List}
 			disablePadding
-			direction="row"
-			gap={5}
-			borderRadius={2}
-			border={`1px solid ${BLUE_GREY}`}
-			padding={5}
-			alignItems="flex-start"
+			direction="column"
+			flexDirection="column"
+			flex={1}
+			gap={4}
 		>
-			{icon}
+			<SettingRow
+				to="/app/projects/$projectId/settings/info"
+				params={{ projectId }}
+				start={
+					<Icon
+						name="noun-project-notebook"
+						htmlColor={DARK_GREY}
+						size={iconSize}
+					/>
+				}
+				end={
+					<Typography color="primary">
+						{t(m.projectSettingsActionLabel)}
+					</Typography>
+				}
+				label={projectSettings.name || t(m.unnamedProject)}
+			/>
 
-			<Stack direction="column" gap={5} justifyContent="space-between">
-				<Typography variant="h1" fontWeight={500}>
-					{title}
-				</Typography>
-
-				{description ? (
-					<Typography sx={{ color: DARK_GREY }}>{description}</Typography>
-				) : null}
-
-				{action}
-			</Stack>
+			<SettingRow
+				to="/app/projects/$projectId/settings/categories"
+				params={{ projectId }}
+				start={
+					<Icon
+						name="material-symbols-apps"
+						htmlColor={DARK_GREY}
+						size={iconSize}
+					/>
+				}
+				end={
+					<Typography color="primary">
+						{t(m.categoriesSettingActionLabel)}
+					</Typography>
+				}
+				label={
+					projectSettings.configMetadata?.name || t(m.defaultCoMapeoCategories)
+				}
+			/>
 		</Stack>
+	)
+}
+
+function SettingRow({
+	label,
+	start,
+	end,
+	...linkProps
+}: Pick<ListItemButtonLinkComponentProps, 'to' | 'params'> & {
+	label: ReactNode
+	start: ReactNode
+	end: ReactNode
+}) {
+	return (
+		<ListItemButtonLink
+			{...linkProps}
+			disableGutters
+			disableTouchRipple
+			sx={{
+				borderRadius: 2,
+				border: `1px solid ${BLUE_GREY}`,
+				flexGrow: 0,
+			}}
+		>
+			<Stack
+				direction="row"
+				flex={1}
+				justifyContent="space-between"
+				alignItems="center"
+				overflow="auto"
+				padding={4}
+			>
+				<Stack direction="row" alignItems="center" gap={3} overflow="auto">
+					{start}
+
+					<Typography
+						textOverflow="ellipsis"
+						whiteSpace="nowrap"
+						overflow="hidden"
+						flex={1}
+						fontWeight={500}
+					>
+						{label}
+					</Typography>
+				</Stack>
+
+				{end}
+			</Stack>
+		</ListItemButtonLink>
 	)
 }
 
 const m = defineMessages({
 	navTitle: {
 		id: 'routes.app.projects.$projectId_.settings.index.navTitle',
-		defaultMessage: 'Project Settings',
-		description: 'Title of the project settings page.',
+		defaultMessage: 'Coordinator Tools',
+		description: 'Title of the coordinator tools page.',
 	},
 	unnamedProject: {
 		id: 'routes.app.projects.$projectId_.settings.index.unnamedProject',
 		defaultMessage: 'Unnamed Project',
 		description: 'Fallback for when current project is missing a name.',
 	},
-	editInfo: {
-		id: 'routes.app.projects.$projectId_.settings.index.editInfo',
-		defaultMessage: 'Edit Info',
-		description:
-			'Text for link that navigates to page for editing project settings.',
+	projectSettingsActionLabel: {
+		id: 'routes.app.projects.$projectId_.settings.index.projectSettingsActionLabel',
+		defaultMessage: 'Edit',
+		description: 'Text for action to update project info.',
 	},
-	categoriesSet: {
-		id: 'routes.app.projects.$projectId_.settings.index.categoriesSet',
-		defaultMessage: 'Categories Set',
-		description: 'Text for item that navigates to project categories set page.',
+	defaultCoMapeoCategories: {
+		id: 'routes.app.projects.$projectId_.settings.index.defaultCoMapeoCategories',
+		defaultMessage: 'CoMapeo Categories',
+		description: 'Name of the default CoMapeo categories set.',
 	},
-	updateCategoriesSet: {
-		id: 'routes.app.projects.$projectId_.settings.index.updateCategoriesSet',
-		defaultMessage: 'Update Set',
-		description: 'Text for link that navigates to project categories set page.',
-	},
-	goBackAccessibleLabel: {
-		id: 'routes.app.projects.$projectId_.settings.index.goBackAccessibleLabel',
-		defaultMessage: 'Go back.',
-		description: 'Accessible label for back button.',
+	categoriesSettingActionLabel: {
+		id: 'routes.app.projects.$projectId_.settings.index.categoriesSettingActionLabel',
+		defaultMessage: 'Update',
+		description: 'Text for action to update categories set.',
 	},
 })
