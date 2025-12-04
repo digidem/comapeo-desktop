@@ -559,18 +559,6 @@
     "description": "Text for item that navigates to project categories set page.",
     "message": "Categorieën instellen"
   },
-  "routes.app.projects.$projectId_.settings.index.collaborators": {
-    "description": "Text for item that navigates to project collaborators page.",
-    "message": "Medewerkers"
-  },
-  "routes.app.projects.$projectId_.settings.index.deviceIsCoordinator": {
-    "description": "Indicates that device is a coordinator on the current project.",
-    "message": "Dit apparaat is een coördinator voor dit project."
-  },
-  "routes.app.projects.$projectId_.settings.index.deviceIsParticpant": {
-    "description": "Indicates that device is a participant on the current project.",
-    "message": "Dit apparaat is een deelnemer in dit project."
-  },
   "routes.app.projects.$projectId_.settings.index.editInfo": {
     "description": "Text for link that navigates to page for editing project settings.",
     "message": "Info bewerken"
@@ -583,10 +571,6 @@
     "description": "Title of the project settings page.",
     "message": "Project Instellingen"
   },
-  "routes.app.projects.$projectId_.settings.index.noProjectDescription": {
-    "description": "Indicates that the project does not have a description.",
-    "message": "Geen projectbeschrijving."
-  },
   "routes.app.projects.$projectId_.settings.index.unnamedProject": {
     "description": "Fallback for when current project is missing a name.",
     "message": "Naamloos project"
@@ -594,10 +578,6 @@
   "routes.app.projects.$projectId_.settings.index.updateCategoriesSet": {
     "description": "Text for link that navigates to project categories set page.",
     "message": "Set bijwerken"
-  },
-  "routes.app.projects.$projectId_.settings.index.viewTeam": {
-    "description": "Text for link that navigates to project team page.",
-    "message": "Bekijk team"
   },
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",
@@ -659,79 +639,79 @@
     "description": "Label for save button.",
     "message": "Opslaan"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.addedOn": {
+  "routes.app.projects.$projectId_.team.$deviceId.addedOn": {
     "description": "Text indicating date collaborator was added to the project.",
     "message": "Toegevoegd op {value}"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.collaboratorNavTitle": {
+  "routes.app.projects.$projectId_.team.$deviceId.collaboratorNavTitle": {
     "description": "Title of the team collaborator info page.",
     "message": "Medewerker Info"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.confirmButton": {
+  "routes.app.projects.$projectId_.team.$deviceId.confirmButton": {
     "description": "Button text to confirm leaving project.",
     "message": "Bevestigen"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.coordinator": {
+  "routes.app.projects.$projectId_.team.$deviceId.coordinator": {
     "description": "Text indicating collaborator is a coordinator.",
     "message": "Coördinator"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.lastCoordinatorWarning": {
+  "routes.app.projects.$projectId_.team.$deviceId.lastCoordinatorWarning": {
     "description": "Warning text about leaving the project as the last coordinator.",
     "message": "U bent de laatste coördinator. Overweeg een ander apparaat tot coördinator te maken voordat u het project verlaat."
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectButton": {
+  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectButton": {
     "description": "Button text to initiate leave project flow.",
     "message": "Project verlaten"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectExplainerDescription": {
+  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerDescription": {
     "description": "Description for leave project explanation.",
     "message": "<b>{name}</b> zal niet langer in staat zijn waarnemingen toe te voegen of uit te wisselen."
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectExplainerTitle": {
+  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerTitle": {
     "description": "Title text for leave project explanation.",
     "message": "Project verlaten?"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectNavTitle": {
+  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectNavTitle": {
     "description": "Title of the team collaborator info page when the leave project flow is initiated.",
     "message": "Project verlaten"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.participant": {
+  "routes.app.projects.$projectId_.team.$deviceId.participant": {
     "description": "Text indicating collaborator is a participant.",
     "message": "Deelnemer"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.thisDevice": {
+  "routes.app.projects.$projectId_.team.$deviceId.thisDevice": {
     "description": "Text indicating that user is viewing itslef.",
     "message": "Dit apparaat!"
   },
-  "routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionDescription": {
+  "routes.app.projects.$projectId_.team.index.coordinatorsSectionDescription": {
     "description": "Description of the coordinators section in the team page.",
     "message": "Coördinatoren kunnen apparaten, bewerken en verwijderen van gegevens, en projectdetails beheren."
   },
-  "routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionTitle": {
+  "routes.app.projects.$projectId_.team.index.coordinatorsSectionTitle": {
     "description": "Title of the coordinators section in the team page.",
     "message": "Coördinatoren"
   },
-  "routes.app.projects.$projectId_.settings.team.index.inviteDevice": {
+  "routes.app.projects.$projectId_.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Apparaat Uitnodigen"
   },
-  "routes.app.projects.$projectId_.settings.team.index.navTitle": {
+  "routes.app.projects.$projectId_.team.index.navTitle": {
     "description": "Title of the project settings team page.",
     "message": "Team"
   },
-  "routes.app.projects.$projectId_.settings.team.index.noParticipants": {
+  "routes.app.projects.$projectId_.team.index.noParticipants": {
     "description": "Text indicating that no participants are part of the project yet.",
     "message": "Er zijn geen deelnemers aan dit project toegevoegd."
   },
-  "routes.app.projects.$projectId_.settings.team.index.participantsSectionDescription": {
+  "routes.app.projects.$projectId_.team.index.participantsSectionDescription": {
     "description": "Description of the participants section in the team page.",
     "message": "Deelnemers kunnen waarnemingen aannemen en delen. Ze kunnen gebruikers of projectdetails niet beheren."
   },
-  "routes.app.projects.$projectId_.settings.team.index.participantsSectionTitle": {
+  "routes.app.projects.$projectId_.team.index.participantsSectionTitle": {
     "description": "Title of the participants section in the team page.",
     "message": "Deelnemers"
   },
-  "routes.app.projects.$projectId_.settings.team.index.thisDevice": {
+  "routes.app.projects.$projectId_.team.index.thisDevice": {
     "description": "Text indicating that the listed device refers to the one currently being used.",
     "message": "Dit apparaat"
   },
@@ -764,14 +744,24 @@
     "message": "Wi-Fi info unavailable."
   },
   "routes.app.route.appSettingsTabLabel": {
+    "description": "Label for CoMapeo settings tab link in navigation.",
     "message": "Instellingen"
   },
-  "routes.app.route.exchangeTabLabel": {
-    "message": "Ruil"
+  "routes.app.route.exchangeTabAccessibleLabel": {
+    "description": "Accessible label for exchange tab link in navigation.",
+    "message": "Toon uitwisseling."
   },
   "routes.app.route.projectTabAccessibleLabel": {
     "description": "Accessible label for project tab link in navigation.",
     "message": "Bekijk het project."
+  },
+  "routes.app.route.teamTabLabel": {
+    "description": "Label for team tab link in navigation.",
+    "message": "Team"
+  },
+  "routes.app.route.toolsTabLabel": {
+    "description": "Label for tools tab link in navigation.",
+    "message": "Hulpmiddelen"
   },
   "routes.app.settings.-data-and-pritvacy-section.diagnosticInformationPersonalInfo": {
     "message": "Dit bevat nooit enige van je gegevens of persoonlijke informatie."
