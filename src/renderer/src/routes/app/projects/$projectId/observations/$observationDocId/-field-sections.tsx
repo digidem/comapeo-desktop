@@ -5,21 +5,21 @@ import Typography from '@mui/material/Typography'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { ErrorDialog } from '../../../../../../components/error-dialog'
+import { ErrorDialog } from '#renderer/src/components/error-dialog.tsx'
 import {
 	type ObservationTagValue,
 	type TagValue,
-} from '../../../../../../lib/comapeo'
-import { getLocaleStateQueryOptions } from '../../../../../../lib/queries/app-settings'
-import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations'
-import { EditableSection } from './-components/editable-section'
+} from '#renderer/src/lib/comapeo.ts'
+import { getLocaleStateQueryOptions } from '#renderer/src/lib/queries/app-settings.ts'
+import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
+import { EditableSection } from './-components/editable-section.tsx'
 import {
 	MultiSelectFieldEditor,
 	NumberFieldEditor,
 	SingleSelectFieldEditor,
 	TextFieldEditor,
-} from './-field-editors'
-import { getDisplayedTagValue, type EditableField } from './-shared'
+} from './-field-editors.tsx'
+import { getDisplayedTagValue, type EditableField } from './-shared.ts'
 
 export function ReadOnlyFieldSection({
 	label,
