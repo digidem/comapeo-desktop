@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
 
-import type { SupportedLanguageTag } from '../../../../shared/intl'
+import type { SupportedLanguageTag } from '#shared/intl.ts'
 import { loadTranslations } from '../intl'
 
 export const BASE_QUERY_KEY = 'language'

@@ -12,7 +12,7 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import { parse } from 'valibot'
 
-import { CoordinateFormatSchema } from '../../../../../shared/coordinate-format'
+import { CoordinateFormatSchema } from '#shared/coordinate-format.ts'
 import { BLUE_GREY, DARK_GREY } from '../../../colors'
 import { ErrorDialog } from '../../../components/error-dialog'
 import { Icon } from '../../../components/icon'

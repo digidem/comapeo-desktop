@@ -1,6 +1,6 @@
 import { fromLatLon } from 'utm'
 
-import type { CoordinateFormat } from '../../../shared/coordinate-format'
+import type { CoordinateFormat } from '#shared/coordinate-format.ts'
 
 export function formatCoords({
 	lon,

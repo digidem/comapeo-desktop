@@ -25,7 +25,7 @@ import {
 } from '@tanstack/react-router'
 import { useIntl, type IntlShape } from 'react-intl'
 
-import type { LocaleState } from '../../shared/intl'
+import type { LocaleState } from '#shared/intl.ts'
 import { WHITE } from './colors'
 import { initComapeoClient } from './comapeo-client'
 import { AppTitleBar, TITLE_BAR_HEIGHT } from './components/app-title-bar'

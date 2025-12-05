@@ -1,6 +1,6 @@
 import type { UseMutationOptions } from '@tanstack/react-query'
 
-import type { SelectedFile } from '../../../../shared/ipc'
+import type { SelectedFile } from '#shared/ipc.ts'
 
 /**
  * If the resolved value is `undefined` that means the user did not select a
