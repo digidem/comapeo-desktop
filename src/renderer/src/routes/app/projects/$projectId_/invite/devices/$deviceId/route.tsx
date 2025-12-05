@@ -1,6 +1,6 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 
-import { GenericRoutePendingComponent } from '../../../../../../../components/generic-route-pending-component'
+import { GenericRoutePendingComponent } from '#renderer/src/components/generic-route-pending-component.tsx'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/invite/devices/$deviceId',
