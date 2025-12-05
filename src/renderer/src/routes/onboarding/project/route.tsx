@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-router'
 
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '#renderer/src/lib/comapeo.ts'
+
 import { BasicLayout } from '../-layouts.tsx'
 import { ONBOARDING_BASE_MUTATION_KEY } from './-shared.ts'
 

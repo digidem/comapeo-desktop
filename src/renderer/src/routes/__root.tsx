@@ -8,6 +8,7 @@ import {
 import type { IntlShape } from 'react-intl'
 
 import type { LocaleState } from '#shared/intl.ts'
+
 import type { ActiveProjectIdStore } from '../contexts/active-project-id-store-context'
 
 export interface RootRouterContext {

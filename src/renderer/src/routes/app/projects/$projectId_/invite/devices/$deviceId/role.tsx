@@ -13,6 +13,7 @@ import { BLUE_GREY } from '#renderer/src/colors.ts'
 import { GenericRoutePendingComponent } from '#renderer/src/components/generic-route-pending-component.tsx'
 import { Icon } from '#renderer/src/components/icon.tsx'
 import { useLocalPeersState } from '#renderer/src/contexts/local-peers-store-context.ts'
+
 import { DeviceRow } from '../-shared/device-row.tsx'
 
 export const Route = createFileRoute(

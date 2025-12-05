@@ -9,6 +9,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import { DARKER_ORANGE, GREEN, WHITE } from '#renderer/src/colors.ts'
 import { Icon } from '#renderer/src/components/icon.tsx'
 import { ButtonLink } from '#renderer/src/components/link.tsx'
+
 import { StepLayout } from '../-layouts.tsx'
 
 export const Route = createFileRoute('/onboarding/project/')({

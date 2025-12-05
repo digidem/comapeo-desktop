@@ -23,6 +23,7 @@ import {
 	getDiagnosticsEnabledQueryOptions,
 	setDiagnosticsEnabledMutationOptions,
 } from '#renderer/src/lib/queries/app-settings.ts'
+
 import { StepLayout } from './-layouts.tsx'
 
 export const Route = createFileRoute('/onboarding/privacy-policy')({

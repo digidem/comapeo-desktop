@@ -30,6 +30,7 @@ import {
 	type Props as ErrorDialogProps,
 } from '#renderer/src/components/error-dialog.tsx'
 import { Icon } from '#renderer/src/components/icon.tsx'
+
 import { ONBOARDING_BASE_MUTATION_KEY } from '../-shared.ts'
 
 export const Route = createFileRoute('/onboarding/project/join/')({

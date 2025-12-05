@@ -13,6 +13,7 @@ import { Icon } from '#renderer/src/components/icon.tsx'
 import { IconButtonLink } from '#renderer/src/components/link.tsx'
 import { audioInfoResource } from '#renderer/src/lib/resources/audio.ts'
 import { getFormattedDuration } from '#renderer/src/lib/time.ts'
+
 import { ImageButtonLink } from './-components/image-button-link.tsx'
 import { PhotoAttachmentImage } from './-components/photo-attachment-image.tsx'
 

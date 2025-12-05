@@ -12,6 +12,7 @@ import * as v from 'valibot'
 
 import { Icon } from '#renderer/src/components/icon.tsx'
 import { useAppForm } from '#renderer/src/hooks/forms.ts'
+
 import {
 	getDisplayedTagValue,
 	type EditableMultiSelectField,

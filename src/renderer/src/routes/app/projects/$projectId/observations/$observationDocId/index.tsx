@@ -47,6 +47,7 @@ import {
 	getLocaleStateQueryOptions,
 } from '#renderer/src/lib/queries/app-settings.ts'
 import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
+
 import { EditCategoryPanel } from './-edit-category-panel.tsx'
 import {
 	EditableFieldSection,

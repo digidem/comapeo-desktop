@@ -36,6 +36,7 @@ import {
 import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
 import { getFormattedDuration } from '#renderer/src/lib/time.ts'
 import { DeviceIcon } from '#renderer/src/routes/app/projects/-shared/device-icon.tsx'
+
 import { DeviceRow } from '../-shared/device-row'
 import { DisconnectedIndicator } from '../-shared/disconnected-indicator'
 

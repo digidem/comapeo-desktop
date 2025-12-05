@@ -33,6 +33,7 @@ import {
 import { getLocaleStateQueryOptions } from '#renderer/src/lib/queries/app-settings.ts'
 import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
 import { downloadURLMutationOptions } from '#renderer/src/lib/queries/system.ts'
+
 import { PhotoAttachmentImage } from '../-components/photo-attachment-image.tsx'
 
 // TODO: Support video type

@@ -17,6 +17,7 @@ import {
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 } from '#renderer/src/lib/comapeo.ts'
+
 import { DisplayedDataList } from './-displayed-data/list.tsx'
 
 export const Route = createFileRoute('/app/projects/$projectId/')({

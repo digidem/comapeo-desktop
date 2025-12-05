@@ -16,6 +16,7 @@ import { Icon } from '#renderer/src/components/icon.tsx'
 import { useAppForm } from '#renderer/src/hooks/forms.ts'
 import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '#renderer/src/lib/constants.ts'
 import { createProjectNameSchema } from '#renderer/src/lib/validators/project.ts'
+
 import { ONBOARDING_BASE_MUTATION_KEY } from '../-shared.ts'
 
 export const Route = createFileRoute('/onboarding/project/create/')({

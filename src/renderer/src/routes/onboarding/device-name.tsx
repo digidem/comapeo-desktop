@@ -17,6 +17,7 @@ import { useAppForm } from '#renderer/src/hooks/forms.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '#renderer/src/lib/comapeo.ts'
 import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '#renderer/src/lib/constants.ts'
 import { createDeviceNameSchema } from '#renderer/src/lib/validators/device.ts'
+
 import { StepLayout } from './-layouts.tsx'
 
 export const Route = createFileRoute('/onboarding/device-name')({

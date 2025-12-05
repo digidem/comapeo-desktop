@@ -26,6 +26,7 @@ import {
 import { useIntl, type IntlShape } from 'react-intl'
 
 import type { LocaleState } from '#shared/intl.ts'
+
 import { WHITE } from './colors.ts'
 import { initComapeoClient } from './comapeo-client.ts'
 import { AppTitleBar, TITLE_BAR_HEIGHT } from './components/app-title-bar.tsx'

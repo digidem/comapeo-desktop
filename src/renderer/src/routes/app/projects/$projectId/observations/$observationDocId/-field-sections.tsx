@@ -12,6 +12,7 @@ import {
 } from '#renderer/src/lib/comapeo.ts'
 import { getLocaleStateQueryOptions } from '#renderer/src/lib/queries/app-settings.ts'
 import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
+
 import { EditableSection } from './-components/editable-section.tsx'
 import {
 	MultiSelectFieldEditor,

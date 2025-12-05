@@ -25,6 +25,7 @@ import {
 	FilesSelectFileParamsSchema,
 	ImportSMPFileParamsSchema,
 } from '#shared/ipc.ts'
+
 import { IntlManager } from './intl-manager.ts'
 import { setUpMainIPC } from './ipc.ts'
 import { createAppDiagnosticsMetricsScheduler } from './metrics/app-diagnostics-metrics.ts'

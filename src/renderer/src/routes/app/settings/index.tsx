@@ -24,6 +24,7 @@ import {
 	getLocaleStateQueryOptions,
 } from '#renderer/src/lib/queries/app-settings.ts'
 import { getCustomMapInfoQueryOptions } from '#renderer/src/lib/queries/maps.ts'
+
 import { DataAndPrivacySection } from './-data-and-privacy-section.tsx'
 
 export const Route = createFileRoute('/app/settings/')({

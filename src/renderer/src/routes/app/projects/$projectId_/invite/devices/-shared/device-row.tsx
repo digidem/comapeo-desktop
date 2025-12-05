@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography'
 import { useIconSizeBasedOnTypography } from '#renderer/src/hooks/icon.ts'
 import type { DeviceType } from '#renderer/src/lib/comapeo.ts'
 import { DeviceIcon } from '#renderer/src/routes/app/projects/-shared/device-icon.tsx'
+
 import { DisconnectedIndicator } from './disconnected-indicator.tsx'
 
 export function DeviceRow({

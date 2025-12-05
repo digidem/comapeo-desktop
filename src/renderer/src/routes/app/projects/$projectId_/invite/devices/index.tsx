@@ -15,6 +15,7 @@ import { BLUE_GREY, LIGHT_GREY } from '#renderer/src/colors.ts'
 import { Icon } from '#renderer/src/components/icon.tsx'
 import { useInitiallyConnectedPeers } from '#renderer/src/hooks/peers.ts'
 import { NetworkConnectionInfo } from '#renderer/src/routes/app/projects/-shared/network-connection-info.tsx'
+
 import { DeviceRow } from './-shared/device-row.tsx'
 
 export const Route = createFileRoute(

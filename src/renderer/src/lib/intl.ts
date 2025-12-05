@@ -2,6 +2,7 @@ import type { IntlConfig } from 'react-intl'
 import * as v from 'valibot'
 
 import { SUPPORTED_LANGUAGES, type SupportedLanguageTag } from '#shared/intl.ts'
+
 import TRANSLATED_LANGUAGE_TAGS from '../generated/translated-languages.generated.json'
 
 const translations = import.meta.glob('./*.json', {
