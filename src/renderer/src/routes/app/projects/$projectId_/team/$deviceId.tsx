@@ -18,18 +18,18 @@ import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { DeviceIcon } from '../../-shared/device-icon'
-import { BLUE_GREY } from '../../../../../colors'
-import { ErrorDialog } from '../../../../../components/error-dialog'
-import { Icon } from '../../../../../components/icon'
-import { useActiveProjectIdActions } from '../../../../../contexts/active-project-id-store-context'
-import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
+import { BLUE_GREY } from '#renderer/src/colors.ts'
+import { ErrorDialog } from '#renderer/src/components/error-dialog.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { useActiveProjectIdActions } from '#renderer/src/contexts/active-project-id-store-context.ts'
+import { useIconSizeBasedOnTypography } from '#renderer/src/hooks/icon.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
-} from '../../../../../lib/comapeo'
-import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations'
+} from '#renderer/src/lib/comapeo.ts'
+import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
+import { DeviceIcon } from '#renderer/src/routes/app/projects/-shared/device-icon.tsx'
 
 export const Route = createFileRoute('/app/projects/$projectId/team/$deviceId')(
 	{
