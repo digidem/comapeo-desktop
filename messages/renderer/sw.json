@@ -147,6 +147,14 @@
     "description": "Text displayed when external device is disconnected.",
     "message": "Imetenganishwa"
   },
+  "routes.app.projects.$projectId_.settings.index.categoriesActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "Sasisha"
+  },
+  "routes.app.projects.$projectId_.settings.index.projectInfoActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "Hariri"
+  },
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",
     "message": "Ghairi"
