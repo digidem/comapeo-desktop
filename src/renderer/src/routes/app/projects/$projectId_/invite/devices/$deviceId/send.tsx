@@ -16,28 +16,28 @@ import { Navigate, createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { DeviceRow } from '../-shared/device-row'
-import { DisconnectedIndicator } from '../-shared/disconnected-indicator'
-import { DeviceIcon } from '../../../../-shared/device-icon'
 import {
 	BLACK,
 	BLUE_GREY,
 	COMAPEO_BLUE,
 	GREEN,
 	WHITE,
-} from '../../../../../../../colors'
-import { ErrorDialog } from '../../../../../../../components/error-dialog'
-import { GenericRoutePendingComponent } from '../../../../../../../components/generic-route-pending-component'
-import { Icon } from '../../../../../../../components/icon'
-import { ButtonLink } from '../../../../../../../components/link'
-import { useLocalPeersState } from '../../../../../../../contexts/local-peers-store-context'
+} from '#renderer/src/colors.ts'
+import { ErrorDialog } from '#renderer/src/components/error-dialog.tsx'
+import { GenericRoutePendingComponent } from '#renderer/src/components/generic-route-pending-component.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { ButtonLink } from '#renderer/src/components/link.tsx'
+import { useLocalPeersState } from '#renderer/src/contexts/local-peers-store-context.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	MEMBER_ROLE_ID,
-} from '../../../../../../../lib/comapeo'
-import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations'
-import { getFormattedDuration } from '../../../../../../../lib/time'
+} from '#renderer/src/lib/comapeo.ts'
+import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
+import { getFormattedDuration } from '#renderer/src/lib/time.ts'
+import { DeviceIcon } from '#renderer/src/routes/app/projects/-shared/device-icon.tsx'
+import { DeviceRow } from '../-shared/device-row'
+import { DisconnectedIndicator } from '../-shared/disconnected-indicator'
 
 const ReviewInvitationSearchSchema = v.object({
 	role: v.union([v.literal('participant'), v.literal('coordinator')]),
