@@ -2,10 +2,10 @@ import type { MemberApi } from '@comapeo/core'
 import Box from '@mui/material/Box'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { LIGHT_GREY } from '../../../../colors'
-import { Icon } from '../../../../components/icon'
-import type { IconName } from '../../../../generated/icons.generated'
-import type { DeviceType } from '../../../../lib/comapeo'
+import { LIGHT_GREY } from '#renderer/src/colors.ts'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import type { IconName } from '#renderer/src/generated/icons.generated.ts'
+import type { DeviceType } from '#renderer/src/lib/comapeo.ts'
 
 export function DeviceIcon({
 	deviceType,
