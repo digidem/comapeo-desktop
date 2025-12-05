@@ -127,6 +127,14 @@
     "description": "Text displayed when external device is disconnected.",
     "message": "បាន​ផ្ដាច់"
   },
+  "routes.app.projects.$projectId_.settings.index.categoriesActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "ធ្វើបច្ចុប្បន្នភាព"
+  },
+  "routes.app.projects.$projectId_.settings.index.projectInfoActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "កែរ"
+  },
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",
     "message": "បោះបង់"
