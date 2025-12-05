@@ -4,11 +4,11 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { Outlet, createFileRoute, notFound } from '@tanstack/react-router'
 import * as v from 'valibot'
 
-import { TwoPanelLayout } from '../../-components/two-panel-layout'
-import { BLACK } from '../../../../colors'
-import { GenericRoutePendingComponent } from '../../../../components/generic-route-pending-component'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
-import { DisplayedDataMap } from './-displayed-data/map'
+import { BLACK } from '#renderer/src/colors.ts'
+import { GenericRoutePendingComponent } from '#renderer/src/components/generic-route-pending-component.tsx'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '#renderer/src/lib/comapeo.ts'
+import { TwoPanelLayout } from '#renderer/src/routes/app/-components/two-panel-layout.tsx'
+import { DisplayedDataMap } from './-displayed-data/map.tsx'
 
 const SearchParamsSchema = v.object({
 	highlightedDocument: v.optional(
