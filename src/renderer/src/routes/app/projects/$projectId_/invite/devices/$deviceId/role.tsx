@@ -9,11 +9,11 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { DeviceRow } from '../-shared/device-row'
-import { BLUE_GREY } from '../../../../../../../colors'
-import { GenericRoutePendingComponent } from '../../../../../../../components/generic-route-pending-component'
-import { Icon } from '../../../../../../../components/icon'
-import { useLocalPeersState } from '../../../../../../../contexts/local-peers-store-context'
+import { BLUE_GREY } from '#renderer/src/colors.ts'
+import { GenericRoutePendingComponent } from '#renderer/src/components/generic-route-pending-component.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { useLocalPeersState } from '#renderer/src/contexts/local-peers-store-context.ts'
+import { DeviceRow } from '../-shared/device-row.ts'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/invite/devices/$deviceId/role',
