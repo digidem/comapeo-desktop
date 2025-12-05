@@ -12,14 +12,17 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLUE_GREY, DARK_GREY } from '../../../colors'
-import { ErrorDialog } from '../../../components/error-dialog'
-import { Icon } from '../../../components/icon'
-import { SupportedLanguageTagSchema, usableLanguages } from '../../../lib/intl'
+import { BLUE_GREY, DARK_GREY } from '#renderer/src/colors.ts'
+import { ErrorDialog } from '#renderer/src/components/error-dialog.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import {
+	SupportedLanguageTagSchema,
+	usableLanguages,
+} from '#renderer/src/lib/intl.ts'
 import {
 	getLocaleStateQueryOptions,
 	setLocaleMutationOptions,
-} from '../../../lib/queries/app-settings'
+} from '#renderer/src/lib/queries/app-settings.ts'
 
 export const Route = createFileRoute('/app/settings/language')({
 	loader: async ({ context }) => {
