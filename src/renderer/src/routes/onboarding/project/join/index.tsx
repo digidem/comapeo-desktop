@@ -18,19 +18,19 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import { TransitionGroup } from 'react-transition-group'
 
-import { ONBOARDING_BASE_MUTATION_KEY } from '../-shared'
 import {
 	BLACK,
 	DARKER_ORANGE,
 	DARK_GREY,
 	LIGHT_GREY,
 	WHITE,
-} from '../../../../colors'
+} from '#renderer/src/colors.ts'
 import {
 	ErrorDialog,
 	type Props as ErrorDialogProps,
-} from '../../../../components/error-dialog'
-import { Icon } from '../../../../components/icon'
+} from '#renderer/src/components/error-dialog.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { ONBOARDING_BASE_MUTATION_KEY } from '../-shared.ts'
 
 export const Route = createFileRoute('/onboarding/project/join/')({
 	component: RouteComponent,
