@@ -42,17 +42,17 @@ import {
 } from 'react-map-gl/maplibre'
 import * as v from 'valibot'
 
-import { BLACK, BLUE_GREY, ORANGE, WHITE } from '../../../../../colors'
+import { BLACK, BLUE_GREY, ORANGE, WHITE } from '#renderer/src/colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
-} from '../../../../../components/category-icon'
-import { Icon } from '../../../../../components/icon'
-import { Map } from '../../../../../components/map'
-import { ZoomToDataMapControl } from '../../../../../components/zoom-to-data-map-control'
-import { useMapsRefreshToken } from '../../../../../hooks/maps'
-import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo'
-import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
+} from '#renderer/src/components/category-icon.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { Map } from '#renderer/src/components/map.tsx'
+import { ZoomToDataMapControl } from '#renderer/src/components/zoom-to-data-map-control.tsx'
+import { useMapsRefreshToken } from '#renderer/src/hooks/maps.ts'
+import { getMatchingCategoryForDocument } from '#renderer/src/lib/comapeo.ts'
+import { getLocaleStateQueryOptions } from '#renderer/src/lib/queries/app-settings.ts'
 
 const OBSERVATIONS_SOURCE_ID = 'observations_source' as const
 const TRACKS_SOURCE_ID = 'tracks_source' as const
