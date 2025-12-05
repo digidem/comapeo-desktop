@@ -1,10 +1,10 @@
 import Box from '@mui/material/Box'
 import { Outlet, createFileRoute, notFound } from '@tanstack/react-router'
 
-import { TwoPanelLayout } from '../../../-components/two-panel-layout'
-import { LIGHT_GREY } from '../../../../../colors'
-import { GenericRoutePendingComponent } from '../../../../../components/generic-route-pending-component'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
+import { LIGHT_GREY } from '#renderer/src/colors.ts'
+import { GenericRoutePendingComponent } from '#renderer/src/components/generic-route-pending-component.tsx'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '#renderer/src/lib/comapeo.ts'
+import { TwoPanelLayout } from '#renderer/src/routes/app/-components/two-panel-layout.tsx'
 
 export const Route = createFileRoute('/app/projects/$projectId/team')({
 	beforeLoad: async ({ context, params }) => {
