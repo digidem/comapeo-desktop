@@ -8,12 +8,12 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { ErrorDialog } from '../../../../../../components/error-dialog'
-import { Icon } from '../../../../../../components/icon'
-import { useAppForm } from '../../../../../../hooks/forms'
-import { getLocaleStateQueryOptions } from '../../../../../../lib/queries/app-settings'
-import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations'
-import { EditableSection } from './-components/editable-section'
+import { ErrorDialog } from '#renderer/src/components/error-dialog.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { useAppForm } from '#renderer/src/hooks/forms.ts'
+import { getLocaleStateQueryOptions } from '#renderer/src/lib/queries/app-settings.ts'
+import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
+import { EditableSection } from './-components/editable-section.ts'
 
 export function ReadOnlyNotesSection({ notes }: { notes?: string }) {
 	const { formatMessage: t } = useIntl()
