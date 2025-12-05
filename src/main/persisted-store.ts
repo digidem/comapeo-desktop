@@ -7,8 +7,8 @@ import * as v from 'valibot'
 import { persist, type PersistStorage } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 
-import { CoordinateFormatSchema } from '../shared/coordinate-format.ts'
-import { LocaleSchema } from '../shared/intl.ts'
+import { CoordinateFormatSchema } from '#shared/coordinate-format.ts'
+import { LocaleSchema } from '#shared/intl.ts'
 
 const log = debug('comapeo:main:persisted-store')
 

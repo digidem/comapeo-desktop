@@ -11,7 +11,7 @@ import {
 	type LocaleSource,
 	type LocaleState,
 	type SupportedLanguageTag,
-} from '../shared/intl.ts'
+} from '#shared/intl.ts'
 import type { PersistedStateV1 } from './persisted-store.ts'
 
 const log = debug('comapeo:main:intl-manager')

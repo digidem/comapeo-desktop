@@ -5,8 +5,8 @@ import debug from 'debug'
 import { app } from 'electron'
 import * as v from 'valibot'
 
-import type { AppConfig } from '../../shared/app.ts'
-import type { SupportedLanguageTag } from '../../shared/intl.ts'
+import type { AppConfig } from '#shared/app.ts'
+import type { SupportedLanguageTag } from '#shared/intl.ts'
 import { MetricsScheduler } from './metrics-scheduler/index.ts'
 import {
 	SendMetricsHttpError,

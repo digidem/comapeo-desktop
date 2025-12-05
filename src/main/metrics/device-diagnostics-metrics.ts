@@ -6,7 +6,7 @@ import { screen } from 'electron'
 import si from 'systeminformation'
 import * as v from 'valibot'
 
-import type { AppConfig } from '../../shared/app.ts'
+import type { AppConfig } from '#shared/app.ts'
 import {
 	SendMetricsHttpError,
 	getMonthlyHash,

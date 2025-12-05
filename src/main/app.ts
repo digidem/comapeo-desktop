@@ -17,14 +17,14 @@ import {
 } from 'electron/main'
 import * as v from 'valibot'
 
-import type { NewClientMessage } from '../services/core.ts'
-import type { AppConfig, AppType, SentryEnvironment } from '../shared/app.ts'
+import type { NewClientMessage } from '#services/core.ts'
+import type { AppConfig, AppType, SentryEnvironment } from '#shared/app.ts'
 import {
 	DownloadURLParamsSchema,
 	FilesSelectDirectoryParamsSchema,
 	FilesSelectFileParamsSchema,
 	ImportSMPFileParamsSchema,
-} from '../shared/ipc.ts'
+} from '#shared/ipc.ts'
 import { IntlManager } from './intl-manager.ts'
 import { setUpMainIPC } from './ipc.ts'
 import { createAppDiagnosticsMetricsScheduler } from './metrics/app-diagnostics-metrics.ts'
