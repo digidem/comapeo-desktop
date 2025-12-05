@@ -16,14 +16,14 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLUE_GREY, DARK_GREY, GREEN } from '../../../../colors'
-import { ErrorDialog } from '../../../../components/error-dialog'
-import { Icon } from '../../../../components/icon'
-import { useAppForm } from '../../../../hooks/forms'
-import { getLocaleStateQueryOptions } from '../../../../lib/queries/app-settings'
-import { selectDirectoryMutationOptions } from '../../../../lib/queries/file-system'
-import { createGlobalMutationsKey } from '../../../../lib/queries/global-mutations'
-import { showItemInFolderMutationOptions } from '../../../../lib/queries/system'
+import { BLUE_GREY, DARK_GREY, GREEN } from '#renderer/src/colors.ts'
+import { ErrorDialog } from '#renderer/src/components/error-dialog.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { useAppForm } from '#renderer/src/hooks/forms.ts'
+import { getLocaleStateQueryOptions } from '#renderer/src/lib/queries/app-settings.ts'
+import { selectDirectoryMutationOptions } from '#renderer/src/lib/queries/file-system.ts'
+import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
+import { showItemInFolderMutationOptions } from '#renderer/src/lib/queries/system.ts'
 
 export const Route = createFileRoute('/app/projects/$projectId/download')({
 	component: RouteComponent,
