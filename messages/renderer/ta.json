@@ -139,6 +139,14 @@
     "description": "Text displayed when external device is disconnected.",
     "message": "துண்டிக்கப்பட்டது"
   },
+  "routes.app.projects.$projectId_.settings.index.categoriesActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "புதுப்பி"
+  },
+  "routes.app.projects.$projectId_.settings.index.projectInfoActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "திருத்து"
+  },
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",
     "message": "ரத்து செய்க"
