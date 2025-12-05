@@ -32,19 +32,19 @@ import { defineMessages, useIntl } from 'react-intl'
 import { Layer, Marker, Source } from 'react-map-gl/maplibre'
 import * as v from 'valibot'
 
-import { TwoPanelLayout } from '../-components/two-panel-layout'
-import { BLACK, BLUE_GREY } from '../../../colors'
+import { BLACK, BLUE_GREY } from '#renderer/src/colors.ts'
 import {
 	ErrorDialog,
 	type Props as ErrorDialogProps,
-} from '../../../components/error-dialog'
-import { GenericRoutePendingComponent } from '../../../components/generic-route-pending-component'
-import { Icon } from '../../../components/icon'
-import { Map } from '../../../components/map'
-import { useAppForm } from '../../../hooks/forms'
-import { useMapsRefreshToken } from '../../../hooks/maps'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
-import { createGlobalMutationsKey } from '../../../lib/queries/global-mutations'
+} from '#renderer/src/components/error-dialog.tsx'
+import { GenericRoutePendingComponent } from '#renderer/src/components/generic-route-pending-component.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { Map } from '#renderer/src/components/map.tsx'
+import { useAppForm } from '#renderer/src/hooks/forms.ts'
+import { useMapsRefreshToken } from '#renderer/src/hooks/maps.ts'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '#renderer/src/lib/comapeo.ts'
+import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
+import { TwoPanelLayout } from '../-components/two-panel-layout.tsx'
 
 export const Route = createFileRoute('/app/settings/test-data')({
 	beforeLoad: () => {
