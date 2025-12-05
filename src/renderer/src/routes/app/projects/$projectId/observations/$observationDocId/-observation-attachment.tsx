@@ -8,13 +8,13 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import type { SxProps } from '@mui/material/styles'
 
-import { BLUE_GREY, DARK_GREY } from '../../../../../../colors'
-import { Icon } from '../../../../../../components/icon'
-import { IconButtonLink } from '../../../../../../components/link'
-import { audioInfoResource } from '../../../../../../lib/resources/audio'
-import { getFormattedDuration } from '../../../../../../lib/time'
-import { ImageButtonLink } from './-components/image-button-link'
-import { PhotoAttachmentImage } from './-components/photo-attachment-image'
+import { BLUE_GREY, DARK_GREY } from '#renderer/src/colors.ts'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { IconButtonLink } from '#renderer/src/components/link.tsx'
+import { audioInfoResource } from '#renderer/src/lib/resources/audio.ts'
+import { getFormattedDuration } from '#renderer/src/lib/time.ts'
+import { ImageButtonLink } from './-components/image-button-link.tsx'
+import { PhotoAttachmentImage } from './-components/photo-attachment-image.tsx'
 
 const ATTACHMENT_CONTAINER_HEIGHT_PX = 128
 
