@@ -235,18 +235,6 @@
     "description": "Fallback text displayed if field has no meaningful value.",
     "message": "回答なし"
   },
-  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerFalse": {
-    "description": "Text displayed if a boolean field is answered with \"false\"",
-    "message": "FALSE"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerNull": {
-    "description": "Text displayed if a field is answered with \"null\"",
-    "message": "NULL"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerTrue": {
-    "description": "Text displayed if a boolean field is answered with \"true\"",
-    "message": "TRUE"
-  },
   "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.accessibleNotesInputLabel": {
     "description": "Accessible label for notes input field.",
     "message": "メモ"
@@ -270,6 +258,18 @@
   "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.title": {
     "description": "Title for notes section.",
     "message": "メモ"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerFalse": {
+    "description": "Text displayed if a boolean field is answered with \"false\"",
+    "message": "FALSE"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerNull": {
+    "description": "Text displayed if a field is answered with \"null\"",
+    "message": "NULL"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerTrue": {
+    "description": "Text displayed if a boolean field is answered with \"true\"",
+    "message": "TRUE"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
@@ -551,29 +551,33 @@
     "description": "Label for button to upload new categories set.",
     "message": "新しいセットをアップロード"
   },
-  "routes.app.projects.$projectId_.settings.index.categoriesSet": {
-    "description": "Text for item that navigates to project categories set page.",
-    "message": "カテゴリセット"
+  "routes.app.projects.$projectId_.settings.index.categoriesActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "更新"
   },
-  "routes.app.projects.$projectId_.settings.index.editInfo": {
-    "description": "Text for link that navigates to page for editing project settings.",
-    "message": "情報を編集"
+  "routes.app.projects.$projectId_.settings.index.categoriesLinkAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to project info settings page.",
+    "message": "カテゴリ設定に移動します。"
   },
-  "routes.app.projects.$projectId_.settings.index.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "戻ってください。"
+  "routes.app.projects.$projectId_.settings.index.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set.",
+    "message": "CoMapeo カテゴリ"
   },
   "routes.app.projects.$projectId_.settings.index.navTitle": {
-    "description": "Title of the project settings page.",
-    "message": "プロジェクトの設定"
+    "description": "Title of the coordinator tools page.",
+    "message": "コーディネータツール"
+  },
+  "routes.app.projects.$projectId_.settings.index.projectInfoActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "編集"
+  },
+  "routes.app.projects.$projectId_.settings.index.projectSettingsLinkAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to project info settings page.",
+    "message": "プロジェクト情報の設定に移動します。"
   },
   "routes.app.projects.$projectId_.settings.index.unnamedProject": {
     "description": "Fallback for when current project is missing a name.",
     "message": "名前のないプロジェクト"
-  },
-  "routes.app.projects.$projectId_.settings.index.updateCategoriesSet": {
-    "description": "Text for link that navigates to project categories set page.",
-    "message": "セットを更新"
   },
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",
