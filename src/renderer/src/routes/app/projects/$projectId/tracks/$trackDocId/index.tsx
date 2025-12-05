@@ -16,19 +16,19 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK, BLUE_GREY, COMAPEO_BLUE } from '../../../../../../colors'
+import { BLACK, BLUE_GREY, COMAPEO_BLUE } from '#renderer/src/colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
-} from '../../../../../../components/category-icon'
-import { GenericRouteNotFoundComponent } from '../../../../../../components/generic-route-not-found-component'
-import { Icon } from '../../../../../../components/icon'
+} from '#renderer/src/components/category-icon.tsx'
+import { GenericRouteNotFoundComponent } from '#renderer/src/components/generic-route-not-found-component.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	getMatchingCategoryForDocument,
-} from '../../../../../../lib/comapeo'
-import { customNotFound } from '../../../../../../lib/navigation'
-import { getLocaleStateQueryOptions } from '../../../../../../lib/queries/app-settings'
+} from '#renderer/src/lib/comapeo.ts'
+import { customNotFound } from '#renderer/src/lib/navigation.ts'
+import { getLocaleStateQueryOptions } from '#renderer/src/lib/queries/app-settings.ts'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/tracks/$trackDocId/',
