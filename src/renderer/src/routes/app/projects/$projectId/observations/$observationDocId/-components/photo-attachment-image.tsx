@@ -1,8 +1,8 @@
 import { use } from 'react'
 import { useAttachmentUrl } from '@comapeo/core-react'
 
-import { SuspenseImage } from '../../../../../../../components/suspense-image'
-import { imageSrcResource } from '../../../../../../../lib/image'
+import { SuspenseImage } from '#renderer/src/components/suspense-image.tsx'
+import { imageSrcResource } from '#renderer/src/lib/image.ts'
 
 export function PhotoAttachmentImage({
 	attachmentDriveId,

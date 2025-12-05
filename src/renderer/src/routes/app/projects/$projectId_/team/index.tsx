@@ -13,17 +13,20 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { DeviceIcon } from '../../-shared/device-icon'
-import { BLUE_GREY, DARK_GREY } from '../../../../../colors'
-import { Icon } from '../../../../../components/icon'
-import { ButtonLink, ListItemButtonLink } from '../../../../../components/link'
-import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
+import { BLUE_GREY, DARK_GREY } from '#renderer/src/colors.ts'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import {
+	ButtonLink,
+	ListItemButtonLink,
+} from '#renderer/src/components/link.tsx'
+import { useIconSizeBasedOnTypography } from '#renderer/src/hooks/icon.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 	MEMBER_ROLE_ID,
-} from '../../../../../lib/comapeo'
+} from '#renderer/src/lib/comapeo.ts'
+import { DeviceIcon } from '#renderer/src/routes/app/projects/-shared/device-icon.tsx'
 
 export const Route = createFileRoute('/app/projects/$projectId/team/')({
 	loader: async ({ context, params }) => {

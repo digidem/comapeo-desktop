@@ -20,15 +20,15 @@ import {
 } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY } from '../../../../../../colors'
+import { BLUE_GREY } from '#renderer/src/colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
-} from '../../../../../../components/category-icon'
-import { ErrorDialog } from '../../../../../../components/error-dialog'
-import { Icon } from '../../../../../../components/icon'
-import { getLocaleStateQueryOptions } from '../../../../../../lib/queries/app-settings'
-import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations'
+} from '#renderer/src/components/category-icon.tsx'
+import { ErrorDialog } from '#renderer/src/components/error-dialog.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { getLocaleStateQueryOptions } from '#renderer/src/lib/queries/app-settings.ts'
+import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
 
 const UPDATE_OBSERVATION_CATEGORY_MUTATION_KEY = createGlobalMutationsKey([
 	'observations',

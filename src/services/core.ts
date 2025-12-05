@@ -13,7 +13,7 @@ import Fastify from 'fastify'
 import sodium from 'sodium-native'
 import * as v from 'valibot'
 
-import type { ServiceErrorMessage } from '../main/service-error.js'
+import type { ServiceErrorMessage } from '#main/service-error.ts'
 
 Sentry.init()
 

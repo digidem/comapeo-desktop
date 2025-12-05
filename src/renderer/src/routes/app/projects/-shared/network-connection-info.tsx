@@ -4,11 +4,11 @@ import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { LIGHT_COMAPEO_BLUE } from '../../../../colors'
-import { Icon } from '../../../../components/icon'
-import { useIconSizeBasedOnTypography } from '../../../../hooks/icon'
-import { useBrowserNetInfo } from '../../../../hooks/network'
-import { getWifiConnectionsOptions } from '../../../../lib/queries/system'
+import { LIGHT_COMAPEO_BLUE } from '#renderer/src/colors.ts'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { useIconSizeBasedOnTypography } from '#renderer/src/hooks/icon.ts'
+import { useBrowserNetInfo } from '#renderer/src/hooks/network.ts'
+import { getWifiConnectionsOptions } from '#renderer/src/lib/queries/system.ts'
 
 export function NetworkConnectionInfo({
 	waitingText,

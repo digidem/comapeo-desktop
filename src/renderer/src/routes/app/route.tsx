@@ -12,17 +12,25 @@ import {
 } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, COMAPEO_BLUE, DARK_GREY, WHITE } from '../../colors'
-import { Icon } from '../../components/icon'
-import { ButtonLink, type ButtonLinkProps } from '../../components/link'
-import { useGlobalEditingState } from '../../contexts/global-editing-state-store-context'
+import {
+	BLUE_GREY,
+	COMAPEO_BLUE,
+	DARK_GREY,
+	WHITE,
+} from '#renderer/src/colors.ts'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import {
+	ButtonLink,
+	type ButtonLinkProps,
+} from '#renderer/src/components/link.tsx'
+import { useGlobalEditingState } from '#renderer/src/contexts/global-editing-state-store-context.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 	MEMBER_ROLE_ID,
-} from '../../lib/comapeo'
-import { GLOBAL_MUTATIONS_BASE_KEY } from '../../lib/queries/global-mutations'
+} from '#renderer/src/lib/comapeo.ts'
+import { GLOBAL_MUTATIONS_BASE_KEY } from '#renderer/src/lib/queries/global-mutations.ts'
 
 export const Route = createFileRoute('/app')({
 	beforeLoad: async ({ context, matches, preload, buildLocation }) => {

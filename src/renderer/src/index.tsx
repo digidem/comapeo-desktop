@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 
 import './index.css'
 
-import { App } from './app'
+import { App } from './app.tsx'
 
 const root = createRoot(document.getElementById('app') as HTMLElement, {
 	onUncaughtError: SentryReact.reactErrorHandler((error, errorInfo) => {

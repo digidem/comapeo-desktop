@@ -11,19 +11,19 @@ import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors'
+import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '#renderer/src/colors.ts'
 import {
 	ErrorDialog,
 	type Props as ErrorDialogProps,
-} from '../../../components/error-dialog'
-import { Icon } from '../../../components/icon'
-import { TextLink } from '../../../components/link'
-import { useIconSizeBasedOnTypography } from '../../../hooks/icon'
+} from '#renderer/src/components/error-dialog.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { TextLink } from '#renderer/src/components/link.tsx'
+import { useIconSizeBasedOnTypography } from '#renderer/src/hooks/icon.ts'
 import {
 	getDiagnosticsEnabledQueryOptions,
 	setDiagnosticsEnabledMutationOptions,
-} from '../../../lib/queries/app-settings'
-import { openExternalURLMutationOptions } from '../../../lib/queries/system'
+} from '#renderer/src/lib/queries/app-settings.ts'
+import { openExternalURLMutationOptions } from '#renderer/src/lib/queries/system.ts'
 
 export function DataAndPrivacySection() {
 	const { formatMessage: t } = useIntl()

@@ -22,6 +22,28 @@
 	"license": "GPL-3.0",
 	"type": "module",
 	"main": "src/main/index.ts",
+	"imports": {
+		"#shared/*": {
+			"types": "./src/shared/*",
+			"default": "./src/shared/*"
+		},
+		"#main/*": {
+			"types": "./src/main/*",
+			"default": "./src/main/*"
+		},
+		"#services/*": {
+			"types": "./src/services/*",
+			"default": "./src/services/*"
+		},
+		"#preload/*": {
+			"types": "./src/preload/*",
+			"default": "./src/preload/*"
+		},
+		"#renderer/*": {
+			"types": "./src/renderer/*",
+			"default": "./src/renderer/*"
+		}
+	},
 	"devEngines": {
 		"runtime": {
 			"name": "node",
@@ -141,6 +163,7 @@
 		"electron": "39.2.4",
 		"electron-playwright-helpers": "1.8.2",
 		"eslint": "9.39.1",
+		"eslint-plugin-no-relative-import-paths": "1.6.1",
 		"eslint-plugin-react-hooks": "7.0.1",
 		"eslint-plugin-react-refresh": "0.4.24",
 		"globals": "16.5.0",

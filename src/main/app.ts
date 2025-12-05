@@ -17,14 +17,15 @@ import {
 } from 'electron/main'
 import * as v from 'valibot'
 
-import type { NewClientMessage } from '../services/core.ts'
-import type { AppConfig, AppType, SentryEnvironment } from '../shared/app.ts'
+import type { NewClientMessage } from '#services/core.ts'
+import type { AppConfig, AppType, SentryEnvironment } from '#shared/app.ts'
 import {
 	DownloadURLParamsSchema,
 	FilesSelectDirectoryParamsSchema,
 	FilesSelectFileParamsSchema,
 	ImportSMPFileParamsSchema,
-} from '../shared/ipc.ts'
+} from '#shared/ipc.ts'
+
 import { IntlManager } from './intl-manager.ts'
 import { setUpMainIPC } from './ipc.ts'
 import { createAppDiagnosticsMetricsScheduler } from './metrics/app-diagnostics-metrics.ts'
@@ -40,11 +41,11 @@ type AppState = {
 }
 
 const CORE_SERVICE_PATH = fileURLToPath(
-	import.meta.resolve('../services/core.ts'),
+	import.meta.resolve('#services/core.ts'),
 )
 
 const MAIN_WINDOW_PRELOAD_PATH = fileURLToPath(
-	new URL('../preload/main-window.js', import.meta.url),
+	import.meta.resolve('#preload/main-window.js'),
 )
 
 const APP_STATE: AppState = {
@@ -316,7 +317,7 @@ function initMainWindow({
 		})
 	} else {
 		mainWindow.loadFile(
-			fileURLToPath(new URL('../renderer/index.html', import.meta.url)),
+			fileURLToPath(import.meta.resolve('#renderer/index.html')),
 		)
 	}
 

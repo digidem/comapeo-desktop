@@ -7,11 +7,11 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY, DARK_ORANGE } from '../../../../../colors'
-import { GenericRoutePendingComponent } from '../../../../../components/generic-route-pending-component'
-import { Icon } from '../../../../../components/icon'
-import { ButtonLink } from '../../../../../components/link'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
+import { BLUE_GREY, DARK_GREY, DARK_ORANGE } from '#renderer/src/colors.ts'
+import { GenericRoutePendingComponent } from '#renderer/src/components/generic-route-pending-component.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { ButtonLink } from '#renderer/src/components/link.tsx'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '#renderer/src/lib/comapeo.ts'
 
 export const Route = createFileRoute('/app/projects/$projectId/invite/')({
 	beforeLoad: async ({ context, params }) => {

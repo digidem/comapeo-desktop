@@ -12,7 +12,7 @@ import {
 	ORANGE,
 	RED,
 	WHITE,
-} from './colors'
+} from './colors.ts'
 
 declare module '@mui/material/Button' {
 	interface ButtonPropsVariantOverrides {

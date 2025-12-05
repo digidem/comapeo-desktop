@@ -1,7 +1,7 @@
 import type { Field } from '@comapeo/schema'
 import { defineMessages, type IntlShape } from 'react-intl'
 
-import type { TagValue } from '../../../../../../lib/comapeo'
+import type { TagValue } from '#renderer/src/lib/comapeo.ts'
 
 export type EditableTextField = Field & {
 	type: 'text'

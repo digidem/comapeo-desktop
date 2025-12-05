@@ -9,8 +9,8 @@ import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY, LIGHT_GREY } from '../colors'
-import { Icon } from './icon'
+import { BLUE_GREY, DARK_GREY, LIGHT_GREY } from '../colors.ts'
+import { Icon } from './icon.tsx'
 
 export type Props = {
 	errorMessage?: string

@@ -1,7 +1,8 @@
 import { queryOptions, type UseMutationOptions } from '@tanstack/react-query'
 
-import type { RuntimeApi } from '../../../../preload/runtime'
-import { BASE_QUERY_KEY as LANGUAGE_BASE_QUERY_KEY } from './intl'
+import type { RuntimeApi } from '#preload/runtime.ts'
+
+import { BASE_QUERY_KEY as LANGUAGE_BASE_QUERY_KEY } from './intl.ts'
 
 const BASE_QUERY_KEY = 'app-settings'
 

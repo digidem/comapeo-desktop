@@ -12,7 +12,8 @@ import {
 	AppConfigSchema,
 	type AppConfig,
 	type SentryEnvironment,
-} from '../shared/app.ts'
+} from '#shared/app.ts'
+
 import { start } from './app.ts'
 import { createPersistedStore } from './persisted-store.ts'
 

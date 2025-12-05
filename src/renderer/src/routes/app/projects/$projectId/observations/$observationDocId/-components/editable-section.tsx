@@ -13,9 +13,9 @@ import {
 	COMAPEO_BLUE,
 	GREEN,
 	LIGHT_COMAPEO_BLUE,
-} from '../../../../../../../colors'
-import { Icon } from '../../../../../../../components/icon'
-import { useIconSizeBasedOnTypography } from '../../../../../../../hooks/icon'
+} from '#renderer/src/colors.ts'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { useIconSizeBasedOnTypography } from '#renderer/src/hooks/icon.ts'
 
 type EditState = 'idle' | 'active' | 'success'
 

@@ -12,22 +12,22 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, LIGHT_GREY } from '../../../colors'
-import { ErrorBoundary } from '../../../components/error-boundary'
+import { BLUE_GREY, LIGHT_GREY } from '#renderer/src/colors.ts'
+import { ErrorBoundary } from '#renderer/src/components/error-boundary.tsx'
 import {
 	ErrorDialog,
 	type Props as ErrorDialogProps,
-} from '../../../components/error-dialog'
-import { Icon } from '../../../components/icon'
-import { useRefreshTokensActions } from '../../../contexts/refresh-tokens-store-context'
-import { bytesToMegabytes } from '../../../lib/bytes-to-megabytes'
-import { selectFileMutationOptions } from '../../../lib/queries/file-system'
-import { createGlobalMutationsKey } from '../../../lib/queries/global-mutations'
+} from '#renderer/src/components/error-dialog.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { useRefreshTokensActions } from '#renderer/src/contexts/refresh-tokens-store-context.ts'
+import { bytesToMegabytes } from '#renderer/src/lib/bytes-to-megabytes.ts'
+import { selectFileMutationOptions } from '#renderer/src/lib/queries/file-system.ts'
+import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
 import {
 	getCustomMapInfoQueryOptions,
 	importSMPFileMutationOptions,
 	removeSMPFileMutationOptions,
-} from '../../../lib/queries/maps'
+} from '#renderer/src/lib/queries/maps.ts'
 
 export const Route = createFileRoute('/app/settings/background-map')({
 	component: RouteComponent,

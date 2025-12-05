@@ -17,6 +17,8 @@ export default {
 		'^react$',
 		'<THIRD_PARTY_MODULES>',
 		'',
+		'^#.+',
+		'',
 		'^(?!.*[.]css$)[./].*$',
 		'',
 		'.css$',

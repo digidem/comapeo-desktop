@@ -1,7 +1,7 @@
 import { type SyncState } from '@comapeo/core-react'
 import { describe, expect, it, test } from 'vitest'
 
-import { deriveSyncStage, getConnectedPeersCount } from './sync'
+import { deriveSyncStage, getConnectedPeersCount } from './sync.ts'
 
 test('getConnectedPeersCount', () => {
 	const exampleDeviceSyncState: SyncState['remoteDeviceSyncState'][string] = {

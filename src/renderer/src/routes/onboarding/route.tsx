@@ -1,6 +1,6 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '#renderer/src/lib/comapeo.ts'
 
 export const Route = createFileRoute('/onboarding')({
 	beforeLoad: async ({ context }) => {

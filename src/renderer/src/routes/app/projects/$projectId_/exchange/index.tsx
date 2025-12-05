@@ -19,31 +19,31 @@ import { captureException } from '@sentry/react'
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { NetworkConnectionInfo } from '../../-shared/network-connection-info'
-import { TwoPanelLayout } from '../../../-components/two-panel-layout'
 import {
 	BLUE_GREY,
 	COMAPEO_BLUE,
 	DARKER_ORANGE,
 	GREEN,
 	LIGHT_GREY,
-} from '../../../../../colors'
-import { ErrorDialog } from '../../../../../components/error-dialog'
-import { GenericRoutePendingComponent } from '../../../../../components/generic-route-pending-component'
-import { Icon } from '../../../../../components/icon'
-import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
-import { useBrowserNetInfo } from '../../../../../hooks/network'
+} from '#renderer/src/colors.ts'
+import { ErrorDialog } from '#renderer/src/components/error-dialog.tsx'
+import { GenericRoutePendingComponent } from '#renderer/src/components/generic-route-pending-component.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { useIconSizeBasedOnTypography } from '#renderer/src/hooks/icon.ts'
+import { useBrowserNetInfo } from '#renderer/src/hooks/network.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	memberIsActiveRemoteArchive,
-} from '../../../../../lib/comapeo'
-import { ExhaustivenessError } from '../../../../../lib/exchaustiveness-error'
+} from '#renderer/src/lib/comapeo.ts'
+import { ExhaustivenessError } from '#renderer/src/lib/exchaustiveness-error.ts'
 import {
 	deriveSyncStage,
 	getConnectedPeersCount,
 	getSyncingPeersCount,
 	type SyncStage,
-} from '../../../../../lib/sync'
+} from '#renderer/src/lib/sync.ts'
+import { TwoPanelLayout } from '#renderer/src/routes/app/-components/two-panel-layout.tsx'
+import { NetworkConnectionInfo } from '#renderer/src/routes/app/projects/-shared/network-connection-info.tsx'
 
 export const Route = createFileRoute('/app/projects/$projectId/exchange/')({
 	beforeLoad: async ({ context, params }) => {

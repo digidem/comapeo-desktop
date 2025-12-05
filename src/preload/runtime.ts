@@ -1,8 +1,8 @@
 import type { Systeminformation } from 'systeminformation'
 
-import type { CoordinateFormat } from '../shared/coordinate-format.ts'
-import type { Locale, LocaleState } from '../shared/intl.ts'
-import type { SelectedFile } from '../shared/ipc.ts'
+import type { CoordinateFormat } from '#shared/coordinate-format.ts'
+import type { Locale, LocaleState } from '#shared/intl.ts'
+import type { SelectedFile } from '#shared/ipc.ts'
 
 export type RuntimeApi = {
 	// Files

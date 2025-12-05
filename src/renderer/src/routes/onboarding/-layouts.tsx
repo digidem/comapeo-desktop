@@ -13,8 +13,8 @@ import {
 	DARK_COMAPEO_BLUE,
 	LIGHT_GREY,
 	WHITE,
-} from '../../colors'
-import { Icon } from '../../components/icon'
+} from '#renderer/src/colors.ts'
+import { Icon } from '#renderer/src/components/icon.tsx'
 
 export function BasicLayout({
 	backStatus,
