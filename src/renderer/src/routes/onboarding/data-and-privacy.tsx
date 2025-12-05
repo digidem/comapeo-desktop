@@ -7,10 +7,10 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { DARKER_ORANGE, DARK_GREY } from '../../colors'
-import { Icon } from '../../components/icon'
-import { ButtonLink } from '../../components/link'
-import { StepLayout } from './-layouts'
+import { DARKER_ORANGE, DARK_GREY } from '#renderer/src/colors.ts'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { ButtonLink } from '#renderer/src/components/link.tsx'
+import { StepLayout } from './-layouts.tsx'
 
 export const Route = createFileRoute('/onboarding/data-and-privacy')({
 	component: RouteComponent,
