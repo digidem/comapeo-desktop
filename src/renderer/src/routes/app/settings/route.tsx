@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box'
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
+import { LIGHT_GREY } from '#renderer/src/colors.ts'
 import { TwoPanelLayout } from '../-components/two-panel-layout'
-import { LIGHT_GREY } from '../../../colors'
 
 export const Route = createFileRoute('/app/settings')({
 	component: RouteComponent,
