@@ -11,11 +11,11 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { NetworkConnectionInfo } from '../../../-shared/network-connection-info'
-import { BLUE_GREY, LIGHT_GREY } from '../../../../../../colors'
-import { Icon } from '../../../../../../components/icon'
-import { useInitiallyConnectedPeers } from '../../../../../../hooks/peers'
-import { DeviceRow } from './-shared/device-row'
+import { BLUE_GREY, LIGHT_GREY } from '#renderer/src/colors.ts'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { useInitiallyConnectedPeers } from '#renderer/src/hooks/peers.ts'
+import { NetworkConnectionInfo } from '#renderer/src/routes/app/projects/-shared/network-connection-info.tsx'
+import { DeviceRow } from './-shared/device-row.tsx'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/invite/devices/',
