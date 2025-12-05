@@ -170,7 +170,7 @@
 		"vitest": "4.0.15"
 	},
 	"overrides": {
-		"better-sqlite3": "12.4.6",
+		"better-sqlite3": "12.5.0",
 		"tmp": "0.2.5"
 	}
 }
