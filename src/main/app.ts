@@ -40,11 +40,11 @@ type AppState = {
 }
 
 const CORE_SERVICE_PATH = fileURLToPath(
-	import.meta.resolve('../services/core.ts'),
+	import.meta.resolve('#services/core.ts'),
 )
 
 const MAIN_WINDOW_PRELOAD_PATH = fileURLToPath(
-	new URL('../preload/main-window.js', import.meta.url),
+	import.meta.resolve('#preload/main-window.js'),
 )
 
 const APP_STATE: AppState = {
@@ -316,7 +316,7 @@ function initMainWindow({
 		})
 	} else {
 		mainWindow.loadFile(
-			fileURLToPath(new URL('../renderer/index.html', import.meta.url)),
+			fileURLToPath(import.meta.resolve('#renderer/index.html')),
 		)
 	}
 
