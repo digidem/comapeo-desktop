@@ -10,15 +10,15 @@ import { captureException } from '@sentry/react'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { Icon } from '../../../../../../components/icon'
-import { useAppForm } from '../../../../../../hooks/forms'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { useAppForm } from '#renderer/src/hooks/forms.ts'
 import {
 	getDisplayedTagValue,
 	type EditableMultiSelectField,
 	type EditableNumberField,
 	type EditableSingleSelectField,
 	type EditableTextField,
-} from './-shared'
+} from './-shared.ts'
 
 const TextFieldEditorSchema = v.object({
 	answer: v.union([v.undefined(), v.pipe(v.string(), v.trim())]),
