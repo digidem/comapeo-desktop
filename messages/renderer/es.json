@@ -231,18 +231,6 @@
     "description": "Fallback text displayed if field has no meaningful value.",
     "message": "Sin respuesta"
   },
-  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerFalse": {
-    "description": "Text displayed if a boolean field is answered with \"false\"",
-    "message": "FABRICAR"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerNull": {
-    "description": "Text displayed if a field is answered with \"null\"",
-    "message": "NÚLL"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerTrue": {
-    "description": "Text displayed if a boolean field is answered with \"true\"",
-    "message": "TRUE"
-  },
   "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.accessibleNotesInputLabel": {
     "description": "Accessible label for notes input field.",
     "message": "Notas"
@@ -266,6 +254,18 @@
   "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.title": {
     "description": "Title for notes section.",
     "message": "Notas"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerFalse": {
+    "description": "Text displayed if a boolean field is answered with \"false\"",
+    "message": "FABRICAR"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerNull": {
+    "description": "Text displayed if a field is answered with \"null\"",
+    "message": "NÚLL"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerTrue": {
+    "description": "Text displayed if a boolean field is answered with \"true\"",
+    "message": "TRUE"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
@@ -567,29 +567,33 @@
     "description": "Label for button to upload new categories set.",
     "message": "Subir nuevo conjunto"
   },
-  "routes.app.projects.$projectId_.settings.index.categoriesSet": {
-    "description": "Text for item that navigates to project categories set page.",
-    "message": "Conjunto de categorías"
+  "routes.app.projects.$projectId_.settings.index.categoriesActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "Actualizar"
   },
-  "routes.app.projects.$projectId_.settings.index.editInfo": {
-    "description": "Text for link that navigates to page for editing project settings.",
-    "message": "Editar información"
+  "routes.app.projects.$projectId_.settings.index.categoriesLinkAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to project info settings page.",
+    "message": "Ir a la configuración de categorías."
   },
-  "routes.app.projects.$projectId_.settings.index.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "Regresar."
+  "routes.app.projects.$projectId_.settings.index.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set.",
+    "message": "Categorías de CoMapeo"
   },
   "routes.app.projects.$projectId_.settings.index.navTitle": {
-    "description": "Title of the project settings page.",
-    "message": "Configuración del Proyecto"
+    "description": "Title of the coordinator tools page.",
+    "message": "Herramientas Coordinator"
+  },
+  "routes.app.projects.$projectId_.settings.index.projectInfoActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "Editar"
+  },
+  "routes.app.projects.$projectId_.settings.index.projectSettingsLinkAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to project info settings page.",
+    "message": "Ir a la configuración de información del proyecto."
   },
   "routes.app.projects.$projectId_.settings.index.unnamedProject": {
     "description": "Fallback for when current project is missing a name.",
     "message": "Proyecto sin nombre"
-  },
-  "routes.app.projects.$projectId_.settings.index.updateCategoriesSet": {
-    "description": "Text for link that navigates to project categories set page.",
-    "message": "Actualizar conjunto"
   },
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",
