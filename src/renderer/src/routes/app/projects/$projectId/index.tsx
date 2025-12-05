@@ -9,15 +9,15 @@ import { alpha } from '@mui/material/styles'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK, DARK_GREY, LIGHT_GREY } from '../../../../colors'
-import { Icon } from '../../../../components/icon'
-import { ButtonLink } from '../../../../components/link'
+import { BLACK, DARK_GREY, LIGHT_GREY } from '#renderer/src/colors.ts'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { ButtonLink } from '#renderer/src/components/link.tsx'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
-} from '../../../../lib/comapeo'
-import { DisplayedDataList } from './-displayed-data/list'
+} from '#renderer/src/lib/comapeo.ts'
+import { DisplayedDataList } from './-displayed-data/list.tsx'
 
 export const Route = createFileRoute('/app/projects/$projectId/')({
 	loader: async ({ context, params }) => {
