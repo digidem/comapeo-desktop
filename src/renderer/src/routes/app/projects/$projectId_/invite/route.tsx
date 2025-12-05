@@ -6,14 +6,14 @@ import {
 	redirect,
 } from '@tanstack/react-router'
 
-import { TwoPanelLayout } from '../../../-components/two-panel-layout'
-import { LIGHT_GREY } from '../../../../../colors'
-import { GenericRoutePendingComponent } from '../../../../../components/generic-route-pending-component'
+import { LIGHT_GREY } from '#renderer/src/colors.ts'
+import { GenericRoutePendingComponent } from '#renderer/src/components/generic-route-pending-component.tsx'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
-} from '../../../../../lib/comapeo'
+} from '#renderer/src/lib/comapeo.ts'
+import { TwoPanelLayout } from '#renderer/src/routes/app/-components/two-panel-layout.tsx'
 
 export const Route = createFileRoute('/app/projects/$projectId/invite')({
 	beforeLoad: async ({ context, params }) => {
