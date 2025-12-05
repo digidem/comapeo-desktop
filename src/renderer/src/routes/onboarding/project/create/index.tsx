@@ -10,13 +10,13 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { ONBOARDING_BASE_MUTATION_KEY } from '../-shared'
-import { DARKER_ORANGE, WHITE } from '../../../../colors'
-import { ErrorDialog } from '../../../../components/error-dialog'
-import { Icon } from '../../../../components/icon'
-import { useAppForm } from '../../../../hooks/forms'
-import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../../../lib/constants'
-import { createProjectNameSchema } from '../../../../lib/validators/project'
+import { DARKER_ORANGE, WHITE } from '#renderer/src/colors.ts'
+import { ErrorDialog } from '#renderer/src/components/error-dialog.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { useAppForm } from '#renderer/src/hooks/forms.ts'
+import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '#renderer/src/lib/constants.ts'
+import { createProjectNameSchema } from '#renderer/src/lib/validators/project.ts'
+import { ONBOARDING_BASE_MUTATION_KEY } from '../-shared.ts'
 
 export const Route = createFileRoute('/onboarding/project/create/')({
 	component: RouteComponent,
