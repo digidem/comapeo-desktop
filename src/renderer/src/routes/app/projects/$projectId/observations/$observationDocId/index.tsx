@@ -20,47 +20,48 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import {
-	BLUE_GREY,
-	DARKER_ORANGE,
-	GREEN,
-	WHITE,
-} from '../../../../../../colors'
+import { BLUE_GREY, DARKER_ORANGE, GREEN, WHITE } from '#renderer/src/colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
-} from '../../../../../../components/category-icon'
-import { ErrorBoundary } from '../../../../../../components/error-boundary'
-import { ErrorDialog } from '../../../../../../components/error-dialog'
-import { GenericRouteNotFoundComponent } from '../../../../../../components/generic-route-not-found-component'
-import { Icon } from '../../../../../../components/icon'
+} from '#renderer/src/components/category-icon.tsx'
+import { ErrorBoundary } from '#renderer/src/components/error-boundary.tsx'
+import { ErrorDialog } from '#renderer/src/components/error-dialog.tsx'
+import { GenericRouteNotFoundComponent } from '#renderer/src/components/generic-route-not-found-component.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
 import {
 	useGlobalEditingState,
 	useGlobalEditingStateActions,
-} from '../../../../../../contexts/global-editing-state-store-context'
+} from '#renderer/src/contexts/global-editing-state-store-context.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 	getMatchingCategoryForDocument,
 	type ObservationTagValue,
-} from '../../../../../../lib/comapeo'
-import { formatCoords } from '../../../../../../lib/coordinate-format'
-import { customNotFound } from '../../../../../../lib/navigation'
+} from '#renderer/src/lib/comapeo.ts'
+import { formatCoords } from '#renderer/src/lib/coordinate-format.ts'
+import { customNotFound } from '#renderer/src/lib/navigation.ts'
 import {
 	getCoordinateFormatQueryOptions,
 	getLocaleStateQueryOptions,
-} from '../../../../../../lib/queries/app-settings'
-import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations'
-import { EditCategoryPanel } from './-edit-category-panel'
-import { EditableFieldSection, ReadOnlyFieldSection } from './-field-sections'
-import { EditableNotesSection, ReadOnlyNotesSection } from './-notes-section'
+} from '#renderer/src/lib/queries/app-settings.ts'
+import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
+import { EditCategoryPanel } from './-edit-category-panel.tsx'
+import {
+	EditableFieldSection,
+	ReadOnlyFieldSection,
+} from './-field-sections.tsx'
+import {
+	EditableNotesSection,
+	ReadOnlyNotesSection,
+} from './-notes-section.tsx'
 import {
 	ObservationAttachmentError,
 	ObservationAttachmentPending,
 	ObservationAttachmentPreview,
-} from './-observation-attachment'
-import { getDisplayedTagValue, type EditableField } from './-shared'
+} from './-observation-attachment.tsx'
+import { getDisplayedTagValue, type EditableField } from './-shared.ts'
 
 const SearchParamsSchema = v.object({
 	fromTrackDocId: v.optional(v.string()),
