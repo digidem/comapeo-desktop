@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { convertToUTM } from './coordinate-format'
+import { convertToUTM } from './coordinate-format.ts'
 
 describe('convertToUTM()', () => {
 	it('converts latitude + longitude to UTM format', () => {

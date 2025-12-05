@@ -9,10 +9,10 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import { alpha } from '@mui/material/styles'
 
-import { WHITE } from '../colors'
-import { ErrorBoundary } from './error-boundary'
-import { Icon } from './icon'
-import { SuspenseImage } from './suspense-image'
+import { WHITE } from '../colors.ts'
+import { ErrorBoundary } from './error-boundary.tsx'
+import { Icon } from './icon.tsx'
+import { SuspenseImage } from './suspense-image.tsx'
 
 export function CategoryIconContainer({
 	children,

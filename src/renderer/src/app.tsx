@@ -26,33 +26,33 @@ import {
 import { useIntl, type IntlShape } from 'react-intl'
 
 import type { LocaleState } from '#shared/intl.ts'
-import { WHITE } from './colors'
-import { initComapeoClient } from './comapeo-client'
-import { AppTitleBar, TITLE_BAR_HEIGHT } from './components/app-title-bar'
-import { GenericRouteErrorComponent } from './components/generic-route-error-component'
-import { GenericRouteNotFoundComponent } from './components/generic-route-not-found-component'
-import { GenericRoutePendingComponent } from './components/generic-route-pending-component'
+import { WHITE } from './colors.ts'
+import { initComapeoClient } from './comapeo-client.ts'
+import { AppTitleBar, TITLE_BAR_HEIGHT } from './components/app-title-bar.tsx'
+import { GenericRouteErrorComponent } from './components/generic-route-error-component.tsx'
+import { GenericRouteNotFoundComponent } from './components/generic-route-not-found-component.tsx'
+import { GenericRoutePendingComponent } from './components/generic-route-pending-component.tsx'
 import {
 	ActiveProjectIdStoreProvider,
 	createActiveProjectIdStore,
-} from './contexts/active-project-id-store-context'
+} from './contexts/active-project-id-store-context.ts'
 import {
 	GlobalEditingStateStoreProvider,
 	createGlobalEditingStateStore,
-} from './contexts/global-editing-state-store-context'
-import { IntlProvider } from './contexts/intl'
+} from './contexts/global-editing-state-store-context.ts'
+import { IntlProvider } from './contexts/intl.tsx'
 import {
 	LocalPeersStoreProvider,
 	createLocalPeersStore,
-} from './contexts/local-peers-store-context'
+} from './contexts/local-peers-store-context.ts'
 import {
 	RefreshTokensStoreProvider,
 	createRefreshTokensStore,
-} from './contexts/refresh-tokens-store-context'
-import { routeTree } from './generated/routeTree.gen'
-import { useNetworkConnectionChangeListener } from './hooks/network'
-import { getLocaleStateQueryOptions } from './lib/queries/app-settings'
-import { theme } from './theme'
+} from './contexts/refresh-tokens-store-context.ts'
+import { routeTree } from './generated/routeTree.gen.ts'
+import { useNetworkConnectionChangeListener } from './hooks/network.ts'
+import { getLocaleStateQueryOptions } from './lib/queries/app-settings.ts'
+import { theme } from './theme.ts'
 
 const queryClient = new QueryClient({
 	// Since the API is running locally, queries should run regardless of network

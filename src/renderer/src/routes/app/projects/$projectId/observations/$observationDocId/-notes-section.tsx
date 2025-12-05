@@ -13,7 +13,7 @@ import { Icon } from '#renderer/src/components/icon.tsx'
 import { useAppForm } from '#renderer/src/hooks/forms.ts'
 import { getLocaleStateQueryOptions } from '#renderer/src/lib/queries/app-settings.ts'
 import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
-import { EditableSection } from './-components/editable-section.ts'
+import { EditableSection } from './-components/editable-section.tsx'
 
 export function ReadOnlyNotesSection({ notes }: { notes?: string }) {
 	const { formatMessage: t } = useIntl()
