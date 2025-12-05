@@ -16,14 +16,14 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY, LIGHT_GREY } from '../../colors'
-import { ErrorDialog } from '../../components/error-dialog'
-import { Icon } from '../../components/icon'
+import { BLUE_GREY, DARK_GREY, LIGHT_GREY } from '#renderer/src/colors.ts'
+import { ErrorDialog } from '#renderer/src/components/error-dialog.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
 import {
 	getDiagnosticsEnabledQueryOptions,
 	setDiagnosticsEnabledMutationOptions,
-} from '../../lib/queries/app-settings'
-import { StepLayout } from './-layouts'
+} from '#renderer/src/lib/queries/app-settings.ts'
+import { StepLayout } from './-layouts.tsx'
 
 export const Route = createFileRoute('/onboarding/privacy-policy')({
 	loader: async ({ context }) => {
