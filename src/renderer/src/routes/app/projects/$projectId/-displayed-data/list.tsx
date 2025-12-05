@@ -35,20 +35,20 @@ import {
 	LIGHT_COMAPEO_BLUE,
 	LIGHT_GREY,
 	WHITE,
-} from '../../../../../colors'
+} from '#renderer/src/colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
-} from '../../../../../components/category-icon'
-import { ErrorBoundary } from '../../../../../components/error-boundary'
-import { Icon } from '../../../../../components/icon'
-import { ButtonLink, TextLink } from '../../../../../components/link'
-import { SuspenseImage } from '../../../../../components/suspense-image'
+} from '#renderer/src/components/category-icon.tsx'
+import { ErrorBoundary } from '#renderer/src/components/error-boundary.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { ButtonLink, TextLink } from '#renderer/src/components/link.tsx'
+import { SuspenseImage } from '#renderer/src/components/suspense-image.tsx'
 import {
 	getMatchingCategoryForDocument,
 	type Attachment,
-} from '../../../../../lib/comapeo'
-import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
+} from '#renderer/src/lib/comapeo.ts'
+import { getLocaleStateQueryOptions } from '#renderer/src/lib/queries/app-settings.ts'
 
 const CATEGORY_CONTAINER_SIZE_PX = 64
 
