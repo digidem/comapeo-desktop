@@ -12,10 +12,10 @@ import {
 } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { GREEN, LIGHT_GREY } from '../../../../colors'
-import { Icon } from '../../../../components/icon'
-import { ButtonLink } from '../../../../components/link'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
+import { GREEN, LIGHT_GREY } from '#renderer/src/colors.ts'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { ButtonLink } from '#renderer/src/components/link.tsx'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '#renderer/src/lib/comapeo.ts'
 
 export const Route = createFileRoute(
 	'/onboarding/project/create/$projectId/success',
