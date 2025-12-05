@@ -18,8 +18,8 @@ import semver from 'semver'
 import * as v from 'valibot'
 import { build, createServer, type ViteDevServer } from 'vite'
 
+import type { AppConfig, AppType } from '#shared/app.ts'
 import packageJSON from './package.json' with { type: 'json' }
-import type { AppConfig, AppType } from './src/shared/app.ts'
 
 import 'dotenv/config'
 
