@@ -12,15 +12,15 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import { parse } from 'valibot'
 
-import { CoordinateFormatSchema } from '#shared/coordinate-format.ts'
-import { BLUE_GREY, DARK_GREY } from '../../../colors'
-import { ErrorDialog } from '../../../components/error-dialog'
-import { Icon } from '../../../components/icon'
-import { formatCoords } from '../../../lib/coordinate-format'
+import { BLUE_GREY, DARK_GREY } from '#renderer/src/colors.ts'
+import { ErrorDialog } from '#renderer/src/components/error-dialog.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { formatCoords } from '#renderer/src/lib/coordinate-format.ts'
 import {
 	getCoordinateFormatQueryOptions,
 	setCoordinateFormatMutationOptions,
-} from '../../../lib/queries/app-settings'
+} from '#renderer/src/lib/queries/app-settings.ts'
+import { CoordinateFormatSchema } from '#shared/coordinate-format.ts'
 
 export const Route = createFileRoute('/app/settings/coordinate-system')({
 	loader: async ({ context }) => {
