@@ -7,9 +7,9 @@ import {
 	useRouter,
 } from '@tanstack/react-router'
 
-import { BasicLayout } from '../-layouts'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
-import { ONBOARDING_BASE_MUTATION_KEY } from './-shared'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '#renderer/src/lib/comapeo.ts'
+import { BasicLayout } from '../-layouts.tsx'
+import { ONBOARDING_BASE_MUTATION_KEY } from './-shared.ts'
 
 export const Route = createFileRoute('/onboarding/project')({
 	loader: async ({ context }) => {
