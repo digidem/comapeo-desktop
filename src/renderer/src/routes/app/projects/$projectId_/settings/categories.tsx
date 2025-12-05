@@ -14,12 +14,12 @@ import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY, DARK_ORANGE } from '../../../../../colors'
-import { ErrorDialog } from '../../../../../components/error-dialog'
-import { Icon } from '../../../../../components/icon'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
-import { selectFileMutationOptions } from '../../../../../lib/queries/file-system'
-import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations'
+import { BLUE_GREY, DARK_GREY, DARK_ORANGE } from '#renderer/src/colors.ts'
+import { ErrorDialog } from '#renderer/src/components/error-dialog.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '#renderer/src/lib/comapeo.ts'
+import { selectFileMutationOptions } from '#renderer/src/lib/queries/file-system.ts'
+import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/settings/categories',
