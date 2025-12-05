@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import {
 	ButtonBaseLink,
 	type ButtonBaseLinkComponentProps,
-} from '../../../../../../../components/link'
+} from '#renderer/src/components/link.tsx'
 
 // Adapted from https://mui.com/material-ui/react-button/#complex-button
 export function ImageButtonLink({
