@@ -10,21 +10,21 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors'
-import { ErrorBoundary } from '../../../components/error-boundary'
-import { Icon } from '../../../components/icon'
+import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '#renderer/src/colors.ts'
+import { ErrorBoundary } from '#renderer/src/components/error-boundary.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
 import {
 	ListItemButtonLink,
 	type ListItemButtonLinkComponentProps,
-} from '../../../components/link'
-import { useIconSizeBasedOnTypography } from '../../../hooks/icon'
-import { getLanguageInfo } from '../../../lib/intl'
+} from '#renderer/src/components/link.tsx'
+import { useIconSizeBasedOnTypography } from '#renderer/src/hooks/icon.ts'
+import { getLanguageInfo } from '#renderer/src/lib/intl.ts'
 import {
 	getCoordinateFormatQueryOptions,
 	getLocaleStateQueryOptions,
-} from '../../../lib/queries/app-settings'
-import { getCustomMapInfoQueryOptions } from '../../../lib/queries/maps'
-import { DataAndPrivacySection } from './-data-and-privacy-section'
+} from '#renderer/src/lib/queries/app-settings.ts'
+import { getCustomMapInfoQueryOptions } from '#renderer/src/lib/queries/maps.ts'
+import { DataAndPrivacySection } from './-data-and-privacy-section.tsx'
 
 export const Route = createFileRoute('/app/settings/')({
 	component: RouteComponent,
