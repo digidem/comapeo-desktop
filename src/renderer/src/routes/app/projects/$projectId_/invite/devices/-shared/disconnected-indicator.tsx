@@ -2,9 +2,9 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { ORANGE } from '../../../../../../../colors'
-import { Icon } from '../../../../../../../components/icon'
-import { useIconSizeBasedOnTypography } from '../../../../../../../hooks/icon'
+import { ORANGE } from '#renderer/src/colors.ts'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { useIconSizeBasedOnTypography } from '#renderer/src/hooks/icon.ts'
 
 export function DisconnectedIndicator() {
 	const { formatMessage: t } = useIntl()
