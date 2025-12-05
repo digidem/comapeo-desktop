@@ -8,11 +8,11 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { GREEN } from '../../../../../colors'
-import { Icon } from '../../../../../components/icon'
-import { ButtonLink } from '../../../../../components/link'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
-import { customNotFound } from '../../../../../lib/navigation'
+import { GREEN } from '#renderer/src/colors.ts'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { ButtonLink } from '#renderer/src/components/link.tsx'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '#renderer/src/lib/comapeo.ts'
+import { customNotFound } from '#renderer/src/lib/navigation.ts'
 
 const SearchParamsSchema = v.object({
 	projectId: v.optional(v.string()),
