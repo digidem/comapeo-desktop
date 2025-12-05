@@ -9,13 +9,13 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLUE_GREY, WHITE } from '../../../colors'
-import { ErrorDialog } from '../../../components/error-dialog'
-import { Icon } from '../../../components/icon'
-import { useAppForm } from '../../../hooks/forms'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
-import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../../lib/constants'
-import { createDeviceNameSchema } from '../../../lib/validators/device'
+import { BLUE_GREY, WHITE } from '#renderer/src/colors.ts'
+import { ErrorDialog } from '#renderer/src/components/error-dialog.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
+import { useAppForm } from '#renderer/src/hooks/forms.ts'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '#renderer/src/lib/comapeo.ts'
+import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '#renderer/src/lib/constants.ts'
+import { createDeviceNameSchema } from '#renderer/src/lib/validators/device.ts'
 
 export const Route = createFileRoute('/app/settings/device-name')({
 	loader: async ({ context }) => {
