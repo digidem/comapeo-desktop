@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import Box from '@mui/material/Box'
 import { alpha } from '@mui/material/styles'
 
-import { BLACK } from '../../../colors'
+import { BLACK } from '#renderer/src/colors.ts'
 
 const BOX_SHADOW = `0px 5px 20px 0px ${alpha(BLACK, 0.25)}`
 
