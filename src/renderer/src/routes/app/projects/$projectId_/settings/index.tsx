@@ -9,14 +9,14 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../../../colors'
-import { Icon } from '../../../../../components/icon'
+import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '#renderer/src/colors.ts'
+import { Icon } from '#renderer/src/components/icon.tsx'
 import {
 	ListItemButtonLink,
 	type ListItemButtonLinkComponentProps,
-} from '../../../../../components/link'
-import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
+} from '#renderer/src/components/link.tsx'
+import { useIconSizeBasedOnTypography } from '#renderer/src/hooks/icon.ts'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '#renderer/src/lib/comapeo.ts'
 
 export const Route = createFileRoute('/app/projects/$projectId/settings/')({
 	loader: async ({ context, params }) => {
