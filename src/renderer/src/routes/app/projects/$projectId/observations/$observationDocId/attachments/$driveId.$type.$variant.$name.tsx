@@ -21,19 +21,19 @@ import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { PhotoAttachmentImage } from '../-components/photo-attachment-image'
-import { BLUE_GREY, GREEN, LIGHT_GREY } from '../../../../../../../colors'
-import { ErrorBoundary } from '../../../../../../../components/error-boundary'
-import { ErrorDialog } from '../../../../../../../components/error-dialog'
-import { Icon } from '../../../../../../../components/icon'
+import { BLUE_GREY, GREEN, LIGHT_GREY } from '#renderer/src/colors.ts'
+import { ErrorBoundary } from '#renderer/src/components/error-boundary.tsx'
+import { ErrorDialog } from '#renderer/src/components/error-dialog.tsx'
+import { Icon } from '#renderer/src/components/icon.tsx'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
-} from '../../../../../../../lib/comapeo'
-import { getLocaleStateQueryOptions } from '../../../../../../../lib/queries/app-settings'
-import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations'
-import { downloadURLMutationOptions } from '../../../../../../../lib/queries/system'
+} from '#renderer/src/lib/comapeo.ts'
+import { getLocaleStateQueryOptions } from '#renderer/src/lib/queries/app-settings.ts'
+import { createGlobalMutationsKey } from '#renderer/src/lib/queries/global-mutations.ts'
+import { downloadURLMutationOptions } from '#renderer/src/lib/queries/system.ts'
+import { PhotoAttachmentImage } from '../-components/photo-attachment-image.tsx'
 
 // TODO: Support video type
 const BlobIdSchema = v.variant('type', [
