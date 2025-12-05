@@ -104,7 +104,7 @@
 		"@electron/fuses": "1.8.0",
 		"@emotion/react": "11.14.0",
 		"@emotion/styled": "11.14.1",
-		"@eslint-react/eslint-plugin": "2.3.9",
+		"@eslint-react/eslint-plugin": "2.3.12",
 		"@eslint/compat": "2.0.0",
 		"@eslint/js": "9.39.1",
 		"@fontsource-variable/rubik": "5.2.8",
