@@ -1,7 +1,30 @@
-import type { MemberApi } from '@comapeo/core'
+import type { BlobApi, MemberApi } from '@comapeo/core'
 import type { Observation, Preset, Track } from '@comapeo/schema'
 
 export type Attachment = Observation['attachments'][number]
+
+export type PhotoAttachment = Extract<Attachment, { type: 'photo' }>
+export type AudioAttachment = Omit<Attachment, 'type'> & { type: 'audio' }
+
+export type PhotoAttachmentVariant = Extract<
+	BlobApi.BlobId,
+	{ type: 'photo' }
+>['variant']
+export type AudioAttachmentVariant = Extract<
+	BlobApi.BlobId,
+	{ type: 'audio' }
+>['variant']
+
+export function isPhotoAttachment(
+	attachment: Attachment,
+): attachment is PhotoAttachment {
+	return attachment.type === 'photo'
+}
+export function isAudioAttachment(
+	attachment: Attachment,
+): attachment is AudioAttachment {
+	return attachment.type === 'audio'
+}
 
 export type DeviceType = NonNullable<MemberApi.MemberInfo['deviceType']>
 
