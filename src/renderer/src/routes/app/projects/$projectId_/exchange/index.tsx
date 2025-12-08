@@ -34,8 +34,10 @@ import { Icon } from '../../../../../components/icon'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
 import { useBrowserNetInfo } from '../../../../../hooks/network'
 import {
+	BLOCKED_ROLE_ID,
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-	memberIsActiveRemoteArchive,
+	LEFT_ROLE_ID,
+	memberIsRemoteArchive,
 } from '../../../../../lib/comapeo'
 import { ExhaustivenessError } from '../../../../../lib/exchaustiveness-error'
 import {
@@ -246,7 +248,12 @@ function RemoteArchiveIndicator({ projectId }: { projectId: string }) {
 	const { formatMessage: t } = useIntl()
 	const { data: members } = useManyMembers({ projectId })
 
-	const activeRemoteArchives = members.filter(memberIsActiveRemoteArchive)
+	const activeRemoteArchives = members.filter(
+		(m) =>
+			memberIsRemoteArchive(m) &&
+			m.role.roleId !== LEFT_ROLE_ID &&
+			m.role.roleId !== BLOCKED_ROLE_ID,
+	)
 
 	const { online } = useBrowserNetInfo()
 

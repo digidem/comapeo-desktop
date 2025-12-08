@@ -1,4 +1,4 @@
-import { Suspense, type ReactNode } from 'react'
+import { Suspense } from 'react'
 import { useMapStyleUrl, useOwnDeviceInfo } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -10,13 +10,10 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
+import { ListRowLink } from '../-components/list-row-link'
 import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors'
 import { ErrorBoundary } from '../../../components/error-boundary'
 import { Icon } from '../../../components/icon'
-import {
-	ListItemButtonLink,
-	type ListItemButtonLinkComponentProps,
-} from '../../../components/link'
 import { useIconSizeBasedOnTypography } from '../../../hooks/icon'
 import { getLanguageInfo } from '../../../lib/intl'
 import {
@@ -84,9 +81,14 @@ function SettingsList() {
 
 	const { data: styleUrl } = useMapStyleUrl()
 
-	const rowIconSize = useIconSizeBasedOnTypography({
+	const startIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
 		multiplier: 1.25,
+	})
+
+	const actionIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+		multiplier: 1.75,
 	})
 
 	return (
@@ -104,13 +106,13 @@ function SettingsList() {
 				sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
 			>
 				<ListItem disableGutters disablePadding>
-					<SettingLink
+					<ListRowLink
 						to="/app/settings/device-name"
 						start={
 							<Icon
 								name="material-symbols-computer"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={startIconSize}
 							/>
 						}
 						end={<Typography color="primary">{t(m.editDeviceName)}</Typography>}
@@ -121,20 +123,20 @@ function SettingsList() {
 				</ListItem>
 
 				<ListItem disableGutters disablePadding>
-					<SettingLink
+					<ListRowLink
 						to="/app/settings/language"
 						start={
 							<Icon
 								name="material-language"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={startIconSize}
 							/>
 						}
 						end={
 							<Icon
-								name="material-chevron-right"
+								name="material-chevron-right-rounded"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={actionIconSize}
 							/>
 						}
 						aria-label={t(m.languageSettingsAccessibleLabel)}
@@ -143,20 +145,20 @@ function SettingsList() {
 				</ListItem>
 
 				<ListItem disableGutters disablePadding>
-					<SettingLink
+					<ListRowLink
 						to="/app/settings/coordinate-system"
 						start={
 							<Icon
 								name="material-explore-filled"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={startIconSize}
 							/>
 						}
 						end={
 							<Icon
-								name="material-chevron-right"
+								name="material-chevron-right-rounded"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={actionIconSize}
 							/>
 						}
 						aria-label={t(m.coordinateSystemSettingsAccessibleLabel)}
@@ -171,20 +173,20 @@ function SettingsList() {
 				</ListItem>
 
 				<ListItem disableGutters disablePadding>
-					<SettingLink
+					<ListRowLink
 						to="/app/settings/background-map"
 						start={
 							<Icon
 								name="material-layers-outlined"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={startIconSize}
 							/>
 						}
 						end={
 							<Icon
-								name="material-chevron-right"
+								name="material-chevron-right-rounded"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={actionIconSize}
 							/>
 						}
 						aria-label={t(m.backgroundMapSettingsAccessibleLabel)}
@@ -199,20 +201,20 @@ function SettingsList() {
 				{__APP_TYPE__ !== 'production' &&
 				import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
 					<ListItem disableGutters disablePadding>
-						<SettingLink
+						<ListRowLink
 							to="/app/settings/test-data"
 							start={
 								<Icon
 									name="material-auto-fix-high"
 									htmlColor={DARK_GREY}
-									size={rowIconSize}
+									size={startIconSize}
 								/>
 							}
 							end={
 								<Icon
-									name="material-chevron-right"
+									name="material-chevron-right-rounded"
 									htmlColor={DARK_GREY}
-									size={rowIconSize}
+									size={actionIconSize}
 								/>
 							}
 							label={t(m.createTestData)}
@@ -221,51 +223,6 @@ function SettingsList() {
 				) : null}
 			</List>
 		</Stack>
-	)
-}
-
-function SettingLink({
-	label,
-	start,
-	end,
-	...linkProps
-}: Pick<ListItemButtonLinkComponentProps, 'to' | 'params'> & {
-	label: ReactNode
-	start: ReactNode
-	end: ReactNode
-}) {
-	return (
-		<ListItemButtonLink
-			{...linkProps}
-			disableGutters
-			disableTouchRipple
-			sx={{ borderRadius: 2, border: `1px solid ${BLUE_GREY}` }}
-		>
-			<Stack
-				direction="row"
-				flex={1}
-				justifyContent="space-between"
-				alignItems="center"
-				overflow="auto"
-				padding={4}
-			>
-				<Stack direction="row" alignItems="center" gap={3} overflow="auto">
-					{start}
-
-					<Typography
-						textOverflow="ellipsis"
-						whiteSpace="nowrap"
-						overflow="hidden"
-						flex={1}
-						fontWeight={500}
-					>
-						{label}
-					</Typography>
-				</Stack>
-
-				{end}
-			</Stack>
-		</ListItemButtonLink>
 	)
 }
 

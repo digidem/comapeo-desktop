@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import type { MemberApi } from '@comapeo/core'
 import {
 	useManyMembers,
@@ -5,24 +6,30 @@ import {
 	useOwnRoleInProject,
 } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
-import IconButton from '@mui/material/IconButton'
+import CircularProgress from '@mui/material/CircularProgress'
+import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { DeviceIcon } from '../../-shared/device-icon'
-import { BLUE_GREY, DARK_GREY } from '../../../../../colors'
+import { ListRowLink } from '../../../-components/list-row-link'
+import { DARKER_ORANGE, DARK_GREY, LIGHT_GREY } from '../../../../../colors'
 import { Icon } from '../../../../../components/icon'
-import { ButtonLink, ListItemButtonLink } from '../../../../../components/link'
+import { ButtonLink } from '../../../../../components/link'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
 import {
+	BLOCKED_ROLE_ID,
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
+	LEFT_ROLE_ID,
 	MEMBER_ROLE_ID,
+	memberIsRemoteArchive,
+	type RemoteArchiveMemberInfo,
 } from '../../../../../lib/comapeo'
 
 export const Route = createFileRoute('/app/projects/$projectId/team/')({
@@ -66,23 +73,83 @@ export const Route = createFileRoute('/app/projects/$projectId/team/')({
 
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
-	const router = useRouter()
+
 	const { projectId } = Route.useParams()
 
-	const { data: members } = useManyMembers({ projectId })
+	return (
+		<Stack direction="column" flex={1} overflow="auto" gap={10} padding={6}>
+			<Stack direction="column" gap={4} alignItems="center">
+				<Icon
+					name="material-people-filled"
+					size={120}
+					htmlColor={DARKER_ORANGE}
+				/>
+
+				<Typography variant="h1" fontWeight={500} textAlign="center">
+					{t(m.navTitle)}
+				</Typography>
+			</Stack>
+
+			<Suspense
+				fallback={
+					<Box display="flex" flexDirection="row" justifyContent="center">
+						<CircularProgress disableShrink />
+					</Box>
+				}
+			>
+				<Stack direction="column">
+					<Box display="flex" flexDirection="row" justifyContent="center">
+						<InviteButtonSection projectId={projectId} />
+					</Box>
+
+					<Stack
+						direction="column"
+						flex={1}
+						justifyContent="space-between"
+						paddingBlock={10}
+					>
+						<MembersSections projectId={projectId} />
+					</Stack>
+				</Stack>
+			</Suspense>
+		</Stack>
+	)
+}
+
+function InviteButtonSection({ projectId }: { projectId: string }) {
+	const { formatMessage: t } = useIntl()
+
 	const { data: role } = useOwnRoleInProject({ projectId })
-	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
 	const isAtLeastCoordinator =
 		role.roleId === COORDINATOR_ROLE_ID || role.roleId === CREATOR_ROLE_ID
 
-	const coordinators = members.filter(
-		(m) =>
-			m.role.roleId === CREATOR_ROLE_ID ||
-			m.role.roleId === COORDINATOR_ROLE_ID,
-	)
+	if (!isAtLeastCoordinator) {
+		return null
+	}
 
-	const participants = members.filter((m) => m.role.roleId === MEMBER_ROLE_ID)
+	return (
+		<ButtonLink
+			fullWidth
+			variant="outlined"
+			sx={{ maxWidth: 400 }}
+			to="/app/projects/$projectId/invite"
+			params={{ projectId }}
+			startIcon={<Icon name="material-person-add" />}
+		>
+			{t(m.inviteDevice)}
+		</ButtonLink>
+	)
+}
+
+function MembersSections({ projectId }: { projectId: string }) {
+	const { formatMessage: t } = useIntl()
+
+	const { data: members } = useManyMembers({ projectId })
+	const { data: ownDeviceInfo } = useOwnDeviceInfo()
+
+	const { coordinators, participants, pastCollaborators, remoteArchives } =
+		getDisplayableMembers(members)
 
 	const sectionIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'h2',
@@ -90,111 +157,103 @@ function RouteComponent() {
 	})
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
-			<Stack
-				direction="row"
-				alignItems="center"
-				component="nav"
-				gap={4}
-				padding={4}
-				borderBottom={`1px solid ${BLUE_GREY}`}
-			>
-				<IconButton
-					onClick={() => {
-						if (router.history.canGoBack()) {
-							router.history.back()
-							return
-						}
+		<Stack direction="column" gap={6}>
+			<Stack direction="column" gap={2}>
+				<Stack direction="row" gap={4} alignItems="center">
+					<Icon name="material-manage-accounts-filled" size={sectionIconSize} />
 
-						router.navigate({
-							to: '/app/projects/$projectId/settings',
-							params: { projectId },
-							replace: true,
-						})
-					}}
-				>
-					<Icon name="material-arrow-back" size={30} />
-				</IconButton>
+					<Typography variant="h2" fontWeight={500}>
+						{t(m.coordinatorsSectionTitle)}
+					</Typography>
+				</Stack>
 
-				<Typography variant="h1" fontWeight={500}>
-					{t(m.navTitle)}
-				</Typography>
+				<Typography>{t(m.coordinatorsSectionDescription)}</Typography>
 			</Stack>
 
-			<Stack
-				direction="column"
-				flex={1}
-				justifyContent="space-between"
-				overflow="auto"
-			>
-				<Box padding={6}>
-					<Stack direction="column" gap={6}>
-						{isAtLeastCoordinator ? (
-							<Box display="flex" justifyContent="center">
-								<ButtonLink
-									fullWidth
-									variant="outlined"
-									sx={{ maxWidth: 400 }}
-									to="/app/projects/$projectId/invite"
-									params={{ projectId }}
-									startIcon={<Icon name="material-person-add" />}
-								>
-									{t(m.inviteDevice)}
-								</ButtonLink>
-							</Box>
-						) : null}
+			<ActiveCollaboratorsList
+				devices={coordinators}
+				ownDeviceId={ownDeviceInfo.deviceId}
+				projectId={projectId}
+			/>
 
-						<Stack direction="column" gap={2}>
-							<Stack direction="row" gap={4} alignItems="center">
-								<Icon
-									name="material-manage-accounts-filled"
-									size={sectionIconSize}
-								/>
+			<Divider variant="fullWidth" sx={{ bgcolor: LIGHT_GREY }} />
 
-								<Typography variant="h2" fontWeight={500}>
-									{t(m.coordinatorsSectionTitle)}
-								</Typography>
-							</Stack>
-							<Typography>{t(m.coordinatorsSectionDescription)}</Typography>
-						</Stack>
+			<Stack direction="column" gap={2}>
+				<Stack direction="row" gap={4} alignItems="center">
+					<Icon name="material-people-filled" size={sectionIconSize} />
 
-						<MemberList
-							devices={coordinators}
-							ownDeviceId={ownDeviceInfo.deviceId}
-							projectId={projectId}
-						/>
+					<Typography variant="h2" fontWeight={500}>
+						{t(m.participantsSectionTitle)}
+					</Typography>
+				</Stack>
 
-						<Stack direction="column" gap={2}>
-							<Stack direction="row" gap={4} alignItems="center">
-								<Icon name="material-people-filled" size={sectionIconSize} />
+				<Typography>{t(m.participantsSectionDescription)}</Typography>
+			</Stack>
 
-								<Typography variant="h2" fontWeight={500}>
-									{t(m.participantsSectionTitle)}
-								</Typography>
-							</Stack>
+			{participants.length > 0 ? (
+				<ActiveCollaboratorsList
+					devices={participants}
+					ownDeviceId={ownDeviceInfo.deviceId}
+					projectId={projectId}
+				/>
+			) : (
+				<Typography color="textSecondary">{t(m.noParticipants)}</Typography>
+			)}
 
-							<Typography>{t(m.participantsSectionDescription)}</Typography>
-						</Stack>
+			{remoteArchives.length > 0 ? (
+				<>
+					<Divider variant="fullWidth" sx={{ bgcolor: LIGHT_GREY }} />
 
-						{participants.length > 0 ? (
-							<MemberList
-								devices={participants}
-								ownDeviceId={ownDeviceInfo.deviceId}
-								projectId={projectId}
+					<Stack direction="column" gap={2}>
+						<Stack direction="row" gap={4} alignItems="center">
+							<Icon
+								name="material-offline-bolt-outlined"
+								size={sectionIconSize}
 							/>
-						) : (
-							<Typography color="textSecondary">
-								{t(m.noParticipants)}
+
+							<Typography variant="h2" fontWeight={500}>
+								{t(m.remoteArchivesSectionTitle)}
 							</Typography>
-						)}
+						</Stack>
+
+						<Typography>{t(m.remoteArchivesSectionDescription)}</Typography>
 					</Stack>
-				</Box>
-			</Stack>
+
+					<ActiveCollaboratorsList
+						devices={remoteArchives}
+						ownDeviceId={ownDeviceInfo.deviceId}
+						projectId={projectId}
+					/>
+				</>
+			) : null}
+
+			{pastCollaborators.length > 0 ? (
+				<>
+					<Divider variant="fullWidth" sx={{ bgcolor: LIGHT_GREY }} />
+
+					<Stack direction="column" gap={2}>
+						<Stack direction="row" gap={4} alignItems="center">
+							<Icon name="material-group-off" size={sectionIconSize} />
+
+							<Typography variant="h2" fontWeight={500}>
+								{t(m.pastCollaboratorsSectionTitle)}
+							</Typography>
+						</Stack>
+
+						<Typography>{t(m.pastCollaboratorsSectionDescription)}</Typography>
+					</Stack>
+
+					<PastCollaboratorsList
+						devices={pastCollaborators}
+						ownDeviceId={ownDeviceInfo.deviceId}
+					/>
+				</>
+			) : null}
 		</Stack>
 	)
 }
 
-function MemberList({
+function ActiveCollaboratorsList({
 	devices,
 	ownDeviceId,
 	projectId,
@@ -209,11 +268,12 @@ function MemberList({
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
+		multiplier: 1.25,
 	})
 
 	const actionIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
-		multiplier: 1.25,
+		multiplier: 1.75,
 	})
 
 	return (
@@ -226,74 +286,45 @@ function MemberList({
 
 				const displayedName = device.name || device.deviceId.slice(0, 12)
 
-				const deviceNameLabelId = `device-name-label-${device.deviceId}`
-
 				return (
-					<ListItem
-						disablePadding
-						disableGutters
-						key={device.deviceId}
-						sx={{ display: 'flex', flexDirection: 'row', flexGrow: 0 }}
-					>
-						<ListItemButtonLink
+					<ListItem key={device.deviceId} disablePadding disableGutters>
+						<ListRowLink
 							to="/app/projects/$projectId/team/$deviceId"
 							params={{ projectId, deviceId: device.deviceId }}
-							disableGutters
-							sx={{
-								borderRadius: 2,
-								border: `1px solid ${BLUE_GREY}`,
-							}}
-							aria-labelledby={deviceNameLabelId}
-						>
-							<Stack
-								direction="row"
-								flex={1}
-								justifyContent="space-between"
-								alignItems="center"
-								overflow="auto"
-								padding={4}
-							>
-								<Stack
-									direction="row"
-									alignItems="center"
-									gap={3}
-									overflow="auto"
-								>
-									<DeviceIcon
-										deviceType={device.deviceType}
-										size={deviceIconSize}
-									/>
+							aria-label={t(m.memberLinkAccessibleLabel, {
+								name: displayedName,
+							})}
+							label={
+								isSelf ? (
+									<>
+										<Box component="span">{displayedName}</Box>
 
-									<Typography
-										textOverflow="ellipsis"
-										whiteSpace="nowrap"
-										overflow="hidden"
-										flex={1}
-										fontWeight={500}
-									>
-										<Box component="span" id={deviceNameLabelId}>
-											{displayedName}
-										</Box>
-
-										{isSelf ? (
-											<Typography
-												component="span"
-												color="textSecondary"
-												sx={{ marginInlineStart: 4 }}
-											>
-												{t(m.thisDevice)}
-											</Typography>
-										) : null}
-									</Typography>
-								</Stack>
-
+										<Typography
+											component="span"
+											color="textSecondary"
+											sx={{ marginInlineStart: 4 }}
+										>
+											{t(m.thisDevice)}
+										</Typography>
+									</>
+								) : (
+									displayedName
+								)
+							}
+							start={
+								<DeviceIcon
+									deviceType={device.deviceType}
+									size={deviceIconSize}
+								/>
+							}
+							end={
 								<Icon
-									name="material-chevron-right"
+									name="material-chevron-right-rounded"
 									htmlColor={DARK_GREY}
 									size={actionIconSize}
 								/>
-							</Stack>
-						</ListItemButtonLink>
+							}
+						/>
 					</ListItem>
 				)
 			})}
@@ -301,11 +332,139 @@ function MemberList({
 	)
 }
 
+function PastCollaboratorsList({
+	devices,
+	ownDeviceId,
+}: {
+	devices: Array<
+		Pick<MemberApi.MemberInfo, 'deviceId' | 'deviceType' | 'name' | 'joinedAt'>
+	>
+	ownDeviceId: string
+}) {
+	const { formatMessage: t } = useIntl()
+
+	const deviceIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+		multiplier: 1.25,
+	})
+
+	return (
+		<List
+			disablePadding
+			sx={{ display: 'flex', flexDirection: 'column', gap: 10 }}
+		>
+			{devices.map((device) => {
+				const isSelf = device.deviceId === ownDeviceId
+
+				const displayedName = device.name || device.deviceId.slice(0, 12)
+
+				return (
+					<ListItem key={device.deviceId} disablePadding disableGutters>
+						<Stack
+							direction="row"
+							flex={1}
+							justifyContent="space-between"
+							alignItems="center"
+							overflow="auto"
+						>
+							<Stack
+								direction="row"
+								alignItems="center"
+								gap={3}
+								overflow="auto"
+							>
+								<Box sx={{ opacity: 0.5 }}>
+									<DeviceIcon
+										deviceType={device.deviceType}
+										size={deviceIconSize}
+									/>
+								</Box>
+
+								<Typography
+									textOverflow="ellipsis"
+									whiteSpace="nowrap"
+									overflow="hidden"
+									flex={1}
+									fontWeight={500}
+								>
+									{isSelf ? (
+										<>
+											<Box component="span">{displayedName}</Box>
+
+											<Typography
+												component="span"
+												color="textSecondary"
+												sx={{ marginInlineStart: 4 }}
+											>
+												{t(m.thisDevice)}
+											</Typography>
+										</>
+									) : (
+										displayedName
+									)}
+								</Typography>
+							</Stack>
+						</Stack>
+					</ListItem>
+				)
+			})}
+		</List>
+	)
+}
+
+function getDisplayableMembers(members: Array<MemberApi.MemberInfo>) {
+	const coordinators: Array<MemberApi.MemberInfo> = []
+	const participants: Array<MemberApi.MemberInfo> = []
+	const pastCollaborators: Array<
+		MemberApi.MemberInfo | RemoteArchiveMemberInfo
+	> = []
+	const remoteArchives: Array<RemoteArchiveMemberInfo> = []
+
+	for (const m of members) {
+		if (memberIsRemoteArchive(m)) {
+			if (m.role.roleId === LEFT_ROLE_ID || m.role.roleId === BLOCKED_ROLE_ID) {
+				pastCollaborators.push(m)
+			} else {
+				remoteArchives.push(m)
+			}
+
+			continue
+		}
+
+		switch (m.role.roleId) {
+			case LEFT_ROLE_ID:
+			case BLOCKED_ROLE_ID: {
+				pastCollaborators.push(m)
+				break
+			}
+			case CREATOR_ROLE_ID:
+			case COORDINATOR_ROLE_ID: {
+				coordinators.push(m)
+				break
+			}
+			case MEMBER_ROLE_ID: {
+				participants.push(m)
+				break
+			}
+			default: {
+				// TODO: How to handle other role types?
+			}
+		}
+	}
+
+	return {
+		coordinators,
+		participants,
+		pastCollaborators,
+		remoteArchives,
+	}
+}
+
 const m = defineMessages({
 	navTitle: {
 		id: 'routes.app.projects.$projectId_.team.index.navTitle',
 		defaultMessage: 'Team',
-		description: 'Title of the project settings team page.',
+		description: 'Title of the team page.',
 	},
 	inviteDevice: {
 		id: 'routes.app.projects.$projectId_.team.index.inviteDevice',
@@ -341,10 +500,36 @@ const m = defineMessages({
 		description:
 			'Text indicating that no participants are part of the project yet.',
 	},
+	remoteArchivesSectionTitle: {
+		id: 'routes.app.projects.$projectId_.team.index.remoteArchivesSectionTitle',
+		defaultMessage: 'Remote Archives',
+		description: 'Title of the remote archives section in the team page.',
+	},
+	remoteArchivesSectionDescription: {
+		id: 'routes.app.projects.$projectId_.team.index.remoteArchivesSectionDescription',
+		defaultMessage: 'This project is sharing with secure, encrypted servers.',
+		description: 'Description of the remote archives section in the team page.',
+	},
+	pastCollaboratorsSectionTitle: {
+		id: 'routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionTitle',
+		defaultMessage: 'Past Collaborators',
+		description: 'Title of the past collaborators section in the team page.',
+	},
+	pastCollaboratorsSectionDescription: {
+		id: 'routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionDescription',
+		defaultMessage: 'Devices no longer contributing to this project.',
+		description:
+			'Description of the past collaborators section in the team page.',
+	},
 	thisDevice: {
 		id: 'routes.app.projects.$projectId_.team.index.thisDevice',
-		defaultMessage: 'This Device',
+		defaultMessage: 'This device',
 		description:
 			'Text indicating that the listed device refers to the one currently being used.',
+	},
+	memberLinkAccessibleLabel: {
+		id: 'routes.app.projects.$projectId_.team.index.memberLinkAccessibleLabel',
+		defaultMessage: 'View member {name}.',
+		description: 'Accessible label for link that navigates to member details.',
 	},
 })

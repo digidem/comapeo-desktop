@@ -1,4 +1,4 @@
-import { Suspense, type ReactNode } from 'react'
+import { Suspense } from 'react'
 import { useProjectSettings } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -9,12 +9,9 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../../../colors'
+import { ListRowLink } from '../../../-components/list-row-link'
+import { DARKER_ORANGE, DARK_GREY } from '../../../../../colors'
 import { Icon } from '../../../../../components/icon'
-import {
-	ListItemButtonLink,
-	type ListItemButtonLinkComponentProps,
-} from '../../../../../components/link'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
 
@@ -90,7 +87,7 @@ function SettingsList({ projectId }: { projectId: string }) {
 			gap={4}
 		>
 			<ListItem disableGutters disablePadding>
-				<SettingLink
+				<ListRowLink
 					to="/app/projects/$projectId/settings/info"
 					params={{ projectId }}
 					start={
@@ -111,7 +108,7 @@ function SettingsList({ projectId }: { projectId: string }) {
 			</ListItem>
 
 			<ListItem disableGutters disablePadding>
-				<SettingLink
+				<ListRowLink
 					to="/app/projects/$projectId/settings/categories"
 					params={{ projectId }}
 					start={
@@ -134,51 +131,6 @@ function SettingsList({ projectId }: { projectId: string }) {
 				/>
 			</ListItem>
 		</Stack>
-	)
-}
-
-function SettingLink({
-	label,
-	start,
-	end,
-	...linkProps
-}: Pick<ListItemButtonLinkComponentProps, 'to' | 'params'> & {
-	label: ReactNode
-	start: ReactNode
-	end: ReactNode
-}) {
-	return (
-		<ListItemButtonLink
-			{...linkProps}
-			disableGutters
-			disableTouchRipple
-			sx={{ borderRadius: 2, border: `1px solid ${BLUE_GREY}` }}
-		>
-			<Stack
-				direction="row"
-				flex={1}
-				justifyContent="space-between"
-				alignItems="center"
-				overflow="auto"
-				padding={4}
-			>
-				<Stack direction="row" alignItems="center" gap={3} overflow="auto">
-					{start}
-
-					<Typography
-						textOverflow="ellipsis"
-						whiteSpace="nowrap"
-						overflow="hidden"
-						flex={1}
-						fontWeight={500}
-					>
-						{label}
-					</Typography>
-				</Stack>
-
-				{end}
-			</Stack>
-		</ListItemButtonLink>
 	)
 }
 

@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react'
+import { Suspense, useState, type JSX } from 'react'
 import {
 	useClientApi,
 	useLeaveProject,
@@ -27,6 +27,7 @@ import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
+	memberIsRemoteArchive,
 } from '../../../../../lib/comapeo'
 import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations'
 
@@ -220,17 +221,48 @@ function CollaboratorInfoContent({
 
 	const isSelf = member.deviceId === ownDeviceInfo.deviceId
 
-	const isAtLeastCoordinator =
-		member.role.roleId === COORDINATOR_ROLE_ID ||
-		member.role.roleId === CREATOR_ROLE_ID
-
 	const truncatedDeviceId = member.deviceId.slice(0, 12)
-	const displayedName = member.name || truncatedDeviceId
 
 	const roleIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'h3',
 		multiplier: 1.5,
 	})
+
+	let title: string
+	let description: JSX.Element
+
+	const isRemoteArchive = memberIsRemoteArchive(member)
+
+	if (isRemoteArchive) {
+		title = member.name || t(m.remoteArchive)
+		description = (
+			<Typography variant="h3" fontWeight={500} textAlign="center">
+				{member.selfHostedServerDetails.baseUrl}
+			</Typography>
+		)
+	} else {
+		const isAtLeastCoordinator =
+			member.role.roleId === CREATOR_ROLE_ID ||
+			member.role.roleId === COORDINATOR_ROLE_ID
+
+		title = member.name || truncatedDeviceId
+		description = (
+			<>
+				<Icon
+					name={
+						isAtLeastCoordinator
+							? 'material-manage-accounts-filled'
+							: 'material-people-filled'
+					}
+					size={roleIconSize}
+				/>
+
+				<Typography variant="h3" fontWeight={500} textAlign="center">
+					{t(isAtLeastCoordinator ? m.coordinator : m.participant)}
+				</Typography>
+			</>
+		)
+	}
 
 	return (
 		<Stack
@@ -250,11 +282,16 @@ function CollaboratorInfoContent({
 				justifyContent="center"
 				gap={20}
 			>
-				<Stack direction="column" gap={4} alignItems="center">
+				<Stack
+					direction="column"
+					gap={4}
+					alignItems="center"
+					sx={{ overflowWrap: 'anywhere' }}
+				>
 					<DeviceIcon deviceType={member.deviceType} size="60px" />
 
 					<Typography variant="h1" fontWeight={500} textAlign="center">
-						{displayedName}
+						{title}
 					</Typography>
 
 					{isSelf ? (
@@ -264,18 +301,7 @@ function CollaboratorInfoContent({
 					) : null}
 
 					<Stack direction="row" gap={2} alignItems="center">
-						<Icon
-							name={
-								isAtLeastCoordinator
-									? 'material-person-add'
-									: 'material-manage-accounts-filled'
-							}
-							size={roleIconSize}
-						/>
-
-						<Typography variant="h3" fontWeight={500} textAlign="center">
-							{t(isAtLeastCoordinator ? m.coordinator : m.participant)}
-						</Typography>
+						{description}
 					</Stack>
 				</Stack>
 
@@ -298,7 +324,9 @@ function CollaboratorInfoContent({
 				</Stack>
 			</Stack>
 
-			{isSelf ? (
+			{isSelf &&
+			// NOTE: Remote archives go through different flow
+			!isRemoteArchive ? (
 				<Box display="flex" flexDirection="row" justifyContent="center">
 					<Button
 						variant="outlined"
@@ -448,6 +476,11 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId_.team.$deviceId.participant',
 		defaultMessage: 'Participant',
 		description: 'Text indicating collaborator is a participant.',
+	},
+	remoteArchive: {
+		id: 'routes.app.projects.$projectId_.team.$deviceId.remoteArchive',
+		defaultMessage: 'Remote Archive',
+		description: 'Fallback name used if remote archive does not have name.',
 	},
 	addedOn: {
 		id: 'routes.app.projects.$projectId_.team.$deviceId.addedOn',
