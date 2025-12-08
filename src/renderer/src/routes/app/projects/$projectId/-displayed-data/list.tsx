@@ -4,16 +4,12 @@ import {
 	useEffect,
 	useMemo,
 	useRef,
+	type CSSProperties,
 	type FocusEvent,
 	type MouseEvent,
 	type RefObject,
 } from 'react'
-import type { BlobApi } from '@comapeo/core'
-import {
-	useAttachmentUrl,
-	useManyDocs,
-	useOwnDeviceInfo,
-} from '@comapeo/core-react'
+import { useManyDocs, useOwnDeviceInfo } from '@comapeo/core-react'
 import type { Observation, Preset, Track } from '@comapeo/schema'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -22,6 +18,7 @@ import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { captureException, captureMessage } from '@sentry/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -43,12 +40,12 @@ import {
 import { ErrorBoundary } from '../../../../../components/error-boundary'
 import { Icon } from '../../../../../components/icon'
 import { ButtonLink, TextLink } from '../../../../../components/link'
-import { SuspenseImage } from '../../../../../components/suspense-image'
 import {
 	getMatchingCategoryForDocument,
 	type Attachment,
 } from '../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
+import { PhotoAttachmentImage } from '../observations/$observationDocId/-components/photo-attachment-image.tsx'
 
 const CATEGORY_CONTAINER_SIZE_PX = 64
 
@@ -483,60 +480,98 @@ function ObservationCategory({
 				>
 					{
 						// NOTE: We only display the first three
-						displayableAttachments.slice(0, 3).map((attachment, index) => (
-							<Box
-								key={`${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`}
-								position="absolute"
-								sx={
-									shouldStack
-										? {
-												aspectRatio: 1,
-												border: `1px solid ${BLUE_GREY}`,
-												width: '80%',
-												top: index * 5,
-												left: index * 5,
-											}
-										: {
-												border: `1px solid ${BLUE_GREY}`,
-												top: 0,
-												right: 0,
-												left: 0,
-												bottom: 0,
-											}
-								}
-								overflow="hidden"
-								borderRadius={2}
-							>
-								<ErrorBoundary
-									getResetKey={() =>
-										`${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`
+						displayableAttachments.slice(0, 3).map((attachment, index) => {
+							const key = `${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`
+
+							const attachmentStyle: CSSProperties = {
+								aspectRatio: 1,
+								width: '100%',
+								objectFit: 'cover',
+							}
+
+							return (
+								<Box
+									key={key}
+									position="absolute"
+									sx={
+										shouldStack
+											? {
+													aspectRatio: 1,
+													border: `1px solid ${BLUE_GREY}`,
+													width: '80%',
+													top: index * 5,
+													left: index * 5,
+												}
+											: {
+													border: `1px solid ${BLUE_GREY}`,
+													top: 0,
+													right: 0,
+													left: 0,
+													bottom: 0,
+												}
 									}
-									fallback={() => (
-										<Box
-											display="flex"
-											flex={1}
-											justifyContent="center"
-											alignItems="center"
-											height="100%"
-											width="100%"
-											bgcolor={WHITE}
-										>
-											<Icon name="material-error" color="error" />
-										</Box>
-									)}
+									overflow="hidden"
+									borderRadius={2}
 								>
-									<AttachmentImage
-										projectId={projectId}
-										blobId={{
-											driveId: attachment.driveDiscoveryId,
-											name: attachment.name,
-											variant: 'preview',
-											type: attachment.type,
+									<ErrorBoundary
+										getResetKey={() => key}
+										onError={(err) => {
+											captureException(new Error('Failed to load attachment'), {
+												originalException: err,
+												data: {
+													driveId: attachment.driveDiscoveryId,
+													name: attachment.name,
+													type: attachment.type,
+												},
+											})
 										}}
-									/>
-								</ErrorBoundary>
-							</Box>
-						))
+										fallback={() => (
+											<Box
+												display="flex"
+												flex={1}
+												justifyContent="center"
+												alignItems="center"
+												height="100%"
+												width="100%"
+												bgcolor={WHITE}
+											>
+												<Icon name="material-error" color="error" />
+											</Box>
+										)}
+									>
+										<ErrorBoundary
+											getResetKey={() => key + ':preview'}
+											onError={() => {
+												captureMessage('Failed to load preview image', {
+													level: 'info',
+													extra: {
+														driveId: attachment.driveDiscoveryId,
+														name: attachment.name,
+													},
+												})
+											}}
+											fallback={() => (
+												<PhotoAttachmentImage
+													projectId={projectId}
+													attachmentDriveId={attachment.driveDiscoveryId}
+													attachmentName={attachment.name}
+													attachmentVariant="thumbnail"
+													style={attachmentStyle}
+												/>
+											)}
+										>
+											<PhotoAttachmentImage
+												projectId={projectId}
+												attachmentDriveId={attachment.driveDiscoveryId}
+												attachmentName={attachment.name}
+												attachmentVariant="preview"
+												style={attachmentStyle}
+											/>
+										</ErrorBoundary>
+									</ErrorBoundary>
+								</Box>
+							)
+						})
 					}
 				</Box>
 
@@ -596,27 +631,6 @@ function TrackCategory({
 		<CategoryIconContainer color={BLACK}>
 			<Icon name="material-hiking" size={40} />
 		</CategoryIconContainer>
-	)
-}
-
-function AttachmentImage({
-	blobId,
-	projectId,
-}: {
-	blobId: BlobApi.BlobId
-	projectId: string
-}) {
-	const { data: attachmentUrl } = useAttachmentUrl({ projectId, blobId })
-
-	return (
-		<SuspenseImage
-			src={attachmentUrl}
-			style={{
-				aspectRatio: 1,
-				width: '100%',
-				objectFit: 'cover',
-			}}
-		/>
 	)
 }
 

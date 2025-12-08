@@ -1,6 +1,5 @@
 import { use } from 'react'
 import { useAttachmentUrl } from '@comapeo/core-react'
-import type { Attachment } from '@comapeo/core/dist/types'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
@@ -11,6 +10,12 @@ import type { SxProps } from '@mui/material/styles'
 import { BLUE_GREY, DARK_GREY } from '../../../../../../colors'
 import { Icon } from '../../../../../../components/icon'
 import { IconButtonLink } from '../../../../../../components/link'
+import type {
+	AudioAttachment,
+	AudioAttachmentVariant,
+	PhotoAttachment,
+	PhotoAttachmentVariant,
+} from '../../../../../../lib/comapeo.ts'
 import { audioInfoResource } from '../../../../../../lib/resources/audio'
 import { getFormattedDuration } from '../../../../../../lib/time'
 import { ImageButtonLink } from './-components/image-button-link'
@@ -29,89 +34,103 @@ const BASE_ATTACHMENT_CONTAINER_STYLE: SxProps = {
 	aspectRatio: 1,
 }
 
-export function ObservationAttachmentPreview({
+export function ObservationPhotoAttachmentPreview({
 	attachment,
 	projectId,
+	variant,
 }: {
-	attachment: Attachment
+	attachment: PhotoAttachment
 	projectId: string
+	variant: PhotoAttachmentVariant
 }) {
-	switch (attachment.type) {
-		case 'photo': {
-			return (
-				<ImageButtonLink
-					height={128}
-					borderColor={BLUE_GREY}
-					to="/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name"
-					params={(prev) => ({
-						...prev,
-						driveId: attachment.driveDiscoveryId,
-						type: 'photo' as const,
-						variant: 'original' as const,
-						name: attachment.name,
-					})}
-				>
-					<PhotoAttachmentImage
-						attachmentDriveId={attachment.driveDiscoveryId}
-						attachmentName={attachment.name}
-						projectId={projectId}
-					/>
-				</ImageButtonLink>
-			)
-		}
-		case 'audio': {
-			return (
-				<IconButtonLink
-					sx={BASE_ATTACHMENT_CONTAINER_STYLE}
-					to="/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name"
-					params={(prev) => ({
-						...prev,
-						driveId: attachment.driveDiscoveryId,
-						type: 'audio' as const,
-						variant: 'original' as const,
-						name: attachment.name,
-					})}
-				>
-					<Stack
-						direction="column"
-						gap={2}
-						justifyContent="center"
-						alignItems="center"
-					>
-						<Icon name="material-volume-up" htmlColor={DARK_GREY} />
+	return (
+		<ImageButtonLink
+			height={128}
+			borderColor={BLUE_GREY}
+			to="/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name"
+			params={(prev) => ({
+				...prev,
+				driveId: attachment.driveDiscoveryId,
+				type: 'photo' as const,
+				variant,
+				name: attachment.name,
+			})}
+		>
+			<PhotoAttachmentImage
+				attachmentDriveId={attachment.driveDiscoveryId}
+				attachmentName={attachment.name}
+				attachmentVariant={variant}
+				projectId={projectId}
+			/>
+		</ImageButtonLink>
+	)
+}
 
-						<AudioDurationText
-							projectId={projectId}
-							attachmentDriveId={attachment.driveDiscoveryId}
-							attachmentName={attachment.name}
-						/>
-					</Stack>
-				</IconButtonLink>
-			)
-		}
-		default: {
-			// TODO: Needs more design direction
-			return (
-				<IconButton
-					sx={BASE_ATTACHMENT_CONTAINER_STYLE}
-					// TODO: Open dialog with attachment info?
-					onClick={() => {
-						alert(attachment.name)
-					}}
-				>
-					<Stack
-						direction="column"
-						gap={2}
-						justifyContent="center"
-						alignItems="center"
-						overflow={'auto'}
-					>
-						<Icon name="material-attachment" htmlColor={DARK_GREY} />
-					</Stack>
-				</IconButton>
-			)
-		}
-	}
+export function ObservationAudioAttachmentPreview({
+	attachment,
+	projectId,
+	variant,
+}: {
+	attachment: AudioAttachment
+	projectId: string
+	variant: AudioAttachmentVariant
+}) {
+	return (
+		<IconButtonLink
+			sx={BASE_ATTACHMENT_CONTAINER_STYLE}
+			to="/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name"
+			params={(prev) => ({
+				...prev,
+				driveId: attachment.driveDiscoveryId,
+				type: 'audio' as const,
+				variant,
+				name: attachment.name,
+			})}
+		>
+			<Stack
+				direction="column"
+				gap={2}
+				justifyContent="center"
+				alignItems="center"
+			>
+				<Icon name="material-volume-up" htmlColor={DARK_GREY} />
+
+				<AudioDurationText
+					projectId={projectId}
+					attachmentDriveId={attachment.driveDiscoveryId}
+					attachmentName={attachment.name}
+					attachmentVariant={variant}
+				/>
+			</Stack>
+		</IconButtonLink>
+	)
+}
+
+// TODO: Needs more design direction
+export function ObservationUnsupportedAttachmentPreview({
+	attachmentName,
+}: {
+	attachmentName: string
+}) {
+	return (
+		<IconButton
+			sx={BASE_ATTACHMENT_CONTAINER_STYLE}
+			// TODO: Open dialog with attachment info?
+			onClick={() => {
+				alert(attachmentName)
+			}}
+		>
+			<Stack
+				direction="column"
+				gap={2}
+				justifyContent="center"
+				alignItems="center"
+				overflow={'auto'}
+			>
+				<Icon name="material-attachment" htmlColor={DARK_GREY} />
+			</Stack>
+		</IconButton>
+	)
 }
 
 export function ObservationAttachmentError() {
@@ -133,10 +152,12 @@ export function ObservationAttachmentPending() {
 function AudioDurationText({
 	attachmentDriveId,
 	attachmentName,
+	attachmentVariant,
 	projectId,
 }: {
 	attachmentDriveId: string
 	attachmentName: string
+	attachmentVariant: AudioAttachmentVariant
 	projectId: string
 }) {
 	const { data: url } = useAttachmentUrl({
@@ -144,7 +165,7 @@ function AudioDurationText({
 		blobId: {
 			driveId: attachmentDriveId,
 			name: attachmentName,
-			variant: 'original',
+			variant: attachmentVariant,
 			type: 'audio',
 		},
 	})
