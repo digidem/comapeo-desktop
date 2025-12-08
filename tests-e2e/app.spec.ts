@@ -968,6 +968,7 @@ test.describe('team', () => {
 				main.getByRole('link', { name: 'Invite Device', exact: true }),
 			).toBeVisible()
 
+			/// Coordinators list
 			await expect(
 				main.getByRole('heading', { name: 'Coordinators', exact: true }),
 			).toBeVisible()
@@ -982,16 +983,17 @@ test.describe('team', () => {
 			const coordinatorList = main.getByRole('list').first()
 
 			const ownDeviceListItem = coordinatorList.getByRole('link', {
-				name: OUTPUTS.deviceName,
+				name: `View member ${OUTPUTS.deviceName}.`,
 				exact: true,
 			})
 
 			await expect(ownDeviceListItem).toBeVisible()
 
 			await expect(
-				ownDeviceListItem.getByText('This Device', { exact: true }),
+				ownDeviceListItem.getByText('This device', { exact: true }),
 			).toBeVisible()
 
+			/// Participants list
 			await expect(
 				main.getByRole('heading', { name: 'Participants', exact: true }),
 			).toBeVisible()
@@ -1008,6 +1010,16 @@ test.describe('team', () => {
 					exact: true,
 				}),
 			).toBeVisible()
+
+			/// Remote archives list
+			await expect(
+				main.getByRole('heading', { name: 'Remote Archives', exact: true }),
+			).not.toBeVisible()
+
+			/// Past collaborators list
+			await expect(
+				main.getByRole('heading', { name: 'Past Collaborators', exact: true }),
+			).not.toBeVisible()
 		}
 	})
 })
