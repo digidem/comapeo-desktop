@@ -200,7 +200,7 @@ function MembersSections({ projectId }: { projectId: string }) {
 				<Typography color="textSecondary">{t(m.noParticipants)}</Typography>
 			)}
 
-			{remoteArchives[0] ? (
+			{remoteArchives.length > 0 ? (
 				<>
 					<Divider variant="fullWidth" sx={{ bgcolor: LIGHT_GREY }} />
 
@@ -220,8 +220,7 @@ function MembersSections({ projectId }: { projectId: string }) {
 					</Stack>
 
 					<ActiveCollaboratorsList
-						// NOTE: We only surface the first one (probably will change in the future)
-						devices={[remoteArchives[0]]}
+						devices={remoteArchives}
 						ownDeviceId={ownDeviceInfo.deviceId}
 						projectId={projectId}
 					/>
@@ -498,12 +497,12 @@ const m = defineMessages({
 	},
 	remoteArchivesSectionTitle: {
 		id: 'routes.app.projects.$projectId_.team.index.remoteArchivesSectionTitle',
-		defaultMessage: 'Remote Archive',
+		defaultMessage: 'Remote Archives',
 		description: 'Title of the remote archives section in the team page.',
 	},
 	remoteArchivesSectionDescription: {
 		id: 'routes.app.projects.$projectId_.team.index.remoteArchivesSectionDescription',
-		defaultMessage: 'This project is sharing with a secure, encrypted server.',
+		defaultMessage: 'This project is sharing with secure, encrypted servers.',
 		description: 'Description of the remote archives section in the team page.',
 	},
 	pastCollaboratorsSectionTitle: {
