@@ -703,6 +703,10 @@
     "description": "Text indicating collaborator is a participant.",
     "message": "Participant"
   },
+  "routes.app.projects.$projectId_.team.$deviceId.remoteArchive": {
+    "description": "Fallback name used if remote archive does not have name.",
+    "message": "Remote Archive"
+  },
   "routes.app.projects.$projectId_.team.$deviceId.thisDevice": {
     "description": "Text indicating that user is viewing itslef.",
     "message": "This Device!"
