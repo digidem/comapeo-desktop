@@ -26,6 +26,7 @@ export default {
 	/**
 	 * Configuration for prettier-plugin-jsdoc
 	 */
+	jsdocBracketSpacing: true,
 	jsdocCommentLineStrategy: 'keep',
 	jsdocAddDefaultToDescription: false,
 	jsdocSeparateReturnsFromParam: true,

@@ -9,21 +9,21 @@ import * as v from 'valibot'
 import SUPPORTED_LANGUAGES from '../languages.json' with { type: 'json' }
 
 /**
- * @typedef {keyof typeof SUPPORTED_LANGUAGES} SupportedLanguageTag
+ * @typedef { keyof typeof SUPPORTED_LANGUAGES } SupportedLanguageTag
  *
- * @typedef {(typeof SUPPORTED_LANGUAGES)[SupportedLanguageTag]} SupportedLanguageInfo
+ * @typedef { (typeof SUPPORTED_LANGUAGES)[SupportedLanguageTag] } SupportedLanguageInfo
  */
 
-const SUPPORTED_LANGUAGE_TAGS = /** @type {SupportedLanguageTag[]} */ (
+const SUPPORTED_LANGUAGE_TAGS = /** @type { SupportedLanguageTag[] } */ (
 	Object.keys(SUPPORTED_LANGUAGES)
 )
 
 /**
- * @typedef {{
+ * @typedef { {
  * 	languageTag: SupportedLanguageTag
  * 	nativeName: string
  * 	englishName: string
- * }} UsableLanguage
+ * } } UsableLanguage
  */
 
 const SupportedLanguageTagSchema = v.union(
@@ -35,7 +35,7 @@ const RENDERER_MESSAGES_DIR = fileURLToPath(
 )
 
 /**
- * @type {SupportedLanguageTag[]}
+ * @type { SupportedLanguageTag[] }
  */
 const translatedLanguages = []
 
