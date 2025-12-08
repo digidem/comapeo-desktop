@@ -373,10 +373,12 @@ function PastCollaboratorsList({
 								gap={3}
 								overflow="auto"
 							>
-								<DeviceIcon
-									deviceType={device.deviceType}
-									size={deviceIconSize}
-								/>
+								<Box sx={{ opacity: 0.5 }}>
+									<DeviceIcon
+										deviceType={device.deviceType}
+										size={deviceIconSize}
+									/>
+								</Box>
 
 								<Typography
 									textOverflow="ellipsis"
