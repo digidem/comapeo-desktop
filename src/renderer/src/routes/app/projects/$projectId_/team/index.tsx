@@ -28,8 +28,8 @@ import {
 	CREATOR_ROLE_ID,
 	LEFT_ROLE_ID,
 	MEMBER_ROLE_ID,
-	memberIsActiveRemoteArchive,
-	type ActiveRemoteArchiveMemberInfo,
+	memberIsRemoteArchive,
+	type RemoteArchiveMemberInfo,
 } from '../../../../../lib/comapeo'
 
 export const Route = createFileRoute('/app/projects/$projectId/team/')({
@@ -413,12 +413,20 @@ function PastCollaboratorsList({
 function getDisplayableMembers(members: Array<MemberApi.MemberInfo>) {
 	const coordinators: Array<MemberApi.MemberInfo> = []
 	const participants: Array<MemberApi.MemberInfo> = []
-	const pastCollaborators: Array<MemberApi.MemberInfo> = []
-	const remoteArchives: Array<ActiveRemoteArchiveMemberInfo> = []
+	const pastCollaborators: Array<
+		MemberApi.MemberInfo | RemoteArchiveMemberInfo
+	> = []
+	const remoteArchives: Array<RemoteArchiveMemberInfo> = []
 
 	for (const m of members) {
-		if (memberIsActiveRemoteArchive(m)) {
-			remoteArchives.push(m)
+		if (memberIsRemoteArchive(m)) {
+			if (m.role.roleId === LEFT_ROLE_ID || m.role.roleId === BLOCKED_ROLE_ID) {
+				pastCollaborators.push(m)
+			} else {
+				remoteArchives.push(m)
+			}
+
+			continue
 		}
 
 		switch (m.role.roleId) {

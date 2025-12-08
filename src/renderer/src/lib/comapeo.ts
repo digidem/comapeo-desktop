@@ -104,18 +104,17 @@ export function getMatchingCategoryForDocument(
 	return result
 }
 
-export type ActiveRemoteArchiveMemberInfo = MemberApi.MemberInfo & {
+export type RemoteArchiveMemberInfo = MemberApi.MemberInfo & {
 	deviceType: 'selfHostedServer'
 	selfHostedServerDetails: NonNullable<
 		MemberApi.MemberInfo['selfHostedServerDetails']
 	>
 }
 
-export function memberIsActiveRemoteArchive(
+export function memberIsRemoteArchive(
 	member: MemberApi.MemberInfo,
-): member is ActiveRemoteArchiveMemberInfo {
-	if (member.deviceType !== 'selfHostedServer') return false
-	if (!member.selfHostedServerDetails) return false
-	if (member.role.roleId !== MEMBER_ROLE_ID) return false
-	return true
+): member is RemoteArchiveMemberInfo {
+	return (
+		member.deviceType === 'selfHostedServer' && !!member.selfHostedServerDetails
+	)
 }
