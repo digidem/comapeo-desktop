@@ -117,6 +117,8 @@ export function EditableNotesSection({
 								try {
 									await updateObservationNotes.mutateAsync({ notes })
 									updateEditState('success')
+								} catch (err) {
+									captureException(err)
 								} finally {
 									onStopEditMode()
 								}
@@ -191,9 +193,7 @@ function NotesEditor({
 			onSubmit={(event) => {
 				event.preventDefault()
 				if (form.state.isSubmitting) return
-				form.handleSubmit().catch((err) => {
-					captureException(err)
-				})
+				form.handleSubmit()
 			}}
 		>
 			<Stack direction="column" gap={4}>

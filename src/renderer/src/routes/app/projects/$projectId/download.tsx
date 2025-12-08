@@ -236,9 +236,14 @@ function DownloadForm({
 		onSubmit: async ({ value }) => {
 			const parsedValue = v.parse(onChangeSchema, value)
 
-			const savedToPath = await downloadData.mutateAsync({
-				dataToDownload: parsedValue.dataToDownload,
-			})
+			let savedToPath
+			try {
+				savedToPath = await downloadData.mutateAsync({
+					dataToDownload: parsedValue.dataToDownload,
+				})
+			} catch (err) {
+				captureException(err)
+			}
 
 			if (savedToPath) {
 				onSuccess({ dataDownloaded: parsedValue.dataToDownload, savedToPath })
@@ -292,9 +297,7 @@ function DownloadForm({
 							onSubmit={(event) => {
 								event.preventDefault()
 								if (form.state.isSubmitting) return
-								form.handleSubmit().catch((err) => {
-									captureException(err)
-								})
+								form.handleSubmit()
 							}}
 						>
 							<Stack direction="column" gap={10}>
