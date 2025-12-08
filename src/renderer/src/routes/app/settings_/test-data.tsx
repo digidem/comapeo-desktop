@@ -312,9 +312,7 @@ function RouteComponent() {
 									onSubmit={(event) => {
 										event.preventDefault()
 										if (form.state.isSubmitting) return
-										form.handleSubmit().catch((_err) => {
-											// TODO: Report to Sentry?
-										})
+										form.handleSubmit()
 									}}
 								>
 									<Stack direction="column" gap={10}>
