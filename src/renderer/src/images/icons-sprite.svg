@@ -506,9 +506,15 @@
 				d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2z"
 			></path>
 		</symbol>
-		<symbol viewBox="0 0 24 24" id="material-chevron-right">
-			<path fill="none" d="M0 0h24v24H0V0z"></path>
-			<path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
+		<symbol
+			fill="currentColor"
+			viewBox="0 0 24 24"
+			id="material-chevron-right-rounded"
+		>
+			<path fill="none" d="M0 0h24v24H0z"></path>
+			<path
+				d="M9.29 6.71a.996.996 0 0 0 0 1.41L13.17 12l-3.88 3.88a.996.996 0 1 0 1.41 1.41l4.59-4.59a.996.996 0 0 0 0-1.41L10.7 6.7c-.38-.38-1.02-.38-1.41.01"
+			></path>
 		</symbol>
 		<symbol viewBox="0 0 24 24" id="material-check">
 			<path fill="none" d="M0 0h24v24H0V0z"></path>

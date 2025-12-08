@@ -273,7 +273,7 @@ function ActiveCollaboratorsList({
 
 	const actionIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
-		multiplier: 1.25,
+		multiplier: 1.75,
 	})
 
 	return (
@@ -319,7 +319,7 @@ function ActiveCollaboratorsList({
 							}
 							end={
 								<Icon
-									name="material-chevron-right"
+									name="material-chevron-right-rounded"
 									htmlColor={DARK_GREY}
 									size={actionIconSize}
 								/>

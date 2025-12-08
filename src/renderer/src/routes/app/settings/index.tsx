@@ -81,9 +81,14 @@ function SettingsList() {
 
 	const { data: styleUrl } = useMapStyleUrl()
 
-	const rowIconSize = useIconSizeBasedOnTypography({
+	const startIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
 		multiplier: 1.25,
+	})
+
+	const actionIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+		multiplier: 1.75,
 	})
 
 	return (
@@ -107,7 +112,7 @@ function SettingsList() {
 							<Icon
 								name="material-symbols-computer"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={startIconSize}
 							/>
 						}
 						end={<Typography color="primary">{t(m.editDeviceName)}</Typography>}
@@ -124,14 +129,14 @@ function SettingsList() {
 							<Icon
 								name="material-language"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={startIconSize}
 							/>
 						}
 						end={
 							<Icon
-								name="material-chevron-right"
+								name="material-chevron-right-rounded"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={actionIconSize}
 							/>
 						}
 						aria-label={t(m.languageSettingsAccessibleLabel)}
@@ -146,14 +151,14 @@ function SettingsList() {
 							<Icon
 								name="material-explore-filled"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={startIconSize}
 							/>
 						}
 						end={
 							<Icon
-								name="material-chevron-right"
+								name="material-chevron-right-rounded"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={actionIconSize}
 							/>
 						}
 						aria-label={t(m.coordinateSystemSettingsAccessibleLabel)}
@@ -174,14 +179,14 @@ function SettingsList() {
 							<Icon
 								name="material-layers-outlined"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={startIconSize}
 							/>
 						}
 						end={
 							<Icon
-								name="material-chevron-right"
+								name="material-chevron-right-rounded"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={actionIconSize}
 							/>
 						}
 						aria-label={t(m.backgroundMapSettingsAccessibleLabel)}
@@ -202,14 +207,14 @@ function SettingsList() {
 								<Icon
 									name="material-auto-fix-high"
 									htmlColor={DARK_GREY}
-									size={rowIconSize}
+									size={startIconSize}
 								/>
 							}
 							end={
 								<Icon
-									name="material-chevron-right"
+									name="material-chevron-right-rounded"
 									htmlColor={DARK_GREY}
-									size={rowIconSize}
+									size={actionIconSize}
 								/>
 							}
 							label={t(m.createTestData)}

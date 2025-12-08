@@ -50,7 +50,7 @@ export const iconNames = [
 	'material-edit-filled',
 	'material-close',
 	'material-circle-filled',
-	'material-chevron-right',
+	'material-chevron-right-rounded',
 	'material-check',
 	'material-check-circle-rounded',
 	'material-check-circle-outline-rounded',
