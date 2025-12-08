@@ -421,11 +421,6 @@ function getDisplayableMembers(members: Array<MemberApi.MemberInfo>) {
 			remoteArchives.push(m)
 		}
 
-		// NOTE: Member is an inactive remote archive
-		if (m.deviceType === 'selfHostedServer') {
-			continue
-		}
-
 		switch (m.role.roleId) {
 			case LEFT_ROLE_ID:
 			case BLOCKED_ROLE_ID: {
