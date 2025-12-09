@@ -1,11 +1,4 @@
-import {
-	Suspense,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react'
+import { Suspense, useCallback, useMemo, useRef, useState } from 'react'
 import {
 	useManyDocs,
 	useMapStyleUrl,
@@ -28,7 +21,11 @@ import { bbox } from '@turf/bbox'
 import { center } from '@turf/center'
 import { featureCollection, lineString, point } from '@turf/helpers'
 import type { Feature, Point } from 'geojson'
-import type { FitBoundsOptions, LineLayerSpecification } from 'maplibre-gl'
+import type {
+	FitBoundsOptions,
+	LineLayerSpecification,
+	MapLibreEvent,
+} from 'maplibre-gl'
 import { defineMessages, useIntl } from 'react-intl'
 import {
 	Layer,
@@ -63,6 +60,10 @@ const TRACKS_LAYER_ID = 'tracks_layer' as const
 const TRACKS_LAYER_LAYOUT: LineLayerSpecification['layout'] = {
 	'line-cap': 'round',
 	'line-join': 'round',
+}
+const TRACKS_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] = {
+	'line-color': BLACK,
+	'line-width': 4,
 }
 
 const INTERACTIVE_LAYER_IDS = [OBSERVATIONS_LAYER_ID, TRACKS_LAYER_ID]
@@ -171,15 +172,8 @@ export function DisplayedDataMap() {
 	}, [tracks])
 
 	const observationsLayerPaint = useMemo(() => {
-		return createObservationLayerPaintProperty(
-			categories,
-			!!documentToHighlight,
-		)
-	}, [categories, documentToHighlight])
-
-	const tracksLayerPaint = useMemo(() => {
-		return createTrackLayerPaintProperty(!!documentToHighlight)
-	}, [documentToHighlight])
+		return createObservationLayerPaintProperty(categories)
+	}, [categories])
 
 	const mapBbox: [number, number, number, number] = useMemo(() => {
 		if (
@@ -209,6 +203,7 @@ export function DisplayedDataMap() {
 				if (documentToHighlight) {
 					navigate({ search: { highlightedDocument: undefined } })
 				}
+
 				return
 			}
 
@@ -220,6 +215,7 @@ export function DisplayedDataMap() {
 					to: './observations/$observationDocId',
 					params: { observationDocId: feature.properties.docId },
 				})
+
 				return
 			}
 
@@ -231,144 +227,80 @@ export function DisplayedDataMap() {
 					to: './tracks/$trackDocId',
 					params: { trackDocId: feature.properties.docId },
 				})
+
 				return
 			}
 		},
 		[navigate, documentToHighlight],
 	)
 
-	const onMapMouseMove = useCallback(
-		(event: MapLayerMouseEvent) => {
-			const feature = event.features?.[0]
+	/**
+	 * Determines if the hover state of a feature should be enabled
+	 */
+	const onMapMouseMove = useCallback((event: MapLayerMouseEvent) => {
+		const mapInstance = event.target
 
-			if (!feature) {
-				return
+		const feature = event.features?.[0]
+
+		const mapCanvas = mapInstance.getCanvas()
+
+		if (!feature) {
+			// Clear the existing feature states
+			mapInstance.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
+
+			// Restore default cursor style
+			if (mapCanvas.style.cursor !== 'inherit') {
+				mapInstance.getCanvas().style.cursor = 'inherit'
 			}
 
-			if (
-				(feature.layer.id === OBSERVATIONS_LAYER_ID ||
-					feature.layer.id === TRACKS_LAYER_ID) &&
-				typeof feature.properties.docId === 'string'
-			) {
-				navigate({
-					search: {
-						highlightedDocument: {
-							type:
-								feature.layer.id === OBSERVATIONS_LAYER_ID
-									? 'observation'
-									: 'track',
-							docId: feature.properties.docId,
-							from: 'map',
-						},
-					},
+			return
+		}
+
+		// Update the cursor style when hovering over a relevant feature
+		if (
+			(feature.layer.id === OBSERVATIONS_LAYER_ID ||
+				feature.layer.id === TRACKS_LAYER_ID) &&
+			mapCanvas.style.cursor !== 'pointer'
+		) {
+			mapCanvas.style.cursor = 'pointer'
+		}
+
+		// Update observation feature state to show hover state
+		if (
+			feature.layer.id === OBSERVATIONS_LAYER_ID &&
+			typeof feature.properties.docId === 'string'
+		) {
+			// Enable the hover state for the relevant feature
+			mapInstance.setFeatureState(
+				{ source: OBSERVATIONS_SOURCE_ID, id: feature.properties.docId },
+				{ hovered: true },
+			)
+		}
+	}, [])
+
+	/**
+	 * On initial map load, if there's a document to highlight, pan to it and zoom
+	 * in if necessary. Otherwise, update the bounding box of the map to fit all
+	 * of the features.
+	 */
+	const onMapLoad = useCallback(
+		(event: MapLibreEvent) => {
+			const mapInstance = event.target
+
+			if (!documentToHighlight) {
+				mapInstance.fitBounds(mapBbox, {
+					...BASE_FIT_BOUNDS_OPTIONS,
+					animate: false,
 				})
-				return
-			}
-		},
-		[navigate],
-	)
 
-	useEffect(
-		/**
-		 * Updates the map such that the map adjusts how features are displayed
-		 * based on whether there is a document to highlight or not.
-		 */
-		function updateMapFeatureHighlighting() {
-			if (!mapRef.current || !mapLoaded) {
-				return
-			}
+				setMapLoaded(true)
 
-			if (documentToHighlight) {
-				// Clear the existing feature states first
-				mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
-				mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
-
-				// Highlight the feature(s) with the new value
-				if (documentToHighlight.type === 'observation') {
-					mapRef.current.setFeatureState(
-						{ source: OBSERVATIONS_SOURCE_ID, id: documentToHighlight.docId },
-						{ highlight: true },
-					)
-				} else {
-					mapRef.current.setFeatureState(
-						{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
-						{ highlight: true },
-					)
-
-					const highlightedTrack = tracks.find(
-						(t) => t.docId === documentToHighlight.docId,
-					)
-
-					if (!highlightedTrack) {
-						console.warn(
-							`Could not find track with doc ID: ${documentToHighlight.docId}`,
-						)
-						return
-					}
-
-					// NOTE: Highlighting a track should highlight observations that it references.
-					for (const o of highlightedTrack.observationRefs) {
-						mapRef.current.setFeatureState(
-							{ source: OBSERVATIONS_SOURCE_ID, id: o.docId },
-							{ highlight: true },
-						)
-					}
-				}
-			} else {
-				mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
-				mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
-			}
-		},
-		[documentToHighlight, mapLoaded, tracks],
-	)
-
-	useEffect(
-		/**
-		 * Accounts for the following situation:
-		 *
-		 * 1. Leave this page
-		 * 2. New data is received (e.g. creating test data, exchanging)
-		 * 3. Return to this page
-		 *
-		 * After (3), the stale data is still being used to calculate the map's
-		 * initial bounds (not really sure why though). The new data comes in
-		 * afterwards and the bounds are re-calculated, but they do not get applied
-		 * to the map as there's no way to reactively update it after
-		 * initialization.
-		 */
-		function setMapBoundsBasedOnDataBbox() {
-			if (!mapLoaded || !mapRef.current) {
-				return
-			}
-
-			mapRef.current.fitBounds(mapBbox, {
-				...BASE_FIT_BOUNDS_OPTIONS,
-				animate: false,
-			})
-		},
-		[mapBbox, mapLoaded],
-	)
-
-	useEffect(
-		/**
-		 * Whenever the highlighted document changes (either due to a list or map
-		 * interaction), pan the map such that the corresponding feature is
-		 * centered. Also zooms closer to the feature if necessary (it will never
-		 * zoom out).
-		 */
-		function panToMapFeature() {
-			if (!mapLoaded || !mapRef.current || !documentToHighlight) {
-				return
-			}
-
-			// Do not pan the map if the highlighting is done via a map interaction
-			if (documentToHighlight.from === 'map') {
 				return
 			}
 
 			const { type, docId } = documentToHighlight
 
-			const shouldZoomIn = mapRef.current.getZoom() < 10
+			const shouldZoomIn = mapInstance.getZoom() < 10
 
 			if (type === 'observation') {
 				const observationMatch = observationsFeatureCollection.features.find(
@@ -376,7 +308,7 @@ export function DisplayedDataMap() {
 				)
 
 				if (observationMatch) {
-					mapRef.current.panTo(
+					mapInstance.panTo(
 						{
 							lon: observationMatch.geometry.coordinates[0]!,
 							lat: observationMatch.geometry.coordinates[1]!,
@@ -394,7 +326,7 @@ export function DisplayedDataMap() {
 
 					const [minLon, minLat, maxLon, maxLat] = bbox(tracksMatch)
 
-					mapRef.current.panTo(
+					mapInstance.panTo(
 						{
 							lon: c.geometry.coordinates[0]!,
 							lat: c.geometry.coordinates[1]!,
@@ -402,17 +334,20 @@ export function DisplayedDataMap() {
 						shouldZoomIn ? { zoom: 10 } : undefined,
 					)
 
-					mapRef.current.fitBounds(
+					mapInstance.fitBounds(
 						[minLon, minLat, maxLon, maxLat],
 						BASE_FIT_BOUNDS_OPTIONS,
 					)
 				}
 			}
+
+			setMapLoaded(true)
 		},
 		[
 			documentToHighlight,
-			mapLoaded,
+			mapBbox,
 			observationsFeatureCollection,
+			setMapLoaded,
 			tracksFeatureCollection,
 		],
 	)
@@ -435,24 +370,6 @@ export function DisplayedDataMap() {
 		observationsFeatureCollection,
 		tracksFeatureCollection,
 	])
-
-	const showZoomToDataControl =
-		currentRoute.routeId !==
-			'/app/projects/$projectId/observations/$observationDocId/' &&
-		currentRoute.routeId !==
-			'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name' &&
-		currentRoute.routeId !== '/app/projects/$projectId/tracks/$trackDocId/'
-
-	const enableMouseHoverInteractions =
-		currentRoute.routeId === '/app/projects/$projectId/'
-
-	const enableMouseClickInteractions =
-		currentRoute.routeId === '/app/projects/$projectId/' ||
-		currentRoute.routeId === '/app/projects/$projectId/download'
-
-	const enableMapMovementInteractions =
-		currentRoute.routeId === '/app/projects/$projectId/' ||
-		currentRoute.routeId === '/app/projects/$projectId/download'
 
 	return (
 		<Box position="relative" display="flex" flex={1}>
@@ -485,35 +402,22 @@ export function DisplayedDataMap() {
 				// and this seems to get preserved between different usages of the maps.
 				maxBounds={undefined}
 				interactiveLayerIds={INTERACTIVE_LAYER_IDS}
-				onLoad={() => {
-					setMapLoaded(true)
-				}}
-				onClick={enableMouseClickInteractions ? onMapClick : undefined}
-				onMouseMove={enableMouseHoverInteractions ? onMapMouseMove : undefined}
-				dragPan={enableMapMovementInteractions}
-				scrollZoom={enableMapMovementInteractions}
+				onLoad={onMapLoad}
+				onClick={onMapClick}
+				onMouseMove={onMapMouseMove}
 				touchPitch={false}
 				dragRotate={false}
 				pitchWithRotate={false}
 				touchZoomRotate={false}
-				cursor={
-					enableMouseClickInteractions ||
-					enableMouseHoverInteractions ||
-					enableMapMovementInteractions
-						? undefined
-						: 'default'
-				}
 			>
 				<ScaleControl />
 				<NavigationControl showCompass={false} />
 
-				{showZoomToDataControl ? (
-					<ZoomToDataMapControl
-						buttonTitle={t(m.zoomToData)}
-						fitBoundsOptions={BASE_FIT_BOUNDS_OPTIONS}
-						sourceIds={[OBSERVATIONS_SOURCE_ID, TRACKS_SOURCE_ID]}
-					/>
-				) : null}
+				<ZoomToDataMapControl
+					buttonTitle={t(m.zoomToData)}
+					fitBoundsOptions={BASE_FIT_BOUNDS_OPTIONS}
+					sourceIds={[OBSERVATIONS_SOURCE_ID, TRACKS_SOURCE_ID]}
+				/>
 
 				<Source
 					type="geojson"
@@ -525,7 +429,7 @@ export function DisplayedDataMap() {
 					<Layer
 						type="line"
 						id={TRACKS_LAYER_ID}
-						paint={tracksLayerPaint}
+						paint={TRACKS_LAYER_PAINT_PROPERTY}
 						layout={TRACKS_LAYER_LAYOUT}
 					/>
 				</Source>
@@ -544,8 +448,9 @@ export function DisplayedDataMap() {
 					/>
 				</Source>
 
-				{(currentRoute.routeId ===
-					'/app/projects/$projectId/observations/$observationDocId/' ||
+				{(currentRoute.routeId === '/app/projects/$projectId/' ||
+					currentRoute.routeId ===
+						'/app/projects/$projectId/observations/$observationDocId/' ||
 					currentRoute.routeId ===
 						'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name') &&
 				highlightedFeature &&
@@ -553,13 +458,6 @@ export function DisplayedDataMap() {
 				highlightedFeature.properties.type === 'observation' ? (
 					<Suspense>
 						<Marker
-							style={
-								enableMouseClickInteractions ||
-								enableMouseHoverInteractions ||
-								enableMapMovementInteractions
-									? undefined
-									: { cursor: 'default' }
-							}
 							longitude={highlightedFeature.geometry.coordinates[0]!}
 							latitude={highlightedFeature.geometry.coordinates[1]!}
 						>
@@ -719,21 +617,8 @@ function tracksToFeatureCollection(tracks: Array<Track>) {
 	return featureCollection(displayableTracks)
 }
 
-function createTrackLayerPaintProperty(
-	enableHighlighting: boolean,
-): LineLayerSpecification['paint'] {
-	return {
-		'line-color': BLACK,
-		'line-width': 4,
-		'line-opacity': enableHighlighting
-			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.2]
-			: 1,
-	}
-}
-
 function createObservationLayerPaintProperty(
 	categories: Array<Preset>,
-	enableHighlighting: boolean,
 ): CircleLayerSpecification['paint'] {
 	const categoryColorPairs: Array<string> = []
 
@@ -745,20 +630,19 @@ function createObservationLayerPaintProperty(
 	}
 
 	return {
-		'circle-color': WHITE,
-		'circle-radius': 6,
-		'circle-stroke-width': 3,
 		// @ts-expect-error Type def doesn't like the spread of the pairs
-		'circle-stroke-color':
+		'circle-color':
 			categoryColorPairs.length > 0
 				? ['match', ['get', 'categoryDocId'], ...categoryColorPairs, ORANGE]
 				: ORANGE,
-		'circle-stroke-opacity': enableHighlighting
-			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.2]
-			: 1,
-		'circle-opacity': enableHighlighting
-			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.2]
-			: 1,
+		'circle-radius': [
+			'case',
+			['boolean', ['feature-state', 'hovered'], false],
+			9,
+			6,
+		],
+		'circle-stroke-color': WHITE,
+		'circle-stroke-width': 3,
 	}
 }
 
