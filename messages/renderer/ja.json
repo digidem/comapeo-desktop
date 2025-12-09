@@ -679,6 +679,10 @@
     "description": "Text indicating collaborator is a participant.",
     "message": "参加者"
   },
+  "routes.app.projects.$projectId_.team.$deviceId.remoteArchive": {
+    "description": "Fallback name used if remote archive does not have name.",
+    "message": "リモートアーカイブ"
+  },
   "routes.app.projects.$projectId_.team.$deviceId.thisDevice": {
     "description": "Text indicating that user is viewing itslef.",
     "message": "このデバイスです！"
@@ -695,8 +699,12 @@
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "デバイスを招待"
   },
+  "routes.app.projects.$projectId_.team.index.memberLinkAccessibleLabel": {
+    "description": "Accessible label for link that navigates to member details.",
+    "message": "メンバー {name}を表示"
+  },
   "routes.app.projects.$projectId_.team.index.navTitle": {
-    "description": "Title of the project settings team page.",
+    "description": "Title of the team page.",
     "message": "チーム"
   },
   "routes.app.projects.$projectId_.team.index.noParticipants": {
@@ -710,6 +718,22 @@
   "routes.app.projects.$projectId_.team.index.participantsSectionTitle": {
     "description": "Title of the participants section in the team page.",
     "message": "参加者"
+  },
+  "routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionDescription": {
+    "description": "Description of the past collaborators section in the team page.",
+    "message": "デバイスはこのプロジェクトに貢献していません。"
+  },
+  "routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionTitle": {
+    "description": "Title of the past collaborators section in the team page.",
+    "message": "過去のコラボレーション"
+  },
+  "routes.app.projects.$projectId_.team.index.remoteArchivesSectionDescription": {
+    "description": "Description of the remote archives section in the team page.",
+    "message": "このプロジェクトは安全な暗号化されたサーバーと共有しています。"
+  },
+  "routes.app.projects.$projectId_.team.index.remoteArchivesSectionTitle": {
+    "description": "Title of the remote archives section in the team page.",
+    "message": "リモートアーカイブ"
   },
   "routes.app.projects.$projectId_.team.index.thisDevice": {
     "description": "Text indicating that the listed device refers to the one currently being used.",
