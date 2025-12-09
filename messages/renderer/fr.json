@@ -687,6 +687,10 @@
     "description": "Text indicating collaborator is a participant.",
     "message": "Participant"
   },
+  "routes.app.projects.$projectId_.team.$deviceId.remoteArchive": {
+    "description": "Fallback name used if remote archive does not have name.",
+    "message": "Archives distantes"
+  },
   "routes.app.projects.$projectId_.team.$deviceId.thisDevice": {
     "description": "Text indicating that user is viewing itslef.",
     "message": "Cet appareil !"
@@ -703,8 +707,12 @@
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Inviter un appareil"
   },
+  "routes.app.projects.$projectId_.team.index.memberLinkAccessibleLabel": {
+    "description": "Accessible label for link that navigates to member details.",
+    "message": "Voir le membre {name}."
+  },
   "routes.app.projects.$projectId_.team.index.navTitle": {
-    "description": "Title of the project settings team page.",
+    "description": "Title of the team page.",
     "message": "Equipe"
   },
   "routes.app.projects.$projectId_.team.index.noParticipants": {
@@ -718,6 +726,22 @@
   "routes.app.projects.$projectId_.team.index.participantsSectionTitle": {
     "description": "Title of the participants section in the team page.",
     "message": "Participants"
+  },
+  "routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionDescription": {
+    "description": "Description of the past collaborators section in the team page.",
+    "message": "Les appareils ne contribuent plus à ce projet."
+  },
+  "routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionTitle": {
+    "description": "Title of the past collaborators section in the team page.",
+    "message": "Collaborateurs passés"
+  },
+  "routes.app.projects.$projectId_.team.index.remoteArchivesSectionDescription": {
+    "description": "Description of the remote archives section in the team page.",
+    "message": "Ce projet partage avec des serveurs sécurisés et chiffrés."
+  },
+  "routes.app.projects.$projectId_.team.index.remoteArchivesSectionTitle": {
+    "description": "Title of the remote archives section in the team page.",
+    "message": "Archives distantes"
   },
   "routes.app.projects.$projectId_.team.index.thisDevice": {
     "description": "Text indicating that the listed device refers to the one currently being used.",
