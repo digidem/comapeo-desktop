@@ -55,6 +55,9 @@ const OBSERVATIONS_SOURCE_ID = 'observations_source' as const
 const TRACKS_SOURCE_ID = 'tracks_source' as const
 
 const OBSERVATIONS_LAYER_ID = 'observations_layer' as const
+const TRACKS_HOVER_OUTLINE_LAYER_ID = 'tracks_hover_outline_layer' as const
+const TRACKS_HOVER_SHADOW_LAYER_ID = 'tracks_hover_shadow_layer' as const
+
 const TRACKS_LAYER_ID = 'tracks_layer' as const
 
 const TRACKS_LAYER_LAYOUT: LineLayerSpecification['layout'] = {
@@ -65,6 +68,29 @@ const TRACKS_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] = {
 	'line-color': BLACK,
 	'line-width': 4,
 }
+const TRACKS_HOVER_OUTLINE_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] =
+	{
+		'line-color': WHITE,
+		'line-width': 12,
+		'line-opacity': [
+			'case',
+			['boolean', ['feature-state', 'hovered'], false],
+			1,
+			0,
+		],
+	}
+const TRACKS_HOVER_SHADOW_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] =
+	{
+		'line-color': '#686868',
+		'line-blur': 20,
+		'line-width': 20,
+		'line-opacity': [
+			'case',
+			['boolean', ['feature-state', 'hovered'], false],
+			1,
+			0,
+		],
+	}
 
 const INTERACTIVE_LAYER_IDS = [OBSERVATIONS_LAYER_ID, TRACKS_LAYER_ID]
 
@@ -244,9 +270,10 @@ export function DisplayedDataMap() {
 
 		const mapCanvas = mapInstance.getCanvas()
 
-		if (!feature) {
+		if (!(feature && typeof feature.properties.docId === 'string')) {
 			// Clear the existing feature states
 			mapInstance.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
+			mapInstance.removeFeatureState({ source: TRACKS_SOURCE_ID })
 
 			// Restore default cursor style
 			if (mapCanvas.style.cursor !== 'inherit') {
@@ -266,13 +293,15 @@ export function DisplayedDataMap() {
 		}
 
 		// Update observation feature state to show hover state
-		if (
-			feature.layer.id === OBSERVATIONS_LAYER_ID &&
-			typeof feature.properties.docId === 'string'
-		) {
+		if (feature.layer.id === OBSERVATIONS_LAYER_ID) {
 			// Enable the hover state for the relevant feature
 			mapInstance.setFeatureState(
 				{ source: OBSERVATIONS_SOURCE_ID, id: feature.properties.docId },
+				{ hovered: true },
+			)
+		} else if (feature.layer.id === TRACKS_LAYER_ID) {
+			mapInstance.setFeatureState(
+				{ source: TRACKS_SOURCE_ID, id: feature.properties.docId },
 				{ hovered: true },
 			)
 		}
@@ -426,6 +455,20 @@ export function DisplayedDataMap() {
 					// NOTE: Need this in order for the feature-state querying to work when hovering
 					promoteId="docId"
 				>
+					<Layer
+						type="line"
+						id={TRACKS_HOVER_SHADOW_LAYER_ID}
+						paint={TRACKS_HOVER_SHADOW_LAYER_PAINT_PROPERTY}
+						layout={TRACKS_LAYER_LAYOUT}
+					/>
+
+					<Layer
+						type="line"
+						id={TRACKS_HOVER_OUTLINE_LAYER_ID}
+						paint={TRACKS_HOVER_OUTLINE_LAYER_PAINT_PROPERTY}
+						layout={TRACKS_LAYER_LAYOUT}
+					/>
+
 					<Layer
 						type="line"
 						id={TRACKS_LAYER_ID}
