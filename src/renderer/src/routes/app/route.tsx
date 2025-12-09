@@ -16,6 +16,7 @@ import { BLUE_GREY, COMAPEO_BLUE, DARK_GREY, WHITE } from '../../colors'
 import { Icon } from '../../components/icon'
 import { ButtonLink, type ButtonLinkProps } from '../../components/link'
 import { useGlobalEditingState } from '../../contexts/global-editing-state-store-context'
+import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -142,6 +143,14 @@ function RouteComponent() {
 	const someGlobalMutationIsPending =
 		useIsMutating({ mutationKey: GLOBAL_MUTATIONS_BASE_KEY }) > 0
 
+	const labeledNavIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+	})
+	const unlabledNavIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+		multiplier: 1.2,
+	})
+
 	return (
 		<Box bgcolor={WHITE} height="100%">
 			<Box display="grid" gridTemplateColumns="min-content 1fr" height="100%">
@@ -191,6 +200,7 @@ function RouteComponent() {
 									fullWidth
 									variant="text"
 									color="inherit"
+									size="small"
 									inactiveProps={BASE_INACTIVE_LINK_PROPS}
 									activeProps={
 										// NOTE: Subroutes of the project that also live as nav rail tabs
@@ -215,7 +225,10 @@ function RouteComponent() {
 										paddingBlock={4}
 										flex={1}
 									>
-										<Icon name="noun-project-notebook" size={32} />
+										<Icon
+											name="noun-project-notebook"
+											size={unlabledNavIconSize}
+										/>
 									</Box>
 								</ButtonLink>
 							</ListItem>
@@ -245,6 +258,7 @@ function RouteComponent() {
 									fullWidth
 									variant="text"
 									color="inherit"
+									size="small"
 									inactiveProps={BASE_INACTIVE_LINK_PROPS}
 									activeProps={BASE_ACTIVE_LINK_PROPS}
 									aria-label={t(m.exchangeTabAccessibleLabel)}
@@ -256,7 +270,10 @@ function RouteComponent() {
 										paddingBlock={4}
 										flex={1}
 									>
-										<Icon name="material-offline-bolt-filled" size={36} />
+										<Icon
+											name="material-offline-bolt-filled"
+											size={unlabledNavIconSize}
+										/>
 									</Box>
 								</ButtonLink>
 							</ListItem>
@@ -291,6 +308,7 @@ function RouteComponent() {
 									fullWidth
 									variant="text"
 									color="inherit"
+									size="small"
 									inactiveProps={BASE_INACTIVE_LINK_PROPS}
 									activeProps={BASE_ACTIVE_LINK_PROPS}
 								>
@@ -299,9 +317,12 @@ function RouteComponent() {
 										alignItems="center"
 										flexWrap="wrap"
 										textAlign="center"
-										gap={2}
+										gap={1}
 									>
-										<Icon name="material-people-filled" size={36} />
+										<Icon
+											name="material-people-filled"
+											size={labeledNavIconSize}
+										/>
 
 										{t(m.teamTabLabel)}
 									</Stack>
@@ -337,6 +358,7 @@ function RouteComponent() {
 										fullWidth
 										variant="text"
 										color="inherit"
+										size="small"
 										inactiveProps={BASE_INACTIVE_LINK_PROPS}
 										activeProps={BASE_ACTIVE_LINK_PROPS}
 									>
@@ -345,9 +367,12 @@ function RouteComponent() {
 											alignItems="center"
 											flexWrap="wrap"
 											textAlign="center"
-											gap={2}
+											gap={1}
 										>
-											<Icon name="material-manage-accounts-filled" size={36} />
+											<Icon
+												name="material-manage-accounts-filled"
+												size={labeledNavIconSize}
+											/>
 
 											{t(m.toolsTabLabel)}
 										</Stack>
@@ -380,6 +405,7 @@ function RouteComponent() {
 									fullWidth
 									variant="text"
 									color="inherit"
+									size="small"
 									inactiveProps={BASE_INACTIVE_LINK_PROPS}
 									activeProps={BASE_ACTIVE_LINK_PROPS}
 								>
@@ -388,9 +414,9 @@ function RouteComponent() {
 										alignItems="center"
 										flexWrap="wrap"
 										textAlign="center"
-										gap={2}
+										gap={1}
 									>
-										<Icon name="material-settings" size={32} />
+										<Icon name="material-settings" size={labeledNavIconSize} />
 
 										{t(m.appSettingsTabLabel)}
 									</Stack>
@@ -410,7 +436,7 @@ function RouteComponent() {
 
 const BASE_INACTIVE_LINK_PROPS = {
 	sx: {
-		padding: 2,
+		padding: 1,
 		borderRadius: 2,
 		color: DARK_GREY,
 	},
@@ -418,7 +444,7 @@ const BASE_INACTIVE_LINK_PROPS = {
 
 const BASE_ACTIVE_LINK_PROPS = {
 	sx: {
-		padding: 2,
+		padding: 1,
 		borderRadius: 2,
 		color: COMAPEO_BLUE,
 		background: (theme) => theme.lighten(theme.palette.primary.light, 0.5),
