@@ -1,12 +1,9 @@
 import {
 	Suspense,
 	useCallback,
-	useEffect,
 	useMemo,
 	useRef,
 	type CSSProperties,
-	type FocusEvent,
-	type MouseEvent,
 	type RefObject,
 } from 'react'
 import { useManyDocs, useOwnDeviceInfo } from '@comapeo/core-react'
@@ -23,7 +20,6 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { defineMessages, useIntl } from 'react-intl'
-import scrollIntoView from 'scroll-into-view-if-needed'
 
 import {
 	BLACK,
@@ -105,97 +101,8 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 		})
 	}, [observationsWithCategory, tracksWithCategory])
 
-	const onFocus = useCallback(
-		(event: FocusEvent<HTMLUListElement>) => {
-			const el = event.target.closest('[data-docid]')
-
-			if (!(el instanceof HTMLElement)) {
-				return
-			}
-
-			const dataType = el.getAttribute('data-datatype')
-			const docId = el.getAttribute('data-docid')
-
-			if (!(dataType && docId)) {
-				return
-			}
-
-			if (!(dataType === 'observation' || dataType === 'track')) {
-				return
-			}
-
-			if (highlightedDocument && docId === highlightedDocument.docId) {
-				return
-			}
-
-			navigate({
-				search: {
-					highlightedDocument: {
-						type: dataType,
-						docId,
-						from: 'list',
-					},
-				},
-			})
-		},
-		[navigate, highlightedDocument],
-	)
-
-	const onMouseMove = useCallback((event: MouseEvent<HTMLUListElement>) => {
-		const el = (event.target as HTMLElement).closest('[data-docid]')
-
-		if (!(el instanceof HTMLElement)) {
-			return
-		}
-
-		// NOTE: We defer to the onFocus callback in order to determine the navigation changes.
-		el.focus()
-	}, [])
-
 	const listRef = useRef<HTMLUListElement | null>(null)
 	const rowVirtualizer = useVirtual(listRef, sortedListData)
-	const { scrollToIndex, scrollElement } = rowVirtualizer
-
-	useEffect(
-		/**
-		 * Scrolls the list to the item that is either:
-		 *
-		 * 1. Hovered over on the map
-		 * 2. Focused onto via the keyboard in the list.
-		 *
-		 * Does not do anything if the highlighting is triggered by a mouseover
-		 * interaction on the list.
-		 */
-		function scrollToHighlightedItem() {
-			if (highlightedDocument?.docId) {
-				if (scrollElement) {
-					const itemNode = scrollElement.querySelector(
-						`[data-docid="${highlightedDocument.docId}"]`,
-					)
-					if (itemNode) {
-						// We don't want the list to change scroll position if it's not needed (i.e the item is already visible in the list).
-						// Reduces the amount of visual abruptness.
-						scrollIntoView(itemNode, {
-							scrollMode: 'if-needed',
-							block: 'nearest',
-						})
-						return
-					}
-				}
-
-				const itemIndexToScrollTo = highlightedDocument?.docId
-					? sortedListData.findIndex(
-							({ document }) => document.docId === highlightedDocument.docId,
-						)
-					: undefined
-
-				if (itemIndexToScrollTo) {
-					scrollToIndex(itemIndexToScrollTo)
-				}
-			}
-		},
-		[highlightedDocument?.docId, scrollToIndex, sortedListData, scrollElement],
-	)
 
 	return sortedListData.length > 0 ? (
 		<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
@@ -223,12 +130,7 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 					component="ul"
 					ref={listRef}
 					disablePadding
-					onFocus={onFocus}
-					onMouseMove={onMouseMove}
-					sx={{
-						overflow: 'auto',
-						scrollbarColor: 'initial',
-					}}
+					sx={{ overflow: 'auto', scrollbarColor: 'initial' }}
 				>
 					<Box
 						position="relative"
@@ -244,6 +146,8 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 									? t(m.trackItemTitle)
 									: category?.name || t(m.observationCategoryNameFallback)
 
+							const isHighlighted = docId === highlightedDocument?.docId
+
 							return (
 								<Box
 									key={row.key}
@@ -257,12 +161,21 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 									}}
 								>
 									<ListItemButton
-										data-datatype={type}
-										data-docid={docId}
 										disableGutters
 										disableTouchRipple
-										selected={docId === highlightedDocument?.docId}
+										selected={isHighlighted}
+										autoFocus={isHighlighted}
 										onClick={() => {
+											if (!isHighlighted) {
+												navigate({
+													search: {
+														highlightedDocument: { type, docId, from: 'list' },
+													},
+												})
+
+												return
+											}
+
 											if (type === 'observation') {
 												navigate({
 													to: './observations/$observationDocId',
