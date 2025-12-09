@@ -683,6 +683,10 @@
     "description": "Text indicating collaborator is a participant.",
     "message": "Deelnemer"
   },
+  "routes.app.projects.$projectId_.team.$deviceId.remoteArchive": {
+    "description": "Fallback name used if remote archive does not have name.",
+    "message": "Extern archief"
+  },
   "routes.app.projects.$projectId_.team.$deviceId.thisDevice": {
     "description": "Text indicating that user is viewing itslef.",
     "message": "Dit apparaat!"
@@ -699,8 +703,12 @@
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Apparaat Uitnodigen"
   },
+  "routes.app.projects.$projectId_.team.index.memberLinkAccessibleLabel": {
+    "description": "Accessible label for link that navigates to member details.",
+    "message": "Lid {name} bekijken."
+  },
   "routes.app.projects.$projectId_.team.index.navTitle": {
-    "description": "Title of the project settings team page.",
+    "description": "Title of the team page.",
     "message": "Team"
   },
   "routes.app.projects.$projectId_.team.index.noParticipants": {
@@ -714,6 +722,22 @@
   "routes.app.projects.$projectId_.team.index.participantsSectionTitle": {
     "description": "Title of the participants section in the team page.",
     "message": "Deelnemers"
+  },
+  "routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionDescription": {
+    "description": "Description of the past collaborators section in the team page.",
+    "message": "De toestellen dragen niet meer bij aan dit project."
+  },
+  "routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionTitle": {
+    "description": "Title of the past collaborators section in the team page.",
+    "message": "Vorige samenwerkers"
+  },
+  "routes.app.projects.$projectId_.team.index.remoteArchivesSectionDescription": {
+    "description": "Description of the remote archives section in the team page.",
+    "message": "Dit project deelt met veilige, versleutelde servers."
+  },
+  "routes.app.projects.$projectId_.team.index.remoteArchivesSectionTitle": {
+    "description": "Title of the remote archives section in the team page.",
+    "message": "Extern archief"
   },
   "routes.app.projects.$projectId_.team.index.thisDevice": {
     "description": "Text indicating that the listed device refers to the one currently being used.",
