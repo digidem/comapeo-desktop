@@ -104,7 +104,7 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 
 	const listRef = useRef<HTMLUListElement | null>(null)
 	const rowVirtualizer = useVirtual(listRef, sortedListData)
-	const { scrollToIndex, scrollElement } = rowVirtualizer
+	const { scrollToIndex } = rowVirtualizer
 
 	const mountedRef = useRef<boolean>(false)
 
@@ -132,7 +132,7 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 
 			mountedRef.current = true
 		},
-		[highlightedDocument?.docId, scrollToIndex, scrollElement, sortedListData],
+		[highlightedDocument?.docId, scrollToIndex, sortedListData],
 	)
 
 	return sortedListData.length > 0 ? (
