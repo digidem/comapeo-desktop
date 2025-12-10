@@ -1,6 +1,7 @@
 import {
 	Suspense,
 	useCallback,
+	useEffect,
 	useMemo,
 	useRef,
 	type CSSProperties,
@@ -103,6 +104,36 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 
 	const listRef = useRef<HTMLUListElement | null>(null)
 	const rowVirtualizer = useVirtual(listRef, sortedListData)
+	const { scrollToIndex, scrollElement } = rowVirtualizer
+
+	const mountedRef = useRef<boolean>(false)
+
+	useEffect(
+		/**
+		 * Handles autoscrolling to selected item in list when initially loading the
+		 * page.
+		 */
+		function scrollToItemOnMount() {
+			if (mountedRef.current) {
+				return
+			}
+
+			if (highlightedDocument?.docId) {
+				const itemIndexToScrollTo = highlightedDocument?.docId
+					? sortedListData.findIndex(
+							({ document }) => document.docId === highlightedDocument.docId,
+						)
+					: undefined
+
+				if (itemIndexToScrollTo) {
+					scrollToIndex(itemIndexToScrollTo, { align: 'center' })
+				}
+			}
+
+			mountedRef.current = true
+		},
+		[highlightedDocument?.docId, scrollToIndex, scrollElement, sortedListData],
+	)
 
 	return sortedListData.length > 0 ? (
 		<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
@@ -161,6 +192,7 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 									}}
 								>
 									<ListItemButton
+										data-docid={docId}
 										disableGutters
 										disableTouchRipple
 										selected={isHighlighted}
