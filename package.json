@@ -160,7 +160,6 @@
 		"react-intl": "7.1.14",
 		"react-map-gl": "8.1.0",
 		"react-transition-group": "4.4.5",
-		"scroll-into-view-if-needed": "3.1.0",
 		"semver": "7.7.3",
 		"typescript": "5.9.3",
 		"typescript-eslint": "8.49.0",
