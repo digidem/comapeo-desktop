@@ -42,6 +42,7 @@ import {
 	ScaleControl,
 	Source,
 	type CircleLayerSpecification,
+	type MapInstance,
 	type MapLayerMouseEvent,
 	type MapRef,
 } from 'react-map-gl/maplibre'
@@ -271,56 +272,98 @@ export function DisplayedDataMap() {
 		[navigate, documentToHighlight],
 	)
 
-	/**
-	 * Determines if the hover state of a feature should be enabled
-	 */
-	const onMapMouseMove = useCallback((event: MapLayerMouseEvent) => {
-		const mapInstance = event.target
+	const highlightTrack = useCallback(
+		(docId: string, mapInstance: Pick<MapInstance, 'setFeatureState'>) => {
+			mapInstance.setFeatureState(
+				{ source: TRACKS_SOURCE_ID, id: docId },
+				{ highlight: true },
+			)
+		},
+		[],
+	)
 
-		const feature = event.features?.[0]
+	const highlightObservation = useCallback(
+		(docId: string, mapInstance: Pick<MapInstance, 'setFeatureState'>) => {
+			mapInstance.setFeatureState(
+				{ source: OBSERVATIONS_SOURCE_ID, id: docId },
+				{ highlight: true },
+			)
 
-		const mapCanvas = mapInstance.getCanvas()
+			let trackDocIdToHighlight: string | undefined
 
-		if (!(feature && typeof feature.properties.docId === 'string')) {
-			// Clear the existing feature states
-			mapInstance.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
-			mapInstance.removeFeatureState({ source: TRACKS_SOURCE_ID })
-
-			// Restore default cursor style
-			if (mapCanvas.style.cursor !== 'inherit') {
-				mapInstance.getCanvas().style.cursor = 'inherit'
+			for (const t of tracks) {
+				if (t.observationRefs.some((o) => o.docId === docId)) {
+					trackDocIdToHighlight = t.docId
+					break
+				}
 			}
 
-			return
-		}
-
-		// Update the cursor style when hovering over a relevant feature
-		if (
-			(feature.layer.id === OBSERVATIONS_LAYER_ID ||
-				feature.layer.id === TRACKS_LAYER_ID) &&
-			mapCanvas.style.cursor !== 'pointer'
-		) {
-			mapCanvas.style.cursor = 'pointer'
-		}
-
-		// Enable the hover state for the relevant features
-		if (feature.layer.id === OBSERVATIONS_LAYER_ID) {
-			mapInstance.setFeatureState(
-				{ source: OBSERVATIONS_SOURCE_ID, id: feature.properties.docId },
-				{ highlight: true },
-			)
-		} else if (feature.layer.id === TRACKS_LAYER_ID) {
-			mapInstance.setFeatureState(
-				{ source: TRACKS_SOURCE_ID, id: feature.properties.docId },
-				{ highlight: true },
-			)
-		}
-	}, [])
+			// NOTE: Highlight the associated track as well
+			if (trackDocIdToHighlight) {
+				highlightTrack(trackDocIdToHighlight, mapInstance)
+			}
+		},
+		[tracks, highlightTrack],
+	)
 
 	/**
-	 * On initial map load, if there's a document to highlight, pan to it and zoom
-	 * in if necessary. Otherwise, update the bounding box of the map to fit all
-	 * of the features.
+	 * NOTE: Determines if the hover state of a feature should be enabled
+	 */
+	const onMapMouseMove = useCallback(
+		(event: MapLayerMouseEvent) => {
+			const mapInstance = event.target
+
+			const feature = event.features?.[0]
+
+			const mapCanvas = mapInstance.getCanvas()
+
+			// NOTE: Hovering over nothing
+			if (!(feature && typeof feature.properties.docId === 'string')) {
+				// Clear the existing feature states
+				mapInstance.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
+				mapInstance.removeFeatureState({ source: TRACKS_SOURCE_ID })
+
+				// Restore feature states related to highlighted document
+				if (documentToHighlight) {
+					// Enable the hover state for the relevant feature
+					if (documentToHighlight.type === 'observation') {
+						highlightObservation(documentToHighlight.docId, mapInstance)
+					} else {
+						highlightTrack(documentToHighlight.docId, mapInstance)
+					}
+				}
+
+				// Restore default cursor style
+				if (mapCanvas.style.cursor !== 'inherit') {
+					mapInstance.getCanvas().style.cursor = 'inherit'
+				}
+
+				return
+			}
+
+			// NOTE: Update the cursor style when hovering over a relevant feature
+			if (
+				(feature.layer.id === OBSERVATIONS_LAYER_ID ||
+					feature.layer.id === TRACKS_LAYER_ID) &&
+				mapCanvas.style.cursor !== 'pointer'
+			) {
+				mapCanvas.style.cursor = 'pointer'
+			}
+
+			// NOTE: Enable the hover state for the relevant features
+			if (feature.layer.id === OBSERVATIONS_LAYER_ID) {
+				highlightObservation(feature.properties.docId, mapInstance)
+			} else if (feature.layer.id === TRACKS_LAYER_ID) {
+				highlightTrack(feature.properties.docId, mapInstance)
+			}
+		},
+		[documentToHighlight, highlightObservation, highlightTrack],
+	)
+
+	/**
+	 * NOTE: On initial map load, if there's a document to highlight, pan to it
+	 * and zoom in if necessary. Otherwise, update the bounding box of the map to
+	 * fit all of the features.
 	 */
 	const onMapLoad = useCallback(
 		(event: MapLibreEvent) => {
@@ -429,18 +472,12 @@ export function DisplayedDataMap() {
 
 			// Enable the hover state for the relevant feature
 			if (documentToHighlight.type === 'observation') {
-				mapRef.current.setFeatureState(
-					{ source: OBSERVATIONS_SOURCE_ID, id: documentToHighlight.docId },
-					{ highlight: true },
-				)
+				highlightObservation(documentToHighlight.docId, mapRef.current)
 			} else {
-				mapRef.current.setFeatureState(
-					{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
-					{ highlight: true },
-				)
+				highlightTrack(documentToHighlight.docId, mapRef.current)
 			}
 		},
-		[documentToHighlight],
+		[documentToHighlight, highlightObservation, highlightTrack],
 	)
 
 	return (
