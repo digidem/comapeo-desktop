@@ -233,6 +233,58 @@ export function DisplayedDataMap() {
 		return [minLon, minLat, maxLon, maxLat]
 	}, [observationsFeatureCollection, tracksFeatureCollection])
 
+	const moveMapToObservation = useCallback(
+		(
+			{
+				coordinates,
+				shouldZoomIn,
+			}: { coordinates: [lat: number, lon: number]; shouldZoomIn: boolean },
+			mapInstance: Pick<MapInstance, 'panTo'>,
+		) => {
+			mapInstance.panTo(
+				{
+					lon: coordinates[0],
+					lat: coordinates[1],
+				},
+				shouldZoomIn ? { zoom: 10 } : undefined,
+			)
+		},
+		[],
+	)
+
+	const moveMapToTrack = useCallback(
+		(
+			{
+				trackFeature,
+				shouldZoomIn,
+			}: {
+				trackFeature: ReturnType<
+					typeof tracksToFeatureCollection
+				>['features'][number]
+				shouldZoomIn: boolean
+			},
+			mapInstance: Pick<MapInstance, 'panTo' | 'fitBounds'>,
+		) => {
+			const c = center(trackFeature)
+
+			const [minLon, minLat, maxLon, maxLat] = bbox(trackFeature)
+
+			mapInstance.panTo(
+				{
+					lon: c.geometry.coordinates[0]!,
+					lat: c.geometry.coordinates[1]!,
+				},
+				shouldZoomIn ? { zoom: 10 } : undefined,
+			)
+
+			mapInstance.fitBounds(
+				[minLon, minLat, maxLon, maxLat],
+				BASE_FIT_BOUNDS_OPTIONS,
+			)
+		},
+		[],
+	)
+
 	const onMapClick = useCallback(
 		(event: MapLayerMouseEvent) => {
 			const feature = event.features?.[0]
@@ -245,10 +297,30 @@ export function DisplayedDataMap() {
 				return
 			}
 
+			const mapInstance = event.target
+			const shouldZoomIn = mapInstance.getZoom() < 10
+
 			if (
 				feature.layer.id === OBSERVATIONS_LAYER_ID &&
 				typeof feature.properties.docId === 'string'
 			) {
+				const observationMatch = observationsFeatureCollection.features.find(
+					({ properties }) => properties.docId === feature.properties.docId,
+				)
+
+				if (observationMatch) {
+					moveMapToObservation(
+						{
+							coordinates: [
+								observationMatch.geometry.coordinates[0]!,
+								observationMatch.geometry.coordinates[1]!,
+							],
+							shouldZoomIn,
+						},
+						mapInstance,
+					)
+				}
+
 				navigate({
 					to: './observations/$observationDocId',
 					params: { observationDocId: feature.properties.docId },
@@ -261,6 +333,17 @@ export function DisplayedDataMap() {
 				feature.layer.id === TRACKS_LAYER_ID &&
 				typeof feature.properties.docId === 'string'
 			) {
+				const tracksMatch = tracksFeatureCollection.features.find(
+					({ properties }) => properties.docId === feature.properties.docId,
+				)
+
+				if (tracksMatch) {
+					moveMapToTrack(
+						{ trackFeature: tracksMatch, shouldZoomIn },
+						mapInstance,
+					)
+				}
+
 				navigate({
 					to: './tracks/$trackDocId',
 					params: { trackDocId: feature.properties.docId },
@@ -269,7 +352,14 @@ export function DisplayedDataMap() {
 				return
 			}
 		},
-		[navigate, documentToHighlight],
+		[
+			documentToHighlight,
+			moveMapToObservation,
+			moveMapToTrack,
+			navigate,
+			observationsFeatureCollection,
+			tracksFeatureCollection,
+		],
 	)
 
 	const highlightTrack = useCallback(
@@ -390,12 +480,15 @@ export function DisplayedDataMap() {
 				)
 
 				if (observationMatch) {
-					mapInstance.panTo(
+					moveMapToObservation(
 						{
-							lon: observationMatch.geometry.coordinates[0]!,
-							lat: observationMatch.geometry.coordinates[1]!,
+							coordinates: [
+								observationMatch.geometry.coordinates[0]!,
+								observationMatch.geometry.coordinates[1]!,
+							],
+							shouldZoomIn,
 						},
-						shouldZoomIn ? { zoom: 10 } : undefined,
+						mapInstance,
 					)
 				}
 			} else {
@@ -404,21 +497,9 @@ export function DisplayedDataMap() {
 				)
 
 				if (tracksMatch) {
-					const c = center(tracksMatch)
-
-					const [minLon, minLat, maxLon, maxLat] = bbox(tracksMatch)
-
-					mapInstance.panTo(
-						{
-							lon: c.geometry.coordinates[0]!,
-							lat: c.geometry.coordinates[1]!,
-						},
-						shouldZoomIn ? { zoom: 10 } : undefined,
-					)
-
-					mapInstance.fitBounds(
-						[minLon, minLat, maxLon, maxLat],
-						BASE_FIT_BOUNDS_OPTIONS,
+					moveMapToTrack(
+						{ trackFeature: tracksMatch, shouldZoomIn },
+						mapInstance,
 					)
 				}
 			}
@@ -428,6 +509,8 @@ export function DisplayedDataMap() {
 		[
 			documentToHighlight,
 			mapBbox,
+			moveMapToObservation,
+			moveMapToTrack,
 			observationsFeatureCollection,
 			setMapLoaded,
 			tracksFeatureCollection,
@@ -458,17 +541,18 @@ export function DisplayedDataMap() {
 		 * Controls map feature highlighting for when items in the list are selected
 		 * via single click.
 		 */
-		function updateHighlightedMapFeatures() {
+		function updateHighlihgtedMapFeaturesFromListClick() {
 			if (!mapRef.current) {
+				return
+			}
+
+			// NOTE: Only care about triggers from list interactions
+			if (documentToHighlight?.from !== 'list') {
 				return
 			}
 
 			mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
 			mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
-
-			if (!documentToHighlight) {
-				return
-			}
 
 			// Enable the hover state for the relevant feature
 			if (documentToHighlight.type === 'observation') {
@@ -478,6 +562,78 @@ export function DisplayedDataMap() {
 			}
 		},
 		[documentToHighlight, highlightObservation, highlightTrack],
+	)
+
+	useEffect(
+		/**
+		 * Controls movement to map feature when navigating to document-specific
+		 * page via the list.
+		 */
+		function moveToMapFeaturesFromListDoubleClick() {
+			if (!mapRef.current) {
+				return
+			}
+
+			// NOTE: Only care about triggers from list interactions
+			if (documentToHighlight?.from !== 'list') {
+				return
+			}
+
+			// NOTE: Double click in list means that a committed navigation to document-specific page occurred.
+			if (
+				!(
+					currentRoute.routeId.startsWith(
+						'/app/projects/$projectId/observations/$observationDocId',
+					) ||
+					currentRoute.routeId.startsWith(
+						'/app/projects/$projectId/tracks/$trackDocId/',
+					)
+				)
+			) {
+				return
+			}
+
+			const shouldZoomIn = mapRef.current.getZoom() < 10
+
+			if (documentToHighlight.type === 'observation') {
+				const observationMatch = observationsFeatureCollection.features.find(
+					({ properties }) => properties.docId === documentToHighlight.docId,
+				)
+
+				if (observationMatch) {
+					moveMapToObservation(
+						{
+							coordinates: [
+								observationMatch.geometry.coordinates[0]!,
+								observationMatch.geometry.coordinates[1]!,
+							],
+							shouldZoomIn,
+						},
+						mapRef.current,
+					)
+				}
+			} else {
+				const tracksMatch = tracksFeatureCollection.features.find(
+					({ properties }) => properties.docId === documentToHighlight.docId,
+				)
+
+				if (tracksMatch) {
+					moveMapToTrack(
+						{ trackFeature: tracksMatch, shouldZoomIn },
+						mapRef.current,
+					)
+				}
+			}
+		},
+		[
+			currentRoute,
+			documentToHighlight,
+			mapLoaded,
+			moveMapToObservation,
+			moveMapToTrack,
+			observationsFeatureCollection,
+			tracksFeatureCollection,
+		],
 	)
 
 	return (
