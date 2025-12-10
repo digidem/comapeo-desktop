@@ -38,6 +38,7 @@ export const iconNames = [
 	'material-logout',
 	'material-layers-outlined',
 	'material-language',
+	'material-icons-center-focus-weak',
 	'material-hiking',
 	'material-group-off',
 	'material-fmd-good-filled',

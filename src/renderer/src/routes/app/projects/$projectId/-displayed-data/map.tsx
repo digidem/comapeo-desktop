@@ -55,7 +55,10 @@ import {
 } from '../../../../../components/category-icon'
 import { Icon } from '../../../../../components/icon'
 import { Map } from '../../../../../components/map'
-import { ZoomToDataMapControl } from '../../../../../components/zoom-to-data-map-control'
+import {
+	ZoomToDataMapControl,
+	ZoomToSelectedDocumentMapControl,
+} from '../../../../../components/map-controls'
 import { useMapsRefreshToken } from '../../../../../hooks/maps'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
@@ -687,6 +690,21 @@ export function DisplayedDataMap() {
 					sourceIds={[OBSERVATIONS_SOURCE_ID, TRACKS_SOURCE_ID]}
 				/>
 
+				{documentToHighlight ? (
+					<ZoomToSelectedDocumentMapControl
+						// NOTE: Important to remount or else it uses stale document reference
+						key={documentToHighlight.docId}
+						buttonTitle={t(m.zoomToSelected)}
+						document={documentToHighlight}
+						fitBoundsOptions={BASE_FIT_BOUNDS_OPTIONS}
+						sourceIds={[
+							documentToHighlight.type === 'observation'
+								? OBSERVATIONS_SOURCE_ID
+								: TRACKS_SOURCE_ID,
+						]}
+					/>
+				) : null}
+
 				<Source
 					type="geojson"
 					id={TRACKS_SOURCE_ID}
@@ -985,6 +1003,12 @@ const m = defineMessages({
 		defaultMessage: 'Zoom to data',
 		description:
 			'Text displayed when hovering over map control for zooming to data.',
+	},
+	zoomToSelected: {
+		id: 'routes.app.projects.$projectId.-displayed.data.map.zoomToSelected',
+		defaultMessage: 'Zoom to selected',
+		description:
+			'Text displayed when hovering over map control for zooming to selected.',
 	},
 	cannotDisplayFeature: {
 		id: 'routes.app.projects.$projectId.-displayed.data.map.cannotDisplayFeature',
