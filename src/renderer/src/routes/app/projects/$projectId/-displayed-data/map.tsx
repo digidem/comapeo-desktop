@@ -124,7 +124,7 @@ export function DisplayedDataMap() {
 
 	const navigate = useNavigate({ from: '/app/projects/$projectId' })
 	const { projectId } = useParams({ from: '/app/projects/$projectId' })
-	const { highlightedDocument } = useSearch({
+	const { highlightedDocument: documentFromSearch } = useSearch({
 		from: '/app/projects/$projectId',
 	})
 
@@ -136,7 +136,7 @@ export function DisplayedDataMap() {
 		},
 	})
 
-	const documentFromRouteParams: typeof highlightedDocument = useChildMatches({
+	const documentFromRouteParams: typeof documentFromSearch = useChildMatches({
 		select: (matches) => {
 			for (const m of matches) {
 				if (
@@ -172,7 +172,7 @@ export function DisplayedDataMap() {
 	// 4. An observation or track in the list on the main project page is clicked on.
 	// 5. A specific observation's page is being viewed.
 	// 6. A specific track's page is being viewed.
-	const documentToHighlight = documentFromRouteParams || highlightedDocument
+	const documentToHighlight = documentFromRouteParams || documentFromSearch
 
 	const mapRef = useRef<MapRef>(null)
 
@@ -674,8 +674,8 @@ export function DisplayedDataMap() {
 				maxBounds={undefined}
 				interactiveLayerIds={INTERACTIVE_LAYER_IDS}
 				onLoad={onMapLoad}
-				onClick={onMapClick}
-				onMouseMove={onMapMouseMove}
+				onClick={mapLoaded ? onMapClick : undefined}
+				onMouseMove={mapLoaded ? onMapMouseMove : undefined}
 				touchPitch={false}
 				dragRotate={false}
 				pitchWithRotate={false}
