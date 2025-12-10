@@ -579,17 +579,17 @@ export function DisplayedDataMap() {
 				highlightedFeature &&
 				highlightedFeature.geometry.type === 'Point' &&
 				highlightedFeature.properties.type === 'observation' ? (
-					<Suspense>
-						<Marker
-							anchor="bottom"
-							onClick={(event) => {
-								event.originalEvent.preventDefault()
-								event.originalEvent.stopImmediatePropagation()
-							}}
-							longitude={highlightedFeature.geometry.coordinates[0]!}
-							latitude={highlightedFeature.geometry.coordinates[1]!}
-						>
-							{highlightedFeature.properties.categoryDocId ? (
+					<Marker
+						anchor="bottom"
+						onClick={(event) => {
+							event.originalEvent.preventDefault()
+							event.originalEvent.stopImmediatePropagation()
+						}}
+						longitude={highlightedFeature.geometry.coordinates[0]!}
+						latitude={highlightedFeature.geometry.coordinates[1]!}
+					>
+						{highlightedFeature.properties.categoryDocId ? (
+							<Suspense>
 								<CategoryIconMarker
 									categoryDocumentId={
 										highlightedFeature.properties.categoryDocId
@@ -597,22 +597,22 @@ export function DisplayedDataMap() {
 									projectId={projectId}
 									lang={lang}
 								/>
-							) : (
-								<IconMarkerContainer
+							</Suspense>
+						) : (
+							<IconMarkerContainer
+								color={BLUE_GREY}
+								markerSize={MARKER_SIZE_PX}
+							>
+								<CategoryIconContainer
 									color={BLUE_GREY}
-									markerSize={MARKER_SIZE_PX}
+									applyBoxShadow
+									padding={2}
 								>
-									<CategoryIconContainer
-										color={BLUE_GREY}
-										applyBoxShadow
-										padding={2}
-									>
-										<Icon name="material-place" size={CATEGORY_ICON_SIZE_PX} />
-									</CategoryIconContainer>
-								</IconMarkerContainer>
-							)}
-						</Marker>
-					</Suspense>
+									<Icon name="material-place" size={CATEGORY_ICON_SIZE_PX} />
+								</CategoryIconContainer>
+							</IconMarkerContainer>
+						)}
+					</Marker>
 				) : null}
 
 				{(currentRoute.routeId ===
