@@ -203,6 +203,7 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 													search: {
 														highlightedDocument: { type, docId, from: 'list' },
 													},
+													replace: true,
 												})
 
 												return
