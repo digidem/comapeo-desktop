@@ -238,7 +238,10 @@ export function DisplayedDataMap() {
 			{
 				coordinates,
 				shouldZoomIn,
-			}: { coordinates: [lat: number, lon: number]; shouldZoomIn: boolean },
+			}: {
+				coordinates: [lat: number, lon: number]
+				shouldZoomIn?: boolean
+			},
 			mapInstance: Pick<MapInstance, 'panTo'>,
 		) => {
 			mapInstance.panTo(
@@ -246,7 +249,7 @@ export function DisplayedDataMap() {
 					lon: coordinates[0],
 					lat: coordinates[1],
 				},
-				shouldZoomIn ? { zoom: 10 } : undefined,
+				{ zoom: shouldZoomIn ? 10 : undefined },
 			)
 		},
 		[],
@@ -261,7 +264,7 @@ export function DisplayedDataMap() {
 				trackFeature: ReturnType<
 					typeof tracksToFeatureCollection
 				>['features'][number]
-				shouldZoomIn: boolean
+				shouldZoomIn?: boolean
 			},
 			mapInstance: Pick<MapInstance, 'panTo' | 'fitBounds'>,
 		) => {
@@ -274,7 +277,7 @@ export function DisplayedDataMap() {
 					lon: c.geometry.coordinates[0]!,
 					lat: c.geometry.coordinates[1]!,
 				},
-				shouldZoomIn ? { zoom: 10 } : undefined,
+				{ zoom: shouldZoomIn ? 10 : undefined },
 			)
 
 			mapInstance.fitBounds(
@@ -570,7 +573,7 @@ export function DisplayedDataMap() {
 		 * page via the list.
 		 */
 		function moveToMapFeaturesFromListDoubleClick() {
-			if (!mapRef.current) {
+			if (!mapLoaded || !mapRef.current) {
 				return
 			}
 
