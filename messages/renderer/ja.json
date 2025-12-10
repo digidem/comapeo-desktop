@@ -83,6 +83,10 @@
     "description": "Text displayed when hovering over map control for zooming to data.",
     "message": "データにズーム"
   },
+  "routes.app.projects.$projectId.-displayed.data.map.zoomToSelected": {
+    "description": "Text displayed when hovering over map control for zooming to selected.",
+    "message": "選択された場所にズーム"
+  },
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.audioNavTitle": {
     "description": "Title of the audio attachment page.",
     "message": "音声録音"
