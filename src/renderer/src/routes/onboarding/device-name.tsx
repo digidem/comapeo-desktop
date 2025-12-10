@@ -64,12 +64,16 @@ function RouteComponent() {
 		onSubmit: async ({ value }) => {
 			const parsedDeviceName = v.parse(deviceNameSchema, value.deviceName)
 
-			await setOwnDeviceInfo.mutateAsync({
-				deviceType: 'desktop',
-				name: parsedDeviceName,
-			})
+			try {
+				await setOwnDeviceInfo.mutateAsync({
+					deviceType: 'desktop',
+					name: parsedDeviceName,
+				})
 
-			await router.navigate({ to: '/onboarding/project' })
+				await router.navigate({ to: '/onboarding/project' })
+			} catch (err) {
+				captureException(err)
+			}
 		},
 	})
 
@@ -127,9 +131,7 @@ function RouteComponent() {
 								return
 							}
 
-							form.handleSubmit().catch((err) => {
-								captureException(err)
-							})
+							form.handleSubmit()
 						}}
 					>
 						<form.AppField name="deviceName">

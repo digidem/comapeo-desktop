@@ -87,6 +87,10 @@
     "description": "Text displayed when hovering over map control for zooming to data.",
     "message": "Zoom to data"
   },
+  "routes.app.projects.$projectId.-displayed.data.map.zoomToSelected": {
+    "description": "Text displayed when hovering over map control for zooming to selected.",
+    "message": "Zoom to selected"
+  },
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.audioNavTitle": {
     "description": "Title of the audio attachment page.",
     "message": "Audio Recording"
@@ -239,18 +243,6 @@
     "description": "Fallback text displayed if field has no meaningful value.",
     "message": "No answer"
   },
-  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerFalse": {
-    "description": "Text displayed if a boolean field is answered with \"false\"",
-    "message": "FALSE"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerNull": {
-    "description": "Text displayed if a field is answered with \"null\"",
-    "message": "NULL"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.-fields.shared.fieldAnswerTrue": {
-    "description": "Text displayed if a boolean field is answered with \"true\"",
-    "message": "TRUE"
-  },
   "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.accessibleNotesInputLabel": {
     "description": "Accessible label for notes input field.",
     "message": "Notes"
@@ -274,6 +266,18 @@
   "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.title": {
     "description": "Title for notes section.",
     "message": "Notes"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerFalse": {
+    "description": "Text displayed if a boolean field is answered with \"false\"",
+    "message": "FALSE"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerNull": {
+    "description": "Text displayed if a field is answered with \"null\"",
+    "message": "NULL"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerTrue": {
+    "description": "Text displayed if a boolean field is answered with \"true\"",
+    "message": "TRUE"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
@@ -575,49 +579,33 @@
     "description": "Label for button to upload new categories set.",
     "message": "Upload New Set"
   },
-  "routes.app.projects.$projectId_.settings.index.categoriesSet": {
-    "description": "Text for item that navigates to project categories set page.",
-    "message": "Categories Set"
+  "routes.app.projects.$projectId_.settings.index.categoriesActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "Update"
   },
-  "routes.app.projects.$projectId_.settings.index.collaborators": {
-    "description": "Text for item that navigates to project collaborators page.",
-    "message": "Collaborators"
+  "routes.app.projects.$projectId_.settings.index.categoriesLinkAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to project info settings page.",
+    "message": "Go to categories settings."
   },
-  "routes.app.projects.$projectId_.settings.index.deviceIsCoordinator": {
-    "description": "Indicates that device is a coordinator on the current project.",
-    "message": "This device is a coordinator on this project."
-  },
-  "routes.app.projects.$projectId_.settings.index.deviceIsParticpant": {
-    "description": "Indicates that device is a participant on the current project.",
-    "message": "This device is a participant on this project."
-  },
-  "routes.app.projects.$projectId_.settings.index.editInfo": {
-    "description": "Text for link that navigates to page for editing project settings.",
-    "message": "Edit Info"
-  },
-  "routes.app.projects.$projectId_.settings.index.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "Go back."
+  "routes.app.projects.$projectId_.settings.index.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set.",
+    "message": "CoMapeo Categories"
   },
   "routes.app.projects.$projectId_.settings.index.navTitle": {
-    "description": "Title of the project settings page.",
-    "message": "Project Settings"
+    "description": "Title of the coordinator tools page.",
+    "message": "Coordinator Tools"
   },
-  "routes.app.projects.$projectId_.settings.index.noProjectDescription": {
-    "description": "Indicates that the project does not have a description.",
-    "message": "No project description."
+  "routes.app.projects.$projectId_.settings.index.projectInfoActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "Edit"
+  },
+  "routes.app.projects.$projectId_.settings.index.projectSettingsLinkAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to project info settings page.",
+    "message": "Go to project info settings."
   },
   "routes.app.projects.$projectId_.settings.index.unnamedProject": {
     "description": "Fallback for when current project is missing a name.",
     "message": "Unnamed Project"
-  },
-  "routes.app.projects.$projectId_.settings.index.updateCategoriesSet": {
-    "description": "Text for link that navigates to project categories set page.",
-    "message": "Update Set"
-  },
-  "routes.app.projects.$projectId_.settings.index.viewTeam": {
-    "description": "Text for link that navigates to project team page.",
-    "message": "View Team"
   },
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",
@@ -679,81 +667,105 @@
     "description": "Label for save button.",
     "message": "Save"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.addedOn": {
+  "routes.app.projects.$projectId_.team.$deviceId.addedOn": {
     "description": "Text indicating date collaborator was added to the project.",
     "message": "Added on {value}"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.collaboratorNavTitle": {
+  "routes.app.projects.$projectId_.team.$deviceId.collaboratorNavTitle": {
     "description": "Title of the team collaborator info page.",
     "message": "Collaborator Info"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.confirmButton": {
+  "routes.app.projects.$projectId_.team.$deviceId.confirmButton": {
     "description": "Button text to confirm leaving project.",
     "message": "Confirm"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.coordinator": {
+  "routes.app.projects.$projectId_.team.$deviceId.coordinator": {
     "description": "Text indicating collaborator is a coordinator.",
     "message": "Coordinator"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.lastCoordinatorWarning": {
+  "routes.app.projects.$projectId_.team.$deviceId.lastCoordinatorWarning": {
     "description": "Warning text about leaving the project as the last coordinator.",
     "message": "You're the last coordinator. Consider making another device a coordinator before leaving the project."
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectButton": {
+  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectButton": {
     "description": "Button text to initiate leave project flow.",
     "message": "Leave Project"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectExplainerDescription": {
+  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerDescription": {
     "description": "Description for leave project explanation.",
     "message": "<b>{name}</b> will no longer be able to add or exchange observations."
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectExplainerTitle": {
+  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerTitle": {
     "description": "Title text for leave project explanation.",
     "message": "Leave Project?"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectNavTitle": {
+  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectNavTitle": {
     "description": "Title of the team collaborator info page when the leave project flow is initiated.",
     "message": "Leave Project"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.participant": {
+  "routes.app.projects.$projectId_.team.$deviceId.participant": {
     "description": "Text indicating collaborator is a participant.",
     "message": "Participant"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.thisDevice": {
+  "routes.app.projects.$projectId_.team.$deviceId.remoteArchive": {
+    "description": "Fallback name used if remote archive does not have name.",
+    "message": "Remote Archive"
+  },
+  "routes.app.projects.$projectId_.team.$deviceId.thisDevice": {
     "description": "Text indicating that user is viewing itslef.",
     "message": "This Device!"
   },
-  "routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionDescription": {
+  "routes.app.projects.$projectId_.team.index.coordinatorsSectionDescription": {
     "description": "Description of the coordinators section in the team page.",
     "message": "Coordinators can invite devices, edit and delete data, and manage project details."
   },
-  "routes.app.projects.$projectId_.settings.team.index.coordinatorsSectionTitle": {
+  "routes.app.projects.$projectId_.team.index.coordinatorsSectionTitle": {
     "description": "Title of the coordinators section in the team page.",
     "message": "Coordinators"
   },
-  "routes.app.projects.$projectId_.settings.team.index.inviteDevice": {
+  "routes.app.projects.$projectId_.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Invite Device"
   },
-  "routes.app.projects.$projectId_.settings.team.index.navTitle": {
-    "description": "Title of the project settings team page.",
+  "routes.app.projects.$projectId_.team.index.memberLinkAccessibleLabel": {
+    "description": "Accessible label for link that navigates to member details.",
+    "message": "View member {name}."
+  },
+  "routes.app.projects.$projectId_.team.index.navTitle": {
+    "description": "Title of the team page.",
     "message": "Team"
   },
-  "routes.app.projects.$projectId_.settings.team.index.noParticipants": {
+  "routes.app.projects.$projectId_.team.index.noParticipants": {
     "description": "Text indicating that no participants are part of the project yet.",
     "message": "No Participants have been added to this project."
   },
-  "routes.app.projects.$projectId_.settings.team.index.participantsSectionDescription": {
+  "routes.app.projects.$projectId_.team.index.participantsSectionDescription": {
     "description": "Description of the participants section in the team page.",
     "message": "Participants can take and share observations. They cannot manage users or project details."
   },
-  "routes.app.projects.$projectId_.settings.team.index.participantsSectionTitle": {
+  "routes.app.projects.$projectId_.team.index.participantsSectionTitle": {
     "description": "Title of the participants section in the team page.",
     "message": "Participants"
   },
-  "routes.app.projects.$projectId_.settings.team.index.thisDevice": {
+  "routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionDescription": {
+    "description": "Description of the past collaborators section in the team page.",
+    "message": "Devices no longer contributing to this project."
+  },
+  "routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionTitle": {
+    "description": "Title of the past collaborators section in the team page.",
+    "message": "Past Collaborators"
+  },
+  "routes.app.projects.$projectId_.team.index.remoteArchivesSectionDescription": {
+    "description": "Description of the remote archives section in the team page.",
+    "message": "This project is sharing with secure, encrypted servers."
+  },
+  "routes.app.projects.$projectId_.team.index.remoteArchivesSectionTitle": {
+    "description": "Title of the remote archives section in the team page.",
+    "message": "Remote Archives"
+  },
+  "routes.app.projects.$projectId_.team.index.thisDevice": {
     "description": "Text indicating that the listed device refers to the one currently being used.",
-    "message": "This Device"
+    "message": "This device"
   },
   "routes.app.projects.-shared.device-icon.deviceTypeDesktop": {
     "description": "Text indicating that the member is a desktop device (displays when hovering over the icon).",
@@ -784,14 +796,24 @@
     "message": "Wi-Fi info unavailable."
   },
   "routes.app.route.appSettingsTabLabel": {
+    "description": "Label for CoMapeo settings tab link in navigation.",
     "message": "Settings"
   },
-  "routes.app.route.exchangeTabLabel": {
-    "message": "Exchange"
+  "routes.app.route.exchangeTabAccessibleLabel": {
+    "description": "Accessible label for exchange tab link in navigation.",
+    "message": "View exchange."
   },
   "routes.app.route.projectTabAccessibleLabel": {
     "description": "Accessible label for project tab link in navigation.",
     "message": "View project."
+  },
+  "routes.app.route.teamTabLabel": {
+    "description": "Label for team tab link in navigation.",
+    "message": "Team"
+  },
+  "routes.app.route.toolsTabLabel": {
+    "description": "Label for tools tab link in navigation.",
+    "message": "Tools"
   },
   "routes.app.settings.-data-and-pritvacy-section.diagnosticInformationPersonalInfo": {
     "message": "This never includes any of your data or personal information."

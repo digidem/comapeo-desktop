@@ -16,6 +16,7 @@ import Dialog from '@mui/material/Dialog'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { captureMessage } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -333,6 +334,13 @@ function AttachmentPanel({
 					{blobId.type === 'photo' ? (
 						<ErrorBoundary
 							getResetKey={() => errorResetKey}
+							onError={() => {
+								captureMessage(`Failed to load ${blobId.variant} image`, {
+									level: 'info',
+									extra: blobId,
+								})
+							}}
+							// TODO: Consider redirecting to other variants recursively
 							fallback={() => (
 								<Box
 									display="grid"
@@ -375,6 +383,7 @@ function AttachmentPanel({
 									<PhotoAttachmentImage
 										attachmentDriveId={blobId.driveId}
 										attachmentName={blobId.name}
+										attachmentVariant={blobId.variant}
 										projectId={projectId}
 									/>
 								</Box>

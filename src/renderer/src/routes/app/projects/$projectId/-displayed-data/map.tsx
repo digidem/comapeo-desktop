@@ -5,6 +5,7 @@ import {
 	useMemo,
 	useRef,
 	useState,
+	type ReactNode,
 } from 'react'
 import {
 	useManyDocs,
@@ -28,7 +29,11 @@ import { bbox } from '@turf/bbox'
 import { center } from '@turf/center'
 import { featureCollection, lineString, point } from '@turf/helpers'
 import type { Feature, Point } from 'geojson'
-import type { FitBoundsOptions, LineLayerSpecification } from 'maplibre-gl'
+import type {
+	FitBoundsOptions,
+	LineLayerSpecification,
+	MapLibreEvent,
+} from 'maplibre-gl'
 import { defineMessages, useIntl } from 'react-intl'
 import {
 	Layer,
@@ -37,6 +42,7 @@ import {
 	ScaleControl,
 	Source,
 	type CircleLayerSpecification,
+	type MapInstance,
 	type MapLayerMouseEvent,
 	type MapRef,
 } from 'react-map-gl/maplibre'
@@ -49,21 +55,57 @@ import {
 } from '../../../../../components/category-icon'
 import { Icon } from '../../../../../components/icon'
 import { Map } from '../../../../../components/map'
-import { ZoomToDataMapControl } from '../../../../../components/zoom-to-data-map-control'
+import {
+	ZoomToDataMapControl,
+	ZoomToSelectedDocumentMapControl,
+} from '../../../../../components/map-controls'
 import { useMapsRefreshToken } from '../../../../../hooks/maps'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
+
+// TODO: Move to lib/colors
+const SHADOW_COLOR = '#686868'
 
 const OBSERVATIONS_SOURCE_ID = 'observations_source' as const
 const TRACKS_SOURCE_ID = 'tracks_source' as const
 
 const OBSERVATIONS_LAYER_ID = 'observations_layer' as const
+const TRACKS_HOVER_OUTLINE_LAYER_ID = 'tracks_hover_outline_layer' as const
+const TRACKS_HOVER_SHADOW_LAYER_ID = 'tracks_hover_shadow_layer' as const
+
 const TRACKS_LAYER_ID = 'tracks_layer' as const
 
 const TRACKS_LAYER_LAYOUT: LineLayerSpecification['layout'] = {
 	'line-cap': 'round',
 	'line-join': 'round',
 }
+const TRACKS_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] = {
+	'line-color': BLACK,
+	'line-width': 4,
+}
+const TRACKS_HOVER_OUTLINE_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] =
+	{
+		'line-color': WHITE,
+		'line-width': 12,
+		'line-opacity': [
+			'case',
+			['boolean', ['feature-state', 'highlight'], false],
+			1,
+			0,
+		],
+	}
+const TRACKS_HOVER_SHADOW_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] =
+	{
+		'line-color': SHADOW_COLOR,
+		'line-blur': 20,
+		'line-width': 20,
+		'line-opacity': [
+			'case',
+			['boolean', ['feature-state', 'highlight'], false],
+			1,
+			0,
+		],
+	}
 
 const INTERACTIVE_LAYER_IDS = [OBSERVATIONS_LAYER_ID, TRACKS_LAYER_ID]
 
@@ -82,7 +124,7 @@ export function DisplayedDataMap() {
 
 	const navigate = useNavigate({ from: '/app/projects/$projectId' })
 	const { projectId } = useParams({ from: '/app/projects/$projectId' })
-	const { highlightedDocument } = useSearch({
+	const { highlightedDocument: documentFromSearch } = useSearch({
 		from: '/app/projects/$projectId',
 	})
 
@@ -94,7 +136,7 @@ export function DisplayedDataMap() {
 		},
 	})
 
-	const documentFromRouteParams: typeof highlightedDocument = useChildMatches({
+	const documentFromRouteParams: typeof documentFromSearch = useChildMatches({
 		select: (matches) => {
 			for (const m of matches) {
 				if (
@@ -130,7 +172,7 @@ export function DisplayedDataMap() {
 	// 4. An observation or track in the list on the main project page is clicked on.
 	// 5. A specific observation's page is being viewed.
 	// 6. A specific track's page is being viewed.
-	const documentToHighlight = documentFromRouteParams || highlightedDocument
+	const documentToHighlight = documentFromRouteParams || documentFromSearch
 
 	const mapRef = useRef<MapRef>(null)
 
@@ -171,15 +213,8 @@ export function DisplayedDataMap() {
 	}, [tracks])
 
 	const observationsLayerPaint = useMemo(() => {
-		return createObservationLayerPaintProperty(
-			categories,
-			!!documentToHighlight,
-		)
-	}, [categories, documentToHighlight])
-
-	const tracksLayerPaint = useMemo(() => {
-		return createTrackLayerPaintProperty(!!documentToHighlight)
-	}, [documentToHighlight])
+		return createObservationLayerPaintProperty(categories)
+	}, [categories])
 
 	const mapBbox: [number, number, number, number] = useMemo(() => {
 		if (
@@ -201,6 +236,61 @@ export function DisplayedDataMap() {
 		return [minLon, minLat, maxLon, maxLat]
 	}, [observationsFeatureCollection, tracksFeatureCollection])
 
+	const moveMapToObservation = useCallback(
+		(
+			{
+				coordinates,
+				shouldZoomIn,
+			}: {
+				coordinates: [lat: number, lon: number]
+				shouldZoomIn?: boolean
+			},
+			mapInstance: Pick<MapInstance, 'panTo'>,
+		) => {
+			mapInstance.panTo(
+				{
+					lon: coordinates[0],
+					lat: coordinates[1],
+				},
+				{ zoom: shouldZoomIn ? 10 : undefined },
+			)
+		},
+		[],
+	)
+
+	const moveMapToTrack = useCallback(
+		(
+			{
+				trackFeature,
+				shouldZoomIn,
+			}: {
+				trackFeature: ReturnType<
+					typeof tracksToFeatureCollection
+				>['features'][number]
+				shouldZoomIn?: boolean
+			},
+			mapInstance: Pick<MapInstance, 'panTo' | 'fitBounds'>,
+		) => {
+			const c = center(trackFeature)
+
+			const [minLon, minLat, maxLon, maxLat] = bbox(trackFeature)
+
+			mapInstance.panTo(
+				{
+					lon: c.geometry.coordinates[0]!,
+					lat: c.geometry.coordinates[1]!,
+				},
+				{ zoom: shouldZoomIn ? 10 : undefined },
+			)
+
+			mapInstance.fitBounds(
+				[minLon, minLat, maxLon, maxLat],
+				BASE_FIT_BOUNDS_OPTIONS,
+			)
+		},
+		[],
+	)
+
 	const onMapClick = useCallback(
 		(event: MapLayerMouseEvent) => {
 			const feature = event.features?.[0]
@@ -209,17 +299,39 @@ export function DisplayedDataMap() {
 				if (documentToHighlight) {
 					navigate({ search: { highlightedDocument: undefined } })
 				}
+
 				return
 			}
+
+			const mapInstance = event.target
+			const shouldZoomIn = mapInstance.getZoom() < 10
 
 			if (
 				feature.layer.id === OBSERVATIONS_LAYER_ID &&
 				typeof feature.properties.docId === 'string'
 			) {
+				const observationMatch = observationsFeatureCollection.features.find(
+					({ properties }) => properties.docId === feature.properties.docId,
+				)
+
+				if (observationMatch) {
+					moveMapToObservation(
+						{
+							coordinates: [
+								observationMatch.geometry.coordinates[0]!,
+								observationMatch.geometry.coordinates[1]!,
+							],
+							shouldZoomIn,
+						},
+						mapInstance,
+					)
+				}
+
 				navigate({
 					to: './observations/$observationDocId',
 					params: { observationDocId: feature.properties.docId },
 				})
+
 				return
 			}
 
@@ -227,148 +339,160 @@ export function DisplayedDataMap() {
 				feature.layer.id === TRACKS_LAYER_ID &&
 				typeof feature.properties.docId === 'string'
 			) {
+				const tracksMatch = tracksFeatureCollection.features.find(
+					({ properties }) => properties.docId === feature.properties.docId,
+				)
+
+				if (tracksMatch) {
+					moveMapToTrack(
+						{ trackFeature: tracksMatch, shouldZoomIn },
+						mapInstance,
+					)
+				}
+
 				navigate({
 					to: './tracks/$trackDocId',
 					params: { trackDocId: feature.properties.docId },
 				})
+
 				return
 			}
 		},
-		[navigate, documentToHighlight],
+		[
+			documentToHighlight,
+			moveMapToObservation,
+			moveMapToTrack,
+			navigate,
+			observationsFeatureCollection,
+			tracksFeatureCollection,
+		],
 	)
 
+	/**
+	 * NOTE: Determines if the hover state of a feature should be enabled
+	 */
 	const onMapMouseMove = useCallback(
 		(event: MapLayerMouseEvent) => {
+			const mapInstance = event.target
+
 			const feature = event.features?.[0]
 
-			if (!feature) {
-				return
-			}
+			const mapCanvas = mapInstance.getCanvas()
 
-			if (
-				(feature.layer.id === OBSERVATIONS_LAYER_ID ||
-					feature.layer.id === TRACKS_LAYER_ID) &&
-				typeof feature.properties.docId === 'string'
-			) {
-				navigate({
-					search: {
-						highlightedDocument: {
-							type:
-								feature.layer.id === OBSERVATIONS_LAYER_ID
-									? 'observation'
-									: 'track',
-							docId: feature.properties.docId,
-							from: 'map',
-						},
-					},
-				})
-				return
-			}
-		},
-		[navigate],
-	)
+			// NOTE: Hovering over nothing
+			if (!(feature && typeof feature.properties.docId === 'string')) {
+				// Clear the existing feature states
+				mapInstance.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
+				mapInstance.removeFeatureState({ source: TRACKS_SOURCE_ID })
 
-	useEffect(
-		/**
-		 * Updates the map such that the map adjusts how features are displayed
-		 * based on whether there is a document to highlight or not.
-		 */
-		function updateMapFeatureHighlighting() {
-			if (!mapRef.current || !mapLoaded) {
-				return
-			}
+				// Restore feature states related to highlighted document
+				if (documentToHighlight) {
+					// Enable the hover state for the relevant feature
+					if (documentToHighlight.type === 'observation') {
+						let trackDocIdToHighlight: string | undefined
 
-			if (documentToHighlight) {
-				// Clear the existing feature states first
-				mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
-				mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
+						for (const t of tracks) {
+							if (
+								t.observationRefs.some(
+									(o) => o.docId === documentToHighlight.docId,
+								)
+							) {
+								trackDocIdToHighlight = t.docId
+								break
+							}
+						}
 
-				// Highlight the feature(s) with the new value
-				if (documentToHighlight.type === 'observation') {
-					mapRef.current.setFeatureState(
-						{ source: OBSERVATIONS_SOURCE_ID, id: documentToHighlight.docId },
-						{ highlight: true },
-					)
-				} else {
-					mapRef.current.setFeatureState(
-						{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
-						{ highlight: true },
-					)
-
-					const highlightedTrack = tracks.find(
-						(t) => t.docId === documentToHighlight.docId,
-					)
-
-					if (!highlightedTrack) {
-						console.warn(
-							`Could not find track with doc ID: ${documentToHighlight.docId}`,
-						)
-						return
-					}
-
-					// NOTE: Highlighting a track should highlight observations that it references.
-					for (const o of highlightedTrack.observationRefs) {
-						mapRef.current.setFeatureState(
-							{ source: OBSERVATIONS_SOURCE_ID, id: o.docId },
+						// NOTE: Highlight the associated track as well
+						if (trackDocIdToHighlight) {
+							mapInstance.setFeatureState(
+								{ source: TRACKS_SOURCE_ID, id: trackDocIdToHighlight },
+								{ highlight: true },
+							)
+						}
+					} else {
+						mapInstance.setFeatureState(
+							{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
 							{ highlight: true },
 						)
 					}
 				}
-			} else {
-				mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
-				mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
-			}
-		},
-		[documentToHighlight, mapLoaded, tracks],
-	)
 
-	useEffect(
-		/**
-		 * Accounts for the following situation:
-		 *
-		 * 1. Leave this page
-		 * 2. New data is received (e.g. creating test data, exchanging)
-		 * 3. Return to this page
-		 *
-		 * After (3), the stale data is still being used to calculate the map's
-		 * initial bounds (not really sure why though). The new data comes in
-		 * afterwards and the bounds are re-calculated, but they do not get applied
-		 * to the map as there's no way to reactively update it after
-		 * initialization.
-		 */
-		function setMapBoundsBasedOnDataBbox() {
-			if (!mapLoaded || !mapRef.current) {
+				// Restore default cursor style
+				if (mapCanvas.style.cursor !== 'inherit') {
+					mapInstance.getCanvas().style.cursor = 'inherit'
+				}
+
 				return
 			}
 
-			mapRef.current.fitBounds(mapBbox, {
-				...BASE_FIT_BOUNDS_OPTIONS,
-				animate: false,
-			})
-		},
-		[mapBbox, mapLoaded],
-	)
-
-	useEffect(
-		/**
-		 * Whenever the highlighted document changes (either due to a list or map
-		 * interaction), pan the map such that the corresponding feature is
-		 * centered. Also zooms closer to the feature if necessary (it will never
-		 * zoom out).
-		 */
-		function panToMapFeature() {
-			if (!mapLoaded || !mapRef.current || !documentToHighlight) {
-				return
+			// NOTE: Update the cursor style when hovering over a relevant feature
+			if (
+				(feature.layer.id === OBSERVATIONS_LAYER_ID ||
+					feature.layer.id === TRACKS_LAYER_ID) &&
+				mapCanvas.style.cursor !== 'pointer'
+			) {
+				mapCanvas.style.cursor = 'pointer'
 			}
 
-			// Do not pan the map if the highlighting is done via a map interaction
-			if (documentToHighlight.from === 'map') {
+			// NOTE: Enable the hover state for the relevant features
+			if (feature.layer.id === OBSERVATIONS_LAYER_ID) {
+				mapInstance.setFeatureState(
+					{ source: OBSERVATIONS_SOURCE_ID, id: feature.properties.docId },
+					{ highlight: true },
+				)
+
+				let trackDocIdToHighlight: string | undefined
+
+				for (const t of tracks) {
+					if (
+						t.observationRefs.some((o) => o.docId === feature.properties.docId)
+					) {
+						trackDocIdToHighlight = t.docId
+						break
+					}
+				}
+
+				// NOTE: Highlight the associated track as well
+				if (trackDocIdToHighlight) {
+					// highlightTrack(trackDocIdToHighlight, mapInstance)
+					mapInstance.setFeatureState(
+						{ source: TRACKS_SOURCE_ID, id: trackDocIdToHighlight },
+						{ highlight: true },
+					)
+				}
+			} else if (feature.layer.id === TRACKS_LAYER_ID) {
+				mapInstance.setFeatureState(
+					{ source: TRACKS_SOURCE_ID, id: feature.properties.docId },
+					{ highlight: true },
+				)
+			}
+		},
+		[documentToHighlight, tracks],
+	)
+
+	/**
+	 * NOTE: On initial map load, if there's a document to highlight, pan to it
+	 * and zoom in if necessary. Otherwise, update the bounding box of the map to
+	 * fit all of the features.
+	 */
+	const onMapLoad = useCallback(
+		(event: MapLibreEvent) => {
+			const mapInstance = event.target
+
+			if (!documentToHighlight) {
+				mapInstance.fitBounds(mapBbox, {
+					...BASE_FIT_BOUNDS_OPTIONS,
+					animate: false,
+				})
+
+				setMapLoaded(true)
+
 				return
 			}
 
 			const { type, docId } = documentToHighlight
 
-			const shouldZoomIn = mapRef.current.getZoom() < 10
+			const shouldZoomIn = mapInstance.getZoom() < 10
 
 			if (type === 'observation') {
 				const observationMatch = observationsFeatureCollection.features.find(
@@ -376,12 +500,15 @@ export function DisplayedDataMap() {
 				)
 
 				if (observationMatch) {
-					mapRef.current.panTo(
+					moveMapToObservation(
 						{
-							lon: observationMatch.geometry.coordinates[0]!,
-							lat: observationMatch.geometry.coordinates[1]!,
+							coordinates: [
+								observationMatch.geometry.coordinates[0]!,
+								observationMatch.geometry.coordinates[1]!,
+							],
+							shouldZoomIn,
 						},
-						shouldZoomIn ? { zoom: 10 } : undefined,
+						mapInstance,
 					)
 				}
 			} else {
@@ -390,29 +517,22 @@ export function DisplayedDataMap() {
 				)
 
 				if (tracksMatch) {
-					const c = center(tracksMatch)
-
-					const [minLon, minLat, maxLon, maxLat] = bbox(tracksMatch)
-
-					mapRef.current.panTo(
-						{
-							lon: c.geometry.coordinates[0]!,
-							lat: c.geometry.coordinates[1]!,
-						},
-						shouldZoomIn ? { zoom: 10 } : undefined,
-					)
-
-					mapRef.current.fitBounds(
-						[minLon, minLat, maxLon, maxLat],
-						BASE_FIT_BOUNDS_OPTIONS,
+					moveMapToTrack(
+						{ trackFeature: tracksMatch, shouldZoomIn },
+						mapInstance,
 					)
 				}
 			}
+
+			setMapLoaded(true)
 		},
 		[
 			documentToHighlight,
-			mapLoaded,
+			mapBbox,
+			moveMapToObservation,
+			moveMapToTrack,
 			observationsFeatureCollection,
+			setMapLoaded,
 			tracksFeatureCollection,
 		],
 	)
@@ -436,23 +556,124 @@ export function DisplayedDataMap() {
 		tracksFeatureCollection,
 	])
 
-	const showZoomToDataControl =
-		currentRoute.routeId !==
-			'/app/projects/$projectId/observations/$observationDocId/' &&
-		currentRoute.routeId !==
-			'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name' &&
-		currentRoute.routeId !== '/app/projects/$projectId/tracks/$trackDocId/'
+	useEffect(
+		/**
+		 * Controls map feature highlighting for when items in the list are selected
+		 * via single click.
+		 */
+		function updateHighlightedMapFeaturesFromListClick() {
+			if (!mapRef.current) {
+				return
+			}
 
-	const enableMouseHoverInteractions =
-		currentRoute.routeId === '/app/projects/$projectId/'
+			// NOTE: Only care about triggers from list interactions
+			if (documentToHighlight?.from !== 'list') {
+				return
+			}
 
-	const enableMouseClickInteractions =
-		currentRoute.routeId === '/app/projects/$projectId/' ||
-		currentRoute.routeId === '/app/projects/$projectId/download'
+			mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
+			mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
 
-	const enableMapMovementInteractions =
-		currentRoute.routeId === '/app/projects/$projectId/' ||
-		currentRoute.routeId === '/app/projects/$projectId/download'
+			// Enable the hover state for the relevant feature
+			if (documentToHighlight.type === 'observation') {
+				let trackDocIdToHighlight: string | undefined
+
+				for (const t of tracks) {
+					if (
+						t.observationRefs.some((o) => o.docId === documentToHighlight.docId)
+					) {
+						trackDocIdToHighlight = t.docId
+						break
+					}
+				}
+
+				if (trackDocIdToHighlight) {
+					mapRef.current.setFeatureState(
+						{ source: TRACKS_SOURCE_ID, id: trackDocIdToHighlight },
+						{ highlight: true },
+					)
+				}
+			} else {
+				mapRef.current.setFeatureState(
+					{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
+					{ highlight: true },
+				)
+			}
+		},
+		[documentToHighlight, tracks],
+	)
+
+	useEffect(
+		/**
+		 * Controls movement to map feature when navigating to document-specific
+		 * page via the list.
+		 */
+		function moveToMapFeaturesFromListDoubleClick() {
+			if (!mapLoaded || !mapRef.current) {
+				return
+			}
+
+			// NOTE: Only care about triggers from list interactions
+			if (documentToHighlight?.from !== 'list') {
+				return
+			}
+
+			// NOTE: Double click in list means that a committed navigation to document-specific page occurred.
+			if (
+				!(
+					currentRoute.routeId.startsWith(
+						'/app/projects/$projectId/observations/$observationDocId',
+					) ||
+					currentRoute.routeId.startsWith(
+						'/app/projects/$projectId/tracks/$trackDocId/',
+					)
+				)
+			) {
+				return
+			}
+
+			const shouldZoomIn = mapRef.current.getZoom() < 10
+
+			if (documentToHighlight.type === 'observation') {
+				const observationMatch = observationsFeatureCollection.features.find(
+					({ properties }) => properties.docId === documentToHighlight.docId,
+				)
+
+				if (observationMatch) {
+					moveMapToObservation(
+						{
+							coordinates: [
+								observationMatch.geometry.coordinates[0]!,
+								observationMatch.geometry.coordinates[1]!,
+							],
+							shouldZoomIn,
+						},
+						mapRef.current,
+					)
+				}
+			} else {
+				const tracksMatch = tracksFeatureCollection.features.find(
+					({ properties }) => properties.docId === documentToHighlight.docId,
+				)
+
+				if (tracksMatch) {
+					moveMapToTrack(
+						{ trackFeature: tracksMatch, shouldZoomIn },
+						mapRef.current,
+					)
+				}
+			}
+		},
+		[
+			currentRoute,
+			documentToHighlight,
+			mapLoaded,
+			moveMapToObservation,
+			moveMapToTrack,
+			observationsFeatureCollection,
+			tracksFeatureCollection,
+		],
+	)
 
 	return (
 		<Box position="relative" display="flex" flex={1}>
@@ -485,33 +706,35 @@ export function DisplayedDataMap() {
 				// and this seems to get preserved between different usages of the maps.
 				maxBounds={undefined}
 				interactiveLayerIds={INTERACTIVE_LAYER_IDS}
-				onLoad={() => {
-					setMapLoaded(true)
-				}}
-				onClick={enableMouseClickInteractions ? onMapClick : undefined}
-				onMouseMove={enableMouseHoverInteractions ? onMapMouseMove : undefined}
-				dragPan={enableMapMovementInteractions}
-				scrollZoom={enableMapMovementInteractions}
+				onLoad={onMapLoad}
+				onClick={mapLoaded ? onMapClick : undefined}
+				onMouseMove={mapLoaded ? onMapMouseMove : undefined}
 				touchPitch={false}
 				dragRotate={false}
 				pitchWithRotate={false}
 				touchZoomRotate={false}
-				cursor={
-					enableMouseClickInteractions ||
-					enableMouseHoverInteractions ||
-					enableMapMovementInteractions
-						? undefined
-						: 'default'
-				}
 			>
 				<ScaleControl />
 				<NavigationControl showCompass={false} />
 
-				{showZoomToDataControl ? (
-					<ZoomToDataMapControl
-						buttonTitle={t(m.zoomToData)}
+				<ZoomToDataMapControl
+					buttonTitle={t(m.zoomToData)}
+					fitBoundsOptions={BASE_FIT_BOUNDS_OPTIONS}
+					sourceIds={[OBSERVATIONS_SOURCE_ID, TRACKS_SOURCE_ID]}
+				/>
+
+				{documentToHighlight ? (
+					<ZoomToSelectedDocumentMapControl
+						// NOTE: Important to remount or else it uses stale document reference
+						key={documentToHighlight.docId}
+						buttonTitle={t(m.zoomToSelected)}
+						document={documentToHighlight}
 						fitBoundsOptions={BASE_FIT_BOUNDS_OPTIONS}
-						sourceIds={[OBSERVATIONS_SOURCE_ID, TRACKS_SOURCE_ID]}
+						sourceIds={[
+							documentToHighlight.type === 'observation'
+								? OBSERVATIONS_SOURCE_ID
+								: TRACKS_SOURCE_ID,
+						]}
 					/>
 				) : null}
 
@@ -524,8 +747,22 @@ export function DisplayedDataMap() {
 				>
 					<Layer
 						type="line"
+						id={TRACKS_HOVER_SHADOW_LAYER_ID}
+						paint={TRACKS_HOVER_SHADOW_LAYER_PAINT_PROPERTY}
+						layout={TRACKS_LAYER_LAYOUT}
+					/>
+
+					<Layer
+						type="line"
+						id={TRACKS_HOVER_OUTLINE_LAYER_ID}
+						paint={TRACKS_HOVER_OUTLINE_LAYER_PAINT_PROPERTY}
+						layout={TRACKS_LAYER_LAYOUT}
+					/>
+
+					<Layer
+						type="line"
 						id={TRACKS_LAYER_ID}
-						paint={tracksLayerPaint}
+						paint={TRACKS_LAYER_PAINT_PROPERTY}
 						layout={TRACKS_LAYER_LAYOUT}
 					/>
 				</Source>
@@ -544,44 +781,48 @@ export function DisplayedDataMap() {
 					/>
 				</Source>
 
-				{(currentRoute.routeId ===
-					'/app/projects/$projectId/observations/$observationDocId/' ||
+				{(currentRoute.routeId === '/app/projects/$projectId/' ||
+					currentRoute.routeId ===
+						'/app/projects/$projectId/observations/$observationDocId/' ||
 					currentRoute.routeId ===
 						'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name') &&
 				highlightedFeature &&
 				highlightedFeature.geometry.type === 'Point' &&
 				highlightedFeature.properties.type === 'observation' ? (
-					<Suspense>
-						<Marker
-							style={
-								enableMouseClickInteractions ||
-								enableMouseHoverInteractions ||
-								enableMapMovementInteractions
-									? undefined
-									: { cursor: 'default' }
-							}
-							longitude={highlightedFeature.geometry.coordinates[0]!}
-							latitude={highlightedFeature.geometry.coordinates[1]!}
-						>
-							{highlightedFeature.properties.categoryDocId ? (
-								<CategoryIcon
+					<Marker
+						anchor="bottom"
+						onClick={(event) => {
+							event.originalEvent.preventDefault()
+							event.originalEvent.stopImmediatePropagation()
+						}}
+						longitude={highlightedFeature.geometry.coordinates[0]!}
+						latitude={highlightedFeature.geometry.coordinates[1]!}
+					>
+						{highlightedFeature.properties.categoryDocId ? (
+							<Suspense>
+								<CategoryIconMarker
 									categoryDocumentId={
 										highlightedFeature.properties.categoryDocId
 									}
 									projectId={projectId}
 									lang={lang}
 								/>
-							) : (
+							</Suspense>
+						) : (
+							<IconMarkerContainer
+								color={BLUE_GREY}
+								markerSize={MARKER_SIZE_PX}
+							>
 								<CategoryIconContainer
 									color={BLUE_GREY}
 									applyBoxShadow
-									padding={1}
+									padding={2}
 								>
-									<Icon name="material-place" size={ICON_SIZE} />
+									<Icon name="material-place" size={CATEGORY_ICON_SIZE_PX} />
 								</CategoryIconContainer>
-							)}
-						</Marker>
-					</Suspense>
+							</IconMarkerContainer>
+						)}
+					</Marker>
 				) : null}
 
 				{(currentRoute.routeId ===
@@ -609,9 +850,44 @@ export function DisplayedDataMap() {
 	)
 }
 
-const ICON_SIZE = 20
+const MARKER_SIZE_PX = 68
+const CATEGORY_ICON_SIZE_PX = 24
 
-function CategoryIcon({
+function IconMarkerContainer({
+	color,
+	children,
+	markerSize,
+}: {
+	color: string
+	children: ReactNode
+	markerSize: number | string
+}) {
+	return (
+		<Box
+			position="relative"
+			display="flex"
+			flexDirection="column"
+			justifyContent="center"
+			alignItems="center"
+		>
+			<Icon
+				name="comapeo-selected-marker"
+				htmlColor={color}
+				sx={{
+					filter: `drop-shadow(0 0 3px ${SHADOW_COLOR});`,
+					height: markerSize,
+					width: markerSize,
+				}}
+			/>
+
+			<Box position="absolute" top={0}>
+				{children}
+			</Box>
+		</Box>
+	)
+}
+
+function CategoryIconMarker({
 	categoryDocumentId,
 	lang,
 	projectId,
@@ -629,23 +905,23 @@ function CategoryIcon({
 		lang,
 	})
 
+	const color = category.color || BLUE_GREY
+
 	return (
-		<CategoryIconContainer
-			color={category.color || BLUE_GREY}
-			applyBoxShadow
-			padding={1}
-		>
-			{category.iconRef?.docId ? (
-				<CategoryIconImage
-					projectId={projectId}
-					iconDocumentId={category.iconRef.docId}
-					imageStyle={{ height: ICON_SIZE, aspectRatio: 1 }}
-					altText={t(m.categoryIconAlt, { name: category.name })}
-				/>
-			) : (
-				<Icon name="material-place" size={20} />
-			)}
-		</CategoryIconContainer>
+		<IconMarkerContainer color={color} markerSize={MARKER_SIZE_PX}>
+			<CategoryIconContainer color={color} applyBoxShadow padding={2}>
+				{category.iconRef?.docId ? (
+					<CategoryIconImage
+						projectId={projectId}
+						iconDocumentId={category.iconRef.docId}
+						imageStyle={{ height: CATEGORY_ICON_SIZE_PX, aspectRatio: 1 }}
+						altText={t(m.categoryIconAlt, { name: category.name })}
+					/>
+				) : (
+					<Icon name="material-place" size={CATEGORY_ICON_SIZE_PX} />
+				)}
+			</CategoryIconContainer>
+		</IconMarkerContainer>
 	)
 }
 
@@ -719,21 +995,8 @@ function tracksToFeatureCollection(tracks: Array<Track>) {
 	return featureCollection(displayableTracks)
 }
 
-function createTrackLayerPaintProperty(
-	enableHighlighting: boolean,
-): LineLayerSpecification['paint'] {
-	return {
-		'line-color': BLACK,
-		'line-width': 4,
-		'line-opacity': enableHighlighting
-			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.2]
-			: 1,
-	}
-}
-
 function createObservationLayerPaintProperty(
 	categories: Array<Preset>,
-	enableHighlighting: boolean,
 ): CircleLayerSpecification['paint'] {
 	const categoryColorPairs: Array<string> = []
 
@@ -745,20 +1008,19 @@ function createObservationLayerPaintProperty(
 	}
 
 	return {
-		'circle-color': WHITE,
-		'circle-radius': 6,
-		'circle-stroke-width': 3,
 		// @ts-expect-error Type def doesn't like the spread of the pairs
-		'circle-stroke-color':
+		'circle-color':
 			categoryColorPairs.length > 0
 				? ['match', ['get', 'categoryDocId'], ...categoryColorPairs, ORANGE]
 				: ORANGE,
-		'circle-stroke-opacity': enableHighlighting
-			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.2]
-			: 1,
-		'circle-opacity': enableHighlighting
-			? ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.2]
-			: 1,
+		'circle-radius': [
+			'case',
+			['boolean', ['feature-state', 'highlight'], false],
+			9,
+			6,
+		],
+		'circle-stroke-color': WHITE,
+		'circle-stroke-width': 3,
 	}
 }
 
@@ -774,6 +1036,12 @@ const m = defineMessages({
 		defaultMessage: 'Zoom to data',
 		description:
 			'Text displayed when hovering over map control for zooming to data.',
+	},
+	zoomToSelected: {
+		id: 'routes.app.projects.$projectId.-displayed.data.map.zoomToSelected',
+		defaultMessage: 'Zoom to selected',
+		description:
+			'Text displayed when hovering over map control for zooming to selected.',
 	},
 	cannotDisplayFeature: {
 		id: 'routes.app.projects.$projectId.-displayed.data.map.cannotDisplayFeature',

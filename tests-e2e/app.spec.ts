@@ -82,17 +82,100 @@ test.describe('CoMapeo settings', () => {
 			}),
 		).toBeVisible()
 
-		const settingsLinks = main.getByRole('list').getByRole('link')
+		const settingsItems = main
+			.getByRole('listitem')
+			.filter({ has: page.getByRole('link') })
 
-		await expect(settingsLinks).toHaveText([
-			// TODO: Should fix this in app using aria-label?
-			`${onboardingOutputs.deviceName}Edit`,
-			// TODO: The result of this will vary based on system language preferences.
-			/^English.*/,
-			'UTM Coordinates',
-			'Default Background',
-			'Create Test Data',
-		])
+		await expect(settingsItems).toHaveCount(5)
+
+		//// Device name settings item
+		{
+			const deviceNameSettingsItem = settingsItems.first()
+
+			await expect(
+				deviceNameSettingsItem.getByRole('link', {
+					name: 'Go to device name settings.',
+					exact: true,
+				}),
+			).toBeVisible()
+
+			await expect(
+				deviceNameSettingsItem.getByText(onboardingOutputs.deviceName, {
+					exact: true,
+				}),
+			).toBeVisible()
+
+			await expect(
+				deviceNameSettingsItem.getByText('Edit', { exact: true }),
+			).toBeVisible()
+		}
+
+		//// Language settings item
+		{
+			const languageSettingsItem = settingsItems.nth(1)
+
+			await expect(
+				languageSettingsItem.getByRole('link', {
+					name: 'Go to language settings.',
+					exact: true,
+				}),
+			).toBeVisible()
+
+			await expect(
+				languageSettingsItem.getByText(
+					// TODO: The result of this will vary based on system language preferences.
+					/^English.*/,
+				),
+			).toBeVisible()
+		}
+
+		//// Coordinate system settings item
+		{
+			const coordinateSystemSettingsItem = settingsItems.nth(2)
+
+			await expect(
+				coordinateSystemSettingsItem.getByRole('link', {
+					name: 'Go to coordinate system settings.',
+					exact: true,
+				}),
+			).toBeVisible()
+
+			await expect(
+				coordinateSystemSettingsItem.getByText('UTM Coordinates', {
+					exact: true,
+				}),
+			).toBeVisible()
+		}
+
+		//// Background map settings item
+		{
+			const backgroundMapSettingsItem = settingsItems.nth(3)
+
+			await expect(
+				backgroundMapSettingsItem.getByRole('link', {
+					name: 'Go to background map settings.',
+					exact: true,
+				}),
+			).toBeVisible()
+
+			await expect(
+				backgroundMapSettingsItem.getByText('Default Background', {
+					exact: true,
+				}),
+			).toBeVisible()
+		}
+
+		//// Test data settings item
+		{
+			const testDataSettingsItem = settingsItems.last()
+
+			await expect(
+				testDataSettingsItem.getByRole('link', {
+					name: 'Create Test Data',
+					exact: true,
+				}),
+			).toBeVisible()
+		}
 
 		/// Data and Privacy section
 		await expect(
@@ -179,9 +262,9 @@ test.describe('CoMapeo settings', () => {
 			exact: true,
 		})
 
-		await expect(deviceNameSettingsLink).toHaveText(
-			`${onboardingOutputs.deviceName}Edit`,
-		)
+		await expect(
+			deviceNameSettingsLink.getByText(onboardingOutputs.deviceName),
+		).toBeVisible()
 
 		await deviceNameSettingsLink.click()
 
@@ -197,8 +280,9 @@ test.describe('CoMapeo settings', () => {
 			.getByRole('link', { disabled: true })
 
 		await expect(disabledNavLinks.first()).toHaveAccessibleName('View project.')
+		await expect(disabledNavLinks.nth(1)).toHaveAccessibleName('View exchange.')
 
-		await expect(disabledNavLinks).toHaveText(['', 'Exchange'])
+		await expect(disabledNavLinks).toHaveText(['', '', 'Team', 'Tools'])
 
 		// Main
 		await expect(
@@ -277,11 +361,13 @@ test.describe('CoMapeo settings', () => {
 			.click()
 
 		await expect(
-			main.getByRole('link', {
-				name: 'Go to device name settings.',
-				exact: true,
-			}),
-		).toHaveText(`${OUTPUTS.deviceName}Edit`)
+			main
+				.getByRole('link', {
+					name: 'Go to device name settings.',
+					exact: true,
+				})
+				.getByText(OUTPUTS.deviceName),
+		).toBeVisible()
 	})
 
 	test('language', async () => {
@@ -295,10 +381,12 @@ test.describe('CoMapeo settings', () => {
 				exact: true,
 			})
 
-			await expect(languageSettingsLink).toHaveText(
-				// TODO: The result of this will vary based on system language preferences.
-				/^English.*/,
-			)
+			await expect(
+				languageSettingsLink.getByText(
+					// TODO: The result of this will vary based on system language preferences.
+					/^English.*/,
+				),
+			).toBeVisible()
 
 			await languageSettingsLink.click()
 		}
@@ -318,8 +406,11 @@ test.describe('CoMapeo settings', () => {
 			await expect(disabledNavLinks.first()).toHaveAccessibleName(
 				'View project.',
 			)
+			await expect(disabledNavLinks.nth(1)).toHaveAccessibleName(
+				'View exchange.',
+			)
 
-			await expect(disabledNavLinks).toHaveText(['', 'Exchange'])
+			await expect(disabledNavLinks).toHaveText(['', '', 'Team', 'Tools'])
 		}
 
 		// Main
@@ -383,7 +474,12 @@ test.describe('CoMapeo settings', () => {
 
 			await expect(page.getByRole('navigation').getByRole('link')).toHaveText([
 				'',
-				'Trocar',
+				'',
+				// TODO: Need to update when translations get updated
+				'Team',
+				// TODO: Need to update when translations get updated
+				'Tools',
+				// TODO: Need to update when translations get updated
 				'Configurações do Aplicativo',
 			])
 
@@ -394,7 +490,9 @@ test.describe('CoMapeo settings', () => {
 				exact: true,
 			})
 
-			await expect(languageSettingsLink).toHaveText('Português')
+			await expect(
+				languageSettingsLink.getByText('Português', { exact: true }),
+			).toBeVisible()
 
 			await languageSettingsLink.click()
 		}
@@ -429,7 +527,11 @@ test.describe('CoMapeo settings', () => {
 				exact: true,
 			})
 
-			await expect(coordinateSystemSettingsLink).toHaveText('UTM Coordinates')
+			await expect(
+				coordinateSystemSettingsLink.getByText('UTM Coordinates', {
+					exact: true,
+				}),
+			).toBeVisible()
 
 			await coordinateSystemSettingsLink.click()
 		}
@@ -449,8 +551,11 @@ test.describe('CoMapeo settings', () => {
 			await expect(disabledNavLinks.first()).toHaveAccessibleName(
 				'View project.',
 			)
+			await expect(disabledNavLinks.nth(1)).toHaveAccessibleName(
+				'View exchange.',
+			)
 
-			await expect(disabledNavLinks).toHaveText(['', 'Exchange'])
+			await expect(disabledNavLinks).toHaveText(['', '', 'Team', 'Tools'])
 		}
 
 		// Main
@@ -508,7 +613,11 @@ test.describe('CoMapeo settings', () => {
 				name: 'Go to coordinate system settings.',
 				exact: true,
 			})
-			await expect(coordinateSystemSettingsLink).toHaveText('DD Coordinates')
+			await expect(
+				coordinateSystemSettingsLink.getByText('DD Coordinates', {
+					exact: true,
+				}),
+			).toBeVisible()
 			await coordinateSystemSettingsLink.click()
 		}
 
@@ -545,7 +654,11 @@ test.describe('CoMapeo settings', () => {
 				exact: true,
 			})
 
-			await expect(backgroundMapSettingsLink).toHaveText('Default Background')
+			await expect(
+				backgroundMapSettingsLink.getByText('Default Background', {
+					exact: true,
+				}),
+			).toBeVisible()
 
 			await backgroundMapSettingsLink.click()
 		}
@@ -701,7 +814,9 @@ test.describe('CoMapeo settings', () => {
 				name: 'Go to background map settings.',
 				exact: true,
 			})
-			await expect(backgroundMapSettingsLink).toHaveText('MapLibre')
+			await expect(
+				backgroundMapSettingsLink.getByText('MapLibre', { exact: true }),
+			).toBeVisible()
 			await backgroundMapSettingsLink.click()
 		}
 
@@ -720,11 +835,13 @@ test.describe('CoMapeo settings', () => {
 
 			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
 			await expect(
-				main.getByRole('link', {
-					name: 'Go to background map settings.',
-					exact: true,
-				}),
-			).toHaveText('Default Background')
+				main
+					.getByRole('link', {
+						name: 'Go to background map settings.',
+						exact: true,
+					})
+					.getByText('Default Background'),
+			).toBeVisible()
 		}
 	})
 })
@@ -735,14 +852,14 @@ test.describe('exchange', () => {
 
 		await page
 			.getByRole('navigation')
-			.getByText('Exchange', { exact: true })
+			.getByRole('link', { name: 'View exchange.', exact: true })
 			.click()
 
 		// Navigation
 		await expect(
 			page
 				.getByRole('navigation')
-				.getByRole('link', { name: 'Exchange', exact: true }),
+				.getByRole('link', { name: 'View exchange.', exact: true }),
 		).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
 
 		const main = page.getByRole('main')
@@ -793,7 +910,12 @@ test.describe('exchange', () => {
 				'View project.',
 			)
 
-			await expect(disabledNavLinks).toHaveText(['', 'Settings'])
+			await expect(disabledNavLinks).toHaveText([
+				'',
+				'Team',
+				'Tools',
+				'Settings',
+			])
 
 			await expect(
 				main.getByRole('heading', { name: 'Waiting for Devices', exact: true }),
@@ -819,7 +941,7 @@ test.describe('exchange', () => {
 	})
 })
 
-test.describe('project settings', () => {
+test.describe('team', () => {
 	test('index', async () => {
 		const page = await electronApp.firstWindow()
 
@@ -827,85 +949,146 @@ test.describe('project settings', () => {
 
 		// Navigation
 		{
-			const projectNavLink = page
+			const teamNavLink = page
 				.getByRole('navigation')
-				.getByRole('link', { name: 'View project.', exact: true })
+				.getByRole('link', { name: 'Team', exact: true })
 
-			await projectNavLink.click()
+			await teamNavLink.click()
 
-			await expect(projectNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
-
-			await main.getByRole('link', { name: 'View', exact: true }).click()
-
-			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
-
-			await main.getByRole('link', { name: 'View', exact: true }).click()
-
-			await expect(projectNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+			await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
 		}
 
 		// Main
 		{
 			await expect(
-				main.getByRole('heading', { name: 'Project Settings', exact: true }),
+				main.getByRole('heading', { name: 'Team', exact: true }),
 			).toBeVisible()
 
-			const settingsItems = main.getByRole('listitem')
+			await expect(
+				main.getByRole('link', { name: 'Invite Device', exact: true }),
+			).toBeVisible()
 
-			await expect(settingsItems).toHaveCount(3)
+			/// Coordinators list
+			await expect(
+				main.getByRole('heading', { name: 'Coordinators', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				main.getByText(
+					'Coordinators can invite devices, edit and delete data, and manage project details.',
+					{ exact: true },
+				),
+			).toBeVisible()
+
+			const coordinatorList = main.getByRole('list').first()
+
+			const ownDeviceListItem = coordinatorList.getByRole('link', {
+				name: `View member ${OUTPUTS.deviceName}.`,
+				exact: true,
+			})
+
+			await expect(ownDeviceListItem).toBeVisible()
+
+			await expect(
+				ownDeviceListItem.getByText('This device', { exact: true }),
+			).toBeVisible()
+
+			/// Participants list
+			await expect(
+				main.getByRole('heading', { name: 'Participants', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				main.getByText(
+					'Participants can take and share observations. They cannot manage users or project details.',
+					{ exact: true },
+				),
+			).toBeVisible()
+
+			await expect(
+				main.getByText('No Participants have been added to this project.', {
+					exact: true,
+				}),
+			).toBeVisible()
+
+			/// Remote archives list
+			await expect(
+				main.getByRole('heading', { name: 'Remote Archives', exact: true }),
+			).not.toBeVisible()
+
+			/// Past collaborators list
+			await expect(
+				main.getByRole('heading', { name: 'Past Collaborators', exact: true }),
+			).not.toBeVisible()
+		}
+	})
+})
+
+test.describe('coordinator tools', () => {
+	test('index', async () => {
+		const page = await electronApp.firstWindow()
+
+		const main = page.getByRole('main')
+
+		// Navigation
+		{
+			const toolsNavLink = page
+				.getByRole('navigation')
+				.getByRole('link', { name: 'Tools', exact: true })
+
+			await toolsNavLink.click()
+
+			await expect(toolsNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+		}
+
+		// Main
+		{
+			await expect(
+				main.getByRole('heading', { name: 'Coordinator Tools', exact: true }),
+			).toBeVisible()
+
+			const settingsItems = main
+				.getByRole('listitem')
+				.filter({ has: page.getByRole('link') })
+
+			await expect(settingsItems).toHaveCount(2)
 
 			//// Project info settings item
 			const projectInfoItem = settingsItems.first()
 
 			await expect(
-				projectInfoItem.getByRole('heading', {
-					name: onboardingOutputs.projectName,
-					exact: true,
-				}),
-			).toBeVisible()
-			await expect(
 				projectInfoItem.getByRole('link', {
-					name: 'Edit Info',
+					name: 'Go to project info settings.',
 					exact: true,
 				}),
 			).toBeVisible()
 
-			//// Collaborators settings item
-			const collaboratorsItem = settingsItems.nth(1)
+			await expect(
+				projectInfoItem.getByText(onboardingOutputs.projectName, {
+					exact: true,
+				}),
+			).toBeVisible()
 
 			await expect(
-				collaboratorsItem.getByRole('heading', {
-					name: 'Collaborators',
-					exact: true,
-				}),
-			).toBeVisible()
-			await expect(
-				collaboratorsItem.getByText(
-					'This device is a coordinator on this project.',
-				),
-			).toBeVisible()
-			await expect(
-				collaboratorsItem.getByRole('link', {
-					name: 'View Team',
-					exact: true,
-				}),
+				projectInfoItem.getByText('Edit', { exact: true }),
 			).toBeVisible()
 
 			//// Categories set settings item
 			const categoriesSetItem = settingsItems.last()
 
 			await expect(
-				categoriesSetItem.getByRole('heading', {
-					name: 'Categories Set',
+				categoriesSetItem.getByRole('link', {
+					name: 'Go to categories settings.',
 					exact: true,
 				}),
 			).toBeVisible()
+
 			await expect(
-				categoriesSetItem.getByText('CoMapeo Default Categories'),
+				categoriesSetItem.getByText('Update', { exact: true }),
 			).toBeVisible()
+
 			await expect(
-				categoriesSetItem.getByRole('link', {
-					name: 'Update Set',
+				categoriesSetItem.getByText('CoMapeo Default Categories', {
 					exact: true,
 				}),
 			).toBeVisible()
@@ -917,23 +1100,25 @@ test.describe('project settings', () => {
 
 		const main = page.getByRole('main')
 
-		await main.getByRole('link', { name: 'Edit Info', exact: true }).click()
+		await main
+			.getByRole('link', { name: 'Go to project info settings.', exact: true })
+			.click()
 
 		// Navigation
 		{
-			await expect(
-				page.getByRole('navigation').getByRole('link', {
-					name: 'View project.',
-					exact: true,
-					disabled: false,
-				}),
-			).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
-
 			const disabledNavLinks = page
 				.getByRole('navigation')
 				.getByRole('link', { disabled: true })
 
-			await expect(disabledNavLinks).toHaveText(['Exchange', 'Settings'])
+			await expect(disabledNavLinks.first()).toHaveAccessibleName(
+				'View project.',
+			)
+
+			await expect(disabledNavLinks.nth(1)).toHaveAccessibleName(
+				'View exchange.',
+			)
+
+			await expect(disabledNavLinks).toHaveText(['', '', 'Team', 'Settings'])
 		}
 
 		// Main
@@ -1005,7 +1190,9 @@ test.describe('project settings', () => {
 		}
 
 		await main.getByRole('button', { name: 'Go back.', exact: true }).click()
-		await main.getByRole('link', { name: 'Edit Info', exact: true }).click()
+		await main
+			.getByRole('link', { name: 'Go to project info settings.', exact: true })
+			.click()
 
 		//// Cancel changes (back button)
 		{
@@ -1037,7 +1224,12 @@ test.describe('project settings', () => {
 
 			// Leave and re-enter using back button
 			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
-			await main.getByRole('link', { name: 'Edit Info', exact: true }).click()
+			await main
+				.getByRole('link', {
+					name: 'Go to project info settings.',
+					exact: true,
+				})
+				.click()
 
 			// Assert inputs state
 			const projectNameInput = main.getByRole('textbox', {
@@ -1100,7 +1292,12 @@ test.describe('project settings', () => {
 
 			// Leave using cancel button and re-enter
 			await main.getByRole('button', { name: 'Cancel', exact: true }).click()
-			await main.getByRole('link', { name: 'Edit Info', exact: true }).click()
+			await main
+				.getByRole('link', {
+					name: 'Go to project info settings.',
+					exact: true,
+				})
+				.click()
 
 			// Assert inputs state
 			const projectNameInput = main.getByRole('textbox', {
@@ -1230,7 +1427,9 @@ test.describe('project settings', () => {
 		}
 
 		await main.getByRole('button', { name: 'Go back.', exact: true }).click()
-		await main.getByRole('link', { name: 'Edit Info', exact: true }).click()
+		await main
+			.getByRole('link', { name: 'Go to project info settings.', exact: true })
+			.click()
 
 		//// Updating and saving project info
 		{
@@ -1269,21 +1468,12 @@ test.describe('project settings', () => {
 				const projectInfoItem = main.getByRole('listitem').first()
 
 				await expect(
-					projectInfoItem.getByRole('heading', {
-						name: OUTPUTS.projectName,
-						exact: true,
-					}),
-				).toBeVisible()
-
-				await expect(
-					projectInfoItem.getByText(OUTPUTS.projectDescription, {
-						exact: true,
-					}),
+					projectInfoItem.getByText(OUTPUTS.projectName, { exact: true }),
 				).toBeVisible()
 
 				await projectInfoItem
 					.getByRole('link', {
-						name: 'Edit Info',
+						name: 'Go to project info settings.',
 						exact: true,
 					})
 					.click()
@@ -1331,18 +1521,31 @@ test.describe('project settings', () => {
 
 		const main = page.getByRole('main')
 
-		await main.getByRole('link', { name: 'Update Set', exact: true }).click()
+		await main
+			.getByRole('link', { name: 'Go to categories settings.', exact: true })
+			.click()
 
 		// Navigation
 		{
-			const navLinks = page
+			const enabledNavLinks = page
 				.getByRole('navigation')
 				.getByRole('link', { disabled: false })
 
-			await expect(navLinks.first()).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
-			await expect(navLinks.first()).toHaveAccessibleName('View project.')
+			await expect(enabledNavLinks.first()).toHaveAccessibleName(
+				'View project.',
+			)
 
-			await expect(navLinks).toHaveText(['', 'Exchange', 'Settings'])
+			await expect(enabledNavLinks.nth(1)).toHaveAccessibleName(
+				'View exchange.',
+			)
+
+			await expect(enabledNavLinks).toHaveText([
+				'',
+				'',
+				'Team',
+				'Tools',
+				'Settings',
+			])
 		}
 
 		// Main
@@ -1464,7 +1667,7 @@ test.describe('project settings', () => {
 
 				await categoriesSetItem
 					.getByRole('link', {
-						name: 'Update Set',
+						name: 'Go to categories settings.',
 						exact: true,
 					})
 					.click()

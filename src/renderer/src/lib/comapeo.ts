@@ -1,7 +1,30 @@
-import type { MemberApi } from '@comapeo/core'
+import type { BlobApi, MemberApi } from '@comapeo/core'
 import type { Observation, Preset, Track } from '@comapeo/schema'
 
 export type Attachment = Observation['attachments'][number]
+
+export type PhotoAttachment = Extract<Attachment, { type: 'photo' }>
+export type AudioAttachment = Omit<Attachment, 'type'> & { type: 'audio' }
+
+export type PhotoAttachmentVariant = Extract<
+	BlobApi.BlobId,
+	{ type: 'photo' }
+>['variant']
+export type AudioAttachmentVariant = Extract<
+	BlobApi.BlobId,
+	{ type: 'audio' }
+>['variant']
+
+export function isPhotoAttachment(
+	attachment: Attachment,
+): attachment is PhotoAttachment {
+	return attachment.type === 'photo'
+}
+export function isAudioAttachment(
+	attachment: Attachment,
+): attachment is AudioAttachment {
+	return attachment.type === 'audio'
+}
 
 export type DeviceType = NonNullable<MemberApi.MemberInfo['deviceType']>
 
@@ -17,8 +40,8 @@ export const COMAPEO_CORE_REACT_ROOT_QUERY_KEY = '@comapeo/core-react' as const
 export const CREATOR_ROLE_ID = 'a12a6702b93bd7ff'
 export const COORDINATOR_ROLE_ID = 'f7c150f5a3a9a855'
 export const MEMBER_ROLE_ID = '012fd2d431c0bf60'
-// export const BLOCKED_ROLE_ID = '9e6d29263cba36c9'
-// export const LEFT_ROLE_ID = '8ced989b1904606b'
+export const BLOCKED_ROLE_ID = '9e6d29263cba36c9'
+export const LEFT_ROLE_ID = '8ced989b1904606b'
 // export const FAILED_ROLE_ID = 'a24eaca65ab5d5d0'
 // export const NO_ROLE_ID = '08e4251e36f6e7ed'
 
@@ -81,18 +104,17 @@ export function getMatchingCategoryForDocument(
 	return result
 }
 
-type ActiveRemoteArchiveMemberInfo = MemberApi.MemberInfo & {
+export type RemoteArchiveMemberInfo = MemberApi.MemberInfo & {
 	deviceType: 'selfHostedServer'
 	selfHostedServerDetails: NonNullable<
 		MemberApi.MemberInfo['selfHostedServerDetails']
 	>
 }
 
-export function memberIsActiveRemoteArchive(
+export function memberIsRemoteArchive(
 	member: MemberApi.MemberInfo,
-): member is ActiveRemoteArchiveMemberInfo {
-	if (member.deviceType !== 'selfHostedServer') return false
-	if (!member.selfHostedServerDetails) return false
-	if (member.role.roleId !== MEMBER_ROLE_ID) return false
-	return true
+): member is RemoteArchiveMemberInfo {
+	return (
+		member.deviceType === 'selfHostedServer' && !!member.selfHostedServerDetails
+	)
 }

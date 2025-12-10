@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useEffect, useState, type JSX } from 'react'
 import {
 	useDeleteDocument,
 	useManyDocs,
@@ -15,6 +15,7 @@ import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { captureException, captureMessage } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -43,6 +44,8 @@ import {
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 	getMatchingCategoryForDocument,
+	isAudioAttachment,
+	isPhotoAttachment,
 	type ObservationTagValue,
 } from '../../../../../../lib/comapeo'
 import { formatCoords } from '../../../../../../lib/coordinate-format'
@@ -58,9 +61,11 @@ import { EditableNotesSection, ReadOnlyNotesSection } from './-notes-section'
 import {
 	ObservationAttachmentError,
 	ObservationAttachmentPending,
-	ObservationAttachmentPreview,
+	ObservationAudioAttachmentPreview,
+	ObservationPhotoAttachmentPreview,
+	ObservationUnsupportedAttachmentPreview,
 } from './-observation-attachment'
-import { getDisplayedTagValue, type EditableField } from './shared'
+import { getDisplayedTagValue, type EditableField } from './-shared'
 
 const SearchParamsSchema = v.object({
 	fromTrackDocId: v.optional(v.string()),
@@ -596,17 +601,93 @@ function ObservationDetailsPanel({
 								{observation.attachments.map((attachment) => {
 									const key = `${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`
 
+									let previewToRender: JSX.Element
+
+									if (isPhotoAttachment(attachment)) {
+										previewToRender = (
+											<ErrorBoundary
+												getResetKey={() => key + ':preview'}
+												onError={() => {
+													captureMessage('Failed to load preview image', {
+														level: 'info',
+														extra: {
+															driveId: attachment.driveDiscoveryId,
+															name: attachment.name,
+														},
+													})
+												}}
+												fallback={() => (
+													<ObservationPhotoAttachmentPreview
+														projectId={projectId}
+														attachment={attachment}
+														variant="thumbnail"
+													/>
+												)}
+											>
+												<ErrorBoundary
+													getResetKey={() => key + ':original'}
+													onError={() => {
+														captureMessage('Failed to load original image', {
+															level: 'info',
+															extra: {
+																driveId: attachment.driveDiscoveryId,
+																name: attachment.name,
+															},
+														})
+													}}
+													fallback={() => (
+														<ObservationPhotoAttachmentPreview
+															projectId={projectId}
+															attachment={attachment}
+															variant="preview"
+														/>
+													)}
+												>
+													<ObservationPhotoAttachmentPreview
+														projectId={projectId}
+														attachment={attachment}
+														variant="original"
+													/>
+												</ErrorBoundary>
+											</ErrorBoundary>
+										)
+									} else if (isAudioAttachment(attachment)) {
+										previewToRender = (
+											<ObservationAudioAttachmentPreview
+												projectId={projectId}
+												attachment={attachment}
+												variant="original"
+											/>
+										)
+									} else {
+										previewToRender = (
+											<ObservationUnsupportedAttachmentPreview
+												attachmentName={attachment.name}
+											/>
+										)
+									}
+
 									return (
 										<ErrorBoundary
 											key={key}
 											getResetKey={() => key}
+											onError={(err) => {
+												captureException(
+													new Error('Failed to load attachment'),
+													{
+														originalException: err,
+														data: {
+															driveId: attachment.driveDiscoveryId,
+															name: attachment.name,
+															type: attachment.type,
+														},
+													},
+												)
+											}}
 											fallback={() => <ObservationAttachmentError />}
 										>
 											<Suspense fallback={<ObservationAttachmentPending />}>
-												<ObservationAttachmentPreview
-													attachment={attachment}
-													projectId={projectId}
-												/>
+												{previewToRender}
 											</Suspense>
 										</ErrorBoundary>
 									)

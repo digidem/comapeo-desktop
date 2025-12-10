@@ -11,12 +11,12 @@ window.onmessage = (event) => {
 }
 
 /**
- * @type {import('./runtime.js').RuntimeApi}
+ * @type { import('./runtime.js').RuntimeApi }
  */
 const runtimeApi = {
 	// Files
 	async selectFile(opts) {
-		/** @type {unknown} */
+		/** @type { unknown } */
 		const result = await ipcRenderer.invoke('files:select_file', opts)
 
 		if (!result) return undefined
@@ -26,7 +26,7 @@ const runtimeApi = {
 		return result
 	},
 	async selectDirectory(opts) {
-		/** @type {unknown} */
+		/** @type { unknown } */
 		const result = await ipcRenderer.invoke('files:select_directory', opts)
 
 		if (!result) return undefined
@@ -121,9 +121,9 @@ const runtimeApi = {
 }
 
 /**
- * @param {`comapeo-${string}`} flag
+ * @param { `comapeo-${string}` } flag
  *
- * @returns {string}
+ * @returns { string }
  */
 function getProcessArgValue(flag) {
 	const match = process.argv
@@ -144,9 +144,9 @@ function getProcessArgValue(flag) {
 }
 
 /**
- * @param {NonNullable<unknown>} value
+ * @param { NonNullable<unknown> } value
  *
- * @returns {asserts value is import('../shared/ipc.ts').SelectedFile}
+ * @returns { asserts value is import('../shared/ipc.ts').SelectedFile }
  */
 function validateSelectedFileResult(value) {
 	if (!('path' in value && 'name' in value)) {

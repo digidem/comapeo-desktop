@@ -2,6 +2,7 @@ import { useSingleDocByDocId, useUpdateDocument } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 
@@ -19,7 +20,7 @@ import {
 	SingleSelectFieldEditor,
 	TextFieldEditor,
 } from './-field-editors'
-import { getDisplayedTagValue, type EditableField } from './shared'
+import { getDisplayedTagValue, type EditableField } from './-shared'
 
 export function ReadOnlyFieldSection({
 	label,
@@ -152,6 +153,8 @@ export function EditableFieldSection({
 												await updateObservationField.mutateAsync({ value })
 											}
 											updateEditState('success')
+										} catch (err) {
+											captureException(err)
 										} finally {
 											onStopEditMode()
 										}
@@ -182,6 +185,8 @@ export function EditableFieldSection({
 												await updateObservationField.mutateAsync({ value })
 											}
 											updateEditState('success')
+										} catch (err) {
+											captureException(err)
 										} finally {
 											onStopEditMode()
 										}
@@ -212,6 +217,8 @@ export function EditableFieldSection({
 												await updateObservationField.mutateAsync({ value })
 											}
 											updateEditState('success')
+										} catch (err) {
+											captureException(err)
 										} finally {
 											onStopEditMode()
 										}
@@ -242,6 +249,8 @@ export function EditableFieldSection({
 										try {
 											await updateObservationField.mutateAsync({ value })
 											updateEditState('success')
+										} catch (err) {
+											captureException(err)
 										} finally {
 											onStopEditMode()
 										}

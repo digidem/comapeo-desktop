@@ -1,5 +1,7 @@
-import { Suspense, type ReactNode } from 'react'
+import { Suspense } from 'react'
 import { useMapStyleUrl, useOwnDeviceInfo } from '@comapeo/core-react'
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
@@ -8,13 +10,10 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
+import { ListRowLink } from '../-components/list-row-link'
 import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors'
 import { ErrorBoundary } from '../../../components/error-boundary'
 import { Icon } from '../../../components/icon'
-import {
-	ListItemButtonLink,
-	type ListItemButtonLinkComponentProps,
-} from '../../../components/link'
 import { useIconSizeBasedOnTypography } from '../../../hooks/icon'
 import { getLanguageInfo } from '../../../lib/intl'
 import {
@@ -34,18 +33,26 @@ function RouteComponent() {
 	return (
 		<Stack direction="column" padding={6} flex={1} overflow="auto" gap={10}>
 			<Stack direction="column" gap={4} alignItems="center">
-				<Icon name="material-settings" size={100} htmlColor={DARKER_ORANGE} />
+				<Icon name="material-settings" size={120} htmlColor={DARKER_ORANGE} />
 
 				<Typography variant="h1" fontWeight={500} textAlign="center">
 					{t(m.title)}
 				</Typography>
 			</Stack>
 
-			<SettingsList />
+			<Suspense
+				fallback={
+					<Box display="flex" flexDirection="row" justifyContent="center">
+						<CircularProgress disableShrink />
+					</Box>
+				}
+			>
+				<SettingsList />
 
-			<DataAndPrivacySection />
+				<DataAndPrivacySection />
 
-			<AboutCoMapeoSection />
+				<AboutCoMapeoSection />
+			</Suspense>
 		</Stack>
 	)
 }
@@ -74,9 +81,14 @@ function SettingsList() {
 
 	const { data: styleUrl } = useMapStyleUrl()
 
-	const rowIconSize = useIconSizeBasedOnTypography({
+	const startIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
 		multiplier: 1.25,
+	})
+
+	const actionIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+		multiplier: 1.75,
 	})
 
 	return (
@@ -93,162 +105,124 @@ function SettingsList() {
 				disablePadding
 				sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
 			>
-				<SettingRow
-					to="/app/settings/device-name"
-					start={
-						<Icon
-							name="material-symbols-computer"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					}
-					end={<Typography color="primary">{t(m.editDeviceName)}</Typography>}
-					aria-label={t(m.deviceNameSettingsAccessibleLabel)}
-					// TODO: What to do when this is undefined?
-					label={deviceInfo.name || ''}
-				/>
-
-				<SettingRow
-					to="/app/settings/language"
-					start={
-						<Icon
-							name="material-language"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					}
-					end={
-						<Icon
-							name="material-chevron-right"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					}
-					aria-label={t(m.languageSettingsAccessibleLabel)}
-					label={selectedLanguageName}
-				/>
-
-				<SettingRow
-					to="/app/settings/coordinate-system"
-					start={
-						<Icon
-							name="material-explore-filled"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					}
-					end={
-						<Icon
-							name="material-chevron-right"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					}
-					aria-label={t(m.coordinateSystemSettingsAccessibleLabel)}
-					label={t(
-						coordinateFormat === 'utm'
-							? m.utmCoordinates
-							: coordinateFormat === 'dd'
-								? m.ddCoordinates
-								: m.dmsCoordinates,
-					)}
-				/>
-
-				<SettingRow
-					to="/app/settings/background-map"
-					start={
-						<Icon
-							name="material-layers-outlined"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					}
-					end={
-						<Icon
-							name="material-chevron-right"
-							htmlColor={DARK_GREY}
-							size={rowIconSize}
-						/>
-					}
-					aria-label={t(m.backgroundMapSettingsAccessibleLabel)}
-					label={
-						<Suspense>
-							<BackgroundMapLabel styleUrl={styleUrl} />
-						</Suspense>
-					}
-				/>
-
-				{__APP_TYPE__ !== 'production' &&
-				import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
-					<SettingRow
-						to="/app/settings/test-data"
+				<ListItem disableGutters disablePadding>
+					<ListRowLink
+						to="/app/settings/device-name"
 						start={
 							<Icon
-								name="material-auto-fix-high"
+								name="material-symbols-computer"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={startIconSize}
+							/>
+						}
+						end={<Typography color="primary">{t(m.editDeviceName)}</Typography>}
+						aria-label={t(m.deviceNameSettingsAccessibleLabel)}
+						// TODO: What to do when this is undefined?
+						label={deviceInfo.name || ''}
+					/>
+				</ListItem>
+
+				<ListItem disableGutters disablePadding>
+					<ListRowLink
+						to="/app/settings/language"
+						start={
+							<Icon
+								name="material-language"
+								htmlColor={DARK_GREY}
+								size={startIconSize}
 							/>
 						}
 						end={
 							<Icon
-								name="material-chevron-right"
+								name="material-chevron-right-rounded"
 								htmlColor={DARK_GREY}
-								size={rowIconSize}
+								size={actionIconSize}
 							/>
 						}
-						label={t(m.createTestData)}
+						aria-label={t(m.languageSettingsAccessibleLabel)}
+						label={selectedLanguageName}
 					/>
+				</ListItem>
+
+				<ListItem disableGutters disablePadding>
+					<ListRowLink
+						to="/app/settings/coordinate-system"
+						start={
+							<Icon
+								name="material-explore-filled"
+								htmlColor={DARK_GREY}
+								size={startIconSize}
+							/>
+						}
+						end={
+							<Icon
+								name="material-chevron-right-rounded"
+								htmlColor={DARK_GREY}
+								size={actionIconSize}
+							/>
+						}
+						aria-label={t(m.coordinateSystemSettingsAccessibleLabel)}
+						label={t(
+							coordinateFormat === 'utm'
+								? m.utmCoordinates
+								: coordinateFormat === 'dd'
+									? m.ddCoordinates
+									: m.dmsCoordinates,
+						)}
+					/>
+				</ListItem>
+
+				<ListItem disableGutters disablePadding>
+					<ListRowLink
+						to="/app/settings/background-map"
+						start={
+							<Icon
+								name="material-layers-outlined"
+								htmlColor={DARK_GREY}
+								size={startIconSize}
+							/>
+						}
+						end={
+							<Icon
+								name="material-chevron-right-rounded"
+								htmlColor={DARK_GREY}
+								size={actionIconSize}
+							/>
+						}
+						aria-label={t(m.backgroundMapSettingsAccessibleLabel)}
+						label={
+							<Suspense>
+								<BackgroundMapLabel styleUrl={styleUrl} />
+							</Suspense>
+						}
+					/>
+				</ListItem>
+
+				{__APP_TYPE__ !== 'production' &&
+				import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
+					<ListItem disableGutters disablePadding>
+						<ListRowLink
+							to="/app/settings/test-data"
+							start={
+								<Icon
+									name="material-auto-fix-high"
+									htmlColor={DARK_GREY}
+									size={startIconSize}
+								/>
+							}
+							end={
+								<Icon
+									name="material-chevron-right-rounded"
+									htmlColor={DARK_GREY}
+									size={actionIconSize}
+								/>
+							}
+							label={t(m.createTestData)}
+						/>
+					</ListItem>
 				) : null}
 			</List>
 		</Stack>
-	)
-}
-
-function SettingRow({
-	label,
-	start,
-	end,
-	...linkProps
-}: Pick<ListItemButtonLinkComponentProps, 'to' | 'params'> & {
-	label: ReactNode
-	start: ReactNode
-	end: ReactNode
-}) {
-	return (
-		<ListItemButtonLink
-			{...linkProps}
-			disableGutters
-			sx={{
-				borderRadius: 2,
-				border: `1px solid ${BLUE_GREY}`,
-				flexGrow: 0,
-			}}
-		>
-			<Stack
-				direction="row"
-				flex={1}
-				justifyContent="space-between"
-				alignItems="center"
-				overflow="auto"
-				padding={4}
-			>
-				<Stack direction="row" alignItems="center" gap={3} overflow="auto">
-					{start}
-
-					<Typography
-						textOverflow="ellipsis"
-						whiteSpace="nowrap"
-						overflow="hidden"
-						flex={1}
-						fontWeight={500}
-					>
-						{label}
-					</Typography>
-				</Stack>
-
-				{end}
-			</Stack>
-		</ListItemButtonLink>
 	)
 }
 

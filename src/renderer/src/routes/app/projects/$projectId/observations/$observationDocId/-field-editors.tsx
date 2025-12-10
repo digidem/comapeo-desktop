@@ -6,7 +6,6 @@ import FormGroup from '@mui/material/FormGroup'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import Stack from '@mui/material/Stack'
-import { captureException } from '@sentry/react'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
@@ -18,7 +17,7 @@ import {
 	type EditableNumberField,
 	type EditableSingleSelectField,
 	type EditableTextField,
-} from './shared'
+} from './-shared'
 
 const TextFieldEditorSchema = v.object({
 	answer: v.union([v.undefined(), v.pipe(v.string(), v.trim())]),
@@ -56,9 +55,7 @@ export function TextFieldEditor({
 			onSubmit={(event) => {
 				event.preventDefault()
 				if (form.state.isSubmitting) return
-				form.handleSubmit().catch((err) => {
-					captureException(err)
-				})
+				form.handleSubmit()
 			}}
 		>
 			<form.AppField name="answer">
@@ -163,9 +160,7 @@ export function NumberFieldEditor({
 			onSubmit={(event) => {
 				event.preventDefault()
 				if (form.state.isSubmitting) return
-				form.handleSubmit().catch((err) => {
-					captureException(err)
-				})
+				form.handleSubmit()
 			}}
 		>
 			<form.AppField name="answer">
@@ -266,9 +261,7 @@ export function SingleSelectFieldEditor({
 			onSubmit={(event) => {
 				event.preventDefault()
 				if (form.state.isSubmitting) return
-				form.handleSubmit().catch((err) => {
-					captureException(err)
-				})
+				form.handleSubmit()
 			}}
 		>
 			<form.AppField name="answer">
@@ -405,9 +398,7 @@ export function MultiSelectFieldEditor({
 			onSubmit={(event) => {
 				event.preventDefault()
 				if (form.state.isSubmitting) return
-				form.handleSubmit().catch((err) => {
-					captureException(err)
-				})
+				form.handleSubmit()
 			}}
 		>
 			<FormGroup>
