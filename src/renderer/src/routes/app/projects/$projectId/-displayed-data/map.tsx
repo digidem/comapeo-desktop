@@ -368,40 +368,6 @@ export function DisplayedDataMap() {
 		],
 	)
 
-	const highlightTrack = useCallback(
-		(docId: string, mapInstance: Pick<MapInstance, 'setFeatureState'>) => {
-			mapInstance.setFeatureState(
-				{ source: TRACKS_SOURCE_ID, id: docId },
-				{ highlight: true },
-			)
-		},
-		[],
-	)
-
-	const highlightObservation = useCallback(
-		(docId: string, mapInstance: Pick<MapInstance, 'setFeatureState'>) => {
-			mapInstance.setFeatureState(
-				{ source: OBSERVATIONS_SOURCE_ID, id: docId },
-				{ highlight: true },
-			)
-
-			let trackDocIdToHighlight: string | undefined
-
-			for (const t of tracks) {
-				if (t.observationRefs.some((o) => o.docId === docId)) {
-					trackDocIdToHighlight = t.docId
-					break
-				}
-			}
-
-			// NOTE: Highlight the associated track as well
-			if (trackDocIdToHighlight) {
-				highlightTrack(trackDocIdToHighlight, mapInstance)
-			}
-		},
-		[tracks, highlightTrack],
-	)
-
 	/**
 	 * NOTE: Determines if the hover state of a feature should be enabled
 	 */
@@ -423,9 +389,31 @@ export function DisplayedDataMap() {
 				if (documentToHighlight) {
 					// Enable the hover state for the relevant feature
 					if (documentToHighlight.type === 'observation') {
-						highlightObservation(documentToHighlight.docId, mapInstance)
+						let trackDocIdToHighlight: string | undefined
+
+						for (const t of tracks) {
+							if (
+								t.observationRefs.some(
+									(o) => o.docId === documentToHighlight.docId,
+								)
+							) {
+								trackDocIdToHighlight = t.docId
+								break
+							}
+						}
+
+						// NOTE: Highlight the associated track as well
+						if (trackDocIdToHighlight) {
+							mapInstance.setFeatureState(
+								{ source: TRACKS_SOURCE_ID, id: trackDocIdToHighlight },
+								{ highlight: true },
+							)
+						}
 					} else {
-						highlightTrack(documentToHighlight.docId, mapInstance)
+						mapInstance.setFeatureState(
+							{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
+							{ highlight: true },
+						)
 					}
 				}
 
@@ -448,12 +436,38 @@ export function DisplayedDataMap() {
 
 			// NOTE: Enable the hover state for the relevant features
 			if (feature.layer.id === OBSERVATIONS_LAYER_ID) {
-				highlightObservation(feature.properties.docId, mapInstance)
+				mapInstance.setFeatureState(
+					{ source: OBSERVATIONS_SOURCE_ID, id: feature.properties.docId },
+					{ highlight: true },
+				)
+
+				let trackDocIdToHighlight: string | undefined
+
+				for (const t of tracks) {
+					if (
+						t.observationRefs.some((o) => o.docId === feature.properties.docId)
+					) {
+						trackDocIdToHighlight = t.docId
+						break
+					}
+				}
+
+				// NOTE: Highlight the associated track as well
+				if (trackDocIdToHighlight) {
+					// highlightTrack(trackDocIdToHighlight, mapInstance)
+					mapInstance.setFeatureState(
+						{ source: TRACKS_SOURCE_ID, id: trackDocIdToHighlight },
+						{ highlight: true },
+					)
+				}
 			} else if (feature.layer.id === TRACKS_LAYER_ID) {
-				highlightTrack(feature.properties.docId, mapInstance)
+				mapInstance.setFeatureState(
+					{ source: TRACKS_SOURCE_ID, id: feature.properties.docId },
+					{ highlight: true },
+				)
 			}
 		},
-		[documentToHighlight, highlightObservation, highlightTrack],
+		[documentToHighlight, tracks],
 	)
 
 	/**
@@ -547,7 +561,7 @@ export function DisplayedDataMap() {
 		 * Controls map feature highlighting for when items in the list are selected
 		 * via single click.
 		 */
-		function updateHighlihgtedMapFeaturesFromListClick() {
+		function updateHighlightedMapFeaturesFromListClick() {
 			if (!mapRef.current) {
 				return
 			}
@@ -562,12 +576,31 @@ export function DisplayedDataMap() {
 
 			// Enable the hover state for the relevant feature
 			if (documentToHighlight.type === 'observation') {
-				highlightObservation(documentToHighlight.docId, mapRef.current)
+				let trackDocIdToHighlight: string | undefined
+
+				for (const t of tracks) {
+					if (
+						t.observationRefs.some((o) => o.docId === documentToHighlight.docId)
+					) {
+						trackDocIdToHighlight = t.docId
+						break
+					}
+				}
+
+				if (trackDocIdToHighlight) {
+					mapRef.current.setFeatureState(
+						{ source: TRACKS_SOURCE_ID, id: trackDocIdToHighlight },
+						{ highlight: true },
+					)
+				}
 			} else {
-				highlightTrack(documentToHighlight.docId, mapRef.current)
+				mapRef.current.setFeatureState(
+					{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
+					{ highlight: true },
+				)
 			}
 		},
-		[documentToHighlight, highlightObservation, highlightTrack],
+		[documentToHighlight, tracks],
 	)
 
 	useEffect(
