@@ -5,6 +5,7 @@ import {
 	useMemo,
 	useRef,
 	useState,
+	type ReactNode,
 } from 'react'
 import {
 	useManyDocs,
@@ -58,6 +59,9 @@ import { useMapsRefreshToken } from '../../../../../hooks/maps'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
 
+// TODO: Move to lib/colors
+const SHADOW_COLOR = '#686868'
+
 const OBSERVATIONS_SOURCE_ID = 'observations_source' as const
 const TRACKS_SOURCE_ID = 'tracks_source' as const
 
@@ -88,7 +92,7 @@ const TRACKS_HOVER_OUTLINE_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint']
 	}
 const TRACKS_HOVER_SHADOW_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] =
 	{
-		'line-color': '#686868',
+		'line-color': SHADOW_COLOR,
 		'line-blur': 20,
 		'line-width': 20,
 		'line-opacity': [
@@ -540,11 +544,16 @@ export function DisplayedDataMap() {
 				highlightedFeature.properties.type === 'observation' ? (
 					<Suspense>
 						<Marker
+							anchor="bottom"
+							onClick={(event) => {
+								event.originalEvent.preventDefault()
+								event.originalEvent.stopImmediatePropagation()
+							}}
 							longitude={highlightedFeature.geometry.coordinates[0]!}
 							latitude={highlightedFeature.geometry.coordinates[1]!}
 						>
 							{highlightedFeature.properties.categoryDocId ? (
-								<CategoryIcon
+								<CategoryIconMarker
 									categoryDocumentId={
 										highlightedFeature.properties.categoryDocId
 									}
@@ -552,13 +561,18 @@ export function DisplayedDataMap() {
 									lang={lang}
 								/>
 							) : (
-								<CategoryIconContainer
+								<IconMarkerContainer
 									color={BLUE_GREY}
-									applyBoxShadow
-									padding={1}
+									markerSize={MARKER_SIZE_PX}
 								>
-									<Icon name="material-place" size={ICON_SIZE} />
-								</CategoryIconContainer>
+									<CategoryIconContainer
+										color={BLUE_GREY}
+										applyBoxShadow
+										padding={2}
+									>
+										<Icon name="material-place" size={CATEGORY_ICON_SIZE_PX} />
+									</CategoryIconContainer>
+								</IconMarkerContainer>
 							)}
 						</Marker>
 					</Suspense>
@@ -589,9 +603,44 @@ export function DisplayedDataMap() {
 	)
 }
 
-const ICON_SIZE = 20
+const MARKER_SIZE_PX = 68
+const CATEGORY_ICON_SIZE_PX = 24
 
-function CategoryIcon({
+function IconMarkerContainer({
+	color,
+	children,
+	markerSize,
+}: {
+	color: string
+	children: ReactNode
+	markerSize: number | string
+}) {
+	return (
+		<Box
+			position="relative"
+			display="flex"
+			flexDirection="column"
+			justifyContent="center"
+			alignItems="center"
+		>
+			<Icon
+				name="comapeo-selected-marker"
+				htmlColor={color}
+				sx={{
+					filter: `drop-shadow(0 0 3px ${SHADOW_COLOR});`,
+					height: markerSize,
+					width: markerSize,
+				}}
+			/>
+
+			<Box position="absolute" top={0}>
+				{children}
+			</Box>
+		</Box>
+	)
+}
+
+function CategoryIconMarker({
 	categoryDocumentId,
 	lang,
 	projectId,
@@ -609,23 +658,23 @@ function CategoryIcon({
 		lang,
 	})
 
+	const color = category.color || BLUE_GREY
+
 	return (
-		<CategoryIconContainer
-			color={category.color || BLUE_GREY}
-			applyBoxShadow
-			padding={1}
-		>
-			{category.iconRef?.docId ? (
-				<CategoryIconImage
-					projectId={projectId}
-					iconDocumentId={category.iconRef.docId}
-					imageStyle={{ height: ICON_SIZE, aspectRatio: 1 }}
-					altText={t(m.categoryIconAlt, { name: category.name })}
-				/>
-			) : (
-				<Icon name="material-place" size={20} />
-			)}
-		</CategoryIconContainer>
+		<IconMarkerContainer color={color} markerSize={MARKER_SIZE_PX}>
+			<CategoryIconContainer color={color} applyBoxShadow padding={2}>
+				{category.iconRef?.docId ? (
+					<CategoryIconImage
+						projectId={projectId}
+						iconDocumentId={category.iconRef.docId}
+						imageStyle={{ height: CATEGORY_ICON_SIZE_PX, aspectRatio: 1 }}
+						altText={t(m.categoryIconAlt, { name: category.name })}
+					/>
+				) : (
+					<Icon name="material-place" size={CATEGORY_ICON_SIZE_PX} />
+				)}
+			</CategoryIconContainer>
+		</IconMarkerContainer>
 	)
 }
 

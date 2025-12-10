@@ -60,6 +60,7 @@ export const iconNames = [
 	'material-attachment',
 	'material-arrow-back',
 	'comapeo-send',
+	'comapeo-selected-marker',
 	'comapeo-cards',
 ] as const
 
