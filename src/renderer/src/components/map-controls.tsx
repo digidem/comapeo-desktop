@@ -96,7 +96,6 @@ class ZoomToSelectedDocumentControl implements IControl {
 							continue
 						}
 
-						console.log(this.#options.document.docId)
 						if (this.#options.document.type === 'observation') {
 							if (match.geometry.type !== 'Point') {
 								return
