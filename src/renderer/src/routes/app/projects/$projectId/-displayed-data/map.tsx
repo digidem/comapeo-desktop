@@ -1,4 +1,11 @@
-import { Suspense, useCallback, useMemo, useRef, useState } from 'react'
+import {
+	Suspense,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react'
 import {
 	useManyDocs,
 	useMapStyleUrl,
@@ -74,7 +81,7 @@ const TRACKS_HOVER_OUTLINE_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint']
 		'line-width': 12,
 		'line-opacity': [
 			'case',
-			['boolean', ['feature-state', 'hovered'], false],
+			['boolean', ['feature-state', 'highlight'], false],
 			1,
 			0,
 		],
@@ -86,7 +93,7 @@ const TRACKS_HOVER_SHADOW_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] 
 		'line-width': 20,
 		'line-opacity': [
 			'case',
-			['boolean', ['feature-state', 'hovered'], false],
+			['boolean', ['feature-state', 'highlight'], false],
 			1,
 			0,
 		],
@@ -292,17 +299,16 @@ export function DisplayedDataMap() {
 			mapCanvas.style.cursor = 'pointer'
 		}
 
-		// Update observation feature state to show hover state
+		// Enable the hover state for the relevant features
 		if (feature.layer.id === OBSERVATIONS_LAYER_ID) {
-			// Enable the hover state for the relevant feature
 			mapInstance.setFeatureState(
 				{ source: OBSERVATIONS_SOURCE_ID, id: feature.properties.docId },
-				{ hovered: true },
+				{ highlight: true },
 			)
 		} else if (feature.layer.id === TRACKS_LAYER_ID) {
 			mapInstance.setFeatureState(
 				{ source: TRACKS_SOURCE_ID, id: feature.properties.docId },
-				{ hovered: true },
+				{ highlight: true },
 			)
 		}
 	}, [])
@@ -399,6 +405,39 @@ export function DisplayedDataMap() {
 		observationsFeatureCollection,
 		tracksFeatureCollection,
 	])
+
+	useEffect(
+		/**
+		 * Controls map feature highlighting for when items in the list are selected
+		 * via single click.
+		 */
+		function updateHighlightedMapFeatures() {
+			if (!mapRef.current) {
+				return
+			}
+
+			mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
+			mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
+
+			if (!documentToHighlight) {
+				return
+			}
+
+			// Enable the hover state for the relevant feature
+			if (documentToHighlight.type === 'observation') {
+				mapRef.current.setFeatureState(
+					{ source: OBSERVATIONS_SOURCE_ID, id: documentToHighlight.docId },
+					{ highlight: true },
+				)
+			} else {
+				mapRef.current.setFeatureState(
+					{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
+					{ highlight: true },
+				)
+			}
+		},
+		[documentToHighlight],
+	)
 
 	return (
 		<Box position="relative" display="flex" flex={1}>
@@ -680,7 +719,7 @@ function createObservationLayerPaintProperty(
 				: ORANGE,
 		'circle-radius': [
 			'case',
-			['boolean', ['feature-state', 'hovered'], false],
+			['boolean', ['feature-state', 'highlight'], false],
 			9,
 			6,
 		],
