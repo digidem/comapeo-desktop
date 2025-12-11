@@ -49,6 +49,7 @@ import {
 } from 'react-map-gl/maplibre'
 import * as v from 'valibot'
 
+import type { HighlightedDocument } from '../-shared.ts'
 import { BLACK, BLUE_GREY, ORANGE, WHITE } from '../../../../../colors'
 import {
 	CategoryIconContainer,
@@ -63,7 +64,6 @@ import {
 import { useMapsRefreshToken } from '../../../../../hooks/maps'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
-import type { HighlightedDocument } from '../route.tsx'
 
 // TODO: Move to lib/colors
 const SHADOW_COLOR = '#686868'
