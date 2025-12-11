@@ -2,6 +2,7 @@ import {
 	Suspense,
 	useCallback,
 	useEffect,
+	useEffectEvent,
 	useMemo,
 	useRef,
 	type CSSProperties,
@@ -22,6 +23,7 @@ import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { defineMessages, useIntl } from 'react-intl'
 
+import type { HighlightedDocument } from '../-shared.ts'
 import {
 	BLACK,
 	BLUE_GREY,
@@ -106,6 +108,20 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 	const rowVirtualizer = useVirtual(listRef, sortedListData)
 	const { scrollToIndex } = rowVirtualizer
 
+	const scrollToHighlightedItem = useEffectEvent(
+		(document: HighlightedDocument) => {
+			const itemIndexToScrollTo = highlightedDocument?.docId
+				? sortedListData.findIndex(
+						(item) => item.document.docId === document.docId,
+					)
+				: undefined
+
+			if (itemIndexToScrollTo) {
+				scrollToIndex(itemIndexToScrollTo, { align: 'center' })
+			}
+		},
+	)
+
 	const mountedRef = useRef<boolean>(false)
 
 	useEffect(
@@ -113,26 +129,18 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 		 * Handles autoscrolling to selected item in list when initially loading the
 		 * page.
 		 */
-		function scrollToItemOnMount() {
+		function onInitialRender() {
 			if (mountedRef.current) {
 				return
 			}
 
-			if (highlightedDocument?.docId) {
-				const itemIndexToScrollTo = highlightedDocument?.docId
-					? sortedListData.findIndex(
-							({ document }) => document.docId === highlightedDocument.docId,
-						)
-					: undefined
-
-				if (itemIndexToScrollTo) {
-					scrollToIndex(itemIndexToScrollTo, { align: 'center' })
-				}
+			if (highlightedDocument) {
+				scrollToHighlightedItem(highlightedDocument)
 			}
 
 			mountedRef.current = true
 		},
-		[highlightedDocument?.docId, scrollToIndex, sortedListData],
+		[highlightedDocument],
 	)
 
 	return sortedListData.length > 0 ? (
