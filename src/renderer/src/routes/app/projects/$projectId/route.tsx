@@ -20,6 +20,10 @@ const SearchParamsSchema = v.object({
 	),
 })
 
+export type HighlightedDocument = NonNullable<
+	v.InferOutput<typeof SearchParamsSchema>['highlightedDocument']
+>
+
 export const Route = createFileRoute('/app/projects/$projectId')({
 	validateSearch: SearchParamsSchema,
 	beforeLoad: async ({ context, params }) => {
