@@ -9,15 +9,10 @@ import { BLACK } from '../../../../colors'
 import { GenericRoutePendingComponent } from '../../../../components/generic-route-pending-component'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
 import { DisplayedDataMap } from './-displayed-data/map'
+import { HighlightedDocumentSchema } from './-shared.ts'
 
 const SearchParamsSchema = v.object({
-	highlightedDocument: v.optional(
-		v.object({
-			type: v.union([v.literal('observation'), v.literal('track')]),
-			docId: v.string(),
-			from: v.union([v.literal('map'), v.literal('list')]),
-		}),
-	),
+	highlightedDocument: v.optional(HighlightedDocumentSchema),
 })
 
 export const Route = createFileRoute('/app/projects/$projectId')({

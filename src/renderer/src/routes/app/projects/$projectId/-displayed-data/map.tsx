@@ -2,6 +2,7 @@ import {
 	Suspense,
 	useCallback,
 	useEffect,
+	useEffectEvent,
 	useMemo,
 	useRef,
 	useState,
@@ -48,6 +49,7 @@ import {
 } from 'react-map-gl/maplibre'
 import * as v from 'valibot'
 
+import type { HighlightedDocument } from '../-shared.ts'
 import { BLACK, BLUE_GREY, ORANGE, WHITE } from '../../../../../colors'
 import {
 	CategoryIconContainer,
@@ -136,34 +138,35 @@ export function DisplayedDataMap() {
 		},
 	})
 
-	const documentFromRouteParams: typeof documentFromSearch = useChildMatches({
-		select: (matches) => {
-			for (const m of matches) {
-				if (
-					m.routeId ===
-						'/app/projects/$projectId/observations/$observationDocId/' ||
-					m.routeId ===
-						'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
-				) {
-					return {
-						type: 'observation' as const,
-						docId: m.params.observationDocId,
-						from: 'list' as const,
+	const documentFromRouteParams: HighlightedDocument | undefined =
+		useChildMatches({
+			select: (matches) => {
+				for (const m of matches) {
+					if (
+						m.routeId ===
+							'/app/projects/$projectId/observations/$observationDocId/' ||
+						m.routeId ===
+							'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
+					) {
+						return {
+							type: 'observation' as const,
+							docId: m.params.observationDocId,
+							from: 'list' as const,
+						}
+					}
+
+					if (m.routeId === '/app/projects/$projectId/tracks/$trackDocId/') {
+						return {
+							type: 'track' as const,
+							docId: m.params.trackDocId,
+							from: 'list' as const,
+						}
 					}
 				}
 
-				if (m.routeId === '/app/projects/$projectId/tracks/$trackDocId/') {
-					return {
-						type: 'track' as const,
-						docId: m.params.trackDocId,
-						from: 'list' as const,
-					}
-				}
-			}
-
-			return undefined
-		},
-	})
+				return undefined
+			},
+		})
 
 	// Highlighting should occur under the following scenarios:
 	// 1. A feature on the map while on the main project page is hovered over.
@@ -245,9 +248,9 @@ export function DisplayedDataMap() {
 				coordinates: [lat: number, lon: number]
 				shouldZoomIn?: boolean
 			},
-			mapInstance: Pick<MapInstance, 'panTo'>,
+			map: MapInstance | MapRef,
 		) => {
-			mapInstance.panTo(
+			map.panTo(
 				{
 					lon: coordinates[0],
 					lat: coordinates[1],
@@ -269,13 +272,13 @@ export function DisplayedDataMap() {
 				>['features'][number]
 				shouldZoomIn?: boolean
 			},
-			mapInstance: Pick<MapInstance, 'panTo' | 'fitBounds'>,
+			map: MapInstance | MapRef,
 		) => {
 			const c = center(trackFeature)
 
 			const [minLon, minLat, maxLon, maxLat] = bbox(trackFeature)
 
-			mapInstance.panTo(
+			map.panTo(
 				{
 					lon: c.geometry.coordinates[0]!,
 					lat: c.geometry.coordinates[1]!,
@@ -283,10 +286,7 @@ export function DisplayedDataMap() {
 				{ zoom: shouldZoomIn ? 10 : undefined },
 			)
 
-			mapInstance.fitBounds(
-				[minLon, minLat, maxLon, maxLat],
-				BASE_FIT_BOUNDS_OPTIONS,
-			)
+			map.fitBounds([minLon, minLat, maxLon, maxLat], BASE_FIT_BOUNDS_OPTIONS)
 		},
 		[],
 	)
@@ -556,37 +556,26 @@ export function DisplayedDataMap() {
 		tracksFeatureCollection,
 	])
 
-	useEffect(
-		/**
-		 * Controls map feature highlighting for when items in the list are selected
-		 * via single click.
-		 */
-		function updateHighlightedMapFeaturesFromListClick() {
+	const highlightMapFeature = useEffectEvent(
+		(document: HighlightedDocument) => {
 			if (!mapRef.current) {
-				return
-			}
-
-			// NOTE: Only care about triggers from list interactions
-			if (documentToHighlight?.from !== 'list') {
 				return
 			}
 
 			mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
 			mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
 
-			// Enable the hover state for the relevant feature
-			if (documentToHighlight.type === 'observation') {
+			if (document.type === 'observation') {
 				let trackDocIdToHighlight: string | undefined
 
 				for (const t of tracks) {
-					if (
-						t.observationRefs.some((o) => o.docId === documentToHighlight.docId)
-					) {
+					if (t.observationRefs.some((o) => o.docId === document.docId)) {
 						trackDocIdToHighlight = t.docId
 						break
 					}
 				}
 
+				// NOTE: Highlight the associated track as well
 				if (trackDocIdToHighlight) {
 					mapRef.current.setFeatureState(
 						{ source: TRACKS_SOURCE_ID, id: trackDocIdToHighlight },
@@ -595,21 +584,74 @@ export function DisplayedDataMap() {
 				}
 			} else {
 				mapRef.current.setFeatureState(
-					{ source: TRACKS_SOURCE_ID, id: documentToHighlight.docId },
+					{ source: TRACKS_SOURCE_ID, id: document.docId },
 					{ highlight: true },
 				)
 			}
 		},
-		[documentToHighlight, tracks],
 	)
+
+	useEffect(
+		/**
+		 * Controls map feature highlighting for when items in the list are selected
+		 * via single click.
+		 */
+		function onUpdateFromListSingleClick() {
+			// NOTE: Only care about triggers from list interactions
+			if (documentToHighlight?.from !== 'list') {
+				return
+			}
+
+			highlightMapFeature(documentToHighlight)
+		},
+		[documentToHighlight],
+	)
+
+	const moveToMapFeature = useEffectEvent((document: HighlightedDocument) => {
+		if (!mapRef.current) {
+			return
+		}
+
+		const shouldZoomIn = mapRef.current.getZoom() < 10
+
+		if (document.type === 'observation') {
+			const observationMatch = observationsFeatureCollection.features.find(
+				({ properties }) => properties.docId === document.docId,
+			)
+
+			if (observationMatch) {
+				moveMapToObservation(
+					{
+						coordinates: [
+							observationMatch.geometry.coordinates[0]!,
+							observationMatch.geometry.coordinates[1]!,
+						],
+						shouldZoomIn,
+					},
+					mapRef.current,
+				)
+			}
+		} else {
+			const tracksMatch = tracksFeatureCollection.features.find(
+				({ properties }) => properties.docId === document.docId,
+			)
+
+			if (tracksMatch) {
+				moveMapToTrack(
+					{ trackFeature: tracksMatch, shouldZoomIn },
+					mapRef.current,
+				)
+			}
+		}
+	})
 
 	useEffect(
 		/**
 		 * Controls movement to map feature when navigating to document-specific
 		 * page via the list.
 		 */
-		function moveToMapFeaturesFromListDoubleClick() {
-			if (!mapLoaded || !mapRef.current) {
+		function onUpdateFromListDoubleClick() {
+			if (!mapLoaded) {
 				return
 			}
 
@@ -632,47 +674,9 @@ export function DisplayedDataMap() {
 				return
 			}
 
-			const shouldZoomIn = mapRef.current.getZoom() < 10
-
-			if (documentToHighlight.type === 'observation') {
-				const observationMatch = observationsFeatureCollection.features.find(
-					({ properties }) => properties.docId === documentToHighlight.docId,
-				)
-
-				if (observationMatch) {
-					moveMapToObservation(
-						{
-							coordinates: [
-								observationMatch.geometry.coordinates[0]!,
-								observationMatch.geometry.coordinates[1]!,
-							],
-							shouldZoomIn,
-						},
-						mapRef.current,
-					)
-				}
-			} else {
-				const tracksMatch = tracksFeatureCollection.features.find(
-					({ properties }) => properties.docId === documentToHighlight.docId,
-				)
-
-				if (tracksMatch) {
-					moveMapToTrack(
-						{ trackFeature: tracksMatch, shouldZoomIn },
-						mapRef.current,
-					)
-				}
-			}
+			moveToMapFeature(documentToHighlight)
 		},
-		[
-			currentRoute,
-			documentToHighlight,
-			mapLoaded,
-			moveMapToObservation,
-			moveMapToTrack,
-			observationsFeatureCollection,
-			tracksFeatureCollection,
-		],
+		[currentRoute, documentToHighlight, mapLoaded],
 	)
 
 	return (
