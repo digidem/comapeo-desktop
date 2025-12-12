@@ -44,7 +44,7 @@ export const Route = createFileRoute(
 	component: RouteComponent,
 })
 
-const DEFAULT_CATEGORIES_NAME = `@comapeo/default-categories`
+const DEFAULT_CATEGORIES_NAME = 'CoMapeo Default Categories'
 
 const SELECT_AND_IMPORT_CATEGORY_MUTATION_KEY = createGlobalMutationsKey([
 	'category',
@@ -77,6 +77,9 @@ function RouteComponent() {
 			return importCategoriesFile.mutateAsync({ filePath: fileInfo.path })
 		},
 	})
+
+	const displayedName =
+		projectSettings.configMetadata?.name || t(m.fallbackCategoriesName)
 
 	return (
 		<>
@@ -135,39 +138,60 @@ function RouteComponent() {
 					>
 						<Box alignSelf="center">
 							<Icon
-								name="material-category"
+								name="material-symbols-apps"
 								htmlColor={DARK_ORANGE}
 								size={128}
 							/>
 						</Box>
 
 						<Typography variant="h1" fontWeight={500} textAlign="center">
-							{projectSettings.configMetadata?.name ||
-								// TODO: Get confirmation about what this should be
-								t(m.missingCategoriesName)}
+							{displayedName}
 						</Typography>
 
-						{projectSettings.configMetadata?.importDate ? (
-							<Typography
-								textAlign="center"
-								color="textSecondary"
-								fontWeight={500}
-							>
-								{t(m.dateAdded, {
-									date: (
-										<time
-											key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
-											dateTime={projectSettings.configMetadata.importDate}
-										>
-											{formatDate(projectSettings.configMetadata.importDate, {
-												year: 'numeric',
-												month: 'long',
-												day: 'numeric',
-											})}
-										</time>
-									),
-								})}
-							</Typography>
+						{projectSettings.configMetadata ? (
+							<Stack direction="column" gap={2}>
+								<Typography
+									textAlign="center"
+									color="textSecondary"
+									fontWeight={500}
+								>
+									{t(m.dateCreated, {
+										date: (
+											<time
+												key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
+												dateTime={projectSettings.configMetadata.buildDate}
+											>
+												{formatDate(projectSettings.configMetadata.buildDate, {
+													year: 'numeric',
+													month: 'long',
+													day: 'numeric',
+												})}
+											</time>
+										),
+									})}
+								</Typography>
+
+								<Typography
+									textAlign="center"
+									color="textSecondary"
+									fontWeight={500}
+								>
+									{t(m.dateAdded, {
+										date: (
+											<time
+												key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
+												dateTime={projectSettings.configMetadata.importDate}
+											>
+												{formatDate(projectSettings.configMetadata.importDate, {
+													year: 'numeric',
+													month: 'long',
+													day: 'numeric',
+												})}
+											</time>
+										),
+									})}
+								</Typography>
+							</Stack>
 						) : null}
 
 						{projectSettings.configMetadata?.name ===
@@ -239,15 +263,20 @@ const m = defineMessages({
 		defaultMessage: 'Upload New Set',
 		description: 'Label for button to upload new categories set.',
 	},
-	missingCategoriesName: {
-		id: 'routes.app.projects.$projectId_.settings.categories.missingCategoriesName',
-		defaultMessage: 'No name found for categories set.',
-		description: 'Text indicating that project is missing categories set name.',
+	fallbackCategoriesName: {
+		id: 'routes.app.projects.$projectId_.settings.categories.fallbackCategoriesName',
+		defaultMessage: 'CoMapeo Categories',
+		description: 'Fallback displayed name when project has no category set.',
 	},
 	dateAdded: {
 		id: 'routes.app.projects.$projectId_.settings.categories.dateAdded',
 		defaultMessage: 'Added {date}',
 		description: 'Text indicating the date the categories set was added.',
+	},
+	dateCreated: {
+		id: 'routes.app.projects.$projectId_.settings.categories.dateCreated',
+		defaultMessage: 'Created {date}',
+		description: 'Text indicating the date the categories set was created.',
 	},
 	defaultCategoriesExplainer: {
 		id: 'routes.app.projects.$projectId_.settings.categories.defaultCategoriesExplainer',
