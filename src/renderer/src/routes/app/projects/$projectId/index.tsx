@@ -111,7 +111,14 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 				setInfoToShow({ type: 'tooltip', show: false })
 			}}
 		>
-			<Box display="flex">
+			<Box
+				display="flex"
+				onKeyDown={(event) => {
+					if (event.key === 'Tab' || event.key === 'Escape') {
+						setInfoToShow({ type: 'tooltip', show: false })
+					}
+				}}
+			>
 				<Tooltip
 					title={t(m.projectInfoTooltip)}
 					slots={{ transition: Fade }}
@@ -178,7 +185,10 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 					placement="right-start"
 					transition
 					sx={{ maxWidth: 300, zIndex: 1 }}
-					modifiers={[{ name: 'offset', options: { offset: [0, 8] } }]}
+					modifiers={[
+						{ name: 'offset', options: { offset: [0, 8] } },
+						{ name: 'eventListeners', enabled: true },
+					]}
 					{...(infoToShow.type === 'popper'
 						? { open: true, anchorEl: infoToShow.anchor }
 						: { open: false })}
