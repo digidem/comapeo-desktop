@@ -176,7 +176,9 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 								},
 							}}
 						>
-							<Typography variant="button">{displayedName}</Typography>
+							<Typography variant="button" sx={{ wordBreak: 'break-all' }}>
+								{displayedName}
+							</Typography>
 						</ButtonBase>
 					</Box>
 				</Tooltip>
@@ -186,7 +188,7 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 					role="dialog"
 					placement="right-start"
 					transition
-					sx={{ maxWidth: 300, zIndex: 1 }}
+					sx={{ width: `clamp(250px, 25%, 350px)`, zIndex: 1 }}
 					modifiers={[
 						{ name: 'offset', options: { offset: [0, 8] } },
 						{ name: 'eventListeners', enabled: true },
@@ -205,12 +207,16 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 									padding={6}
 								>
 									<Stack direction="column" gap={4}>
-										<Typography variant="h1" fontWeight={500}>
+										<Typography
+											variant="h1"
+											fontWeight={500}
+											sx={{ wordBreak: 'break-all' }}
+										>
 											{displayedName}
 										</Typography>
 
 										{projectSettings.projectDescription ? (
-											<Typography>
+											<Typography sx={{ wordBreak: 'break-all' }}>
 												{projectSettings.projectDescription}
 											</Typography>
 										) : null}
