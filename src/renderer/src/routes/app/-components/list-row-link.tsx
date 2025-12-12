@@ -32,6 +32,7 @@ export function ListRowLink({
 				alignItems="center"
 				overflow="auto"
 				padding={4}
+				gap={2}
 			>
 				<Stack direction="row" alignItems="center" gap={3} overflow="auto">
 					{start}
