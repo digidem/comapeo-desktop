@@ -272,13 +272,22 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 
 														<Box component="span">
 															{t(m.projectInfoCategoriesCreated, {
-																value: formatDate(
-																	projectSettings.configMetadata.buildDate,
-																	{
-																		year: 'numeric',
-																		month: 'long',
-																		day: 'numeric',
-																	},
+																date: (
+																	<time
+																		key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
+																		dateTime={
+																			projectSettings.configMetadata.buildDate
+																		}
+																	>
+																		{formatDate(
+																			projectSettings.configMetadata.buildDate,
+																			{
+																				year: 'numeric',
+																				month: 'long',
+																				day: 'numeric',
+																			},
+																		)}
+																	</time>
 																),
 															})}
 														</Box>
@@ -350,7 +359,7 @@ const m = defineMessages({
 	},
 	projectInfoCategoriesCreated: {
 		id: 'routes.app.projects.$projectId.index.projectInfoCategoriesCreated',
-		defaultMessage: 'Created {value}',
+		defaultMessage: 'Created {date}',
 		description: 'Text indicating creation date of categories set.',
 	},
 	projectInfoProjectStats: {

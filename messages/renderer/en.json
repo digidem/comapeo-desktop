@@ -209,7 +209,7 @@
   },
   "routes.app.projects.$projectId.index.projectInfoCategoriesCreated": {
     "description": "Text indicating creation date of categories set.",
-    "message": "Created {value}"
+    "message": "Created {date}"
   },
   "routes.app.projects.$projectId.index.projectInfoProjectStats": {
     "description": "Text indicating if project stats sharing is enabled or not.",
