@@ -8,7 +8,7 @@ import { TwoPanelLayout } from '../../-components/two-panel-layout'
 import { BLACK } from '../../../../colors'
 import { GenericRoutePendingComponent } from '../../../../components/generic-route-pending-component'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo'
-import { DisplayedDataMap } from './-displayed-data/map'
+import { MapPanel } from './-map-panel.tsx'
 import { HighlightedDocumentSchema } from './-shared.ts'
 
 const SearchParamsSchema = v.object({
@@ -128,7 +128,7 @@ function RouteComponent() {
 						</Box>
 					}
 				>
-					<DisplayedDataMap />
+					<MapPanel />
 				</Suspense>
 			}
 		/>

@@ -2,6 +2,7 @@ import {
 	Suspense,
 	useCallback,
 	useEffect,
+	useEffectEvent,
 	useMemo,
 	useRef,
 	type CSSProperties,
@@ -11,7 +12,6 @@ import { useManyDocs, useOwnDeviceInfo } from '@comapeo/core-react'
 import type { Observation, Preset, Track } from '@comapeo/schema'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
-import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import Stack from '@mui/material/Stack'
@@ -26,41 +26,41 @@ import {
 	BLACK,
 	BLUE_GREY,
 	COMAPEO_BLUE,
-	LIGHT_COMAPEO_BLUE,
 	LIGHT_GREY,
 	WHITE,
-} from '../../../../../colors'
+} from '../../../../colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
-} from '../../../../../components/category-icon'
-import { ErrorBoundary } from '../../../../../components/error-boundary'
-import { Icon } from '../../../../../components/icon'
-import { ButtonLink, TextLink } from '../../../../../components/link'
+} from '../../../../components/category-icon.tsx'
+import { ErrorBoundary } from '../../../../components/error-boundary.tsx'
+import { Icon } from '../../../../components/icon.tsx'
+import { ButtonLink } from '../../../../components/link.tsx'
 import {
 	getMatchingCategoryForDocument,
 	type Attachment,
-} from '../../../../../lib/comapeo'
-import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
-import { PhotoAttachmentImage } from '../observations/$observationDocId/-components/photo-attachment-image.tsx'
+} from '../../../../lib/comapeo.ts'
+import { getLocaleStateQueryOptions } from '../../../../lib/queries/app-settings.ts'
+import type { HighlightedDocument } from './-shared.ts'
+import { Route } from './index.tsx'
+import { PhotoAttachmentImage } from './observations/$observationDocId/-components/photo-attachment-image.tsx'
 
 const CATEGORY_CONTAINER_SIZE_PX = 64
 
 // NOTE: Accounts for space added by top + bottom padding and bottom border
 const APPROXIMATE_ITEM_HEIGHT_PX = CATEGORY_CONTAINER_SIZE_PX + 16 * 2 + 1
 
-export function DisplayedDataList({ projectId }: { projectId: string }) {
+export function DataList({ projectId }: { projectId: string }) {
 	const { formatMessage: t, formatDate } = useIntl()
-
-	const { highlightedDocument } = useSearch({
-		from: '/app/projects/$projectId/',
-	})
-	const navigate = useNavigate({ from: '/app/projects/$projectId/' })
 
 	const { data: lang } = useSuspenseQuery({
 		...getLocaleStateQueryOptions(),
 		select: ({ value }) => value,
 	})
+
+	const { highlightedDocument } = useSearch({ from: Route.id })
+
+	const navigate = useNavigate({ from: Route.id })
 
 	const { data: observations } = useManyDocs({
 		projectId,
@@ -106,6 +106,20 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 	const rowVirtualizer = useVirtual(listRef, sortedListData)
 	const { scrollToIndex } = rowVirtualizer
 
+	const scrollToHighlightedItem = useEffectEvent(
+		(document: HighlightedDocument) => {
+			const itemIndexToScrollTo = highlightedDocument?.docId
+				? sortedListData.findIndex(
+						(item) => item.document.docId === document.docId,
+					)
+				: undefined
+
+			if (itemIndexToScrollTo) {
+				scrollToIndex(itemIndexToScrollTo, { align: 'center' })
+			}
+		},
+	)
+
 	const mountedRef = useRef<boolean>(false)
 
 	useEffect(
@@ -113,35 +127,29 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 		 * Handles autoscrolling to selected item in list when initially loading the
 		 * page.
 		 */
-		function scrollToItemOnMount() {
+		function onInitialRender() {
 			if (mountedRef.current) {
 				return
 			}
 
-			if (highlightedDocument?.docId) {
-				const itemIndexToScrollTo = highlightedDocument?.docId
-					? sortedListData.findIndex(
-							({ document }) => document.docId === highlightedDocument.docId,
-						)
-					: undefined
-
-				if (itemIndexToScrollTo) {
-					scrollToIndex(itemIndexToScrollTo, { align: 'center' })
-				}
+			if (highlightedDocument) {
+				scrollToHighlightedItem(highlightedDocument)
 			}
 
 			mountedRef.current = true
 		},
-		[highlightedDocument?.docId, scrollToIndex, sortedListData],
+		[highlightedDocument],
 	)
 
-	return sortedListData.length > 0 ? (
+	return (
 		<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
 			<Box
 				display="flex"
 				flexDirection="row"
 				justifyContent="center"
 				padding={6}
+				borderTop={`1px solid ${BLUE_GREY}`}
+				borderBottom={`1px solid ${BLUE_GREY}`}
 			>
 				<ButtonLink
 					fullWidth
@@ -153,8 +161,6 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 					{t(m.downloadObservations)}
 				</ButtonLink>
 			</Box>
-
-			<Divider sx={{ bgcolor: LIGHT_GREY }} />
 
 			<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
 				<List
@@ -309,8 +315,6 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 				</List>
 			</Box>
 		</Box>
-	) : (
-		<AddObservationsCard projectId={projectId} />
 	)
 }
 
@@ -580,89 +584,25 @@ function TrackCategory({
 	)
 }
 
-function AddObservationsCard({ projectId }: { projectId: string }) {
-	const { formatMessage: t } = useIntl()
-
-	return (
-		<Box display="flex" flex={1} padding={6}>
-			<Stack
-				direction="column"
-				gap={4}
-				alignItems="center"
-				borderRadius={2}
-				border={`1px solid ${BLUE_GREY}`}
-				paddingX={6}
-				paddingY={10}
-				justifyContent="center"
-				flex={1}
-			>
-				<Box
-					borderRadius="100%"
-					bgcolor={LIGHT_COMAPEO_BLUE}
-					display="flex"
-					justifyContent="center"
-					alignItems="center"
-					padding={6}
-				>
-					<Icon name="comapeo-cards" htmlColor={WHITE} size={40} />
-				</Box>
-
-				<Typography variant="h1" textAlign="center" fontWeight={500}>
-					{t(m.addObservationsTitle)}
-				</Typography>
-
-				<Typography textAlign="center" fontWeight={400}>
-					{t(m.addObservationsDescription)}
-				</Typography>
-
-				<TextLink
-					underline="none"
-					to="/app/projects/$projectId/exchange"
-					params={{ projectId }}
-				>
-					{t(m.goToExchange)}
-				</TextLink>
-			</Stack>
-		</Box>
-	)
-}
-
 const m = defineMessages({
-	addObservationsTitle: {
-		id: 'routes.app.projects.$projectId.-displayed.data.list.addObservationsTitle',
-		defaultMessage: 'Add Observations',
-		description:
-			'Title of card that is displayed when project has no observations to display.',
-	},
-	addObservationsDescription: {
-		id: 'routes.app.projects.$projectId.-displayed.data.list.addObservationsDescription',
-		defaultMessage: 'Use Exchange to add Collaborator Observations',
-		description:
-			'Description of card that is displayed when project has no observations to display.',
-	},
-	goToExchange: {
-		id: 'routes.app.projects.$projectId.-displayed.data.list.goToExchange',
-		defaultMessage: 'Go to Exchange',
-		description: 'Link text to navigate to Exchange page.',
-	},
 	observationCategoryNameFallback: {
-		id: 'routes.app.projects.$projectId.-displayed.data.list.observationCategoryNameFallback',
+		id: 'routes.app.projects.$projectId.-data-list.observationCategoryNameFallback',
 		defaultMessage: 'Observation',
 		description: 'Fallback name for observation without a matching category.',
 	},
 	trackItemTitle: {
-		id: 'routes.app.projects.$projectId.-displayed.data.list.trackItemTitle',
+		id: 'routes.app.projects.$projectId.-data-list.trackItemTitle',
 		defaultMessage: 'Track',
 		description: 'Title for list item that is a track.',
 	},
 	categoryIconAlt: {
-		id: 'routes.app.projects.$projectId.-displayed.data.list.categoryIconAlt',
+		id: 'routes.app.projects.$projectId.-data-list.categoryIconAlt',
 		defaultMessage: 'Icon for {name} category',
 		description:
 			'Alt text for icon image displayed for category (used for accessibility tools).',
 	},
 	downloadObservations: {
-		id: 'routes.app.projects.$projectId.-displayed.data.list.downloadObservations',
+		id: 'routes.app.projects.$projectId.-data-list.downloadObservations',
 		defaultMessage: 'Download Observations',
 		description: 'Link text to navigate to download observations page.',
 	},

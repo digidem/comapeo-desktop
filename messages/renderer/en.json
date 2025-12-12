@@ -47,47 +47,59 @@
     "description": "Button text for try again button.",
     "message": "Try Again"
   },
-  "routes.app.projects.$projectId.-displayed.data.list.addObservationsDescription": {
-    "description": "Description of card that is displayed when project has no observations to display.",
-    "message": "Use Exchange to add Collaborator Observations"
-  },
-  "routes.app.projects.$projectId.-displayed.data.list.addObservationsTitle": {
-    "description": "Title of card that is displayed when project has no observations to display.",
-    "message": "Add Observations"
-  },
-  "routes.app.projects.$projectId.-displayed.data.list.categoryIconAlt": {
+  "routes.app.projects.$projectId.-data-list.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
   },
-  "routes.app.projects.$projectId.-displayed.data.list.downloadObservations": {
+  "routes.app.projects.$projectId.-data-list.downloadObservations": {
     "description": "Link text to navigate to download observations page.",
     "message": "Download Observations"
   },
-  "routes.app.projects.$projectId.-displayed.data.list.goToExchange": {
-    "description": "Link text to navigate to Exchange page.",
-    "message": "Go to Exchange"
-  },
-  "routes.app.projects.$projectId.-displayed.data.list.observationCategoryNameFallback": {
+  "routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
     "message": "Observation"
   },
-  "routes.app.projects.$projectId.-displayed.data.list.trackItemTitle": {
+  "routes.app.projects.$projectId.-data-list.trackItemTitle": {
     "description": "Title for list item that is a track.",
     "message": "Track"
   },
-  "routes.app.projects.$projectId.-displayed.data.map.cannotDisplayFeature": {
+  "routes.app.projects.$projectId.-main-panel.inviteCollaboratorsPanelDescription": {
+    "description": "Text for description of panel shown when no active collaborators or data exist on project.",
+    "message": "Invite devices to start gathering observations and tracks."
+  },
+  "routes.app.projects.$projectId.-main-panel.inviteCollaboratorsPanelInviteLink": {
+    "description": "Text for link that navigates to invite page.",
+    "message": "Invite Device"
+  },
+  "routes.app.projects.$projectId.-main-panel.inviteCollaboratorsPanelTitle": {
+    "description": "Text for title of panel shown when no active collaborators or data exist on project.",
+    "message": "Invite Collaborators"
+  },
+  "routes.app.projects.$projectId.-main-panel.openExchangePanelDescription": {
+    "description": "Text for description of panel shown when project has collaborators but no data.",
+    "message": "All observations and tracks will be listed here."
+  },
+  "routes.app.projects.$projectId.-main-panel.openExchangePanelLink": {
+    "description": "Text for link that navigates to exchange page.",
+    "message": "Open Exchange"
+  },
+  "routes.app.projects.$projectId.-main-panel.openExchangePanelTitle": {
+    "description": "Text for title of panel shown when project has collaborators but no data.",
+    "message": "Exchange to Gather Observations"
+  },
+  "routes.app.projects.$projectId.-map-panel.cannotDisplayFeature": {
     "description": "Text displayed when map feature for selected data cannot be displayed",
     "message": "Cannot display feature"
   },
-  "routes.app.projects.$projectId.-displayed.data.map.categoryIconAlt": {
+  "routes.app.projects.$projectId.-map-panel.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
   },
-  "routes.app.projects.$projectId.-displayed.data.map.zoomToData": {
+  "routes.app.projects.$projectId.-map-panel.zoomToData": {
     "description": "Text displayed when hovering over map control for zooming to data.",
     "message": "Zoom to data"
   },
-  "routes.app.projects.$projectId.-displayed.data.map.zoomToSelected": {
+  "routes.app.projects.$projectId.-map-panel.zoomToSelected": {
     "description": "Text displayed when hovering over map control for zooming to selected.",
     "message": "Zoom to selected"
   },
@@ -191,25 +203,33 @@
     "description": "Title of the tracks option.",
     "message": "Tracks"
   },
-  "routes.app.projects.$projectId.index.invite": {
-    "description": "Link text to navigate to invite collaborators page.",
-    "message": "Invite"
+  "routes.app.projects.$projectId.index.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set.",
+    "message": "CoMapeo Categories"
+  },
+  "routes.app.projects.$projectId.index.projectInfoCategoriesCreated": {
+    "description": "Text indicating creation date of categories set.",
+    "message": "Created {date}"
+  },
+  "routes.app.projects.$projectId.index.projectInfoProjectStats": {
+    "description": "Text indicating if project stats sharing is enabled or not.",
+    "message": "Project Sharing | {enabled, select, 1 {ON} other {OFF}}"
+  },
+  "routes.app.projects.$projectId.index.projectInfoRoleCoordinator": {
+    "description": "Indicates that user is a coordinator.",
+    "message": "Coordinator"
+  },
+  "routes.app.projects.$projectId.index.projectInfoRoleParticipant": {
+    "description": "Indicates that user is a participant.",
+    "message": "Participant"
+  },
+  "routes.app.projects.$projectId.index.projectInfoTooltip": {
+    "description": "Text for tooltip shown when hovering or focusing project info button.",
+    "message": "View Project Info"
   },
   "routes.app.projects.$projectId.index.unnamedProject": {
-    "description": "Fallback for when current project is missing a name.",
+    "description": "Fallback for when project is missing a name.",
     "message": "Unnamed Project"
-  },
-  "routes.app.projects.$projectId.index.view": {
-    "description": "Link text to navigate to project settings page.",
-    "message": "View"
-  },
-  "routes.app.projects.$projectId.index.youAreCoordinator": {
-    "description": "Indicates that user is a coordinator on the current project.",
-    "message": "You're a coordinator on this project."
-  },
-  "routes.app.projects.$projectId.index.youAreParticipant": {
-    "description": "Indicates that user is a participant on the current project.",
-    "message": "You're a participant on this project."
   },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",

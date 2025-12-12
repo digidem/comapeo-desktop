@@ -62,7 +62,7 @@ export const iconNames = [
 	'material-arrow-back',
 	'comapeo-send',
 	'comapeo-selected-marker',
-	'comapeo-cards',
+	'ant-design-icons-bar-chart-outlined',
 ] as const
 
 export type IconName = (typeof iconNames)[number]
