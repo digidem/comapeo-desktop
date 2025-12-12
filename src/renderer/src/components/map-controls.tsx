@@ -222,11 +222,21 @@ class ZoomToDataControl implements IControl {
 					const maxLon = Math.max(...bboxes.map((bbox) => bbox[2]))
 					const maxLat = Math.max(...bboxes.map((bbox) => bbox[3]))
 
-					map.fitBounds(
-						[minLon, minLat, maxLon, maxLat],
-						this.#options.fitBoundsOptions,
-						{ originalEvent: event },
-					)
+					const calculatedBbox: [number, number, number, number] = [
+						minLon,
+						minLat,
+						maxLon,
+						maxLat,
+					]
+
+					// NOTE: Happens when no data exists
+					if (calculatedBbox.every((v) => v === Infinity || v === -Infinity)) {
+						return
+					}
+
+					map.fitBounds(calculatedBbox, this.#options.fitBoundsOptions, {
+						originalEvent: event,
+					})
 				} catch (err) {
 					captureException(err)
 				}
