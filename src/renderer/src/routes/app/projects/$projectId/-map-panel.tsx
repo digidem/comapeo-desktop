@@ -723,11 +723,13 @@ export function MapPanel() {
 
 				<NavigationControl showCompass={false} />
 
-				<ZoomToDataMapControl
-					buttonTitle={t(m.zoomToData)}
-					fitBoundsOptions={BASE_FIT_BOUNDS_OPTIONS}
-					sourceIds={[OBSERVATIONS_SOURCE_ID, TRACKS_SOURCE_ID]}
-				/>
+				{observations.length + tracks.length > 0 ? (
+					<ZoomToDataMapControl
+						buttonTitle={t(m.zoomToData)}
+						fitBoundsOptions={BASE_FIT_BOUNDS_OPTIONS}
+						sourceIds={[OBSERVATIONS_SOURCE_ID, TRACKS_SOURCE_ID]}
+					/>
+				) : null}
 
 				{documentToHighlight ? (
 					<ZoomToSelectedDocumentMapControl
