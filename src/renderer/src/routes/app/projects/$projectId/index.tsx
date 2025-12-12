@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react'
+import { Suspense, useId, useState } from 'react'
 import { useOwnRoleInProject, useProjectSettings } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import ButtonBase from '@mui/material/ButtonBase'
@@ -87,6 +87,8 @@ function RouteComponent() {
 }
 
 function ProjectInfoSection({ projectId }: { projectId: string }) {
+	const popupDescribedById = useId()
+
 	const { formatMessage: t, formatDate } = useIntl()
 
 	const { data: projectSettings } = useProjectSettings({ projectId })
@@ -150,7 +152,7 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 				>
 					<Box component="span">
 						<ButtonBase
-							aria-describedby="project-info-panel"
+							aria-describedby={popupDescribedById}
 							aria-haspopup="dialog"
 							onClick={(event) => {
 								setInfoToShow((prev) =>
@@ -180,7 +182,7 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 				</Tooltip>
 
 				<Popper
-					id="project-info-panel"
+					id={popupDescribedById}
 					role="dialog"
 					placement="right-start"
 					transition
