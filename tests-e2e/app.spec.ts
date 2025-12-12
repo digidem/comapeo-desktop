@@ -1563,10 +1563,18 @@ test.describe('coordinator tools', () => {
 			).toBeVisible()
 
 			// TODO: Ideally check for the actual values
-			await expect(main.getByText(/^Added .+/)).toBeVisible()
-			const addedAt = main.getByRole('time')
-			await expect(addedAt).not.toBeEmpty()
-			await expect(addedAt).toHaveAttribute('datetime')
+			const dateCreated = main.getByText(/^Added .+/)
+			await expect(dateCreated).toBeVisible()
+			const dateCreatedTime = dateCreated.getByRole('time')
+			await expect(dateCreatedTime).not.toBeEmpty()
+			await expect(dateCreatedTime).toHaveAttribute('datetime')
+
+			// TODO: Ideally check for the actual values
+			const dateAdded = main.getByText(/^Added .+/)
+			await expect(dateAdded).toBeVisible()
+			const dateAddedTime = dateAdded.getByRole('time')
+			await expect(dateAddedTime).not.toBeEmpty()
+			await expect(dateAddedTime).toHaveAttribute('datetime')
 
 			await expect(
 				main.getByRole('button', { name: 'Upload New Set', exact: true }),
@@ -1649,9 +1657,18 @@ test.describe('coordinator tools', () => {
 			await expect(main.getByText(/^Added .+/)).toBeVisible()
 
 			// TODO: Ideally check for the actual values
-			const addedAt = main.getByRole('time')
-			await expect(addedAt).not.toBeEmpty()
-			await expect(addedAt).toHaveAttribute('datetime')
+			const dateCreated = main.getByText(/^Added .+/)
+			await expect(dateCreated).toBeVisible()
+			const dateCreatedTime = dateCreated.getByRole('time')
+			await expect(dateCreatedTime).not.toBeEmpty()
+			await expect(dateCreatedTime).toHaveAttribute('datetime')
+
+			// TODO: Ideally check for the actual values
+			const dateAdded = main.getByText(/^Added .+/)
+			await expect(dateAdded).toBeVisible()
+			const dateAddedTime = dateAdded.getByRole('time')
+			await expect(dateAddedTime).not.toBeEmpty()
+			await expect(dateAddedTime).toHaveAttribute('datetime')
 
 			// Check relevant changes are reflected in project settings index page
 			{
@@ -1696,10 +1713,18 @@ test.describe('coordinator tools', () => {
 			).toBeVisible()
 
 			// TODO: Ideally check for the actual values
-			await expect(main.getByText(/^Added .+/)).toBeVisible()
-			const addedAt = main.getByRole('time')
-			await expect(addedAt).not.toBeEmpty()
-			await expect(addedAt).toHaveAttribute('datetime')
+			const dateCreated = main.getByText(/^Added .+/)
+			await expect(dateCreated).toBeVisible()
+			const dateCreatedTime = dateCreated.getByRole('time')
+			await expect(dateCreatedTime).not.toBeEmpty()
+			await expect(dateCreatedTime).toHaveAttribute('datetime')
+
+			// TODO: Ideally check for the actual values
+			const dateAdded = main.getByText(/^Added .+/)
+			await expect(dateAdded).toBeVisible()
+			const dateAddedTime = dateAdded.getByRole('time')
+			await expect(dateAddedTime).not.toBeEmpty()
+			await expect(dateAddedTime).toHaveAttribute('datetime')
 
 			// Check relevant changes are reflected in project settings index page
 			{

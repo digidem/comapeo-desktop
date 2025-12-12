@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import {
 	useImportProjectCategories,
 	useProjectSettings,
@@ -52,6 +53,8 @@ const SELECT_AND_IMPORT_CATEGORY_MUTATION_KEY = createGlobalMutationsKey([
 ])
 
 function RouteComponent() {
+	const accessibilityId = useId()
+
 	const { formatMessage: t, formatDate } = useIntl()
 	const router = useRouter()
 
@@ -154,42 +157,57 @@ function RouteComponent() {
 									textAlign="center"
 									color="textSecondary"
 									fontWeight={500}
+									aria-labelledby={`date-created-${accessibilityId}`}
 								>
-									{t(m.dateCreated, {
-										date: (
-											<time
-												key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
-												dateTime={projectSettings.configMetadata.buildDate}
-											>
-												{formatDate(projectSettings.configMetadata.buildDate, {
-													year: 'numeric',
-													month: 'long',
-													day: 'numeric',
-												})}
-											</time>
-										),
-									})}
+									<Box
+										component={'span'}
+										id={`date-created-${accessibilityId}`}
+									>
+										{t(m.dateCreated, {
+											date: (
+												<time
+													key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
+													dateTime={projectSettings.configMetadata.buildDate}
+												>
+													{formatDate(
+														projectSettings.configMetadata.buildDate,
+														{
+															year: 'numeric',
+															month: 'long',
+															day: 'numeric',
+														},
+													)}
+												</time>
+											),
+										})}
+									</Box>
 								</Typography>
 
 								<Typography
 									textAlign="center"
 									color="textSecondary"
 									fontWeight={500}
+									aria-labelledby={`date-added-${accessibilityId}`}
 								>
-									{t(m.dateAdded, {
-										date: (
-											<time
-												key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
-												dateTime={projectSettings.configMetadata.importDate}
-											>
-												{formatDate(projectSettings.configMetadata.importDate, {
-													year: 'numeric',
-													month: 'long',
-													day: 'numeric',
-												})}
-											</time>
-										),
-									})}
+									<Box component="span" id={`date-added-${accessibilityId}`}>
+										{t(m.dateAdded, {
+											date: (
+												<time
+													key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
+													dateTime={projectSettings.configMetadata.importDate}
+												>
+													{formatDate(
+														projectSettings.configMetadata.importDate,
+														{
+															year: 'numeric',
+															month: 'long',
+															day: 'numeric',
+														},
+													)}
+												</time>
+											),
+										})}
+									</Box>
 								</Typography>
 							</Stack>
 						) : null}
