@@ -16,7 +16,6 @@ export const iconNames = [
 	'material-warning-rounded',
 	'material-volume-up',
 	'material-tablet-android',
-	'material-symbols-new-window',
 	'material-symbols-info',
 	'material-symbols-encrypted-weight200',
 	'material-symbols-delete',
