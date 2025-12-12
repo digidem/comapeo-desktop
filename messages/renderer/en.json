@@ -579,17 +579,21 @@
     "description": "Text indicating the date the categories set was added.",
     "message": "Added {date}"
   },
+  "routes.app.projects.$projectId_.settings.categories.dateCreated": {
+    "description": "Text indicating the date the categories set was created.",
+    "message": "Created {date}"
+  },
   "routes.app.projects.$projectId_.settings.categories.defaultCategoriesExplainer": {
     "description": "Explanation for default categories",
     "message": "Default categories help you start organizing your observations instantly."
   },
+  "routes.app.projects.$projectId_.settings.categories.fallbackCategoriesName": {
+    "description": "Fallback displayed name when project has no category set.",
+    "message": "CoMapeo Categories"
+  },
   "routes.app.projects.$projectId_.settings.categories.goBackAccessibleLabel": {
     "description": "Accessible label for back button.",
     "message": "Go back."
-  },
-  "routes.app.projects.$projectId_.settings.categories.missingCategoriesName": {
-    "description": "Text indicating that project is missing categories set name.",
-    "message": "No name found for categories set."
   },
   "routes.app.projects.$projectId_.settings.categories.navTitle": {
     "description": "Title of the categories set page.",

@@ -54,7 +54,6 @@ export const iconNames = [
 	'material-check',
 	'material-check-circle-rounded',
 	'material-check-circle-outline-rounded',
-	'material-category',
 	'material-bolt-sharp',
 	'material-auto-fix-high',
 	'material-attachment',
