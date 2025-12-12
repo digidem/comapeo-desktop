@@ -22,7 +22,7 @@ import {
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 } from '../../../../lib/comapeo'
-import { DisplayedDataList } from './-displayed-data/list'
+import { MainPanel } from './-main-panel.tsx'
 
 export const Route = createFileRoute('/app/projects/$projectId/')({
 	loader: async ({ context, params }) => {
@@ -79,7 +79,7 @@ function RouteComponent() {
 						</Box>
 					}
 				>
-					<DisplayedDataList projectId={projectId} />
+					<MainPanel projectId={projectId} />
 				</Suspense>
 			</Box>
 		</Stack>

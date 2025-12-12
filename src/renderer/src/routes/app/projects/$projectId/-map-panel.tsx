@@ -49,21 +49,22 @@ import {
 } from 'react-map-gl/maplibre'
 import * as v from 'valibot'
 
-import type { HighlightedDocument } from '../-shared.ts'
-import { BLACK, BLUE_GREY, ORANGE, WHITE } from '../../../../../colors'
+import { BLACK, BLUE_GREY, ORANGE, WHITE } from '../../../../colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
-} from '../../../../../components/category-icon'
-import { Icon } from '../../../../../components/icon'
-import { Map } from '../../../../../components/map'
+} from '../../../../components/category-icon.tsx'
+import { Icon } from '../../../../components/icon.tsx'
 import {
 	ZoomToDataMapControl,
 	ZoomToSelectedDocumentMapControl,
-} from '../../../../../components/map-controls'
-import { useMapsRefreshToken } from '../../../../../hooks/maps'
-import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo'
-import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings'
+} from '../../../../components/map-controls.tsx'
+import { Map } from '../../../../components/map.tsx'
+import { useMapsRefreshToken } from '../../../../hooks/maps.ts'
+import { getMatchingCategoryForDocument } from '../../../../lib/comapeo.ts'
+import { getLocaleStateQueryOptions } from '../../../../lib/queries/app-settings.ts'
+import type { HighlightedDocument } from './-shared.ts'
+import { Route } from './route.tsx'
 
 // TODO: Move to lib/colors
 const SHADOW_COLOR = '#686868'
@@ -121,13 +122,13 @@ const BASE_FIT_BOUNDS_OPTIONS: FitBoundsOptions = {
 	linear: true,
 }
 
-export function DisplayedDataMap() {
+export function MapPanel() {
 	const { formatMessage: t } = useIntl()
 
-	const navigate = useNavigate({ from: '/app/projects/$projectId' })
-	const { projectId } = useParams({ from: '/app/projects/$projectId' })
+	const navigate = useNavigate({ from: Route.id })
+	const { projectId } = useParams({ from: Route.id })
 	const { highlightedDocument: documentFromSearch } = useSearch({
-		from: '/app/projects/$projectId',
+		from: Route.id,
 	})
 
 	const [mapLoaded, setMapLoaded] = useState(false)
@@ -719,6 +720,7 @@ export function DisplayedDataMap() {
 				touchZoomRotate={false}
 			>
 				<ScaleControl />
+
 				<NavigationControl showCompass={false} />
 
 				<ZoomToDataMapControl
@@ -1030,25 +1032,25 @@ function createObservationLayerPaintProperty(
 
 const m = defineMessages({
 	categoryIconAlt: {
-		id: 'routes.app.projects.$projectId.-displayed.data.map.categoryIconAlt',
+		id: 'routes.app.projects.$projectId.-map-panel.categoryIconAlt',
 		defaultMessage: 'Icon for {name} category',
 		description:
 			'Alt text for icon image displayed for category (used for accessibility tools).',
 	},
 	zoomToData: {
-		id: 'routes.app.projects.$projectId.-displayed.data.map.zoomToData',
+		id: 'routes.app.projects.$projectId.-map-panel.zoomToData',
 		defaultMessage: 'Zoom to data',
 		description:
 			'Text displayed when hovering over map control for zooming to data.',
 	},
 	zoomToSelected: {
-		id: 'routes.app.projects.$projectId.-displayed.data.map.zoomToSelected',
+		id: 'routes.app.projects.$projectId.-map-panel.zoomToSelected',
 		defaultMessage: 'Zoom to selected',
 		description:
 			'Text displayed when hovering over map control for zooming to selected.',
 	},
 	cannotDisplayFeature: {
-		id: 'routes.app.projects.$projectId.-displayed.data.map.cannotDisplayFeature',
+		id: 'routes.app.projects.$projectId.-map-panel.cannotDisplayFeature',
 		defaultMessage: 'Cannot display feature',
 		description:
 			'Text displayed when map feature for selected data cannot be displayed',
