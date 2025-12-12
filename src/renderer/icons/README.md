@@ -1,6 +1,6 @@
 # Icons
 
-### Attributions
+## Attributions
 
 - Icons with names starting with `openmoji-` designed by [OpenMoji](https://openmoji.org/) – the open-source emoji and icon project. License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/#)
 
@@ -8,5 +8,7 @@
 
 - Icons with name starting with `noun-project-` sourced from [Noun Project](https://thenounproject.com).
   - ["Notebook" icon by Nursila](./noun-project-notebook.svg) from [Noun Project](https://thenounproject.com/browse/icons/term/notebook/) CC BY 3.0
+
+- Icons with name starting with `ant-design-icons-` sourced from [Ant Design Icons](https://ant.design/components/icon). License: [MIT](https://github.com/ant-design/ant-design/blob/master/LICENSE)
 
 - Optimizations done via [SVGOMG](https://optimize.svgomg.net/)

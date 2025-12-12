@@ -6,13 +6,18 @@ import {
 	useMemo,
 	useRef,
 	type CSSProperties,
+	type ReactNode,
 	type RefObject,
 } from 'react'
-import { useManyDocs, useOwnDeviceInfo } from '@comapeo/core-react'
+import {
+	useManyDocs,
+	useManyMembers,
+	useOwnDeviceInfo,
+	useOwnRoleInProject,
+} from '@comapeo/core-react'
 import type { Observation, Preset, Track } from '@comapeo/schema'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
-import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import Stack from '@mui/material/Stack'
@@ -28,7 +33,7 @@ import {
 	BLACK,
 	BLUE_GREY,
 	COMAPEO_BLUE,
-	LIGHT_COMAPEO_BLUE,
+	DARKER_ORANGE,
 	LIGHT_GREY,
 	WHITE,
 } from '../../../../../colors'
@@ -38,8 +43,11 @@ import {
 } from '../../../../../components/category-icon'
 import { ErrorBoundary } from '../../../../../components/error-boundary'
 import { Icon } from '../../../../../components/icon'
-import { ButtonLink, TextLink } from '../../../../../components/link'
+import { ButtonLink } from '../../../../../components/link'
 import {
+	COORDINATOR_ROLE_ID,
+	CREATOR_ROLE_ID,
+	MEMBER_ROLE_ID,
 	getMatchingCategoryForDocument,
 	type Attachment,
 } from '../../../../../lib/comapeo'
@@ -52,17 +60,150 @@ const CATEGORY_CONTAINER_SIZE_PX = 64
 const APPROXIMATE_ITEM_HEIGHT_PX = CATEGORY_CONTAINER_SIZE_PX + 16 * 2 + 1
 
 export function DisplayedDataList({ projectId }: { projectId: string }) {
-	const { formatMessage: t, formatDate } = useIntl()
-
-	const { highlightedDocument } = useSearch({
-		from: '/app/projects/$projectId/',
-	})
-	const navigate = useNavigate({ from: '/app/projects/$projectId/' })
+	const { formatMessage: t } = useIntl()
 
 	const { data: lang } = useSuspenseQuery({
 		...getLocaleStateQueryOptions(),
 		select: ({ value }) => value,
 	})
+
+	const { data: observations } = useManyDocs({
+		projectId,
+		docType: 'observation',
+		lang,
+	})
+
+	const { data: tracks } = useManyDocs({
+		projectId,
+		docType: 'track',
+		lang,
+	})
+
+	const { data: members } = useManyMembers({ projectId })
+
+	const activeMembersCount = members.filter(
+		(m) =>
+			m.role.roleId === CREATOR_ROLE_ID ||
+			m.role.roleId === MEMBER_ROLE_ID ||
+			m.role.roleId === COORDINATOR_ROLE_ID,
+	).length
+
+	const { data: ownRole } = useOwnRoleInProject({ projectId })
+
+	const selfIsAtLeastCoordinator =
+		ownRole.roleId === CREATOR_ROLE_ID || ownRole.roleId === COORDINATOR_ROLE_ID
+
+	const hasDataToShow = observations.length + tracks.length > 0
+
+	if (selfIsAtLeastCoordinator && activeMembersCount < 2 && !hasDataToShow) {
+		return (
+			<IntroPanel
+				title={t(m.inviteCollaboratorsPanelTitle)}
+				description={t(m.inviteCollaboratorsPanelDescription)}
+				icon={
+					<Icon
+						name="material-person-add"
+						size={120}
+						htmlColor={DARKER_ORANGE}
+					/>
+				}
+				link={
+					<ButtonLink
+						to="/app/projects/$projectId/invite"
+						params={{ projectId }}
+						startIcon={<Icon name="material-person-add" />}
+						sx={{ maxWidth: 400 }}
+						variant="contained"
+						fullWidth
+					>
+						{t(m.inviteCollaboratorsPanelInviteLink)}
+					</ButtonLink>
+				}
+			/>
+		)
+	}
+
+	if (!hasDataToShow) {
+		return (
+			<IntroPanel
+				title={t(m.openExchangePanelTitle)}
+				description={t(m.openExchangePanelDescription)}
+				icon={
+					<Icon
+						name="material-offline-bolt-outlined"
+						size={150}
+						htmlColor={BLUE_GREY}
+					/>
+				}
+				link={
+					<ButtonLink
+						to="/app/projects/$projectId/exchange"
+						params={{ projectId }}
+						startIcon={<Icon name="material-offline-bolt-outlined" />}
+						sx={{ maxWidth: 400 }}
+						variant="contained"
+						fullWidth
+					>
+						{t(m.openExchangePanelLink)}
+					</ButtonLink>
+				}
+			/>
+		)
+	}
+
+	return <ListedData projectId={projectId} />
+}
+
+function IntroPanel({
+	icon,
+	title,
+	description,
+	link,
+}: {
+	icon: ReactNode
+	title: string
+	description: string
+	link: ReactNode
+}) {
+	return (
+		<Stack direction="column" flex={1} padding={6} gap={10}>
+			<Stack
+				direction="column"
+				flex={1}
+				gap={4}
+				alignItems="center"
+				justifyContent="center"
+				padding={4}
+			>
+				<Box>{icon}</Box>
+
+				<Typography variant="h1" fontWeight={500} textAlign="center">
+					{title}
+				</Typography>
+
+				<Typography textAlign="center">{description}</Typography>
+			</Stack>
+
+			<Box display="flex" justifyContent="center" alignItems="center">
+				{link}
+			</Box>
+		</Stack>
+	)
+}
+
+function ListedData({ projectId }: { projectId: string }) {
+	const { formatMessage: t, formatDate } = useIntl()
+
+	const { data: lang } = useSuspenseQuery({
+		...getLocaleStateQueryOptions(),
+		select: ({ value }) => value,
+	})
+
+	const { highlightedDocument } = useSearch({
+		from: '/app/projects/$projectId/',
+	})
+
+	const navigate = useNavigate({ from: '/app/projects/$projectId/' })
 
 	const { data: observations } = useManyDocs({
 		projectId,
@@ -143,13 +284,15 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 		[highlightedDocument],
 	)
 
-	return sortedListData.length > 0 ? (
+	return (
 		<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
 			<Box
 				display="flex"
 				flexDirection="row"
 				justifyContent="center"
 				padding={6}
+				borderTop={`1px solid ${BLUE_GREY}`}
+				borderBottom={`1px solid ${BLUE_GREY}`}
 			>
 				<ButtonLink
 					fullWidth
@@ -161,8 +304,6 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 					{t(m.downloadObservations)}
 				</ButtonLink>
 			</Box>
-
-			<Divider sx={{ bgcolor: LIGHT_GREY }} />
 
 			<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
 				<List
@@ -317,8 +458,6 @@ export function DisplayedDataList({ projectId }: { projectId: string }) {
 				</List>
 			</Box>
 		</Box>
-	) : (
-		<AddObservationsCard projectId={projectId} />
 	)
 }
 
@@ -588,70 +727,41 @@ function TrackCategory({
 	)
 }
 
-function AddObservationsCard({ projectId }: { projectId: string }) {
-	const { formatMessage: t } = useIntl()
-
-	return (
-		<Box display="flex" flex={1} padding={6}>
-			<Stack
-				direction="column"
-				gap={4}
-				alignItems="center"
-				borderRadius={2}
-				border={`1px solid ${BLUE_GREY}`}
-				paddingX={6}
-				paddingY={10}
-				justifyContent="center"
-				flex={1}
-			>
-				<Box
-					borderRadius="100%"
-					bgcolor={LIGHT_COMAPEO_BLUE}
-					display="flex"
-					justifyContent="center"
-					alignItems="center"
-					padding={6}
-				>
-					<Icon name="comapeo-cards" htmlColor={WHITE} size={40} />
-				</Box>
-
-				<Typography variant="h1" textAlign="center" fontWeight={500}>
-					{t(m.addObservationsTitle)}
-				</Typography>
-
-				<Typography textAlign="center" fontWeight={400}>
-					{t(m.addObservationsDescription)}
-				</Typography>
-
-				<TextLink
-					underline="none"
-					to="/app/projects/$projectId/exchange"
-					params={{ projectId }}
-				>
-					{t(m.goToExchange)}
-				</TextLink>
-			</Stack>
-		</Box>
-	)
-}
-
 const m = defineMessages({
-	addObservationsTitle: {
-		id: 'routes.app.projects.$projectId.-displayed.data.list.addObservationsTitle',
-		defaultMessage: 'Add Observations',
+	inviteCollaboratorsPanelTitle: {
+		id: 'routes.app.projects.$projectId.-displayed.data.list.inviteCollaboratorsPanelTitle',
+		defaultMessage: 'Invite Collaborators',
 		description:
-			'Title of card that is displayed when project has no observations to display.',
+			'Text for title of panel shown when no active collaborators or data exist on project.',
 	},
-	addObservationsDescription: {
-		id: 'routes.app.projects.$projectId.-displayed.data.list.addObservationsDescription',
-		defaultMessage: 'Use Exchange to add Collaborator Observations',
+	inviteCollaboratorsPanelDescription: {
+		id: 'routes.app.projects.$projectId.-displayed.data.list.inviteCollaboratorsPanelDescription',
+		defaultMessage:
+			'Invite devices to start gathering observations and tracks.',
 		description:
-			'Description of card that is displayed when project has no observations to display.',
+			'Text for description of panel shown when no active collaborators or data exist on project.',
 	},
-	goToExchange: {
-		id: 'routes.app.projects.$projectId.-displayed.data.list.goToExchange',
-		defaultMessage: 'Go to Exchange',
-		description: 'Link text to navigate to Exchange page.',
+	inviteCollaboratorsPanelInviteLink: {
+		id: 'routes.app.projects.$projectId.-displayed.data.list.inviteCollaboratorsPanelInviteLink',
+		defaultMessage: 'Invite Device',
+		description: 'Text for link that navigates to invite page.',
+	},
+	openExchangePanelTitle: {
+		id: 'routes.app.projects.$projectId.-displayed.data.list.openExchangePanelTitle',
+		defaultMessage: 'Exchange to Gather Observations',
+		description:
+			'Text for title of panel shown when project has collaborators but no data.',
+	},
+	openExchangePanelDescription: {
+		id: 'routes.app.projects.$projectId.-displayed.data.list.openExchangePanelDescription',
+		defaultMessage: 'All observations and tracks will be listed here.',
+		description:
+			'Text for description of panel shown when project has collaborators but no data.',
+	},
+	openExchangePanelLink: {
+		id: 'routes.app.projects.$projectId.-displayed.data.list.openExchangePanelLink',
+		defaultMessage: 'Open Exchange',
+		description: 'Text for link that navigates to exchange page.',
 	},
 	observationCategoryNameFallback: {
 		id: 'routes.app.projects.$projectId.-displayed.data.list.observationCategoryNameFallback',

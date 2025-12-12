@@ -1,17 +1,22 @@
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import { useOwnRoleInProject, useProjectSettings } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
+import ButtonBase from '@mui/material/ButtonBase'
 import CircularProgress from '@mui/material/CircularProgress'
-import Divider from '@mui/material/Divider'
+import ClickAwayListener from '@mui/material/ClickAwayListener'
+import Fade from '@mui/material/Fade'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import Popper from '@mui/material/Popper'
 import Stack from '@mui/material/Stack'
+import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK, DARK_GREY, LIGHT_GREY } from '../../../../colors'
+import { BLUE_GREY, WHITE } from '../../../../colors'
 import { Icon } from '../../../../components/icon'
-import { ButtonLink } from '../../../../components/link'
+import { useIconSizeBasedOnTypography } from '../../../../hooks/icon.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -25,7 +30,6 @@ export const Route = createFileRoute('/app/projects/$projectId/')({
 		const { projectId } = params
 
 		await Promise.all([
-			// TODO: Not ideal but requires changes in @comapeo/core-react
 			queryClient.ensureQueryData({
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -37,7 +41,6 @@ export const Route = createFileRoute('/app/projects/$projectId/')({
 					return projectApi.$getProjectSettings()
 				},
 			}),
-			// TODO: Not ideal but requires changes in @comapeo/core-react
 			queryClient.ensureQueryData({
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -54,81 +57,14 @@ export const Route = createFileRoute('/app/projects/$projectId/')({
 	component: RouteComponent,
 })
 
-const BOX_SHADOW = `0px 1px 5px 0px ${alpha(BLACK, 0.25)}`
-
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
-
 	const { projectId } = Route.useParams()
-
-	const { data: projectSettings } = useProjectSettings({ projectId })
-	const { data: role } = useOwnRoleInProject({ projectId })
-
-	const isAtLeastCoordinator =
-		role.roleId === CREATOR_ROLE_ID || role.roleId === COORDINATOR_ROLE_ID
 
 	return (
 		<Stack direction="column" flex={1} overflow="auto">
 			<Box padding={6}>
-				<Stack
-					direction="column"
-					gap={5}
-					borderRadius={2}
-					padding={6}
-					boxShadow={BOX_SHADOW}
-					bgcolor={projectSettings.projectColor}
-					border={`2px solid ${LIGHT_GREY}`}
-				>
-					<Typography variant="h1" fontWeight={500}>
-						{projectSettings.name || t(m.unnamedProject)}
-					</Typography>
-
-					<Stack direction="row" gap={3} alignItems="center">
-						<Icon
-							name={
-								isAtLeastCoordinator
-									? 'material-manage-accounts-filled'
-									: 'material-people-filled'
-							}
-							htmlColor={DARK_GREY}
-						/>
-						<Typography fontWeight={400} sx={{ color: DARK_GREY }}>
-							{t(
-								isAtLeastCoordinator
-									? m.youAreCoordinator
-									: m.youAreParticipant,
-							)}
-						</Typography>
-					</Stack>
-
-					{isAtLeastCoordinator ? (
-						<Stack direction="row" gap={5} justifyContent="center">
-							<ButtonLink
-								fullWidth
-								variant="outlined"
-								to="/app/projects/$projectId/settings"
-								params={{ projectId }}
-								sx={{ maxWidth: 400 }}
-							>
-								{t(m.view)}
-							</ButtonLink>
-
-							<ButtonLink
-								fullWidth
-								variant="contained"
-								to="/app/projects/$projectId/invite"
-								params={{ projectId }}
-								startIcon={<Icon name="material-person-add" />}
-								sx={{ maxWidth: 400 }}
-							>
-								{t(m.invite)}
-							</ButtonLink>
-						</Stack>
-					) : null}
-				</Stack>
+				<ProjectInfoSection projectId={projectId} />
 			</Box>
-
-			<Divider sx={{ bgcolor: LIGHT_GREY }} />
 
 			<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
 				<Suspense
@@ -150,30 +86,266 @@ function RouteComponent() {
 	)
 }
 
+function ProjectInfoSection({ projectId }: { projectId: string }) {
+	const { formatMessage: t, formatDate } = useIntl()
+
+	const { data: projectSettings } = useProjectSettings({ projectId })
+	const { data: role } = useOwnRoleInProject({ projectId })
+
+	const isAtLeastCoordinator =
+		role.roleId === CREATOR_ROLE_ID || role.roleId === COORDINATOR_ROLE_ID
+
+	const displayedName = projectSettings.name || t(m.unnamedProject)
+	const displayedColor = projectSettings.projectColor || WHITE
+
+	const [infoToShow, setInfoToShow] = useState<
+		| { type: 'tooltip'; show: boolean }
+		| { type: 'popper'; anchor: HTMLButtonElement }
+	>({ type: 'tooltip', show: false })
+
+	const iconSize = useIconSizeBasedOnTypography({ typographyVariant: 'body1' })
+
+	return (
+		<ClickAwayListener
+			onClickAway={() => {
+				setInfoToShow({ type: 'tooltip', show: false })
+			}}
+		>
+			<Box display="flex">
+				<Tooltip
+					title={t(m.projectInfoTooltip)}
+					slots={{ transition: Fade }}
+					placement="right"
+					open={infoToShow.type === 'tooltip' && infoToShow.show}
+					onOpen={
+						infoToShow.type === 'tooltip'
+							? () => {
+									setInfoToShow({ type: 'tooltip', show: true })
+								}
+							: undefined
+					}
+					onClose={
+						infoToShow.type === 'tooltip'
+							? () => {
+									setInfoToShow({ type: 'tooltip', show: false })
+								}
+							: undefined
+					}
+					slotProps={{
+						tooltip: {
+							sx: (theme) => ({
+								backgroundColor: theme.palette.common.white,
+								color: theme.palette.text.primary,
+								boxShadow: theme.shadows[5],
+							}),
+						},
+					}}
+				>
+					<Box component="span">
+						<ButtonBase
+							aria-describedby="project-info-panel"
+							aria-haspopup="dialog"
+							onClick={(event) => {
+								setInfoToShow((prev) =>
+									prev.type === 'popper'
+										? { type: 'tooltip', show: true }
+										: { type: 'popper', anchor: event.currentTarget },
+								)
+							}}
+							sx={{
+								minWidth: 100,
+								maxWidth: 400,
+								paddingInline: 4,
+								paddingBlock: 2,
+								borderRadius: 2,
+								border: (theme) =>
+									`1px solid ${infoToShow.type === 'popper' ? theme.palette.primary.main : BLUE_GREY}`,
+								background: displayedColor,
+								'&:focus-within': {
+									borderColor: (theme) => theme.palette.primary.main,
+									outline: (theme) => `1px solid ${theme.palette.primary.main}`,
+								},
+							}}
+						>
+							<Typography variant="button">{displayedName}</Typography>
+						</ButtonBase>
+					</Box>
+				</Tooltip>
+
+				<Popper
+					id="project-info-panel"
+					role="dialog"
+					placement="right-start"
+					transition
+					sx={{ maxWidth: 300, zIndex: 1 }}
+					modifiers={[{ name: 'offset', options: { offset: [0, 8] } }]}
+					{...(infoToShow.type === 'popper'
+						? { open: true, anchorEl: infoToShow.anchor }
+						: { open: false })}
+				>
+					{({ TransitionProps }) => {
+						return (
+							<Fade {...TransitionProps}>
+								<Box
+									bgcolor={displayedColor}
+									boxShadow={(theme) => theme.shadows[5]}
+									borderRadius={2}
+									padding={6}
+								>
+									<Stack direction="column" gap={4}>
+										<Typography variant="h1" fontWeight={500}>
+											{displayedName}
+										</Typography>
+
+										{projectSettings.projectDescription ? (
+											<Typography>
+												{projectSettings.projectDescription}
+											</Typography>
+										) : null}
+
+										<Stack component={List} disablePadding gap={4}>
+											<Stack
+												component={ListItem}
+												disableGutters
+												disablePadding
+												direction="row"
+												gap={4}
+												alignItems="flex-start"
+											>
+												{isAtLeastCoordinator ? (
+													<>
+														<Icon
+															name="material-manage-accounts-filled"
+															size={iconSize}
+														/>
+
+														<Typography fontWeight={500}>
+															{t(m.projectInfoRoleCoordinator)}
+														</Typography>
+													</>
+												) : (
+													<>
+														<Icon name="material-people-filled" />
+
+														<Typography fontWeight={500}>
+															{t(m.projectInfoRoleParticipant)}
+														</Typography>
+													</>
+												)}
+											</Stack>
+
+											<Stack
+												component={ListItem}
+												disableGutters
+												disablePadding
+												direction="row"
+												gap={4}
+												alignItems="flex-start"
+											>
+												<Icon name="material-symbols-apps" size={iconSize} />
+
+												{projectSettings.configMetadata ? (
+													<Typography color="textSecondary">
+														<Box component="span">
+															<Typography
+																component="span"
+																variant="inherit"
+																color="textPrimary"
+																fontWeight={500}
+															>
+																{projectSettings.configMetadata.name}
+															</Typography>{' '}
+															{projectSettings.configMetadata.fileVersion}
+														</Box>
+
+														<br />
+
+														<Box component="span">
+															{t(m.projectInfoCategoriesCreated, {
+																value: formatDate(
+																	projectSettings.configMetadata.buildDate,
+																	{
+																		year: 'numeric',
+																		month: 'long',
+																		day: 'numeric',
+																	},
+																),
+															})}
+														</Box>
+													</Typography>
+												) : (
+													<Typography fontWeight={500}>
+														{t(m.fallbackCategoriesSetName)}
+													</Typography>
+												)}
+											</Stack>
+
+											<Stack
+												component={ListItem}
+												disableGutters
+												disablePadding
+												direction="row"
+												gap={4}
+												alignItems="flex-start"
+											>
+												<Icon
+													name="ant-design-icons-bar-chart-outlined"
+													size={iconSize}
+												/>
+
+												<Typography fontWeight={500}>
+													{t(m.projectInfoProjectStats, {
+														enabled: projectSettings.sendStats ? 1 : 0,
+													})}
+												</Typography>
+											</Stack>
+										</Stack>
+									</Stack>
+								</Box>
+							</Fade>
+						)
+					}}
+				</Popper>
+			</Box>
+		</ClickAwayListener>
+	)
+}
+
 const m = defineMessages({
+	projectInfoTooltip: {
+		id: 'routes.app.projects.$projectId.index.projectInfoTooltip',
+		defaultMessage: 'View Project Info',
+		description:
+			'Text for tooltip shown when hovering or focusing project info button.',
+	},
 	unnamedProject: {
 		id: 'routes.app.projects.$projectId.index.unnamedProject',
 		defaultMessage: 'Unnamed Project',
-		description: 'Fallback for when current project is missing a name.',
+		description: 'Fallback for when project is missing a name.',
 	},
-	youAreCoordinator: {
-		id: 'routes.app.projects.$projectId.index.youAreCoordinator',
-		defaultMessage: "You're a coordinator on this project.",
-		description: 'Indicates that user is a coordinator on the current project.',
+	fallbackCategoriesSetName: {
+		id: 'routes.app.projects.$projectId.index.fallbackCategoriesSetName',
+		defaultMessage: 'CoMapeo Categories',
+		description: 'Text shown when project does not use a categories set.',
 	},
-	youAreParticipant: {
-		id: 'routes.app.projects.$projectId.index.youAreParticipant',
-		defaultMessage: "You're a participant on this project.",
-		description: 'Indicates that user is a participant on the current project.',
+	projectInfoRoleCoordinator: {
+		id: 'routes.app.projects.$projectId.index.projectInfoRoleCoordinator',
+		defaultMessage: 'Coordinator',
+		description: 'Indicates that user is a coordinator.',
 	},
-	view: {
-		id: 'routes.app.projects.$projectId.index.view',
-		defaultMessage: 'View',
-		description: 'Link text to navigate to project settings page.',
+	projectInfoRoleParticipant: {
+		id: 'routes.app.projects.$projectId.index.projectInfoRoleParticipant',
+		defaultMessage: 'Participant',
+		description: 'Indicates that user is a participant.',
 	},
-	invite: {
-		id: 'routes.app.projects.$projectId.index.invite',
-		defaultMessage: 'Invite',
-		description: 'Link text to navigate to invite collaborators page.',
+	projectInfoCategoriesCreated: {
+		id: 'routes.app.projects.$projectId.index.projectInfoCategoriesCreated',
+		defaultMessage: 'Created {value}',
+		description: 'Text indicating creation date of categories set.',
+	},
+	projectInfoProjectStats: {
+		id: 'routes.app.projects.$projectId.index.projectInfoProjectStats',
+		defaultMessage: 'Project Sharing | {enabled, select, 1 {ON} other {OFF}}',
+		description: 'Text indicating if project stats sharing is enabled or not.',
 	},
 })
