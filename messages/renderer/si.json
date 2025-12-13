@@ -11,37 +11,85 @@
     "description": "Button text for try again button.",
     "message": "යලි උත්සාහ කරන්න"
   },
-  "routes.app.projects.$projectId.-displayed.data.list.addObservationsTitle": {
-    "description": "Title of card that is displayed when project has no observations to display.",
-    "message": "නිරීක්ෂණය එකතු කරන්න"
-  },
-  "routes.app.projects.$projectId.-displayed.data.list.observationCategoryNameFallback": {
+  "routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
     "message": "නිරීක්ෂණ"
   },
-  "routes.app.projects.$projectId.-displayed.data.map.zoomToData": {
+  "routes.app.projects.$projectId.-main-panel.inviteCollaboratorsPanelInviteLink": {
+    "description": "Text for link that navigates to invite page.",
+    "message": "උපාංගයට ආරාධනා කරන්න"
+  },
+  "routes.app.projects.$projectId.-map-panel.zoomToData": {
     "description": "Text displayed when hovering over map control for zooming to data.",
     "message": "Zoom to data"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "මකන්න"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "අවලංගු කරන්න"
   },
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
     "description": "Label text for download button",
     "message": "බාගත කරන්න"
   },
-  "routes.app.projects.$projectId.index.invite": {
-    "description": "Link text to navigate to invite collaborators page.",
-    "message": "ආරාධනා කරන්න"
+  "routes.app.projects.$projectId.download.download": {
+    "description": "Title of the download page.",
+    "message": "බාගත කරන්න"
   },
-  "routes.app.projects.$projectId.index.view": {
-    "description": "Link text to navigate to project settings page.",
-    "message": "View"
+  "routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "හරි"
+  },
+  "routes.app.projects.$projectId.download.successPanelTitle": {
+    "description": "Title text for success panel.",
+    "message": "සාර්ථකයි!"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Open Settings."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "නිරීක්ෂණ"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "අවලංගු කරන්න"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "සුරකින්න"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "පිළිතුරක් නැත"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "අවලංගු කරන්න"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "සුරකින්න"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "වෙනස් කරන්න"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
+    "description": "Text for delete observation button.",
+    "message": "මකන්න"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "අවලංගු කරන්න"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
     "message": "විස්තරය"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
-    "description": "Fallback text displayed if field has no meaningful value.",
-    "message": "පිළිතුරක් නැත"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
@@ -63,6 +111,10 @@
     "description": "Text displayed when exchange is completed with all devices.",
     "message": "Complete! You're up to date"
   },
+  "routes.app.projects.$projectId_.exchange.index.devicesFound": {
+    "description": "Text displayed when other devices have been found.",
+    "message": "Devices found"
+  },
   "routes.app.projects.$projectId_.exchange.index.upToDate": {
     "description": "Text displayed when exchangable data is up to date.",
     "message": "All data synced"
@@ -79,6 +131,14 @@
     "description": "Text displayed when external device is disconnected.",
     "message": "සම්බන්ද තාවයක් නැත"
   },
+  "routes.app.projects.$projectId_.settings.index.categoriesActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "යාවත්කාලීන කරන්න"
+  },
+  "routes.app.projects.$projectId_.settings.index.projectInfoActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "සංස්කරණය කරන්න"
+  },
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",
     "message": "අවලංගු කරන්න"
@@ -91,21 +151,25 @@
     "description": "Label for save button.",
     "message": "සුරකින්න"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectButton": {
+  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectButton": {
     "description": "Button text to initiate leave project flow.",
     "message": "ව්‍යාපෘතියෙන් ඉවත් වන්න"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectExplainerTitle": {
+  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerTitle": {
     "description": "Title text for leave project explanation.",
     "message": "ව්‍යාපෘතියෙන් ඉවත් වන්න?"
   },
-  "routes.app.projects.$projectId_.settings.team.$deviceId.leaveProjectNavTitle": {
+  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectNavTitle": {
     "description": "Title of the team collaborator info page when the leave project flow is initiated.",
     "message": "ව්‍යාපෘතියෙන් ඉවත් වන්න"
   },
-  "routes.app.projects.$projectId_.settings.team.index.inviteDevice": {
+  "routes.app.projects.$projectId_.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "උපාංගයට ආරාධනා කරන්න"
+  },
+  "routes.app.route.appSettingsTabLabel": {
+    "description": "Label for CoMapeo settings tab link in navigation.",
+    "message": "සැකසුම්"
   },
   "routes.app.settings.background-map.close": {
     "description": "Text displayed for closing dialogs",
@@ -152,6 +216,7 @@
     "message": "Create Project"
   },
   "routes.onboarding.data-and-privacy.next": {
+    "description": "Text for link to next step in onboarding.",
     "message": "ඊළඟ"
   },
   "routes.onboarding.device-name.description": {
@@ -161,30 +226,35 @@
     "message": "උපාංගයේ නම"
   },
   "routes.onboarding.project.create.$projectId.success.title": {
+    "description": "Title for onboarding project creation success page.",
     "message": "සාර්ථකයි!"
   },
-  "routes.onboarding.project.create.index.createProject": {
-    "message": "ව්යාපෘතිය සාදන්න"
+  "routes.onboarding.project.create.index.createButton": {
+    "description": "Text for button to create project.",
+    "message": "Create Project"
   },
   "routes.onboarding.project.create.index.projectName": {
+    "description": "Input label for onboarding project creation page.",
     "message": "Enter a name for the Project"
   },
   "routes.onboarding.project.create.index.title": {
-    "message": "නව ව්‍යාපෘතියක් සාදන්න"
+    "description": "Page title for onboarding project creation page.",
+    "message": "Create a Project"
   },
-  "routes.onboarding.project.createProject": {
-    "message": "නව ව්‍යාපෘතියක් සාදන්න"
-  },
-  "routes.onboarding.project.join.$inviteId.index.declineInvite": {
-    "message": "ආරාධනාව ප්‍රතික්ෂේප කරන්න"
-  },
-  "routes.onboarding.project.join.$inviteId.index.title": {
+  "routes.onboarding.project.index.joinProjectButton": {
+    "description": "Text for link to join a project.",
     "message": "ව්යාපෘතියකට සම්බන්ධ වන්න"
   },
+  "routes.onboarding.project.index.startProjectButton": {
+    "description": "Text for link to start a project.",
+    "message": "Create a Project"
+  },
   "routes.onboarding.project.join.$inviteId.success.title": {
+    "description": "Title for onboarding joining project success page.",
     "message": "සාර්ථකයි!"
   },
-  "routes.onboarding.project.title": {
+  "routes.onboarding.project.join.index.title": {
+    "description": "Title for onboarding join project landing page.",
     "message": "ව්යාපෘතියකට සම්බන්ධ වන්න"
   },
   "routes.welcome.collaborate": {
