@@ -40,6 +40,7 @@ const {
 	COMAPEO_METRICS_ACCESS_TOKEN,
 	COMAPEO_TEST,
 	ONLINE_STYLE_URL,
+	SENTRY_DSN,
 	USER_DATA_PATH,
 	VITE_MAPBOX_ACCESS_TOKEN,
 } = v.parse(
@@ -82,6 +83,7 @@ const {
 			),
 		),
 		ONLINE_STYLE_URL: v.optional(v.pipe(v.string(), v.url())),
+		SENTRY_DSN: v.optional(v.pipe(v.string(), v.url())),
 		USER_DATA_PATH: v.optional(v.string()),
 		VITE_MAPBOX_ACCESS_TOKEN: v.optional(v.string()),
 	}),
@@ -90,6 +92,18 @@ const {
 
 if (typeof COMAPEO_TEST === 'boolean' && APP_TYPE !== 'internal') {
 	throw new Error('COMAPEO_TEST can only be used when APP_TYPE is "internal"')
+}
+
+if (!SENTRY_DSN) {
+	if (APP_TYPE === 'release-candidate' || APP_TYPE === 'production') {
+		throw new Error('SENTRY_DSN must be specified for RC and production builds')
+	}
+
+	if (APP_TYPE === 'internal') {
+		console.warn(
+			'SENTRY_DSN not specified for internal build. App will not report to Sentry.',
+		)
+	}
 }
 
 const RENDERER_VITE_CONFIG_PATH = fileURLToPath(
@@ -172,6 +186,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase<CoMapeoDesktopForgePluginConf
 				diagnosticsUrl: COMAPEO_DIAGNOSTICS_METRICS_URL,
 			},
 			onlineStyleUrl: onlineStyleUrl?.toString(),
+			sentryDsn: SENTRY_DSN,
 			userDataPath: USER_DATA_PATH,
 			win32AppUserModelId:
 				process.platform === 'win32'

@@ -33,6 +33,8 @@ export const AppConfigSchema = v.object({
 	}),
 	/** Sets the online map style for @comapeo/core to use */
 	onlineStyleUrl: v.optional(v.pipe(v.string(), v.url())),
+	/** [Sentry DSN](https://docs.sentry.io/concepts/key-terms/dsn-explainer/) */
+	sentryDsn: v.optional(v.pipe(v.string(), v.url())),
 	/** Sets the user data directory for the application to use */
 	userDataPath: v.optional(v.string()),
 	/**
