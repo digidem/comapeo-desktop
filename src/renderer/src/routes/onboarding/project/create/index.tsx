@@ -1,8 +1,10 @@
 import { useMemo } from 'react'
 import { useCreateProject } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
+import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useMutation } from '@tanstack/react-query'
@@ -123,7 +125,7 @@ function RouteComponent() {
 				>
 					<form.AppField name="projectName">
 						{(field) => (
-							<field.TextField
+							<TextField
 								id={field.name}
 								required
 								fullWidth
@@ -182,7 +184,7 @@ function RouteComponent() {
 					selector={(state) => [state.canSubmit, state.isSubmitting]}
 				>
 					{([canSubmit, isSubmitting]) => (
-						<form.SubmitButton
+						<Button
 							fullWidth
 							form="device-name-form"
 							variant="contained"
@@ -195,7 +197,7 @@ function RouteComponent() {
 							startIcon={<Icon name="material-check-circle-outline-rounded" />}
 						>
 							{t(m.createButton)}
-						</form.SubmitButton>
+						</Button>
 					)}
 				</form.Subscribe>
 			</Box>

@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
+import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -138,7 +139,7 @@ function RouteComponent() {
 						>
 							<form.AppField name="deviceName">
 								{(field) => (
-									<field.TextField
+									<TextField
 										required
 										fullWidth
 										label={t(m.inputLabel)}
@@ -226,7 +227,7 @@ function RouteComponent() {
 										{t(m.cancel)}
 									</Button>
 
-									<form.SubmitButton
+									<Button
 										type="submit"
 										form={FORM_ID}
 										fullWidth
@@ -237,7 +238,7 @@ function RouteComponent() {
 										sx={{ maxWidth: 400 }}
 									>
 										{t(m.save)}
-									</form.SubmitButton>
+									</Button>
 								</>
 							)}
 						</form.Subscribe>

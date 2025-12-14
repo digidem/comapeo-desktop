@@ -1,8 +1,10 @@
 import { useMemo } from 'react'
 import { useOwnDeviceInfo, useSetOwnDeviceInfo } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
+import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useStore } from '@tanstack/react-form'
@@ -136,7 +138,7 @@ function RouteComponent() {
 					>
 						<form.AppField name="deviceName">
 							{(field) => (
-								<field.TextField
+								<TextField
 									id={field.name}
 									required
 									fullWidth
@@ -193,7 +195,7 @@ function RouteComponent() {
 				<Box display="flex" justifyContent="center">
 					<form.Subscribe selector={(state) => state.canSubmit}>
 						{(canSubmit) => (
-							<form.SubmitButton
+							<Button
 								fullWidth
 								form="device-name-form"
 								variant="contained"
@@ -202,7 +204,7 @@ function RouteComponent() {
 								sx={{ maxWidth: 400 }}
 							>
 								{t(m.addName)}
-							</form.SubmitButton>
+							</Button>
 						)}
 					</form.Subscribe>
 				</Box>
