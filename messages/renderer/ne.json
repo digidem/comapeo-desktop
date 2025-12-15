@@ -1,7 +1,7 @@
 {
   "components.error-dialog.close": {
     "description": "Button text for the close button in the error dialog.",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "components.generic-route-error-component.error": {
     "description": "Label for error section",
@@ -33,7 +33,7 @@
   },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
     "description": "Accessible label for button to close panel.",
-    "message": "Open Settings."
+    "message": "Close."
   },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
@@ -105,7 +105,7 @@
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
     "description": "Text for button to leave invite flow.",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",
@@ -129,7 +129,7 @@
   },
   "routes.app.settings.background-map.close": {
     "description": "Text displayed for closing dialogs",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "routes.app.settings.background-map.navTitle": {
     "description": "Title of the background map settings page.",
