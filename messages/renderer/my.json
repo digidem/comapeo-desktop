@@ -1,15 +1,59 @@
 {
   "components.error-dialog.close": {
     "description": "Button text for the close button in the error dialog.",
-    "message": "Open Settings"
+    "message": "Close"
   },
-  "routes.app.projects.$projectId.-displayed.data.list.observationCategoryNameFallback": {
+  "routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
     "message": "လေ့လာတွေ့ရှိချက်များ"
   },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
+  "routes.app.projects.$projectId.-main-panel.inviteCollaboratorsPanelInviteLink": {
+    "description": "Text for link that navigates to invite page.",
+    "message": "ကိရိယာများကို ဖိတ်ခေါ်ပါ"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "ပယ်ဖျက်သည်"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "ပယ်ဖျက်သည်"
+  },
+  "routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "ပြီးသွားပြီ"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Close."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "လေ့လာတွေ့ရှိချက်များ"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "ပယ်ဖျက်သည်"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
     "description": "Fallback text displayed if field has no meaningful value.",
     "message": "အဖြေမရှိပါ"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "ပယ်ဖျက်သည်"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "ပြောင်းလဲသည်"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
+    "description": "Text for delete observation button.",
+    "message": "ပယ်ဖျက်သည်"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "ပယ်ဖျက်သည်"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
@@ -27,6 +71,10 @@
     "description": "Text displayed when exchange is completed with all devices.",
     "message": "Complete! You're up to date"
   },
+  "routes.app.projects.$projectId_.exchange.index.devicesFound": {
+    "description": "Text displayed when other devices have been found.",
+    "message": "Devices found"
+  },
   "routes.app.projects.$projectId_.exchange.index.upToDate": {
     "description": "Text displayed when exchangable data is up to date.",
     "message": "All data synced"
@@ -37,7 +85,7 @@
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
     "description": "Text for button to leave invite flow.",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",
@@ -47,13 +95,13 @@
     "description": "Label for the project name input.",
     "message": "Enter a name for the Project"
   },
-  "routes.app.projects.$projectId_.settings.team.index.inviteDevice": {
+  "routes.app.projects.$projectId_.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "ကိရိယာများကို ဖိတ်ခေါ်ပါ"
   },
   "routes.app.settings.background-map.close": {
     "description": "Text displayed for closing dialogs",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "routes.app.settings.background-map.navTitle": {
     "description": "Title of the background map settings page.",
@@ -72,13 +120,27 @@
     "message": "Create Project"
   },
   "routes.onboarding.data-and-privacy.next": {
+    "description": "Text for link to next step in onboarding.",
     "message": "နောက်ထပ်"
   },
   "routes.onboarding.device-name.description": {
     "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
   },
+  "routes.onboarding.project.create.index.createButton": {
+    "description": "Text for button to create project.",
+    "message": "Create Project"
+  },
   "routes.onboarding.project.create.index.projectName": {
+    "description": "Input label for onboarding project creation page.",
     "message": "Enter a name for the Project"
+  },
+  "routes.onboarding.project.create.index.title": {
+    "description": "Page title for onboarding project creation page.",
+    "message": "Create a Project"
+  },
+  "routes.onboarding.project.index.startProjectButton": {
+    "description": "Text for link to start a project.",
+    "message": "Create a Project"
   },
   "routes.welcome.collaborate": {
     "message": "Collaborate with others"

@@ -1,11 +1,35 @@
 {
   "components.error-dialog.close": {
     "description": "Button text for the close button in the error dialog.",
-    "message": "Open Settings"
+    "message": "Close"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "Noomtee"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Close."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Noomtee"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Noomtee"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "Noomtee"
   },
   "routes.app.projects.$projectId_.exchange.index.complete": {
     "description": "Text displayed when exchange is completed with all devices.",
     "message": "Complete! You're up to date"
+  },
+  "routes.app.projects.$projectId_.exchange.index.devicesFound": {
+    "description": "Text displayed when other devices have been found.",
+    "message": "Devices found"
   },
   "routes.app.projects.$projectId_.exchange.index.upToDate": {
     "description": "Text displayed when exchangable data is up to date.",
@@ -17,7 +41,7 @@
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
     "description": "Text for button to leave invite flow.",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",
@@ -29,7 +53,7 @@
   },
   "routes.app.settings.background-map.close": {
     "description": "Text displayed for closing dialogs",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "routes.app.settings.background-map.navTitle": {
     "description": "Title of the background map settings page.",
@@ -50,8 +74,21 @@
   "routes.onboarding.device-name.description": {
     "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
   },
+  "routes.onboarding.project.create.index.createButton": {
+    "description": "Text for button to create project.",
+    "message": "Create Project"
+  },
   "routes.onboarding.project.create.index.projectName": {
+    "description": "Input label for onboarding project creation page.",
     "message": "Enter a name for the Project"
+  },
+  "routes.onboarding.project.create.index.title": {
+    "description": "Page title for onboarding project creation page.",
+    "message": "Create a Project"
+  },
+  "routes.onboarding.project.index.startProjectButton": {
+    "description": "Text for link to start a project.",
+    "message": "Create a Project"
   },
   "routes.welcome.collaborate": {
     "message": "Collaborate with others"

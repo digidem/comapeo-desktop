@@ -1,39 +1,83 @@
 {
   "components.error-dialog.close": {
     "description": "Button text for the close button in the error dialog.",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "components.generic-route-error-component.error": {
     "description": "Label for error section",
     "message": "កំហុសឆ្គង"
   },
-  "routes.app.projects.$projectId.-displayed.data.list.addObservationsTitle": {
-    "description": "Title of card that is displayed when project has no observations to display.",
-    "message": "បន្ថែមការសង្កេត"
-  },
-  "routes.app.projects.$projectId.-displayed.data.list.observationCategoryNameFallback": {
+  "routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
     "message": "ការសង្កេត"
   },
-  "routes.app.projects.$projectId.-displayed.data.map.zoomToData": {
+  "routes.app.projects.$projectId.-map-panel.zoomToData": {
     "description": "Text displayed when hovering over map control for zooming to data.",
     "message": "ពង្រីកទៅកាន់ទិន្នន័យ"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "លុប"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "បោះបង់"
   },
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
     "description": "Label text for download button",
     "message": "ទាញយក"
   },
-  "routes.app.projects.$projectId.index.view": {
-    "description": "Link text to navigate to project settings page.",
-    "message": "ទិដ្ឋភាព"
+  "routes.app.projects.$projectId.download.download": {
+    "description": "Title of the download page.",
+    "message": "ទាញយក"
+  },
+  "routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "រួចរាល់"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Close."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "ការសង្កេត"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "បោះបង់"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "រក្សាទុក"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "គ្មាន​ចម្លើយ"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "បោះបង់"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "រក្សាទុក"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "ផ្លាស់ប្តូរ"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
+    "description": "Text for delete observation button.",
+    "message": "លុប"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "បោះបង់"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
     "message": "ព័ត៌មានលម្អិត"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.fieldAnswerNoAnswer": {
-    "description": "Fallback text displayed if field has no meaningful value.",
-    "message": "គ្មាន​ចម្លើយ"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
@@ -55,6 +99,10 @@
     "description": "Text displayed when exchange is completed with all devices.",
     "message": "Complete! You're up to date"
   },
+  "routes.app.projects.$projectId_.exchange.index.devicesFound": {
+    "description": "Text displayed when other devices have been found.",
+    "message": "Devices found"
+  },
   "routes.app.projects.$projectId_.exchange.index.upToDate": {
     "description": "Text displayed when exchangable data is up to date.",
     "message": "All data synced"
@@ -65,11 +113,19 @@
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
     "description": "Text for button to leave invite flow.",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "routes.app.projects.$projectId_.invite.devices.-shared.disconnected-indicator.disconnected": {
     "description": "Text displayed when external device is disconnected.",
     "message": "បាន​ផ្ដាច់"
+  },
+  "routes.app.projects.$projectId_.settings.index.categoriesActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "ធ្វើបច្ចុប្បន្នភាព"
+  },
+  "routes.app.projects.$projectId_.settings.index.projectInfoActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "កែរ"
   },
   "routes.app.projects.$projectId_.settings.info.cancel": {
     "description": "Label for cancel button.",
@@ -83,9 +139,13 @@
     "description": "Label for save button.",
     "message": "រក្សាទុក"
   },
+  "routes.app.route.appSettingsTabLabel": {
+    "description": "Label for CoMapeo settings tab link in navigation.",
+    "message": "ការកំណត់"
+  },
   "routes.app.settings.background-map.close": {
     "description": "Text displayed for closing dialogs",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "routes.app.settings.background-map.navTitle": {
     "description": "Title of the background map settings page.",
@@ -116,13 +176,27 @@
     "message": "Create Project"
   },
   "routes.onboarding.data-and-privacy.next": {
+    "description": "Text for link to next step in onboarding.",
     "message": "បន្ទាប់"
   },
   "routes.onboarding.device-name.description": {
     "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
   },
+  "routes.onboarding.project.create.index.createButton": {
+    "description": "Text for button to create project.",
+    "message": "Create Project"
+  },
   "routes.onboarding.project.create.index.projectName": {
+    "description": "Input label for onboarding project creation page.",
     "message": "Enter a name for the Project"
+  },
+  "routes.onboarding.project.create.index.title": {
+    "description": "Page title for onboarding project creation page.",
+    "message": "Create a Project"
+  },
+  "routes.onboarding.project.index.startProjectButton": {
+    "description": "Text for link to start a project.",
+    "message": "Create a Project"
   },
   "routes.welcome.collaborate": {
     "message": "Collaborate with others"
