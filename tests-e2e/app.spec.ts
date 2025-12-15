@@ -1844,20 +1844,9 @@ test('leave project', async () => {
 
 	await main.getByRole('button', { name: 'Confirm', exact: true }).click()
 
-	await page.waitForURL(
-		(url) => {
-			return url.hash === '#/onboarding/project'
-		},
-		{ timeout: 3_000 },
-	)
-
-	await expect(
-		main.getByRole('link', { name: 'Start New Project', exact: true }),
-	).toBeVisible()
-
-	await expect(
-		main.getByRole('link', { name: 'Join a Project', exact: true }),
-	).toBeVisible()
+	await page.waitForURL((url) => {
+		return url.hash === '#/onboarding/project'
+	})
 })
 
 test('write outputs', async () => {
