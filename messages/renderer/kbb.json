@@ -1,11 +1,11 @@
 {
   "components.error-dialog.close": {
     "description": "Button text for the close button in the error dialog.",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
     "description": "Accessible label for button to close panel.",
-    "message": "Open Settings."
+    "message": "Close."
   },
   "routes.app.projects.$projectId_.exchange.index.complete": {
     "description": "Text displayed when exchange is completed with all devices.",
@@ -25,7 +25,7 @@
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
     "description": "Text for button to leave invite flow.",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "routes.app.projects.$projectId_.settings.info.projectNameInputLabel": {
     "description": "Label for the project name input.",
@@ -33,7 +33,7 @@
   },
   "routes.app.settings.background-map.close": {
     "description": "Text displayed for closing dialogs",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "routes.app.settings.background-map.navTitle": {
     "description": "Title of the background map settings page.",
