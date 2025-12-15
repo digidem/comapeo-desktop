@@ -707,6 +707,10 @@
     "description": "Text indicating collaborator is a coordinator.",
     "message": "Coordinator"
   },
+  "routes.app.projects.$projectId_.team.$deviceId.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Go back."
+  },
   "routes.app.projects.$projectId_.team.$deviceId.lastCoordinatorWarning": {
     "description": "Warning text about leaving the project as the last coordinator.",
     "message": "You're the last coordinator. Consider making another device a coordinator before leaving the project."
