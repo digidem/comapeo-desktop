@@ -1,7 +1,7 @@
 {
   "components.error-dialog.close": {
     "description": "Button text for the close button in the error dialog.",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "components.generic-route-error-component.error": {
     "description": "Label for error section",
