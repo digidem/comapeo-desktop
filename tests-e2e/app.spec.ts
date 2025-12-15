@@ -475,17 +475,18 @@ test.describe('CoMapeo settings', () => {
 			await expect(page.getByRole('navigation').getByRole('link')).toHaveText([
 				'',
 				'',
-				// TODO: Need to update when translations get updated
-				'Team',
-				// TODO: Need to update when translations get updated
-				'Tools',
-				// TODO: Need to update when translations get updated
-				'Configurações do Aplicativo',
+				// NOTE: Need to update when translations get updated
+				'Equipe',
+				// NOTE: Need to update when translations get updated
+				'Ferramentas',
+				// NOTE: Need to update when translations get updated
+				'Ajustes',
 			])
 
 			await main.getByRole('button', { name: 'Voltar.', exact: true }).click()
 
 			const languageSettingsLink = main.getByRole('link', {
+				// NOTE: Need to update when translations get updated
 				name: 'Vá para as configurações de idioma.',
 				exact: true,
 			})
