@@ -12,6 +12,7 @@ import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
+import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -201,7 +202,7 @@ function RouteComponent() {
 								<Box paddingInline={6}>
 									<form.AppField name="projectName">
 										{(field) => (
-											<field.TextField
+											<TextField
 												required
 												fullWidth
 												label={t(m.projectNameInputLabel)}
@@ -253,7 +254,7 @@ function RouteComponent() {
 								<Box paddingInline={6}>
 									<form.AppField name="projectDescription">
 										{(field) => (
-											<field.TextField
+											<TextField
 												fullWidth
 												multiline
 												rows={3}
@@ -454,7 +455,7 @@ function RouteComponent() {
 										{t(m.cancel)}
 									</Button>
 
-									<form.SubmitButton
+									<Button
 										type="submit"
 										form={FORM_ID}
 										fullWidth
@@ -465,7 +466,7 @@ function RouteComponent() {
 										sx={{ maxWidth: 400 }}
 									>
 										{t(m.save)}
-									</form.SubmitButton>
+									</Button>
 								</>
 							)}
 						</form.Subscribe>

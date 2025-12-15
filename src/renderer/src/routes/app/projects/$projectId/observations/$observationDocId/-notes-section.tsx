@@ -2,6 +2,7 @@ import { useSingleDocByDocId, useUpdateDocument } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
+import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
@@ -199,7 +200,7 @@ function NotesEditor({
 			<Stack direction="column" gap={4}>
 				<form.AppField name="notes">
 					{(field) => (
-						<field.TextField
+						<TextField
 							fullWidth
 							multiline
 							aria-label={t(m.accessibleNotesInputLabel)}
@@ -227,7 +228,7 @@ function NotesEditor({
 					<form.Subscribe selector={(state) => state.isSubmitting}>
 						{(isSubmitting) => (
 							<>
-								<form.SubmitButton
+								<Button
 									type="submit"
 									fullWidth
 									sx={{ maxWidth: 400 }}
@@ -238,7 +239,7 @@ function NotesEditor({
 									}
 								>
 									{t(m.saveButtonText)}
-								</form.SubmitButton>
+								</Button>
 
 								<Button
 									type="button"

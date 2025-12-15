@@ -104,7 +104,7 @@ if (appConfig.appType === 'release-candidate') {
 // NOTE: Has to be set up after user data directory is updated
 // https://docs.sentry.io/platforms/javascript/guides/electron/#app-userdata-directory
 Sentry.init({
-	dsn: 'https://f7336c12cc39fb0367886e31036a6cd7@o4507148235702272.ingest.us.sentry.io/4509803831820288',
+	dsn: appConfig.sentryDsn,
 	// NOTE: Only works on app startup. Any changes to `diagnosticsEnabled` while the app is running will not
 	// take effect here until the app is restarted.
 	enabled: persistedStoreState.diagnosticsEnabled,
