@@ -19,6 +19,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 import Snackbar from '@mui/material/Snackbar'
 import Stack from '@mui/material/Stack'
+import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useStore } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
@@ -353,7 +354,7 @@ function RouteComponent() {
 
 										<form.AppField name="observationCount">
 											{(field) => (
-												<field.TextField
+												<TextField
 													required
 													fullWidth
 													label={t(m.observationCountLabel)}
@@ -405,7 +406,7 @@ function RouteComponent() {
 												>
 													<form.AppField name="longitude">
 														{(field) => (
-															<field.TextField
+															<TextField
 																fullWidth
 																aria-disabled
 																disabled
@@ -424,7 +425,7 @@ function RouteComponent() {
 
 													<form.AppField name="latitude">
 														{(field) => (
-															<field.TextField
+															<TextField
 																fullWidth
 																aria-disabled
 																disabled
@@ -445,7 +446,7 @@ function RouteComponent() {
 
 											<form.AppField name="boundedDistance">
 												{(field) => (
-													<field.TextField
+													<TextField
 														required
 														fullWidth
 														label={t(m.boundedDistanceLabel)}
@@ -526,7 +527,7 @@ function RouteComponent() {
 												{t(m.cancel)}
 											</Button>
 
-											<form.SubmitButton
+											<Button
 												type="submit"
 												form={FORM_ID}
 												fullWidth
@@ -537,7 +538,7 @@ function RouteComponent() {
 												sx={{ maxWidth: 400 }}
 											>
 												{t(m.create)}
-											</form.SubmitButton>
+											</Button>
 										</>
 									)}
 								</form.Subscribe>

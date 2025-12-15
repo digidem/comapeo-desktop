@@ -363,7 +363,7 @@ function DownloadForm({
 							}
 						>
 							{([canSubmit, isSubmitting]) => (
-								<form.SubmitButton
+								<Button
 									type="submit"
 									form={FORM_ID}
 									fullWidth
@@ -375,7 +375,7 @@ function DownloadForm({
 									sx={{ maxWidth: 400 }}
 								>
 									{t(m.download)}
-								</form.SubmitButton>
+								</Button>
 							)}
 						</form.Subscribe>
 					</Box>

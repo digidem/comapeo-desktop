@@ -6,6 +6,7 @@ import FormGroup from '@mui/material/FormGroup'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import Stack from '@mui/material/Stack'
+import TextField from '@mui/material/TextField'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
@@ -60,7 +61,7 @@ export function TextFieldEditor({
 		>
 			<form.AppField name="answer">
 				{(formField) => (
-					<formField.TextField
+					<TextField
 						fullWidth
 						multiline={field.appearance !== 'singleline'}
 						aria-label={field.label}
@@ -88,7 +89,7 @@ export function TextFieldEditor({
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
-							<form.SubmitButton
+							<Button
 								type="submit"
 								fullWidth
 								sx={{ maxWidth: 400 }}
@@ -97,7 +98,7 @@ export function TextFieldEditor({
 								endIcon={<Icon name="material-check-circle-outline-rounded" />}
 							>
 								{t(m.saveButtonText)}
-							</form.SubmitButton>
+							</Button>
 
 							<Button
 								type="button"
@@ -165,7 +166,7 @@ export function NumberFieldEditor({
 		>
 			<form.AppField name="answer">
 				{(formField) => (
-					<formField.TextField
+					<TextField
 						fullWidth
 						aria-label={field.label}
 						autoFocus
@@ -198,7 +199,7 @@ export function NumberFieldEditor({
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
-							<form.SubmitButton
+							<Button
 								type="submit"
 								fullWidth
 								sx={{ maxWidth: 400 }}
@@ -207,7 +208,7 @@ export function NumberFieldEditor({
 								endIcon={<Icon name="material-check-circle-outline-rounded" />}
 							>
 								{t(m.saveButtonText)}
-							</form.SubmitButton>
+							</Button>
 
 							<Button
 								type="button"
@@ -320,7 +321,7 @@ export function SingleSelectFieldEditor({
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
-							<form.SubmitButton
+							<Button
 								type="submit"
 								fullWidth
 								sx={{ maxWidth: 400 }}
@@ -329,7 +330,7 @@ export function SingleSelectFieldEditor({
 								endIcon={<Icon name="material-check-circle-outline-rounded" />}
 							>
 								{t(m.saveButtonText)}
-							</form.SubmitButton>
+							</Button>
 
 							<Button
 								type="button"
@@ -425,7 +426,7 @@ export function MultiSelectFieldEditor({
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
-							<form.SubmitButton
+							<Button
 								type="submit"
 								fullWidth
 								sx={{ maxWidth: 400 }}
@@ -434,7 +435,7 @@ export function MultiSelectFieldEditor({
 								endIcon={<Icon name="material-check-circle-outline-rounded" />}
 							>
 								{t(m.saveButtonText)}
-							</form.SubmitButton>
+							</Button>
 
 							<Button
 								type="button"
