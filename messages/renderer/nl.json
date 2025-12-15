@@ -9,7 +9,7 @@
   },
   "components.error-dialog.close": {
     "description": "Button text for the close button in the error dialog.",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "components.error-dialog.somethingWentWrong": {
     "description": "Generic title text for the error dialog.",
@@ -237,7 +237,7 @@
   },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
     "description": "Accessible label for button to close panel.",
-    "message": "Open Settings."
+    "message": "Close."
   },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
     "description": "Title for edit category panel.",
@@ -465,7 +465,7 @@
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
     "description": "Text for button to leave invite flow.",
-    "message": "Open Settings"
+    "message": "Close"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.coordinator": {
     "description": "Coordinator role name.",
