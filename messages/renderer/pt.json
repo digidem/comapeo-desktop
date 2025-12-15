@@ -9,7 +9,7 @@
   },
   "components.error-dialog.close": {
     "description": "Button text for the close button in the error dialog.",
-    "message": "Abrir Configurações"
+    "message": "Fechar"
   },
   "components.error-dialog.somethingWentWrong": {
     "description": "Generic title text for the error dialog.",
@@ -233,7 +233,7 @@
   },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
     "description": "Accessible label for button to close panel.",
-    "message": "Abrir Configurações."
+    "message": "Fechar."
   },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
     "description": "Title for edit category panel.",
@@ -469,7 +469,7 @@
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
     "description": "Text for button to leave invite flow.",
-    "message": "Abrir Configurações"
+    "message": "Fechar"
   },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.coordinator": {
     "description": "Coordinator role name.",
@@ -861,7 +861,7 @@
   },
   "routes.app.settings.background-map.close": {
     "description": "Text displayed for closing dialogs",
-    "message": "Abrir Configurações"
+    "message": "Fechar"
   },
   "routes.app.settings.background-map.customMapInfoError": {
     "description": "Text displayed when info about a custom map cannot be retrieved.",
