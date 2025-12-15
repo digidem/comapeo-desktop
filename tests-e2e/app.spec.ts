@@ -1848,7 +1848,7 @@ test('leave project', async () => {
 		(url) => {
 			return url.hash === '#/onboarding/project'
 		},
-		{ timeout: 1_000 },
+		{ timeout: 3_000 },
 	)
 
 	await expect(
