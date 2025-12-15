@@ -113,6 +113,7 @@ jobs:
         env:
           APP_TYPE: 'internal'
           COMAPEO_TEST: 'true'
+          SENTRY_DSN: ${{ vars.COMAPEO_SENTRY_DSN }}
           VITE_FEATURE_TEST_DATA_UI: 'true'
         run: node --run forge:package
 

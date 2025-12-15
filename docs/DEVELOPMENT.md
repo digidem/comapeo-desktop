@@ -57,6 +57,10 @@ Make sure you have the desired Node version installed. For this project we encou
 
 If you need to use environment overrides, create a copy of the [`.env.template`](../.env.template) and call it `.env`.
 
+If you want logs and errors to be sent to Sentry as you run the app, you need to specify the following environment variables:
+
+- `SENTRY_DSN`: [Sentry Data Source Name (DSN)](https://docs.sentry.io/concepts/key-terms/dsn-explainer/)
+
 If you're planning to use a different online map style, you'll need to specify a couple of other environment variables:
 
 - `ONLINE_STYLE_URL`: Full URL that points to a compatible map's StyleJSON.

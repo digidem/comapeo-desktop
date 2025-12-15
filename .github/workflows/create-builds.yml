@@ -158,6 +158,7 @@ jobs:
           ONLINE_STYLE_URL: ${{ secrets.ONLINE_STYLE_URL }}
           VITE_FEATURE_TEST_DATA_UI: ${{ env.APP_TYPE == 'production' && 'false' || 'true' }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_DSN: ${{ vars.COMAPEO_SENTRY_DSN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
