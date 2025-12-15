@@ -58,11 +58,15 @@ export function createAppDiagnosticsMetricsScheduler({
 		},
 		storage: {
 			get: async () => {
-				let content
+				let content: unknown
 
 				try {
-					content = await readFile(storageFilePath, { encoding: 'utf-8' })
-				} catch {
+					content = JSON.parse(
+						await readFile(storageFilePath, { encoding: 'utf-8' }),
+					)
+				} catch (err) {
+					captureException(err)
+
 					return undefined
 				}
 
@@ -76,7 +80,7 @@ export function createAppDiagnosticsMetricsScheduler({
 							]),
 						),
 					}),
-					JSON.parse(content),
+					content,
 				)
 
 				if (!result.success) {

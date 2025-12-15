@@ -69,18 +69,19 @@ export class DeviceDiagnosticsMetrics {
 	}
 
 	async #readStorage() {
-		let content
+		let content: unknown
 
 		try {
-			content = await readFile(this.#storageFilePath, { encoding: 'utf-8' })
-		} catch {
+			content = JSON.parse(
+				await readFile(this.#storageFilePath, { encoding: 'utf-8' }),
+			)
+		} catch (err) {
+			captureException(err)
+
 			return undefined
 		}
 
-		const result = v.safeParse(
-			DeviceDiagnosticsStorageSchema,
-			JSON.parse(content),
-		)
+		const result = v.safeParse(DeviceDiagnosticsStorageSchema, content)
 
 		if (!result.success) {
 			return undefined
