@@ -1,4 +1,5 @@
 import { Suspense, useState, type JSX } from 'react'
+import type { MemberApi } from '@comapeo/core'
 import {
 	useClientApi,
 	useLeaveProject,
@@ -131,6 +132,7 @@ function RouteComponent() {
 				borderBottom={`1px solid ${BLUE_GREY}`}
 			>
 				<IconButton
+					aria-label={t(m.goBackAccessibleLabel)}
 					onClick={
 						showLeaveProject
 							? () => {
@@ -236,7 +238,12 @@ function CollaboratorInfoContent({
 	if (isRemoteArchive) {
 		title = member.name || t(m.remoteArchive)
 		description = (
-			<Typography variant="h3" fontWeight={500} textAlign="center">
+			<Typography
+				component="p"
+				variant="h3"
+				fontWeight={500}
+				textAlign="center"
+			>
 				{member.selfHostedServerDetails.baseUrl}
 			</Typography>
 		)
@@ -257,7 +264,12 @@ function CollaboratorInfoContent({
 					size={roleIconSize}
 				/>
 
-				<Typography variant="h3" fontWeight={500} textAlign="center">
+				<Typography
+					component="p"
+					variant="h3"
+					fontWeight={500}
+					textAlign="center"
+				>
 					{t(isAtLeastCoordinator ? m.coordinator : m.participant)}
 				</Typography>
 			</>
@@ -295,7 +307,12 @@ function CollaboratorInfoContent({
 					</Typography>
 
 					{isSelf ? (
-						<Typography variant="h3" fontWeight={500} textAlign="center">
+						<Typography
+							component="p"
+							variant="h3"
+							fontWeight={500}
+							textAlign="center"
+						>
 							{t(m.thisDevice)}
 						</Typography>
 					) : null}
@@ -313,11 +330,15 @@ function CollaboratorInfoContent({
 					{member.joinedAt ? (
 						<Typography color="textSecondary" textAlign="center">
 							{t(m.addedOn, {
-								value: formatDate(member.joinedAt, {
-									year: 'numeric',
-									month: 'long',
-									day: '2-digit',
-								}),
+								value: (
+									<time key={member.deviceId} dateTime={member.joinedAt}>
+										{formatDate(member.joinedAt, {
+											year: 'numeric',
+											month: 'long',
+											day: '2-digit',
+										})}
+									</time>
+								),
 							})}
 						</Typography>
 					) : null}
@@ -362,27 +383,7 @@ function LeaveProjectContent({
 		multiplier: 4,
 	})
 
-	const { data: ownDeviceInfo } = useOwnDeviceInfo()
-
 	const { data: member } = useSingleMember({ projectId, deviceId })
-
-	const { data: members } = useManyMembers({ projectId })
-
-	const isSelf = member.deviceId === ownDeviceInfo.deviceId
-
-	const isAtLeastCoordinator =
-		member.role.roleId === CREATOR_ROLE_ID ||
-		member.role.roleId === COORDINATOR_ROLE_ID
-
-	const showLastCoordinatorWarning =
-		isSelf &&
-		isAtLeastCoordinator &&
-		!members.some(
-			(m) =>
-				m.deviceId !== ownDeviceInfo.deviceId &&
-				(m.role.roleId === CREATOR_ROLE_ID ||
-					m.role.roleId === COORDINATOR_ROLE_ID),
-		)
 
 	const displayedName = member.name || member.deviceId.slice(0, 12)
 
@@ -395,18 +396,9 @@ function LeaveProjectContent({
 			padding={6}
 			gap={6}
 		>
-			{showLastCoordinatorWarning ? (
-				<Alert
-					severity="warning"
-					icon={<Icon name="material-warning-rounded" />}
-					sx={{
-						border: `1px solid ${BLUE_GREY}`,
-						borderRadius: 2,
-					}}
-				>
-					<Typography>{t(m.lastCoordinatorWarning)}</Typography>
-				</Alert>
-			) : null}
+			<Suspense>
+				<LastCoordinatorWarning projectId={projectId} member={member} />
+			</Suspense>
 
 			<Stack
 				direction="column"
@@ -447,6 +439,53 @@ function LeaveProjectContent({
 				</Button>
 			</Box>
 		</Stack>
+	)
+}
+
+function LastCoordinatorWarning({
+	projectId,
+	member,
+}: {
+	projectId: string
+	member: MemberApi.MemberInfo
+}) {
+	const { formatMessage: t } = useIntl()
+
+	const { data: ownDeviceInfo } = useOwnDeviceInfo()
+
+	const { data: members } = useManyMembers({ projectId })
+
+	const isSelf = member.deviceId === ownDeviceInfo.deviceId
+
+	const isAtLeastCoordinator =
+		member.role.roleId === CREATOR_ROLE_ID ||
+		member.role.roleId === COORDINATOR_ROLE_ID
+
+	const showLastCoordinatorWarning =
+		isSelf &&
+		isAtLeastCoordinator &&
+		!members.some(
+			(m) =>
+				m.deviceId !== ownDeviceInfo.deviceId &&
+				(m.role.roleId === CREATOR_ROLE_ID ||
+					m.role.roleId === COORDINATOR_ROLE_ID),
+		)
+
+	if (!showLastCoordinatorWarning) {
+		return null
+	}
+
+	return (
+		<Alert
+			severity="warning"
+			icon={<Icon name="material-warning-rounded" />}
+			sx={{
+				border: `1px solid ${BLUE_GREY}`,
+				borderRadius: 2,
+			}}
+		>
+			<Typography>{t(m.lastCoordinatorWarning)}</Typography>
+		</Alert>
 	)
 }
 
@@ -514,5 +553,10 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId_.team.$deviceId.confirmButton',
 		defaultMessage: 'Confirm',
 		description: 'Button text to confirm leaving project.',
+	},
+	goBackAccessibleLabel: {
+		id: 'routes.app.projects.$projectId_.team.$deviceId.goBackAccessibleLabel',
+		defaultMessage: 'Go back.',
+		description: 'Accessible label for back button.',
 	},
 })

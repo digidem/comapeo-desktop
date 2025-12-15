@@ -942,89 +942,6 @@ test.describe('exchange', () => {
 	})
 })
 
-test.describe('team', () => {
-	test('index', async () => {
-		const page = await electronApp.firstWindow()
-
-		const main = page.getByRole('main')
-
-		// Navigation
-		{
-			const teamNavLink = page
-				.getByRole('navigation')
-				.getByRole('link', { name: 'Team', exact: true })
-
-			await teamNavLink.click()
-
-			await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
-		}
-
-		// Main
-		{
-			await expect(
-				main.getByRole('heading', { name: 'Team', exact: true }),
-			).toBeVisible()
-
-			await expect(
-				main.getByRole('link', { name: 'Invite Device', exact: true }),
-			).toBeVisible()
-
-			/// Coordinators list
-			await expect(
-				main.getByRole('heading', { name: 'Coordinators', exact: true }),
-			).toBeVisible()
-
-			await expect(
-				main.getByText(
-					'Coordinators can invite devices, edit and delete data, and manage project details.',
-					{ exact: true },
-				),
-			).toBeVisible()
-
-			const coordinatorList = main.getByRole('list').first()
-
-			const ownDeviceListItem = coordinatorList.getByRole('link', {
-				name: `View member ${OUTPUTS.deviceName}.`,
-				exact: true,
-			})
-
-			await expect(ownDeviceListItem).toBeVisible()
-
-			await expect(
-				ownDeviceListItem.getByText('This device', { exact: true }),
-			).toBeVisible()
-
-			/// Participants list
-			await expect(
-				main.getByRole('heading', { name: 'Participants', exact: true }),
-			).toBeVisible()
-
-			await expect(
-				main.getByText(
-					'Participants can take and share observations. They cannot manage users or project details.',
-					{ exact: true },
-				),
-			).toBeVisible()
-
-			await expect(
-				main.getByText('No Participants have been added to this project.', {
-					exact: true,
-				}),
-			).toBeVisible()
-
-			/// Remote archives list
-			await expect(
-				main.getByRole('heading', { name: 'Remote Archives', exact: true }),
-			).not.toBeVisible()
-
-			/// Past collaborators list
-			await expect(
-				main.getByRole('heading', { name: 'Past Collaborators', exact: true }),
-			).not.toBeVisible()
-		}
-	})
-})
-
 test.describe('coordinator tools', () => {
 	test('index', async () => {
 		const page = await electronApp.firstWindow()
@@ -1564,7 +1481,7 @@ test.describe('coordinator tools', () => {
 			).toBeVisible()
 
 			// TODO: Ideally check for the actual values
-			const dateCreated = main.getByText(/^Added .+/)
+			const dateCreated = main.getByText(/^Created .+/)
 			await expect(dateCreated).toBeVisible()
 			const dateCreatedTime = dateCreated.getByRole('time')
 			await expect(dateCreatedTime).not.toBeEmpty()
@@ -1743,6 +1660,204 @@ test.describe('coordinator tools', () => {
 			}
 		}
 	})
+})
+
+test.describe('team', () => {
+	test('index', async () => {
+		const page = await electronApp.firstWindow()
+
+		const main = page.getByRole('main')
+
+		// Navigation
+		{
+			const teamNavLink = page
+				.getByRole('navigation')
+				.getByRole('link', { name: 'Team', exact: true })
+
+			await teamNavLink.click()
+
+			await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+		}
+
+		// Main
+		{
+			await expect(
+				main.getByRole('heading', { name: 'Team', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				main.getByRole('link', { name: 'Invite Device', exact: true }),
+			).toBeVisible()
+
+			/// Coordinators list
+			await expect(
+				main.getByRole('heading', { name: 'Coordinators', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				main.getByText(
+					'Coordinators can invite devices, edit and delete data, and manage project details.',
+					{ exact: true },
+				),
+			).toBeVisible()
+
+			const coordinatorList = main.getByRole('list').first()
+
+			const ownDeviceListItem = coordinatorList.getByRole('link', {
+				name: `View member ${OUTPUTS.deviceName}.`,
+				exact: true,
+			})
+
+			await expect(ownDeviceListItem).toBeVisible()
+
+			await expect(
+				ownDeviceListItem.getByText('This device', { exact: true }),
+			).toBeVisible()
+
+			/// Participants list
+			await expect(
+				main.getByRole('heading', { name: 'Participants', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				main.getByText(
+					'Participants can take and share observations. They cannot manage users or project details.',
+					{ exact: true },
+				),
+			).toBeVisible()
+
+			await expect(
+				main.getByText('No Participants have been added to this project.', {
+					exact: true,
+				}),
+			).toBeVisible()
+
+			/// Remote archives list
+			await expect(
+				main.getByRole('heading', { name: 'Remote Archives', exact: true }),
+			).not.toBeVisible()
+
+			/// Past collaborators list
+			await expect(
+				main.getByRole('heading', { name: 'Past Collaborators', exact: true }),
+			).not.toBeVisible()
+		}
+	})
+
+	test('collaborator info (yourself)', async () => {
+		const page = await electronApp.firstWindow()
+
+		const main = page.getByRole('main')
+
+		await main
+			.getByRole('link', {
+				name: `View member ${OUTPUTS.deviceName}.`,
+				exact: true,
+			})
+			.click()
+
+		// Navigation
+		{
+			const teamNavLink = page
+				.getByRole('navigation')
+				.getByRole('link', { name: 'Team', exact: true })
+
+			await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+		}
+
+		// Main
+
+		/// Page title
+		await expect(
+			main.getByRole('heading', { name: 'Collaborator Info', exact: true }),
+		).toBeVisible()
+
+		/// Info specific to yourself
+		await expect(
+			main.getByRole('heading', { name: OUTPUTS.deviceName, exact: true }),
+		).toBeVisible()
+		await expect(main.getByText('This Device!', { exact: true })).toBeVisible()
+
+		/// Displayed role
+		await expect(main.getByText('Coordinator', { exact: true })).toBeVisible()
+
+		/// Other displayed collaborator info
+		// TODO: Check for displayed device ID
+
+		// TODO: Ideally check for the actual values
+		const dateAdded = main.getByText(/^Added on .+/)
+		await expect(dateAdded).toBeVisible()
+		const dateAddedTime = dateAdded.getByRole('time')
+		await expect(dateAddedTime).not.toBeEmpty()
+		await expect(dateAddedTime).toHaveAttribute('datetime')
+
+		/// Actions
+		await expect(
+			main.getByRole('button', { name: 'Leave Project', exact: true }),
+		).toBeVisible()
+	})
+})
+
+// NOTE: Ideally the last test that runs before outputs test
+test('leave project', async () => {
+	const page = await electronApp.firstWindow()
+
+	const main = page.getByRole('main')
+
+	// Navigation to leave project flow
+	{
+		const teamNavLink = page
+			.getByRole('navigation')
+			.getByRole('link', { name: 'Team', exact: true })
+
+		await teamNavLink.click()
+
+		await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+
+		await main
+			.getByRole('link', {
+				name: `View member ${OUTPUTS.deviceName}.`,
+				exact: true,
+			})
+			.click()
+
+		await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+
+		await main
+			.getByRole('button', { name: 'Leave Project', exact: true })
+			.click()
+
+		await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+	}
+
+	// Main
+	await expect(
+		main.getByRole('heading', { name: 'Leave Project?', exact: true }),
+	).toBeVisible()
+
+	await expect(
+		main.getByText(
+			`${OUTPUTS.deviceName} will no longer be able to add or exchange observations.`,
+			{ exact: true },
+		),
+	).toBeVisible()
+
+	await main.getByRole('button', { name: 'Confirm', exact: true }).click()
+
+	await page.waitForURL(
+		(url) => {
+			return url.hash === '#/onboarding/project'
+		},
+		{ timeout: 3_000 },
+	)
+
+	await expect(
+		main.getByRole('link', { name: 'Start New Project', exact: true }),
+	).toBeVisible()
+
+	await expect(
+		main.getByRole('link', { name: 'Join a Project', exact: true }),
+	).toBeVisible()
 })
 
 test('write outputs', async () => {
