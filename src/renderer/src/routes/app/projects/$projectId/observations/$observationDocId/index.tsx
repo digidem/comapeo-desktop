@@ -171,6 +171,23 @@ export const Route = createFileRoute(
 			}),
 		])
 	},
+	remountDeps: ({ params }) => {
+		return params
+	},
+	onLeave: ({ context, params }) => {
+		const { globalEditingStateStore } = context
+		const { observationDocId } = params
+
+		const globalEditIdPrefix = getGlobalEditIdPrefix(observationDocId)
+
+		const relevantEditIds = globalEditingStateStore.instance
+			.getState()
+			.activeEdits.filter((e) => e.startsWith(globalEditIdPrefix))
+
+		for (const id of relevantEditIds) {
+			globalEditingStateStore.actions.remove(id)
+		}
+	},
 	notFoundComponent: GenericRouteNotFoundComponent,
 	component: RouteComponent,
 })
@@ -413,12 +430,13 @@ function ObservationDetailsPanel({
 
 	const isEditing = globalEditingEntries.length > 0
 
-	const globalEditIdPrefix = `observations_${observationDocId}_edit`
+	const globalEditIdPrefix = getGlobalEditIdPrefix(observationDocId)
+
+	const notesGlobalEditId = `${globalEditIdPrefix}_notes`
+
 	const activeObservationDetailsGlobalEditId = globalEditingEntries.find((e) =>
 		e.startsWith(globalEditIdPrefix),
 	)
-
-	const notesGlobalEditId = `${globalEditIdPrefix}_notes`
 
 	return (
 		<>
@@ -981,6 +999,10 @@ function ObservationDetailsPanel({
 			/>
 		</>
 	)
+}
+
+function getGlobalEditIdPrefix(observationDocId: string) {
+	return `observation_${observationDocId}_edit`
 }
 
 function isEditableField(field: Field): field is EditableField {
