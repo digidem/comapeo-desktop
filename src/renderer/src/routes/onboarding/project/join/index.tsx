@@ -116,9 +116,11 @@ function PendingInvite() {
 		<>
 			<TransitionGroup style={{ position: 'relative' }}>
 				{acceptOnboardingInvite.status === 'pending' ? (
-					<Box display="flex" flexDirection="row" justifyContent="center">
-						<CircularProgress disableShrink />
-					</Box>
+					<Zoom mountOnEnter unmountOnExit>
+						<Box display="flex" flexDirection="row" justifyContent="center">
+							<CircularProgress disableShrink />
+						</Box>
+					</Zoom>
 				) : pendingInvite ? (
 					<Zoom key={pendingInvite.inviteId} mountOnEnter unmountOnExit>
 						<Stack
