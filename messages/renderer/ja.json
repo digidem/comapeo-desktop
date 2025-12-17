@@ -683,6 +683,10 @@
     "description": "Text indicating collaborator is a coordinator.",
     "message": "Coordinator"
   },
+  "routes.app.projects.$projectId_.team.$deviceId.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
+  },
   "routes.app.projects.$projectId_.team.$deviceId.lastCoordinatorWarning": {
     "description": "Warning text about leaving the project as the last coordinator.",
     "message": "あなたは最後のコーディネーターです。プロジェクトを離れる前に別のデバイスをコーディネーターにすることを検討してください。"
