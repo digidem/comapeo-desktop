@@ -155,6 +155,8 @@ function PendingInvite() {
 									variant="outlined"
 									fullWidth
 									aria-disabled={rejectOnboardingInvite.status === 'pending'}
+									loading={rejectOnboardingInvite.status === 'pending'}
+									loadingPosition="start"
 									onClick={() => {
 										if (rejectOnboardingInvite.status === 'pending') {
 											return
@@ -182,6 +184,7 @@ function PendingInvite() {
 										if (rejectOnboardingInvite.status === 'pending') {
 											return
 										}
+
 										acceptOnboardingInvite.mutate(
 											{ inviteId: pendingInvite.inviteId },
 											{
