@@ -24,7 +24,7 @@ export default defineConfig((configEnv) => {
 			alias: {
 				// https://formatjs.github.io/docs/guides/advanced-usage
 				'@formatjs/icu-messageformat-parser':
-					'@formatjs/icu-messageformat-parser/no-parser',
+					'@formatjs/icu-messageformat-parser/no-parser.js',
 			},
 		},
 		// When packaging the app we need to use relative URL when pointing to assets

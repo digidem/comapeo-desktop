@@ -171,6 +171,23 @@ export const Route = createFileRoute(
 			}),
 		])
 	},
+	remountDeps: ({ params }) => {
+		return params
+	},
+	onLeave: ({ context, params }) => {
+		const { globalEditingStateStore } = context
+		const { observationDocId } = params
+
+		const globalEditIdPrefix = getGlobalEditIdPrefix(observationDocId)
+
+		const relevantEditIds = globalEditingStateStore.instance
+			.getState()
+			.activeEdits.filter((e) => e.startsWith(globalEditIdPrefix))
+
+		for (const id of relevantEditIds) {
+			globalEditingStateStore.actions.remove(id)
+		}
+	},
 	notFoundComponent: GenericRouteNotFoundComponent,
 	component: RouteComponent,
 })
@@ -411,14 +428,17 @@ function ObservationDetailsPanel({
 	const globalEditingStateActions = useGlobalEditingStateActions()
 	const globalEditingEntries = useGlobalEditingState()
 
-	const isEditing = globalEditingEntries.length > 0
+	const globalEditIdPrefix = getGlobalEditIdPrefix(observationDocId)
 
-	const globalEditIdPrefix = `observations_${observationDocId}_edit`
-	const activeObservationDetailsGlobalEditId = globalEditingEntries.find((e) =>
+	const notesGlobalEditId = `${globalEditIdPrefix}_notes`
+
+	const observationEditIds = globalEditingEntries.filter((e) =>
 		e.startsWith(globalEditIdPrefix),
 	)
 
-	const notesGlobalEditId = `${globalEditIdPrefix}_notes`
+	const isEditingObservation = observationEditIds.length > 0
+
+	const activeObservationEditId = observationEditIds[0]
 
 	return (
 		<>
@@ -432,7 +452,7 @@ function ObservationDetailsPanel({
 					borderBottom={`1px solid ${BLUE_GREY}`}
 				>
 					<IconButton
-						disabled={isEditing}
+						disabled={isEditingObservation}
 						onClick={() => {
 							if (deleteObservation.status === 'pending') {
 								return
@@ -548,7 +568,7 @@ function ObservationDetailsPanel({
 									{canEdit ? (
 										<Box display="flex" flex={0} justifyContent="center">
 											<Button
-												disabled={isEditing}
+												disabled={isEditingObservation}
 												variant="text"
 												onClick={() => {
 													onEditCategory()
@@ -703,8 +723,8 @@ function ObservationDetailsPanel({
 						{canEdit ? (
 							<EditableNotesSection
 								disabled={
-									!!activeObservationDetailsGlobalEditId &&
-									activeObservationDetailsGlobalEditId !== notesGlobalEditId
+									!!activeObservationEditId &&
+									activeObservationEditId !== notesGlobalEditId
 								}
 								onStartEditMode={() => {
 									globalEditingStateActions.add(notesGlobalEditId)
@@ -769,9 +789,8 @@ function ObservationDetailsPanel({
 													key={field.docId}
 													field={field}
 													disabled={
-														!!activeObservationDetailsGlobalEditId &&
-														activeObservationDetailsGlobalEditId !==
-															globalEditId
+														!!activeObservationEditId &&
+														activeObservationEditId !== globalEditId
 													}
 													onStartEditMode={() => {
 														globalEditingStateActions.add(globalEditId)
@@ -841,9 +860,8 @@ function ObservationDetailsPanel({
 												<EditableFieldSection
 													field={field}
 													disabled={
-														!!activeObservationDetailsGlobalEditId &&
-														activeObservationDetailsGlobalEditId !==
-															globalEditId
+														!!activeObservationEditId &&
+														activeObservationEditId !== globalEditId
 													}
 													onStartEditMode={() => {
 														globalEditingStateActions.add(globalEditId)
@@ -875,7 +893,7 @@ function ObservationDetailsPanel({
 							padding={6}
 						>
 							<IconButton
-								disabled={isEditing}
+								disabled={isEditingObservation}
 								aria-labelledby="delete-observation-button-label"
 								sx={{ border: `1px solid ${BLUE_GREY}` }}
 								onClick={() => {
@@ -887,7 +905,7 @@ function ObservationDetailsPanel({
 
 							<Typography
 								id="delete-observation-button-label"
-								color={isEditing ? 'textDisabled' : undefined}
+								color={isEditingObservation ? 'textDisabled' : undefined}
 							>
 								{t(m.deleteObservationButtonText)}
 							</Typography>
@@ -981,6 +999,10 @@ function ObservationDetailsPanel({
 			/>
 		</>
 	)
+}
+
+function getGlobalEditIdPrefix(observationDocId: string) {
+	return `observation_${observationDocId}_edit`
 }
 
 function isEditableField(field: Field): field is EditableField {
