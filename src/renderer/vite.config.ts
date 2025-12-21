@@ -45,11 +45,6 @@ export default defineConfig((configEnv) => {
 				routesDirectory: fileURLToPath(
 					new URL('./src/routes', import.meta.url),
 				),
-				experimental: {
-					// NOTE: Fixes issue with path params not updating properly in non-nested routes
-					// https://discord.com/channels/719702312431386674/1432492487091683370
-					nonNestedRoutes: true,
-				},
 				target: 'react',
 				generatedRouteTree: path.join(GENERATED_DIR, 'routeTree.gen.ts'),
 			}),
