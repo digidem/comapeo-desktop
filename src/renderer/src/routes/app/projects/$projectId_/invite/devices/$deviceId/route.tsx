@@ -3,7 +3,7 @@ import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { GenericRoutePendingComponent } from '../../../../../../../components/generic-route-pending-component'
 
 export const Route = createFileRoute(
-	'/app/projects/$projectId/invite/devices/$deviceId',
+	'/app/projects/$projectId_/invite/devices/$deviceId',
 )({
 	// NOTE: We want to make sure that the device of interest is actually still detected by us and connected.
 	// If it's not, then we redirect to the page that lists the discovered devices.
