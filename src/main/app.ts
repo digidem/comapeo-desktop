@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto'
 import { copyFile, mkdir, rm } from 'node:fs/promises'
-import { basename, isAbsolute, join } from 'node:path'
+import { basename, isAbsolute, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineMessages } from '@formatjs/intl'
 import { captureException } from '@sentry/electron'
@@ -11,6 +11,8 @@ import {
 	BrowserWindow,
 	app,
 	dialog,
+	net,
+	protocol,
 	safeStorage,
 	utilityProcess,
 	type UtilityProcess,
@@ -238,6 +240,47 @@ export async function start({
 	const diagnosticsEnabled = persisted.diagnosticsEnabled
 	const sentryUserId = persisted.sentryUser.id
 
+	protocol.handle('comapeo', (request: Request) => {
+		const { pathname, hash } = new URL(request.url)
+
+		const isDevelopment = appConfig.appType === 'development'
+
+		if (isDevelopment) {
+			// TODO: Ideally forward to the Vite dev server
+			throw new Error('Custom protocol does not work in development yet')
+		} else {
+			if (pathname === '/') {
+				const u = new URL('../renderer/index.html', import.meta.url)
+				// NOTE: Enables deeplinking in the app
+				u.hash = hash
+				return net.fetch(u.toString())
+			}
+
+			const allowedDirectoryPath = fileURLToPath(
+				new URL('../renderer', import.meta.url),
+			)
+			const requestedPath = join(allowedDirectoryPath, pathname)
+			const relativePath = relative(allowedDirectoryPath, requestedPath)
+
+			// NOTE: Make sure incoming requests do not attempt to access files outside the allowed directory scope
+			const isSafe =
+				relativePath &&
+				!relativePath.startsWith('..') &&
+				!isAbsolute(relativePath)
+
+			if (!isSafe) {
+				// TODO: More gracefully handle by returning an error page?
+				throw new Error(
+					`Requested path is outside allowed scope: ${requestedPath}`,
+				)
+			}
+
+			return net.fetch(
+				new URL(`../renderer${pathname}`, import.meta.url).toString(),
+			)
+		}
+	})
+
 	const mainWindow = initMainWindow({
 		activeProjectId,
 		appVersion: appConfig.appVersion,
@@ -308,6 +351,7 @@ function initMainWindow({
 	mainWindow.setAutoHideMenuBar(true)
 
 	if (isDevelopment) {
+		// TODO: Consider using custom protocol?
 		// TODO: Don't hard code ideally
 		mainWindow.loadURL('http://localhost:5173/')
 		mainWindow.webContents.openDevTools({
@@ -315,9 +359,9 @@ function initMainWindow({
 			activate: false,
 		})
 	} else {
-		mainWindow.loadFile(
-			fileURLToPath(new URL('../renderer/index.html', import.meta.url)),
-		)
+		// NOTE: name used for host here does not really matter, but it's useful to use
+		// `renderer` for the sake of understanding where things are being served from.
+		mainWindow.loadURL('comapeo://renderer/index.html')
 	}
 
 	mainWindow.on('close', (event) => {

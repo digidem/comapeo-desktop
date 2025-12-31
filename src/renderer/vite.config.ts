@@ -27,9 +27,6 @@ export default defineConfig((configEnv) => {
 					'@formatjs/icu-messageformat-parser/no-parser.js',
 			},
 		},
-		// When packaging the app we need to use relative URL when pointing to assets
-		// because the file is statically loaded (not via server)
-		base: configEnv.command === 'build' ? './' : undefined,
 		build: {
 			outDir: path.join(PROJECT_ROOT_DIR, 'dist/renderer'),
 			emptyOutDir: true,

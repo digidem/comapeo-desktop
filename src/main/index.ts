@@ -5,7 +5,7 @@ import { platform } from 'node:os'
 import * as path from 'node:path'
 import * as Sentry from '@sentry/electron/main'
 import debug from 'debug'
-import { app } from 'electron/main'
+import { app, protocol } from 'electron/main'
 import { parse } from 'valibot'
 
 import {
@@ -123,6 +123,20 @@ log('Paths', {
 	userData: app.getPath('userData'),
 	logs: app.getPath('logs'),
 })
+
+protocol.registerSchemesAsPrivileged([
+	{
+		scheme: 'comapeo',
+		privileges: {
+			allowServiceWorkers: true,
+			corsEnabled: true,
+			secure: true,
+			supportFetchAPI: true,
+			standard: true,
+			stream: true,
+		},
+	},
+])
 
 start({ appConfig, persistedStore }).catch((err) => {
 	Sentry.captureException(err)
