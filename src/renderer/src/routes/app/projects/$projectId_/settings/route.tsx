@@ -15,7 +15,7 @@ import {
 	CREATOR_ROLE_ID,
 } from '../../../../../lib/comapeo'
 
-export const Route = createFileRoute('/app/projects/$projectId/settings')({
+export const Route = createFileRoute('/app/projects/$projectId_/settings')({
 	beforeLoad: async ({ context, params }) => {
 		const { clientApi, queryClient } = context
 		const { projectId } = params

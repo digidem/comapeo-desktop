@@ -30,42 +30,39 @@ import {
 	CREATOR_ROLE_ID,
 	memberIsRemoteArchive,
 } from '../../../../../lib/comapeo'
+import { buildDocumentReloadURL } from '../../../../../lib/navigation.ts'
 import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations'
 
-export const Route = createFileRoute('/app/projects/$projectId/team/$deviceId')(
-	{
-		loader: async ({ context, params }) => {
-			const { clientApi, projectApi, queryClient } = context
-			const { projectId, deviceId } = params
+export const Route = createFileRoute(
+	'/app/projects/$projectId_/team/$deviceId',
+)({
+	loader: async ({ context, params }) => {
+		const { clientApi, projectApi, queryClient } = context
+		const { projectId, deviceId } = params
 
-			await Promise.all([
-				queryClient.ensureQueryData({
-					queryKey: [
-						COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-						'client',
-						'device_info',
-					],
-					queryFn: async () => {
-						return clientApi.getDeviceInfo()
-					},
-				}),
-				queryClient.ensureQueryData({
-					queryKey: [
-						COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-						'projects',
-						projectId,
-						'members',
-						deviceId,
-					],
-					queryFn: async () => {
-						return projectApi.$member.getById(deviceId)
-					},
-				}),
-			])
-		},
-		component: RouteComponent,
+		await Promise.all([
+			queryClient.ensureQueryData({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
+				queryFn: async () => {
+					return clientApi.getDeviceInfo()
+				},
+			}),
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'members',
+					deviceId,
+				],
+				queryFn: async () => {
+					return projectApi.$member.getById(deviceId)
+				},
+			}),
+		])
 	},
-)
+	component: RouteComponent,
+})
 
 const LEAVE_PROJECT_AND_NAVIGATE_MUTATION_KEY = createGlobalMutationsKey([
 	'leave_project_and_navigate',
@@ -109,12 +106,8 @@ function RouteComponent() {
 			} else {
 				activeProjectIdActions.update(undefined)
 
-				// NOTE: Accounts for bug where `router.navigate()` doesn't account for hash router usage when trying to reload document
-				// (https://discord.com/channels/719702312431386674/1431138480096022680)
 				await router.navigate({
-					href: router.history.createHref(
-						router.buildLocation({ to: '/onboarding/project' }).href,
-					),
+					href: buildDocumentReloadURL(router, '/onboarding/project'),
 					reloadDocument: true,
 				})
 			}
