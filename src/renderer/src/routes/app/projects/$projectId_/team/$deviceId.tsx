@@ -30,6 +30,7 @@ import {
 	CREATOR_ROLE_ID,
 	memberIsRemoteArchive,
 } from '../../../../../lib/comapeo'
+import { buildDocumentReloadURL } from '../../../../../lib/navigation.ts'
 import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations'
 
 export const Route = createFileRoute(
@@ -105,12 +106,8 @@ function RouteComponent() {
 			} else {
 				activeProjectIdActions.update(undefined)
 
-				// NOTE: Accounts for bug where `router.navigate()` doesn't account for hash router usage when trying to reload document
-				// (https://discord.com/channels/719702312431386674/1431138480096022680)
 				await router.navigate({
-					href: router.history.createHref(
-						router.buildLocation({ to: '/onboarding/project' }).href,
-					),
+					href: buildDocumentReloadURL(router, '/onboarding/project'),
 					reloadDocument: true,
 				})
 			}

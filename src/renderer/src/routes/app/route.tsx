@@ -23,6 +23,7 @@ import {
 	CREATOR_ROLE_ID,
 	MEMBER_ROLE_ID,
 } from '../../lib/comapeo'
+import { buildDocumentReloadURL } from '../../lib/navigation.ts'
 import { GLOBAL_MUTATIONS_BASE_KEY } from '../../lib/queries/global-mutations'
 
 export const Route = createFileRoute('/app')({
@@ -85,10 +86,16 @@ export const Route = createFileRoute('/app')({
 		) {
 			activeProjectIdStore.actions.update(undefined)
 
-			// NOTE: Accounts for bug where `router.navigate()` doesn't account for hash router usage when trying to reload document
-			// (https://discord.com/channels/719702312431386674/1431138480096022680)
 			throw redirect({
-				href: history.createHref(buildLocation({ to: '/' }).href),
+				// TODO: Kind of hacky but no way to access router instance here at the moment
+				href: buildDocumentReloadURL(
+					{
+						buildLocation,
+						history,
+						origin: window.origin,
+					},
+					'/',
+				),
 				reloadDocument: true,
 			})
 		}
