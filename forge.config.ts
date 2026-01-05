@@ -7,6 +7,7 @@ import { loadEnvFile } from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { MakerDeb } from '@electron-forge/maker-deb'
 import { MakerDMG } from '@electron-forge/maker-dmg'
+import { MakerMSIX } from '@electron-forge/maker-msix'
 import { MakerRpm } from '@electron-forge/maker-rpm'
 import { MakerSquirrel } from '@electron-forge/maker-squirrel'
 import { MakerZIP } from '@electron-forge/maker-zip'
@@ -373,6 +374,12 @@ export default {
 	},
 	rebuildConfig: {},
 	makers: [
+		// TODO: Finish this up
+		new MakerMSIX(() => ({
+			manifestVariables: {
+				publisher: 'Awana Digital',
+			},
+		})),
 		new MakerSquirrel((arch) => ({
 			iconUrl:
 				'https://raw.githubusercontent.com/digidem/comapeo-desktop/232a55085e10f6b59f639aa86be0c46a71ed5110/assets/icon.ico',
