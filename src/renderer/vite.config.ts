@@ -45,7 +45,11 @@ export default defineConfig((configEnv) => {
 				target: 'react',
 				generatedRouteTree: path.join(GENERATED_DIR, 'routeTree.gen.ts'),
 			}),
-			react(),
+			react({
+				babel: {
+					plugins: ['babel-plugin-react-compiler'],
+				},
+			}),
 			// TODO: `cwd` option is broken. should submit a fix at some point
 			iconsSpritesheet({
 				inputDir: fileURLToPath(new URL('./icons', import.meta.url)),
