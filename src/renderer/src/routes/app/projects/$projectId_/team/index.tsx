@@ -32,7 +32,7 @@ import {
 	type RemoteArchiveMemberInfo,
 } from '../../../../../lib/comapeo'
 
-export const Route = createFileRoute('/app/projects/$projectId/team/')({
+export const Route = createFileRoute('/app/projects/$projectId_/team/')({
 	loader: async ({ context, params }) => {
 		const { clientApi, projectApi, queryClient } = context
 		const { projectId } = params

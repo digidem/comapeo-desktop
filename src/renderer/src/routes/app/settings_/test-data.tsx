@@ -47,7 +47,7 @@ import { useMapsRefreshToken } from '../../../hooks/maps'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
 import { createGlobalMutationsKey } from '../../../lib/queries/global-mutations'
 
-export const Route = createFileRoute('/app/settings/test-data')({
+export const Route = createFileRoute('/app/settings_/test-data')({
 	beforeLoad: () => {
 		if (
 			__APP_TYPE__ === 'production' ||

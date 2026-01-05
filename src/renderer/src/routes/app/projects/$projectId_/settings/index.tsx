@@ -15,7 +15,7 @@ import { Icon } from '../../../../../components/icon'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
 
-export const Route = createFileRoute('/app/projects/$projectId/settings/')({
+export const Route = createFileRoute('/app/projects/$projectId_/settings/')({
 	loader: async ({ context, params }) => {
 		const { projectApi, queryClient } = context
 		const { projectId } = params
