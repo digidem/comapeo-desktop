@@ -50,6 +50,10 @@ const CATEGORY_CONTAINER_SIZE_PX = 64
 const APPROXIMATE_ITEM_HEIGHT_PX = CATEGORY_CONTAINER_SIZE_PX + 16 * 2 + 1
 
 export function DataList({ projectId }: { projectId: string }) {
+	// NOTE: Necessary due to @tanstack/react-virtual
+	// https://github.com/TanStack/virtual/issues/736
+	'use no memo'
+
 	const { formatMessage: t, formatDate } = useIntl()
 
 	const { data: lang } = useSuspenseQuery({
