@@ -26,11 +26,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Update npm version
-        shell: bash
-        run: |
-          version=$(cat package.json | jq '.devEngines.packageManager.version' --raw-output)
-          echo "Version detected: $version"
-          npm install -g npm@$version
+        uses: ./.github/update-npm-version
 
       - name: Install deps
         run: npm ci
@@ -57,11 +53,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Update npm version
-        shell: bash
-        run: |
-          version=$(cat package.json | jq '.devEngines.packageManager.version' --raw-output)
-          echo "Version detected: $version"
-          npm install -g npm@$version
+        uses: ./.github/update-npm-version
 
       - name: Install deps
         run: npm ci
@@ -97,11 +89,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Update npm version
-        shell: bash
-        run: |
-          version=$(cat package.json | jq '.devEngines.packageManager.version' --raw-output)
-          echo "Version detected: $version"
-          npm install -g npm@$version
+        uses: ./.github/update-npm-version
 
       - name: Install deps
         run: npm ci
