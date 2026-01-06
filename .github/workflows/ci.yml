@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
 
 jobs:
-  lint:
+  checks:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -50,8 +50,9 @@ jobs:
       - name: Build translations
         run: node --run intl
 
-      - name: Run lint
-        run: node --run lint
+      - name: Run checks
+        run: node --run checks
+
   test:
     timeout-minutes: 10
     strategy:
