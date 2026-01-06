@@ -18,20 +18,20 @@ import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { DeviceIcon } from '../../-shared/device-icon'
-import { BLUE_GREY } from '../../../../../colors'
-import { ErrorDialog } from '../../../../../components/error-dialog'
-import { Icon } from '../../../../../components/icon'
-import { useActiveProjectIdActions } from '../../../../../contexts/active-project-id-store-context'
-import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
+import { DeviceIcon } from '../../-shared/device-icon.tsx'
+import { BLUE_GREY } from '../../../../../colors.ts'
+import { ErrorDialog } from '../../../../../components/error-dialog.tsx'
+import { Icon } from '../../../../../components/icon.tsx'
+import { useActiveProjectIdActions } from '../../../../../contexts/active-project-id-store-context.ts'
+import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 	memberIsRemoteArchive,
-} from '../../../../../lib/comapeo'
+} from '../../../../../lib/comapeo.ts'
 import { buildDocumentReloadURL } from '../../../../../lib/navigation.ts'
-import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations'
+import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations.ts'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId_/team/$deviceId',
