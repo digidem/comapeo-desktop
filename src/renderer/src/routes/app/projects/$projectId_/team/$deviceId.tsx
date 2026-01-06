@@ -18,20 +18,20 @@ import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { DeviceIcon } from '../../-shared/device-icon'
-import { BLUE_GREY } from '../../../../../colors'
-import { ErrorDialog } from '../../../../../components/error-dialog'
-import { Icon } from '../../../../../components/icon'
-import { useActiveProjectIdActions } from '../../../../../contexts/active-project-id-store-context'
-import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
+import { DeviceIcon } from '../../-shared/device-icon.tsx'
+import { BLUE_GREY } from '../../../../../colors.ts'
+import { ErrorDialog } from '../../../../../components/error-dialog.tsx'
+import { Icon } from '../../../../../components/icon.tsx'
+import { useActiveProjectIdActions } from '../../../../../contexts/active-project-id-store-context.ts'
+import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 	memberIsRemoteArchive,
-} from '../../../../../lib/comapeo'
+} from '../../../../../lib/comapeo.ts'
 import { buildDocumentReloadURL } from '../../../../../lib/navigation.ts'
-import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations'
+import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations.ts'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId_/team/$deviceId',
@@ -88,14 +88,14 @@ function RouteComponent() {
 		mutationFn: async ({ projectId }: { projectId: string }) => {
 			return leaveProject.mutateAsync({ projectId })
 		},
-		onSuccess: async () => {
+		onSuccess: async (_data, variables) => {
 			// TODO: Ideally we don't autonavigate to some arbitrary project.
 			// Instead we should allow the user to choose which project to enter.
 			// Okay to do for now because we don't allow joining another project after the onboarding right now.
 			const projects = await clientApi.listProjects()
 
 			const projectToNavigateTo = projects.find(
-				(p) => p.projectId !== projectId,
+				(p) => p.projectId !== variables.projectId,
 			)
 
 			if (projectToNavigateTo) {
@@ -115,87 +115,91 @@ function RouteComponent() {
 	})
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
-			<Stack
-				direction="row"
-				alignItems="center"
-				component="nav"
-				gap={4}
-				padding={4}
-				borderBottom={`1px solid ${BLUE_GREY}`}
-			>
-				<IconButton
-					aria-label={t(m.goBackAccessibleLabel)}
-					onClick={
-						showLeaveProject
-							? () => {
-									if (leaveProjectAndNavigate.status === 'pending') {
-										return
-									}
+		<>
+			<Stack direction="column" flex={1} overflow="auto">
+				<Stack
+					direction="row"
+					alignItems="center"
+					component="nav"
+					gap={4}
+					padding={4}
+					borderBottom={`1px solid ${BLUE_GREY}`}
+				>
+					<IconButton
+						aria-label={t(m.goBackAccessibleLabel)}
+						onClick={
+							showLeaveProject
+								? () => {
+										if (leaveProjectAndNavigate.status === 'pending') {
+											return
+										}
 
-									setShowLeaveProject(false)
-								}
-							: () => {
-									if (router.history.canGoBack()) {
-										router.history.back()
-										return
+										setShowLeaveProject(false)
 									}
+								: () => {
+										if (router.history.canGoBack()) {
+											router.history.back()
+											return
+										}
 
-									router.navigate({
-										to: '/app/projects/$projectId/team',
-										params: { projectId },
-										replace: true,
-									})
-								}
+										router.navigate({
+											to: '/app/projects/$projectId/team',
+											params: { projectId },
+											replace: true,
+										})
+									}
+						}
+					>
+						<Icon name="material-arrow-back" size={30} />
+					</IconButton>
+
+					<Typography variant="h1" fontWeight={500}>
+						{t(
+							showLeaveProject
+								? m.leaveProjectNavTitle
+								: m.collaboratorNavTitle,
+						)}
+					</Typography>
+				</Stack>
+
+				<Suspense
+					fallback={
+						<Box display="grid" sx={{ placeItems: 'center' }} flex={1}>
+							<CircularProgress disableShrink size={30} />
+						</Box>
 					}
 				>
-					<Icon name="material-arrow-back" size={30} />
-				</IconButton>
-
-				<Typography variant="h1" fontWeight={500}>
-					{t(
-						showLeaveProject ? m.leaveProjectNavTitle : m.collaboratorNavTitle,
-					)}
-				</Typography>
-			</Stack>
-
-			<Suspense
-				fallback={
-					<Box display="grid" sx={{ placeItems: 'center' }} flex={1}>
-						<CircularProgress disableShrink size={30} />
-					</Box>
-				}
-			>
-				{showLeaveProject ? (
-					<>
-						<LeaveProjectContent
+					{showLeaveProject ? (
+						<>
+							<LeaveProjectContent
+								projectId={projectId}
+								deviceId={deviceId}
+								isLeaving={leaveProjectAndNavigate.status === 'pending'}
+								onConfirm={() => {
+									leaveProjectAndNavigate.mutate({ projectId })
+								}}
+							/>
+						</>
+					) : (
+						<CollaboratorInfoContent
 							projectId={projectId}
 							deviceId={deviceId}
-							isLeaving={leaveProjectAndNavigate.status === 'pending'}
-							onConfirm={() => {
-								leaveProjectAndNavigate.mutate({ projectId })
+							onLeaveProject={() => {
+								setShowLeaveProject(true)
 							}}
 						/>
+					)}
+				</Suspense>
+			</Stack>
 
-						<ErrorDialog
-							open={leaveProjectAndNavigate.status === 'error'}
-							errorMessage={leaveProjectAndNavigate.error?.toString()}
-							onClose={() => {
-								leaveProjectAndNavigate.reset()
-							}}
-						/>
-					</>
-				) : (
-					<CollaboratorInfoContent
-						projectId={projectId}
-						deviceId={deviceId}
-						onLeaveProject={() => {
-							setShowLeaveProject(true)
-						}}
-					/>
-				)}
-			</Suspense>
-		</Stack>
+			<ErrorDialog
+				open={leaveProjectAndNavigate.status === 'error'}
+				errorMessage={leaveProjectAndNavigate.error?.toString()}
+				onClose={() => {
+					leaveProjectAndNavigate.reset()
+				}}
+			/>
+		</>
 	)
 }
 
