@@ -39,7 +39,8 @@ jobs:
         run: |
           electron_node_version=$(ELECTRON_RUN_AS_NODE=true npx electron -e 'console.log(process.versions.node);')
 
-          if [[ "$electron_node_version" == "$EXPECTED_NODE_VERSION" ]]
+          # Version string from setup-node is prefixed with "v"
+          if [[ "v$electron_node_version" == "$EXPECTED_NODE_VERSION" ]]
           then
             echo "✅ Electron node version matches expected ($electron_node_version)"
           else
