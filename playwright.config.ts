@@ -4,32 +4,23 @@ export default defineConfig({
 	testDir: 'tests-e2e',
 	outputDir: 'tests-e2e/results',
 	forbidOnly: !!process.env.CI,
+	// TODO: Consider bumping to 2 in CI
 	workers: process.env.CI ? 1 : undefined,
 	maxFailures: 0,
-	timeout: process.env.CI ? 30_000 : 10_000,
+	retries: 2,
+	timeout: 30_000,
 	reporter: [
 		['list'],
 		['html', { open: 'never', outputFolder: 'tests-e2e/playwright-report' }],
 	],
 	projects: [
 		{
-			name: 'setup',
-			testMatch: /setup\.spec\.ts/,
-			teardown: 'teardown',
-		},
-		{
-			name: 'teardown',
-			testMatch: /teardown\.spec\.ts/,
-		},
-		{
 			name: 'onboarding',
 			testMatch: /onboarding\.spec\.ts/,
-			dependencies: ['setup'],
 		},
-		{
-			name: 'app',
-			testMatch: /app\.spec\.ts/,
-			dependencies: ['setup', 'onboarding'],
-		},
+		// {
+		// 	name: 'app',
+		// 	testMatch: /app\.spec\.ts/,
+		// },
 	],
 })

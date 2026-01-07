@@ -9,7 +9,11 @@ import {
 } from 'electron-playwright-helpers'
 import * as v from 'valibot'
 
-export const test = base.extend<{ appInfo: ElectronAppInfo }>({
+export const test = base.extend<{
+	appInfo: ElectronAppInfo
+	userParams: { deviceName: string }
+}>({
+	userParams: [{ deviceName: 'Desktop (e2e)' }, { option: true }],
 	appInfo: (
 		// eslint-disable-next-line no-empty-pattern
 		{},
