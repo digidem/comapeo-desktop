@@ -110,7 +110,7 @@
 		"@fontsource-variable/rubik": "5.2.8",
 		"@formatjs/cli": "6.10.0",
 		"@ianvs/prettier-plugin-sort-imports": "4.7.0",
-		"@mui/material": "7.3.6",
+		"@mui/material": "7.3.7",
 		"@playwright/test": "1.57.0",
 		"@reforged/maker-appimage": "5.1.1",
 		"@sentry/react": "10.29.0",
