@@ -14,7 +14,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
@@ -83,6 +83,8 @@ function RouteComponent() {
 
 	const activeProjectIdActions = useActiveProjectIdActions()
 
+	const queryClient = useQueryClient()
+
 	const leaveProjectAndNavigate = useMutation({
 		mutationKey: LEAVE_PROJECT_AND_NAVIGATE_MUTATION_KEY,
 		mutationFn: async ({ projectId }: { projectId: string }) => {
@@ -92,14 +94,23 @@ function RouteComponent() {
 			// TODO: Ideally we don't autonavigate to some arbitrary project.
 			// Instead we should allow the user to choose which project to enter.
 			// Okay to do for now because we don't allow joining another project after the onboarding right now.
-			const projects = await clientApi.listProjects()
+
+			// NOTE: We use fetchQuery here in order to update the query cache for the relevant query before
+			// attempting to do a navigation, which prevents an issue with an incorrect redirect based on stale cache data
+			// in the relevant route's beforeLoad callback.
+			const projects = await queryClient.fetchQuery({
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects'],
+				queryFn: async () => {
+					return clientApi.listProjects()
+				},
+			})
 
 			const projectToNavigateTo = projects.find(
 				(p) => p.projectId !== variables.projectId,
 			)
 
 			if (projectToNavigateTo) {
-				router.navigate({
+				await router.navigate({
 					to: '/app/projects/$projectId',
 					params: { projectId: projectToNavigateTo.projectId },
 				})
