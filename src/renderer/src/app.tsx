@@ -87,6 +87,8 @@ const router = createRouter({
 		// NOTE: Populated at render time
 		formatMessage: undefined!,
 		// NOTE: Populated at render time
+		globalEditingStateStore: undefined!,
+		// NOTE: Populated at render time
 		localeState: undefined!,
 	},
 	defaultPreload: 'intent',
@@ -193,6 +195,7 @@ export function App() {
 																		context={{
 																			activeProjectIdStore,
 																			formatMessage,
+																			globalEditingStateStore,
 																			localeState,
 																		}}
 																	/>

@@ -54,7 +54,7 @@ export type BrowserNetInfo = NetworkInformationReadableFields & {
 }
 
 export function useBrowserNetInfo(): BrowserNetInfo {
-	const cache = useRef<BrowserNetInfo>({
+	const cacheRef = useRef<BrowserNetInfo>({
 		...getConnectionFields(),
 		online: navigator.onLine,
 	})
@@ -65,10 +65,10 @@ export function useBrowserNetInfo(): BrowserNetInfo {
 			online: navigator.onLine,
 		}
 
-		if (isEqual(cache.current, nextState)) {
-			return cache.current
+		if (isEqual(cacheRef.current, nextState)) {
+			return cacheRef.current
 		} else {
-			cache.current = nextState
+			cacheRef.current = nextState
 			return nextState
 		}
 	})

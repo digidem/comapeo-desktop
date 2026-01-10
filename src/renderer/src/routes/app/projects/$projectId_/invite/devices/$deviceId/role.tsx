@@ -16,7 +16,7 @@ import { Icon } from '../../../../../../../components/icon'
 import { useLocalPeersState } from '../../../../../../../contexts/local-peers-store-context'
 
 export const Route = createFileRoute(
-	'/app/projects/$projectId/invite/devices/$deviceId/role',
+	'/app/projects/$projectId_/invite/devices/$deviceId/role',
 )({
 	pendingComponent: GenericRoutePendingComponent,
 	component: RouteComponent,

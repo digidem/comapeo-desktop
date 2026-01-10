@@ -7,7 +7,10 @@ import { useRouter, type NotFoundRouteProps } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { CustomNotFoundDataSchema } from '../lib/navigation'
+import {
+	CustomNotFoundDataSchema,
+	buildDocumentReloadURL,
+} from '../lib/navigation'
 
 const CustomNotFoundDataPropSchema = v.looseObject({
 	data: CustomNotFoundDataSchema,
@@ -82,12 +85,8 @@ export function GenericRouteNotFoundComponent({
 							fullWidth
 							variant="outlined"
 							onClick={() => {
-								// NOTE: Accounts for bug where `router.navigate()` doesn't account for hash router usage when trying to reload document
-								// (https://discord.com/channels/719702312431386674/1431138480096022680)
 								router.navigate({
-									href: router.history.createHref(
-										router.buildLocation({ to: '/' }).href,
-									),
+									href: buildDocumentReloadURL(router, '/'),
 									reloadDocument: true,
 								})
 							}}

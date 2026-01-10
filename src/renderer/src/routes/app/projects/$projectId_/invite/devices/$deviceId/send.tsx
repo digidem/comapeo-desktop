@@ -44,7 +44,7 @@ const ReviewInvitationSearchSchema = v.object({
 })
 
 export const Route = createFileRoute(
-	'/app/projects/$projectId/invite/devices/$deviceId/send',
+	'/app/projects/$projectId_/invite/devices/$deviceId/send',
 )({
 	validateSearch: ReviewInvitationSearchSchema,
 	component: RouteComponent,

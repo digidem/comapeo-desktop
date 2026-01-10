@@ -6,6 +6,7 @@ import { useRouter, type ErrorComponentProps } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, LIGHT_GREY, WHITE } from '../colors'
+import { buildDocumentReloadURL } from '../lib/navigation.ts'
 
 export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 	const router = useRouter()
@@ -87,13 +88,8 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 				<Button
 					fullWidth
 					onClick={() => {
-						// NOTE: Accounts for bug where `router.navigate()` doesn't account for hash router usage when trying to reload document
-						// (https://discord.com/channels/719702312431386674/1431138480096022680)
 						router.navigate({
-							href: router.history.createHref(
-								router.buildLocation({ to: '.' }).href,
-							),
-							replace: true,
+							href: buildDocumentReloadURL(router, '.'),
 							reloadDocument: true,
 						})
 					}}

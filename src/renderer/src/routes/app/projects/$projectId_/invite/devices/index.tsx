@@ -18,7 +18,7 @@ import { useInitiallyConnectedPeers } from '../../../../../../hooks/peers'
 import { DeviceRow } from './-shared/device-row'
 
 export const Route = createFileRoute(
-	'/app/projects/$projectId/invite/devices/',
+	'/app/projects/$projectId_/invite/devices/',
 )({
 	component: RouteComponent,
 })

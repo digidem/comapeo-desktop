@@ -113,7 +113,7 @@ const TRACKS_HOVER_SHADOW_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] 
 const INTERACTIVE_LAYER_IDS = [OBSERVATIONS_LAYER_ID, TRACKS_LAYER_ID]
 
 const DEFAULT_BOUNDING_BOX: [number, number, number, number] = [
-	-180, -90, 180, 90,
+	-180, -85.0511, 180, 85.0511,
 ]
 
 const BASE_FIT_BOUNDS_OPTIONS: FitBoundsOptions = {

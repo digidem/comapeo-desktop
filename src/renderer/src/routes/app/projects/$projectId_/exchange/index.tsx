@@ -47,7 +47,7 @@ import {
 	type SyncStage,
 } from '../../../../../lib/sync'
 
-export const Route = createFileRoute('/app/projects/$projectId/exchange/')({
+export const Route = createFileRoute('/app/projects/$projectId_/exchange/')({
 	beforeLoad: async ({ context, params }) => {
 		const { clientApi, queryClient } = context
 		const { projectId } = params

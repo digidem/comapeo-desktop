@@ -15,44 +15,16 @@ const RICH_TEXT_MAPPINGS: ComponentProps<
 	typeof ReactIntlProvider
 >['defaultRichTextElements'] = {
 	b: (parts) => {
-		return (
-			<b
-				// https://github.com/formatjs/formatjs/pull/5032#issuecomment-3371489291
-				key="bold"
-			>
-				{parts}
-			</b>
-		)
+		return <b>{parts}</b>
 	},
 	orange: (parts) => {
-		return (
-			<span
-				// https://github.com/formatjs/formatjs/pull/5032#issuecomment-3371489291
-				key="orange"
-				style={{ color: ORANGE }}
-			>
-				{parts}
-			</span>
-		)
+		return <span style={{ color: ORANGE }}>{parts}</span>
 	},
 	blue: (parts) => {
-		return (
-			<span
-				// https://github.com/formatjs/formatjs/pull/5032#issuecomment-3371489291
-				key="blue"
-				style={{ color: CORNFLOWER_BLUE }}
-			>
-				{parts}
-			</span>
-		)
+		return <span style={{ color: CORNFLOWER_BLUE }}>{parts}</span>
 	},
 	br: () => {
-		return (
-			<br
-				// https://github.com/formatjs/formatjs/pull/5032#issuecomment-3371489291
-				key="break"
-			/>
-		)
+		return <br />
 	},
 }
 

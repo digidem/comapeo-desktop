@@ -11,7 +11,7 @@ import { DARKER_ORANGE, GREEN, WHITE } from '../../../colors'
 import { Icon } from '../../../components/icon'
 import { ButtonLink } from '../../../components/link'
 
-export const Route = createFileRoute('/onboarding/project/')({
+export const Route = createFileRoute('/onboarding/project_/')({
 	component: RouteComponent,
 })
 

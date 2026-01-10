@@ -9,11 +9,13 @@ import type { IntlShape } from 'react-intl'
 
 import type { LocaleState } from '../../../shared/intl'
 import type { ActiveProjectIdStore } from '../contexts/active-project-id-store-context'
+import type { GlobalEditingStateStore } from '../contexts/global-editing-state-store-context.ts'
 
 export interface RootRouterContext {
 	activeProjectIdStore: ActiveProjectIdStore
 	clientApi: MapeoClientApi
 	formatMessage: IntlShape['formatMessage']
+	globalEditingStateStore: GlobalEditingStateStore
 	history: RouterHistory
 	localeState: LocaleState
 	queryClient: QueryClient
