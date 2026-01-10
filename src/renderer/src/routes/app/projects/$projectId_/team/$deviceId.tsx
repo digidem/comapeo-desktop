@@ -110,7 +110,7 @@ function RouteComponent() {
 			)
 
 			if (projectToNavigateTo) {
-				router.navigate({
+				await router.navigate({
 					to: '/app/projects/$projectId',
 					params: { projectId: projectToNavigateTo.projectId },
 				})
