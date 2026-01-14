@@ -41,7 +41,7 @@
 		"forge:start": "electron-forge start",
 		"forge:package": "electron-forge package",
 		"forge:make": "electron-forge make",
-		"intl:main:extract": "formatjs extract \"src/main/**/*.{js,ts}\" --ignore \"**/*.d.ts\" --format crowdin --out-file messages/main/en.json --throws",
+		"intl:main:extract": "formatjs extract \"src/main/**/*.{js,ts}\" --ignore \"**/*.d.ts\" --format crowdin --out-file messages/main/en-US/core.json --throws",
 		"intl:main:compile": "node ./scripts/compile-messages.js --type main",
 		"intl:main": "node --run \"intl:main:extract\" && node --run \"intl:main:compile\"",
 		"intl:renderer:extract": "formatjs extract \"src/renderer/**/*.{js,jsx,ts,tsx}\" --ignore \"**/*.d.ts\" --format crowdin --out-file messages/renderer/en-US/core.json --throws",
