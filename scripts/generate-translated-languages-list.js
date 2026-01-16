@@ -9,8 +9,6 @@ import SUPPORTED_LANGUAGES from '../languages.json' with { type: 'json' }
 
 /**
  * @typedef { keyof typeof SUPPORTED_LANGUAGES } SupportedLanguageTag
- *
- * @typedef { (typeof SUPPORTED_LANGUAGES)[SupportedLanguageTag] } SupportedLanguageInfo
  */
 
 const SUPPORTED_LANGUAGE_TAGS = /** @type { SupportedLanguageTag[] } */ (
@@ -41,6 +39,7 @@ for (const folder of localeFolders) {
 
 	const locale = folder.name
 
+	// TODO: Make use of fallbacks if possible?
 	if (!v.is(SupportedLanguageTagSchema, locale)) {
 		console.warn(
 			`Translated language tag "${locale}" is not listed as a supported language.\n\n
