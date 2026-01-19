@@ -1,10 +1,10 @@
 import { Suspense, useMemo, useState } from 'react'
 import {
 	useCreateDocument,
-	useManyDocs,
 	useManyProjects,
 	useMapStyleUrl,
 	useOwnDeviceInfo,
+	usePresetsSelection,
 } from '@comapeo/core-react'
 import type { Observation, Track } from '@comapeo/schema'
 import Box from '@mui/material/Box'
@@ -22,7 +22,7 @@ import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useStore } from '@tanstack/react-form'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
 import { bboxPolygon } from '@turf/bbox-polygon'
 import { featureCollection, lengthToDegrees } from '@turf/helpers'
@@ -45,6 +45,7 @@ import { Map } from '../../../components/map'
 import { useAppForm } from '../../../hooks/forms'
 import { useMapsRefreshToken } from '../../../hooks/maps'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
+import { getLocaleStateQueryOptions } from '../../../lib/queries/app-settings.ts'
 import { createGlobalMutationsKey } from '../../../lib/queries/global-mutations'
 
 export const Route = createFileRoute('/app/settings_/test-data')({
@@ -693,7 +694,16 @@ const CREATE_TEST_TRACK_MUTATION_KEY = createGlobalMutationsKey([
 function useCreateTestObservations({ projectId }: { projectId: string }) {
 	const { data: deviceInfo } = useOwnDeviceInfo()
 
-	const { data: presets } = useManyDocs({ projectId, docType: 'preset' })
+	const { data: lang } = useSuspenseQuery({
+		...getLocaleStateQueryOptions(),
+		select: ({ value }) => value,
+	})
+
+	const selectableObservationCategories = usePresetsSelection({
+		projectId,
+		dataType: 'observation',
+		lang,
+	})
 
 	const createObservation = useCreateDocument({
 		projectId,
@@ -724,7 +734,7 @@ function useCreateTestObservations({ projectId }: { projectId: string }) {
 					)
 				}
 
-				const randomPreset = draw(presets)!
+				const randomPreset = draw(selectableObservationCategories)!
 
 				const now = new Date().toISOString()
 
@@ -773,7 +783,16 @@ function useCreateTestObservations({ projectId }: { projectId: string }) {
 function useCreateTestTrack({ projectId }: { projectId: string }) {
 	const { data: deviceInfo } = useOwnDeviceInfo()
 
-	const { data: presets } = useManyDocs({ projectId, docType: 'preset' })
+	const { data: lang } = useSuspenseQuery({
+		...getLocaleStateQueryOptions(),
+		select: ({ value }) => value,
+	})
+
+	const selectableTrackCategories = usePresetsSelection({
+		projectId,
+		dataType: 'track',
+		lang,
+	})
 
 	const createTrack = useCreateDocument({
 		projectId,
@@ -787,7 +806,8 @@ function useCreateTestTrack({ projectId }: { projectId: string }) {
 		}: {
 			observations: Array<Observation>
 		}) => {
-			const randomPreset = Math.random() > 0.5 ? draw(presets) : null
+			const randomPreset =
+				Math.random() > 0.5 ? draw(selectableTrackCategories) : null
 
 			// NOTE: This is technically invalid if observations.length < 2 but helpful to allow this
 			// to test handling of invalid data.
