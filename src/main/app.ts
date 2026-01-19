@@ -241,44 +241,48 @@ export async function start({
 	const sentryUserId = persisted.sentryUser.id
 
 	protocol.handle('comapeo', (request: Request) => {
-		const { pathname, hash } = new URL(request.url)
+		const { hash, host, pathname } = new URL(request.url)
 
 		const isDevelopment = appConfig.appType === 'development'
 
 		if (isDevelopment) {
 			// TODO: Ideally forward to the Vite dev server
 			throw new Error('Custom protocol does not work in development yet')
-		} else {
-			if (pathname === '/') {
-				const u = new URL('../renderer/index.html', import.meta.url)
-				// NOTE: Enables deeplinking in the app
-				u.hash = hash
-				return net.fetch(u.toString())
-			}
+		}
 
-			const allowedDirectoryPath = fileURLToPath(
-				new URL('../renderer', import.meta.url),
-			)
-			const requestedPath = join(allowedDirectoryPath, pathname)
-			const relativePath = relative(allowedDirectoryPath, requestedPath)
+		if (host !== 'renderer') {
+			throw new Error(`Unrecognized host: ${host}`)
+		}
 
-			// NOTE: Make sure incoming requests do not attempt to access files outside the allowed directory scope
-			const isSafe =
-				relativePath &&
-				!relativePath.startsWith('..') &&
-				!isAbsolute(relativePath)
+		if (pathname === '/') {
+			const u = new URL('../renderer/index.html', import.meta.url)
+			// NOTE: Enables deeplinking in the app
+			u.hash = hash
+			return net.fetch(u.toString())
+		}
 
-			if (!isSafe) {
-				// TODO: More gracefully handle by returning an error page?
-				throw new Error(
-					`Requested path is outside allowed scope: ${requestedPath}`,
-				)
-			}
+		const allowedDirectoryPath = fileURLToPath(
+			new URL('../renderer', import.meta.url),
+		)
+		const requestedPath = join(allowedDirectoryPath, pathname)
+		const relativePath = relative(allowedDirectoryPath, requestedPath)
 
-			return net.fetch(
-				new URL(`../renderer${pathname}`, import.meta.url).toString(),
+		// NOTE: Make sure incoming requests do not attempt to access files outside the allowed directory scope
+		const isSafe =
+			relativePath &&
+			!relativePath.startsWith('..') &&
+			!isAbsolute(relativePath)
+
+		if (!isSafe) {
+			// TODO: More gracefully handle by returning an error page?
+			throw new Error(
+				`Requested path is outside allowed scope: ${requestedPath}`,
 			)
 		}
+
+		return net.fetch(
+			new URL(`../renderer${pathname}`, import.meta.url).toString(),
+		)
 	})
 
 	const mainWindow = initMainWindow({
@@ -359,8 +363,7 @@ function initMainWindow({
 			activate: false,
 		})
 	} else {
-		// NOTE: name used for host here does not really matter, but it's useful to use
-		// `renderer` for the sake of understanding where things are being served from.
+		// NOTE: host (`renderer`) needs to match whatever is matched against in the protocol handler
 		mainWindow.loadURL('comapeo://renderer/index.html')
 	}
 
