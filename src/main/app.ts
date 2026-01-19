@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto'
 import { copyFile, mkdir, rm } from 'node:fs/promises'
 import { basename, isAbsolute, join, relative } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import { defineMessages } from '@formatjs/intl'
 import { captureException } from '@sentry/electron'
 import debug from 'debug'
@@ -280,9 +280,7 @@ export async function start({
 			)
 		}
 
-		return net.fetch(
-			new URL(`../renderer${pathname}`, import.meta.url).toString(),
-		)
+		return net.fetch(pathToFileURL(requestedPath).toString())
 	})
 
 	const mainWindow = initMainWindow({
