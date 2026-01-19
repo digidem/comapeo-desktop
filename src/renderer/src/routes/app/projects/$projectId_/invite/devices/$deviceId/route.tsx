@@ -1,7 +1,6 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 
 import { GenericRoutePendingComponent } from '../../../../../../../components/generic-route-pending-component'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../../../lib/comapeo.ts'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId_/invite/devices/$deviceId',
@@ -9,7 +8,7 @@ export const Route = createFileRoute(
 	// NOTE: We want to make sure that the device of interest is actually still detected by us and connected.
 	// If it's not, then we redirect to the page that lists the discovered devices.
 	beforeLoad: async ({ context, params }) => {
-		const { clientApi, projectApi, queryClient } = context
+		const { clientApi, projectApi } = context
 		const { deviceId, projectId } = params
 		const peers = await clientApi.listLocalPeers()
 
@@ -23,22 +22,10 @@ export const Route = createFileRoute(
 			})
 		}
 
-		const member = await queryClient
-			.fetchQuery({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'members',
-					deviceId,
-				],
-				queryFn: async () => {
-					return projectApi.$member.getById(deviceId)
-				},
-			})
-			.catch(() => {
-				return null
-			})
+		// NOTE: This is intentionally a plain call instead of that's wrapped in
+		// `queryClient.ensureQueryData()`, `queryClient.fetchQuery()`, etc.
+		// This prevents an issue with showing thesuccess screen when another device accepts an invite sent by us.
+		const member = await projectApi.$member.getById(deviceId)
 
 		// TODO: Do not redirect if member left project?
 		if (member) {
