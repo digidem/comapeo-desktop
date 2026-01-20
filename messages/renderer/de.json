@@ -23,6 +23,10 @@
     "description": "Text for button to reload page.",
     "message": "Reload"
   },
+  "components.generic-route-error-component.restart": {
+    "description": "Text for button to restart app.",
+    "message": "Neustart"
+  },
   "components.generic-route-error-component.somethinWentWrong": {
     "description": "Title text of page error",
     "message": "Etwas ist schief gelaufen"
