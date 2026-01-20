@@ -84,6 +84,7 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 				display="flex"
 				flexDirection="column"
 				alignItems="center"
+				gap={4}
 			>
 				<Button
 					fullWidth
@@ -96,6 +97,20 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 					sx={{ maxWidth: 400 }}
 				>
 					{t(m.reload)}
+				</Button>
+
+				<Button
+					fullWidth
+					variant="outlined"
+					onClick={() => {
+						router.navigate({
+							href: buildDocumentReloadURL(router, '/'),
+							reloadDocument: true,
+						})
+					}}
+					sx={{ maxWidth: 400 }}
+				>
+					{t(m.restart)}
 				</Button>
 			</Box>
 		</Stack>
@@ -122,5 +137,10 @@ const m = defineMessages({
 		id: 'components.generic-route-error-component.reload',
 		defaultMessage: 'Reload',
 		description: 'Text for button to reload page.',
+	},
+	restart: {
+		id: 'components.generic-route-error-component.restart',
+		defaultMessage: 'Restart',
+		description: 'Text for button to restart app.',
 	},
 })

@@ -1,4 +1,4 @@
-import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import { Outlet, createFileRoute } from '@tanstack/react-router'
 
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo'
 
@@ -9,7 +9,7 @@ export const Route = createFileRoute('/onboarding')({
 		const activeProjectId = activeProjectIdStore.instance.getState()
 
 		if (activeProjectId) {
-			throw redirect({
+			throw Route.redirect({
 				to: '/app/projects/$projectId',
 				params: { projectId: activeProjectId },
 				replace: true,
@@ -31,7 +31,7 @@ export const Route = createFileRoute('/onboarding')({
 		const projectToUse = projects[0]
 
 		if (projectToUse) {
-			throw redirect({
+			throw Route.redirect({
 				to: '/app/projects/$projectId',
 				params: { projectId: projectToUse.projectId },
 				replace: true,
