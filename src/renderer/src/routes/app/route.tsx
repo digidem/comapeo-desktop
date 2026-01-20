@@ -7,7 +7,6 @@ import { useIsMutating } from '@tanstack/react-query'
 import {
 	Outlet,
 	createFileRoute,
-	redirect,
 	useChildMatches,
 } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -86,7 +85,7 @@ export const Route = createFileRoute('/app')({
 		) {
 			activeProjectIdStore.actions.update(undefined)
 
-			throw redirect({
+			throw Route.redirect({
 				// TODO: Kind of hacky but no way to access router instance here at the moment
 				href: buildDocumentReloadURL(
 					{
@@ -102,7 +101,7 @@ export const Route = createFileRoute('/app')({
 
 		// Redirect to project-specific "initial" page if the current route is the just /app
 		if (matches.at(-1)!.fullPath === '/app') {
-			throw redirect({
+			throw Route.redirect({
 				to: '/app/projects/$projectId',
 				params: { projectId: activeProjectId },
 				replace: true,
