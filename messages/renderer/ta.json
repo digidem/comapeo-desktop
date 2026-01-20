@@ -7,6 +7,10 @@
     "description": "Label for error section",
     "message": "பிழை"
   },
+  "components.generic-route-error-component.restart": {
+    "description": "Text for button to restart app.",
+    "message": "மீண்டும் தொடங்கவும் "
+  },
   "components.generic-route-not-found-component.tryAgain": {
     "description": "Button text for try again button.",
     "message": "மீண்டும் முயற்சி"
