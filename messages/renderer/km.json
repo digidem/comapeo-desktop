@@ -7,6 +7,10 @@
     "description": "Label for error section",
     "message": "កំហុសឆ្គង"
   },
+  "components.generic-route-error-component.restart": {
+    "description": "Text for button to restart app.",
+    "message": "ចាប់ផ្ដើមឡើងវិញ"
+  },
   "routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
     "message": "ការសង្កេត"
