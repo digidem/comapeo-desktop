@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../lib/comapeo'
 
@@ -15,13 +15,13 @@ export const Route = createFileRoute('/')({
 
 		// NOTE: Implicit check that the user hasn't completed the onboarding yet.
 		if (!ownDeviceInfo.name) {
-			throw redirect({ to: '/welcome', replace: true })
+			throw Route.redirect({ to: '/welcome', replace: true })
 		}
 
 		const activeProjectId = activeProjectIdStore.instance.getState()
 
 		if (activeProjectId) {
-			throw redirect({
+			throw Route.redirect({
 				to: '/app/projects/$projectId',
 				params: { projectId: activeProjectId },
 				replace: true,
@@ -33,7 +33,7 @@ export const Route = createFileRoute('/')({
 		// The better solution is probably a project selection page of some sort,
 		// as opposed to automatic redirection to a valid project.
 
-		const projects = await queryClient.ensureQueryData({
+		const projects = await queryClient.fetchQuery({
 			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects'],
 			queryFn: async () => {
 				return clientApi.listProjects()
@@ -43,14 +43,14 @@ export const Route = createFileRoute('/')({
 		const projectToUse = projects[0]
 
 		if (projectToUse) {
-			throw redirect({
+			throw Route.redirect({
 				to: '/app/projects/$projectId',
 				params: { projectId: projectToUse.projectId },
 				replace: true,
 			})
 		}
 
-		throw redirect({
+		throw Route.redirect({
 			to: '/onboarding/project',
 			replace: true,
 		})

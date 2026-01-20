@@ -2,7 +2,6 @@ import { useIsMutating } from '@tanstack/react-query'
 import {
 	Outlet,
 	createFileRoute,
-	redirect,
 	useChildMatches,
 	useRouter,
 } from '@tanstack/react-router'
@@ -23,7 +22,7 @@ export const Route = createFileRoute('/onboarding/project')({
 		})
 
 		if (!ownDeviceInfo.name) {
-			throw redirect({
+			throw Route.redirect({
 				to: '/onboarding/device-name',
 				replace: true,
 			})

@@ -1,0 +1,26 @@
+diff --git a/node_modules/@tanstack/router-core/dist/cjs/utils.cjs b/node_modules/@tanstack/router-core/dist/cjs/utils.cjs
+index 346cac9..f364a0e 100644
+--- a/node_modules/@tanstack/router-core/dist/cjs/utils.cjs
++++ b/node_modules/@tanstack/router-core/dist/cjs/utils.cjs
+@@ -182,7 +182,7 @@ function decodeSegment(segment) {
+   }
+   return sanitizePathSegment(decoded);
+ }
+-const SAFE_URL_PROTOCOLS = ["http:", "https:", "mailto:", "tel:"];
++const SAFE_URL_PROTOCOLS = ["http:", "https:", "mailto:", "tel:", "comapeo:"];
+ function isDangerousProtocol(url) {
+   if (!url) return false;
+   try {
+diff --git a/node_modules/@tanstack/router-core/dist/esm/utils.js b/node_modules/@tanstack/router-core/dist/esm/utils.js
+index 20822c1..c4b9e50 100644
+--- a/node_modules/@tanstack/router-core/dist/esm/utils.js
++++ b/node_modules/@tanstack/router-core/dist/esm/utils.js
+@@ -180,7 +180,7 @@ function decodeSegment(segment) {
+   }
+   return sanitizePathSegment(decoded);
+ }
+-const SAFE_URL_PROTOCOLS = ["http:", "https:", "mailto:", "tel:"];
++const SAFE_URL_PROTOCOLS = ["http:", "https:", "mailto:", "tel:", "comapeo:"];
+ function isDangerousProtocol(url) {
+   if (!url) return false;
+   try {
