@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
@@ -53,7 +53,7 @@ export const Route = createFileRoute(
 
 		// Redirect if the invite response did not actually succeed
 		if (invite.state !== 'joined') {
-			throw redirect({
+			throw Route.redirect({
 				to: '/onboarding/project',
 				replace: true,
 			})

@@ -1,10 +1,5 @@
 import Box from '@mui/material/Box'
-import {
-	Outlet,
-	createFileRoute,
-	notFound,
-	redirect,
-} from '@tanstack/react-router'
+import { Outlet, createFileRoute, notFound } from '@tanstack/react-router'
 
 import { TwoPanelLayout } from '../../../-components/two-panel-layout'
 import { LIGHT_GREY } from '../../../../../colors'
@@ -52,7 +47,7 @@ export const Route = createFileRoute('/app/projects/$projectId_/invite')({
 		// TODO: Should be checking the specific role permissions instead
 		// https://github.com/digidem/comapeo-mobile/issues/1316
 		if (!isAtLeastCoordinator) {
-			throw redirect({ to: '/', replace: true })
+			throw Route.redirect({ to: '/', replace: true })
 		}
 
 		return { projectApi }

@@ -23,7 +23,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useStore } from '@tanstack/react-form'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { bboxPolygon } from '@turf/bbox-polygon'
 import { featureCollection, lengthToDegrees } from '@turf/helpers'
 import { randomPosition } from '@turf/random'
@@ -54,7 +54,7 @@ export const Route = createFileRoute('/app/settings_/test-data')({
 			__APP_TYPE__ === 'production' ||
 			import.meta.env.VITE_FEATURE_TEST_DATA_UI !== 'true'
 		) {
-			throw redirect({ to: '/', replace: true })
+			throw Route.redirect({ to: '/', replace: true })
 		}
 	},
 	loader: async ({ context }) => {
