@@ -286,7 +286,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/welcome': typeof WelcomeRoute
   '/app/settings': typeof AppSettingsRouteRouteWithChildren
-  '/onboarding/project': typeof OnboardingProjectIndexRoute
+  '/onboarding/project': typeof OnboardingProjectRouteRouteWithChildren
   '/onboarding/data-and-privacy': typeof OnboardingDataAndPrivacyRoute
   '/onboarding/device-name': typeof OnboardingDeviceNameRoute
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
@@ -297,26 +297,27 @@ export interface FileRoutesByFullPath {
   '/app/settings/language': typeof AppSettingsLanguageRoute
   '/app/settings/test-data': typeof AppSettingsTestDataRoute
   '/app/settings/': typeof AppSettingsIndexRoute
+  '/onboarding/project/': typeof OnboardingProjectIndexRoute
   '/app/projects/$projectId/invite': typeof AppProjectsProjectIdInviteRouteRouteWithChildren
   '/app/projects/$projectId/settings': typeof AppProjectsProjectIdSettingsRouteRouteWithChildren
   '/app/projects/$projectId/team': typeof AppProjectsProjectIdTeamRouteRouteWithChildren
   '/app/projects/$projectId/download': typeof AppProjectsProjectIdDownloadRoute
   '/app/projects/$projectId/': typeof AppProjectsProjectIdIndexRoute
-  '/onboarding/project/create': typeof OnboardingProjectCreateIndexRoute
-  '/onboarding/project/join': typeof OnboardingProjectJoinIndexRoute
+  '/onboarding/project/create/': typeof OnboardingProjectCreateIndexRoute
+  '/onboarding/project/join/': typeof OnboardingProjectJoinIndexRoute
   '/app/projects/$projectId/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
   '/app/projects/$projectId/settings/info': typeof AppProjectsProjectIdSettingsInfoRoute
   '/app/projects/$projectId/team/$deviceId': typeof AppProjectsProjectIdTeamDeviceIdRoute
   '/onboarding/project/create/$projectId/success': typeof OnboardingProjectCreateProjectIdSuccessRoute
   '/onboarding/project/join/$inviteId/success': typeof OnboardingProjectJoinInviteIdSuccessRoute
-  '/app/projects/$projectId/exchange': typeof AppProjectsProjectIdExchangeIndexRoute
+  '/app/projects/$projectId/exchange/': typeof AppProjectsProjectIdExchangeIndexRoute
   '/app/projects/$projectId/invite/': typeof AppProjectsProjectIdInviteIndexRoute
   '/app/projects/$projectId/settings/': typeof AppProjectsProjectIdSettingsIndexRoute
   '/app/projects/$projectId/team/': typeof AppProjectsProjectIdTeamIndexRoute
   '/app/projects/$projectId/invite/devices/$deviceId': typeof AppProjectsProjectIdInviteDevicesDeviceIdRouteRouteWithChildren
-  '/app/projects/$projectId/observations/$observationDocId': typeof AppProjectsProjectIdObservationsObservationDocIdIndexRoute
-  '/app/projects/$projectId/tracks/$trackDocId': typeof AppProjectsProjectIdTracksTrackDocIdIndexRoute
-  '/app/projects/$projectId/invite/devices': typeof AppProjectsProjectIdInviteDevicesIndexRoute
+  '/app/projects/$projectId/observations/$observationDocId/': typeof AppProjectsProjectIdObservationsObservationDocIdIndexRoute
+  '/app/projects/$projectId/tracks/$trackDocId/': typeof AppProjectsProjectIdTracksTrackDocIdIndexRoute
+  '/app/projects/$projectId/invite/devices/': typeof AppProjectsProjectIdInviteDevicesIndexRoute
   '/app/projects/$projectId/invite/devices/$deviceId/role': typeof AppProjectsProjectIdInviteDevicesDeviceIdRoleRoute
   '/app/projects/$projectId/invite/devices/$deviceId/send': typeof AppProjectsProjectIdInviteDevicesDeviceIdSendRoute
   '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name': typeof AppProjectsProjectIdObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRoute
@@ -419,26 +420,27 @@ export interface FileRouteTypes {
     | '/app/settings/language'
     | '/app/settings/test-data'
     | '/app/settings/'
+    | '/onboarding/project/'
     | '/app/projects/$projectId/invite'
     | '/app/projects/$projectId/settings'
     | '/app/projects/$projectId/team'
     | '/app/projects/$projectId/download'
     | '/app/projects/$projectId/'
-    | '/onboarding/project/create'
-    | '/onboarding/project/join'
+    | '/onboarding/project/create/'
+    | '/onboarding/project/join/'
     | '/app/projects/$projectId/settings/categories'
     | '/app/projects/$projectId/settings/info'
     | '/app/projects/$projectId/team/$deviceId'
     | '/onboarding/project/create/$projectId/success'
     | '/onboarding/project/join/$inviteId/success'
-    | '/app/projects/$projectId/exchange'
+    | '/app/projects/$projectId/exchange/'
     | '/app/projects/$projectId/invite/'
     | '/app/projects/$projectId/settings/'
     | '/app/projects/$projectId/team/'
     | '/app/projects/$projectId/invite/devices/$deviceId'
-    | '/app/projects/$projectId/observations/$observationDocId'
-    | '/app/projects/$projectId/tracks/$trackDocId'
-    | '/app/projects/$projectId/invite/devices'
+    | '/app/projects/$projectId/observations/$observationDocId/'
+    | '/app/projects/$projectId/tracks/$trackDocId/'
+    | '/app/projects/$projectId/invite/devices/'
     | '/app/projects/$projectId/invite/devices/$deviceId/role'
     | '/app/projects/$projectId/invite/devices/$deviceId/send'
     | '/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
@@ -597,7 +599,7 @@ declare module '@tanstack/react-router' {
     '/onboarding/project_/': {
       id: '/onboarding/project_/'
       path: '/project'
-      fullPath: '/onboarding/project'
+      fullPath: '/onboarding/project/'
       preLoaderRoute: typeof OnboardingProjectIndexRouteImport
       parentRoute: typeof OnboardingRouteRoute
     }
@@ -653,14 +655,14 @@ declare module '@tanstack/react-router' {
     '/onboarding/project/join/': {
       id: '/onboarding/project/join/'
       path: '/join'
-      fullPath: '/onboarding/project/join'
+      fullPath: '/onboarding/project/join/'
       preLoaderRoute: typeof OnboardingProjectJoinIndexRouteImport
       parentRoute: typeof OnboardingProjectRouteRoute
     }
     '/onboarding/project/create/': {
       id: '/onboarding/project/create/'
       path: '/create'
-      fullPath: '/onboarding/project/create'
+      fullPath: '/onboarding/project/create/'
       preLoaderRoute: typeof OnboardingProjectCreateIndexRouteImport
       parentRoute: typeof OnboardingProjectRouteRoute
     }
@@ -723,7 +725,7 @@ declare module '@tanstack/react-router' {
     '/app/projects/$projectId_/exchange/': {
       id: '/app/projects/$projectId_/exchange/'
       path: '/projects/$projectId/exchange'
-      fullPath: '/app/projects/$projectId/exchange'
+      fullPath: '/app/projects/$projectId/exchange/'
       preLoaderRoute: typeof AppProjectsProjectIdExchangeIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
@@ -765,21 +767,21 @@ declare module '@tanstack/react-router' {
     '/app/projects/$projectId_/invite/devices/': {
       id: '/app/projects/$projectId_/invite/devices/'
       path: '/devices'
-      fullPath: '/app/projects/$projectId/invite/devices'
+      fullPath: '/app/projects/$projectId/invite/devices/'
       preLoaderRoute: typeof AppProjectsProjectIdInviteDevicesIndexRouteImport
       parentRoute: typeof AppProjectsProjectIdInviteRouteRoute
     }
     '/app/projects/$projectId/tracks/$trackDocId/': {
       id: '/app/projects/$projectId/tracks/$trackDocId/'
       path: '/tracks/$trackDocId'
-      fullPath: '/app/projects/$projectId/tracks/$trackDocId'
+      fullPath: '/app/projects/$projectId/tracks/$trackDocId/'
       preLoaderRoute: typeof AppProjectsProjectIdTracksTrackDocIdIndexRouteImport
       parentRoute: typeof AppProjectsProjectIdRouteRoute
     }
     '/app/projects/$projectId/observations/$observationDocId/': {
       id: '/app/projects/$projectId/observations/$observationDocId/'
       path: '/observations/$observationDocId'
-      fullPath: '/app/projects/$projectId/observations/$observationDocId'
+      fullPath: '/app/projects/$projectId/observations/$observationDocId/'
       preLoaderRoute: typeof AppProjectsProjectIdObservationsObservationDocIdIndexRouteImport
       parentRoute: typeof AppProjectsProjectIdRouteRoute
     }

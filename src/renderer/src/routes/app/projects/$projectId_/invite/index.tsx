@@ -4,7 +4,7 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARK_GREY, DARK_ORANGE } from '../../../../../colors'
@@ -31,7 +31,7 @@ export const Route = createFileRoute('/app/projects/$projectId_/invite/')({
 		})
 
 		if (members.length > 1) {
-			throw redirect({
+			throw Route.redirect({
 				to: '/app/projects/$projectId/invite/devices',
 				params: { projectId },
 				replace: true,

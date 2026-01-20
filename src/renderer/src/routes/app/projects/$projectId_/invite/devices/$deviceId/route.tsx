@@ -1,4 +1,4 @@
-import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import { Outlet, createFileRoute } from '@tanstack/react-router'
 
 import { GenericRoutePendingComponent } from '../../../../../../../components/generic-route-pending-component'
 
@@ -15,7 +15,7 @@ export const Route = createFileRoute(
 		const matchingPeer = peers.find((p) => p.deviceId === deviceId)
 
 		if (!matchingPeer) {
-			throw redirect({
+			throw Route.redirect({
 				to: '/app/projects/$projectId/invite/devices',
 				params: { projectId },
 				replace: true,
@@ -31,7 +31,7 @@ export const Route = createFileRoute(
 
 		// TODO: Do not redirect if member left project?
 		if (member) {
-			throw redirect({
+			throw Route.redirect({
 				to: '/app/projects/$projectId/invite/devices',
 				params: { projectId },
 				replace: true,
