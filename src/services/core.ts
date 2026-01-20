@@ -160,6 +160,15 @@ function initializeCore({
 	const fastify = Fastify()
 	const fastifyController = new FastifyController({ fastify })
 
+	// NOTE: Kind of a gross hack to address CORS issues from the map server.
+	fastify.addHook('onSend', async (request, reply, payload) => {
+		if (request.url.startsWith('/maps')) {
+			reply.header('Access-Control-Allow-Origin', '*')
+		}
+
+		return payload
+	})
+
 	const manager = new MapeoManager({
 		rootKey: Buffer.from(rootKey),
 		dbFolder: databaseDirectory,
