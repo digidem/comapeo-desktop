@@ -23,17 +23,17 @@ test('welcome page', async ({ appInfo }) => {
 		await expect(
 			// TODO: Should be heading
 			page.getByText('CoMapeo Desktop'),
-		).toBeVisible()
+		).toBeVisible({
+			// TODO: Sometimes takes a bit longer (especially in CI)
+			timeout: 10_000,
+		})
 
 		await expect(
 			// TODO: Should be heading
 			page.getByText(
 				'View and manage observations collected with CoMapeo Mobile.',
 			),
-		).toBeVisible({
-			// NOTE: Sometimes takes a bit longer
-			timeout: 10_000,
-		})
+		).toBeVisible()
 
 		const featureList = page.getByRole('list')
 
