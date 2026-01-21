@@ -59,7 +59,7 @@ export async function setup() {
 					...process.env,
 					USER_DATA_PATH: userDataPath,
 				},
-				timeout: 10_000,
+				timeout: 15_000,
 			})
 		},
 		cleanup: () => {

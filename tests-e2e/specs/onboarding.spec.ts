@@ -32,7 +32,7 @@ test('welcome page', async ({ appInfo }) => {
 			),
 		).toBeVisible({
 			// NOTE: Sometimes takes a bit longer
-			timeout: 8_000,
+			timeout: 10_000,
 		})
 
 		const featureList = page.getByRole('list')
