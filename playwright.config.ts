@@ -12,7 +12,7 @@ export default defineConfig<TestOptions>({
 		: undefined,
 	maxFailures: 0,
 	retries: 2,
-	timeout: process.env.CI ? 60_000 : 30_000,
+	timeout: process.env.CI ? 45_000 : 30_000,
 	reporter: [
 		['list'],
 		['html', { open: 'never', outputFolder: 'tests-e2e/playwright-report' }],
