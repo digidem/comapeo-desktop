@@ -33,7 +33,10 @@ test('welcome page', async ({ appInfo }) => {
 			page.getByText(
 				'View and manage observations collected with CoMapeo Mobile.',
 			),
-		).toBeVisible()
+		).toBeVisible({
+			// TODO: Sometimes takes a bit longer (especially in CI)
+			timeout: 10_000,
+		})
 
 		const featureList = page.getByRole('list')
 
