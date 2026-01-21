@@ -1,32 +1,7 @@
-import { mkdtemp, rm } from 'node:fs/promises'
-import { platform, tmpdir } from 'node:os'
-import { join } from 'node:path'
-import { _electron as electron, expect } from '@playwright/test'
-import type { ElectronAppInfo } from 'electron-playwright-helpers'
+import { platform } from 'node:os'
+import { expect } from '@playwright/test'
 
-import { test } from './utils.ts'
-
-async function setup() {
-	const userDataPath = await mkdtemp(join(tmpdir(), 'comapeo-test-e2e-'))
-
-	return {
-		userDataPath,
-		launchApp: async ({ appInfo }: { appInfo: ElectronAppInfo }) => {
-			return electron.launch({
-				args: [appInfo.main],
-				executablePath: appInfo.executable,
-				env: {
-					...process.env,
-					USER_DATA_PATH: userDataPath,
-				},
-				timeout: 10_000,
-			})
-		},
-		cleanup: async () => {
-			await rm(userDataPath, { force: true, recursive: true })
-		},
-	}
-}
+import { setup, test } from './utils.ts'
 
 test.describe.configure({ mode: 'parallel' })
 
@@ -91,7 +66,7 @@ test('welcome page', async ({ appInfo }) => {
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()
-		await cleanup()
+		cleanup()
 	}
 })
 
@@ -179,7 +154,7 @@ test('data and privacy step', async ({ appInfo }) => {
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()
-		await cleanup()
+		cleanup()
 	}
 })
 
@@ -264,7 +239,7 @@ test('device name step', async ({ appInfo, userParams }) => {
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()
-		await cleanup()
+		cleanup()
 	}
 })
 
@@ -313,7 +288,7 @@ test('project landing', async ({ appInfo, userParams }) => {
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()
-		await cleanup()
+		cleanup()
 	}
 })
 
@@ -355,7 +330,7 @@ test('join project', async ({ appInfo, userParams }) => {
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()
-		await cleanup()
+		cleanup()
 	}
 })
 
@@ -475,7 +450,7 @@ test('create project', async ({ appInfo, userParams }) => {
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()
-		await cleanup()
+		cleanup()
 	}
 })
 
@@ -518,7 +493,7 @@ test.describe('navigation after project creation', () => {
 		} finally {
 			// 3. Cleanup
 			await electronApp.close()
-			await cleanup()
+			cleanup()
 		}
 	})
 
@@ -558,7 +533,7 @@ test.describe('navigation after project creation', () => {
 		} finally {
 			// 3. Cleanup
 			await electronApp.close()
-			await cleanup()
+			cleanup()
 		}
 	})
 })
