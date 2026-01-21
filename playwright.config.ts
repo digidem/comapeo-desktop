@@ -8,7 +8,7 @@ export default defineConfig<TestOptions>({
 	forbidOnly: !!process.env.CI,
 	workers: process.env.CI
 		? // Based on specs defined in https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/choose-the-runner-for-a-job#standard-github-hosted-runners-for-public-repositories
-			2
+			3
 		: undefined,
 	maxFailures: 0,
 	retries: 2,
