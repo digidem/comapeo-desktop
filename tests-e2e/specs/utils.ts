@@ -1,8 +1,7 @@
 import { rmSync } from 'node:fs'
-import { mkdtemp, readFile, writeFile } from 'node:fs/promises'
+import { mkdtemp } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import {
 	test as base,
 	_electron as electron,
@@ -13,7 +12,6 @@ import {
 	parseElectronApp,
 	type ElectronAppInfo,
 } from 'electron-playwright-helpers'
-import * as v from 'valibot'
 
 export type TestOptions = {
 	projectParams: { projectName: string }
@@ -105,41 +103,3 @@ export async function simulateOnboarding({
 		return /^#\/app\/projects\/[a-zA-Z0-9]+/.test(url.hash)
 	})
 }
-
-export const OUTPUTS_DIR_PATH = fileURLToPath(
-	new URL('./results/outputs', import.meta.url),
-)
-
-export async function writeOutputsFile(testName: string, value: unknown) {
-	return writeFile(
-		join(OUTPUTS_DIR_PATH, `${testName}.json`),
-		JSON.stringify(value),
-		'utf-8',
-	)
-}
-
-export async function readOutputsFile(testName: string) {
-	return readFile(join(OUTPUTS_DIR_PATH, `${testName}.json`), 'utf-8')
-}
-
-export const SetupOutputsSchema = v.object({
-	userDataPath: v.string(),
-})
-export type SetupOutputs = v.InferOutput<typeof SetupOutputsSchema>
-
-export const OnboardingOutputsSchema = v.object({
-	deviceName: v.string(),
-	projectName: v.string(),
-})
-export type OnboardingOutputs = v.InferOutput<typeof OnboardingOutputsSchema>
-
-export const AppOutputsSchema = v.object({
-	deviceName: v.string(),
-	projectName: v.string(),
-	projectDescription: v.string(),
-	projectColor: v.object({
-		name: v.string(),
-		hexCode: v.pipe(v.string(), v.hexColor()),
-	}),
-})
-export type AppOutputs = v.InferOutput<typeof AppOutputsSchema>
