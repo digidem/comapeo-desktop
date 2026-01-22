@@ -3,6 +3,7 @@ import { mkdirSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import { arch, platform } from 'node:os'
 import path from 'node:path'
+import { loadEnvFile } from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { MakerDeb } from '@electron-forge/maker-deb'
 import { MakerDMG } from '@electron-forge/maker-dmg'
@@ -12,6 +13,11 @@ import { MakerZIP } from '@electron-forge/maker-zip'
 import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives'
 import { PluginBase } from '@electron-forge/plugin-base'
 import { FusesPlugin } from '@electron-forge/plugin-fuses'
+import type {
+	ForgeConfig,
+	ForgeConfigPlugin,
+	ForgeHookFn,
+} from '@electron-forge/shared-types'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
 import { MakerAppImage } from '@reforged/maker-appimage'
 import semver from 'semver'
@@ -21,13 +27,11 @@ import { build, createServer, type ViteDevServer } from 'vite'
 import packageJSON from './package.json' with { type: 'json' }
 import type { AppConfig, AppType } from './src/shared/app.ts'
 
-import 'dotenv/config'
-
-import type {
-	ForgeConfig,
-	ForgeConfigPlugin,
-	ForgeHookFn,
-} from '@electron-forge/shared-types'
+try {
+	loadEnvFile()
+} catch (err) {
+	console.warn(`Failed to load .env file: ${err}`)
+}
 
 const {
 	APP_TYPE,
