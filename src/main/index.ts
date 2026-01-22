@@ -52,29 +52,29 @@ if (process.platform === 'win32' && appConfig.win32AppUserModelId) {
 	app.setAppUserModelId(appConfig.win32AppUserModelId)
 }
 
+// NOTE: Update some of the application paths used during development. This helps to avoid conflicts with production installations and helps debugging in some cases.
+//   - Sets the user data directory to `<project_root>/data/default/`, which can be overridden if `USER_DATA_PATH` is specified.
+//   - Sets the logs directory to `<project_root>/logs/default/` for macOS.
 if (appConfig.appType === 'development') {
 	// This is typically handled in the `readPackageJson` hook in the Forge configuration but that only runs when packaging an application.
 	// This is still needed in the case of running the app through the development server.
 	app.setName(`${app.name} Dev`)
 
-	// Update some of the application paths used during development. This helps to avoid conflicts with production installations and helps debugging in some cases.
-	//   - Sets the user data directory to `<project_root>/data/default/`, which can be overridden if `USER_DATA_PATH` is specified.
-	//   - Sets the logs directory to `<project_root>/logs/default/` for macOS.
 	const appPath = app.getAppPath()
 
-	let userDataPath: string
+	let customUserDataPath: string
 
 	if (appConfig.userDataPath) {
-		userDataPath = path.isAbsolute(appConfig.userDataPath)
+		customUserDataPath = path.isAbsolute(appConfig.userDataPath)
 			? path.resolve(appConfig.userDataPath)
 			: path.resolve(appPath, appConfig.userDataPath)
 	} else {
-		userDataPath = path.join(appPath, 'data', 'default')
+		customUserDataPath = path.join(appPath, 'data', 'default')
 	}
 
-	log(`Setting user data path to ${userDataPath}`)
+	log(`Setting user data path to ${customUserDataPath}`)
 
-	app.setPath('userData', userDataPath)
+	app.setPath('userData', customUserDataPath)
 
 	// Logs are stored within the user data path on Windows and Linux, so no need to adjust it here.
 	if (platform() === 'darwin') {
@@ -84,6 +84,18 @@ if (appConfig.appType === 'development') {
 
 		app.setAppLogsPath(logsPath)
 	}
+}
+// NOTE: Allow overriding of user data path for internal builds, which is most useful for e2e tests.
+else if (appConfig.appType === 'internal' && process.env.USER_DATA_PATH) {
+	if (!path.isAbsolute(process.env.USER_DATA_PATH)) {
+		throw new Error(`${process.env.USER_DATA_PATH} is not an absolute path.`)
+	}
+
+	const customUserDataPath = path.resolve(process.env.USER_DATA_PATH)
+
+	log(`Setting user data path to ${customUserDataPath}`)
+
+	app.setPath('userData', customUserDataPath)
 }
 
 // NOTE: Has to be set up after user data directory is updated
