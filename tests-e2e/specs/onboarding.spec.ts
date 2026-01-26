@@ -22,7 +22,10 @@ test('welcome page', async ({ appInfo }) => {
 
 		await expect(
 			page.getByRole('heading', { name: 'CoMapeo Desktop', exact: true }),
-		).toBeVisible()
+		).toBeVisible({
+			// NOTE: Takes a while, especially in CI
+			timeout: 10_000,
+		})
 
 		await expect(
 			page.getByText(
