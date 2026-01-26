@@ -14,7 +14,7 @@ export default {
 	project: [
 		'src/**/*.{js,ts,jsx,tsx}!',
 		'scripts/*.{js,ts}',
-		'tests-e2e/*.{js,ts}',
+		'tests-e2e/**/*.{js,ts}',
 		'*.{js,ts}',
 	],
 	ignore: [
