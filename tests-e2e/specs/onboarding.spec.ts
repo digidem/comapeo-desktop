@@ -60,7 +60,9 @@ test('welcome page', async ({ appInfo }) => {
 			),
 		).toBeVisible()
 
-		await expect(page.getByRole('link', { name: 'Get Started' })).toBeVisible()
+		await expect(
+			page.getByRole('link', { name: 'Get Started', exact: true }),
+		).toBeVisible()
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()
@@ -76,11 +78,11 @@ test('data and privacy step', async ({ appInfo }) => {
 		// 1. Setup
 		const page = await electronApp.firstWindow()
 
-		await page.getByRole('link', { name: 'Get Started' }).click()
+		await page.getByRole('link', { name: 'Get Started', exact: true }).click()
 
 		// 2. Main tests
 		await page.getByRole('button', { name: 'Go back', exact: true }).click()
-		await page.getByRole('link', { name: 'Get Started' }).click()
+		await page.getByRole('link', { name: 'Get Started', exact: true }).click()
 
 		// TODO: Assertions against the onboarding steps indicator
 
@@ -102,22 +104,28 @@ test('data and privacy step', async ({ appInfo }) => {
 		const featureListItems = page.getByRole('listitem')
 
 		await expect(
-			featureListItems.getByText('All data stays fully encrypted.'),
+			featureListItems.getByText('All data stays fully encrypted.', {
+				exact: true,
+			}),
 		).toBeVisible()
 
 		await expect(
-			featureListItems.getByText('Your data stays on your devices.'),
+			featureListItems.getByText('Your data stays on your devices.', {
+				exact: true,
+			}),
 		).toBeVisible()
 
 		await expect(
 			featureListItems.getByText(
 				'Easily manage and control sharing and collaboration.',
+				{ exact: true },
 			),
 		).toBeVisible()
 
 		await expect(
 			featureListItems.getByText(
 				'Private by default — diagnostic information is made fully anonymous and you can opt-out any time.',
+				{ exact: true },
 			),
 		).toBeVisible()
 
@@ -164,7 +172,7 @@ test('device name step', async ({ appInfo, userParams }) => {
 		// 1. Setup
 		const page = await electronApp.firstWindow()
 
-		await page.getByRole('link', { name: 'Get Started' }).click()
+		await page.getByRole('link', { name: 'Get Started', exact: true }).click()
 		await page.getByRole('link', { name: 'Next', exact: true }).click()
 
 		// 2. Main tests
@@ -249,7 +257,7 @@ test('project landing', async ({ appInfo, userParams }) => {
 		// 1. Setup
 		const page = await electronApp.firstWindow()
 
-		await page.getByRole('link', { name: 'Get Started' }).click()
+		await page.getByRole('link', { name: 'Get Started', exact: true }).click()
 		await page.getByRole('link', { name: 'Next', exact: true }).click()
 		await page
 			.getByRole('textbox', { name: 'Device Name', exact: true })
@@ -298,7 +306,7 @@ test('join project', async ({ appInfo, userParams }) => {
 		// 1. Setup
 		const page = await electronApp.firstWindow()
 
-		await page.getByRole('link', { name: 'Get Started' }).click()
+		await page.getByRole('link', { name: 'Get Started', exact: true }).click()
 		await page.getByRole('link', { name: 'Next', exact: true }).click()
 		await page
 			.getByRole('textbox', { name: 'Device Name', exact: true })
@@ -340,7 +348,7 @@ test('create project', async ({ appInfo, userParams }) => {
 		// 1. Setup
 		const page = await electronApp.firstWindow()
 
-		await page.getByRole('link', { name: 'Get Started' }).click()
+		await page.getByRole('link', { name: 'Get Started', exact: true }).click()
 		await page.getByRole('link', { name: 'Next', exact: true }).click()
 		await page
 			.getByRole('textbox', { name: 'Device Name', exact: true })
@@ -463,7 +471,7 @@ test.describe('navigation after project creation', () => {
 			// 1. Setup
 			const page = await electronApp.firstWindow()
 
-			await page.getByRole('link', { name: 'Get Started' }).click()
+			await page.getByRole('link', { name: 'Get Started', exact: true }).click()
 			await page.getByRole('link', { name: 'Next', exact: true }).click()
 			await page
 				.getByRole('textbox', { name: 'Device Name', exact: true })
@@ -503,7 +511,7 @@ test.describe('navigation after project creation', () => {
 			// 1. Setup
 			const page = await electronApp.firstWindow()
 
-			await page.getByRole('link', { name: 'Get Started' }).click()
+			await page.getByRole('link', { name: 'Get Started', exact: true }).click()
 			await page.getByRole('link', { name: 'Next', exact: true }).click()
 			await page
 				.getByRole('textbox', { name: 'Device Name', exact: true })
