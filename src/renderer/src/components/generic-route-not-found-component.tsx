@@ -41,7 +41,7 @@ export function GenericRouteNotFoundComponent({
 					fontWeight={500}
 					textAlign="center"
 					whiteSpace="pre-wrap"
-					sx={{ wordBreak: 'break-word' }}
+					sx={{ overflowWrap: 'break-word' }}
 				>
 					{t(m.title)}
 				</Typography>
@@ -50,7 +50,7 @@ export function GenericRouteNotFoundComponent({
 					<Typography
 						textAlign="center"
 						whiteSpace="pre-wrap"
-						sx={{ wordBreak: 'break-word' }}
+						sx={{ overflowWrap: 'break-word' }}
 					>
 						{data.data.message}
 					</Typography>

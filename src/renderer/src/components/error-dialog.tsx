@@ -88,7 +88,7 @@ export function ErrorDialog({ errorMessage, onClose, open }: Props) {
 										variant="body2"
 										fontFamily="monospace"
 										whiteSpace="pre-wrap"
-										sx={{ wordBreak: 'break-word' }}
+										sx={{ overflowWrap: 'break-word' }}
 									>
 										{errorMessage}
 									</Typography>
