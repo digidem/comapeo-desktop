@@ -176,7 +176,7 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 								},
 							}}
 						>
-							<Typography variant="button" sx={{ wordBreak: 'break-all' }}>
+							<Typography variant="button" sx={{ wordBreak: 'break-word' }}>
 								{displayedName}
 							</Typography>
 						</ButtonBase>
@@ -210,13 +210,13 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 										<Typography
 											variant="h1"
 											fontWeight={500}
-											sx={{ wordBreak: 'break-all' }}
+											sx={{ wordBreak: 'break-word' }}
 										>
 											{displayedName}
 										</Typography>
 
 										{projectSettings.projectDescription ? (
-											<Typography sx={{ wordBreak: 'break-all' }}>
+											<Typography sx={{ wordBreak: 'break-word' }}>
 												{projectSettings.projectDescription}
 											</Typography>
 										) : null}
