@@ -22,21 +22,16 @@ test('welcome page', async ({ appInfo }) => {
 
 		await expect(
 			// TODO: Should be heading
-			page.getByText('CoMapeo Desktop'),
-		).toBeVisible({
-			// TODO: Sometimes takes a bit longer (especially in CI)
-			timeout: 10_000,
-		})
+			page.getByText('CoMapeo Desktop', { exact: true }),
+		).toBeVisible()
 
 		await expect(
 			// TODO: Should be heading
 			page.getByText(
 				'View and manage observations collected with CoMapeo Mobile.',
+				{ exact: true },
 			),
-		).toBeVisible({
-			// TODO: Sometimes takes a bit longer (especially in CI)
-			timeout: 10_000,
-		})
+		).toBeVisible()
 
 		const featureList = page.getByRole('list')
 
