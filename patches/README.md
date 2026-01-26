@@ -11,6 +11,6 @@ By default, core sets up a file watcher for the `fallbackMapPath` option that's 
 
 ## @tanstack/router-core
 
-### [Define `comapeo:` protocol as safe](./@tanstack+router-core+1.154.8+001+define-custom-protocol-as-safe.patch)
+### [Define `comapeo:` protocol as safe](./@tanstack+router-core+1.157.15+001+define-custom-protocol-as-safe.patch)
 
 When the router attempts to do a full page reload, it checks the protocol for security purposes. It uses a hardcoded list for known "safe" protocols which results in issues in the app that attempt to navigate to a `comapeo:` URL with `reloadDocument: true` set. This patch updates the hardcoded list to account for our custom protocol so that the router doesn't consider it dangerous. We are responsible for doing safety checks related to accessing resources using this protocol, which is handled in the protocol handler that's implemented in the main process.
