@@ -21,12 +21,10 @@ test('welcome page', async ({ appInfo }) => {
 		}
 
 		await expect(
-			// TODO: Should be heading
-			page.getByText('CoMapeo Desktop', { exact: true }),
+			page.getByRole('heading', { name: 'CoMapeo Desktop', exact: true }),
 		).toBeVisible()
 
 		await expect(
-			// TODO: Should be heading
 			page.getByText(
 				'View and manage observations collected with CoMapeo Mobile.',
 				{ exact: true },

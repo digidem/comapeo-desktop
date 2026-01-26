@@ -54,10 +54,20 @@ function RouteComponent() {
 							textAlign={viewportIsNarrow ? 'center' : undefined}
 						>
 							<Stack spacing={5}>
-								<Typography variant="bannerTitle" color="textInverted">
+								<Typography
+									component="h1"
+									variant="bannerTitle"
+									color="textInverted"
+									fontWeight="inherit"
+								>
 									{t(m.comapeoDesktop)}
 								</Typography>
-								<Typography variant="bannerSubtitle" color="textInverted">
+
+								<Typography
+									component="p"
+									variant="bannerSubtitle"
+									color="textInverted"
+								>
 									{t(m.appDescription)}
 								</Typography>
 							</Stack>
