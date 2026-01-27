@@ -48,7 +48,7 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 						variant="body2"
 						fontFamily="monospace"
 						whiteSpace="pre-wrap"
-						sx={{ wordBreak: 'break-word' }}
+						sx={{ overflowWrap: 'break-word' }}
 					>
 						{error.toString()}
 					</Typography>
@@ -70,7 +70,7 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 						variant="body2"
 						fontFamily="monospace"
 						whiteSpace="pre-wrap"
-						sx={{ wordBreak: 'break-word' }}
+						sx={{ overflowWrap: 'break-word' }}
 					>
 						{error.stack}
 					</Typography>
