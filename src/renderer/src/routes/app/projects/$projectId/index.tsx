@@ -263,8 +263,8 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 												<Icon name="material-symbols-apps" size={iconSize} />
 
 												{projectSettings.configMetadata ? (
-													<Typography color="textSecondary">
-														<Box component="span">
+													<Box>
+														<Typography color="textSecondary">
 															<Typography
 																component="span"
 																variant="inherit"
@@ -274,11 +274,9 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 																{projectSettings.configMetadata.name}
 															</Typography>{' '}
 															{projectSettings.configMetadata.fileVersion}
-														</Box>
+														</Typography>
 
-														<br />
-
-														<Box component="span">
+														<Typography color="textSecondary">
 															{t(m.projectInfoCategoriesCreated, {
 																date: (
 																	<time
@@ -298,8 +296,8 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 																	</time>
 																),
 															})}
-														</Box>
-													</Typography>
+														</Typography>
+													</Box>
 												) : (
 													<Typography fontWeight={500}>
 														{t(m.fallbackCategoriesSetName)}
