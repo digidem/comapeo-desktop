@@ -301,13 +301,9 @@ function CollaboratorInfoContent({
 				padding={10}
 				justifyContent="center"
 				gap={20}
+				sx={{ overflowWrap: 'break-word' }}
 			>
-				<Stack
-					direction="column"
-					gap={4}
-					alignItems="center"
-					sx={{ overflowWrap: 'anywhere' }}
-				>
+				<Stack direction="column" gap={4} alignItems="center">
 					<DeviceIcon deviceType={member.deviceType} size="60px" />
 
 					<Typography variant="h1" fontWeight={500} textAlign="center">
@@ -331,7 +327,11 @@ function CollaboratorInfoContent({
 				</Stack>
 
 				<Stack direction="column" gap={4} alignItems="center">
-					<Typography color="textSecondary" textAlign="center">
+					<Typography
+						color="textSecondary"
+						textAlign="center"
+						sx={{ overflowWrap: 'anywhere' }}
+					>
 						{truncatedDeviceId}
 					</Typography>
 
