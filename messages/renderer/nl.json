@@ -523,6 +523,10 @@
     "description": "Title for device discovery troubleshooting section.",
     "message": "Zie je geen apparaat?"
   },
+  "routes.app.projects.$projectId_.invite.devices.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button",
+    "message": "Ga terug."
+  },
   "routes.app.projects.$projectId_.invite.devices.index.navTitle": {
     "description": "Title of the device selection for invite page.",
     "message": "Selecteer een apparaat"
@@ -530,6 +534,10 @@
   "routes.app.projects.$projectId_.invite.index.controlSharing": {
     "description": "Detail about how to control data sharing.",
     "message": "Controleer delen in projectinstellingen."
+  },
+  "routes.app.projects.$projectId_.invite.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Ga terug."
   },
   "routes.app.projects.$projectId_.invite.index.inviteCollaborators": {
     "description": "Title of the Invite Get Started page.",
