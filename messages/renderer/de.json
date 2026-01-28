@@ -543,6 +543,10 @@
     "description": "Text displayed when waiting for Wi-Fi information.",
     "message": "Lade Wi-Fi-Informationen…"
   },
+  "routes.app.projects.$projectId_.invite.devices.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button",
+    "message": "Gehe zurück."
+  },
   "routes.app.projects.$projectId_.invite.devices.index.navTitle": {
     "description": "Title of the device selection for invite page.",
     "message": "Gerät auswählen"
@@ -550,6 +554,10 @@
   "routes.app.projects.$projectId_.invite.index.controlSharing": {
     "description": "Detail about how to control data sharing.",
     "message": "Freigabe in den Projekteinstellungen kontrollieren."
+  },
+  "routes.app.projects.$projectId_.invite.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Gehe zurück."
   },
   "routes.app.projects.$projectId_.invite.index.inviteCollaborators": {
     "description": "Title of the Invite Get Started page.",
