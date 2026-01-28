@@ -59,6 +59,7 @@ function RouteComponent() {
 				borderBottom={`1px solid ${BLUE_GREY}`}
 			>
 				<IconButton
+					aria-label={t(m.goBackAccessibleLabel)}
 					onClick={() => {
 						if (router.history.canGoBack()) {
 							router.history.back()
@@ -193,5 +194,10 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId_.invite.index.selectDevice',
 		defaultMessage: 'Select a Device',
 		description: 'Text for button to navigate to device selection.',
+	},
+	goBackAccessibleLabel: {
+		id: 'routes.app.projects.$projectId_.invite.index.goBackAccessibleLabel',
+		defaultMessage: 'Go back.',
+		description: 'Accessible label for back button.',
 	},
 })
