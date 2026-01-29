@@ -49,6 +49,7 @@ export function createAppDiagnosticsMetricsScheduler({
 			const { appLocale, deviceLocale } = getLocaleInfo()
 
 			return {
+				appId: appConfig.appId,
 				appLocale,
 				appName: app.getName(),
 				deviceLocale,
