@@ -18,7 +18,7 @@ import { useInitiallyConnectedPeers } from '../../../../../../hooks/peers'
 import { DeviceRow } from './-shared/device-row'
 
 export const Route = createFileRoute(
-	'/app/projects/$projectId/invite/devices/',
+	'/app/projects/$projectId_/invite/devices/',
 )({
 	component: RouteComponent,
 })
@@ -39,6 +39,7 @@ function RouteComponent() {
 				borderBottom={`1px solid ${BLUE_GREY}`}
 			>
 				<IconButton
+					aria-label={t(m.goBackAccessibleLabel)}
 					onClick={() => {
 						if (router.history.canGoBack()) {
 							router.history.back()
@@ -81,6 +82,7 @@ function RouteComponent() {
 						alignItems="center"
 						padding={4}
 						overflow="auto"
+						data-testid="invite-devices-list-network-connection-info"
 					>
 						<Suspense
 							fallback={
@@ -211,5 +213,10 @@ const m = defineMessages({
 			'Confirm that devices are using the same version of CoMapeo',
 		description:
 			'Text explaining that devices need to be using same version of CoMapeo.',
+	},
+	goBackAccessibleLabel: {
+		id: 'routes.app.projects.$projectId_.invite.devices.index.goBackAccessibleLabel',
+		defaultMessage: 'Go back.',
+		description: 'Accessible label for back button',
 	},
 })

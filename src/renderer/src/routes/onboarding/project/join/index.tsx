@@ -11,7 +11,6 @@ import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Zoom from '@mui/material/Zoom'
-import { alpha } from '@mui/material/styles'
 import { captureException } from '@sentry/react'
 import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
@@ -19,13 +18,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import { TransitionGroup } from 'react-transition-group'
 
 import { ONBOARDING_BASE_MUTATION_KEY } from '../-shared'
-import {
-	BLACK,
-	DARKER_ORANGE,
-	DARK_GREY,
-	LIGHT_GREY,
-	WHITE,
-} from '../../../../colors'
+import { BLUE_GREY, DARKER_ORANGE, DARK_GREY, WHITE } from '../../../../colors'
 import {
 	ErrorDialog,
 	type Props as ErrorDialogProps,
@@ -65,8 +58,6 @@ function RouteComponent() {
 		</Container>
 	)
 }
-
-const BOX_SHADOW = `0px 1px 5px 0px ${alpha(BLACK, 0.25)}`
 
 function PendingInvite() {
 	const router = useRouter()
@@ -116,9 +107,11 @@ function PendingInvite() {
 		<>
 			<TransitionGroup style={{ position: 'relative' }}>
 				{acceptOnboardingInvite.status === 'pending' ? (
-					<Box display="flex" flexDirection="row" justifyContent="center">
-						<CircularProgress disableShrink />
-					</Box>
+					<Zoom mountOnEnter unmountOnExit>
+						<Box display="flex" flexDirection="row" justifyContent="center">
+							<CircularProgress disableShrink />
+						</Box>
+					</Zoom>
 				) : pendingInvite ? (
 					<Zoom key={pendingInvite.inviteId} mountOnEnter unmountOnExit>
 						<Stack
@@ -130,9 +123,9 @@ function PendingInvite() {
 							gap={6}
 							borderRadius={2}
 							padding={6}
-							boxShadow={BOX_SHADOW}
+							boxShadow={(theme) => theme.shadows[5]}
 							bgcolor={pendingInvite.projectColor || WHITE}
-							border={`2px solid ${LIGHT_GREY}`}
+							border={`1px solid ${BLUE_GREY}`}
 						>
 							<Typography variant="h1" fontWeight={500}>
 								{pendingInvite.projectName}
@@ -153,6 +146,8 @@ function PendingInvite() {
 									variant="outlined"
 									fullWidth
 									aria-disabled={rejectOnboardingInvite.status === 'pending'}
+									loading={rejectOnboardingInvite.status === 'pending'}
+									loadingPosition="start"
 									onClick={() => {
 										if (rejectOnboardingInvite.status === 'pending') {
 											return
@@ -180,6 +175,7 @@ function PendingInvite() {
 										if (rejectOnboardingInvite.status === 'pending') {
 											return
 										}
+
 										acceptOnboardingInvite.mutate(
 											{ inviteId: pendingInvite.inviteId },
 											{

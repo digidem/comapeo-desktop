@@ -7,7 +7,6 @@ import { useIsMutating } from '@tanstack/react-query'
 import {
 	Outlet,
 	createFileRoute,
-	redirect,
 	useChildMatches,
 } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
@@ -23,6 +22,7 @@ import {
 	CREATOR_ROLE_ID,
 	MEMBER_ROLE_ID,
 } from '../../lib/comapeo'
+import { buildDocumentReloadURL } from '../../lib/navigation.ts'
 import { GLOBAL_MUTATIONS_BASE_KEY } from '../../lib/queries/global-mutations'
 
 export const Route = createFileRoute('/app')({
@@ -85,17 +85,23 @@ export const Route = createFileRoute('/app')({
 		) {
 			activeProjectIdStore.actions.update(undefined)
 
-			// NOTE: Accounts for bug where `router.navigate()` doesn't account for hash router usage when trying to reload document
-			// (https://discord.com/channels/719702312431386674/1431138480096022680)
-			throw redirect({
-				href: history.createHref(buildLocation({ to: '/' }).href),
+			throw Route.redirect({
+				// TODO: Kind of hacky but no way to access router instance here at the moment
+				href: buildDocumentReloadURL(
+					{
+						buildLocation,
+						history,
+						origin: window.origin,
+					},
+					'/',
+				),
 				reloadDocument: true,
 			})
 		}
 
 		// Redirect to project-specific "initial" page if the current route is the just /app
 		if (matches.at(-1)!.fullPath === '/app') {
-			throw redirect({
+			throw Route.redirect({
 				to: '/app/projects/$projectId',
 				params: { projectId: activeProjectId },
 				replace: true,
@@ -132,11 +138,11 @@ function RouteComponent() {
 		currentRoute.routeId === '/app/settings/device-name' ||
 		currentRoute.routeId === '/app/settings/coordinate-system' ||
 		currentRoute.routeId === '/app/settings/language' ||
-		currentRoute.routeId === '/app/projects/$projectId/settings/info' ||
+		currentRoute.routeId === '/app/projects/$projectId_/settings/info' ||
 		currentRoute.routeId ===
-			'/app/projects/$projectId/invite/devices/$deviceId/role' ||
+			'/app/projects/$projectId_/invite/devices/$deviceId/role' ||
 		currentRoute.routeId ===
-			'/app/projects/$projectId/invite/devices/$deviceId/send'
+			'/app/projects/$projectId_/invite/devices/$deviceId/send'
 
 	const isEditing = useGlobalEditingState().length > 0
 
@@ -190,7 +196,7 @@ function RouteComponent() {
 										someGlobalMutationIsPending ||
 										(syncEnabled &&
 											currentRoute.routeId ===
-												'/app/projects/$projectId/exchange/')
+												'/app/projects/$projectId_/exchange/')
 									}
 									onClick={(event) => {
 										if (someGlobalMutationIsPending) {
@@ -205,13 +211,13 @@ function RouteComponent() {
 									activeProps={
 										// NOTE: Subroutes of the project that also live as nav rail tabs
 										currentRoute.routeId.startsWith(
-											'/app/projects/$projectId/exchange',
+											'/app/projects/$projectId_/exchange',
 										) ||
 										currentRoute.routeId.startsWith(
-											'/app/projects/$projectId/settings',
+											'/app/projects/$projectId_/settings',
 										) ||
 										currentRoute.routeId.startsWith(
-											'/app/projects/$projectId/team',
+											'/app/projects/$projectId_/team',
 										)
 											? BASE_INACTIVE_LINK_PROPS
 											: BASE_ACTIVE_LINK_PROPS
@@ -294,11 +300,11 @@ function RouteComponent() {
 											isEditing ||
 											someGlobalMutationIsPending) &&
 											!currentRoute.routeId.startsWith(
-												'/app/projects/$projectId/team',
+												'/app/projects/$projectId_/team',
 											)) ||
 										(syncEnabled &&
 											currentRoute.routeId ===
-												'/app/projects/$projectId/exchange/')
+												'/app/projects/$projectId_/exchange/')
 									}
 									onClick={(event) => {
 										if (someGlobalMutationIsPending) {
@@ -344,11 +350,11 @@ function RouteComponent() {
 												isEditing ||
 												someGlobalMutationIsPending) &&
 												!currentRoute.routeId.startsWith(
-													'/app/projects/$projectId/settings',
+													'/app/projects/$projectId_/settings',
 												)) ||
 											(syncEnabled &&
 												currentRoute.routeId ===
-													'/app/projects/$projectId/exchange/')
+													'/app/projects/$projectId_/exchange/')
 										}
 										onClick={(event) => {
 											if (someGlobalMutationIsPending) {
@@ -394,7 +400,7 @@ function RouteComponent() {
 											someGlobalMutationIsPending) &&
 											!currentRoute.routeId.startsWith('/app/settings')) ||
 										(currentRoute.routeId ===
-											'/app/projects/$projectId/exchange/' &&
+											'/app/projects/$projectId_/exchange/' &&
 											syncEnabled)
 									}
 									onClick={(event) => {

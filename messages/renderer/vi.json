@@ -7,6 +7,10 @@
     "description": "Label for error section",
     "message": "Lỗi"
   },
+  "components.generic-route-error-component.restart": {
+    "description": "Text for button to restart app.",
+    "message": "Khởi động lại"
+  },
   "components.generic-route-not-found-component.tryAgain": {
     "description": "Button text for try again button.",
     "message": "Thử lại"

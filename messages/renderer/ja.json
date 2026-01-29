@@ -19,6 +19,10 @@
     "description": "Text for button to reload page.",
     "message": "Reload"
   },
+  "components.generic-route-error-component.restart": {
+    "description": "Text for button to restart app.",
+    "message": "再起動"
+  },
   "components.generic-route-error-component.somethinWentWrong": {
     "description": "Title text of page error",
     "message": "問題が発生しました"
@@ -515,6 +519,10 @@
     "description": "Title for device discovery troubleshooting section.",
     "message": "デバイスが表示されませんか？"
   },
+  "routes.app.projects.$projectId_.invite.devices.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button",
+    "message": "戻ってください。"
+  },
   "routes.app.projects.$projectId_.invite.devices.index.navTitle": {
     "description": "Title of the device selection for invite page.",
     "message": "デバイスを選択"
@@ -522,6 +530,10 @@
   "routes.app.projects.$projectId_.invite.index.controlSharing": {
     "description": "Detail about how to control data sharing.",
     "message": "プロジェクト設定で共有を制御します。"
+  },
+  "routes.app.projects.$projectId_.invite.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
   },
   "routes.app.projects.$projectId_.invite.index.inviteCollaborators": {
     "description": "Title of the Invite Get Started page.",
@@ -682,6 +694,10 @@
   "routes.app.projects.$projectId_.team.$deviceId.coordinator": {
     "description": "Text indicating collaborator is a coordinator.",
     "message": "Coordinator"
+  },
+  "routes.app.projects.$projectId_.team.$deviceId.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
   },
   "routes.app.projects.$projectId_.team.$deviceId.lastCoordinatorWarning": {
     "description": "Warning text about leaving the project as the last coordinator.",

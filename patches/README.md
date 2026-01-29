@@ -9,12 +9,8 @@ fixes.
 
 By default, core sets up a file watcher for the `fallbackMapPath` option that's provided when instantiating `MapeoManager`. This does not work when packaging the app as an ASAR file (via Electron Forge) because watching a file within the ASAR directory is not possible. Instead, we change the setup so that it does not try to watch the file and instead make the assumption that the file always exists on instantiation, which is generally the case in CoMapeo Desktop (for now).
 
-### [Fix CORS issue when getting custom map info when in development](./@comapeo+core+5.2.1+002+fix-custom-map-info-cors.patch)
+## @tanstack/router-core
 
-Making a fetch-based request for the custom map info fails due to a CORS issue in development. This is because the app is technically being served from a development server in development, which thus has a different origin than server that hosts the relevant endpoint.
+### [Define `comapeo:` protocol as safe](./@tanstack+router-core+1.157.15+001+define-custom-protocol-as-safe.patch)
 
-## styled-map-package
-
-### [Fix CORS issues when in development](styled-map-package+3.0.0+001+fix-CORS-issues.patch)
-
-The maps served through the server plugin in this module can fail to load in the app due to CORS issues in development. This is because the app is technically being served from a development server in development, which thus has a different origin than the map server that the map is being served from.
+When the router attempts to do a full page reload, it checks the protocol for security purposes. It uses a hardcoded list for known "safe" protocols which results in issues in the app that attempt to navigate to a `comapeo:` URL with `reloadDocument: true` set. This patch updates the hardcoded list to account for our custom protocol so that the router doesn't consider it dangerous. We are responsible for doing safety checks related to accessing resources using this protocol, which is handled in the protocol handler that's implemented in the main process.

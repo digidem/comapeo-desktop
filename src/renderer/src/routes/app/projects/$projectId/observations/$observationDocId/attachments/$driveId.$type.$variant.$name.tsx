@@ -18,7 +18,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { captureMessage } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
@@ -104,7 +104,7 @@ export const Route = createFileRoute(
 				)
 			})
 		) {
-			throw redirect({
+			throw Route.redirect({
 				to: '/app/projects/$projectId/observations/$observationDocId',
 				params: { projectId, observationDocId },
 			})

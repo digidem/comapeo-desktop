@@ -6,7 +6,6 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import {
 	createFileRoute,
-	redirect,
 	useRouter,
 	type NotFoundRouteProps,
 } from '@tanstack/react-router'
@@ -34,7 +33,7 @@ export const Route = createFileRoute(
 			})
 		} catch {
 			// We are assuming that getting the project fails because it does not exist
-			throw redirect({ to: '/onboarding/project/create' })
+			throw Route.redirect({ to: '/onboarding/project/create' })
 		}
 
 		const settings = await queryClient.ensureQueryData({
@@ -52,7 +51,7 @@ export const Route = createFileRoute(
 		// TODO: Kind of hacky but we do not allow creating a project without a name
 		// so it should be okay to redirect them to the project creation page for now.
 		if (!settings.name) {
-			throw redirect({ to: '/onboarding/project/create' })
+			throw Route.redirect({ to: '/onboarding/project/create' })
 		}
 
 		activeProjectIdStore.actions.update(params.projectId)

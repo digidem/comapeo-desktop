@@ -13,7 +13,6 @@ export function useInitiallyConnectedPeers() {
 	const peers = useLocalPeersState()
 
 	// Keeps track of peers who were initially seen as connected
-	// eslint-disable-next-line @eslint-react/naming-convention/use-state
 	const [relevantDeviceIds] = useState(() => {
 		return new Set<string>(
 			peers.filter((p) => p.status === 'connected').map((p) => p.deviceId),

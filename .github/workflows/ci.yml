@@ -15,31 +15,45 @@ concurrency:
   cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
 
 jobs:
-  lint:
+  checks:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - name: Use Node.js
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        id: setup-node
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: '.nvmrc'
 
       - name: Update npm version
-        shell: bash
-        run: |
-          version=$(cat package.json | jq '.devEngines.packageManager.version' --raw-output)
-          echo "Version detected: $version"
-          npm install -g npm@$version
+        uses: ./.github/update-npm-version
 
       - name: Install deps
         run: npm ci
 
+      - name: Check Electron node version
+        shell: bash
+        env:
+          EXPECTED_NODE_VERSION: ${{ steps.setup-node.outputs.node-version }}
+        run: |
+          electron_node_version=$(ELECTRON_RUN_AS_NODE=true npx electron -e 'console.log(process.versions.node);')
+
+          # Version string from setup-node is prefixed with "v"
+          if [[ "v$electron_node_version" == "$EXPECTED_NODE_VERSION" ]]
+          then
+            echo "✅ Electron node version matches expected ($electron_node_version)"
+          else
+            echo "⛔️ Electron node version ($electron_node_version) does not match expected ($EXPECTED_NODE_VERSION)"
+            exit 1
+          fi
+
       - name: Build translations
         run: node --run intl
 
-      - name: Run lint
-        run: node --run lint
+      - name: Run checks
+        run: node --run checks
+
   test:
     timeout-minutes: 10
     strategy:
@@ -52,16 +66,12 @@ jobs:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
       - name: Use Node.js
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: '.nvmrc'
 
       - name: Update npm version
-        shell: bash
-        run: |
-          version=$(cat package.json | jq '.devEngines.packageManager.version' --raw-output)
-          echo "Version detected: $version"
-          npm install -g npm@$version
+        uses: ./.github/update-npm-version
 
       - name: Install deps
         run: npm ci
@@ -92,16 +102,12 @@ jobs:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
       - name: Use Node.js
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: '.nvmrc'
 
       - name: Update npm version
-        shell: bash
-        run: |
-          version=$(cat package.json | jq '.devEngines.packageManager.version' --raw-output)
-          echo "Version detected: $version"
-          npm install -g npm@$version
+        uses: ./.github/update-npm-version
 
       - name: Install deps
         run: npm ci
@@ -119,22 +125,14 @@ jobs:
 
       - name: Run e2e tests
         if: ${{ matrix.os.name != 'linux'}}
-        uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
-        with:
-          timeout_minutes: 5
-          max_attempts: 3
-          command: node --run test-e2e
+        run: node --run test-e2e
 
         # NOTE: Addresses issue with app not launching (https://github.com/microsoft/playwright/issues/34251#issuecomment-2580645333)
       - name: Run e2e tests (Linux)
         if: ${{ matrix.os.name == 'linux'}}
-        uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
-        with:
-          timeout_minutes: 5
-          max_attempts: 3
-          command: |
-            sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
-            xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- node --run test-e2e
+        run: |
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- node --run test-e2e
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}

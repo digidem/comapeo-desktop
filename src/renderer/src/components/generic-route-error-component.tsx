@@ -6,6 +6,7 @@ import { useRouter, type ErrorComponentProps } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, LIGHT_GREY, WHITE } from '../colors'
+import { buildDocumentReloadURL } from '../lib/navigation.ts'
 
 export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 	const router = useRouter()
@@ -47,7 +48,7 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 						variant="body2"
 						fontFamily="monospace"
 						whiteSpace="pre-wrap"
-						sx={{ wordBreak: 'break-word' }}
+						sx={{ overflowWrap: 'break-word' }}
 					>
 						{error.toString()}
 					</Typography>
@@ -69,7 +70,7 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 						variant="body2"
 						fontFamily="monospace"
 						whiteSpace="pre-wrap"
-						sx={{ wordBreak: 'break-word' }}
+						sx={{ overflowWrap: 'break-word' }}
 					>
 						{error.stack}
 					</Typography>
@@ -83,23 +84,33 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 				display="flex"
 				flexDirection="column"
 				alignItems="center"
+				gap={4}
 			>
 				<Button
 					fullWidth
 					onClick={() => {
-						// NOTE: Accounts for bug where `router.navigate()` doesn't account for hash router usage when trying to reload document
-						// (https://discord.com/channels/719702312431386674/1431138480096022680)
 						router.navigate({
-							href: router.history.createHref(
-								router.buildLocation({ to: '.' }).href,
-							),
-							replace: true,
+							href: buildDocumentReloadURL(router, '.'),
 							reloadDocument: true,
 						})
 					}}
 					sx={{ maxWidth: 400 }}
 				>
 					{t(m.reload)}
+				</Button>
+
+				<Button
+					fullWidth
+					variant="outlined"
+					onClick={() => {
+						router.navigate({
+							href: buildDocumentReloadURL(router, '/'),
+							reloadDocument: true,
+						})
+					}}
+					sx={{ maxWidth: 400 }}
+				>
+					{t(m.restart)}
 				</Button>
 			</Box>
 		</Stack>
@@ -126,5 +137,10 @@ const m = defineMessages({
 		id: 'components.generic-route-error-component.reload',
 		defaultMessage: 'Reload',
 		description: 'Text for button to reload page.',
+	},
+	restart: {
+		id: 'components.generic-route-error-component.restart',
+		defaultMessage: 'Restart',
+		description: 'Text for button to restart app.',
 	},
 })

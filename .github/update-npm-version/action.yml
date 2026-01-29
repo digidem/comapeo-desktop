@@ -1,0 +1,31 @@
+name: Update npm version
+
+description: Updates the global npm version based on the `devEngines` field of a package.json
+
+inputs:
+  package-json-path:
+    description: Path pointing to package.json file. Attempts to use the one in current directory by default.
+    required: false
+    default: './package.json'
+
+outputs:
+  npm-version:
+    description: Installed npm version
+    value: ${{ steps.update-npm.npm-version }}
+
+runs:
+  using: composite
+  steps:
+    - name: Update npm
+      id: update-npm
+      shell: bash
+      env:
+        PACKAGE_JSON_PATH: ${{ inputs.package-json-path }}
+      run: |
+        version=$(cat "$PACKAGE_JSON_PATH" | jq '.devEngines.packageManager.version' --raw-output)
+
+        echo "Version detected: $version"
+
+        npm install -g npm@$version
+
+        echo "npm-version=$(npm --version)" >> $GITHUB_OUTPUT

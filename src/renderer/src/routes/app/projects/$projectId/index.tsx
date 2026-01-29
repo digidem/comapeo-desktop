@@ -176,7 +176,7 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 								},
 							}}
 						>
-							<Typography variant="button" sx={{ wordBreak: 'break-all' }}>
+							<Typography variant="button" sx={{ overflowWrap: 'break-word' }}>
 								{displayedName}
 							</Typography>
 						</ButtonBase>
@@ -210,13 +210,13 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 										<Typography
 											variant="h1"
 											fontWeight={500}
-											sx={{ wordBreak: 'break-all' }}
+											sx={{ overflowWrap: 'break-word' }}
 										>
 											{displayedName}
 										</Typography>
 
 										{projectSettings.projectDescription ? (
-											<Typography sx={{ wordBreak: 'break-all' }}>
+											<Typography sx={{ overflowWrap: 'break-word' }}>
 												{projectSettings.projectDescription}
 											</Typography>
 										) : null}
@@ -263,8 +263,8 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 												<Icon name="material-symbols-apps" size={iconSize} />
 
 												{projectSettings.configMetadata ? (
-													<Typography color="textSecondary">
-														<Box component="span">
+													<Box>
+														<Typography color="textSecondary">
 															<Typography
 																component="span"
 																variant="inherit"
@@ -274,11 +274,9 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 																{projectSettings.configMetadata.name}
 															</Typography>{' '}
 															{projectSettings.configMetadata.fileVersion}
-														</Box>
+														</Typography>
 
-														<br />
-
-														<Box component="span">
+														<Typography color="textSecondary">
 															{t(m.projectInfoCategoriesCreated, {
 																date: (
 																	<time
@@ -298,8 +296,8 @@ function ProjectInfoSection({ projectId }: { projectId: string }) {
 																	</time>
 																),
 															})}
-														</Box>
-													</Typography>
+														</Typography>
+													</Box>
 												) : (
 													<Typography fontWeight={500}>
 														{t(m.fallbackCategoriesSetName)}

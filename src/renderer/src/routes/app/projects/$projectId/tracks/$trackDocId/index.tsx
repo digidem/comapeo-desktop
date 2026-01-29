@@ -81,6 +81,9 @@ export const Route = createFileRoute(
 			},
 		})
 	},
+	remountDeps: ({ params }) => {
+		return params
+	},
 	notFoundComponent: GenericRouteNotFoundComponent,
 	component: RouteComponent,
 })

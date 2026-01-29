@@ -23,6 +23,10 @@
     "description": "Text for button to reload page.",
     "message": "Reload"
   },
+  "components.generic-route-error-component.restart": {
+    "description": "Text for button to restart app.",
+    "message": "Redémarrer"
+  },
   "components.generic-route-error-component.somethinWentWrong": {
     "description": "Title text of page error",
     "message": "Quelque chose s'est mal passé"
@@ -519,6 +523,10 @@
     "description": "Text displayed when waiting for Wi-Fi information.",
     "message": "Récupération des informations Wi-Fi…"
   },
+  "routes.app.projects.$projectId_.invite.devices.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button",
+    "message": "Revenir en arrière."
+  },
   "routes.app.projects.$projectId_.invite.devices.index.navTitle": {
     "description": "Title of the device selection for invite page.",
     "message": "Sélectionnez un appareil"
@@ -526,6 +534,10 @@
   "routes.app.projects.$projectId_.invite.index.controlSharing": {
     "description": "Detail about how to control data sharing.",
     "message": "Contrôle du partage dans les paramètres du projet."
+  },
+  "routes.app.projects.$projectId_.invite.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Revenir en arrière."
   },
   "routes.app.projects.$projectId_.invite.index.inviteCollaborators": {
     "description": "Title of the Invite Get Started page.",
@@ -682,6 +694,10 @@
   "routes.app.projects.$projectId_.team.$deviceId.coordinator": {
     "description": "Text indicating collaborator is a coordinator.",
     "message": "Coordonnateur"
+  },
+  "routes.app.projects.$projectId_.team.$deviceId.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Revenir en arrière."
   },
   "routes.app.projects.$projectId_.team.$deviceId.lastCoordinatorWarning": {
     "description": "Warning text about leaving the project as the last coordinator.",

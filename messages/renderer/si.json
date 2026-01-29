@@ -7,6 +7,10 @@
     "description": "Label for error section",
     "message": "දෝෂයකි"
   },
+  "components.generic-route-error-component.restart": {
+    "description": "Text for button to restart app.",
+    "message": "නැවත ආරම්භ"
+  },
   "components.generic-route-not-found-component.tryAgain": {
     "description": "Button text for try again button.",
     "message": "යලි උත්සාහ කරන්න"

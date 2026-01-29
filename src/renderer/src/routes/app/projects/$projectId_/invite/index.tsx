@@ -4,7 +4,7 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARK_GREY, DARK_ORANGE } from '../../../../../colors'
@@ -13,7 +13,7 @@ import { Icon } from '../../../../../components/icon'
 import { ButtonLink } from '../../../../../components/link'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
 
-export const Route = createFileRoute('/app/projects/$projectId/invite/')({
+export const Route = createFileRoute('/app/projects/$projectId_/invite/')({
 	beforeLoad: async ({ context, params }) => {
 		const { projectApi, queryClient } = context
 		const { projectId } = params
@@ -31,7 +31,7 @@ export const Route = createFileRoute('/app/projects/$projectId/invite/')({
 		})
 
 		if (members.length > 1) {
-			throw redirect({
+			throw Route.redirect({
 				to: '/app/projects/$projectId/invite/devices',
 				params: { projectId },
 				replace: true,
@@ -59,6 +59,7 @@ function RouteComponent() {
 				borderBottom={`1px solid ${BLUE_GREY}`}
 			>
 				<IconButton
+					aria-label={t(m.goBackAccessibleLabel)}
 					onClick={() => {
 						if (router.history.canGoBack()) {
 							router.history.back()
@@ -193,5 +194,10 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId_.invite.index.selectDevice',
 		defaultMessage: 'Select a Device',
 		description: 'Text for button to navigate to device selection.',
+	},
+	goBackAccessibleLabel: {
+		id: 'routes.app.projects.$projectId_.invite.index.goBackAccessibleLabel',
+		defaultMessage: 'Go back.',
+		description: 'Accessible label for back button.',
 	},
 })
