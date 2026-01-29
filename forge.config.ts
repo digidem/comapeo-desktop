@@ -115,6 +115,7 @@ const RENDERER_VITE_CONFIG_PATH = fileURLToPath(
 )
 
 type CoMapeoDesktopForgePluginConfig = {
+	appId: string
 	appVersion: string
 	win32AppUserModelId: string
 }
@@ -182,6 +183,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase<CoMapeoDesktopForgePluginConf
 		}
 
 		const appConfig: AppConfig = {
+			appId: this.config.appId,
 			appType: APP_TYPE,
 			appVersion: this.config.appVersion,
 			asar: ASAR,
@@ -334,6 +336,7 @@ const properties = getPropertiesForAppType(APP_TYPE)
 
 const plugins: Array<ForgeConfigPlugin> = [
 	new CoMapeoDesktopForgePlugin({
+		appId: properties.appBundleId,
 		appVersion: properties.appVersion,
 		win32AppUserModelId: properties.win32AppUserModelId,
 	}),

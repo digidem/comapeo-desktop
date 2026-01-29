@@ -9,6 +9,8 @@ export type AppType =
 	| 'production'
 
 export const AppConfigSchema = v.object({
+	/** Indicates the application ID e.g. `app.comapeo` */
+	appId: v.string(),
 	/** Indicates the app type */
 	appType: v.union([
 		v.literal('development'),
