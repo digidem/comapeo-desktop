@@ -251,6 +251,7 @@ function CollaboratorInfoContent({
 				variant="h3"
 				fontWeight={500}
 				textAlign="center"
+				sx={{ overflowWrap: 'anywhere' }}
 			>
 				{member.selfHostedServerDetails.baseUrl}
 			</Typography>
