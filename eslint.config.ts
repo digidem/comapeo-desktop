@@ -6,7 +6,7 @@ import js from '@eslint/js'
 import pluginQuery from '@tanstack/eslint-plugin-query'
 import pluginRouter from '@tanstack/eslint-plugin-router'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
-import pluginReactRefresh from 'eslint-plugin-react-refresh'
+import { reactRefresh } from 'eslint-plugin-react-refresh'
 import { defineConfig } from 'eslint/config'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
@@ -77,7 +77,10 @@ export default defineConfig(
 			pluginRouter.configs['flat/recommended'],
 			pluginReactHooks.configs.flat.recommended,
 			pluginQuery.configs['flat/recommended'],
-			pluginReactRefresh.configs.vite,
+			reactRefresh.configs.vite({
+				// https://github.com/ArnaudBarre/eslint-plugin-react-refresh/releases/tag/v0.5.0
+				extraHOCs: ['createFileRoute', 'createRootRouteWithContext'],
+			}),
 		],
 		rules: {
 			'react-hooks/exhaustive-deps': 'error',
