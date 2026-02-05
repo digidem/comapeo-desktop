@@ -109,7 +109,7 @@
 		"@eslint/js": "9.39.2",
 		"@fontsource-variable/rubik": "5.2.8",
 		"@formatjs/cli": "6.12.2",
-		"@ianvs/prettier-plugin-sort-imports": "4.7.0",
+		"@ianvs/prettier-plugin-sort-imports": "4.7.1",
 		"@mui/material": "7.3.7",
 		"@playwright/test": "1.58.1",
 		"@reforged/maker-appimage": "5.2.0",
