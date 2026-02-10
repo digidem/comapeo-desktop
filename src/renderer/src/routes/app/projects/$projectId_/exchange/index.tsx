@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import {
 	useDataSyncProgress,
 	useManyMembers,
+	useOwnDeviceInfo,
 	useStartSync,
 	useStopSync,
 	useSyncState,
@@ -31,12 +32,16 @@ import {
 import { ErrorDialog } from '../../../../../components/error-dialog'
 import { GenericRoutePendingComponent } from '../../../../../components/generic-route-pending-component'
 import { Icon } from '../../../../../components/icon'
+import { ButtonLink } from '../../../../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
 import { useBrowserNetInfo } from '../../../../../hooks/network'
 import {
 	BLOCKED_ROLE_ID,
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+	COORDINATOR_ROLE_ID,
+	CREATOR_ROLE_ID,
 	LEFT_ROLE_ID,
+	MEMBER_ROLE_ID,
 	memberIsRemoteArchive,
 } from '../../../../../lib/comapeo'
 import { ExhaustivenessError } from '../../../../../lib/exchaustiveness-error'
@@ -65,6 +70,35 @@ export const Route = createFileRoute('/app/projects/$projectId_/exchange/')({
 		}
 
 		return { projectApi }
+	},
+	loader: async ({ context, params }) => {
+		const { queryClient, projectApi } = context
+		const { projectId } = params
+
+		await Promise.all([
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'role',
+				],
+				queryFn: async () => {
+					return projectApi.$getOwnRole()
+				},
+			}),
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'members',
+				],
+				queryFn: async () => {
+					return projectApi.$member.getMany()
+				},
+			}),
+		])
 	},
 	pendingComponent: () => {
 		return (
@@ -109,6 +143,53 @@ function RouteComponent() {
 	const connectedPeersCount = syncState
 		? getConnectedPeersCount(syncState.remoteDeviceSyncState)
 		: 0
+
+	const { data: ownDeviceInfo } = useOwnDeviceInfo()
+	const { data: members } = useManyMembers({ projectId })
+
+	const selfIsOnlyActiveProjectMember = !members.some(
+		(m) =>
+			m.deviceId !== ownDeviceInfo.deviceId &&
+			(m.role.roleId === CREATOR_ROLE_ID ||
+				m.role.roleId === COORDINATOR_ROLE_ID ||
+				m.role.roleId === MEMBER_ROLE_ID),
+	)
+
+	const displayedExchangeStateContent = selfIsOnlyActiveProjectMember ? (
+		<Stack direction="column" flex={1} gap={5} padding={6} alignItems="center">
+			<Typography
+				component="p"
+				variant="h1"
+				fontWeight={500}
+				textAlign="center"
+			>
+				{t(m.noOtherDevicesOnProject)}
+			</Typography>
+
+			<ButtonLink
+				variant="text"
+				to="/app/projects/$projectId/invite"
+				params={{ projectId }}
+			>
+				{t(m.inviteDevices)}
+			</ButtonLink>
+		</Stack>
+	) : (
+		<>
+			<Suspense>
+				<RemoteArchiveIndicator projectId={projectId} />
+			</Suspense>
+
+			{syncState ? (
+				<DisplayedSyncState projectId={projectId} syncState={syncState} />
+			) : (
+				<CircularProgress />
+			)}
+		</>
+	)
+
+	const selfIsOnlyProjectMemberEver =
+		members.length === 1 && members[0]?.deviceId === ownDeviceInfo.deviceId
 
 	return (
 		<>
@@ -173,67 +254,62 @@ function RouteComponent() {
 								</Box>
 							</Box>
 
-							<Suspense>
-								<RemoteArchiveIndicator projectId={projectId} />
-							</Suspense>
-
-							{syncState ? (
-								<DisplayedSyncState
-									projectId={projectId}
-									syncState={syncState}
-								/>
-							) : (
-								<CircularProgress />
-							)}
+							{displayedExchangeStateContent}
 						</Stack>
 
-						<Box
-							display="flex"
-							flexDirection="row"
-							alignItems="center"
-							justifyContent="center"
-						>
-							<Button
-								fullWidth
-								variant={
-									syncState?.data.isSyncEnabled ? 'outlined' : 'contained'
-								}
-								sx={{ maxWidth: 400 }}
-								startIcon={
-									<Icon
-										name={
-											syncState?.data.isSyncEnabled
-												? 'material-square-filled'
-												: 'material-bolt-sharp'
+						{
+							// NOTE: We do not want to show the exchange button if we are the only member that the project has ever had (e.g. we freshly created a project).
+							// Once some other device has joined the project, then we should always show the button, regardless of who's active or not.
+							selfIsOnlyProjectMemberEver ? null : (
+								<Box
+									display="flex"
+									flexDirection="row"
+									alignItems="center"
+									justifyContent="center"
+								>
+									<Button
+										fullWidth
+										variant={
+											syncState?.data.isSyncEnabled ? 'outlined' : 'contained'
 										}
-									/>
-								}
-								onClick={() => {
-									if (
-										stopSync.status === 'pending' ||
-										startSync.status === 'pending'
-									) {
-										return
-									}
+										sx={{ maxWidth: 400 }}
+										startIcon={
+											<Icon
+												name={
+													syncState?.data.isSyncEnabled
+														? 'material-square-filled'
+														: 'material-bolt-sharp'
+												}
+											/>
+										}
+										onClick={() => {
+											if (
+												stopSync.status === 'pending' ||
+												startSync.status === 'pending'
+											) {
+												return
+											}
 
-									if (syncState?.data.isSyncEnabled) {
-										stopSync.mutate(undefined, {
-											onError: (err) => {
-												captureException(err)
-											},
-										})
-									} else {
-										startSync.mutate(undefined, {
-											onError: (err) => {
-												captureException(err)
-											},
-										})
-									}
-								}}
-							>
-								{t(syncState?.data.isSyncEnabled ? m.stop : m.start)}
-							</Button>
-						</Box>
+											if (syncState?.data.isSyncEnabled) {
+												stopSync.mutate(undefined, {
+													onError: (err) => {
+														captureException(err)
+													},
+												})
+											} else {
+												startSync.mutate(undefined, {
+													onError: (err) => {
+														captureException(err)
+													},
+												})
+											}
+										}}
+									>
+										{t(syncState?.data.isSyncEnabled ? m.stop : m.start)}
+									</Button>
+								</Box>
+							)
+						}
 					</Stack>
 				}
 				end={<Box bgcolor={LIGHT_GREY} display="flex" flex={1} />}
@@ -304,7 +380,12 @@ function DisplayedSyncState({
 
 	return (
 		<Stack direction="column" flex={1} gap={5} padding={6}>
-			<Typography variant="h1" fontWeight={500} textAlign="center">
+			<Typography
+				component="p"
+				variant="h1"
+				fontWeight={500}
+				textAlign="center"
+			>
 				{t(title)}
 			</Typography>
 
@@ -437,5 +518,15 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId_.exchange.index.remoteArchiveConnected',
 		defaultMessage: 'Remote Archive connected',
 		description: 'Text indicating that some remote archive is connected.',
+	},
+	noOtherDevicesOnProject: {
+		id: 'routes.app.projects.$projectId_.exchange.index.noOtherDevicesOnProject',
+		defaultMessage: 'No other devices are on this project.',
+		description: 'Text indicating no other active devices are on the project.',
+	},
+	inviteDevices: {
+		id: 'routes.app.projects.$projectId_.exchange.index.inviteDevices',
+		defaultMessage: 'Invite Devices',
+		description: 'Text for link to invite devices page.',
 	},
 })
