@@ -56,65 +56,14 @@ test('solo ', async ({ appInfo, projectParams, userParams }) => {
 			await expect(networkConnectionInfo).not.toHaveText('&lt;redacted&gt;')
 
 			await expect(
-				main.getByRole('heading', {
-					name: 'Looking for devices…',
+				main.getByText('No other devices are on this project.', {
 					exact: true,
 				}),
 			).toBeVisible()
-
-			await expect(main.getByRole('progressbar')).not.toBeVisible()
-		}
-
-		//// Start exchange
-		{
-			const startButton = main.getByRole('button', {
-				name: 'Start',
-				exact: true,
-			})
-			await expect(startButton).toBeVisible()
-			await startButton.click()
-
-			const disabledNavLinks = page
-				.getByRole('navigation')
-				.getByRole('link', { disabled: true })
-
-			await expect(disabledNavLinks.first()).toHaveAccessibleName(
-				'View project.',
-			)
-
-			await expect(disabledNavLinks).toHaveText([
-				'',
-				'Team',
-				'Tools',
-				'Settings',
-			])
 
 			await expect(
-				main.getByRole('heading', {
-					name: 'Waiting for Devices',
-					exact: true,
-				}),
+				main.getByRole('link', { name: 'Invite Devices', exact: true }),
 			).toBeVisible()
-
-			await expect(main.getByRole('progressbar')).toBeVisible()
-
-			await expect(main.getByText(/^\d%$/)).toBeVisible()
-		}
-
-		//// Stop exchange
-		{
-			const stopButton = main.getByRole('button', {
-				name: 'Stop',
-				exact: true,
-			})
-			await expect(stopButton).toBeVisible()
-			await stopButton.click()
-
-			const disabledNavLinks = page
-				.getByRole('navigation')
-				.getByRole('link', { disabled: true })
-
-			await expect(disabledNavLinks).toHaveCount(0)
 		}
 	} finally {
 		// 3. Cleanup
