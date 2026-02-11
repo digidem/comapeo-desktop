@@ -415,9 +415,17 @@
     "description": "Text displayed when waiting for Wi-Fi information.",
     "message": "Lade Wi-Fi-Informationen…"
   },
+  "routes.app.projects.$projectId_.exchange.index.inviteDevices": {
+    "description": "Text for link to invite devices page.",
+    "message": "Geräte einladen"
+  },
   "routes.app.projects.$projectId_.exchange.index.lookingForDevices": {
     "description": "Text displayed when no other devices have been found.",
     "message": "Suche Geräte…"
+  },
+  "routes.app.projects.$projectId_.exchange.index.noOtherDevicesOnProject": {
+    "description": "Text indicating no other active devices are on the project.",
+    "message": "Keine anderen Geräte sind in diesem Projekt."
   },
   "routes.app.projects.$projectId_.exchange.index.remoteArchiveConnected": {
     "description": "Text indicating that some remote archive is connected.",
