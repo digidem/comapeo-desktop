@@ -407,6 +407,14 @@
     "description": "Text displayed when other devices have been found.",
     "message": "Devices found"
   },
+  "routes.app.projects.$projectId_.exchange.index.inviteDevices": {
+    "description": "Text for link to invite devices page.",
+    "message": "Apparaten uitnodigen"
+  },
+  "routes.app.projects.$projectId_.exchange.index.noOtherDevicesOnProject": {
+    "description": "Text indicating no other active devices are on the project.",
+    "message": "Geen andere apparaten zijn op dit project."
+  },
   "routes.app.projects.$projectId_.exchange.index.remoteArchiveConnected": {
     "description": "Text indicating that some remote archive is connected.",
     "message": "Verbinding met extern archief"
