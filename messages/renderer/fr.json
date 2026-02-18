@@ -507,6 +507,10 @@
     "description": "Button text for sending invite.",
     "message": "Envoyer une invitation"
   },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.timeSinceSent": {
+    "description": "Text showing time elapsed since invite was sent",
+    "message": "Invitation envoyée il y a {time}s"
+  },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.waiting": {
     "description": "Text displayed while waiting for invite response.",
     "message": "En attente d'acceptation de l'invitation de l'appareil"
@@ -910,6 +914,10 @@
   "routes.app.settings.background-map.removeMap": {
     "description": "Text for button to remove map",
     "message": "Supprimer la carte"
+  },
+  "routes.app.settings.background-map.sizeInMegabytes": {
+    "description": "Text describing what kind of files are usable for background maps.",
+    "message": "{value} MB"
   },
   "routes.app.settings.coordinate-system.ddOptionLabel": {
     "description": "Label for the decimal degrees option.",
