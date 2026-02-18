@@ -19,6 +19,7 @@ import {
 	useSuspenseQuery,
 } from '@tanstack/react-query'
 import {
+	DEFAULT_PROTOCOL_ALLOWLIST,
 	RouterProvider,
 	createHashHistory,
 	createRouter,
@@ -102,6 +103,13 @@ const router = createRouter({
 		<GenericRouteNotFoundComponent data={data} backgroundColor={WHITE} />
 	),
 	notFoundMode: 'fuzzy',
+	protocolAllowlist: [
+		...DEFAULT_PROTOCOL_ALLOWLIST,
+		// Accounts for our custom protocol so that the router doesn't consider it dangerous.
+		// We are responsible for doing safety checks related to accessing resources using this protocol,
+		// which is handled in the protocol handler that's implemented in the main process.
+		'comapeo:',
+	],
 })
 
 declare module '@tanstack/react-router' {

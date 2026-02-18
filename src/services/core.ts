@@ -22,13 +22,11 @@ const log = debug('comapeo:services:core')
 // Patching due to issues with sodium-native in more recent versions of Electron due to removal of APIs that the module relies on.
 // Replaces the usage of SecureBuffer in sodium's malloc with just a normal Buffer, which may have security implications.
 // https://github.com/holepunchto/sodium-native/issues/185
-// const sodium = require('sodium-native')
 
 // @ts-expect-error Need patch
 sodium.sodium_malloc = function sodium_malloc_monkey_patched(n: number) {
 	return Buffer.alloc(n)
 }
-
 // @ts-expect-error Need patch
 sodium.sodium_free = function sodium_free_monkey_patched() {}
 
