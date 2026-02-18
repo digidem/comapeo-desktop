@@ -463,6 +463,10 @@
     "description": "Text for button to add another device.",
     "message": "別のデバイスを追加"
   },
+  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.addedOn": {
+    "description": "Text showing when device was added to project.",
+    "message": "{date, date, long} に追加"
+  },
   "routes.app.projects.$projectId_.invite.devices.$deviceId.send.cancelInvite": {
     "description": "Text for button to cancel invite.",
     "message": "招待をキャンセル"
