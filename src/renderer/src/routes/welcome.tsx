@@ -36,7 +36,6 @@ function RouteComponent() {
 			display="flex"
 			justifyContent="center"
 			alignItems="center"
-			padding={5}
 			sx={{
 				backgroundImage: `url("${topographicPrintURL}")`,
 				backgroundRepeat: 'no-repeat',
@@ -44,7 +43,7 @@ function RouteComponent() {
 				backgroundSize: 'contain',
 			}}
 		>
-			<Container maxWidth="lg">
+			<Container maxWidth="lg" sx={{ overflow: 'auto', padding: 5 }}>
 				<Stack display="flex" alignItems="center" gap={25}>
 					<Grid container spacing={10} justifyContent="center">
 						<Grid
