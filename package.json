@@ -51,7 +51,7 @@
 		"intl": "concurrently --pad-prefix \"node:intl:renderer\" \"node:intl:main\" && node --run \"intl:generate-translated-languages-list\"",
 		"checks:eslint": "eslint --cache .",
 		"checks:format": "prettier --cache --check .",
-		"checks:knip": "knip",
+		"checks:knip": "knip --cache",
 		"checks": "concurrently --prefix \"checks:{name}\" --pad-prefix --group \"node:checks:*\"",
 		"types:root": "tsc -p tsconfig.json",
 		"types:shared": "tsc -p src/shared/tsconfig.json",
