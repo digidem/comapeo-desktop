@@ -1,8 +1,5 @@
-import { StrictMode, Suspense, type ReactElement, type ReactNode } from 'react'
-import {
-	ClientApiProvider,
-	useSetUpInvitesListeners,
-} from '@comapeo/core-react'
+import { StrictMode, Suspense, type ReactElement } from 'react'
+import { ClientApiProvider } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -198,21 +195,19 @@ export function App() {
 											>
 												<ClientApiProvider clientApi={clientApi}>
 													<LocalPeersStoreProvider value={localPeersStore}>
-														<WithInvitesListener>
-															<WithAddedRouteContext>
-																{({ formatMessage, localeState }) => (
-																	<RouterProvider
-																		router={router}
-																		context={{
-																			activeProjectIdStore,
-																			formatMessage,
-																			globalEditingStateStore,
-																			localeState,
-																		}}
-																	/>
-																)}
-															</WithAddedRouteContext>
-														</WithInvitesListener>
+														<WithAddedRouteContext>
+															{({ formatMessage, localeState }) => (
+																<RouterProvider
+																	router={router}
+																	context={{
+																		activeProjectIdStore,
+																		formatMessage,
+																		globalEditingStateStore,
+																		localeState,
+																	}}
+																/>
+															)}
+														</WithAddedRouteContext>
 													</LocalPeersStoreProvider>
 												</ClientApiProvider>
 											</Suspense>
@@ -231,12 +226,6 @@ export function App() {
 function NetworkConnectionChangeListener() {
 	useNetworkConnectionChangeListener()
 	return null
-}
-
-function WithInvitesListener({ children }: { children: ReactNode }) {
-	useSetUpInvitesListeners()
-
-	return children
 }
 
 function WithAddedRouteContext({
