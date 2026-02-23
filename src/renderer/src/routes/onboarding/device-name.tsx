@@ -7,19 +7,17 @@ import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
-import { useStore } from '@tanstack/react-form'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { DARKER_ORANGE, WHITE } from '../../colors'
+import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../colors'
 import { ErrorDialog } from '../../components/error-dialog'
 import { Icon } from '../../components/icon'
 import { useAppForm } from '../../hooks/forms'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo'
 import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../lib/constants'
 import { createDeviceNameSchema } from '../../lib/validators/device'
-import { StepLayout } from './-layouts'
 
 export const Route = createFileRoute('/onboarding/device-name')({
 	loader: async ({ context }) => {
@@ -31,6 +29,9 @@ export const Route = createFileRoute('/onboarding/device-name')({
 				return clientApi.getDeviceInfo()
 			},
 		})
+	},
+	staticData: {
+		onboardingStepNumber: 2,
 	},
 	component: RouteComponent,
 })
@@ -72,35 +73,25 @@ function RouteComponent() {
 					name: parsedDeviceName,
 				})
 
-				await router.navigate({ to: '/onboarding/project' })
+				await router.navigate({ to: '/app' })
 			} catch (err) {
 				captureException(err)
 			}
 		},
 	})
 
-	const isSubmitting = useStore(form.store, (state) => {
-		return state.isSubmitting
-	})
-
 	return (
 		<>
-			<StepLayout
-				stepNumber={2}
-				onBack={
-					isSubmitting
-						? undefined
-						: () => {
-								if (router.history.canGoBack()) {
-									router.history.back()
-								} else {
-									router.navigate({
-										to: '/onboarding/data-and-privacy',
-										replace: true,
-									})
-								}
-							}
-				}
+			<Stack
+				display="flex"
+				direction="column"
+				justifyContent="space-between"
+				flex={1}
+				gap={10}
+				bgcolor={LIGHT_GREY}
+				padding={10}
+				borderRadius={2}
+				overflow="auto"
 			>
 				<Container maxWidth="sm" component={Stack} direction="column" gap={10}>
 					<Stack direction="column" gap={5}>
@@ -208,7 +199,7 @@ function RouteComponent() {
 						)}
 					</form.Subscribe>
 				</Box>
-			</StepLayout>
+			</Stack>
 
 			<ErrorDialog
 				open={setOwnDeviceInfo.status === 'error'}
