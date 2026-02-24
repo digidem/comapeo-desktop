@@ -7,13 +7,13 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY, DARK_ORANGE } from '../../../../../colors'
-import { GenericRoutePendingComponent } from '../../../../../components/generic-route-pending-component'
-import { Icon } from '../../../../../components/icon'
-import { ButtonLink } from '../../../../../components/link'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
+import { BLUE_GREY, DARK_GREY, DARK_ORANGE } from '../../../../../../colors.ts'
+import { GenericRoutePendingComponent } from '../../../../../../components/generic-route-pending-component.tsx'
+import { Icon } from '../../../../../../components/icon.tsx'
+import { ButtonLink } from '../../../../../../components/link.tsx'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../../lib/comapeo.ts'
 
-export const Route = createFileRoute('/app/projects/$projectId_/invite/')({
+export const Route = createFileRoute('/app/projects/$projectId/team/invite/')({
 	beforeLoad: async ({ context, params }) => {
 		const { projectApi, queryClient } = context
 		const { projectId } = params
@@ -32,7 +32,7 @@ export const Route = createFileRoute('/app/projects/$projectId_/invite/')({
 
 		if (members.length > 1) {
 			throw Route.redirect({
-				to: '/app/projects/$projectId/invite/devices',
+				to: '/app/projects/$projectId/team/invite/devices',
 				params: { projectId },
 				replace: true,
 			})
@@ -144,7 +144,7 @@ function RouteComponent() {
 
 				<Box display="flex" flexDirection="row" justifyContent="center">
 					<ButtonLink
-						to="/app/projects/$projectId/invite/devices"
+						to="/app/projects/$projectId/team/invite/devices"
 						params={{ projectId }}
 						replace
 						type="button"
@@ -161,42 +161,42 @@ function RouteComponent() {
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId_.invite.index.navTitle',
+		id: 'routes.app.projects.$projectId.team.invite.index.navTitle',
 		defaultMessage: 'Get Started',
 		description: 'Title of the Invite Get Started page.',
 	},
 	inviteCollaborators: {
-		id: 'routes.app.projects.$projectId_.invite.index.inviteCollaborators',
+		id: 'routes.app.projects.$projectId.team.invite.index.inviteCollaborators',
 		defaultMessage: 'Invite Collaborators',
 		description: 'Title of the Invite Get Started page.',
 	},
 	primaryDescription: {
-		id: 'routes.app.projects.$projectId_.invite.index.primaryDescription',
+		id: 'routes.app.projects.$projectId.team.invite.index.primaryDescription',
 		defaultMessage: 'Invite devices using CoMapeo to start collaborating.',
 		description: 'Primary description text.',
 	},
 	onlyInvitedDevices: {
-		id: 'routes.app.projects.$projectId_.invite.index.onlyInvitedDevices',
+		id: 'routes.app.projects.$projectId.team.invite.index.onlyInvitedDevices',
 		defaultMessage: 'Only invited devices contribute.',
 		description: 'Detail about who contributes.',
 	},
 	shareUsingExchange: {
-		id: 'routes.app.projects.$projectId_.invite.index.shareUsingExchange',
+		id: 'routes.app.projects.$projectId.team.invite.index.shareUsingExchange',
 		defaultMessage: 'Collaborators share securely using Exchange.',
 		description: 'Detail about how collaborators share data.',
 	},
 	controlSharing: {
-		id: 'routes.app.projects.$projectId_.invite.index.controlSharing',
+		id: 'routes.app.projects.$projectId.team.invite.index.controlSharing',
 		defaultMessage: 'Control sharing in Project Settings.',
 		description: 'Detail about how to control data sharing.',
 	},
 	selectDevice: {
-		id: 'routes.app.projects.$projectId_.invite.index.selectDevice',
+		id: 'routes.app.projects.$projectId.team.invite.index.selectDevice',
 		defaultMessage: 'Select a Device',
 		description: 'Text for button to navigate to device selection.',
 	},
 	goBackAccessibleLabel: {
-		id: 'routes.app.projects.$projectId_.invite.index.goBackAccessibleLabel',
+		id: 'routes.app.projects.$projectId.team.invite.index.goBackAccessibleLabel',
 		defaultMessage: 'Go back.',
 		description: 'Accessible label for back button.',
 	},

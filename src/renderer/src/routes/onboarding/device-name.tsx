@@ -11,13 +11,13 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../colors'
-import { ErrorDialog } from '../../components/error-dialog'
-import { Icon } from '../../components/icon'
-import { useAppForm } from '../../hooks/forms'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo'
-import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../lib/constants'
-import { createDeviceNameSchema } from '../../lib/validators/device'
+import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../colors.ts'
+import { ErrorDialog } from '../../components/error-dialog.tsx'
+import { Icon } from '../../components/icon.tsx'
+import { useAppForm } from '../../hooks/forms.ts'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo.ts'
+import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../lib/constants.ts'
+import { createDeviceNameSchema } from '../../lib/validators/device.ts'
 
 export const Route = createFileRoute('/onboarding/device-name')({
 	loader: async ({ context }) => {
@@ -72,11 +72,15 @@ function RouteComponent() {
 					deviceType: 'desktop',
 					name: parsedDeviceName,
 				})
-
-				await router.navigate({ to: '/app' })
 			} catch (err) {
 				captureException(err)
 			}
+
+			await router.navigate({
+				to: '/app',
+				search: { fromOnboarding: true },
+				mask: { to: '/app', unmaskOnReload: true },
+			})
 		},
 	})
 

@@ -15,7 +15,7 @@ import { Icon } from '../../../../../components/icon'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo'
 
-export const Route = createFileRoute('/app/projects/$projectId_/settings/')({
+export const Route = createFileRoute('/app/projects/$projectId/settings/')({
 	loader: async ({ context, params }) => {
 		const { projectApi, queryClient } = context
 		const { projectId } = params
@@ -136,38 +136,38 @@ function SettingsList({ projectId }: { projectId: string }) {
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId_.settings.index.navTitle',
+		id: 'routes.app.projects.$projectId.settings.index.navTitle',
 		defaultMessage: 'Coordinator Tools',
 		description: 'Title of the coordinator tools page.',
 	},
 	unnamedProject: {
-		id: 'routes.app.projects.$projectId_.settings.index.unnamedProject',
+		id: 'routes.app.projects.$projectId.settings.index.unnamedProject',
 		defaultMessage: 'Unnamed Project',
 		description: 'Fallback for when current project is missing a name.',
 	},
 	projectInfoActionLabel: {
-		id: 'routes.app.projects.$projectId_.settings.index.projectInfoActionLabel',
+		id: 'routes.app.projects.$projectId.settings.index.projectInfoActionLabel',
 		defaultMessage: 'Edit',
 		description: 'Text for action to update project info.',
 	},
 	projectSettingsLinkAccessibleLabel: {
-		id: 'routes.app.projects.$projectId_.settings.index.projectSettingsLinkAccessibleLabel',
+		id: 'routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel',
 		defaultMessage: 'Go to project info settings.',
 		description:
 			'Accessible label for link item that navigates to project info settings page.',
 	},
 	fallbackCategoriesSetName: {
-		id: 'routes.app.projects.$projectId_.settings.index.fallbackCategoriesSetName',
+		id: 'routes.app.projects.$projectId.settings.index.fallbackCategoriesSetName',
 		defaultMessage: 'CoMapeo Categories',
 		description: 'Text shown when project does not use a categories set.',
 	},
 	categoriesActionLabel: {
-		id: 'routes.app.projects.$projectId_.settings.index.categoriesActionLabel',
+		id: 'routes.app.projects.$projectId.settings.index.categoriesActionLabel',
 		defaultMessage: 'Update',
 		description: 'Text for action to update categories set.',
 	},
 	categoriesLinkAccessibleLabel: {
-		id: 'routes.app.projects.$projectId_.settings.index.categoriesLinkAccessibleLabel',
+		id: 'routes.app.projects.$projectId.settings.index.categoriesLinkAccessibleLabel',
 		defaultMessage: 'Go to categories settings.',
 		description:
 			'Accessible label for link item that navigates to project info settings page.',

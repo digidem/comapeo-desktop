@@ -1,9 +1,9 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
-import { GenericRoutePendingComponent } from '../../../../../../../components/generic-route-pending-component'
+import { GenericRoutePendingComponent } from '../../../../../../../../components/generic-route-pending-component.tsx'
 
 export const Route = createFileRoute(
-	'/app/projects/$projectId_/invite/devices/$deviceId',
+	'/app/projects/$projectId/team/invite/devices/$deviceId',
 )({
 	// NOTE: We want to make sure that the device of interest is actually still detected by us and connected.
 	// If it's not, then we redirect to the page that lists the discovered devices.
@@ -16,7 +16,7 @@ export const Route = createFileRoute(
 
 		if (!matchingPeer) {
 			throw Route.redirect({
-				to: '/app/projects/$projectId/invite/devices',
+				to: '/app/projects/$projectId/team/invite/devices',
 				params: { projectId },
 				replace: true,
 			})
@@ -32,7 +32,7 @@ export const Route = createFileRoute(
 		// TODO: Do not redirect if member left project?
 		if (member) {
 			throw Route.redirect({
-				to: '/app/projects/$projectId/invite/devices',
+				to: '/app/projects/$projectId/team/invite/devices',
 				params: { projectId },
 				replace: true,
 			})

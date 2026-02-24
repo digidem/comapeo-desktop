@@ -1,0 +1,300 @@
+import { useId, useState } from 'react'
+import { useOwnRoleInProject, useProjectSettings } from '@comapeo/core-react'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import ClickAwayListener from '@mui/material/ClickAwayListener'
+import Fade from '@mui/material/Fade'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import Popper from '@mui/material/Popper'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+import { darken } from '@mui/material/styles'
+import { useMatch, useRouter } from '@tanstack/react-router'
+import { defineMessages, useIntl } from 'react-intl'
+
+import { WHITE } from '../../colors.ts'
+import { Icon } from '../../components/icon.tsx'
+import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
+import { COORDINATOR_ROLE_ID, CREATOR_ROLE_ID } from '../../lib/comapeo.ts'
+
+export function ProjectTabButton({ projectId }: { projectId: string }) {
+	const router = useRouter()
+
+	const projectRouteMatch = useMatch({
+		from: '/app/projects/$projectId',
+		shouldThrow: false,
+	})
+
+	const popupDescribedById = useId()
+
+	const { formatMessage: t, formatDate } = useIntl()
+
+	const { data: projectSettings } = useProjectSettings({ projectId })
+	const { data: role } = useOwnRoleInProject({ projectId })
+
+	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+	const iconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+	})
+
+	const isAtLeastCoordinator =
+		role.roleId === CREATOR_ROLE_ID || role.roleId === COORDINATOR_ROLE_ID
+
+	const displayedProjectName = projectSettings.name || t(m.unnamedProject)
+	const accentColor = projectSettings.projectColor || WHITE
+
+	return (
+		<ClickAwayListener
+			onClickAway={() => {
+				setAnchorEl(null)
+			}}
+		>
+			<Box
+				display="flex"
+				onKeyDown={(event) => {
+					if (event.key === 'Tab' || event.key === 'Escape') {
+						setAnchorEl(null)
+					}
+				}}
+			>
+				<Button
+					aria-label={t(
+						anchorEl ? m.accessibleLabelShowProjectInfo : m.accessibleLabelGoTo,
+						{ name: displayedProjectName },
+					)}
+					variant="text"
+					size="small"
+					onClick={(event) => {
+						if (projectRouteMatch) {
+							setAnchorEl((prev) => (prev ? null : event.currentTarget))
+						} else {
+							router.navigate({
+								to: '/app/projects/$projectId',
+								params: { projectId },
+							})
+						}
+					}}
+					sx={{
+						minWidth: 80,
+						maxWidth: 200,
+						borderRadius: 2,
+						backgroundColor: accentColor,
+						'&:focus-within': {
+							outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+						},
+						'&:hover': {
+							backgroundColor: darken(accentColor, 0.1),
+						},
+					}}
+				>
+					<Typography
+						variant="inherit"
+						color="textPrimary"
+						sx={{
+							textOverflow: 'ellipsis',
+							whiteSpace: 'nowrap',
+							overflow: 'hidden',
+						}}
+					>
+						{displayedProjectName}
+					</Typography>
+				</Button>
+
+				<Popper
+					id={popupDescribedById}
+					role="dialog"
+					placement="right-start"
+					transition
+					sx={{ width: `clamp(250px, 25%, 350px)`, zIndex: 1 }}
+					modifiers={[
+						{ name: 'offset', options: { offset: [0, 2] } },
+						{ name: 'eventListeners', enabled: true },
+					]}
+					anchorEl={anchorEl}
+					open={!!anchorEl}
+				>
+					{({ TransitionProps }) => {
+						return (
+							<Fade {...TransitionProps}>
+								<Box
+									bgcolor={accentColor}
+									boxShadow={(theme) => theme.shadows[5]}
+									borderRadius={2}
+									padding={6}
+								>
+									<Stack direction="column" gap={4}>
+										<Typography
+											variant="h1"
+											fontWeight={500}
+											sx={{ overflowWrap: 'break-word' }}
+										>
+											{displayedProjectName}
+										</Typography>
+
+										{projectSettings.projectDescription ? (
+											<Typography sx={{ overflowWrap: 'break-word' }}>
+												{projectSettings.projectDescription}
+											</Typography>
+										) : null}
+
+										<Stack component={List} disablePadding gap={4}>
+											<Stack
+												component={ListItem}
+												disableGutters
+												disablePadding
+												direction="row"
+												gap={4}
+												alignItems="flex-start"
+											>
+												{isAtLeastCoordinator ? (
+													<>
+														<Icon
+															name="material-manage-accounts-filled"
+															size={iconSize}
+														/>
+
+														<Typography fontWeight={500}>
+															{t(m.projectInfoRoleCoordinator)}
+														</Typography>
+													</>
+												) : (
+													<>
+														<Icon name="material-people-filled" />
+
+														<Typography fontWeight={500}>
+															{t(m.projectInfoRoleParticipant)}
+														</Typography>
+													</>
+												)}
+											</Stack>
+
+											<Stack
+												component={ListItem}
+												disableGutters
+												disablePadding
+												direction="row"
+												gap={4}
+												alignItems="flex-start"
+											>
+												<Icon name="material-symbols-apps" size={iconSize} />
+
+												{projectSettings.configMetadata ? (
+													<Box>
+														<Typography color="textSecondary">
+															<Typography
+																component="span"
+																variant="inherit"
+																color="textPrimary"
+																fontWeight={500}
+															>
+																{projectSettings.configMetadata.name}
+															</Typography>{' '}
+															{projectSettings.configMetadata.fileVersion}
+														</Typography>
+
+														<Typography color="textSecondary">
+															{t(m.projectInfoCategoriesCreated, {
+																date: (
+																	<time
+																		key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
+																		dateTime={
+																			projectSettings.configMetadata.buildDate
+																		}
+																	>
+																		{formatDate(
+																			projectSettings.configMetadata.buildDate,
+																			{
+																				year: 'numeric',
+																				month: 'long',
+																				day: 'numeric',
+																			},
+																		)}
+																	</time>
+																),
+															})}
+														</Typography>
+													</Box>
+												) : (
+													<Typography fontWeight={500}>
+														{t(m.fallbackCategoriesSetName)}
+													</Typography>
+												)}
+											</Stack>
+
+											<Stack
+												component={ListItem}
+												disableGutters
+												disablePadding
+												direction="row"
+												gap={4}
+												alignItems="flex-start"
+											>
+												<Icon
+													name="ant-design-icons-bar-chart-outlined"
+													size={iconSize}
+												/>
+
+												<Typography fontWeight={500}>
+													{t(m.projectInfoProjectStats, {
+														enabled: projectSettings.sendStats ? 1 : 0,
+													})}
+												</Typography>
+											</Stack>
+										</Stack>
+									</Stack>
+								</Box>
+							</Fade>
+						)
+					}}
+				</Popper>
+			</Box>
+		</ClickAwayListener>
+	)
+}
+
+const m = defineMessages({
+	unnamedProject: {
+		id: 'routes.app.route.unnamedProject',
+		defaultMessage: 'Unnamed Project',
+		description: 'Fallback for when project is missing a name.',
+	},
+	accessibleLabelGoTo: {
+		id: 'routes.app.route.accessibleLabelGoTo',
+		defaultMessage: 'Go to project {name}.',
+		description:
+			'Accessible label for button that navigates to project when clicked.',
+	},
+	accessibleLabelShowProjectInfo: {
+		id: 'routes.app.route.accessibleLabelShowProjectInfo',
+		defaultMessage: 'Show info for project {name}.',
+		description:
+			'Accessible label for button that shows project info when clicked.',
+	},
+	fallbackCategoriesSetName: {
+		id: 'routes.app.route.fallbackCategoriesSetName',
+		defaultMessage: 'CoMapeo Categories',
+		description: 'Text shown when project does not use a categories set.',
+	},
+	projectInfoRoleCoordinator: {
+		id: 'routes.app.route.projectInfoRoleCoordinator',
+		defaultMessage: 'Coordinator',
+		description: 'Indicates that user is a coordinator.',
+	},
+	projectInfoRoleParticipant: {
+		id: 'routes.app.route.projectInfoRoleParticipant',
+		defaultMessage: 'Participant',
+		description: 'Indicates that user is a participant.',
+	},
+	projectInfoCategoriesCreated: {
+		id: 'routes.app.route.projectInfoCategoriesCreated',
+		defaultMessage: 'Created {date}',
+		description: 'Text indicating creation date of categories set.',
+	},
+	projectInfoProjectStats: {
+		id: 'routes.app.route.projectInfoProjectStats',
+		defaultMessage: 'Project Sharing | {enabled, select, 1 {ON} other {OFF}}',
+		description: 'Text indicating if project stats sharing is enabled or not.',
+	},
+})

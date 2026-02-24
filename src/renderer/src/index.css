@@ -3,3 +3,8 @@
 :root {
 	scrollbar-color: #ccccd6 transparent;
 }
+
+body {
+	/* NOTE: Prevents scroll bars showing when overflow occurs due to usage of MUI Tooltip */
+	overflow: hidden;
+}

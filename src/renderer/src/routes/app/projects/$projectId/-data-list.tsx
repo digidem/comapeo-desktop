@@ -142,179 +142,188 @@ export function DataList({ projectId }: { projectId: string }) {
 	)
 
 	return (
-		<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
-			<Box
-				display="flex"
-				flexDirection="row"
-				justifyContent="center"
-				padding={6}
-				borderTop={`1px solid ${BLUE_GREY}`}
-				borderBottom={`1px solid ${BLUE_GREY}`}
-			>
-				<ButtonLink
-					fullWidth
-					startIcon={<Icon name="material-file-download" />}
-					variant="outlined"
-					to="/app/projects/$projectId/download"
-					params={{ projectId }}
-				>
-					{t(m.downloadObservations)}
-				</ButtonLink>
-			</Box>
-
+		<Stack direction="column" flex={1} overflow="auto">
 			<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
-				<List
-					component="ul"
-					ref={listRef}
-					disablePadding
-					sx={{ overflow: 'auto', scrollbarColor: 'initial' }}
+				<Box
+					display="flex"
+					flexDirection="row"
+					justifyContent="center"
+					padding={6}
+					borderTop={`1px solid ${BLUE_GREY}`}
+					borderBottom={`1px solid ${BLUE_GREY}`}
 				>
-					<Box
-						position="relative"
-						height={`${rowVirtualizer.getTotalSize()}px`}
-						width="100%"
+					<ButtonLink
+						fullWidth
+						startIcon={<Icon name="material-file-download" />}
+						variant="outlined"
+						to="/app/projects/$projectId/download"
+						params={{ projectId }}
 					>
-						{rowVirtualizer.getVirtualItems().map((row) => {
-							const { type, category, document } = sortedListData[row.index]!
-							const { createdAt, docId, createdBy } = document
+						{t(m.downloadObservations)}
+					</ButtonLink>
+				</Box>
 
-							const title =
-								type === 'track'
-									? t(m.trackItemTitle)
-									: category?.name || t(m.observationCategoryNameFallback)
+				<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
+					<List
+						component="ul"
+						ref={listRef}
+						disablePadding
+						sx={{ overflow: 'auto', scrollbarColor: 'initial' }}
+					>
+						<Box
+							position="relative"
+							height={`${rowVirtualizer.getTotalSize()}px`}
+							width="100%"
+						>
+							{rowVirtualizer.getVirtualItems().map((row) => {
+								const { type, category, document } = sortedListData[row.index]!
+								const { createdAt, docId, createdBy } = document
 
-							const isHighlighted = docId === highlightedDocument?.docId
+								const title =
+									type === 'track'
+										? t(m.trackItemTitle)
+										: category?.name || t(m.observationCategoryNameFallback)
 
-							return (
-								<Box
-									key={row.key}
-									sx={{
-										position: 'absolute',
-										top: 0,
-										left: 0,
-										width: '100%',
-										height: `${row.size}px`,
-										transform: `translateY(${row.start}px)`,
-									}}
-								>
-									<ListItemButton
-										data-docid={docId}
-										disableGutters
-										disableTouchRipple
-										selected={isHighlighted}
-										autoFocus={isHighlighted}
-										onClick={() => {
-											if (!isHighlighted) {
-												navigate({
-													search: {
-														highlightedDocument: { type, docId, from: 'list' },
-													},
-													replace: true,
-												})
+								const isHighlighted = docId === highlightedDocument?.docId
 
-												return
-											}
-
-											if (type === 'observation') {
-												navigate({
-													to: './observations/$observationDocId',
-													params: { observationDocId: docId },
-												})
-											} else {
-												navigate({
-													to: './tracks/$trackDocId',
-													params: { trackDocId: docId },
-												})
-											}
+								return (
+									<Box
+										key={row.key}
+										sx={{
+											position: 'absolute',
+											top: 0,
+											left: 0,
+											width: '100%',
+											height: `${row.size}px`,
+											transform: `translateY(${row.start}px)`,
 										}}
-										sx={{ borderBottom: `1px solid ${LIGHT_GREY}`, padding: 4 }}
 									>
-										<Suspense>
-											<SyncedIndicatorLine createdByDeviceId={createdBy} />
-										</Suspense>
-										<Stack direction="row" flex={1} gap={2} overflow="auto">
-											<Stack
-												direction="column"
-												flex={1}
-												justifyContent="center"
-												overflow="hidden"
-											>
-												<Typography
-													fontWeight={500}
-													textOverflow="ellipsis"
-													whiteSpace="nowrap"
+										<ListItemButton
+											data-docid={docId}
+											disableGutters
+											disableTouchRipple
+											selected={isHighlighted}
+											autoFocus={isHighlighted}
+											onClick={() => {
+												if (!isHighlighted) {
+													navigate({
+														search: {
+															highlightedDocument: {
+																type,
+																docId,
+																from: 'list',
+															},
+														},
+														replace: true,
+													})
+
+													return
+												}
+
+												if (type === 'observation') {
+													navigate({
+														to: './observations/$observationDocId',
+														params: { observationDocId: docId },
+													})
+												} else {
+													navigate({
+														to: './tracks/$trackDocId',
+														params: { trackDocId: docId },
+													})
+												}
+											}}
+											sx={{
+												borderBottom: `1px solid ${LIGHT_GREY}`,
+												padding: 4,
+											}}
+										>
+											<Suspense>
+												<SyncedIndicatorLine createdByDeviceId={createdBy} />
+											</Suspense>
+											<Stack direction="row" flex={1} gap={2} overflow="auto">
+												<Stack
+													direction="column"
+													flex={1}
+													justifyContent="center"
 													overflow="hidden"
 												>
-													{title}
-												</Typography>
-
-												<Typography
-													textOverflow="ellipsis"
-													whiteSpace="nowrap"
-													overflow="hidden"
-												>
-													{formatDate(createdAt, {
-														year: 'numeric',
-														month: 'short',
-														day: '2-digit',
-														minute: '2-digit',
-														hour: '2-digit',
-														hourCycle: 'h12',
-													})}
-												</Typography>
-											</Stack>
-
-											<Box
-												display="flex"
-												justifyContent="center"
-												alignItems="center"
-												width={CATEGORY_CONTAINER_SIZE_PX}
-												sx={{ aspectRatio: 1 }}
-											>
-												<Box flex={1}>
-													<Suspense
-														fallback={
-															<Box
-																display="flex"
-																justifyContent="center"
-																alignItems="center"
-															>
-																<CircularProgress disableShrink size={30} />
-															</Box>
-														}
+													<Typography
+														fontWeight={500}
+														textOverflow="ellipsis"
+														whiteSpace="nowrap"
+														overflow="hidden"
 													>
-														{type === 'observation' ? (
-															<ObservationCategory
-																attachments={document.attachments}
-																categoryColor={category?.color}
-																categoryName={category?.name}
-																categoryIconDocumentId={
-																	category?.iconRef?.docId
-																}
-																projectId={projectId}
-															/>
-														) : (
-															<TrackCategory
-																categoryIconDocumentId={
-																	category?.iconRef?.docId
-																}
-																categoryColor={category?.color}
-																categoryName={category?.name}
-																projectId={projectId}
-															/>
-														)}
-													</Suspense>
+														{title}
+													</Typography>
+
+													<Typography
+														textOverflow="ellipsis"
+														whiteSpace="nowrap"
+														overflow="hidden"
+													>
+														{formatDate(createdAt, {
+															year: 'numeric',
+															month: 'short',
+															day: '2-digit',
+															minute: '2-digit',
+															hour: '2-digit',
+															hourCycle: 'h12',
+														})}
+													</Typography>
+												</Stack>
+
+												<Box
+													display="flex"
+													justifyContent="center"
+													alignItems="center"
+													width={CATEGORY_CONTAINER_SIZE_PX}
+													sx={{ aspectRatio: 1 }}
+												>
+													<Box flex={1}>
+														<Suspense
+															fallback={
+																<Box
+																	display="flex"
+																	justifyContent="center"
+																	alignItems="center"
+																>
+																	<CircularProgress disableShrink size={30} />
+																</Box>
+															}
+														>
+															{type === 'observation' ? (
+																<ObservationCategory
+																	attachments={document.attachments}
+																	categoryColor={category?.color}
+																	categoryName={category?.name}
+																	categoryIconDocumentId={
+																		category?.iconRef?.docId
+																	}
+																	projectId={projectId}
+																/>
+															) : (
+																<TrackCategory
+																	categoryIconDocumentId={
+																		category?.iconRef?.docId
+																	}
+																	categoryColor={category?.color}
+																	categoryName={category?.name}
+																	projectId={projectId}
+																/>
+															)}
+														</Suspense>
+													</Box>
 												</Box>
-											</Box>
-										</Stack>
-									</ListItemButton>
-								</Box>
-							)
-						})}
-					</Box>
-				</List>
+											</Stack>
+										</ListItemButton>
+									</Box>
+								)
+							})}
+						</Box>
+					</List>
+				</Box>
 			</Box>
-		</Box>
+		</Stack>
 	)
 }
 

@@ -2,9 +2,9 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { ORANGE } from '../../../../../../../colors'
-import { Icon } from '../../../../../../../components/icon'
-import { useIconSizeBasedOnTypography } from '../../../../../../../hooks/icon'
+import { ORANGE } from '../../../../../../../../colors.ts'
+import { Icon } from '../../../../../../../../components/icon.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../../../../../hooks/icon.ts'
 
 export function DisconnectedIndicator() {
 	const { formatMessage: t } = useIntl()
@@ -30,7 +30,7 @@ export function DisconnectedIndicator() {
 
 const m = defineMessages({
 	disconnected: {
-		id: 'routes.app.projects.$projectId_.invite.devices.-shared.disconnected-indicator.disconnected',
+		id: 'routes.app.projects.$projectId.team.invite.devices.-shared.disconnected-indicator.disconnected',
 		defaultMessage: 'Disconnected',
 		description: 'Text displayed when external device is disconnected.',
 	},

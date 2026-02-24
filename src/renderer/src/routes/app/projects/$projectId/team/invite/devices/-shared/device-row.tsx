@@ -1,9 +1,9 @@
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 
-import { DeviceIcon } from '../../../../-shared/device-icon'
-import { useIconSizeBasedOnTypography } from '../../../../../../../hooks/icon'
-import type { DeviceType } from '../../../../../../../lib/comapeo'
+import { DeviceIcon } from '../../../../../-shared/device-icon.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../../../../../hooks/icon.ts'
+import type { DeviceType } from '../../../../../../../../lib/comapeo.ts'
 import { DisconnectedIndicator } from './disconnected-indicator'
 
 export function DeviceRow({

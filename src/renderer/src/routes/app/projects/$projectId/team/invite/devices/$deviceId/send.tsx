@@ -18,33 +18,33 @@ import * as v from 'valibot'
 
 import { DeviceRow } from '../-shared/device-row'
 import { DisconnectedIndicator } from '../-shared/disconnected-indicator'
-import { DeviceIcon } from '../../../../-shared/device-icon'
+import { DeviceIcon } from '../../../../../-shared/device-icon.tsx'
 import {
 	BLACK,
 	BLUE_GREY,
 	COMAPEO_BLUE,
 	GREEN,
 	WHITE,
-} from '../../../../../../../colors'
-import { ErrorDialog } from '../../../../../../../components/error-dialog'
-import { GenericRoutePendingComponent } from '../../../../../../../components/generic-route-pending-component'
-import { Icon } from '../../../../../../../components/icon'
-import { ButtonLink } from '../../../../../../../components/link'
-import { useLocalPeersState } from '../../../../../../../contexts/local-peers-store-context'
+} from '../../../../../../../../colors.ts'
+import { ErrorDialog } from '../../../../../../../../components/error-dialog.tsx'
+import { GenericRoutePendingComponent } from '../../../../../../../../components/generic-route-pending-component.tsx'
+import { Icon } from '../../../../../../../../components/icon.tsx'
+import { ButtonLink } from '../../../../../../../../components/link.tsx'
+import { useLocalPeersState } from '../../../../../../../../contexts/local-peers-store-context.tsx'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	MEMBER_ROLE_ID,
-} from '../../../../../../../lib/comapeo'
-import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations'
-import { getFormattedDuration } from '../../../../../../../lib/time'
+} from '../../../../../../../../lib/comapeo.ts'
+import { createGlobalMutationsKey } from '../../../../../../../../lib/queries/global-mutations.ts'
+import { getFormattedDuration } from '../../../../../../../../lib/time.ts'
 
 const ReviewInvitationSearchSchema = v.object({
 	role: v.union([v.literal('participant'), v.literal('coordinator')]),
 })
 
 export const Route = createFileRoute(
-	'/app/projects/$projectId_/invite/devices/$deviceId/send',
+	'/app/projects/$projectId/team/invite/devices/$deviceId/send',
 )({
 	validateSearch: ReviewInvitationSearchSchema,
 	component: RouteComponent,
@@ -174,7 +174,7 @@ function RouteComponent() {
 			// TODO: Should handle this more intentionally
 			return (
 				<Navigate
-					to="/app/projects/$projectId/invite/devices"
+					to="/app/projects/$projectId/team/invite/devices"
 					params={{ projectId }}
 					replace
 				/>
@@ -222,7 +222,7 @@ function ReviewInvitation({
 					<IconButton
 						onClick={() => {
 							router.navigate({
-								to: '/app/projects/$projectId/invite/devices/$deviceId/role',
+								to: '/app/projects/$projectId/team/invite/devices/$deviceId/role',
 								params: { projectId, deviceId },
 								replace: true,
 							})
@@ -441,7 +441,7 @@ function InviteRejected({
 					zIndex={1}
 				>
 					<ButtonLink
-						to="/app/projects/$projectId/invite"
+						to="/app/projects/$projectId/team/invite"
 						params={{ projectId }}
 						replace
 						fullWidth
@@ -552,7 +552,7 @@ function InviteAccepted({
 					zIndex={1}
 				>
 					<ButtonLink
-						to="/app/projects/$projectId/invite/devices"
+						to="/app/projects/$projectId/team/invite/devices"
 						params={{ projectId }}
 						replace
 						fullWidth
@@ -580,79 +580,79 @@ function InviteAccepted({
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.send.navTitle',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.navTitle',
 		defaultMessage: 'Review Invitation',
 		description: 'Title of the review invite page.',
 	},
 	participant: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.send.participant',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.participant',
 		defaultMessage: 'Participant',
 		description: 'Participant role name.',
 	},
 	coordinator: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.send.coordinator',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.coordinator',
 		defaultMessage: 'Coordinator',
 		description: 'Coordinator role name.',
 	},
 	sendInvite: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.send.sendInvite',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.sendInvite',
 		defaultMessage: 'Send Invite',
 		description: 'Button text for sending invite.',
 	},
 	deviceBeingInvited: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.send.deviceBeingInvited',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.deviceBeingInvited',
 		defaultMessage:
 			'{name}<br></br><br></br> is being invited as <br></br><br></br>{role}',
 		description:
 			'Text displaying the device and its role that it is being invited as.',
 	},
 	waiting: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.send.waiting',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.waiting',
 		defaultMessage: 'Waiting for Device to Accept Invite',
 		description: 'Text displayed while waiting for invite response.',
 	},
 	inviteAccepted: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.send.inviteAccepted',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteAccepted',
 		defaultMessage: 'Invite Accepted',
 		description: 'Text displayed when invite is accepted.',
 	},
 	timeSinceSent: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.send.timeSinceSent',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.timeSinceSent',
 		defaultMessage: 'Invite sent {time}s ago',
 		description: 'Text showing time elapsed since invite was sent',
 	},
 	cancelInvite: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.send.cancelInvite',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.cancelInvite',
 		defaultMessage: 'Cancel Invite',
 		description: 'Text for button to cancel invite.',
 	},
 	accepted: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.send.accepted',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.accepted',
 		defaultMessage: 'Accepted!',
 		description: 'Text displayed when invite is accepted.',
 	},
 	addedOn: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.send.addedOn',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addedOn',
 		defaultMessage: 'Added on {date, date, long}',
 		description: 'Text showing when device was added to project.',
 	},
 	addAnotherDevice: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.send.addAnotherDevice',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addAnotherDevice',
 		defaultMessage: 'Add Another Device',
 		description: 'Text for button to add another device.',
 	},
 	close: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.send.close',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.close',
 		defaultMessage: 'Close',
 		description: 'Text for button to leave invite flow.',
 	},
 	invitationDeclinedTitle: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.send.invitationDeclinedTitle',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedTitle',
 		defaultMessage: 'Invitation Declined',
 		description: 'Title of page when invite is declined.',
 	},
 	invitationDeclinedDescription: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.send.invitationDeclinedDescription',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedDescription',
 		defaultMessage:
 			'This device has declined your invitation. They have not joined the project.',
 		description: 'Description of a declined invite.',

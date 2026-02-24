@@ -11,14 +11,14 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { NetworkConnectionInfo } from '../../../-shared/network-connection-info'
-import { BLUE_GREY, LIGHT_GREY } from '../../../../../../colors'
-import { Icon } from '../../../../../../components/icon'
-import { useInitiallyConnectedPeers } from '../../../../../../hooks/peers'
-import { DeviceRow } from './-shared/device-row'
+import { NetworkConnectionInfo } from '../../../../-shared/network-connection-info.tsx'
+import { BLUE_GREY, LIGHT_GREY } from '../../../../../../../colors.ts'
+import { Icon } from '../../../../../../../components/icon.tsx'
+import { useInitiallyConnectedPeers } from '../../../../../../../hooks/peers.ts'
+import { DeviceRow } from './-shared/device-row.tsx'
 
 export const Route = createFileRoute(
-	'/app/projects/$projectId_/invite/devices/',
+	'/app/projects/$projectId/team/invite/devices/',
 )({
 	component: RouteComponent,
 })
@@ -163,7 +163,7 @@ function InvitablePeersList({ projectId }: { projectId: string }) {
 							peer.status === 'connected'
 								? () => {
 										navigate({
-											to: '/app/projects/$projectId/invite/devices/$deviceId/role',
+											to: '/app/projects/$projectId/team/invite/devices/$deviceId/role',
 											params: { projectId, deviceId: peer.deviceId },
 											replace: true,
 										})
@@ -187,35 +187,35 @@ function InvitablePeersList({ projectId }: { projectId: string }) {
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId_.invite.devices.index.navTitle',
+		id: 'routes.app.projects.$projectId.team.invite.devices.index.navTitle',
 		defaultMessage: 'Select a Device',
 		description: 'Title of the device selection for invite page.',
 	},
 	gettingWifiInfo: {
-		id: 'routes.app.projects.$projectId_.invite.devices.index.gettingWifiInfo',
+		id: 'routes.app.projects.$projectId.team.invite.devices.index.gettingWifiInfo',
 		defaultMessage: 'Getting Wi-Fi information…',
 		description: 'Text displayed when waiting for Wi-Fi information.',
 	},
 	discoveryTroubleshootingTitle: {
-		id: 'routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingTitle',
+		id: 'routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingTitle',
 		defaultMessage: 'Not seeing a device?',
 		description: 'Title for device discovery troubleshooting section.',
 	},
 	discoveryTroubleshootingSameNetwork: {
-		id: 'routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameNetwork',
+		id: 'routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingSameNetwork',
 		defaultMessage: 'Check that devices are on the same Wi-Fi network',
 		description:
 			'Text explaining that devices need to be on same Wi-Fi network.',
 	},
 	discoveryTroubleshootingSameVersion: {
-		id: 'routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameVersion',
+		id: 'routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingSameVersion',
 		defaultMessage:
 			'Confirm that devices are using the same version of CoMapeo',
 		description:
 			'Text explaining that devices need to be using same version of CoMapeo.',
 	},
 	goBackAccessibleLabel: {
-		id: 'routes.app.projects.$projectId_.invite.devices.index.goBackAccessibleLabel',
+		id: 'routes.app.projects.$projectId.team.invite.devices.index.goBackAccessibleLabel',
 		defaultMessage: 'Go back.',
 		description: 'Accessible label for back button',
 	},

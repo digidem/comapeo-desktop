@@ -9,14 +9,14 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { DeviceRow } from '../-shared/device-row'
-import { BLUE_GREY } from '../../../../../../../colors'
-import { GenericRoutePendingComponent } from '../../../../../../../components/generic-route-pending-component'
-import { Icon } from '../../../../../../../components/icon'
-import { useLocalPeersState } from '../../../../../../../contexts/local-peers-store-context'
+import { DeviceRow } from '../-shared/device-row.tsx'
+import { BLUE_GREY } from '../../../../../../../../colors.ts'
+import { GenericRoutePendingComponent } from '../../../../../../../../components/generic-route-pending-component.tsx'
+import { Icon } from '../../../../../../../../components/icon.tsx'
+import { useLocalPeersState } from '../../../../../../../../contexts/local-peers-store-context.ts'
 
 export const Route = createFileRoute(
-	'/app/projects/$projectId_/invite/devices/$deviceId/role',
+	'/app/projects/$projectId/team/invite/devices/$deviceId/role',
 )({
 	pendingComponent: GenericRoutePendingComponent,
 	component: RouteComponent,
@@ -50,7 +50,7 @@ function RouteComponent() {
 				<IconButton
 					onClick={() => {
 						router.navigate({
-							to: '/app/projects/$projectId/invite/devices',
+							to: '/app/projects/$projectId/team/invite/devices',
 							params: { projectId },
 							replace: true,
 						})
@@ -88,7 +88,7 @@ function RouteComponent() {
 						icon={<Icon name="material-people-filled" />}
 						onClick={() => {
 							navigate({
-								to: '/app/projects/$projectId/invite/devices/$deviceId/send',
+								to: '/app/projects/$projectId/team/invite/devices/$deviceId/send',
 								params: { projectId, deviceId: peer.deviceId },
 								search: { role: 'participant' },
 								replace: true,
@@ -102,7 +102,7 @@ function RouteComponent() {
 						icon={<Icon name="material-manage-accounts-filled" />}
 						onClick={() => {
 							navigate({
-								to: '/app/projects/$projectId/invite/devices/$deviceId/send',
+								to: '/app/projects/$projectId/team/invite/devices/$deviceId/send',
 								params: { projectId, deviceId: peer.deviceId },
 								search: { role: 'coordinator' },
 								replace: true,
@@ -153,33 +153,33 @@ function RoleOption({
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.role.navTitle',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.role.navTitle',
 		defaultMessage: 'Select a Role',
 		description: 'Title of the invite role selection page.',
 	},
 	selectingRole: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.role.selectingRole',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.role.selectingRole',
 		defaultMessage: 'You are selecting a role for this device:',
 		description: 'Description of action being taken in role selection page.',
 	},
 	participantTitle: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.role.participantTitle',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.role.participantTitle',
 		defaultMessage: 'Participant',
 		description: 'Participant role name.',
 	},
 	participantDescription: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.role.participantDescription',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.role.participantDescription',
 		defaultMessage:
 			'As a Participant this device can take and share observations. They cannot manage users or project details.',
 		description: 'Participant role description.',
 	},
 	coordinatorTitle: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.role.coordinatorTitle',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.role.coordinatorTitle',
 		defaultMessage: 'Coordinator',
 		description: 'Coordinator role name.',
 	},
 	coordinatorDescription: {
-		id: 'routes.app.projects.$projectId_.invite.devices.$deviceId.role.coordinatorDescription',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.role.coordinatorDescription',
 		defaultMessage:
 			'As a Coordinator this device can invite and remove users, and manage project details.',
 		description: 'Coordinator role description.',

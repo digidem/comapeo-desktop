@@ -33,20 +33,21 @@ import { defineMessages, useIntl } from 'react-intl'
 import { Layer, Marker, Source } from 'react-map-gl/maplibre'
 import * as v from 'valibot'
 
-import { TwoPanelLayout } from '../-components/two-panel-layout'
-import { BLACK, BLUE_GREY } from '../../../colors'
+import { TwoPanelLayout } from '../-components/two-panel-layout.tsx'
+import { BLACK, BLUE_GREY } from '../../../colors.ts'
 import {
 	ErrorDialog,
 	type Props as ErrorDialogProps,
-} from '../../../components/error-dialog'
-import { GenericRoutePendingComponent } from '../../../components/generic-route-pending-component'
-import { Icon } from '../../../components/icon'
-import { Map } from '../../../components/map'
-import { useAppForm } from '../../../hooks/forms'
-import { useMapsRefreshToken } from '../../../hooks/maps'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
+} from '../../../components/error-dialog.tsx'
+import { GenericRoutePendingComponent } from '../../../components/generic-route-pending-component.tsx'
+import { Icon } from '../../../components/icon.tsx'
+import { Map } from '../../../components/map.tsx'
+import { useActiveProjectId } from '../../../contexts/active-project-id-store-context.ts'
+import { useAppForm } from '../../../hooks/forms.ts'
+import { useMapsRefreshToken } from '../../../hooks/maps.ts'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo.ts'
 import { getLocaleStateQueryOptions } from '../../../lib/queries/app-settings.ts'
-import { createGlobalMutationsKey } from '../../../lib/queries/global-mutations'
+import { createGlobalMutationsKey } from '../../../lib/queries/global-mutations.ts'
 
 export const Route = createFileRoute('/app/settings_/test-data')({
 	beforeLoad: () => {
@@ -58,26 +59,19 @@ export const Route = createFileRoute('/app/settings_/test-data')({
 		}
 	},
 	loader: async ({ context }) => {
-		const { activeProjectId, clientApi, queryClient } = context
+		const { clientApi, queryClient } = context
 
-		await Promise.all([
-			queryClient.ensureQueryData({
-				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects'],
-				queryFn: async () => {
-					return clientApi.listProjects()
-				},
-			}),
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					activeProjectId,
-				],
-				queryFn: async () => {
-					return clientApi.getProject(activeProjectId)
-				},
-			}),
-		])
+		const projects = await queryClient.ensureQueryData({
+			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects'],
+			queryFn: async () => {
+				return clientApi.listProjects()
+			},
+		})
+
+		// NOTE: Cannot access this page if there are no projects to work with.
+		if (projects.length === 0) {
+			throw Route.redirect({ to: '/app/settings', replace: true })
+		}
 	},
 	pendingComponent: () => {
 		return (
@@ -160,7 +154,7 @@ function RouteComponent() {
 		})
 	}, [t])
 
-	const { activeProjectId } = Route.useRouteContext()
+	const initialProjectId = useActiveProjectId() || allProjects[0]!.projectId
 
 	const form = useAppForm({
 		defaultValues: {
@@ -169,7 +163,7 @@ function RouteComponent() {
 			latitude: 0,
 			longitude: 0,
 			createTrack: false,
-			projectId: activeProjectId,
+			projectId: initialProjectId,
 		},
 		validators: {
 			onChange: onChangeSchema,

@@ -1,46 +1,36 @@
-import { Suspense, useId, useState } from 'react'
-import { useOwnRoleInProject, useProjectSettings } from '@comapeo/core-react'
+import type { ReactNode } from 'react'
+import {
+	useManyDocs,
+	useManyMembers,
+	useOwnRoleInProject,
+} from '@comapeo/core-react'
 import Box from '@mui/material/Box'
-import ButtonBase from '@mui/material/ButtonBase'
-import CircularProgress from '@mui/material/CircularProgress'
-import ClickAwayListener from '@mui/material/ClickAwayListener'
-import Fade from '@mui/material/Fade'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import Popper from '@mui/material/Popper'
 import Stack from '@mui/material/Stack'
-import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, WHITE } from '../../../../colors'
-import { Icon } from '../../../../components/icon'
-import { useIconSizeBasedOnTypography } from '../../../../hooks/icon.ts'
+import { BLUE_GREY, DARKER_ORANGE } from '../../../../colors.ts'
+import { Icon } from '../../../../components/icon.tsx'
+import { ButtonLink } from '../../../../components/link.tsx'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
-} from '../../../../lib/comapeo'
-import { MainPanel } from './-main-panel.tsx'
+	MEMBER_ROLE_ID,
+} from '../../../../lib/comapeo.ts'
+import { getLocaleStateQueryOptions } from '../../../../lib/queries/app-settings.ts'
+import { DataList } from './-data-list.tsx'
 
 export const Route = createFileRoute('/app/projects/$projectId/')({
 	loader: async ({ context, params }) => {
 		const { projectApi, queryClient } = context
 		const { projectId } = params
 
+		// NOTE: Some queries are already preloaded in `./route.tsx` so
+		// we only include the ones it doesn't handle that this route needs.
 		await Promise.all([
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'project_settings',
-				],
-				queryFn: async () => {
-					return projectApi.$getProjectSettings()
-				},
-			}),
 			queryClient.ensureQueryData({
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -60,317 +50,173 @@ export const Route = createFileRoute('/app/projects/$projectId/')({
 function RouteComponent() {
 	const { projectId } = Route.useParams()
 
+	const { formatMessage: t } = useIntl()
+
+	const { data: lang } = useSuspenseQuery({
+		...getLocaleStateQueryOptions(),
+		select: ({ value }) => value,
+	})
+
+	const { data: observations } = useManyDocs({
+		projectId,
+		docType: 'observation',
+		lang,
+	})
+
+	const { data: tracks } = useManyDocs({
+		projectId,
+		docType: 'track',
+		lang,
+	})
+
+	const { data: members } = useManyMembers({ projectId })
+
+	const activeMembersCount = members.filter(
+		(m) =>
+			m.role.roleId === CREATOR_ROLE_ID ||
+			m.role.roleId === MEMBER_ROLE_ID ||
+			m.role.roleId === COORDINATOR_ROLE_ID,
+	).length
+
+	const { data: ownRole } = useOwnRoleInProject({ projectId })
+
+	const selfIsAtLeastCoordinator =
+		ownRole.roleId === CREATOR_ROLE_ID || ownRole.roleId === COORDINATOR_ROLE_ID
+
+	const hasDataToShow = observations.length + tracks.length > 0
+
+	if (selfIsAtLeastCoordinator && activeMembersCount < 2 && !hasDataToShow) {
+		return (
+			<IntroPanel
+				title={t(m.inviteCollaboratorsPanelTitle)}
+				description={t(m.inviteCollaboratorsPanelDescription)}
+				icon={
+					<Icon
+						name="material-person-add"
+						size={120}
+						htmlColor={DARKER_ORANGE}
+					/>
+				}
+				link={
+					<ButtonLink
+						to="/app/projects/$projectId/team/invite"
+						params={{ projectId }}
+						startIcon={<Icon name="material-person-add" />}
+						sx={{ maxWidth: 400 }}
+						variant="contained"
+						fullWidth
+					>
+						{t(m.inviteCollaboratorsPanelInviteLink)}
+					</ButtonLink>
+				}
+			/>
+		)
+	}
+
+	if (!hasDataToShow) {
+		return (
+			<IntroPanel
+				title={t(m.openExchangePanelTitle)}
+				description={t(m.openExchangePanelDescription)}
+				icon={
+					<Icon
+						name="material-offline-bolt-outlined"
+						size={150}
+						htmlColor={BLUE_GREY}
+					/>
+				}
+				link={
+					<ButtonLink
+						to="/app/projects/$projectId/exchange"
+						params={{ projectId }}
+						startIcon={<Icon name="material-offline-bolt-outlined" />}
+						sx={{ maxWidth: 400 }}
+						variant="contained"
+						fullWidth
+					>
+						{t(m.openExchangePanelLink)}
+					</ButtonLink>
+				}
+			/>
+		)
+	}
+
+	return <DataList projectId={projectId} />
+}
+
+function IntroPanel({
+	icon,
+	title,
+	description,
+	link,
+}: {
+	icon: ReactNode
+	title: string
+	description: string
+	link: ReactNode
+}) {
 	return (
 		<Stack direction="column" flex={1} overflow="auto">
-			<Box padding={6}>
-				<ProjectInfoSection projectId={projectId} />
-			</Box>
-
-			<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
-				<Suspense
-					fallback={
-						<Box
-							display="flex"
-							flex={1}
-							justifyContent="center"
-							alignItems="center"
-						>
-							<CircularProgress />
-						</Box>
-					}
+			<Stack direction="column" flex={1} padding={6} gap={10}>
+				<Stack
+					direction="column"
+					flex={1}
+					gap={4}
+					alignItems="center"
+					justifyContent="center"
+					padding={4}
 				>
-					<MainPanel projectId={projectId} />
-				</Suspense>
-			</Box>
+					<Box>{icon}</Box>
+
+					<Typography variant="h1" fontWeight={500} textAlign="center">
+						{title}
+					</Typography>
+
+					<Typography textAlign="center">{description}</Typography>
+				</Stack>
+
+				<Box display="flex" justifyContent="center" alignItems="center">
+					{link}
+				</Box>
+			</Stack>
 		</Stack>
 	)
 }
 
-function ProjectInfoSection({ projectId }: { projectId: string }) {
-	const popupDescribedById = useId()
-
-	const { formatMessage: t, formatDate } = useIntl()
-
-	const { data: projectSettings } = useProjectSettings({ projectId })
-	const { data: role } = useOwnRoleInProject({ projectId })
-
-	const isAtLeastCoordinator =
-		role.roleId === CREATOR_ROLE_ID || role.roleId === COORDINATOR_ROLE_ID
-
-	const displayedName = projectSettings.name || t(m.unnamedProject)
-	const displayedColor = projectSettings.projectColor || WHITE
-
-	const [infoToShow, setInfoToShow] = useState<
-		| { type: 'tooltip'; show: boolean }
-		| { type: 'popper'; anchor: HTMLButtonElement }
-	>({ type: 'tooltip', show: false })
-
-	const iconSize = useIconSizeBasedOnTypography({ typographyVariant: 'body1' })
-
-	return (
-		<ClickAwayListener
-			onClickAway={() => {
-				setInfoToShow({ type: 'tooltip', show: false })
-			}}
-		>
-			<Box
-				display="flex"
-				onKeyDown={(event) => {
-					if (event.key === 'Tab' || event.key === 'Escape') {
-						setInfoToShow({ type: 'tooltip', show: false })
-					}
-				}}
-			>
-				<Tooltip
-					title={t(m.projectInfoTooltip)}
-					slots={{ transition: Fade }}
-					placement="right"
-					open={infoToShow.type === 'tooltip' && infoToShow.show}
-					onOpen={
-						infoToShow.type === 'tooltip'
-							? () => {
-									setInfoToShow({ type: 'tooltip', show: true })
-								}
-							: undefined
-					}
-					onClose={
-						infoToShow.type === 'tooltip'
-							? () => {
-									setInfoToShow({ type: 'tooltip', show: false })
-								}
-							: undefined
-					}
-					slotProps={{
-						tooltip: {
-							sx: (theme) => ({
-								backgroundColor: theme.palette.common.white,
-								color: theme.palette.text.primary,
-								boxShadow: theme.shadows[5],
-							}),
-						},
-					}}
-				>
-					<Box component="span">
-						<ButtonBase
-							aria-describedby={popupDescribedById}
-							aria-haspopup="dialog"
-							onClick={(event) => {
-								setInfoToShow((prev) =>
-									prev.type === 'popper'
-										? { type: 'tooltip', show: true }
-										: { type: 'popper', anchor: event.currentTarget },
-								)
-							}}
-							sx={{
-								minWidth: 100,
-								maxWidth: 400,
-								paddingInline: 4,
-								paddingBlock: 2,
-								borderRadius: 2,
-								border: (theme) =>
-									`1px solid ${infoToShow.type === 'popper' ? theme.palette.primary.main : BLUE_GREY}`,
-								background: displayedColor,
-								'&:focus-within': {
-									borderColor: (theme) => theme.palette.primary.main,
-									outline: (theme) => `1px solid ${theme.palette.primary.main}`,
-								},
-							}}
-						>
-							<Typography variant="button" sx={{ overflowWrap: 'break-word' }}>
-								{displayedName}
-							</Typography>
-						</ButtonBase>
-					</Box>
-				</Tooltip>
-
-				<Popper
-					id={popupDescribedById}
-					role="dialog"
-					placement="right-start"
-					transition
-					sx={{ width: `clamp(250px, 25%, 350px)`, zIndex: 1 }}
-					modifiers={[
-						{ name: 'offset', options: { offset: [0, 8] } },
-						{ name: 'eventListeners', enabled: true },
-					]}
-					{...(infoToShow.type === 'popper'
-						? { open: true, anchorEl: infoToShow.anchor }
-						: { open: false })}
-				>
-					{({ TransitionProps }) => {
-						return (
-							<Fade {...TransitionProps}>
-								<Box
-									bgcolor={displayedColor}
-									boxShadow={(theme) => theme.shadows[5]}
-									borderRadius={2}
-									padding={6}
-								>
-									<Stack direction="column" gap={4}>
-										<Typography
-											variant="h1"
-											fontWeight={500}
-											sx={{ overflowWrap: 'break-word' }}
-										>
-											{displayedName}
-										</Typography>
-
-										{projectSettings.projectDescription ? (
-											<Typography sx={{ overflowWrap: 'break-word' }}>
-												{projectSettings.projectDescription}
-											</Typography>
-										) : null}
-
-										<Stack component={List} disablePadding gap={4}>
-											<Stack
-												component={ListItem}
-												disableGutters
-												disablePadding
-												direction="row"
-												gap={4}
-												alignItems="flex-start"
-											>
-												{isAtLeastCoordinator ? (
-													<>
-														<Icon
-															name="material-manage-accounts-filled"
-															size={iconSize}
-														/>
-
-														<Typography fontWeight={500}>
-															{t(m.projectInfoRoleCoordinator)}
-														</Typography>
-													</>
-												) : (
-													<>
-														<Icon name="material-people-filled" />
-
-														<Typography fontWeight={500}>
-															{t(m.projectInfoRoleParticipant)}
-														</Typography>
-													</>
-												)}
-											</Stack>
-
-											<Stack
-												component={ListItem}
-												disableGutters
-												disablePadding
-												direction="row"
-												gap={4}
-												alignItems="flex-start"
-											>
-												<Icon name="material-symbols-apps" size={iconSize} />
-
-												{projectSettings.configMetadata ? (
-													<Box>
-														<Typography color="textSecondary">
-															<Typography
-																component="span"
-																variant="inherit"
-																color="textPrimary"
-																fontWeight={500}
-															>
-																{projectSettings.configMetadata.name}
-															</Typography>{' '}
-															{projectSettings.configMetadata.fileVersion}
-														</Typography>
-
-														<Typography color="textSecondary">
-															{t(m.projectInfoCategoriesCreated, {
-																date: (
-																	<time
-																		key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
-																		dateTime={
-																			projectSettings.configMetadata.buildDate
-																		}
-																	>
-																		{formatDate(
-																			projectSettings.configMetadata.buildDate,
-																			{
-																				year: 'numeric',
-																				month: 'long',
-																				day: 'numeric',
-																			},
-																		)}
-																	</time>
-																),
-															})}
-														</Typography>
-													</Box>
-												) : (
-													<Typography fontWeight={500}>
-														{t(m.fallbackCategoriesSetName)}
-													</Typography>
-												)}
-											</Stack>
-
-											<Stack
-												component={ListItem}
-												disableGutters
-												disablePadding
-												direction="row"
-												gap={4}
-												alignItems="flex-start"
-											>
-												<Icon
-													name="ant-design-icons-bar-chart-outlined"
-													size={iconSize}
-												/>
-
-												<Typography fontWeight={500}>
-													{t(m.projectInfoProjectStats, {
-														enabled: projectSettings.sendStats ? 1 : 0,
-													})}
-												</Typography>
-											</Stack>
-										</Stack>
-									</Stack>
-								</Box>
-							</Fade>
-						)
-					}}
-				</Popper>
-			</Box>
-		</ClickAwayListener>
-	)
-}
-
 const m = defineMessages({
-	projectInfoTooltip: {
-		id: 'routes.app.projects.$projectId.index.projectInfoTooltip',
-		defaultMessage: 'View Project Info',
+	inviteCollaboratorsPanelTitle: {
+		id: 'routes.app.projects.$projectId.index.inviteCollaboratorsPanelTitle',
+		defaultMessage: 'Invite Collaborators',
 		description:
-			'Text for tooltip shown when hovering or focusing project info button.',
+			'Text for title of panel shown when no active collaborators or data exist on project.',
 	},
-	unnamedProject: {
-		id: 'routes.app.projects.$projectId.index.unnamedProject',
-		defaultMessage: 'Unnamed Project',
-		description: 'Fallback for when project is missing a name.',
+	inviteCollaboratorsPanelDescription: {
+		id: 'routes.app.projects.$projectId.index.inviteCollaboratorsPanelDescription',
+		defaultMessage:
+			'Invite devices to start gathering observations and tracks.',
+		description:
+			'Text for description of panel shown when no active collaborators or data exist on project.',
 	},
-	fallbackCategoriesSetName: {
-		id: 'routes.app.projects.$projectId.index.fallbackCategoriesSetName',
-		defaultMessage: 'CoMapeo Categories',
-		description: 'Text shown when project does not use a categories set.',
+	inviteCollaboratorsPanelInviteLink: {
+		id: 'routes.app.projects.$projectId.index.inviteCollaboratorsPanelInviteLink',
+		defaultMessage: 'Invite Device',
+		description: 'Text for link that navigates to invite page.',
 	},
-	projectInfoRoleCoordinator: {
-		id: 'routes.app.projects.$projectId.index.projectInfoRoleCoordinator',
-		defaultMessage: 'Coordinator',
-		description: 'Indicates that user is a coordinator.',
+	openExchangePanelTitle: {
+		id: 'routes.app.projects.$projectId.index.openExchangePanelTitle',
+		defaultMessage: 'Exchange to Gather Observations',
+		description:
+			'Text for title of panel shown when project has collaborators but no data.',
 	},
-	projectInfoRoleParticipant: {
-		id: 'routes.app.projects.$projectId.index.projectInfoRoleParticipant',
-		defaultMessage: 'Participant',
-		description: 'Indicates that user is a participant.',
+	openExchangePanelDescription: {
+		id: 'routes.app.projects.$projectId.index.openExchangePanelDescription',
+		defaultMessage: 'All observations and tracks will be listed here.',
+		description:
+			'Text for description of panel shown when project has collaborators but no data.',
 	},
-	projectInfoCategoriesCreated: {
-		id: 'routes.app.projects.$projectId.index.projectInfoCategoriesCreated',
-		defaultMessage: 'Created {date}',
-		description: 'Text indicating creation date of categories set.',
-	},
-	projectInfoProjectStats: {
-		id: 'routes.app.projects.$projectId.index.projectInfoProjectStats',
-		defaultMessage: 'Project Sharing | {enabled, select, 1 {ON} other {OFF}}',
-		description: 'Text indicating if project stats sharing is enabled or not.',
+	openExchangePanelLink: {
+		id: 'routes.app.projects.$projectId.index.openExchangePanelLink',
+		defaultMessage: 'Open Exchange',
+		description: 'Text for link that navigates to exchange page.',
 	},
 })

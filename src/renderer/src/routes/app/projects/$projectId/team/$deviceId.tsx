@@ -1,7 +1,6 @@
 import { Suspense, useState, type JSX } from 'react'
 import type { MemberApi } from '@comapeo/core'
 import {
-	useClientApi,
 	useLeaveProject,
 	useManyMembers,
 	useOwnDeviceInfo,
@@ -14,7 +13,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
@@ -33,36 +32,40 @@ import {
 import { buildDocumentReloadURL } from '../../../../../lib/navigation.ts'
 import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations.ts'
 
-export const Route = createFileRoute(
-	'/app/projects/$projectId_/team/$deviceId',
-)({
-	loader: async ({ context, params }) => {
-		const { clientApi, projectApi, queryClient } = context
-		const { projectId, deviceId } = params
+export const Route = createFileRoute('/app/projects/$projectId/team/$deviceId')(
+	{
+		loader: async ({ context, params }) => {
+			const { clientApi, projectApi, queryClient } = context
+			const { projectId, deviceId } = params
 
-		await Promise.all([
-			queryClient.ensureQueryData({
-				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
-				queryFn: async () => {
-					return clientApi.getDeviceInfo()
-				},
-			}),
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'members',
-					deviceId,
-				],
-				queryFn: async () => {
-					return projectApi.$member.getById(deviceId)
-				},
-			}),
-		])
+			await Promise.all([
+				queryClient.ensureQueryData({
+					queryKey: [
+						COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+						'client',
+						'device_info',
+					],
+					queryFn: async () => {
+						return clientApi.getDeviceInfo()
+					},
+				}),
+				queryClient.ensureQueryData({
+					queryKey: [
+						COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+						'projects',
+						projectId,
+						'members',
+						deviceId,
+					],
+					queryFn: async () => {
+						return projectApi.$member.getById(deviceId)
+					},
+				}),
+			])
+		},
+		component: RouteComponent,
 	},
-	component: RouteComponent,
-})
+)
 
 const LEAVE_PROJECT_AND_NAVIGATE_MUTATION_KEY = createGlobalMutationsKey([
 	'leave_project_and_navigate',
@@ -77,51 +80,22 @@ function RouteComponent() {
 
 	const { projectId, deviceId } = Route.useParams()
 
-	const clientApi = useClientApi()
-
 	const leaveProject = useLeaveProject()
 
 	const activeProjectIdActions = useActiveProjectIdActions()
-
-	const queryClient = useQueryClient()
 
 	const leaveProjectAndNavigate = useMutation({
 		mutationKey: LEAVE_PROJECT_AND_NAVIGATE_MUTATION_KEY,
 		mutationFn: async ({ projectId }: { projectId: string }) => {
 			return leaveProject.mutateAsync({ projectId })
 		},
-		onSuccess: async (_data, variables) => {
-			// TODO: Ideally we don't autonavigate to some arbitrary project.
-			// Instead we should allow the user to choose which project to enter.
-			// Okay to do for now because we don't allow joining another project after the onboarding right now.
+		onSuccess: async () => {
+			activeProjectIdActions.update(undefined)
 
-			// NOTE: We use fetchQuery here in order to update the query cache for the relevant query before
-			// attempting to do a navigation, which prevents an issue with an incorrect redirect based on stale cache data
-			// in the relevant route's beforeLoad callback.
-			const projects = await queryClient.fetchQuery({
-				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects'],
-				queryFn: async () => {
-					return clientApi.listProjects()
-				},
+			return router.navigate({
+				href: buildDocumentReloadURL(router, '/app'),
+				reloadDocument: true,
 			})
-
-			const projectToNavigateTo = projects.find(
-				(p) => p.projectId !== variables.projectId,
-			)
-
-			if (projectToNavigateTo) {
-				await router.navigate({
-					to: '/app/projects/$projectId',
-					params: { projectId: projectToNavigateTo.projectId },
-				})
-			} else {
-				activeProjectIdActions.update(undefined)
-
-				await router.navigate({
-					href: buildDocumentReloadURL(router, '/onboarding/project'),
-					reloadDocument: true,
-				})
-			}
 		},
 	})
 
@@ -500,71 +474,71 @@ function LastCoordinatorWarning({
 
 const m = defineMessages({
 	collaboratorNavTitle: {
-		id: 'routes.app.projects.$projectId_.team.$deviceId.collaboratorNavTitle',
+		id: 'routes.app.projects.$projectId.team.$deviceId.collaboratorNavTitle',
 		defaultMessage: 'Collaborator Info',
 		description: 'Title of the team collaborator info page.',
 	},
 	leaveProjectNavTitle: {
-		id: 'routes.app.projects.$projectId_.team.$deviceId.leaveProjectNavTitle',
+		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectNavTitle',
 		defaultMessage: 'Leave Project',
 		description:
 			'Title of the team collaborator info page when the leave project flow is initiated.',
 	},
 	thisDevice: {
-		id: 'routes.app.projects.$projectId_.team.$deviceId.thisDevice',
+		id: 'routes.app.projects.$projectId.team.$deviceId.thisDevice',
 		defaultMessage: 'This Device!',
 		description: 'Text indicating that user is viewing itslef.',
 	},
 	coordinator: {
-		id: 'routes.app.projects.$projectId_.team.$deviceId.coordinator',
+		id: 'routes.app.projects.$projectId.team.$deviceId.coordinator',
 		defaultMessage: 'Coordinator',
 		description: 'Text indicating collaborator is a coordinator.',
 	},
 	participant: {
-		id: 'routes.app.projects.$projectId_.team.$deviceId.participant',
+		id: 'routes.app.projects.$projectId.team.$deviceId.participant',
 		defaultMessage: 'Participant',
 		description: 'Text indicating collaborator is a participant.',
 	},
 	remoteArchive: {
-		id: 'routes.app.projects.$projectId_.team.$deviceId.remoteArchive',
+		id: 'routes.app.projects.$projectId.team.$deviceId.remoteArchive',
 		defaultMessage: 'Remote Archive',
 		description: 'Fallback name used if remote archive does not have name.',
 	},
 	addedOn: {
-		id: 'routes.app.projects.$projectId_.team.$deviceId.addedOn',
+		id: 'routes.app.projects.$projectId.team.$deviceId.addedOn',
 		defaultMessage: 'Added on {value}',
 		description: 'Text indicating date collaborator was added to the project.',
 	},
 	leaveProjectButton: {
-		id: 'routes.app.projects.$projectId_.team.$deviceId.leaveProjectButton',
+		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectButton',
 		defaultMessage: 'Leave Project',
 		description: 'Button text to initiate leave project flow.',
 	},
 	lastCoordinatorWarning: {
-		id: 'routes.app.projects.$projectId_.team.$deviceId.lastCoordinatorWarning',
+		id: 'routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarning',
 		defaultMessage:
 			"You're the last coordinator. Consider making another device a coordinator before leaving the project.",
 		description:
 			'Warning text about leaving the project as the last coordinator.',
 	},
 	leaveProjectExplainerTitle: {
-		id: 'routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerTitle',
+		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectExplainerTitle',
 		defaultMessage: 'Leave Project?',
 		description: 'Title text for leave project explanation.',
 	},
 	leaveProjectExplainerDescription: {
-		id: 'routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerDescription',
+		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectExplainerDescription',
 		defaultMessage:
 			'<b>{name}</b> will no longer be able to add or exchange observations.',
 		description: 'Description for leave project explanation.',
 	},
 	confirmButton: {
-		id: 'routes.app.projects.$projectId_.team.$deviceId.confirmButton',
+		id: 'routes.app.projects.$projectId.team.$deviceId.confirmButton',
 		defaultMessage: 'Confirm',
 		description: 'Button text to confirm leaving project.',
 	},
 	goBackAccessibleLabel: {
-		id: 'routes.app.projects.$projectId_.team.$deviceId.goBackAccessibleLabel',
+		id: 'routes.app.projects.$projectId.team.$deviceId.goBackAccessibleLabel',
 		defaultMessage: 'Go back.',
 		description: 'Accessible label for back button.',
 	},
