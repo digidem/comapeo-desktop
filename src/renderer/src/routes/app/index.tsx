@@ -366,13 +366,8 @@ function RouteComponent() {
 
 			<StartProjectDialog
 				open={projectActionToShow === 'create'}
-				onProjectCreated={async (createdProjectId) => {
-					// await router.navigate({
-					// 	to: '.',
-					// 	search: ({ projectAction, ...rest }) => rest,
-					// 	replace: true,
-					// })
-					await router.navigate({
+				onProjectCreated={(createdProjectId) => {
+					router.navigate({
 						to: '/app/projects/$projectId',
 						params: { projectId: createdProjectId },
 						replace: true,
