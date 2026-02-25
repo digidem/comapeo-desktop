@@ -923,17 +923,17 @@
     "description": "Accessible label for button that shows project info when clicked.",
     "message": "Show info for project {name}."
   },
-  "routes.app.route.appSettingsTabAccessibleLabel": {
-    "description": "Accessible label for app settings tab link in navigation.",
-    "message": "Go to app settings."
+  "routes.app.route.appSettingsTabLabel": {
+    "description": "Label for app settings tab link in navigation.",
+    "message": "Settings"
   },
   "routes.app.route.fallbackCategoriesSetName": {
     "description": "Text shown when project does not use a categories set.",
     "message": "CoMapeo Categories"
   },
-  "routes.app.route.homeTabAccessibleLabel": {
-    "description": "Accessible label for home tab link in navigation.",
-    "message": "Go to home page."
+  "routes.app.route.homeTabTitle": {
+    "description": "Label for home tab link in navigation.",
+    "message": "Home"
   },
   "routes.app.route.projectCardLinkAccessibleLabel": {
     "description": "Accessible label for link that navigates to project when clicked.",
