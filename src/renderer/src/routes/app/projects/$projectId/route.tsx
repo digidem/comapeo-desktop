@@ -155,11 +155,9 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 
 		await Promise.all([...navRailQueries, ...mapPanelQueries])
 	},
-	onEnter: ({ context, params, preload }) => {
+	onEnter: ({ context, params }) => {
 		// NOTE: Update the active project ID whenever we navigate to a relevant project-specific page.
-		if (!preload) {
-			context.activeProjectIdStore.actions.update(params.projectId)
-		}
+		context.activeProjectIdStore.actions.update(params.projectId)
 	},
 	component: RouteComponent,
 })
