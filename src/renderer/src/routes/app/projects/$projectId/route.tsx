@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { Suspense, type ComponentProps } from 'react'
 import {
 	useManyMembers,
 	useOwnDeviceInfo,
@@ -10,6 +10,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
+import Tooltip from '@mui/material/Tooltip'
 import { useIsMutating } from '@tanstack/react-query'
 import {
 	Outlet,
@@ -30,11 +31,10 @@ import {
 } from '../../../../colors.ts'
 import { Icon } from '../../../../components/icon.tsx'
 import {
-	ButtonLink,
-	type ButtonLinkProps,
+	IconButtonLink,
+	type IconButtonLinkProps,
 } from '../../../../components/link.tsx'
 import { useGlobalEditingState } from '../../../../contexts/global-editing-state-store-context.ts'
-import { useIconSizeBasedOnTypography } from '../../../../hooks/icon.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -201,11 +201,6 @@ function RouteComponent() {
 	const syncState = useSyncState({ projectId })
 	const syncEnabled = syncState?.data.isSyncEnabled
 
-	const navIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
-		multiplier: 1.2,
-	})
-
 	const { data: members } = useManyMembers({ projectId })
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
@@ -241,48 +236,48 @@ function RouteComponent() {
 							disablePadding
 							sx={{ justifyContent: 'center' }}
 						>
-							<ButtonLink
-								to="/app/projects/$projectId"
-								params={{ projectId }}
-								disabled={
-									pageHasEditing ||
-									isEditing ||
-									someGlobalMutationIsPending ||
-									(syncEnabled &&
-										currentRoute.routeId ===
-											'/app/projects/$projectId/exchange/')
-								}
-								onClick={(event) => {
-									if (someGlobalMutationIsPending) {
-										event.preventDefault()
-									}
-								}}
-								fullWidth
-								variant="text"
-								color="inherit"
-								size="small"
-								inactiveProps={BASE_INACTIVE_LINK_PROPS}
-								activeProps={
-									// NOTE: Subroutes of the project that also live as nav rail tabs
-									currentRoute.routeId.startsWith(
-										'/app/projects/$projectId/exchange',
-									) ||
-									currentRoute.routeId.startsWith(
-										'/app/projects/$projectId/settings',
-									) ||
-									currentRoute.routeId.startsWith(
-										'/app/projects/$projectId/team',
-									) ||
-									currentRoute.routeId.startsWith(
-										'/app/projects/$projectId/team/invite',
-									)
-										? BASE_INACTIVE_LINK_PROPS
-										: BASE_ACTIVE_LINK_PROPS
-								}
-								aria-label={t(m.listTabLabel)}
+							<Tooltip
+								{...BASE_PROJECT_NAV_TAB_TOOLTIP_PROPS}
+								title={t(m.listTabLabel)}
 							>
-								<Icon name="noun-project-notebook" size={navIconSize} />
-							</ButtonLink>
+								<IconButtonLink
+									to="/app/projects/$projectId"
+									params={{ projectId }}
+									disabled={
+										pageHasEditing ||
+										isEditing ||
+										someGlobalMutationIsPending ||
+										(syncEnabled &&
+											currentRoute.routeId ===
+												'/app/projects/$projectId/exchange/')
+									}
+									onClick={(event) => {
+										if (someGlobalMutationIsPending) {
+											event.preventDefault()
+										}
+									}}
+									inactiveProps={BASE_INACTIVE_LINK_PROPS}
+									activeProps={
+										// NOTE: Subroutes of the project that also live as nav rail tabs
+										currentRoute.routeId.startsWith(
+											'/app/projects/$projectId/exchange',
+										) ||
+										currentRoute.routeId.startsWith(
+											'/app/projects/$projectId/settings',
+										) ||
+										currentRoute.routeId.startsWith(
+											'/app/projects/$projectId/team',
+										) ||
+										currentRoute.routeId.startsWith(
+											'/app/projects/$projectId/team/invite',
+										)
+											? BASE_INACTIVE_LINK_PROPS
+											: BASE_ACTIVE_LINK_PROPS
+									}
+								>
+									<Icon name="noun-project-notebook" size={32} />
+								</IconButtonLink>
+							</Tooltip>
 						</ListItem>
 
 						<ListItem
@@ -291,53 +286,19 @@ function RouteComponent() {
 							disablePadding
 							sx={{ justifyContent: 'center' }}
 						>
-							<ButtonLink
-								to="/app/projects/$projectId/team"
-								params={{ projectId }}
-								disabled={
-									((pageHasEditing ||
-										isEditing ||
-										someGlobalMutationIsPending) &&
-										!currentRoute.routeId.startsWith(
-											'/app/projects/$projectId/team',
-										)) ||
-									(syncEnabled &&
-										currentRoute.routeId ===
-											'/app/projects/$projectId/exchange/')
-								}
-								onClick={(event) => {
-									if (someGlobalMutationIsPending) {
-										event.preventDefault()
-									}
-								}}
-								fullWidth
-								variant="text"
-								color="inherit"
-								size="small"
-								inactiveProps={BASE_INACTIVE_LINK_PROPS}
-								activeProps={BASE_ACTIVE_LINK_PROPS}
-								aria-label={t(m.teamTabLabel)}
+							<Tooltip
+								{...BASE_PROJECT_NAV_TAB_TOOLTIP_PROPS}
+								title={t(m.teamTabLabel)}
 							>
-								<Icon name="material-people-filled" size={navIconSize} />
-							</ButtonLink>
-						</ListItem>
-
-						{isCoordinator ? (
-							<ListItem
-								dense
-								disableGutters
-								disablePadding
-								sx={{ justifyContent: 'center' }}
-							>
-								<ButtonLink
-									to="/app/projects/$projectId/settings"
+								<IconButtonLink
+									to="/app/projects/$projectId/team"
 									params={{ projectId }}
 									disabled={
 										((pageHasEditing ||
 											isEditing ||
 											someGlobalMutationIsPending) &&
 											!currentRoute.routeId.startsWith(
-												'/app/projects/$projectId/settings',
+												'/app/projects/$projectId/team',
 											)) ||
 										(syncEnabled &&
 											currentRoute.routeId ===
@@ -348,19 +309,50 @@ function RouteComponent() {
 											event.preventDefault()
 										}
 									}}
-									fullWidth
-									variant="text"
-									color="inherit"
-									size="small"
 									inactiveProps={BASE_INACTIVE_LINK_PROPS}
 									activeProps={BASE_ACTIVE_LINK_PROPS}
-									aria-label={t(m.toolsTabLabel)}
 								>
-									<Icon
-										name="material-manage-accounts-filled"
-										size={navIconSize}
-									/>
-								</ButtonLink>
+									<Icon name="material-people-filled" size={32} />
+								</IconButtonLink>
+							</Tooltip>
+						</ListItem>
+
+						{isCoordinator ? (
+							<ListItem
+								dense
+								disableGutters
+								disablePadding
+								sx={{ justifyContent: 'center' }}
+							>
+								<Tooltip
+									{...BASE_PROJECT_NAV_TAB_TOOLTIP_PROPS}
+									title={t(m.toolsTabLabel)}
+								>
+									<IconButtonLink
+										to="/app/projects/$projectId/settings"
+										params={{ projectId }}
+										disabled={
+											((pageHasEditing ||
+												isEditing ||
+												someGlobalMutationIsPending) &&
+												!currentRoute.routeId.startsWith(
+													'/app/projects/$projectId/settings',
+												)) ||
+											(syncEnabled &&
+												currentRoute.routeId ===
+													'/app/projects/$projectId/exchange/')
+										}
+										onClick={(event) => {
+											if (someGlobalMutationIsPending) {
+												event.preventDefault()
+											}
+										}}
+										inactiveProps={BASE_INACTIVE_LINK_PROPS}
+										activeProps={BASE_ACTIVE_LINK_PROPS}
+									>
+										<Icon name="material-manage-accounts-filled" size={32} />
+									</IconButtonLink>
+								</Tooltip>
 							</ListItem>
 						) : null}
 					</Stack>
@@ -373,35 +365,32 @@ function RouteComponent() {
 								disablePadding
 								sx={{ justifyContent: 'center' }}
 							>
-								<ButtonLink
-									to="/app/projects/$projectId/exchange"
-									params={{ projectId }}
-									disabled={
-										(pageHasEditing ||
-											isEditing ||
-											someGlobalMutationIsPending) &&
-										!currentRoute.fullPath.startsWith(
-											'/app/projects/$projectId/exchange',
-										)
-									}
-									onClick={(event) => {
-										if (someGlobalMutationIsPending) {
-											event.preventDefault()
-										}
-									}}
-									fullWidth
-									variant="text"
-									color="inherit"
-									size="small"
-									inactiveProps={BASE_INACTIVE_LINK_PROPS}
-									activeProps={BASE_ACTIVE_LINK_PROPS}
-									aria-label={t(m.exchangeTabLabel)}
+								<Tooltip
+									{...BASE_PROJECT_NAV_TAB_TOOLTIP_PROPS}
+									title={t(m.exchangeTabLabel)}
 								>
-									<Icon
-										name="material-offline-bolt-filled"
-										size={navIconSize}
-									/>
-								</ButtonLink>
+									<IconButtonLink
+										to="/app/projects/$projectId/exchange"
+										params={{ projectId }}
+										disabled={
+											(pageHasEditing ||
+												isEditing ||
+												someGlobalMutationIsPending) &&
+											!currentRoute.fullPath.startsWith(
+												'/app/projects/$projectId/exchange',
+											)
+										}
+										onClick={(event) => {
+											if (someGlobalMutationIsPending) {
+												event.preventDefault()
+											}
+										}}
+										inactiveProps={BASE_INACTIVE_LINK_PROPS}
+										activeProps={BASE_ACTIVE_LINK_PROPS}
+									>
+										<Icon name="material-offline-bolt-filled" size={32} />
+									</IconButtonLink>
+								</Tooltip>
 							</ListItem>
 						)}
 					</Stack>
@@ -439,13 +428,34 @@ function RouteComponent() {
 	)
 }
 
+const BASE_PROJECT_NAV_TAB_TOOLTIP_PROPS = {
+	disableFocusListener: true,
+	describeChild: true,
+	placement: 'right',
+	enterDelay: 0,
+	leaveDelay: 0,
+	slotProps: {
+		popper: {
+			modifiers: [{ name: 'offset', options: { offset: [0, -12] } }],
+		},
+		tooltip: {
+			sx: (theme) => ({
+				backgroundColor: theme.palette.common.white,
+				color: theme.palette.text.primary,
+				boxShadow: theme.shadows[5],
+			}),
+		},
+	},
+} satisfies Partial<ComponentProps<typeof Tooltip>>
+
 const BASE_INACTIVE_LINK_PROPS = {
 	sx: {
+		padding: 2,
 		aspectRatio: 1,
 		borderRadius: 2,
 		color: DARK_GREY,
 	},
-} satisfies ButtonLinkProps['inactiveProps']
+} satisfies IconButtonLinkProps['inactiveProps']
 
 const BASE_ACTIVE_LINK_PROPS = {
 	sx: {
@@ -457,7 +467,7 @@ const BASE_ACTIVE_LINK_PROPS = {
 			background: (theme) => theme.palette.primary.light,
 		},
 	},
-} satisfies ButtonLinkProps['activeProps']
+} satisfies IconButtonLinkProps['activeProps']
 
 const m = defineMessages({
 	listTabLabel: {
