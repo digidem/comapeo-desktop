@@ -50,18 +50,17 @@ import { getLocaleStateQueryOptions } from '../../../lib/queries/app-settings.ts
 import { createGlobalMutationsKey } from '../../../lib/queries/global-mutations.ts'
 
 export const Route = createFileRoute('/app/settings_/test-data')({
-	beforeLoad: () => {
+	beforeLoad: async ({ context }) => {
 		if (
 			__APP_TYPE__ === 'production' ||
 			import.meta.env.VITE_FEATURE_TEST_DATA_UI !== 'true'
 		) {
-			throw Route.redirect({ to: '/', replace: true })
+			throw Route.redirect({ to: '/app/settings', replace: true })
 		}
-	},
-	loader: async ({ context }) => {
+
 		const { clientApi, queryClient } = context
 
-		const projects = await queryClient.ensureQueryData({
+		const projects = await queryClient.fetchQuery({
 			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects'],
 			queryFn: async () => {
 				return clientApi.listProjects()
