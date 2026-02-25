@@ -18,31 +18,17 @@ import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo'
 
 export const Route = createFileRoute('/onboarding')({
 	beforeLoad: async ({ context }) => {
-		const { activeProjectIdStore, clientApi, queryClient } = context
+		const { clientApi, queryClient } = context
 
-		const activeProjectId = activeProjectIdStore.instance.getState()
-
-		if (activeProjectId) {
-			throw Route.redirect({
-				to: '/app/projects/$projectId',
-				params: { projectId: activeProjectId },
-				replace: true,
-			})
-		}
-
-		// NOTE: Accounts for when the active project ID is somehow missing
-		// but there are already projects that have been created/joined.
-		// The better solution is probably a project selection page of some sort,
-		// as opposed to automatic redirection to a valid project.
-
-		const projects = await queryClient.ensureQueryData({
-			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects'],
+		const ownDeviceInfo = await queryClient.fetchQuery({
+			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 			queryFn: async () => {
-				return clientApi.listProjects()
+				return clientApi.getDeviceInfo()
 			},
 		})
 
-		if (projects.length > 0) {
+		// NOTE: No need to go through onboarding if device name has already been set.
+		if (ownDeviceInfo.name) {
 			throw Route.redirect({ to: '/app', replace: true })
 		}
 	},
