@@ -23,7 +23,7 @@ export interface RootRouterContext {
 }
 
 export const Route = createRootRouteWithContext<RootRouterContext>()({
-	beforeLoad: async ({ context }) => {
+	beforeLoad: async ({ context, matches }) => {
 		const { queryClient, clientApi } = context
 
 		const ownDeviceInfo = await queryClient.fetchQuery({
@@ -33,8 +33,16 @@ export const Route = createRootRouteWithContext<RootRouterContext>()({
 			},
 		})
 
-		// NOTE: Implicit check that the user hasn't completed the onboarding yet.
-		if (!ownDeviceInfo.name) {
+		const currentRoute = matches.at(-1)!
+
+		if (
+			// NOTE: Implicit check that the user hasn't completed the onboarding yet.
+			!ownDeviceInfo.name &&
+			!(
+				currentRoute.routeId === '/welcome' ||
+				currentRoute.routeId.startsWith('/onboarding')
+			)
+		) {
 			throw Route.redirect({ to: '/welcome', replace: true })
 		}
 	},
