@@ -1,3 +1,4 @@
+import { tooltipClasses } from '@mui/material/Tooltip'
 import {
 	createTheme as createMaterialTheme,
 	responsiveFontSizes,
@@ -201,6 +202,41 @@ function createTheme({ platform }: { platform: NodeJS.Platform }) {
 								},
 							}
 						: undefined,
+			},
+			MuiTooltip: {
+				defaultProps: {
+					enterDelay: 0,
+					leaveDelay: 0,
+					slotProps: {
+						tooltip: {
+							sx: (theme) => ({
+								backgroundColor: theme.palette.common.white,
+								color: theme.palette.text.primary,
+								boxShadow: theme.shadows[5],
+							}),
+						},
+					},
+				},
+				styleOverrides: {
+					popper: {
+						[`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+							{
+								marginTop: '4px',
+							},
+						[`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+							{
+								marginBottom: '4px',
+							},
+						[`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+							{
+								marginLeft: '4px',
+							},
+						[`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+							{
+								marginRight: '4px',
+							},
+					},
+				},
 			},
 		},
 	})

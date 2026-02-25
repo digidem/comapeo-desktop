@@ -226,16 +226,9 @@ function RouteComponent() {
 								<Stack direction="row">
 									<Tooltip
 										title={t(m.additionalProjectsSectionShowAsGrid)}
+										disableFocusListener
+										describeChild
 										placement="bottom"
-										slotProps={{
-											tooltip: {
-												sx: (theme) => ({
-													backgroundColor: theme.palette.common.white,
-													color: theme.palette.text.primary,
-													boxShadow: theme.shadows[5],
-												}),
-											},
-										}}
 									>
 										<IconButton
 											color="inherit"
@@ -260,16 +253,9 @@ function RouteComponent() {
 
 									<Tooltip
 										title={t(m.additionalProjectsSectionShowAsList)}
+										disableFocusListener
+										describeChild
 										placement="bottom"
-										slotProps={{
-											tooltip: {
-												sx: (theme) => ({
-													backgroundColor: theme.palette.common.white,
-													color: theme.palette.text.primary,
-													boxShadow: theme.shadows[5],
-												}),
-											},
-										}}
 									>
 										<IconButton
 											color="inherit"

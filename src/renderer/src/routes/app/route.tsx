@@ -1,4 +1,3 @@
-import type { ComponentProps } from 'react'
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
 import Stack from '@mui/material/Stack'
@@ -35,7 +34,12 @@ function RouteComponent() {
 					bgcolor={darken(DARK_COMAPEO_BLUE, 0.5)}
 					height={48}
 				>
-					<Tooltip {...BASE_NAV_TAB_TOOLTIP_PROPS} title={t(m.homeTabLabel)}>
+					<Tooltip
+						title={t(m.homeTabLabel)}
+						disableFocusListener
+						describeChild
+						placement="bottom"
+					>
 						<IconButtonLink
 							to="/app"
 							activeOptions={{ exact: true, includeSearch: false }}
@@ -52,8 +56,10 @@ function RouteComponent() {
 					/>
 
 					<Tooltip
-						{...BASE_NAV_TAB_TOOLTIP_PROPS}
 						title={t(m.appSettingsTabLabel)}
+						disableFocusListener
+						describeChild
+						placement="bottom"
 					>
 						<IconButtonLink
 							to="/app/settings"
@@ -85,26 +91,6 @@ function RouteComponent() {
 }
 
 const TAB_DIVIDER_COLOR = lighten(DARK_COMAPEO_BLUE, 0.1)
-
-const BASE_NAV_TAB_TOOLTIP_PROPS = {
-	disableFocusListener: true,
-	describeChild: true,
-	placement: 'bottom',
-	enterDelay: 0,
-	leaveDelay: 0,
-	slotProps: {
-		popper: {
-			modifiers: [{ name: 'offset', options: { offset: [0, -12] } }],
-		},
-		tooltip: {
-			sx: (theme) => ({
-				backgroundColor: theme.palette.common.white,
-				color: theme.palette.text.primary,
-				boxShadow: theme.shadows[5],
-			}),
-		},
-	},
-} satisfies Partial<ComponentProps<typeof Tooltip>>
 
 const BASE_INACTIVE_LINK_PROPS = {
 	sx: {

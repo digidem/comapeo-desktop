@@ -134,23 +134,7 @@ export function EditableSection({
 			) : disabled ? (
 				triggerButton
 			) : (
-				<Tooltip
-					title={tooltipText}
-					slots={{ transition: Fade }}
-					slotProps={{
-						tooltip: {
-							sx: (theme) => ({
-								backgroundColor: theme.palette.common.white,
-								color: theme.palette.text.primary,
-								boxShadow: theme.shadows[5],
-							}),
-						},
-						popper: {
-							disablePortal: true,
-							modifiers: [{ name: 'offset', options: { offset: [0, -12] } }],
-						},
-					}}
-				>
+				<Tooltip title={tooltipText} slots={{ transition: Fade }}>
 					<Box component="span" display="flex">
 						{triggerButton}
 					</Box>

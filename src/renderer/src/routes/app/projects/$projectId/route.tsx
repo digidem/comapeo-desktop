@@ -1,4 +1,4 @@
-import { Suspense, type ComponentProps } from 'react'
+import { Suspense } from 'react'
 import {
 	useManyMembers,
 	useOwnDeviceInfo,
@@ -235,8 +235,10 @@ function RouteComponent() {
 							sx={{ justifyContent: 'center' }}
 						>
 							<Tooltip
-								{...BASE_PROJECT_NAV_TAB_TOOLTIP_PROPS}
 								title={t(m.listTabLabel)}
+								disableFocusListener
+								describeChild
+								placement="right"
 							>
 								<IconButtonLink
 									to="/app/projects/$projectId"
@@ -285,8 +287,10 @@ function RouteComponent() {
 							sx={{ justifyContent: 'center' }}
 						>
 							<Tooltip
-								{...BASE_PROJECT_NAV_TAB_TOOLTIP_PROPS}
 								title={t(m.teamTabLabel)}
+								disableFocusListener
+								describeChild
+								placement="right"
 							>
 								<IconButtonLink
 									to="/app/projects/$projectId/team"
@@ -323,8 +327,10 @@ function RouteComponent() {
 								sx={{ justifyContent: 'center' }}
 							>
 								<Tooltip
-									{...BASE_PROJECT_NAV_TAB_TOOLTIP_PROPS}
 									title={t(m.toolsTabLabel)}
+									disableFocusListener
+									describeChild
+									placement="right"
 								>
 									<IconButtonLink
 										to="/app/projects/$projectId/settings"
@@ -364,8 +370,10 @@ function RouteComponent() {
 								sx={{ justifyContent: 'center' }}
 							>
 								<Tooltip
-									{...BASE_PROJECT_NAV_TAB_TOOLTIP_PROPS}
 									title={t(m.exchangeTabLabel)}
+									disableFocusListener
+									describeChild
+									placement="right"
 								>
 									<IconButtonLink
 										to="/app/projects/$projectId/exchange"
@@ -425,26 +433,6 @@ function RouteComponent() {
 		</Box>
 	)
 }
-
-const BASE_PROJECT_NAV_TAB_TOOLTIP_PROPS = {
-	disableFocusListener: true,
-	describeChild: true,
-	placement: 'right',
-	enterDelay: 0,
-	leaveDelay: 0,
-	slotProps: {
-		popper: {
-			modifiers: [{ name: 'offset', options: { offset: [0, -12] } }],
-		},
-		tooltip: {
-			sx: (theme) => ({
-				backgroundColor: theme.palette.common.white,
-				color: theme.palette.text.primary,
-				boxShadow: theme.shadows[5],
-			}),
-		},
-	},
-} satisfies Partial<ComponentProps<typeof Tooltip>>
 
 const BASE_INACTIVE_LINK_PROPS = {
 	sx: {
