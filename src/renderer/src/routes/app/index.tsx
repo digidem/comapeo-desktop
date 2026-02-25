@@ -350,6 +350,7 @@ function RouteComponent() {
 												to="/app/projects/$projectId"
 												params={{ projectId: project.projectId }}
 												project={project}
+												singleRow={additionalProjectsLayout === 'list'}
 											/>
 										</Suspense>
 									))}
@@ -427,22 +428,16 @@ function ListedProjectCard({
 	children,
 	highlight,
 	project,
+	singleRow,
 	...buttonLinkProps
 }: PropsWithChildren<
 	ButtonBaseLinkComponentProps & {
 		highlight?: boolean
 		project: ListedProject
+		singleRow?: boolean
 	}
 >) {
 	const { formatMessage: t } = useIntl()
-
-	const activeProjectIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
-	})
-
-	const roleIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
-	})
 
 	const { data: ownRole } = useOwnRoleInProject({
 		projectId: project.projectId,
@@ -469,13 +464,134 @@ function ListedProjectCard({
 				},
 			}}
 		>
-			<Stack direction="column" gap={2} flex={1} padding={6} overflow="auto">
-				<Stack
-					direction="row"
-					alignItems="center"
-					justifyContent="space-between"
-					flex={1}
+			{singleRow ? (
+				<ProjectCardContentListVariant
+					highlight={highlight}
+					projectName={displayedName}
+					role={isAtLeastCoordinator ? 'coordinator' : 'participant'}
+				/>
+			) : (
+				<ProjectCardContentGridVariant
+					highlight={highlight}
+					projectName={displayedName}
+					role={isAtLeastCoordinator ? 'coordinator' : 'participant'}
+				/>
+			)}
+		</ButtonBaseLink>
+	)
+}
+
+function ProjectCardContentGridVariant({
+	highlight,
+	projectName,
+	role,
+}: {
+	highlight?: boolean
+	projectName: string
+	role: 'coordinator' | 'participant'
+}) {
+	const { formatMessage: t } = useIntl()
+
+	const activeProjectIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+	})
+
+	const roleIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+	})
+
+	return (
+		<Stack direction="column" gap={2} flex={1} padding={6} overflow="auto">
+			<Stack
+				direction="row"
+				alignItems="center"
+				justifyContent="space-between"
+				flex={1}
+			>
+				<Typography
+					component="p"
+					variant="h1"
+					color="textPrimary"
+					fontWeight={500}
+					textOverflow="ellipsis"
+					whiteSpace="nowrap"
+					overflow="hidden"
 				>
+					{projectName}
+				</Typography>
+
+				{highlight ? (
+					<Icon
+						name="material-check-circle-rounded"
+						size={activeProjectIconSize}
+						htmlColor={COMAPEO_BLUE}
+					/>
+				) : null}
+			</Stack>
+
+			<Stack direction="row" alignItems="center" gap={2}>
+				<Icon
+					name={
+						role === 'coordinator'
+							? 'material-manage-accounts-filled'
+							: 'material-people-filled'
+					}
+					size={roleIconSize}
+				/>
+
+				<Typography
+					textOverflow="ellipsis"
+					whiteSpace="nowrap"
+					overflow="hidden"
+				>
+					{t(
+						role === 'coordinator'
+							? m.projectCardRoleCoordinator
+							: m.projectCardRoleParticipant,
+					)}
+				</Typography>
+			</Stack>
+		</Stack>
+	)
+}
+
+function ProjectCardContentListVariant({
+	highlight,
+	projectName,
+	role,
+}: {
+	highlight?: boolean
+	projectName: string
+	role: 'coordinator' | 'participant'
+}) {
+	const { formatMessage: t } = useIntl()
+
+	const iconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+	})
+
+	return (
+		<Stack
+			direction="row"
+			gap={2}
+			flex={1}
+			justifyContent="space-between"
+			alignItems="center"
+			paddingInline={6}
+			paddingBlock={4}
+			overflow="auto"
+		>
+			<Stack direction="row" gap={2} flex={1} overflow="auto">
+				<Icon
+					name={
+						role === 'coordinator'
+							? 'material-manage-accounts-filled'
+							: 'material-people-filled'
+					}
+					size={iconSize}
+				/>
+
+				<Box overflow="auto">
 					<Typography
 						component="p"
 						variant="h1"
@@ -485,42 +601,29 @@ function ListedProjectCard({
 						whiteSpace="nowrap"
 						overflow="hidden"
 					>
-						{displayedName}
+						{projectName}
 					</Typography>
+				</Box>
 
-					{highlight ? (
-						<Icon
-							name="material-check-circle-rounded"
-							size={activeProjectIconSize}
-							htmlColor={COMAPEO_BLUE}
-						/>
-					) : null}
-				</Stack>
-
-				<Stack direction="row" alignItems="center" gap={2}>
+				{highlight ? (
 					<Icon
-						name={
-							isAtLeastCoordinator
-								? 'material-manage-accounts-filled'
-								: 'material-people-filled'
-						}
-						size={roleIconSize}
+						name="material-check-circle-rounded"
+						size={iconSize}
+						htmlColor={COMAPEO_BLUE}
 					/>
-
-					<Typography
-						textOverflow="ellipsis"
-						whiteSpace="nowrap"
-						overflow="hidden"
-					>
-						{t(
-							isAtLeastCoordinator
-								? m.projectCardRoleCoordinator
-								: m.projectCardRoleParticipant,
-						)}
-					</Typography>
-				</Stack>
+				) : null}
 			</Stack>
-		</ButtonBaseLink>
+
+			<Box>
+				<Typography>
+					{t(
+						role === 'coordinator'
+							? m.projectCardRoleCoordinator
+							: m.projectCardRoleParticipant,
+					)}
+				</Typography>
+			</Box>
+		</Stack>
 	)
 }
 
