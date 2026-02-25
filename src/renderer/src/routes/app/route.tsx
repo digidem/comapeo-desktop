@@ -48,7 +48,7 @@ function RouteComponent() {
 
 					<Divider
 						orientation="vertical"
-						sx={{ borderColor: DARK_COMAPEO_BLUE }}
+						sx={{ borderColor: TAB_DIVIDER_COLOR }}
 					/>
 
 					<Tooltip
@@ -66,7 +66,7 @@ function RouteComponent() {
 
 					<Divider
 						orientation="vertical"
-						sx={{ borderColor: DARK_COMAPEO_BLUE }}
+						sx={{ borderColor: TAB_DIVIDER_COLOR }}
 					/>
 
 					<Stack direction="row" padding={2} gap={2} sx={{ overflowX: 'auto' }}>
@@ -83,6 +83,8 @@ function RouteComponent() {
 		</Box>
 	)
 }
+
+const TAB_DIVIDER_COLOR = lighten(DARK_COMAPEO_BLUE, 0.1)
 
 const BASE_NAV_TAB_TOOLTIP_PROPS = {
 	disableFocusListener: true,
