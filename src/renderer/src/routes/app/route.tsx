@@ -1,4 +1,4 @@
-import { Suspense, type ComponentProps } from 'react'
+import type { ComponentProps } from 'react'
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
 import Stack from '@mui/material/Stack'
@@ -71,9 +71,7 @@ function RouteComponent() {
 
 					<Stack direction="row" padding={2} gap={2} sx={{ overflowX: 'auto' }}>
 						{activeProjectId ? (
-							<Suspense>
-								<ProjectTabButton projectId={activeProjectId} />
-							</Suspense>
+							<ProjectTabButton projectId={activeProjectId} />
 						) : null}
 					</Stack>
 				</Stack>

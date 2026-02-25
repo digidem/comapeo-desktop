@@ -1,7 +1,8 @@
-import { useId, useState } from 'react'
+import { Suspense, useId, useState, type MouseEventHandler } from 'react'
 import { useOwnRoleInProject, useProjectSettings } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import CircularProgress from '@mui/material/CircularProgress'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import Fade from '@mui/material/Fade'
 import List from '@mui/material/List'
@@ -9,11 +10,11 @@ import ListItem from '@mui/material/ListItem'
 import Popper from '@mui/material/Popper'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { darken } from '@mui/material/styles'
+import { darken, type SxProps, type Theme } from '@mui/material/styles'
 import { useMatch, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { WHITE } from '../../colors.ts'
+import { LIGHT_GREY, WHITE } from '../../colors.ts'
 import { Icon } from '../../components/icon.tsx'
 import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
 import { COORDINATOR_ROLE_ID, CREATOR_ROLE_ID } from '../../lib/comapeo.ts'
@@ -26,14 +27,72 @@ export function ProjectTabButton({ projectId }: { projectId: string }) {
 		shouldThrow: false,
 	})
 
+	const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null)
+
+	return (
+		<ClickAwayListener
+			onClickAway={() => {
+				setAnchorElement(null)
+			}}
+		>
+			<Box
+				display="flex"
+				onKeyDown={(event) => {
+					if (event.key === 'Tab' || event.key === 'Escape') {
+						setAnchorElement(null)
+					}
+				}}
+			>
+				<Suspense
+					fallback={
+						<Box
+							display="flex"
+							justifyContent="center"
+							alignItems="center"
+							sx={{
+								...BASE_TAB_CONTAINER_SX_PROPS,
+								backgroundColor: LIGHT_GREY,
+							}}
+						>
+							<CircularProgress disableShrink size={16} />
+						</Box>
+					}
+				>
+					<ButtonTabContent
+						anchorElement={anchorElement}
+						onClick={(event) => {
+							if (projectRouteMatch) {
+								setAnchorElement((prev) => (prev ? null : event.currentTarget))
+							} else {
+								router.navigate({
+									to: '/app/projects/$projectId',
+									params: { projectId },
+								})
+							}
+						}}
+						projectId={projectId}
+					/>
+				</Suspense>
+			</Box>
+		</ClickAwayListener>
+	)
+}
+
+function ButtonTabContent({
+	anchorElement,
+	onClick,
+	projectId,
+}: {
+	anchorElement: HTMLElement | null
+	onClick: MouseEventHandler<HTMLButtonElement>
+	projectId: string
+}) {
 	const popupDescribedById = useId()
 
 	const { formatMessage: t, formatDate } = useIntl()
 
 	const { data: projectSettings } = useProjectSettings({ projectId })
 	const { data: role } = useOwnRoleInProject({ projectId })
-
-	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
 	const iconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
@@ -46,213 +105,197 @@ export function ProjectTabButton({ projectId }: { projectId: string }) {
 	const accentColor = projectSettings.projectColor || WHITE
 
 	return (
-		<ClickAwayListener
-			onClickAway={() => {
-				setAnchorEl(null)
-			}}
-		>
-			<Box
-				display="flex"
-				onKeyDown={(event) => {
-					if (event.key === 'Tab' || event.key === 'Escape') {
-						setAnchorEl(null)
-					}
+		<>
+			<Button
+				aria-label={t(
+					anchorElement
+						? m.accessibleLabelShowProjectInfo
+						: m.accessibleLabelGoTo,
+					{ name: displayedProjectName },
+				)}
+				variant="text"
+				size="small"
+				onClick={onClick}
+				sx={{
+					...BASE_TAB_CONTAINER_SX_PROPS,
+					backgroundColor: accentColor,
+					'&:focus-within': {
+						outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+					},
+					'&:hover': {
+						backgroundColor: darken(accentColor, 0.1),
+					},
 				}}
 			>
-				<Button
-					aria-label={t(
-						anchorEl ? m.accessibleLabelShowProjectInfo : m.accessibleLabelGoTo,
-						{ name: displayedProjectName },
-					)}
-					variant="text"
-					size="small"
-					onClick={(event) => {
-						if (projectRouteMatch) {
-							setAnchorEl((prev) => (prev ? null : event.currentTarget))
-						} else {
-							router.navigate({
-								to: '/app/projects/$projectId',
-								params: { projectId },
-							})
-						}
-					}}
+				<Typography
+					variant="inherit"
+					color="textPrimary"
 					sx={{
-						minWidth: 80,
-						maxWidth: 200,
-						borderRadius: 2,
-						backgroundColor: accentColor,
-						'&:focus-within': {
-							outline: (theme) => `2px solid ${theme.palette.primary.main}`,
-						},
-						'&:hover': {
-							backgroundColor: darken(accentColor, 0.1),
-						},
+						textOverflow: 'ellipsis',
+						whiteSpace: 'nowrap',
+						overflow: 'hidden',
 					}}
 				>
-					<Typography
-						variant="inherit"
-						color="textPrimary"
-						sx={{
-							textOverflow: 'ellipsis',
-							whiteSpace: 'nowrap',
-							overflow: 'hidden',
-						}}
-					>
-						{displayedProjectName}
-					</Typography>
-				</Button>
+					{displayedProjectName}
+				</Typography>
+			</Button>
 
-				<Popper
-					id={popupDescribedById}
-					role="dialog"
-					placement="right-start"
-					transition
-					sx={{ width: `clamp(250px, 25%, 350px)`, zIndex: 1 }}
-					modifiers={[
-						{ name: 'offset', options: { offset: [0, 2] } },
-						{ name: 'eventListeners', enabled: true },
-					]}
-					anchorEl={anchorEl}
-					open={!!anchorEl}
-				>
-					{({ TransitionProps }) => {
-						return (
-							<Fade {...TransitionProps}>
-								<Box
-									bgcolor={accentColor}
-									boxShadow={(theme) => theme.shadows[5]}
-									borderRadius={2}
-									padding={6}
-								>
-									<Stack direction="column" gap={4}>
-										<Typography
-											variant="h1"
-											fontWeight={500}
-											sx={{ overflowWrap: 'break-word' }}
-										>
-											{displayedProjectName}
+			<Popper
+				id={popupDescribedById}
+				role="dialog"
+				placement="right-start"
+				transition
+				sx={{ width: `clamp(250px, 25%, 350px)`, zIndex: 1 }}
+				modifiers={[
+					{ name: 'offset', options: { offset: [0, 2] } },
+					{ name: 'eventListeners', enabled: true },
+				]}
+				anchorEl={anchorElement}
+				open={!!anchorElement}
+			>
+				{({ TransitionProps }) => {
+					return (
+						<Fade {...TransitionProps}>
+							<Box
+								bgcolor={accentColor}
+								boxShadow={(theme) => theme.shadows[5]}
+								borderRadius={2}
+								padding={6}
+							>
+								<Stack direction="column" gap={4}>
+									<Typography
+										variant="h1"
+										fontWeight={500}
+										sx={{ overflowWrap: 'break-word' }}
+									>
+										{displayedProjectName}
+									</Typography>
+
+									{projectSettings.projectDescription ? (
+										<Typography sx={{ overflowWrap: 'break-word' }}>
+											{projectSettings.projectDescription}
 										</Typography>
+									) : null}
 
-										{projectSettings.projectDescription ? (
-											<Typography sx={{ overflowWrap: 'break-word' }}>
-												{projectSettings.projectDescription}
-											</Typography>
-										) : null}
+									<Stack component={List} disablePadding gap={4}>
+										<Stack
+											component={ListItem}
+											disableGutters
+											disablePadding
+											direction="row"
+											gap={4}
+											alignItems="flex-start"
+										>
+											{isAtLeastCoordinator ? (
+												<>
+													<Icon
+														name="material-manage-accounts-filled"
+														size={iconSize}
+													/>
 
-										<Stack component={List} disablePadding gap={4}>
-											<Stack
-												component={ListItem}
-												disableGutters
-												disablePadding
-												direction="row"
-												gap={4}
-												alignItems="flex-start"
-											>
-												{isAtLeastCoordinator ? (
-													<>
-														<Icon
-															name="material-manage-accounts-filled"
-															size={iconSize}
-														/>
-
-														<Typography fontWeight={500}>
-															{t(m.projectInfoRoleCoordinator)}
-														</Typography>
-													</>
-												) : (
-													<>
-														<Icon name="material-people-filled" />
-
-														<Typography fontWeight={500}>
-															{t(m.projectInfoRoleParticipant)}
-														</Typography>
-													</>
-												)}
-											</Stack>
-
-											<Stack
-												component={ListItem}
-												disableGutters
-												disablePadding
-												direction="row"
-												gap={4}
-												alignItems="flex-start"
-											>
-												<Icon name="material-symbols-apps" size={iconSize} />
-
-												{projectSettings.configMetadata ? (
-													<Box>
-														<Typography color="textSecondary">
-															<Typography
-																component="span"
-																variant="inherit"
-																color="textPrimary"
-																fontWeight={500}
-															>
-																{projectSettings.configMetadata.name}
-															</Typography>{' '}
-															{projectSettings.configMetadata.fileVersion}
-														</Typography>
-
-														<Typography color="textSecondary">
-															{t(m.projectInfoCategoriesCreated, {
-																date: (
-																	<time
-																		key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
-																		dateTime={
-																			projectSettings.configMetadata.buildDate
-																		}
-																	>
-																		{formatDate(
-																			projectSettings.configMetadata.buildDate,
-																			{
-																				year: 'numeric',
-																				month: 'long',
-																				day: 'numeric',
-																			},
-																		)}
-																	</time>
-																),
-															})}
-														</Typography>
-													</Box>
-												) : (
 													<Typography fontWeight={500}>
-														{t(m.fallbackCategoriesSetName)}
+														{t(m.projectInfoRoleCoordinator)}
 													</Typography>
-												)}
-											</Stack>
+												</>
+											) : (
+												<>
+													<Icon name="material-people-filled" />
 
-											<Stack
-												component={ListItem}
-												disableGutters
-												disablePadding
-												direction="row"
-												gap={4}
-												alignItems="flex-start"
-											>
-												<Icon
-													name="ant-design-icons-bar-chart-outlined"
-													size={iconSize}
-												/>
+													<Typography fontWeight={500}>
+														{t(m.projectInfoRoleParticipant)}
+													</Typography>
+												</>
+											)}
+										</Stack>
 
+										<Stack
+											component={ListItem}
+											disableGutters
+											disablePadding
+											direction="row"
+											gap={4}
+											alignItems="flex-start"
+										>
+											<Icon name="material-symbols-apps" size={iconSize} />
+
+											{projectSettings.configMetadata ? (
+												<Box>
+													<Typography color="textSecondary">
+														<Typography
+															component="span"
+															variant="inherit"
+															color="textPrimary"
+															fontWeight={500}
+														>
+															{projectSettings.configMetadata.name}
+														</Typography>{' '}
+														{projectSettings.configMetadata.fileVersion}
+													</Typography>
+
+													<Typography color="textSecondary">
+														{t(m.projectInfoCategoriesCreated, {
+															date: (
+																<time
+																	key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
+																	dateTime={
+																		projectSettings.configMetadata.buildDate
+																	}
+																>
+																	{formatDate(
+																		projectSettings.configMetadata.buildDate,
+																		{
+																			year: 'numeric',
+																			month: 'long',
+																			day: 'numeric',
+																		},
+																	)}
+																</time>
+															),
+														})}
+													</Typography>
+												</Box>
+											) : (
 												<Typography fontWeight={500}>
-													{t(m.projectInfoProjectStats, {
-														enabled: projectSettings.sendStats ? 1 : 0,
-													})}
+													{t(m.fallbackCategoriesSetName)}
 												</Typography>
-											</Stack>
+											)}
+										</Stack>
+
+										<Stack
+											component={ListItem}
+											disableGutters
+											disablePadding
+											direction="row"
+											gap={4}
+											alignItems="flex-start"
+										>
+											<Icon
+												name="ant-design-icons-bar-chart-outlined"
+												size={iconSize}
+											/>
+
+											<Typography fontWeight={500}>
+												{t(m.projectInfoProjectStats, {
+													enabled: projectSettings.sendStats ? 1 : 0,
+												})}
+											</Typography>
 										</Stack>
 									</Stack>
-								</Box>
-							</Fade>
-						)
-					}}
-				</Popper>
-			</Box>
-		</ClickAwayListener>
+								</Stack>
+							</Box>
+						</Fade>
+					)
+				}}
+			</Popper>
+		</>
 	)
 }
+
+const BASE_TAB_CONTAINER_SX_PROPS = {
+	minWidth: 80,
+	maxWidth: 200,
+	borderRadius: 2,
+} satisfies SxProps<Theme>
 
 const m = defineMessages({
 	unnamedProject: {
