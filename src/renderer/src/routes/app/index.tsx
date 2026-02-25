@@ -102,6 +102,21 @@ function RouteComponent() {
 		select: (values) => values.fromOnboarding,
 	})
 
+	function handleBack() {
+		if (router.history.canGoBack()) {
+			router.history.back()
+			return
+		}
+
+		router.navigate({
+			to: '.',
+			search: ({ projectAction: _, ...rest }) => {
+				return rest
+			},
+			replace: true,
+		})
+	}
+
 	return (
 		<>
 			<Stack direction="column" flex={1} overflow="auto">
@@ -348,20 +363,7 @@ function RouteComponent() {
 
 			<JoinProjectDialog
 				open={projectActionToShow === 'join'}
-				onBack={() => {
-					if (router.history.canGoBack()) {
-						router.history.back()
-						return
-					}
-
-					router.navigate({
-						to: '.',
-						search: ({ projectAction: _, ...rest }) => {
-							return rest
-						},
-						replace: true,
-					})
-				}}
+				onBack={handleBack}
 			/>
 
 			<StartProjectDialog
@@ -373,20 +375,7 @@ function RouteComponent() {
 						replace: true,
 					})
 				}}
-				onBack={() => {
-					if (router.history.canGoBack()) {
-						router.history.back()
-						return
-					}
-
-					router.navigate({
-						to: '.',
-						search: ({ projectAction: _, ...rest }) => {
-							return rest
-						},
-						replace: true,
-					})
-				}}
+				onBack={handleBack}
 			/>
 		</>
 	)
