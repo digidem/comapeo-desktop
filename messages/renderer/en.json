@@ -955,6 +955,34 @@
     "description": "Indicates that user is a participant.",
     "message": "Participant"
   },
+  "routes.app.route.projectInviteAccept": {
+    "description": "Button text for accepting project invite.",
+    "message": "Accept"
+  },
+  "routes.app.route.projectInviteDecline": {
+    "description": "Button text for declining project invite.",
+    "message": "Decline"
+  },
+  "routes.app.route.projectInviteDescription": {
+    "description": "Description for invite containing role being invited as.",
+    "message": "Join as a <b>{role, select, coordinator {coordinator} other {participant}}</b>?"
+  },
+  "routes.app.route.projectInviteTitle": {
+    "description": "Title of project invite.",
+    "message": "You've been invited to…"
+  },
+  "routes.app.route.projectJoinedCloseDialog": {
+    "description": "Text for button to close project joined dialog.",
+    "message": "Close"
+  },
+  "routes.app.route.projectJoinedTitle": {
+    "description": "Title of dialog displayed when joining a project successfully.",
+    "message": "You joined project {name}."
+  },
+  "routes.app.route.projectJoinedViewProject": {
+    "description": "Text for button to navigate to joined project in project joined dialog.",
+    "message": "View Project"
+  },
   "routes.app.route.unnamedProject": {
     "description": "Fallback for when project is missing a name.",
     "message": "Unnamed Project"

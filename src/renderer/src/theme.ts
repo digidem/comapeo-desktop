@@ -121,6 +121,18 @@ function createTheme({ platform }: { platform: NodeJS.Platform }) {
 			},
 			divider: BLUE_GREY,
 		},
+		// NOTE: Customized such that modals have the highest z-index
+		// https://mui.com/material-ui/customization/z-index
+		zIndex: {
+			mobileStepper: 10,
+			fab: 11,
+			speedDial: 11,
+			appBar: 12,
+			drawer: 13,
+			snackbar: 14,
+			tooltip: 15,
+			modal: 16,
+		},
 		components: {
 			MuiInputLabel: {
 				defaultProps: {
