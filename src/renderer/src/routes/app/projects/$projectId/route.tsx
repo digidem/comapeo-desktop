@@ -40,6 +40,7 @@ import {
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 } from '../../../../lib/comapeo.ts'
+import { LOCAL_STORAGE_KEYS } from '../../../../lib/constants.ts'
 import { GLOBAL_MUTATIONS_BASE_KEY } from '../../../../lib/queries/global-mutations.ts'
 import { MapPanel } from './-map-panel.tsx'
 import { HighlightedDocumentSchema } from './-shared.ts'
@@ -156,8 +157,20 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 		await Promise.all([...navRailQueries, ...mapPanelQueries])
 	},
 	onEnter: ({ context, params }) => {
+		// NOTE: Used by the initial route (`/`) to determine whether we should use
+		// the persisted active project ID for redirecting when opening the app.
+		window.localStorage.setItem(
+			LOCAL_STORAGE_KEYS.USE_ACTIVE_PROJECT_ID_FOR_INITIAL_ROUTE,
+			'true',
+		)
+
 		// NOTE: Update the active project ID whenever we navigate to a relevant project-specific page.
 		context.activeProjectIdStore.actions.update(params.projectId)
+	},
+	onLeave: () => {
+		window.localStorage.removeItem(
+			LOCAL_STORAGE_KEYS.USE_ACTIVE_PROJECT_ID_FOR_INITIAL_ROUTE,
+		)
 	},
 	component: RouteComponent,
 })
