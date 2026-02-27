@@ -281,6 +281,9 @@ function ProjectInvite() {
 																})
 																captureException(err)
 															},
+															onSuccess: () => {
+																rejectInvite.reset()
+															},
 														},
 													)
 												}}
@@ -318,6 +321,8 @@ function ProjectInvite() {
 																captureException(err)
 															},
 															onSuccess: (projectId) => {
+																acceptInvite.reset()
+
 																projectJoinedDialogRef.current?.open({
 																	projectId,
 																	projectName: pendingInvite.projectName,
@@ -343,6 +348,7 @@ function ProjectInvite() {
 				fullWidth
 				maxWidth="sm"
 				dialogActionsHandle={projectJoinedDialogRef}
+				sx={{ zIndex: (theme) => theme.zIndex.snackbar + 1 }}
 			>
 				{(projectJoinedInfo, actions) => (
 					<Stack direction="column">
@@ -390,6 +396,7 @@ function ProjectInvite() {
 								fullWidth
 								variant="outlined"
 								onClick={() => {
+									acceptInvite.reset()
 									actions.close()
 								}}
 								sx={{ maxWidth: 400 }}
@@ -401,6 +408,8 @@ function ProjectInvite() {
 								fullWidth
 								variant="contained"
 								onClick={() => {
+									acceptInvite.reset()
+
 									actions.close()
 
 									router.navigate({
@@ -421,6 +430,7 @@ function ProjectInvite() {
 				fullWidth
 				maxWidth="sm"
 				dialogActionsHandle={handleInviteErrorDialogRef}
+				sx={{ zIndex: (theme) => theme.zIndex.snackbar + 1 }}
 			>
 				{({ from, error }, actions) => (
 					<ErrorDialogContent
