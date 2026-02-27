@@ -500,7 +500,7 @@ const m = defineMessages({
 	},
 	projectJoinedTitle: {
 		id: 'routes.app.route.projectJoinedTitle',
-		defaultMessage: 'You joined project {name}.',
+		defaultMessage: 'Joined project {name} successfully.',
 		description:
 			'Title of dialog displayed when joining a project successfully.',
 	},

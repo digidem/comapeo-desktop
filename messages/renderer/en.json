@@ -977,7 +977,7 @@
   },
   "routes.app.route.projectJoinedTitle": {
     "description": "Title of dialog displayed when joining a project successfully.",
-    "message": "You joined project {name}."
+    "message": "Joined project {name} successfully."
   },
   "routes.app.route.projectJoinedViewProject": {
     "description": "Text for button to navigate to joined project in project joined dialog.",
