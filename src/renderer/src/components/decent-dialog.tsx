@@ -1,84 +1,54 @@
-import {
-	useImperativeHandle,
-	useState,
-	type ReactElement,
-	type Ref,
-} from 'react'
+import { useState, type ReactElement } from 'react'
 import Dialog, { type DialogProps } from '@mui/material/Dialog'
 
-export type DecentDialogRef<Value> = {
-	open: (value: NonNullable<Value>) => void
-	close: () => void
-}
-
-export function DecentDialog<Value>({
+/**
+ * Dialog wrapper with more elegant close handling and child rendering.
+ */
+export function DecentDialog<Value = unknown>({
 	children,
-	dialogActionsHandle,
-	initialValue,
+	value,
 	...muiDialogProps
 }: Omit<DialogProps, 'children' | 'open' | 'slotProps'> & {
-	children: (
-		value: NonNullable<Value>,
-		actions: {
-			close: () => void
-			update: (value: NonNullable<Value>) => void
-		},
-	) => ReactElement
-	dialogActionsHandle: Ref<DecentDialogRef<Value>>
-	initialValue?: Value
+	children: (value: NonNullable<Value>) => ReactElement
+	value?: Value
 }) {
-	const [dialogState, dialogActions] = useDialogState<Value>(initialValue)
+	const [dialogState, setDialogState] = useState<
+		| { status: 'opened' | 'closing'; value: NonNullable<Value> }
+		| { status: 'closed' }
+	>(() => {
+		return value === undefined || value === null
+			? { status: 'closed' }
+			: { status: 'opened', value }
+	})
 
-	// NOTE: This is explicitly recommended against in the React docs (https://react.dev/reference/react/useImperativeHandle)
-	// but we do this anyways because I like imperative APIs and renderProps-based rendering.
-	useImperativeHandle(dialogActionsHandle, () => {
-		return {
-			open: dialogActions.open,
-			close: dialogActions.close,
+	if (
+		dialogState.status === 'closed' &&
+		!(value === undefined || value === null)
+	) {
+		setDialogState({ status: 'opened', value })
+	} else if (dialogState.status === 'opened') {
+		if (value === undefined || value === null) {
+			setDialogState({ status: 'closing', value: dialogState.value })
 		}
-	}, [dialogActions])
+		// NOTE: Relies on referential equality. Otherwise will run into infinite rerenders loop.
+		else if (value !== dialogState.value) {
+			setDialogState({ status: 'opened', value })
+		}
+	}
 
 	return (
 		<Dialog
 			{...muiDialogProps}
-			open={!!dialogState?.showDialog}
+			open={dialogState.status === 'opened'}
 			slotProps={{
 				transition: {
 					onExited: () => {
-						dialogActions.handleExited()
+						setDialogState({ status: 'closed' })
 					},
 				},
 			}}
 		>
-			{dialogState
-				? children(dialogState.value, {
-						close: dialogActions.close,
-						update: dialogActions.open,
-					})
-				: null}
+			{dialogState.status !== 'closed' ? children(dialogState.value) : null}
 		</Dialog>
 	)
-}
-
-function useDialogState<V>(initialValue?: V) {
-	const [dialogState, setDialogState] = useState<
-		{ showDialog: boolean; value: NonNullable<V> } | undefined
-	>(() => {
-		return initialValue ? { showDialog: true, value: initialValue } : undefined
-	})
-
-	return [
-		dialogState,
-		{
-			open: (value: NonNullable<V>) => {
-				setDialogState({ showDialog: true, value })
-			},
-			close: () => {
-				setDialogState((prev) => (prev ? { ...prev, showDialog: false } : prev))
-			},
-			handleExited: () => {
-				setDialogState(undefined)
-			},
-		},
-	] as const
 }

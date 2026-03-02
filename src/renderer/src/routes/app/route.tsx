@@ -1,4 +1,4 @@
-import { Suspense, useRef } from 'react'
+import { Suspense } from 'react'
 import {
 	useAcceptInvite,
 	useManyInvites,
@@ -16,6 +16,7 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import { darken, lighten } from '@mui/material/styles'
 import { captureException } from '@sentry/react'
+import { useMutation } from '@tanstack/react-query'
 import { Outlet, createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
@@ -28,10 +29,7 @@ import {
 	LIGHT_GREY,
 	WHITE,
 } from '../../colors.ts'
-import {
-	DecentDialog,
-	type DecentDialogRef,
-} from '../../components/decent-dialog.tsx'
+import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
 import {
@@ -135,15 +133,19 @@ function ProjectInvite() {
 	})
 
 	const rejectInvite = useRejectInvite()
-	const acceptInvite = useAcceptInvite()
 
-	const projectJoinedDialogRef = useRef<DecentDialogRef<{
-		projectId: string
-		projectName: string
-	}> | null>(null)
-
-	const handleInviteErrorDialogRef =
-		useRef<DecentDialogRef<{ from: 'reject' | 'accept'; error: Error }>>(null)
+	const __acceptInvite = useAcceptInvite()
+	const acceptInvite = useMutation({
+		mutationFn: async ({
+			inviteId,
+		}: {
+			inviteId: string
+			// NOTE: Needed for joined project dialog
+			projectName: string
+		}) => {
+			return __acceptInvite.mutateAsync({ inviteId })
+		},
+	})
 
 	const pendingInvite = invites.find((i) => i.state === 'pending')
 
@@ -275,14 +277,7 @@ function ProjectInvite() {
 														{ inviteId: pendingInvite.inviteId },
 														{
 															onError: (err) => {
-																handleInviteErrorDialogRef.current?.open({
-																	from: 'reject',
-																	error: err,
-																})
 																captureException(err)
-															},
-															onSuccess: () => {
-																rejectInvite.reset()
 															},
 														},
 													)
@@ -311,22 +306,11 @@ function ProjectInvite() {
 													acceptInvite.mutate(
 														{
 															inviteId: pendingInvite.inviteId,
+															projectName: pendingInvite.projectName,
 														},
 														{
 															onError: (err) => {
-																handleInviteErrorDialogRef.current?.open({
-																	from: 'accept',
-																	error: err,
-																})
 																captureException(err)
-															},
-															onSuccess: (projectId) => {
-																acceptInvite.reset()
-
-																projectJoinedDialogRef.current?.open({
-																	projectId,
-																	projectName: pendingInvite.projectName,
-																})
 															},
 														},
 													)
@@ -347,10 +331,17 @@ function ProjectInvite() {
 			<DecentDialog
 				fullWidth
 				maxWidth="sm"
-				dialogActionsHandle={projectJoinedDialogRef}
+				value={
+					acceptInvite.status === 'success'
+						? {
+								projectId: acceptInvite.data,
+								projectName: acceptInvite.variables.projectName,
+							}
+						: null
+				}
 				sx={{ zIndex: (theme) => theme.zIndex.snackbar + 1 }}
 			>
-				{(projectJoinedInfo, actions) => (
+				{({ projectId, projectName }) => (
 					<Stack direction="column">
 						<Stack direction="column" gap={10} flex={1} padding={20}>
 							<Stack direction="column" alignItems="center" gap={4}>
@@ -377,9 +368,7 @@ function ProjectInvite() {
 								</Box>
 
 								<Typography variant="h1" fontWeight={500} textAlign="center">
-									{t(m.projectJoinedTitle, {
-										name: projectJoinedInfo.projectName,
-									})}
+									{t(m.projectJoinedTitle, { name: projectName })}
 								</Typography>
 							</Stack>
 						</Stack>
@@ -397,7 +386,6 @@ function ProjectInvite() {
 								variant="outlined"
 								onClick={() => {
 									acceptInvite.reset()
-									actions.close()
 								}}
 								sx={{ maxWidth: 400 }}
 							>
@@ -410,11 +398,9 @@ function ProjectInvite() {
 								onClick={() => {
 									acceptInvite.reset()
 
-									actions.close()
-
 									router.navigate({
 										to: '/app/projects/$projectId',
-										params: { projectId: projectJoinedInfo.projectId },
+										params: { projectId },
 									})
 								}}
 								sx={{ maxWidth: 400 }}
@@ -429,20 +415,24 @@ function ProjectInvite() {
 			<DecentDialog
 				fullWidth
 				maxWidth="sm"
-				dialogActionsHandle={handleInviteErrorDialogRef}
+				value={
+					acceptInvite.status === 'error'
+						? { from: 'accept', error: acceptInvite.error }
+						: rejectInvite.status === 'error'
+							? { from: 'reject', error: rejectInvite.error }
+							: null
+				}
 				sx={{ zIndex: (theme) => theme.zIndex.snackbar + 1 }}
 			>
-				{({ from, error }, actions) => (
+				{({ from, error }) => (
 					<ErrorDialogContent
-						errorMessage={error.message.toString()}
+						errorMessage={error.toString()}
 						onClose={() => {
 							if (from === 'accept') {
 								acceptInvite.reset()
 							} else {
 								rejectInvite.reset()
 							}
-
-							actions.close()
 						}}
 					/>
 				)}
