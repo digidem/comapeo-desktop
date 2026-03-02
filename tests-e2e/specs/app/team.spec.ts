@@ -2,7 +2,12 @@ import { hexToRgb } from '@mui/material/styles'
 import { expect } from '@playwright/test'
 
 import { COMAPEO_BLUE } from '../../../src/renderer/src/colors.ts'
-import { setup, simulateOnboarding, test } from '../utils.ts'
+import {
+	setup,
+	simulateCreateProject,
+	simulateOnboarding,
+	test,
+} from '../utils.ts'
 
 test.describe.configure({ mode: 'parallel' })
 
@@ -17,8 +22,19 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 		await simulateOnboarding({
 			page,
 			deviceName: userParams.deviceName,
+		})
+
+		await simulateCreateProject({
+			page,
 			projectName: projectParams.projectName,
 		})
+
+		await page
+			.getByRole('button', {
+				name: `Go to project ${projectParams.projectName}.`,
+				exact: true,
+			})
+			.click()
 
 		// 2. Main tests
 		const main = page.getByRole('main')
@@ -27,7 +43,7 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 		{
 			// Navigate to team page
 			const teamNavLink = page
-				.getByRole('navigation')
+				.getByRole('navigation', { name: 'Project navigation', exact: true })
 				.getByRole('link', { name: 'Team', exact: true })
 
 			await teamNavLink.click()
@@ -121,8 +137,19 @@ test('collaborator info (yourself)', async ({
 		await simulateOnboarding({
 			page,
 			deviceName: userParams.deviceName,
+		})
+
+		await simulateCreateProject({
+			page,
 			projectName: projectParams.projectName,
 		})
+
+		await page
+			.getByRole('button', {
+				name: `Go to project ${projectParams.projectName}.`,
+				exact: true,
+			})
+			.click()
 
 		// 2. Main tests
 		const main = page.getByRole('main')
@@ -131,7 +158,7 @@ test('collaborator info (yourself)', async ({
 		{
 			// Navigate to collaborator info page
 			const teamNavLink = page
-				.getByRole('navigation')
+				.getByRole('navigation', { name: 'Project navigation', exact: true })
 				.getByRole('link', { name: 'Team', exact: true })
 
 			await teamNavLink.click()
@@ -198,8 +225,20 @@ test('leave project', async ({ appInfo }) => {
 		await simulateOnboarding({
 			page,
 			deviceName: userParams.deviceName,
+		})
+
+		await simulateCreateProject({
+			page,
 			projectName: projectParams.projectName,
 		})
+
+		await page
+			.getByRole('navigation', { name: 'App navigation', exact: true })
+			.getByRole('button', {
+				name: `Go to project ${projectParams.projectName}.`,
+				exact: true,
+			})
+			.click()
 
 		// 2. Main tests
 		const main = page.getByRole('main')
@@ -208,7 +247,7 @@ test('leave project', async ({ appInfo }) => {
 		{
 			// Navigate to leave project flow
 			const teamNavLink = page
-				.getByRole('navigation')
+				.getByRole('navigation', { name: 'Project navigation', exact: true })
 				.getByRole('link', { name: 'Team', exact: true })
 
 			await teamNavLink.click()
@@ -243,8 +282,23 @@ test('leave project', async ({ appInfo }) => {
 		await main.getByRole('button', { name: 'Confirm', exact: true }).click()
 
 		await page.waitForURL((url) => {
-			return url.hash === '#/onboarding/project'
+			return url.hash === '#/app'
 		})
+
+		await expect(
+			page
+				.getByRole('navigation', { name: 'App navigation', exact: true })
+				.getByRole('button', {
+					name: `Go to project ${projectParams.projectName}.`,
+					exact: true,
+				})
+				.or(
+					main.getByRole('link', {
+						name: `Go to project ${projectParams.projectName}.`,
+						exact: true,
+					}),
+				),
+		).not.toBeVisible()
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()
