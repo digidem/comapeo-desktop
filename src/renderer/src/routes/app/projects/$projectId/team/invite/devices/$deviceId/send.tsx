@@ -30,7 +30,7 @@ import { ErrorDialog } from '../../../../../../../../components/error-dialog.tsx
 import { GenericRoutePendingComponent } from '../../../../../../../../components/generic-route-pending-component.tsx'
 import { Icon } from '../../../../../../../../components/icon.tsx'
 import { ButtonLink } from '../../../../../../../../components/link.tsx'
-import { useLocalPeersState } from '../../../../../../../../contexts/local-peers-store-context.tsx'
+import { useLocalPeersState } from '../../../../../../../../contexts/local-peers-store-context.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
