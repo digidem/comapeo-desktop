@@ -2,7 +2,12 @@ import { hexToRgb } from '@mui/material/styles'
 import { expect } from 'playwright/test'
 
 import { COMAPEO_BLUE } from '../../../src/renderer/src/colors.ts'
-import { setup, simulateOnboarding, test } from '../utils.ts'
+import {
+	setup,
+	simulateCreateProject,
+	simulateOnboarding,
+	test,
+} from '../utils.ts'
 
 test.describe.configure({ mode: 'parallel' })
 
@@ -22,8 +27,19 @@ test.describe('Invite device flow', () => {
 			await simulateOnboarding({
 				deviceName: userParams.deviceName,
 				page,
+			})
+
+			await simulateCreateProject({
+				page,
 				projectName: projectParams.projectName,
 			})
+
+			await page
+				.getByRole('button', {
+					name: `Go to project ${projectParams.projectName}.`,
+					exact: true,
+				})
+				.click()
 
 			// 2. Main tests
 			const main = page.getByRole('main')
@@ -39,16 +55,18 @@ test.describe('Invite device flow', () => {
 					.getByRole('button', { name: 'Go back.', exact: true })
 					.click()
 
+				const teamNavLink = page
+					.getByRole('navigation', { name: 'Project navigation', exact: true })
+					.getByRole('link', { name: 'Team', exact: true })
+
+				await teamNavLink.click()
+
 				await main
 					.getByRole('link', { name: 'Invite Device', exact: true })
 					.click()
 
 				// Assert nav rail state
-				await expect(
-					page
-						.getByRole('navigation')
-						.getByRole('link', { name: 'View project.', exact: true }),
-				).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+				await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
 			}
 
 			/// Main
@@ -69,9 +87,7 @@ test.describe('Invite device flow', () => {
 				await expect(
 					main.getByText(
 						'Invite devices using CoMapeo to start collaborating.',
-						{
-							exact: true,
-						},
+						{ exact: true },
 					),
 				).toBeVisible()
 
@@ -122,7 +138,7 @@ test.describe('Invite device flow', () => {
 				await page.waitForURL(
 					(url) => {
 						return new URLPattern({
-							pathname: '/app/projects/:projectId',
+							pathname: '/app/projects/:projectId/team',
 						}).test({ pathname: url.hash.slice(1) })
 					},
 					{ timeout: 1_000 },
