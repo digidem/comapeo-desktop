@@ -2,7 +2,12 @@ import { hexToRgb } from '@mui/material/styles'
 import { expect } from 'playwright/test'
 
 import { COMAPEO_BLUE } from '../../../src/renderer/src/colors.ts'
-import { setup, simulateOnboarding, test } from '../utils.ts'
+import {
+	setup,
+	simulateCreateProject,
+	simulateOnboarding,
+	test,
+} from '../utils.ts'
 
 test.describe.configure({ mode: 'parallel' })
 
@@ -18,33 +23,37 @@ test.describe('Main panel (coordinator)', () => {
 			await simulateOnboarding({
 				deviceName: userParams.deviceName,
 				page,
+			})
+
+			await simulateCreateProject({
+				page,
 				projectName: projectParams.projectName,
 			})
+
+			await page
+				.getByRole('navigation', { name: 'App navigation', exact: true })
+				.getByRole('button', {
+					name: `Go to project ${projectParams.projectName}.`,
+					exact: true,
+				})
+				.click()
 
 			// 2. Main tests
 
 			/// Navigation
 			{
 				// Assert nav rail state
-				const projectDataNavLink = page
-					.getByRole('navigation')
-					.getByRole('link', { name: 'View project.', exact: true })
+				const projectListNavLink = page
+					.getByRole('navigation', { name: 'Project navigation', exact: true })
+					.getByRole('link', { name: 'List', exact: true })
 
-				await expect(projectDataNavLink).toHaveCSS(
+				await expect(projectListNavLink).toHaveCSS(
 					'color',
 					hexToRgb(COMAPEO_BLUE),
 				)
 			}
 
 			const main = page.getByRole('main')
-
-			//// Project info popup button
-			await expect(
-				main.getByRole('button', {
-					name: projectParams.projectName,
-					exact: true,
-				}),
-			).toBeVisible()
 
 			//// Collaborators prompt
 			await expect(
@@ -80,38 +89,31 @@ test.describe('Main panel (coordinator)', () => {
 			await simulateOnboarding({
 				deviceName: userParams.deviceName,
 				page,
+			})
+
+			await simulateCreateProject({
+				page,
 				projectName: projectParams.projectName,
 			})
 
+			await page
+				.getByRole('navigation', { name: 'App navigation', exact: true })
+				.getByRole('button', {
+					name: `Go to project ${projectParams.projectName}.`,
+					exact: true,
+				})
+				.click()
+
 			// 2. Main tests
-			const main = page.getByRole('main')
-
-			const button = main.getByRole('button', {
-				name: projectParams.projectName,
-				exact: true,
-			})
-
-			const tooltip = page.getByRole('tooltip', {
-				name: 'View Project Info',
-				exact: true,
-			})
-
-			await expect(button).toBeVisible()
-
-			/// Hover behavior
-			await button.hover()
-			await expect(button).not.toHaveCSS('border-color', hexToRgb(COMAPEO_BLUE))
-			await expect(tooltip).toBeVisible()
-
-			/// Focus behavior
-			await button.focus()
-			await expect(button).toHaveCSS('border-color', hexToRgb(COMAPEO_BLUE))
-			await expect(tooltip).toBeVisible()
+			const button = page
+				.getByRole('navigation', { name: 'App navigation', exact: true })
+				.getByRole('button', {
+					name: `Show info for project ${projectParams.projectName}.`,
+					exact: true,
+				})
 
 			/// Click to toggle on behavior
 			await button.click()
-			await expect(button).toHaveCSS('border-color', hexToRgb(COMAPEO_BLUE))
-			await expect(tooltip).not.toBeVisible()
 
 			const describedById = await button.getAttribute('aria-describedby')
 			expect(describedById).toBeTruthy()
@@ -149,15 +151,11 @@ test.describe('Main panel (coordinator)', () => {
 
 			/// Click to toggle off behavior
 			await button.click()
-			await expect(button).toHaveCSS('border-color', hexToRgb(COMAPEO_BLUE))
 			await expect(popup).not.toBeVisible()
-			await expect(tooltip).toBeVisible()
 
 			/// Blur behavior
 			await button.blur()
-			await expect(button).not.toHaveCSS('border-color', hexToRgb(COMAPEO_BLUE))
 			await expect(popup).not.toBeVisible()
-			await expect(tooltip).not.toBeVisible()
 		} finally {
 			// 3. Cleanup
 			await electronApp.close()

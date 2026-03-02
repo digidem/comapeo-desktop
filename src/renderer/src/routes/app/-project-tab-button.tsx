@@ -60,6 +60,7 @@ export function ProjectTabButton({ projectId }: { projectId: string }) {
 				>
 					<ButtonTabContent
 						anchorElement={anchorElement}
+						isOnProjectPage={!!projectRouteMatch}
 						onClick={(event) => {
 							if (projectRouteMatch) {
 								setAnchorElement((prev) => (prev ? null : event.currentTarget))
@@ -80,10 +81,12 @@ export function ProjectTabButton({ projectId }: { projectId: string }) {
 
 function ButtonTabContent({
 	anchorElement,
+	isOnProjectPage,
 	onClick,
 	projectId,
 }: {
 	anchorElement: HTMLElement | null
+	isOnProjectPage: boolean
 	onClick: MouseEventHandler<HTMLButtonElement>
 	projectId: string
 }) {
@@ -108,11 +111,13 @@ function ButtonTabContent({
 		<>
 			<Button
 				aria-label={t(
-					anchorElement
+					isOnProjectPage
 						? m.accessibleLabelShowProjectInfo
 						: m.accessibleLabelGoTo,
 					{ name: displayedProjectName },
 				)}
+				aria-describedby={isOnProjectPage ? popupDescribedById : undefined}
+				aria-haspopup={isOnProjectPage ? 'dialog' : undefined}
 				variant="text"
 				size="small"
 				onClick={onClick}
