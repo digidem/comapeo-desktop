@@ -1,8 +1,7 @@
-import { useId, useMemo, type PropsWithChildren } from 'react'
+import { useId, useMemo } from 'react'
 import { useCreateProject } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog'
 import Divider from '@mui/material/Divider'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
@@ -22,24 +21,18 @@ import {
 	PROJECT_RED,
 	WHITE,
 } from '../../colors.ts'
-import { ErrorDialog } from '../../components/error-dialog.tsx'
+import { DecentDialog } from '../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
 import { useAppForm } from '../../hooks/forms.ts'
 import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../lib/constants.ts'
 import { createProjectNameSchema } from '../../lib/validators/project.ts'
 
-function ProjectActionDialog({
-	children,
-	onBack,
-	open,
-}: PropsWithChildren<{
-	open: boolean
-	onBack?: () => void
-}>) {
+export function JoinProjectDialogContent({ onBack }: { onBack: () => void }) {
 	const { formatMessage: t } = useIntl()
 
 	return (
-		<Dialog open={open} fullScreen sx={{ padding: 10 }}>
+		<Stack direction="column" flex={1}>
 			<Box padding={2}>
 				<Button
 					variant="text"
@@ -53,22 +46,6 @@ function ProjectActionDialog({
 
 			<Divider variant="fullWidth" />
 
-			{children}
-		</Dialog>
-	)
-}
-
-export function JoinProjectDialog({
-	open,
-	onBack,
-}: {
-	open: boolean
-	onBack: () => void
-}) {
-	const { formatMessage: t } = useIntl()
-
-	return (
-		<ProjectActionDialog open={open} onBack={onBack}>
 			<Stack
 				direction="column"
 				gap={10}
@@ -94,16 +71,14 @@ export function JoinProjectDialog({
 
 				<Typography>{t(m.joinProjectDialogDescription)}</Typography>
 			</Stack>
-		</ProjectActionDialog>
+		</Stack>
 	)
 }
 
-export function StartProjectDialog({
-	open,
+export function StartProjectDialogContent({
 	onProjectCreated,
 	onBack,
 }: {
-	open: boolean
 	onProjectCreated: (projectId: string) => void
 	onBack: () => void
 }) {
@@ -159,22 +134,23 @@ export function StartProjectDialog({
 		},
 	})
 
-	const errorDialogProps =
-		createProject.status === 'error'
-			? {
-					open: true,
-
-					errorMessage: createProject.error.toString(),
-					onClose: () => {
-						createProject.reset()
-					},
-				}
-			: { open: false, onClose: () => {} }
-
 	const isSubmitting = useStore(form.store, (state) => state.isSubmitting)
 
 	return (
-		<ProjectActionDialog open={open} onBack={isSubmitting ? undefined : onBack}>
+		<Stack direction="column" flex={1}>
+			<Box padding={2}>
+				<Button
+					variant="text"
+					startIcon={<Icon name="material-arrow-back" />}
+					aria-disabled={!onBack}
+					onClick={onBack}
+				>
+					{t(m.projectActionDialogGoBack)}
+				</Button>
+			</Box>
+
+			<Divider variant="fullWidth" />
+
 			<Stack direction="column" flex={1} padding={6} gap={10} overflow="auto">
 				<Stack
 					direction="column"
@@ -291,8 +267,21 @@ export function StartProjectDialog({
 				</Box>
 			</Stack>
 
-			<ErrorDialog {...errorDialogProps} />
-		</ProjectActionDialog>
+			<DecentDialog
+				value={
+					createProject.status === 'error' ? createProject.error : undefined
+				}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							createProject.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
+		</Stack>
 	)
 }
 

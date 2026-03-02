@@ -19,6 +19,7 @@ import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
 import { BLUE_GREY, COMAPEO_BLUE, LIGHT_GREY, WHITE } from '../../colors.ts'
+import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
 import {
 	ButtonBaseLink,
@@ -33,9 +34,9 @@ import {
 	type ListedProject,
 } from '../../lib/comapeo.ts'
 import {
-	JoinProjectDialog,
-	StartProjectDialog,
-} from './-project-action-dialog.tsx'
+	JoinProjectDialogContent,
+	StartProjectDialogContent,
+} from './-project-action-dialog-content.tsx'
 import { DeviceIcon } from './projects/-shared/device-icon.tsx'
 
 const SearchParamsSchema = v.object({
@@ -361,22 +362,23 @@ function RouteComponent() {
 				) : null}
 			</Stack>
 
-			<JoinProjectDialog
-				open={projectActionToShow === 'join'}
-				onBack={handleBack}
-			/>
-
-			<StartProjectDialog
-				open={projectActionToShow === 'create'}
-				onProjectCreated={(createdProjectId) => {
-					router.navigate({
-						to: '/app/projects/$projectId',
-						params: { projectId: createdProjectId },
-						replace: true,
-					})
-				}}
-				onBack={handleBack}
-			/>
+			<DecentDialog value={projectActionToShow} fullScreen sx={{ padding: 10 }}>
+				{(projectAction) =>
+					projectAction === 'join' ? (
+						<JoinProjectDialogContent onBack={handleBack} />
+					) : (
+						<StartProjectDialogContent
+							onBack={handleBack}
+							onProjectCreated={(createdProjectId) => {
+								router.navigate({
+									to: '/app/projects/$projectId',
+									params: { projectId: createdProjectId },
+								})
+							}}
+						/>
+					)
+				}
+			</DecentDialog>
 		</>
 	)
 }
