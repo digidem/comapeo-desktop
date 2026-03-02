@@ -475,6 +475,10 @@
     "description": "Text displayed when the duration of an audio attachment cannot be determined.",
     "message": "Unable to get duration time."
   },
+  "routes.app.projects.$projectId.route.appNavigationAccesibleLabel": {
+    "description": "Accessible label for app-wide navigation bar.",
+    "message": "App navigation"
+  },
   "routes.app.projects.$projectId.route.exchangeTabLabel": {
     "description": "Label for project exchange tab link in navigation.",
     "message": "Exchange"
@@ -482,6 +486,10 @@
   "routes.app.projects.$projectId.route.listTabLabel": {
     "description": "Label for project list tab link in navigation.",
     "message": "List"
+  },
+  "routes.app.projects.$projectId.route.projectNavigationAccessibleLabel": {
+    "description": "Accessible label for project-specific navigation bar.",
+    "message": "Project navigation"
   },
   "routes.app.projects.$projectId.route.teamTabLabel": {
     "description": "Label for project team tab link in navigation.",

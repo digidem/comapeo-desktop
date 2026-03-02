@@ -120,7 +120,7 @@ function RouteComponent() {
 
 	return (
 		<>
-			<Stack direction="column" flex={1} overflow="auto">
+			<Stack component="main" direction="column" flex={1} overflow="auto">
 				<Stack direction="column" padding={6} gap={4}>
 					<Stack direction="row" gap={2} alignItems="center">
 						<DeviceIcon
@@ -243,7 +243,6 @@ function RouteComponent() {
 									<Tooltip
 										title={t(m.additionalProjectsSectionShowAsGrid)}
 										disableFocusListener
-										describeChild
 										placement="bottom"
 									>
 										<IconButton
@@ -270,7 +269,6 @@ function RouteComponent() {
 									<Tooltip
 										title={t(m.additionalProjectsSectionShowAsList)}
 										disableFocusListener
-										describeChild
 										placement="bottom"
 									>
 										<IconButton

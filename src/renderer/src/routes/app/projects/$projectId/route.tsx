@@ -225,6 +225,7 @@ function RouteComponent() {
 				display="flex"
 				borderRight={`2px solid ${BLUE_GREY}`}
 				overflow="auto"
+				aria-label={t(m.projectNavigationAccessibleLabel)}
 			>
 				<List
 					dense
@@ -250,7 +251,6 @@ function RouteComponent() {
 							<Tooltip
 								title={t(m.listTabLabel)}
 								disableFocusListener
-								describeChild
 								placement="right"
 							>
 								<IconButtonLink
@@ -302,7 +302,6 @@ function RouteComponent() {
 							<Tooltip
 								title={t(m.teamTabLabel)}
 								disableFocusListener
-								describeChild
 								placement="right"
 							>
 								<IconButtonLink
@@ -342,7 +341,6 @@ function RouteComponent() {
 								<Tooltip
 									title={t(m.toolsTabLabel)}
 									disableFocusListener
-									describeChild
 									placement="right"
 								>
 									<IconButtonLink
@@ -385,7 +383,6 @@ function RouteComponent() {
 								<Tooltip
 									title={t(m.exchangeTabLabel)}
 									disableFocusListener
-									describeChild
 									placement="right"
 								>
 									<IconButtonLink
@@ -469,6 +466,11 @@ const BASE_ACTIVE_LINK_PROPS = {
 } satisfies IconButtonLinkProps['activeProps']
 
 const m = defineMessages({
+	projectNavigationAccessibleLabel: {
+		id: 'routes.app.projects.$projectId.route.projectNavigationAccessibleLabel',
+		defaultMessage: 'Project navigation',
+		description: 'Accessible label for project-specific navigation bar.',
+	},
 	listTabLabel: {
 		id: 'routes.app.projects.$projectId.route.listTabLabel',
 		defaultMessage: 'List',

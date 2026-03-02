@@ -59,11 +59,11 @@ function RouteComponent() {
 					direction="row"
 					bgcolor={darken(DARK_COMAPEO_BLUE, 0.5)}
 					height={48}
+					aria-label={t(m.appNavigationAccesibleLabel)}
 				>
 					<Tooltip
 						title={t(m.homeTabLabel)}
 						disableFocusListener
-						describeChild
 						placement="bottom"
 					>
 						<IconButtonLink
@@ -84,7 +84,6 @@ function RouteComponent() {
 					<Tooltip
 						title={t(m.appSettingsTabLabel)}
 						disableFocusListener
-						describeChild
 						placement="bottom"
 					>
 						<IconButtonLink
@@ -108,7 +107,7 @@ function RouteComponent() {
 					</Stack>
 				</Stack>
 
-				<Box component="main" display="flex" overflow="auto">
+				<Box display="flex" overflow="auto">
 					<Outlet />
 
 					<Suspense>
@@ -467,6 +466,11 @@ const BASE_ACTIVE_LINK_PROPS = {
 } satisfies IconButtonLinkProps['activeProps']
 
 const m = defineMessages({
+	appNavigationAccesibleLabel: {
+		id: 'routes.app.projects.$projectId.route.appNavigationAccesibleLabel',
+		defaultMessage: 'App navigation',
+		description: 'Accessible label for app-wide navigation bar.',
+	},
 	homeTabLabel: {
 		id: 'routes.app.route.homeTabTitle',
 		defaultMessage: 'Home',

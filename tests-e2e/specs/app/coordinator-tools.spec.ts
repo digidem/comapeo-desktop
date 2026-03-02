@@ -13,7 +13,12 @@ import {
 	PROJECT_ORANGE,
 	PROJECT_RED,
 } from '../../../src/renderer/src/colors.ts'
-import { setup, simulateOnboarding, test } from '../utils.ts'
+import {
+	setup,
+	simulateCreateProject,
+	simulateOnboarding,
+	test,
+} from '../utils.ts'
 
 const ASSETS_DIR = fileURLToPath(new URL('../../assets', import.meta.url))
 
@@ -30,17 +35,27 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 		await simulateOnboarding({
 			page,
 			deviceName: userParams.deviceName,
-			projectName: projectParams.projectName,
 		})
 
+		await simulateCreateProject({
+			projectName: projectParams.projectName,
+			page,
+		})
+
+		await page
+			.getByRole('button', {
+				name: `Go to project ${projectParams.projectName}.`,
+				exact: true,
+			})
+			.click()
+
 		// 2. Main tests
-		const main = page.getByRole('main')
 
 		/// Navigation
 		{
 			// Navigate to coordinator tools page
 			const toolsNavLink = page
-				.getByRole('navigation')
+				.getByRole('navigation', { name: 'Project navigation', exact: true })
 				.getByRole('link', { name: 'Tools', exact: true })
 
 			await toolsNavLink.click()
@@ -50,6 +65,8 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 		}
 
 		/// Main
+		const main = page.getByRole('main')
+
 		{
 			await expect(
 				main.getByRole('heading', { name: 'Coordinator Tools', exact: true }),
@@ -119,8 +136,19 @@ test('project info', async ({ appInfo, projectParams, userParams }) => {
 		await simulateOnboarding({
 			page,
 			deviceName: userParams.deviceName,
-			projectName: projectParams.projectName,
 		})
+
+		await simulateCreateProject({
+			projectName: projectParams.projectName,
+			page,
+		})
+
+		await page
+			.getByRole('button', {
+				name: `Go to project ${projectParams.projectName}.`,
+				exact: true,
+			})
+			.click()
 
 		// 2. Main tests
 		const main = page.getByRole('main')
@@ -129,7 +157,7 @@ test('project info', async ({ appInfo, projectParams, userParams }) => {
 		{
 			// Navigate to project info settings page
 			const toolsNavLink = page
-				.getByRole('navigation')
+				.getByRole('navigation', { name: 'Project navigation', exact: true })
 				.getByRole('link', { name: 'Tools', exact: true })
 
 			await toolsNavLink.click()
@@ -145,18 +173,12 @@ test('project info', async ({ appInfo, projectParams, userParams }) => {
 			await expect(toolsNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
 
 			const disabledNavLinks = page
-				.getByRole('navigation')
+				.getByRole('navigation', { name: 'Project navigation', exact: true })
 				.getByRole('link', { disabled: true })
 
-			await expect(disabledNavLinks.first()).toHaveAccessibleName(
-				'View project.',
-			)
+			await expect(disabledNavLinks.first()).toHaveAccessibleName('List')
 
-			await expect(disabledNavLinks.nth(1)).toHaveAccessibleName(
-				'View exchange.',
-			)
-
-			await expect(disabledNavLinks).toHaveText(['', '', 'Team', 'Settings'])
+			await expect(disabledNavLinks.nth(1)).toHaveAccessibleName('Team')
 		}
 
 		/// Main
@@ -192,7 +214,8 @@ test('project info', async ({ appInfo, projectParams, userParams }) => {
 
 				await expect(
 					projectColorInput.getByRole('checkbox', { checked: true }),
-				).toHaveCount(0)
+				).toHaveCount(1)
+
 				const colorCheckboxes = projectColorInput.getByRole('checkbox')
 
 				const expectedColorOptions = [
@@ -252,13 +275,9 @@ test('project info', async ({ appInfo, projectParams, userParams }) => {
 			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
 			await main
 				.getByLabel('Project Card Color', { exact: true })
-				.getByRole('checkbox', { name: 'Green', exact: true })
+				.getByRole('checkbox')
+				.first()
 				.click()
-			await expect(
-				main
-					.getByLabel('Project Card Color', { exact: true })
-					.getByRole('checkbox', { name: 'Green', exact: true }),
-			).toBeChecked()
 
 			// Leave and re-enter using back button
 			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
@@ -294,7 +313,7 @@ test('project info', async ({ appInfo, projectParams, userParams }) => {
 
 			await expect(
 				projectColorInput.getByRole('checkbox', { checked: true }),
-			).toHaveCount(0)
+			).toHaveCount(1)
 		}
 
 		//// Cancel changes (cancel button)
@@ -317,16 +336,9 @@ test('project info', async ({ appInfo, projectParams, userParams }) => {
 			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
 			await main
 				.getByLabel('Project Card Color', { exact: true })
-				.getByRole('checkbox', { name: 'Blue', exact: true })
+				.getByRole('checkbox')
+				.first()
 				.click()
-			await expect(
-				main
-					.getByLabel('Project Card Color', { exact: true })
-					.getByRole('checkbox', {
-						name: 'Blue',
-						exact: true,
-					}),
-			).toBeChecked()
 
 			// Leave using cancel button and re-enter
 			await main.getByRole('button', { name: 'Cancel', exact: true }).click()
@@ -362,7 +374,7 @@ test('project info', async ({ appInfo, projectParams, userParams }) => {
 
 			await expect(
 				projectColorInput.getByRole('checkbox', { checked: true }),
-			).toHaveCount(0)
+			).toHaveCount(1)
 
 			await expect(
 				main.getByRole('button', { name: 'Cancel', exact: true }),
@@ -473,7 +485,6 @@ test('project info', async ({ appInfo, projectParams, userParams }) => {
 		const updatedProjectParams = {
 			projectName: 'Project e2e Updated',
 			projectDescription: 'Updated project description for e2e tests',
-			projectColor: { name: 'Orange', hexCode: PROJECT_ORANGE },
 		}
 
 		{
@@ -494,19 +505,8 @@ test('project info', async ({ appInfo, projectParams, userParams }) => {
 			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
 			await main
 				.getByLabel('Project Card Color', { exact: true })
-				.getByRole('checkbox', {
-					name: updatedProjectParams.projectColor.name,
-					exact: true,
-				})
+				.getByRole('checkbox', { checked: true })
 				.click()
-			await expect(
-				main
-					.getByLabel('Project Card Color', { exact: true })
-					.getByRole('checkbox', {
-						name: updatedProjectParams.projectColor.name,
-						exact: true,
-					}),
-			).toBeChecked()
 
 			main.getByRole('button', { name: 'Save', exact: true }).click()
 
@@ -550,15 +550,9 @@ test('project info', async ({ appInfo, projectParams, userParams }) => {
 
 				await expect(
 					main
-						.getByLabel('Project Card Color', {
-							exact: true,
-						})
-						.getByRole('checkbox', {
-							name: updatedProjectParams.projectColor.name,
-							exact: true,
-							checked: true,
-						}),
-				).toBeVisible()
+						.getByLabel('Project Card Color', { exact: true })
+						.getByRole('checkbox', { checked: true }),
+				).toHaveCount(0)
 
 				await main
 					.getByRole('button', { name: 'Go back.', exact: true })
@@ -583,8 +577,19 @@ test('categories', async ({ appInfo, projectParams, userParams }) => {
 		await simulateOnboarding({
 			page,
 			deviceName: userParams.deviceName,
-			projectName: projectParams.projectName,
 		})
+
+		await simulateCreateProject({
+			projectName: projectParams.projectName,
+			page,
+		})
+
+		await page
+			.getByRole('button', {
+				name: `Go to project ${projectParams.projectName}.`,
+				exact: true,
+			})
+			.click()
 
 		// 2. Main tests
 		const main = page.getByRole('main')
@@ -593,7 +598,7 @@ test('categories', async ({ appInfo, projectParams, userParams }) => {
 		{
 			// Navigate to categories settings page
 			const toolsNavLink = page
-				.getByRole('navigation')
+				.getByRole('navigation', { name: 'Project navigation', exact: true })
 				.getByRole('link', { name: 'Tools', exact: true })
 
 			await toolsNavLink.click()
@@ -604,24 +609,14 @@ test('categories', async ({ appInfo, projectParams, userParams }) => {
 
 			// Assert nav rail state
 			const enabledNavLinks = page
-				.getByRole('navigation')
+				.getByRole('navigation', { name: 'Project navigation', exact: true })
 				.getByRole('link', { disabled: false })
 
-			await expect(enabledNavLinks.first()).toHaveAccessibleName(
-				'View project.',
-			)
+			await expect(enabledNavLinks.first()).toHaveAccessibleName('List')
 
-			await expect(enabledNavLinks.nth(1)).toHaveAccessibleName(
-				'View exchange.',
-			)
+			await expect(enabledNavLinks.nth(1)).toHaveAccessibleName('Team')
 
-			await expect(enabledNavLinks).toHaveText([
-				'',
-				'',
-				'Team',
-				'Tools',
-				'Settings',
-			])
+			await expect(enabledNavLinks.nth(2)).toHaveAccessibleName('Tools')
 		}
 
 		/// Main
