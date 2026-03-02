@@ -28,6 +28,7 @@ test('solo', async ({ appInfo, projectParams, userParams }) => {
 		})
 
 		await page
+			.getByRole('navigation', { name: 'App navigation', exact: true })
 			.getByRole('button', {
 				name: `Go to project ${projectParams.projectName}.`,
 				exact: true,

@@ -35,6 +35,7 @@ test.describe('Invite device flow', () => {
 			})
 
 			await page
+				.getByRole('navigation', { name: 'App navigation', exact: true })
 				.getByRole('button', {
 					name: `Go to project ${projectParams.projectName}.`,
 					exact: true,
