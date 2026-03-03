@@ -315,35 +315,65 @@ function RouteComponent() {
 										<Suspense
 											key={project.projectId}
 											fallback={
-												<Stack
-													direction="column"
-													gap={2}
-													border={`1px solid ${BLUE_GREY}`}
-													sx={{ borderRadius: 2, padding: 6 }}
-												>
-													<Skeleton
-														variant="text"
-														width="100%"
-														sx={{
-															fontSize: (theme) => theme.typography.h1.fontSize,
-														}}
-													/>
-													<Stack direction="row" gap={2} alignItems="center">
+												additionalProjectsLayout === 'list' ? (
+													<Stack
+														direction="row"
+														flex={1}
+														alignItems="center"
+														gap={2}
+														paddingInline={6}
+														paddingBlock={4}
+														border={`1px solid ${LIGHT_GREY}`}
+														sx={{ borderRadius: 2 }}
+													>
 														<Skeleton
 															variant="circular"
 															width={24}
 															height={24}
 														/>
+
 														<Skeleton
 															variant="text"
-															width="25%"
 															sx={{
+																flex: 1,
 																fontSize: (theme) =>
-																	theme.typography.body1.fontSize,
+																	theme.typography.h1.fontSize,
 															}}
 														/>
 													</Stack>
-												</Stack>
+												) : (
+													<Stack
+														direction="column"
+														gap={2}
+														padding={6}
+														border={`1px solid ${LIGHT_GREY}`}
+														sx={{ borderRadius: 2 }}
+													>
+														<Skeleton
+															variant="text"
+															width="100%"
+															sx={{
+																fontSize: (theme) =>
+																	theme.typography.h1.fontSize,
+															}}
+														/>
+														<Stack direction="row" gap={2} alignItems="center">
+															<Skeleton
+																variant="circular"
+																width={24}
+																height={24}
+															/>
+															<Skeleton
+																variant="text"
+																width="25%"
+																sx={{
+																	fontSize: (theme) =>
+																		theme.typography.body1.fontSize,
+																}}
+															/>
+														</Stack>
+													</Stack>
+												)
 											}
 										>
 											<ListedProjectCard
