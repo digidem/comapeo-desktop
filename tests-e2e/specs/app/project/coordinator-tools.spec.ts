@@ -20,7 +20,7 @@ import {
 	test,
 } from '../../utils.ts'
 
-const ASSETS_DIR = fileURLToPath(new URL('../../assets', import.meta.url))
+const ASSETS_DIR = fileURLToPath(new URL('../../../assets', import.meta.url))
 
 test.describe.configure({ mode: 'parallel' })
 

@@ -29,7 +29,7 @@ export default defineConfig<TestOptions>({
 		},
 		{
 			name: 'app',
-			testMatch: 'specs/app/*.spec.ts',
+			testMatch: 'specs/app/**/*.spec.ts',
 			dependencies: ['smokescreen'],
 		},
 	],

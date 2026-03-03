@@ -24,7 +24,7 @@ test('welcome page', async ({ appInfo }) => {
 			page.getByRole('heading', { name: 'CoMapeo Desktop', exact: true }),
 		).toBeVisible({
 			// NOTE: Takes a while, especially in CI
-			timeout: 10_000,
+			timeout: 15_000,
 		})
 
 		await expect(
