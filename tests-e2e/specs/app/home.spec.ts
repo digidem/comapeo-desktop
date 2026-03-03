@@ -2,7 +2,12 @@ import { hexToRgb } from '@mui/material/styles'
 import { expect } from '@playwright/test'
 
 import { COMAPEO_BLUE } from '../../../src/renderer/src/colors.ts'
-import { setup, simulateOnboarding, test } from '../utils.ts'
+import {
+	setup,
+	simulateCreateProject,
+	simulateOnboarding,
+	test,
+} from '../utils.ts'
 
 test.describe.configure({ mode: 'parallel' })
 
@@ -185,6 +190,96 @@ test('create project', async ({ appInfo, projectParams, userParams }) => {
 				hexToRgb(COMAPEO_BLUE),
 			)
 		}
+	} finally {
+		// 3. Cleanup
+		await electronApp.close()
+		cleanup()
+	}
+})
+
+test('additional projects section', async ({
+	appInfo,
+	projectParams,
+	userParams,
+}) => {
+	const { launchApp, cleanup } = await setup()
+	const electronApp = await launchApp({ appInfo })
+
+	try {
+		// 1. Setup
+		const page = await electronApp.firstWindow()
+
+		await simulateOnboarding({ deviceName: userParams.deviceName, page })
+
+		const projectName01 = `${projectParams.projectName} 01`
+
+		await simulateCreateProject({
+			page,
+			projectName: projectName01,
+		})
+
+		// 2. Main tests
+		const main = page.getByRole('main')
+
+		// Additional projects row assertions
+		{
+			await expect(
+				main.getByRole('heading', { name: 'Additional Projects', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				main.getByText('Ordered by most recently created', { exact: true }),
+			).toBeVisible()
+
+			await main
+				.getByRole('link', { name: 'Show as list', exact: true })
+				.hover()
+
+			await expect(
+				page.getByRole('tooltip', { name: 'Show as list', exact: true }),
+			).toBeVisible()
+
+			await main
+				.getByRole('link', { name: 'Show as grid', exact: true })
+				.hover()
+
+			await expect(
+				page.getByRole('tooltip', { name: 'Show as grid', exact: true }),
+			).toBeVisible()
+		}
+
+		const projectName02 = `${projectParams.projectName} 02`
+
+		await simulateCreateProject({
+			page,
+			projectName: projectName02,
+		})
+
+		// Project card assertions after creation of second project.
+		{
+			const projectCard01 = main.getByRole('link', {
+				name: `Go to project ${projectName01}.`,
+				exact: true,
+			})
+
+			await expect(projectCard01).not.toHaveCSS(
+				'border-color',
+				hexToRgb(COMAPEO_BLUE),
+			)
+
+			const projectCard02 = main.getByRole('link', {
+				name: `Go to project ${projectName02}.`,
+				exact: true,
+			})
+
+			await expect(projectCard02).toHaveCSS(
+				'border-color',
+				hexToRgb(COMAPEO_BLUE),
+			)
+		}
+
+		await main.getByRole('link', { name: 'Show as list', exact: true }).click()
+		await main.getByRole('link', { name: 'Show as grid', exact: true }).click()
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()
