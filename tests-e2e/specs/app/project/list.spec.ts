@@ -1,13 +1,13 @@
 import { hexToRgb } from '@mui/material/styles'
 import { expect } from 'playwright/test'
 
-import { COMAPEO_BLUE } from '../../../src/renderer/src/colors.ts'
+import { COMAPEO_BLUE } from '../../../../src/renderer/src/colors.ts'
 import {
 	setup,
 	simulateCreateProject,
 	simulateOnboarding,
 	test,
-} from '../utils.ts'
+} from '../../utils.ts'
 
 test.describe.configure({ mode: 'parallel' })
 

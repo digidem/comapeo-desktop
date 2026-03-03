@@ -5,7 +5,7 @@ import {
 	simulateCreateProject,
 	simulateOnboarding,
 	test,
-} from '../utils.ts'
+} from '../../utils.ts'
 
 test.describe.configure({ mode: 'parallel' })
 

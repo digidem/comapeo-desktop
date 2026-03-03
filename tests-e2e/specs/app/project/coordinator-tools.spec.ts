@@ -12,13 +12,13 @@ import {
 	PROJECT_GREY,
 	PROJECT_ORANGE,
 	PROJECT_RED,
-} from '../../../src/renderer/src/colors.ts'
+} from '../../../../src/renderer/src/colors.ts'
 import {
 	setup,
 	simulateCreateProject,
 	simulateOnboarding,
 	test,
-} from '../utils.ts'
+} from '../../utils.ts'
 
 const ASSETS_DIR = fileURLToPath(new URL('../../assets', import.meta.url))
 
