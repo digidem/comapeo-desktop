@@ -1,5 +1,9 @@
 import { Suspense } from 'react'
-import { useMapStyleUrl, useOwnDeviceInfo } from '@comapeo/core-react'
+import {
+	useManyProjects,
+	useMapStyleUrl,
+	useOwnDeviceInfo,
+} from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import List from '@mui/material/List'
@@ -91,6 +95,7 @@ function SettingsList() {
 		multiplier: 1.75,
 	})
 
+	const { data: projects } = useManyProjects()
 	return (
 		<Stack direction="column" gap={4}>
 			<Typography
@@ -199,7 +204,8 @@ function SettingsList() {
 				</ListItem>
 
 				{__APP_TYPE__ !== 'production' &&
-				import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
+				import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' &&
+				projects.length > 0 ? (
 					<ListItem disableGutters disablePadding>
 						<ListRowLink
 							to="/app/settings/test-data"

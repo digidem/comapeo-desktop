@@ -4,14 +4,14 @@ import { hexToRgb } from '@mui/material/styles'
 import { expect } from '@playwright/test'
 import { stubDialog } from 'electron-playwright-helpers'
 
-import { COMAPEO_BLUE } from '../../../src/renderer/src/colors.ts'
+import { DARK_COMAPEO_BLUE } from '../../../src/renderer/src/colors.ts'
 import { setup, simulateOnboarding, test } from '../utils.ts'
 
 const ASSETS_DIR = fileURLToPath(new URL('../../assets', import.meta.url))
 
 test.describe.configure({ mode: 'parallel' })
 
-test('index', async ({ appInfo, projectParams, userParams }) => {
+test('index', async ({ appInfo, userParams }) => {
 	const { launchApp, cleanup } = await setup()
 	const electronApp = await launchApp({ appInfo })
 
@@ -22,7 +22,6 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 		await simulateOnboarding({
 			page,
 			deviceName: userParams.deviceName,
-			projectName: projectParams.projectName,
 		})
 
 		// 2. Main tests
@@ -30,12 +29,10 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 		/// Navigation
 		{
 			const settingsNavLink = page
-				.getByRole('navigation')
+				.getByRole('navigation', { name: 'App navigation', exact: true })
 				.getByRole('link', { name: 'Settings', exact: true })
 
 			await settingsNavLink.click()
-
-			await expect(settingsNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
 		}
 
 		/// Main
@@ -57,7 +54,7 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 			.getByRole('listitem')
 			.filter({ has: page.getByRole('link') })
 
-		await expect(settingsItems).toHaveCount(5)
+		await expect(settingsItems).toHaveCount(4)
 
 		//// Device name settings item
 		{
@@ -131,18 +128,6 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 
 			await expect(
 				backgroundMapSettingsItem.getByText('Default Background', {
-					exact: true,
-				}),
-			).toBeVisible()
-		}
-
-		//// Test data settings item
-		{
-			const testDataSettingsItem = settingsItems.last()
-
-			await expect(
-				testDataSettingsItem.getByRole('link', {
-					name: 'Create Test Data',
 					exact: true,
 				}),
 			).toBeVisible()
@@ -226,7 +211,7 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 	}
 })
 
-test('device name', async ({ appInfo, projectParams, userParams }) => {
+test('device name', async ({ appInfo, userParams }) => {
 	const { launchApp, cleanup } = await setup()
 	const electronApp = await launchApp({ appInfo })
 
@@ -237,7 +222,6 @@ test('device name', async ({ appInfo, projectParams, userParams }) => {
 		await simulateOnboarding({
 			page,
 			deviceName: userParams.deviceName,
-			projectName: projectParams.projectName,
 		})
 
 		// 2. Main tests
@@ -247,7 +231,7 @@ test('device name', async ({ appInfo, projectParams, userParams }) => {
 		{
 			// Navigate to device name settings page
 			const settingsNavLink = page
-				.getByRole('navigation')
+				.getByRole('navigation', { name: 'App navigation', exact: true })
 				.getByRole('link', { name: 'Settings', exact: true })
 
 			await settingsNavLink.click()
@@ -263,21 +247,11 @@ test('device name', async ({ appInfo, projectParams, userParams }) => {
 
 			await deviceNameSettingsLink.click()
 
-			// Assert nav rail state
-			await expect(settingsNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
-
-			const disabledNavLinks = page
-				.getByRole('navigation')
-				.getByRole('link', { disabled: true })
-
-			await expect(disabledNavLinks.first()).toHaveAccessibleName(
-				'View project.',
+			// Assert app nav bar state
+			await expect(settingsNavLink).toHaveCSS(
+				'background-color',
+				hexToRgb(DARK_COMAPEO_BLUE),
 			)
-			await expect(disabledNavLinks.nth(1)).toHaveAccessibleName(
-				'View exchange.',
-			)
-
-			await expect(disabledNavLinks).toHaveText(['', '', 'Team', 'Tools'])
 		}
 
 		/// Main
@@ -376,7 +350,7 @@ test('device name', async ({ appInfo, projectParams, userParams }) => {
 	}
 })
 
-test('language', async ({ appInfo, projectParams, userParams }) => {
+test('language', async ({ appInfo, userParams }) => {
 	const { launchApp, cleanup } = await setup()
 	const electronApp = await launchApp({ appInfo })
 
@@ -387,7 +361,6 @@ test('language', async ({ appInfo, projectParams, userParams }) => {
 		await simulateOnboarding({
 			page,
 			deviceName: userParams.deviceName,
-			projectName: projectParams.projectName,
 		})
 
 		// 2. Main tests
@@ -397,7 +370,7 @@ test('language', async ({ appInfo, projectParams, userParams }) => {
 		{
 			// Navigate to language settings page
 			const settingsNavLink = page
-				.getByRole('navigation')
+				.getByRole('navigation', { name: 'App navigation', exact: true })
 				.getByRole('link', { name: 'Settings', exact: true })
 
 			await settingsNavLink.click()
@@ -416,21 +389,11 @@ test('language', async ({ appInfo, projectParams, userParams }) => {
 
 			await languageSettingsLink.click()
 
-			// Assert nav rail state
-			await expect(settingsNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
-
-			const disabledNavLinks = page
-				.getByRole('navigation')
-				.getByRole('link', { disabled: true })
-
-			await expect(disabledNavLinks.first()).toHaveAccessibleName(
-				'View project.',
+			// Assert app nav bar state
+			await expect(settingsNavLink).toHaveCSS(
+				'background-color',
+				hexToRgb(DARK_COMAPEO_BLUE),
 			)
-			await expect(disabledNavLinks.nth(1)).toHaveAccessibleName(
-				'View exchange.',
-			)
-
-			await expect(disabledNavLinks).toHaveText(['', '', 'Team', 'Tools'])
 		}
 
 		/// Main
@@ -492,17 +455,6 @@ test('language', async ({ appInfo, projectParams, userParams }) => {
 				}),
 			).toBeVisible()
 
-			await expect(page.getByRole('navigation').getByRole('link')).toHaveText([
-				'',
-				'',
-				// NOTE: Need to update when translations get updated
-				'Equipe',
-				// NOTE: Need to update when translations get updated
-				'Ferramentas',
-				// NOTE: Need to update when translations get updated
-				'Ajustes',
-			])
-
 			await main.getByRole('button', { name: 'Voltar.', exact: true }).click()
 
 			const languageSettingsLink = main.getByRole('link', {
@@ -542,7 +494,7 @@ test('language', async ({ appInfo, projectParams, userParams }) => {
 	}
 })
 
-test('coordinate system', async ({ appInfo, projectParams, userParams }) => {
+test('coordinate system', async ({ appInfo, userParams }) => {
 	const { launchApp, cleanup } = await setup()
 	const electronApp = await launchApp({ appInfo })
 
@@ -553,7 +505,6 @@ test('coordinate system', async ({ appInfo, projectParams, userParams }) => {
 		await simulateOnboarding({
 			page,
 			deviceName: userParams.deviceName,
-			projectName: projectParams.projectName,
 		})
 
 		// 2. Main tests
@@ -563,7 +514,7 @@ test('coordinate system', async ({ appInfo, projectParams, userParams }) => {
 		{
 			// Navigate to coordinate system settings page
 			const settingsNavLink = page
-				.getByRole('navigation')
+				.getByRole('navigation', { name: 'App navigation', exact: true })
 				.getByRole('link', { name: 'Settings', exact: true })
 
 			await settingsNavLink.click()
@@ -581,21 +532,11 @@ test('coordinate system', async ({ appInfo, projectParams, userParams }) => {
 
 			await coordinateSystemSettingsLink.click()
 
-			// Assert nav rail state
-			await expect(settingsNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
-
-			const disabledNavLinks = page
-				.getByRole('navigation')
-				.getByRole('link', { disabled: true })
-
-			await expect(disabledNavLinks.first()).toHaveAccessibleName(
-				'View project.',
+			// Assert app nav bar state
+			await expect(settingsNavLink).toHaveCSS(
+				'background-color',
+				hexToRgb(DARK_COMAPEO_BLUE),
 			)
-			await expect(disabledNavLinks.nth(1)).toHaveAccessibleName(
-				'View exchange.',
-			)
-
-			await expect(disabledNavLinks).toHaveText(['', '', 'Team', 'Tools'])
 		}
 
 		/// Main
@@ -688,7 +629,7 @@ test('coordinate system', async ({ appInfo, projectParams, userParams }) => {
 	}
 })
 
-test('background map', async ({ appInfo, projectParams, userParams }) => {
+test('background map', async ({ appInfo, userParams }) => {
 	const { launchApp, cleanup } = await setup()
 	const electronApp = await launchApp({ appInfo })
 
@@ -699,18 +640,16 @@ test('background map', async ({ appInfo, projectParams, userParams }) => {
 		await simulateOnboarding({
 			page,
 			deviceName: userParams.deviceName,
-			projectName: projectParams.projectName,
 		})
 
-		const main = page.getByRole('main')
-
 		// 2. Main tests
+		const main = page.getByRole('main')
 
 		/// Navigation
 		{
 			// Navigate to background map settings page
 			const settingsNavLink = page
-				.getByRole('navigation')
+				.getByRole('navigation', { name: 'App navigation', exact: true })
 				.getByRole('link', { name: 'Settings', exact: true })
 
 			await settingsNavLink.click()
@@ -728,8 +667,11 @@ test('background map', async ({ appInfo, projectParams, userParams }) => {
 
 			await backgroundMapSettingsLink.click()
 
-			// Assert nav rail state
-			await expect(settingsNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+			// Assert app nav bar state
+			await expect(settingsNavLink).toHaveCSS(
+				'background-color',
+				hexToRgb(DARK_COMAPEO_BLUE),
+			)
 		}
 
 		/// Main

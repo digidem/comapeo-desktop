@@ -1,8 +1,5 @@
-import { StrictMode, Suspense, type ReactElement, type ReactNode } from 'react'
-import {
-	ClientApiProvider,
-	useSetUpInvitesListeners,
-} from '@comapeo/core-react'
+import { StrictMode, Suspense, type ReactElement } from 'react'
+import { ClientApiProvider } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -29,7 +26,7 @@ import { useIntl, type IntlShape } from 'react-intl'
 import type { LocaleState } from '../../shared/intl'
 import { WHITE } from './colors'
 import { initComapeoClient } from './comapeo-client'
-import { AppTitleBar, TITLE_BAR_HEIGHT } from './components/app-title-bar'
+import { AppTitleBar } from './components/app-title-bar'
 import { GenericRouteErrorComponent } from './components/generic-route-error-component'
 import { GenericRouteNotFoundComponent } from './components/generic-route-not-found-component'
 import { GenericRoutePendingComponent } from './components/generic-route-pending-component'
@@ -52,8 +49,9 @@ import {
 } from './contexts/refresh-tokens-store-context'
 import { routeTree } from './generated/routeTree.gen'
 import { useNetworkConnectionChangeListener } from './hooks/network'
+import { DIALOG_CONTAINER_ID, TITLE_BAR_HEIGHT } from './lib/constants.js'
 import { getLocaleStateQueryOptions } from './lib/queries/app-settings'
-import { theme } from './theme'
+import { createTheme } from './theme.js'
 
 const queryClient = new QueryClient({
 	// Since the API is running locally, queries should run regardless of network
@@ -138,6 +136,8 @@ initSentryElectron(
 
 const { platform } = window.runtime.getAppInfo()
 
+const theme = createTheme({ platform })
+
 const MAIN_CONTENT_HEIGHT =
 	platform === 'darwin' ? `calc(100% - ${TITLE_BAR_HEIGHT})` : '100%'
 
@@ -180,7 +180,7 @@ export function App() {
 											<AppTitleBar platform={platform} testId="app-title-bar" />
 										) : null}
 
-										<Box height={MAIN_CONTENT_HEIGHT}>
+										<Box id={DIALOG_CONTAINER_ID} height={MAIN_CONTENT_HEIGHT}>
 											<Suspense
 												fallback={
 													<Box
@@ -195,21 +195,19 @@ export function App() {
 											>
 												<ClientApiProvider clientApi={clientApi}>
 													<LocalPeersStoreProvider value={localPeersStore}>
-														<WithInvitesListener>
-															<WithAddedRouteContext>
-																{({ formatMessage, localeState }) => (
-																	<RouterProvider
-																		router={router}
-																		context={{
-																			activeProjectIdStore,
-																			formatMessage,
-																			globalEditingStateStore,
-																			localeState,
-																		}}
-																	/>
-																)}
-															</WithAddedRouteContext>
-														</WithInvitesListener>
+														<WithAddedRouteContext>
+															{({ formatMessage, localeState }) => (
+																<RouterProvider
+																	router={router}
+																	context={{
+																		activeProjectIdStore,
+																		formatMessage,
+																		globalEditingStateStore,
+																		localeState,
+																	}}
+																/>
+															)}
+														</WithAddedRouteContext>
 													</LocalPeersStoreProvider>
 												</ClientApiProvider>
 											</Suspense>
@@ -228,12 +226,6 @@ export function App() {
 function NetworkConnectionChangeListener() {
 	useNetworkConnectionChangeListener()
 	return null
-}
-
-function WithInvitesListener({ children }: { children: ReactNode }) {
-	useSetUpInvitesListeners()
-
-	return children
 }
 
 function WithAddedRouteContext({

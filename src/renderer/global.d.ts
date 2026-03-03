@@ -8,3 +8,9 @@ declare global {
 		runtime: RuntimeApi
 	}
 }
+
+declare module '@tanstack/react-router' {
+	interface StaticDataRouteOption {
+		onboardingStepNumber?: 1 | 2
+	}
+}

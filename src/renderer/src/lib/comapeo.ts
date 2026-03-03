@@ -1,5 +1,8 @@
 import type { BlobApi, MemberApi } from '@comapeo/core'
+import type { useManyProjects } from '@comapeo/core-react'
 import type { Observation, Preset, Track } from '@comapeo/schema'
+
+export type ListedProject = ReturnType<typeof useManyProjects>['data'][number]
 
 export type Attachment = Observation['attachments'][number]
 

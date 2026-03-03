@@ -71,11 +71,9 @@ export async function setup() {
 
 export async function simulateOnboarding({
 	deviceName,
-	projectName,
 	page,
 }: {
 	deviceName: string
-	projectName: string
 	page: Page
 }) {
 	await page.getByRole('link', { name: 'Get Started' }).click()
@@ -84,22 +82,30 @@ export async function simulateOnboarding({
 		.getByRole('textbox', { name: 'Device Name', exact: true })
 		.fill(deviceName)
 	await page.getByRole('button', { name: 'Add Name', exact: true }).click()
+
+	await page.waitForURL((url) => {
+		return /^#\/app$/.test(url.hash)
+	})
+}
+
+export async function simulateCreateProject({
+	page,
+	projectName,
+}: {
+	page: Page
+	projectName: string
+}) {
+	await page.getByRole('link', { name: 'Home', exact: true }).click()
+
 	await page
-		.getByRole('link', { name: 'Start New Project', exact: true })
+		.getByRole('button', { name: 'Start New Project', exact: true })
 		.click()
+
 	await page
 		.getByRole('textbox', { name: 'Project Name', exact: true })
 		.fill(projectName)
+
 	await page.getByRole('button', { name: 'Create', exact: true }).click()
 
-	await page
-		.getByRole('link', { name: 'Start Using CoMapeo', exact: true })
-		.click({
-			// NOTE: Depending on machine, project creation might take a bit longer.
-			timeout: 10_000,
-		})
-
-	await page.waitForURL((url) => {
-		return /^#\/app\/projects\/[a-zA-Z0-9]+/.test(url.hash)
-	})
+	await page.getByRole('link', { name: 'Home', exact: true }).click()
 }

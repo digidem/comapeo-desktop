@@ -11,7 +11,7 @@ export default defineConfig<TestOptions>({
 			3
 		: undefined,
 	maxFailures: 0,
-	retries: 2,
+	retries: process.env.CI ? 2 : 0,
 	timeout: process.env.CI ? 45_000 : 30_000,
 	reporter: [
 		['list'],

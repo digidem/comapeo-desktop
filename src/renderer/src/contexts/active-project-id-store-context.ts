@@ -1,12 +1,9 @@
 import { createContext, use } from 'react'
-import { createStore } from 'zustand'
+import { createStore, useStore } from 'zustand'
 
 export type ActiveProjectIdStore = ReturnType<typeof createActiveProjectIdStore>
-export type ActiveProjectIdState = string | undefined
 
-export function createActiveProjectIdStore(opts?: {
-	initialValue: ActiveProjectIdState
-}) {
+export function createActiveProjectIdStore(opts?: { initialValue?: string }) {
 	const store = createStore(() => {
 		return opts?.initialValue
 	})
@@ -33,6 +30,11 @@ function useActiveProjectIdStore() {
 	}
 
 	return value
+}
+
+export function useActiveProjectId() {
+	const { instance } = useActiveProjectIdStore()
+	return useStore(instance)
 }
 
 export function useActiveProjectIdActions() {

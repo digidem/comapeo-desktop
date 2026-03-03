@@ -290,9 +290,24 @@
 				d="M18 0H6C4.34 0 3 1.34 3 3v18c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V3c0-1.66-1.34-3-3-3zm-4 22h-4v-1h4v1zm5.25-3H4.75V3h14.5v16z"
 			></path>
 		</symbol>
+		<symbol viewBox="0 -960 960 960" id="material-symbols-lists">
+			<path
+				d="M80-160v-160h160v160zm240 0v-160h560v160zM80-400v-160h160v160zm240 0v-160h560v160zM80-640v-160h160v160zm240 0v-160h560v160z"
+			></path>
+		</symbol>
 		<symbol viewBox="0 -960 960 960" id="material-symbols-info">
 			<path
 				d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
+			></path>
+		</symbol>
+		<symbol viewBox="0 -960 960 960" id="material-symbols-home">
+			<path
+				d="M240-200h120v-240h240v240h120v-360L480-740 240-560zm-80 80v-480l320-240 320 240v480H520v-240h-80v240zm320-350"
+			></path>
+		</symbol>
+		<symbol viewBox="0 -960 960 960" id="material-symbols-grid-view">
+			<path
+				d="M120-520v-320h320v320zm0 400v-320h320v320zm400-400v-320h320v320zm0 400v-320h320v320zM200-600h160v-160H200zm400 0h160v-160H600zm0 400h160v-160H600zm-400 0h160v-160H200zm160-400"
 			></path>
 		</symbol>
 		<symbol viewBox="0 -960 960 960" id="material-symbols-encrypted-weight200">

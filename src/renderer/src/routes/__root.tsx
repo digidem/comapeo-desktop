@@ -7,9 +7,10 @@ import {
 } from '@tanstack/react-router'
 import type { IntlShape } from 'react-intl'
 
-import type { LocaleState } from '../../../shared/intl'
-import type { ActiveProjectIdStore } from '../contexts/active-project-id-store-context'
+import type { LocaleState } from '../../../shared/intl.ts'
+import type { ActiveProjectIdStore } from '../contexts/active-project-id-store-context.ts'
 import type { GlobalEditingStateStore } from '../contexts/global-editing-state-store-context.ts'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../lib/comapeo.ts'
 
 export interface RootRouterContext {
 	activeProjectIdStore: ActiveProjectIdStore
@@ -22,6 +23,29 @@ export interface RootRouterContext {
 }
 
 export const Route = createRootRouteWithContext<RootRouterContext>()({
+	beforeLoad: async ({ context, matches }) => {
+		const { queryClient, clientApi } = context
+
+		const ownDeviceInfo = await queryClient.fetchQuery({
+			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
+			queryFn: async () => {
+				return clientApi.getDeviceInfo()
+			},
+		})
+
+		const currentRoute = matches.at(-1)!
+
+		if (
+			// NOTE: Implicit check that the user hasn't completed the onboarding yet.
+			!ownDeviceInfo.name &&
+			!(
+				currentRoute.routeId === '/welcome' ||
+				currentRoute.routeId.startsWith('/onboarding')
+			)
+		) {
+			throw Route.redirect({ to: '/welcome', replace: true })
+		}
+	},
 	component: RouteComponent,
 })
 
