@@ -286,3 +286,66 @@ test('additional projects section', async ({
 		cleanup()
 	}
 })
+
+// TODO: Local storage is not getting set/persisted across page instances?
+test.skip('initial page when re-opening app', async ({
+	appInfo,
+	projectParams,
+	userParams,
+}) => {
+	const { launchApp, cleanup } = await setup()
+	let electronApp = await launchApp({ appInfo })
+
+	try {
+		// 1. Setup
+		let page = await electronApp.firstWindow()
+
+		await simulateOnboarding({ deviceName: userParams.deviceName, page })
+
+		await simulateCreateProject({
+			page,
+			projectName: projectParams.projectName,
+		})
+
+		// 2. Main tests
+
+		await electronApp.close()
+		electronApp = await launchApp({ appInfo })
+		page = await electronApp.firstWindow()
+
+		await page.waitForURL((url) => {
+			return new URLPattern({
+				pathname: '/app',
+			}).test({ pathname: url.hash.slice(1) })
+		})
+
+		await page
+			.getByRole('navigation', { name: 'App navigation', exact: true })
+			.getByRole('button', {
+				name: `Go to project ${projectParams.projectName}.`,
+				exact: true,
+			})
+			.click()
+
+		await page.waitForURL((url) => {
+			return new URLPattern({
+				pathname: '/app/projects/:projectId',
+			}).test({ pathname: url.hash.slice(1) })
+		})
+
+		await electronApp.close()
+		electronApp = await launchApp({ appInfo })
+		page = await electronApp.firstWindow()
+
+		// TODO: This assertion fails. End up on home page.
+		await page.waitForURL((url) => {
+			return new URLPattern({
+				pathname: '/app/projects/:projectId',
+			}).test({ pathname: url.hash.slice(1) })
+		})
+	} finally {
+		// 3. Cleanup
+		await electronApp.close()
+		cleanup()
+	}
+})
