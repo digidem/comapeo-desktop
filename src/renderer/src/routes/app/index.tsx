@@ -7,7 +7,6 @@ import {
 import Box from '@mui/material/Box'
 import ButtonBase from '@mui/material/ButtonBase'
 import Divider from '@mui/material/Divider'
-import IconButton from '@mui/material/IconButton'
 import Skeleton from '@mui/material/Skeleton'
 import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
@@ -23,6 +22,7 @@ import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
 import {
 	ButtonBaseLink,
+	IconButtonLink,
 	type ButtonBaseLinkComponentProps,
 } from '../../components/link.tsx'
 import { useActiveProjectId } from '../../contexts/active-project-id-store-context.ts'
@@ -245,25 +245,20 @@ function RouteComponent() {
 										disableFocusListener
 										placement="bottom"
 									>
-										<IconButton
-											color="inherit"
-											onClick={() => {
-												router.navigate({
-													to: '.',
-													replace: true,
-													search: { projectsLayout: 'grid' },
-												})
+										<IconButtonLink
+											to="."
+											search={{ projectsLayout: 'grid' }}
+											replace
+											activeOptions={{ includeSearch: true }}
+											inactiveProps={{
+												sx: { color: BLUE_GREY },
+											}}
+											activeProps={{
+												sx: { color: (theme) => theme.palette.text.primary },
 											}}
 										>
-											<Icon
-												name="material-symbols-grid-view"
-												htmlColor={
-													additionalProjectsLayout === 'grid'
-														? undefined
-														: BLUE_GREY
-												}
-											/>
-										</IconButton>
+											<Icon name="material-symbols-grid-view" />
+										</IconButtonLink>
 									</Tooltip>
 
 									<Tooltip
@@ -271,25 +266,20 @@ function RouteComponent() {
 										disableFocusListener
 										placement="bottom"
 									>
-										<IconButton
-											color="inherit"
-											onClick={() => {
-												router.navigate({
-													to: '.',
-													replace: true,
-													search: { projectsLayout: 'list' },
-												})
+										<IconButtonLink
+											to="."
+											search={{ projectsLayout: 'list' }}
+											replace
+											activeOptions={{ includeSearch: true }}
+											inactiveProps={{
+												sx: { color: BLUE_GREY },
+											}}
+											activeProps={{
+												sx: { color: (theme) => theme.palette.text.primary },
 											}}
 										>
-											<Icon
-												name="material-symbols-lists"
-												htmlColor={
-													additionalProjectsLayout === 'list'
-														? undefined
-														: BLUE_GREY
-												}
-											/>
-										</IconButton>
+											<Icon name="material-symbols-lists" />
+										</IconButtonLink>
 									</Tooltip>
 								</Stack>
 							</Stack>
