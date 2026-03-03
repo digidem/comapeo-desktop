@@ -251,7 +251,12 @@ function RouteComponent() {
 											replace
 											activeOptions={{ includeSearch: true }}
 											inactiveProps={{
-												sx: { color: BLUE_GREY },
+												sx: {
+													color: (theme) =>
+														additionalProjectsLayout === 'grid'
+															? theme.palette.text.primary
+															: BLUE_GREY,
+												},
 											}}
 											activeProps={{
 												sx: { color: (theme) => theme.palette.text.primary },
@@ -272,7 +277,12 @@ function RouteComponent() {
 											replace
 											activeOptions={{ includeSearch: true }}
 											inactiveProps={{
-												sx: { color: BLUE_GREY },
+												sx: {
+													color: (theme) =>
+														additionalProjectsLayout === 'list'
+															? theme.palette.text.primary
+															: BLUE_GREY,
+												},
 											}}
 											activeProps={{
 												sx: { color: (theme) => theme.palette.text.primary },
