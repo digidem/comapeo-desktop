@@ -1,12 +1,12 @@
-import { Suspense } from 'react'
+import { Suspense, type MouseEventHandler } from 'react'
 import {
 	useManyMembers,
+	useManyProjects,
 	useOwnDeviceInfo,
 	useOwnRoleInProject,
 	useSyncState,
 } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
-import CircularProgress from '@mui/material/CircularProgress'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
@@ -19,16 +19,8 @@ import {
 	useChildMatches,
 } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
-import * as v from 'valibot'
 
-import { TwoPanelLayout } from '../../-components/two-panel-layout.tsx'
-import {
-	BLACK,
-	BLUE_GREY,
-	COMAPEO_BLUE,
-	DARK_GREY,
-	LIGHT_GREY,
-} from '../../../../colors.ts'
+import { BLUE_GREY, COMAPEO_BLUE, DARK_GREY } from '../../../../colors.ts'
 import { Icon } from '../../../../components/icon.tsx'
 import {
 	IconButtonLink,
@@ -42,15 +34,8 @@ import {
 } from '../../../../lib/comapeo.ts'
 import { LOCAL_STORAGE_KEYS } from '../../../../lib/constants.ts'
 import { GLOBAL_MUTATIONS_BASE_KEY } from '../../../../lib/queries/global-mutations.ts'
-import { MapPanel } from './-map-panel.tsx'
-import { HighlightedDocumentSchema } from './-shared.ts'
-
-const SearchParamsSchema = v.object({
-	highlightedDocument: v.optional(HighlightedDocumentSchema),
-})
 
 export const Route = createFileRoute('/app/projects/$projectId')({
-	validateSearch: SearchParamsSchema,
 	beforeLoad: async ({ context, params }) => {
 		const { clientApi, queryClient } = context
 		const { projectId } = params
@@ -70,19 +55,25 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 		return { projectApi }
 	},
 	loader: async ({ context, params }) => {
-		const {
-			clientApi,
-			projectApi,
-			queryClient,
-			localeState: { value: lang },
-		} = context
+		const { clientApi, projectApi, queryClient } = context
 		const { projectId } = params
 
-		const navRailQueries = [
+		await Promise.all([
 			queryClient.ensureQueryData({
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 				queryFn: async () => {
 					return clientApi.getDeviceInfo()
+				},
+			}),
+			queryClient.ensureQueryData({
+				queryKey: [
+					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+					'projects',
+					projectId,
+					'role',
+				],
+				queryFn: async () => {
+					return projectApi.$getOwnRole()
 				},
 			}),
 			queryClient.ensureQueryData({
@@ -96,65 +87,7 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 					return projectApi.$member.getMany()
 				},
 			}),
-		] as const
-
-		const mapPanelQueries = [
-			queryClient.ensureQueryData({
-				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
-				queryFn: async () => {
-					return clientApi.getDeviceInfo()
-				},
-			}),
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'members',
-				],
-				queryFn: async () => {
-					return projectApi.$member.getMany()
-				},
-			}),
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'observation',
-					{ lang },
-				],
-				queryFn: async () => {
-					return projectApi.observation.getMany({ lang })
-				},
-			}),
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'track',
-					{ lang },
-				],
-				queryFn: async () => {
-					return projectApi.track.getMany({ lang })
-				},
-			}),
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'preset',
-					{ lang },
-				],
-				queryFn: async () => {
-					return projectApi.preset.getMany({ lang })
-				},
-			}),
-		] as const
-
-		await Promise.all([...navRailQueries, ...mapPanelQueries])
+		])
 	},
 	onEnter: ({ context, params }) => {
 		// NOTE: Used by the initial route (`/`) to determine whether we should use
@@ -186,18 +119,13 @@ function RouteComponent() {
 		},
 	})
 
-	const showMapPanel =
-		currentRoute.routeId === '/app/projects/$projectId/' ||
-		currentRoute.routeId === '/app/projects/$projectId/download' ||
-		currentRoute.routeId.startsWith('/app/projects/$projectId/observations') ||
-		currentRoute.routeId.startsWith('/app/projects/$projectId/tracks')
-
 	const pageHasEditing =
-		currentRoute.routeId === '/app/projects/$projectId/settings/info' ||
 		currentRoute.routeId ===
-			'/app/projects/$projectId/team/invite/devices/$deviceId/role' ||
+			'/app/projects/$projectId/_main-tabs/settings/info' ||
 		currentRoute.routeId ===
-			'/app/projects/$projectId/team/invite/devices/$deviceId/send'
+			'/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId/role' ||
+		currentRoute.routeId ===
+			'/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId/send'
 
 	const isEditing = useGlobalEditingState().length > 0
 
@@ -234,8 +162,8 @@ function RouteComponent() {
 						display: 'flex',
 						flexDirection: 'column',
 						justifyContent: 'space-between',
-						paddingInline: 3,
-						paddingBlock: 4,
+						paddingInline: 4,
+						paddingBlock: 6,
 						gap: 10,
 						textAlign: 'center',
 						alignItems: 'stretch',
@@ -261,8 +189,9 @@ function RouteComponent() {
 										isEditing ||
 										someGlobalMutationIsPending ||
 										(syncEnabled &&
-											currentRoute.routeId ===
-												'/app/projects/$projectId/exchange/')
+											currentRoute.routeId.startsWith(
+												'/app/projects/$projectId/_main-tabs/exchange',
+											))
 									}
 									onClick={(event) => {
 										if (someGlobalMutationIsPending) {
@@ -271,19 +200,21 @@ function RouteComponent() {
 									}}
 									inactiveProps={BASE_INACTIVE_LINK_PROPS}
 									activeProps={
-										// NOTE: Subroutes of the project that also live as nav rail tabs
+										// NOTE: Subroutes of the project that also live as project nav bar tab links
 										currentRoute.routeId.startsWith(
-											'/app/projects/$projectId/exchange',
+											'/app/projects/$projectId/_main-tabs/exchange',
 										) ||
 										currentRoute.routeId.startsWith(
-											'/app/projects/$projectId/settings',
+											'/app/projects/$projectId/_main-tabs/settings',
 										) ||
 										currentRoute.routeId.startsWith(
-											'/app/projects/$projectId/team',
+											'/app/projects/$projectId/_main-tabs/team',
 										) ||
 										currentRoute.routeId.startsWith(
-											'/app/projects/$projectId/team/invite',
-										)
+											'/app/projects/$projectId/_main-tabs/team/invite',
+										) ||
+										currentRoute.routeId ===
+											'/app/projects/$projectId/test-data'
 											? BASE_INACTIVE_LINK_PROPS
 											: BASE_ACTIVE_LINK_PROPS
 									}
@@ -312,11 +243,11 @@ function RouteComponent() {
 											isEditing ||
 											someGlobalMutationIsPending) &&
 											!currentRoute.routeId.startsWith(
-												'/app/projects/$projectId/team',
+												'/app/projects/$projectId/_main-tabs/team',
 											)) ||
 										(syncEnabled &&
 											currentRoute.routeId ===
-												'/app/projects/$projectId/exchange/')
+												'/app/projects/$projectId/_main-tabs/exchange/')
 									}
 									onClick={(event) => {
 										if (someGlobalMutationIsPending) {
@@ -351,11 +282,11 @@ function RouteComponent() {
 												isEditing ||
 												someGlobalMutationIsPending) &&
 												!currentRoute.routeId.startsWith(
-													'/app/projects/$projectId/settings',
+													'/app/projects/$projectId/_main-tabs/settings',
 												)) ||
 											(syncEnabled &&
 												currentRoute.routeId ===
-													'/app/projects/$projectId/exchange/')
+													'/app/projects/$projectId/_main-tabs/exchange/')
 										}
 										onClick={(event) => {
 											if (someGlobalMutationIsPending) {
@@ -369,6 +300,32 @@ function RouteComponent() {
 									</IconButtonLink>
 								</Tooltip>
 							</ListItem>
+						) : null}
+
+						{__APP_TYPE__ !== 'production' &&
+						import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
+							<Suspense>
+								<TestDataTabLink
+									disabled={
+										!!(
+											((pageHasEditing ||
+												isEditing ||
+												someGlobalMutationIsPending) &&
+												currentRoute.routeId !==
+													'/app/projects/$projectId/test-data') ||
+											(syncEnabled &&
+												currentRoute.routeId ===
+													'/app/projects/$projectId/_main-tabs/exchange/')
+										)
+									}
+									onClick={(event) => {
+										if (someGlobalMutationIsPending) {
+											event.preventDefault()
+										}
+									}}
+									projectId={projectId}
+								/>
+							</Suspense>
 						) : null}
 					</Stack>
 
@@ -392,8 +349,8 @@ function RouteComponent() {
 											(pageHasEditing ||
 												isEditing ||
 												someGlobalMutationIsPending) &&
-											!currentRoute.fullPath.startsWith(
-												'/app/projects/$projectId/exchange',
+											!currentRoute.routeId.startsWith(
+												'/app/projects/$projectId/_main-tabs/exchange',
 											)
 										}
 										onClick={(event) => {
@@ -414,33 +371,53 @@ function RouteComponent() {
 			</Box>
 
 			<Box component="main" display="flex" overflow="auto">
-				<TwoPanelLayout
-					start={<Outlet />}
-					end={
-						showMapPanel ? (
-							<Suspense
-								fallback={
-									<Box
-										display="flex"
-										flex={1}
-										justifyContent="center"
-										alignItems="center"
-										bgcolor={BLACK}
-										sx={{ opacity: 0.5 }}
-									>
-										<CircularProgress />
-									</Box>
-								}
-							>
-								<MapPanel />
-							</Suspense>
-						) : (
-							<Box bgcolor={LIGHT_GREY} display="flex" flex={1} />
-						)
-					}
-				/>
+				<Outlet />
 			</Box>
 		</Box>
+	)
+}
+
+function TestDataTabLink({
+	disabled,
+	onClick,
+	projectId,
+}: {
+	disabled: boolean
+	onClick: MouseEventHandler<HTMLAnchorElement>
+	projectId: string
+}) {
+	const { formatMessage: t } = useIntl()
+
+	const { data: projects } = useManyProjects()
+
+	if (projects.length === 0) {
+		return null
+	}
+
+	return (
+		<ListItem
+			dense
+			disableGutters
+			disablePadding
+			sx={{ justifyContent: 'center' }}
+		>
+			<Tooltip
+				title={t(m.testDataTabLabel)}
+				disableFocusListener
+				placement="right"
+			>
+				<IconButtonLink
+					to="/app/projects/$projectId/test-data"
+					params={{ projectId }}
+					disabled={disabled}
+					onClick={onClick}
+					inactiveProps={BASE_INACTIVE_LINK_PROPS}
+					activeProps={BASE_ACTIVE_LINK_PROPS}
+				>
+					<Icon name="material-auto-fix-high" size={32} />
+				</IconButtonLink>
+			</Tooltip>
+		</ListItem>
 	)
 }
 
@@ -490,5 +467,10 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId.route.toolsTabLabel',
 		defaultMessage: 'Tools',
 		description: 'Label for project tools tab link in navigation.',
+	},
+	testDataTabLabel: {
+		id: 'routes.app.projects.$projectId.route.testDataTabLabel',
+		defaultMessage: 'Test Data',
+		description: 'Label for project test data tab link in navigation.',
 	},
 })
