@@ -81,9 +81,6 @@ export const Route = createFileRoute(
 			}),
 		])
 	},
-	onLeave: async ({ context }) => {
-		await context.projectApi.$sync.stop()
-	},
 	component: RouteComponent,
 })
 
