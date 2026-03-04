@@ -69,19 +69,21 @@ function RouteComponent() {
 									return
 								}
 
-								if (currentRoute.routeId === '/onboarding/data-and-privacy') {
+								if (currentRoute.fullPath === '/onboarding/data-and-privacy') {
 									router.navigate({
 										to: '/welcome',
 										replace: true,
 									})
 								} else if (
-									currentRoute.routeId === '/onboarding/privacy-policy'
+									currentRoute.fullPath === '/onboarding/privacy-policy'
 								) {
 									router.navigate({
 										to: '/onboarding/data-and-privacy',
 										replace: true,
 									})
-								} else if (currentRoute.routeId === '/onboarding/device-name') {
+								} else if (
+									currentRoute.fullPath === '/onboarding/device-name'
+								) {
 									router.navigate({
 										to: '/onboarding/data-and-privacy',
 										replace: true,

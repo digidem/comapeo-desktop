@@ -85,14 +85,10 @@ function RouteComponent() {
 	})
 
 	const showMapPanel =
-		currentRoute.routeId === '/app/projects/$projectId/_main-tabs/' ||
-		currentRoute.routeId === '/app/projects/$projectId/_main-tabs/download' ||
-		currentRoute.routeId.startsWith(
-			'/app/projects/$projectId/_main-tabs/observations',
-		) ||
-		currentRoute.routeId.startsWith(
-			'/app/projects/$projectId/_main-tabs/tracks',
-		)
+		currentRoute.fullPath === '/app/projects/$projectId/' ||
+		currentRoute.fullPath === '/app/projects/$projectId/download' ||
+		currentRoute.fullPath.startsWith('/app/projects/$projectId/observations') ||
+		currentRoute.fullPath.startsWith('/app/projects/$projectId/tracks')
 
 	return (
 		<TwoPanelLayout

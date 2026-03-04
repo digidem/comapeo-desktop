@@ -147,10 +147,10 @@ export function MapPanel() {
 			select: (matches) => {
 				for (const m of matches) {
 					if (
-						m.routeId ===
-							'/app/projects/$projectId/_main-tabs/observations/$observationDocId/' ||
-						m.routeId ===
-							'/app/projects/$projectId/_main-tabs/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
+						m.fullPath ===
+							'/app/projects/$projectId/observations/$observationDocId/' ||
+						m.fullPath ===
+							'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
 					) {
 						return {
 							type: 'observation' as const,
@@ -159,10 +159,7 @@ export function MapPanel() {
 						}
 					}
 
-					if (
-						m.routeId ===
-						'/app/projects/$projectId/_main-tabs/tracks/$trackDocId/'
-					) {
+					if (m.fullPath === '/app/projects/$projectId/tracks/$trackDocId/') {
 						return {
 							type: 'track' as const,
 							docId: m.params.trackDocId,
@@ -670,11 +667,11 @@ export function MapPanel() {
 			// NOTE: Double click in list means that a committed navigation to document-specific page occurred.
 			if (
 				!(
-					currentRoute.routeId.startsWith(
-						'/app/projects/$projectId/_main-tabs/observations/$observationDocId',
+					currentRoute.fullPath.startsWith(
+						'/app/projects/$projectId/observations/$observationDocId',
 					) ||
-					currentRoute.routeId.startsWith(
-						'/app/projects/$projectId/_main-tabs/tracks/$trackDocId/',
+					currentRoute.fullPath.startsWith(
+						'/app/projects/$projectId/tracks/$trackDocId/',
 					)
 				)
 			) {
@@ -795,11 +792,11 @@ export function MapPanel() {
 					/>
 				</Source>
 
-				{(currentRoute.routeId === '/app/projects/$projectId' ||
-					currentRoute.routeId ===
-						'/app/projects/$projectId/_main-tabs/observations/$observationDocId/' ||
-					currentRoute.routeId ===
-						'/app/projects/$projectId/_main-tabs/observations/$observationDocId/attachments/$driveId/$type/$variant/$name') &&
+				{(currentRoute.fullPath === '/app/projects/$projectId/' ||
+					currentRoute.fullPath ===
+						'/app/projects/$projectId/observations/$observationDocId/' ||
+					currentRoute.fullPath ===
+						'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name') &&
 				highlightedFeature &&
 				highlightedFeature.geometry.type === 'Point' &&
 				highlightedFeature.properties.type === 'observation' ? (
@@ -839,10 +836,10 @@ export function MapPanel() {
 					</Marker>
 				) : null}
 
-				{(currentRoute.routeId ===
-					'/app/projects/$projectId/_main-tabs/observations/$observationDocId/' ||
-					currentRoute.routeId ===
-						'/app/projects/$projectId/_main-tabs/tracks/$trackDocId/') &&
+				{(currentRoute.fullPath ===
+					'/app/projects/$projectId/observations/$observationDocId/' ||
+					currentRoute.fullPath ===
+						'/app/projects/$projectId/tracks/$trackDocId/') &&
 				!highlightedFeature ? (
 					<Box
 						position="absolute"

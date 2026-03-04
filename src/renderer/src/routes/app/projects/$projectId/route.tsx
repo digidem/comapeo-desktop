@@ -120,12 +120,11 @@ function RouteComponent() {
 	})
 
 	const pageHasEditing =
-		currentRoute.routeId ===
-			'/app/projects/$projectId/_main-tabs/settings/info' ||
-		currentRoute.routeId ===
-			'/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId/role' ||
-		currentRoute.routeId ===
-			'/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId/send'
+		currentRoute.fullPath === '/app/projects/$projectId/settings/info' ||
+		currentRoute.fullPath ===
+			'/app/projects/$projectId/team/invite/devices/$deviceId/role' ||
+		currentRoute.fullPath ===
+			'/app/projects/$projectId/team/invite/devices/$deviceId/send'
 
 	const isEditing = useGlobalEditingState().length > 0
 
@@ -189,8 +188,8 @@ function RouteComponent() {
 										isEditing ||
 										someGlobalMutationIsPending ||
 										(syncEnabled &&
-											currentRoute.routeId.startsWith(
-												'/app/projects/$projectId/_main-tabs/exchange',
+											currentRoute.fullPath.startsWith(
+												'/app/projects/$projectId/exchange',
 											))
 									}
 									onClick={(event) => {
@@ -201,19 +200,19 @@ function RouteComponent() {
 									inactiveProps={BASE_INACTIVE_LINK_PROPS}
 									activeProps={
 										// NOTE: Subroutes of the project that also live as project nav bar tab links
-										currentRoute.routeId.startsWith(
-											'/app/projects/$projectId/_main-tabs/exchange',
+										currentRoute.fullPath.startsWith(
+											'/app/projects/$projectId/exchange',
 										) ||
-										currentRoute.routeId.startsWith(
-											'/app/projects/$projectId/_main-tabs/settings',
+										currentRoute.fullPath.startsWith(
+											'/app/projects/$projectId/settings',
 										) ||
-										currentRoute.routeId.startsWith(
-											'/app/projects/$projectId/_main-tabs/team',
+										currentRoute.fullPath.startsWith(
+											'/app/projects/$projectId/team',
 										) ||
-										currentRoute.routeId.startsWith(
-											'/app/projects/$projectId/_main-tabs/team/invite',
+										currentRoute.fullPath.startsWith(
+											'/app/projects/$projectId/team/invite',
 										) ||
-										currentRoute.routeId ===
+										currentRoute.fullPath ===
 											'/app/projects/$projectId/test-data'
 											? BASE_INACTIVE_LINK_PROPS
 											: BASE_ACTIVE_LINK_PROPS
@@ -242,12 +241,12 @@ function RouteComponent() {
 										((pageHasEditing ||
 											isEditing ||
 											someGlobalMutationIsPending) &&
-											!currentRoute.routeId.startsWith(
-												'/app/projects/$projectId/_main-tabs/team',
+											!currentRoute.fullPath.startsWith(
+												'/app/projects/$projectId/team',
 											)) ||
 										(syncEnabled &&
-											currentRoute.routeId ===
-												'/app/projects/$projectId/_main-tabs/exchange/')
+											currentRoute.fullPath ===
+												'/app/projects/$projectId/exchange/')
 									}
 									onClick={(event) => {
 										if (someGlobalMutationIsPending) {
@@ -281,12 +280,12 @@ function RouteComponent() {
 											((pageHasEditing ||
 												isEditing ||
 												someGlobalMutationIsPending) &&
-												!currentRoute.routeId.startsWith(
-													'/app/projects/$projectId/_main-tabs/settings',
+												!currentRoute.fullPath.startsWith(
+													'/app/projects/$projectId/settings',
 												)) ||
 											(syncEnabled &&
-												currentRoute.routeId ===
-													'/app/projects/$projectId/_main-tabs/exchange/')
+												currentRoute.fullPath ===
+													'/app/projects/$projectId/exchange/')
 										}
 										onClick={(event) => {
 											if (someGlobalMutationIsPending) {
@@ -311,11 +310,11 @@ function RouteComponent() {
 											((pageHasEditing ||
 												isEditing ||
 												someGlobalMutationIsPending) &&
-												currentRoute.routeId !==
+												currentRoute.fullPath !==
 													'/app/projects/$projectId/test-data') ||
 											(syncEnabled &&
-												currentRoute.routeId ===
-													'/app/projects/$projectId/_main-tabs/exchange/')
+												currentRoute.fullPath ===
+													'/app/projects/$projectId/exchange/')
 										)
 									}
 									onClick={(event) => {
@@ -349,8 +348,8 @@ function RouteComponent() {
 											(pageHasEditing ||
 												isEditing ||
 												someGlobalMutationIsPending) &&
-											!currentRoute.routeId.startsWith(
-												'/app/projects/$projectId/_main-tabs/exchange',
+											!currentRoute.fullPath.startsWith(
+												'/app/projects/$projectId/exchange',
 											)
 										}
 										onClick={(event) => {
