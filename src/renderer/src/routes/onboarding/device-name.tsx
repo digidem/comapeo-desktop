@@ -78,7 +78,7 @@ function RouteComponent() {
 
 			await router.navigate({
 				to: '/app',
-				search: { fromOnboarding: true },
+				search: { fromFlow: 'onboarding' },
 				mask: { to: '/app', unmaskOnReload: true },
 			})
 		},
