@@ -4,7 +4,6 @@ import {
 	useManyProjects,
 	useOwnDeviceInfo,
 	useOwnRoleInProject,
-	useSyncState,
 } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import List from '@mui/material/List'
@@ -136,9 +135,6 @@ function RouteComponent() {
 	const isCoordinator =
 		role.roleId === CREATOR_ROLE_ID || role.roleId === COORDINATOR_ROLE_ID
 
-	const syncState = useSyncState({ projectId })
-	const syncEnabled = syncState?.data.isSyncEnabled
-
 	const { data: members } = useManyMembers({ projectId })
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
@@ -184,13 +180,7 @@ function RouteComponent() {
 									to="/app/projects/$projectId"
 									params={{ projectId }}
 									disabled={
-										pageHasEditing ||
-										isEditing ||
-										someGlobalMutationIsPending ||
-										(syncEnabled &&
-											currentRoute.fullPath.startsWith(
-												'/app/projects/$projectId/exchange',
-											))
+										pageHasEditing || isEditing || someGlobalMutationIsPending
 									}
 									onClick={(event) => {
 										if (someGlobalMutationIsPending) {
@@ -238,15 +228,12 @@ function RouteComponent() {
 									to="/app/projects/$projectId/team"
 									params={{ projectId }}
 									disabled={
-										((pageHasEditing ||
+										(pageHasEditing ||
 											isEditing ||
 											someGlobalMutationIsPending) &&
-											!currentRoute.fullPath.startsWith(
-												'/app/projects/$projectId/team',
-											)) ||
-										(syncEnabled &&
-											currentRoute.fullPath ===
-												'/app/projects/$projectId/exchange/')
+										!currentRoute.fullPath.startsWith(
+											'/app/projects/$projectId/team',
+										)
 									}
 									onClick={(event) => {
 										if (someGlobalMutationIsPending) {
@@ -277,15 +264,12 @@ function RouteComponent() {
 										to="/app/projects/$projectId/settings"
 										params={{ projectId }}
 										disabled={
-											((pageHasEditing ||
+											(pageHasEditing ||
 												isEditing ||
 												someGlobalMutationIsPending) &&
-												!currentRoute.fullPath.startsWith(
-													'/app/projects/$projectId/settings',
-												)) ||
-											(syncEnabled &&
-												currentRoute.fullPath ===
-													'/app/projects/$projectId/exchange/')
+											!currentRoute.fullPath.startsWith(
+												'/app/projects/$projectId/settings',
+											)
 										}
 										onClick={(event) => {
 											if (someGlobalMutationIsPending) {
@@ -307,14 +291,11 @@ function RouteComponent() {
 								<TestDataTabLink
 									disabled={
 										!!(
-											((pageHasEditing ||
+											(pageHasEditing ||
 												isEditing ||
 												someGlobalMutationIsPending) &&
-												currentRoute.fullPath !==
-													'/app/projects/$projectId/test-data') ||
-											(syncEnabled &&
-												currentRoute.fullPath ===
-													'/app/projects/$projectId/exchange/')
+											currentRoute.fullPath !==
+												'/app/projects/$projectId/test-data'
 										)
 									}
 									onClick={(event) => {
