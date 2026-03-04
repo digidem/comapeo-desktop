@@ -1,9 +1,5 @@
 import { Suspense } from 'react'
-import {
-	useManyProjects,
-	useMapStyleUrl,
-	useOwnDeviceInfo,
-} from '@comapeo/core-react'
+import { useMapStyleUrl, useOwnDeviceInfo } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import List from '@mui/material/List'
@@ -95,7 +91,6 @@ function SettingsList() {
 		multiplier: 1.75,
 	})
 
-	const { data: projects } = useManyProjects()
 	return (
 		<Stack direction="column" gap={4}>
 			<Typography
@@ -202,31 +197,6 @@ function SettingsList() {
 						}
 					/>
 				</ListItem>
-
-				{__APP_TYPE__ !== 'production' &&
-				import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' &&
-				projects.length > 0 ? (
-					<ListItem disableGutters disablePadding>
-						<ListRowLink
-							to="/app/settings/test-data"
-							start={
-								<Icon
-									name="material-auto-fix-high"
-									htmlColor={DARK_GREY}
-									size={startIconSize}
-								/>
-							}
-							end={
-								<Icon
-									name="material-chevron-right-rounded"
-									htmlColor={DARK_GREY}
-									size={actionIconSize}
-								/>
-							}
-							label={t(m.createTestData)}
-						/>
-					</ListItem>
-				) : null}
 			</List>
 		</Stack>
 	)
@@ -344,11 +314,6 @@ const m = defineMessages({
 		id: 'routes.app.settings.index.languageFromSystemPreference',
 		defaultMessage: '{name} (System Preference)',
 		description: 'Label for selected language based on the system preferences.',
-	},
-	createTestData: {
-		id: 'routes.app.settings.index.createTestData',
-		defaultMessage: 'Create Test Data',
-		description: 'Label for item that navigates to test data creation page.',
 	},
 	deviceNameSettingsAccessibleLabel: {
 		id: 'routes.app.settings.index.deviceNameSettingsAccessibleLabel',

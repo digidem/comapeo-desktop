@@ -39,8 +39,8 @@ export const Route = createRootRouteWithContext<RootRouterContext>()({
 			// NOTE: Implicit check that the user hasn't completed the onboarding yet.
 			!ownDeviceInfo.name &&
 			!(
-				currentRoute.routeId === '/welcome' ||
-				currentRoute.routeId.startsWith('/onboarding')
+				currentRoute.fullPath === '/welcome' ||
+				currentRoute.fullPath.startsWith('/onboarding')
 			)
 		) {
 			throw Route.redirect({ to: '/welcome', replace: true })

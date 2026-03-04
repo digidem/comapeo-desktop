@@ -495,6 +495,10 @@
     "description": "Label for project team tab link in navigation.",
     "message": "Team"
   },
+  "routes.app.projects.$projectId.route.testDataTabLabel": {
+    "description": "Label for project test data tab link in navigation.",
+    "message": "Test Data"
+  },
   "routes.app.projects.$projectId.route.toolsTabLabel": {
     "description": "Label for project tools tab link in navigation.",
     "message": "Tools"
@@ -1135,10 +1139,6 @@
     "description": "Accessible label for link item that navigates to coordinate system settings page.",
     "message": "Go to coordinate system settings."
   },
-  "routes.app.settings.index.createTestData": {
-    "description": "Label for item that navigates to test data creation page.",
-    "message": "Create Test Data"
-  },
   "routes.app.settings.index.customBackground": {
     "description": "Placeholder name of custom background map if name cannot be retrieved.",
     "message": "Custom Background"
@@ -1254,10 +1254,6 @@
   "routes.app.settings_.test-data.observationCreateSuccess": {
     "description": "Message displayed when observation creation succeeds.",
     "message": "Created {count, plural, one {# observation} other {# observations}}."
-  },
-  "routes.app.settings_.test-data.projectSelectLabel": {
-    "description": "Text label for project selector input.",
-    "message": "Project"
   },
   "routes.app.settings_.test-data.requiredError": {
     "description": "Error message for when required input is empty.",
