@@ -2,6 +2,8 @@ import { Suspense } from 'react'
 import { useMapStyleUrl, useOwnDeviceInfo } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
+import Container from '@mui/material/Container'
+import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
@@ -30,29 +32,62 @@ export const Route = createFileRoute('/app/settings/')({
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 
-	return (
-		<Stack direction="column" padding={6} flex={1} overflow="auto" gap={10}>
-			<Stack direction="column" gap={4} alignItems="center">
-				<Icon name="material-settings" size={120} htmlColor={DARKER_ORANGE} />
+	const headerIconHeight = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+		multiplier: 2,
+	})
 
-				<Typography variant="h1" fontWeight={500} textAlign="center">
-					{t(m.title)}
-				</Typography>
+	return (
+		<Stack direction="column" flex={1} overflow="auto">
+			<Stack direction="column" gap={6} padding={6}>
+				<Stack direction="row" gap={4} alignItems="center" flex={1}>
+					<Icon
+						name="material-settings"
+						size={headerIconHeight}
+						htmlColor={DARKER_ORANGE}
+					/>
+
+					<Typography variant="h1" fontWeight={500} textAlign="center">
+						{t(m.title)}
+					</Typography>
+				</Stack>
 			</Stack>
 
-			<Suspense
-				fallback={
-					<Box display="flex" flexDirection="row" justifyContent="center">
-						<CircularProgress disableShrink />
-					</Box>
-				}
+			<Box paddingInline={6}>
+				<Divider variant="fullWidth" sx={{ borderColor: BLUE_GREY }} />
+			</Box>
+
+			<Box
+				display="flex"
+				flex={1}
+				overflow="auto"
+				padding={6}
+				sx={{ scrollbarGutter: 'stable both-edges' }}
 			>
-				<SettingsList />
+				<Suspense
+					fallback={
+						<Box
+							display="flex"
+							flexDirection="column"
+							alignItems="center"
+							justifyContent="center"
+							flex={1}
+						>
+							<CircularProgress disableShrink />
+						</Box>
+					}
+				>
+					<Container maxWidth="md" disableGutters>
+						<Stack direction="column" gap={6} padding={0}>
+							<SettingsList />
 
-				<DataAndPrivacySection />
+							<DataAndPrivacySection />
 
-				<AboutCoMapeoSection />
-			</Suspense>
+							<AboutCoMapeoSection />
+						</Stack>
+					</Container>
+				</Suspense>
+			</Box>
 		</Stack>
 	)
 }
@@ -101,102 +136,125 @@ function SettingsList() {
 				{t(m.sectionTitleGeneral)}
 			</Typography>
 
-			<List
-				disablePadding
-				sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
-			>
-				<ListItem disableGutters disablePadding>
-					<ListRowLink
-						to="/app/settings/device-name"
-						start={
-							<Icon
-								name="material-symbols-computer"
-								htmlColor={DARK_GREY}
-								size={startIconSize}
-							/>
-						}
-						end={<Typography color="primary">{t(m.editDeviceName)}</Typography>}
-						aria-label={t(m.deviceNameSettingsAccessibleLabel)}
-						// TODO: What to do when this is undefined?
-						label={deviceInfo.name || ''}
-					/>
-				</ListItem>
+			<List disablePadding>
+				<Box
+					flex={1}
+					display="grid"
+					gridTemplateColumns={`1fr 1fr`}
+					rowGap={6}
+					columnGap={6}
+				>
+					<ListItem
+						disableGutters
+						disablePadding
+						sx={{ display: 'flex', alignItems: 'stretch' }}
+					>
+						<ListRowLink
+							to="/app/settings/device-name"
+							start={
+								<Icon
+									name="material-symbols-computer"
+									htmlColor={DARK_GREY}
+									size={startIconSize}
+								/>
+							}
+							end={
+								<Typography color="primary">{t(m.editDeviceName)}</Typography>
+							}
+							aria-label={t(m.deviceNameSettingsAccessibleLabel)}
+							// TODO: What to do when this is undefined?
+							label={deviceInfo.name || ''}
+						/>
+					</ListItem>
 
-				<ListItem disableGutters disablePadding>
-					<ListRowLink
-						to="/app/settings/language"
-						start={
-							<Icon
-								name="material-language"
-								htmlColor={DARK_GREY}
-								size={startIconSize}
-							/>
-						}
-						end={
-							<Icon
-								name="material-chevron-right-rounded"
-								htmlColor={DARK_GREY}
-								size={actionIconSize}
-							/>
-						}
-						aria-label={t(m.languageSettingsAccessibleLabel)}
-						label={selectedLanguageName}
-					/>
-				</ListItem>
+					<ListItem
+						disableGutters
+						disablePadding
+						sx={{ display: 'flex', alignItems: 'stretch' }}
+					>
+						<ListRowLink
+							to="/app/settings/language"
+							start={
+								<Icon
+									name="material-language"
+									htmlColor={DARK_GREY}
+									size={startIconSize}
+								/>
+							}
+							end={
+								<Icon
+									name="material-chevron-right-rounded"
+									htmlColor={DARK_GREY}
+									size={actionIconSize}
+								/>
+							}
+							aria-label={t(m.languageSettingsAccessibleLabel)}
+							label={selectedLanguageName}
+						/>
+					</ListItem>
 
-				<ListItem disableGutters disablePadding>
-					<ListRowLink
-						to="/app/settings/coordinate-system"
-						start={
-							<Icon
-								name="material-explore-filled"
-								htmlColor={DARK_GREY}
-								size={startIconSize}
-							/>
-						}
-						end={
-							<Icon
-								name="material-chevron-right-rounded"
-								htmlColor={DARK_GREY}
-								size={actionIconSize}
-							/>
-						}
-						aria-label={t(m.coordinateSystemSettingsAccessibleLabel)}
-						label={t(
-							coordinateFormat === 'utm'
-								? m.utmCoordinates
-								: coordinateFormat === 'dd'
-									? m.ddCoordinates
-									: m.dmsCoordinates,
-						)}
-					/>
-				</ListItem>
+					<ListItem
+						disableGutters
+						disablePadding
+						sx={{ display: 'flex', alignItems: 'stretch' }}
+					>
+						<ListRowLink
+							to="/app/settings/coordinate-system"
+							start={
+								<Icon
+									name="material-explore-filled"
+									htmlColor={DARK_GREY}
+									size={startIconSize}
+								/>
+							}
+							end={
+								<Icon
+									name="material-chevron-right-rounded"
+									htmlColor={DARK_GREY}
+									size={actionIconSize}
+								/>
+							}
+							aria-label={t(m.coordinateSystemSettingsAccessibleLabel)}
+							label={t(
+								coordinateFormat === 'utm'
+									? m.utmCoordinates
+									: coordinateFormat === 'dd'
+										? m.ddCoordinates
+										: m.dmsCoordinates,
+							)}
+						/>
+					</ListItem>
 
-				<ListItem disableGutters disablePadding>
-					<ListRowLink
-						to="/app/settings/background-map"
-						start={
-							<Icon
-								name="material-layers-outlined"
-								htmlColor={DARK_GREY}
-								size={startIconSize}
-							/>
-						}
-						end={
-							<Icon
-								name="material-chevron-right-rounded"
-								htmlColor={DARK_GREY}
-								size={actionIconSize}
-							/>
-						}
-						aria-label={t(m.backgroundMapSettingsAccessibleLabel)}
-						label={
-							<Suspense>
-								<BackgroundMapLabel styleUrl={styleUrl} />
-							</Suspense>
-						}
-					/>
-				</ListItem>
+					<ListItem
+						disableGutters
+						disablePadding
+						sx={{ display: 'flex', alignItems: 'stretch' }}
+					>
+						<ListRowLink
+							to="/app/settings/background-map"
+							start={
+								<Icon
+									name="material-layers-outlined"
+									htmlColor={DARK_GREY}
+									size={startIconSize}
+								/>
+							}
+							end={
+								<Icon
+									name="material-chevron-right-rounded"
+									htmlColor={DARK_GREY}
+									size={actionIconSize}
+								/>
+							}
+							aria-label={t(m.backgroundMapSettingsAccessibleLabel)}
+							label={
+								<Suspense>
+									<BackgroundMapLabel styleUrl={styleUrl} />
+								</Suspense>
+							}
+						/>
+					</ListItem>
+				</Box>
 			</List>
 		</Stack>
 	)
