@@ -383,7 +383,7 @@ const m = defineMessages({
 		description: 'Error message for when project name is too long.',
 	},
 	createProjectButton: {
-		id: 'routes.app.index.createButton',
+		id: 'routes.app.index.createProjectButton',
 		defaultMessage: 'Create',
 		description: 'Text for button to create project.',
 	},

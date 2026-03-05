@@ -37,7 +37,7 @@ import {
 	JoinProjectDialogContent,
 	LeftProjectDialogContent,
 	StartProjectDialogContent,
-} from './-project-action-dialog-content.tsx'
+} from './-home-page-dialog-content.tsx'
 import { DeviceIcon } from './projects/-shared/device-icon.tsx'
 
 const SearchParamsSchema = v.object({

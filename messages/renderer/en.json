@@ -71,7 +71,7 @@
     "description": "Character count for project name input.",
     "message": "{count}/{max}"
   },
-  "routes.app.index.createButton": {
+  "routes.app.index.createProjectButton": {
     "description": "Text for button to create project.",
     "message": "Create"
   },
