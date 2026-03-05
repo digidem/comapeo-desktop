@@ -3,33 +3,57 @@
     "description": "Button text for the close button in the error dialog.",
     "message": "Close"
   },
+  "routes.app.index.createProjectButton": {
+    "description": "Text for button to create project.",
+    "message": "Create Project"
+  },
+  "routes.app.index.leftProjectDialogCloseButton": {
+    "description": "Text for button to close left project dialog.",
+    "message": "Open Settings"
+  },
+  "routes.app.index.projectNameInputLabel": {
+    "description": "Input label for input in start project dialog.",
+    "message": "Enter a name for the Project"
+  },
+  "routes.app.index.startProjectCardTitle": {
+    "description": "Title card for starting a new project.",
+    "message": "Create a Project"
+  },
+  "routes.app.index.startProjectDialogTitle": {
+    "description": "Description of dialog shown for starting a project.",
+    "message": "Create a Project"
+  },
+  "routes.app.projects.$projectId.exchange.index.complete": {
+    "description": "Text displayed when exchange is completed with all devices.",
+    "message": "Complete! You're up to date"
+  },
+  "routes.app.projects.$projectId.exchange.index.devicesFound": {
+    "description": "Text displayed when other devices have been found.",
+    "message": "Devices found"
+  },
+  "routes.app.projects.$projectId.exchange.index.upToDate": {
+    "description": "Text displayed when exchangable data is up to date.",
+    "message": "All data synced"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
     "description": "Accessible label for button to close panel.",
     "message": "Close."
   },
-  "routes.app.projects.$projectId_.exchange.index.complete": {
-    "description": "Text displayed when exchange is completed with all devices.",
-    "message": "Complete! You're up to date"
+  "routes.app.projects.$projectId.settings.info.projectNameInputLabel": {
+    "description": "Label for the project name input.",
+    "message": "Enter a name for the Project"
   },
-  "routes.app.projects.$projectId_.exchange.index.devicesFound": {
-    "description": "Text displayed when other devices have been found.",
-    "message": "Devices found"
-  },
-  "routes.app.projects.$projectId_.exchange.index.upToDate": {
-    "description": "Text displayed when exchangable data is up to date.",
-    "message": "All data synced"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.accepted": {
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.accepted": {
     "description": "Text displayed when invite is accepted.",
     "message": "Invite Accepted"
   },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.close": {
     "description": "Text for button to leave invite flow.",
-    "message": "Close"
+    "message": "Open Settings"
   },
-  "routes.app.projects.$projectId_.settings.info.projectNameInputLabel": {
-    "description": "Label for the project name input.",
-    "message": "Enter a name for the Project"
+  "routes.app.route.projectJoinedCloseDialog": {
+    "description": "Text for button to close project joined dialog.",
+    "message": "Open Settings"
   },
   "routes.app.settings.background-map.close": {
     "description": "Text displayed for closing dialogs",
@@ -45,22 +69,6 @@
   },
   "routes.onboarding.device-name.description": {
     "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
-  },
-  "routes.onboarding.project.create.index.createButton": {
-    "description": "Text for button to create project.",
-    "message": "Create Project"
-  },
-  "routes.onboarding.project.create.index.projectName": {
-    "description": "Input label for onboarding project creation page.",
-    "message": "Enter a name for the Project"
-  },
-  "routes.onboarding.project.create.index.title": {
-    "description": "Page title for onboarding project creation page.",
-    "message": "Create a Project"
-  },
-  "routes.onboarding.project.index.startProjectButton": {
-    "description": "Text for link to start a project.",
-    "message": "Create a Project"
   },
   "routes.welcome.collaborate": {
     "message": "Collaborate with others"
