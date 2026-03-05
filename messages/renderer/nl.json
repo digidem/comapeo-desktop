@@ -51,6 +51,98 @@
     "description": "Button text for try again button.",
     "message": "Probeer opnieuw"
   },
+  "routes.app.index.additionalProjectsSecitionTitle": {
+    "description": "Title text for the additional projects section.",
+    "message": "Extra projecten"
+  },
+  "routes.app.index.additionalProjectsSectionDescription": {
+    "description": "Text describing sorting order of the additional projects section.",
+    "message": "Gesorteerd op meest recent gemaakt"
+  },
+  "routes.app.index.additionalProjectsSectionShowAsGrid": {
+    "description": "Tooltip text for button to display additional projects section as a grid.",
+    "message": "Als raster weergeven"
+  },
+  "routes.app.index.additionalProjectsSectionShowAsList": {
+    "description": "Tooltip text for button to display additional projects section as a list.",
+    "message": "Toon als lijst"
+  },
+  "routes.app.index.characterCount": {
+    "description": "Character count for project name input.",
+    "message": "{count}/{max}"
+  },
+  "routes.app.index.createProjectButton": {
+    "description": "Text for button to create project.",
+    "message": "Create Project"
+  },
+  "routes.app.index.joinProjectCardTitle": {
+    "description": "Title card for joining a project.",
+    "message": "Deelnemen aan een project"
+  },
+  "routes.app.index.joinProjectDialogDescription": {
+    "description": "Description of dialog shown for joining a project.",
+    "message": "Coördineer met je team om een projectuitnodiging te ontvangen."
+  },
+  "routes.app.index.joinProjectDialogTitle": {
+    "description": "Title of dialog shown for joining a project.",
+    "message": "Deelnemen aan een project"
+  },
+  "routes.app.index.leftProjectDialogCloseButton": {
+    "description": "Text for button to close left project dialog.",
+    "message": "Open Settings"
+  },
+  "routes.app.index.leftProjectDialogTitleNoProjectName": {
+    "description": "Title text for left project dialog when project has no name (edge case).",
+    "message": "Je hebt het project verlaten."
+  },
+  "routes.app.index.pageTitle": {
+    "description": "Title of home page.",
+    "message": "{name}'s Projecten"
+  },
+  "routes.app.index.postOnboardingPageTitle": {
+    "description": "Title of home page after completing onboarding.",
+    "message": "{name} is klaar!"
+  },
+  "routes.app.index.projectActionDialogGoBack": {
+    "description": "Text for button to close project join/create dialog.",
+    "message": "Ga terug"
+  },
+  "routes.app.index.projectCardRoleCoordinator": {
+    "description": "Displayed name of coordinator role on project card.",
+    "message": "Coördinator"
+  },
+  "routes.app.index.projectCardRoleParticipant": {
+    "description": "Displayed name of participant role on project card.",
+    "message": "Deelnemer"
+  },
+  "routes.app.index.projectNameInputLabel": {
+    "description": "Input label for input in start project dialog.",
+    "message": "Enter a name for the Project"
+  },
+  "routes.app.index.projectNameMaxLengthError": {
+    "description": "Error message for when project name is too long.",
+    "message": "Te lang, probeer een kortere naam."
+  },
+  "routes.app.index.projectNameMinLengthError": {
+    "description": "Error message for when project name is too short.",
+    "message": "Voer een projectnaam in"
+  },
+  "routes.app.index.startProjectCardTitle": {
+    "description": "Title card for starting a new project.",
+    "message": "Nieuw project starten"
+  },
+  "routes.app.index.startProjectDialogDescription": {
+    "description": "Description of dialog shown for starting a project.",
+    "message": "Benoem uw project."
+  },
+  "routes.app.index.startProjectDialogTitle": {
+    "description": "Description of dialog shown for starting a project.",
+    "message": "Nieuw project starten"
+  },
+  "routes.app.index.unnamedProject": {
+    "description": "Fallback for when project is missing a name.",
+    "message": "Naamloos project"
+  },
   "routes.app.projects.$projectId.-data-list.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Pictogram voor {name} categorie"
@@ -66,30 +158,6 @@
   "routes.app.projects.$projectId.-data-list.trackItemTitle": {
     "description": "Title for list item that is a track.",
     "message": "Bijhouden"
-  },
-  "routes.app.projects.$projectId.-main-panel.inviteCollaboratorsPanelDescription": {
-    "description": "Text for description of panel shown when no active collaborators or data exist on project.",
-    "message": "Nodig apparaten uit om te beginnen met het verzamelen van waarnemingen en tracks."
-  },
-  "routes.app.projects.$projectId.-main-panel.inviteCollaboratorsPanelInviteLink": {
-    "description": "Text for link that navigates to invite page.",
-    "message": "Apparaat Uitnodigen"
-  },
-  "routes.app.projects.$projectId.-main-panel.inviteCollaboratorsPanelTitle": {
-    "description": "Text for title of panel shown when no active collaborators or data exist on project.",
-    "message": "Nodig samenwerkers uit"
-  },
-  "routes.app.projects.$projectId.-main-panel.openExchangePanelDescription": {
-    "description": "Text for description of panel shown when project has collaborators but no data.",
-    "message": "Alle waarnemingen en tracks worden hier weergegeven."
-  },
-  "routes.app.projects.$projectId.-main-panel.openExchangePanelLink": {
-    "description": "Text for link that navigates to exchange page.",
-    "message": "Wisselkoers openen"
-  },
-  "routes.app.projects.$projectId.-main-panel.openExchangePanelTitle": {
-    "description": "Text for title of panel shown when project has collaborators but no data.",
-    "message": "Ruil in om waarnemingen te verzamelen"
   },
   "routes.app.projects.$projectId.-map-panel.cannotDisplayFeature": {
     "description": "Text displayed when map feature for selected data cannot be displayed",
@@ -207,33 +275,69 @@
     "description": "Title of the tracks option.",
     "message": "Nummers"
   },
-  "routes.app.projects.$projectId.index.fallbackCategoriesSetName": {
-    "description": "Text shown when project does not use a categories set.",
-    "message": "CoMapeo categorieën"
+  "routes.app.projects.$projectId.exchange.index.complete": {
+    "description": "Text displayed when exchange is completed with all devices.",
+    "message": "Complete! You're up to date"
   },
-  "routes.app.projects.$projectId.index.projectInfoCategoriesCreated": {
-    "description": "Text indicating creation date of categories set.",
-    "message": "Aangemaakt {date}"
+  "routes.app.projects.$projectId.exchange.index.completeAndWaiting": {
+    "description": "Text displayed when exchange is completed with currently connected devices.",
+    "message": "Voltooid! Wachten op andere apparaten."
   },
-  "routes.app.projects.$projectId.index.projectInfoProjectStats": {
-    "description": "Text indicating if project stats sharing is enabled or not.",
-    "message": "Project Delen ww {enabled, select, 1 {} other {UIT}}"
+  "routes.app.projects.$projectId.exchange.index.devicesFound": {
+    "description": "Text displayed when other devices have been found.",
+    "message": "Devices found"
   },
-  "routes.app.projects.$projectId.index.projectInfoRoleCoordinator": {
-    "description": "Indicates that user is a coordinator.",
-    "message": "Coördinator"
+  "routes.app.projects.$projectId.exchange.index.inviteDevices": {
+    "description": "Text for link to invite devices page.",
+    "message": "Apparaten uitnodigen"
   },
-  "routes.app.projects.$projectId.index.projectInfoRoleParticipant": {
-    "description": "Indicates that user is a participant.",
-    "message": "Deelnemer"
+  "routes.app.projects.$projectId.exchange.index.noOtherDevicesOnProject": {
+    "description": "Text indicating no other active devices are on the project.",
+    "message": "Geen andere apparaten zijn op dit project."
   },
-  "routes.app.projects.$projectId.index.projectInfoTooltip": {
-    "description": "Text for tooltip shown when hovering or focusing project info button.",
-    "message": "Bekijk projectinformatie"
+  "routes.app.projects.$projectId.exchange.index.remoteArchiveConnected": {
+    "description": "Text indicating that some remote archive is connected.",
+    "message": "Verbinding met extern archief"
   },
-  "routes.app.projects.$projectId.index.unnamedProject": {
-    "description": "Fallback for when project is missing a name.",
-    "message": "Naamloos project"
+  "routes.app.projects.$projectId.exchange.index.start": {
+    "description": "Button text to start exchange.",
+    "message": "Beginnen"
+  },
+  "routes.app.projects.$projectId.exchange.index.stop": {
+    "description": "Button text to stop exchange.",
+    "message": "Stoppen"
+  },
+  "routes.app.projects.$projectId.exchange.index.upToDate": {
+    "description": "Text displayed when exchangable data is up to date.",
+    "message": "All data synced"
+  },
+  "routes.app.projects.$projectId.exchange.index.waitingForDevices": {
+    "description": "Text displayed when waiting for other devices to be found.",
+    "message": "Wachten op apparaten"
+  },
+  "routes.app.projects.$projectId.index.inviteCollaboratorsPanelDescription": {
+    "description": "Text for description of panel shown when no active collaborators or data exist on project.",
+    "message": "Nodig apparaten uit om te beginnen met het verzamelen van waarnemingen en tracks."
+  },
+  "routes.app.projects.$projectId.index.inviteCollaboratorsPanelInviteLink": {
+    "description": "Text for link that navigates to invite page.",
+    "message": "Apparaat Uitnodigen"
+  },
+  "routes.app.projects.$projectId.index.inviteCollaboratorsPanelTitle": {
+    "description": "Text for title of panel shown when no active collaborators or data exist on project.",
+    "message": "Nodig samenwerkers uit"
+  },
+  "routes.app.projects.$projectId.index.openExchangePanelDescription": {
+    "description": "Text for description of panel shown when project has collaborators but no data.",
+    "message": "Alle waarnemingen en tracks worden hier weergegeven."
+  },
+  "routes.app.projects.$projectId.index.openExchangePanelLink": {
+    "description": "Text for link that navigates to exchange page.",
+    "message": "Wisselkoers openen"
+  },
+  "routes.app.projects.$projectId.index.openExchangePanelTitle": {
+    "description": "Text for title of panel shown when project has collaborators but no data.",
+    "message": "Ruil in om waarnemingen te verzamelen"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
@@ -367,6 +471,426 @@
     "description": "Text displayed when the duration of an audio attachment cannot be determined.",
     "message": "Niet in staat om tijdsduur op te halen."
   },
+  "routes.app.projects.$projectId.route.appNavigationAccesibleLabel": {
+    "description": "Accessible label for app-wide navigation bar.",
+    "message": "App navigatie"
+  },
+  "routes.app.projects.$projectId.route.exchangeTabLabel": {
+    "description": "Label for project exchange tab link in navigation.",
+    "message": "Ruil"
+  },
+  "routes.app.projects.$projectId.route.listTabLabel": {
+    "description": "Label for project list tab link in navigation.",
+    "message": "Klantenlijst"
+  },
+  "routes.app.projects.$projectId.route.projectNavigationAccessibleLabel": {
+    "description": "Accessible label for project-specific navigation bar.",
+    "message": "Project navigatie"
+  },
+  "routes.app.projects.$projectId.route.teamTabLabel": {
+    "description": "Label for project team tab link in navigation.",
+    "message": "Team"
+  },
+  "routes.app.projects.$projectId.route.testDataTabLabel": {
+    "description": "Label for project test data tab link in navigation.",
+    "message": "Test Data"
+  },
+  "routes.app.projects.$projectId.route.toolsTabLabel": {
+    "description": "Label for project tools tab link in navigation.",
+    "message": "Hulpmiddelen"
+  },
+  "routes.app.projects.$projectId.settings.categories.customCategoriesExplainer": {
+    "description": "Explanation for custom categories",
+    "message": "Gebruik aangepaste categorieën door het importeren van nieuwe categoriëen hieronder ingestelde bestanden."
+  },
+  "routes.app.projects.$projectId.settings.categories.dateAdded": {
+    "description": "Text indicating the date the categories set was added.",
+    "message": "Toegevoegd {date}"
+  },
+  "routes.app.projects.$projectId.settings.categories.dateCreated": {
+    "description": "Text indicating the date the categories set was created.",
+    "message": "Aangemaakt {date}"
+  },
+  "routes.app.projects.$projectId.settings.categories.defaultCategoriesExplainer": {
+    "description": "Explanation for default categories",
+    "message": "Standaardcategorieën helpen je om je waarnemingen direct te organiseren."
+  },
+  "routes.app.projects.$projectId.settings.categories.fallbackCategoriesName": {
+    "description": "Fallback displayed name when project has no category set.",
+    "message": "CoMapeo categorieën"
+  },
+  "routes.app.projects.$projectId.settings.categories.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Ga terug."
+  },
+  "routes.app.projects.$projectId.settings.categories.navTitle": {
+    "description": "Title of the categories set page.",
+    "message": "Categorieën instellen"
+  },
+  "routes.app.projects.$projectId.settings.categories.uploadNewSet": {
+    "description": "Label for button to upload new categories set.",
+    "message": "Nieuwe set uploaden"
+  },
+  "routes.app.projects.$projectId.settings.index.categoriesActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "Updaten"
+  },
+  "routes.app.projects.$projectId.settings.index.categoriesLinkAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to project info settings page.",
+    "message": "Ga naar instellingen voor categorieën."
+  },
+  "routes.app.projects.$projectId.settings.index.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set.",
+    "message": "CoMapeo categorieën"
+  },
+  "routes.app.projects.$projectId.settings.index.navTitle": {
+    "description": "Title of the coordinator tools page.",
+    "message": "Coördinator Tools"
+  },
+  "routes.app.projects.$projectId.settings.index.projectInfoActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "Bewerken"
+  },
+  "routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to project info settings page.",
+    "message": "Ga naar de project info instellingen."
+  },
+  "routes.app.projects.$projectId.settings.index.unnamedProject": {
+    "description": "Fallback for when current project is missing a name.",
+    "message": "Naamloos project"
+  },
+  "routes.app.projects.$projectId.settings.info.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Annuleren"
+  },
+  "routes.app.projects.$projectId.settings.info.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Ga terug."
+  },
+  "routes.app.projects.$projectId.settings.info.maxProjectDescriptionLengthError": {
+    "description": "Error message for project description that is too long.",
+    "message": "Te lang, probeer een kortere beschrijving."
+  },
+  "routes.app.projects.$projectId.settings.info.maxProjectNameLengthError": {
+    "description": "Error message for project name that is too long.",
+    "message": "Te lang, probeer een kortere naam."
+  },
+  "routes.app.projects.$projectId.settings.info.minProjectNameLengthError": {
+    "description": "Error message for project name that is too short.",
+    "message": "Voer een projectnaam in"
+  },
+  "routes.app.projects.$projectId.settings.info.navTitle": {
+    "description": "Title of the project settings info page.",
+    "message": "Info bewerken"
+  },
+  "routes.app.projects.$projectId.settings.info.projectCardColorLabel": {
+    "description": "Label for the project card color selector.",
+    "message": "Project Kaart Kleur"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionBlue": {
+    "description": "Label for blue option in project color selector.",
+    "message": "Blauw"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionGreen": {
+    "description": "Label for green option in project color selector.",
+    "message": "Groen"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionGrey": {
+    "description": "Label for grey option in project color selector.",
+    "message": "Grijs"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionOrange": {
+    "description": "Label for orange option in project color selector.",
+    "message": "Oranje"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionRed": {
+    "description": "Label for grey option in project color selector.",
+    "message": "Rood"
+  },
+  "routes.app.projects.$projectId.settings.info.projectDescriptionInputLabel": {
+    "description": "Label for the project description input.",
+    "message": "Project beschrijving"
+  },
+  "routes.app.projects.$projectId.settings.info.projectNameInputLabel": {
+    "description": "Label for the project name input.",
+    "message": "Enter a name for the Project"
+  },
+  "routes.app.projects.$projectId.settings.info.save": {
+    "description": "Label for save button.",
+    "message": "Opslaan"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.addedOn": {
+    "description": "Text indicating date collaborator was added to the project.",
+    "message": "Toegevoegd op {value}"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.cancelButton": {
+    "description": "Button text to cancel leaving project.",
+    "message": "Annuleren"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.collaboratorNavTitle": {
+    "description": "Title of the team collaborator info page.",
+    "message": "Medewerker Info"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.confirmButton": {
+    "description": "Button text to confirm leaving project.",
+    "message": "Ja, verlaat"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.continueButton": {
+    "description": "Button text to continue to next step in leave project flow.",
+    "message": "Doorgaan"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.coordinator": {
+    "description": "Text indicating collaborator is a coordinator.",
+    "message": "Coördinator"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Ga terug."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningDescription": {
+    "description": "Description text for last coordinator warning when leaving a project.",
+    "message": "Als dit apparaat weggaat, kan geen ander apparaat apparaten toevoegen of verwijderen, projectinformatie aanpassen of de ingestelde categorieën bijwerken."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningTitle": {
+    "description": "Title text for last coordinator warning when leaving a project.",
+    "message": "Apparaat is laatste coördinator."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningDescription": {
+    "description": "Description text for last device warning when leaving a project.",
+    "message": "Als dit apparaat vertrekt, zullen alle gegevens van dit project verloren gaan."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningTitle": {
+    "description": "Title text for last device warning when leaving a project.",
+    "message": "Apparaat is laatste apparaat."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectButton": {
+    "description": "Button text to initiate leave project flow.",
+    "message": "Project verlaten"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationDescription": {
+    "description": "Description for leave project confirmation when leaving a project.",
+    "message": "Apparaat zal niet langer in staat zijn om dit project te bekijken of bij te dragen."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitle": {
+    "description": "Title text for leave project confirmation when leaving a project.",
+    "message": "Verlaat {name}?"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitleNoProjectName": {
+    "description": "Title text for leave project confirmation when leaving a project that has no name (edge case).",
+    "message": "Project verlaten?"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectNavTitle": {
+    "description": "Title of the team collaborator info page when the leave project flow is initiated.",
+    "message": "Project verlaten"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.participant": {
+    "description": "Text indicating collaborator is a participant.",
+    "message": "Deelnemer"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.remoteArchive": {
+    "description": "Fallback name used if remote archive does not have name.",
+    "message": "Extern archief"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.suggestionExportData": {
+    "description": "Text for export data suggestion in warning when leaving a project.",
+    "message": "Voordat je vertrekt, exporteer je belangrijke gegevens."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.suggestionInviteCoordinator": {
+    "description": "Text for invite coordinator suggestion in warning when leaving a project.",
+    "message": "Nodig een nieuw apparaat uit als coördinator om dit te voorkomen."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.thisDevice": {
+    "description": "Text indicating that user is viewing itself.",
+    "message": "Dit apparaat"
+  },
+  "routes.app.projects.$projectId.team.index.coordinatorsSectionDescription": {
+    "description": "Description of the coordinators section in the team page.",
+    "message": "Coördinatoren kunnen apparaten, bewerken en verwijderen van gegevens, en projectdetails beheren."
+  },
+  "routes.app.projects.$projectId.team.index.coordinatorsSectionTitle": {
+    "description": "Title of the coordinators section in the team page.",
+    "message": "Coördinatoren"
+  },
+  "routes.app.projects.$projectId.team.index.inviteDevice": {
+    "description": "Text for button that initiates steps for inviting device to project.",
+    "message": "Apparaat Uitnodigen"
+  },
+  "routes.app.projects.$projectId.team.index.memberLinkAccessibleLabel": {
+    "description": "Accessible label for link that navigates to member details.",
+    "message": "Lid {name} bekijken."
+  },
+  "routes.app.projects.$projectId.team.index.navTitle": {
+    "description": "Title of the team page.",
+    "message": "Team"
+  },
+  "routes.app.projects.$projectId.team.index.noParticipants": {
+    "description": "Text indicating that no participants are part of the project yet.",
+    "message": "Er zijn geen deelnemers aan dit project toegevoegd."
+  },
+  "routes.app.projects.$projectId.team.index.participantsSectionDescription": {
+    "description": "Description of the participants section in the team page.",
+    "message": "Deelnemers kunnen waarnemingen aannemen en delen. Ze kunnen gebruikers of projectdetails niet beheren."
+  },
+  "routes.app.projects.$projectId.team.index.participantsSectionTitle": {
+    "description": "Title of the participants section in the team page.",
+    "message": "Deelnemers"
+  },
+  "routes.app.projects.$projectId.team.index.pastCollaboratorsSectionDescription": {
+    "description": "Description of the past collaborators section in the team page.",
+    "message": "De toestellen dragen niet meer bij aan dit project."
+  },
+  "routes.app.projects.$projectId.team.index.pastCollaboratorsSectionTitle": {
+    "description": "Title of the past collaborators section in the team page.",
+    "message": "Vorige samenwerkers"
+  },
+  "routes.app.projects.$projectId.team.index.remoteArchivesSectionDescription": {
+    "description": "Description of the remote archives section in the team page.",
+    "message": "Dit project deelt met veilige, versleutelde servers."
+  },
+  "routes.app.projects.$projectId.team.index.remoteArchivesSectionTitle": {
+    "description": "Title of the remote archives section in the team page.",
+    "message": "Extern archief"
+  },
+  "routes.app.projects.$projectId.team.index.thisDevice": {
+    "description": "Text indicating that the listed device refers to the one currently being used.",
+    "message": "Dit apparaat"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.role.coordinatorDescription": {
+    "description": "Coordinator role description.",
+    "message": "Als coördinator kan dit apparaat gebruikers uitnodigen en verwijderen en projectdetails beheren."
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.role.coordinatorTitle": {
+    "description": "Coordinator role name.",
+    "message": "Coördinator"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.role.navTitle": {
+    "description": "Title of the invite role selection page.",
+    "message": "Selecteer een rol"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.role.participantDescription": {
+    "description": "Participant role description.",
+    "message": "Als deelnemer kan dit apparaat waarnemingen aannemen en delen. Ze kunnen geen gebruikers of projectgegevens beheren."
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.role.participantTitle": {
+    "description": "Participant role name.",
+    "message": "Deelnemer"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.role.selectingRole": {
+    "description": "Description of action being taken in role selection page.",
+    "message": "U selecteert een rol voor dit apparaat:"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.accepted": {
+    "description": "Text displayed when invite is accepted.",
+    "message": "Invite Accepted"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addAnotherDevice": {
+    "description": "Text for button to add another device.",
+    "message": "Nog een apparaat toevoegen"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addedOn": {
+    "description": "Text showing when device was added to project.",
+    "message": "Toegevoegd op {date, date, long}"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.cancelInvite": {
+    "description": "Text for button to cancel invite.",
+    "message": "Annuleer uitnodiging"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.close": {
+    "description": "Text for button to leave invite flow.",
+    "message": "Afsluiten"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.coordinator": {
+    "description": "Coordinator role name.",
+    "message": "Coördinator"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedDescription": {
+    "description": "Description of a declined invite.",
+    "message": "Dit apparaat heeft je uitnodiging geweigerd. Ze nemen geen deel aan het project."
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedTitle": {
+    "description": "Title of page when invite is declined.",
+    "message": "Uitnodiging geweigerd"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteAccepted": {
+    "description": "Text displayed when invite is accepted.",
+    "message": "Uitnodiging geaccepteerd"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.navTitle": {
+    "description": "Title of the review invite page.",
+    "message": "Uitnodiging bekijken"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.participant": {
+    "description": "Participant role name.",
+    "message": "Deelnemer"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.sendInvite": {
+    "description": "Button text for sending invite.",
+    "message": "Uitnodiging sturen"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.timeSinceSent": {
+    "description": "Text showing time elapsed since invite was sent",
+    "message": "Uitnodiging verzonden {time}s geleden"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.waiting": {
+    "description": "Text displayed while waiting for invite response.",
+    "message": "Wachten op apparaat om uitnodiging te accepteren"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.-shared.disconnected-indicator.disconnected": {
+    "description": "Text displayed when external device is disconnected.",
+    "message": "Losgekoppeld"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingSameNetwork": {
+    "description": "Text explaining that devices need to be on same Wi-Fi network.",
+    "message": "Controleer of apparaten op hetzelfde wifi-netwerk zitten"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingSameVersion": {
+    "description": "Text explaining that devices need to be using same version of CoMapeo.",
+    "message": "Bevestig dat apparaten dezelfde versie van CoMapeo gebruiken"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingTitle": {
+    "description": "Title for device discovery troubleshooting section.",
+    "message": "Zie je geen apparaat?"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button",
+    "message": "Ga terug."
+  },
+  "routes.app.projects.$projectId.team.invite.devices.index.navTitle": {
+    "description": "Title of the device selection for invite page.",
+    "message": "Selecteer een apparaat"
+  },
+  "routes.app.projects.$projectId.team.invite.index.controlSharing": {
+    "description": "Detail about how to control data sharing.",
+    "message": "Controleer delen in projectinstellingen."
+  },
+  "routes.app.projects.$projectId.team.invite.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Ga terug."
+  },
+  "routes.app.projects.$projectId.team.invite.index.inviteCollaborators": {
+    "description": "Title of the Invite Get Started page.",
+    "message": "Nodig samenwerkers uit"
+  },
+  "routes.app.projects.$projectId.team.invite.index.navTitle": {
+    "description": "Title of the Invite Get Started page.",
+    "message": "Nu inschrijven"
+  },
+  "routes.app.projects.$projectId.team.invite.index.onlyInvitedDevices": {
+    "description": "Detail about who contributes.",
+    "message": "Alleen uitgenodigde apparaten bijdragen."
+  },
+  "routes.app.projects.$projectId.team.invite.index.primaryDescription": {
+    "description": "Primary description text.",
+    "message": "Apparaten uitnodigen die CoMapeo gebruiken om samen te werken."
+  },
+  "routes.app.projects.$projectId.team.invite.index.selectDevice": {
+    "description": "Text for button to navigate to device selection.",
+    "message": "Selecteer een apparaat"
+  },
+  "routes.app.projects.$projectId.team.invite.index.shareUsingExchange": {
+    "description": "Detail about how collaborators share data.",
+    "message": "Medewerkers delen veilig met behulp van Exchange."
+  },
   "routes.app.projects.$projectId.tracks.$trackDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Pictogram voor {name} categorie"
@@ -394,398 +918,6 @@
   "routes.app.projects.$projectId.tracks.$trackDocId.index.tracks": {
     "description": "Displayed title next to category icon.",
     "message": "Nummers"
-  },
-  "routes.app.projects.$projectId_.exchange.index.complete": {
-    "description": "Text displayed when exchange is completed with all devices.",
-    "message": "Complete! You're up to date"
-  },
-  "routes.app.projects.$projectId_.exchange.index.completeAndWaiting": {
-    "description": "Text displayed when exchange is completed with currently connected devices.",
-    "message": "Voltooid! Wachten tot andere toestellen zich aansluiten."
-  },
-  "routes.app.projects.$projectId_.exchange.index.devicesFound": {
-    "description": "Text displayed when other devices have been found.",
-    "message": "Devices found"
-  },
-  "routes.app.projects.$projectId_.exchange.index.remoteArchiveConnected": {
-    "description": "Text indicating that some remote archive is connected.",
-    "message": "Verbinding met extern archief"
-  },
-  "routes.app.projects.$projectId_.exchange.index.start": {
-    "description": "Button text to start exchange.",
-    "message": "Beginnen"
-  },
-  "routes.app.projects.$projectId_.exchange.index.stop": {
-    "description": "Button text to stop exchange.",
-    "message": "Stoppen"
-  },
-  "routes.app.projects.$projectId_.exchange.index.upToDate": {
-    "description": "Text displayed when exchangable data is up to date.",
-    "message": "All data synced"
-  },
-  "routes.app.projects.$projectId_.exchange.index.waitingForDevices": {
-    "description": "Text displayed when waiting for other devices to be found.",
-    "message": "Wachten op apparaten"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.coordinatorDescription": {
-    "description": "Coordinator role description.",
-    "message": "Als coördinator kan dit apparaat gebruikers uitnodigen en verwijderen en projectdetails beheren."
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.coordinatorTitle": {
-    "description": "Coordinator role name.",
-    "message": "Coördinator"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.navTitle": {
-    "description": "Title of the invite role selection page.",
-    "message": "Selecteer een rol"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.participantDescription": {
-    "description": "Participant role description.",
-    "message": "Als deelnemer kan dit apparaat waarnemingen aannemen en delen. Ze kunnen geen gebruikers of projectgegevens beheren."
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.participantTitle": {
-    "description": "Participant role name.",
-    "message": "Deelnemer"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.selectingRole": {
-    "description": "Description of action being taken in role selection page.",
-    "message": "U selecteert een rol voor dit apparaat:"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.accepted": {
-    "description": "Text displayed when invite is accepted.",
-    "message": "Invite Accepted"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.addAnotherDevice": {
-    "description": "Text for button to add another device.",
-    "message": "Nog een apparaat toevoegen"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.addedOn": {
-    "description": "Text showing when device was added to project.",
-    "message": "Toegevoegd op {date, date, long}"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.cancelInvite": {
-    "description": "Text for button to cancel invite.",
-    "message": "Annuleer uitnodiging"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
-    "description": "Text for button to leave invite flow.",
-    "message": "Close"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.coordinator": {
-    "description": "Coordinator role name.",
-    "message": "Coördinator"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.invitationDeclinedDescription": {
-    "description": "Description of a declined invite.",
-    "message": "Dit apparaat heeft je uitnodiging geweigerd. Ze nemen geen deel aan het project."
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.invitationDeclinedTitle": {
-    "description": "Title of page when invite is declined.",
-    "message": "Uitnodiging geweigerd"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.inviteAccepted": {
-    "description": "Text displayed when invite is accepted.",
-    "message": "Uitnodiging geaccepteerd"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.navTitle": {
-    "description": "Title of the review invite page.",
-    "message": "Uitnodiging bekijken"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.participant": {
-    "description": "Participant role name.",
-    "message": "Deelnemer"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.sendInvite": {
-    "description": "Button text for sending invite.",
-    "message": "Uitnodiging sturen"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.timeSinceSent": {
-    "description": "Text showing time elapsed since invite was sent",
-    "message": "Uitnodiging verzonden {time}s geleden"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.waiting": {
-    "description": "Text displayed while waiting for invite response.",
-    "message": "Wachten op apparaat om uitnodiging te accepteren"
-  },
-  "routes.app.projects.$projectId_.invite.devices.-shared.disconnected-indicator.disconnected": {
-    "description": "Text displayed when external device is disconnected.",
-    "message": "Losgekoppeld"
-  },
-  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameNetwork": {
-    "description": "Text explaining that devices need to be on same Wi-Fi network.",
-    "message": "Controleer of apparaten op hetzelfde wifi-netwerk zitten"
-  },
-  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameVersion": {
-    "description": "Text explaining that devices need to be using same version of CoMapeo.",
-    "message": "Bevestig dat apparaten dezelfde versie van CoMapeo gebruiken"
-  },
-  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingTitle": {
-    "description": "Title for device discovery troubleshooting section.",
-    "message": "Zie je geen apparaat?"
-  },
-  "routes.app.projects.$projectId_.invite.devices.index.goBackAccessibleLabel": {
-    "description": "Accessible label for back button",
-    "message": "Ga terug."
-  },
-  "routes.app.projects.$projectId_.invite.devices.index.navTitle": {
-    "description": "Title of the device selection for invite page.",
-    "message": "Selecteer een apparaat"
-  },
-  "routes.app.projects.$projectId_.invite.index.controlSharing": {
-    "description": "Detail about how to control data sharing.",
-    "message": "Controleer delen in projectinstellingen."
-  },
-  "routes.app.projects.$projectId_.invite.index.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "Ga terug."
-  },
-  "routes.app.projects.$projectId_.invite.index.inviteCollaborators": {
-    "description": "Title of the Invite Get Started page.",
-    "message": "Nodig samenwerkers uit"
-  },
-  "routes.app.projects.$projectId_.invite.index.navTitle": {
-    "description": "Title of the Invite Get Started page.",
-    "message": "Nu inschrijven"
-  },
-  "routes.app.projects.$projectId_.invite.index.onlyInvitedDevices": {
-    "description": "Detail about who contributes.",
-    "message": "Alleen uitgenodigde apparaten bijdragen."
-  },
-  "routes.app.projects.$projectId_.invite.index.primaryDescription": {
-    "description": "Primary description text.",
-    "message": "Apparaten uitnodigen die CoMapeo gebruiken om samen te werken."
-  },
-  "routes.app.projects.$projectId_.invite.index.selectDevice": {
-    "description": "Text for button to navigate to device selection.",
-    "message": "Selecteer een apparaat"
-  },
-  "routes.app.projects.$projectId_.invite.index.shareUsingExchange": {
-    "description": "Detail about how collaborators share data.",
-    "message": "Medewerkers delen veilig met behulp van Exchange."
-  },
-  "routes.app.projects.$projectId_.settings.categories.customCategoriesExplainer": {
-    "description": "Explanation for custom categories",
-    "message": "Gebruik aangepaste categorieën door het importeren van nieuwe categoriëen hieronder ingestelde bestanden."
-  },
-  "routes.app.projects.$projectId_.settings.categories.dateAdded": {
-    "description": "Text indicating the date the categories set was added.",
-    "message": "Toegevoegd {date}"
-  },
-  "routes.app.projects.$projectId_.settings.categories.dateCreated": {
-    "description": "Text indicating the date the categories set was created.",
-    "message": "Aangemaakt {date}"
-  },
-  "routes.app.projects.$projectId_.settings.categories.defaultCategoriesExplainer": {
-    "description": "Explanation for default categories",
-    "message": "Standaardcategorieën helpen je om je waarnemingen direct te organiseren."
-  },
-  "routes.app.projects.$projectId_.settings.categories.fallbackCategoriesName": {
-    "description": "Fallback displayed name when project has no category set.",
-    "message": "CoMapeo categorieën"
-  },
-  "routes.app.projects.$projectId_.settings.categories.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "Ga terug."
-  },
-  "routes.app.projects.$projectId_.settings.categories.navTitle": {
-    "description": "Title of the categories set page.",
-    "message": "Categorieën instellen"
-  },
-  "routes.app.projects.$projectId_.settings.categories.uploadNewSet": {
-    "description": "Label for button to upload new categories set.",
-    "message": "Nieuwe set uploaden"
-  },
-  "routes.app.projects.$projectId_.settings.index.categoriesActionLabel": {
-    "description": "Text for action to update categories set.",
-    "message": "Updaten"
-  },
-  "routes.app.projects.$projectId_.settings.index.categoriesLinkAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to project info settings page.",
-    "message": "Ga naar instellingen voor categorieën."
-  },
-  "routes.app.projects.$projectId_.settings.index.fallbackCategoriesSetName": {
-    "description": "Text shown when project does not use a categories set.",
-    "message": "CoMapeo categorieën"
-  },
-  "routes.app.projects.$projectId_.settings.index.navTitle": {
-    "description": "Title of the coordinator tools page.",
-    "message": "Coördinator Tools"
-  },
-  "routes.app.projects.$projectId_.settings.index.projectInfoActionLabel": {
-    "description": "Text for action to update project info.",
-    "message": "Bewerken"
-  },
-  "routes.app.projects.$projectId_.settings.index.projectSettingsLinkAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to project info settings page.",
-    "message": "Ga naar de project info instellingen."
-  },
-  "routes.app.projects.$projectId_.settings.index.unnamedProject": {
-    "description": "Fallback for when current project is missing a name.",
-    "message": "Naamloos project"
-  },
-  "routes.app.projects.$projectId_.settings.info.cancel": {
-    "description": "Label for cancel button.",
-    "message": "Annuleren"
-  },
-  "routes.app.projects.$projectId_.settings.info.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "Ga terug."
-  },
-  "routes.app.projects.$projectId_.settings.info.maxProjectDescriptionLengthError": {
-    "description": "Error message for project description that is too long.",
-    "message": "Te lang, probeer een kortere beschrijving."
-  },
-  "routes.app.projects.$projectId_.settings.info.maxProjectNameLengthError": {
-    "description": "Error message for project name that is too long.",
-    "message": "Te lang, probeer een kortere naam."
-  },
-  "routes.app.projects.$projectId_.settings.info.minProjectNameLengthError": {
-    "description": "Error message for project name that is too short.",
-    "message": "Voer een projectnaam in"
-  },
-  "routes.app.projects.$projectId_.settings.info.navTitle": {
-    "description": "Title of the project settings info page.",
-    "message": "Info bewerken"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectCardColorLabel": {
-    "description": "Label for the project card color selector.",
-    "message": "Project Kaart Kleur"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectColorOptionBlue": {
-    "description": "Label for blue option in project color selector.",
-    "message": "Blauw"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectColorOptionGreen": {
-    "description": "Label for green option in project color selector.",
-    "message": "Groen"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectColorOptionGrey": {
-    "description": "Label for grey option in project color selector.",
-    "message": "Grijs"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectColorOptionOrange": {
-    "description": "Label for orange option in project color selector.",
-    "message": "Oranje"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectColorOptionRed": {
-    "description": "Label for grey option in project color selector.",
-    "message": "Rood"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectDescriptionInputLabel": {
-    "description": "Label for the project description input.",
-    "message": "Project beschrijving"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectNameInputLabel": {
-    "description": "Label for the project name input.",
-    "message": "Enter a name for the Project"
-  },
-  "routes.app.projects.$projectId_.settings.info.save": {
-    "description": "Label for save button.",
-    "message": "Opslaan"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.addedOn": {
-    "description": "Text indicating date collaborator was added to the project.",
-    "message": "Toegevoegd op {value}"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.collaboratorNavTitle": {
-    "description": "Title of the team collaborator info page.",
-    "message": "Medewerker Info"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.confirmButton": {
-    "description": "Button text to confirm leaving project.",
-    "message": "Bevestigen"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.coordinator": {
-    "description": "Text indicating collaborator is a coordinator.",
-    "message": "Coördinator"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "Ga terug."
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.lastCoordinatorWarning": {
-    "description": "Warning text about leaving the project as the last coordinator.",
-    "message": "U bent de laatste coördinator. Overweeg een ander apparaat tot coördinator te maken voordat u het project verlaat."
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectButton": {
-    "description": "Button text to initiate leave project flow.",
-    "message": "Project verlaten"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerDescription": {
-    "description": "Description for leave project explanation.",
-    "message": "<b>{name}</b> zal niet langer in staat zijn waarnemingen toe te voegen of uit te wisselen."
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerTitle": {
-    "description": "Title text for leave project explanation.",
-    "message": "Project verlaten?"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectNavTitle": {
-    "description": "Title of the team collaborator info page when the leave project flow is initiated.",
-    "message": "Project verlaten"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.participant": {
-    "description": "Text indicating collaborator is a participant.",
-    "message": "Deelnemer"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.remoteArchive": {
-    "description": "Fallback name used if remote archive does not have name.",
-    "message": "Extern archief"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.thisDevice": {
-    "description": "Text indicating that user is viewing itslef.",
-    "message": "Dit apparaat!"
-  },
-  "routes.app.projects.$projectId_.team.index.coordinatorsSectionDescription": {
-    "description": "Description of the coordinators section in the team page.",
-    "message": "Coördinatoren kunnen apparaten, bewerken en verwijderen van gegevens, en projectdetails beheren."
-  },
-  "routes.app.projects.$projectId_.team.index.coordinatorsSectionTitle": {
-    "description": "Title of the coordinators section in the team page.",
-    "message": "Coördinatoren"
-  },
-  "routes.app.projects.$projectId_.team.index.inviteDevice": {
-    "description": "Text for button that initiates steps for inviting device to project.",
-    "message": "Apparaat Uitnodigen"
-  },
-  "routes.app.projects.$projectId_.team.index.memberLinkAccessibleLabel": {
-    "description": "Accessible label for link that navigates to member details.",
-    "message": "Lid {name} bekijken."
-  },
-  "routes.app.projects.$projectId_.team.index.navTitle": {
-    "description": "Title of the team page.",
-    "message": "Team"
-  },
-  "routes.app.projects.$projectId_.team.index.noParticipants": {
-    "description": "Text indicating that no participants are part of the project yet.",
-    "message": "Er zijn geen deelnemers aan dit project toegevoegd."
-  },
-  "routes.app.projects.$projectId_.team.index.participantsSectionDescription": {
-    "description": "Description of the participants section in the team page.",
-    "message": "Deelnemers kunnen waarnemingen aannemen en delen. Ze kunnen gebruikers of projectdetails niet beheren."
-  },
-  "routes.app.projects.$projectId_.team.index.participantsSectionTitle": {
-    "description": "Title of the participants section in the team page.",
-    "message": "Deelnemers"
-  },
-  "routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionDescription": {
-    "description": "Description of the past collaborators section in the team page.",
-    "message": "De toestellen dragen niet meer bij aan dit project."
-  },
-  "routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionTitle": {
-    "description": "Title of the past collaborators section in the team page.",
-    "message": "Vorige samenwerkers"
-  },
-  "routes.app.projects.$projectId_.team.index.remoteArchivesSectionDescription": {
-    "description": "Description of the remote archives section in the team page.",
-    "message": "Dit project deelt met veilige, versleutelde servers."
-  },
-  "routes.app.projects.$projectId_.team.index.remoteArchivesSectionTitle": {
-    "description": "Title of the remote archives section in the team page.",
-    "message": "Extern archief"
-  },
-  "routes.app.projects.$projectId_.team.index.thisDevice": {
-    "description": "Text indicating that the listed device refers to the one currently being used.",
-    "message": "Dit apparaat"
   },
   "routes.app.projects.-shared.device-icon.deviceTypeDesktop": {
     "description": "Text indicating that the member is a desktop device (displays when hovering over the icon).",
@@ -815,25 +947,73 @@
     "description": "Text displayed when Wi-Fi info is unavailable.",
     "message": "Wi-Fi info unavailable."
   },
+  "routes.app.route.accessibleLabelGoTo": {
+    "description": "Accessible label for button that navigates to project when clicked.",
+    "message": "Ga naar project {name}."
+  },
+  "routes.app.route.accessibleLabelShowProjectInfo": {
+    "description": "Accessible label for button that shows project info when clicked.",
+    "message": "Toon info voor project {name}."
+  },
   "routes.app.route.appSettingsTabLabel": {
-    "description": "Label for CoMapeo settings tab link in navigation.",
+    "description": "Label for app settings tab link in navigation.",
     "message": "Instellingen"
   },
-  "routes.app.route.exchangeTabAccessibleLabel": {
-    "description": "Accessible label for exchange tab link in navigation.",
-    "message": "Toon uitwisseling."
+  "routes.app.route.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set.",
+    "message": "CoMapeo categorieën"
   },
-  "routes.app.route.projectTabAccessibleLabel": {
-    "description": "Accessible label for project tab link in navigation.",
-    "message": "Bekijk het project."
+  "routes.app.route.homeTabTitle": {
+    "description": "Label for home tab link in navigation.",
+    "message": "Startpagina"
   },
-  "routes.app.route.teamTabLabel": {
-    "description": "Label for team tab link in navigation.",
-    "message": "Team"
+  "routes.app.route.projectCardLinkAccessibleLabel": {
+    "description": "Accessible label for link that navigates to project when clicked.",
+    "message": "Ga naar project {name}."
   },
-  "routes.app.route.toolsTabLabel": {
-    "description": "Label for tools tab link in navigation.",
-    "message": "Hulpmiddelen"
+  "routes.app.route.projectInfoCategoriesCreated": {
+    "description": "Text indicating creation date of categories set.",
+    "message": "Aangemaakt {date}"
+  },
+  "routes.app.route.projectInfoProjectStats": {
+    "description": "Text indicating if project stats sharing is enabled or not.",
+    "message": "Project Delen ww {enabled, select, 1 {} other {UIT}}"
+  },
+  "routes.app.route.projectInfoRoleCoordinator": {
+    "description": "Indicates that user is a coordinator.",
+    "message": "Coördinator"
+  },
+  "routes.app.route.projectInfoRoleParticipant": {
+    "description": "Indicates that user is a participant.",
+    "message": "Deelnemer"
+  },
+  "routes.app.route.projectInviteAccept": {
+    "description": "Button text for accepting project invite.",
+    "message": "Accepteren"
+  },
+  "routes.app.route.projectInviteDecline": {
+    "description": "Button text for declining project invite.",
+    "message": "Afwijzen"
+  },
+  "routes.app.route.projectInviteTitle": {
+    "description": "Title of project invite.",
+    "message": "U bent uitgenodigd voor…"
+  },
+  "routes.app.route.projectJoinedCloseDialog": {
+    "description": "Text for button to close project joined dialog.",
+    "message": "Open Settings"
+  },
+  "routes.app.route.projectJoinedTitle": {
+    "description": "Title of dialog displayed when joining a project successfully.",
+    "message": "Het project {name} is succesvol aangesloten."
+  },
+  "routes.app.route.projectJoinedViewProject": {
+    "description": "Text for button to navigate to joined project in project joined dialog.",
+    "message": "Bekijk project"
+  },
+  "routes.app.route.unnamedProject": {
+    "description": "Fallback for when project is missing a name.",
+    "message": "Naamloos project"
   },
   "routes.app.settings.-data-and-pritvacy-section.diagnosticInformationPersonalInfo": {
     "message": "Dit bevat nooit enige van je gegevens of persoonlijke informatie."
@@ -975,10 +1155,6 @@
     "description": "Accessible label for link item that navigates to coordinate system settings page.",
     "message": "Ga naar coördinaat systeem instellingen."
   },
-  "routes.app.settings.index.createTestData": {
-    "description": "Label for item that navigates to test data creation page.",
-    "message": "Maak Test Data"
-  },
   "routes.app.settings.index.customBackground": {
     "description": "Placeholder name of custom background map if name cannot be retrieved.",
     "message": "Aangepaste achtergrond"
@@ -1095,10 +1271,6 @@
     "description": "Message displayed when observation creation succeeds.",
     "message": "{count, plural, one {# waarneming} other {# waarnemingen}}."
   },
-  "routes.app.settings_.test-data.projectSelectLabel": {
-    "description": "Text label for project selector input.",
-    "message": "Project"
-  },
   "routes.app.settings_.test-data.requiredError": {
     "description": "Error message for when required input is empty.",
     "message": "vereist"
@@ -1106,14 +1278,6 @@
   "routes.app.settings_.test-data.trackCreateSuccess": {
     "description": "Message displayed when track creation succeeds.",
     "message": "{count, plural, one {# nummer} other {# nummer nummer}}."
-  },
-  "routes.onboarding.-layouts.goBack": {
-    "description": "Button text for button to navigate back in onboarding steps.",
-    "message": "Ga terug"
-  },
-  "routes.onboarding.-layouts.step": {
-    "description": "Text indicating step number in onboarding.",
-    "message": "Stap {value}"
   },
   "routes.onboarding.data-and-privacy.dataEncrypted": {
     "message": "Alle data blijft volledig versleuteld."
@@ -1248,109 +1412,13 @@
   "routes.onboarding.privacy-policy.whyIsThisDataCollectedDescription": {
     "message": "Crashen van gegevens en app-fouten, samen met de informatie van het apparaat en app bieden Awana Digital de informatie die nodig is om fouten en fouten in de app op te lossen.<br></br><br></br>De prestatiegegevens helpen ons bij het verbeteren van het reactievermogen van de app en het identificeren van fouten.<br></br><br></br>Het land waar CoMapeo wordt gebruikt en de taal van de UI helpt ons minimale informatie over CoMapeo gebruikers te begrijpen: \"Hoeveel CoMapeo gebruikers zijn er in elk land?\""
   },
-  "routes.onboarding.project.create.$projectId.notFound": {
-    "description": "Text displayed when project is not found.",
-    "message": "Kan project met ID {projectId} niet vinden"
-  },
-  "routes.onboarding.project.create.$projectId.success.description": {
-    "description": "Description for onboarding project creation success page.",
-    "message": "<b>{projectName}</b><br></br>aangemaakt."
-  },
-  "routes.onboarding.project.create.$projectId.success.goBack": {
-    "description": "Text for button to navigate back when project is not found.",
+  "routes.onboarding.route.goBack": {
+    "description": "Button text for button to navigate back in onboarding steps.",
     "message": "Ga terug"
   },
-  "routes.onboarding.project.create.$projectId.success.inviteCollaborators": {
-    "description": "Text for link to navigate to invite collaborators page.",
-    "message": "Nodig samenwerkers uit"
-  },
-  "routes.onboarding.project.create.$projectId.success.projectNotFound": {
-    "description": "Text displayed when invite cannot be found.",
-    "message": "Kon de uitnodiging niet vinden met ID {inviteId}"
-  },
-  "routes.onboarding.project.create.$projectId.success.startUsingCoMapeo": {
-    "description": "Text for link to navigate to main app.",
-    "message": "Start met behulp van CoMapeo"
-  },
-  "routes.onboarding.project.create.$projectId.success.title": {
-    "description": "Title for onboarding project creation success page.",
-    "message": "Voltooid!"
-  },
-  "routes.onboarding.project.create.index.characterCount": {
-    "description": "Character count for project name input.",
-    "message": "{count}/{max}"
-  },
-  "routes.onboarding.project.create.index.createButton": {
-    "description": "Text for button to create project.",
-    "message": "Create Project"
-  },
-  "routes.onboarding.project.create.index.description": {
-    "description": "Page description for onboarding project creation page.",
-    "message": "Benoem uw project."
-  },
-  "routes.onboarding.project.create.index.maxLengthError": {
-    "description": "Error message for when project name is too long.",
-    "message": "Te lang, probeer een kortere naam."
-  },
-  "routes.onboarding.project.create.index.minLengthError": {
-    "description": "Error message for when project name is too short.",
-    "message": "Voer een projectnaam in"
-  },
-  "routes.onboarding.project.create.index.projectName": {
-    "description": "Input label for onboarding project creation page.",
-    "message": "Enter a name for the Project"
-  },
-  "routes.onboarding.project.create.index.title": {
-    "description": "Page title for onboarding project creation page.",
-    "message": "Create a Project"
-  },
-  "routes.onboarding.project.index.description": {
-    "description": "Description shown about actions to take in the project onboarding landing page.",
-    "message": "Kies uit de onderkant om je eerste project te starten."
-  },
-  "routes.onboarding.project.index.joinProjectButton": {
-    "description": "Text for link to join a project.",
-    "message": "Deelnemen aan een project"
-  },
-  "routes.onboarding.project.index.startProjectButton": {
-    "description": "Text for link to start a project.",
-    "message": "Create a Project"
-  },
-  "routes.onboarding.project.index.title": {
-    "description": "Title for the project onboarding landing page.",
-    "message": "{name} is klaar!"
-  },
-  "routes.onboarding.project.join.$inviteId.success.description": {
-    "description": "Description for onboarding joining project success page.",
-    "message": "<b>{deviceName}</b><br></br>sluit aan bij<br></br><b>{projectName}</b>."
-  },
-  "routes.onboarding.project.join.$inviteId.success.inviteNotFound": {
-    "description": "Text displayed when invite cannot be found.",
-    "message": "Kon de uitnodiging niet vinden met ID {inviteId}"
-  },
-  "routes.onboarding.project.join.$inviteId.success.startUsingCoMapeo": {
-    "description": "Text for link to navigate to main app.",
-    "message": "Start met behulp van CoMapeo"
-  },
-  "routes.onboarding.project.join.$inviteId.success.title": {
-    "description": "Title for onboarding joining project success page.",
-    "message": "Voltooid!"
-  },
-  "routes.onboarding.project.join.index.acceptButton": {
-    "description": "Text for button to accept invitation.",
-    "message": "Accepteren"
-  },
-  "routes.onboarding.project.join.index.declineButton": {
-    "description": "Text for button to decline invitation.",
-    "message": "Afwijzen"
-  },
-  "routes.onboarding.project.join.index.description": {
-    "description": "Description for onboarding join project landing page.",
-    "message": "Coördineer met je team om een projectuitnodiging te ontvangen."
-  },
-  "routes.onboarding.project.join.index.title": {
-    "description": "Title for onboarding join project landing page.",
-    "message": "Deelnemen aan een project"
+  "routes.onboarding.route.step": {
+    "description": "Text indicating step number in onboarding.",
+    "message": "Stap {value}"
   },
   "routes.welcome.appDescription": {
     "message": "Bekijk en beheer waarnemingen die zijn verzameld met CoMapeo Mobile."
