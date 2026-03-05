@@ -3,70 +3,44 @@ import { useMapStyleUrl } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
-import Dialog from '@mui/material/Dialog'
+import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
-import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, LIGHT_GREY } from '../../../colors'
-import { ErrorBoundary } from '../../../components/error-boundary'
-import {
-	ErrorDialog,
-	type Props as ErrorDialogProps,
-} from '../../../components/error-dialog'
-import { Icon } from '../../../components/icon'
-import { useRefreshTokensActions } from '../../../contexts/refresh-tokens-store-context'
-import { bytesToMegabytes } from '../../../lib/bytes-to-megabytes'
-import { selectFileMutationOptions } from '../../../lib/queries/file-system'
-import { createGlobalMutationsKey } from '../../../lib/queries/global-mutations'
+import { BLUE_GREY, LIGHT_GREY } from '../../../../colors.ts'
+import { DecentDialog } from '../../../../components/decent-dialog.tsx'
+import { ErrorBoundary } from '../../../../components/error-boundary.tsx'
+import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
+import { Icon } from '../../../../components/icon.tsx'
+import { useRefreshTokensActions } from '../../../../contexts/refresh-tokens-store-context.ts'
+import { bytesToMegabytes } from '../../../../lib/bytes-to-megabytes.ts'
+import { selectFileMutationOptions } from '../../../../lib/queries/file-system.ts'
+import { createGlobalMutationsKey } from '../../../../lib/queries/global-mutations.ts'
 import {
 	getCustomMapInfoQueryOptions,
 	importSMPFileMutationOptions,
 	removeSMPFileMutationOptions,
-} from '../../../lib/queries/maps'
+} from '../../../../lib/queries/maps.ts'
 
-export const Route = createFileRoute('/app/settings/background-map')({
+export const Route = createFileRoute('/app/settings/_nested/background-map')({
+	staticData: {
+		getNavTitle: () => {
+			return m.navTitle
+		},
+	},
 	component: RouteComponent,
 })
 
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 
-	const router = useRouter()
-
 	return (
-		<>
+		<Container maxWidth="md" disableGutters>
 			<Stack direction="column" flex={1}>
-				<Stack
-					direction="row"
-					alignItems="center"
-					component="nav"
-					gap={4}
-					padding={4}
-					borderBottom={`1px solid ${BLUE_GREY}`}
-				>
-					<IconButton
-						aria-label={t(m.goBackAccessibleLabel)}
-						onClick={() => {
-							if (router.history.canGoBack()) {
-								router.history.back()
-								return
-							}
-
-							router.navigate({ to: '/app/settings', replace: true })
-						}}
-					>
-						<Icon name="material-arrow-back" size={30} />
-					</IconButton>
-					<Typography variant="h1" fontWeight={500}>
-						{t(m.navTitle)}
-					</Typography>
-				</Stack>
-
 				<Stack direction="column" flex={1} overflow="auto">
 					<Stack direction="column" padding={6} gap={6}>
 						<Box
@@ -92,7 +66,7 @@ function RouteComponent() {
 					</Stack>
 				</Stack>
 			</Stack>
-		</>
+		</Container>
 	)
 }
 
@@ -129,36 +103,6 @@ function CustomMap() {
 		...removeSMPFileMutationOptions(),
 		mutationKey: REMOVE_CUSTOM_MAP_MUTATION_KEY,
 	})
-
-	const errorDialogProps: ErrorDialogProps =
-		selectFile.status === 'error'
-			? {
-					open: true,
-					errorMessage: selectFile.error.toString(),
-					onClose: () => {
-						selectFile.reset()
-					},
-				}
-			: importSMPFile.status === 'error'
-				? {
-						open: true,
-						errorMessage: importSMPFile.error.toString(),
-						onClose: () => {
-							importSMPFile.reset()
-						},
-					}
-				: removeCustomMap.status === 'error'
-					? {
-							open: true,
-							errorMessage: removeCustomMap.error.toString(),
-							onClose: () => {
-								importSMPFile.reset()
-							},
-						}
-					: {
-							open: false,
-							onClose: () => {},
-						}
 
 	return (
 		<>
@@ -242,67 +186,72 @@ function CustomMap() {
 				/>
 			</ErrorBoundary>
 
-			<ErrorDialog {...errorDialogProps} />
-
-			<SuccessDialog
-				open={importSMPFile.status === 'success'}
-				title={t(m.mapUpdateSuccessTitle)}
-				description={t(m.mapUpdateSuccessDescription)}
-				onClose={() => {
-					importSMPFile.reset()
-				}}
-			/>
-		</>
-	)
-}
-
-// TODO: Potentially extract as shared component
-function SuccessDialog({
-	open,
-	onClose,
-	title,
-	description,
-}: {
-	open: boolean
-	title: string
-	description?: string
-	onClose: () => void
-}) {
-	const { formatMessage: t } = useIntl()
-
-	return (
-		<Dialog open={open} maxWidth="sm">
-			<Stack direction="column">
-				<Stack direction="column" gap={10} flex={1} padding={20}>
-					<Stack direction="column" alignItems="center" gap={4}>
-						<Typography variant="h1" fontWeight={500} textAlign="center">
-							{title}
-						</Typography>
-
-						{description ? <Typography>{description}</Typography> : null}
-					</Stack>
-				</Stack>
-
-				<Box
-					position="sticky"
-					bottom={0}
-					display="flex"
-					justifyContent="center"
-					padding={6}
-				>
-					<Button
-						fullWidth
-						variant="outlined"
-						onClick={() => {
-							onClose()
+			<DecentDialog
+				maxWidth="sm"
+				value={
+					selectFile.status === 'error'
+						? { error: selectFile.error, from: 'select' as const }
+						: importSMPFile.status === 'error'
+							? { error: importSMPFile.error, from: 'import' as const }
+							: removeCustomMap.status === 'error'
+								? { error: removeCustomMap.error, from: 'remove' as const }
+								: null
+				}
+			>
+				{({ error, from }) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							if (from === 'select') {
+								selectFile.reset()
+							} else if (from === 'import') {
+								importSMPFile.reset()
+							} else if (from === 'remove') {
+								removeCustomMap.reset()
+							}
 						}}
-						sx={{ maxWidth: 400, alignSelf: 'center' }}
-					>
-						{t(m.close)}
-					</Button>
-				</Box>
-			</Stack>
-		</Dialog>
+					/>
+				)}
+			</DecentDialog>
+
+			<DecentDialog
+				maxWidth="sm"
+				value={importSMPFile.status === 'success' || null}
+			>
+				{() => (
+					<Stack direction="column">
+						<Stack direction="column" gap={10} flex={1} padding={20}>
+							<Stack direction="column" alignItems="center" gap={4}>
+								<Typography variant="h1" fontWeight={500} textAlign="center">
+									{t(m.mapUpdateSuccessTitle)}
+								</Typography>
+
+								<Typography>{t(m.mapUpdateSuccessDescription)}</Typography>
+							</Stack>
+						</Stack>
+
+						<Box
+							position="sticky"
+							bottom={0}
+							display="flex"
+							justifyContent="center"
+							padding={6}
+						>
+							<Button
+								fullWidth
+								variant="outlined"
+								onClick={() => {
+									importSMPFile.reset()
+								}}
+								sx={{ maxWidth: 400, alignSelf: 'center' }}
+							>
+								{t(m.close)}
+							</Button>
+						</Box>
+					</Stack>
+				)}
+			</DecentDialog>
+		</>
 	)
 }
 
@@ -533,10 +482,5 @@ const m = defineMessages({
 		id: 'routes.app.settings.background-map.close',
 		defaultMessage: 'Close',
 		description: 'Text displayed for closing dialogs',
-	},
-	goBackAccessibleLabel: {
-		id: 'routes.app.settings.background-map.goBackAccessibleLabel',
-		defaultMessage: 'Go back.',
-		description: 'Accessible label for back button.',
 	},
 })

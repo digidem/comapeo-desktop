@@ -1,5 +1,7 @@
 /// <reference types="network-information-types/dist-types/" />
 
+import type { MessageDescriptor } from 'react-intl'
+
 import { type RuntimeApi } from '../preload/runtime'
 
 declare global {
@@ -12,5 +14,6 @@ declare global {
 declare module '@tanstack/react-router' {
 	interface StaticDataRouteOption {
 		onboardingStepNumber?: 1 | 2
+		getNavTitle?: () => MessageDescriptor
 	}
 }

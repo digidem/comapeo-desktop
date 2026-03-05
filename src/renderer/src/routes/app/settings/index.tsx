@@ -78,7 +78,7 @@ function RouteComponent() {
 					}
 				>
 					<Container maxWidth="md" disableGutters>
-						<Stack direction="column" gap={6} padding={0}>
+						<Stack direction="column" gap={6}>
 							<SettingsList />
 
 							<DataAndPrivacySection />

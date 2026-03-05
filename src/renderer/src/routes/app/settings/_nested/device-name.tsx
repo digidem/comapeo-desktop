@@ -1,29 +1,31 @@
-import { useMemo } from 'react'
+import { useId, useMemo } from 'react'
 import { useOwnDeviceInfo, useSetOwnDeviceInfo } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
+import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLUE_GREY, WHITE } from '../../../colors'
-import { ErrorDialog } from '../../../components/error-dialog'
-import { Icon } from '../../../components/icon'
-import { useAppForm } from '../../../hooks/forms'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../lib/comapeo'
-import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../../lib/constants'
-import { createDeviceNameSchema } from '../../../lib/validators/device'
+import { WHITE } from '../../../../colors.ts'
+import { DecentDialog } from '../../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
+import { useAppForm } from '../../../../hooks/forms.ts'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo.ts'
+import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../../../lib/constants.ts'
+import { createDeviceNameSchema } from '../../../../lib/validators/device.ts'
 
-export const Route = createFileRoute('/app/settings/device-name')({
+export const Route = createFileRoute('/app/settings/_nested/device-name')({
+	staticData: {
+		getNavTitle: () => {
+			return m.navTitle
+		},
+	},
 	loader: async ({ context }) => {
 		const { clientApi, queryClient } = context
 
-		// TODO: not ideal to do this but requires major changes to @comapeo/core-react
-		// copied from https://github.com/digidem/comapeo-core-react/blob/e56979321e91440ad6e291521a9e3ce8eb91200d/src/lib/react-query/client.ts#L21
 		await queryClient.ensureQueryData({
 			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 			queryFn: async () => {
@@ -33,8 +35,6 @@ export const Route = createFileRoute('/app/settings/device-name')({
 	},
 	component: RouteComponent,
 })
-
-const FORM_ID = 'device-name-form'
 
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
@@ -86,122 +86,78 @@ function RouteComponent() {
 		},
 	})
 
+	const formId = `device-name-form-${useId()}`
+
 	return (
 		<>
-			<Stack direction="column" flex={1}>
-				<Stack
-					direction="row"
-					alignItems="center"
-					component="nav"
-					gap={4}
-					padding={4}
-					borderBottom={`1px solid ${BLUE_GREY}`}
-				>
-					<IconButton
-						aria-label={t(m.goBackAccessibleLabel)}
-						onClick={() => {
-							if (form.state.isSubmitting) {
-								return
-							}
-
-							if (router.history.canGoBack()) {
-								router.history.back()
-								return
-							}
-
-							router.navigate({ to: '/app/settings', replace: true })
+			<Container maxWidth="md" disableGutters>
+				<Stack direction="column" flex={1} padding={6} gap={10}>
+					<Box
+						component="form"
+						id={formId}
+						noValidate
+						autoComplete="off"
+						onSubmit={(event) => {
+							event.preventDefault()
+							if (form.state.isSubmitting) return
+							form.handleSubmit()
 						}}
 					>
-						<Icon name="material-arrow-back" size={30} />
-					</IconButton>
-					<Typography variant="h1" fontWeight={500}>
-						{t(m.navTitle)}
-					</Typography>
-				</Stack>
-
-				<Stack
-					direction="column"
-					flex={1}
-					justifyContent="space-between"
-					overflow="auto"
-				>
-					<Box padding={6}>
-						<Box
-							component="form"
-							id={FORM_ID}
-							noValidate
-							autoComplete="off"
-							onSubmit={(event) => {
-								event.preventDefault()
-								if (form.state.isSubmitting) return
-								form.handleSubmit()
-							}}
-						>
-							<form.AppField name="deviceName">
-								{(field) => (
-									<TextField
-										required
-										fullWidth
-										label={t(m.inputLabel)}
-										value={field.state.value}
-										error={!field.state.meta.isValid}
-										name={field.name}
-										onChange={(event) => {
-											field.handleChange(event.target.value)
-										}}
-										slotProps={{
-											input: {
-												style: {
-													backgroundColor: WHITE,
-												},
+						<form.AppField name="deviceName">
+							{(field) => (
+								<TextField
+									required
+									fullWidth
+									label={t(m.inputLabel)}
+									value={field.state.value}
+									error={!field.state.meta.isValid}
+									name={field.name}
+									onChange={(event) => {
+										field.handleChange(event.target.value)
+									}}
+									slotProps={{
+										input: {
+											style: {
+												backgroundColor: WHITE,
 											},
-										}}
-										onBlur={field.handleBlur}
-										helperText={
-											<Stack
-												component="span"
-												direction="row"
-												justifyContent="space-between"
+										},
+									}}
+									onBlur={field.handleBlur}
+									helperText={
+										<Stack
+											component="span"
+											direction="row"
+											justifyContent="space-between"
+										>
+											<Box component="span">
+												{field.state.meta.errors[0]?.message}
+											</Box>
+											<Box
+												component="output"
+												htmlFor={field.name}
+												name="character-count"
 											>
-												<Box component="span">
-													{field.state.meta.errors[0]?.message}
-												</Box>
-												<Box
-													component="output"
-													htmlFor={field.name}
-													name="character-count"
+												<form.Subscribe
+													selector={(state) =>
+														v._getGraphemeCount(state.values.deviceName)
+													}
 												>
-													<form.Subscribe
-														selector={(state) =>
-															v._getGraphemeCount(state.values.deviceName)
-														}
-													>
-														{(count) =>
-															t(m.characterCount, {
-																count,
-																max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
-															})
-														}
-													</form.Subscribe>
-												</Box>
-											</Stack>
-										}
-									/>
-								)}
-							</form.AppField>
-						</Box>
+													{(count) =>
+														t(m.characterCount, {
+															count,
+															max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
+														})
+													}
+												</form.Subscribe>
+											</Box>
+										</Stack>
+									}
+								/>
+							)}
+						</form.AppField>
 					</Box>
 
-					<Stack
-						direction="column"
-						gap={4}
-						paddingX={6}
-						paddingBottom={6}
-						position="sticky"
-						bottom={0}
-						alignItems="center"
-						zIndex={1}
-					>
+					<Stack direction="row" gap={4} justifyContent="center">
 						<form.Subscribe
 							selector={(state) => [state.canSubmit, state.isSubmitting]}
 						>
@@ -229,7 +185,7 @@ function RouteComponent() {
 
 									<Button
 										type="submit"
-										form={FORM_ID}
+										form={formId}
 										fullWidth
 										variant="contained"
 										loading={isSubmitting}
@@ -244,15 +200,23 @@ function RouteComponent() {
 						</form.Subscribe>
 					</Stack>
 				</Stack>
-			</Stack>
+			</Container>
 
-			<ErrorDialog
-				open={setOwnDeviceInfo.status === 'error'}
-				errorMessage={setOwnDeviceInfo.error?.toString()}
-				onClose={() => {
-					setOwnDeviceInfo.reset()
-				}}
-			/>
+			<DecentDialog
+				maxWidth="sm"
+				value={
+					setOwnDeviceInfo.status === 'error' ? setOwnDeviceInfo.error : null
+				}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							setOwnDeviceInfo.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
 		</>
 	)
 }
@@ -293,10 +257,5 @@ const m = defineMessages({
 		id: 'routes.app.settings.device-name.maxLengthError',
 		defaultMessage: 'Too long, try a shorter name.',
 		description: 'Error message for device name that is too long.',
-	},
-	goBackAccessibleLabel: {
-		id: 'routes.app.settings.device-name.goBackAccessibleLabel',
-		defaultMessage: 'Go back.',
-		description: 'Accessible label for back button.',
 	},
 })
