@@ -11,19 +11,17 @@ import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors'
-import {
-	ErrorDialog,
-	type Props as ErrorDialogProps,
-} from '../../../components/error-dialog'
-import { Icon } from '../../../components/icon'
-import { TextLink } from '../../../components/link'
-import { useIconSizeBasedOnTypography } from '../../../hooks/icon'
+import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors.ts'
+import { DecentDialog } from '../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../components/error-dialog.tsx'
+import { Icon } from '../../../components/icon.tsx'
+import { TextLink } from '../../../components/link.tsx'
+import { useIconSizeBasedOnTypography } from '../../../hooks/icon.ts'
 import {
 	getDiagnosticsEnabledQueryOptions,
 	setDiagnosticsEnabledMutationOptions,
-} from '../../../lib/queries/app-settings'
-import { openExternalURLMutationOptions } from '../../../lib/queries/system'
+} from '../../../lib/queries/app-settings.ts'
+import { openExternalURLMutationOptions } from '../../../lib/queries/system.ts'
 
 export function DataAndPrivacySection() {
 	const { formatMessage: t } = useIntl()
@@ -37,28 +35,6 @@ export function DataAndPrivacySection() {
 	)
 
 	const openExternalURL = useMutation(openExternalURLMutationOptions())
-
-	const errorDialogProps: ErrorDialogProps =
-		setDiagnosticsEnabledMutation.status === 'error'
-			? {
-					open: true,
-					errorMessage: setDiagnosticsEnabledMutation.error.toString(),
-					onClose: () => {
-						setDiagnosticsEnabledMutation.reset()
-					},
-				}
-			: openExternalURL.status === 'error'
-				? {
-						open: true,
-						errorMessage: openExternalURL.error.toString(),
-						onClose: () => {
-							openExternalURL.reset()
-						},
-					}
-				: {
-						open: false,
-						onClose: () => {},
-					}
 
 	const iconSize = useIconSizeBasedOnTypography({
 		multiplier: 2,
@@ -184,7 +160,30 @@ export function DataAndPrivacySection() {
 				</Stack>
 			</Stack>
 
-			<ErrorDialog {...errorDialogProps} />
+			<DecentDialog
+				maxWidth="sm"
+				value={
+					setDiagnosticsEnabledMutation.status === 'error'
+						? {
+								errorMessage: setDiagnosticsEnabledMutation.error.toString(),
+								onClose: () => {
+									setDiagnosticsEnabledMutation.reset()
+								},
+							}
+						: openExternalURL.status === 'error'
+							? {
+									errorMessage: openExternalURL.error.toString(),
+									onClose: () => {
+										openExternalURL.reset()
+									},
+								}
+							: null
+				}
+			>
+				{({ errorMessage, onClose }) => (
+					<ErrorDialogContent errorMessage={errorMessage} onClose={onClose} />
+				)}
+			</DecentDialog>
 		</>
 	)
 }

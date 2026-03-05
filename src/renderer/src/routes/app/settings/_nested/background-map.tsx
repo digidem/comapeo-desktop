@@ -190,27 +190,31 @@ function CustomMap() {
 				maxWidth="sm"
 				value={
 					selectFile.status === 'error'
-						? { error: selectFile.error, from: 'select' as const }
+						? {
+								errorMessage: selectFile.error.toString(),
+								onClose: () => {
+									selectFile.reset()
+								},
+							}
 						: importSMPFile.status === 'error'
-							? { error: importSMPFile.error, from: 'import' as const }
+							? {
+									errorMessage: importSMPFile.error.toString(),
+									onClose: () => {
+										importSMPFile.reset()
+									},
+								}
 							: removeCustomMap.status === 'error'
-								? { error: removeCustomMap.error, from: 'remove' as const }
+								? {
+										errorMessage: removeCustomMap.error.toString(),
+										onClose: () => {
+											removeCustomMap.reset()
+										},
+									}
 								: null
 				}
 			>
-				{({ error, from }) => (
-					<ErrorDialogContent
-						errorMessage={error.toString()}
-						onClose={() => {
-							if (from === 'select') {
-								selectFile.reset()
-							} else if (from === 'import') {
-								importSMPFile.reset()
-							} else if (from === 'remove') {
-								removeCustomMap.reset()
-							}
-						}}
-					/>
+				{({ errorMessage, onClose }) => (
+					<ErrorDialogContent errorMessage={errorMessage} onClose={onClose} />
 				)}
 			</DecentDialog>
 
