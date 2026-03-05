@@ -109,6 +109,7 @@ function RouteComponent() {
 			</Container>
 
 			<DecentDialog
+				fullWidth
 				maxWidth="sm"
 				value={
 					setCoordinateFormat.status === 'error'

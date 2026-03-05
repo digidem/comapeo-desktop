@@ -161,6 +161,7 @@ export function DataAndPrivacySection() {
 			</Stack>
 
 			<DecentDialog
+				fullWidth
 				maxWidth="sm"
 				value={
 					setDiagnosticsEnabledMutation.status === 'error'

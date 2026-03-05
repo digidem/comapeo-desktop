@@ -187,6 +187,7 @@ function CustomMap() {
 			</ErrorBoundary>
 
 			<DecentDialog
+				fullWidth
 				maxWidth="sm"
 				value={
 					selectFile.status === 'error'

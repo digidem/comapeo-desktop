@@ -203,6 +203,7 @@ function RouteComponent() {
 			</Container>
 
 			<DecentDialog
+				fullWidth
 				maxWidth="sm"
 				value={
 					setOwnDeviceInfo.status === 'error' ? setOwnDeviceInfo.error : null

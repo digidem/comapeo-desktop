@@ -121,6 +121,7 @@ function RouteComponent() {
 			</Container>
 
 			<DecentDialog
+				fullWidth
 				maxWidth="sm"
 				value={setLocale.status === 'error' ? setLocale.error : null}
 			>
