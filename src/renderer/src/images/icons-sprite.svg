@@ -109,6 +109,83 @@
 				></path>
 			</g>
 		</symbol>
+		<symbol id="openmoji-mobile-phone-with-arrow" viewBox="0 0 72 72">
+			<g id="color">
+				<path
+					fill="#9B9B9A"
+					stroke="none"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-miterlimit="10"
+					stroke-width="2"
+					d="M54.0698,59H27.6801c-0.4447,0-0.8052-0.3605-0.8052-0.8052V12.8052c0-0.4447,0.3605-0.8052,0.8052-0.8052h26.3897 c0.4446,0,0.8051,0.3605,0.8051,0.8052v45.3896C54.8749,58.6395,54.5144,59,54.0698,59z"
+				></path>
+				<path
+					fill="#D0CFCE"
+					stroke="none"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-miterlimit="10"
+					stroke-width="2"
+					d="M50.5937,52.053H31.1561c-0.4314,0-0.7812-0.3498-0.7812-0.7812V18.8342c0-0.4315,0.3498-0.7812,0.7812-0.7812h19.4376 c0.4315,0,0.7812,0.3497,0.7812,0.7812v32.4376C51.3749,51.7032,51.0252,52.053,50.5937,52.053z"
+				></path>
+				<polygon
+					fill="#FFFFFF"
+					stroke="none"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-miterlimit="10"
+					stroke-width="2"
+					points="37,15 45,15 45,15 37,15"
+				></polygon>
+			</g>
+			<g id="hair"></g>
+			<g id="skin"></g>
+			<g id="skin-shadow"></g>
+			<g id="line">
+				<path
+					fill="none"
+					stroke="#000000"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-miterlimit="10"
+					stroke-width="2"
+					d="M54.0698,59H27.6801c-0.4447,0-0.8052-0.3605-0.8052-0.8052V12.8052c0-0.4447,0.3605-0.8052,0.8052-0.8052h26.3897 c0.4446,0,0.8051,0.3605,0.8051,0.8052v45.3896C54.8749,58.6395,54.5144,59,54.0698,59z"
+				></path>
+				<path
+					fill="none"
+					stroke="#000000"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-miterlimit="10"
+					stroke-width="2"
+					d="M50.5937,52.053H31.1561c-0.4314,0-0.7812-0.3498-0.7812-0.7812V18.8342c0-0.4315,0.3498-0.7812,0.7812-0.7812h19.4376 c0.4315,0,0.7812,0.3497,0.7812,0.7812v32.4376C51.3749,51.7032,51.0252,52.053,50.5937,52.053z"
+				></path>
+				<circle
+					cx="41"
+					cy="55.5"
+					r="1.5"
+					fill="#000000"
+					stroke="#000000"
+					stroke-miterlimit="10"
+				></circle>
+				<polygon
+					fill="none"
+					stroke="#000000"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-miterlimit="10"
+					stroke-width="2"
+					points="37,15 45,15 45,15 37,15"
+				></polygon>
+				<path
+					fill="#000000"
+					stroke="#000000"
+					stroke-miterlimit="10"
+					d="M16.5297,42.7513L17.6409,44L25.5,35.5029L17.6351,27L16.53,28.2401l5.1655,5.55 c0.1464,0.1573,0.1693,0.4427,0.051,0.6374c-0.0646,0.1065-0.1621,0.1685-0.265,0.1685H6.5v1.813h14.9675 c0.1882,0.0001,0.3407,0.203,0.3407,0.4534c0,0.1369-0.0466,0.2664-0.1267,0.3525L16.5297,42.7513z"
+				></path>
+			</g>
+		</symbol>
 		<symbol viewBox="0 0 72 72" id="openmoji-locked-with-key">
 			<path
 				fill="#D0CFCE"
@@ -213,6 +290,43 @@
 				></path>
 			</g>
 		</symbol>
+		<symbol id="openmoji-download" viewBox="0 0 72 72">
+			<g id="line">
+				<line
+					x1="36.5"
+					x2="36.5"
+					y1="17"
+					y2="49.7614"
+					fill="none"
+					stroke="#000000"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-miterlimit="10"
+					stroke-width="2"
+				></line>
+				<polyline
+					fill="none"
+					stroke="#000000"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-miterlimit="10"
+					stroke-width="2"
+					points="27.8047,41.6451 36.5,50.3104 45.1953,41.6451"
+				></polyline>
+				<line
+					x1="27.5"
+					x2="45.5"
+					y1="55"
+					y2="55"
+					fill="none"
+					stroke="#000000"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-miterlimit="10"
+					stroke-width="2"
+				></line>
+			</g>
+		</symbol>
 		<symbol viewBox="0 0 72 72" id="openmoji-bust-in-silhouette">
 			<g fill="#D0CFCE">
 				<path
@@ -290,6 +404,11 @@
 				d="M18 0H6C4.34 0 3 1.34 3 3v18c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V3c0-1.66-1.34-3-3-3zm-4 22h-4v-1h4v1zm5.25-3H4.75V3h14.5v16z"
 			></path>
 		</symbol>
+		<symbol viewBox="0 -960 960 960" id="material-symbols-waving-hand">
+			<path
+				d="m430-500 283-283q12-12 28-12t28 12 12 28-12 28L487-444zm99 99 254-255q12-12 28.5-12t28.5 12 12 28.5-12 28.5L586-345zM211-211q-91-91-91-219t91-219l120-120 59 59q7 7 12 14.5t10 15.5l148-149q12-12 28.5-12t28.5 12 12 28.5-12 28.5L444-599l-85 84 19 19q46 46 44 110t-49 111l-57-56q23-23 25.5-54.5T321-440l-47-46q-12-12-12-28.5t12-28.5l57-56q12-12 12-28.5T331-656l-64 64q-68 68-68 162.5T267-267t163 68 163-68l239-240q12-12 28.5-12t28.5 12 12 28.5-12 28.5L649-211q-91 91-219 91t-219-91M680-39v-81q66 0 113-47t47-113h81q0 100-70.5 170.5T680-39M39-680q0-100 70.5-170.5T280-921v81q-66 0-113 47t-47 113z"
+			></path>
+		</symbol>
 		<symbol viewBox="0 -960 960 960" id="material-symbols-lists">
 			<path
 				d="M80-160v-160h160v160zm240 0v-160h560v160zM80-400v-160h160v160zm240 0v-160h560v160zM80-640v-160h160v160zm240 0v-160h560v160z"
@@ -327,6 +446,11 @@
 		<symbol viewBox="0 -960 960 960" id="material-symbols-computer">
 			<path
 				d="M40-120v-80h880v80H40Zm120-120q-33 0-56.5-23.5T80-320v-440q0-33 23.5-56.5T160-840h640q33 0 56.5 23.5T880-760v440q0 33-23.5 56.5T800-240H160Zm0-80h640v-440H160v440Zm0 0v-440 440Z"
+			></path>
+		</symbol>
+		<symbol viewBox="0 -960 960 960" id="material-symbols-arrow-circle-right">
+			<path
+				d="m480-320 160-160-160-160-56 56 64 64H320v80h168l-64 64zm0 240q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80m0-80q134 0 227-93t93-227-93-227-227-93-227 93-93 227 93 227 227 93m0-320"
 			></path>
 		</symbol>
 		<symbol
