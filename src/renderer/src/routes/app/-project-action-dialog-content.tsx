@@ -285,6 +285,61 @@ export function StartProjectDialogContent({
 	)
 }
 
+export function LeftProjectDialogContent({
+	onClose,
+	projectName,
+}: {
+	onClose: () => void
+	projectName?: string
+}) {
+	const { formatMessage: t } = useIntl()
+
+	return (
+		<Stack direction="column">
+			<Stack direction="column" gap={10} flex={1} padding={20}>
+				<Stack direction="column" gap={4} alignItems="center">
+					<Box>
+						<Icon
+							name="material-symbols-waving-hand"
+							htmlColor={DARKER_ORANGE}
+							size="96px"
+						/>
+					</Box>
+
+					<Typography variant="h1" fontWeight={500} textAlign="center">
+						{projectName
+							? t(m.leftProjectDialogTitle, { name: projectName })
+							: t(m.leftProjectDialogTitleNoProjectName)}
+					</Typography>
+				</Stack>
+			</Stack>
+
+			<Box
+				position="sticky"
+				right={0}
+				left={0}
+				top={0}
+				bottom={0}
+				display="flex"
+				flexDirection="row"
+				justifyContent="center"
+				padding={6}
+			>
+				<Button
+					fullWidth
+					variant="outlined"
+					onClick={() => {
+						onClose()
+					}}
+					sx={{ maxWidth: 400 }}
+				>
+					{t(m.leftProjectDialogCloseButton)}
+				</Button>
+			</Box>
+		</Stack>
+	)
+}
+
 const m = defineMessages({
 	projectActionDialogGoBack: {
 		id: 'routes.app.index.projectActionDialogGoBack',
@@ -328,7 +383,7 @@ const m = defineMessages({
 		description: 'Error message for when project name is too long.',
 	},
 	createProjectButton: {
-		id: 'routes.app.index.index.createButton',
+		id: 'routes.app.index.createButton',
 		defaultMessage: 'Create',
 		description: 'Text for button to create project.',
 	},
@@ -336,5 +391,21 @@ const m = defineMessages({
 		id: 'routes.app.index.characterCount',
 		defaultMessage: '{count}/{max}',
 		description: 'Character count for project name input.',
+	},
+	leftProjectDialogTitle: {
+		id: 'routes.app.index.leftProjectDialogTitle',
+		defaultMessage: "You've left {name}.",
+		description: 'Title text for left project dialog.',
+	},
+	leftProjectDialogTitleNoProjectName: {
+		id: 'routes.app.index.leftProjectDialogTitleNoProjectName',
+		defaultMessage: "You've left the project.",
+		description:
+			'Title text for left project dialog when project has no name (edge case).',
+	},
+	leftProjectDialogCloseButton: {
+		id: 'routes.app.index.leftProjectDialogCloseButton',
+		defaultMessage: 'Close',
+		description: 'Text for button to close left project dialog.',
 	},
 })

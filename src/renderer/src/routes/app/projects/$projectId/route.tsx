@@ -30,6 +30,7 @@ import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
+	MEMBER_ROLE_ID,
 } from '../../../../lib/comapeo.ts'
 import { LOCAL_STORAGE_KEYS } from '../../../../lib/constants.ts'
 import { GLOBAL_MUTATIONS_BASE_KEY } from '../../../../lib/queries/global-mutations.ts'
@@ -51,6 +52,28 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 			throw notFound()
 		}
 
+		const role = await queryClient.fetchQuery({
+			queryKey: [
+				COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
+				'projects',
+				projectId,
+				'role',
+			],
+			queryFn: async () => {
+				return projectApi.$getOwnRole()
+			},
+		})
+
+		// NOTE: No longer an active member of the project, redirect to home page.
+		if (
+			role.roleId !== CREATOR_ROLE_ID &&
+			role.roleId !== COORDINATOR_ROLE_ID &&
+			role.roleId !== MEMBER_ROLE_ID
+		) {
+			// TODO: Display some sort of notification about this happening?
+			throw Route.redirect({ to: '/app', replace: true })
+		}
+
 		return { projectApi }
 	},
 	loader: async ({ context, params }) => {
@@ -62,17 +85,6 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 				queryFn: async () => {
 					return clientApi.getDeviceInfo()
-				},
-			}),
-			queryClient.ensureQueryData({
-				queryKey: [
-					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
-					'projects',
-					projectId,
-					'role',
-				],
-				queryFn: async () => {
-					return projectApi.$getOwnRole()
 				},
 			}),
 			queryClient.ensureQueryData({

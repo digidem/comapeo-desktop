@@ -35,6 +35,7 @@ import {
 } from '../../lib/comapeo.ts'
 import {
 	JoinProjectDialogContent,
+	LeftProjectDialogContent,
 	StartProjectDialogContent,
 } from './-project-action-dialog-content.tsx'
 import { DeviceIcon } from './projects/-shared/device-icon.tsx'
@@ -42,7 +43,15 @@ import { DeviceIcon } from './projects/-shared/device-icon.tsx'
 const SearchParamsSchema = v.object({
 	projectsLayout: v.optional(v.union([v.literal('grid'), v.literal('list')])),
 	fromFlow: v.optional(
-		v.union([v.literal('onboarding'), v.literal('project_leave')]),
+		v.variant('name', [
+			v.object({
+				name: v.literal('onboarding'),
+			}),
+			v.object({
+				name: v.literal('project_leave'),
+				projectName: v.optional(v.string()),
+			}),
+		]),
 	),
 	projectAction: v.optional(v.union([v.literal('join'), v.literal('create')])),
 })
@@ -132,7 +141,7 @@ function RouteComponent() {
 
 						<Typography variant="h1" fontWeight={500}>
 							{t(
-								fromFlow === 'onboarding'
+								fromFlow?.name === 'onboarding'
 									? m.postOnboardingPageTitle
 									: m.pageTitle,
 								{
@@ -413,6 +422,31 @@ function RouteComponent() {
 						/>
 					)
 				}
+			</DecentDialog>
+
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					fromFlow?.name === 'project_leave'
+						? { projectName: fromFlow.projectName }
+						: null
+				}
+			>
+				{({ projectName }) => (
+					<LeftProjectDialogContent
+						projectName={projectName}
+						onClose={() => {
+							router.navigate({
+								to: '.',
+								search: ({ fromFlow: _, ...rest }) => {
+									return rest
+								},
+								replace: true,
+							})
+						}}
+					/>
+				)}
 			</DecentDialog>
 		</>
 	)

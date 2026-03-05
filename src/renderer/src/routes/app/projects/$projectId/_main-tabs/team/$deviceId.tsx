@@ -1,16 +1,17 @@
 import { Suspense, useState, type JSX } from 'react'
-import type { MemberApi } from '@comapeo/core'
 import {
 	useLeaveProject,
 	useManyMembers,
 	useOwnDeviceInfo,
+	useProjectSettings,
 	useSingleMember,
 } from '@comapeo/core-react'
-import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useMutation } from '@tanstack/react-query'
@@ -18,8 +19,9 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { DeviceIcon } from '../../../-shared/device-icon.tsx'
-import { BLUE_GREY } from '../../../../../../colors.ts'
-import { ErrorDialog } from '../../../../../../components/error-dialog.tsx'
+import { BLUE_GREY, PROJECT_ORANGE } from '../../../../../../colors.ts'
+import { DecentDialog } from '../../../../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../../components/icon.tsx'
 import { useActiveProjectIdActions } from '../../../../../../contexts/active-project-id-store-context.ts'
 import { useIconSizeBasedOnTypography } from '../../../../../../hooks/icon.ts'
@@ -27,9 +29,9 @@ import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
+	MEMBER_ROLE_ID,
 	memberIsRemoteArchive,
 } from '../../../../../../lib/comapeo.ts'
-import { buildDocumentReloadURL } from '../../../../../../lib/navigation.ts'
 import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations.ts'
 
 export const Route = createFileRoute(
@@ -63,12 +65,8 @@ export const Route = createFileRoute(
 	component: RouteComponent,
 })
 
-const LEAVE_PROJECT_AND_NAVIGATE_MUTATION_KEY = createGlobalMutationsKey([
-	'leave_project_and_navigate',
-])
-
 function RouteComponent() {
-	const [showLeaveProject, setShowLeaveProject] = useState(false)
+	const [showLeaveProjectDialog, setShowLeaveProjectDialog] = useState(false)
 
 	const { formatMessage: t } = useIntl()
 
@@ -76,24 +74,11 @@ function RouteComponent() {
 
 	const { projectId, deviceId } = Route.useParams()
 
-	const leaveProject = useLeaveProject()
+	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
-	const activeProjectIdActions = useActiveProjectIdActions()
+	const { data: member } = useSingleMember({ projectId, deviceId })
 
-	const leaveProjectAndNavigate = useMutation({
-		mutationKey: LEAVE_PROJECT_AND_NAVIGATE_MUTATION_KEY,
-		mutationFn: async ({ projectId }: { projectId: string }) => {
-			return leaveProject.mutateAsync({ projectId })
-		},
-		onSuccess: async () => {
-			activeProjectIdActions.update(undefined)
-
-			return router.navigate({
-				href: buildDocumentReloadURL(router, '/app'),
-				reloadDocument: true,
-			})
-		},
-	})
+	const isSelf = member.deviceId === ownDeviceInfo.deviceId
 
 	return (
 		<>
@@ -108,38 +93,24 @@ function RouteComponent() {
 				>
 					<IconButton
 						aria-label={t(m.goBackAccessibleLabel)}
-						onClick={
-							showLeaveProject
-								? () => {
-										if (leaveProjectAndNavigate.status === 'pending') {
-											return
-										}
+						onClick={() => {
+							if (router.history.canGoBack()) {
+								router.history.back()
+								return
+							}
 
-										setShowLeaveProject(false)
-									}
-								: () => {
-										if (router.history.canGoBack()) {
-											router.history.back()
-											return
-										}
-
-										router.navigate({
-											to: '/app/projects/$projectId/team',
-											params: { projectId },
-											replace: true,
-										})
-									}
-						}
+							router.navigate({
+								to: '/app/projects/$projectId/team',
+								params: { projectId },
+								replace: true,
+							})
+						}}
 					>
 						<Icon name="material-arrow-back" size={30} />
 					</IconButton>
 
 					<Typography variant="h1" fontWeight={500}>
-						{t(
-							showLeaveProject
-								? m.leaveProjectNavTitle
-								: m.collaboratorNavTitle,
-						)}
+						{t(isSelf ? m.thisDevice : m.collaboratorNavTitle)}
 					</Typography>
 				</Stack>
 
@@ -150,36 +121,31 @@ function RouteComponent() {
 						</Box>
 					}
 				>
-					{showLeaveProject ? (
-						<>
-							<LeaveProjectContent
-								projectId={projectId}
-								deviceId={deviceId}
-								isLeaving={leaveProjectAndNavigate.status === 'pending'}
-								onConfirm={() => {
-									leaveProjectAndNavigate.mutate({ projectId })
-								}}
-							/>
-						</>
-					) : (
-						<CollaboratorInfoContent
-							projectId={projectId}
-							deviceId={deviceId}
-							onLeaveProject={() => {
-								setShowLeaveProject(true)
-							}}
-						/>
-					)}
+					<CollaboratorInfoContent
+						projectId={projectId}
+						deviceId={deviceId}
+						onLeaveProject={() => {
+							setShowLeaveProjectDialog(true)
+						}}
+					/>
 				</Suspense>
 			</Stack>
 
-			<ErrorDialog
-				open={leaveProjectAndNavigate.status === 'error'}
-				errorMessage={leaveProjectAndNavigate.error?.toString()}
-				onClose={() => {
-					leaveProjectAndNavigate.reset()
-				}}
-			/>
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={showLeaveProjectDialog || null}
+			>
+				{() => (
+					<LeaveProjectDialogContent
+						deviceId={deviceId}
+						projectId={projectId}
+						onClose={() => {
+							setShowLeaveProjectDialog(false)
+						}}
+					/>
+				)}
+			</DecentDialog>
 		</>
 	)
 }
@@ -281,17 +247,6 @@ function CollaboratorInfoContent({
 						{title}
 					</Typography>
 
-					{isSelf ? (
-						<Typography
-							component="p"
-							variant="h3"
-							fontWeight={500}
-							textAlign="center"
-						>
-							{t(m.thisDevice)}
-						</Typography>
-					) : null}
-
 					<Stack direction="row" gap={2} alignItems="center">
 						{description}
 					</Stack>
@@ -331,6 +286,8 @@ function CollaboratorInfoContent({
 					<Button
 						variant="outlined"
 						fullWidth
+						color="error"
+						startIcon={<Icon name="material-logout" />}
 						sx={{ maxWidth: 400 }}
 						onClick={() => {
 							onLeaveProject()
@@ -344,127 +301,300 @@ function CollaboratorInfoContent({
 	)
 }
 
-function LeaveProjectContent({
-	projectId,
+function LeaveProjectDialogContent({
 	deviceId,
-	onConfirm,
-	isLeaving,
+	onClose,
+	projectId,
 }: {
 	deviceId: string
+	onClose: () => void
 	projectId: string
-	onConfirm: () => void
-	isLeaving: boolean
 }) {
 	const { formatMessage: t } = useIntl()
-
-	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
-		multiplier: 4,
-	})
-
-	const { data: member } = useSingleMember({ projectId, deviceId })
-
-	const displayedName = member.name || member.deviceId.slice(0, 12)
-
-	return (
-		<Stack
-			direction="column"
-			flex={1}
-			justifyContent="space-between"
-			overflow="auto"
-			padding={6}
-			gap={6}
-		>
-			<Suspense>
-				<LastCoordinatorWarning projectId={projectId} member={member} />
-			</Suspense>
-
-			<Stack
-				direction="column"
-				border={`1px solid ${BLUE_GREY}`}
-				borderRadius={2}
-				justifyContent="center"
-				alignItems="center"
-				padding={6}
-				gap={10}
-				flex={1}
-			>
-				<Stack direction="column" gap={6} alignItems="center">
-					<Icon name="material-logout" htmlColor={BLUE_GREY} size={iconSize} />
-
-					<Typography variant="h1" fontWeight={500} textAlign="center">
-						{t(m.leaveProjectExplainerTitle)}
-					</Typography>
-				</Stack>
-
-				<Typography textAlign="center">
-					{t(m.leaveProjectExplainerDescription, { name: displayedName })}
-				</Typography>
-			</Stack>
-
-			<Box display="flex" flexDirection="row" justifyContent="center">
-				<Button
-					variant="contained"
-					color="error"
-					fullWidth
-					sx={{ maxWidth: 400 }}
-					loadingPosition="start"
-					loading={isLeaving}
-					onClick={() => {
-						onConfirm()
-					}}
-				>
-					{t(m.confirmButton)}
-				</Button>
-			</Box>
-		</Stack>
-	)
-}
-
-function LastCoordinatorWarning({
-	projectId,
-	member,
-}: {
-	projectId: string
-	member: MemberApi.MemberInfo
-}) {
-	const { formatMessage: t } = useIntl()
+	const { data: projectSettings } = useProjectSettings({ projectId })
 
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
 	const { data: members } = useManyMembers({ projectId })
 
-	const isSelf = member.deviceId === ownDeviceInfo.deviceId
+	const member = members.find((m) => m.deviceId === deviceId)!
 
 	const isAtLeastCoordinator =
 		member.role.roleId === CREATOR_ROLE_ID ||
 		member.role.roleId === COORDINATOR_ROLE_ID
 
-	const showLastCoordinatorWarning =
-		isSelf &&
+	const activeMembers = members.filter(
+		(m) =>
+			m.role.roleId === CREATOR_ROLE_ID ||
+			m.role.roleId === COORDINATOR_ROLE_ID ||
+			m.role.roleId === MEMBER_ROLE_ID,
+	)
+
+	const isLastActiveDevice =
+		activeMembers.length === 1 && activeMembers[0]!.deviceId === deviceId
+
+	const isLastCoordinator =
 		isAtLeastCoordinator &&
-		!members.some(
+		!activeMembers.some(
 			(m) =>
 				m.deviceId !== ownDeviceInfo.deviceId &&
 				(m.role.roleId === CREATOR_ROLE_ID ||
 					m.role.roleId === COORDINATOR_ROLE_ID),
 		)
 
-	if (!showLastCoordinatorWarning) {
-		return null
+	const [warningToShow, setWarningToShow] = useState(() => {
+		return isLastActiveDevice
+			? 'last_device'
+			: isLastCoordinator
+				? 'last_coordinator'
+				: undefined
+	})
+
+	const suggestionIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body2',
+	})
+
+	if (warningToShow) {
+		return (
+			<Stack direction="column">
+				<Stack direction="column" gap={10} flex={1} padding={20}>
+					<Stack direction="column" alignItems="center" gap={4}>
+						<Box position="relative">
+							<DeviceIcon deviceType={member.deviceType} size="60px" />
+
+							<Box position="absolute" right={-8} bottom={-16}>
+								<Icon name="material-error" color="error" size={36} />
+							</Box>
+						</Box>
+
+						<Typography variant="h1" fontWeight={500} textAlign="center">
+							{t(
+								warningToShow === 'last_device'
+									? m.lastDeviceWarningTitle
+									: m.lastCoordinatorWarningTitle,
+							)}
+						</Typography>
+
+						<Typography textAlign="center">
+							{t(
+								warningToShow === 'last_device'
+									? m.lastDeviceWarningDescription
+									: m.lastCoordinatorWarningDescription,
+							)}
+						</Typography>
+
+						<Box
+							alignSelf="stretch"
+							padding={6}
+							borderRadius={2}
+							border={`1px solid ${BLUE_GREY}`}
+							sx={{ backgroundColor: PROJECT_ORANGE }}
+						>
+							<List disablePadding>
+								<Stack direction="column" gap={2}>
+									{warningToShow === 'last_coordinator' ? (
+										<ListItem disableGutters disablePadding>
+											<Stack direction="row" gap={2}>
+												<Icon
+													name="openmoji-mobile-phone-with-arrow"
+													size={suggestionIconSize}
+													sx={{ alignSelf: 'flex-start' }}
+												/>
+
+												<Typography variant="body2" color="textSecondary">
+													{t(m.suggestionInviteCoordinator)}
+												</Typography>
+											</Stack>
+										</ListItem>
+									) : null}
+
+									<ListItem disableGutters disablePadding>
+										<Stack direction="row" gap={2}>
+											<Icon
+												name="openmoji-download"
+												size={suggestionIconSize}
+												sx={{ alignSelf: 'flex-start' }}
+											/>
+
+											<Typography variant="body2" color="textSecondary">
+												{t(m.suggestionExportData)}
+											</Typography>
+										</Stack>
+									</ListItem>
+								</Stack>
+							</List>
+						</Box>
+					</Stack>
+				</Stack>
+
+				<Stack
+					direction="row"
+					alignItems="center"
+					position="sticky"
+					bottom={0}
+					gap={4}
+					padding={6}
+				>
+					<Button
+						fullWidth
+						variant="outlined"
+						onClick={() => {
+							onClose()
+						}}
+						sx={{ maxWidth: 400, alignSelf: 'center' }}
+					>
+						{t(m.cancelButton)}
+					</Button>
+
+					<Button
+						fullWidth
+						variant="contained"
+						color="error"
+						endIcon={<Icon name="material-symbols-arrow-circle-right" />}
+						onClick={() => {
+							setWarningToShow(undefined)
+						}}
+						sx={{ maxWidth: 400, alignSelf: 'center' }}
+					>
+						{t(m.continueButton)}
+					</Button>
+				</Stack>
+			</Stack>
+		)
 	}
 
 	return (
-		<Alert
-			severity="warning"
-			icon={<Icon name="material-warning-rounded" />}
-			sx={{
-				border: `1px solid ${BLUE_GREY}`,
-				borderRadius: 2,
-			}}
-		>
-			<Typography>{t(m.lastCoordinatorWarning)}</Typography>
-		</Alert>
+		<LeaveProjectConfirmation
+			projectId={projectId}
+			projectName={projectSettings.name}
+			onClose={onClose}
+		/>
+	)
+}
+
+const LEAVE_PROJECT_AND_NAVIGATE_MUTATION_KEY = createGlobalMutationsKey([
+	'leave_project_and_navigate',
+])
+
+function LeaveProjectConfirmation({
+	onClose,
+	projectId,
+	projectName,
+}: {
+	onClose: () => void
+	projectId: string
+	projectName?: string
+}) {
+	const { formatMessage: t } = useIntl()
+
+	const router = useRouter()
+
+	const activeProjectIdActions = useActiveProjectIdActions()
+
+	const _leaveProject = useLeaveProject()
+	const leaveProject = useMutation({
+		mutationKey: LEAVE_PROJECT_AND_NAVIGATE_MUTATION_KEY,
+		mutationFn: async ({ projectId }: { projectId: string }) => {
+			return _leaveProject.mutateAsync({ projectId })
+		},
+	})
+
+	return (
+		<>
+			<Stack direction="column">
+				<Stack direction="column" gap={10} flex={1} padding={20}>
+					<Stack direction="column" alignItems="center" gap={4}>
+						<Icon name="material-logout" htmlColor={BLUE_GREY} size={72} />
+
+						<Typography variant="h1" fontWeight={500} textAlign="center">
+							{projectName
+								? t(m.leaveProjectConfirmationTitle, { name: projectName })
+								: t(m.leaveProjectConfirmationTitleNoProjectName)}
+						</Typography>
+
+						<Typography textAlign="center">
+							{t(m.leaveProjectConfirmationDescription)}
+						</Typography>
+					</Stack>
+				</Stack>
+
+				<Stack
+					direction="row"
+					alignItems="center"
+					position="sticky"
+					bottom={0}
+					gap={4}
+					padding={6}
+				>
+					<Button
+						fullWidth
+						variant="outlined"
+						aria-disabled={leaveProject.status === 'pending'}
+						onClick={() => {
+							if (leaveProject.status === 'pending') {
+								return
+							}
+
+							onClose()
+						}}
+						sx={{ maxWidth: 400, alignSelf: 'center' }}
+					>
+						{t(m.cancelButton)}
+					</Button>
+
+					<Button
+						fullWidth
+						variant="contained"
+						color="error"
+						startIcon={<Icon name="material-logout" />}
+						loading={leaveProject.status === 'pending'}
+						loadingPosition="start"
+						onClick={() => {
+							if (leaveProject.status === 'pending') {
+								return
+							}
+
+							leaveProject.mutate(
+								{ projectId },
+								{
+									onSuccess: async () => {
+										onClose()
+
+										activeProjectIdActions.update(undefined)
+
+										return router.navigate({
+											to: '/app',
+											search: {
+												fromFlow: { name: 'project_leave', projectName },
+											},
+											mask: { to: '/app', unmaskOnReload: true },
+										})
+									},
+								},
+							)
+						}}
+						sx={{ maxWidth: 400, alignSelf: 'center' }}
+					>
+						{t(m.confirmButton)}
+					</Button>
+				</Stack>
+			</Stack>
+
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={leaveProject.status === 'error' ? leaveProject.error : null}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							leaveProject.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
+		</>
 	)
 }
 
@@ -482,8 +612,8 @@ const m = defineMessages({
 	},
 	thisDevice: {
 		id: 'routes.app.projects.$projectId.team.$deviceId.thisDevice',
-		defaultMessage: 'This Device!',
-		description: 'Text indicating that user is viewing itslef.',
+		defaultMessage: 'This Device',
+		description: 'Text indicating that user is viewing itself.',
 	},
 	coordinator: {
 		id: 'routes.app.projects.$projectId.team.$deviceId.coordinator',
@@ -510,27 +640,75 @@ const m = defineMessages({
 		defaultMessage: 'Leave Project',
 		description: 'Button text to initiate leave project flow.',
 	},
-	lastCoordinatorWarning: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarning',
-		defaultMessage:
-			"You're the last coordinator. Consider making another device a coordinator before leaving the project.",
+	lastCoordinatorWarningTitle: {
+		id: 'routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningTitle',
+		defaultMessage: 'Device is last coordinator.',
 		description:
-			'Warning text about leaving the project as the last coordinator.',
+			'Title text for last coordinator warning when leaving a project.',
 	},
-	leaveProjectExplainerTitle: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectExplainerTitle',
-		defaultMessage: 'Leave Project?',
-		description: 'Title text for leave project explanation.',
-	},
-	leaveProjectExplainerDescription: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectExplainerDescription',
+	lastCoordinatorWarningDescription: {
+		id: 'routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningDescription',
 		defaultMessage:
-			'<b>{name}</b> will no longer be able to add or exchange observations.',
-		description: 'Description for leave project explanation.',
+			'If this device leaves, then no other device can add or remove devices, adjust project info, or update the categories set.',
+		description:
+			'Description text for last coordinator warning when leaving a project.',
+	},
+	lastDeviceWarningTitle: {
+		id: 'routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningTitle',
+		defaultMessage: 'Device is last device.',
+		description: 'Title text for last device warning when leaving a project.',
+	},
+	lastDeviceWarningDescription: {
+		id: 'routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningDescription',
+		defaultMessage:
+			'If this device leaves, then all data on this project will be lost.',
+		description:
+			'Description text for last device warning when leaving a project.',
+	},
+	suggestionExportData: {
+		id: 'routes.app.projects.$projectId.team.$deviceId.suggestionExportData',
+		defaultMessage: 'Before leaving, export any important data.',
+		description:
+			'Text for export data suggestion in warning when leaving a project.',
+	},
+	suggestionInviteCoordinator: {
+		id: 'routes.app.projects.$projectId.team.$deviceId.suggestionInviteCoordinator',
+		defaultMessage: 'To avoid this, invite a new device as a coordinator.',
+		description:
+			'Text for invite coordinator suggestion in warning when leaving a project.',
+	},
+	leaveProjectConfirmationTitle: {
+		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitle',
+		defaultMessage: 'Leave {name}?',
+		description:
+			'Title text for leave project confirmation when leaving a project.',
+	},
+	leaveProjectConfirmationTitleNoProjectName: {
+		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitleNoProjectName',
+		defaultMessage: 'Leave Project?',
+		description:
+			'Title text for leave project confirmation when leaving a project that has no name (edge case).',
+	},
+	leaveProjectConfirmationDescription: {
+		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationDescription',
+		defaultMessage:
+			'Device will no longer be able to view or contribute to this project.',
+		description:
+			'Description for leave project confirmation when leaving a project.',
+	},
+	cancelButton: {
+		id: 'routes.app.projects.$projectId.team.$deviceId.cancelButton',
+		defaultMessage: 'Cancel',
+		description: 'Button text to cancel leaving project.',
+	},
+	continueButton: {
+		id: 'routes.app.projects.$projectId.team.$deviceId.continueButton',
+		defaultMessage: 'Continue',
+		description: 'Button text to continue to next step in leave project flow.',
 	},
 	confirmButton: {
 		id: 'routes.app.projects.$projectId.team.$deviceId.confirmButton',
-		defaultMessage: 'Confirm',
+		defaultMessage: 'Yes, Leave',
 		description: 'Button text to confirm leaving project.',
 	},
 	goBackAccessibleLabel: {
