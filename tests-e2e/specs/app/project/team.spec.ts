@@ -122,186 +122,262 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 	}
 })
 
-test('collaborator info (yourself)', async ({
-	appInfo,
-	projectParams,
-	userParams,
-}) => {
-	const { launchApp, cleanup } = await setup()
-	const electronApp = await launchApp({ appInfo })
+test.describe('collaborator info', () => {
+	test('yourself', async ({ appInfo, projectParams, userParams }) => {
+		const { launchApp, cleanup } = await setup()
+		const electronApp = await launchApp({ appInfo })
 
-	try {
-		const page = await electronApp.firstWindow()
+		try {
+			const page = await electronApp.firstWindow()
 
-		// 1. Setup
-		await simulateOnboarding({
-			page,
-			deviceName: userParams.deviceName,
-		})
-
-		await simulateCreateProject({
-			page,
-			projectName: projectParams.projectName,
-		})
-
-		await page
-			.getByRole('button', {
-				name: `Go to project ${projectParams.projectName}.`,
-				exact: true,
+			// 1. Setup
+			await simulateOnboarding({
+				page,
+				deviceName: userParams.deviceName,
 			})
-			.click()
 
-		// 2. Main tests
-		const main = page.getByRole('main')
+			await simulateCreateProject({
+				page,
+				projectName: projectParams.projectName,
+			})
 
-		/// Navigation
-		{
-			// Navigate to collaborator info page
-			const teamNavLink = page
-				.getByRole('navigation', { name: 'Project navigation', exact: true })
-				.getByRole('link', { name: 'Team', exact: true })
-
-			await teamNavLink.click()
-
-			await main
-				.getByRole('link', {
-					name: `View member ${userParams.deviceName}.`,
+			await page
+				.getByRole('button', {
+					name: `Go to project ${projectParams.projectName}.`,
 					exact: true,
 				})
 				.click()
 
-			// Assert nav rail state
-			await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+			// 2. Main tests
+			const main = page.getByRole('main')
+
+			/// Navigation
+			{
+				// Navigate to collaborator info page
+				const teamNavLink = page
+					.getByRole('navigation', { name: 'Project navigation', exact: true })
+					.getByRole('link', { name: 'Team', exact: true })
+
+				await teamNavLink.click()
+
+				await main
+					.getByRole('link', {
+						name: `View member ${userParams.deviceName}.`,
+						exact: true,
+					})
+					.click()
+
+				// Assert nav rail state
+				await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+			}
+
+			/// Main
+
+			await expect(
+				main.getByRole('heading', { name: 'This Device', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				main.getByRole('heading', { name: userParams.deviceName, exact: true }),
+			).toBeVisible()
+
+			await expect(main.getByText('Coordinator', { exact: true })).toBeVisible()
+
+			//// Other displayed collaborator info
+			// TODO: Check for displayed device ID
+
+			// TODO: Ideally check for the actual values
+			const dateAdded = main.getByText(/^Added on .+/)
+			await expect(dateAdded).toBeVisible()
+			const dateAddedTime = dateAdded.getByRole('time')
+			await expect(dateAddedTime).not.toBeEmpty()
+			await expect(dateAddedTime).toHaveAttribute('datetime')
+
+			/// Actions
+			await expect(
+				main.getByRole('button', { name: 'Leave Project', exact: true }),
+			).toBeVisible()
+		} finally {
+			// 3. Cleanup
+			await electronApp.close()
+			cleanup()
 		}
-
-		/// Main
-
-		//// Page title
-		await expect(
-			main.getByRole('heading', { name: 'Collaborator Info', exact: true }),
-		).toBeVisible()
-
-		//// Info specific to yourself
-		await expect(
-			main.getByRole('heading', { name: userParams.deviceName, exact: true }),
-		).toBeVisible()
-		await expect(main.getByText('This Device!', { exact: true })).toBeVisible()
-
-		//// Displayed role
-		await expect(main.getByText('Coordinator', { exact: true })).toBeVisible()
-
-		//// Other displayed collaborator info
-		// TODO: Check for displayed device ID
-
-		// TODO: Ideally check for the actual values
-		const dateAdded = main.getByText(/^Added on .+/)
-		await expect(dateAdded).toBeVisible()
-		const dateAddedTime = dateAdded.getByRole('time')
-		await expect(dateAddedTime).not.toBeEmpty()
-		await expect(dateAddedTime).toHaveAttribute('datetime')
-
-		/// Actions
-		await expect(
-			main.getByRole('button', { name: 'Leave Project', exact: true }),
-		).toBeVisible()
-	} finally {
-		// 3. Cleanup
-		await electronApp.close()
-		cleanup()
-	}
+	})
 })
 
-test('leave project', async ({ appInfo }) => {
-	const userParams = { deviceName: 'Desktop (e2e)' }
-	const projectParams = { projectName: 'Project (e2e)' }
+test.describe('leave project', () => {
+	test('last device', async ({ appInfo, projectParams, userParams }) => {
+		const { launchApp, cleanup } = await setup()
+		const electronApp = await launchApp({ appInfo })
 
-	const { launchApp, cleanup } = await setup()
-	const electronApp = await launchApp({ appInfo })
+		try {
+			const page = await electronApp.firstWindow()
 
-	try {
-		const page = await electronApp.firstWindow()
-
-		// 1. Setup
-		await simulateOnboarding({
-			page,
-			deviceName: userParams.deviceName,
-		})
-
-		await simulateCreateProject({
-			page,
-			projectName: projectParams.projectName,
-		})
-
-		await page
-			.getByRole('navigation', { name: 'App navigation', exact: true })
-			.getByRole('button', {
-				name: `Go to project ${projectParams.projectName}.`,
-				exact: true,
+			// 1. Setup
+			await simulateOnboarding({
+				page,
+				deviceName: userParams.deviceName,
 			})
-			.click()
 
-		// 2. Main tests
-		const main = page.getByRole('main')
+			await simulateCreateProject({
+				page,
+				projectName: projectParams.projectName,
+			})
 
-		/// Navigation
-		{
-			// Navigate to leave project flow
-			const teamNavLink = page
-				.getByRole('navigation', { name: 'Project navigation', exact: true })
-				.getByRole('link', { name: 'Team', exact: true })
-
-			await teamNavLink.click()
-
-			await main
-				.getByRole('link', {
-					name: `View member ${userParams.deviceName}.`,
-					exact: true,
-				})
-				.click()
-
-			await main
-				.getByRole('button', { name: 'Leave Project', exact: true })
-				.click()
-
-			// Assert nav rail state
-			await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
-		}
-
-		/// Main
-		await expect(
-			main.getByRole('heading', { name: 'Leave Project?', exact: true }),
-		).toBeVisible()
-
-		await expect(
-			main.getByText(
-				`${userParams.deviceName} will no longer be able to add or exchange observations.`,
-				{ exact: true },
-			),
-		).toBeVisible()
-
-		await main.getByRole('button', { name: 'Confirm', exact: true }).click()
-
-		await page.waitForURL((url) => {
-			return url.hash === '#/app'
-		})
-
-		await expect(
-			page
+			await page
 				.getByRole('navigation', { name: 'App navigation', exact: true })
 				.getByRole('button', {
 					name: `Go to project ${projectParams.projectName}.`,
 					exact: true,
 				})
-				.or(
+				.click()
+
+			// 2. Main tests
+			const main = page.getByRole('main')
+
+			/// Navigation
+			{
+				// Navigate to leave project flow
+				const teamNavLink = page
+					.getByRole('navigation', { name: 'Project navigation', exact: true })
+					.getByRole('link', { name: 'Team', exact: true })
+
+				await teamNavLink.click()
+
+				await main
+					.getByRole('link', {
+						name: `View member ${userParams.deviceName}.`,
+						exact: true,
+					})
+					.click()
+
+				// Assert nav rail state
+				await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+
+				await main
+					.getByRole('button', { name: 'Leave Project', exact: true })
+					.click()
+			}
+
+			// Leave project dialog
+			const dialog = page.getByRole('dialog')
+
+			//// Last device warning step
+			{
+				await expect(
+					dialog.getByRole('heading', {
+						name: 'Device is last device.',
+						exact: true,
+					}),
+				).toBeVisible()
+
+				await expect(
+					dialog.getByText(
+						'If this device leaves, then all data on this project will be lost.',
+						{ exact: true },
+					),
+				).toBeVisible()
+
+				const suggestionsListItems = dialog
+					.getByRole('list')
+					.getByRole('listitem')
+
+				await expect(suggestionsListItems).toHaveCount(1)
+
+				await expect(suggestionsListItems).toHaveText(
+					'Before leaving, export any important data.',
+				)
+
+				await dialog
+					.getByRole('button', { name: 'Cancel', exact: true })
+					.click()
+
+				await expect(dialog).not.toBeVisible()
+
+				await main
+					.getByRole('button', { name: 'Leave Project', exact: true })
+					.click()
+
+				await dialog
+					.getByRole('button', { name: 'Continue', exact: true })
+					.click()
+			}
+
+			//// Confirmation step
+			{
+				await expect(
+					dialog.getByRole('heading', {
+						name: `Leave ${projectParams.projectName}?`,
+						exact: true,
+					}),
+				).toBeVisible()
+
+				await expect(
+					dialog.getByText(
+						'Device will no longer be able to view or contribute to this project.',
+						{ exact: true },
+					),
+				).toBeVisible()
+
+				await dialog
+					.getByRole('button', { name: 'Cancel', exact: true })
+					.click()
+
+				await expect(dialog).not.toBeVisible()
+
+				await main
+					.getByRole('button', { name: 'Leave Project', exact: true })
+					.click()
+
+				await dialog
+					.getByRole('button', { name: 'Continue', exact: true })
+					.click()
+
+				await dialog
+					.getByRole('button', { name: 'Yes, Leave', exact: true })
+					.click()
+			}
+
+			await page.waitForURL((url) => {
+				return url.hash === '#/app'
+			})
+
+			// Project left dialog
+			{
+				await expect(
+					dialog.getByRole('heading', {
+						name: `You've left ${projectParams.projectName}.`,
+						exact: true,
+					}),
+				).toBeVisible()
+
+				await dialog.getByRole('button', { name: 'Close', exact: true }).click()
+
+				await expect(dialog).not.toBeVisible()
+			}
+
+			// Assert left project is no longer referenced on home page
+			{
+				await expect(
+					page
+						.getByRole('navigation', { name: 'App navigation', exact: true })
+						.getByRole('button', {
+							name: `Go to project ${projectParams.projectName}.`,
+							exact: true,
+						}),
+				).not.toBeVisible()
+
+				await expect(
 					main.getByRole('link', {
 						name: `Go to project ${projectParams.projectName}.`,
 						exact: true,
 					}),
-				),
-		).not.toBeVisible()
-	} finally {
-		// 3. Cleanup
-		await electronApp.close()
-		cleanup()
-	}
+				).not.toBeVisible()
+			}
+		} finally {
+			// 3. Cleanup
+			await electronApp.close()
+			cleanup()
+		}
+	})
 })

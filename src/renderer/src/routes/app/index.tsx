@@ -35,13 +35,24 @@ import {
 } from '../../lib/comapeo.ts'
 import {
 	JoinProjectDialogContent,
+	LeftProjectDialogContent,
 	StartProjectDialogContent,
-} from './-project-action-dialog-content.tsx'
+} from './-home-page-dialog-content.tsx'
 import { DeviceIcon } from './projects/-shared/device-icon.tsx'
 
 const SearchParamsSchema = v.object({
 	projectsLayout: v.optional(v.union([v.literal('grid'), v.literal('list')])),
-	fromOnboarding: v.optional(v.boolean()),
+	fromFlow: v.optional(
+		v.variant('name', [
+			v.object({
+				name: v.literal('onboarding'),
+			}),
+			v.object({
+				name: v.literal('project_leave'),
+				projectName: v.optional(v.string()),
+			}),
+		]),
+	),
 	projectAction: v.optional(v.union([v.literal('join'), v.literal('create')])),
 })
 
@@ -99,8 +110,8 @@ function RouteComponent() {
 		select: (values) => values.projectAction,
 	})
 
-	const fromOnboarding = Route.useSearch({
-		select: (values) => values.fromOnboarding,
+	const fromFlow = Route.useSearch({
+		select: (values) => values.fromFlow,
 	})
 
 	function handleBack() {
@@ -129,9 +140,14 @@ function RouteComponent() {
 						/>
 
 						<Typography variant="h1" fontWeight={500}>
-							{t(fromOnboarding ? m.postOnboardingPageTitle : m.pageTitle, {
-								name: ownDeviceInfo.name,
-							})}
+							{t(
+								fromFlow?.name === 'onboarding'
+									? m.postOnboardingPageTitle
+									: m.pageTitle,
+								{
+									name: ownDeviceInfo.name,
+								},
+							)}
 						</Typography>
 					</Stack>
 
@@ -406,6 +422,31 @@ function RouteComponent() {
 						/>
 					)
 				}
+			</DecentDialog>
+
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					fromFlow?.name === 'project_leave'
+						? { projectName: fromFlow.projectName }
+						: null
+				}
+			>
+				{({ projectName }) => (
+					<LeftProjectDialogContent
+						projectName={projectName}
+						onClose={() => {
+							router.navigate({
+								to: '.',
+								search: ({ fromFlow: _, ...rest }) => {
+									return rest
+								},
+								replace: true,
+							})
+						}}
+					/>
+				)}
 			</DecentDialog>
 		</>
 	)

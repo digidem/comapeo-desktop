@@ -71,7 +71,7 @@
     "description": "Character count for project name input.",
     "message": "{count}/{max}"
   },
-  "routes.app.index.index.createButton": {
+  "routes.app.index.createProjectButton": {
     "description": "Text for button to create project.",
     "message": "Create"
   },
@@ -86,6 +86,18 @@
   "routes.app.index.joinProjectDialogTitle": {
     "description": "Title of dialog shown for joining a project.",
     "message": "Join a Project"
+  },
+  "routes.app.index.leftProjectDialogCloseButton": {
+    "description": "Text for button to close left project dialog.",
+    "message": "Close"
+  },
+  "routes.app.index.leftProjectDialogTitle": {
+    "description": "Title text for left project dialog.",
+    "message": "You've left {name}."
+  },
+  "routes.app.index.leftProjectDialogTitleNoProjectName": {
+    "description": "Title text for left project dialog when project has no name (edge case).",
+    "message": "You've left the project."
   },
   "routes.app.index.pageTitle": {
     "description": "Title of home page.",
@@ -627,13 +639,21 @@
     "description": "Text indicating date collaborator was added to the project.",
     "message": "Added on {value}"
   },
+  "routes.app.projects.$projectId.team.$deviceId.cancelButton": {
+    "description": "Button text to cancel leaving project.",
+    "message": "Cancel"
+  },
   "routes.app.projects.$projectId.team.$deviceId.collaboratorNavTitle": {
     "description": "Title of the team collaborator info page.",
     "message": "Collaborator Info"
   },
   "routes.app.projects.$projectId.team.$deviceId.confirmButton": {
     "description": "Button text to confirm leaving project.",
-    "message": "Confirm"
+    "message": "Yes, Leave"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.continueButton": {
+    "description": "Button text to continue to next step in leave project flow.",
+    "message": "Continue"
   },
   "routes.app.projects.$projectId.team.$deviceId.coordinator": {
     "description": "Text indicating collaborator is a coordinator.",
@@ -643,20 +663,36 @@
     "description": "Accessible label for back button.",
     "message": "Go back."
   },
-  "routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarning": {
-    "description": "Warning text about leaving the project as the last coordinator.",
-    "message": "You're the last coordinator. Consider making another device a coordinator before leaving the project."
+  "routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningDescription": {
+    "description": "Description text for last coordinator warning when leaving a project.",
+    "message": "If this device leaves, then no other device can add or remove devices, adjust project info, or update the categories set."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningTitle": {
+    "description": "Title text for last coordinator warning when leaving a project.",
+    "message": "Device is last coordinator."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningDescription": {
+    "description": "Description text for last device warning when leaving a project.",
+    "message": "If this device leaves, then all data on this project will be lost."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningTitle": {
+    "description": "Title text for last device warning when leaving a project.",
+    "message": "Device is last device."
   },
   "routes.app.projects.$projectId.team.$deviceId.leaveProjectButton": {
     "description": "Button text to initiate leave project flow.",
     "message": "Leave Project"
   },
-  "routes.app.projects.$projectId.team.$deviceId.leaveProjectExplainerDescription": {
-    "description": "Description for leave project explanation.",
-    "message": "<b>{name}</b> will no longer be able to add or exchange observations."
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationDescription": {
+    "description": "Description for leave project confirmation when leaving a project.",
+    "message": "Device will no longer be able to view or contribute to this project."
   },
-  "routes.app.projects.$projectId.team.$deviceId.leaveProjectExplainerTitle": {
-    "description": "Title text for leave project explanation.",
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitle": {
+    "description": "Title text for leave project confirmation when leaving a project.",
+    "message": "Leave {name}?"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitleNoProjectName": {
+    "description": "Title text for leave project confirmation when leaving a project that has no name (edge case).",
     "message": "Leave Project?"
   },
   "routes.app.projects.$projectId.team.$deviceId.leaveProjectNavTitle": {
@@ -671,9 +707,17 @@
     "description": "Fallback name used if remote archive does not have name.",
     "message": "Remote Archive"
   },
+  "routes.app.projects.$projectId.team.$deviceId.suggestionExportData": {
+    "description": "Text for export data suggestion in warning when leaving a project.",
+    "message": "Before leaving, export any important data."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.suggestionInviteCoordinator": {
+    "description": "Text for invite coordinator suggestion in warning when leaving a project.",
+    "message": "To avoid this, invite a new device as a coordinator."
+  },
   "routes.app.projects.$projectId.team.$deviceId.thisDevice": {
-    "description": "Text indicating that user is viewing itslef.",
-    "message": "This Device!"
+    "description": "Text indicating that user is viewing itself.",
+    "message": "This Device"
   },
   "routes.app.projects.$projectId.team.index.coordinatorsSectionDescription": {
     "description": "Description of the coordinators section in the team page.",

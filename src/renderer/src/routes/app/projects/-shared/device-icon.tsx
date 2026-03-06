@@ -12,7 +12,7 @@ export function DeviceIcon({
 	size,
 }: {
 	deviceType: DeviceType | undefined
-	size: string | number
+	size: string
 }) {
 	const { formatMessage: t } = useIntl()
 
