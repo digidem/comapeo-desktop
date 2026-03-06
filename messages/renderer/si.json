@@ -175,10 +175,6 @@
     "description": "Button text to initiate leave project flow.",
     "message": "ව්‍යාපෘතියෙන් ඉවත් වන්න"
   },
-  "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitleNoProjectName": {
-    "description": "Title text for leave project confirmation when leaving a project that has no name (edge case).",
-    "message": "ව්‍යාපෘතියෙන් ඉවත් වන්න?"
-  },
   "routes.app.projects.$projectId.team.$deviceId.leaveProjectNavTitle": {
     "description": "Title of the team collaborator info page when the leave project flow is initiated.",
     "message": "ව්‍යාපෘතියෙන් ඉවත් වන්න"
