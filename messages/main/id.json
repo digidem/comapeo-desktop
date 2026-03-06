@@ -1,1 +1,14 @@
-{}
+{
+  "main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "Salin"
+  },
+  "main.app.contextMenuCopyImage": {
+    "description": "Context menu item label for copying an image",
+    "message": "Salin Gambar"
+  },
+  "main.app.contextMenuLearnSpelling": {
+    "description": "Context menu item label for learning the spelling of the selected text",
+    "message": "Belajar Ejaan {placeholder}"
+  }
+}

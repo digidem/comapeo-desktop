@@ -47,6 +47,102 @@
     "description": "Button text for try again button.",
     "message": "もう一度試す"
   },
+  "routes.app.index.additionalProjectsSecitionTitle": {
+    "description": "Title text for the additional projects section.",
+    "message": "追加プロジェクト"
+  },
+  "routes.app.index.additionalProjectsSectionDescription": {
+    "description": "Text describing sorting order of the additional projects section.",
+    "message": "直近に作成された順に並びました"
+  },
+  "routes.app.index.additionalProjectsSectionShowAsGrid": {
+    "description": "Tooltip text for button to display additional projects section as a grid.",
+    "message": "グリッドとして表示"
+  },
+  "routes.app.index.additionalProjectsSectionShowAsList": {
+    "description": "Tooltip text for button to display additional projects section as a list.",
+    "message": "リストとして表示"
+  },
+  "routes.app.index.characterCount": {
+    "description": "Character count for project name input.",
+    "message": "{count}/{max}"
+  },
+  "routes.app.index.createProjectButton": {
+    "description": "Text for button to create project.",
+    "message": "Create Project"
+  },
+  "routes.app.index.joinProjectCardTitle": {
+    "description": "Title card for joining a project.",
+    "message": "プロジェクトに参加"
+  },
+  "routes.app.index.joinProjectDialogDescription": {
+    "description": "Description of dialog shown for joining a project.",
+    "message": "プロジェクトの招待状を受け取るには、チームと調整してください。"
+  },
+  "routes.app.index.joinProjectDialogTitle": {
+    "description": "Title of dialog shown for joining a project.",
+    "message": "プロジェクトに参加"
+  },
+  "routes.app.index.leftProjectDialogCloseButton": {
+    "description": "Text for button to close left project dialog.",
+    "message": "Open Settings"
+  },
+  "routes.app.index.leftProjectDialogTitle": {
+    "description": "Title text for left project dialog.",
+    "message": "{name} を退出しました。"
+  },
+  "routes.app.index.leftProjectDialogTitleNoProjectName": {
+    "description": "Title text for left project dialog when project has no name (edge case).",
+    "message": "プロジェクトから退出しました。"
+  },
+  "routes.app.index.pageTitle": {
+    "description": "Title of home page.",
+    "message": "{name}のプロジェクト"
+  },
+  "routes.app.index.postOnboardingPageTitle": {
+    "description": "Title of home page after completing onboarding.",
+    "message": "{name} の準備ができました！"
+  },
+  "routes.app.index.projectActionDialogGoBack": {
+    "description": "Text for button to close project join/create dialog.",
+    "message": "戻る"
+  },
+  "routes.app.index.projectCardRoleCoordinator": {
+    "description": "Displayed name of coordinator role on project card.",
+    "message": "Coordinator"
+  },
+  "routes.app.index.projectCardRoleParticipant": {
+    "description": "Displayed name of participant role on project card.",
+    "message": "参加者"
+  },
+  "routes.app.index.projectNameInputLabel": {
+    "description": "Input label for input in start project dialog.",
+    "message": "Enter a name for the Project"
+  },
+  "routes.app.index.projectNameMaxLengthError": {
+    "description": "Error message for when project name is too long.",
+    "message": "長すぎます。短い名前を入力してください。"
+  },
+  "routes.app.index.projectNameMinLengthError": {
+    "description": "Error message for when project name is too short.",
+    "message": "プロジェクト名を入力"
+  },
+  "routes.app.index.startProjectCardTitle": {
+    "description": "Title card for starting a new project.",
+    "message": "新規プロジェクトを開始"
+  },
+  "routes.app.index.startProjectDialogDescription": {
+    "description": "Description of dialog shown for starting a project.",
+    "message": "プロジェクトに名前を付けます。"
+  },
+  "routes.app.index.startProjectDialogTitle": {
+    "description": "Description of dialog shown for starting a project.",
+    "message": "新規プロジェクトを開始"
+  },
+  "routes.app.index.unnamedProject": {
+    "description": "Fallback for when project is missing a name.",
+    "message": "名前のないプロジェクト"
+  },
   "routes.app.projects.$projectId.-data-list.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "{name} カテゴリのアイコン"
@@ -62,30 +158,6 @@
   "routes.app.projects.$projectId.-data-list.trackItemTitle": {
     "description": "Title for list item that is a track.",
     "message": "トラック"
-  },
-  "routes.app.projects.$projectId.-main-panel.inviteCollaboratorsPanelDescription": {
-    "description": "Text for description of panel shown when no active collaborators or data exist on project.",
-    "message": "デバイスに観察記録やトラックの収集を開始するように招待します。"
-  },
-  "routes.app.projects.$projectId.-main-panel.inviteCollaboratorsPanelInviteLink": {
-    "description": "Text for link that navigates to invite page.",
-    "message": "デバイスを招待"
-  },
-  "routes.app.projects.$projectId.-main-panel.inviteCollaboratorsPanelTitle": {
-    "description": "Text for title of panel shown when no active collaborators or data exist on project.",
-    "message": "コラボレーターを招待"
-  },
-  "routes.app.projects.$projectId.-main-panel.openExchangePanelDescription": {
-    "description": "Text for description of panel shown when project has collaborators but no data.",
-    "message": "すべての観察記録とトラックはここにリストされます。"
-  },
-  "routes.app.projects.$projectId.-main-panel.openExchangePanelLink": {
-    "description": "Text for link that navigates to exchange page.",
-    "message": "取引を開く"
-  },
-  "routes.app.projects.$projectId.-main-panel.openExchangePanelTitle": {
-    "description": "Text for title of panel shown when project has collaborators but no data.",
-    "message": "観察記録の略奪と交換"
   },
   "routes.app.projects.$projectId.-map-panel.cannotDisplayFeature": {
     "description": "Text displayed when map feature for selected data cannot be displayed",
@@ -203,33 +275,69 @@
     "description": "Title of the tracks option.",
     "message": "トラック"
   },
-  "routes.app.projects.$projectId.index.fallbackCategoriesSetName": {
-    "description": "Text shown when project does not use a categories set.",
-    "message": "CoMapeo カテゴリ"
+  "routes.app.projects.$projectId.exchange.index.complete": {
+    "description": "Text displayed when exchange is completed with all devices.",
+    "message": "Complete! You're up to date"
   },
-  "routes.app.projects.$projectId.index.projectInfoCategoriesCreated": {
-    "description": "Text indicating creation date of categories set.",
-    "message": "作成された {date}"
+  "routes.app.projects.$projectId.exchange.index.completeAndWaiting": {
+    "description": "Text displayed when exchange is completed with currently connected devices.",
+    "message": "完了！他のデバイスの参加を待っています."
   },
-  "routes.app.projects.$projectId.index.projectInfoProjectStats": {
-    "description": "Text indicating if project stats sharing is enabled or not.",
-    "message": "プロジェクト共有 | {enabled, select, 1 {オン} other {オフ}}"
+  "routes.app.projects.$projectId.exchange.index.devicesFound": {
+    "description": "Text displayed when other devices have been found.",
+    "message": "Devices found"
   },
-  "routes.app.projects.$projectId.index.projectInfoRoleCoordinator": {
-    "description": "Indicates that user is a coordinator.",
-    "message": "Coordinator"
+  "routes.app.projects.$projectId.exchange.index.inviteDevices": {
+    "description": "Text for link to invite devices page.",
+    "message": "デバイスを招待する"
   },
-  "routes.app.projects.$projectId.index.projectInfoRoleParticipant": {
-    "description": "Indicates that user is a participant.",
-    "message": "参加者"
+  "routes.app.projects.$projectId.exchange.index.noOtherDevicesOnProject": {
+    "description": "Text indicating no other active devices are on the project.",
+    "message": "このプロジェクトには他のデバイスはありません。"
   },
-  "routes.app.projects.$projectId.index.projectInfoTooltip": {
-    "description": "Text for tooltip shown when hovering or focusing project info button.",
-    "message": "プロジェクト情報を表示"
+  "routes.app.projects.$projectId.exchange.index.remoteArchiveConnected": {
+    "description": "Text indicating that some remote archive is connected.",
+    "message": "リモートアーカイブに接続"
   },
-  "routes.app.projects.$projectId.index.unnamedProject": {
-    "description": "Fallback for when project is missing a name.",
-    "message": "名前のないプロジェクト"
+  "routes.app.projects.$projectId.exchange.index.start": {
+    "description": "Button text to start exchange.",
+    "message": "開始"
+  },
+  "routes.app.projects.$projectId.exchange.index.stop": {
+    "description": "Button text to stop exchange.",
+    "message": "停止"
+  },
+  "routes.app.projects.$projectId.exchange.index.upToDate": {
+    "description": "Text displayed when exchangable data is up to date.",
+    "message": "All data synced"
+  },
+  "routes.app.projects.$projectId.exchange.index.waitingForDevices": {
+    "description": "Text displayed when waiting for other devices to be found.",
+    "message": "デバイスを待っています"
+  },
+  "routes.app.projects.$projectId.index.inviteCollaboratorsPanelDescription": {
+    "description": "Text for description of panel shown when no active collaborators or data exist on project.",
+    "message": "デバイスに観察記録やトラックの収集を開始するように招待します。"
+  },
+  "routes.app.projects.$projectId.index.inviteCollaboratorsPanelInviteLink": {
+    "description": "Text for link that navigates to invite page.",
+    "message": "デバイスを招待"
+  },
+  "routes.app.projects.$projectId.index.inviteCollaboratorsPanelTitle": {
+    "description": "Text for title of panel shown when no active collaborators or data exist on project.",
+    "message": "コラボレーターを招待"
+  },
+  "routes.app.projects.$projectId.index.openExchangePanelDescription": {
+    "description": "Text for description of panel shown when project has collaborators but no data.",
+    "message": "すべての観察記録とトラックはここにリストされます。"
+  },
+  "routes.app.projects.$projectId.index.openExchangePanelLink": {
+    "description": "Text for link that navigates to exchange page.",
+    "message": "取引を開く"
+  },
+  "routes.app.projects.$projectId.index.openExchangePanelTitle": {
+    "description": "Text for title of panel shown when project has collaborators but no data.",
+    "message": "観察記録の略奪と交換"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
@@ -363,6 +471,430 @@
     "description": "Text displayed when the duration of an audio attachment cannot be determined.",
     "message": "時間を取得できません。"
   },
+  "routes.app.projects.$projectId.route.appNavigationAccesibleLabel": {
+    "description": "Accessible label for app-wide navigation bar.",
+    "message": "アプリナビゲーション"
+  },
+  "routes.app.projects.$projectId.route.exchangeTabLabel": {
+    "description": "Label for project exchange tab link in navigation.",
+    "message": "交換"
+  },
+  "routes.app.projects.$projectId.route.listTabLabel": {
+    "description": "Label for project list tab link in navigation.",
+    "message": "リスト"
+  },
+  "routes.app.projects.$projectId.route.projectNavigationAccessibleLabel": {
+    "description": "Accessible label for project-specific navigation bar.",
+    "message": "プロジェクトナビゲーション"
+  },
+  "routes.app.projects.$projectId.route.teamTabLabel": {
+    "description": "Label for project team tab link in navigation.",
+    "message": "チーム"
+  },
+  "routes.app.projects.$projectId.route.testDataTabLabel": {
+    "description": "Label for project test data tab link in navigation.",
+    "message": "テストデータ"
+  },
+  "routes.app.projects.$projectId.route.toolsTabLabel": {
+    "description": "Label for project tools tab link in navigation.",
+    "message": "ツール"
+  },
+  "routes.app.projects.$projectId.settings.categories.customCategoriesExplainer": {
+    "description": "Explanation for custom categories",
+    "message": "新しいカテゴリセットファイルを以下にインポートしてカスタムカテゴリを使用します。"
+  },
+  "routes.app.projects.$projectId.settings.categories.dateAdded": {
+    "description": "Text indicating the date the categories set was added.",
+    "message": "{date} を追加しました"
+  },
+  "routes.app.projects.$projectId.settings.categories.dateCreated": {
+    "description": "Text indicating the date the categories set was created.",
+    "message": "作成された {date}"
+  },
+  "routes.app.projects.$projectId.settings.categories.defaultCategoriesExplainer": {
+    "description": "Explanation for default categories",
+    "message": "デフォルトのカテゴリは、観察記録を即座に整理するのに役立ちます。"
+  },
+  "routes.app.projects.$projectId.settings.categories.fallbackCategoriesName": {
+    "description": "Fallback displayed name when project has no category set.",
+    "message": "CoMapeo カテゴリ"
+  },
+  "routes.app.projects.$projectId.settings.categories.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
+  },
+  "routes.app.projects.$projectId.settings.categories.navTitle": {
+    "description": "Title of the categories set page.",
+    "message": "カテゴリセット"
+  },
+  "routes.app.projects.$projectId.settings.categories.uploadNewSet": {
+    "description": "Label for button to upload new categories set.",
+    "message": "新しいセットをアップロード"
+  },
+  "routes.app.projects.$projectId.settings.index.categoriesActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "更新"
+  },
+  "routes.app.projects.$projectId.settings.index.categoriesLinkAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to project info settings page.",
+    "message": "カテゴリ設定に移動します。"
+  },
+  "routes.app.projects.$projectId.settings.index.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set.",
+    "message": "CoMapeo カテゴリ"
+  },
+  "routes.app.projects.$projectId.settings.index.navTitle": {
+    "description": "Title of the coordinator tools page.",
+    "message": "コーディネータツール"
+  },
+  "routes.app.projects.$projectId.settings.index.projectInfoActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "編集"
+  },
+  "routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to project info settings page.",
+    "message": "プロジェクト情報の設定に移動します。"
+  },
+  "routes.app.projects.$projectId.settings.index.unnamedProject": {
+    "description": "Fallback for when current project is missing a name.",
+    "message": "名前のないプロジェクト"
+  },
+  "routes.app.projects.$projectId.settings.info.cancel": {
+    "description": "Label for cancel button.",
+    "message": "取消"
+  },
+  "routes.app.projects.$projectId.settings.info.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
+  },
+  "routes.app.projects.$projectId.settings.info.maxProjectDescriptionLengthError": {
+    "description": "Error message for project description that is too long.",
+    "message": "長すぎます。説明を短くしてください。"
+  },
+  "routes.app.projects.$projectId.settings.info.maxProjectNameLengthError": {
+    "description": "Error message for project name that is too long.",
+    "message": "長すぎます。短い名前を入力してください。"
+  },
+  "routes.app.projects.$projectId.settings.info.minProjectNameLengthError": {
+    "description": "Error message for project name that is too short.",
+    "message": "プロジェクト名を入力"
+  },
+  "routes.app.projects.$projectId.settings.info.navTitle": {
+    "description": "Title of the project settings info page.",
+    "message": "情報を編集"
+  },
+  "routes.app.projects.$projectId.settings.info.projectCardColorLabel": {
+    "description": "Label for the project card color selector.",
+    "message": "プロジェクトカードの色"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionBlue": {
+    "description": "Label for blue option in project color selector.",
+    "message": "青"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionGreen": {
+    "description": "Label for green option in project color selector.",
+    "message": "緑"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionGrey": {
+    "description": "Label for grey option in project color selector.",
+    "message": "グレー"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionOrange": {
+    "description": "Label for orange option in project color selector.",
+    "message": "オレンジ"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionRed": {
+    "description": "Label for grey option in project color selector.",
+    "message": "赤"
+  },
+  "routes.app.projects.$projectId.settings.info.projectDescriptionInputLabel": {
+    "description": "Label for the project description input.",
+    "message": "プロジェクトの説明"
+  },
+  "routes.app.projects.$projectId.settings.info.projectNameInputLabel": {
+    "description": "Label for the project name input.",
+    "message": "Enter a name for the Project"
+  },
+  "routes.app.projects.$projectId.settings.info.save": {
+    "description": "Label for save button.",
+    "message": "保存"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.addedOn": {
+    "description": "Text indicating date collaborator was added to the project.",
+    "message": "{value} に追加"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.cancelButton": {
+    "description": "Button text to cancel leaving project.",
+    "message": "取消"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.collaboratorNavTitle": {
+    "description": "Title of the team collaborator info page.",
+    "message": "コラボレーター情報"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.confirmButton": {
+    "description": "Button text to confirm leaving project.",
+    "message": "はい、退出します"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.continueButton": {
+    "description": "Button text to continue to next step in leave project flow.",
+    "message": "続ける"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.coordinator": {
+    "description": "Text indicating collaborator is a coordinator.",
+    "message": "Coordinator"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningDescription": {
+    "description": "Description text for last coordinator warning when leaving a project.",
+    "message": "このデバイスが離れている場合、他のデバイスはデバイスを追加または削除できません。プロジェクト情報を調整したり、カテゴリセットを更新したりできません。"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningTitle": {
+    "description": "Title text for last coordinator warning when leaving a project.",
+    "message": "デバイスは最後のコーディネーターです。"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningDescription": {
+    "description": "Description text for last device warning when leaving a project.",
+    "message": "このデバイスを離れると、このプロジェクト上のすべてのデータが失われます。"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningTitle": {
+    "description": "Title text for last device warning when leaving a project.",
+    "message": "デバイスは最後のデバイスです。"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectButton": {
+    "description": "Button text to initiate leave project flow.",
+    "message": "プロジェクトを退出する"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationDescription": {
+    "description": "Description for leave project confirmation when leaving a project.",
+    "message": "デバイスは、このプロジェクトを表示または貢献することができなくなります。"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitle": {
+    "description": "Title text for leave project confirmation when leaving a project.",
+    "message": "{name} を離れますか？"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitleNoProjectName": {
+    "description": "Title text for leave project confirmation when leaving a project that has no name (edge case).",
+    "message": "プロジェクトを退出する?"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectNavTitle": {
+    "description": "Title of the team collaborator info page when the leave project flow is initiated.",
+    "message": "プロジェクトを退出する"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.participant": {
+    "description": "Text indicating collaborator is a participant.",
+    "message": "参加者"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.remoteArchive": {
+    "description": "Fallback name used if remote archive does not have name.",
+    "message": "リモートアーカイブ"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.suggestionExportData": {
+    "description": "Text for export data suggestion in warning when leaving a project.",
+    "message": "出発する前に、重要なデータをエクスポートしてください。"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.suggestionInviteCoordinator": {
+    "description": "Text for invite coordinator suggestion in warning when leaving a project.",
+    "message": "これを回避するには、新しいデバイスをコーディネーターとして招待してください。"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.thisDevice": {
+    "description": "Text indicating that user is viewing itself.",
+    "message": "このデバイス"
+  },
+  "routes.app.projects.$projectId.team.index.coordinatorsSectionDescription": {
+    "description": "Description of the coordinators section in the team page.",
+    "message": "コーディネーターは、デバイスの招待、データの編集、削除、プロジェクトの詳細の管理ができます。"
+  },
+  "routes.app.projects.$projectId.team.index.coordinatorsSectionTitle": {
+    "description": "Title of the coordinators section in the team page.",
+    "message": "Coordinators"
+  },
+  "routes.app.projects.$projectId.team.index.inviteDevice": {
+    "description": "Text for button that initiates steps for inviting device to project.",
+    "message": "デバイスを招待"
+  },
+  "routes.app.projects.$projectId.team.index.memberLinkAccessibleLabel": {
+    "description": "Accessible label for link that navigates to member details.",
+    "message": "メンバー {name}を表示"
+  },
+  "routes.app.projects.$projectId.team.index.navTitle": {
+    "description": "Title of the team page.",
+    "message": "チーム"
+  },
+  "routes.app.projects.$projectId.team.index.noParticipants": {
+    "description": "Text indicating that no participants are part of the project yet.",
+    "message": "このプロジェクトに参加者が追加されていません．"
+  },
+  "routes.app.projects.$projectId.team.index.participantsSectionDescription": {
+    "description": "Description of the participants section in the team page.",
+    "message": "参加者は観察記録を取ったり共有したりできます。ユーザやプロジェクトの詳細を管理することはできません。"
+  },
+  "routes.app.projects.$projectId.team.index.participantsSectionTitle": {
+    "description": "Title of the participants section in the team page.",
+    "message": "参加者"
+  },
+  "routes.app.projects.$projectId.team.index.pastCollaboratorsSectionDescription": {
+    "description": "Description of the past collaborators section in the team page.",
+    "message": "デバイスはこのプロジェクトに貢献していません。"
+  },
+  "routes.app.projects.$projectId.team.index.pastCollaboratorsSectionTitle": {
+    "description": "Title of the past collaborators section in the team page.",
+    "message": "過去のコラボレーション"
+  },
+  "routes.app.projects.$projectId.team.index.remoteArchivesSectionDescription": {
+    "description": "Description of the remote archives section in the team page.",
+    "message": "このプロジェクトは安全な暗号化されたサーバーと共有しています。"
+  },
+  "routes.app.projects.$projectId.team.index.remoteArchivesSectionTitle": {
+    "description": "Title of the remote archives section in the team page.",
+    "message": "リモートアーカイブ"
+  },
+  "routes.app.projects.$projectId.team.index.thisDevice": {
+    "description": "Text indicating that the listed device refers to the one currently being used.",
+    "message": "このデバイス"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.role.coordinatorDescription": {
+    "description": "Coordinator role description.",
+    "message": "コーディネーターとして、このデバイスはユーザーの招待と削除、およびプロジェクトの詳細を管理することができます。"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.role.coordinatorTitle": {
+    "description": "Coordinator role name.",
+    "message": "Coordinator"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.role.navTitle": {
+    "description": "Title of the invite role selection page.",
+    "message": "役割を選択"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.role.participantDescription": {
+    "description": "Participant role description.",
+    "message": "参加者として、このデバイスは観察記録を取ったり共有したりできます。ユーザーやプロジェクトの詳細を管理することはできません。"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.role.participantTitle": {
+    "description": "Participant role name.",
+    "message": "参加者"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.role.selectingRole": {
+    "description": "Description of action being taken in role selection page.",
+    "message": "このデバイスのロールを選択しています:"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.accepted": {
+    "description": "Text displayed when invite is accepted.",
+    "message": "Invite Accepted"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addAnotherDevice": {
+    "description": "Text for button to add another device.",
+    "message": "別のデバイスを追加"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addedOn": {
+    "description": "Text showing when device was added to project.",
+    "message": "{date, date, long} に追加"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.cancelInvite": {
+    "description": "Text for button to cancel invite.",
+    "message": "招待をキャンセル"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.close": {
+    "description": "Text for button to leave invite flow.",
+    "message": "Open Settings"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.coordinator": {
+    "description": "Coordinator role name.",
+    "message": "Coordinator"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.deviceBeingInvited": {
+    "description": "Text displaying the device and its role that it is being invited as.",
+    "message": "{name}<br></br><br></br> が <br></br><br></br>{role} として招待されています"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedDescription": {
+    "description": "Description of a declined invite.",
+    "message": "このデバイスはあなたの招待を拒否しました。彼らはプロジェクトに参加していません。"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedTitle": {
+    "description": "Title of page when invite is declined.",
+    "message": "招待が拒否されました"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteAccepted": {
+    "description": "Text displayed when invite is accepted.",
+    "message": "招待が承認されました"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.navTitle": {
+    "description": "Title of the review invite page.",
+    "message": "招待状を確認"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.participant": {
+    "description": "Participant role name.",
+    "message": "参加者"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.sendInvite": {
+    "description": "Button text for sending invite.",
+    "message": "招待を送信"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.timeSinceSent": {
+    "description": "Text showing time elapsed since invite was sent",
+    "message": "{time}秒前に招待を送信しました"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.waiting": {
+    "description": "Text displayed while waiting for invite response.",
+    "message": "デバイスが招待を承認するのを待っています"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.-shared.disconnected-indicator.disconnected": {
+    "description": "Text displayed when external device is disconnected.",
+    "message": "切断済み"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingSameNetwork": {
+    "description": "Text explaining that devices need to be on same Wi-Fi network.",
+    "message": "デバイスが同じWi-Fiネットワーク上にあることを確認してください"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingSameVersion": {
+    "description": "Text explaining that devices need to be using same version of CoMapeo.",
+    "message": "デバイスが同じバージョンの CoMapeo を使用していることを確認してください"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingTitle": {
+    "description": "Title for device discovery troubleshooting section.",
+    "message": "デバイスが表示されませんか？"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button",
+    "message": "戻ってください。"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.index.navTitle": {
+    "description": "Title of the device selection for invite page.",
+    "message": "デバイスを選択"
+  },
+  "routes.app.projects.$projectId.team.invite.index.controlSharing": {
+    "description": "Detail about how to control data sharing.",
+    "message": "プロジェクト設定で共有を制御します。"
+  },
+  "routes.app.projects.$projectId.team.invite.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
+  },
+  "routes.app.projects.$projectId.team.invite.index.inviteCollaborators": {
+    "description": "Title of the Invite Get Started page.",
+    "message": "コラボレーターを招待"
+  },
+  "routes.app.projects.$projectId.team.invite.index.navTitle": {
+    "description": "Title of the Invite Get Started page.",
+    "message": "はじめよう"
+  },
+  "routes.app.projects.$projectId.team.invite.index.onlyInvitedDevices": {
+    "description": "Detail about who contributes.",
+    "message": "招待されたデバイスのみが貢献します。"
+  },
+  "routes.app.projects.$projectId.team.invite.index.primaryDescription": {
+    "description": "Primary description text.",
+    "message": "CoMapeoを使用してデバイスを招待してコラボレーションを開始します。"
+  },
+  "routes.app.projects.$projectId.team.invite.index.selectDevice": {
+    "description": "Text for button to navigate to device selection.",
+    "message": "デバイスを選択"
+  },
+  "routes.app.projects.$projectId.team.invite.index.shareUsingExchange": {
+    "description": "Detail about how collaborators share data.",
+    "message": "コラボレーターはExchangeを使用して安全に共有します。"
+  },
   "routes.app.projects.$projectId.tracks.$trackDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "{name} カテゴリのアイコン"
@@ -390,398 +922,6 @@
   "routes.app.projects.$projectId.tracks.$trackDocId.index.tracks": {
     "description": "Displayed title next to category icon.",
     "message": "トラック"
-  },
-  "routes.app.projects.$projectId_.exchange.index.complete": {
-    "description": "Text displayed when exchange is completed with all devices.",
-    "message": "Complete! You're up to date"
-  },
-  "routes.app.projects.$projectId_.exchange.index.completeAndWaiting": {
-    "description": "Text displayed when exchange is completed with currently connected devices.",
-    "message": "完了！他のデバイスが参加するのを待っています。"
-  },
-  "routes.app.projects.$projectId_.exchange.index.devicesFound": {
-    "description": "Text displayed when other devices have been found.",
-    "message": "Devices found"
-  },
-  "routes.app.projects.$projectId_.exchange.index.remoteArchiveConnected": {
-    "description": "Text indicating that some remote archive is connected.",
-    "message": "リモートアーカイブに接続"
-  },
-  "routes.app.projects.$projectId_.exchange.index.start": {
-    "description": "Button text to start exchange.",
-    "message": "開始"
-  },
-  "routes.app.projects.$projectId_.exchange.index.stop": {
-    "description": "Button text to stop exchange.",
-    "message": "停止"
-  },
-  "routes.app.projects.$projectId_.exchange.index.upToDate": {
-    "description": "Text displayed when exchangable data is up to date.",
-    "message": "All data synced"
-  },
-  "routes.app.projects.$projectId_.exchange.index.waitingForDevices": {
-    "description": "Text displayed when waiting for other devices to be found.",
-    "message": "デバイスを待っています"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.coordinatorDescription": {
-    "description": "Coordinator role description.",
-    "message": "コーディネーターとして、このデバイスはユーザーの招待と削除、およびプロジェクトの詳細を管理することができます。"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.coordinatorTitle": {
-    "description": "Coordinator role name.",
-    "message": "Coordinator"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.navTitle": {
-    "description": "Title of the invite role selection page.",
-    "message": "役割を選択"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.participantDescription": {
-    "description": "Participant role description.",
-    "message": "参加者として、このデバイスは観察記録を取ったり共有したりできます。ユーザーやプロジェクトの詳細を管理することはできません。"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.participantTitle": {
-    "description": "Participant role name.",
-    "message": "参加者"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.role.selectingRole": {
-    "description": "Description of action being taken in role selection page.",
-    "message": "このデバイスのロールを選択しています:"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.accepted": {
-    "description": "Text displayed when invite is accepted.",
-    "message": "Invite Accepted"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.addAnotherDevice": {
-    "description": "Text for button to add another device.",
-    "message": "別のデバイスを追加"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.cancelInvite": {
-    "description": "Text for button to cancel invite.",
-    "message": "招待をキャンセル"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
-    "description": "Text for button to leave invite flow.",
-    "message": "Close"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.coordinator": {
-    "description": "Coordinator role name.",
-    "message": "Coordinator"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.deviceBeingInvited": {
-    "description": "Text displaying the device and its role that it is being invited as.",
-    "message": "{name}<br></br><br></br> が <br></br><br></br>{role} として招待されています"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.invitationDeclinedDescription": {
-    "description": "Description of a declined invite.",
-    "message": "このデバイスはあなたの招待を拒否しました。彼らはプロジェクトに参加していません。"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.invitationDeclinedTitle": {
-    "description": "Title of page when invite is declined.",
-    "message": "招待が拒否されました"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.inviteAccepted": {
-    "description": "Text displayed when invite is accepted.",
-    "message": "招待が承認されました"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.navTitle": {
-    "description": "Title of the review invite page.",
-    "message": "招待状を確認"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.participant": {
-    "description": "Participant role name.",
-    "message": "参加者"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.sendInvite": {
-    "description": "Button text for sending invite.",
-    "message": "招待を送信"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.timeSinceSent": {
-    "description": "Text showing time elapsed since invite was sent",
-    "message": "{time}秒前に招待を送信しました"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.waiting": {
-    "description": "Text displayed while waiting for invite response.",
-    "message": "デバイスが招待を承認するのを待っています"
-  },
-  "routes.app.projects.$projectId_.invite.devices.-shared.disconnected-indicator.disconnected": {
-    "description": "Text displayed when external device is disconnected.",
-    "message": "切断済み"
-  },
-  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameNetwork": {
-    "description": "Text explaining that devices need to be on same Wi-Fi network.",
-    "message": "デバイスが同じWi-Fiネットワーク上にあることを確認してください"
-  },
-  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingSameVersion": {
-    "description": "Text explaining that devices need to be using same version of CoMapeo.",
-    "message": "デバイスが同じバージョンの CoMapeo を使用していることを確認してください"
-  },
-  "routes.app.projects.$projectId_.invite.devices.index.discoveryTroubleshootingTitle": {
-    "description": "Title for device discovery troubleshooting section.",
-    "message": "デバイスが表示されませんか？"
-  },
-  "routes.app.projects.$projectId_.invite.devices.index.goBackAccessibleLabel": {
-    "description": "Accessible label for back button",
-    "message": "戻ってください。"
-  },
-  "routes.app.projects.$projectId_.invite.devices.index.navTitle": {
-    "description": "Title of the device selection for invite page.",
-    "message": "デバイスを選択"
-  },
-  "routes.app.projects.$projectId_.invite.index.controlSharing": {
-    "description": "Detail about how to control data sharing.",
-    "message": "プロジェクト設定で共有を制御します。"
-  },
-  "routes.app.projects.$projectId_.invite.index.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "戻ってください。"
-  },
-  "routes.app.projects.$projectId_.invite.index.inviteCollaborators": {
-    "description": "Title of the Invite Get Started page.",
-    "message": "コラボレーターを招待"
-  },
-  "routes.app.projects.$projectId_.invite.index.navTitle": {
-    "description": "Title of the Invite Get Started page.",
-    "message": "はじめよう"
-  },
-  "routes.app.projects.$projectId_.invite.index.onlyInvitedDevices": {
-    "description": "Detail about who contributes.",
-    "message": "招待されたデバイスのみが貢献します。"
-  },
-  "routes.app.projects.$projectId_.invite.index.primaryDescription": {
-    "description": "Primary description text.",
-    "message": "CoMapeoを使用してデバイスを招待してコラボレーションを開始します。"
-  },
-  "routes.app.projects.$projectId_.invite.index.selectDevice": {
-    "description": "Text for button to navigate to device selection.",
-    "message": "デバイスを選択"
-  },
-  "routes.app.projects.$projectId_.invite.index.shareUsingExchange": {
-    "description": "Detail about how collaborators share data.",
-    "message": "コラボレーターはExchangeを使用して安全に共有します。"
-  },
-  "routes.app.projects.$projectId_.settings.categories.customCategoriesExplainer": {
-    "description": "Explanation for custom categories",
-    "message": "新しいカテゴリセットファイルを以下にインポートしてカスタムカテゴリを使用します。"
-  },
-  "routes.app.projects.$projectId_.settings.categories.dateAdded": {
-    "description": "Text indicating the date the categories set was added.",
-    "message": "{date} を追加しました"
-  },
-  "routes.app.projects.$projectId_.settings.categories.dateCreated": {
-    "description": "Text indicating the date the categories set was created.",
-    "message": "作成された {date}"
-  },
-  "routes.app.projects.$projectId_.settings.categories.defaultCategoriesExplainer": {
-    "description": "Explanation for default categories",
-    "message": "デフォルトのカテゴリは、観察記録を即座に整理するのに役立ちます。"
-  },
-  "routes.app.projects.$projectId_.settings.categories.fallbackCategoriesName": {
-    "description": "Fallback displayed name when project has no category set.",
-    "message": "CoMapeo カテゴリ"
-  },
-  "routes.app.projects.$projectId_.settings.categories.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "戻ってください。"
-  },
-  "routes.app.projects.$projectId_.settings.categories.navTitle": {
-    "description": "Title of the categories set page.",
-    "message": "カテゴリセット"
-  },
-  "routes.app.projects.$projectId_.settings.categories.uploadNewSet": {
-    "description": "Label for button to upload new categories set.",
-    "message": "新しいセットをアップロード"
-  },
-  "routes.app.projects.$projectId_.settings.index.categoriesActionLabel": {
-    "description": "Text for action to update categories set.",
-    "message": "更新"
-  },
-  "routes.app.projects.$projectId_.settings.index.categoriesLinkAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to project info settings page.",
-    "message": "カテゴリ設定に移動します。"
-  },
-  "routes.app.projects.$projectId_.settings.index.fallbackCategoriesSetName": {
-    "description": "Text shown when project does not use a categories set.",
-    "message": "CoMapeo カテゴリ"
-  },
-  "routes.app.projects.$projectId_.settings.index.navTitle": {
-    "description": "Title of the coordinator tools page.",
-    "message": "コーディネータツール"
-  },
-  "routes.app.projects.$projectId_.settings.index.projectInfoActionLabel": {
-    "description": "Text for action to update project info.",
-    "message": "編集"
-  },
-  "routes.app.projects.$projectId_.settings.index.projectSettingsLinkAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to project info settings page.",
-    "message": "プロジェクト情報の設定に移動します。"
-  },
-  "routes.app.projects.$projectId_.settings.index.unnamedProject": {
-    "description": "Fallback for when current project is missing a name.",
-    "message": "名前のないプロジェクト"
-  },
-  "routes.app.projects.$projectId_.settings.info.cancel": {
-    "description": "Label for cancel button.",
-    "message": "取消"
-  },
-  "routes.app.projects.$projectId_.settings.info.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "戻ってください。"
-  },
-  "routes.app.projects.$projectId_.settings.info.maxProjectDescriptionLengthError": {
-    "description": "Error message for project description that is too long.",
-    "message": "長すぎます。説明を短くしてください。"
-  },
-  "routes.app.projects.$projectId_.settings.info.maxProjectNameLengthError": {
-    "description": "Error message for project name that is too long.",
-    "message": "長すぎます。短い名前を入力してください。"
-  },
-  "routes.app.projects.$projectId_.settings.info.minProjectNameLengthError": {
-    "description": "Error message for project name that is too short.",
-    "message": "プロジェクト名を入力"
-  },
-  "routes.app.projects.$projectId_.settings.info.navTitle": {
-    "description": "Title of the project settings info page.",
-    "message": "情報を編集"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectCardColorLabel": {
-    "description": "Label for the project card color selector.",
-    "message": "プロジェクトカードの色"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectColorOptionBlue": {
-    "description": "Label for blue option in project color selector.",
-    "message": "青"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectColorOptionGreen": {
-    "description": "Label for green option in project color selector.",
-    "message": "緑"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectColorOptionGrey": {
-    "description": "Label for grey option in project color selector.",
-    "message": "グレー"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectColorOptionOrange": {
-    "description": "Label for orange option in project color selector.",
-    "message": "オレンジ"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectColorOptionRed": {
-    "description": "Label for grey option in project color selector.",
-    "message": "赤"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectDescriptionInputLabel": {
-    "description": "Label for the project description input.",
-    "message": "プロジェクトの説明"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectNameInputLabel": {
-    "description": "Label for the project name input.",
-    "message": "Enter a name for the Project"
-  },
-  "routes.app.projects.$projectId_.settings.info.save": {
-    "description": "Label for save button.",
-    "message": "保存"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.addedOn": {
-    "description": "Text indicating date collaborator was added to the project.",
-    "message": "{value} に追加"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.collaboratorNavTitle": {
-    "description": "Title of the team collaborator info page.",
-    "message": "コラボレーター情報"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.confirmButton": {
-    "description": "Button text to confirm leaving project.",
-    "message": "確認する"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.coordinator": {
-    "description": "Text indicating collaborator is a coordinator.",
-    "message": "Coordinator"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "戻ってください。"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.lastCoordinatorWarning": {
-    "description": "Warning text about leaving the project as the last coordinator.",
-    "message": "あなたは最後のコーディネーターです。プロジェクトを離れる前に別のデバイスをコーディネーターにすることを検討してください。"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectButton": {
-    "description": "Button text to initiate leave project flow.",
-    "message": "プロジェクトを退出する"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerDescription": {
-    "description": "Description for leave project explanation.",
-    "message": "<b>{name}</b> は観察記録の追加や交換ができなくなります。"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerTitle": {
-    "description": "Title text for leave project explanation.",
-    "message": "プロジェクトを終了しますか？"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectNavTitle": {
-    "description": "Title of the team collaborator info page when the leave project flow is initiated.",
-    "message": "プロジェクトを退出する"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.participant": {
-    "description": "Text indicating collaborator is a participant.",
-    "message": "参加者"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.remoteArchive": {
-    "description": "Fallback name used if remote archive does not have name.",
-    "message": "リモートアーカイブ"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.thisDevice": {
-    "description": "Text indicating that user is viewing itslef.",
-    "message": "このデバイスです！"
-  },
-  "routes.app.projects.$projectId_.team.index.coordinatorsSectionDescription": {
-    "description": "Description of the coordinators section in the team page.",
-    "message": "コーディネーターは、デバイスの招待、データの編集、削除、プロジェクトの詳細の管理ができます。"
-  },
-  "routes.app.projects.$projectId_.team.index.coordinatorsSectionTitle": {
-    "description": "Title of the coordinators section in the team page.",
-    "message": "Coordinators"
-  },
-  "routes.app.projects.$projectId_.team.index.inviteDevice": {
-    "description": "Text for button that initiates steps for inviting device to project.",
-    "message": "デバイスを招待"
-  },
-  "routes.app.projects.$projectId_.team.index.memberLinkAccessibleLabel": {
-    "description": "Accessible label for link that navigates to member details.",
-    "message": "メンバー {name}を表示"
-  },
-  "routes.app.projects.$projectId_.team.index.navTitle": {
-    "description": "Title of the team page.",
-    "message": "チーム"
-  },
-  "routes.app.projects.$projectId_.team.index.noParticipants": {
-    "description": "Text indicating that no participants are part of the project yet.",
-    "message": "このプロジェクトに参加者が追加されていません．"
-  },
-  "routes.app.projects.$projectId_.team.index.participantsSectionDescription": {
-    "description": "Description of the participants section in the team page.",
-    "message": "参加者は観察記録を取ったり共有したりできます。ユーザやプロジェクトの詳細を管理することはできません。"
-  },
-  "routes.app.projects.$projectId_.team.index.participantsSectionTitle": {
-    "description": "Title of the participants section in the team page.",
-    "message": "参加者"
-  },
-  "routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionDescription": {
-    "description": "Description of the past collaborators section in the team page.",
-    "message": "デバイスはこのプロジェクトに貢献していません。"
-  },
-  "routes.app.projects.$projectId_.team.index.pastCollaboratorsSectionTitle": {
-    "description": "Title of the past collaborators section in the team page.",
-    "message": "過去のコラボレーション"
-  },
-  "routes.app.projects.$projectId_.team.index.remoteArchivesSectionDescription": {
-    "description": "Description of the remote archives section in the team page.",
-    "message": "このプロジェクトは安全な暗号化されたサーバーと共有しています。"
-  },
-  "routes.app.projects.$projectId_.team.index.remoteArchivesSectionTitle": {
-    "description": "Title of the remote archives section in the team page.",
-    "message": "リモートアーカイブ"
-  },
-  "routes.app.projects.$projectId_.team.index.thisDevice": {
-    "description": "Text indicating that the listed device refers to the one currently being used.",
-    "message": "このデバイス"
   },
   "routes.app.projects.-shared.device-icon.deviceTypeDesktop": {
     "description": "Text indicating that the member is a desktop device (displays when hovering over the icon).",
@@ -811,25 +951,69 @@
     "description": "Text displayed when Wi-Fi info is unavailable.",
     "message": "Wi-Fi info unavailable."
   },
+  "routes.app.route.accessibleLabelGoTo": {
+    "description": "Accessible label for button that navigates to project when clicked.",
+    "message": "プロジェクト {name} に移動します。"
+  },
+  "routes.app.route.accessibleLabelShowProjectInfo": {
+    "description": "Accessible label for button that shows project info when clicked.",
+    "message": "プロジェクト {name} の情報を表示します。"
+  },
   "routes.app.route.appSettingsTabLabel": {
-    "description": "Label for CoMapeo settings tab link in navigation.",
+    "description": "Label for app settings tab link in navigation.",
     "message": "設定"
   },
-  "routes.app.route.exchangeTabAccessibleLabel": {
-    "description": "Accessible label for exchange tab link in navigation.",
-    "message": "交換を表示"
+  "routes.app.route.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set.",
+    "message": "CoMapeo カテゴリ"
   },
-  "routes.app.route.projectTabAccessibleLabel": {
-    "description": "Accessible label for project tab link in navigation.",
+  "routes.app.route.homeTabTitle": {
+    "description": "Label for home tab link in navigation.",
+    "message": "ホーム"
+  },
+  "routes.app.route.projectCardLinkAccessibleLabel": {
+    "description": "Accessible label for link that navigates to project when clicked.",
+    "message": "プロジェクト {name} に移動します。"
+  },
+  "routes.app.route.projectInfoCategoriesCreated": {
+    "description": "Text indicating creation date of categories set.",
+    "message": "作成された {date}"
+  },
+  "routes.app.route.projectInfoProjectStats": {
+    "description": "Text indicating if project stats sharing is enabled or not.",
+    "message": "プロジェクト共有 | {enabled, select, 1 {オン} other {オフ}}"
+  },
+  "routes.app.route.projectInfoRoleCoordinator": {
+    "description": "Indicates that user is a coordinator.",
+    "message": "Coordinator"
+  },
+  "routes.app.route.projectInfoRoleParticipant": {
+    "description": "Indicates that user is a participant.",
+    "message": "参加者"
+  },
+  "routes.app.route.projectInviteAccept": {
+    "description": "Button text for accepting project invite.",
+    "message": "同意する"
+  },
+  "routes.app.route.projectInviteDecline": {
+    "description": "Button text for declining project invite.",
+    "message": "同意しない"
+  },
+  "routes.app.route.projectJoinedCloseDialog": {
+    "description": "Text for button to close project joined dialog.",
+    "message": "Open Settings"
+  },
+  "routes.app.route.projectJoinedTitle": {
+    "description": "Title of dialog displayed when joining a project successfully.",
+    "message": "プロジェクト {name} に参加しました。"
+  },
+  "routes.app.route.projectJoinedViewProject": {
+    "description": "Text for button to navigate to joined project in project joined dialog.",
     "message": "プロジェクトを表示"
   },
-  "routes.app.route.teamTabLabel": {
-    "description": "Label for team tab link in navigation.",
-    "message": "チーム"
-  },
-  "routes.app.route.toolsTabLabel": {
-    "description": "Label for tools tab link in navigation.",
-    "message": "ツール"
+  "routes.app.route.unnamedProject": {
+    "description": "Fallback for when project is missing a name.",
+    "message": "名前のないプロジェクト"
   },
   "routes.app.settings.-data-and-pritvacy-section.diagnosticInformationPersonalInfo": {
     "message": "これには、お客様のデータや個人情報は一切含まれません。"
@@ -971,10 +1155,6 @@
     "description": "Accessible label for link item that navigates to coordinate system settings page.",
     "message": "座標系の設定に移動します。"
   },
-  "routes.app.settings.index.createTestData": {
-    "description": "Label for item that navigates to test data creation page.",
-    "message": "テストデータの作成"
-  },
   "routes.app.settings.index.customBackground": {
     "description": "Placeholder name of custom background map if name cannot be retrieved.",
     "message": "カスタム背景"
@@ -1091,10 +1271,6 @@
     "description": "Message displayed when observation creation succeeds.",
     "message": "作成されました {count, plural, one {# 観察記録} other {# 観察記録}}"
   },
-  "routes.app.settings_.test-data.projectSelectLabel": {
-    "description": "Text label for project selector input.",
-    "message": "プロジェクト"
-  },
   "routes.app.settings_.test-data.requiredError": {
     "description": "Error message for when required input is empty.",
     "message": "必須"
@@ -1102,14 +1278,6 @@
   "routes.app.settings_.test-data.trackCreateSuccess": {
     "description": "Message displayed when track creation succeeds.",
     "message": "作成されました {count, plural, one {# トラック} other {# トラック}}"
-  },
-  "routes.onboarding.-layouts.goBack": {
-    "description": "Button text for button to navigate back in onboarding steps.",
-    "message": "戻る"
-  },
-  "routes.onboarding.-layouts.step": {
-    "description": "Text indicating step number in onboarding.",
-    "message": "手順 {value}"
   },
   "routes.onboarding.data-and-privacy.dataEncrypted": {
     "message": "すべてのデータは完全に暗号化されたままです。"
@@ -1232,113 +1400,13 @@
   "routes.onboarding.privacy-policy.whyIsThisDataCollected": {
     "message": "なぜこのデータが収集されるのですか?"
   },
-  "routes.onboarding.project.create.$projectId.notFound": {
-    "description": "Text displayed when project is not found.",
-    "message": "ID {projectId} のプロジェクトが見つかりませんでした"
-  },
-  "routes.onboarding.project.create.$projectId.success.description": {
-    "description": "Description for onboarding project creation success page.",
-    "message": "<b>{projectName}</b><br></br>が作成されました。"
-  },
-  "routes.onboarding.project.create.$projectId.success.goBack": {
-    "description": "Text for button to navigate back when project is not found.",
+  "routes.onboarding.route.goBack": {
+    "description": "Button text for button to navigate back in onboarding steps.",
     "message": "戻る"
   },
-  "routes.onboarding.project.create.$projectId.success.inviteCollaborators": {
-    "description": "Text for link to navigate to invite collaborators page.",
-    "message": "コラボレーターを招待"
-  },
-  "routes.onboarding.project.create.$projectId.success.projectNotFound": {
-    "description": "Text displayed when invite cannot be found.",
-    "message": "ID {inviteId} の招待状が見つかりませんでした"
-  },
-  "routes.onboarding.project.create.$projectId.success.startUsingCoMapeo": {
-    "description": "Text for link to navigate to main app.",
-    "message": "CoMapeoの使用を開始"
-  },
-  "routes.onboarding.project.create.$projectId.success.title": {
-    "description": "Title for onboarding project creation success page.",
-    "message": "成功！"
-  },
-  "routes.onboarding.project.create.index.characterCount": {
-    "description": "Character count for project name input.",
-    "message": "{count}/{max}"
-  },
-  "routes.onboarding.project.create.index.createButton": {
-    "description": "Text for button to create project.",
-    "message": "Create Project"
-  },
-  "routes.onboarding.project.create.index.description": {
-    "description": "Page description for onboarding project creation page.",
-    "message": "プロジェクトに名前を付けます。"
-  },
-  "routes.onboarding.project.create.index.maxLengthError": {
-    "description": "Error message for when project name is too long.",
-    "message": "長すぎます。短い名前を入力してください。"
-  },
-  "routes.onboarding.project.create.index.minLengthError": {
-    "description": "Error message for when project name is too short.",
-    "message": "プロジェクト名を入力"
-  },
-  "routes.onboarding.project.create.index.projectName": {
-    "description": "Input label for onboarding project creation page.",
-    "message": "Enter a name for the Project"
-  },
-  "routes.onboarding.project.create.index.title": {
-    "description": "Page title for onboarding project creation page.",
-    "message": "Create a Project"
-  },
-  "routes.onboarding.project.index.description": {
-    "description": "Description shown about actions to take in the project onboarding landing page.",
-    "message": "最初のプロジェクトを開始するには、以下から選択してください。"
-  },
-  "routes.onboarding.project.index.joinProjectButton": {
-    "description": "Text for link to join a project.",
-    "message": "プロジェクトに参加"
-  },
-  "routes.onboarding.project.index.startProjectButton": {
-    "description": "Text for link to start a project.",
-    "message": "Create a Project"
-  },
-  "routes.onboarding.project.index.title": {
-    "description": "Title for the project onboarding landing page.",
-    "message": "{name} の準備ができました！"
-  },
-  "routes.onboarding.project.join.$inviteId.success.description": {
-    "description": "Description for onboarding joining project success page.",
-    "message": "<b>{deviceName}</b><br></br>が<br></br><b>{projectName}</b> に参加しました。"
-  },
-  "routes.onboarding.project.join.$inviteId.success.inviteNotFound": {
-    "description": "Text displayed when invite cannot be found.",
-    "message": "ID {inviteId} の招待状が見つかりませんでした"
-  },
-  "routes.onboarding.project.join.$inviteId.success.startUsingCoMapeo": {
-    "description": "Text for link to navigate to main app.",
-    "message": "CoMapeoの使用を開始"
-  },
-  "routes.onboarding.project.join.$inviteId.success.title": {
-    "description": "Title for onboarding joining project success page.",
-    "message": "成功！"
-  },
-  "routes.onboarding.project.join.index.acceptButton": {
-    "description": "Text for button to accept invitation.",
-    "message": "同意する"
-  },
-  "routes.onboarding.project.join.index.declineButton": {
-    "description": "Text for button to decline invitation.",
-    "message": "同意しない"
-  },
-  "routes.onboarding.project.join.index.description": {
-    "description": "Description for onboarding join project landing page.",
-    "message": "プロジェクトの招待状を受け取るには、チームと調整してください。"
-  },
-  "routes.onboarding.project.join.index.inviteDescription": {
-    "description": "Description for invite containing role being invited as.",
-    "message": "{role, select, coordinator {コーディネーターとして参加しましょう} other {参加者}}"
-  },
-  "routes.onboarding.project.join.index.title": {
-    "description": "Title for onboarding join project landing page.",
-    "message": "プロジェクトに参加"
+  "routes.onboarding.route.step": {
+    "description": "Text indicating step number in onboarding.",
+    "message": "手順 {value}"
   },
   "routes.welcome.appDescription": {
     "message": "CoMapeo Mobileで収集した観察記録を表示および管理します。"

@@ -15,13 +15,37 @@
     "description": "Button text for try again button.",
     "message": "Jaribu Tena"
   },
+  "routes.app.index.createProjectButton": {
+    "description": "Text for button to create project.",
+    "message": "Create Project"
+  },
+  "routes.app.index.joinProjectCardTitle": {
+    "description": "Title card for joining a project.",
+    "message": "Jiunge na Mradi"
+  },
+  "routes.app.index.joinProjectDialogTitle": {
+    "description": "Title of dialog shown for joining a project.",
+    "message": "Jiunge na Mradi"
+  },
+  "routes.app.index.leftProjectDialogCloseButton": {
+    "description": "Text for button to close left project dialog.",
+    "message": "Open Settings"
+  },
+  "routes.app.index.projectNameInputLabel": {
+    "description": "Input label for input in start project dialog.",
+    "message": "Enter a name for the Project"
+  },
+  "routes.app.index.startProjectCardTitle": {
+    "description": "Title card for starting a new project.",
+    "message": "Create a Project"
+  },
+  "routes.app.index.startProjectDialogTitle": {
+    "description": "Description of dialog shown for starting a project.",
+    "message": "Create a Project"
+  },
   "routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
     "message": "Uchunguzi"
-  },
-  "routes.app.projects.$projectId.-main-panel.inviteCollaboratorsPanelInviteLink": {
-    "description": "Text for link that navigates to invite page.",
-    "message": "Alika Kifaa"
   },
   "routes.app.projects.$projectId.-map-panel.zoomToData": {
     "description": "Text displayed when hovering over map control for zooming to data.",
@@ -54,6 +78,22 @@
   "routes.app.projects.$projectId.download.successPanelTitle": {
     "description": "Title text for success panel.",
     "message": "Imefaulu!"
+  },
+  "routes.app.projects.$projectId.exchange.index.complete": {
+    "description": "Text displayed when exchange is completed with all devices.",
+    "message": "Complete! You're up to date"
+  },
+  "routes.app.projects.$projectId.exchange.index.devicesFound": {
+    "description": "Text displayed when other devices have been found.",
+    "message": "Devices found"
+  },
+  "routes.app.projects.$projectId.exchange.index.upToDate": {
+    "description": "Text displayed when exchangable data is up to date.",
+    "message": "All data synced"
+  },
+  "routes.app.projects.$projectId.index.inviteCollaboratorsPanelInviteLink": {
+    "description": "Text for link that navigates to invite page.",
+    "message": "Alika Kifaa"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
     "description": "Accessible label for button to close panel.",
@@ -111,6 +151,66 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "Uchunguzi"
   },
+  "routes.app.projects.$projectId.route.toolsTabLabel": {
+    "description": "Label for project tools tab link in navigation.",
+    "message": "Zana"
+  },
+  "routes.app.projects.$projectId.settings.index.categoriesActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "Sasisha"
+  },
+  "routes.app.projects.$projectId.settings.index.projectInfoActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "Hariri"
+  },
+  "routes.app.projects.$projectId.settings.info.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Ghairi"
+  },
+  "routes.app.projects.$projectId.settings.info.projectNameInputLabel": {
+    "description": "Label for the project name input.",
+    "message": "Enter a name for the Project"
+  },
+  "routes.app.projects.$projectId.settings.info.save": {
+    "description": "Label for save button.",
+    "message": "Hifadhi"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.cancelButton": {
+    "description": "Button text to cancel leaving project.",
+    "message": "Ghairi"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.continueButton": {
+    "description": "Button text to continue to next step in leave project flow.",
+    "message": "Endelea"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectButton": {
+    "description": "Button text to initiate leave project flow.",
+    "message": "Ondoka kwenye Mradi"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitleNoProjectName": {
+    "description": "Title text for leave project confirmation when leaving a project that has no name (edge case).",
+    "message": "Ondoka kwenye Mradi?"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.leaveProjectNavTitle": {
+    "description": "Title of the team collaborator info page when the leave project flow is initiated.",
+    "message": "Ondoka kwenye Mradi"
+  },
+  "routes.app.projects.$projectId.team.index.inviteDevice": {
+    "description": "Text for button that initiates steps for inviting device to project.",
+    "message": "Alika Kifaa"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.accepted": {
+    "description": "Text displayed when invite is accepted.",
+    "message": "Invite Accepted"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.close": {
+    "description": "Text for button to leave invite flow.",
+    "message": "Funga"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.-shared.disconnected-indicator.disconnected": {
+    "description": "Text displayed when external device is disconnected.",
+    "message": "Imetenganishwa"
+  },
   "routes.app.projects.$projectId.tracks.$trackDocId.index.descriptionSectionTitle": {
     "description": "Title for description section.",
     "message": "Maelezo"
@@ -119,73 +219,13 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "Uchunguzi"
   },
-  "routes.app.projects.$projectId_.exchange.index.complete": {
-    "description": "Text displayed when exchange is completed with all devices.",
-    "message": "Complete! You're up to date"
-  },
-  "routes.app.projects.$projectId_.exchange.index.devicesFound": {
-    "description": "Text displayed when other devices have been found.",
-    "message": "Devices found"
-  },
-  "routes.app.projects.$projectId_.exchange.index.upToDate": {
-    "description": "Text displayed when exchangable data is up to date.",
-    "message": "All data synced"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.accepted": {
-    "description": "Text displayed when invite is accepted.",
-    "message": "Invite Accepted"
-  },
-  "routes.app.projects.$projectId_.invite.devices.$deviceId.send.close": {
-    "description": "Text for button to leave invite flow.",
-    "message": "Close"
-  },
-  "routes.app.projects.$projectId_.invite.devices.-shared.disconnected-indicator.disconnected": {
-    "description": "Text displayed when external device is disconnected.",
-    "message": "Imetenganishwa"
-  },
-  "routes.app.projects.$projectId_.settings.index.categoriesActionLabel": {
-    "description": "Text for action to update categories set.",
-    "message": "Sasisha"
-  },
-  "routes.app.projects.$projectId_.settings.index.projectInfoActionLabel": {
-    "description": "Text for action to update project info.",
-    "message": "Hariri"
-  },
-  "routes.app.projects.$projectId_.settings.info.cancel": {
-    "description": "Label for cancel button.",
-    "message": "Ghairi"
-  },
-  "routes.app.projects.$projectId_.settings.info.projectNameInputLabel": {
-    "description": "Label for the project name input.",
-    "message": "Enter a name for the Project"
-  },
-  "routes.app.projects.$projectId_.settings.info.save": {
-    "description": "Label for save button.",
-    "message": "Hifadhi"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectButton": {
-    "description": "Button text to initiate leave project flow.",
-    "message": "Ondoka kwenye Mradi"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectExplainerTitle": {
-    "description": "Title text for leave project explanation.",
-    "message": "Ondoka kwenye Mradi?"
-  },
-  "routes.app.projects.$projectId_.team.$deviceId.leaveProjectNavTitle": {
-    "description": "Title of the team collaborator info page when the leave project flow is initiated.",
-    "message": "Ondoka kwenye Mradi"
-  },
-  "routes.app.projects.$projectId_.team.index.inviteDevice": {
-    "description": "Text for button that initiates steps for inviting device to project.",
-    "message": "Alika Kifaa"
-  },
   "routes.app.route.appSettingsTabLabel": {
-    "description": "Label for CoMapeo settings tab link in navigation.",
+    "description": "Label for app settings tab link in navigation.",
     "message": "Mipangilio"
   },
-  "routes.app.route.toolsTabLabel": {
-    "description": "Label for tools tab link in navigation.",
-    "message": "Zana"
+  "routes.app.route.projectJoinedCloseDialog": {
+    "description": "Text for button to close project joined dialog.",
+    "message": "Open Settings"
   },
   "routes.app.settings.background-map.close": {
     "description": "Text displayed for closing dialogs",
@@ -240,38 +280,6 @@
   },
   "routes.onboarding.device-name.deviceName": {
     "message": "Jina la Kifaa"
-  },
-  "routes.onboarding.project.create.$projectId.success.title": {
-    "description": "Title for onboarding project creation success page.",
-    "message": "Imefaulu!"
-  },
-  "routes.onboarding.project.create.index.createButton": {
-    "description": "Text for button to create project.",
-    "message": "Create Project"
-  },
-  "routes.onboarding.project.create.index.projectName": {
-    "description": "Input label for onboarding project creation page.",
-    "message": "Enter a name for the Project"
-  },
-  "routes.onboarding.project.create.index.title": {
-    "description": "Page title for onboarding project creation page.",
-    "message": "Create a Project"
-  },
-  "routes.onboarding.project.index.joinProjectButton": {
-    "description": "Text for link to join a project.",
-    "message": "Jiunge na Mradi"
-  },
-  "routes.onboarding.project.index.startProjectButton": {
-    "description": "Text for link to start a project.",
-    "message": "Create a Project"
-  },
-  "routes.onboarding.project.join.$inviteId.success.title": {
-    "description": "Title for onboarding joining project success page.",
-    "message": "Imefaulu!"
-  },
-  "routes.onboarding.project.join.index.title": {
-    "description": "Title for onboarding join project landing page.",
-    "message": "Jiunge na Mradi"
   },
   "routes.welcome.collaborate": {
     "message": "Collaborate with others"
