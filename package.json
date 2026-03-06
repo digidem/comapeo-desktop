@@ -25,7 +25,7 @@
 	"devEngines": {
 		"runtime": {
 			"name": "node",
-			"version": "~24.13.0",
+			"version": "~24.14.0",
 			"onFail": "warn"
 		},
 		"packageManager": {
@@ -137,7 +137,7 @@
 		"@vitejs/plugin-react": "5.1.4",
 		"concurrently": "9.2.1",
 		"date-fns": "4.1.0",
-		"electron": "40.4.1",
+		"electron": "40.8.0",
 		"electron-playwright-helpers": "2.1.0",
 		"eslint": "9.39.4",
 		"eslint-plugin-react-hooks": "7.0.1",
