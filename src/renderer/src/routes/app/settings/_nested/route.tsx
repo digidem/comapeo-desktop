@@ -14,6 +14,7 @@ import { BLUE_GREY, DARK_GREY } from '../../../../colors.ts'
 import { Icon } from '../../../../components/icon.tsx'
 import { TextLink } from '../../../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../hooks/icon.ts'
+import { BREADCRUMB_NAV_CURRENT_PAGE_LINK_ID } from './-shared.ts'
 
 export const Route = createFileRoute('/app/settings/_nested')({
 	component: RouteComponent,
@@ -57,6 +58,7 @@ function RouteComponent() {
 						</TextLink>
 
 						<TextLink
+							id={BREADCRUMB_NAV_CURRENT_PAGE_LINK_ID}
 							to="."
 							aria-current="page"
 							sx={{ textDecoration: 'none' }}

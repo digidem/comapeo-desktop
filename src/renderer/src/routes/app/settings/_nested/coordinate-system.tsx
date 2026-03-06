@@ -21,6 +21,7 @@ import {
 	getCoordinateFormatQueryOptions,
 	setCoordinateFormatMutationOptions,
 } from '../../../../lib/queries/app-settings.ts'
+import { BREADCRUMB_NAV_CURRENT_PAGE_LINK_ID } from './-shared.ts'
 
 export const Route = createFileRoute('/app/settings/_nested/coordinate-system')(
 	{
@@ -54,7 +55,7 @@ function RouteComponent() {
 					<Box padding={6} overflow="auto">
 						<FormControl>
 							<RadioGroup
-								aria-labelledby="coordinate-system-selection-label"
+								aria-labelledby={BREADCRUMB_NAV_CURRENT_PAGE_LINK_ID}
 								value={coordinateFormat}
 								name="coordinate-system"
 								onChange={(event) => {
