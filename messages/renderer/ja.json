@@ -89,11 +89,7 @@
   },
   "routes.app.index.leftProjectDialogTitle": {
     "description": "Title text for left project dialog.",
-    "message": "{name} を退出しました。"
-  },
-  "routes.app.index.leftProjectDialogTitleNoProjectName": {
-    "description": "Title text for left project dialog when project has no name (edge case).",
-    "message": "プロジェクトから退出しました。"
+    "message": "このデバイスはプロジェクト {name}を退出しました。"
   },
   "routes.app.index.pageTitle": {
     "description": "Title of home page.",
@@ -669,15 +665,11 @@
   },
   "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationDescription": {
     "description": "Description for leave project confirmation when leaving a project.",
-    "message": "デバイスは、このプロジェクトを表示または貢献することができなくなります。"
+    "message": "デバイスは、プロジェクト <b>{name}</b> を表示、貢献、または調整することができなくなります。"
   },
   "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitle": {
     "description": "Title text for leave project confirmation when leaving a project.",
-    "message": "{name} を離れますか？"
-  },
-  "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitleNoProjectName": {
-    "description": "Title text for leave project confirmation when leaving a project that has no name (edge case).",
-    "message": "プロジェクトを退出する?"
+    "message": "このプロジェクトを終了しますか？"
   },
   "routes.app.projects.$projectId.team.$deviceId.leaveProjectNavTitle": {
     "description": "Title of the team collaborator info page when the leave project flow is initiated.",
@@ -1063,10 +1055,6 @@
     "description": "Description of how custom background maps work.",
     "message": "カスタムバックグラウンドマップは、このデバイスでのみオフラインで表示できます。"
   },
-  "routes.app.settings.background-map.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "戻ってください。"
-  },
   "routes.app.settings.background-map.mapNameColumnLabel": {
     "description": "Column label text for map name.",
     "message": "地図名"
@@ -1091,6 +1079,10 @@
     "description": "Text describing what kind of files are usable for background maps.",
     "message": "{value} MB"
   },
+  "routes.app.settings.comapeoSettingsBreadCrumbLink": {
+    "description": "Text for breadcrumb link to go to main CoMapeo settings page when viewing nested settings page.",
+    "message": "CoMapeoの設定"
+  },
   "routes.app.settings.coordinate-system.ddOptionLabel": {
     "description": "Label for the decimal degrees option.",
     "message": "DD (小数点以下)"
@@ -1098,10 +1090,6 @@
   "routes.app.settings.coordinate-system.dmsOptionLabel": {
     "description": "Label for the degrees/minutes/seconds option.",
     "message": "DMS (小数点/分/秒)"
-  },
-  "routes.app.settings.coordinate-system.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "戻ってください。"
   },
   "routes.app.settings.coordinate-system.title": {
     "description": "Title of the coordinate system settings page.",
@@ -1118,10 +1106,6 @@
   "routes.app.settings.device-name.characterCount": {
     "description": "Displays number of characters in input out of the maximum allowed characters.",
     "message": "{count}/{max}"
-  },
-  "routes.app.settings.device-name.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "戻ってください。"
   },
   "routes.app.settings.device-name.inputLabel": {
     "description": "Label for the device name input.",
@@ -1206,10 +1190,6 @@
   "routes.app.settings.language.followSystemOptionLabel": {
     "description": "Option label for following system preference for language.",
     "message": "システム設定に従ってください"
-  },
-  "routes.app.settings.language.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "戻ってください。"
   },
   "routes.app.settings.language.title": {
     "description": "Title of the language settings page.",
