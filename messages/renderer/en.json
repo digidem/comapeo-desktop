@@ -93,11 +93,7 @@
   },
   "routes.app.index.leftProjectDialogTitle": {
     "description": "Title text for left project dialog.",
-    "message": "You've left {name}."
-  },
-  "routes.app.index.leftProjectDialogTitleNoProjectName": {
-    "description": "Title text for left project dialog when project has no name (edge case).",
-    "message": "You've left the project."
+    "message": "This device has left the project {name}."
   },
   "routes.app.index.pageTitle": {
     "description": "Title of home page.",
@@ -685,15 +681,11 @@
   },
   "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationDescription": {
     "description": "Description for leave project confirmation when leaving a project.",
-    "message": "Device will no longer be able to view or contribute to this project."
+    "message": "Device will no longer be able to view, contribute to, or adjust the project <b>{name}</b>."
   },
   "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitle": {
     "description": "Title text for leave project confirmation when leaving a project.",
-    "message": "Leave {name}?"
-  },
-  "routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitleNoProjectName": {
-    "description": "Title text for leave project confirmation when leaving a project that has no name (edge case).",
-    "message": "Leave Project?"
+    "message": "Leave this project?"
   },
   "routes.app.projects.$projectId.team.$deviceId.leaveProjectNavTitle": {
     "description": "Title of the team collaborator info page when the leave project flow is initiated.",

@@ -309,9 +309,7 @@ export function LeftProjectDialogContent({
 					</Box>
 
 					<Typography variant="h1" fontWeight={500} textAlign="center">
-						{projectName
-							? t(m.leftProjectDialogTitle, { name: projectName })
-							: t(m.leftProjectDialogTitleNoProjectName)}
+						{t(m.leftProjectDialogTitle, { name: projectName || '' })}
 					</Typography>
 				</Stack>
 			</Stack>
@@ -396,14 +394,8 @@ const m = defineMessages({
 	},
 	leftProjectDialogTitle: {
 		id: 'routes.app.index.leftProjectDialogTitle',
-		defaultMessage: "You've left {name}.",
+		defaultMessage: 'This device has left the project {name}.',
 		description: 'Title text for left project dialog.',
-	},
-	leftProjectDialogTitleNoProjectName: {
-		id: 'routes.app.index.leftProjectDialogTitleNoProjectName',
-		defaultMessage: "You've left the project.",
-		description:
-			'Title text for left project dialog when project has no name (edge case).',
 	},
 	leftProjectDialogCloseButton: {
 		id: 'routes.app.index.leftProjectDialogCloseButton',

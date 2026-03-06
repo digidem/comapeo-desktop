@@ -507,13 +507,13 @@ function LeaveProjectConfirmation({
 						<Icon name="material-logout" htmlColor={BLUE_GREY} size={72} />
 
 						<Typography variant="h1" fontWeight={500} textAlign="center">
-							{projectName
-								? t(m.leaveProjectConfirmationTitle, { name: projectName })
-								: t(m.leaveProjectConfirmationTitleNoProjectName)}
+							{t(m.leaveProjectConfirmationTitle)}
 						</Typography>
 
 						<Typography textAlign="center">
-							{t(m.leaveProjectConfirmationDescription)}
+							{t(m.leaveProjectConfirmationDescription, {
+								name: projectName || '',
+							})}
 						</Typography>
 					</Stack>
 				</Stack>
@@ -679,20 +679,14 @@ const m = defineMessages({
 	},
 	leaveProjectConfirmationTitle: {
 		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitle',
-		defaultMessage: 'Leave {name}?',
+		defaultMessage: 'Leave this project?',
 		description:
 			'Title text for leave project confirmation when leaving a project.',
-	},
-	leaveProjectConfirmationTitleNoProjectName: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitleNoProjectName',
-		defaultMessage: 'Leave Project?',
-		description:
-			'Title text for leave project confirmation when leaving a project that has no name (edge case).',
 	},
 	leaveProjectConfirmationDescription: {
 		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationDescription',
 		defaultMessage:
-			'Device will no longer be able to view or contribute to this project.',
+			'Device will no longer be able to view, contribute to, or adjust the project <b>{name}</b>.',
 		description:
 			'Description for leave project confirmation when leaving a project.',
 	},
