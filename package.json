@@ -128,7 +128,7 @@
 		"@turf/helpers": "7.3.4",
 		"@turf/random": "7.3.4",
 		"@types/geojson": "7946.0.16",
-		"@types/node": "24.10.13",
+		"@types/node": "24.12.0",
 		"@types/react": "19.2.14",
 		"@types/react-dom": "19.2.3",
 		"@types/semver": "7.7.1",
