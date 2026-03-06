@@ -77,7 +77,6 @@ function RouteComponent() {
 				overflow="auto"
 				display="flex"
 				flex={1}
-				padding={6}
 				sx={{ scrollbarGutter: 'stable both-edges' }}
 			>
 				<Outlet />

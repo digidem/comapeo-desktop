@@ -61,7 +61,6 @@ function RouteComponent() {
 				display="flex"
 				flex={1}
 				overflow="auto"
-				padding={6}
 				sx={{ scrollbarGutter: 'stable both-edges' }}
 			>
 				<Suspense
@@ -78,7 +77,7 @@ function RouteComponent() {
 					}
 				>
 					<Container maxWidth="md" disableGutters>
-						<Stack direction="column" gap={6}>
+						<Stack direction="column" gap={6} padding={6}>
 							<SettingsList />
 
 							<DataAndPrivacySection />
