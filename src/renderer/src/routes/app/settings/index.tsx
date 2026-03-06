@@ -34,7 +34,7 @@ function RouteComponent() {
 
 	const headerIconHeight = useIconSizeBasedOnTypography({
 		typographyVariant: 'h1',
-		multiplier: 2,
+		multiplier: 1.5,
 	})
 
 	return (
