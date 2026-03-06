@@ -307,14 +307,14 @@ test.describe('leave project', () => {
 			{
 				await expect(
 					dialog.getByRole('heading', {
-						name: `Leave ${projectParams.projectName}?`,
+						name: `Leave this project?`,
 						exact: true,
 					}),
 				).toBeVisible()
 
 				await expect(
 					dialog.getByText(
-						'Device will no longer be able to view or contribute to this project.',
+						`Device will no longer be able to view, contribute to, or adjust the project ${projectParams.projectName}.`,
 						{ exact: true },
 					),
 				).toBeVisible()
@@ -346,7 +346,7 @@ test.describe('leave project', () => {
 			{
 				await expect(
 					dialog.getByRole('heading', {
-						name: `You've left ${projectParams.projectName}.`,
+						name: `This device has left the project ${projectParams.projectName}.`,
 						exact: true,
 					}),
 				).toBeVisible()
