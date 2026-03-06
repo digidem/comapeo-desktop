@@ -268,6 +268,8 @@ export function StartProjectDialogContent({
 			</Stack>
 
 			<DecentDialog
+				fullWidth
+				maxWidth="sm"
 				value={
 					createProject.status === 'error' ? createProject.error : undefined
 				}

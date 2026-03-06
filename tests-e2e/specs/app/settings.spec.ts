@@ -44,10 +44,7 @@ test('index', async ({ appInfo, userParams }) => {
 
 		//// General section
 		await expect(
-			main.getByRole('heading', {
-				name: 'General',
-				exact: true,
-			}),
+			main.getByRole('heading', { name: 'General', exact: true }),
 		).toBeVisible()
 
 		const settingsItems = main
@@ -256,9 +253,27 @@ test('device name', async ({ appInfo, userParams }) => {
 
 		/// Main
 
-		await expect(
-			main.getByRole('heading', { name: 'Device Name', exact: true }),
-		).toBeVisible()
+		// Breadcrumb
+		{
+			const breadcrumbNav = main.getByRole('navigation', {
+				name: 'breadcrumb',
+				exact: true,
+			})
+
+			const breadcrumbItems = breadcrumbNav
+				.getByRole('listitem')
+				.getByRole('link')
+
+			await expect(breadcrumbItems).toHaveCount(2)
+
+			await expect(breadcrumbItems.nth(0)).toHaveText('CoMapeo Settings')
+
+			await expect(breadcrumbItems.nth(1)).toHaveText('Device Name')
+			await expect(breadcrumbItems.nth(1)).toHaveAttribute(
+				'aria-current',
+				'page',
+			)
+		}
 
 		const deviceNameInput = main.getByRole('textbox', {
 			name: 'Device Name',
@@ -305,7 +320,10 @@ test('device name', async ({ appInfo, userParams }) => {
 		)
 
 		//// Restoration of input initial state when navigating away without saving
-		await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+		await main
+			.getByRole('navigation', { name: 'breadcrumb', exact: true })
+			.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+			.click()
 
 		await page
 			.getByRole('link', { name: 'Go to device name settings.', exact: true })
@@ -397,9 +415,28 @@ test('language', async ({ appInfo, userParams }) => {
 		}
 
 		/// Main
-		await expect(
-			main.getByRole('heading', { name: 'Language', exact: true }),
-		).toBeVisible()
+
+		// Breadcrumb
+		{
+			const breadcrumbNav = main.getByRole('navigation', {
+				name: 'breadcrumb',
+				exact: true,
+			})
+
+			const breadcrumbItems = breadcrumbNav
+				.getByRole('listitem')
+				.getByRole('link')
+
+			await expect(breadcrumbItems).toHaveCount(2)
+
+			await expect(breadcrumbItems.nth(0)).toHaveText('CoMapeo Settings')
+
+			await expect(breadcrumbItems.nth(1)).toHaveText('Language')
+			await expect(breadcrumbItems.nth(1)).toHaveAttribute(
+				'aria-current',
+				'page',
+			)
+		}
 
 		//// Initial state
 		{
@@ -445,7 +482,12 @@ test('language', async ({ appInfo, userParams }) => {
 			await expect(portugueseOption).toBeChecked()
 
 			await expect(
-				main.getByRole('heading', { name: 'Idioma', exact: true }),
+				main
+					.getByRole('navigation', {
+						name: 'breadcrumb',
+						exact: true,
+					})
+					.getByRole('link', { name: 'Idioma', exact: true }),
 			).toBeVisible()
 
 			await expect(
@@ -455,10 +497,12 @@ test('language', async ({ appInfo, userParams }) => {
 				}),
 			).toBeVisible()
 
-			await main.getByRole('button', { name: 'Voltar.', exact: true }).click()
+			await main
+				.getByRole('navigation', { name: 'breadcrumb', exact: true })
+				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+				.click()
 
 			const languageSettingsLink = main.getByRole('link', {
-				// NOTE: Need to update when translations get updated
 				name: 'Vá para as configurações de idioma.',
 				exact: true,
 			})
@@ -485,7 +529,10 @@ test('language', async ({ appInfo, userParams }) => {
 			await systemPreferencesOption.click()
 			await expect(systemPreferencesOption).toBeChecked()
 
-			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+			await main
+				.getByRole('navigation', { name: 'breadcrumb', exact: true })
+				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+				.click()
 		}
 	} finally {
 		// 3. Cleanup
@@ -540,23 +587,32 @@ test('coordinate system', async ({ appInfo, userParams }) => {
 		}
 
 		/// Main
+
+		// Breadcrumb
 		{
-			const pageTitle = main.getByRole('heading', {
-				name: 'Coordinate System',
+			const breadcrumbNav = main.getByRole('navigation', {
+				name: 'breadcrumb',
 				exact: true,
 			})
 
-			await expect(pageTitle).toBeVisible()
-			await expect(pageTitle).toHaveId('coordinate-system-selection-label')
+			const breadcrumbItems = breadcrumbNav
+				.getByRole('listitem')
+				.getByRole('link')
+
+			await expect(breadcrumbItems).toHaveCount(2)
+
+			await expect(breadcrumbItems.nth(0)).toHaveText('CoMapeo Settings')
+
+			await expect(breadcrumbItems.nth(1)).toHaveText('Coordinate System')
+			await expect(breadcrumbItems.nth(1)).toHaveAttribute(
+				'aria-current',
+				'page',
+			)
 		}
 
 		//// Initial state
 		{
 			const radioGroup = main.getByRole('radiogroup')
-			await expect(radioGroup).toHaveAttribute(
-				'aria-labelledby',
-				'coordinate-system-selection-label',
-			)
 			await expect(radioGroup).toHaveAccessibleName('Coordinate System')
 
 			const utmOption = main.getByRole('radio', {
@@ -588,7 +644,10 @@ test('coordinate system', async ({ appInfo, userParams }) => {
 			await ddOption.click()
 			await expect(ddOption).toBeChecked()
 
-			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+			await main
+				.getByRole('navigation', { name: 'breadcrumb', exact: true })
+				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+				.click()
 
 			const coordinateSystemSettingsLink = main.getByRole('link', {
 				name: 'Go to coordinate system settings.',
@@ -620,7 +679,10 @@ test('coordinate system', async ({ appInfo, userParams }) => {
 			await utmOption.click()
 			await expect(utmOption).toBeChecked()
 
-			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+			await main
+				.getByRole('navigation', { name: 'breadcrumb', exact: true })
+				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+				.click()
 		}
 	} finally {
 		// 3. Cleanup
@@ -675,9 +737,28 @@ test('background map', async ({ appInfo, userParams }) => {
 		}
 
 		/// Main
-		await expect(
-			main.getByRole('heading', { name: 'Background Map', exact: true }),
-		).toBeVisible()
+
+		// Breadcrumb
+		{
+			const breadcrumbNav = main.getByRole('navigation', {
+				name: 'breadcrumb',
+				exact: true,
+			})
+
+			const breadcrumbItems = breadcrumbNav
+				.getByRole('listitem')
+				.getByRole('link')
+
+			await expect(breadcrumbItems).toHaveCount(2)
+
+			await expect(breadcrumbItems.nth(0)).toHaveText('CoMapeo Settings')
+
+			await expect(breadcrumbItems.nth(1)).toHaveText('Background Map')
+			await expect(breadcrumbItems.nth(1)).toHaveAttribute(
+				'aria-current',
+				'page',
+			)
+		}
 
 		await expect(
 			main.getByText(
@@ -743,7 +824,10 @@ test('background map', async ({ appInfo, userParams }) => {
 			})
 			await expect(removeMapButton).toBeVisible()
 
-			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+			await main
+				.getByRole('navigation', { name: 'breadcrumb', exact: true })
+				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+				.click()
 
 			const backgroundMapSettingsLink = main.getByRole('link', {
 				name: 'Go to background map settings.',
@@ -783,10 +867,7 @@ test('background map', async ({ appInfo, userParams }) => {
 			await expect(dialog).not.toBeVisible()
 
 			await expect(
-				main.getByRole('button', {
-					name: 'Choose File',
-					exact: true,
-				}),
+				main.getByRole('button', { name: 'Choose File', exact: true }),
 			).not.toBeVisible()
 
 			await expect(main.getByText('Map Name')).toBeVisible()
@@ -804,7 +885,10 @@ test('background map', async ({ appInfo, userParams }) => {
 				main.getByRole('button', { name: 'Remove Map', exact: true }),
 			).toBeVisible()
 
-			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+			await main
+				.getByRole('navigation', { name: 'breadcrumb', exact: true })
+				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+				.click()
 
 			const backgroundMapSettingsLink = main.getByRole('link', {
 				name: 'Go to background map settings.',
@@ -829,7 +913,11 @@ test('background map', async ({ appInfo, userParams }) => {
 				main.getByText('Accepted file types are .smp', { exact: true }),
 			).toBeVisible()
 
-			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+			await main
+				.getByRole('navigation', { name: 'breadcrumb', exact: true })
+				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+				.click()
+
 			await expect(
 				main
 					.getByRole('link', {

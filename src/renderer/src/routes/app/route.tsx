@@ -416,24 +416,25 @@ function ProjectInvite() {
 				maxWidth="sm"
 				value={
 					acceptInvite.status === 'error'
-						? { from: 'accept', error: acceptInvite.error }
+						? {
+								errorMessage: acceptInvite.error.toString(),
+								onClose: () => {
+									acceptInvite.reset()
+								},
+							}
 						: rejectInvite.status === 'error'
-							? { from: 'reject', error: rejectInvite.error }
+							? {
+									errorMessage: rejectInvite.error.toString(),
+									onClose: () => {
+										rejectInvite.reset()
+									},
+								}
 							: null
 				}
 				sx={{ zIndex: (theme) => theme.zIndex.snackbar + 1 }}
 			>
-				{({ from, error }) => (
-					<ErrorDialogContent
-						errorMessage={error.toString()}
-						onClose={() => {
-							if (from === 'accept') {
-								acceptInvite.reset()
-							} else {
-								rejectInvite.reset()
-							}
-						}}
-					/>
+				{({ errorMessage, onClose }) => (
+					<ErrorDialogContent errorMessage={errorMessage} onClose={onClose} />
 				)}
 			</DecentDialog>
 		</>
