@@ -5,7 +5,6 @@ export default {
 		'forge.config.ts',
 		'src/preload/*.js',
 		'src/renderer/global.d.ts',
-		'src/renderer/src/index.tsx',
 		'src/renderer/src/index.css',
 		'src/renderer/vite-env.d.ts',
 		'src/services/core.ts',
