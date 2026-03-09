@@ -16,13 +16,14 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY, LIGHT_GREY } from '../../colors'
-import { ErrorDialog } from '../../components/error-dialog'
-import { Icon } from '../../components/icon'
+import { BLUE_GREY, DARK_GREY, LIGHT_GREY } from '../../colors.ts'
+import { DecentDialog } from '../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../components/error-dialog.tsx'
+import { Icon } from '../../components/icon.tsx'
 import {
 	getDiagnosticsEnabledQueryOptions,
 	setDiagnosticsEnabledMutationOptions,
-} from '../../lib/queries/app-settings'
+} from '../../lib/queries/app-settings.ts'
 
 export const Route = createFileRoute('/onboarding/privacy-policy')({
 	loader: async ({ context }) => {
@@ -238,13 +239,24 @@ function RouteComponent() {
 				</Container>
 			</Stack>
 
-			<ErrorDialog
-				open={setDiagnosticsEnabledMutation.status === 'error'}
-				errorMessage={setDiagnosticsEnabledMutation.error?.toString()}
-				onClose={() => {
-					setDiagnosticsEnabledMutation.reset()
-				}}
-			/>
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					setDiagnosticsEnabledMutation.status === 'error'
+						? setDiagnosticsEnabledMutation.error
+						: null
+				}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							setDiagnosticsEnabledMutation.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
 		</>
 	)
 }
