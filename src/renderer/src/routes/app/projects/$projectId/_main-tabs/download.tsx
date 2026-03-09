@@ -17,7 +17,8 @@ import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
 import { BLUE_GREY, DARK_GREY, GREEN } from '../../../../../colors.ts'
-import { ErrorDialog } from '../../../../../components/error-dialog.tsx'
+import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
 import { useAppForm } from '../../../../../hooks/forms.ts'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings.ts'
@@ -384,13 +385,20 @@ function DownloadForm({
 				</Stack>
 			</Stack>
 
-			<ErrorDialog
-				open={downloadData.status === 'error'}
-				errorMessage={downloadData.error?.toString()}
-				onClose={() => {
-					downloadData.reset()
-				}}
-			/>
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={downloadData.status === 'error' ? downloadData.error : null}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							downloadData.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
 		</>
 	)
 }
