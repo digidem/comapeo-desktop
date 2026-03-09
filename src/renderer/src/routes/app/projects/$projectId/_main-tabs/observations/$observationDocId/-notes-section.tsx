@@ -9,12 +9,13 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { ErrorDialog } from '../../../../../../../components/error-dialog'
-import { Icon } from '../../../../../../../components/icon'
-import { useAppForm } from '../../../../../../../hooks/forms'
-import { getLocaleStateQueryOptions } from '../../../../../../../lib/queries/app-settings'
-import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations'
-import { EditableSection } from './-components/editable-section'
+import { DecentDialog } from '../../../../../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../../../../../components/error-dialog.tsx'
+import { Icon } from '../../../../../../../components/icon.tsx'
+import { useAppForm } from '../../../../../../../hooks/forms.ts'
+import { getLocaleStateQueryOptions } from '../../../../../../../lib/queries/app-settings.ts'
+import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations.ts'
+import { EditableSection } from './-components/editable-section.tsx'
 
 export function ReadOnlyNotesSection({ notes }: { notes?: string }) {
 	const { formatMessage: t } = useIntl()
@@ -120,9 +121,9 @@ export function EditableNotesSection({
 									updateEditState('success')
 								} catch (err) {
 									captureException(err)
-								} finally {
-									onStopEditMode()
 								}
+
+								onStopEditMode()
 							}}
 						/>
 					)}
@@ -150,13 +151,24 @@ export function EditableNotesSection({
 				/>
 			</Box>
 
-			<ErrorDialog
-				open={updateObservationNotes.status === 'error'}
-				errorMessage={updateObservationNotes.error?.toString()}
-				onClose={() => {
-					updateObservationNotes.reset()
-				}}
-			/>
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					updateObservationNotes.status === 'error'
+						? updateObservationNotes.error
+						: null
+				}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							updateObservationNotes.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
 		</>
 	)
 }
