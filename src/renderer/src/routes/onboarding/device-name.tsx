@@ -12,7 +12,8 @@ import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
 import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../colors.ts'
-import { ErrorDialog } from '../../components/error-dialog.tsx'
+import { DecentDialog } from '../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
 import { useAppForm } from '../../hooks/forms.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo.ts'
@@ -205,13 +206,22 @@ function RouteComponent() {
 				</Box>
 			</Stack>
 
-			<ErrorDialog
-				open={setOwnDeviceInfo.status === 'error'}
-				errorMessage={setOwnDeviceInfo.error?.toString()}
-				onClose={() => {
-					setOwnDeviceInfo.reset()
-				}}
-			/>
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					setOwnDeviceInfo.status === 'error' ? setOwnDeviceInfo.error : null
+				}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							setOwnDeviceInfo.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
 		</>
 	)
 }
