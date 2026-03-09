@@ -18,6 +18,7 @@ import {
 	useChildMatches,
 } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
+import { useSpinDelay } from 'spin-delay'
 
 import { BLUE_GREY, COMAPEO_BLUE, DARK_GREY } from '../../../../colors.ts'
 import { Icon } from '../../../../components/icon.tsx'
@@ -129,9 +130,6 @@ function RouteComponent() {
 		},
 	})
 
-	const someGlobalMutationIsPending =
-		useIsMutating({ mutationKey: GLOBAL_MUTATIONS_BASE_KEY }) > 0
-
 	const { data: role } = useOwnRoleInProject({ projectId })
 
 	const isCoordinator =
@@ -142,6 +140,14 @@ function RouteComponent() {
 
 	const selfIsOnlyProjectMemberEver =
 		members.length === 1 && members[0]?.deviceId === ownDeviceInfo.deviceId
+
+	const someGlobalMutationIsPending =
+		useIsMutating({ mutationKey: GLOBAL_MUTATIONS_BASE_KEY }) > 0
+
+	const globalMutationsAreVisiblyPending = useSpinDelay(
+		someGlobalMutationIsPending,
+		{ delay: 100 },
+	)
 
 	return (
 		<Box flex={1} display="grid" gridTemplateColumns="min-content 1fr">
@@ -181,7 +187,7 @@ function RouteComponent() {
 								<IconButtonLink
 									to="/app/projects/$projectId"
 									params={{ projectId }}
-									disabled={someGlobalMutationIsPending}
+									disabled={globalMutationsAreVisiblyPending}
 									onClick={(event) => {
 										if (someGlobalMutationIsPending) {
 											event.preventDefault()
@@ -228,7 +234,7 @@ function RouteComponent() {
 									to="/app/projects/$projectId/team"
 									params={{ projectId }}
 									disabled={
-										someGlobalMutationIsPending &&
+										globalMutationsAreVisiblyPending &&
 										!currentRoute.fullPath.startsWith(
 											'/app/projects/$projectId/team',
 										)
@@ -262,7 +268,7 @@ function RouteComponent() {
 										to="/app/projects/$projectId/settings"
 										params={{ projectId }}
 										disabled={
-											someGlobalMutationIsPending &&
+											globalMutationsAreVisiblyPending &&
 											!currentRoute.fullPath.startsWith(
 												'/app/projects/$projectId/settings',
 											)
@@ -286,11 +292,9 @@ function RouteComponent() {
 							<Suspense>
 								<TestDataTabLink
 									disabled={
-										!!(
-											someGlobalMutationIsPending &&
-											currentRoute.fullPath !==
-												'/app/projects/$projectId/test-data'
-										)
+										globalMutationsAreVisiblyPending &&
+										currentRoute.fullPath !==
+											'/app/projects/$projectId/test-data'
 									}
 									onClick={(event) => {
 										if (someGlobalMutationIsPending) {
@@ -320,7 +324,7 @@ function RouteComponent() {
 										to="/app/projects/$projectId/exchange"
 										params={{ projectId }}
 										disabled={
-											someGlobalMutationIsPending &&
+											globalMutationsAreVisiblyPending &&
 											!currentRoute.fullPath.startsWith(
 												'/app/projects/$projectId/exchange',
 											)
