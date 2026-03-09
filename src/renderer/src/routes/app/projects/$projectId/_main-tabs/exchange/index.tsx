@@ -27,7 +27,8 @@ import {
 	DARKER_ORANGE,
 	GREEN,
 } from '../../../../../../colors.ts'
-import { ErrorDialog } from '../../../../../../components/error-dialog.tsx'
+import { DecentDialog } from '../../../../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../../components/icon.tsx'
 import { ButtonLink } from '../../../../../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../../hooks/icon.ts'
@@ -96,25 +97,6 @@ function RouteComponent() {
 
 	const startSync = useStartSync({ projectId })
 	const stopSync = useStopSync({ projectId })
-
-	const errorDialogProps =
-		startSync.status === 'error'
-			? {
-					open: true,
-					errorMessage: startSync.error.message,
-					onClose: () => {
-						startSync.reset()
-					},
-				}
-			: stopSync.status === 'error'
-				? {
-						open: true,
-						errorMessage: stopSync.error.message,
-						onClose: () => {
-							stopSync.reset()
-						},
-					}
-				: { open: false, onClose: () => {} }
 
 	const connectedPeersCount = syncState
 		? getConnectedPeersCount(syncState.remoteDeviceSyncState)
@@ -282,7 +264,32 @@ function RouteComponent() {
 				}
 			</Stack>
 
-			<ErrorDialog {...errorDialogProps} />
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					startSync.status === 'error'
+						? {
+								errorMessage: startSync.error.toString(),
+								onClose: () => {
+									startSync.reset()
+								},
+							}
+						: stopSync.status === 'error'
+							? {
+									open: true,
+									errorMessage: stopSync.error.toString(),
+									onClose: () => {
+										stopSync.reset()
+									},
+								}
+							: null
+				}
+			>
+				{({ errorMessage, onClose }) => (
+					<ErrorDialogContent errorMessage={errorMessage} onClose={onClose} />
+				)}
+			</DecentDialog>
 		</>
 	)
 }
