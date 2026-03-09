@@ -29,10 +29,8 @@ import * as v from 'valibot'
 
 import { TwoPanelLayout } from '../../-components/two-panel-layout.tsx'
 import { BLACK, BLUE_GREY } from '../../../../colors.ts'
-import {
-	ErrorDialog,
-	type Props as ErrorDialogProps,
-} from '../../../../components/error-dialog.tsx'
+import { DecentDialog } from '../../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { GenericRoutePendingComponent } from '../../../../components/generic-route-pending-component.tsx'
 import { Map } from '../../../../components/map.tsx'
 import { useAppForm } from '../../../../hooks/forms.ts'
@@ -213,25 +211,6 @@ function RouteComponent() {
 			distance: boundedDistance,
 		})
 	}, [boundedDistance, coordinates])
-
-	const errorDialogProps: ErrorDialogProps =
-		createTestObservations.status === 'error'
-			? {
-					errorMessage: createTestObservations.error.toString(),
-					onClose: () => {
-						createTestObservations.reset()
-					},
-					open: true,
-				}
-			: createTestTrack.status === 'error'
-				? {
-						open: true,
-						errorMessage: createTestTrack.error.toString(),
-						onClose: () => {
-							createTestTrack.reset()
-						},
-					}
-				: { open: false, onClose: () => {} }
 
 	return (
 		<>
@@ -515,7 +494,31 @@ function RouteComponent() {
 				anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 			/>
 
-			<ErrorDialog {...errorDialogProps} />
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					createTestObservations.status === 'error'
+						? {
+								errorMessage: createTestObservations.error.toString(),
+								onClose: () => {
+									createTestObservations.reset()
+								},
+							}
+						: createTestTrack.status === 'error'
+							? {
+									errorMessage: createTestTrack.error.toString(),
+									onClose: () => {
+										createTestTrack.reset()
+									},
+								}
+							: null
+				}
+			>
+				{({ errorMessage, onClose }) => (
+					<ErrorDialogContent errorMessage={errorMessage} onClose={onClose} />
+				)}
+			</DecentDialog>
 		</>
 	)
 }
