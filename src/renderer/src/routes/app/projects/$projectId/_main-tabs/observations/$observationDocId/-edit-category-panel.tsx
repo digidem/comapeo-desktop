@@ -20,15 +20,16 @@ import {
 } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY } from '../../../../../../../colors'
+import { BLUE_GREY } from '../../../../../../../colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
-} from '../../../../../../../components/category-icon'
-import { ErrorDialog } from '../../../../../../../components/error-dialog'
-import { Icon } from '../../../../../../../components/icon'
-import { getLocaleStateQueryOptions } from '../../../../../../../lib/queries/app-settings'
-import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations'
+} from '../../../../../../../components/category-icon.tsx'
+import { DecentDialog } from '../../../../../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../../../../../components/error-dialog.tsx'
+import { Icon } from '../../../../../../../components/icon.tsx'
+import { getLocaleStateQueryOptions } from '../../../../../../../lib/queries/app-settings.ts'
+import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations.ts'
 
 const UPDATE_OBSERVATION_CATEGORY_MUTATION_KEY = createGlobalMutationsKey([
 	'observations',
@@ -266,13 +267,24 @@ function CategoriesList({
 				})}
 			</Box>
 
-			<ErrorDialog
-				open={updateObservationCategory.status === 'error'}
-				errorMessage={updateObservationCategory.error?.toString()}
-				onClose={() => {
-					updateObservationCategory.reset()
-				}}
-			/>
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					updateObservationCategory.status === 'error'
+						? updateObservationCategory.error
+						: null
+				}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							updateObservationCategory.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
 		</>
 	)
 }
