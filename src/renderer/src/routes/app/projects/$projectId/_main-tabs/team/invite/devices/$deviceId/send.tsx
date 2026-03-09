@@ -26,7 +26,8 @@ import {
 	GREEN,
 	WHITE,
 } from '../../../../../../../../../colors.ts'
-import { ErrorDialog } from '../../../../../../../../../components/error-dialog.tsx'
+import { DecentDialog } from '../../../../../../../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../../../../../../../components/error-dialog.tsx'
 import { GenericRoutePendingComponent } from '../../../../../../../../../components/generic-route-pending-component.tsx'
 import { Icon } from '../../../../../../../../../components/icon.tsx'
 import { ButtonLink } from '../../../../../../../../../components/link.tsx'
@@ -75,14 +76,13 @@ function RouteComponent() {
 
 	const { role } = Route.useSearch()
 
-	const sendInvite = useSendInvite({ projectId })
-
-	const invite = useMutation({
+	const _sendInvite = useSendInvite({ projectId })
+	const sendInvite = useMutation({
 		mutationKey: SEND_INVITE_GLOBAL_MUTATIONS_KEY,
 		mutationFn: async (
-			variables: Parameters<(typeof sendInvite)['mutateAsync']>[0],
+			variables: Parameters<(typeof _sendInvite)['mutateAsync']>[0],
 		) => {
-			return sendInvite.mutateAsync(variables)
+			return _sendInvite.mutateAsync(variables)
 		},
 	})
 
@@ -112,36 +112,49 @@ function RouteComponent() {
 		[deviceId, cancelInvite],
 	)
 
-	const deferredInviteStatus = useDeferredValue(invite.status)
+	const deferredInviteStatus = useDeferredValue(sendInvite.status)
 
 	if (deferredInviteStatus === 'idle' || deferredInviteStatus === 'error') {
 		return (
-			<ReviewInvitation
-				error={invite.error}
-				onDismissError={() => {
-					invite.reset()
-				}}
-				onSendInvite={() => {
-					invite.mutate({
-						deviceId,
-						roleId:
-							role === 'coordinator' ? COORDINATOR_ROLE_ID : MEMBER_ROLE_ID,
-					})
-				}}
-			/>
+			<>
+				<ReviewInvitation
+					onSendInvite={() => {
+						sendInvite.mutate({
+							deviceId,
+							roleId:
+								role === 'coordinator' ? COORDINATOR_ROLE_ID : MEMBER_ROLE_ID,
+						})
+					}}
+				/>
+
+				<DecentDialog
+					fullWidth
+					maxWidth="sm"
+					value={sendInvite.status === 'error' ? sendInvite.error : null}
+				>
+					{(error) => (
+						<ErrorDialogContent
+							errorMessage={error.toString()}
+							onClose={() => {
+								sendInvite.reset()
+							}}
+						/>
+					)}
+				</DecentDialog>
+			</>
 		)
 	}
 
 	if (deferredInviteStatus === 'pending') {
 		return (
 			<InvitePending
-				sentAt={invite.submittedAt}
+				sentAt={sendInvite.submittedAt}
 				onCancelInvite={() => {
 					cancelInvite.mutate(
 						{ deviceId },
 						{
 							onSettled: () => {
-								invite.reset()
+								sendInvite.reset()
 							},
 						},
 					)
@@ -150,11 +163,11 @@ function RouteComponent() {
 		)
 	}
 
-	switch (invite.data) {
+	switch (sendInvite.data) {
 		case 'REJECT': {
 			return (
 				<InviteRejected
-					deviceId={invite.variables.deviceId}
+					deviceId={sendInvite.variables.deviceId}
 					projectId={projectId}
 				/>
 			)
@@ -164,7 +177,7 @@ function RouteComponent() {
 			return (
 				<Suspense fallback={<GenericRoutePendingComponent />}>
 					<InviteAccepted
-						deviceId={invite.variables.deviceId}
+						deviceId={sendInvite.variables.deviceId}
 						projectId={projectId}
 					/>
 				</Suspense>
@@ -183,15 +196,7 @@ function RouteComponent() {
 	}
 }
 
-function ReviewInvitation({
-	error,
-	onDismissError,
-	onSendInvite,
-}: {
-	error: Error | null
-	onDismissError: () => void
-	onSendInvite: () => void
-}) {
+function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 	const { formatMessage: t } = useIntl()
 
 	const router = useRouter()
@@ -209,115 +214,105 @@ function ReviewInvitation({
 	const peer = updatedPeer || peerOnLoad
 
 	return (
-		<>
-			<Stack direction="column" flex={1} overflow="auto">
-				<Stack
-					direction="row"
-					alignItems="center"
-					component="nav"
-					gap={4}
-					padding={4}
-					borderBottom={`1px solid ${BLUE_GREY}`}
+		<Stack direction="column" flex={1} overflow="auto">
+			<Stack
+				direction="row"
+				alignItems="center"
+				component="nav"
+				gap={4}
+				padding={4}
+				borderBottom={`1px solid ${BLUE_GREY}`}
+			>
+				<IconButton
+					onClick={() => {
+						router.navigate({
+							to: '/app/projects/$projectId/team/invite/devices/$deviceId/role',
+							params: { projectId, deviceId },
+							replace: true,
+						})
+					}}
 				>
-					<IconButton
-						onClick={() => {
-							router.navigate({
-								to: '/app/projects/$projectId/team/invite/devices/$deviceId/role',
-								params: { projectId, deviceId },
-								replace: true,
-							})
-						}}
-					>
-						<Icon name="material-arrow-back" size={30} />
-					</IconButton>
+					<Icon name="material-arrow-back" size={30} />
+				</IconButton>
 
-					<Typography variant="h1" fontWeight={500}>
-						{t(m.navTitle)}
-					</Typography>
-				</Stack>
-
-				<Stack
-					direction="column"
-					flex={1}
-					overflow="auto"
-					justifyContent="space-between"
-				>
-					<Box padding={6}>
-						<Stack
-							direction="column"
-							padding={6}
-							border={`1px solid ${BLUE_GREY}`}
-							borderRadius={2}
-							justifyContent="center"
-							alignItems="center"
-							gap={4}
-						>
-							<DeviceIcon deviceType={peer.deviceType} size="48px" />
-
-							{peer.status === 'disconnected' ? (
-								<DisconnectedIndicator />
-							) : null}
-
-							<Typography textAlign="center">
-								{t(m.deviceBeingInvited, {
-									name: (
-										<Typography
-											variant="inherit"
-											component="span"
-											fontSize={(theme) => theme.typography.h1.fontSize}
-											fontWeight={500}
-										>
-											{peer.name}
-										</Typography>
-									),
-									role: (
-										<Typography
-											variant="inherit"
-											component="span"
-											fontSize={(theme) => theme.typography.h2.fontSize}
-											fontWeight={500}
-										>
-											{role === 'coordinator'
-												? t(m.coordinator)
-												: t(m.participant)}
-										</Typography>
-									),
-								})}
-							</Typography>
-						</Stack>
-					</Box>
-
-					<Box
-						display="flex"
-						flexDirection="row"
-						justifyContent="center"
-						paddingInline={6}
-						paddingBlockEnd={6}
-						position="sticky"
-						bottom={0}
-						zIndex={1}
-					>
-						<Button
-							fullWidth
-							variant="contained"
-							startIcon={<Icon name="material-send-filled" />}
-							sx={{ maxWidth: 400 }}
-							onClick={() => {
-								onSendInvite()
-							}}
-						>
-							{t(m.sendInvite)}
-						</Button>
-					</Box>
-				</Stack>
+				<Typography variant="h1" fontWeight={500}>
+					{t(m.navTitle)}
+				</Typography>
 			</Stack>
 
-			<ErrorDialog
-				open={!!error}
-				errorMessage={error?.toString()}
-				onClose={onDismissError}
-			/>
-		</>
+			<Stack
+				direction="column"
+				flex={1}
+				overflow="auto"
+				justifyContent="space-between"
+			>
+				<Box padding={6}>
+					<Stack
+						direction="column"
+						padding={6}
+						border={`1px solid ${BLUE_GREY}`}
+						borderRadius={2}
+						justifyContent="center"
+						alignItems="center"
+						gap={4}
+					>
+						<DeviceIcon deviceType={peer.deviceType} size="48px" />
+
+						{peer.status === 'disconnected' ? <DisconnectedIndicator /> : null}
+
+						<Typography textAlign="center">
+							{t(m.deviceBeingInvited, {
+								name: (
+									<Typography
+										variant="inherit"
+										component="span"
+										fontSize={(theme) => theme.typography.h1.fontSize}
+										fontWeight={500}
+									>
+										{peer.name}
+									</Typography>
+								),
+								role: (
+									<Typography
+										variant="inherit"
+										component="span"
+										fontSize={(theme) => theme.typography.h2.fontSize}
+										fontWeight={500}
+									>
+										{role === 'coordinator'
+											? t(m.coordinator)
+											: t(m.participant)}
+									</Typography>
+								),
+							})}
+						</Typography>
+					</Stack>
+				</Box>
+
+				<Box
+					display="flex"
+					flexDirection="row"
+					justifyContent="center"
+					paddingInline={6}
+					paddingBlockEnd={6}
+					position="sticky"
+					bottom={0}
+					zIndex={1}
+				>
+					<Button
+						fullWidth
+						variant="contained"
+						startIcon={<Icon name="material-send-filled" />}
+						sx={{ maxWidth: 400 }}
+						onClick={() => {
+							onSendInvite()
+						}}
+					>
+						{t(m.sendInvite)}
+					</Button>
+				</Box>
+			</Stack>
+		</Stack>
 	)
 }
 
