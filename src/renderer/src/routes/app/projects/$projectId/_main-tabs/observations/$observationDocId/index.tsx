@@ -26,19 +26,20 @@ import {
 	DARKER_ORANGE,
 	GREEN,
 	WHITE,
-} from '../../../../../../../colors'
+} from '../../../../../../../colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
-} from '../../../../../../../components/category-icon'
-import { ErrorBoundary } from '../../../../../../../components/error-boundary'
-import { ErrorDialog } from '../../../../../../../components/error-dialog'
-import { GenericRouteNotFoundComponent } from '../../../../../../../components/generic-route-not-found-component'
-import { Icon } from '../../../../../../../components/icon'
+} from '../../../../../../../components/category-icon.tsx'
+import { DecentDialog } from '../../../../../../../components/decent-dialog.tsx'
+import { ErrorBoundary } from '../../../../../../../components/error-boundary.tsx'
+import { ErrorDialogContent } from '../../../../../../../components/error-dialog.tsx'
+import { GenericRouteNotFoundComponent } from '../../../../../../../components/generic-route-not-found-component.tsx'
+import { Icon } from '../../../../../../../components/icon.tsx'
 import {
 	useGlobalEditingState,
 	useGlobalEditingStateActions,
-} from '../../../../../../../contexts/global-editing-state-store-context'
+} from '../../../../../../../contexts/global-editing-state-store-context.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -47,25 +48,31 @@ import {
 	isAudioAttachment,
 	isPhotoAttachment,
 	type ObservationTagValue,
-} from '../../../../../../../lib/comapeo'
-import { formatCoords } from '../../../../../../../lib/coordinate-format'
-import { customNotFound } from '../../../../../../../lib/navigation'
+} from '../../../../../../../lib/comapeo.ts'
+import { formatCoords } from '../../../../../../../lib/coordinate-format.ts'
+import { customNotFound } from '../../../../../../../lib/navigation.ts'
 import {
 	getCoordinateFormatQueryOptions,
 	getLocaleStateQueryOptions,
-} from '../../../../../../../lib/queries/app-settings'
-import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations'
-import { EditCategoryPanel } from './-edit-category-panel'
-import { EditableFieldSection, ReadOnlyFieldSection } from './-field-sections'
-import { EditableNotesSection, ReadOnlyNotesSection } from './-notes-section'
+} from '../../../../../../../lib/queries/app-settings.ts'
+import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations.ts'
+import { EditCategoryPanel } from './-edit-category-panel.tsx'
+import {
+	EditableFieldSection,
+	ReadOnlyFieldSection,
+} from './-field-sections.tsx'
+import {
+	EditableNotesSection,
+	ReadOnlyNotesSection,
+} from './-notes-section.tsx'
 import {
 	ObservationAttachmentError,
 	ObservationAttachmentPending,
 	ObservationAudioAttachmentPreview,
 	ObservationPhotoAttachmentPreview,
 	ObservationUnsupportedAttachmentPreview,
-} from './-observation-attachment'
-import { getDisplayedTagValue, type EditableField } from './-shared'
+} from './-observation-attachment.tsx'
+import { getDisplayedTagValue, type EditableField } from './-shared.ts'
 
 const SearchParamsSchema = v.object({
 	fromTrackDocId: v.optional(v.string()),
@@ -990,13 +997,22 @@ function ObservationDetailsPanel({
 				) : null}
 			</Stack>
 
-			<ErrorDialog
-				open={deleteObservation.status === 'error'}
-				errorMessage={deleteObservation.error?.toString()}
-				onClose={() => {
-					deleteObservation.reset()
-				}}
-			/>
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					deleteObservation.status === 'error' ? deleteObservation.error : null
+				}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							deleteObservation.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
 		</>
 	)
 }
