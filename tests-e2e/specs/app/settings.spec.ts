@@ -499,7 +499,7 @@ test('language', async ({ appInfo, userParams }) => {
 
 			await main
 				.getByRole('navigation', { name: 'breadcrumb', exact: true })
-				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+				.getByRole('link', { name: 'Configurações do CoMapeo', exact: true })
 				.click()
 
 			const languageSettingsLink = main.getByRole('link', {
