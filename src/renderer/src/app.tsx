@@ -23,35 +23,31 @@ import {
 } from '@tanstack/react-router'
 import { useIntl, type IntlShape } from 'react-intl'
 
-import type { LocaleState } from '../../shared/intl'
-import { WHITE } from './colors'
-import { initComapeoClient } from './comapeo-client'
-import { AppTitleBar } from './components/app-title-bar'
-import { GenericRouteErrorComponent } from './components/generic-route-error-component'
-import { GenericRouteNotFoundComponent } from './components/generic-route-not-found-component'
-import { GenericRoutePendingComponent } from './components/generic-route-pending-component'
+import type { LocaleState } from '../../shared/intl.ts'
+import { WHITE } from './colors.ts'
+import { initComapeoClient } from './comapeo-client.ts'
+import { AppTitleBar } from './components/app-title-bar.tsx'
+import { GenericRouteErrorComponent } from './components/generic-route-error-component.tsx'
+import { GenericRouteNotFoundComponent } from './components/generic-route-not-found-component.tsx'
+import { GenericRoutePendingComponent } from './components/generic-route-pending-component.tsx'
 import {
 	ActiveProjectIdStoreProvider,
 	createActiveProjectIdStore,
-} from './contexts/active-project-id-store-context'
-import {
-	GlobalEditingStateStoreProvider,
-	createGlobalEditingStateStore,
-} from './contexts/global-editing-state-store-context'
-import { IntlProvider } from './contexts/intl'
+} from './contexts/active-project-id-store-context.ts'
+import { IntlProvider } from './contexts/intl.tsx'
 import {
 	LocalPeersStoreProvider,
 	createLocalPeersStore,
-} from './contexts/local-peers-store-context'
+} from './contexts/local-peers-store-context.ts'
 import {
 	RefreshTokensStoreProvider,
 	createRefreshTokensStore,
-} from './contexts/refresh-tokens-store-context'
-import { routeTree } from './generated/routeTree.gen'
-import { useNetworkConnectionChangeListener } from './hooks/network'
-import { DIALOG_CONTAINER_ID, TITLE_BAR_HEIGHT } from './lib/constants.js'
-import { getLocaleStateQueryOptions } from './lib/queries/app-settings'
-import { createTheme } from './theme.js'
+} from './contexts/refresh-tokens-store-context.ts'
+import { routeTree } from './generated/routeTree.gen.ts'
+import { useNetworkConnectionChangeListener } from './hooks/network.ts'
+import { DIALOG_CONTAINER_ID, TITLE_BAR_HEIGHT } from './lib/constants.ts'
+import { getLocaleStateQueryOptions } from './lib/queries/app-settings.ts'
+import { createTheme } from './theme.ts'
 
 const queryClient = new QueryClient({
 	// Since the API is running locally, queries should run regardless of network
@@ -85,8 +81,6 @@ const router = createRouter({
 		activeProjectIdStore: undefined!,
 		// NOTE: Populated at render time
 		formatMessage: undefined!,
-		// NOTE: Populated at render time
-		globalEditingStateStore: undefined!,
 		// NOTE: Populated at render time
 		localeState: undefined!,
 	},
@@ -141,7 +135,6 @@ const theme = createTheme({ platform })
 const MAIN_CONTENT_HEIGHT =
 	platform === 'darwin' ? `calc(100% - ${TITLE_BAR_HEIGHT})` : '100%'
 
-const globalEditingStateStore = createGlobalEditingStateStore()
 const refreshTokensStore = createRefreshTokensStore()
 const localPeersStore = createLocalPeersStore({ clientApi })
 const activeProjectIdStore = createActiveProjectIdStore({
@@ -169,54 +162,51 @@ export function App() {
 				<CssBaseline enableColorScheme />
 
 				<RefreshTokensStoreProvider value={refreshTokensStore}>
-					<GlobalEditingStateStoreProvider value={globalEditingStateStore}>
-						<ActiveProjectIdStoreProvider value={activeProjectIdStore}>
-							<QueryClientProvider client={queryClient}>
-								<IntlProvider>
-									<NetworkConnectionChangeListener />
+					<ActiveProjectIdStoreProvider value={activeProjectIdStore}>
+						<QueryClientProvider client={queryClient}>
+							<IntlProvider>
+								<NetworkConnectionChangeListener />
 
-									<Box height="100dvh">
-										{platform === 'darwin' ? (
-											<AppTitleBar platform={platform} testId="app-title-bar" />
-										) : null}
+								<Box height="100dvh">
+									{platform === 'darwin' ? (
+										<AppTitleBar platform={platform} testId="app-title-bar" />
+									) : null}
 
-										<Box id={DIALOG_CONTAINER_ID} height={MAIN_CONTENT_HEIGHT}>
-											<Suspense
-												fallback={
-													<Box
-														display="flex"
-														justifyContent="center"
-														alignItems="center"
-														height="100%"
-													>
-														<CircularProgress />
-													</Box>
-												}
-											>
-												<ClientApiProvider clientApi={clientApi}>
-													<LocalPeersStoreProvider value={localPeersStore}>
-														<WithAddedRouteContext>
-															{({ formatMessage, localeState }) => (
-																<RouterProvider
-																	router={router}
-																	context={{
-																		activeProjectIdStore,
-																		formatMessage,
-																		globalEditingStateStore,
-																		localeState,
-																	}}
-																/>
-															)}
-														</WithAddedRouteContext>
-													</LocalPeersStoreProvider>
-												</ClientApiProvider>
-											</Suspense>
-										</Box>
+									<Box id={DIALOG_CONTAINER_ID} height={MAIN_CONTENT_HEIGHT}>
+										<Suspense
+											fallback={
+												<Box
+													display="flex"
+													justifyContent="center"
+													alignItems="center"
+													height="100%"
+												>
+													<CircularProgress />
+												</Box>
+											}
+										>
+											<ClientApiProvider clientApi={clientApi}>
+												<LocalPeersStoreProvider value={localPeersStore}>
+													<WithAddedRouteContext>
+														{({ formatMessage, localeState }) => (
+															<RouterProvider
+																router={router}
+																context={{
+																	activeProjectIdStore,
+																	formatMessage,
+																	localeState,
+																}}
+															/>
+														)}
+													</WithAddedRouteContext>
+												</LocalPeersStoreProvider>
+											</ClientApiProvider>
+										</Suspense>
 									</Box>
-								</IntlProvider>
-							</QueryClientProvider>
-						</ActiveProjectIdStoreProvider>
-					</GlobalEditingStateStoreProvider>
+								</Box>
+							</IntlProvider>
+						</QueryClientProvider>
+					</ActiveProjectIdStoreProvider>
 				</RefreshTokensStoreProvider>
 			</ThemeProvider>
 		</StrictMode>

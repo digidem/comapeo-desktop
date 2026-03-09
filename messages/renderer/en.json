@@ -459,6 +459,18 @@
     "description": "Title for details section.",
     "message": "Details"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.discardEditsDialogCancelButton": {
+    "description": "Text for button to cancel navigation while editing observation.",
+    "message": "Cancel"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.discardEditsDialogConfirmButton": {
+    "description": "Text for button to confirm discarding changes when navigating while editing observation.",
+    "message": "Yes, Discard"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.discardEditsDialogTitle": {
+    "description": "Title of dialog displayed when trying to leave page while editing observation.",
+    "message": "Discard Edits?"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy": {
     "description": "Displayed accuracy for observation location in meters.",
     "message": "± {value}m"
