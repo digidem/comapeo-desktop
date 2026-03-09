@@ -22,19 +22,20 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { PhotoAttachmentImage } from '../-components/photo-attachment-image'
-import { BLUE_GREY, GREEN, LIGHT_GREY } from '../../../../../../../../colors'
-import { ErrorBoundary } from '../../../../../../../../components/error-boundary'
-import { ErrorDialog } from '../../../../../../../../components/error-dialog'
-import { Icon } from '../../../../../../../../components/icon'
+import { PhotoAttachmentImage } from '../-components/photo-attachment-image.tsx'
+import { BLUE_GREY, GREEN, LIGHT_GREY } from '../../../../../../../../colors.ts'
+import { DecentDialog } from '../../../../../../../../components/decent-dialog.tsx'
+import { ErrorBoundary } from '../../../../../../../../components/error-boundary.tsx'
+import { ErrorDialogContent } from '../../../../../../../../components/error-dialog.tsx'
+import { Icon } from '../../../../../../../../components/icon.tsx'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
-} from '../../../../../../../../lib/comapeo'
-import { getLocaleStateQueryOptions } from '../../../../../../../../lib/queries/app-settings'
-import { createGlobalMutationsKey } from '../../../../../../../../lib/queries/global-mutations'
-import { downloadURLMutationOptions } from '../../../../../../../../lib/queries/system'
+} from '../../../../../../../../lib/comapeo.ts'
+import { getLocaleStateQueryOptions } from '../../../../../../../../lib/queries/app-settings.ts'
+import { createGlobalMutationsKey } from '../../../../../../../../lib/queries/global-mutations.ts'
+import { downloadURLMutationOptions } from '../../../../../../../../lib/queries/system.ts'
 
 // TODO: Support video type
 const BlobIdSchema = v.variant('type', [
@@ -530,13 +531,22 @@ function DeleteButton({
 				type={blobId.type}
 			/>
 
-			<ErrorDialog
-				open={deleteAttachment.status === 'error'}
-				errorMessage={deleteAttachment?.error?.toString()}
-				onClose={() => {
-					deleteAttachment.reset()
-				}}
-			/>
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					deleteAttachment.status === 'error' ? deleteAttachment.error : null
+				}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							deleteAttachment.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
 		</>
 	)
 }
@@ -650,13 +660,20 @@ function DownloadButton({
 				<Typography id="download-button-label">{t(m.download)}</Typography>
 			</Stack>
 
-			<ErrorDialog
-				open={downloadUrl.status === 'error'}
-				errorMessage={downloadUrl?.error?.toString()}
-				onClose={() => {
-					downloadUrl.reset()
-				}}
-			/>
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={downloadUrl.status === 'error' ? downloadUrl.error : null}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							downloadUrl.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
 		</>
 	)
 }

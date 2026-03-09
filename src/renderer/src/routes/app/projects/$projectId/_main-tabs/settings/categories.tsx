@@ -15,12 +15,13 @@ import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY, DARK_ORANGE } from '../../../../../../colors'
-import { ErrorDialog } from '../../../../../../components/error-dialog'
-import { Icon } from '../../../../../../components/icon'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../../lib/comapeo'
-import { selectFileMutationOptions } from '../../../../../../lib/queries/file-system'
-import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations'
+import { BLUE_GREY, DARK_GREY, DARK_ORANGE } from '../../../../../../colors.ts'
+import { DecentDialog } from '../../../../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../../../../components/error-dialog.tsx'
+import { Icon } from '../../../../../../components/icon.tsx'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../../lib/comapeo.ts'
+import { selectFileMutationOptions } from '../../../../../../lib/queries/file-system.ts'
+import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations.ts'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/_main-tabs/settings/categories',
@@ -259,13 +260,24 @@ function RouteComponent() {
 				</Stack>
 			</Stack>
 
-			<ErrorDialog
-				open={selectAndImportMutation.status === 'error'}
-				errorMessage={selectAndImportMutation.error?.toString()}
-				onClose={() => {
-					selectAndImportMutation.reset()
-				}}
-			/>
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					selectAndImportMutation.status === 'error'
+						? selectAndImportMutation.error
+						: null
+				}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							selectAndImportMutation.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
 		</>
 	)
 }

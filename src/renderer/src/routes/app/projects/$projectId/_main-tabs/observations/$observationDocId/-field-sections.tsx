@@ -6,21 +6,22 @@ import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { ErrorDialog } from '../../../../../../../components/error-dialog'
-import {
-	type ObservationTagValue,
-	type TagValue,
-} from '../../../../../../../lib/comapeo'
-import { getLocaleStateQueryOptions } from '../../../../../../../lib/queries/app-settings'
-import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations'
-import { EditableSection } from './-components/editable-section'
+import { DecentDialog } from '../../../../../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../../../../../components/error-dialog.tsx'
+import type {
+	ObservationTagValue,
+	TagValue,
+} from '../../../../../../../lib/comapeo.ts'
+import { getLocaleStateQueryOptions } from '../../../../../../../lib/queries/app-settings.ts'
+import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations.ts'
+import { EditableSection } from './-components/editable-section.tsx'
 import {
 	MultiSelectFieldEditor,
 	NumberFieldEditor,
 	SingleSelectFieldEditor,
 	TextFieldEditor,
-} from './-field-editors'
-import { getDisplayedTagValue, type EditableField } from './-shared'
+} from './-field-editors.tsx'
+import { getDisplayedTagValue, type EditableField } from './-shared.ts'
 
 export function ReadOnlyFieldSection({
 	label,
@@ -155,9 +156,9 @@ export function EditableFieldSection({
 											updateEditState('success')
 										} catch (err) {
 											captureException(err)
-										} finally {
-											onStopEditMode()
 										}
+
+										onStopEditMode()
 									}}
 								/>
 							)
@@ -187,9 +188,9 @@ export function EditableFieldSection({
 											updateEditState('success')
 										} catch (err) {
 											captureException(err)
-										} finally {
-											onStopEditMode()
 										}
+
+										onStopEditMode()
 									}}
 								/>
 							)
@@ -219,9 +220,9 @@ export function EditableFieldSection({
 											updateEditState('success')
 										} catch (err) {
 											captureException(err)
-										} finally {
-											onStopEditMode()
 										}
+
+										onStopEditMode()
 									}}
 								/>
 							)
@@ -251,9 +252,9 @@ export function EditableFieldSection({
 											updateEditState('success')
 										} catch (err) {
 											captureException(err)
-										} finally {
-											onStopEditMode()
 										}
+
+										onStopEditMode()
 									}}
 								/>
 							)
@@ -300,13 +301,24 @@ export function EditableFieldSection({
 				}}
 			/>
 
-			<ErrorDialog
-				open={updateObservationField.status === 'error'}
-				errorMessage={updateObservationField.error?.toString()}
-				onClose={() => {
-					updateObservationField.reset()
-				}}
-			/>
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					updateObservationField.status === 'error'
+						? updateObservationField.error
+						: null
+				}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							updateObservationField.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
 		</>
 	)
 }

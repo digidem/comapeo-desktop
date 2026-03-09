@@ -26,20 +26,21 @@ import {
 	PROJECT_GREY,
 	PROJECT_ORANGE,
 	PROJECT_RED,
-} from '../../../../../../colors'
-import { ErrorDialog } from '../../../../../../components/error-dialog'
-import { Icon } from '../../../../../../components/icon'
-import { useAppForm } from '../../../../../../hooks/forms'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../../lib/comapeo'
+} from '../../../../../../colors.ts'
+import { DecentDialog } from '../../../../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../../../../components/error-dialog.tsx'
+import { Icon } from '../../../../../../components/icon.tsx'
+import { useAppForm } from '../../../../../../hooks/forms.ts'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../../lib/comapeo.ts'
 import {
 	PROJECT_DESCRIPTION_MAX_LENGTH_GRAPHEMES,
 	PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
-} from '../../../../../../lib/constants'
+} from '../../../../../../lib/constants.ts'
 import {
 	createProjectColorSchema,
 	createProjectDescriptionSchema,
 	createProjectNameSchema,
-} from '../../../../../../lib/validators/project'
+} from '../../../../../../lib/validators/project.ts'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/_main-tabs/settings/info',
@@ -476,13 +477,24 @@ function RouteComponent() {
 				</Stack>
 			</Stack>
 
-			<ErrorDialog
-				open={setProjectSettings.status === 'error'}
-				errorMessage={setProjectSettings.error?.toString()}
-				onClose={() => {
-					setProjectSettings.reset()
-				}}
-			/>
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					setProjectSettings.status === 'error'
+						? setProjectSettings.error
+						: null
+				}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							setProjectSettings.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
 		</>
 	)
 }
