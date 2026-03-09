@@ -37,7 +37,6 @@ import {
 	type IconButtonLinkProps,
 } from '../../components/link.tsx'
 import { useActiveProjectId } from '../../contexts/active-project-id-store-context.ts'
-import { useGlobalEditingState } from '../../contexts/global-editing-state-store-context.ts'
 import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
 import { ProjectTabButton } from './-project-tab-button.tsx'
 
@@ -148,8 +147,6 @@ function ProjectInvite() {
 
 	const pendingInvite = invites.find((i) => i.state === 'pending')
 
-	const isEditing = useGlobalEditingState().length > 0
-
 	const showRespondingToInviteLoader = useSpinDelay(
 		rejectInvite.status === 'pending' || acceptInvite.status === 'pending',
 		{ delay: 100 },
@@ -159,11 +156,7 @@ function ProjectInvite() {
 		<>
 			<Snackbar
 				key={pendingInvite ? pendingInvite.inviteId : undefined}
-				open={
-					!!pendingInvite &&
-					// TODO: No longer necessary once confirm-before-leaving-page functionality is introduced
-					!isEditing
-				}
+				open={!!pendingInvite}
 				anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 				slots={{ transition: Slide }}
 				slotProps={{

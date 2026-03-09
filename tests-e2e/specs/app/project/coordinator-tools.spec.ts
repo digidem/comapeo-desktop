@@ -126,97 +126,87 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 	}
 })
 
-test('project info', async ({ appInfo, projectParams, userParams }) => {
-	const { launchApp, cleanup } = await setup()
-	const electronApp = await launchApp({ appInfo })
+test.describe('project info', () => {
+	test('basic UI checks', async ({ appInfo, projectParams, userParams }) => {
+		const { launchApp, cleanup } = await setup()
+		const electronApp = await launchApp({ appInfo })
 
-	try {
-		const page = await electronApp.firstWindow()
+		try {
+			const page = await electronApp.firstWindow()
 
-		// 1. Setup
-		await simulateOnboarding({
-			page,
-			deviceName: userParams.deviceName,
-		})
-
-		await simulateCreateProject({
-			projectName: projectParams.projectName,
-			page,
-		})
-
-		await page
-			.getByRole('navigation', { name: 'App navigation', exact: true })
-			.getByRole('button', {
-				name: `Go to project ${projectParams.projectName}.`,
-				exact: true,
+			// 1. Setup
+			await simulateOnboarding({
+				page,
+				deviceName: userParams.deviceName,
 			})
-			.click()
 
-		// 2. Main tests
-		const main = page.getByRole('main')
+			await simulateCreateProject({
+				projectName: projectParams.projectName,
+				page,
+			})
 
-		/// Navigation
-		{
-			// Navigate to project info settings page
-			const toolsNavLink = page
-				.getByRole('navigation', { name: 'Project navigation', exact: true })
-				.getByRole('link', { name: 'Tools', exact: true })
-
-			await toolsNavLink.click()
-
-			await main
-				.getByRole('link', {
-					name: 'Go to project info settings.',
+			await page
+				.getByRole('navigation', { name: 'App navigation', exact: true })
+				.getByRole('button', {
+					name: `Go to project ${projectParams.projectName}.`,
 					exact: true,
 				})
 				.click()
 
-			// Assert nav rail state
-			await expect(toolsNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+			// 2. Main tests
+			const main = page.getByRole('main')
 
-			const disabledNavLinks = page
-				.getByRole('navigation', { name: 'Project navigation', exact: true })
-				.getByRole('link', { disabled: true })
-
-			await expect(disabledNavLinks.first()).toHaveAccessibleName('List')
-
-			await expect(disabledNavLinks.nth(1)).toHaveAccessibleName('Team')
-		}
-
-		/// Main
-		await expect(
-			main.getByRole('heading', { name: 'Edit Info', exact: true }),
-		).toBeVisible()
-
-		//// Initial state
-		{
-			const projectNameInput = main.getByRole('textbox', {
-				name: 'Project Name',
-				exact: true,
-			})
-
-			await expect(projectNameInput).toBeVisible()
-			await expect(projectNameInput).toHaveValue(projectParams.projectName)
-
-			const projectDescriptionInput = main.getByRole('textbox', {
-				name: 'Project Description',
-				exact: true,
-			})
-
-			await expect(projectDescriptionInput).toBeVisible()
-			await expect(projectDescriptionInput).toHaveValue('')
-
-			// Project color
+			/// Navigation
 			{
+				// Navigate to project info settings page
+				const toolsNavLink = page
+					.getByRole('navigation', { name: 'Project navigation', exact: true })
+					.getByRole('link', { name: 'Tools', exact: true })
+
+				await toolsNavLink.click()
+
+				await main
+					.getByRole('link', {
+						name: 'Go to project info settings.',
+						exact: true,
+					})
+					.click()
+
+				// Assert nav rail state
+				await expect(toolsNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+			}
+
+			/// Main
+
+			// Page header
+			{
+				await expect(
+					main.getByRole('heading', { name: 'Edit Info', exact: true }),
+				).toBeVisible()
+
+				await expect(
+					main.getByRole('button', { name: 'Go back.', exact: true }),
+				).toBeVisible()
+			}
+
+			// Interactive elements
+			{
+				await expect(
+					main.getByRole('textbox', { name: 'Project Name', exact: true }),
+				).toBeVisible()
+
+				await expect(
+					main.getByRole('textbox', {
+						name: 'Project Description',
+						exact: true,
+					}),
+				).toBeVisible()
+
 				const projectColorInput = main.getByLabel('Project Card Color', {
 					exact: true,
 				})
 
 				await expect(projectColorInput).toBeVisible()
-
-				await expect(
-					projectColorInput.getByRole('checkbox', { checked: true }),
-				).toHaveCount(1)
 
 				const colorCheckboxes = projectColorInput.getByRole('checkbox')
 
@@ -242,330 +232,426 @@ test('project info', async ({ appInfo, projectParams, userParams }) => {
 						`option-${name.toLowerCase()}`,
 					)
 				}
-			}
-
-			await expect(
-				main.getByRole('button', { name: 'Cancel', exact: true }),
-			).toBeVisible()
-			await expect(
-				main.getByRole('button', { name: 'Save', exact: true }),
-			).toBeVisible()
-		}
-
-		await main.getByRole('button', { name: 'Go back.', exact: true }).click()
-		await main
-			.getByRole('link', { name: 'Go to project info settings.', exact: true })
-			.click()
-
-		//// Cancel changes (back button)
-		{
-			// Update inputs
-			await main
-				.getByRole('textbox', {
-					name: 'Project Name',
-					exact: true,
-				})
-				.fill('Name in back button test')
-
-			await main
-				.getByRole('textbox', {
-					name: 'Project Description',
-					exact: true,
-				})
-				.fill('Description in back button test')
-
-			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
-			await main
-				.getByLabel('Project Card Color', { exact: true })
-				.getByRole('checkbox')
-				.first()
-				.click()
-
-			// Leave and re-enter using back button
-			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
-			await main
-				.getByRole('link', {
-					name: 'Go to project info settings.',
-					exact: true,
-				})
-				.click()
-
-			// Assert inputs state
-			const projectNameInput = main.getByRole('textbox', {
-				name: 'Project Name',
-				exact: true,
-			})
-
-			await expect(projectNameInput).toBeVisible()
-			await expect(projectNameInput).toHaveValue(projectParams.projectName)
-
-			const projectDescriptionInput = main.getByRole('textbox', {
-				name: 'Project Description',
-				exact: true,
-			})
-
-			await expect(projectDescriptionInput).toBeVisible()
-			await expect(projectDescriptionInput).toHaveValue('')
-
-			const projectColorInput = main.getByLabel('Project Card Color', {
-				exact: true,
-			})
-
-			await expect(projectColorInput).toBeVisible()
-
-			await expect(
-				projectColorInput.getByRole('checkbox', { checked: true }),
-			).toHaveCount(1)
-		}
-
-		//// Cancel changes (cancel button)
-		{
-			// Update inputs
-			await main
-				.getByRole('textbox', {
-					name: 'Project Name',
-					exact: true,
-				})
-				.fill('Name in cancel button test')
-
-			await main
-				.getByRole('textbox', {
-					name: 'Project Description',
-					exact: true,
-				})
-				.fill('Description in cancel button test')
-
-			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
-			await main
-				.getByLabel('Project Card Color', { exact: true })
-				.getByRole('checkbox')
-				.first()
-				.click()
-
-			// Leave using cancel button and re-enter
-			await main.getByRole('button', { name: 'Cancel', exact: true }).click()
-			await main
-				.getByRole('link', {
-					name: 'Go to project info settings.',
-					exact: true,
-				})
-				.click()
-
-			// Assert inputs state
-			const projectNameInput = main.getByRole('textbox', {
-				name: 'Project Name',
-				exact: true,
-			})
-
-			await expect(projectNameInput).toBeVisible()
-			await expect(projectNameInput).toHaveValue(projectParams.projectName)
-
-			const projectDescriptionInput = main.getByRole('textbox', {
-				name: 'Project Description',
-				exact: true,
-			})
-
-			await expect(projectDescriptionInput).toBeVisible()
-			await expect(projectDescriptionInput).toHaveValue('')
-
-			const projectColorInput = main.getByLabel('Project Card Color', {
-				exact: true,
-			})
-
-			await expect(projectColorInput).toBeVisible()
-
-			await expect(
-				projectColorInput.getByRole('checkbox', { checked: true }),
-			).toHaveCount(1)
-
-			await expect(
-				main.getByRole('button', { name: 'Cancel', exact: true }),
-			).toBeVisible()
-			await expect(
-				main.getByRole('button', { name: 'Save', exact: true }),
-			).toBeVisible()
-		}
-
-		//// Input validation
-
-		//// Project name
-		{
-			// Too long
-			const projectNameInput = main.getByRole('textbox', {
-				name: 'Project Name',
-				exact: true,
-			})
-
-			const invalidProjectName = Array(101).fill('a').join('')
-
-			await projectNameInput.fill(invalidProjectName)
-
-			await expect(
-				main.getByText('Too long, try a shorter name.', { exact: true }),
-			).toBeVisible()
-
-			await expect(
-				main.locator('output[for="projectName"][name="character-count"]'),
-			).toHaveText(`${invalidProjectName.length}/100`)
-
-			{
-				// Save button does nothing
-				const currentUrl = page.url()
-
-				await main
-					.getByRole('button', { name: 'Save', exact: true })
-					.click({ force: true })
-
-				expect(page.url()).toStrictEqual(currentUrl)
-			}
-
-			// Too short
-			await projectNameInput.clear()
-
-			await expect(
-				main.getByText('Enter a Project Name', { exact: true }),
-			).toBeVisible()
-
-			await expect(
-				main.locator('output[for="projectName"][name="character-count"]'),
-			).toHaveText('0/100')
-
-			await main
-				.getByRole('button', { name: 'Save', exact: true })
-				.click({ force: true })
-
-			{
-				// Save button does nothing
-				const currentUrl = page.url()
-
-				await main
-					.getByRole('button', { name: 'Save', exact: true })
-					.click({ force: true })
-
-				expect(page.url()).toStrictEqual(currentUrl)
-			}
-		}
-
-		//// Project description
-		{
-			const projectDescriptionInput = main.getByRole('textbox', {
-				name: 'Project Description',
-				exact: true,
-			})
-
-			const invalidProjectName = Array(61).fill('a').join('')
-
-			await projectDescriptionInput.fill(invalidProjectName)
-
-			// Too long
-			await expect(
-				main.getByText('Too long, try a shorter description.', { exact: true }),
-			).toBeVisible()
-
-			await expect(
-				main.locator(
-					'output[for="projectDescription"][name="character-count"]',
-				),
-			).toHaveText(`${invalidProjectName.length}/60`)
-
-			// Save button does nothing
-			const currentUrl = page.url()
-
-			await main
-				.getByRole('button', { name: 'Save', exact: true })
-				.click({ force: true })
-
-			expect(page.url()).toStrictEqual(currentUrl)
-		}
-
-		await main.getByRole('button', { name: 'Go back.', exact: true }).click()
-		await main
-			.getByRole('link', { name: 'Go to project info settings.', exact: true })
-			.click()
-
-		//// Updating and saving project info
-		const updatedProjectParams = {
-			projectName: 'Project e2e Updated',
-			projectDescription: 'Updated project description for e2e tests',
-		}
-
-		{
-			await main
-				.getByRole('textbox', {
-					name: 'Project Name',
-					exact: true,
-				})
-				.fill(updatedProjectParams.projectName)
-
-			main
-				.getByRole('textbox', {
-					name: 'Project Description',
-					exact: true,
-				})
-				.fill(updatedProjectParams.projectDescription)
-
-			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
-			await main
-				.getByLabel('Project Card Color', { exact: true })
-				.getByRole('checkbox', { checked: true })
-				.click()
-
-			main.getByRole('button', { name: 'Save', exact: true }).click()
-
-			// Check relevant changes are reflected in project settings index page
-			{
-				const projectInfoItem = main.getByRole('listitem').first()
 
 				await expect(
-					projectInfoItem.getByText(updatedProjectParams.projectName, {
-						exact: true,
-					}),
+					main.getByRole('button', { name: 'Cancel', exact: true }),
 				).toBeVisible()
 
-				await projectInfoItem
-					.getByRole('link', {
-						name: 'Go to project info settings.',
-						exact: true,
-					})
-					.click()
+				await expect(
+					main.getByRole('button', { name: 'Save', exact: true }),
+				).toBeVisible()
 			}
+		} finally {
+			// 3. Cleanup
+			await electronApp.close()
+			cleanup()
+		}
+	})
 
-			// Check changes are present when re-entering project info settings page
+	test('form behavior', async ({ appInfo, projectParams, userParams }) => {
+		const { launchApp, cleanup } = await setup()
+		const electronApp = await launchApp({ appInfo })
+
+		try {
+			const page = await electronApp.firstWindow()
+
+			// 1. Setup
+			await simulateOnboarding({
+				page,
+				deviceName: userParams.deviceName,
+			})
+
+			await simulateCreateProject({
+				projectName: projectParams.projectName,
+				page,
+			})
+
+			await page
+				.getByRole('navigation', { name: 'App navigation', exact: true })
+				.getByRole('button', {
+					name: `Go to project ${projectParams.projectName}.`,
+					exact: true,
+				})
+				.click()
+
+			await page
+				.getByRole('navigation', { name: 'Project navigation', exact: true })
+				.getByRole('link', { name: 'Tools', exact: true })
+				.click()
+
+			const main = page.getByRole('main')
+
+			await main
+				.getByRole('link', {
+					name: 'Go to project info settings.',
+					exact: true,
+				})
+				.click()
+
+			// 2. Main tests
+
+			/// Main
+
+			//// Initial state
 			{
 				const projectNameInput = main.getByRole('textbox', {
 					name: 'Project Name',
 					exact: true,
 				})
 
-				await expect(projectNameInput).toHaveValue(
-					updatedProjectParams.projectName,
-				)
+				await expect(projectNameInput).toHaveValue(projectParams.projectName)
 
 				const projectDescriptionInput = main.getByRole('textbox', {
 					name: 'Project Description',
 					exact: true,
 				})
 
-				await expect(projectDescriptionInput).toHaveValue(
-					updatedProjectParams.projectDescription,
-				)
+				await expect(projectDescriptionInput).toHaveValue('')
 
 				await expect(
 					main
-						.getByLabel('Project Card Color', { exact: true })
+						.getByLabel('Project Card Color', {
+							exact: true,
+						})
 						.getByRole('checkbox', { checked: true }),
-				).toHaveCount(0)
+				).toHaveCount(1)
+			}
 
+			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+
+			await main
+				.getByRole('link', {
+					name: 'Go to project info settings.',
+					exact: true,
+				})
+				.click()
+
+			//// Cancel changes (back button)
+			{
+				// Update inputs
+				await main
+					.getByRole('textbox', {
+						name: 'Project Name',
+						exact: true,
+					})
+					.fill('Name in back button test')
+
+				await main
+					.getByRole('textbox', {
+						name: 'Project Description',
+						exact: true,
+					})
+					.fill('Description in back button test')
+
+				// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
+				await main
+					.getByLabel('Project Card Color', { exact: true })
+					.getByRole('checkbox')
+					.first()
+					.click()
+
+				// Leave and re-enter using back button
 				await main
 					.getByRole('button', { name: 'Go back.', exact: true })
 					.click()
+
+				const discardEditsDialog = page.getByRole('dialog')
+
+				await expect(
+					discardEditsDialog.getByRole('heading', { name: 'Discard Edits?' }),
+				).toBeVisible()
+
+				await expect(
+					discardEditsDialog.getByRole('button', {
+						name: 'Cancel',
+						exact: true,
+					}),
+				).toBeVisible()
+
+				await discardEditsDialog
+					.getByRole('button', {
+						name: 'Yes, Discard',
+						exact: true,
+					})
+					.click()
+
+				await main
+					.getByRole('link', {
+						name: 'Go to project info settings.',
+						exact: true,
+					})
+					.click()
+
+				// Assert inputs state
+				await expect(
+					main.getByRole('textbox', {
+						name: 'Project Name',
+						exact: true,
+					}),
+				).toHaveValue(projectParams.projectName)
+
+				await expect(
+					main.getByRole('textbox', {
+						name: 'Project Description',
+						exact: true,
+					}),
+				).toHaveValue('')
+
+				await expect(
+					main
+						.getByLabel('Project Card Color', {
+							exact: true,
+						})
+						.getByRole('checkbox', { checked: true }),
+				).toHaveCount(1)
 			}
+
+			//// Cancel changes (cancel button)
+			{
+				// Update inputs
+				await main
+					.getByRole('textbox', {
+						name: 'Project Name',
+						exact: true,
+					})
+					.fill('Name in cancel button test')
+
+				await main
+					.getByRole('textbox', {
+						name: 'Project Description',
+						exact: true,
+					})
+					.fill('Description in cancel button test')
+
+				// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
+				await main
+					.getByLabel('Project Card Color', { exact: true })
+					.getByRole('checkbox')
+					.first()
+					.click()
+
+				// Leave using cancel button and re-enter
+				await main.getByRole('button', { name: 'Cancel', exact: true }).click()
+				await main
+					.getByRole('link', {
+						name: 'Go to project info settings.',
+						exact: true,
+					})
+					.click()
+
+				// Assert inputs state
+
+				await expect(
+					main.getByRole('textbox', {
+						name: 'Project Name',
+						exact: true,
+					}),
+				).toHaveValue(projectParams.projectName)
+
+				await expect(
+					main.getByRole('textbox', {
+						name: 'Project Description',
+						exact: true,
+					}),
+				).toHaveValue('')
+
+				await expect(
+					main
+						.getByLabel('Project Card Color', {
+							exact: true,
+						})
+						.getByRole('checkbox', { checked: true }),
+				).toHaveCount(1)
+			}
+
+			//// Input validation
+
+			//// Project name
+			{
+				// Too long
+				const projectNameInput = main.getByRole('textbox', {
+					name: 'Project Name',
+					exact: true,
+				})
+
+				const invalidProjectName = Array(101).fill('a').join('')
+
+				await projectNameInput.fill(invalidProjectName)
+
+				await expect(
+					main.getByText('Too long, try a shorter name.', { exact: true }),
+				).toBeVisible()
+
+				await expect(
+					main.locator('output[for="projectName"][name="character-count"]'),
+				).toHaveText(`${invalidProjectName.length}/100`)
+
+				{
+					// Save button does nothing
+					const currentUrl = page.url()
+
+					await main
+						.getByRole('button', { name: 'Save', exact: true })
+						.click({ force: true })
+
+					expect(page.url()).toStrictEqual(currentUrl)
+				}
+
+				// Too short
+				await projectNameInput.clear()
+
+				await expect(
+					main.getByText('Enter a Project Name', { exact: true }),
+				).toBeVisible()
+
+				await expect(
+					main.locator('output[for="projectName"][name="character-count"]'),
+				).toHaveText('0/100')
+
+				await main
+					.getByRole('button', { name: 'Save', exact: true })
+					.click({ force: true })
+
+				{
+					// Save button does nothing
+					const currentUrl = page.url()
+
+					await main
+						.getByRole('button', { name: 'Save', exact: true })
+						.click({ force: true })
+
+					expect(page.url()).toStrictEqual(currentUrl)
+				}
+			}
+
+			//// Project description
+			{
+				const projectDescriptionInput = main.getByRole('textbox', {
+					name: 'Project Description',
+					exact: true,
+				})
+
+				const invalidProjectName = Array(61).fill('a').join('')
+
+				await projectDescriptionInput.fill(invalidProjectName)
+
+				// Too long
+				await expect(
+					main.getByText('Too long, try a shorter description.', {
+						exact: true,
+					}),
+				).toBeVisible()
+
+				await expect(
+					main.locator(
+						'output[for="projectDescription"][name="character-count"]',
+					),
+				).toHaveText(`${invalidProjectName.length}/60`)
+
+				// Save button does nothing
+				const currentUrl = page.url()
+
+				await main
+					.getByRole('button', { name: 'Save', exact: true })
+					.click({ force: true })
+
+				expect(page.url()).toStrictEqual(currentUrl)
+			}
+
+			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
+
+			await page
+				.getByRole('dialog')
+				.getByRole('button', { name: 'Yes, Discard', exact: true })
+				.click()
+
+			await main
+				.getByRole('link', {
+					name: 'Go to project info settings.',
+					exact: true,
+				})
+				.click()
+
+			//// Updating and saving project info
+			const updatedProjectParams = {
+				projectName: 'Project e2e Updated',
+				projectDescription: 'Updated project description for e2e tests',
+			}
+
+			{
+				await main
+					.getByRole('textbox', {
+						name: 'Project Name',
+						exact: true,
+					})
+					.fill(updatedProjectParams.projectName)
+
+				main
+					.getByRole('textbox', {
+						name: 'Project Description',
+						exact: true,
+					})
+					.fill(updatedProjectParams.projectDescription)
+
+				// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
+				await main
+					.getByLabel('Project Card Color', { exact: true })
+					.getByRole('checkbox', { checked: true })
+					.click()
+
+				main.getByRole('button', { name: 'Save', exact: true }).click()
+
+				// Check relevant changes are reflected in project settings index page
+				{
+					const projectInfoItem = main.getByRole('listitem').first()
+
+					await expect(
+						projectInfoItem.getByText(updatedProjectParams.projectName, {
+							exact: true,
+						}),
+					).toBeVisible()
+
+					await projectInfoItem
+						.getByRole('link', {
+							name: 'Go to project info settings.',
+							exact: true,
+						})
+						.click()
+				}
+
+				// Check changes are present when re-entering project info settings page
+				{
+					const projectNameInput = main.getByRole('textbox', {
+						name: 'Project Name',
+						exact: true,
+					})
+
+					await expect(projectNameInput).toHaveValue(
+						updatedProjectParams.projectName,
+					)
+
+					const projectDescriptionInput = main.getByRole('textbox', {
+						name: 'Project Description',
+						exact: true,
+					})
+
+					await expect(projectDescriptionInput).toHaveValue(
+						updatedProjectParams.projectDescription,
+					)
+
+					await expect(
+						main
+							.getByLabel('Project Card Color', { exact: true })
+							.getByRole('checkbox', { checked: true }),
+					).toHaveCount(0)
+				}
+			}
+		} finally {
+			// 3. Cleanup
+			await electronApp.close()
+			cleanup()
 		}
-	} finally {
-		// 3. Cleanup
-		await electronApp.close()
-		cleanup()
-	}
+	})
 })
 
 test('categories', async ({ appInfo, projectParams, userParams }) => {

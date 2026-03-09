@@ -5,12 +5,13 @@ import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { Block, createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
 import { WHITE } from '../../../../colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
+import { DiscardEditsDialogContent } from '../../../../components/discard-edits-dialog.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { useAppForm } from '../../../../hooks/forms.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo.ts'
@@ -75,13 +76,14 @@ function RouteComponent() {
 			})
 
 			if (router.history.canGoBack()) {
-				router.history.back()
+				router.history.back({ ignoreBlocker: true })
 				return
 			}
 
 			router.navigate({
 				to: '/app/settings',
 				replace: true,
+				ignoreBlocker: true,
 			})
 		},
 	})
@@ -172,11 +174,15 @@ function RouteComponent() {
 											if (isSubmitting) return
 
 											if (router.history.canGoBack()) {
-												router.history.back()
+												router.history.back({ ignoreBlocker: true })
 												return
 											}
 
-											router.navigate({ to: '/app/settings', replace: true })
+											router.navigate({
+												to: '/app/settings',
+												replace: true,
+												ignoreBlocker: true,
+											})
 										}}
 										sx={{ maxWidth: 400 }}
 									>
@@ -218,6 +224,35 @@ function RouteComponent() {
 					/>
 				)}
 			</DecentDialog>
+
+			<form.Subscribe selector={(state) => state.isDirty}>
+				{(shouldBlock) => (
+					<Block
+						withResolver
+						// TODO: Ideally we conditionally enable this but the handled unload event does not
+						// emit a state update so it won't trigger the dialog as expected.
+						enableBeforeUnload={false}
+						shouldBlockFn={() => {
+							return shouldBlock
+						}}
+					>
+						{({ status, proceed, reset }) => (
+							<DecentDialog
+								fullWidth
+								maxWidth="sm"
+								value={status === 'blocked' ? { proceed, reset } : null}
+							>
+								{(blockerActions) => (
+									<DiscardEditsDialogContent
+										onCancel={blockerActions.reset}
+										onConfirm={blockerActions.proceed}
+									/>
+								)}
+							</DecentDialog>
+						)}
+					</Block>
+				)}
+			</form.Subscribe>
 		</>
 	)
 }

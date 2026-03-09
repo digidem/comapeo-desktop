@@ -9,14 +9,12 @@ import type { IntlShape } from 'react-intl'
 
 import type { LocaleState } from '../../../shared/intl.ts'
 import type { ActiveProjectIdStore } from '../contexts/active-project-id-store-context.ts'
-import type { GlobalEditingStateStore } from '../contexts/global-editing-state-store-context.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../lib/comapeo.ts'
 
 export interface RootRouterContext {
 	activeProjectIdStore: ActiveProjectIdStore
 	clientApi: MapeoClientApi
 	formatMessage: IntlShape['formatMessage']
-	globalEditingStateStore: GlobalEditingStateStore
 	history: RouterHistory
 	localeState: LocaleState
 	queryClient: QueryClient

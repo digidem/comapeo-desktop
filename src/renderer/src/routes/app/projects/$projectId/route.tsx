@@ -18,6 +18,7 @@ import {
 	useChildMatches,
 } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
+import { useSpinDelay } from 'spin-delay'
 
 import { BLUE_GREY, COMAPEO_BLUE, DARK_GREY } from '../../../../colors.ts'
 import { Icon } from '../../../../components/icon.tsx'
@@ -25,7 +26,6 @@ import {
 	IconButtonLink,
 	type IconButtonLinkProps,
 } from '../../../../components/link.tsx'
-import { useGlobalEditingState } from '../../../../contexts/global-editing-state-store-context.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -130,18 +130,6 @@ function RouteComponent() {
 		},
 	})
 
-	const pageHasEditing =
-		currentRoute.fullPath === '/app/projects/$projectId/settings/info' ||
-		currentRoute.fullPath ===
-			'/app/projects/$projectId/team/invite/devices/$deviceId/role' ||
-		currentRoute.fullPath ===
-			'/app/projects/$projectId/team/invite/devices/$deviceId/send'
-
-	const isEditing = useGlobalEditingState().length > 0
-
-	const someGlobalMutationIsPending =
-		useIsMutating({ mutationKey: GLOBAL_MUTATIONS_BASE_KEY }) > 0
-
 	const { data: role } = useOwnRoleInProject({ projectId })
 
 	const isCoordinator =
@@ -152,6 +140,14 @@ function RouteComponent() {
 
 	const selfIsOnlyProjectMemberEver =
 		members.length === 1 && members[0]?.deviceId === ownDeviceInfo.deviceId
+
+	const someGlobalMutationIsPending =
+		useIsMutating({ mutationKey: GLOBAL_MUTATIONS_BASE_KEY }) > 0
+
+	const globalMutationsAreVisiblyPending = useSpinDelay(
+		someGlobalMutationIsPending,
+		{ delay: 100 },
+	)
 
 	return (
 		<Box flex={1} display="grid" gridTemplateColumns="min-content 1fr">
@@ -191,9 +187,7 @@ function RouteComponent() {
 								<IconButtonLink
 									to="/app/projects/$projectId"
 									params={{ projectId }}
-									disabled={
-										pageHasEditing || isEditing || someGlobalMutationIsPending
-									}
+									disabled={globalMutationsAreVisiblyPending}
 									onClick={(event) => {
 										if (someGlobalMutationIsPending) {
 											event.preventDefault()
@@ -240,9 +234,7 @@ function RouteComponent() {
 									to="/app/projects/$projectId/team"
 									params={{ projectId }}
 									disabled={
-										(pageHasEditing ||
-											isEditing ||
-											someGlobalMutationIsPending) &&
+										globalMutationsAreVisiblyPending &&
 										!currentRoute.fullPath.startsWith(
 											'/app/projects/$projectId/team',
 										)
@@ -276,9 +268,7 @@ function RouteComponent() {
 										to="/app/projects/$projectId/settings"
 										params={{ projectId }}
 										disabled={
-											(pageHasEditing ||
-												isEditing ||
-												someGlobalMutationIsPending) &&
+											globalMutationsAreVisiblyPending &&
 											!currentRoute.fullPath.startsWith(
 												'/app/projects/$projectId/settings',
 											)
@@ -302,13 +292,9 @@ function RouteComponent() {
 							<Suspense>
 								<TestDataTabLink
 									disabled={
-										!!(
-											(pageHasEditing ||
-												isEditing ||
-												someGlobalMutationIsPending) &&
-											currentRoute.fullPath !==
-												'/app/projects/$projectId/test-data'
-										)
+										globalMutationsAreVisiblyPending &&
+										currentRoute.fullPath !==
+											'/app/projects/$projectId/test-data'
 									}
 									onClick={(event) => {
 										if (someGlobalMutationIsPending) {
@@ -338,9 +324,7 @@ function RouteComponent() {
 										to="/app/projects/$projectId/exchange"
 										params={{ projectId }}
 										disabled={
-											(pageHasEditing ||
-												isEditing ||
-												someGlobalMutationIsPending) &&
+											globalMutationsAreVisiblyPending &&
 											!currentRoute.fullPath.startsWith(
 												'/app/projects/$projectId/exchange',
 											)

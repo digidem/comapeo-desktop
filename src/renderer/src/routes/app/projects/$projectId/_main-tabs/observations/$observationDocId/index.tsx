@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState, type JSX } from 'react'
+import { Suspense, useEffect, useId, useState, type JSX } from 'react'
 import {
 	useDeleteDocument,
 	useManyDocs,
@@ -17,7 +17,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { captureException, captureMessage } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { Block, createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
@@ -32,14 +32,11 @@ import {
 	CategoryIconImage,
 } from '../../../../../../../components/category-icon.tsx'
 import { DecentDialog } from '../../../../../../../components/decent-dialog.tsx'
+import { DiscardEditsDialogContent } from '../../../../../../../components/discard-edits-dialog.tsx'
 import { ErrorBoundary } from '../../../../../../../components/error-boundary.tsx'
 import { ErrorDialogContent } from '../../../../../../../components/error-dialog.tsx'
 import { GenericRouteNotFoundComponent } from '../../../../../../../components/generic-route-not-found-component.tsx'
 import { Icon } from '../../../../../../../components/icon.tsx'
-import {
-	useGlobalEditingState,
-	useGlobalEditingStateActions,
-} from '../../../../../../../contexts/global-editing-state-store-context.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -180,20 +177,6 @@ export const Route = createFileRoute(
 	},
 	remountDeps: ({ params }) => {
 		return params
-	},
-	onLeave: ({ context, params }) => {
-		const { globalEditingStateStore } = context
-		const { observationDocId } = params
-
-		const globalEditIdPrefix = getGlobalEditIdPrefix(observationDocId)
-
-		const relevantEditIds = globalEditingStateStore.instance
-			.getState()
-			.activeEdits.filter((e) => e.startsWith(globalEditIdPrefix))
-
-		for (const id of relevantEditIds) {
-			globalEditingStateStore.actions.remove(id)
-		}
 	},
 	notFoundComponent: GenericRouteNotFoundComponent,
 	component: RouteComponent,
@@ -432,20 +415,12 @@ function ObservationDetailsPanel({
 		},
 	})
 
-	const globalEditingStateActions = useGlobalEditingStateActions()
-	const globalEditingEntries = useGlobalEditingState()
+	// NOTE: We only allow editing one thing at a time.
+	// Otherwise we could represent as a list of IDs.
+	const [activeEditId, setActiveEditId] = useState<string | null>(null)
 
-	const globalEditIdPrefix = getGlobalEditIdPrefix(observationDocId)
-
-	const notesGlobalEditId = `${globalEditIdPrefix}_notes`
-
-	const observationEditIds = globalEditingEntries.filter((e) =>
-		e.startsWith(globalEditIdPrefix),
-	)
-
-	const isEditingObservation = observationEditIds.length > 0
-
-	const activeObservationEditId = observationEditIds[0]
+	const editPrefixId = useId()
+	const notesEditId = `${editPrefixId}/notes`
 
 	return (
 		<>
@@ -459,7 +434,7 @@ function ObservationDetailsPanel({
 					borderBottom={`1px solid ${BLUE_GREY}`}
 				>
 					<IconButton
-						disabled={isEditingObservation}
+						aria-disabled={deleteObservation.status === 'pending'}
 						onClick={() => {
 							if (deleteObservation.status === 'pending') {
 								return
@@ -575,7 +550,7 @@ function ObservationDetailsPanel({
 									{canEdit ? (
 										<Box display="flex" flex={0} justifyContent="center">
 											<Button
-												disabled={isEditingObservation}
+												disabled={!!activeEditId}
 												variant="text"
 												onClick={() => {
 													onEditCategory()
@@ -729,15 +704,12 @@ function ObservationDetailsPanel({
 
 						{canEdit ? (
 							<EditableNotesSection
-								disabled={
-									!!activeObservationEditId &&
-									activeObservationEditId !== notesGlobalEditId
-								}
+								disabled={!!activeEditId && activeEditId !== notesEditId}
 								onStartEditMode={() => {
-									globalEditingStateActions.add(notesGlobalEditId)
+									setActiveEditId(notesEditId)
 								}}
 								onStopEditMode={() => {
-									globalEditingStateActions.remove(notesGlobalEditId)
+									setActiveEditId(null)
 								}}
 								observationDocId={observationDocId}
 								projectId={projectId}
@@ -765,7 +737,7 @@ function ObservationDetailsPanel({
 
 								<Stack direction="column" gap={3}>
 									{fieldsToDisplay.map((field) => {
-										const globalEditId = `${globalEditIdPrefix}_fields_${field.docId}`
+										const editId = `${editPrefixId}/fields/${field.docId}`
 										const existingTagValue = observation.tags[field.tagKey]
 
 										if (!canEdit || !isEditableField(field)) {
@@ -795,15 +767,12 @@ function ObservationDetailsPanel({
 												<EditableFieldSection
 													key={field.docId}
 													field={field}
-													disabled={
-														!!activeObservationEditId &&
-														activeObservationEditId !== globalEditId
-													}
+													disabled={!!activeEditId && activeEditId !== editId}
 													onStartEditMode={() => {
-														globalEditingStateActions.add(globalEditId)
+														setActiveEditId(editId)
 													}}
 													onStopEditMode={() => {
-														globalEditingStateActions.remove(globalEditId)
+														setActiveEditId(null)
 													}}
 													initialTagValue={existingTagValue}
 													observationDocId={observationDocId}
@@ -866,15 +835,12 @@ function ObservationDetailsPanel({
 											>
 												<EditableFieldSection
 													field={field}
-													disabled={
-														!!activeObservationEditId &&
-														activeObservationEditId !== globalEditId
-													}
+													disabled={!!activeEditId && activeEditId !== editId}
 													onStartEditMode={() => {
-														globalEditingStateActions.add(globalEditId)
+														setActiveEditId(editId)
 													}}
 													onStopEditMode={() => {
-														globalEditingStateActions.remove(globalEditId)
+														setActiveEditId(null)
 													}}
 													initialTagValue={coercedTagValue}
 													observationDocId={observationDocId}
@@ -900,7 +866,7 @@ function ObservationDetailsPanel({
 							padding={6}
 						>
 							<IconButton
-								disabled={isEditingObservation}
+								disabled={!!activeEditId}
 								aria-labelledby="delete-observation-button-label"
 								sx={{ border: `1px solid ${BLUE_GREY}` }}
 								onClick={() => {
@@ -912,7 +878,7 @@ function ObservationDetailsPanel({
 
 							<Typography
 								id="delete-observation-button-label"
-								color={isEditingObservation ? 'textDisabled' : undefined}
+								color={activeEditId ? 'textDisabled' : undefined}
 							>
 								{t(m.deleteObservationButtonText)}
 							</Typography>
@@ -1013,12 +979,33 @@ function ObservationDetailsPanel({
 					/>
 				)}
 			</DecentDialog>
+
+			<Block
+				withResolver
+				// TODO: Ideally we conditionally enable this but the handled unload event does not
+				// emit a state update so it won't trigger the dialog as expected.
+				enableBeforeUnload={false}
+				shouldBlockFn={() => {
+					return !!activeEditId
+				}}
+			>
+				{({ status, proceed, reset }) => (
+					<DecentDialog
+						fullWidth
+						maxWidth="sm"
+						value={status === 'blocked' ? { proceed, reset } : null}
+					>
+						{(blockerActions) => (
+							<DiscardEditsDialogContent
+								onCancel={blockerActions.reset}
+								onConfirm={blockerActions.proceed}
+							/>
+						)}
+					</DecentDialog>
+				)}
+			</Block>
 		</>
 	)
-}
-
-function getGlobalEditIdPrefix(observationDocId: string) {
-	return `observation_${observationDocId}_edit`
 }
 
 function isEditableField(field: Field): field is EditableField {
