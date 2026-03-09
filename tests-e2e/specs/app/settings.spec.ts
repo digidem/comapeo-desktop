@@ -208,164 +208,246 @@ test('index', async ({ appInfo, userParams }) => {
 	}
 })
 
-test('device name', async ({ appInfo, userParams }) => {
-	const { launchApp, cleanup } = await setup()
-	const electronApp = await launchApp({ appInfo })
+test.describe('device name', () => {
+	test('base UI checks', async ({ appInfo, userParams }) => {
+		const { launchApp, cleanup } = await setup()
+		const electronApp = await launchApp({ appInfo })
 
-	try {
-		const page = await electronApp.firstWindow()
+		try {
+			const page = await electronApp.firstWindow()
 
-		// 1. Setup
-		await simulateOnboarding({
-			page,
-			deviceName: userParams.deviceName,
-		})
+			// 1. Setup
+			await simulateOnboarding({
+				page,
+				deviceName: userParams.deviceName,
+			})
 
-		// 2. Main tests
-		const main = page.getByRole('main')
+			// 2. Main tests
+			const main = page.getByRole('main')
 
-		/// Navigation
-		{
-			// Navigate to device name settings page
-			const settingsNavLink = page
+			/// Navigation
+			{
+				// Navigate to device name settings page
+				const settingsNavLink = page
+					.getByRole('navigation', { name: 'App navigation', exact: true })
+					.getByRole('link', { name: 'Settings', exact: true })
+
+				await settingsNavLink.click()
+
+				const deviceNameSettingsLink = main.getByRole('link', {
+					name: 'Go to device name settings.',
+					exact: true,
+				})
+
+				await expect(
+					deviceNameSettingsLink.getByText(userParams.deviceName),
+				).toBeVisible()
+
+				await deviceNameSettingsLink.click()
+
+				// Assert app nav bar state
+				await expect(settingsNavLink).toHaveCSS(
+					'background-color',
+					hexToRgb(DARK_COMAPEO_BLUE),
+				)
+			}
+
+			/// Main
+
+			// Breadcrumb
+			{
+				const breadcrumbNav = main.getByRole('navigation', {
+					name: 'breadcrumb',
+					exact: true,
+				})
+
+				const breadcrumbItems = breadcrumbNav
+					.getByRole('listitem')
+					.getByRole('link')
+
+				await expect(breadcrumbItems).toHaveCount(2)
+
+				await expect(breadcrumbItems.nth(0)).toHaveText('CoMapeo Settings')
+
+				await expect(breadcrumbItems.nth(1)).toHaveText('Device Name')
+				await expect(breadcrumbItems.nth(1)).toHaveAttribute(
+					'aria-current',
+					'page',
+				)
+			}
+
+			// Interactive elements
+			{
+				await expect(
+					main.getByRole('textbox', { name: 'Device Name', exact: true }),
+				).toBeVisible()
+
+				await expect(
+					main.getByRole('button', { name: 'Cancel', exact: true }),
+				).toBeVisible()
+
+				await expect(
+					main.getByRole('button', { name: 'Save', exact: true }),
+				).toBeVisible()
+			}
+		} finally {
+			// 3. Cleanup
+			await electronApp.close()
+			cleanup()
+		}
+	})
+
+	test('form behavior', async ({ appInfo, userParams }) => {
+		const { launchApp, cleanup } = await setup()
+		const electronApp = await launchApp({ appInfo })
+
+		try {
+			const page = await electronApp.firstWindow()
+
+			// 1. Setup
+			await simulateOnboarding({
+				page,
+				deviceName: userParams.deviceName,
+			})
+
+			const main = page.getByRole('main')
+
+			await page
 				.getByRole('navigation', { name: 'App navigation', exact: true })
 				.getByRole('link', { name: 'Settings', exact: true })
+				.click()
 
-			await settingsNavLink.click()
-
-			const deviceNameSettingsLink = main.getByRole('link', {
-				name: 'Go to device name settings.',
-				exact: true,
-			})
-
-			await expect(
-				deviceNameSettingsLink.getByText(userParams.deviceName),
-			).toBeVisible()
-
-			await deviceNameSettingsLink.click()
-
-			// Assert app nav bar state
-			await expect(settingsNavLink).toHaveCSS(
-				'background-color',
-				hexToRgb(DARK_COMAPEO_BLUE),
-			)
-		}
-
-		/// Main
-
-		// Breadcrumb
-		{
-			const breadcrumbNav = main.getByRole('navigation', {
-				name: 'breadcrumb',
-				exact: true,
-			})
-
-			const breadcrumbItems = breadcrumbNav
-				.getByRole('listitem')
-				.getByRole('link')
-
-			await expect(breadcrumbItems).toHaveCount(2)
-
-			await expect(breadcrumbItems.nth(0)).toHaveText('CoMapeo Settings')
-
-			await expect(breadcrumbItems.nth(1)).toHaveText('Device Name')
-			await expect(breadcrumbItems.nth(1)).toHaveAttribute(
-				'aria-current',
-				'page',
-			)
-		}
-
-		const deviceNameInput = main.getByRole('textbox', {
-			name: 'Device Name',
-			exact: true,
-		})
-
-		//// Input (initial state)
-		await expect(deviceNameInput).toHaveValue(userParams.deviceName)
-
-		await expect(main.locator('output[name="character-count"]')).toHaveText(
-			`${userParams.deviceName.length}/60`,
-		)
-
-		//// Input (invalid state, too long)
-		const invalidDeviceName = Array(100).fill('a').join('')
-
-		await deviceNameInput.fill(invalidDeviceName)
-
-		await expect(
-			page.getByText('Too long, try a shorter name.', { exact: true }),
-		).toBeVisible()
-
-		await expect(page.locator('output[name="character-count"]')).toHaveText(
-			`${invalidDeviceName.length}/60`,
-		)
-
-		const currentUrl = page.url()
-
-		await main
-			.getByRole('button', { name: 'Save', exact: true })
-			.click({ force: true })
-
-		expect(page.url()).toStrictEqual(currentUrl)
-
-		//// Input (invalid state, empty)
-		await deviceNameInput.fill('')
-
-		await expect(
-			page.getByText('Enter a Device Name', { exact: true }),
-		).toBeVisible()
-
-		await expect(page.locator('output[name="character-count"]')).toHaveText(
-			'0/60',
-		)
-
-		//// Restoration of input initial state when navigating away without saving
-		await main
-			.getByRole('navigation', { name: 'breadcrumb', exact: true })
-			.getByRole('link', { name: 'CoMapeo Settings', exact: true })
-			.click()
-
-		await page
-			.getByRole('link', { name: 'Go to device name settings.', exact: true })
-			.click()
-
-		await expect(deviceNameInput).toHaveValue(userParams.deviceName)
-
-		await main.getByRole('button', { name: 'Cancel', exact: true }).click()
-
-		await page
-			.getByRole('link', { name: 'Go to device name settings.', exact: true })
-			.click()
-
-		await expect(deviceNameInput).toHaveValue(userParams.deviceName)
-
-		const updatedUserParams = {
-			deviceName: 'Desktop e2e Updated',
-		}
-
-		//// Saving updated device name
-		await deviceNameInput.fill(updatedUserParams.deviceName)
-
-		await main
-			.getByRole('button', {
-				name: 'Save',
-				exact: true,
-			})
-			.click()
-
-		await expect(
-			main
+			await main
 				.getByRole('link', {
 					name: 'Go to device name settings.',
 					exact: true,
 				})
-				.getByText(updatedUserParams.deviceName),
-		).toBeVisible()
-	} finally {
-		// 3. Cleanup
-		await electronApp.close()
-		cleanup()
-	}
+				.click()
+
+			// 2. Main tests
+			const deviceNameInput = main.getByRole('textbox', {
+				name: 'Device Name',
+				exact: true,
+			})
+
+			//// Input (initial state)
+			{
+				await expect(deviceNameInput).toHaveValue(userParams.deviceName)
+
+				await expect(main.locator('output[name="character-count"]')).toHaveText(
+					`${userParams.deviceName.length}/60`,
+				)
+			}
+
+			//// Input (invalid state, too long)
+			{
+				const invalidDeviceName = Array(100).fill('a').join('')
+
+				await deviceNameInput.fill(invalidDeviceName)
+
+				await expect(
+					page.getByText('Too long, try a shorter name.', { exact: true }),
+				).toBeVisible()
+
+				await expect(page.locator('output[name="character-count"]')).toHaveText(
+					`${invalidDeviceName.length}/60`,
+				)
+
+				const currentUrl = page.url()
+
+				await main
+					.getByRole('button', { name: 'Save', exact: true })
+					.click({ force: true })
+
+				expect(page.url()).toStrictEqual(currentUrl)
+
+				//// Input (invalid state, empty)
+				await deviceNameInput.fill('')
+
+				await expect(
+					page.getByText('Enter a Device Name', { exact: true }),
+				).toBeVisible()
+
+				await expect(page.locator('output[name="character-count"]')).toHaveText(
+					'0/60',
+				)
+			}
+
+			//// Restoration of input initial state when navigating away without saving
+			{
+				//  Clicking external navigation control
+				await main
+					.getByRole('navigation', { name: 'breadcrumb', exact: true })
+					.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+					.click()
+
+				const discardEditsDialog = page.getByRole('dialog')
+
+				await expect(
+					discardEditsDialog.getByRole('heading', {
+						name: 'Discard Edits?',
+						exact: true,
+					}),
+				).toBeVisible()
+
+				await expect(
+					discardEditsDialog.getByRole('button', {
+						name: 'Cancel',
+						exact: true,
+					}),
+				).toBeVisible()
+
+				await discardEditsDialog
+					.getByRole('button', { name: 'Yes, Discard', exact: true })
+					.click()
+
+				await page
+					.getByRole('link', {
+						name: 'Go to device name settings.',
+						exact: true,
+					})
+					.click()
+
+				await expect(deviceNameInput).toHaveValue(userParams.deviceName)
+
+				// Clicking cancel button on page
+				await main.getByRole('button', { name: 'Cancel', exact: true }).click()
+
+				await page
+					.getByRole('link', {
+						name: 'Go to device name settings.',
+						exact: true,
+					})
+					.click()
+
+				await expect(deviceNameInput).toHaveValue(userParams.deviceName)
+			}
+
+			//// Saving updated device name
+			{
+				const updatedUserParams = {
+					deviceName: 'Desktop e2e Updated',
+				}
+
+				await deviceNameInput.fill(updatedUserParams.deviceName)
+
+				await main.getByRole('button', { name: 'Save', exact: true }).click()
+
+				await expect(
+					main
+						.getByRole('link', {
+							name: 'Go to device name settings.',
+							exact: true,
+						})
+						.getByText(updatedUserParams.deviceName),
+				).toBeVisible()
+			}
+		} finally {
+			// 3. Cleanup
+			await electronApp.close()
+			cleanup()
+		}
+	})
 })
 
 test('language', async ({ appInfo, userParams }) => {
