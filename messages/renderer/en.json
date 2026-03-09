@@ -3,6 +3,18 @@
     "description": "Name of the app displayed in the title bar.",
     "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
   },
+  "components.discard-edits-dialog.cancelButton": {
+    "description": "Text for button to cancel action.",
+    "message": "Cancel"
+  },
+  "components.discard-edits-dialog.confirmButton": {
+    "description": "Text for button to confirm discarding changes.",
+    "message": "Yes, Discard"
+  },
+  "components.discard-edits-dialog.title": {
+    "description": "Title of dialog displayed when trying to leave page while editing observation.",
+    "message": "Discard Edits?"
+  },
   "components.error-dialog.advanced": {
     "description": "Title text for the collapsible section that shows the actual error message.",
     "message": "Advanced"
@@ -458,18 +470,6 @@
   "routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
     "message": "Details"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.discardEditsDialogCancelButton": {
-    "description": "Text for button to cancel navigation while editing observation.",
-    "message": "Cancel"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.discardEditsDialogConfirmButton": {
-    "description": "Text for button to confirm discarding changes when navigating while editing observation.",
-    "message": "Yes, Discard"
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.index.discardEditsDialogTitle": {
-    "description": "Title of dialog displayed when trying to leave page while editing observation.",
-    "message": "Discard Edits?"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy": {
     "description": "Displayed accuracy for observation location in meters.",

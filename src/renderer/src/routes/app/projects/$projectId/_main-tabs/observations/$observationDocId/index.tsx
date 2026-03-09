@@ -32,6 +32,7 @@ import {
 	CategoryIconImage,
 } from '../../../../../../../components/category-icon.tsx'
 import { DecentDialog } from '../../../../../../../components/decent-dialog.tsx'
+import { DiscardEditsDialogContent } from '../../../../../../../components/discard-edits-dialog.tsx'
 import { ErrorBoundary } from '../../../../../../../components/error-boundary.tsx'
 import { ErrorDialogContent } from '../../../../../../../components/error-dialog.tsx'
 import { GenericRouteNotFoundComponent } from '../../../../../../../components/generic-route-not-found-component.tsx'
@@ -995,55 +996,10 @@ function ObservationDetailsPanel({
 						value={status === 'blocked' ? { proceed, reset } : null}
 					>
 						{(blockerActions) => (
-							<Stack direction="column">
-								<Stack direction="column" gap={10} flex={1} padding={20}>
-									<Stack direction="column" alignItems="center" gap={4}>
-										<Icon name="material-error" color="error" size={72} />
-
-										<Typography
-											variant="h1"
-											fontWeight={500}
-											textAlign="center"
-										>
-											{t(m.discardEditsDialogTitle)}
-										</Typography>
-									</Stack>
-								</Stack>
-
-								<Stack
-									direction="row"
-									position="sticky"
-									bottom={0}
-									display="flex"
-									justifyContent="center"
-									gap={4}
-									padding={6}
-								>
-									<Button
-										fullWidth
-										variant="outlined"
-										onClick={() => {
-											blockerActions.reset()
-										}}
-										sx={{ maxWidth: 400 }}
-									>
-										{t(m.discardEditsDialogCancelButton)}
-									</Button>
-
-									<Button
-										fullWidth
-										variant="contained"
-										color="error"
-										startIcon={<Icon name="material-symbols-delete" />}
-										onClick={() => {
-											blockerActions.proceed()
-										}}
-										sx={{ maxWidth: 400 }}
-									>
-										{t(m.discardEditsDialogConfirmButton)}
-									</Button>
-								</Stack>
-							</Stack>
+							<DiscardEditsDialogContent
+								onCancel={blockerActions.reset}
+								onConfirm={blockerActions.proceed}
+							/>
 						)}
 					</DecentDialog>
 				)}
@@ -1280,23 +1236,5 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy',
 		defaultMessage: '± {value}m',
 		description: 'Displayed accuracy for observation location in meters.',
-	},
-	discardEditsDialogTitle: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.discardEditsDialogTitle',
-		defaultMessage: 'Discard Edits?',
-		description:
-			'Title of dialog displayed when trying to leave page while editing observation.',
-	},
-	discardEditsDialogCancelButton: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.discardEditsDialogCancelButton',
-		defaultMessage: 'Cancel',
-		description:
-			'Text for button to cancel navigation while editing observation.',
-	},
-	discardEditsDialogConfirmButton: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.discardEditsDialogConfirmButton',
-		defaultMessage: 'Yes, Discard',
-		description:
-			'Text for button to confirm discarding changes when navigating while editing observation.',
 	},
 })
