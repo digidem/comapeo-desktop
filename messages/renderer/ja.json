@@ -1,4 +1,16 @@
 {
+  "components.discard-edits-dialog.cancelButton": {
+    "description": "Text for button to cancel action.",
+    "message": "取消"
+  },
+  "components.discard-edits-dialog.confirmButton": {
+    "description": "Text for button to confirm discarding changes.",
+    "message": "はい、破棄します"
+  },
+  "components.discard-edits-dialog.title": {
+    "description": "Title of dialog displayed when trying to leave page while editing observation.",
+    "message": "編集を破棄しますか？"
+  },
   "components.error-dialog.advanced": {
     "description": "Title text for the collapsible section that shows the actual error message.",
     "message": "高度な設定"
