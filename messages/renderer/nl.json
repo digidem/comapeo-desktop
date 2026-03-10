@@ -3,6 +3,18 @@
     "description": "Name of the app displayed in the title bar.",
     "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
   },
+  "components.discard-edits-dialog.cancelButton": {
+    "description": "Text for button to cancel action.",
+    "message": "Annuleren"
+  },
+  "components.discard-edits-dialog.confirmButton": {
+    "description": "Text for button to confirm discarding changes.",
+    "message": "Ja, weggooien"
+  },
+  "components.discard-edits-dialog.title": {
+    "description": "Title of dialog displayed when trying to leave page while editing observation.",
+    "message": "Wijzigingen weggooien?"
+  },
   "components.error-dialog.advanced": {
     "description": "Title text for the collapsible section that shows the actual error message.",
     "message": "Geavanceerd"
