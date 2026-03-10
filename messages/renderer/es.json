@@ -221,7 +221,7 @@
   },
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.playerUnavailable": {
     "description": "Alert text indicating inability to play audio attachment.",
-    "message": "Jugador no disponible. Descargar archivo para previsualizar."
+    "message": "Reproductor no disponible. Descargar archivo para previsualizar."
   },
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.returnToObservation": {
     "description": "Button text for the successful deletion panel.",
@@ -241,7 +241,7 @@
   },
   "routes.app.projects.$projectId.download.allObservationsWithMediaOptionDescription": {
     "description": "Description of the all observations with media download option.",
-    "message": "Imágenes, audio y vídeo en un archivo .zip"
+    "message": "Imágenes y audios en un archivo .zip"
   },
   "routes.app.projects.$projectId.download.download": {
     "description": "Title of the download page.",
@@ -561,7 +561,7 @@
   },
   "routes.app.projects.$projectId.settings.index.navTitle": {
     "description": "Title of the coordinator tools page.",
-    "message": "Herramientas Coordinador"
+    "message": "Herramientas de Coordinación"
   },
   "routes.app.projects.$projectId.settings.index.projectInfoActionLabel": {
     "description": "Text for action to update project info.",
