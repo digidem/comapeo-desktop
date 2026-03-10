@@ -241,7 +241,7 @@
   },
   "routes.app.projects.$projectId.download.allObservationsWithMediaOptionDescription": {
     "description": "Description of the all observations with media download option.",
-    "message": "Afbeeldingen, audio en video in een .zip-bestand"
+    "message": "Afbeeldingen en audio in het zip-bestand"
   },
   "routes.app.projects.$projectId.download.download": {
     "description": "Title of the download page.",
