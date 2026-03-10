@@ -237,7 +237,7 @@
   },
   "routes.app.projects.$projectId.download.allObservationsWithMediaOptionDescription": {
     "description": "Description of the all observations with media download option.",
-    "message": ".zip ファイル内のイメージ、オーディオ、およびビデオ"
+    "message": "画像とオーディオ .zip ファイル内の"
   },
   "routes.app.projects.$projectId.download.download": {
     "description": "Title of the download page.",
