@@ -463,7 +463,7 @@ const m = defineMessages({
 	},
 	allObservationsWithMediaOptionDescription: {
 		id: 'routes.app.projects.$projectId.download.allObservationsWithMediaOptionDescription',
-		defaultMessage: 'Images, audio, and video in a .zip file',
+		defaultMessage: 'Images and audio in a .zip file',
 		description:
 			'Description of the all observations with media download option.',
 	},
