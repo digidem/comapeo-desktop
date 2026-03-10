@@ -1,4 +1,8 @@
 {
+  "components.discard-edits-dialog.cancelButton": {
+    "description": "Text for button to cancel action.",
+    "message": "ပယ်ဖျက်သည်"
+  },
   "components.error-dialog.close": {
     "description": "Button text for the close button in the error dialog.",
     "message": "Close"
