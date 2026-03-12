@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto'
-import { appendFileSync, writeFileSync } from 'node:fs'
+import { appendFileSync } from 'node:fs'
 import { copyFile, mkdir, rm } from 'node:fs/promises'
 import { basename, isAbsolute, join, relative } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -173,15 +173,15 @@ export async function start({
 		serviceName: `CoMapeo Core Service`,
 	})
 
+	let fatalMessage = 'Fatal error occurred. Close application.'
+
 	coreService.on('message', (message) => {
 		if (v.is(ServiceErrorMessageSchema, message)) {
 			const logsPath = app.getPath('logs')
 
-			appendFileSync(
-				join(logsPath, 'logs.txt'),
-				`${new Date().toISOString()} ${inspect(message.error, { compact: true, breakLength: Infinity })}\n`,
-				'utf-8',
-			)
+			fatalMessage = `${new Date().toISOString()} ${inspect(message.error, { compact: true, breakLength: Infinity })}`
+
+			appendFileSync(join(logsPath, 'logs.txt'), `${fatalMessage}\n`, 'utf-8')
 
 			captureException(message.error)
 			return
@@ -190,10 +190,7 @@ export async function start({
 
 	coreService.on('exit', (code) => {
 		log(`Core service exited with code ${code}`)
-		dialog.showErrorBox(
-			'Fatal Error',
-			'A fatal error occurred. Application required to close.',
-		)
+		dialog.showErrorBox('Fatal Error', fatalMessage)
 		process.crash()
 	})
 
