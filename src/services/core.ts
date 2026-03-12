@@ -67,72 +67,81 @@ const NewClientMessageSchema = v.object({
 
 export type NewClientMessage = v.InferInput<typeof NewClientMessageSchema>
 
-const { values } = parseArgs({
-	strict: true,
-	options: {
-		onlineStyleUrl: { type: 'string' },
-		rootKey: { type: 'string' },
-		storageDirectory: { type: 'string' },
-	},
-})
-
-const { onlineStyleUrl, rootKey, storageDirectory } = v.parse(
-	ProcessArgsSchema,
-	values,
-)
-
-const { manager } = initializeCore({
-	onlineStyleUrl,
-	rootKey,
-	storageDirectory,
-})
-
-initializePeerDiscovery(manager).catch((err) => {
-	log('Failed to start peer discovery', err)
-
-	process.parentPort.postMessage({
-		type: 'error',
-		error: err instanceof Error ? err : new Error(err),
-	} satisfies ServiceErrorMessage)
-})
-
-const connectedClientPorts: WeakSet<MessagePortMain> = new WeakSet()
-
-// We might get multiple clients, for instance if there are multiple windows,
-// or if the main window reloads.
-process.parentPort.on('message', (event) => {
-	if (!v.is(NewClientMessageSchema, event.data)) {
-		log('Unrecognized message received', event)
-		return
-	}
-
-	const [port] = event.ports
-
-	assert(port)
-
-	if (connectedClientPorts.has(port)) {
-		log(
-			`Ignoring '${event.data.type}' message because message port already initialized`,
-		)
-		return
-	}
-
-	const { clientId } = event.data.payload
-
-	log('Adding new client', clientId)
-
-	const server = createMapeoServer(manager, new MessagePortLike(port))
-
-	port.on('close', () => {
-		log(`Port associated with client ${clientId} closed`)
-		server.close()
-		connectedClientPorts.delete(port)
+try {
+	const { values } = parseArgs({
+		strict: true,
+		options: {
+			onlineStyleUrl: { type: 'string' },
+			rootKey: { type: 'string' },
+			storageDirectory: { type: 'string' },
+		},
 	})
 
-	connectedClientPorts.add(port)
+	const { onlineStyleUrl, rootKey, storageDirectory } = v.parse(
+		ProcessArgsSchema,
+		values,
+	)
 
-	port.start()
-})
+	const { manager } = initializeCore({
+		onlineStyleUrl,
+		rootKey,
+		storageDirectory,
+	})
+
+	initializePeerDiscovery(manager).catch((err) => {
+		log('Failed to start peer discovery', err)
+
+		process.parentPort.postMessage({
+			type: 'error',
+			error: err instanceof Error ? err : new Error(err),
+		} satisfies ServiceErrorMessage)
+	})
+
+	const connectedClientPorts: WeakSet<MessagePortMain> = new WeakSet()
+
+	// We might get multiple clients, for instance if there are multiple windows,
+	// or if the main window reloads.
+	process.parentPort.on('message', (event) => {
+		if (!v.is(NewClientMessageSchema, event.data)) {
+			log('Unrecognized message received', event)
+			return
+		}
+
+		const [port] = event.ports
+
+		assert(port)
+
+		if (connectedClientPorts.has(port)) {
+			log(
+				`Ignoring '${event.data.type}' message because message port already initialized`,
+			)
+			return
+		}
+
+		const { clientId } = event.data.payload
+
+		log('Adding new client', clientId)
+
+		const server = createMapeoServer(manager, new MessagePortLike(port))
+
+		port.on('close', () => {
+			log(`Port associated with client ${clientId} closed`)
+			server.close()
+			connectedClientPorts.delete(port)
+		})
+
+		connectedClientPorts.add(port)
+
+		port.start()
+	})
+} catch (err) {
+	process.parentPort.postMessage({
+		type: 'error',
+		error: new Error('Core Service Failure', { cause: err }),
+	} satisfies ServiceErrorMessage)
+
+	process.exit(1)
+}
 
 function initializeCore({
 	onlineStyleUrl,

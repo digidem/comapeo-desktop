@@ -1,7 +1,9 @@
 import { randomBytes } from 'node:crypto'
+import { appendFileSync, writeFileSync } from 'node:fs'
 import { copyFile, mkdir, rm } from 'node:fs/promises'
 import { basename, isAbsolute, join, relative } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
+import { inspect } from 'node:util'
 import { defineMessages } from '@formatjs/intl'
 import { captureException } from '@sentry/electron'
 import debug from 'debug'
@@ -173,9 +175,30 @@ export async function start({
 
 	coreService.on('message', (message) => {
 		if (v.is(ServiceErrorMessageSchema, message)) {
+			const logsPath = app.getPath('logs')
+
+			appendFileSync(
+				join(logsPath, 'logs.txt'),
+				`${new Date().toISOString()} ${inspect(message.error, { compact: true, breakLength: Infinity })}\n`,
+				'utf-8',
+			)
+
 			captureException(message.error)
 			return
 		}
+	})
+
+	coreService.on('exit', (code) => {
+		log(`Core service exited with code ${code}`)
+		dialog.showErrorBox(
+			'Fatal Error',
+			'A fatal error occurred. Application required to close.',
+		)
+		process.crash()
+	})
+
+	coreService.on('error', (type, location, report) => {
+		console.log('*** core service error', { type, location, report })
 	})
 
 	app.on('quit', () => {
