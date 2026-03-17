@@ -5,7 +5,7 @@ import { platform } from 'node:os'
 import * as path from 'node:path'
 import * as Sentry from '@sentry/electron/main'
 import debug from 'debug'
-import { app, protocol } from 'electron/main'
+import { app, dialog, protocol } from 'electron/main'
 import { parse } from 'valibot'
 
 import {
@@ -14,6 +14,7 @@ import {
 	type SentryEnvironment,
 } from '../shared/app.ts'
 import { start } from './app.ts'
+import { AppRunError } from './errors.ts'
 import { createPersistedStore } from './persisted-store.ts'
 
 const require = createRequire(import.meta.url)
@@ -54,7 +55,8 @@ if (process.platform === 'win32' && appConfig.win32AppUserModelId) {
 
 // NOTE: Update some of the application paths used during development. This helps to avoid conflicts with production installations and helps debugging in some cases.
 //   - Sets the user data directory to `<project_root>/data/default/`, which can be overridden if `USER_DATA_PATH` is specified.
-//   - Sets the logs directory to `<project_root>/logs/default/` for macOS.
+//   - Sets the logs directory to `<project_root>/logs/default/` for macOS. If `USER_DATA_PATH` is specified, its basename will be used instead of `default`
+// 	   i.e. `<project_root>/logs/<user_data_path_basename>`.
 if (appConfig.appType === 'development') {
 	// This is typically handled in the `readPackageJson` hook in the Forge configuration but that only runs when packaging an application.
 	// This is still needed in the case of running the app through the development server.
@@ -78,7 +80,11 @@ if (appConfig.appType === 'development') {
 
 	// Logs are stored within the user data path on Windows and Linux, so no need to adjust it here.
 	if (platform() === 'darwin') {
-		const logsPath = path.join(appPath, 'logs', 'default')
+		const logsPath = path.join(
+			appPath,
+			'logs',
+			path.basename(customUserDataPath),
+		)
 
 		log(`Setting logs path to ${logsPath}`)
 
@@ -150,7 +156,14 @@ protocol.registerSchemesAsPrivileged([
 	},
 ])
 
-start({ appConfig, persistedStore }).catch((err) => {
-	Sentry.captureException(err)
+start({ appConfig, persistedStore }).catch((reason) => {
+	log(reason)
+
+	Sentry.captureException(reason)
+
+	if (reason instanceof AppRunError) {
+		dialog.showErrorBox(reason.title, reason.description)
+	}
+
 	process.exit(1)
 })

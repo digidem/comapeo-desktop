@@ -1,11 +1,7 @@
 import { randomBytes } from 'node:crypto'
-import { appendFileSync } from 'node:fs'
 import { copyFile, mkdir, rm } from 'node:fs/promises'
 import { basename, isAbsolute, join, relative } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import { inspect } from 'node:util'
-import { defineMessages } from '@formatjs/intl'
-import { captureException } from '@sentry/electron'
 import debug from 'debug'
 import contextMenu from 'electron-context-menu'
 import { CancelError, download } from 'electron-dl'
@@ -29,12 +25,13 @@ import {
 	FilesSelectFileParamsSchema,
 	ImportSMPFileParamsSchema,
 } from '../shared/ipc.ts'
+import { AppRunError } from './errors.ts'
 import { IntlManager } from './intl-manager.ts'
 import { setUpMainIPC } from './ipc.ts'
+import { messages } from './messages.ts'
 import { createAppDiagnosticsMetricsScheduler } from './metrics/app-diagnostics-metrics.ts'
 import { DeviceDiagnosticsMetrics } from './metrics/device-diagnostics-metrics.ts'
 import type { PersistedStore } from './persisted-store.ts'
-import { ServiceErrorMessageSchema } from './service-error.ts'
 
 const log = debug('comapeo:main:app')
 
@@ -63,264 +60,283 @@ export async function start({
 	appConfig: AppConfig
 	persistedStore: PersistedStore
 }): Promise<void> {
-	app.setAboutPanelOptions({ applicationVersion: appConfig.appVersion })
-
-	// Quit when all windows are closed, except on macOS. There, it's common
-	// for applications and their menu bar to stay active until the user quits
-	// explicitly with Cmd + Q.
-	app.on('window-all-closed', () => {
-		if (process.platform !== 'darwin') {
-			app.quit()
-		}
-	})
-
-	app.on('before-quit', () => {
-		APP_STATE.tryingToQuitApp = true
-	})
-
-	app.on('quit', () => {
-		APP_STATE.tryingToQuitApp = false
-	})
-
 	const intlManager = new IntlManager({
 		initialLocale: persistedStore.getState().locale,
 	})
 
-	persistedStore.subscribe((current, previous) => {
-		if (previous.locale !== current.locale) {
-			intlManager.updateLocale(current.locale)
-		}
-	})
+	try {
+		const appRunPromise = Promise.withResolvers<void>()
 
-	setUpMainIPC({ persistedStore, intlManager })
+		app.setAboutPanelOptions({ applicationVersion: appConfig.appVersion })
 
-	let disposeAppContextMenu = createAppContextMenu({
-		appType: appConfig.appType,
-		intlManager,
-	})
+		// Quit when all windows are closed, except on macOS. There, it's common
+		// for applications and their menu bar to stay active until the user quits
+		// explicitly with Cmd + Q.
+		app.on('window-all-closed', () => {
+			if (process.platform !== 'darwin') {
+				app.quit()
+			}
+		})
 
-	intlManager.on('locale-state', () => {
-		disposeAppContextMenu()
+		app.on('before-quit', () => {
+			APP_STATE.tryingToQuitApp = true
+		})
 
-		disposeAppContextMenu = createAppContextMenu({
+		app.on('quit', () => {
+			APP_STATE.tryingToQuitApp = false
+		})
+
+		persistedStore.subscribe((current, previous) => {
+			if (previous.locale !== current.locale) {
+				intlManager.updateLocale(current.locale)
+			}
+		})
+
+		setUpMainIPC({ persistedStore, intlManager })
+
+		let disposeAppContextMenu = createAppContextMenu({
 			appType: appConfig.appType,
 			intlManager,
 		})
-	})
 
-	const comapeoUserDataDirectory = join(app.getPath('userData'), 'comapeo')
+		intlManager.on('locale-state', () => {
+			disposeAppContextMenu()
 
-	const metricsDirectory = join(comapeoUserDataDirectory, 'metrics')
-
-	await mkdir(metricsDirectory, { recursive: true })
-
-	const appDiagnosticsMetrics = createAppDiagnosticsMetricsScheduler({
-		appConfig,
-		getLocaleInfo: () => {
-			return {
-				appLocale: intlManager.localeState.value,
-				deviceLocale: app.getPreferredSystemLanguages()[0]!,
-			}
-		},
-		getMetricsDeviceId: () => {
-			return persistedStore.getState().metricsDeviceId
-		},
-		storageFilePath: join(metricsDirectory, 'app-diagnostics.json'),
-	})
-
-	const deviceDiagnosticsMetrics = new DeviceDiagnosticsMetrics({
-		appConfig,
-		getMetricsDeviceId: () => {
-			return persistedStore.getState().metricsDeviceId
-		},
-		storageFilePath: join(metricsDirectory, 'device-diagnostics.json'),
-	})
-
-	if (persistedStore.getState().diagnosticsEnabled) {
-		log('Enabling app diagnostics metrics on init')
-		appDiagnosticsMetrics.setEnabled(true)
-
-		log('Enabling device diagnostics metrics on init')
-		deviceDiagnosticsMetrics.setEnabled(true)
-	}
-
-	persistedStore.subscribe((current, previous) => {
-		if (previous.diagnosticsEnabled !== current.diagnosticsEnabled) {
-			const action = current.diagnosticsEnabled ? 'Enabling' : 'Disabling'
-
-			log(`${action} app diagnostics metrics`)
-			appDiagnosticsMetrics.setEnabled(current.diagnosticsEnabled)
-
-			log(`${action} device diagnostics metrics`)
-			deviceDiagnosticsMetrics.setEnabled(current.diagnosticsEnabled)
-		}
-	})
-
-	await app.whenReady()
-
-	const rootKey = loadRootKey({ persistedStore })
-
-	const coreProcessArgs = [
-		`--rootKey=${rootKey}`,
-		`--storageDirectory=${comapeoUserDataDirectory}`,
-	]
-
-	if (appConfig.onlineStyleUrl) {
-		coreProcessArgs.push(`--onlineStyleUrl=${appConfig.onlineStyleUrl}`)
-	}
-
-	const coreService = utilityProcess.fork(CORE_SERVICE_PATH, coreProcessArgs, {
-		serviceName: `CoMapeo Core Service`,
-	})
-
-	let fatalMessage = 'Fatal error occurred. Close application.'
-
-	coreService.on('message', (message) => {
-		if (v.is(ServiceErrorMessageSchema, message)) {
-			const logsPath = app.getPath('logs')
-
-			fatalMessage = `${new Date().toISOString()} ${inspect(message.error, { compact: true, breakLength: Infinity })}`
-
-			appendFileSync(join(logsPath, 'logs.txt'), `${fatalMessage}\n`, 'utf-8')
-
-			captureException(message.error)
-			return
-		}
-	})
-
-	coreService.on('exit', (code) => {
-		log(`Core service exited with code ${code}`)
-		dialog.showErrorBox('Fatal Error', fatalMessage)
-		process.crash()
-	})
-
-	coreService.on('error', (type, location, report) => {
-		console.log('*** core service error', { type, location, report })
-	})
-
-	app.on('quit', () => {
-		if (coreService.pid) {
-			coreService.kill()
-		}
-	})
-
-	let sentryEnvironment: SentryEnvironment = 'development'
-
-	if (appConfig.appType === 'release-candidate') {
-		sentryEnvironment = 'qa'
-	} else if (appConfig.appType === 'production') {
-		sentryEnvironment = 'production'
-	}
-
-	app.on('activate', () => {
-		log('App activated')
-
-		let existingMainWindow = null
-
-		for (const bw of BrowserWindow.getAllWindows()) {
-			const bwInfo = APP_STATE.browserWindows.get(bw)
-			if (bwInfo?.type === 'main') {
-				existingMainWindow = bw
-				break
-			}
-		}
-
-		if (existingMainWindow) {
-			log(`Main window with id ${existingMainWindow.id} exists - showing`)
-			existingMainWindow.show()
-		} else {
-			log('Main window does not exist - creating new main window')
-
-			const persisted = persistedStore.getState()
-			const diagnosticsEnabled = persisted.diagnosticsEnabled
-			const activeProjectId = persisted.activeProjectId
-			const sentryUserId = persisted.sentryUser.id
-
-			const mainWindow = initMainWindow({
-				activeProjectId,
-				appVersion: appConfig.appVersion,
-				coreService,
-				comapeoUserDataDirectory,
-				isDevelopment: appConfig.appType === 'development',
-				sentryConfig: {
-					enabled: diagnosticsEnabled,
-					environment: sentryEnvironment,
-					userId: sentryUserId,
-				},
+			disposeAppContextMenu = createAppContextMenu({
+				appType: appConfig.appType,
+				intlManager,
 			})
+		})
 
-			mainWindow.show()
+		const comapeoUserDataDirectory = join(app.getPath('userData'), 'comapeo')
 
-			log(`Created main window with id ${mainWindow.id}`)
+		const metricsDirectory = join(comapeoUserDataDirectory, 'metrics')
+
+		await mkdir(metricsDirectory, { recursive: true })
+
+		const appDiagnosticsMetrics = createAppDiagnosticsMetricsScheduler({
+			appConfig,
+			getLocaleInfo: () => {
+				return {
+					appLocale: intlManager.localeState.value,
+					deviceLocale: app.getPreferredSystemLanguages()[0]!,
+				}
+			},
+			getMetricsDeviceId: () => {
+				return persistedStore.getState().metricsDeviceId
+			},
+			storageFilePath: join(metricsDirectory, 'app-diagnostics.json'),
+		})
+
+		const deviceDiagnosticsMetrics = new DeviceDiagnosticsMetrics({
+			appConfig,
+			getMetricsDeviceId: () => {
+				return persistedStore.getState().metricsDeviceId
+			},
+			storageFilePath: join(metricsDirectory, 'device-diagnostics.json'),
+		})
+
+		if (persistedStore.getState().diagnosticsEnabled) {
+			log('Enabling app diagnostics metrics on init')
+			appDiagnosticsMetrics.setEnabled(true)
+
+			log('Enabling device diagnostics metrics on init')
+			deviceDiagnosticsMetrics.setEnabled(true)
 		}
-	})
 
-	const persisted = persistedStore.getState()
-	const activeProjectId = persisted.activeProjectId
-	const diagnosticsEnabled = persisted.diagnosticsEnabled
-	const sentryUserId = persisted.sentryUser.id
+		persistedStore.subscribe((current, previous) => {
+			if (previous.diagnosticsEnabled !== current.diagnosticsEnabled) {
+				const action = current.diagnosticsEnabled ? 'Enabling' : 'Disabling'
 
-	protocol.handle('comapeo', (request: Request) => {
-		const { hash, host, pathname } = new URL(request.url)
+				log(`${action} app diagnostics metrics`)
+				appDiagnosticsMetrics.setEnabled(current.diagnosticsEnabled)
 
-		const isDevelopment = appConfig.appType === 'development'
+				log(`${action} device diagnostics metrics`)
+				deviceDiagnosticsMetrics.setEnabled(current.diagnosticsEnabled)
+			}
+		})
 
-		if (isDevelopment) {
-			// TODO: Ideally forward to the Vite dev server
-			throw new Error('Custom protocol does not work in development yet')
+		await app.whenReady()
+
+		const rootKey = loadRootKey({ persistedStore })
+
+		const logsDirectory = app.getPath('logs')
+
+		const coreProcessArgs = [
+			`--logsDirectory=${logsDirectory}`,
+			`--rootKey=${rootKey}`,
+			`--storageDirectory=${comapeoUserDataDirectory}`,
+		]
+
+		if (appConfig.onlineStyleUrl) {
+			coreProcessArgs.push(`--onlineStyleUrl=${appConfig.onlineStyleUrl}`)
 		}
 
-		if (host !== 'renderer') {
-			throw new Error(`Unrecognized host: ${host}`)
-		}
-
-		if (pathname === '/') {
-			const u = new URL('../renderer/index.html', import.meta.url)
-			// NOTE: Enables deeplinking in the app
-			u.hash = hash
-			return net.fetch(u.toString())
-		}
-
-		const allowedDirectoryPath = fileURLToPath(
-			new URL('../renderer', import.meta.url),
+		const coreService = utilityProcess.fork(
+			CORE_SERVICE_PATH,
+			coreProcessArgs,
+			{
+				serviceName: `CoMapeo Core Service`,
+			},
 		)
-		const requestedPath = join(allowedDirectoryPath, pathname)
-		const relativePath = relative(allowedDirectoryPath, requestedPath)
 
-		// NOTE: Make sure incoming requests do not attempt to access files outside the allowed directory scope
-		const isSafe =
-			relativePath &&
-			!relativePath.startsWith('..') &&
-			!isAbsolute(relativePath)
+		// NOTE: Exit the app if the core service exits for some reason
+		coreService.on('exit', (code) => {
+			log(`Core service exited with code ${code}`)
 
-		if (!isSafe) {
-			// TODO: More gracefully handle by returning an error page?
-			throw new Error(
-				`Requested path is outside allowed scope: ${requestedPath}`,
-			)
+			if (code !== 0) {
+				app.exit(1)
+
+				appRunPromise.reject(
+					new AppRunError({
+						title: intlManager.formatMessage(messages.fatalErrorTitle),
+						description: intlManager.formatMessage(
+							messages.fatalErrorDescriptionCoreService,
+						),
+					}),
+				)
+			}
+		})
+
+		app.on('quit', () => {
+			if (coreService.pid) {
+				coreService.kill()
+			}
+		})
+
+		let sentryEnvironment: SentryEnvironment = 'development'
+
+		if (appConfig.appType === 'release-candidate') {
+			sentryEnvironment = 'qa'
+		} else if (appConfig.appType === 'production') {
+			sentryEnvironment = 'production'
 		}
 
-		return net.fetch(pathToFileURL(requestedPath).toString())
-	})
+		app.on('activate', () => {
+			log('App activated')
 
-	const mainWindow = initMainWindow({
-		activeProjectId,
-		appVersion: appConfig.appVersion,
-		coreService,
-		comapeoUserDataDirectory,
-		isDevelopment: appConfig.appType === 'development',
-		sentryConfig: {
-			enabled: diagnosticsEnabled,
-			environment: sentryEnvironment,
-			userId: sentryUserId,
-		},
-	})
+			let existingMainWindow = null
 
-	log(`Created main window with id ${mainWindow.id}`)
+			for (const bw of BrowserWindow.getAllWindows()) {
+				const bwInfo = APP_STATE.browserWindows.get(bw)
+				if (bwInfo?.type === 'main') {
+					existingMainWindow = bw
+					break
+				}
+			}
 
-	mainWindow.addListener('ready-to-show', () => {
-		mainWindow.show()
-	})
+			if (existingMainWindow) {
+				log(`Main window with id ${existingMainWindow.id} exists - showing`)
+				existingMainWindow.show()
+			} else {
+				log('Main window does not exist - creating new main window')
+
+				const persisted = persistedStore.getState()
+				const diagnosticsEnabled = persisted.diagnosticsEnabled
+				const activeProjectId = persisted.activeProjectId
+				const sentryUserId = persisted.sentryUser.id
+
+				const mainWindow = initMainWindow({
+					activeProjectId,
+					appVersion: appConfig.appVersion,
+					coreService,
+					comapeoUserDataDirectory,
+					isDevelopment: appConfig.appType === 'development',
+					sentryConfig: {
+						enabled: diagnosticsEnabled,
+						environment: sentryEnvironment,
+						userId: sentryUserId,
+					},
+				})
+
+				mainWindow.show()
+
+				log(`Created main window with id ${mainWindow.id}`)
+			}
+		})
+
+		const persisted = persistedStore.getState()
+		const activeProjectId = persisted.activeProjectId
+		const diagnosticsEnabled = persisted.diagnosticsEnabled
+		const sentryUserId = persisted.sentryUser.id
+
+		protocol.handle('comapeo', (request: Request) => {
+			const { hash, host, pathname } = new URL(request.url)
+
+			const isDevelopment = appConfig.appType === 'development'
+
+			if (isDevelopment) {
+				// TODO: Ideally forward to the Vite dev server
+				throw new Error('Custom protocol does not work in development yet')
+			}
+
+			if (host !== 'renderer') {
+				throw new Error(`Unrecognized host: ${host}`)
+			}
+
+			if (pathname === '/') {
+				const u = new URL('../renderer/index.html', import.meta.url)
+				// NOTE: Enables deeplinking in the app
+				u.hash = hash
+				return net.fetch(u.toString())
+			}
+
+			const allowedDirectoryPath = fileURLToPath(
+				new URL('../renderer', import.meta.url),
+			)
+			const requestedPath = join(allowedDirectoryPath, pathname)
+			const relativePath = relative(allowedDirectoryPath, requestedPath)
+
+			// NOTE: Make sure incoming requests do not attempt to access files outside the allowed directory scope
+			const isSafe =
+				relativePath &&
+				!relativePath.startsWith('..') &&
+				!isAbsolute(relativePath)
+
+			if (!isSafe) {
+				// TODO: More gracefully handle by returning an error page?
+				throw new Error(
+					`Requested path is outside allowed scope: ${requestedPath}`,
+				)
+			}
+
+			return net.fetch(pathToFileURL(requestedPath).toString())
+		})
+
+		const mainWindow = initMainWindow({
+			activeProjectId,
+			appVersion: appConfig.appVersion,
+			coreService,
+			comapeoUserDataDirectory,
+			isDevelopment: appConfig.appType === 'development',
+			sentryConfig: {
+				enabled: diagnosticsEnabled,
+				environment: sentryEnvironment,
+				userId: sentryUserId,
+			},
+		})
+
+		log(`Created main window with id ${mainWindow.id}`)
+
+		mainWindow.addListener('ready-to-show', () => {
+			mainWindow.show()
+		})
+
+		return appRunPromise.promise
+	} catch (reason) {
+		if (reason instanceof AppRunError) {
+			throw reason
+		} else {
+			throw new AppRunError({
+				title: intlManager.formatMessage(messages.fatalErrorTitle),
+				description:
+					reason instanceof Error
+						? `${reason.name} ${reason.message}`
+						: intlManager.formatMessage(messages.fatalErrorDescriptionGeneric),
+				cause: reason,
+			})
+		}
+	}
 }
 
 function initMainWindow({
@@ -528,65 +544,6 @@ function loadRootKey({ persistedStore }: { persistedStore: PersistedStore }) {
 
 	return rootKey
 }
-
-const messages = defineMessages({
-	contextMenuCopy: {
-		id: 'main.app.contextMenuCopy',
-		defaultMessage: 'Copy',
-		description: 'Context menu item label for copying text',
-	},
-	contextMenuCopyImage: {
-		id: 'main.app.contextMenuCopyImage',
-		defaultMessage: 'Copy Image',
-		description: 'Context menu item label for copying an image',
-	},
-	contextMenuCopyImageAddress: {
-		id: 'main.app.contextMenuCopyImageAddress',
-		defaultMessage: 'Copy Image Address',
-		description: 'Context menu item label for copying the URL of an image',
-	},
-	contextMenuCopyLink: {
-		id: 'main.app.contextMenuCopyLink',
-		defaultMessage: 'Copy Link',
-		description: 'Context menu item label for copying a link',
-	},
-	contextMenuCut: {
-		id: 'main.app.contextMenuCut',
-		defaultMessage: 'Cut',
-		description: 'Context menu item label for cutting text',
-	},
-	contextMenuInspectElement: {
-		id: 'main.app.contextMenuInspectElement',
-		defaultMessage: 'Inspect',
-		description: 'Context menu item label for inspecting an element',
-	},
-	contextMenuLearnSpelling: {
-		id: 'main.app.contextMenuLearnSpelling',
-		defaultMessage: 'Learn Spelling {placeholder}',
-		description:
-			'Context menu item label for learning the spelling of the selected text',
-	},
-	contextMenuLookUpSelection: {
-		id: 'main.app.contextMenuLookUpSelection',
-		defaultMessage: 'Look up {placeholder}',
-		description: 'Context menu item label for looking up selected text',
-	},
-	contextMenuPaste: {
-		id: 'main.app.contextMenuPaste',
-		defaultMessage: 'Paste',
-		description: 'Context menu item label for paste',
-	},
-	contextMenuSaveImageAs: {
-		id: 'main.app.contextMenuSaveImageAs',
-		defaultMessage: 'Save Image As…',
-		description: 'Context menu item label for saving an image as…',
-	},
-	contextMenuSelectAll: {
-		id: 'main.app.contextMenuSelectAll',
-		defaultMessage: 'Select All',
-		description: 'Context menu item label for selecting all',
-	},
-})
 
 function createAppContextMenu({
 	appType,

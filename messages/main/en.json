@@ -42,5 +42,17 @@
   "main.app.contextMenuSelectAll": {
     "description": "Context menu item label for selecting all",
     "message": "Select All"
+  },
+  "main.app.fatalErrorDescriptionCoreService": {
+    "description": "Description for error dialog when core service in backend stops.",
+    "message": "Core service stopped unexpectedly."
+  },
+  "main.app.fatalErrorDescriptionGeneric": {
+    "description": "Description for error dialog when some error occurs in the backend.",
+    "message": "A fatal error occurred. Close the application and try again."
+  },
+  "main.app.fatalErrorTitle": {
+    "description": "Title for error dialog when fatal error in backend occurs.",
+    "message": "Fatal Error"
   }
 }
