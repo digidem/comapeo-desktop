@@ -34,7 +34,13 @@ process.on('uncaughtException', (error) => {
 	log('uncaughtException', error)
 
 	if (values.logsDirectory) {
-		writeErrorToLogs(values.logsDirectory, error)
+		try {
+			writeErrorToLogs(values.logsDirectory, error)
+		} catch (reason) {
+			Sentry.captureException(
+				new Error('Failed to write to log file', { cause: reason }),
+			)
+		}
 	}
 
 	// NOTE: We let Sentry handle exiting the process in order to properly capture exceptions
