@@ -1,6 +1,5 @@
-import assert from 'node:assert'
-import { mkdirSync } from 'node:fs'
-import path from 'node:path'
+import { appendFileSync, mkdirSync } from 'node:fs'
+import path, { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 import { FastifyController, MapeoManager } from '@comapeo/core'
@@ -13,9 +12,39 @@ import Fastify from 'fastify'
 import sodium from 'sodium-native'
 import * as v from 'valibot'
 
-import type { ServiceErrorMessage } from '../main/service-error.js'
+const { values } = parseArgs({
+	strict: true,
+	options: {
+		logsDirectory: { type: 'string' },
+		onlineStyleUrl: { type: 'string' },
+		rootKey: { type: 'string' },
+		storageDirectory: { type: 'string' },
+	},
+})
 
-Sentry.init()
+Sentry.init({
+	integrations: [
+		Sentry.onUncaughtExceptionIntegration({
+			exitEvenIfOtherHandlersAreRegistered: true,
+		}),
+	],
+})
+
+process.on('uncaughtException', (error) => {
+	log('uncaughtException', error)
+
+	if (values.logsDirectory) {
+		try {
+			writeErrorToLogs(values.logsDirectory, error)
+		} catch (reason) {
+			Sentry.captureException(
+				new Error('Failed to write to log file', { cause: reason }),
+			)
+		}
+	}
+
+	// NOTE: We let Sentry handle exiting the process in order to properly capture exceptions
+})
 
 const log = debug('comapeo:services:core')
 
@@ -46,6 +75,7 @@ const CUSTOM_MAPS_DIR_NAME = 'maps'
 const DEFAULT_CUSTOM_MAP_FILE_NAME = 'default.smp'
 
 const ProcessArgsSchema = v.object({
+	logsDirectory: v.string(),
 	onlineStyleUrl: v.optional(v.pipe(v.string(), v.url())),
 	rootKey: v.pipe(
 		v.string(),
@@ -67,15 +97,6 @@ const NewClientMessageSchema = v.object({
 
 export type NewClientMessage = v.InferInput<typeof NewClientMessageSchema>
 
-const { values } = parseArgs({
-	strict: true,
-	options: {
-		onlineStyleUrl: { type: 'string' },
-		rootKey: { type: 'string' },
-		storageDirectory: { type: 'string' },
-	},
-})
-
 const { onlineStyleUrl, rootKey, storageDirectory } = v.parse(
 	ProcessArgsSchema,
 	values,
@@ -89,11 +110,7 @@ const { manager } = initializeCore({
 
 initializePeerDiscovery(manager).catch((err) => {
 	log('Failed to start peer discovery', err)
-
-	process.parentPort.postMessage({
-		type: 'error',
-		error: err instanceof Error ? err : new Error(err),
-	} satisfies ServiceErrorMessage)
+	Sentry.captureException(err)
 })
 
 const connectedClientPorts: WeakSet<MessagePortMain> = new WeakSet()
@@ -108,7 +125,9 @@ process.parentPort.on('message', (event) => {
 
 	const [port] = event.ports
 
-	assert(port)
+	if (!port) {
+		throw new Error('Expected port to be defined')
+	}
 
 	if (connectedClientPorts.has(port)) {
 		log(
@@ -245,6 +264,15 @@ class MessagePortLike {
 	removeEventListener(event: 'message', listener: () => void) {
 		this.#port.removeListener(event, listener)
 	}
+}
+
+function writeErrorToLogs(logsDirectory: string, error: Error) {
+	const file = join(logsDirectory, 'service-core.txt')
+
+	appendFileSync(
+		file,
+		`${new Date().toISOString()} ${error.stack || error.toString()}\n`,
+	)
 }
 
 function noop() {}
