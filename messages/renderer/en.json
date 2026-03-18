@@ -1043,6 +1043,22 @@
     "description": "Fallback for when project is missing a name.",
     "message": "Unnamed Project"
   },
+  "routes.app.settings.-data-and-privacy-section.appUsageDescription": {
+    "description": "Description of app usage metrics settings section.",
+    "message": "Share how you use CoMapeo with Awana Digital — no information you share can be used to track you."
+  },
+  "routes.app.settings.-data-and-privacy-section.appUsageDetailsIdNumbers": {
+    "description": "Text describing how IDs used for app usage metrics are used and generated.",
+    "message": "ID numbers are scrambled randomly and changed every month. ID numbers are scrambled randomly and changed every month."
+  },
+  "routes.app.settings.-data-and-privacy-section.appUsageDetailsIpAddresses": {
+    "description": "Text describing how IP addresses are never stored.",
+    "message": "CoMapeo never stores IP addresses."
+  },
+  "routes.app.settings.-data-and-privacy-section.appUsageTitle": {
+    "description": "Title of app usage metrics settings section.",
+    "message": "App Usage"
+  },
   "routes.app.settings.-data-and-privacy-section.description": {
     "description": "Description for data and privacy section in settings page.",
     "message": "CoMapeo respects your privacy and autonomy"
@@ -1066,6 +1082,10 @@
   "routes.app.settings.-data-and-privacy-section.learnMore": {
     "description": "Text for link that navigates to external URL for additional information info about data and privacy.",
     "message": "Learn More"
+  },
+  "routes.app.settings.-data-and-privacy-section.shareAppUsage": {
+    "description": "Text label for checkbox to toggle app usage sharing setting.",
+    "message": "Share App Usage"
   },
   "routes.app.settings.-data-and-privacy-section.shareDiagnosticInformation": {
     "description": "Label for checkbox to toggle sharing of diagnostic information.",

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Checkbox from '@mui/material/Checkbox'
 import Divider from '@mui/material/Divider'
@@ -40,6 +41,9 @@ export function DataAndPrivacySection() {
 		multiplier: 2,
 		typographyVariant: 'body1',
 	})
+
+	// TODO: Replace with actual implementation
+	const [appUsageEnabled, setAppUsageEnabled] = useState(false)
 
 	return (
 		<>
@@ -92,71 +96,136 @@ export function DataAndPrivacySection() {
 					</Stack>
 				</Stack>
 
-				<Stack
-					direction="column"
-					border={`1px solid ${BLUE_GREY}`}
-					borderRadius={2}
-				>
-					<Stack padding={6} direction="column" gap={4}>
-						<Typography component="h3" variant="body1" fontWeight={500}>
-							{t(m.diagnosticInformationTitle)}
-						</Typography>
-
-						<Box>
-							<Typography color="textSecondary">
-								{t(m.diagnosticInformationDescription)}
+				<Stack direction="row" gap={6}>
+					<Stack
+						direction="column"
+						border={`1px solid ${BLUE_GREY}`}
+						borderRadius={2}
+					>
+						<Stack padding={6} direction="column" gap={4} flex={1}>
+							<Typography component="h3" variant="body1" fontWeight={500}>
+								{t(m.diagnosticInformationTitle)}
 							</Typography>
 
-							<List
-								disablePadding
-								sx={{
-									listStyleType: 'disc',
-									paddingX: 8,
-									color: DARK_GREY,
-								}}
-							>
-								<ListItem disablePadding sx={{ display: 'list-item' }}>
-									<Typography color="textSecondary">
-										{t(m.diagnosticInformationPersonalInfo)}
-									</Typography>
-								</ListItem>
+							<Box>
+								<Typography color="textSecondary">
+									{t(m.diagnosticInformationDescription)}
+								</Typography>
 
-								<ListItem disablePadding sx={{ display: 'list-item' }}>
-									<Typography color="textSecondary">
-										{t(m.diagnosticInformationOptOut)}
-									</Typography>
-								</ListItem>
-							</List>
+								<List
+									disablePadding
+									sx={{
+										listStyleType: 'disc',
+										paddingX: 8,
+										color: DARK_GREY,
+									}}
+								>
+									<ListItem disablePadding sx={{ display: 'list-item' }}>
+										<Typography color="textSecondary">
+											{t(m.diagnosticInformationPersonalInfo)}
+										</Typography>
+									</ListItem>
+
+									<ListItem disablePadding sx={{ display: 'list-item' }}>
+										<Typography color="textSecondary">
+											{t(m.diagnosticInformationOptOut)}
+										</Typography>
+									</ListItem>
+								</List>
+							</Box>
+						</Stack>
+
+						<Divider variant="fullWidth" sx={{ backgroundColor: BLUE_GREY }} />
+
+						<Box paddingX={6} paddingY={4}>
+							<FormGroup>
+								<FormControlLabel
+									control={<Checkbox checked={diagnosticsEnabled} />}
+									onChange={(_event, checked) => {
+										setDiagnosticsEnabledMutation.mutate(checked, {
+											onError: (err) => {
+												captureException(err)
+											},
+										})
+									}}
+									slotProps={{
+										typography: {
+											fontWeight: 500,
+										},
+									}}
+									label={t(m.shareDiagnosticInformation)}
+									labelPlacement="start"
+									sx={{
+										margin: 0,
+										justifyContent: 'space-between',
+									}}
+								/>
+							</FormGroup>
 						</Box>
 					</Stack>
 
-					<Divider variant="fullWidth" sx={{ backgroundColor: BLUE_GREY }} />
+					<Stack
+						direction="column"
+						border={`1px solid ${BLUE_GREY}`}
+						borderRadius={2}
+					>
+						<Stack padding={6} direction="column" gap={4} flex={1}>
+							<Typography component="h3" variant="body1" fontWeight={500}>
+								{t(m.appUsageTitle)}
+							</Typography>
 
-					<Box paddingX={6} paddingY={4}>
-						<FormGroup>
-							<FormControlLabel
-								control={<Checkbox checked={diagnosticsEnabled} />}
-								onChange={(_event, checked) => {
-									setDiagnosticsEnabledMutation.mutate(checked, {
-										onError: (err) => {
-											captureException(err)
+							<Box>
+								<Typography color="textSecondary">
+									{t(m.appUsageDescription)}
+								</Typography>
+
+								<List
+									disablePadding
+									sx={{
+										listStyleType: 'disc',
+										paddingX: 8,
+										color: DARK_GREY,
+									}}
+								>
+									<ListItem disablePadding sx={{ display: 'list-item' }}>
+										<Typography color="textSecondary">
+											{t(m.appUsageDetailsIdNumbers)}
+										</Typography>
+									</ListItem>
+
+									<ListItem disablePadding sx={{ display: 'list-item' }}>
+										<Typography color="textSecondary">
+											{t(m.appUsageDetailsIpAddresses)}
+										</Typography>
+									</ListItem>
+								</List>
+							</Box>
+						</Stack>
+
+						<Divider variant="fullWidth" sx={{ backgroundColor: BLUE_GREY }} />
+
+						<Box paddingX={6} paddingY={4}>
+							<FormGroup>
+								<FormControlLabel
+									control={<Checkbox checked={appUsageEnabled} />}
+									onChange={(_event, checked) => {
+										setAppUsageEnabled(checked)
+									}}
+									slotProps={{
+										typography: {
+											fontWeight: 500,
 										},
-									})
-								}}
-								slotProps={{
-									typography: {
-										fontWeight: 500,
-									},
-								}}
-								label={t(m.shareDiagnosticInformation)}
-								labelPlacement="start"
-								sx={{
-									margin: 0,
-									justifyContent: 'space-between',
-								}}
-							/>
-						</FormGroup>
-					</Box>
+									}}
+									label={t(m.shareAppUsage)}
+									labelPlacement="start"
+									sx={{
+										margin: 0,
+										justifyContent: 'space-between',
+									}}
+								/>
+							</FormGroup>
+						</Box>
+					</Stack>
 				</Stack>
 			</Stack>
 
@@ -240,5 +309,33 @@ const m = defineMessages({
 		defaultMessage: 'Share Diagnostic Information',
 		description:
 			'Label for checkbox to toggle sharing of diagnostic information.',
+	},
+	appUsageTitle: {
+		id: 'routes.app.settings.-data-and-privacy-section.appUsageTitle',
+		defaultMessage: 'App Usage',
+		description: 'Title of app usage metrics settings section.',
+	},
+	appUsageDescription: {
+		id: 'routes.app.settings.-data-and-privacy-section.appUsageDescription',
+		defaultMessage:
+			'Share how you use CoMapeo with Awana Digital — no information you share can be used to track you.',
+		description: 'Description of app usage metrics settings section.',
+	},
+	appUsageDetailsIdNumbers: {
+		id: 'routes.app.settings.-data-and-privacy-section.appUsageDetailsIdNumbers',
+		defaultMessage:
+			'ID numbers are scrambled randomly and changed every month. ID numbers are scrambled randomly and changed every month.',
+		description:
+			'Text describing how IDs used for app usage metrics are used and generated.',
+	},
+	appUsageDetailsIpAddresses: {
+		id: 'routes.app.settings.-data-and-privacy-section.appUsageDetailsIpAddresses',
+		defaultMessage: 'CoMapeo never stores IP addresses.',
+		description: 'Text describing how IP addresses are never stored.',
+	},
+	shareAppUsage: {
+		id: 'routes.app.settings.-data-and-privacy-section.shareAppUsage',
+		defaultMessage: 'Share App Usage',
+		description: 'Text label for checkbox to toggle app usage sharing setting.',
 	},
 })
