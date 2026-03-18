@@ -326,16 +326,16 @@ export async function start({
 	} catch (reason) {
 		if (reason instanceof AppRunError) {
 			throw reason
-		} else {
-			throw new AppRunError({
-				title: intlManager.formatMessage(messages.fatalErrorTitle),
-				description:
-					reason instanceof Error
-						? `${reason.name}: ${reason.message}`
-						: intlManager.formatMessage(messages.fatalErrorDescriptionGeneric),
-				cause: reason,
-			})
 		}
+
+		throw new AppRunError({
+			title: intlManager.formatMessage(messages.fatalErrorTitle),
+			description:
+				reason instanceof Error
+					? `${reason.name}: ${reason.message}`
+					: intlManager.formatMessage(messages.fatalErrorDescriptionGeneric),
+			cause: reason,
+		})
 	}
 }
 
