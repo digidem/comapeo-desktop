@@ -331,7 +331,7 @@ export async function start({
 				title: intlManager.formatMessage(messages.fatalErrorTitle),
 				description:
 					reason instanceof Error
-						? `${reason.name} ${reason.message}`
+						? `${reason.name}: ${reason.message}`
 						: intlManager.formatMessage(messages.fatalErrorDescriptionGeneric),
 				cause: reason,
 			})
