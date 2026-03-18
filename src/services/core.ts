@@ -1,4 +1,3 @@
-import assert from 'node:assert'
 import { appendFileSync, mkdirSync } from 'node:fs'
 import path, { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -120,7 +119,9 @@ process.parentPort.on('message', (event) => {
 
 	const [port] = event.ports
 
-	assert(port)
+	if (!port) {
+		throw new Error('Expected port to be defined')
+	}
 
 	if (connectedClientPorts.has(port)) {
 		log(
@@ -260,7 +261,7 @@ class MessagePortLike {
 }
 
 function writeErrorToLogs(logsDirectory: string, error: Error) {
-	const file = join(logsDirectory, 'core-service.txt')
+	const file = join(logsDirectory, 'service-core.txt')
 
 	appendFileSync(
 		file,
