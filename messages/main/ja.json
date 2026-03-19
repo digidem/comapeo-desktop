@@ -38,5 +38,17 @@
   "main.app.contextMenuSelectAll": {
     "description": "Context menu item label for selecting all",
     "message": "すべて選択"
+  },
+  "main.app.fatalErrorDescriptionCoreService": {
+    "description": "Description for error dialog when core service in backend stops.",
+    "message": "コアサービスが予期せず停止しました。"
+  },
+  "main.app.fatalErrorDescriptionGeneric": {
+    "description": "Description for error dialog when some error occurs in the backend.",
+    "message": "致命的なエラーが発生しました。アプリケーションを閉じて再度お試し下さい。"
+  },
+  "main.app.fatalErrorTitle": {
+    "description": "Title for error dialog when fatal error in backend occurs.",
+    "message": "致命的エラー"
   }
 }
