@@ -1,4 +1,4 @@
-import { Suspense, type PropsWithChildren } from 'react'
+import { Suspense, useState, type PropsWithChildren } from 'react'
 import {
 	useManyProjects,
 	useOwnDeviceInfo,
@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import type { SxProps, Theme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
@@ -33,7 +34,9 @@ import {
 	CREATOR_ROLE_ID,
 	type ListedProject,
 } from '../../lib/comapeo.ts'
+import { getAppUsageMetricsQueryOptions } from '../../lib/queries/app-settings.ts'
 import {
+	AppUsageConsentDialogContent,
 	JoinProjectDialogContent,
 	LeftProjectDialogContent,
 	StartProjectDialogContent,
@@ -128,6 +131,15 @@ function RouteComponent() {
 			replace: true,
 		})
 	}
+
+	const { data: appUsageMetrics } = useSuspenseQuery(
+		getAppUsageMetricsQueryOptions(),
+	)
+
+	const [showAppUsageDialog, setShowAppUsageDialog] = useState(() => {
+		// TODO: Update to match criteria for showing
+		return appUsageMetrics ? null : (true as const)
+	})
 
 	return (
 		<>
@@ -444,6 +456,17 @@ function RouteComponent() {
 								},
 								replace: true,
 							})
+						}}
+					/>
+				)}
+			</DecentDialog>
+
+			<DecentDialog fullWidth maxWidth="sm" value={showAppUsageDialog}>
+				{() => (
+					<AppUsageConsentDialogContent
+						deviceName={ownDeviceInfo.name}
+						onClose={() => {
+							setShowAppUsageDialog(null)
 						}}
 					/>
 				)}

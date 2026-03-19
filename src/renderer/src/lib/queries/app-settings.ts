@@ -1,7 +1,7 @@
 import { queryOptions, type UseMutationOptions } from '@tanstack/react-query'
 
-import type { RuntimeApi } from '../../../../preload/runtime'
-import { BASE_QUERY_KEY as LANGUAGE_BASE_QUERY_KEY } from './intl'
+import type { RuntimeApi } from '../../../../preload/runtime.ts'
+import { BASE_QUERY_KEY as LANGUAGE_BASE_QUERY_KEY } from './intl.ts'
 
 const BASE_QUERY_KEY = 'app-settings'
 
@@ -28,6 +28,15 @@ export function getLocaleStateQueryOptions() {
 		queryKey: [BASE_QUERY_KEY, 'locale'],
 		queryFn: async () => {
 			return window.runtime.getLocaleState()
+		},
+	})
+}
+
+export function getAppUsageMetricsQueryOptions() {
+	return queryOptions({
+		queryKey: [BASE_QUERY_KEY, 'appUsageMetrics'],
+		queryFn: async () => {
+			return window.runtime.getAppUsageMetrics()
 		},
 	})
 }
@@ -79,5 +88,22 @@ export function setLocaleMutationOptions() {
 		void,
 		Error,
 		Parameters<RuntimeApi['setLocale']>[0]
+	>
+}
+
+export function setAppUsageMetricsMutationOptions() {
+	return {
+		mutationFn: async (vars) => {
+			return window.runtime.setAppUsageMetrics(vars)
+		},
+		onSuccess: (_data, _variables, _mutateResult, context) => {
+			context.client.invalidateQueries({
+				queryKey: [BASE_QUERY_KEY, 'appUsageMetrics'],
+			})
+		},
+	} satisfies UseMutationOptions<
+		void,
+		Error,
+		Parameters<RuntimeApi['setAppUsageMetrics']>[0]
 	>
 }

@@ -5,7 +5,7 @@ import * as v from 'valibot'
 
 import type { IntlManager } from './intl-manager.ts'
 import {
-	PersistedStateV1Schema,
+	CurrentPersistedStateSchema,
 	type PersistedStore,
 } from './persisted-store.ts'
 
@@ -45,10 +45,14 @@ export function setUpMainIPC({
 		return intlManager.localeState
 	})
 
+	ipcMain.handle('settings:get:appUsageMetrics', () => {
+		return persistedStore.getState().appUsageMetrics
+	})
+
 	// Settings (set)
 	ipcMain.handle('settings:set:coordinateFormat', (_event, value) => {
 		v.assert(
-			v.nonOptional(PersistedStateV1Schema.entries.coordinateFormat),
+			v.nonOptional(CurrentPersistedStateSchema.entries.coordinateFormat),
 			value,
 		)
 		persistedStore.setState({ coordinateFormat: value })
@@ -56,22 +60,41 @@ export function setUpMainIPC({
 
 	ipcMain.handle('settings:set:diagnosticsEnabled', (_event, value) => {
 		v.assert(
-			v.nonOptional(PersistedStateV1Schema.entries.diagnosticsEnabled),
+			v.nonOptional(CurrentPersistedStateSchema.entries.diagnosticsEnabled),
 			value,
 		)
 		persistedStore.setState({ diagnosticsEnabled: value })
 	})
 
 	ipcMain.handle('settings:set:locale', (_event, value) => {
-		v.assert(v.nonOptional(PersistedStateV1Schema.entries.locale), value)
+		v.assert(v.nonOptional(CurrentPersistedStateSchema.entries.locale), value)
 		persistedStore.setState({ locale: value })
+	})
+
+	ipcMain.handle('settings:set:appUsageMetrics', (_event, value) => {
+		v.assert(
+			CurrentPersistedStateSchema.entries.appUsageMetrics.wrapped.entries
+				.status,
+			value,
+		)
+
+		persistedStore.setState((prev) => ({
+			...prev,
+			appUsageMetrics: {
+				status: value,
+				timesAsked: prev.appUsageMetrics
+					? prev.appUsageMetrics.timesAsked + 1
+					: 1,
+				updatedAt: Date.now(),
+			},
+		}))
 	})
 
 	// Active project ID
 	ipcMain.handle('activeProjectId:set', (_event, value) => {
 		v.assert(
 			v.union([
-				v.nonOptional(PersistedStateV1Schema.entries.activeProjectId),
+				v.nonOptional(CurrentPersistedStateSchema.entries.activeProjectId),
 				v.null(),
 			]),
 			value,

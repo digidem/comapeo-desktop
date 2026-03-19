@@ -7,7 +7,8 @@
 - Icons with names starting with `material-` designed by [Google Material Icons](https://fonts.google.com/icons?icon.set=Material+Icons). License: [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 - Icons with name starting with `noun-project-` sourced from [Noun Project](https://thenounproject.com).
-  - ["Notebook" icon by Nursila](./noun-project-notebook.svg) from [Noun Project](https://thenounproject.com/browse/icons/term/notebook/) CC BY 3.0
+  - ["Notebook" icon by Nursila](./noun-project-notebook.svg) from [Noun Project](https://thenounproject.com/icon/notebook-5269412/) CC BY 3.0
+  - ["Checklist" icon by iconfield](./noun-project-checklist.svg) from [Noun Project](https://thenounproject.com/icon/checklist-4399805/) CC BY 3.0
 
 - Icons with name starting with `ant-design-icons-` sourced from [Ant Design Icons](https://ant.design/components/icon). License: [MIT](https://github.com/ant-design/ant-design/blob/master/LICENSE)
 

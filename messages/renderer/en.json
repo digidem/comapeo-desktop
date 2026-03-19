@@ -79,6 +79,54 @@
     "description": "Tooltip text for button to display additional projects section as a list.",
     "message": "Show as list"
   },
+  "routes.app.index.appUsageConsentInterstitialAllowButton": {
+    "description": "Text for button to allow consent for app usage metrics.",
+    "message": "Yes, count me in"
+  },
+  "routes.app.index.appUsageConsentInterstitialDenyButton": {
+    "description": "Text for button to deny consent for app usage metrics.",
+    "message": "No, not now"
+  },
+  "routes.app.index.appUsageConsentInterstitialDescription": {
+    "description": "Description text for interstitial state of app usage consent dialog.",
+    "message": "Share how you use CoMapeo with Awana Digital — no information you share can be used to track you."
+  },
+  "routes.app.index.appUsageConsentInterstitialDetailsIdNumbers": {
+    "description": "Text describing how IDs used for app usage metrics are used and generated.",
+    "message": "ID numbers are scrambled randomly and changed every month."
+  },
+  "routes.app.index.appUsageConsentInterstitialDetailsIpAddresses": {
+    "description": "Text describing how IP addresses are never stored.",
+    "message": "CoMapeo never stores IP addresses."
+  },
+  "routes.app.index.appUsageConsentInterstitialDetailsTurnOffAnytime": {
+    "description": "Text describing how app usage metrics can be turned off at any time.",
+    "message": "Turn off any time."
+  },
+  "routes.app.index.appUsageConsentInterstitialTitle": {
+    "description": "Title text for interstitial state of app usage consent dialog.",
+    "message": "Help improve your experience."
+  },
+  "routes.app.index.appUsageConsentSuccessCloseButton": {
+    "description": "Text for button to close app usage consent dialog.",
+    "message": "Done"
+  },
+  "routes.app.index.appUsageConsentSuccessDescription": {
+    "description": "Description text for success state of app usage consent dialog.",
+    "message": "<b>{deviceName}</b> is now sharing how you use CoMapeo with Awana Digital."
+  },
+  "routes.app.index.appUsageConsentSuccessDescriptionNoDeviceName": {
+    "description": "Description text for success state of app usage consent dialog when device name not present (edge case).",
+    "message": "This device is now sharing how you use CoMapeo with Awana Digital."
+  },
+  "routes.app.index.appUsageConsentSuccessDetailsChangeSetting": {
+    "description": "Description text for success state of app usage consent dialog.",
+    "message": "Change this anytime by navigating to Data & Privacy in CoMapeo Settings."
+  },
+  "routes.app.index.appUsageConsentSuccessTitle": {
+    "description": "Title text for success state of app usage consent dialog.",
+    "message": "Success!"
+  },
   "routes.app.index.characterCount": {
     "description": "Character count for project name input.",
     "message": "{count}/{max}"

@@ -3,6 +3,7 @@ import type { Systeminformation } from 'systeminformation'
 import type { CoordinateFormat } from '../shared/coordinate-format.ts'
 import type { Locale, LocaleState } from '../shared/intl.ts'
 import type { SelectedFile } from '../shared/ipc.ts'
+import type { AppUsageMetrics } from '../shared/metrics.ts'
 
 export type RuntimeApi = {
 	// Files
@@ -33,11 +34,13 @@ export type RuntimeApi = {
 	getCoordinateFormat: () => Promise<CoordinateFormat>
 	getDiagnosticsEnabled: () => Promise<boolean>
 	getLocaleState: () => Promise<LocaleState>
+	getAppUsageMetrics: () => Promise<AppUsageMetrics | null>
 
 	// Settings (set)
 	setCoordinateFormat: (value: CoordinateFormat) => Promise<void>
 	setDiagnosticsEnabled: (value: boolean) => Promise<void>
 	setLocale: (value: Locale) => Promise<void>
+	setAppUsageMetrics: (value: AppUsageMetrics['status']) => Promise<void>
 
 	// Sentry
 	getSentryConfig: () => {

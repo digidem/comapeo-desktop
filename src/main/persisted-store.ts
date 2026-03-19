@@ -9,10 +9,11 @@ import { createStore } from 'zustand/vanilla'
 
 import { CoordinateFormatSchema } from '../shared/coordinate-format.ts'
 import { LocaleSchema } from '../shared/intl.ts'
+import { AppUsageMetricsSchema } from '../shared/metrics.ts'
 
 const log = debug('comapeo:main:persisted-store')
 
-export const PersistedStateV1Schema = v.object({
+const PersistedStateV1Schema = v.object({
 	activeProjectId: v.optional(v.string()),
 	coordinateFormat: v.optional(CoordinateFormatSchema, 'utm'),
 	diagnosticsEnabled: v.optional(v.boolean(), true),
@@ -31,14 +32,20 @@ export const PersistedStateV1Schema = v.object({
 	metricsDeviceId: v.optional(v.string(), () => generateMetricsDeviceId()),
 })
 
-export type PersistedStateV1 = v.InferOutput<typeof PersistedStateV1Schema>
+const PersistedStateV2Schema = v.object({
+	...PersistedStateV1Schema.entries,
+	appUsageMetrics: v.optional(AppUsageMetricsSchema),
+})
+
+export const CurrentPersistedStateSchema = PersistedStateV2Schema
+export type CurrentPersistedState = v.InferOutput<typeof PersistedStateV2Schema>
 
 export function createPersistedStore(opts: { filePath: string }) {
 	function ensureDirectory() {
 		mkdirSync(dirname(opts.filePath), { recursive: true })
 	}
 
-	const storage: PersistStorage<PersistedStateV1> = {
+	const storage: PersistStorage<CurrentPersistedState> = {
 		getItem: () => {
 			let content
 			try {
@@ -49,11 +56,18 @@ export function createPersistedStore(opts: { filePath: string }) {
 			}
 
 			return v.parse(
-				v.object({
-					version: v.optional(v.number()),
-					state: PersistedStateV1Schema,
-				}),
+				v.variant('version', [
+					v.object({
+						version: v.literal(1),
+						state: PersistedStateV1Schema,
+					}),
+					v.object({
+						version: v.literal(2),
+						state: PersistedStateV2Schema,
+					}),
+				]),
 				JSON.parse(content),
+				{ abortEarly: true },
 			)
 		},
 		removeItem: () => {
@@ -87,13 +101,26 @@ export function createPersistedStore(opts: { filePath: string }) {
 
 	const store = createStore(
 		persist(
-			(): PersistedStateV1 => {
-				return v.getDefaults(PersistedStateV1Schema)
+			(): CurrentPersistedState => {
+				return v.getDefaults(CurrentPersistedStateSchema)
 			},
 			{
 				name: 'comapeo-persisted',
-				version: 1,
+				version: 2,
 				storage,
+				migrate: (prevState, version) => {
+					if (version === 1) {
+						const stateV1 = v.safeParse(PersistedStateV1Schema, prevState, {
+							abortEarly: true,
+						})
+
+						if (stateV1.success) {
+							return stateV1.output
+						}
+					}
+
+					return v.getDefaults(CurrentPersistedStateSchema)
+				},
 			},
 		),
 	)

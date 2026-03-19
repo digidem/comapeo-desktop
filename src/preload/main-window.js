@@ -74,6 +74,10 @@ const runtimeApi = {
 	getLocaleState: async () => {
 		return ipcRenderer.invoke('settings:get:locale')
 	},
+	getAppUsageMetrics: async () => {
+		const result = await ipcRenderer.invoke('settings:get:appUsageMetrics')
+		return result || null
+	},
 
 	// Settings (set)
 	setCoordinateFormat: async (value) => {
@@ -84,6 +88,9 @@ const runtimeApi = {
 	},
 	setLocale: async (value) => {
 		return ipcRenderer.invoke('settings:set:locale', value)
+	},
+	setAppUsageMetrics: async (value) => {
+		return ipcRenderer.invoke('settings:set:appUsageMetrics', value)
 	},
 
 	// Sentry
