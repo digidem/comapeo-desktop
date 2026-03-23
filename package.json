@@ -170,7 +170,7 @@
 	"overrides": {
 		"better-sqlite3": "12.8.0",
 		"@electron-forge/shared-types": {
-			"tar": "7.5.10"
+			"tar": "7.5.12"
 		},
 		"tmp": "0.2.5"
 	}
