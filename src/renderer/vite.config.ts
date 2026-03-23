@@ -31,7 +31,6 @@ export default defineConfig((configEnv) => {
 			outDir: path.join(PROJECT_ROOT_DIR, 'dist/renderer'),
 			emptyOutDir: true,
 			sourcemap: true,
-			modulePreload: false,
 		},
 		define: {
 			__APP_TYPE__: JSON.stringify(configEnv.mode),
