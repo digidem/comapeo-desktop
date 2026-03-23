@@ -119,7 +119,10 @@ jobs:
         env:
           APP_TYPE: 'internal'
           COMAPEO_TEST: 'true'
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_DSN: ${{ vars.COMAPEO_SENTRY_DSN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           VITE_FEATURE_TEST_DATA_UI: 'true'
         run: node --run forge:package
 
