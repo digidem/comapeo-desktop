@@ -31,7 +31,7 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs')({
 
 		await Promise.all([
 			queryClient.ensureQueryData({
-				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'stylejson_url'],
+				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'maps', 'stylejson_url'],
 				queryFn: async () => {
 					return clientApi.getMapStyleJsonUrl()
 				},
