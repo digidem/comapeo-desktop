@@ -85,6 +85,15 @@ export default defineConfig(
 		rules: {
 			'react-hooks/exhaustive-deps': 'error',
 			'react-hooks/rules-of-hooks': 'error',
+			'@tanstack/query/exhaustive-deps': [
+				'error',
+				{
+					allowlist: {
+						variables: ['clientApi', 'projectApi'],
+						types: ['MapeoClientApi', 'MapeoProjectApi'],
+					},
+				},
+			],
 		},
 		languageOptions: {
 			globals: { ...globals.browser },
