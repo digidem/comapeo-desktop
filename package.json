@@ -161,7 +161,7 @@
 		"semver": "7.7.4",
 		"spin-delay": "2.0.1",
 		"typescript": "5.9.3",
-		"typescript-eslint": "8.57.1",
+		"typescript-eslint": "8.57.2",
 		"utm": "1.1.1",
 		"vite": "8.0.2",
 		"vite-plugin-icons-spritesheet": "3.0.1",
