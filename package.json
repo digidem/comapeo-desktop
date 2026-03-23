@@ -78,7 +78,7 @@
 		"@sentry/electron": "7.10.0",
 		"atomically": "2.1.1",
 		"debug": "4.4.3",
-		"electron-context-menu": "4.1.1",
+		"electron-context-menu": "4.1.2",
 		"electron-dl": "4.0.0",
 		"electron-squirrel-startup": "1.0.1",
 		"fastify": "4.29.1",
