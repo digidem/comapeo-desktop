@@ -49,6 +49,21 @@ import { DIALOG_CONTAINER_ID, TITLE_BAR_HEIGHT } from './lib/constants.ts'
 import { getLocaleStateQueryOptions } from './lib/queries/app-settings.ts'
 import { createTheme } from './theme.ts'
 
+const { platform } = window.runtime.getAppInfo()
+
+const theme = createTheme({ platform })
+
+const MAIN_CONTENT_HEIGHT =
+	platform === 'darwin' ? `calc(100% - ${TITLE_BAR_HEIGHT})` : '100%'
+
+const clientApi = initComapeoClient()
+
+const refreshTokensStore = createRefreshTokensStore()
+const localPeersStore = createLocalPeersStore({ clientApi })
+const activeProjectIdStore = createActiveProjectIdStore({
+	initialValue: window.runtime.getInitialProjectId(),
+})
+
 const queryClient = new QueryClient({
 	// Since the API is running locally, queries should run regardless of network
 	// status, and should not be retried. In React Native the API consumer would
@@ -67,22 +82,20 @@ const queryClient = new QueryClient({
 	},
 })
 
-const clientApi = initComapeoClient()
 const hashHistory = createHashHistory()
 
 const router = createRouter({
 	routeTree,
 	history: hashHistory,
 	context: {
+		activeProjectIdStore,
 		clientApi,
-		history: hashHistory,
-		queryClient,
-		// NOTE: Populated at render time
-		activeProjectIdStore: undefined!,
 		// NOTE: Populated at render time
 		formatMessage: undefined!,
+		history: hashHistory,
 		// NOTE: Populated at render time
 		localeState: undefined!,
+		queryClient,
 	},
 	defaultPreload: 'intent',
 	// Since we're using React Query, we don't want loader calls to ever be stale
@@ -127,19 +140,6 @@ initSentryElectron(
 	},
 	initSentryReact,
 )
-
-const { platform } = window.runtime.getAppInfo()
-
-const theme = createTheme({ platform })
-
-const MAIN_CONTENT_HEIGHT =
-	platform === 'darwin' ? `calc(100% - ${TITLE_BAR_HEIGHT})` : '100%'
-
-const refreshTokensStore = createRefreshTokensStore()
-const localPeersStore = createLocalPeersStore({ clientApi })
-const activeProjectIdStore = createActiveProjectIdStore({
-	initialValue: window.runtime.getInitialProjectId(),
-})
 
 activeProjectIdStore.instance.subscribe((state) => {
 	sessionStorage.setItem(
@@ -191,11 +191,7 @@ export function App() {
 														{({ formatMessage, localeState }) => (
 															<RouterProvider
 																router={router}
-																context={{
-																	activeProjectIdStore,
-																	formatMessage,
-																	localeState,
-																}}
+																context={{ formatMessage, localeState }}
 															/>
 														)}
 													</WithAddedRouteContext>
