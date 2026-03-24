@@ -1129,7 +1129,7 @@
   },
   "routes.app.settings.breadCrumbAccessibleLabel": {
     "description": "Accessible label for breadcrumb navigation when viewing nested settings page.",
-    "message": "CoMapeo Settings"
+    "message": "breadcrumb"
   },
   "routes.app.settings.comapeoSettingsBreadCrumbLink": {
     "description": "Text for breadcrumb link to go to main CoMapeo settings page when viewing nested settings page.",

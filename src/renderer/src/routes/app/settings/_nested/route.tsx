@@ -93,7 +93,7 @@ function RouteComponent() {
 const m = defineMessages({
 	breadCrumbAccessibleLabel: {
 		id: 'routes.app.settings.breadCrumbAccessibleLabel',
-		defaultMessage: 'CoMapeo Settings',
+		defaultMessage: 'breadcrumb',
 		description:
 			'Accessible label for breadcrumb navigation when viewing nested settings page.',
 	},
