@@ -55,7 +55,8 @@ export function NetworkConnectionInfo({
 						// NOTE: Issue with systeminformation module on macOS >=15.6 (https://github.com/digidem/comapeo-desktop/issues/378)
 						wifiConnection.ssid !== '&lt;redacted&gt;' &&
 						wifiConnection.ssid !== '<redacted>'
-							? `${wifiConnection.ssid}${
+							? // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+								`${wifiConnection.ssid}${
 									netInfo.effectiveType
 										? // TODO: Should the effectiveType be translatable?
 											` - ${netInfo.effectiveType}`

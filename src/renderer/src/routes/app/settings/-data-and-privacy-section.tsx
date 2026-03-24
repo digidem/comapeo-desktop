@@ -196,36 +196,49 @@ const m = defineMessages({
 	title: {
 		id: 'routes.app.settings.-data-and-privacy-section.title',
 		defaultMessage: 'Data & Privacy',
+		description: 'Title for data and privacy section in settings page.',
 	},
 	description: {
 		id: 'routes.app.settings.-data-and-privacy-section.description',
 		defaultMessage: 'CoMapeo respects your privacy and autonomy',
+		description: 'Description for data and privacy section in settings page.',
 	},
 	learnMore: {
 		id: 'routes.app.settings.-data-and-privacy-section.learnMore',
 		defaultMessage: 'Learn More',
+		description:
+			'Text for link that navigates to external URL for additional information info about data and privacy.',
 	},
 	diagnosticInformationTitle: {
 		id: 'routes.app.settings.-data-and-privacy-section.diagnosticInformationTitle',
 		defaultMessage: 'Diagnostic Information',
+		description: 'Title for diagnostic information section in settings page.',
 	},
 	diagnosticInformationDescription: {
 		id: 'routes.app.settings.-data-and-privacy-section.diagnosticInformationDescription',
 		defaultMessage:
 			'Anonymized information about your device, app crashes, errors and performance helps Awana Digital improve the app and fix errors.',
+		description:
+			'Description for diagnostic information section in settings page.',
 	},
 	diagnosticInformationPersonalInfo: {
-		id: 'routes.app.settings.-data-and-pritvacy-section.diagnosticInformationPersonalInfo',
+		id: 'routes.app.settings.-data-and-privacy-section.diagnosticInformationPersonalInfo',
 		defaultMessage:
-			'This never includes any of your data or personal information. ',
+			'This never includes any of your data or personal information.',
+		description:
+			'Details about personal info in diagnostic information section in settings page.',
 	},
 	diagnosticInformationOptOut: {
 		id: 'routes.app.settings.-data-and-privacy-section.diagnosticInformationOptOut',
 		defaultMessage:
 			'You can opt-out of sharing diagnostic information at any time.',
+		description:
+			'Details about opting out in diagnostic information section in settings page.',
 	},
 	shareDiagnosticInformation: {
 		id: 'routes.app.settings.-data-and-privacy-section.shareDiagnosticInformation',
 		defaultMessage: 'Share Diagnostic Information',
+		description:
+			'Label for checkbox to toggle sharing of diagnostic information.',
 	},
 })

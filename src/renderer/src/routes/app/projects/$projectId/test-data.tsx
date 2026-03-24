@@ -308,6 +308,8 @@ function RouteComponent() {
 																aria-disabled
 																disabled
 																value={field.state.value}
+																// NOTE: Only surfaced for internal usage
+																// eslint-disable-next-line formatjs/no-literal-string-in-jsx
 																label="Longitude"
 																helperText={
 																	<Box component="span">
@@ -327,6 +329,8 @@ function RouteComponent() {
 																aria-disabled
 																disabled
 																value={field.state.value}
+																// NOTE: Only surfaced for internal usage
+																// eslint-disable-next-line formatjs/no-literal-string-in-jsx
 																label="Latitude"
 																helperText={
 																	<Box component="span">
