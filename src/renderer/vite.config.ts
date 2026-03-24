@@ -2,6 +2,7 @@
 /// <reference types="vitest/config" />
 import * as path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import formatJs from '@formatjs/unplugin/vite'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
@@ -36,6 +37,7 @@ export default defineConfig((configEnv) => {
 			__APP_TYPE__: JSON.stringify(configEnv.mode),
 		},
 		plugins: [
+			formatJs({ ast: true, additionalFunctionNames: ['t'] }),
 			tanstackRouter({
 				autoCodeSplitting: true,
 				routeFileIgnorePattern: '\\.test\\.tsx?$',

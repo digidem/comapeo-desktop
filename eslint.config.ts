@@ -5,6 +5,7 @@ import { includeIgnoreFile } from '@eslint/compat'
 import js from '@eslint/js'
 import pluginQuery from '@tanstack/eslint-plugin-query'
 import pluginRouter from '@tanstack/eslint-plugin-router'
+import formatjs from 'eslint-plugin-formatjs'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
 import { reactRefresh } from 'eslint-plugin-react-refresh'
 import { defineConfig } from 'eslint/config'
@@ -27,6 +28,7 @@ export default defineConfig(
 	includeIgnoreFile(gitignorePath),
 	includeIgnoreFile(gitExcludePath),
 	js.configs.recommended,
+	formatjs.configs['recommended'],
 	{
 		name: 'typescript',
 		extends: tseslint.configs.recommended,
