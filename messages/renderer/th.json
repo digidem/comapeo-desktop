@@ -264,12 +264,15 @@
     "message": "ถัดไป"
   },
   "routes.onboarding.device-name.description": {
+    "description": "Description for device name page during onboarding.",
     "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
   },
   "routes.onboarding.device-name.deviceName": {
+    "description": "Label for device name text input.",
     "message": "ชื่ออุปกรณ์"
   },
   "routes.welcome.collaborate": {
+    "description": "Detail about collaborating in welcome page.",
     "message": "Collaborate with others"
   }
 }
