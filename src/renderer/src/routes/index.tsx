@@ -7,6 +7,24 @@ export const Route = createFileRoute('/')({
 	beforeLoad: async ({ context }) => {
 		const { activeProjectIdStore, clientApi, queryClient } = context
 
+		const ownDeviceInfo = await queryClient.fetchQuery({
+			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
+			queryFn: async () => {
+				return clientApi.getDeviceInfo()
+			},
+		})
+
+		// NOTE: Implicit check that the user hasn't completed the onboarding yet.
+		if (!ownDeviceInfo.name) {
+			// NOTE: Clear any persisted state related to last active project
+			window.localStorage.removeItem(
+				LOCAL_STORAGE_KEYS.USE_ACTIVE_PROJECT_ID_FOR_INITIAL_ROUTE,
+			)
+			activeProjectIdStore.actions.update(undefined)
+
+			throw Route.redirect({ to: '/welcome', replace: true })
+		}
+
 		const shouldUseActiveProjectIdForInitialRoute =
 			window.localStorage.getItem(
 				LOCAL_STORAGE_KEYS.USE_ACTIVE_PROJECT_ID_FOR_INITIAL_ROUTE,

@@ -38,9 +38,25 @@ import {
 } from '../../components/link.tsx'
 import { useActiveProjectId } from '../../contexts/active-project-id-store-context.ts'
 import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo.ts'
 import { ProjectTabButton } from './-project-tab-button.tsx'
 
 export const Route = createFileRoute('/app')({
+	beforeLoad: async ({ context }) => {
+		const { queryClient, clientApi } = context
+
+		const ownDeviceInfo = await queryClient.fetchQuery({
+			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
+			queryFn: async () => {
+				return clientApi.getDeviceInfo()
+			},
+		})
+
+		// NOTE: Implicit check that the user hasn't completed the onboarding yet.
+		if (!ownDeviceInfo.name) {
+			throw Route.redirect({ to: '/welcome', replace: true })
+		}
+	},
 	component: RouteComponent,
 })
 

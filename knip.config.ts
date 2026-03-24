@@ -16,11 +16,7 @@ export default {
 		'tests-e2e/**/*.{js,ts}',
 		'*.{js,ts}',
 	],
-	ignoreDependencies: [
-		'@fontsource-variable/rubik',
-		'@comapeo/fallback-smp',
-		'@comapeo/default-categories',
-	],
+	ignoreDependencies: ['@fontsource-variable/rubik', '@comapeo/fallback-smp'],
 	ignoreExportsUsedInFile: {
 		interface: true,
 		type: true,
