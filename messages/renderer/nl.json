@@ -1023,28 +1023,36 @@
     "description": "Fallback for when project is missing a name.",
     "message": "Naamloos project"
   },
-  "routes.app.settings.-data-and-pritvacy-section.diagnosticInformationPersonalInfo": {
-    "message": "Dit bevat nooit enige van je gegevens of persoonlijke informatie."
-  },
   "routes.app.settings.-data-and-privacy-section.description": {
+    "description": "Description for data and privacy section in settings page.",
     "message": "CoMapeo respecteert uw privacy en autonomie"
   },
   "routes.app.settings.-data-and-privacy-section.diagnosticInformationDescription": {
+    "description": "Description for diagnostic information section in settings page.",
     "message": "Geanonimiseerde informatie over uw apparaat, app crasht, fouten en prestaties helpt Awana Digital om de app te verbeteren en fouten op te lossen."
   },
   "routes.app.settings.-data-and-privacy-section.diagnosticInformationOptOut": {
+    "description": "Details about opting out in diagnostic information section in settings page.",
     "message": "U kunt diagnostische informatie op elk moment niet delen."
   },
+  "routes.app.settings.-data-and-privacy-section.diagnosticInformationPersonalInfo": {
+    "description": "Details about personal info in diagnostic information section in settings page.",
+    "message": "Dit bevat nooit enige van je gegevens of persoonlijke informatie."
+  },
   "routes.app.settings.-data-and-privacy-section.diagnosticInformationTitle": {
+    "description": "Title for diagnostic information section in settings page.",
     "message": "Diagnostische informatie"
   },
   "routes.app.settings.-data-and-privacy-section.learnMore": {
+    "description": "Text for link that navigates to external URL for additional information info about data and privacy.",
     "message": "Meer informatie"
   },
   "routes.app.settings.-data-and-privacy-section.shareDiagnosticInformation": {
+    "description": "Label for checkbox to toggle sharing of diagnostic information.",
     "message": "Diagnostische informatie delen"
   },
   "routes.app.settings.-data-and-privacy-section.title": {
+    "description": "Title for data and privacy section in settings page.",
     "message": "Gegevens & Privacy"
   },
   "routes.app.settings.background-map.acceptedFileTypes": {
@@ -1094,6 +1102,10 @@
   "routes.app.settings.background-map.sizeInMegabytes": {
     "description": "Text describing what kind of files are usable for background maps.",
     "message": "{value} MB"
+  },
+  "routes.app.settings.breadCrumbAccessibleLabel": {
+    "description": "Accessible label for breadcrumb navigation when viewing nested settings page.",
+    "message": "breadcrumb"
   },
   "routes.app.settings.comapeoSettingsBreadCrumbLink": {
     "description": "Text for breadcrumb link to go to main CoMapeo settings page when viewing nested settings page.",
@@ -1276,15 +1288,19 @@
     "message": "{count, plural, one {# nummer} other {# nummer nummer}}."
   },
   "routes.onboarding.data-and-privacy.dataEncrypted": {
+    "description": "Detail about data being fully encrypted.",
     "message": "Alle data blijft volledig versleuteld."
   },
   "routes.onboarding.data-and-privacy.dataStays": {
+    "description": "Detail about data staying on device.",
     "message": "Uw gegevens blijven op uw apparaten."
   },
   "routes.onboarding.data-and-privacy.description": {
+    "description": "Description for review data and privacy page in onboarding.",
     "message": "Met CoMapeo kunnen teams offline kaart zonder internet servers nodig te hebben."
   },
   "routes.onboarding.data-and-privacy.learnMore": {
+    "description": "Text for link that navigates to external URL for additional information info about data and privacy.",
     "message": "Meer informatie"
   },
   "routes.onboarding.data-and-privacy.next": {
@@ -1292,120 +1308,155 @@
     "message": "Volgende"
   },
   "routes.onboarding.data-and-privacy.privateByDefault": {
+    "description": "Detail about privacy by default.",
     "message": "Privé standaard - diagnostische informatie wordt volledig anoniem gemaakt en je kunt er op elk moment gebruik van maken."
   },
   "routes.onboarding.data-and-privacy.sharingAndCollaboration": {
+    "description": "Detail about data sharing and collaboration.",
     "message": "Gemakkelijk beheren en beheren van delen en samenwerken."
   },
   "routes.onboarding.data-and-privacy.title": {
+    "description": "Title for review data and privacy page in onboarding.",
     "message": "Gegevens en privacy controleren"
   },
   "routes.onboarding.device-name.addName": {
+    "description": "Text for submit button to save device name.",
     "message": "Naam toevoegen"
   },
   "routes.onboarding.device-name.characterCount": {
+    "description": "Displayed character count of device name input out of maximum allowed characters.",
     "message": "{count}/{max}"
   },
   "routes.onboarding.device-name.description": {
+    "description": "Description for device name page during onboarding.",
     "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
   },
   "routes.onboarding.device-name.deviceName": {
+    "description": "Label for device name text input.",
     "message": "Apparaat Naam"
   },
   "routes.onboarding.device-name.maxLengthError": {
+    "description": "Message displayed when maximum length for device name input is exceeded.",
     "message": "Te lang, probeer een kortere naam."
   },
   "routes.onboarding.device-name.minLengthError": {
+    "description": "Message displayed when required minimum length for device name input is not met.",
     "message": "Voer een apparaatnaam in"
   },
   "routes.onboarding.device-name.title": {
+    "description": "Title for device name page during onboarding.",
     "message": "Benoem uw apparaat"
   },
   "routes.onboarding.privacy-policy.aboutAwanaDigital": {
+    "description": "Title for about section in privacy policy page.",
     "message": "Over Awana Digitaal"
   },
   "routes.onboarding.privacy-policy.aboutAwanaDigitalDescription": {
+    "description": "Description for about section in privacy policy page.",
     "message": "CoMapeo is ontwikkeld door Awana Digital, een 501c3 non-profitorganisatie geregistreerd in de Verenigde Staten. Awana Digital werkt solidair met frontlinie gemeenschappen om technologie te gebruiken om hun rechten te verdedigen en klimaatverandering te bestrijden."
   },
   "routes.onboarding.privacy-policy.appErrors": {
+    "description": "Details for app errors in diagnostics section in privacy policy page.",
     "message": "<b>App Fouten</b>: Informatie over interne fouten die leiden tot het functioneren van de app zoals verwacht."
   },
   "routes.onboarding.privacy-policy.appInfo": {
+    "description": "Details for app info in diagnostics section in privacy policy page.",
     "message": "<b>App Info</b>: De versie en taal van CoMapeo."
   },
   "routes.onboarding.privacy-policy.appUsage": {
+    "description": "Title for app usage section in privacy policy page.",
     "message": "App gebruik"
   },
   "routes.onboarding.privacy-policy.comapeoDataPrivacy": {
+    "description": "Title for data privacy section in privacy policy page.",
     "message": "CoMapeo gegevens privacy"
   },
   "routes.onboarding.privacy-policy.control": {
+    "description": "Title for data control section in privacy policy page.",
     "message": "U bent de baas"
   },
   "routes.onboarding.privacy-policy.controlDescription": {
+    "description": "Description for data control section in privacy policy page.",
     "message": "U kunt zich afmelden voor het verzenden van informatie naar Awana Digital.<br></br><br></br>U kiest waar uw gegevens worden opgeslagen en met wie het wordt gedeeld. U kunt ervoor kiezen om geanonimiseerde, samengevatte gegevens te delen over hoe u CoMapeo gebruikt met Awana Digital.<br></br><br></br>We zijn altijd transparant over welke informatie je wilt delen om de app te verbeteren. en deze informatie zal nooit foto's, video's, audio, tekst of precieze locaties bevatten die u hebt ingevoerd in CoMapeo."
   },
   "routes.onboarding.privacy-policy.country": {
+    "description": "Details for country in app usage section in privacy policy page.",
     "message": "<b>Land</b>: Het land waar CoMapeo wordt gebruikt."
   },
   "routes.onboarding.privacy-policy.crashData": {
+    "description": "Details for crash data in diagnostics section in privacy policy page.",
     "message": "<b>Crash gegevens</b>: Informatie over wat de app onverwacht heeft gesloten."
   },
-  "routes.onboarding.privacy-policy.currentPermissions": {
-    "message": "Huidige permissies"
-  },
   "routes.onboarding.privacy-policy.dataCollection": {
+    "description": "Title for data collection section in privacy policy page.",
     "message": "CoMapeo gegevens verzamelen"
   },
   "routes.onboarding.privacy-policy.description": {
+    "description": "Description for privacy policy page during onboarding.",
     "message": "Het volgende verklaart welke informatie (of \"gegevens\") wordt verzonden van CoMapeo naar de ontwikkelaar van de applicatie, Awana Digital, en hoe die informatie wordt gebruikt."
   },
   "routes.onboarding.privacy-policy.deviceInfo": {
+    "description": "Details for device info in diagnostics section in privacy policy page.",
     "message": "<b>Apparaat Info</b>: zoals model en fabrikant van uw apparaat; besturingssysteem van het apparaat; scherm grootte; apparaat locale (taal); apparaat geheugen."
   },
   "routes.onboarding.privacy-policy.diagnostics": {
+    "description": "Title for diagnostics section in privacy policy page.",
     "message": "Diagnose"
   },
   "routes.onboarding.privacy-policy.noPII": {
+    "description": "Title for no PII section in privacy policy page.",
     "message": "Geen persoonlijk identificeerbare informatie"
   },
   "routes.onboarding.privacy-policy.openSource": {
+    "description": "Title for open source section in privacy policy page.",
     "message": "Open Source en de \"Official\" versie"
   },
   "routes.onboarding.privacy-policy.openSourceDescription": {
+    "description": "Description for open source section in privacy policy page.",
     "message": "CoMapeo is een open-source applicatie.<br></br><br></br>Dit betekent dat iedereen de code kan bekijken die de app laat werken en de privacyverklaringen in dit document kan verifiëren. Het betekent ook dat iedereen de app kan aanpassen aan zijn eigen behoeften en een alternatieve versie kan vrijgeven.<br></br><br></br>Dit document verwijst naar gegevens die zijn verzameld door de officiële releases van CoMapeo, digitaal ondertekend door Awana Digital, beschikbaar via de Google Play Store of de Awana Digital website.<br></br><br></br>Unofficiële releases van CoMapeo verkregen van andere kanalen vallen buiten onze controle en kunnen aanvullende informatie delen met andere organisaties."
   },
   "routes.onboarding.privacy-policy.performanceData": {
+    "description": "Details for performance data in diagnostics section in privacy policy page.",
     "message": "<b>Prestatiegegevens</b>: zoals opstartten, energiegebruik, bevriezing van apps en responsiviteit."
   },
   "routes.onboarding.privacy-policy.prviateByDefault": {
+    "description": "Title for private by default section in privacy policy page.",
     "message": "Standaard Privé"
   },
   "routes.onboarding.privacy-policy.prviateByDefaultDescription": {
+    "description": "Description for private by default section in privacy policy page.",
     "message": "De gegevens die u verzamelt en maakt met CoMapeo (locaties, foto's, video, audio, tekst) wordt standaard alleen op je apparaat opgeslagen en wordt nergens anders opgeslagen of verzonden.<br></br><br></br>Wanneer u gegevens deelt met medewerkers door deel te nemen aan een project met hen, het is versleuteld verstuurd, rechtstreeks naar het apparaat van medewerkers. Dit betekent dat de gegevens niet worden verzonden via Awana Digital, noch door iemand anders, op weg naar uw medewerker.<br></br><br></br>Awana Digitaal ziet en heeft geen toegang tot de gegevens die u met CoMapeo verzamelt tenzij u deze expliciet naar ons stuurt."
   },
   "routes.onboarding.privacy-policy.shareDiagnosticInformation": {
+    "description": "Label for checkbox to toggle sharing of diagnostic information.",
     "message": "Diagnostische informatie delen"
   },
   "routes.onboarding.privacy-policy.title": {
+    "description": "Title for privacy policy page during onboarding.",
     "message": "Privacy Beleid"
   },
   "routes.onboarding.privacy-policy.whatIsCollected": {
+    "description": "Title for what is collected section in privacy policy page.",
     "message": "Wat wordt verzameld?"
   },
   "routes.onboarding.privacy-policy.whatIsCollectedDescription": {
+    "description": "Description for what is collected section in privacy policy page.",
     "message": "Standaard wordt geanonimiseerde diagnostische informatie over uw apparaat, app crashes, fouten en prestaties gedeeld met Awana Digital.<br></br><br></br>Je kunt deze informatie op elk moment niet delen. Deze diagnostische informatie is volledig geanonimiseerd en bevat nooit enige van uw gegevens (de gegevens die u hebt verzameld met CoMapeo)."
   },
   "routes.onboarding.privacy-policy.whatIsNotCollected": {
+    "description": "Title for what is not collected in app usage section in privacy policy page.",
     "message": "Wat wordt niet verzameld?"
   },
   "routes.onboarding.privacy-policy.whatIsNotCollectedDescription": {
+    "description": "Description for what is not collected in app usage section in privacy policy page.",
     "message": "We verzamelen geen persoonlijke gegevens of iets dat gebruikt kan worden om een gebruiker of apparaat te identificeren of te volgen. Apparaat-ID's die gebruikt worden om informatie samen te voegen zijn willekeurig, anoniem, en elke maand gewijzigd. Diagnostische informatie bevat geen gegevens over hoe je de app gebruikt. en het bevat nooit enige van de gegevens die u met de app hebt verzameld. We verzamelen uw precieze of grofste locatie niet, alleen het land waar u CoMapeo gebruikt."
   },
   "routes.onboarding.privacy-policy.whyIsThisDataCollected": {
+    "description": "Title for why data is collected in app usage section in privacy policy page.",
     "message": "Waarom worden deze gegevens verzameld?"
   },
   "routes.onboarding.privacy-policy.whyIsThisDataCollectedDescription": {
+    "description": "Description for why data is collected in app usage section in privacy policy page.",
     "message": "Crashen van gegevens en app-fouten, samen met de informatie van het apparaat en app bieden Awana Digital de informatie die nodig is om fouten en fouten in de app op te lossen.<br></br><br></br>De prestatiegegevens helpen ons bij het verbeteren van het reactievermogen van de app en het identificeren van fouten.<br></br><br></br>Het land waar CoMapeo wordt gebruikt en de taal van de UI helpt ons minimale informatie over CoMapeo gebruikers te begrijpen: \"Hoeveel CoMapeo gebruikers zijn er in elk land?\""
   },
   "routes.onboarding.route.goBack": {
@@ -1417,24 +1468,31 @@
     "message": "Stap {value}"
   },
   "routes.welcome.appDescription": {
+    "description": "Description of app in welcome page.",
     "message": "Bekijk en beheer waarnemingen die zijn verzameld met CoMapeo Mobile."
   },
   "routes.welcome.collaborate": {
+    "description": "Detail about collaborating in welcome page.",
     "message": "Collaborate with others"
   },
   "routes.welcome.comapeoDesktop": {
+    "description": "Name of app displayed in welcome page.",
     "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
   },
   "routes.welcome.designedFor": {
+    "description": "Detail about who app is designed for in welcome page.",
     "message": "Ontworpen met en voor inheemse volkeren & frontlinie gemeenschappen"
   },
   "routes.welcome.getStarted": {
+    "description": "Text for link to navigate to next step.",
     "message": "Nu inschrijven"
   },
   "routes.welcome.mapAnywhere": {
+    "description": "Detail about mapping in welcome page.",
     "message": "Kaart overal en overal"
   },
   "routes.welcome.ownData": {
+    "description": "Detail about owning data in welcome page.",
     "message": "Eigen en besturen van uw gegevens"
   }
 }
