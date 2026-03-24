@@ -52,7 +52,10 @@ function RouteComponent() {
 						htmlColor={DARK_GREY}
 					/>
 
-					<Breadcrumbs component="nav" aria-label="breadcrumb">
+					<Breadcrumbs
+						component="nav"
+						aria-label={t(m.breadCrumbAccessibleLabel)}
+					>
 						<TextLink to="/app/settings" sx={{ textDecoration: 'none' }}>
 							{t(m.comapeoSettingsBreadCrumbLink)}
 						</TextLink>
@@ -88,6 +91,12 @@ function RouteComponent() {
 }
 
 const m = defineMessages({
+	breadCrumbAccessibleLabel: {
+		id: 'routes.app.settings.breadCrumbAccessibleLabel',
+		defaultMessage: 'breadcrumb',
+		description:
+			'Accessible label for breadcrumb navigation when viewing nested settings page.',
+	},
 	comapeoSettingsBreadCrumbLink: {
 		id: 'routes.app.settings.comapeoSettingsBreadCrumbLink',
 		defaultMessage: 'CoMapeo Settings',

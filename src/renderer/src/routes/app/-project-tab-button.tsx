@@ -233,7 +233,11 @@ function ButtonTabContent({
 															fontWeight={500}
 														>
 															{projectSettings.configMetadata.name}
-														</Typography>{' '}
+														</Typography>
+														{
+															// eslint-disable-next-line formatjs/no-literal-string-in-jsx
+															' '
+														}
 														{projectSettings.configMetadata.fileVersion}
 													</Typography>
 
