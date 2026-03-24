@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Checkbox from '@mui/material/Checkbox'
 import Divider from '@mui/material/Divider'
@@ -19,7 +18,9 @@ import { Icon } from '../../../components/icon.tsx'
 import { TextLink } from '../../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../../hooks/icon.ts'
 import {
+	getAppUsageMetricsQueryOptions,
 	getDiagnosticsEnabledQueryOptions,
+	setAppUsageMetricsMutationOptions,
 	setDiagnosticsEnabledMutationOptions,
 } from '../../../lib/queries/app-settings.ts'
 import { openExternalURLMutationOptions } from '../../../lib/queries/system.ts'
@@ -27,12 +28,18 @@ import { openExternalURLMutationOptions } from '../../../lib/queries/system.ts'
 export function DataAndPrivacySection() {
 	const { formatMessage: t } = useIntl()
 
+	const { data: diagnosticsEnabled } = useSuspenseQuery(
+		getDiagnosticsEnabledQueryOptions(),
+	)
 	const setDiagnosticsEnabledMutation = useMutation(
 		setDiagnosticsEnabledMutationOptions(),
 	)
 
-	const { data: diagnosticsEnabled } = useSuspenseQuery(
-		getDiagnosticsEnabledQueryOptions(),
+	const { data: appUsageMetrics } = useSuspenseQuery(
+		getAppUsageMetricsQueryOptions(),
+	)
+	const setAppUsageMetricsMutation = useMutation(
+		setAppUsageMetricsMutationOptions(),
 	)
 
 	const openExternalURL = useMutation(openExternalURLMutationOptions())
@@ -41,9 +48,6 @@ export function DataAndPrivacySection() {
 		multiplier: 2,
 		typographyVariant: 'body1',
 	})
-
-	// TODO: Replace with actual implementation
-	const [appUsageEnabled, setAppUsageEnabled] = useState(false)
 
 	return (
 		<>
@@ -207,9 +211,18 @@ export function DataAndPrivacySection() {
 						<Box paddingX={6} paddingY={4}>
 							<FormGroup>
 								<FormControlLabel
-									control={<Checkbox checked={appUsageEnabled} />}
+									control={
+										<Checkbox checked={appUsageMetrics?.status === 'enabled'} />
+									}
 									onChange={(_event, checked) => {
-										setAppUsageEnabled(checked)
+										setAppUsageMetricsMutation.mutate(
+											checked ? 'enabled' : 'disabled',
+											{
+												onError: (err) => {
+													captureException(err)
+												},
+											},
+										)
 									}}
 									slotProps={{
 										typography: {
@@ -240,14 +253,21 @@ export function DataAndPrivacySection() {
 									setDiagnosticsEnabledMutation.reset()
 								},
 							}
-						: openExternalURL.status === 'error'
+						: setAppUsageMetricsMutation.status === 'error'
 							? {
-									errorMessage: openExternalURL.error.toString(),
+									errorMessage: setAppUsageMetricsMutation.error.toString(),
 									onClose: () => {
-										openExternalURL.reset()
+										setAppUsageMetricsMutation.reset()
 									},
 								}
-							: null
+							: openExternalURL.status === 'error'
+								? {
+										errorMessage: openExternalURL.error.toString(),
+										onClose: () => {
+											openExternalURL.reset()
+										},
+									}
+								: null
 				}
 			>
 				{({ errorMessage, onClose }) => (

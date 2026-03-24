@@ -34,7 +34,9 @@ import {
 	CREATOR_ROLE_ID,
 	type ListedProject,
 } from '../../lib/comapeo.ts'
+import { shouldShowAppUsageConsent } from '../../lib/metrics.ts'
 import { getAppUsageMetricsQueryOptions } from '../../lib/queries/app-settings.ts'
+import { getOnboardedAtQueryOptions } from '../../lib/queries/user.ts'
 import {
 	AppUsageConsentDialogContent,
 	JoinProjectDialogContent,
@@ -65,6 +67,7 @@ export const Route = createFileRoute('/app/')({
 		const { clientApi, queryClient } = context
 
 		await Promise.all([
+			queryClient.ensureQueryData(getOnboardedAtQueryOptions()),
 			queryClient.ensureQueryData({
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 				queryFn: async () => {
@@ -79,6 +82,7 @@ export const Route = createFileRoute('/app/')({
 			}),
 		])
 	},
+
 	component: RouteComponent,
 })
 
@@ -132,13 +136,14 @@ function RouteComponent() {
 		})
 	}
 
+	const { data: onboardedAt } = useSuspenseQuery(getOnboardedAtQueryOptions())
+
 	const { data: appUsageMetrics } = useSuspenseQuery(
 		getAppUsageMetricsQueryOptions(),
 	)
 
 	const [showAppUsageDialog, setShowAppUsageDialog] = useState(() => {
-		// TODO: Update to match criteria for showing
-		return appUsageMetrics ? null : (true as const)
+		return shouldShowAppUsageConsent({ appUsageMetrics, onboardedAt })
 	})
 
 	return (
@@ -461,12 +466,12 @@ function RouteComponent() {
 				)}
 			</DecentDialog>
 
-			<DecentDialog fullWidth maxWidth="sm" value={showAppUsageDialog}>
+			<DecentDialog fullWidth maxWidth="sm" value={showAppUsageDialog || null}>
 				{() => (
 					<AppUsageConsentDialogContent
 						deviceName={ownDeviceInfo.name}
 						onClose={() => {
-							setShowAppUsageDialog(null)
+							setShowAppUsageDialog(false)
 						}}
 					/>
 				)}

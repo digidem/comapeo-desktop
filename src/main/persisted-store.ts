@@ -9,11 +9,15 @@ import { createStore } from 'zustand/vanilla'
 
 import { CoordinateFormatSchema } from '../shared/coordinate-format.ts'
 import { LocaleSchema } from '../shared/intl.ts'
-import { AppUsageMetricsSchema } from '../shared/metrics.ts'
+import {
+	AppUsageMetricsSchema,
+	type AppUsageMetrics,
+} from '../shared/metrics.ts'
+import { daysToMilliseconds } from '../shared/time.ts'
 
 const log = debug('comapeo:main:persisted-store')
 
-const PersistedStateV1Schema = v.object({
+export const StoreStateV1Schema = v.object({
 	activeProjectId: v.optional(v.string()),
 	coordinateFormat: v.optional(CoordinateFormatSchema, 'utm'),
 	diagnosticsEnabled: v.optional(v.boolean(), true),
@@ -32,20 +36,38 @@ const PersistedStateV1Schema = v.object({
 	metricsDeviceId: v.optional(v.string(), () => generateMetricsDeviceId()),
 })
 
-const PersistedStateV2Schema = v.object({
-	...PersistedStateV1Schema.entries,
+const StoreStateV2Schema = v.object({
+	...StoreStateV1Schema.entries,
 	appUsageMetrics: v.optional(AppUsageMetricsSchema),
+	onboardedAt: v.optional(v.pipe(v.number(), v.gtValue(0))),
 })
 
-export const CurrentPersistedStateSchema = PersistedStateV2Schema
-export type CurrentPersistedState = v.InferOutput<typeof PersistedStateV2Schema>
+export const CurrentStoreStateSchema = StoreStateV2Schema
+export type CurrentStoreState = v.InferOutput<typeof StoreStateV2Schema>
+
+export const PersistedStorageV1Schema = v.object({
+	version: v.literal(1),
+	state: StoreStateV1Schema,
+})
+export type PersistedStorageV1 = v.InferOutput<typeof PersistedStorageV1Schema>
+
+export const PersistedStorageV2Schema = v.object({
+	version: v.literal(2),
+	state: StoreStateV2Schema,
+})
+export type PersistedStorageV2 = v.InferOutput<typeof PersistedStorageV2Schema>
+
+const PersistedStorageSchema = v.variant('version', [
+	PersistedStorageV1Schema,
+	PersistedStorageV2Schema,
+])
 
 export function createPersistedStore(opts: { filePath: string }) {
 	function ensureDirectory() {
 		mkdirSync(dirname(opts.filePath), { recursive: true })
 	}
 
-	const storage: PersistStorage<CurrentPersistedState> = {
+	const storage: PersistStorage<CurrentStoreState> = {
 		getItem: () => {
 			let content
 			try {
@@ -55,20 +77,9 @@ export function createPersistedStore(opts: { filePath: string }) {
 				return null
 			}
 
-			return v.parse(
-				v.variant('version', [
-					v.object({
-						version: v.literal(1),
-						state: PersistedStateV1Schema,
-					}),
-					v.object({
-						version: v.literal(2),
-						state: PersistedStateV2Schema,
-					}),
-				]),
-				JSON.parse(content),
-				{ abortEarly: true },
-			)
+			return v.parse(PersistedStorageSchema, JSON.parse(content), {
+				abortEarly: true,
+			})
 		},
 		removeItem: () => {
 			return rmSync(opts.filePath, { force: true })
@@ -101,8 +112,8 @@ export function createPersistedStore(opts: { filePath: string }) {
 
 	const store = createStore(
 		persist(
-			(): CurrentPersistedState => {
-				return v.getDefaults(CurrentPersistedStateSchema)
+			(): CurrentStoreState => {
+				return v.getDefaults(CurrentStoreStateSchema)
 			},
 			{
 				name: 'comapeo-persisted',
@@ -110,7 +121,7 @@ export function createPersistedStore(opts: { filePath: string }) {
 				storage,
 				migrate: (prevState, version) => {
 					if (version === 1) {
-						const stateV1 = v.safeParse(PersistedStateV1Schema, prevState, {
+						const stateV1 = v.safeParse(StoreStateV1Schema, prevState, {
 							abortEarly: true,
 						})
 
@@ -119,7 +130,7 @@ export function createPersistedStore(opts: { filePath: string }) {
 						}
 					}
 
-					return v.getDefaults(CurrentPersistedStateSchema)
+					return v.getDefaults(CurrentStoreStateSchema)
 				},
 			},
 		),
@@ -136,6 +147,22 @@ export function createPersistedStore(opts: { filePath: string }) {
 		log('Rotating Sentry user')
 		const newSentryUser = generateSentryUser()
 		store.setState({ sentryUser: newSentryUser })
+	}
+
+	// NOTE: Reset app usage metrics if it's been enabled for long enough (1 year)
+	const now = Date.now()
+	if (
+		state.appUsageMetrics &&
+		state.appUsageMetrics.status === 'enabled' &&
+		now - state.appUsageMetrics.updatedAt >= daysToMilliseconds(365)
+	) {
+		const updatedAppUsageMetrics: AppUsageMetrics = {
+			status: 'disabled',
+			askCount: 0,
+			updatedAt: now,
+		}
+
+		store.setState({ appUsageMetrics: updatedAppUsageMetrics })
 	}
 
 	return store

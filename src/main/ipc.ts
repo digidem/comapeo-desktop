@@ -3,9 +3,10 @@ import { ipcMain } from 'electron/main'
 import si from 'systeminformation'
 import * as v from 'valibot'
 
+import type { AppUsageMetrics } from '../shared/metrics.ts'
 import type { IntlManager } from './intl-manager.ts'
 import {
-	CurrentPersistedStateSchema,
+	CurrentStoreStateSchema,
 	type PersistedStore,
 } from './persisted-store.ts'
 
@@ -52,7 +53,7 @@ export function setUpMainIPC({
 	// Settings (set)
 	ipcMain.handle('settings:set:coordinateFormat', (_event, value) => {
 		v.assert(
-			v.nonOptional(CurrentPersistedStateSchema.entries.coordinateFormat),
+			v.nonOptional(CurrentStoreStateSchema.entries.coordinateFormat),
 			value,
 		)
 		persistedStore.setState({ coordinateFormat: value })
@@ -60,41 +61,60 @@ export function setUpMainIPC({
 
 	ipcMain.handle('settings:set:diagnosticsEnabled', (_event, value) => {
 		v.assert(
-			v.nonOptional(CurrentPersistedStateSchema.entries.diagnosticsEnabled),
+			v.nonOptional(CurrentStoreStateSchema.entries.diagnosticsEnabled),
 			value,
 		)
 		persistedStore.setState({ diagnosticsEnabled: value })
 	})
 
 	ipcMain.handle('settings:set:locale', (_event, value) => {
-		v.assert(v.nonOptional(CurrentPersistedStateSchema.entries.locale), value)
+		v.assert(v.nonOptional(CurrentStoreStateSchema.entries.locale), value)
 		persistedStore.setState({ locale: value })
 	})
 
 	ipcMain.handle('settings:set:appUsageMetrics', (_event, value) => {
-		v.assert(
-			CurrentPersistedStateSchema.entries.appUsageMetrics.wrapped.entries
-				.status,
-			value,
-		)
+		v.assert(v.union([v.literal('disabled'), v.literal('enabled')]), value)
 
-		persistedStore.setState((prev) => ({
-			...prev,
-			appUsageMetrics: {
-				status: value,
-				timesAsked: prev.appUsageMetrics
-					? prev.appUsageMetrics.timesAsked + 1
-					: 1,
-				updatedAt: Date.now(),
-			},
-		}))
+		persistedStore.setState((prev) => {
+			const now = Date.now()
+
+			if (!prev.appUsageMetrics) {
+				const updatedAppUsageMetrics: AppUsageMetrics =
+					value === 'disabled'
+						? { status: value, askCount: 0, updatedAt: now }
+						: { status: value, updatedAt: now }
+
+				return { appUsageMetrics: updatedAppUsageMetrics }
+			}
+
+			if (prev.appUsageMetrics.status === 'disabled') {
+				const updatedAppUsageMetrics: AppUsageMetrics =
+					value === 'disabled'
+						? {
+								...prev.appUsageMetrics,
+								askCount: prev.appUsageMetrics.askCount + 1,
+								updatedAt: now,
+							}
+						: { status: value, updatedAt: now }
+
+				return { appUsageMetrics: updatedAppUsageMetrics }
+			} else {
+				const updatedAppUsageMetrics: AppUsageMetrics =
+					value === 'disabled'
+						? { status: value, askCount: 0, updatedAt: now }
+						: // TODO: Would it make more sense to no-op here instead of updating `updatedAt`?
+							{ ...prev.appUsageMetrics, updatedAt: now }
+
+				return { appUsageMetrics: updatedAppUsageMetrics }
+			}
+		})
 	})
 
-	// Active project ID
-	ipcMain.handle('activeProjectId:set', (_event, value) => {
+	// User
+	ipcMain.handle('user:activeProjectId:set', (_event, value) => {
 		v.assert(
 			v.union([
-				v.nonOptional(CurrentPersistedStateSchema.entries.activeProjectId),
+				v.nonOptional(CurrentStoreStateSchema.entries.activeProjectId),
 				v.null(),
 			]),
 			value,
@@ -103,5 +123,21 @@ export function setUpMainIPC({
 		persistedStore.setState({
 			activeProjectId: value === null ? undefined : value,
 		})
+	})
+
+	ipcMain.handle('user:onboardedAt:get', () => {
+		return persistedStore.getState().onboardedAt
+	})
+
+	ipcMain.handle('user:onboardedAt:set', (_event, value) => {
+		v.assert(v.nonOptional(CurrentStoreStateSchema.entries.onboardedAt), value)
+
+		const existingValue = persistedStore.getState().onboardedAt
+
+		if (existingValue !== undefined) {
+			throw new Error('`onboardedAt` is already recorded')
+		}
+
+		persistedStore.setState({ onboardedAt: value })
 	})
 }

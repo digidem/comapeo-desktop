@@ -64,36 +64,37 @@ const runtimeApi = {
 		return ipcRenderer.invoke('shell:show-item-in-folder', filePath)
 	},
 
-	// Settings (get)
+	// Settings
 	getCoordinateFormat: async () => {
 		return ipcRenderer.invoke('settings:get:coordinateFormat')
 	},
-	getDiagnosticsEnabled: async () => {
-		return ipcRenderer.invoke('settings:get:diagnosticsEnabled')
-	},
-	getLocaleState: async () => {
-		return ipcRenderer.invoke('settings:get:locale')
-	},
-	getAppUsageMetrics: async () => {
-		const result = await ipcRenderer.invoke('settings:get:appUsageMetrics')
-		return result || null
-	},
-
-	// Settings (set)
 	setCoordinateFormat: async (value) => {
 		return ipcRenderer.invoke('settings:set:coordinateFormat', value)
+	},
+
+	getDiagnosticsEnabled: async () => {
+		return ipcRenderer.invoke('settings:get:diagnosticsEnabled')
 	},
 	setDiagnosticsEnabled: async (value) => {
 		return ipcRenderer.invoke('settings:set:diagnosticsEnabled', value)
 	},
+
+	getLocaleState: async () => {
+		return ipcRenderer.invoke('settings:get:locale')
+	},
 	setLocale: async (value) => {
 		return ipcRenderer.invoke('settings:set:locale', value)
+	},
+
+	getAppUsageMetrics: async () => {
+		const result = await ipcRenderer.invoke('settings:get:appUsageMetrics')
+		return result || null
 	},
 	setAppUsageMetrics: async (value) => {
 		return ipcRenderer.invoke('settings:set:appUsageMetrics', value)
 	},
 
-	// Sentry
+	// User
 	getSentryConfig: () => {
 		const enabled = getProcessArgValue('comapeo-sentry-enabled') === 'true'
 		const environment = getProcessArgValue('comapeo-sentry-environment')
@@ -102,7 +103,6 @@ const runtimeApi = {
 		return { enabled, environment, userId }
 	},
 
-	// Active project ID
 	getInitialProjectId: () => {
 		const sessionValue = sessionStorage.getItem('comapeo:active_project_id')
 
@@ -123,7 +123,15 @@ const runtimeApi = {
 		return processArgValue
 	},
 	setActiveProjectId: async (value) => {
-		return ipcRenderer.invoke('activeProjectId:set', value || null)
+		return ipcRenderer.invoke('user:activeProjectId:set', value || null)
+	},
+
+	getOnboardedAt: async () => {
+		const result = await ipcRenderer.invoke('user:onboardedAt:get')
+		return result !== undefined ? result : null
+	},
+	setOnboardedAt: async (value) => {
+		return ipcRenderer.invoke('user:onboardedAt:set', value)
 	},
 }
 

@@ -30,26 +30,29 @@ export type RuntimeApi = {
 	openExternalURL: (url: string) => Promise<void>
 	showItemInFolder: (path: string) => Promise<void>
 
-	// Settings (get)
+	// Settings
 	getCoordinateFormat: () => Promise<CoordinateFormat>
-	getDiagnosticsEnabled: () => Promise<boolean>
-	getLocaleState: () => Promise<LocaleState>
-	getAppUsageMetrics: () => Promise<AppUsageMetrics | null>
-
-	// Settings (set)
 	setCoordinateFormat: (value: CoordinateFormat) => Promise<void>
+
+	getDiagnosticsEnabled: () => Promise<boolean>
 	setDiagnosticsEnabled: (value: boolean) => Promise<void>
+
+	getLocaleState: () => Promise<LocaleState>
 	setLocale: (value: Locale) => Promise<void>
+
+	getAppUsageMetrics: () => Promise<AppUsageMetrics | null>
 	setAppUsageMetrics: (value: AppUsageMetrics['status']) => Promise<void>
 
-	// Sentry
+	// User
 	getSentryConfig: () => {
 		enabled: boolean
 		environment: string
 		userId: string
 	}
 
-	// Active Project ID
 	getInitialProjectId: () => string | undefined
 	setActiveProjectId: (value: string | undefined) => Promise<void>
+
+	getOnboardedAt: () => Promise<number | null>
+	setOnboardedAt: (value: number) => Promise<void>
 }
