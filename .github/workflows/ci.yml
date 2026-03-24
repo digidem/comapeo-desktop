@@ -119,11 +119,12 @@ jobs:
         env:
           APP_TYPE: 'internal'
           COMAPEO_TEST: 'true'
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_DSN: ${{ vars.COMAPEO_SENTRY_DSN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           VITE_FEATURE_TEST_DATA_UI: 'true'
+          ### Uncomment the following if sourcemap uploads are needed for improved debugging
+          # SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          # SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          # SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
         run: node --run forge:package
 
       - name: Run e2e tests
