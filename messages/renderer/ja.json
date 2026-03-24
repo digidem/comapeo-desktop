@@ -1019,28 +1019,36 @@
     "description": "Fallback for when project is missing a name.",
     "message": "名前のないプロジェクト"
   },
-  "routes.app.settings.-data-and-pritvacy-section.diagnosticInformationPersonalInfo": {
-    "message": "これには、お客様のデータや個人情報は一切含まれません。"
-  },
   "routes.app.settings.-data-and-privacy-section.description": {
+    "description": "Description for data and privacy section in settings page.",
     "message": "CoMapeoはあなたのプライバシーと自律性を尊重します"
   },
   "routes.app.settings.-data-and-privacy-section.diagnosticInformationDescription": {
+    "description": "Description for diagnostic information section in settings page.",
     "message": "デバイスに関する匿名化された情報、アプリのクラッシュ、エラー、パフォーマンスは、Awana Digitalがアプリを改善し、エラーを修正するのに役立ちます。"
   },
   "routes.app.settings.-data-and-privacy-section.diagnosticInformationOptOut": {
+    "description": "Details about opting out in diagnostic information section in settings page.",
     "message": "診断情報の共有をいつでもオプトアウトすることができます。"
   },
+  "routes.app.settings.-data-and-privacy-section.diagnosticInformationPersonalInfo": {
+    "description": "Details about personal info in diagnostic information section in settings page.",
+    "message": "これには、お客様のデータや個人情報は一切含まれません。"
+  },
   "routes.app.settings.-data-and-privacy-section.diagnosticInformationTitle": {
+    "description": "Title for diagnostic information section in settings page.",
     "message": "診断情報"
   },
   "routes.app.settings.-data-and-privacy-section.learnMore": {
+    "description": "Text for link that navigates to external URL for additional information info about data and privacy.",
     "message": "もっと詳しく"
   },
   "routes.app.settings.-data-and-privacy-section.shareDiagnosticInformation": {
+    "description": "Label for checkbox to toggle sharing of diagnostic information.",
     "message": "診断情報を共有"
   },
   "routes.app.settings.-data-and-privacy-section.title": {
+    "description": "Title for data and privacy section in settings page.",
     "message": "データ & プライバシー"
   },
   "routes.app.settings.background-map.acceptedFileTypes": {
@@ -1090,6 +1098,10 @@
   "routes.app.settings.background-map.sizeInMegabytes": {
     "description": "Text describing what kind of files are usable for background maps.",
     "message": "{value} MB"
+  },
+  "routes.app.settings.breadCrumbAccessibleLabel": {
+    "description": "Accessible label for breadcrumb navigation when viewing nested settings page.",
+    "message": "breadcrunb"
   },
   "routes.app.settings.comapeoSettingsBreadCrumbLink": {
     "description": "Text for breadcrumb link to go to main CoMapeo settings page when viewing nested settings page.",
@@ -1272,15 +1284,19 @@
     "message": "作成されました {count, plural, one {# トラック} other {# トラック}}"
   },
   "routes.onboarding.data-and-privacy.dataEncrypted": {
+    "description": "Detail about data being fully encrypted.",
     "message": "すべてのデータは完全に暗号化されたままです。"
   },
   "routes.onboarding.data-and-privacy.dataStays": {
+    "description": "Detail about data staying on device.",
     "message": "データは端末に保存されます。"
   },
   "routes.onboarding.data-and-privacy.description": {
+    "description": "Description for review data and privacy page in onboarding.",
     "message": "CoMapeoは、チームがインターネットサーバーを必要とせずにオフラインでマップすることを可能にします。"
   },
   "routes.onboarding.data-and-privacy.learnMore": {
+    "description": "Text for link that navigates to external URL for additional information info about data and privacy.",
     "message": "もっと詳しく"
   },
   "routes.onboarding.data-and-privacy.next": {
@@ -1288,108 +1304,139 @@
     "message": "次へ"
   },
   "routes.onboarding.data-and-privacy.privateByDefault": {
+    "description": "Detail about privacy by default.",
     "message": "非公開:診断情報は完全に匿名化され、いつでもオプトアウトできます。"
   },
   "routes.onboarding.data-and-privacy.sharingAndCollaboration": {
+    "description": "Detail about data sharing and collaboration.",
     "message": "共有やコラボレーションを簡単に管理できます。"
   },
   "routes.onboarding.data-and-privacy.title": {
+    "description": "Title for review data and privacy page in onboarding.",
     "message": "データとプライバシーを確認する"
   },
   "routes.onboarding.device-name.addName": {
+    "description": "Text for submit button to save device name.",
     "message": "名前を追加"
   },
   "routes.onboarding.device-name.characterCount": {
+    "description": "Displayed character count of device name input out of maximum allowed characters.",
     "message": "{count}/{max}"
   },
   "routes.onboarding.device-name.description": {
+    "description": "Description for device name page during onboarding.",
     "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
   },
   "routes.onboarding.device-name.deviceName": {
+    "description": "Label for device name text input.",
     "message": "端末名"
   },
   "routes.onboarding.device-name.maxLengthError": {
+    "description": "Message displayed when maximum length for device name input is exceeded.",
     "message": "長すぎます。短い名前を入力してください。"
   },
   "routes.onboarding.device-name.minLengthError": {
+    "description": "Message displayed when required minimum length for device name input is not met.",
     "message": "デバイス名を入力してください"
   },
   "routes.onboarding.device-name.title": {
+    "description": "Title for device name page during onboarding.",
     "message": "デバイスに名前を付ける"
   },
   "routes.onboarding.privacy-policy.aboutAwanaDigital": {
+    "description": "Title for about section in privacy policy page.",
     "message": "Awana Digitalについて"
   },
   "routes.onboarding.privacy-policy.aboutAwanaDigitalDescription": {
+    "description": "Description for about section in privacy policy page.",
     "message": "CoMapeoは、米国に登録されている501c3非営利団体であるAwana Digitalによって開発されました。 Awana Digitalは、最前線のコミュニティと連帯して、自らの権利を守り、気候変動と戦うためにテクノロジーを使用しています。"
   },
   "routes.onboarding.privacy-policy.appErrors": {
+    "description": "Details for app errors in diagnostics section in privacy policy page.",
     "message": "<b>App Errors</b>: アプリが期待どおりに動作しない内部エラーに関する情報。"
   },
   "routes.onboarding.privacy-policy.appInfo": {
+    "description": "Details for app info in diagnostics section in privacy policy page.",
     "message": "<b>アプリ情報</b>: CoMapeoのバージョンとロケール(言語)。"
   },
   "routes.onboarding.privacy-policy.appUsage": {
+    "description": "Title for app usage section in privacy policy page.",
     "message": "アプリの使用状況"
   },
   "routes.onboarding.privacy-policy.comapeoDataPrivacy": {
+    "description": "Title for data privacy section in privacy policy page.",
     "message": "CoMapeo Data Privacy"
   },
   "routes.onboarding.privacy-policy.control": {
+    "description": "Title for data control section in privacy policy page.",
     "message": "あなたが制御しています"
   },
   "routes.onboarding.privacy-policy.country": {
+    "description": "Details for country in app usage section in privacy policy page.",
     "message": "<b>国</b>: CoMapeoが使用されている国"
   },
   "routes.onboarding.privacy-policy.crashData": {
+    "description": "Details for crash data in diagnostics section in privacy policy page.",
     "message": "<b>クラッシュデータ</b>: アプリが予期せず終了した原因についての情報。"
   },
-  "routes.onboarding.privacy-policy.currentPermissions": {
-    "message": "現在の権限"
-  },
   "routes.onboarding.privacy-policy.dataCollection": {
+    "description": "Title for data collection section in privacy policy page.",
     "message": "CoMapeo データ収集"
   },
   "routes.onboarding.privacy-policy.description": {
+    "description": "Description for privacy policy page during onboarding.",
     "message": "以下では、CoMapeoからアプリケーション開発者Awana Digitalに送信される情報(または「データ」)とその情報がどのように使用されるかについて説明します。"
   },
   "routes.onboarding.privacy-policy.deviceInfo": {
+    "description": "Details for device info in diagnostics section in privacy policy page.",
     "message": "<b>デバイス情報</b>: お使いのデバイスのモデルやメーカー、デバイスのオペレーティングシステム、画面サイズ、デバイスのロケール(言語)、デバイスのメモリなど。"
   },
   "routes.onboarding.privacy-policy.diagnostics": {
+    "description": "Title for diagnostics section in privacy policy page.",
     "message": "診断"
   },
   "routes.onboarding.privacy-policy.noPII": {
+    "description": "Title for no PII section in privacy policy page.",
     "message": "個人を特定できる情報がありません"
   },
   "routes.onboarding.privacy-policy.openSource": {
+    "description": "Title for open source section in privacy policy page.",
     "message": "オープンソースと「公式」バージョン"
   },
   "routes.onboarding.privacy-policy.performanceData": {
+    "description": "Details for performance data in diagnostics section in privacy policy page.",
     "message": "<b>パフォーマンスデータ</b>: 起動時間、エネルギー使用量、アプリのフリーズ、応答性など。"
   },
   "routes.onboarding.privacy-policy.prviateByDefault": {
+    "description": "Title for private by default section in privacy policy page.",
     "message": "デフォルトでは非公開"
   },
   "routes.onboarding.privacy-policy.shareDiagnosticInformation": {
+    "description": "Label for checkbox to toggle sharing of diagnostic information.",
     "message": "診断情報を共有"
   },
   "routes.onboarding.privacy-policy.title": {
+    "description": "Title for privacy policy page during onboarding.",
     "message": "プライバシーポリシー"
   },
   "routes.onboarding.privacy-policy.whatIsCollected": {
+    "description": "Title for what is collected section in privacy policy page.",
     "message": "収集されたものは？"
   },
   "routes.onboarding.privacy-policy.whatIsCollectedDescription": {
+    "description": "Description for what is collected section in privacy policy page.",
     "message": "デフォルトでは、デバイスに関する匿名化された診断情報、アプリのクラッシュ、エラー、パフォーマンスはAwana Digitalと共有されます。<br></br><br></br>いつでもこの情報を共有することをオプトアウトできます。 この診断情報は完全に匿名化され、お客様のデータ(CoMapeoで収集したデータ)は一切含まれません。"
   },
   "routes.onboarding.privacy-policy.whatIsNotCollected": {
+    "description": "Title for what is not collected in app usage section in privacy policy page.",
     "message": "何が収集されていませんか?"
   },
   "routes.onboarding.privacy-policy.whatIsNotCollectedDescription": {
+    "description": "Description for what is not collected in app usage section in privacy policy page.",
     "message": "当社は、個人データまたはユーザーまたはデバイスを特定または追跡するために使用できるものは一切収集しません。 情報を集約するために使用されるデバイス識別子は、ランダム、匿名、および毎月変更されます。 診断情報にはアプリの使用方法に関するデータは含まれていません アプリで収集したデータは一切含まれていません 私たちは、あなたがCoMapeoを使用している国のみ、あなたの正確なまたは粗い場所を収集しません。"
   },
   "routes.onboarding.privacy-policy.whyIsThisDataCollected": {
+    "description": "Title for why data is collected in app usage section in privacy policy page.",
     "message": "なぜこのデータが収集されるのですか?"
   },
   "routes.onboarding.route.goBack": {
@@ -1401,21 +1448,27 @@
     "message": "手順 {value}"
   },
   "routes.welcome.appDescription": {
+    "description": "Description of app in welcome page.",
     "message": "CoMapeo Mobileで収集した観察記録を表示および管理します。"
   },
   "routes.welcome.collaborate": {
+    "description": "Detail about collaborating in welcome page.",
     "message": "Collaborate with others"
   },
   "routes.welcome.designedFor": {
+    "description": "Detail about who app is designed for in welcome page.",
     "message": "先住民族と最前線コミュニティのために設計されました"
   },
   "routes.welcome.getStarted": {
+    "description": "Text for link to navigate to next step.",
     "message": "はじめよう"
   },
   "routes.welcome.mapAnywhere": {
+    "description": "Detail about mapping in welcome page.",
     "message": "どこでもどこでもマップ"
   },
   "routes.welcome.ownData": {
+    "description": "Detail about owning data in welcome page.",
     "message": "データを所有し、制御する"
   }
 }
