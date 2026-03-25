@@ -1,12 +1,14 @@
 import Box from '@mui/material/Box'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Divider from '@mui/material/Divider'
+import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import {
 	Outlet,
 	createFileRoute,
 	useChildMatches,
+	useRouter,
 } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
@@ -21,6 +23,8 @@ export const Route = createFileRoute('/app/settings/_nested')({
 })
 
 function RouteComponent() {
+	const router = useRouter()
+
 	const { formatMessage: t } = useIntl()
 
 	const currentRoute = useChildMatches({
@@ -46,11 +50,23 @@ function RouteComponent() {
 		<Stack direction="column" flex={1} overflow="auto">
 			<Stack direction="column" gap={6} padding={6}>
 				<Stack direction="row" gap={4} alignItems="center" flex={1}>
-					<Icon
-						name="material-arrow-back"
-						size={headerIconHeight}
-						htmlColor={DARK_GREY}
-					/>
+					<IconButton
+						onClick={() => {
+							if (router.history.canGoBack()) {
+								router.history.back()
+								return
+							}
+
+							router.navigate({ to: '/app/settings', replace: true })
+						}}
+						aria-label={t(m.goBackAccessibleLabel)}
+					>
+						<Icon
+							name="material-arrow-back"
+							size={headerIconHeight}
+							htmlColor={DARK_GREY}
+						/>
+					</IconButton>
 
 					<Breadcrumbs
 						component="nav"
@@ -102,5 +118,10 @@ const m = defineMessages({
 		defaultMessage: 'CoMapeo Settings',
 		description:
 			'Text for breadcrumb link to go to main CoMapeo settings page when viewing nested settings page.',
+	},
+	goBackAccessibleLabel: {
+		id: 'routes.app.settings.goBackAccessibleLabel',
+		defaultMessage: 'Go back.',
+		description: 'Accessible label for back button',
 	},
 })
