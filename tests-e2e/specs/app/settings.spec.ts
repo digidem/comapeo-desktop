@@ -254,8 +254,12 @@ test.describe('device name', () => {
 
 			/// Main
 
-			// Breadcrumb
+			// Subpage navigation
 			{
+				await expect(
+					main.getByRole('button', { name: 'Go back.', exact: true }),
+				).toBeVisible()
+
 				const breadcrumbNav = main.getByRole('navigation', {
 					name: 'breadcrumb',
 					exact: true,
@@ -498,8 +502,12 @@ test('language', async ({ appInfo, userParams }) => {
 
 		/// Main
 
-		// Breadcrumb
+		// Subpage navigation
 		{
+			await expect(
+				main.getByRole('button', { name: 'Go back.', exact: true }),
+			).toBeVisible()
+
 			const breadcrumbNav = main.getByRole('navigation', {
 				name: 'breadcrumb',
 				exact: true,
@@ -671,8 +679,12 @@ test('coordinate system', async ({ appInfo, userParams }) => {
 
 		/// Main
 
-		// Breadcrumb
+		// Subpage navigation
 		{
+			await expect(
+				main.getByRole('button', { name: 'Go back.', exact: true }),
+			).toBeVisible()
+
 			const breadcrumbNav = main.getByRole('navigation', {
 				name: 'breadcrumb',
 				exact: true,
@@ -821,8 +833,12 @@ test('background map', async ({ appInfo, userParams }) => {
 
 		/// Main
 
-		// Breadcrumb
+		// Subpage navigation
 		{
+			await expect(
+				main.getByRole('button', { name: 'Go back.', exact: true }),
+			).toBeVisible()
+
 			const breadcrumbNav = main.getByRole('navigation', {
 				name: 'breadcrumb',
 				exact: true,
