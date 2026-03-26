@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
+import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
@@ -18,6 +19,7 @@ import { Icon } from '../../components/icon.tsx'
 import { useAppForm } from '../../hooks/forms.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo.ts'
 import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../lib/constants.ts'
+import { setOnboardedAtMutationOptions } from '../../lib/queries/user.ts'
 import { createDeviceNameSchema } from '../../lib/validators/device.ts'
 
 export const Route = createFileRoute('/onboarding/device-name')({
@@ -44,6 +46,8 @@ function RouteComponent() {
 
 	const { data: deviceInfo } = useOwnDeviceInfo()
 	const setOwnDeviceInfo = useSetOwnDeviceInfo()
+
+	const setOnboardedAt = useMutation(setOnboardedAtMutationOptions())
 
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
@@ -73,6 +77,8 @@ function RouteComponent() {
 					deviceType: 'desktop',
 					name: parsedDeviceName,
 				})
+
+				await setOnboardedAt.mutateAsync(Date.now())
 			} catch (err) {
 				captureException(err)
 			}
