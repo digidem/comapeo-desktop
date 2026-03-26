@@ -1175,6 +1175,10 @@
     "description": "Label for save button.",
     "message": "Speichern"
   },
+  "routes.app.settings.goBackAccessibleLabel": {
+    "description": "Accessible label for back button",
+    "message": "Gehe zurück."
+  },
   "routes.app.settings.index.aboutCoMapeoVersionLabel": {
     "description": "Label for CoMapeo version",
     "message": "CoMapeo Version"
