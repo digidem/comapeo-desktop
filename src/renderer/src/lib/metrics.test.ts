@@ -5,7 +5,7 @@ import { shouldShowAppUsageConsent } from './metrics.ts'
 
 describe('shouldShowAppUsageConsent()', () => {
 	test.describe('not onboarded', () => {
-		test('app metrics not set', () => {
+		test('app usage metrics not set', () => {
 			expect(
 				shouldShowAppUsageConsent({
 					appUsageMetrics: null,
@@ -14,7 +14,7 @@ describe('shouldShowAppUsageConsent()', () => {
 			).toBe(false)
 		})
 
-		test('app metrics set', () => {
+		test('app usage metrics set', () => {
 			const start = Date.now()
 
 			expect(
@@ -41,7 +41,7 @@ describe('shouldShowAppUsageConsent()', () => {
 	})
 
 	test.describe('onboarded', () => {
-		test('app metrics not set', () => {
+		test('app usage metrics not set', () => {
 			vi.useFakeTimers()
 
 			const start = Date.now()
@@ -81,7 +81,7 @@ describe('shouldShowAppUsageConsent()', () => {
 			).toBe(true)
 		})
 
-		test('app metrics enabled', () => {
+		test('app usage metrics enabled', () => {
 			vi.useFakeTimers()
 
 			const start = Date.now()
@@ -103,7 +103,7 @@ describe('shouldShowAppUsageConsent()', () => {
 			).toBe(false)
 		})
 
-		test('app metrics disabled', () => {
+		test('app usage metrics disabled', () => {
 			vi.useFakeTimers()
 
 			const start = Date.now()
