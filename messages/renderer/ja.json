@@ -1151,6 +1151,10 @@
     "description": "Label for save button.",
     "message": "保存"
   },
+  "routes.app.settings.goBackAccessibleLabel": {
+    "description": "Accessible label for back button",
+    "message": "戻ってください。"
+  },
   "routes.app.settings.index.aboutCoMapeoVersionLabel": {
     "description": "Label for CoMapeo version",
     "message": "CoMapeo バージョン"
