@@ -1,19 +1,87 @@
 {
+  "components.app-title-bar.appName": {
+    "description": "Name of the app displayed in the title bar.",
+    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
+  },
   "components.discard-edits-dialog.cancelButton": {
     "description": "Text for button to cancel action.",
     "message": "Batal"
+  },
+  "components.discard-edits-dialog.confirmButton": {
+    "description": "Text for button to confirm discarding changes.",
+    "message": "Ya, hapus"
+  },
+  "components.discard-edits-dialog.title": {
+    "description": "Title of dialog displayed when trying to leave page while editing observation.",
+    "message": "Hapus edit?"
+  },
+  "components.error-dialog.advanced": {
+    "description": "Title text for the collapsible section that shows the actual error message.",
+    "message": "Maju"
   },
   "components.error-dialog.close": {
     "description": "Button text for the close button in the error dialog.",
     "message": "Close"
   },
+  "components.error-dialog.somethingWentWrong": {
+    "description": "Generic title text for the error dialog.",
+    "message": "Terjadi error"
+  },
   "components.generic-route-error-component.error": {
     "description": "Label for error section",
     "message": "Galat"
   },
+  "components.generic-route-error-component.reload": {
+    "description": "Text for button to reload page.",
+    "message": "Memuat ulang"
+  },
+  "components.generic-route-error-component.restart": {
+    "description": "Text for button to restart app.",
+    "message": "Memulai ulang"
+  },
+  "components.generic-route-error-component.somethinWentWrong": {
+    "description": "Title text of page error",
+    "message": "Terjadi error"
+  },
+  "components.generic-route-error-component.stacktrace": {
+    "description": "Label for stack trace section",
+    "message": "Jejak tumpukan"
+  },
+  "components.generic-route-not-found-component.goBack": {
+    "description": "Button text for back button.",
+    "message": "Kembali"
+  },
+  "components.generic-route-not-found-component.reloadApp": {
+    "description": "Button text for reload app button.",
+    "message": "Muat Ulang Aplikasi"
+  },
+  "components.generic-route-not-found-component.title": {
+    "description": "Title text shown when page is not found.",
+    "message": "Halaman tidak ditemukan"
+  },
   "components.generic-route-not-found-component.tryAgain": {
     "description": "Button text for try again button.",
     "message": "Coba Lagi"
+  },
+  "routes.app.index.additionalProjectsSecitionTitle": {
+    "description": "Title text for the additional projects section.",
+    "message": "Proyek Tambahan"
+  },
+  "routes.app.index.additionalProjectsSectionDescription": {
+    "description": "Text describing sorting order of the additional projects section.",
+    "message": "Diurutkan berdasarkan yang paling terakhir dibuat"
+  },
+  "routes.app.index.additionalProjectsSectionShowAsGrid": {
+    "description": "Tooltip text for button to display additional projects section as a grid.",
+    "message": "Tampilkan sebagai grid"
+  },
+  "routes.app.index.additionalProjectsSectionShowAsList": {
+    "description": "Tooltip text for button to display additional projects section as a list.",
+    "message": "Tampilkan daftar"
+  },
+  "routes.app.index.characterCount": {
+    "description": "Character count for project name input.",
+    "message": "{count}/{max}"
   },
   "routes.app.index.createProjectButton": {
     "description": "Text for button to create project.",
@@ -23,6 +91,10 @@
     "description": "Title card for joining a project.",
     "message": "Bergabung dengan Proyek"
   },
+  "routes.app.index.joinProjectDialogDescription": {
+    "description": "Description of dialog shown for joining a project.",
+    "message": "Berkoordinasi dengan tim Anda untuk menerima undangan proyek."
+  },
   "routes.app.index.joinProjectDialogTitle": {
     "description": "Title of dialog shown for joining a project.",
     "message": "Bergabung dengan Proyek"
@@ -31,21 +103,93 @@
     "description": "Text for button to close left project dialog.",
     "message": "Open Settings"
   },
+  "routes.app.index.leftProjectDialogTitle": {
+    "description": "Title text for left project dialog.",
+    "message": "Perangkat ini telah meninggalkan proyek {name}."
+  },
+  "routes.app.index.pageTitle": {
+    "description": "Title of home page.",
+    "message": "{name} Proyek"
+  },
+  "routes.app.index.postOnboardingPageTitle": {
+    "description": "Title of home page after completing onboarding.",
+    "message": "{name} sudah siap!"
+  },
+  "routes.app.index.projectActionDialogGoBack": {
+    "description": "Text for button to close project join/create dialog.",
+    "message": "Kembali"
+  },
+  "routes.app.index.projectCardRoleCoordinator": {
+    "description": "Displayed name of coordinator role on project card.",
+    "message": "Koordinator"
+  },
+  "routes.app.index.projectCardRoleParticipant": {
+    "description": "Displayed name of participant role on project card.",
+    "message": "Peserta"
+  },
   "routes.app.index.projectNameInputLabel": {
     "description": "Input label for input in start project dialog.",
     "message": "Enter a name for the Project"
+  },
+  "routes.app.index.projectNameMaxLengthError": {
+    "description": "Error message for when project name is too long.",
+    "message": "Terlalu panjang, coba nama yang lebih pendek."
+  },
+  "routes.app.index.projectNameMinLengthError": {
+    "description": "Error message for when project name is too short.",
+    "message": "Masukkan Nama Proyek"
   },
   "routes.app.index.startProjectCardTitle": {
     "description": "Title card for starting a new project.",
     "message": "Create a Project"
   },
+  "routes.app.index.startProjectDialogDescription": {
+    "description": "Description of dialog shown for starting a project.",
+    "message": "Beri nama proyek Anda."
+  },
   "routes.app.index.startProjectDialogTitle": {
     "description": "Description of dialog shown for starting a project.",
     "message": "Create a Project"
   },
+  "routes.app.index.unnamedProject": {
+    "description": "Fallback for when project is missing a name.",
+    "message": "Proyek Tanpa Nama"
+  },
+  "routes.app.projects.$projectId.-data-list.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Ikon untuk {name} kategori"
+  },
+  "routes.app.projects.$projectId.-data-list.downloadObservations": {
+    "description": "Link text to navigate to download observations page.",
+    "message": "Unduh Pengamatan"
+  },
   "routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
     "message": "Pengamatan"
+  },
+  "routes.app.projects.$projectId.-data-list.trackItemTitle": {
+    "description": "Title for list item that is a track.",
+    "message": "Trek"
+  },
+  "routes.app.projects.$projectId.-map-panel.cannotDisplayFeature": {
+    "description": "Text displayed when map feature for selected data cannot be displayed",
+    "message": "Tidak dapat menampilkan fitur"
+  },
+  "routes.app.projects.$projectId.-map-panel.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Ikon untuk {name} kategori"
+  },
+  "routes.app.projects.$projectId.-map-panel.zoomToData": {
+    "description": "Text displayed when hovering over map control for zooming to data.",
+    "message": "Zoom ke data"
+  },
+  "routes.app.projects.$projectId.-map-panel.zoomToSelected": {
+    "description": "Text displayed when hovering over map control for zooming to selected.",
+    "message": "Zoom ke yang dipilih"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.audioNavTitle": {
+    "description": "Title of the audio attachment page.",
+    "message": "Rekaman Audio"
   },
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
     "description": "Label text for delete button",
@@ -54,6 +198,26 @@
   "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
     "description": "Text for cancel button in delete attachment confirmation dialog",
     "message": "Batal"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogConfirm": {
+    "description": "Text for confirm button in delete attachment confirmation dialog",
+    "message": "Ya, Hapus"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogTitle": {
+    "description": "Title text for delete attachment confirmation dialog",
+    "message": "Hapus {type, select, photo {Foto} audio {Rekaman Audio} other {Lampiran}}?"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteSuccessPanelTitle": {
+    "description": "Title text for the successful deletion panel.",
+    "message": "{type, select, photo {Foto} audio {Rekaman Audio} other {Lampiran}} Dihapus"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
+    "description": "Label text for download button",
+    "message": "Unduh"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.photoNavTitle": {
+    "description": "Title of the photo attachment page.",
+    "message": "Info Foto"
   },
   "routes.app.projects.$projectId.download.successPanelDone": {
     "description": "Button text for exiting success panel.",
