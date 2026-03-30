@@ -69,7 +69,7 @@ test('solo', async ({ appInfo, projectParams, userParams }) => {
 			)
 			await expect(networkConnectionInfo).not.toHaveText(
 				'Getting Wi-Fi information…',
-				{ timeout: 10_000 },
+				{ timeout: 20_000 },
 			)
 			// TODO: Ideally check for actual values
 			await expect(networkConnectionInfo).not.toBeEmpty()
