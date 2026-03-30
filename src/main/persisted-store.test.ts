@@ -3,7 +3,7 @@ import { mkdtemp } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import * as v from 'valibot'
-import { expect, test, vi, type TestContext } from 'vitest'
+import { describe, expect, test, vi, type TestContext } from 'vitest'
 
 import type { AppUsageMetrics } from '../shared/metrics.ts'
 import { daysToMilliseconds } from '../shared/time.ts'
@@ -72,7 +72,7 @@ test('with initial storage value matching current schema', async (t) => {
 	).toMatchObject(initialStorage)
 })
 
-test.describe('migrations', () => {
+describe('migrations', () => {
 	// TODO: Might make more sense to throw loudly
 	test('from invalid', async (t) => {
 		const { filePath } = await setup(t)
@@ -154,7 +154,7 @@ test('sentry user rotation behavior', async (t) => {
 	expect(store.getState().sentryUser).not.toStrictEqual(initialSentryUser)
 })
 
-test.describe('app usage metrics reset behavior', () => {
+describe('app usage metrics reset behavior', () => {
 	test.beforeEach(() => {
 		vi.useFakeTimers()
 	})
@@ -241,7 +241,7 @@ test.describe('app usage metrics reset behavior', () => {
 
 async function setup(t: TestContext) {
 	const dir = await mkdtemp(join(tmpdir(), 'persisted-store-'))
-	const filePath = join(dir, 'test.json')
+	const filePath = join(dir, 'data.json')
 
 	t.onTestFinished(() => {
 		rmSync(dir, { recursive: true, force: true })
