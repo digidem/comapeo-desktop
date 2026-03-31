@@ -647,6 +647,10 @@
     "description": "Title of the team collaborator info page.",
     "message": "Información del colaborador"
   },
+  "routes.app.projects.$projectId.team.$deviceId.confirmButton": {
+    "description": "Button text to confirm leaving project.",
+    "message": "Sí, dejar"
+  },
   "routes.app.projects.$projectId.team.$deviceId.continueButton": {
     "description": "Button text to continue to next step in leave project flow.",
     "message": "Continuar"
@@ -658,6 +662,22 @@
   "routes.app.projects.$projectId.team.$deviceId.goBackAccessibleLabel": {
     "description": "Accessible label for back button.",
     "message": "Regresar."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningDescription": {
+    "description": "Description text for last coordinator warning when leaving a project.",
+    "message": "Si este dispositivo abandona, entonces ningún otro dispositivo puede añadir o quitar dispositivos, ajustar la información del proyecto o actualizar las categorías establecidas."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningTitle": {
+    "description": "Title text for last coordinator warning when leaving a project.",
+    "message": "El dispositivo es el último coordinator."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningDescription": {
+    "description": "Description text for last device warning when leaving a project.",
+    "message": "Si este dispositivo sale, se perderán todos los datos de este proyecto."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningTitle": {
+    "description": "Title text for last device warning when leaving a project.",
+    "message": "Dispositivo es el último dispositivo."
   },
   "routes.app.projects.$projectId.team.$deviceId.leaveProjectButton": {
     "description": "Button text to initiate leave project flow.",
@@ -682,6 +702,14 @@
   "routes.app.projects.$projectId.team.$deviceId.remoteArchive": {
     "description": "Fallback name used if remote archive does not have name.",
     "message": "Archivo Remoto"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.suggestionExportData": {
+    "description": "Text for export data suggestion in warning when leaving a project.",
+    "message": "Antes de salir, exportar cualquier dato importante."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.suggestionInviteCoordinator": {
+    "description": "Text for invite coordinator suggestion in warning when leaving a project.",
+    "message": "Para evitar esto, invita a un nuevo dispositivo como coordinador."
   },
   "routes.app.projects.$projectId.team.$deviceId.thisDevice": {
     "description": "Text indicating that user is viewing itself.",
