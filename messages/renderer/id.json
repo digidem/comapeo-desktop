@@ -85,7 +85,7 @@
   },
   "routes.app.index.createProjectButton": {
     "description": "Text for button to create project.",
-    "message": "Create Project"
+    "message": "Buat baru"
   },
   "routes.app.index.joinProjectCardTitle": {
     "description": "Title card for joining a project.",
@@ -129,7 +129,7 @@
   },
   "routes.app.index.projectNameInputLabel": {
     "description": "Input label for input in start project dialog.",
-    "message": "Enter a name for the Project"
+    "message": "Nama proyek"
   },
   "routes.app.index.projectNameMaxLengthError": {
     "description": "Error message for when project name is too long.",
@@ -141,7 +141,7 @@
   },
   "routes.app.index.startProjectCardTitle": {
     "description": "Title card for starting a new project.",
-    "message": "Create a Project"
+    "message": "Mulai Proyek Baru"
   },
   "routes.app.index.startProjectDialogDescription": {
     "description": "Description of dialog shown for starting a project.",
@@ -149,7 +149,7 @@
   },
   "routes.app.index.startProjectDialogTitle": {
     "description": "Description of dialog shown for starting a project.",
-    "message": "Create a Project"
+    "message": "Mulai Proyek Baru"
   },
   "routes.app.index.unnamedProject": {
     "description": "Fallback for when project is missing a name.",
@@ -1353,7 +1353,7 @@
   },
   "routes.onboarding.device-name.description": {
     "description": "Description for device name page during onboarding.",
-    "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
+    "message": "Nama yang berbeda dan mudah diingat membantu kolaborator mengenali Anda."
   },
   "routes.onboarding.device-name.deviceName": {
     "description": "Label for device name text input.",
