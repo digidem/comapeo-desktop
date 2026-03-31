@@ -983,10 +983,6 @@
     "description": "Text indicating creation date of categories set.",
     "message": "Aangemaakt {date}"
   },
-  "routes.app.route.projectInfoProjectStats": {
-    "description": "Text indicating if project stats sharing is enabled or not.",
-    "message": "Project Delen ww {enabled, select, 1 {} other {UIT}}"
-  },
   "routes.app.route.projectInfoRoleCoordinator": {
     "description": "Indicates that user is a coordinator.",
     "message": "Coördinator"

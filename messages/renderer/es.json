@@ -967,10 +967,6 @@
     "description": "Text indicating creation date of categories set.",
     "message": "Creado {date}"
   },
-  "routes.app.route.projectInfoProjectStats": {
-    "description": "Text indicating if project stats sharing is enabled or not.",
-    "message": "Proyecto compartido | {enabled, select, 1 {ON} other {OFF}}"
-  },
   "routes.app.route.projectInfoRoleCoordinator": {
     "description": "Indicates that user is a coordinator.",
     "message": "Persona Coordinadora"
