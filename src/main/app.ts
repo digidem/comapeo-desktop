@@ -67,6 +67,24 @@ export async function start({
 	try {
 		const appRunPromise = Promise.withResolvers<void>()
 
+		if (app.hasSingleInstanceLock()) {
+			app.on('second-instance', () => {
+				log('Second instance requested')
+
+				const existingMainWindow = BrowserWindow.getAllWindows().find((w) => {
+					return APP_STATE.browserWindows.get(w)?.type === 'main'
+				})
+
+				if (existingMainWindow?.isMinimized()) {
+					log(
+						`Restoring and focusing main window with ID ${existingMainWindow.id}.`,
+					)
+					existingMainWindow.restore()
+					existingMainWindow.focus()
+				}
+			})
+		}
+
 		app.setAboutPanelOptions({ applicationVersion: appConfig.appVersion })
 
 		// Quit when all windows are closed, except on macOS. There, it's common

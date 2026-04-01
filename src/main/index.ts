@@ -33,6 +33,17 @@ const appConfigFile = await readFile(
 
 const appConfig: AppConfig = parse(AppConfigSchema, JSON.parse(appConfigFile))
 
+// NOTE: Only allow a single instance of the app to run in non-testing environments.
+// We allow multiple instances in testing environments in order to run e2e tests in parallel.
+if (!appConfig.isTestEnvironment) {
+	const hasInstanceLock = app.requestSingleInstanceLock()
+
+	if (!hasInstanceLock) {
+		log('App instance is already running. Exiting this app.')
+		app.exit()
+	}
+}
+
 // If desired, tell Electron to not use the ASAR format (https://www.electronjs.org/docs/latest/tutorial/asar-archives#treating-an-asar-archive-as-a-normal-file)
 if (appConfig.asar === false) {
 	process.noAsar = true
