@@ -66,7 +66,6 @@ export async function start({
 
 	try {
 		if (app.hasSingleInstanceLock()) {
-			console.log('ADDING SECOND INSTANCE LISTENER')
 			app.on('second-instance', () => {
 				log('Second instance requested')
 
