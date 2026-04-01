@@ -65,6 +65,25 @@ export async function start({
 	})
 
 	try {
+		if (app.hasSingleInstanceLock()) {
+			console.log('ADDING SECOND INSTANCE LISTENER')
+			app.on('second-instance', () => {
+				log('Second instance requested')
+
+				const existingMainWindow = BrowserWindow.getAllWindows().find((w) => {
+					return APP_STATE.browserWindows.get(w)?.type === 'main'
+				})
+
+				if (existingMainWindow?.isMinimized()) {
+					log(
+						`Restoring and focusing main window with ID ${existingMainWindow.id}.`,
+					)
+					existingMainWindow.restore()
+					existingMainWindow.focus()
+				}
+			})
+		}
+
 		const appRunPromise = Promise.withResolvers<void>()
 
 		app.setAboutPanelOptions({ applicationVersion: appConfig.appVersion })

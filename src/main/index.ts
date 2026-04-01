@@ -26,6 +26,14 @@ if (require('electron-squirrel-startup')) {
 
 const log = debug('comapeo:main:index')
 
+const hasInstanceLock = app.requestSingleInstanceLock()
+
+// NOTE: Only allow a single instance of the app to run
+if (!hasInstanceLock) {
+	log('App instance is already running. Quitting app.')
+	app.quit()
+}
+
 const appConfigFile = await readFile(
 	path.join(app.getAppPath(), 'app.config.json'),
 	'utf-8',
