@@ -31,7 +31,7 @@ const hasInstanceLock = app.requestSingleInstanceLock()
 // NOTE: Only allow a single instance of the app to run
 if (!hasInstanceLock) {
 	log('App instance is already running. Quitting app.')
-	app.quit()
+	app.exit()
 }
 
 const appConfigFile = await readFile(
