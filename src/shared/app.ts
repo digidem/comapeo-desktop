@@ -22,6 +22,8 @@ export const AppConfigSchema = v.object({
 	appVersion: v.string(),
 	/** Enables ASAR format */
 	asar: v.optional(v.boolean()),
+	/** Indicates that the app is running in a test environment (e.g. e2e testing) */
+	isTestEnvironment: v.optional(v.boolean()),
 	/** Metrics configuration */
 	metrics: v.object({
 		/**

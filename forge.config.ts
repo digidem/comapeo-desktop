@@ -117,6 +117,7 @@ const RENDERER_VITE_CONFIG_PATH = fileURLToPath(
 type CoMapeoDesktopForgePluginConfig = {
 	appId: string
 	appVersion: string
+	isTestEnvironment: boolean
 	win32AppUserModelId: string
 }
 
@@ -187,6 +188,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase<CoMapeoDesktopForgePluginConf
 			appType: APP_TYPE,
 			appVersion: this.config.appVersion,
 			asar: ASAR,
+			isTestEnvironment: this.config.isTestEnvironment,
 			metrics: {
 				accessToken: COMAPEO_METRICS_ACCESS_TOKEN,
 				diagnosticsUrl: COMAPEO_DIAGNOSTICS_METRICS_URL,
@@ -341,6 +343,7 @@ const plugins: Array<ForgeConfigPlugin> = [
 		appId: properties.appBundleId,
 		appVersion: properties.appVersion,
 		win32AppUserModelId: properties.win32AppUserModelId,
+		isTestEnvironment: !!COMAPEO_TEST,
 	}),
 	// Fuses are used to enable/disable various Electron functionality
 	// at package time, before code signing the application
