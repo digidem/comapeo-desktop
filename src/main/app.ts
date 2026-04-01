@@ -65,6 +65,8 @@ export async function start({
 	})
 
 	try {
+		const appRunPromise = Promise.withResolvers<void>()
+
 		if (app.hasSingleInstanceLock()) {
 			app.on('second-instance', () => {
 				log('Second instance requested')
@@ -82,8 +84,6 @@ export async function start({
 				}
 			})
 		}
-
-		const appRunPromise = Promise.withResolvers<void>()
 
 		app.setAboutPanelOptions({ applicationVersion: appConfig.appVersion })
 
