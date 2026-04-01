@@ -30,7 +30,7 @@ const hasInstanceLock = app.requestSingleInstanceLock()
 
 // NOTE: Only allow a single instance of the app to run
 if (!hasInstanceLock) {
-	log('App instance is already running. Quitting app.')
+	log('App instance is already running. Exiting this app.')
 	app.exit()
 }
 
