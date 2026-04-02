@@ -15,6 +15,11 @@ import { NetworkConnectionInfo } from '../../../../../-shared/network-connection
 import { BLUE_GREY, LIGHT_GREY } from '../../../../../../../../colors.ts'
 import { Icon } from '../../../../../../../../components/icon.tsx'
 import { useInitiallyConnectedPeers } from '../../../../../../../../hooks/peers.ts'
+import {
+	COORDINATOR_ROLE_ID,
+	CREATOR_ROLE_ID,
+	MEMBER_ROLE_ID,
+} from '../../../../../../../../lib/comapeo.ts'
 import { DeviceRow } from './-shared/device-row.tsx'
 
 export const Route = createFileRoute(
@@ -140,7 +145,16 @@ function InvitablePeersList({ projectId }: { projectId: string }) {
 			return true
 		}
 
-		return false
+		if (
+			existingMember.role.roleId === CREATOR_ROLE_ID ||
+			existingMember.role.roleId === COORDINATOR_ROLE_ID ||
+			existingMember.role.roleId === MEMBER_ROLE_ID
+		) {
+			return false
+		}
+
+		// NOTE: Members that do not have a role associated with being an "active" member can be reinvited.
+		return true
 	})
 
 	return (
