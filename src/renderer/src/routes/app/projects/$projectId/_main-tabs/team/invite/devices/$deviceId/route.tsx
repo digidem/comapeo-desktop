@@ -1,7 +1,11 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
 import { GenericRoutePendingComponent } from '../../../../../../../../../components/generic-route-pending-component.tsx'
-import { LEFT_ROLE_ID } from '../../../../../../../../../lib/comapeo.ts'
+import {
+	COORDINATOR_ROLE_ID,
+	CREATOR_ROLE_ID,
+	MEMBER_ROLE_ID,
+} from '../../../../../../../../../lib/comapeo.ts'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId',
@@ -30,8 +34,13 @@ export const Route = createFileRoute(
 			return null
 		})
 
-		// NOTE: Members that left the project are allowed to be reinvited and should not be redirected.
-		if (member && member.role.roleId !== LEFT_ROLE_ID) {
+		// NOTE: "Active" members do not need to be reinvited, so we redirect to prevent access to this page.
+		if (
+			member &&
+			(member.role.roleId === CREATOR_ROLE_ID ||
+				member.role.roleId === COORDINATOR_ROLE_ID ||
+				member.role.roleId === MEMBER_ROLE_ID)
+		) {
 			throw Route.redirect({
 				to: '/app/projects/$projectId/team/invite/devices',
 				params: { projectId },
