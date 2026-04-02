@@ -15,6 +15,7 @@ import { NetworkConnectionInfo } from '../../../../../-shared/network-connection
 import { BLUE_GREY, LIGHT_GREY } from '../../../../../../../../colors.ts'
 import { Icon } from '../../../../../../../../components/icon.tsx'
 import { useInitiallyConnectedPeers } from '../../../../../../../../hooks/peers.ts'
+import { LEFT_ROLE_ID } from '../../../../../../../../lib/comapeo.ts'
 import { DeviceRow } from './-shared/device-row.tsx'
 
 export const Route = createFileRoute(
@@ -137,6 +138,11 @@ function InvitablePeersList({ projectId }: { projectId: string }) {
 		)
 
 		if (!existingMember) {
+			return true
+		}
+
+		// NOTE: Members that left the project are allowed to be reinvited.
+		if (existingMember.role.roleId === LEFT_ROLE_ID) {
 			return true
 		}
 
