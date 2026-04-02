@@ -129,7 +129,7 @@ test.describe('Main panel (coordinator)', () => {
 
 			//// Popup list items
 			const popupListItems = popup.getByRole('listitem')
-			await expect(popupListItems).toHaveCount(3)
+			await expect(popupListItems).toHaveCount(2)
 
 			const projectRoleItem = popupListItems.first()
 			await expect(projectRoleItem).toHaveText('Coordinator')
@@ -143,11 +143,6 @@ test.describe('Main panel (coordinator)', () => {
 			const categoriesSetDateCreatedTime = categoriesSetItem.getByRole('time')
 			await expect(categoriesSetDateCreatedTime).not.toBeEmpty()
 			await expect(categoriesSetDateCreatedTime).toHaveAttribute('datetime')
-
-			const projectSharingItem = popupListItems.last()
-			await expect(projectSharingItem).toHaveText(
-				/^Project Sharing \| (ON|OFF)$/,
-			)
 
 			/// Click to toggle off behavior
 			await button.click()

@@ -999,10 +999,6 @@
     "description": "Text indicating creation date of categories set.",
     "message": "{date} erstellt"
   },
-  "routes.app.route.projectInfoProjectStats": {
-    "description": "Text indicating if project stats sharing is enabled or not.",
-    "message": "Projekt-Freigabe | {enabled, select, 1 {AUF} other {}}"
-  },
   "routes.app.route.projectInfoRoleCoordinator": {
     "description": "Indicates that user is a coordinator.",
     "message": "Koordinator"
@@ -1174,6 +1170,10 @@
   "routes.app.settings.device-name.save": {
     "description": "Label for save button.",
     "message": "Speichern"
+  },
+  "routes.app.settings.goBackAccessibleLabel": {
+    "description": "Accessible label for back button",
+    "message": "Gehe zurück."
   },
   "routes.app.settings.index.aboutCoMapeoVersionLabel": {
     "description": "Label for CoMapeo version",

@@ -569,6 +569,8 @@ export function MapPanel() {
 			mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
 			mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
 
+			const shouldZoomIn = mapRef.current.getZoom() < 10
+
 			if (document.type === 'observation') {
 				let trackDocIdToHighlight: string | undefined
 
@@ -579,28 +581,59 @@ export function MapPanel() {
 					}
 				}
 
-				// NOTE: Highlight the associated track as well
+				// 1. Highlight the track that references the observation
 				if (trackDocIdToHighlight) {
 					mapRef.current.setFeatureState(
 						{ source: TRACKS_SOURCE_ID, id: trackDocIdToHighlight },
 						{ highlight: true },
 					)
 				}
+
+				const observationMatch = observationsFeatureCollection.features.find(
+					({ properties }) => properties.docId === document.docId,
+				)
+
+				// 2. Move to observation
+				if (observationMatch) {
+					moveMapToObservation(
+						{
+							coordinates: [
+								observationMatch.geometry.coordinates[0]!,
+								observationMatch.geometry.coordinates[1]!,
+							],
+							shouldZoomIn,
+						},
+						mapRef.current,
+					)
+				}
 			} else {
+				// 1. Highlight the track
 				mapRef.current.setFeatureState(
 					{ source: TRACKS_SOURCE_ID, id: document.docId },
 					{ highlight: true },
 				)
+
+				const tracksMatch = tracksFeatureCollection.features.find(
+					({ properties }) => properties.docId === document.docId,
+				)
+
+				// 2. Move to the track
+				if (tracksMatch) {
+					moveMapToTrack(
+						{ trackFeature: tracksMatch, shouldZoomIn },
+						mapRef.current,
+					)
+				}
 			}
 		},
 	)
 
 	useEffect(
 		/**
-		 * Controls map feature highlighting for when items in the list are selected
-		 * via single click.
+		 * Controls map feature highlighting for when items in the list selected via
+		 * click.
 		 */
-		function onUpdateFromListSingleClick() {
+		function onUpdateFromListClick() {
 			// NOTE: Only care about triggers from list interactions
 			if (documentToHighlight?.from !== 'list') {
 				return
@@ -609,78 +642,6 @@ export function MapPanel() {
 			highlightMapFeature(documentToHighlight)
 		},
 		[documentToHighlight],
-	)
-
-	const moveToMapFeature = useEffectEvent((document: HighlightedDocument) => {
-		if (!mapRef.current) {
-			return
-		}
-
-		const shouldZoomIn = mapRef.current.getZoom() < 10
-
-		if (document.type === 'observation') {
-			const observationMatch = observationsFeatureCollection.features.find(
-				({ properties }) => properties.docId === document.docId,
-			)
-
-			if (observationMatch) {
-				moveMapToObservation(
-					{
-						coordinates: [
-							observationMatch.geometry.coordinates[0]!,
-							observationMatch.geometry.coordinates[1]!,
-						],
-						shouldZoomIn,
-					},
-					mapRef.current,
-				)
-			}
-		} else {
-			const tracksMatch = tracksFeatureCollection.features.find(
-				({ properties }) => properties.docId === document.docId,
-			)
-
-			if (tracksMatch) {
-				moveMapToTrack(
-					{ trackFeature: tracksMatch, shouldZoomIn },
-					mapRef.current,
-				)
-			}
-		}
-	})
-
-	useEffect(
-		/**
-		 * Controls movement to map feature when navigating to document-specific
-		 * page via the list.
-		 */
-		function onUpdateFromListDoubleClick() {
-			if (!mapLoaded) {
-				return
-			}
-
-			// NOTE: Only care about triggers from list interactions
-			if (documentToHighlight?.from !== 'list') {
-				return
-			}
-
-			// NOTE: Double click in list means that a committed navigation to document-specific page occurred.
-			if (
-				!(
-					currentRoute.fullPath.startsWith(
-						'/app/projects/$projectId/observations/$observationDocId',
-					) ||
-					currentRoute.fullPath.startsWith(
-						'/app/projects/$projectId/tracks/$trackDocId/',
-					)
-				)
-			) {
-				return
-			}
-
-			moveToMapFeature(documentToHighlight)
-		},
-		[currentRoute, documentToHighlight, mapLoaded],
 	)
 
 	return (

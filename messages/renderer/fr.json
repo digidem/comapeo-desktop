@@ -651,6 +651,22 @@
     "description": "Accessible label for back button.",
     "message": "Revenir en arrière."
   },
+  "routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningDescription": {
+    "description": "Description text for last coordinator warning when leaving a project.",
+    "message": "Si cet appareil quitte, alors aucun autre appareil ne peut ajouter ou supprimer des périphériques, ajuster les informations du projet, ou mettre à jour les catégories définies."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningTitle": {
+    "description": "Title text for last coordinator warning when leaving a project.",
+    "message": "L'appareil est le dernier coordinator."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningDescription": {
+    "description": "Description text for last device warning when leaving a project.",
+    "message": "Si cet appareil quitte, toutes les données de ce projet seront perdues."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningTitle": {
+    "description": "Title text for last device warning when leaving a project.",
+    "message": "L'appareil est le dernier appareil."
+  },
   "routes.app.projects.$projectId.team.$deviceId.leaveProjectButton": {
     "description": "Button text to initiate leave project flow.",
     "message": "Quitter le projet"
@@ -674,6 +690,14 @@
   "routes.app.projects.$projectId.team.$deviceId.remoteArchive": {
     "description": "Fallback name used if remote archive does not have name.",
     "message": "Archives distantes"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.suggestionExportData": {
+    "description": "Text for export data suggestion in warning when leaving a project.",
+    "message": "Avant de partir, exportez des données importantes."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.suggestionInviteCoordinator": {
+    "description": "Text for invite coordinator suggestion in warning when leaving a project.",
+    "message": "Pour éviter cela, invitez un nouvel appareil en tant que coordinateur."
   },
   "routes.app.projects.$projectId.team.$deviceId.thisDevice": {
     "description": "Text indicating that user is viewing itself.",
@@ -955,10 +979,6 @@
     "description": "Accessible label for link that navigates to project when clicked.",
     "message": "Allez au projet {name}."
   },
-  "routes.app.route.projectInfoProjectStats": {
-    "description": "Text indicating if project stats sharing is enabled or not.",
-    "message": "Partage de projet | {enabled, select, 1 {ON} other {OFF}}"
-  },
   "routes.app.route.projectInfoRoleCoordinator": {
     "description": "Indicates that user is a coordinator.",
     "message": "Coordonnateur"
@@ -1130,6 +1150,10 @@
   "routes.app.settings.device-name.save": {
     "description": "Label for save button.",
     "message": "Enregistrer"
+  },
+  "routes.app.settings.goBackAccessibleLabel": {
+    "description": "Accessible label for back button",
+    "message": "Revenir en arrière."
   },
   "routes.app.settings.index.aboutCoMapeoVersionLabel": {
     "description": "Label for CoMapeo version",

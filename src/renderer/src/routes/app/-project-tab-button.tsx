@@ -269,26 +269,6 @@ function ButtonTabContent({
 												</Typography>
 											)}
 										</Stack>
-
-										<Stack
-											component={ListItem}
-											disableGutters
-											disablePadding
-											direction="row"
-											gap={4}
-											alignItems="flex-start"
-										>
-											<Icon
-												name="ant-design-icons-bar-chart-outlined"
-												size={iconSize}
-											/>
-
-											<Typography fontWeight={500}>
-												{t(m.projectInfoProjectStats, {
-													enabled: projectSettings.sendStats ? 1 : 0,
-												})}
-											</Typography>
-										</Stack>
 									</Stack>
 								</Stack>
 							</Box>
@@ -343,10 +323,5 @@ const m = defineMessages({
 		id: 'routes.app.route.projectInfoCategoriesCreated',
 		defaultMessage: 'Created {date}',
 		description: 'Text indicating creation date of categories set.',
-	},
-	projectInfoProjectStats: {
-		id: 'routes.app.route.projectInfoProjectStats',
-		defaultMessage: 'Project Sharing | {enabled, select, 1 {ON} other {OFF}}',
-		description: 'Text indicating if project stats sharing is enabled or not.',
 	},
 })
