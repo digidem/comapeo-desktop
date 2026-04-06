@@ -41,7 +41,10 @@ export type RuntimeApi = {
 	setLocale: (value: Locale) => Promise<void>
 
 	getAppUsageMetrics: () => Promise<AppUsageMetrics | null>
-	setAppUsageMetrics: (value: AppUsageMetrics['status']) => Promise<void>
+	setAppUsageMetrics: (value: {
+		status: AppUsageMetrics['status']
+		shouldBumpAskCount: boolean
+	}) => Promise<void>
 
 	// User
 	getSentryConfig: () => {

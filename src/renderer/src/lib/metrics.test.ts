@@ -21,6 +21,7 @@ describe('shouldShowAppUsageConsent()', () => {
 				shouldShowAppUsageConsent({
 					appUsageMetrics: {
 						status: 'enabled',
+						askCount: 0,
 						updatedAt: start,
 					},
 					onboardedAt: null,
@@ -88,7 +89,7 @@ describe('shouldShowAppUsageConsent()', () => {
 
 			expect(
 				shouldShowAppUsageConsent({
-					appUsageMetrics: { status: 'enabled', updatedAt: start },
+					appUsageMetrics: { status: 'enabled', askCount: 0, updatedAt: start },
 					onboardedAt: start,
 				}),
 			).toBe(false)
@@ -97,7 +98,7 @@ describe('shouldShowAppUsageConsent()', () => {
 
 			expect(
 				shouldShowAppUsageConsent({
-					appUsageMetrics: { status: 'enabled', updatedAt: start },
+					appUsageMetrics: { status: 'enabled', askCount: 0, updatedAt: start },
 					onboardedAt: start,
 				}),
 			).toBe(false)

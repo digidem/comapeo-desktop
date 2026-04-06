@@ -73,39 +73,30 @@ export function setUpMainIPC({
 	})
 
 	ipcMain.handle('settings:set:appUsageMetrics', (_event, value) => {
-		v.assert(v.union([v.literal('disabled'), v.literal('enabled')]), value)
+		v.assert(
+			v.object({
+				status: v.nonOptional(
+					CurrentStoreStateSchema.entries.appUsageMetrics.wrapped.entries
+						.status,
+				),
+				shouldBumpAskCount: v.boolean(),
+			}),
+			value,
+		)
 
 		persistedStore.setState((prev) => {
 			const now = Date.now()
 
-			if (!prev.appUsageMetrics) {
-				const updatedAppUsageMetrics: AppUsageMetrics =
-					value === 'disabled'
-						? { status: value, askCount: 0, updatedAt: now }
-						: { status: value, updatedAt: now }
+			const updatedAskCount =
+				(prev.appUsageMetrics ? prev.appUsageMetrics.askCount : 0) +
+				(value.shouldBumpAskCount ? 1 : 0)
 
-				return { appUsageMetrics: updatedAppUsageMetrics }
-			}
-
-			if (prev.appUsageMetrics.status === 'disabled') {
-				const updatedAppUsageMetrics: AppUsageMetrics =
-					value === 'disabled'
-						? {
-								...prev.appUsageMetrics,
-								askCount: prev.appUsageMetrics.askCount + 1,
-								updatedAt: now,
-							}
-						: { status: value, updatedAt: now }
-
-				return { appUsageMetrics: updatedAppUsageMetrics }
-			} else {
-				const updatedAppUsageMetrics: AppUsageMetrics =
-					value === 'disabled'
-						? { status: value, askCount: 0, updatedAt: now }
-						: // TODO: Would it make more sense to no-op here instead of updating `updatedAt`?
-							{ ...prev.appUsageMetrics, updatedAt: now }
-
-				return { appUsageMetrics: updatedAppUsageMetrics }
+			return {
+				appUsageMetrics: {
+					status: value.status,
+					askCount: updatedAskCount,
+					updatedAt: now,
+				} satisfies AppUsageMetrics,
 			}
 		})
 	})

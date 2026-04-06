@@ -202,6 +202,7 @@ describe('app usage metrics reset behavior', () => {
 
 		const initialAppUsageMetrics: AppUsageMetrics = {
 			status: 'enabled',
+			askCount: 1,
 			updatedAt: Date.now(),
 		}
 
@@ -221,7 +222,7 @@ describe('app usage metrics reset behavior', () => {
 
 		const expectedAppUsageMetrics: AppUsageMetrics = {
 			status: 'disabled',
-			askCount: 0,
+			askCount: 1,
 			updatedAt: Date.now(),
 		}
 

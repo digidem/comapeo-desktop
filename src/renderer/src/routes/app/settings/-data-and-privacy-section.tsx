@@ -216,7 +216,10 @@ export function DataAndPrivacySection() {
 									}
 									onChange={(_event, checked) => {
 										setAppUsageMetricsMutation.mutate(
-											checked ? 'enabled' : 'disabled',
+											{
+												status: checked ? 'enabled' : 'disabled',
+												shouldBumpAskCount: false,
+											},
 											{
 												onError: (err) => {
 													captureException(err)

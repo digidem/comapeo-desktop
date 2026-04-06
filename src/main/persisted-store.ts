@@ -158,7 +158,7 @@ export function createPersistedStore(opts: { filePath: string }) {
 	) {
 		const updatedAppUsageMetrics: AppUsageMetrics = {
 			status: 'disabled',
-			askCount: 0,
+			askCount: state.appUsageMetrics.askCount,
 			updatedAt: now,
 		}
 

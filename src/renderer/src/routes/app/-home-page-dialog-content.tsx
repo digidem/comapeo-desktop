@@ -551,7 +551,10 @@ function AppUsageInterstitial({
 							return
 						}
 
-						setAppUsageMetrics.mutate('disabled')
+						setAppUsageMetrics.mutate({
+							status: 'disabled',
+							shouldBumpAskCount: true,
+						})
 						onClose()
 					}}
 					sx={{ maxWidth: 400 }}
@@ -570,11 +573,14 @@ function AppUsageInterstitial({
 							return
 						}
 
-						setAppUsageMetrics.mutate('enabled', {
-							onSuccess: () => {
-								onProceed()
+						setAppUsageMetrics.mutate(
+							{ status: 'enabled', shouldBumpAskCount: true },
+							{
+								onSuccess: () => {
+									onProceed()
+								},
 							},
-						})
+						)
 					}}
 					sx={{ maxWidth: 400 }}
 				>
