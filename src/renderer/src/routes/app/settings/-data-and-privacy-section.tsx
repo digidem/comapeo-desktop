@@ -18,7 +18,9 @@ import { Icon } from '../../../components/icon.tsx'
 import { TextLink } from '../../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../../hooks/icon.ts'
 import {
+	getAppUsageMetricsQueryOptions,
 	getDiagnosticsEnabledQueryOptions,
+	setAppUsageMetricsMutationOptions,
 	setDiagnosticsEnabledMutationOptions,
 } from '../../../lib/queries/app-settings.ts'
 import { openExternalURLMutationOptions } from '../../../lib/queries/system.ts'
@@ -26,12 +28,18 @@ import { openExternalURLMutationOptions } from '../../../lib/queries/system.ts'
 export function DataAndPrivacySection() {
 	const { formatMessage: t } = useIntl()
 
+	const { data: diagnosticsEnabled } = useSuspenseQuery(
+		getDiagnosticsEnabledQueryOptions(),
+	)
 	const setDiagnosticsEnabledMutation = useMutation(
 		setDiagnosticsEnabledMutationOptions(),
 	)
 
-	const { data: diagnosticsEnabled } = useSuspenseQuery(
-		getDiagnosticsEnabledQueryOptions(),
+	const { data: appUsageMetrics } = useSuspenseQuery(
+		getAppUsageMetricsQueryOptions(),
+	)
+	const setAppUsageMetricsMutation = useMutation(
+		setAppUsageMetricsMutationOptions(),
 	)
 
 	const openExternalURL = useMutation(openExternalURLMutationOptions())
@@ -92,71 +100,148 @@ export function DataAndPrivacySection() {
 					</Stack>
 				</Stack>
 
-				<Stack
-					direction="column"
-					border={`1px solid ${BLUE_GREY}`}
-					borderRadius={2}
-				>
-					<Stack padding={6} direction="column" gap={4}>
-						<Typography component="h3" variant="body1" fontWeight={500}>
-							{t(m.diagnosticInformationTitle)}
-						</Typography>
-
-						<Box>
-							<Typography color="textSecondary">
-								{t(m.diagnosticInformationDescription)}
+				<Stack direction="row" gap={6}>
+					<Stack
+						direction="column"
+						border={`1px solid ${BLUE_GREY}`}
+						borderRadius={2}
+					>
+						<Stack padding={6} direction="column" gap={4} flex={1}>
+							<Typography component="h3" variant="body1" fontWeight={500}>
+								{t(m.diagnosticInformationTitle)}
 							</Typography>
 
-							<List
-								disablePadding
-								sx={{
-									listStyleType: 'disc',
-									paddingX: 8,
-									color: DARK_GREY,
-								}}
-							>
-								<ListItem disablePadding sx={{ display: 'list-item' }}>
-									<Typography color="textSecondary">
-										{t(m.diagnosticInformationPersonalInfo)}
-									</Typography>
-								</ListItem>
+							<Box>
+								<Typography color="textSecondary">
+									{t(m.diagnosticInformationDescription)}
+								</Typography>
 
-								<ListItem disablePadding sx={{ display: 'list-item' }}>
-									<Typography color="textSecondary">
-										{t(m.diagnosticInformationOptOut)}
-									</Typography>
-								</ListItem>
-							</List>
+								<List
+									disablePadding
+									sx={{
+										listStyleType: 'disc',
+										paddingX: 8,
+										color: DARK_GREY,
+									}}
+								>
+									<ListItem disablePadding sx={{ display: 'list-item' }}>
+										<Typography color="textSecondary">
+											{t(m.diagnosticInformationPersonalInfo)}
+										</Typography>
+									</ListItem>
+
+									<ListItem disablePadding sx={{ display: 'list-item' }}>
+										<Typography color="textSecondary">
+											{t(m.diagnosticInformationOptOut)}
+										</Typography>
+									</ListItem>
+								</List>
+							</Box>
+						</Stack>
+
+						<Divider variant="fullWidth" sx={{ backgroundColor: BLUE_GREY }} />
+
+						<Box paddingX={6} paddingY={4}>
+							<FormGroup>
+								<FormControlLabel
+									control={<Checkbox checked={diagnosticsEnabled} />}
+									onChange={(_event, checked) => {
+										setDiagnosticsEnabledMutation.mutate(checked, {
+											onError: (err) => {
+												captureException(err)
+											},
+										})
+									}}
+									slotProps={{
+										typography: {
+											fontWeight: 500,
+										},
+									}}
+									label={t(m.shareDiagnosticInformation)}
+									labelPlacement="start"
+									sx={{
+										margin: 0,
+										justifyContent: 'space-between',
+									}}
+								/>
+							</FormGroup>
 						</Box>
 					</Stack>
 
-					<Divider variant="fullWidth" sx={{ backgroundColor: BLUE_GREY }} />
+					<Stack
+						direction="column"
+						border={`1px solid ${BLUE_GREY}`}
+						borderRadius={2}
+					>
+						<Stack padding={6} direction="column" gap={4} flex={1}>
+							<Typography component="h3" variant="body1" fontWeight={500}>
+								{t(m.appUsageTitle)}
+							</Typography>
 
-					<Box paddingX={6} paddingY={4}>
-						<FormGroup>
-							<FormControlLabel
-								control={<Checkbox checked={diagnosticsEnabled} />}
-								onChange={(_event, checked) => {
-									setDiagnosticsEnabledMutation.mutate(checked, {
-										onError: (err) => {
-											captureException(err)
+							<Box>
+								<Typography color="textSecondary">
+									{t(m.appUsageDescription)}
+								</Typography>
+
+								<List
+									disablePadding
+									sx={{
+										listStyleType: 'disc',
+										paddingX: 8,
+										color: DARK_GREY,
+									}}
+								>
+									<ListItem disablePadding sx={{ display: 'list-item' }}>
+										<Typography color="textSecondary">
+											{t(m.appUsageDetailsIdNumbers)}
+										</Typography>
+									</ListItem>
+
+									<ListItem disablePadding sx={{ display: 'list-item' }}>
+										<Typography color="textSecondary">
+											{t(m.appUsageDetailsIpAddresses)}
+										</Typography>
+									</ListItem>
+								</List>
+							</Box>
+						</Stack>
+
+						<Divider variant="fullWidth" sx={{ backgroundColor: BLUE_GREY }} />
+
+						<Box paddingX={6} paddingY={4}>
+							<FormGroup>
+								<FormControlLabel
+									control={
+										<Checkbox checked={appUsageMetrics?.status === 'enabled'} />
+									}
+									onChange={(_event, checked) => {
+										setAppUsageMetricsMutation.mutate(
+											{
+												status: checked ? 'enabled' : 'disabled',
+												shouldBumpAskCount: false,
+											},
+											{
+												onError: (err) => {
+													captureException(err)
+												},
+											},
+										)
+									}}
+									slotProps={{
+										typography: {
+											fontWeight: 500,
 										},
-									})
-								}}
-								slotProps={{
-									typography: {
-										fontWeight: 500,
-									},
-								}}
-								label={t(m.shareDiagnosticInformation)}
-								labelPlacement="start"
-								sx={{
-									margin: 0,
-									justifyContent: 'space-between',
-								}}
-							/>
-						</FormGroup>
-					</Box>
+									}}
+									label={t(m.shareAppUsage)}
+									labelPlacement="start"
+									sx={{
+										margin: 0,
+										justifyContent: 'space-between',
+									}}
+								/>
+							</FormGroup>
+						</Box>
+					</Stack>
 				</Stack>
 			</Stack>
 
@@ -171,14 +256,21 @@ export function DataAndPrivacySection() {
 									setDiagnosticsEnabledMutation.reset()
 								},
 							}
-						: openExternalURL.status === 'error'
+						: setAppUsageMetricsMutation.status === 'error'
 							? {
-									errorMessage: openExternalURL.error.toString(),
+									errorMessage: setAppUsageMetricsMutation.error.toString(),
 									onClose: () => {
-										openExternalURL.reset()
+										setAppUsageMetricsMutation.reset()
 									},
 								}
-							: null
+							: openExternalURL.status === 'error'
+								? {
+										errorMessage: openExternalURL.error.toString(),
+										onClose: () => {
+											openExternalURL.reset()
+										},
+									}
+								: null
 				}
 			>
 				{({ errorMessage, onClose }) => (
@@ -240,5 +332,33 @@ const m = defineMessages({
 		defaultMessage: 'Share Diagnostic Information',
 		description:
 			'Label for checkbox to toggle sharing of diagnostic information.',
+	},
+	appUsageTitle: {
+		id: 'routes.app.settings.-data-and-privacy-section.appUsageTitle',
+		defaultMessage: 'App Usage',
+		description: 'Title of app usage metrics settings section.',
+	},
+	appUsageDescription: {
+		id: 'routes.app.settings.-data-and-privacy-section.appUsageDescription',
+		defaultMessage:
+			'Share how you use CoMapeo with Awana Digital — no information you share can be used to track you.',
+		description: 'Description of app usage metrics settings section.',
+	},
+	appUsageDetailsIdNumbers: {
+		id: 'routes.app.settings.-data-and-privacy-section.appUsageDetailsIdNumbers',
+		defaultMessage:
+			'ID numbers are scrambled randomly and changed every month. ID numbers are scrambled randomly and changed every month.',
+		description:
+			'Text describing how IDs used for app usage metrics are used and generated.',
+	},
+	appUsageDetailsIpAddresses: {
+		id: 'routes.app.settings.-data-and-privacy-section.appUsageDetailsIpAddresses',
+		defaultMessage: 'CoMapeo never stores IP addresses.',
+		description: 'Text describing how IP addresses are never stored.',
+	},
+	shareAppUsage: {
+		id: 'routes.app.settings.-data-and-privacy-section.shareAppUsage',
+		defaultMessage: 'Share App Usage',
+		description: 'Text label for checkbox to toggle app usage sharing setting.',
 	},
 })

@@ -12,7 +12,7 @@ import {
 	type LocaleState,
 	type SupportedLanguageTag,
 } from '../shared/intl.ts'
-import type { PersistedStateV1 } from './persisted-store.ts'
+import type { CurrentStoreState } from './persisted-store.ts'
 
 const log = debug('comapeo:main:intl-manager')
 
@@ -35,7 +35,7 @@ export class IntlManager extends TypedEmitter<IntlManagerEvents> {
 	constructor({
 		initialLocale,
 	}: {
-		initialLocale: PersistedStateV1['locale']
+		initialLocale: CurrentStoreState['locale']
 	}) {
 		super()
 
@@ -91,7 +91,7 @@ export class IntlManager extends TypedEmitter<IntlManagerEvents> {
 		}
 	}
 
-	#getResolvedLocale(locale: PersistedStateV1['locale']): {
+	#getResolvedLocale(locale: CurrentStoreState['locale']): {
 		value: SupportedLanguageTag
 		source: LocaleSource
 	} {
@@ -120,7 +120,7 @@ export class IntlManager extends TypedEmitter<IntlManagerEvents> {
 		}
 	}
 
-	updateLocale(locale: PersistedStateV1['locale']) {
+	updateLocale(locale: CurrentStoreState['locale']) {
 		const { value, source } = this.#getResolvedLocale(locale)
 
 		if (source === 'system') {

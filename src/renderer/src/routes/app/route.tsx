@@ -39,6 +39,7 @@ import {
 import { useActiveProjectId } from '../../contexts/active-project-id-store-context.ts'
 import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo.ts'
+import { getOnboardedAtQueryOptions } from '../../lib/queries/user.ts'
 import { ProjectTabButton } from './-project-tab-button.tsx'
 
 export const Route = createFileRoute('/app')({
@@ -55,6 +56,35 @@ export const Route = createFileRoute('/app')({
 		// NOTE: Implicit check that the user hasn't completed the onboarding yet.
 		if (!ownDeviceInfo.name) {
 			throw Route.redirect({ to: '/welcome', replace: true })
+		}
+	},
+	loader: async ({ context, preload }) => {
+		const { queryClient } = context
+
+		// NOTE: Backfill step for users who onboarded before we started persisting an `onboardedAt` timestamp.
+		// We assume that if they're able to navigate to any "app" page, then they have passed the checks for being "onboarded".
+		if (!preload) {
+			const onboardedAtQueryOptions = getOnboardedAtQueryOptions()
+
+			const onboardedAt = await queryClient.ensureQueryData(
+				onboardedAtQueryOptions,
+			)
+
+			if (onboardedAt === null) {
+				const updatedOnboardedAt = Date.now()
+
+				try {
+					await window.runtime.setOnboardedAt(updatedOnboardedAt)
+
+					// NOTE: We synchronously update to ensure the updated timestamp is used on initial render.
+					queryClient.setQueryData(
+						onboardedAtQueryOptions.queryKey,
+						updatedOnboardedAt,
+					)
+				} catch (err) {
+					captureException(err)
+				}
+			}
 		}
 	},
 	component: RouteComponent,

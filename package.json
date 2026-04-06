@@ -61,6 +61,7 @@
 		"types:preload": "tsc -p src/preload/tsconfig.json",
 		"types:renderer": "tsc -p src/renderer/tsconfig.json",
 		"types": "concurrently --prefix \"types:{name}\" --pad-prefix --group \"node:types:*\"",
+		"test:main": "vitest run --dir ./src/main/",
 		"test:renderer": "vitest run --config ./src/renderer/vite.config.js",
 		"test:shared": "vitest run --dir ./src/shared/",
 		"test": "concurrently --prefix \"test:{name}\" --pad-prefix --group \"node:test:*\"",

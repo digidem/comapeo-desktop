@@ -1,13 +1,13 @@
 import { queryOptions, type UseMutationOptions } from '@tanstack/react-query'
 
-import type { RuntimeApi } from '../../../../preload/runtime'
-import { BASE_QUERY_KEY as LANGUAGE_BASE_QUERY_KEY } from './intl'
+import type { RuntimeApi } from '../../../../preload/runtime.ts'
+import { BASE_QUERY_KEY as LANGUAGE_BASE_QUERY_KEY } from './intl.ts'
 
 const BASE_QUERY_KEY = 'app-settings'
 
 export function getCoordinateFormatQueryOptions() {
 	return queryOptions({
-		queryKey: [BASE_QUERY_KEY, 'coordinateFormat'],
+		queryKey: [BASE_QUERY_KEY, 'coordinateFormat'] as const,
 		queryFn: async () => {
 			return window.runtime.getCoordinateFormat()
 		},
@@ -16,7 +16,7 @@ export function getCoordinateFormatQueryOptions() {
 
 export function getDiagnosticsEnabledQueryOptions() {
 	return queryOptions({
-		queryKey: [BASE_QUERY_KEY, 'diagnosticsEnabled'],
+		queryKey: [BASE_QUERY_KEY, 'diagnosticsEnabled'] as const,
 		queryFn: async () => {
 			return window.runtime.getDiagnosticsEnabled()
 		},
@@ -25,9 +25,18 @@ export function getDiagnosticsEnabledQueryOptions() {
 
 export function getLocaleStateQueryOptions() {
 	return queryOptions({
-		queryKey: [BASE_QUERY_KEY, 'locale'],
+		queryKey: [BASE_QUERY_KEY, 'locale'] as const,
 		queryFn: async () => {
 			return window.runtime.getLocaleState()
+		},
+	})
+}
+
+export function getAppUsageMetricsQueryOptions() {
+	return queryOptions({
+		queryKey: [BASE_QUERY_KEY, 'appUsageMetrics'] as const,
+		queryFn: async () => {
+			return window.runtime.getAppUsageMetrics()
 		},
 	})
 }
@@ -39,7 +48,7 @@ export function setCoordinateFormatMutationOptions() {
 		},
 		onSuccess: (_data, _variables, _mutateResult, context) => {
 			context.client.invalidateQueries({
-				queryKey: [BASE_QUERY_KEY, 'coordinateFormat'],
+				queryKey: getCoordinateFormatQueryOptions().queryKey,
 			})
 		},
 	} satisfies UseMutationOptions<
@@ -56,7 +65,7 @@ export function setDiagnosticsEnabledMutationOptions() {
 		},
 		onSuccess: (_data, _variables, _mutateResult, context) => {
 			context.client.invalidateQueries({
-				queryKey: [BASE_QUERY_KEY, 'diagnosticsEnabled'],
+				queryKey: getDiagnosticsEnabledQueryOptions().queryKey,
 			})
 		},
 	} satisfies UseMutationOptions<
@@ -72,12 +81,31 @@ export function setLocaleMutationOptions() {
 			return window.runtime.setLocale(vars)
 		},
 		onSuccess: (_data, _variables, _mutateResult, context) => {
-			context.client.invalidateQueries({ queryKey: [BASE_QUERY_KEY, 'locale'] })
+			context.client.invalidateQueries({
+				queryKey: getLocaleStateQueryOptions().queryKey,
+			})
 			context.client.invalidateQueries({ queryKey: [LANGUAGE_BASE_QUERY_KEY] })
 		},
 	} satisfies UseMutationOptions<
 		void,
 		Error,
 		Parameters<RuntimeApi['setLocale']>[0]
+	>
+}
+
+export function setAppUsageMetricsMutationOptions() {
+	return {
+		mutationFn: async (vars) => {
+			return window.runtime.setAppUsageMetrics(vars)
+		},
+		onSuccess: (_data, _variables, _mutateResult, context) => {
+			context.client.invalidateQueries({
+				queryKey: getAppUsageMetricsQueryOptions().queryKey,
+			})
+		},
+	} satisfies UseMutationOptions<
+		void,
+		Error,
+		Parameters<RuntimeApi['setAppUsageMetrics']>[0]
 	>
 }

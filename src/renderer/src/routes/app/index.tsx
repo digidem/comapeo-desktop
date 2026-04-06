@@ -1,4 +1,4 @@
-import { Suspense, type PropsWithChildren } from 'react'
+import { Suspense, useState, type PropsWithChildren } from 'react'
 import {
 	useManyProjects,
 	useOwnDeviceInfo,
@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import type { SxProps, Theme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
@@ -33,7 +34,11 @@ import {
 	CREATOR_ROLE_ID,
 	type ListedProject,
 } from '../../lib/comapeo.ts'
+import { shouldShowAppUsageConsent } from '../../lib/metrics.ts'
+import { getAppUsageMetricsQueryOptions } from '../../lib/queries/app-settings.ts'
+import { getOnboardedAtQueryOptions } from '../../lib/queries/user.ts'
 import {
+	AppUsageConsentDialogContent,
 	JoinProjectDialogContent,
 	LeftProjectDialogContent,
 	StartProjectDialogContent,
@@ -62,6 +67,7 @@ export const Route = createFileRoute('/app/')({
 		const { clientApi, queryClient } = context
 
 		await Promise.all([
+			queryClient.ensureQueryData(getOnboardedAtQueryOptions()),
 			queryClient.ensureQueryData({
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 				queryFn: async () => {
@@ -76,6 +82,7 @@ export const Route = createFileRoute('/app/')({
 			}),
 		])
 	},
+
 	component: RouteComponent,
 })
 
@@ -128,6 +135,16 @@ function RouteComponent() {
 			replace: true,
 		})
 	}
+
+	const { data: onboardedAt } = useSuspenseQuery(getOnboardedAtQueryOptions())
+
+	const { data: appUsageMetrics } = useSuspenseQuery(
+		getAppUsageMetricsQueryOptions(),
+	)
+
+	const [showAppUsageDialog, setShowAppUsageDialog] = useState(() => {
+		return shouldShowAppUsageConsent({ appUsageMetrics, onboardedAt })
+	})
 
 	return (
 		<>
@@ -444,6 +461,17 @@ function RouteComponent() {
 								},
 								replace: true,
 							})
+						}}
+					/>
+				)}
+			</DecentDialog>
+
+			<DecentDialog fullWidth maxWidth="sm" value={showAppUsageDialog || null}>
+				{() => (
+					<AppUsageConsentDialogContent
+						deviceName={ownDeviceInfo.name}
+						onClose={() => {
+							setShowAppUsageDialog(false)
 						}}
 					/>
 				)}
