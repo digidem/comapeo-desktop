@@ -131,76 +131,120 @@ test('index', async ({ appInfo, userParams }) => {
 		}
 
 		/// Data and Privacy section
-		await expect(
-			main.getByRole('heading', {
-				name: 'Data & Privacy',
-				exact: true,
-			}),
-		).toBeVisible()
+		{
+			await expect(
+				main.getByRole('heading', {
+					name: 'Data & Privacy',
+					exact: true,
+				}),
+			).toBeVisible()
 
-		await expect(
-			main.getByText('CoMapeo respects your privacy and autonomy', {
-				exact: true,
-			}),
-		).toBeVisible()
+			await expect(
+				main.getByText('CoMapeo respects your privacy and autonomy', {
+					exact: true,
+				}),
+			).toBeVisible()
 
-		// TODO: Assert behavior of `Learn More` button
-		await expect(
-			main.getByRole('link', { name: 'Learn More', exact: true }),
-		).toBeVisible()
+			// TODO: Assert behavior of `Learn More` button
+			await expect(
+				main.getByRole('link', { name: 'Learn More', exact: true }),
+			).toBeVisible()
 
-		await expect(
-			main.getByRole('heading', {
-				name: 'Diagnostic Information',
-				exact: true,
-			}),
-		).toBeVisible()
+			//// Diagnostic Information section
+			await expect(
+				main.getByRole('heading', {
+					name: 'Diagnostic Information',
+					exact: true,
+				}),
+			).toBeVisible()
 
-		await expect(
-			main.getByText(
-				'Anonymized information about your device, app crashes, errors and performance helps Awana Digital improve the app and fix errors.',
-				{ exact: true },
-			),
-		).toBeVisible()
-
-		await expect(
-			main
-				.getByRole('listitem')
-				.getByText(
-					'This never includes any of your data or personal information.',
+			await expect(
+				main.getByText(
+					'Anonymized information about your device, app crashes, errors and performance helps Awana Digital improve the app and fix errors.',
 					{ exact: true },
 				),
-		).toBeVisible()
+			).toBeVisible()
 
-		await expect(
-			main
-				.getByRole('listitem')
-				.getByText(
-					'You can opt-out of sharing diagnostic information at any time.',
+			await expect(
+				main
+					.getByRole('listitem')
+					.getByText(
+						'This never includes any of your data or personal information.',
+						{ exact: true },
+					),
+			).toBeVisible()
+
+			await expect(
+				main
+					.getByRole('listitem')
+					.getByText(
+						'You can opt-out of sharing diagnostic information at any time.',
+						{ exact: true },
+					),
+			).toBeVisible()
+
+			const diagnosticCheckbox = main.getByRole('checkbox', {
+				name: 'Share Diagnostic Information',
+				exact: true,
+			})
+
+			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
+			await expect(diagnosticCheckbox).toBeChecked()
+			await diagnosticCheckbox.click()
+			await expect(diagnosticCheckbox).not.toBeChecked()
+		}
+
+		/// App Usage section
+		{
+			await expect(
+				main.getByRole('heading', { name: 'App Usage', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				main.getByText(
+					'Share how you use CoMapeo with Awana Digital — no information you share can be used to track you.',
 					{ exact: true },
 				),
-		).toBeVisible()
+			).toBeVisible()
 
-		const diagnosticCheckbox = main.getByRole('checkbox', {
-			name: 'Share Diagnostic Information',
-			exact: true,
-		})
-		// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
-		await expect(diagnosticCheckbox).toBeChecked()
-		await diagnosticCheckbox.click()
-		await expect(diagnosticCheckbox).not.toBeChecked()
+			await expect(
+				main
+					.getByRole('listitem')
+					.getByText(
+						'ID numbers are scrambled randomly and changed every month. ID numbers are scrambled randomly and changed every month.',
+						{ exact: true },
+					),
+			).toBeVisible()
+
+			await expect(
+				main
+					.getByRole('listitem')
+					.getByText('CoMapeo never stores IP addresses.', { exact: true }),
+			).toBeVisible()
+
+			const appUsageCheckbox = main.getByRole('checkbox', {
+				name: 'Share App Usage',
+				exact: true,
+			})
+
+			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
+			await expect(appUsageCheckbox).not.toBeChecked()
+			await appUsageCheckbox.click()
+			await expect(appUsageCheckbox).toBeChecked()
+			await appUsageCheckbox.click()
+			await expect(appUsageCheckbox).not.toBeChecked()
+		}
 
 		/// About CoMapeo section
-		await expect(
-			main.getByRole('heading', {
-				name: 'About CoMapeo',
-				exact: true,
-			}),
-		).toBeVisible()
+		{
+			await expect(
+				main.getByRole('heading', { name: 'About CoMapeo', exact: true }),
+			).toBeVisible()
 
-		await expect(
-			main.getByRole('heading', { name: 'CoMapeo Version', exact: true }),
-		).toBeVisible()
+			await expect(
+				main.getByRole('heading', { name: 'CoMapeo Version', exact: true }),
+			).toBeVisible()
+		}
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()
