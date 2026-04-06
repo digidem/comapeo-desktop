@@ -182,6 +182,7 @@ describe('app usage metrics reset behavior', () => {
 			status: 'disabled',
 			askCount: 0,
 			updatedAt: Date.now(),
+			fromReset: false,
 		}
 
 		store.setState({ appUsageMetrics: initialAppUsageMetrics })
@@ -224,6 +225,7 @@ describe('app usage metrics reset behavior', () => {
 			status: 'disabled',
 			askCount: 1,
 			updatedAt: Date.now(),
+			fromReset: true,
 		}
 
 		expect(

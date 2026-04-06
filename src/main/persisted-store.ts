@@ -160,6 +160,7 @@ export function createPersistedStore(opts: { filePath: string }) {
 			status: 'disabled',
 			askCount: state.appUsageMetrics.askCount,
 			updatedAt: now,
+			fromReset: true,
 		}
 
 		store.setState({ appUsageMetrics: updatedAppUsageMetrics })

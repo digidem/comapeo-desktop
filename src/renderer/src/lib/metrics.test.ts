@@ -34,6 +34,7 @@ describe('shouldShowAppUsageConsent()', () => {
 						status: 'disabled',
 						askCount: 0,
 						updatedAt: start,
+						fromReset: false,
 					},
 					onboardedAt: null,
 				}),
@@ -115,6 +116,7 @@ describe('shouldShowAppUsageConsent()', () => {
 						status: 'disabled',
 						askCount: 0,
 						updatedAt: start,
+						fromReset: false,
 					},
 					onboardedAt: start,
 				}),
@@ -128,6 +130,7 @@ describe('shouldShowAppUsageConsent()', () => {
 						status: 'disabled',
 						askCount: 0,
 						updatedAt: start,
+						fromReset: false,
 					},
 					onboardedAt: start,
 				}),
@@ -141,10 +144,23 @@ describe('shouldShowAppUsageConsent()', () => {
 						status: 'disabled',
 						askCount: 0,
 						updatedAt: start,
+						fromReset: false,
 					},
 					onboardedAt: start,
 				}),
 			).toBe(true)
+
+			expect(
+				shouldShowAppUsageConsent({
+					appUsageMetrics: {
+						status: 'disabled',
+						askCount: 0,
+						updatedAt: start,
+						fromReset: true,
+					},
+					onboardedAt: start,
+				}),
+			).toBe(false)
 
 			const updatedTimestamp1 = Date.now()
 
@@ -154,6 +170,7 @@ describe('shouldShowAppUsageConsent()', () => {
 						status: 'disabled',
 						askCount: 1,
 						updatedAt: updatedTimestamp1,
+						fromReset: false,
 					},
 					onboardedAt: start,
 				}),
@@ -167,10 +184,23 @@ describe('shouldShowAppUsageConsent()', () => {
 						status: 'disabled',
 						askCount: 1,
 						updatedAt: updatedTimestamp1,
+						fromReset: false,
 					},
 					onboardedAt: start,
 				}),
 			).toBe(true)
+
+			expect(
+				shouldShowAppUsageConsent({
+					appUsageMetrics: {
+						status: 'disabled',
+						askCount: 1,
+						updatedAt: updatedTimestamp1,
+						fromReset: true,
+					},
+					onboardedAt: start,
+				}),
+			).toBe(false)
 
 			const updatedTimestamp2 = Date.now()
 
@@ -180,6 +210,7 @@ describe('shouldShowAppUsageConsent()', () => {
 						status: 'disabled',
 						askCount: 2,
 						updatedAt: updatedTimestamp2,
+						fromReset: false,
 					},
 					onboardedAt: start,
 				}),
@@ -193,6 +224,7 @@ describe('shouldShowAppUsageConsent()', () => {
 						status: 'disabled',
 						askCount: 2,
 						updatedAt: updatedTimestamp2,
+						fromReset: false,
 					},
 					onboardedAt: start,
 				}),
@@ -206,6 +238,7 @@ describe('shouldShowAppUsageConsent()', () => {
 						status: 'disabled',
 						askCount: 3,
 						updatedAt: updatedTimestamp3,
+						fromReset: false,
 					},
 					onboardedAt: start,
 				}),
@@ -219,6 +252,7 @@ describe('shouldShowAppUsageConsent()', () => {
 						status: 'disabled',
 						askCount: 3,
 						updatedAt: updatedTimestamp3,
+						fromReset: false,
 					},
 					onboardedAt: start,
 				}),

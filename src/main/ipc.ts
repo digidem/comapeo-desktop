@@ -75,10 +75,7 @@ export function setUpMainIPC({
 	ipcMain.handle('settings:set:appUsageMetrics', (_event, value) => {
 		v.assert(
 			v.object({
-				status: v.nonOptional(
-					CurrentStoreStateSchema.entries.appUsageMetrics.wrapped.entries
-						.status,
-				),
+				status: v.union([v.literal('disabled'), v.literal('enabled')]),
 				shouldBumpAskCount: v.boolean(),
 			}),
 			value,
@@ -91,13 +88,21 @@ export function setUpMainIPC({
 				(prev.appUsageMetrics ? prev.appUsageMetrics.askCount : 0) +
 				(value.shouldBumpAskCount ? 1 : 0)
 
-			return {
-				appUsageMetrics: {
-					status: value.status,
-					askCount: updatedAskCount,
-					updatedAt: now,
-				} satisfies AppUsageMetrics,
-			}
+			const updatedAppUsageMetrics: AppUsageMetrics =
+				value.status === 'disabled'
+					? {
+							status: value.status,
+							fromReset: false,
+							askCount: updatedAskCount,
+							updatedAt: now,
+						}
+					: {
+							status: value.status,
+							askCount: updatedAskCount,
+							updatedAt: now,
+						}
+
+			return { appUsageMetrics: updatedAppUsageMetrics }
 		})
 	})
 
