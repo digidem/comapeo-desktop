@@ -75,6 +75,54 @@
     "description": "Tooltip text for button to display additional projects section as a list.",
     "message": "リストとして表示"
   },
+  "routes.app.index.appUsageConsentInterstitialAllowButton": {
+    "description": "Text for button to allow consent for app usage metrics.",
+    "message": "はい、私を数えてください"
+  },
+  "routes.app.index.appUsageConsentInterstitialDenyButton": {
+    "description": "Text for button to deny consent for app usage metrics.",
+    "message": "いいえ、今は違います"
+  },
+  "routes.app.index.appUsageConsentInterstitialDescription": {
+    "description": "Description text for interstitial state of app usage consent dialog.",
+    "message": "CoMapeoの使い方をAwana Digitalと共有しましょう — あなたが共有する情報はあなたを追跡するために使用することはできません。"
+  },
+  "routes.app.index.appUsageConsentInterstitialDetailsIdNumbers": {
+    "description": "Text describing how IDs used for app usage metrics are used and generated.",
+    "message": "ID番号はランダムにスクランブルされ、毎月変更されます。"
+  },
+  "routes.app.index.appUsageConsentInterstitialDetailsIpAddresses": {
+    "description": "Text describing how IP addresses are never stored.",
+    "message": "CoMapeoはIPアドレスを決して保存しません。"
+  },
+  "routes.app.index.appUsageConsentInterstitialDetailsTurnOffAnytime": {
+    "description": "Text describing how app usage metrics can be turned off at any time.",
+    "message": "いつでもオフにします。"
+  },
+  "routes.app.index.appUsageConsentInterstitialTitle": {
+    "description": "Title text for interstitial state of app usage consent dialog.",
+    "message": "あなたの経験を向上させるのに役立ちます。"
+  },
+  "routes.app.index.appUsageConsentSuccessCloseButton": {
+    "description": "Text for button to close app usage consent dialog.",
+    "message": "完了"
+  },
+  "routes.app.index.appUsageConsentSuccessDescription": {
+    "description": "Description text for success state of app usage consent dialog.",
+    "message": "<b>{deviceName}</b> は CoMapeo と Awana Digitalの使用方法を共有しています。"
+  },
+  "routes.app.index.appUsageConsentSuccessDescriptionNoDeviceName": {
+    "description": "Description text for success state of app usage consent dialog when device name not present (edge case).",
+    "message": "このデバイスは、CoMapeoとAwana Digitalの使用方法を共有しています。"
+  },
+  "routes.app.index.appUsageConsentSuccessDetailsChangeSetting": {
+    "description": "Description text for success state of app usage consent dialog.",
+    "message": "CoMapeo設定でformat@@0とformat@@1に移動して、いつでも変更できます。"
+  },
+  "routes.app.index.appUsageConsentSuccessTitle": {
+    "description": "Title text for success state of app usage consent dialog.",
+    "message": "成功！"
+  },
   "routes.app.index.characterCount": {
     "description": "Character count for project name input.",
     "message": "{count}/{max}"
@@ -1015,6 +1063,22 @@
     "description": "Fallback for when project is missing a name.",
     "message": "名前のないプロジェクト"
   },
+  "routes.app.settings.-data-and-privacy-section.appUsageDescription": {
+    "description": "Description of app usage metrics settings section.",
+    "message": "CoMapeoの使い方をAwana Digitalと共有しましょう — あなたが共有する情報はあなたを追跡するために使用することはできません。"
+  },
+  "routes.app.settings.-data-and-privacy-section.appUsageDetailsIdNumbers": {
+    "description": "Text describing how IDs used for app usage metrics are used and generated.",
+    "message": "ID番号はランダムにスクランブルされ、毎月変更されます。ID番号はランダムにスクランブルされ、毎月変更されます。"
+  },
+  "routes.app.settings.-data-and-privacy-section.appUsageDetailsIpAddresses": {
+    "description": "Text describing how IP addresses are never stored.",
+    "message": "CoMapeoはIPアドレスを決して保存しません。"
+  },
+  "routes.app.settings.-data-and-privacy-section.appUsageTitle": {
+    "description": "Title of app usage metrics settings section.",
+    "message": "アプリの使用状況"
+  },
   "routes.app.settings.-data-and-privacy-section.description": {
     "description": "Description for data and privacy section in settings page.",
     "message": "CoMapeoはあなたのプライバシーと自律性を尊重します"
@@ -1038,6 +1102,10 @@
   "routes.app.settings.-data-and-privacy-section.learnMore": {
     "description": "Text for link that navigates to external URL for additional information info about data and privacy.",
     "message": "もっと詳しく"
+  },
+  "routes.app.settings.-data-and-privacy-section.shareAppUsage": {
+    "description": "Text label for checkbox to toggle app usage sharing setting.",
+    "message": "アプリの使用状況を共有"
   },
   "routes.app.settings.-data-and-privacy-section.shareDiagnosticInformation": {
     "description": "Label for checkbox to toggle sharing of diagnostic information.",
