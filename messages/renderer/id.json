@@ -79,6 +79,14 @@
     "description": "Tooltip text for button to display additional projects section as a list.",
     "message": "Tampilkan daftar"
   },
+  "routes.app.index.appUsageConsentSuccessCloseButton": {
+    "description": "Text for button to close app usage consent dialog.",
+    "message": "Selesai"
+  },
+  "routes.app.index.appUsageConsentSuccessTitle": {
+    "description": "Title text for success state of app usage consent dialog.",
+    "message": "Berhasil!"
+  },
   "routes.app.index.characterCount": {
     "description": "Character count for project name input.",
     "message": "{count}/{max}"
@@ -1042,6 +1050,10 @@
   "routes.app.route.unnamedProject": {
     "description": "Fallback for when project is missing a name.",
     "message": "Proyek Tanpa Nama"
+  },
+  "routes.app.settings.-data-and-privacy-section.appUsageTitle": {
+    "description": "Title of app usage metrics settings section.",
+    "message": "Penggunaan Aplikasi"
   },
   "routes.app.settings.-data-and-privacy-section.description": {
     "description": "Description for data and privacy section in settings page.",
