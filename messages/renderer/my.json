@@ -7,6 +7,10 @@
     "description": "Button text for the close button in the error dialog.",
     "message": "Close"
   },
+  "routes.app.index.appUsageConsentSuccessCloseButton": {
+    "description": "Text for button to close app usage consent dialog.",
+    "message": "ပြီးသွားပြီ"
+  },
   "routes.app.index.createProjectButton": {
     "description": "Text for button to create project.",
     "message": "Create Project"
