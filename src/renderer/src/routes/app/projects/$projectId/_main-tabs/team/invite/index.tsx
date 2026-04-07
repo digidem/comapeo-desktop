@@ -30,9 +30,10 @@ export const Route = createFileRoute(
 				'projects',
 				projectId,
 				'members',
+				{ includeLeft: true },
 			],
 			queryFn: async () => {
-				return projectApi.$member.getMany()
+				return projectApi.$member.getMany({ includeLeft: true })
 			},
 		})
 

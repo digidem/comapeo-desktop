@@ -70,12 +70,14 @@
 		"vite:build": "vite build src/renderer"
 	},
 	"dependencies": {
-		"@comapeo/core": "5.5.0",
+		"@comapeo/core": "7.0.1",
 		"@comapeo/default-categories": "1.0.1",
 		"@comapeo/fallback-smp": "1.0.0",
-		"@comapeo/ipc": "6.0.2",
+		"@comapeo/ipc": "8.0.0",
+		"@comapeo/map-server": "1.1.0",
 		"@formatjs/intl": "4.1.5",
 		"@homebridge/ciao": "1.3.6",
+		"@mapeo/crypto": "1.0.0-alpha.10",
 		"@sentry/electron": "7.10.0",
 		"atomically": "2.1.1",
 		"debug": "4.4.3",
@@ -90,8 +92,7 @@
 		"zustand": "5.0.12"
 	},
 	"devDependencies": {
-		"@comapeo/core-react": "8.0.0",
-		"@comapeo/schema": "2.2.0",
+		"@comapeo/core-react": "11.0.3",
 		"@electron-forge/cli": "7.11.1",
 		"@electron-forge/maker-deb": "7.11.1",
 		"@electron-forge/maker-dmg": "7.11.1",

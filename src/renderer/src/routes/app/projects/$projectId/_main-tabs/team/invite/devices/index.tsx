@@ -132,7 +132,7 @@ function RouteComponent() {
 function InvitablePeersList({ projectId }: { projectId: string }) {
 	const navigate = useNavigate()
 
-	const { data: members } = useManyMembers({ projectId })
+	const { data: members } = useManyMembers({ projectId, includeLeft: true })
 
 	const peers = useInitiallyConnectedPeers()
 

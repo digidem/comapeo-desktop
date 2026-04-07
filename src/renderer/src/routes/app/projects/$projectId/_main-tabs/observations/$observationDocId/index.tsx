@@ -6,7 +6,7 @@ import {
 	useOwnRoleInProject,
 	useSingleDocByDocId,
 } from '@comapeo/core-react'
-import type { Field, Preset } from '@comapeo/schema'
+import type { Field, Preset } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'

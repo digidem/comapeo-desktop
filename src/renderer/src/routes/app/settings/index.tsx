@@ -1,5 +1,9 @@
 import { Suspense } from 'react'
-import { useMapStyleUrl, useOwnDeviceInfo } from '@comapeo/core-react'
+import {
+	getErrorCode,
+	useGetCustomMapInfo,
+	useOwnDeviceInfo,
+} from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import Container from '@mui/material/Container'
@@ -14,7 +18,6 @@ import { defineMessages, useIntl } from 'react-intl'
 
 import { ListRowLink } from '../-components/list-row-link.tsx'
 import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors.ts'
-import { ErrorBoundary } from '../../../components/error-boundary.tsx'
 import { Icon } from '../../../components/icon.tsx'
 import { useIconSizeBasedOnTypography } from '../../../hooks/icon.ts'
 import { getLanguageInfo } from '../../../lib/intl.ts'
@@ -22,7 +25,6 @@ import {
 	getCoordinateFormatQueryOptions,
 	getLocaleStateQueryOptions,
 } from '../../../lib/queries/app-settings.ts'
-import { getCustomMapInfoQueryOptions } from '../../../lib/queries/maps.ts'
 import { DataAndPrivacySection } from './-data-and-privacy-section.tsx'
 
 export const Route = createFileRoute('/app/settings/')({
@@ -112,8 +114,6 @@ function SettingsList() {
 			return match.nativeName
 		},
 	})
-
-	const { data: styleUrl } = useMapStyleUrl()
 
 	const startIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
@@ -246,11 +246,7 @@ function SettingsList() {
 								/>
 							}
 							aria-label={t(m.backgroundMapSettingsAccessibleLabel)}
-							label={
-								<Suspense>
-									<BackgroundMapLabel styleUrl={styleUrl} />
-								</Suspense>
-							}
+							label={<BackgroundMapLabel />}
 						/>
 					</ListItem>
 				</Box>
@@ -259,32 +255,22 @@ function SettingsList() {
 	)
 }
 
-function BackgroundMapLabel({ styleUrl }: { styleUrl: string }) {
+function BackgroundMapLabel() {
 	const { formatMessage: t } = useIntl()
 
-	return (
-		<ErrorBoundary
-			getResetKey={() => styleUrl}
-			fallback={() => <>{t(m.customBackground)}</>}
-		>
-			<BackgroundMapText styleUrl={styleUrl} />
-		</ErrorBoundary>
-	)
-}
+	const customMapInfo = useGetCustomMapInfo()
 
-function BackgroundMapText({ styleUrl }: { styleUrl: string }) {
-	const { formatMessage: t } = useIntl()
-
-	const customMapInfo = useSuspenseQuery(
-		getCustomMapInfoQueryOptions({ styleUrl }),
-	)
-
-	if (customMapInfo.status === 'error') {
-		return t(m.customBackground)
+	if (customMapInfo.status === 'pending') {
+		// TODO: Maybe use a skeleton here?
+		return null
 	}
 
-	if (!customMapInfo.data) {
-		return t(m.defaultBackground)
+	if (customMapInfo.status === 'error') {
+		return t(
+			getErrorCode(customMapInfo.error) === 'MAP_NOT_FOUND'
+				? m.defaultBackground
+				: m.customBackground,
+		)
 	}
 
 	return customMapInfo.data.name

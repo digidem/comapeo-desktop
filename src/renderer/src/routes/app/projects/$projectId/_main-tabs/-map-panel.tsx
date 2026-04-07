@@ -13,7 +13,7 @@ import {
 	useMapStyleUrl,
 	useSingleDocByDocId,
 } from '@comapeo/core-react'
-import type { Observation, Preset, Track } from '@comapeo/schema'
+import type { Observation, Preset, Track } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
@@ -60,7 +60,7 @@ import {
 	ZoomToSelectedDocumentMapControl,
 } from '../../../../../components/map-controls.tsx'
 import { Map } from '../../../../../components/map.tsx'
-import { useMapsRefreshToken } from '../../../../../hooks/maps.ts'
+import { useNetworkAwareMapStyleUrl } from '../../../../../hooks/maps.ts'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo.ts'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings.ts'
 import type { HighlightedDocument } from './-shared.ts'
@@ -206,10 +206,8 @@ export function MapPanel() {
 		lang,
 	})
 
-	const mapsRefreshToken = useMapsRefreshToken()
-	const { data: mapStyleUrl } = useMapStyleUrl({
-		refreshToken: mapsRefreshToken,
-	})
+	const { data: originalStyleUrl } = useMapStyleUrl()
+	const mapStyleUrl = useNetworkAwareMapStyleUrl(originalStyleUrl)
 
 	const observationsFeatureCollection = useMemo(() => {
 		return observationsToFeatureCollection(observations, categories)

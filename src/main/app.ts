@@ -435,14 +435,16 @@ function initMainWindow({
 	// Set up communication channel between window and core service
 	// https://www.electronjs.org/docs/latest/tutorial/message-ports/#messageports-in-the-main-process
 	mainWindow.webContents.ipc.on('comapeo-port', (event) => {
-		const [port] = event.ports
-		if (!port) return // TODO: throw/report error
+		const [comapeoChannelPort, appChannelPort] = event.ports
+
+		if (!(comapeoChannelPort && appChannelPort)) return // TODO: throw/report error
+
 		coreService.postMessage(
 			{
 				type: 'main:new-client',
 				payload: { clientId: `window-${mainWindow.id}` },
 			} satisfies NewClientMessage,
-			[port],
+			[comapeoChannelPort, appChannelPort],
 		)
 	})
 

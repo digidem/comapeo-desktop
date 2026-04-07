@@ -18,7 +18,6 @@ import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
-	MEMBER_ROLE_ID,
 } from '../../../../../lib/comapeo.ts'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings.ts'
 import { DataList } from './-data-list.tsx'
@@ -107,14 +106,10 @@ function RouteComponent() {
 		lang,
 	})
 
-	const { data: members } = useManyMembers({ projectId })
-
-	const activeMembersCount = members.filter(
-		(m) =>
-			m.role.roleId === CREATOR_ROLE_ID ||
-			m.role.roleId === MEMBER_ROLE_ID ||
-			m.role.roleId === COORDINATOR_ROLE_ID,
-	).length
+	const { data: activeMembers } = useManyMembers({
+		projectId,
+		includeLeft: false,
+	})
 
 	const { data: ownRole } = useOwnRoleInProject({ projectId })
 
@@ -123,7 +118,7 @@ function RouteComponent() {
 
 	const hasDataToShow = observations.length + tracks.length > 0
 
-	if (selfIsAtLeastCoordinator && activeMembersCount < 2 && !hasDataToShow) {
+	if (selfIsAtLeastCoordinator && activeMembers.length < 2 && !hasDataToShow) {
 		return (
 			<IntroPanel
 				title={t(m.inviteCollaboratorsPanelTitle)}

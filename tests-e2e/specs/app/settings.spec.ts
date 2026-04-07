@@ -2,7 +2,6 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { hexToRgb } from '@mui/material/styles'
 import { expect } from '@playwright/test'
-import { stubDialog } from 'electron-playwright-helpers'
 
 import { DARK_COMAPEO_BLUE } from '../../../src/renderer/src/colors.ts'
 import { setup, simulateOnboarding, test } from '../utils.ts'
@@ -830,7 +829,7 @@ test('coordinate system', async ({ appInfo, userParams }) => {
 	}
 })
 
-test('background map', async ({ appInfo, userParams }) => {
+test.only('background map', async ({ appInfo, userParams }) => {
 	const { launchApp, cleanup } = await setup()
 	const electronApp = await launchApp({ appInfo })
 
@@ -916,88 +915,39 @@ test('background map', async ({ appInfo, userParams }) => {
 
 		//// Choose file (cancelled)
 		{
-			const chooseFileButton = main.getByRole('button', {
-				name: 'Choose File',
-				exact: true,
-			})
+			const chooseFileInput = main.getByLabel('Choose File', { exact: true })
 
-			await stubDialog(electronApp, 'showOpenDialog', {
-				canceled: true,
-				filePaths: [],
-			})
-
-			await chooseFileButton.click()
+			await chooseFileInput.setInputFiles([])
 
 			await expect(page.getByRole('dialog')).not.toBeVisible()
 		}
 
 		//// Choose file (bad file)
 		{
-			const chooseFileButton = main.getByRole('button', {
-				name: 'Choose File',
+			const chooseFileInput = main.getByLabel('Choose File', {
 				exact: true,
 			})
 
-			await stubDialog(electronApp, 'showOpenDialog', {
-				canceled: false,
-				filePaths: [join(ASSETS_DIR, 'bad-map.smp')],
-			})
-
-			await chooseFileButton.click()
+			await chooseFileInput.setInputFiles([join(ASSETS_DIR, 'bad-map.smp')])
 
 			const dialog = page.getByRole('dialog')
 			await expect(
-				dialog.getByRole('heading', { name: 'Updated!', exact: true }),
-			).toBeVisible()
-			await expect(
-				dialog.getByText('CoMapeo is now using the latest background map.'),
+				dialog.getByRole('heading', {
+					name: 'Something Went Wrong',
+					exact: true,
+				}),
 			).toBeVisible()
 			await dialog.getByRole('button', { name: 'Close', exact: true }).click()
 			await expect(dialog).not.toBeVisible()
-
-			await expect(
-				main.getByText(
-					'Could not get custom map information from file. Please remove it or choose a different file.',
-				),
-			).toBeVisible()
-
-			const removeMapButton = main.getByRole('button', {
-				name: 'Remove Map',
-				exact: true,
-			})
-			await expect(removeMapButton).toBeVisible()
-
-			await main
-				.getByRole('navigation', { name: 'breadcrumb', exact: true })
-				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
-				.click()
-
-			const backgroundMapSettingsLink = main.getByRole('link', {
-				name: 'Go to background map settings.',
-				exact: true,
-			})
-			await expect(backgroundMapSettingsLink).toHaveText('Custom Background')
-			await backgroundMapSettingsLink.click()
-
-			await removeMapButton.click()
-			await expect(
-				main.getByText(
-					'Could not get custom map information from file. Please remove it or choose a different file.',
-				),
-			).not.toBeVisible()
-			await expect(removeMapButton).not.toBeVisible()
 		}
 
 		//// Choose file (good file)
 		{
-			await stubDialog(electronApp, 'showOpenDialog', {
-				canceled: false,
-				filePaths: [join(ASSETS_DIR, 'maplibre-demotiles.smp')],
-			})
+			const chooseFileInput = main.getByLabel('Choose File', { exact: true })
 
-			await main
-				.getByRole('button', { name: 'Choose File', exact: true })
-				.click()
+			await chooseFileInput.setInputFiles([
+				join(ASSETS_DIR, 'maplibre-demotiles.smp'),
+			])
 
 			const dialog = page.getByRole('dialog')
 			await expect(

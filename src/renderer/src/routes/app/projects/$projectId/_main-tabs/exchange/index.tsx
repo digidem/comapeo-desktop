@@ -34,11 +34,9 @@ import { ButtonLink } from '../../../../../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../../hooks/icon.ts'
 import { useBrowserNetInfo } from '../../../../../../hooks/network.ts'
 import {
-	BLOCKED_ROLE_ID,
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
-	LEFT_ROLE_ID,
 	MEMBER_ROLE_ID,
 	memberIsRemoteArchive,
 } from '../../../../../../lib/comapeo.ts'
@@ -75,9 +73,10 @@ export const Route = createFileRoute(
 					'projects',
 					projectId,
 					'members',
+					{ includeLeft: true },
 				],
 				queryFn: async () => {
-					return projectApi.$member.getMany()
+					return projectApi.$member.getMany({ includeLeft: true })
 				},
 			}),
 		])
@@ -114,7 +113,7 @@ function RouteComponent() {
 		: 0
 
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
-	const { data: members } = useManyMembers({ projectId })
+	const { data: members } = useManyMembers({ projectId, includeLeft: true })
 
 	const selfIsOnlyActiveProjectMember = !members.some(
 		(m) =>
@@ -307,14 +306,9 @@ function RouteComponent() {
 
 function RemoteArchiveIndicator({ projectId }: { projectId: string }) {
 	const { formatMessage: t } = useIntl()
-	const { data: members } = useManyMembers({ projectId })
+	const { data: members } = useManyMembers({ projectId, includeLeft: false })
 
-	const activeRemoteArchives = members.filter(
-		(m) =>
-			memberIsRemoteArchive(m) &&
-			m.role.roleId !== LEFT_ROLE_ID &&
-			m.role.roleId !== BLOCKED_ROLE_ID,
-	)
+	const activeRemoteArchives = members.filter((m) => memberIsRemoteArchive(m))
 
 	const { online } = useBrowserNetInfo()
 
