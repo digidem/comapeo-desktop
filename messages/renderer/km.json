@@ -15,6 +15,10 @@
     "description": "Text for button to restart app.",
     "message": "ចាប់ផ្ដើមឡើងវិញ"
   },
+  "routes.app.index.appUsageConsentSuccessCloseButton": {
+    "description": "Text for button to close app usage consent dialog.",
+    "message": "រួចរាល់"
+  },
   "routes.app.index.createProjectButton": {
     "description": "Text for button to create project.",
     "message": "Create Project"
