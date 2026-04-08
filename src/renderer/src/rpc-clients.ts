@@ -14,32 +14,14 @@ export function initRpcClients() {
 	})
 	const appRpc = createAppRpcClient(appChannel.port1, { timeout: Infinity })
 
-	// TODO: Consider hardcoded ports?
-	const mapServerListenPromise = appRpc.mapServer.listen()
-
 	const mapServerApi = {
 		async getBaseUrl() {
-			const { localPort } = await mapServerListenPromise
+			// @ts-expect-error https://github.com/digidem/comapeo-ipc/issues/60
+			const localPort = await appRpc.getMapServerLocalPort()
 
 			return new URL(`http://127.0.0.1:${localPort}`)
 		},
 	}
-
-	// NOTE: Prevent errors with starting the map server when Vite applies HMR update to this file (or consuming files)
-	if (import.meta.hot) {
-		import.meta.hot.on('vite:beforeUpdate', () => {
-			appRpc.mapServer.close().catch((err) => {
-				console.error(err)
-			})
-		})
-	}
-
-	// NOTE: Accounts for when page reloads occur in the app
-	window.addEventListener('beforeunload', () => {
-		appRpc.mapServer.close().catch((err) => {
-			console.error(err)
-		})
-	})
 
 	comapeoChannel.port1.start()
 	appChannel.port1.start()

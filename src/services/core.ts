@@ -108,7 +108,7 @@ const { onlineStyleUrl, rootKey, storageDirectory } = v.parse(
 	values,
 )
 
-const { manager, mapServer } = initializeCore({
+const { manager, mapServer, getMapServerLocalPort } = initializeCore({
 	onlineStyleUrl,
 	rootKey,
 	storageDirectory,
@@ -170,7 +170,11 @@ process.parentPort.on('message', (event) => {
 		)
 	} else {
 		const server = createAppRpcServer(
-			{ mapServer },
+			{
+				mapServer,
+				// @ts-expect-error https://github.com/digidem/comapeo-ipc/issues/60
+				getMapServerLocalPort,
+			},
 			new MessagePortLike(appChannelPort),
 		)
 
@@ -246,12 +250,23 @@ function initializeCore({
 		keyPair: mapServerKeyPair,
 	})
 
+	// Don't await, RPC client should call `appRpc.getMapServerLocalPort()` to await
+	const mapServerListenPromise = mapServer.listen()
+
 	// Don't await, methods that use the server will await this internally
 	fastifyController.start().catch((err) => {
 		Sentry.captureException(err)
 	})
 
-	return { manager, mapServer, fastifyController }
+	return {
+		manager,
+		mapServer,
+		fastifyController,
+		getMapServerLocalPort: async () => {
+			const { localPort } = await mapServerListenPromise
+			return localPort
+		},
+	}
 }
 
 async function initializePeerDiscovery(manager: MapeoManager) {
