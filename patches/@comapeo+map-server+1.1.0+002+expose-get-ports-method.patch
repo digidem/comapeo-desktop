@@ -1,0 +1,29 @@
+diff --git a/node_modules/@comapeo/map-server/dist/index.d.ts b/node_modules/@comapeo/map-server/dist/index.d.ts
+index 0826bc6..9ff938e 100644
+--- a/node_modules/@comapeo/map-server/dist/index.d.ts
++++ b/node_modules/@comapeo/map-server/dist/index.d.ts
+@@ -24,5 +24,9 @@ export declare function createServer(options: ServerOptions): {
+         remotePort: number;
+     }>;
+     close(): Promise<void>;
++    getPorts(): Promise<{
++        localPort: number;
++        remotePort: number;
++    }>
+ };
+ //# sourceMappingURL=index.d.ts.map
+diff --git a/node_modules/@comapeo/map-server/dist/index.js b/node_modules/@comapeo/map-server/dist/index.js
+index b1aec27..6ff1c09 100644
+--- a/node_modules/@comapeo/map-server/dist/index.js
++++ b/node_modules/@comapeo/map-server/dist/index.js
+@@ -83,6 +83,10 @@ export function createServer(options) {
+             // Reset deferred listen for potential restart with different ports
+             deferredListen = pDefer();
+         },
++        async getPorts() {
++			const { localPort, remotePort } = await deferredListen.promise
++			return { localPort, remotePort }
++		},
+     };
+ }
+ function validateOptions(options) {

@@ -16,8 +16,7 @@ export function initRpcClients() {
 
 	const mapServerApi = {
 		async getBaseUrl() {
-			// @ts-expect-error https://github.com/digidem/comapeo-ipc/issues/60
-			const localPort = await appRpc.getMapServerLocalPort()
+			const { localPort } = await appRpc.mapServer.getPorts()
 
 			return new URL(`http://127.0.0.1:${localPort}`)
 		},

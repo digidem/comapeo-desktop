@@ -1,0 +1,15 @@
+diff --git a/node_modules/@comapeo/ipc/dist/server.d.ts b/node_modules/@comapeo/ipc/dist/server.d.ts
+index 61ad5b1..5df1a3b 100644
+--- a/node_modules/@comapeo/ipc/dist/server.d.ts
++++ b/node_modules/@comapeo/ipc/dist/server.d.ts
+@@ -44,6 +44,10 @@ export type RpcApi = {
+             remotePort: number;
+         }>;
+         close: () => Promise<void>;
++        getPorts: () => Promise<{
++            localPort: number;
++            remotePort: number;
++        }>
+     };
+ };
+ import { createServer } from 'rpc-reflector/server.js';
