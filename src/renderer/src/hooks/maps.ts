@@ -41,7 +41,7 @@ export function useNetworkAwareMapStyleUrl(url: string) {
 
 		// NOTE: There's already a `refresh_token` param on the url from core-react
 		// but we want to avoid a situation where we incorrectly override it (e.g. invalidation occurs via write hook).
-		// Simplest solution is to just use a different param altogether insted of trying to do something smarter.
+		// Simplest solution is to just use a different param altogether instead of trying to do something smarter.
 		u.searchParams.set('online', refreshToken)
 
 		return u.toString()
