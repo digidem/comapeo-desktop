@@ -100,19 +100,14 @@ function SuccessPanel({
 	return (
 		<Stack
 			direction="column"
-			flex={1}
-			overflow="auto"
-			justifyContent="space-between"
+			sx={{ flex: 1, overflow: 'auto', justifyContent: 'space-between' }}
 		>
 			<Container maxWidth="xs">
 				<Stack
 					direction="column"
-					padding={6}
-					alignItems="center"
-					flex={1}
-					gap={6}
+					sx={{ padding: 6, alignItems: 'center', flex: 1, gap: 6 }}
 				>
-					<Box padding={6}>
+					<Box sx={{ padding: 6 }}>
 						<Icon
 							name="material-check-circle-rounded"
 							htmlColor={GREEN}
@@ -120,11 +115,14 @@ function SuccessPanel({
 						/>
 					</Box>
 
-					<Typography variant="h1" fontWeight={500} textAlign="center">
+					<Typography
+						variant="h1"
+						sx={{ fontWeight: 500, textAlign: 'center' }}
+					>
 						{t(m.successPanelTitle)}
 					</Typography>
 
-					<Typography component="p" variant="h2" textAlign="center">
+					<Typography component="p" variant="h2" sx={{ textAlign: 'center' }}>
 						{t(
 							dataDownloaded === 'observations'
 								? m.successPanelDescriptionObservations
@@ -147,15 +145,17 @@ function SuccessPanel({
 			</Container>
 
 			<Box
-				display="flex"
-				flexDirection="column"
-				gap={4}
-				paddingX={6}
-				paddingBottom={6}
-				position="sticky"
-				bottom={0}
-				alignItems="center"
-				zIndex={1}
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 4,
+					paddingX: 6,
+					paddingBottom: 6,
+					position: 'sticky',
+					bottom: 0,
+					alignItems: 'center',
+					zIndex: 1,
+				}}
 			>
 				<Button
 					fullWidth
@@ -171,9 +171,7 @@ function SuccessPanel({
 	)
 }
 
-const onChangeSchema = v.object({
-	dataToDownload: DataToDownloadSchema,
-})
+const onChangeSchema = v.object({ dataToDownload: DataToDownloadSchema })
 
 function DownloadForm({
 	onBack,
@@ -233,9 +231,7 @@ function DownloadForm({
 
 	const form = useAppForm({
 		defaultValues: { dataToDownload: 'observations' },
-		validators: {
-			onChange: onChangeSchema,
-		},
+		validators: { onChange: onChangeSchema },
 		onSubmit: async ({ value }) => {
 			const parsedValue = v.parse(onChangeSchema, value)
 
@@ -256,14 +252,16 @@ function DownloadForm({
 
 	return (
 		<>
-			<Stack direction="column" flex={1} overflow="auto">
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Stack
 					direction="row"
-					alignItems="center"
 					component="nav"
-					gap={4}
-					padding={4}
-					borderBottom={`1px solid ${BLUE_GREY}`}
+					sx={{
+						alignItems: 'center',
+						gap: 4,
+						padding: 4,
+						borderBottom: `1px solid ${BLUE_GREY}`,
+					}}
 				>
 					<form.Subscribe selector={(state) => state.isSubmitting}>
 						{(isSubmitting) => (
@@ -280,18 +278,16 @@ function DownloadForm({
 						)}
 					</form.Subscribe>
 
-					<Typography variant="h1" fontWeight={500}>
+					<Typography variant="h1" sx={{ fontWeight: 500 }}>
 						{t(m.navTitle)}
 					</Typography>
 				</Stack>
 
 				<Stack
 					direction="column"
-					flex={1}
-					justifyContent="space-between"
-					overflow="auto"
+					sx={{ flex: 1, justifyContent: 'space-between', overflow: 'auto' }}
 				>
-					<Box padding={6}>
+					<Box sx={{ padding: 6 }}>
 						<Box
 							component="form"
 							id={FORM_ID}
@@ -303,7 +299,7 @@ function DownloadForm({
 								form.handleSubmit()
 							}}
 						>
-							<Stack direction="column" gap={10}>
+							<Stack direction="column" sx={{ gap: 10 }}>
 								<form.AppField name="dataToDownload">
 									{(field) => (
 										<FormControl required>
@@ -316,7 +312,7 @@ function DownloadForm({
 												aria-label={t(m.downloadOptionsAccessibleLabel)}
 												onBlur={field.handleBlur}
 											>
-												<Stack direction="column" gap={6}>
+												<Stack direction="column" sx={{ gap: 6 }}>
 													<DownloadOption
 														value="observations"
 														primaryText={t(m.allObservationsOptionTitle)}
@@ -350,15 +346,17 @@ function DownloadForm({
 					</Box>
 
 					<Box
-						display="flex"
-						flexDirection="column"
-						gap={4}
-						paddingX={6}
-						paddingBottom={6}
-						position="sticky"
-						bottom={0}
-						alignItems="center"
-						zIndex={1}
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 4,
+							paddingX: 6,
+							paddingBottom: 6,
+							position: 'sticky',
+							bottom: 0,
+							alignItems: 'center',
+							zIndex: 1,
+						}}
 					>
 						<form.Subscribe
 							selector={(state) =>
@@ -413,13 +411,13 @@ function DownloadOption({
 	secondaryText: string
 }) {
 	return (
-		<Box padding={6} border={`1px solid ${BLUE_GREY}`} borderRadius={2}>
+		<Box sx={{ padding: 6, border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}>
 			<FormControlLabel
 				value={value}
 				control={<Radio />}
 				label={
 					<Stack direction="column">
-						<Typography fontWeight={500}>{primaryText}</Typography>
+						<Typography sx={{ fontWeight: 500 }}>{primaryText}</Typography>
 						<Typography color={DARK_GREY} aria-hidden>
 							{secondaryText}
 						</Typography>

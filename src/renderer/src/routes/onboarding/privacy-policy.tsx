@@ -30,9 +30,7 @@ export const Route = createFileRoute('/onboarding/privacy-policy')({
 		const { queryClient } = context
 		await queryClient.ensureQueryData(getDiagnosticsEnabledQueryOptions())
 	},
-	staticData: {
-		onboardingStepNumber: 1,
-	},
+	staticData: { onboardingStepNumber: 1 },
 	component: RouteComponent,
 })
 
@@ -50,29 +48,41 @@ function RouteComponent() {
 	return (
 		<>
 			<Stack
-				display="flex"
 				direction="column"
-				justifyContent="space-between"
-				flex={1}
-				gap={10}
-				bgcolor={LIGHT_GREY}
-				padding={10}
-				borderRadius={2}
-				overflow="auto"
+				sx={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					flex: 1,
+					gap: 10,
+					bgcolor: LIGHT_GREY,
+					padding: 10,
+					borderRadius: 2,
+					overflow: 'auto',
+				}}
 			>
-				<Container component={Stack} maxWidth="sm" direction="column" gap={10}>
-					<Typography variant="h1" fontWeight={500} textAlign="center">
+				<Container
+					component={Stack}
+					maxWidth="sm"
+					direction="column"
+					sx={{ gap: 10 }}
+				>
+					<Typography
+						variant="h1"
+						sx={{ fontWeight: 500, textAlign: 'center' }}
+					>
 						{t(m.title)}
 					</Typography>
 
-					<Stack direction="column" gap={3}>
+					<Stack direction="column" sx={{ gap: 3 }}>
 						<Box
-							border={`1px solid ${BLUE_GREY}`}
-							bgcolor={LIGHT_GREY}
-							borderRadius={2}
-							padding={5}
+							sx={{
+								border: `1px solid ${BLUE_GREY}`,
+								bgcolor: LIGHT_GREY,
+								borderRadius: 2,
+								padding: 5,
+							}}
 						>
-							<Typography variant="body1" fontWeight={400}>
+							<Typography variant="body1" sx={{ fontWeight: 400 }}>
 								{t(m.description)}
 							</Typography>
 						</Box>
@@ -88,8 +98,8 @@ function RouteComponent() {
 						/>
 					</Stack>
 
-					<Stack direction="column" gap={10}>
-						<Typography variant="h2" fontWeight={500}>
+					<Stack direction="column" sx={{ gap: 10 }}>
+						<Typography variant="h2" sx={{ fontWeight: 500 }}>
 							{t(m.comapeoDataPrivacy)}
 						</Typography>
 
@@ -113,7 +123,7 @@ function RouteComponent() {
 
 						<Divider sx={{ backgroundColor: BLUE_GREY }} />
 
-						<Typography variant="h2" fontWeight={500}>
+						<Typography variant="h2" sx={{ fontWeight: 500 }}>
 							{t(m.dataCollection)}
 						</Typography>
 
@@ -123,17 +133,18 @@ function RouteComponent() {
 							description={t(m.whatIsCollectedDescription)}
 						>
 							<Stack
-								border={`1px solid ${BLUE_GREY}`}
-								borderRadius={2}
 								direction="column"
-								gap={5}
-								paddingY={5}
+								sx={{
+									border: `1px solid ${BLUE_GREY}`,
+									borderRadius: 2,
+									gap: 5,
+									paddingY: 5,
+								}}
 							>
 								<Stack
 									component="section"
 									direction="column"
-									paddingX={5}
-									gap={3}
+									sx={{ paddingX: 5, gap: 3 }}
 								>
 									<Typography variant="h3">{t(m.diagnostics)}</Typography>
 
@@ -171,8 +182,7 @@ function RouteComponent() {
 								<Stack
 									component="section"
 									direction="column"
-									paddingX={5}
-									gap={3}
+									sx={{ paddingX: 5, gap: 3 }}
 								>
 									<Typography variant="h3">{t(m.appUsage)}</Typography>
 
@@ -205,16 +215,18 @@ function RouteComponent() {
 
 						<Divider sx={{ backgroundColor: BLUE_GREY }} />
 
-						<Typography variant="h2" fontWeight={500}>
+						<Typography variant="h2" sx={{ fontWeight: 500 }}>
 							{t(m.dataCollection)}
 						</Typography>
 
 						<Stack
-							border={`1px solid ${BLUE_GREY}`}
-							borderRadius={2}
 							direction="column"
-							gap={5}
-							padding={5}
+							sx={{
+								border: `1px solid ${BLUE_GREY}`,
+								borderRadius: 2,
+								gap: 5,
+								padding: 5,
+							}}
 						>
 							<FormGroup>
 								<FormControlLabel
@@ -228,10 +240,7 @@ function RouteComponent() {
 									}}
 									label={t(m.shareDiagnosticInformation)}
 									labelPlacement="start"
-									sx={{
-										margin: 0,
-										justifyContent: 'space-between',
-									}}
+									sx={{ margin: 0, justifyContent: 'space-between' }}
 								/>
 							</FormGroup>
 						</Stack>
@@ -266,14 +275,10 @@ function QuestionAnswerItem({
 	description,
 	icon,
 	title,
-}: PropsWithChildren<{
-	description: string
-	icon: ReactNode
-	title: string
-}>) {
+}: PropsWithChildren<{ description: string; icon: ReactNode; title: string }>) {
 	return (
-		<Stack component="section" direction="column" gap={10}>
-			<Stack direction="row" alignItems="center" gap={2}>
+		<Stack component="section" direction="column" sx={{ gap: 10 }}>
+			<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
 				{icon}
 				<Typography variant="h3">{title}</Typography>
 			</Stack>
@@ -296,16 +301,20 @@ function CustomAccordion({
 
 	return (
 		<Stack
-			borderRadius={2}
-			border={`1px solid ${BLUE_GREY}`}
-			paddingX={5}
-			paddingY={2}
+			sx={{
+				borderRadius: 2,
+				border: `1px solid ${BLUE_GREY}`,
+				paddingX: 5,
+				paddingY: 2,
+			}}
 		>
 			<Stack
-				display="flex"
 				direction="row"
-				justifyContent="space-between"
-				alignItems="center"
+				sx={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					alignItems: 'center',
+				}}
 			>
 				<Typography>{label}</Typography>
 
@@ -322,7 +331,7 @@ function CustomAccordion({
 				</IconButton>
 			</Stack>
 			<Collapse in={expanded}>
-				<Box paddingBottom={5}>
+				<Box sx={{ paddingBottom: 5 }}>
 					<Typography sx={{ color: DARK_GREY }}>{description}</Typography>
 				</Box>
 			</Collapse>

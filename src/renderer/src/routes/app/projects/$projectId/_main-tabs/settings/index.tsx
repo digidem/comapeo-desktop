@@ -43,22 +43,30 @@ function RouteComponent() {
 	const { projectId } = Route.useParams()
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto" padding={6} gap={10}>
-			<Stack direction="column" alignItems="center" gap={4}>
+		<Stack
+			direction="column"
+			sx={{ flex: 1, overflow: 'auto', padding: 6, gap: 10 }}
+		>
+			<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
 				<Icon
 					name="material-manage-accounts-filled"
 					size={120}
 					htmlColor={DARKER_ORANGE}
 				/>
 
-				<Typography variant="h1" fontWeight={500}>
+				<Typography variant="h1" sx={{ fontWeight: 500 }}>
 					{t(m.navTitle)}
 				</Typography>
 			</Stack>
-
 			<Suspense
 				fallback={
-					<Box display="flex" flexDirection="row" justifyContent="center">
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'row',
+							justifyContent: 'center',
+						}}
+					>
 						<CircularProgress disableShrink />
 					</Box>
 				}
@@ -84,9 +92,7 @@ function SettingsList({ projectId }: { projectId: string }) {
 			component={List}
 			disablePadding
 			direction="column"
-			flexDirection="column"
-			flex={1}
-			gap={4}
+			sx={{ flexDirection: 'column', flex: 1, gap: 4 }}
 		>
 			<ListItem disableGutters disablePadding>
 				<ListRowLink

@@ -120,9 +120,7 @@ function RouteComponent() {
 			projectDescription: projectSettings.projectDescription || '',
 			projectColor: projectSettings.projectColor || null,
 		},
-		validators: {
-			onChange: onChangeSchema,
-		},
+		validators: { onChange: onChangeSchema },
 		onSubmit: async ({ value }) => {
 			const { projectName, projectDescription, projectColor } = v.parse(
 				onChangeSchema,
@@ -153,14 +151,16 @@ function RouteComponent() {
 
 	return (
 		<>
-			<Stack direction="column" flex={1} overflow="auto">
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Stack
 					direction="row"
-					alignItems="center"
 					component="nav"
-					gap={4}
-					padding={4}
-					borderBottom={`1px solid ${BLUE_GREY}`}
+					sx={{
+						alignItems: 'center',
+						gap: 4,
+						padding: 4,
+						borderBottom: `1px solid ${BLUE_GREY}`,
+					}}
 				>
 					<IconButton
 						aria-label={t(m.goBackAccessibleLabel)}
@@ -180,18 +180,16 @@ function RouteComponent() {
 						<Icon name="material-arrow-back" size={30} />
 					</IconButton>
 
-					<Typography variant="h1" fontWeight={500}>
+					<Typography variant="h1" sx={{ fontWeight: 500 }}>
 						{t(m.navTitle)}
 					</Typography>
 				</Stack>
 
 				<Stack
 					direction="column"
-					flex={1}
-					justifyContent="space-between"
-					overflow="auto"
+					sx={{ flex: 1, justifyContent: 'space-between', overflow: 'auto' }}
 				>
-					<Box paddingBlock={6}>
+					<Box sx={{ paddingBlock: 6 }}>
 						<Box
 							component="form"
 							id={FORM_ID}
@@ -203,8 +201,8 @@ function RouteComponent() {
 								form.handleSubmit()
 							}}
 						>
-							<Stack direction="column" gap={10}>
-								<Box paddingInline={6}>
+							<Stack direction="column" sx={{ gap: 10 }}>
+								<Box sx={{ paddingInline: 6 }}>
 									<form.AppField name="projectName">
 										{(field) => (
 											<TextField
@@ -222,7 +220,7 @@ function RouteComponent() {
 													<Stack
 														component="span"
 														direction="row"
-														justifyContent="space-between"
+														sx={{ justifyContent: 'space-between' }}
 													>
 														<Box component="span">
 															{field.state.meta.errors[0]?.message}
@@ -256,7 +254,7 @@ function RouteComponent() {
 									</form.AppField>
 								</Box>
 
-								<Box paddingInline={6}>
+								<Box sx={{ paddingInline: 6 }}>
 									<form.AppField name="projectDescription">
 										{(field) => (
 											<TextField
@@ -276,7 +274,7 @@ function RouteComponent() {
 													<Stack
 														component="span"
 														direction="row"
-														justifyContent="space-between"
+														sx={{ justifyContent: 'space-between' }}
 													>
 														<Box component="span">
 															{field.state.meta.errors[0]?.message}
@@ -311,8 +309,8 @@ function RouteComponent() {
 								</Box>
 
 								<FormControl>
-									<Stack direction="column" gap={4}>
-										<Box paddingInline={6}>
+									<Stack direction="column" sx={{ gap: 4 }}>
+										<Box sx={{ paddingInline: 6 }}>
 											<FormLabel id="project-color-selector-label">
 												{t(m.projectCardColorLabel)}
 											</FormLabel>
@@ -423,13 +421,15 @@ function RouteComponent() {
 
 					<Stack
 						direction="column"
-						gap={4}
-						paddingX={6}
-						paddingBottom={6}
-						position="sticky"
-						bottom={0}
-						alignItems="center"
-						zIndex={1}
+						sx={{
+							gap: 4,
+							paddingX: 6,
+							paddingBottom: 6,
+							position: 'sticky',
+							bottom: 0,
+							alignItems: 'center',
+							zIndex: 1,
+						}}
 					>
 						<form.Subscribe
 							selector={(state) => [state.canSubmit, state.isSubmitting]}
@@ -534,9 +534,7 @@ function RouteComponent() {
 function ProjectColorCheckboxControl({
 	projectColor,
 	...checkboxProps
-}: CheckboxProps & {
-	projectColor: string
-}) {
+}: CheckboxProps & { projectColor: string }) {
 	return (
 		<Checkbox
 			{...checkboxProps}
@@ -545,20 +543,24 @@ function ProjectColorCheckboxControl({
 			value={projectColor}
 			checkedIcon={
 				<Box
-					width={100}
-					height={100}
-					bgcolor={projectColor}
-					borderRadius={2}
-					sx={{ outline: `8px solid ${COMAPEO_BLUE}` }}
+					sx={{
+						width: 100,
+						height: 100,
+						bgcolor: projectColor,
+						borderRadius: 2,
+						outline: `8px solid ${COMAPEO_BLUE}`,
+					}}
 				/>
 			}
 			icon={
 				<Box
-					width={100}
-					height={100}
-					bgcolor={projectColor}
-					borderRadius={2}
-					sx={{ outline: `1px solid ${BLUE_GREY}` }}
+					sx={{
+						width: 100,
+						height: 100,
+						bgcolor: projectColor,
+						borderRadius: 2,
+						outline: `1px solid ${BLUE_GREY}`,
+					}}
 				/>
 			}
 		/>

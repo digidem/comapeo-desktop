@@ -87,14 +87,16 @@ function RouteComponent() {
 
 	return (
 		<>
-			<Stack direction="column" flex={1} overflow="auto">
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Stack
 					direction="row"
-					alignItems="center"
 					component="nav"
-					gap={4}
-					padding={4}
-					borderBottom={`1px solid ${BLUE_GREY}`}
+					sx={{
+						alignItems: 'center',
+						gap: 4,
+						padding: 4,
+						borderBottom: `1px solid ${BLUE_GREY}`,
+					}}
 				>
 					<IconButton
 						aria-label={t(m.goBackAccessibleLabel)}
@@ -118,29 +120,33 @@ function RouteComponent() {
 						<Icon name="material-arrow-back" size={30} />
 					</IconButton>
 
-					<Typography variant="h1" fontWeight={500}>
+					<Typography variant="h1" sx={{ fontWeight: 500 }}>
 						{t(m.navTitle)}
 					</Typography>
 				</Stack>
 
 				<Stack
 					direction="column"
-					flex={1}
-					justifyContent="space-between"
-					overflow="auto"
-					padding={6}
-					gap={6}
+					sx={{
+						flex: 1,
+						justifyContent: 'space-between',
+						overflow: 'auto',
+						padding: 6,
+						gap: 6,
+					}}
 				>
 					<Stack
 						direction="column"
-						borderRadius={2}
-						border={`1px solid ${BLUE_GREY}`}
-						flex={1}
-						justifyContent="center"
-						gap={5}
-						padding={6}
+						sx={{
+							borderRadius: 2,
+							border: `1px solid ${BLUE_GREY}`,
+							flex: 1,
+							justifyContent: 'center',
+							gap: 5,
+							padding: 6,
+						}}
 					>
-						<Box alignSelf="center">
+						<Box sx={{ alignSelf: 'center' }}>
 							<Icon
 								name="material-symbols-apps"
 								htmlColor={DARK_ORANGE}
@@ -148,17 +154,19 @@ function RouteComponent() {
 							/>
 						</Box>
 
-						<Typography variant="h1" fontWeight={500} textAlign="center">
+						<Typography
+							variant="h1"
+							sx={{ fontWeight: 500, textAlign: 'center' }}
+						>
 							{displayedName}
 						</Typography>
 
 						{projectSettings.configMetadata ? (
-							<Stack direction="column" gap={2}>
+							<Stack direction="column" sx={{ gap: 2 }}>
 								<Typography
-									textAlign="center"
 									color="textSecondary"
-									fontWeight={500}
 									aria-labelledby={`date-created-${accessibilityId}`}
+									sx={{ textAlign: 'center', fontWeight: 500 }}
 								>
 									<Box
 										component={'span'}
@@ -172,11 +180,7 @@ function RouteComponent() {
 												>
 													{formatDate(
 														projectSettings.configMetadata.buildDate,
-														{
-															year: 'numeric',
-															month: 'long',
-															day: 'numeric',
-														},
+														{ year: 'numeric', month: 'long', day: 'numeric' },
 													)}
 												</time>
 											),
@@ -185,10 +189,9 @@ function RouteComponent() {
 								</Typography>
 
 								<Typography
-									textAlign="center"
 									color="textSecondary"
-									fontWeight={500}
 									aria-labelledby={`date-added-${accessibilityId}`}
+									sx={{ textAlign: 'center', fontWeight: 500 }}
 								>
 									<Box component="span" id={`date-added-${accessibilityId}`}>
 										{t(m.dateAdded, {
@@ -199,11 +202,7 @@ function RouteComponent() {
 												>
 													{formatDate(
 														projectSettings.configMetadata.importDate,
-														{
-															year: 'numeric',
-															month: 'long',
-															day: 'numeric',
-														},
+														{ year: 'numeric', month: 'long', day: 'numeric' },
 													)}
 												</time>
 											),
@@ -238,7 +237,13 @@ function RouteComponent() {
 						) : null}
 					</Stack>
 
-					<Box display="flex" flexDirection="row" justifyContent="center">
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'row',
+							justifyContent: 'center',
+						}}
+					>
 						<Button
 							type="button"
 							variant="outlined"

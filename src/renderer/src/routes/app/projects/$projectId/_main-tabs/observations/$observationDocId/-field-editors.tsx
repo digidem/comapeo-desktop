@@ -50,7 +50,6 @@ export function TextFieldEditor({
 	return (
 		<Stack
 			direction="column"
-			gap={4}
 			component="form"
 			id={`${field.label}-form`}
 			onSubmit={(event) => {
@@ -58,6 +57,7 @@ export function TextFieldEditor({
 				if (form.state.isSubmitting) return
 				form.handleSubmit()
 			}}
+			sx={{ gap: 4 }}
 		>
 			<form.AppField name="answer">
 				{(formField) => (
@@ -85,7 +85,7 @@ export function TextFieldEditor({
 				)}
 			</form.AppField>
 
-			<Stack direction="row" justifyContent="space-between" gap={2}>
+			<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
@@ -155,7 +155,6 @@ export function NumberFieldEditor({
 	return (
 		<Stack
 			direction="column"
-			gap={4}
 			component="form"
 			id={`${field.label}-form`}
 			onSubmit={(event) => {
@@ -163,6 +162,7 @@ export function NumberFieldEditor({
 				if (form.state.isSubmitting) return
 				form.handleSubmit()
 			}}
+			sx={{ gap: 4 }}
 		>
 			<form.AppField name="answer">
 				{(formField) => (
@@ -195,7 +195,7 @@ export function NumberFieldEditor({
 				)}
 			</form.AppField>
 
-			<Stack direction="row" justifyContent="space-between" gap={2}>
+			<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
@@ -256,7 +256,6 @@ export function SingleSelectFieldEditor({
 	return (
 		<Stack
 			direction="column"
-			gap={4}
 			component="form"
 			id={`${field.label}-form`}
 			onSubmit={(event) => {
@@ -264,6 +263,7 @@ export function SingleSelectFieldEditor({
 				if (form.state.isSubmitting) return
 				form.handleSubmit()
 			}}
+			sx={{ gap: 4 }}
 		>
 			<form.AppField name="answer">
 				{(formField) => {
@@ -317,7 +317,7 @@ export function SingleSelectFieldEditor({
 				}}
 			</form.AppField>
 
-			<Stack direction="row" justifyContent="space-between" gap={2}>
+			<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
@@ -393,7 +393,6 @@ export function MultiSelectFieldEditor({
 	return (
 		<Stack
 			direction="column"
-			gap={4}
 			component="form"
 			id={`${field.label}-form`}
 			onSubmit={(event) => {
@@ -401,6 +400,7 @@ export function MultiSelectFieldEditor({
 				if (form.state.isSubmitting) return
 				form.handleSubmit()
 			}}
+			sx={{ gap: 4 }}
 		>
 			<FormGroup>
 				{field.options.map((option) => (
@@ -422,7 +422,7 @@ export function MultiSelectFieldEditor({
 				))}
 			</FormGroup>
 
-			<Stack direction="row" justifyContent="space-between" gap={2}>
+			<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>

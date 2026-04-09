@@ -34,14 +34,16 @@ function RouteComponent() {
 	const { projectId } = Route.useParams()
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
 				direction="row"
-				alignItems="center"
 				component="nav"
-				gap={4}
-				padding={4}
-				borderBottom={`1px solid ${BLUE_GREY}`}
+				sx={{
+					alignItems: 'center',
+					gap: 4,
+					padding: 4,
+					borderBottom: `1px solid ${BLUE_GREY}`,
+				}}
 			>
 				<IconButton
 					aria-label={t(m.goBackAccessibleLabel)}
@@ -61,37 +63,42 @@ function RouteComponent() {
 					<Icon name="material-arrow-back" size={30} />
 				</IconButton>
 
-				<Typography variant="h1" fontWeight={500}>
+				<Typography variant="h1" sx={{ fontWeight: 500 }}>
 					{t(m.navTitle)}
 				</Typography>
 			</Stack>
 
 			<Stack
 				direction="column"
-				flex={1}
-				justifyContent="space-between"
-				overflow="auto"
-				padding={6}
-				gap={6}
+				sx={{
+					flex: 1,
+					justifyContent: 'space-between',
+					overflow: 'auto',
+					padding: 6,
+					gap: 6,
+				}}
 			>
 				<Stack
 					direction="column"
-					borderRadius={2}
-					border={`1px solid ${BLUE_GREY}`}
+					sx={{ borderRadius: 2, border: `1px solid ${BLUE_GREY}` }}
 				>
 					<Box
-						display="flex"
-						flex={1}
-						flexDirection="row"
-						justifyContent="center"
-						alignItems="center"
-						padding={4}
-						overflow="auto"
 						data-testid="invite-devices-list-network-connection-info"
+						sx={{
+							display: 'flex',
+							flex: 1,
+							flexDirection: 'row',
+							justifyContent: 'center',
+							alignItems: 'center',
+							padding: 4,
+							overflow: 'auto',
+						}}
 					>
 						<Suspense
 							fallback={
-								<Typography fontWeight={500}>{t(m.gettingWifiInfo)}</Typography>
+								<Typography sx={{ fontWeight: 500 }}>
+									{t(m.gettingWifiInfo)}
+								</Typography>
 							}
 						>
 							<NetworkConnectionInfo waitingText={t(m.gettingWifiInfo)} />
@@ -100,7 +107,7 @@ function RouteComponent() {
 
 					<Divider sx={{ bgcolor: LIGHT_GREY }} />
 
-					<Stack direction="column" padding={6}>
+					<Stack direction="column" sx={{ padding: 6 }}>
 						<Typography>{t(m.discoveryTroubleshootingTitle)}</Typography>
 
 						<List sx={{ listStyleType: 'disc', paddingInline: 8 }}>
@@ -119,7 +126,7 @@ function RouteComponent() {
 					</Stack>
 				</Stack>
 
-				<Stack direction="column" flex={1}>
+				<Stack direction="column" sx={{ flex: 1 }}>
 					<Suspense>
 						<InvitablePeersList projectId={projectId} />
 					</Suspense>

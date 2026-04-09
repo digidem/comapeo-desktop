@@ -28,37 +28,43 @@ export function GenericRouteNotFoundComponent({
 
 	return (
 		<Stack
-			bgcolor={backgroundColor}
 			direction="column"
-			flex={1}
-			gap={6}
-			height="100%"
-			overflow="auto"
+			sx={{
+				bgcolor: backgroundColor,
+				flex: 1,
+				gap: 6,
+				height: '100%',
+				overflow: 'auto',
+			}}
 		>
-			<Stack direction="column" flex={1} gap={6} padding={6}>
+			<Stack direction="column" sx={{ flex: 1, gap: 6, padding: 6 }}>
 				<Typography
 					variant="h1"
-					fontWeight={500}
-					textAlign="center"
-					whiteSpace="pre-wrap"
-					sx={{ overflowWrap: 'break-word' }}
+					sx={{
+						fontWeight: 500,
+						textAlign: 'center',
+						whiteSpace: 'pre-wrap',
+						overflowWrap: 'break-word',
+					}}
 				>
 					{t(m.title)}
 				</Typography>
 
 				{v.is(CustomNotFoundDataPropSchema, data) ? (
 					<Typography
-						textAlign="center"
-						whiteSpace="pre-wrap"
-						sx={{ overflowWrap: 'break-word' }}
+						sx={{
+							textAlign: 'center',
+							whiteSpace: 'pre-wrap',
+							overflowWrap: 'break-word',
+						}}
 					>
 						{data.data.message}
 					</Typography>
 				) : null}
 			</Stack>
 
-			<Box position="sticky" bottom={0} padding={6} display="flex">
-				<Stack direction="column" gap={4} flex={1}>
+			<Box sx={{ position: 'sticky', bottom: 0, padding: 6, display: 'flex' }}>
+				<Stack direction="column" sx={{ gap: 4, flex: 1 }}>
 					<Button
 						fullWidth
 						onClick={() => {

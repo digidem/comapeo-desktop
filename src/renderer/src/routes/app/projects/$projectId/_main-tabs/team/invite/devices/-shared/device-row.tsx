@@ -25,29 +25,34 @@ export function DeviceRow({
 	return (
 		<Stack
 			direction="row"
-			flex={1}
-			gap={4}
-			overflow="auto"
-			alignItems="center"
-			padding={5}
+			sx={{
+				flex: 1,
+				gap: 4,
+				overflow: 'auto',
+				alignItems: 'center',
+				padding: 5,
+			}}
 		>
 			<DeviceIcon deviceType={deviceType} size={deviceIconSize} />
-
-			<Stack direction="column" flex={1} overflow="auto">
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Typography
-					fontWeight={500}
-					textOverflow="ellipsis"
-					whiteSpace="nowrap"
-					overflow="hidden"
+					sx={{
+						fontWeight: 500,
+						textOverflow: 'ellipsis',
+						whiteSpace: 'nowrap',
+						overflow: 'hidden',
+					}}
 				>
 					{name}
 				</Typography>
 
 				<Typography
 					color="textSecondary"
-					textOverflow="ellipsis"
-					whiteSpace="nowrap"
-					overflow="hidden"
+					sx={{
+						textOverflow: 'ellipsis',
+						whiteSpace: 'nowrap',
+						overflow: 'hidden',
+					}}
 				>
 					{deviceId.slice(0, 12)}
 				</Typography>

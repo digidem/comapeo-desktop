@@ -69,11 +69,7 @@ export function DataList({ projectId }: { projectId: string }) {
 		lang,
 	})
 
-	const { data: tracks } = useManyDocs({
-		projectId,
-		docType: 'track',
-		lang,
-	})
+	const { data: tracks } = useManyDocs({ projectId, docType: 'track', lang })
 
 	const { data: categories } = useManyDocs({
 		projectId,
@@ -143,15 +139,24 @@ export function DataList({ projectId }: { projectId: string }) {
 	)
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
-			<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Box
+				sx={{
+					overflow: 'auto',
+					display: 'flex',
+					flexDirection: 'column',
+					flex: 1,
+				}}
+			>
 				<Box
-					display="flex"
-					flexDirection="row"
-					justifyContent="center"
-					padding={6}
-					borderTop={`1px solid ${BLUE_GREY}`}
-					borderBottom={`1px solid ${BLUE_GREY}`}
+					sx={{
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'center',
+						padding: 6,
+						borderTop: `1px solid ${BLUE_GREY}`,
+						borderBottom: `1px solid ${BLUE_GREY}`,
+					}}
 				>
 					<ButtonLink
 						fullWidth
@@ -164,7 +169,14 @@ export function DataList({ projectId }: { projectId: string }) {
 					</ButtonLink>
 				</Box>
 
-				<Box overflow="auto" display="flex" flexDirection="column" flex={1}>
+				<Box
+					sx={{
+						overflow: 'auto',
+						display: 'flex',
+						flexDirection: 'column',
+						flex: 1,
+					}}
+				>
 					<List
 						component="ul"
 						ref={listRef}
@@ -172,9 +184,11 @@ export function DataList({ projectId }: { projectId: string }) {
 						sx={{ overflow: 'auto', scrollbarColor: 'initial' }}
 					>
 						<Box
-							position="relative"
-							height={`${rowVirtualizer.getTotalSize()}px`}
-							width="100%"
+							sx={{
+								position: 'relative',
+								height: `${rowVirtualizer.getTotalSize()}px`,
+								width: '100%',
+							}}
 						>
 							{rowVirtualizer.getVirtualItems().map((row) => {
 								const { type, category, document } = sortedListData[row.index]!
@@ -241,26 +255,36 @@ export function DataList({ projectId }: { projectId: string }) {
 											<Suspense>
 												<SyncedIndicatorLine createdByDeviceId={createdBy} />
 											</Suspense>
-											<Stack direction="row" flex={1} gap={2} overflow="auto">
+
+											<Stack
+												direction="row"
+												sx={{ flex: 1, gap: 2, overflow: 'auto' }}
+											>
 												<Stack
 													direction="column"
-													flex={1}
-													justifyContent="center"
-													overflow="hidden"
+													sx={{
+														flex: 1,
+														justifyContent: 'center',
+														overflow: 'hidden',
+													}}
 												>
 													<Typography
-														fontWeight={500}
-														textOverflow="ellipsis"
-														whiteSpace="nowrap"
-														overflow="hidden"
+														sx={{
+															fontWeight: 500,
+															textOverflow: 'ellipsis',
+															whiteSpace: 'nowrap',
+															overflow: 'hidden',
+														}}
 													>
 														{title}
 													</Typography>
 
 													<Typography
-														textOverflow="ellipsis"
-														whiteSpace="nowrap"
-														overflow="hidden"
+														sx={{
+															textOverflow: 'ellipsis',
+															whiteSpace: 'nowrap',
+															overflow: 'hidden',
+														}}
 													>
 														{formatDate(createdAt, {
 															year: 'numeric',
@@ -274,19 +298,23 @@ export function DataList({ projectId }: { projectId: string }) {
 												</Stack>
 
 												<Box
-													display="flex"
-													justifyContent="center"
-													alignItems="center"
-													width={CATEGORY_CONTAINER_SIZE_PX}
-													sx={{ aspectRatio: 1 }}
+													sx={{
+														display: 'flex',
+														justifyContent: 'center',
+														alignItems: 'center',
+														width: CATEGORY_CONTAINER_SIZE_PX,
+														aspectRatio: 1,
+													}}
 												>
-													<Box flex={1}>
+													<Box sx={{ flex: 1 }}>
 														<Suspense
 															fallback={
 																<Box
-																	display="flex"
-																	justifyContent="center"
-																	alignItems="center"
+																	sx={{
+																		display: 'flex',
+																		justifyContent: 'center',
+																		alignItems: 'center',
+																	}}
 																>
 																	<CircularProgress disableShrink size={30} />
 																</Box>
@@ -368,12 +396,14 @@ function SyncedIndicatorLine({
 
 	return ownDeviceInfo.deviceId !== createdByDeviceId ? (
 		<Box
-			position="absolute"
-			width={8}
-			left={0}
-			bottom={0}
-			top={0}
-			bgcolor={COMAPEO_BLUE}
+			sx={{
+				position: 'absolute',
+				width: 8,
+				left: 0,
+				bottom: 0,
+				top: 0,
+				bgcolor: COMAPEO_BLUE,
+			}}
 		/>
 	) : null
 }
@@ -415,11 +445,13 @@ function ObservationCategory({
 					/>
 				) : (
 					<Box
-						display="flex"
-						justifyContent="center"
-						alignItems="center"
-						maxHeight={12}
-						sx={{ aspectRatio: 1 }}
+						sx={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+							maxHeight: 12,
+							aspectRatio: 1,
+						}}
 					>
 						<Icon name="material-place" />
 					</Box>
@@ -430,13 +462,15 @@ function ObservationCategory({
 		return (
 			<>
 				<Box
-					overflow="hidden"
-					borderRadius={2}
-					display="flex"
-					flexDirection="column"
-					position="relative"
-					width="100%"
-					sx={{ aspectRatio: 1 }}
+					sx={{
+						overflow: 'hidden',
+						borderRadius: 2,
+						display: 'flex',
+						flexDirection: 'column',
+						position: 'relative',
+						width: '100%',
+						aspectRatio: 1,
+					}}
 				>
 					{
 						// NOTE: We only display the first three
@@ -452,8 +486,12 @@ function ObservationCategory({
 							return (
 								<Box
 									key={key}
-									position="absolute"
-									sx={
+									sx={[
+										{
+											position: 'absolute',
+											overflow: 'hidden',
+											borderRadius: 2,
+										},
 										shouldStack
 											? {
 													aspectRatio: 1,
@@ -468,10 +506,8 @@ function ObservationCategory({
 													right: 0,
 													left: 0,
 													bottom: 0,
-												}
-									}
-									overflow="hidden"
-									borderRadius={2}
+												},
+									]}
 								>
 									<ErrorBoundary
 										getResetKey={() => key}
@@ -487,13 +523,15 @@ function ObservationCategory({
 										}}
 										fallback={() => (
 											<Box
-												display="flex"
-												flex={1}
-												justifyContent="center"
-												alignItems="center"
-												height="100%"
-												width="100%"
-												bgcolor={WHITE}
+												sx={{
+													display: 'flex',
+													flex: 1,
+													justifyContent: 'center',
+													alignItems: 'center',
+													height: '100%',
+													width: '100%',
+													bgcolor: WHITE,
+												}}
 											>
 												<Icon name="material-error" color="error" />
 											</Box>
@@ -536,10 +574,12 @@ function ObservationCategory({
 				</Box>
 
 				<Box
-					position="absolute"
-					right={(theme) => theme.spacing(2)}
-					bottom={(theme) => theme.spacing(2)}
-					zIndex={1}
+					sx={{
+						position: 'absolute',
+						right: (theme) => theme.spacing(2),
+						bottom: (theme) => theme.spacing(2),
+						zIndex: 1,
+					}}
 				>
 					{categoryIcon}
 				</Box>

@@ -16,11 +16,14 @@ export function DiscardEditsDialogContent({
 
 	return (
 		<Stack direction="column">
-			<Stack direction="column" gap={10} flex={1} padding={20}>
-				<Stack direction="column" alignItems="center" gap={4}>
+			<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+				<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
 					<Icon name="material-error" color="error" size={72} />
 
-					<Typography variant="h1" fontWeight={500} textAlign="center">
+					<Typography
+						variant="h1"
+						sx={{ fontWeight: 500, textAlign: 'center' }}
+					>
 						{t(m.title)}
 					</Typography>
 				</Stack>
@@ -28,12 +31,14 @@ export function DiscardEditsDialogContent({
 
 			<Stack
 				direction="row"
-				position="sticky"
-				bottom={0}
-				display="flex"
-				justifyContent="center"
-				gap={4}
-				padding={6}
+				sx={{
+					position: 'sticky',
+					bottom: 0,
+					display: 'flex',
+					justifyContent: 'center',
+					gap: 4,
+					padding: 6,
+				}}
 			>
 				<Button
 					fullWidth

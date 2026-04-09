@@ -15,7 +15,7 @@ export function DisconnectedIndicator() {
 	})
 
 	return (
-		<Stack direction="row" gap={1}>
+		<Stack direction="row" sx={{ gap: 1 }}>
 			<Icon
 				name="material-warning-rounded"
 				htmlColor={ORANGE}

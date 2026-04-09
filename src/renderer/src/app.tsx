@@ -66,14 +66,8 @@ const queryClient = new QueryClient({
 	// to avoid surprises. Not using the queryClient `defaultOptions` because the API
 	// consumer might also use the same queryClient for network queries
 	defaultOptions: {
-		queries: {
-			networkMode: 'always',
-			retry: false,
-		},
-		mutations: {
-			networkMode: 'always',
-			retry: false,
-		},
+		queries: { networkMode: 'always', retry: false },
+		mutations: { networkMode: 'always', retry: false },
 	},
 })
 
@@ -161,19 +155,24 @@ export function App() {
 						<IntlProvider>
 							<NetworkConnectionChangeListener />
 
-							<Box height="100dvh">
+							<Box sx={{ height: '100dvh' }}>
 								{platform === 'darwin' ? (
 									<AppTitleBar platform={platform} testId="app-title-bar" />
 								) : null}
 
-								<Box id={DIALOG_CONTAINER_ID} height={MAIN_CONTENT_HEIGHT}>
+								<Box
+									id={DIALOG_CONTAINER_ID}
+									sx={{ height: MAIN_CONTENT_HEIGHT }}
+								>
 									<Suspense
 										fallback={
 											<Box
-												display="flex"
-												justifyContent="center"
-												alignItems="center"
-												height="100%"
+												sx={{
+													display: 'flex',
+													justifyContent: 'center',
+													alignItems: 'center',
+													height: '100%',
+												}}
 											>
 												<CircularProgress />
 											</Box>

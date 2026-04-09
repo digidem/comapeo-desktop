@@ -39,8 +39,8 @@ export function JoinProjectDialogContent({ onBack }: { onBack: () => void }) {
 	const { formatMessage: t } = useIntl()
 
 	return (
-		<Stack direction="column" flex={1}>
-			<Box padding={2}>
+		<Stack direction="column" sx={{ flex: 1 }}>
+			<Box sx={{ padding: 2 }}>
 				<Button
 					variant="text"
 					startIcon={<Icon name="material-arrow-back" />}
@@ -55,12 +55,14 @@ export function JoinProjectDialogContent({ onBack }: { onBack: () => void }) {
 
 			<Stack
 				direction="column"
-				gap={10}
-				justifyContent="center"
-				textAlign="center"
-				flex={1}
-				padding={6}
-				overflow="auto"
+				sx={{
+					gap: 10,
+					justifyContent: 'center',
+					textAlign: 'center',
+					flex: 1,
+					padding: 6,
+					overflow: 'auto',
+				}}
 			>
 				<Box>
 					<Box>
@@ -71,7 +73,7 @@ export function JoinProjectDialogContent({ onBack }: { onBack: () => void }) {
 						/>
 					</Box>
 
-					<Typography variant="h1" fontWeight={500}>
+					<Typography variant="h1" sx={{ fontWeight: 500 }}>
 						{t(m.joinProjectDialogTitle)}
 					</Typography>
 				</Box>
@@ -111,12 +113,8 @@ export function StartProjectDialogContent({
 	}, [t])
 
 	const form = useAppForm({
-		defaultValues: {
-			projectName: '',
-		},
-		validators: {
-			onChange: onChangeSchema,
-		},
+		defaultValues: { projectName: '' },
+		validators: { onChange: onChangeSchema },
 		onSubmit: async ({ value }) => {
 			const { projectName } = v.parse(onChangeSchema, value)
 
@@ -144,8 +142,8 @@ export function StartProjectDialogContent({
 	const isSubmitting = useStore(form.store, (state) => state.isSubmitting)
 
 	return (
-		<Stack direction="column" flex={1}>
-			<Box padding={2}>
+		<Stack direction="column" sx={{ flex: 1 }}>
+			<Box sx={{ padding: 2 }}>
 				<Button
 					variant="text"
 					startIcon={<Icon name="material-arrow-back" />}
@@ -158,13 +156,18 @@ export function StartProjectDialogContent({
 
 			<Divider variant="fullWidth" />
 
-			<Stack direction="column" flex={1} padding={6} gap={10} overflow="auto">
+			<Stack
+				direction="column"
+				sx={{ flex: 1, padding: 6, gap: 10, overflow: 'auto' }}
+			>
 				<Stack
 					direction="column"
-					gap={10}
-					justifyContent="center"
-					textAlign="center"
-					flex={1}
+					sx={{
+						gap: 10,
+						justifyContent: 'center',
+						textAlign: 'center',
+						flex: 1,
+					}}
 				>
 					<Box>
 						<Box>
@@ -175,7 +178,7 @@ export function StartProjectDialogContent({
 							/>
 						</Box>
 
-						<Typography variant="h1" fontWeight={500}>
+						<Typography variant="h1" sx={{ fontWeight: 500 }}>
 							{t(m.startProjectDialogTitle)}
 						</Typography>
 					</Box>
@@ -206,20 +209,14 @@ export function StartProjectDialogContent({
 									onChange={(event) => {
 										field.handleChange(event.target.value)
 									}}
-									slotProps={{
-										input: {
-											style: {
-												backgroundColor: WHITE,
-											},
-										},
-									}}
+									slotProps={{ input: { style: { backgroundColor: WHITE } } }}
 									sx={{ maxWidth: (theme) => theme.breakpoints.values.sm }}
 									onBlur={field.handleBlur}
 									helperText={
 										<Stack
 											component="span"
 											direction="row"
-											justifyContent="space-between"
+											sx={{ justifyContent: 'space-between' }}
 										>
 											<Box component="span">
 												{field.state.meta.errors[0]?.message}
@@ -250,7 +247,7 @@ export function StartProjectDialogContent({
 					</Box>
 				</Stack>
 
-				<Box display="flex" justifyContent="center">
+				<Box sx={{ display: 'flex', justifyContent: 'center' }}>
 					<form.Subscribe selector={(state) => [state.canSubmit]}>
 						{([canSubmit]) => (
 							<Button
@@ -305,8 +302,8 @@ export function LeftProjectDialogContent({
 
 	return (
 		<Stack direction="column">
-			<Stack direction="column" gap={10} flex={1} padding={20}>
-				<Stack direction="column" gap={4} alignItems="center">
+			<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+				<Stack direction="column" sx={{ gap: 4, alignItems: 'center' }}>
 					<Box>
 						<Icon
 							name="material-symbols-waving-hand"
@@ -315,22 +312,27 @@ export function LeftProjectDialogContent({
 						/>
 					</Box>
 
-					<Typography variant="h1" fontWeight={500} textAlign="center">
+					<Typography
+						variant="h1"
+						sx={{ fontWeight: 500, textAlign: 'center' }}
+					>
 						{t(m.leftProjectDialogTitle, { name: projectName || '' })}
 					</Typography>
 				</Stack>
 			</Stack>
 
 			<Box
-				position="sticky"
-				right={0}
-				left={0}
-				top={0}
-				bottom={0}
-				display="flex"
-				flexDirection="row"
-				justifyContent="center"
-				padding={6}
+				sx={{
+					position: 'sticky',
+					right: 0,
+					left: 0,
+					top: 0,
+					bottom: 0,
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'center',
+					padding: 6,
+				}}
 			>
 				<Button
 					fullWidth
@@ -373,8 +375,8 @@ export function AppUsageConsentDialogContent({
 
 	return (
 		<Stack direction="column">
-			<Stack direction="column" gap={10} flex={1} padding={20}>
-				<Stack direction="column" gap={6} alignItems="center">
+			<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+				<Stack direction="column" sx={{ gap: 6, alignItems: 'center' }}>
 					<Box>
 						<Icon
 							name="material-check-circle-rounded"
@@ -385,8 +387,7 @@ export function AppUsageConsentDialogContent({
 
 					<Typography
 						variant="h1"
-						fontWeight={500}
-						sx={{ textAlign: 'center', textWrap: 'balance' }}
+						sx={{ fontWeight: 500, textAlign: 'center', textWrap: 'balance' }}
 					>
 						{t(m.appUsageConsentSuccessTitle)}
 					</Typography>
@@ -407,15 +408,17 @@ export function AppUsageConsentDialogContent({
 			</Stack>
 
 			<Box
-				position="sticky"
-				right={0}
-				left={0}
-				top={0}
-				bottom={0}
-				display="flex"
-				flexDirection="row"
-				justifyContent="center"
-				padding={6}
+				sx={{
+					position: 'sticky',
+					right: 0,
+					left: 0,
+					top: 0,
+					bottom: 0,
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'center',
+					padding: 6,
+				}}
 			>
 				<Button
 					fullWidth
@@ -452,9 +455,9 @@ function AppUsageInterstitial({
 
 	return (
 		<Stack direction="column">
-			<Stack direction="column" gap={10} flex={1} padding={20}>
-				<Stack direction="column" gap={6} alignItems="center">
-					<Stack direction="column" alignItems="center">
+			<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+				<Stack direction="column" sx={{ gap: 6, alignItems: 'center' }}>
+					<Stack direction="column" sx={{ alignItems: 'center' }}>
 						<Box>
 							<Icon
 								name="noun-project-checklist"
@@ -465,8 +468,7 @@ function AppUsageInterstitial({
 
 						<Typography
 							variant="h1"
-							fontWeight={500}
-							sx={{ textAlign: 'center', textWrap: 'balance' }}
+							sx={{ fontWeight: 500, textAlign: 'center', textWrap: 'balance' }}
 						>
 							{t(m.appUsageConsentInterstitialTitle)}
 						</Typography>
@@ -477,7 +479,7 @@ function AppUsageInterstitial({
 					</Typography>
 
 					<List disablePadding sx={{ paddingInline: 10 }}>
-						<Stack direction="column" gap={4}>
+						<Stack direction="column" sx={{ gap: 4 }}>
 							<ListItem
 								sx={{ gap: 2, alignItems: 'stretch' }}
 								disableGutters
@@ -531,16 +533,18 @@ function AppUsageInterstitial({
 			</Stack>
 
 			<Box
-				position="sticky"
-				right={0}
-				left={0}
-				top={0}
-				bottom={0}
-				display="flex"
-				flexDirection="row"
-				justifyContent="center"
-				padding={6}
-				gap={4}
+				sx={{
+					position: 'sticky',
+					right: 0,
+					left: 0,
+					top: 0,
+					bottom: 0,
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'center',
+					padding: 6,
+					gap: 4,
+				}}
 			>
 				<Button
 					fullWidth

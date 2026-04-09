@@ -151,13 +151,17 @@ function RouteComponent() {
 	)
 
 	return (
-		<Box flex={1} display="grid" gridTemplateColumns="min-content 1fr">
+		<Box
+			sx={{ flex: 1, display: 'grid', gridTemplateColumns: 'min-content 1fr' }}
+		>
 			<Box
 				component="nav"
-				display="flex"
-				borderRight={`2px solid ${BLUE_GREY}`}
-				overflow="auto"
 				aria-label={t(m.projectNavigationAccessibleLabel)}
+				sx={{
+					display: 'flex',
+					borderRight: `2px solid ${BLUE_GREY}`,
+					overflow: 'auto',
+				}}
 			>
 				<List
 					dense
@@ -173,7 +177,7 @@ function RouteComponent() {
 						alignItems: 'stretch',
 					}}
 				>
-					<Stack direction="column" gap={5}>
+					<Stack direction="column" sx={{ gap: 5 }}>
 						<ListItem
 							dense
 							disableGutters
@@ -308,7 +312,7 @@ function RouteComponent() {
 						) : null}
 					</Stack>
 
-					<Stack direction="column" gap={5}>
+					<Stack direction="column" sx={{ gap: 5 }}>
 						{selfIsOnlyProjectMemberEver ? null : (
 							<ListItem
 								dense
@@ -347,7 +351,7 @@ function RouteComponent() {
 				</List>
 			</Box>
 
-			<Box component="main" display="flex" overflow="auto">
+			<Box component="main" sx={{ display: 'flex', overflow: 'auto' }}>
 				<Outlet />
 			</Box>
 		</Box>
@@ -399,12 +403,7 @@ function TestDataTabLink({
 }
 
 const BASE_INACTIVE_LINK_PROPS = {
-	sx: {
-		padding: 2,
-		aspectRatio: 1,
-		borderRadius: 2,
-		color: DARK_GREY,
-	},
+	sx: { padding: 2, aspectRatio: 1, borderRadius: 2, color: DARK_GREY },
 } satisfies IconButtonLinkProps['inactiveProps']
 
 const BASE_ACTIVE_LINK_PROPS = {

@@ -51,7 +51,7 @@ export function DataAndPrivacySection() {
 
 	return (
 		<>
-			<Stack direction="column" gap={4}>
+			<Stack direction="column" sx={{ gap: 4 }}>
 				<Typography
 					component="h2"
 					variant="body2"
@@ -62,22 +62,21 @@ export function DataAndPrivacySection() {
 
 				<Stack
 					direction="row"
-					border={`1px solid ${BLUE_GREY}`}
-					borderRadius={2}
-					gap={4}
-					padding={6}
+					sx={{
+						border: `1px solid ${BLUE_GREY}`,
+						borderRadius: 2,
+						gap: 4,
+						padding: 6,
+					}}
 				>
 					<Icon
 						name="material-symbols-encrypted-weight200"
-						sx={{
-							height: iconSize,
-							width: iconSize,
-						}}
+						sx={{ height: iconSize, width: iconSize }}
 						htmlColor={DARKER_ORANGE}
 					/>
 
-					<Stack direction="column" gap={2}>
-						<Typography component="h3" variant="body1" fontWeight={500}>
+					<Stack direction="column" sx={{ gap: 2 }}>
+						<Typography component="h3" variant="body1" sx={{ fontWeight: 500 }}>
 							{t(m.description)}
 						</Typography>
 
@@ -100,14 +99,17 @@ export function DataAndPrivacySection() {
 					</Stack>
 				</Stack>
 
-				<Stack direction="row" gap={6}>
+				<Stack direction="row" sx={{ gap: 6 }}>
 					<Stack
 						direction="column"
-						border={`1px solid ${BLUE_GREY}`}
-						borderRadius={2}
+						sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
 					>
-						<Stack padding={6} direction="column" gap={4} flex={1}>
-							<Typography component="h3" variant="body1" fontWeight={500}>
+						<Stack direction="column" sx={{ padding: 6, gap: 4, flex: 1 }}>
+							<Typography
+								component="h3"
+								variant="body1"
+								sx={{ fontWeight: 500 }}
+							>
 								{t(m.diagnosticInformationTitle)}
 							</Typography>
 
@@ -118,11 +120,7 @@ export function DataAndPrivacySection() {
 
 								<List
 									disablePadding
-									sx={{
-										listStyleType: 'disc',
-										paddingX: 8,
-										color: DARK_GREY,
-									}}
+									sx={{ listStyleType: 'disc', paddingX: 8, color: DARK_GREY }}
 								>
 									<ListItem disablePadding sx={{ display: 'list-item' }}>
 										<Typography color="textSecondary">
@@ -141,7 +139,7 @@ export function DataAndPrivacySection() {
 
 						<Divider variant="fullWidth" sx={{ backgroundColor: BLUE_GREY }} />
 
-						<Box paddingX={6} paddingY={4}>
+						<Box sx={{ paddingX: 6, paddingY: 4 }}>
 							<FormGroup>
 								<FormControlLabel
 									control={<Checkbox checked={diagnosticsEnabled} />}
@@ -152,17 +150,10 @@ export function DataAndPrivacySection() {
 											},
 										})
 									}}
-									slotProps={{
-										typography: {
-											fontWeight: 500,
-										},
-									}}
+									slotProps={{ typography: { sx: { fontWeight: 500 } } }}
 									label={t(m.shareDiagnosticInformation)}
 									labelPlacement="start"
-									sx={{
-										margin: 0,
-										justifyContent: 'space-between',
-									}}
+									sx={{ margin: 0, justifyContent: 'space-between' }}
 								/>
 							</FormGroup>
 						</Box>
@@ -170,11 +161,14 @@ export function DataAndPrivacySection() {
 
 					<Stack
 						direction="column"
-						border={`1px solid ${BLUE_GREY}`}
-						borderRadius={2}
+						sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
 					>
-						<Stack padding={6} direction="column" gap={4} flex={1}>
-							<Typography component="h3" variant="body1" fontWeight={500}>
+						<Stack direction="column" sx={{ padding: 6, gap: 4, flex: 1 }}>
+							<Typography
+								component="h3"
+								variant="body1"
+								sx={{ fontWeight: 500 }}
+							>
 								{t(m.appUsageTitle)}
 							</Typography>
 
@@ -185,11 +179,7 @@ export function DataAndPrivacySection() {
 
 								<List
 									disablePadding
-									sx={{
-										listStyleType: 'disc',
-										paddingX: 8,
-										color: DARK_GREY,
-									}}
+									sx={{ listStyleType: 'disc', paddingX: 8, color: DARK_GREY }}
 								>
 									<ListItem disablePadding sx={{ display: 'list-item' }}>
 										<Typography color="textSecondary">
@@ -208,7 +198,7 @@ export function DataAndPrivacySection() {
 
 						<Divider variant="fullWidth" sx={{ backgroundColor: BLUE_GREY }} />
 
-						<Box paddingX={6} paddingY={4}>
+						<Box sx={{ paddingX: 6, paddingY: 4 }}>
 							<FormGroup>
 								<FormControlLabel
 									control={
@@ -227,17 +217,10 @@ export function DataAndPrivacySection() {
 											},
 										)
 									}}
-									slotProps={{
-										typography: {
-											fontWeight: 500,
-										},
-									}}
+									slotProps={{ typography: { sx: { fontWeight: 500 } } }}
 									label={t(m.shareAppUsage)}
 									labelPlacement="start"
-									sx={{
-										margin: 0,
-										justifyContent: 'space-between',
-									}}
+									sx={{ margin: 0, justifyContent: 'space-between' }}
 								/>
 							</FormGroup>
 						</Box>
