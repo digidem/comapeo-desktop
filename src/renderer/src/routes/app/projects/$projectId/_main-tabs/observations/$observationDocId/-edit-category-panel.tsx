@@ -5,7 +5,7 @@ import {
 	useSingleDocByDocId,
 	useUpdateDocument,
 } from '@comapeo/core-react'
-import type { Observation, Preset } from '@comapeo/schema'
+import type { Observation, Preset } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import ButtonBase from '@mui/material/ButtonBase'
 import CircularProgress from '@mui/material/CircularProgress'

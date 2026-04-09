@@ -3,8 +3,10 @@ import path, { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 import { FastifyController, MapeoManager } from '@comapeo/core'
-import { createMapeoServer } from '@comapeo/ipc/server.js'
+import { createAppRpcServer, createMapeoServer } from '@comapeo/ipc/server.js'
+import { createServer as createMapServer } from '@comapeo/map-server'
 import ciao, { type Protocol } from '@homebridge/ciao'
+import { KeyManager } from '@mapeo/crypto'
 import * as Sentry from '@sentry/electron/utility'
 import debug from 'debug'
 import type { MessagePortMain } from 'electron'
@@ -59,13 +61,18 @@ sodium.sodium_malloc = function sodium_malloc_monkey_patched(n: number) {
 // @ts-expect-error Need patch
 sodium.sodium_free = function sodium_free_monkey_patched() {}
 
-const DATABASE_MIGRATIONS_DIRECTORY = fileURLToPath(
-	import.meta.resolve('@comapeo/core/drizzle'),
+const DATABASE_MIGRATIONS_DIRECTORY = join(
+	fileURLToPath(import.meta.resolve('@comapeo/core')),
+	'../../drizzle',
 )
 
 const DEFAULT_CONFIG_PATH = fileURLToPath(
 	import.meta
 		.resolve('@comapeo/default-categories/dist/comapeo-default-categories.comapeocat'),
+)
+
+const DEFAULT_FALLBACK_MAP_FILE_PATH = fileURLToPath(
+	import.meta.resolve('@comapeo/fallback-smp'),
 )
 
 // Do not touch these!
@@ -76,7 +83,7 @@ const DEFAULT_CUSTOM_MAP_FILE_NAME = 'default.smp'
 
 const ProcessArgsSchema = v.object({
 	logsDirectory: v.string(),
-	onlineStyleUrl: v.optional(v.pipe(v.string(), v.url())),
+	onlineStyleUrl: v.pipe(v.string(), v.url()),
 	rootKey: v.pipe(
 		v.string(),
 		v.hexadecimal(),
@@ -102,7 +109,7 @@ const { onlineStyleUrl, rootKey, storageDirectory } = v.parse(
 	values,
 )
 
-const { manager } = initializeCore({
+const { manager, mapServer } = initializeCore({
 	onlineStyleUrl,
 	rootKey,
 	storageDirectory,
@@ -113,7 +120,7 @@ initializePeerDiscovery(manager).catch((err) => {
 	Sentry.captureException(err)
 })
 
-const connectedClientPorts: WeakSet<MessagePortMain> = new WeakSet()
+const connectedRpcPorts: WeakSet<MessagePortMain> = new WeakSet()
 
 // We might get multiple clients, for instance if there are multiple windows,
 // or if the main window reloads.
@@ -123,34 +130,63 @@ process.parentPort.on('message', (event) => {
 		return
 	}
 
-	const [port] = event.ports
+	const [comapeoChannelPort, appChannelPort] = event.ports
 
-	if (!port) {
-		throw new Error('Expected port to be defined')
+	if (!comapeoChannelPort) {
+		throw new Error('Expected comapeoChannelPort to be defined')
 	}
 
-	if (connectedClientPorts.has(port)) {
-		log(
-			`Ignoring '${event.data.type}' message because message port already initialized`,
-		)
-		return
+	if (!appChannelPort) {
+		throw new Error('Expected appChannelPort to be defined')
 	}
 
 	const { clientId } = event.data.payload
 
-	log('Adding new client', clientId)
+	if (connectedRpcPorts.has(comapeoChannelPort)) {
+		log(
+			`CoMapeo channel message port already set up for '${event.data.type}' message from client ${clientId}.`,
+		)
+	} else {
+		const server = createMapeoServer(
+			manager,
+			new MessagePortLike(comapeoChannelPort),
+		)
 
-	const server = createMapeoServer(manager, new MessagePortLike(port))
+		comapeoChannelPort.on('close', () => {
+			log(`CoMapeo channel port associated with client ${clientId} closed`)
+			server.close()
+			connectedRpcPorts.delete(comapeoChannelPort)
+		})
 
-	port.on('close', () => {
-		log(`Port associated with client ${clientId} closed`)
-		server.close()
-		connectedClientPorts.delete(port)
-	})
+		connectedRpcPorts.add(comapeoChannelPort)
 
-	connectedClientPorts.add(port)
+		comapeoChannelPort.start()
 
-	port.start()
+		log(`Initialized comapeo rpc server for client ${clientId}`)
+	}
+
+	if (connectedRpcPorts.has(appChannelPort)) {
+		log(
+			`App channel message port already set up for '${event.data.type}' message from client ${clientId}.`,
+		)
+	} else {
+		const server = createAppRpcServer(
+			{ mapServer },
+			new MessagePortLike(appChannelPort),
+		)
+
+		appChannelPort.on('close', () => {
+			log(`App channel port associated with client ${clientId} closed`)
+			server.close()
+			connectedRpcPorts.delete(appChannelPort)
+		})
+
+		connectedRpcPorts.add(appChannelPort)
+
+		appChannelPort.start()
+
+		log(`Initialized app rpc server for client ${clientId}`)
+	}
 })
 
 function initializeCore({
@@ -158,7 +194,7 @@ function initializeCore({
 	rootKey,
 	storageDirectory,
 }: {
-	onlineStyleUrl?: string
+	onlineStyleUrl: string
 	rootKey: Buffer
 	storageDirectory: string
 }) {
@@ -202,10 +238,30 @@ function initializeCore({
 		customMapPath: path.join(customMapsDirectory, DEFAULT_CUSTOM_MAP_FILE_NAME),
 	})
 
-	// Don't await, methods that use the server will await this internally
-	fastifyController.start().catch(noop)
+	const mapServerKeyPair = new KeyManager(rootKey).getIdentityKeypair()
 
-	return { manager, fastifyController }
+	const mapServer = createMapServer({
+		customMapPath: path.join(customMapsDirectory, DEFAULT_CUSTOM_MAP_FILE_NAME),
+		defaultOnlineStyleUrl: onlineStyleUrl,
+		fallbackMapPath: DEFAULT_FALLBACK_MAP_FILE_PATH,
+		keyPair: mapServerKeyPair,
+	})
+
+	// Don't await, RPC client should call `appRpc.mapServer.getPorts()` to await
+	mapServer.listen().catch((err) => {
+		Sentry.captureException(err)
+	})
+
+	// Don't await, methods that use the server will await this internally
+	fastifyController.start().catch((err) => {
+		Sentry.captureException(err)
+	})
+
+	return {
+		manager,
+		mapServer,
+		fastifyController,
+	}
 }
 
 async function initializePeerDiscovery(manager: MapeoManager) {
@@ -274,5 +330,3 @@ function writeErrorToLogs(logsDirectory: string, error: Error) {
 		`${new Date().toISOString()} ${error.stack || error.toString()}\n`,
 	)
 }
-
-function noop() {}

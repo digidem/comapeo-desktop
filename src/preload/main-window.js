@@ -4,10 +4,17 @@ window.onmessage = (event) => {
 	// event.source === window means the message is coming from the preload
 	// script, as opposed to from an <iframe> or other source.
 	if (event.source !== window) return
+
 	if (event.data !== 'comapeo-port') return
-	const [port] = event.ports
-	if (!port) return // TODO: throw/report error
-	ipcRenderer.postMessage('comapeo-port', null, [port])
+
+	const [comapeoChannelPort, appChannelPort] = event.ports
+
+	if (!(comapeoChannelPort && appChannelPort)) return // TODO: throw/report error
+
+	ipcRenderer.postMessage('comapeo-port', null, [
+		comapeoChannelPort,
+		appChannelPort,
+	])
 }
 
 /**

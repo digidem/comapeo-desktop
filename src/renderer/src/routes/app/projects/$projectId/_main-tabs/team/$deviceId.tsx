@@ -29,7 +29,6 @@ import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
-	MEMBER_ROLE_ID,
 	memberIsRemoteArchive,
 } from '../../../../../../lib/comapeo.ts'
 import { createGlobalMutationsKey } from '../../../../../../lib/queries/global-mutations.ts'
@@ -315,20 +314,16 @@ function LeaveProjectDialogContent({
 
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
-	const { data: members } = useManyMembers({ projectId })
+	const { data: activeMembers } = useManyMembers({
+		projectId,
+		includeLeft: false,
+	})
 
-	const member = members.find((m) => m.deviceId === deviceId)!
+	const member = activeMembers.find((m) => m.deviceId === deviceId)!
 
 	const isAtLeastCoordinator =
 		member.role.roleId === CREATOR_ROLE_ID ||
 		member.role.roleId === COORDINATOR_ROLE_ID
-
-	const activeMembers = members.filter(
-		(m) =>
-			m.role.roleId === CREATOR_ROLE_ID ||
-			m.role.roleId === COORDINATOR_ROLE_ID ||
-			m.role.roleId === MEMBER_ROLE_ID,
-	)
 
 	const isLastActiveDevice =
 		activeMembers.length === 1 && activeMembers[0]!.deviceId === deviceId

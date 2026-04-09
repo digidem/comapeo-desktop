@@ -6,7 +6,7 @@ import {
 	useSingleDocByDocId,
 	useUpdateDocument,
 } from '@comapeo/core-react'
-import type { Observation } from '@comapeo/schema'
+import type { Observation } from '@comapeo/core/schema.js'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'

@@ -9,7 +9,7 @@ import {
 	type RefObject,
 } from 'react'
 import { useManyDocs, useOwnDeviceInfo } from '@comapeo/core-react'
-import type { Observation, Preset, Track } from '@comapeo/schema'
+import type { Observation, Preset, Track } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import List from '@mui/material/List'

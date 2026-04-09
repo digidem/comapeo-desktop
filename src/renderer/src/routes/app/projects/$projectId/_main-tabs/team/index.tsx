@@ -63,9 +63,10 @@ export const Route = createFileRoute(
 					'projects',
 					projectId,
 					'members',
+					{ includeLeft: true },
 				],
 				queryFn: async () => {
-					return projectApi.$member.getMany()
+					return projectApi.$member.getMany({ includeLeft: true })
 				},
 			}),
 		])
@@ -147,7 +148,7 @@ function InviteButtonSection({ projectId }: { projectId: string }) {
 function MembersSections({ projectId }: { projectId: string }) {
 	const { formatMessage: t } = useIntl()
 
-	const { data: members } = useManyMembers({ projectId })
+	const { data: members } = useManyMembers({ projectId, includeLeft: true })
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
 	const { coordinators, participants, pastCollaborators, remoteArchives } =

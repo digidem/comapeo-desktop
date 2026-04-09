@@ -22,7 +22,6 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs')({
 	validateSearch: SearchParamsSchema,
 	loader: async ({ context, params }) => {
 		const {
-			clientApi,
 			projectApi,
 			queryClient,
 			localeState: { value: lang },
@@ -30,12 +29,6 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs')({
 		const { projectId } = params
 
 		await Promise.all([
-			queryClient.ensureQueryData({
-				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'maps', 'stylejson_url'],
-				queryFn: async () => {
-					return clientApi.getMapStyleJsonUrl()
-				},
-			}),
 			queryClient.ensureQueryData({
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,

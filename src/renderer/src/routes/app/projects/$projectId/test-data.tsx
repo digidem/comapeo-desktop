@@ -5,7 +5,7 @@ import {
 	useOwnDeviceInfo,
 	usePresetsSelection,
 } from '@comapeo/core-react'
-import type { Observation, Track } from '@comapeo/schema'
+import type { Observation, Track } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
@@ -34,7 +34,7 @@ import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { GenericRoutePendingComponent } from '../../../../components/generic-route-pending-component.tsx'
 import { Map } from '../../../../components/map.tsx'
 import { useAppForm } from '../../../../hooks/forms.ts'
-import { useMapsRefreshToken } from '../../../../hooks/maps.ts'
+import { useNetworkAwareMapStyleUrl } from '../../../../hooks/maps.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo.ts'
 import { getLocaleStateQueryOptions } from '../../../../lib/queries/app-settings.ts'
 import { createGlobalMutationsKey } from '../../../../lib/queries/global-mutations.ts'
@@ -544,14 +544,12 @@ function DisplayedMap({
 		boundingBox ? [bboxPolygon(boundingBox)] : [],
 	)
 
-	const mapsRefreshToken = useMapsRefreshToken()
-	const { data: mapStyleUrl } = useMapStyleUrl({
-		refreshToken: mapsRefreshToken,
-	})
+	const { data: originalStyleUrl } = useMapStyleUrl()
+	const styleUrl = useNetworkAwareMapStyleUrl(originalStyleUrl)
 
 	return (
 		<Map
-			mapStyle={mapStyleUrl}
+			mapStyle={styleUrl}
 			initialViewState={{
 				fitBoundsOptions: {
 					padding: 40,

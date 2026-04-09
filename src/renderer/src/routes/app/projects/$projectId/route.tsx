@@ -93,9 +93,10 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 					'projects',
 					projectId,
 					'members',
+					{ includeLeft: true },
 				],
 				queryFn: async () => {
-					return projectApi.$member.getMany()
+					return projectApi.$member.getMany({ includeLeft: true })
 				},
 			}),
 		])
@@ -135,7 +136,7 @@ function RouteComponent() {
 	const isCoordinator =
 		role.roleId === CREATOR_ROLE_ID || role.roleId === COORDINATOR_ROLE_ID
 
-	const { data: members } = useManyMembers({ projectId })
+	const { data: members } = useManyMembers({ projectId, includeLeft: true })
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
 	const selfIsOnlyProjectMemberEver =

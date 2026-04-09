@@ -119,8 +119,10 @@ jobs:
         env:
           APP_TYPE: 'internal'
           COMAPEO_TEST: 'true'
+          ONLINE_STYLE_URL: ${{ secrets.ONLINE_STYLE_URL }}
           SENTRY_DSN: ${{ vars.COMAPEO_SENTRY_DSN }}
           VITE_FEATURE_TEST_DATA_UI: 'true'
+          VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
           ### Uncomment the following if sourcemap uploads are needed for improved debugging
           # SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           # SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
