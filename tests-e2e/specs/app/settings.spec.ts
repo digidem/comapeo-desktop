@@ -829,7 +829,7 @@ test('coordinate system', async ({ appInfo, userParams }) => {
 	}
 })
 
-test.only('background map', async ({ appInfo, userParams }) => {
+test('background map', async ({ appInfo, userParams }) => {
 	const { launchApp, cleanup } = await setup()
 	const electronApp = await launchApp({ appInfo })
 
