@@ -14,6 +14,8 @@ export function useNetworkAwareMapStyleUrl(url: string) {
 			let timeoutId: number | undefined
 
 			function handleOnOnline() {
+				// TODO: Should eventually remove this delay
+				// https://github.com/digidem/comapeo-map-server/issues/44
 				timeoutId = window.setTimeout(() => {
 					setRefreshToken(Date.now().toString())
 				}, 3_000)
