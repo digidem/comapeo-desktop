@@ -1,13 +1,9 @@
-import { useEffect, useEffectEvent, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export function useNetworkAwareMapStyleUrl(url: string) {
 	const [refreshToken, setRefreshToken] = useState<string | undefined>(
 		undefined,
 	)
-
-	const handleOnOnline = useEffectEvent(() => {
-		setRefreshToken(Date.now().toString())
-	})
 
 	useEffect(
 		/**
@@ -15,13 +11,23 @@ export function useNetworkAwareMapStyleUrl(url: string) {
 		 * connected.
 		 */
 		function updateRefreshTokenWhenOnline() {
+			let timeoutId: number | undefined
+
+			function handleOnOnline() {
+				timeoutId = window.setTimeout(() => {
+					setRefreshToken(Date.now().toString())
+				}, 3_000)
+			}
+
 			window.addEventListener('online', handleOnOnline, { passive: true })
 
 			return () => {
 				window.removeEventListener('online', handleOnOnline)
+				window.clearTimeout(timeoutId)
+				timeoutId = undefined
 			}
 		},
-		[],
+		[setRefreshToken],
 	)
 
 	const result = useMemo(() => {
