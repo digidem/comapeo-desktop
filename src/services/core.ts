@@ -61,8 +61,9 @@ sodium.sodium_malloc = function sodium_malloc_monkey_patched(n: number) {
 // @ts-expect-error Need patch
 sodium.sodium_free = function sodium_free_monkey_patched() {}
 
-const DATABASE_MIGRATIONS_DIRECTORY = fileURLToPath(
-	join(import.meta.resolve('@comapeo/core'), '../../drizzle'),
+const DATABASE_MIGRATIONS_DIRECTORY = join(
+	fileURLToPath(import.meta.resolve('@comapeo/core')),
+	'../../drizzle',
 )
 
 const DEFAULT_CONFIG_PATH = fileURLToPath(
