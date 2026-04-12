@@ -160,7 +160,7 @@
 		"react": "19.2.5",
 		"react-dom": "19.2.5",
 		"react-intl": "10.1.1",
-		"react-map-gl": "8.1.0",
+		"react-map-gl": "8.1.1",
 		"semver": "7.7.4",
 		"spin-delay": "2.0.1",
 		"typescript": "6.0.2",
