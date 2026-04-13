@@ -36,13 +36,15 @@ export function NetworkConnectionInfo({
 	return (
 		<Stack
 			direction="row"
-			gap={3}
-			alignItems="center"
-			justifyContent="center"
-			overflow="auto"
+			sx={{
+				gap: 3,
+				alignItems: 'center',
+				justifyContent: 'center',
+				overflow: 'auto',
+			}}
 		>
 			{isRefetchingWifiConnection ? (
-				<Typography fontWeight={500}>{waitingText}</Typography>
+				<Typography sx={{ fontWeight: 500 }}>{waitingText}</Typography>
 			) : (
 				<>
 					<WifiIcon
@@ -50,7 +52,7 @@ export function NetworkConnectionInfo({
 						size={wifiIconSize}
 					/>
 
-					<Typography fontWeight={500}>
+					<Typography sx={{ fontWeight: 500 }}>
 						{wifiConnection &&
 						// NOTE: Issue with systeminformation module on macOS >=15.6 (https://github.com/digidem/comapeo-desktop/issues/378)
 						wifiConnection.ssid !== '&lt;redacted&gt;' &&
@@ -79,12 +81,14 @@ function WifiIcon({
 }) {
 	return (
 		<Box
-			display="flex"
-			justifyContent="center"
-			alignItems="center"
-			borderRadius="50%"
-			padding={1}
-			bgcolor={LIGHT_COMAPEO_BLUE}
+			sx={{
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+				borderRadius: '50%',
+				padding: 1,
+				bgcolor: LIGHT_COMAPEO_BLUE,
+			}}
 		>
 			<Icon
 				name={offline ? 'material-wifi-off' : 'material-wifi'}

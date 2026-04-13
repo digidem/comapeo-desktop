@@ -33,13 +33,13 @@ export function ReadOnlyFieldSection({
 	const { formatMessage: t } = useIntl()
 
 	return (
-		<Stack direction="column" gap={2}>
-			<Typography component="h3" variant="body1" fontWeight={450}>
+		<Stack direction="column" sx={{ gap: 2 }}>
+			<Typography component="h3" variant="body1" sx={{ fontWeight: 450 }}>
 				{label}
 			</Typography>
 
-			<Box padding={2}>
-				<Typography fontStyle={value ? undefined : 'italic'}>
+			<Box sx={{ padding: 2 }}>
+				<Typography sx={{ fontStyle: value ? undefined : 'italic' }}>
 					{value || t(m.fieldAnswerNoAnswer)}
 				</Typography>
 			</Box>
@@ -262,7 +262,11 @@ export function EditableFieldSection({
 					}
 				}}
 				sectionTitle={
-					<Typography component="span" variant="inherit" fontWeight={450}>
+					<Typography
+						component="span"
+						variant="inherit"
+						sx={{ fontWeight: 450 }}
+					>
 						{field.label}
 					</Typography>
 				}
@@ -284,7 +288,9 @@ export function EditableFieldSection({
 
 						return (
 							<Typography
-								fontStyle={displayedVariableValue ? undefined : 'italic'}
+								sx={{
+									fontStyle: displayedVariableValue ? undefined : 'italic',
+								}}
 							>
 								{displayedVariableValue || t(m.fieldAnswerNoAnswer)}
 							</Typography>
@@ -293,7 +299,9 @@ export function EditableFieldSection({
 
 					return (
 						<Typography
-							fontStyle={displayedReadOnlyTagValue ? undefined : 'italic'}
+							sx={{
+								fontStyle: displayedReadOnlyTagValue ? undefined : 'italic',
+							}}
 						>
 							{displayedReadOnlyTagValue || t(m.fieldAnswerNoAnswer)}
 						</Typography>

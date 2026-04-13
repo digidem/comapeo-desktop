@@ -33,9 +33,7 @@ export const Route = createFileRoute('/onboarding/device-name')({
 			},
 		})
 	},
-	staticData: {
-		onboardingStepNumber: 2,
-	},
+	staticData: { onboardingStepNumber: 2 },
 	component: RouteComponent,
 })
 
@@ -63,12 +61,8 @@ function RouteComponent() {
 	}, [t])
 
 	const form = useAppForm({
-		defaultValues: {
-			deviceName: deviceInfo.name ? deviceInfo.name : '',
-		},
-		validators: {
-			onChange: v.object({ deviceName: deviceNameSchema }),
-		},
+		defaultValues: { deviceName: deviceInfo.name ? deviceInfo.name : '' },
+		validators: { onChange: v.object({ deviceName: deviceNameSchema }) },
 		onSubmit: async ({ value }) => {
 			const parsedDeviceName = v.parse(deviceNameSchema, value.deviceName)
 
@@ -94,19 +88,26 @@ function RouteComponent() {
 	return (
 		<>
 			<Stack
-				display="flex"
 				direction="column"
-				justifyContent="space-between"
-				flex={1}
-				gap={10}
-				bgcolor={LIGHT_GREY}
-				padding={10}
-				borderRadius={2}
-				overflow="auto"
+				sx={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					flex: 1,
+					gap: 10,
+					bgcolor: LIGHT_GREY,
+					padding: 10,
+					borderRadius: 2,
+					overflow: 'auto',
+				}}
 			>
-				<Container maxWidth="sm" component={Stack} direction="column" gap={10}>
-					<Stack direction="column" gap={5}>
-						<Box alignSelf="center">
+				<Container
+					maxWidth="sm"
+					component={Stack}
+					direction="column"
+					sx={{ gap: 10 }}
+				>
+					<Stack direction="column" sx={{ gap: 5 }}>
+						<Box sx={{ alignSelf: 'center' }}>
 							<Icon
 								name="material-symbols-computer"
 								htmlColor={DARKER_ORANGE}
@@ -114,12 +115,18 @@ function RouteComponent() {
 							/>
 						</Box>
 
-						<Typography variant="h1" fontWeight={500} textAlign="center">
+						<Typography
+							variant="h1"
+							sx={{ fontWeight: 500, textAlign: 'center' }}
+						>
 							{t(m.title)}
 						</Typography>
 					</Stack>
 
-					<Typography variant="h2" fontWeight={400} textAlign="center">
+					<Typography
+						variant="h2"
+						sx={{ fontWeight: 400, textAlign: 'center' }}
+					>
 						{t(m.description)}
 					</Typography>
 
@@ -151,19 +158,13 @@ function RouteComponent() {
 									onChange={(event) => {
 										field.handleChange(event.target.value)
 									}}
-									slotProps={{
-										input: {
-											style: {
-												backgroundColor: WHITE,
-											},
-										},
-									}}
+									slotProps={{ input: { style: { backgroundColor: WHITE } } }}
 									onBlur={field.handleBlur}
 									helperText={
 										<Stack
 											component="span"
 											direction="row"
-											justifyContent="space-between"
+											sx={{ justifyContent: 'space-between' }}
 										>
 											<Box component="span">
 												{field.state.meta.errors[0]?.message}
@@ -194,7 +195,7 @@ function RouteComponent() {
 					</Box>
 				</Container>
 
-				<Box display="flex" justifyContent="center">
+				<Box sx={{ display: 'flex', justifyContent: 'center' }}>
 					<form.Subscribe selector={(state) => state.canSubmit}>
 						{(canSubmit) => (
 							<Button

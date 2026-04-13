@@ -35,23 +35,27 @@ function RouteComponent() {
 
 	return (
 		<Container maxWidth="md" disableGutters>
-			<Stack direction="column" flex={1}>
-				<Stack direction="column" flex={1} overflow="auto">
-					<Stack direction="column" padding={6} gap={6}>
+			<Stack direction="column" sx={{ flex: 1 }}>
+				<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+					<Stack direction="column" sx={{ padding: 6, gap: 6 }}>
 						<Box
-							bgcolor={LIGHT_GREY}
-							border={`1px solid ${BLUE_GREY}`}
-							borderRadius={2}
-							padding={4}
+							sx={{
+								bgcolor: LIGHT_GREY,
+								border: `1px solid ${BLUE_GREY}`,
+								borderRadius: 2,
+								padding: 4,
+							}}
 						>
-							<Typography textAlign="center">{t(m.description)}</Typography>
+							<Typography sx={{ textAlign: 'center' }}>
+								{t(m.description)}
+							</Typography>
 						</Box>
 
 						<Divider />
 
 						<Suspense
 							fallback={
-								<Box display="grid" sx={{ placeItems: 'center' }}>
+								<Box sx={{ display: 'grid', placeItems: 'center' }}>
 									<CircularProgress disableShrink />
 								</Box>
 							}
@@ -116,9 +120,12 @@ function CustomMap() {
 			>
 				{() => (
 					<Stack direction="column">
-						<Stack direction="column" gap={10} flex={1} padding={20}>
-							<Stack direction="column" alignItems="center" gap={4}>
-								<Typography variant="h1" fontWeight={500} textAlign="center">
+						<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+							<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
+								<Typography
+									variant="h1"
+									sx={{ fontWeight: 500, textAlign: 'center' }}
+								>
 									{t(m.mapUpdateSuccessTitle)}
 								</Typography>
 
@@ -127,11 +134,13 @@ function CustomMap() {
 						</Stack>
 
 						<Box
-							position="sticky"
-							bottom={0}
-							display="flex"
-							justifyContent="center"
-							padding={6}
+							sx={{
+								position: 'sticky',
+								bottom: 0,
+								display: 'flex',
+								justifyContent: 'center',
+								padding: 6,
+							}}
 						>
 							<Button
 								fullWidth
@@ -175,7 +184,7 @@ function CustomMapInfo({
 	if (customMapInfo.status === 'error') {
 		if (getErrorCode(customMapInfo.error) === 'MAP_NOT_FOUND') {
 			return (
-				<Stack direction="column" gap={5}>
+				<Stack direction="column" sx={{ gap: 5 }}>
 					<Button
 						component="label"
 						variant="outlined"
@@ -192,7 +201,7 @@ function CustomMapInfo({
 						<HiddenSelectFileInput onClick={onChooseMap} />
 					</Button>
 
-					<Typography color="textSecondary" textAlign="center">
+					<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
 						{t(m.acceptedFileTypes)}
 					</Typography>
 				</Stack>
@@ -200,9 +209,10 @@ function CustomMapInfo({
 		}
 
 		return (
-			<Stack direction="column" gap={4}>
-				<Typography textAlign="center">{t(m.customMapInfoError)}</Typography>
-
+			<Stack direction="column" sx={{ gap: 4 }}>
+				<Typography sx={{ textAlign: 'center' }}>
+					{t(m.customMapInfoError)}
+				</Typography>
 				<Button
 					component="label"
 					variant="outlined"
@@ -240,8 +250,8 @@ function CustomMapInfo({
 	const displayedSize = parseInt(calculatedSize, 10) < 1 ? '<1' : calculatedSize
 
 	return (
-		<Stack direction="column" gap={4}>
-			<Stack direction="row" justifyContent="space-between">
+		<Stack direction="column" sx={{ gap: 4 }}>
+			<Stack direction="row" sx={{ justifyContent: 'space-between' }}>
 				<Typography color="textSecondary">{t(m.mapNameColumnLabel)}</Typography>
 
 				<Typography color="textSecondary">
@@ -251,18 +261,22 @@ function CustomMapInfo({
 
 			<Stack
 				direction="column"
-				border={`1px solid ${BLUE_GREY}`}
-				borderRadius={2}
-				padding={5}
-				gap={5}
+				sx={{
+					border: `1px solid ${BLUE_GREY}`,
+					borderRadius: 2,
+					padding: 5,
+					gap: 5,
+				}}
 			>
-				<Stack direction="row" gap={2}>
-					<Stack direction="column" flex={1} overflow="hidden">
+				<Stack direction="row" sx={{ gap: 2 }}>
+					<Stack direction="column" sx={{ flex: 1, overflow: 'hidden' }}>
 						<Typography
-							textOverflow="ellipsis"
-							whiteSpace="nowrap"
-							overflow="hidden"
-							fontWeight={500}
+							sx={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								fontWeight: 500,
+							}}
 						>
 							{customMapInfo.data.name}
 						</Typography>

@@ -6,7 +6,6 @@ import js from '@eslint/js'
 import pluginQuery from '@tanstack/eslint-plugin-query'
 import pluginRouter from '@tanstack/eslint-plugin-router'
 import formatjs from 'eslint-plugin-formatjs'
-import pluginReactHooks from 'eslint-plugin-react-hooks'
 import { reactRefresh } from 'eslint-plugin-react-refresh'
 import { defineConfig } from 'eslint/config'
 import globals from 'globals'
@@ -77,7 +76,6 @@ export default defineConfig(
 		extends: [
 			react.configs['recommended-typescript'],
 			pluginRouter.configs['flat/recommended'],
-			pluginReactHooks.configs.flat.recommended,
 			pluginQuery.configs['flat/recommended'],
 			reactRefresh.configs.vite({
 				// https://github.com/ArnaudBarre/eslint-plugin-react-refresh/releases/tag/v0.5.0
@@ -85,8 +83,8 @@ export default defineConfig(
 			}),
 		],
 		rules: {
-			'react-hooks/exhaustive-deps': 'error',
-			'react-hooks/rules-of-hooks': 'error',
+			'@eslint-react/exhaustive-deps': 'error',
+			'@eslint-react/rules-of-hooks': 'error',
 			'@tanstack/query/exhaustive-deps': [
 				'error',
 				{

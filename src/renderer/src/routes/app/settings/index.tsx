@@ -40,46 +40,53 @@ function RouteComponent() {
 	})
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
-			<Stack direction="column" gap={6} padding={6}>
-				<Stack direction="row" gap={4} alignItems="center" flex={1}>
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack direction="column" sx={{ gap: 6, padding: 6 }}>
+				<Stack direction="row" sx={{ gap: 4, alignItems: 'center', flex: 1 }}>
 					<Icon
 						name="material-settings"
 						size={headerIconHeight}
 						htmlColor={DARKER_ORANGE}
 					/>
 
-					<Typography variant="h1" fontWeight={500} textAlign="center">
+					<Typography
+						variant="h1"
+						sx={{ fontWeight: 500, textAlign: 'center' }}
+					>
 						{t(m.title)}
 					</Typography>
 				</Stack>
 			</Stack>
 
-			<Box paddingInline={6}>
+			<Box sx={{ paddingInline: 6 }}>
 				<Divider variant="fullWidth" sx={{ borderColor: BLUE_GREY }} />
 			</Box>
 
 			<Box
-				display="flex"
-				flex={1}
-				overflow="auto"
-				sx={{ scrollbarGutter: 'stable both-edges' }}
+				sx={{
+					display: 'flex',
+					flex: 1,
+					overflow: 'auto',
+					scrollbarGutter: 'stable both-edges',
+				}}
 			>
 				<Suspense
 					fallback={
 						<Box
-							display="flex"
-							flexDirection="column"
-							alignItems="center"
-							justifyContent="center"
-							flex={1}
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								alignItems: 'center',
+								justifyContent: 'center',
+								flex: 1,
+							}}
 						>
 							<CircularProgress disableShrink />
 						</Box>
 					}
 				>
 					<Container maxWidth="md" disableGutters>
-						<Stack direction="column" gap={6} padding={6}>
+						<Stack direction="column" sx={{ gap: 6, padding: 6 }}>
 							<SettingsList />
 
 							<DataAndPrivacySection />
@@ -126,7 +133,7 @@ function SettingsList() {
 	})
 
 	return (
-		<Stack direction="column" gap={4}>
+		<Stack direction="column" sx={{ gap: 4 }}>
 			<Typography
 				component="h2"
 				variant="body2"
@@ -137,11 +144,13 @@ function SettingsList() {
 
 			<List disablePadding>
 				<Box
-					flex={1}
-					display="grid"
-					gridTemplateColumns={`1fr 1fr`}
-					rowGap={6}
-					columnGap={6}
+					sx={{
+						flex: 1,
+						display: 'grid',
+						gridTemplateColumns: `1fr 1fr`,
+						rowGap: 6,
+						columnGap: 6,
+					}}
 				>
 					<ListItem
 						disableGutters
@@ -280,8 +289,8 @@ function AboutCoMapeoSection() {
 	const { formatMessage: t } = useIntl()
 
 	return (
-		<Stack direction="column" gap={4}>
-			<Stack direction="column" gap={4}>
+		<Stack direction="column" sx={{ gap: 4 }}>
+			<Stack direction="column" sx={{ gap: 4 }}>
 				<Typography
 					component="h2"
 					variant="body2"
@@ -292,15 +301,21 @@ function AboutCoMapeoSection() {
 
 				<Stack
 					direction="column"
-					border={`1px solid ${BLUE_GREY}`}
-					borderRadius={2}
-					gap={4}
-					flex={1}
+					sx={{
+						border: `1px solid ${BLUE_GREY}`,
+						borderRadius: 2,
+						gap: 4,
+						flex: 1,
+					}}
 				>
 					<List>
 						<ListItem>
-							<Stack direction="column" gap={3}>
-								<Typography component="h3" variant="body1" fontWeight={500}>
+							<Stack direction="column" sx={{ gap: 3 }}>
+								<Typography
+									component="h3"
+									variant="body1"
+									sx={{ fontWeight: 500 }}
+								>
 									{t(m.aboutCoMapeoVersionLabel)}
 								</Typography>
 

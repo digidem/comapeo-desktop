@@ -15,62 +15,65 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 
 	return (
 		<Stack
-			bgcolor={WHITE}
 			direction="column"
-			flex={1}
-			gap={6}
-			height="100%"
-			overflow="auto"
+			sx={{ bgcolor: WHITE, flex: 1, gap: 6, height: '100%', overflow: 'auto' }}
 		>
-			<Stack direction="column" flex={1} gap={6} padding={6}>
+			<Stack direction="column" sx={{ flex: 1, gap: 6, padding: 6 }}>
 				<Typography
 					variant="h1"
 					color="error"
-					fontWeight={500}
-					textAlign="center"
+					sx={{ fontWeight: 500, textAlign: 'center' }}
 				>
 					{t(m.somethingWentWrong)}
 				</Typography>
 
-				<Typography variant="h2" fontWeight={500}>
+				<Typography variant="h2" sx={{ fontWeight: 500 }}>
 					{t(m.error)}
 				</Typography>
 
 				<Box
-					bgcolor={LIGHT_GREY}
-					padding={4}
-					border={`1px solid ${BLUE_GREY}`}
-					overflow="auto"
-					borderRadius={2}
+					sx={{
+						bgcolor: LIGHT_GREY,
+						padding: 4,
+						border: `1px solid ${BLUE_GREY}`,
+						overflow: 'auto',
+						borderRadius: 2,
+					}}
 				>
 					<Typography
 						component="pre"
 						variant="body2"
-						fontFamily="monospace"
-						whiteSpace="pre-wrap"
-						sx={{ overflowWrap: 'break-word' }}
+						sx={{
+							fontFamily: 'monospace',
+							whiteSpace: 'pre-wrap',
+							overflowWrap: 'break-word',
+						}}
 					>
 						{error.toString()}
 					</Typography>
 				</Box>
 
-				<Typography variant="h2" fontWeight={500}>
+				<Typography variant="h2" sx={{ fontWeight: 500 }}>
 					{t(m.stackTrace)}
 				</Typography>
 
 				<Box
-					bgcolor={LIGHT_GREY}
-					padding={4}
-					border={`1px solid ${BLUE_GREY}`}
-					overflow="auto"
-					borderRadius={2}
+					sx={{
+						bgcolor: LIGHT_GREY,
+						padding: 4,
+						border: `1px solid ${BLUE_GREY}`,
+						overflow: 'auto',
+						borderRadius: 2,
+					}}
 				>
 					<Typography
 						component="pre"
 						variant="body2"
-						fontFamily="monospace"
-						whiteSpace="pre-wrap"
-						sx={{ overflowWrap: 'break-word' }}
+						sx={{
+							fontFamily: 'monospace',
+							whiteSpace: 'pre-wrap',
+							overflowWrap: 'break-word',
+						}}
 					>
 						{error.stack}
 					</Typography>
@@ -78,13 +81,15 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 			</Stack>
 
 			<Box
-				position="sticky"
-				bottom={0}
-				padding={6}
-				display="flex"
-				flexDirection="column"
-				alignItems="center"
-				gap={4}
+				sx={{
+					position: 'sticky',
+					bottom: 0,
+					padding: 6,
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+					gap: 4,
+				}}
 			>
 				<Button
 					fullWidth

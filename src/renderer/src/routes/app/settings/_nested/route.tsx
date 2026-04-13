@@ -47,9 +47,9 @@ function RouteComponent() {
 	})
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
-			<Stack direction="column" gap={6} padding={6}>
-				<Stack direction="row" gap={4} alignItems="center" flex={1}>
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack direction="column" sx={{ gap: 6, padding: 6 }}>
+				<Stack direction="row" sx={{ gap: 4, alignItems: 'center', flex: 1 }}>
 					<IconButton
 						onClick={() => {
 							if (router.history.canGoBack()) {
@@ -82,7 +82,7 @@ function RouteComponent() {
 							aria-current="page"
 							sx={{ textDecoration: 'none' }}
 						>
-							<Typography color="textPrimary" fontWeight={500}>
+							<Typography color="textPrimary" sx={{ fontWeight: 500 }}>
 								{t(currentRoute.staticData.getNavTitle!())}
 							</Typography>
 						</TextLink>
@@ -90,15 +90,17 @@ function RouteComponent() {
 				</Stack>
 			</Stack>
 
-			<Box paddingInline={6}>
+			<Box sx={{ paddingInline: 6 }}>
 				<Divider variant="fullWidth" sx={{ borderColor: BLUE_GREY }} />
 			</Box>
 
 			<Box
-				overflow="auto"
-				display="flex"
-				flex={1}
-				sx={{ scrollbarGutter: 'stable both-edges' }}
+				sx={{
+					overflow: 'auto',
+					display: 'flex',
+					flex: 1,
+					scrollbarGutter: 'stable both-edges',
+				}}
 			>
 				<Outlet />
 			</Box>

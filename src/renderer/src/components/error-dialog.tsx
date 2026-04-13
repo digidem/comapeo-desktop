@@ -24,16 +24,19 @@ export function ErrorDialogContent({
 
 	return (
 		<Stack direction="column">
-			<Stack direction="column" gap={10} flex={1} padding={20}>
-				<Stack direction="column" alignItems="center" gap={4}>
+			<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+				<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
 					<Icon name="material-error" color="error" size={72} />
 
-					<Typography variant="h1" fontWeight={500} textAlign="center">
+					<Typography
+						variant="h1"
+						sx={{ fontWeight: 500, textAlign: 'center' }}
+					>
 						{t(m.somethingWentWrong)}
 					</Typography>
 				</Stack>
 
-				<Stack direction="column" flex={1} gap={2}>
+				<Stack direction="column" sx={{ flex: 1, gap: 2 }}>
 					<ButtonBase
 						disableRipple
 						onClick={() => {
@@ -51,9 +54,11 @@ export function ErrorDialogContent({
 					>
 						<Stack
 							direction="row"
-							flex={1}
-							justifyContent={'space-between'}
-							sx={{ '&::marker': { content: 'none' } }}
+							sx={{
+								flex: 1,
+								justifyContent: 'space-between',
+								'&::marker': { content: 'none' },
+							}}
 						>
 							<Typography color="textSecondary">{t(m.advanced)}</Typography>
 
@@ -70,19 +75,23 @@ export function ErrorDialogContent({
 
 					<Collapse in={advancedExpanded}>
 						<Box
-							bgcolor={LIGHT_GREY}
-							padding={4}
-							border={`1px solid ${BLUE_GREY}`}
-							maxHeight={300}
-							overflow="auto"
-							borderRadius={2}
+							sx={{
+								bgcolor: LIGHT_GREY,
+								padding: 4,
+								border: `1px solid ${BLUE_GREY}`,
+								maxHeight: 300,
+								overflow: 'auto',
+								borderRadius: 2,
+							}}
 						>
 							<Typography
 								component="pre"
 								variant="body2"
-								fontFamily="monospace"
-								whiteSpace="pre-wrap"
-								sx={{ overflowWrap: 'break-word' }}
+								sx={{
+									fontFamily: 'monospace',
+									whiteSpace: 'pre-wrap',
+									overflowWrap: 'break-word',
+								}}
 							>
 								{errorMessage}
 							</Typography>
@@ -90,13 +99,14 @@ export function ErrorDialogContent({
 					</Collapse>
 				</Stack>
 			</Stack>
-
 			<Box
-				position="sticky"
-				bottom={0}
-				display="flex"
-				justifyContent="center"
-				padding={6}
+				sx={{
+					position: 'sticky',
+					bottom: 0,
+					display: 'flex',
+					justifyContent: 'center',
+					padding: 6,
+				}}
 			>
 				<Button
 					fullWidth

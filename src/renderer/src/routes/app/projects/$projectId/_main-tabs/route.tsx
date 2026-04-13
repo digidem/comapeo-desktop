@@ -91,12 +91,14 @@ function RouteComponent() {
 					<Suspense
 						fallback={
 							<Box
-								display="flex"
-								flex={1}
-								justifyContent="center"
-								alignItems="center"
-								bgcolor={BLACK}
-								sx={{ opacity: 0.5 }}
+								sx={{
+									display: 'flex',
+									flex: 1,
+									justifyContent: 'center',
+									alignItems: 'center',
+									bgcolor: BLACK,
+									opacity: 0.5,
+								}}
 							>
 								<CircularProgress />
 							</Box>
@@ -105,7 +107,7 @@ function RouteComponent() {
 						<MapPanel />
 					</Suspense>
 				) : (
-					<Box bgcolor={LIGHT_GREY} display="flex" flex={1} />
+					<Box sx={{ bgcolor: LIGHT_GREY, display: 'flex', flex: 1 }} />
 				)
 			}
 		/>

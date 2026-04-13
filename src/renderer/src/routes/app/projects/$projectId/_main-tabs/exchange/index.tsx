@@ -124,12 +124,14 @@ function RouteComponent() {
 	)
 
 	const displayedExchangeStateContent = selfIsOnlyActiveProjectMember ? (
-		<Stack direction="column" flex={1} gap={5} padding={6} alignItems="center">
+		<Stack
+			direction="column"
+			sx={{ flex: 1, gap: 5, padding: 6, alignItems: 'center' }}
+		>
 			<Typography
 				component="p"
 				variant="h1"
-				fontWeight={500}
-				textAlign="center"
+				sx={{ fontWeight: 500, textAlign: 'center' }}
 			>
 				{t(m.noOtherDevicesOnProject)}
 			</Typography>
@@ -163,28 +165,34 @@ function RouteComponent() {
 		<>
 			<Stack
 				direction="column"
-				flex={1}
-				overflow="auto"
-				justifyContent="space-between"
-				padding={6}
-				gap={6}
+				sx={{
+					flex: 1,
+					overflow: 'auto',
+					justifyContent: 'space-between',
+					padding: 6,
+					gap: 6,
+				}}
 			>
-				<Box flexDirection="row" alignItems="center">
+				<Box sx={{ flexDirection: 'row', alignItems: 'center' }}>
 					<Box
-						display="flex"
-						flex={1}
-						flexDirection="row"
-						justifyContent="center"
-						alignItems="center"
-						borderRadius={2}
-						border={`1px solid ${BLUE_GREY}`}
-						padding={4}
-						overflow="auto"
 						data-testid="exchange-network-connection-info"
+						sx={{
+							display: 'flex',
+							flex: 1,
+							flexDirection: 'row',
+							justifyContent: 'center',
+							alignItems: 'center',
+							borderRadius: 2,
+							border: `1px solid ${BLUE_GREY}`,
+							padding: 4,
+							overflow: 'auto',
+						}}
 					>
 						<Suspense
 							fallback={
-								<Typography fontWeight={500}>{t(m.gettingWifiInfo)}</Typography>
+								<Typography sx={{ fontWeight: 500 }}>
+									{t(m.gettingWifiInfo)}
+								</Typography>
 							}
 						>
 							<NetworkConnectionInfo waitingText={t(m.gettingWifiInfo)} />
@@ -192,21 +200,25 @@ function RouteComponent() {
 					</Box>
 				</Box>
 
-				<Stack direction="column" gap={5} flex={1} paddingBlock={10}>
+				<Stack direction="column" sx={{ gap: 5, flex: 1, paddingBlock: 10 }}>
 					<Box
-						display="flex"
-						flexDirection="row"
-						alignItems="center"
-						justifyContent="center"
-						flex={0}
-						position="relative"
+						sx={{
+							display: 'flex',
+							flexDirection: 'row',
+							alignItems: 'center',
+							justifyContent: 'center',
+							flex: 0,
+							position: 'relative',
+						}}
 					>
 						<Box
-							display="flex"
-							flexDirection="column"
-							padding={2}
-							borderRadius="50%"
-							border={`12px solid ${connectedPeersCount > 0 ? DARKER_ORANGE : BLUE_GREY}`}
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								padding: 2,
+								borderRadius: '50%',
+								border: `12px solid ${connectedPeersCount > 0 ? DARKER_ORANGE : BLUE_GREY}`,
+							}}
 						>
 							<Icon
 								name="material-bolt-sharp"
@@ -224,10 +236,12 @@ function RouteComponent() {
 					// Once some other device has joined the project, then we should always show the button, regardless of who's active or not.
 					selfIsOnlyProjectMemberEver ? null : (
 						<Box
-							display="flex"
-							flexDirection="row"
-							alignItems="center"
-							justifyContent="center"
+							sx={{
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+								justifyContent: 'center',
+							}}
 						>
 							<Button
 								fullWidth
@@ -322,7 +336,10 @@ function RemoteArchiveIndicator({ projectId }: { projectId: string }) {
 	}
 
 	return (
-		<Stack direction="row" justifyContent="center" alignItems="center" gap={2}>
+		<Stack
+			direction="row"
+			sx={{ justifyContent: 'center', alignItems: 'center', gap: 2 }}
+		>
 			<Icon name="material-circle-filled" size={iconSize} />
 			<Typography variant="body2">{t(m.remoteArchiveConnected)}</Typography>
 		</Stack>
@@ -358,16 +375,14 @@ function DisplayedSyncState({
 	const title = getExchangeStateTitle(syncStage, syncState.data.isSyncEnabled)
 
 	return (
-		<Stack direction="column" flex={1} gap={5} padding={6}>
+		<Stack direction="column" sx={{ flex: 1, gap: 5, padding: 6 }}>
 			<Typography
 				component="p"
 				variant="h1"
-				fontWeight={500}
-				textAlign="center"
+				sx={{ fontWeight: 500, textAlign: 'center' }}
 			>
 				{t(title)}
 			</Typography>
-
 			{syncStage.name === 'idle' ? null : <SyncProgress stage={syncStage} />}
 		</Stack>
 	)
@@ -412,10 +427,7 @@ function SyncProgress({
 
 	const progressProps: LinearProgressProps =
 		stage.name === 'waiting'
-			? {
-					variant: 'indeterminate',
-					color: 'primary',
-				}
+			? { variant: 'indeterminate', color: 'primary' }
 			: {
 					variant: 'determinate',
 					value: stage.progress * 100,
@@ -423,7 +435,7 @@ function SyncProgress({
 				}
 
 	return (
-		<Stack direction="column" gap={3} padding={6}>
+		<Stack direction="column" sx={{ gap: 3, padding: 6 }}>
 			{stage.name === 'complete-full' ? (
 				<Icon name="material-check" htmlColor={GREEN} />
 			) : stage.name !== 'waiting' ? (
@@ -432,7 +444,7 @@ function SyncProgress({
 
 			<LinearProgress {...progressProps} />
 
-			<Typography color="textSecondary" textAlign="end">
+			<Typography color="textSecondary" sx={{ textAlign: 'end' }}>
 				{formatNumber(stage.name === 'waiting' ? 0 : stage.progress, {
 					style: 'percent',
 				})}

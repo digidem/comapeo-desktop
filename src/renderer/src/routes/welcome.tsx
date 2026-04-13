@@ -30,13 +30,13 @@ function RouteComponent() {
 
 	return (
 		<Box
-			height="100%"
-			bgcolor={DARK_COMAPEO_BLUE}
-			flexDirection="column"
-			display="flex"
-			justifyContent="center"
-			alignItems="center"
 			sx={{
+				height: '100%',
+				bgcolor: DARK_COMAPEO_BLUE,
+				flexDirection: 'column',
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
 				backgroundImage: `url("${topographicPrintURL}")`,
 				backgroundRepeat: 'no-repeat',
 				backgroundPosition: 'center',
@@ -44,20 +44,22 @@ function RouteComponent() {
 			}}
 		>
 			<Container maxWidth="lg" sx={{ overflow: 'auto', padding: 5 }}>
-				<Stack display="flex" alignItems="center" gap={25}>
-					<Grid container spacing={10} justifyContent="center">
+				<Stack sx={{ display: 'flex', alignItems: 'center', gap: 25 }}>
+					<Grid container spacing={10} sx={{ justifyContent: 'center' }}>
 						<Grid
 							container
-							alignItems="center"
 							size={viewportIsNarrow ? 8 : 5}
-							textAlign={viewportIsNarrow ? 'center' : undefined}
+							sx={{
+								alignItems: 'center',
+								textAlign: viewportIsNarrow ? 'center' : undefined,
+							}}
 						>
 							<Stack spacing={5}>
 								<Typography
 									component="h1"
 									variant="bannerTitle"
 									color="textInverted"
-									fontWeight="inherit"
+									sx={{ fontWeight: 'inherit' }}
 								>
 									{t(m.comapeoDesktop)}
 								</Typography>
@@ -73,14 +75,14 @@ function RouteComponent() {
 						</Grid>
 						<Grid size={viewportIsNarrow ? 8 : 5} container>
 							<Stack
-								display="flex"
-								justifyContent="center"
-								paddingX={5}
-								paddingY={6}
-								borderRadius={2}
-								bgcolor={LIST_BACKGROUND_COLOR}
-								borderColor={BLUE_GREY}
 								sx={{
+									display: 'flex',
+									justifyContent: 'center',
+									paddingX: 5,
+									paddingY: 6,
+									borderRadius: 2,
+									bgcolor: LIST_BACKGROUND_COLOR,
+									borderColor: BLUE_GREY,
 									borderWidth: 1,
 									borderStyle: 'solid',
 								}}

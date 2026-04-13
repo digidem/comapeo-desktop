@@ -51,7 +51,7 @@ function RouteComponent() {
 	return (
 		<>
 			<Container maxWidth="md" disableGutters>
-				<Stack direction="column" flex={1} padding={6}>
+				<Stack direction="column" sx={{ flex: 1, padding: 6 }}>
 					<FormControl>
 						<RadioGroup
 							aria-labelledby="language-selection-label"
@@ -70,14 +70,8 @@ function RouteComponent() {
 
 								setLocale.mutate(
 									parsedValue === 'system'
-										? {
-												useSystemPreferences: true,
-												languageTag: null,
-											}
-										: {
-												useSystemPreferences: false,
-												languageTag: parsedValue,
-											},
+										? { useSystemPreferences: true, languageTag: null }
+										: { useSystemPreferences: false, languageTag: parsedValue },
 									{
 										onError: (err) => {
 											captureException(err)
@@ -89,7 +83,7 @@ function RouteComponent() {
 								)
 							}}
 						>
-							<Stack direction="column" gap={6}>
+							<Stack direction="column" sx={{ gap: 6 }}>
 								<FormControlLabel
 									value="system"
 									control={<Radio />}
@@ -147,7 +141,7 @@ function RadioOptionLabel({
 }) {
 	return (
 		<Stack direction="column">
-			<Typography fontWeight={500}>{primaryText}</Typography>
+			<Typography sx={{ fontWeight: 500 }}>{primaryText}</Typography>
 			{secondaryText ? (
 				<Typography color={DARK_GREY}>{secondaryText}</Typography>
 			) : null}

@@ -194,11 +194,7 @@ export function MapPanel() {
 		lang,
 	})
 
-	const { data: tracks } = useManyDocs({
-		projectId,
-		docType: 'track',
-		lang,
-	})
+	const { data: tracks } = useManyDocs({ projectId, docType: 'track', lang })
 
 	const { data: categories } = useManyDocs({
 		projectId,
@@ -246,17 +242,11 @@ export function MapPanel() {
 			{
 				coordinates,
 				shouldZoomIn,
-			}: {
-				coordinates: [lat: number, lon: number]
-				shouldZoomIn?: boolean
-			},
+			}: { coordinates: [lat: number, lon: number]; shouldZoomIn?: boolean },
 			map: MapInstance | MapRef,
 		) => {
 			map.panTo(
-				{
-					lon: coordinates[0],
-					lat: coordinates[1],
-				},
+				{ lon: coordinates[0], lat: coordinates[1] },
 				{ zoom: shouldZoomIn ? 10 : undefined },
 			)
 		},
@@ -281,10 +271,7 @@ export function MapPanel() {
 			const [minLon, minLat, maxLon, maxLat] = bbox(trackFeature)
 
 			map.panTo(
-				{
-					lon: c.geometry.coordinates[0]!,
-					lat: c.geometry.coordinates[1]!,
-				},
+				{ lon: c.geometry.coordinates[0]!, lat: c.geometry.coordinates[1]! },
 				{ zoom: shouldZoomIn ? 10 : undefined },
 			)
 
@@ -643,20 +630,22 @@ export function MapPanel() {
 	)
 
 	return (
-		<Box position="relative" display="flex" flex={1}>
+		<Box sx={{ position: 'relative', display: 'flex', flex: 1 }}>
 			{mapLoaded ? null : (
 				<Box
-					display="flex"
-					flex={1}
-					justifyContent="center"
-					alignItems="center"
-					position="absolute"
-					left={0}
-					right={0}
-					top={0}
-					bottom={0}
-					sx={{ opacity: 0.5 }}
-					bgcolor={BLACK}
+					sx={{
+						display: 'flex',
+						flex: 1,
+						justifyContent: 'center',
+						alignItems: 'center',
+						position: 'absolute',
+						left: 0,
+						right: 0,
+						top: 0,
+						bottom: 0,
+						bgcolor: BLACK,
+						opacity: 0.5,
+					}}
 				>
 					<CircularProgress />
 				</Box>
@@ -801,14 +790,17 @@ export function MapPanel() {
 						'/app/projects/$projectId/tracks/$trackDocId/') &&
 				!highlightedFeature ? (
 					<Box
-						position="absolute"
-						bottom={0}
-						top={0}
-						right={0}
-						left={0}
-						bgcolor={BLACK}
-						display="grid"
-						sx={{ placeItems: 'center', backgroundColor: alpha(BLACK, 0.5) }}
+						sx={{
+							position: 'absolute',
+							bottom: 0,
+							top: 0,
+							right: 0,
+							left: 0,
+							bgcolor: BLACK,
+							display: 'grid',
+							placeItems: 'center',
+							backgroundColor: alpha(BLACK, 0.5),
+						}}
 					>
 						<Typography color="textInverted">
 							{t(m.cannotDisplayFeature)}
@@ -834,11 +826,13 @@ function IconMarkerContainer({
 }) {
 	return (
 		<Box
-			position="relative"
-			display="flex"
-			flexDirection="column"
-			justifyContent="center"
-			alignItems="center"
+			sx={{
+				position: 'relative',
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}
 		>
 			<Icon
 				name="comapeo-selected-marker"
@@ -850,9 +844,7 @@ function IconMarkerContainer({
 				}}
 			/>
 
-			<Box position="absolute" top={0}>
-				{children}
-			</Box>
+			<Box sx={{ position: 'absolute', top: 0 }}>{children}</Box>
 		</Box>
 	)
 }
@@ -941,10 +933,7 @@ function tracksToFeatureCollection(tracks: Array<Track>) {
 			location.coords.latitude,
 		])
 
-		const featureProperties = {
-			type: 'track' as const,
-			docId: t.docId,
-		}
+		const featureProperties = { type: 'track' as const, docId: t.docId }
 
 		// NOTE: We still want to show tracks despite having only 1 location
 		// so we duplicate the lone point to make it a valid line string.

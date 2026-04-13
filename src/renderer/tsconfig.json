@@ -3,8 +3,9 @@
 	"compilerOptions": {
 		"module": "Preserve",
 		"moduleResolution": "Bundler",
-		"lib": ["ESNext", "dom", "dom.iterable", "WebWorker"],
-		"jsx": "react-jsx"
+		"lib": ["ESNext", "dom", "WebWorker"],
+		"jsx": "react-jsx",
+		"types": []
 	},
 	"include": ["../shared/*", "**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
 }

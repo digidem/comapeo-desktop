@@ -51,8 +51,8 @@ function RouteComponent() {
 	return (
 		<>
 			<Container maxWidth="md" disableGutters>
-				<Stack direction="column" flex={1}>
-					<Box padding={6} overflow="auto">
+				<Stack direction="column" sx={{ flex: 1 }}>
+					<Box sx={{ padding: 6, overflow: 'auto' }}>
 						<FormControl>
 							<RadioGroup
 								aria-labelledby={BREADCRUMB_NAV_CURRENT_PAGE_LINK_ID}
@@ -71,7 +71,7 @@ function RouteComponent() {
 									})
 								}}
 							>
-								<Stack direction="column" gap={6}>
+								<Stack direction="column" sx={{ gap: 6 }}>
 									<FormControlLabel
 										value="dd"
 										control={<Radio />}
@@ -140,7 +140,7 @@ function RadioOptionLabel({
 }) {
 	return (
 		<Stack direction="column">
-			<Typography fontWeight={500}>{primaryText}</Typography>
+			<Typography sx={{ fontWeight: 500 }}>{primaryText}</Typography>
 			<Typography color={DARK_GREY} aria-hidden>
 				{secondaryText}
 			</Typography>

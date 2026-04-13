@@ -36,21 +36,21 @@ export function ProjectTabButton({ projectId }: { projectId: string }) {
 			}}
 		>
 			<Box
-				display="flex"
 				onKeyDown={(event) => {
 					if (event.key === 'Tab' || event.key === 'Escape') {
 						setAnchorElement(null)
 					}
 				}}
+				sx={{ display: 'flex' }}
 			>
 				<Suspense
 					fallback={
 						<Box
-							display="flex"
-							justifyContent="center"
-							alignItems="center"
 							sx={{
 								...BASE_TAB_CONTAINER_SX_PROPS,
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
 								backgroundColor: LIGHT_GREY,
 							}}
 						>
@@ -97,9 +97,7 @@ function ButtonTabContent({
 	const { data: projectSettings } = useProjectSettings({ projectId })
 	const { data: role } = useOwnRoleInProject({ projectId })
 
-	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
-	})
+	const iconSize = useIconSizeBasedOnTypography({ typographyVariant: 'body1' })
 
 	const isAtLeastCoordinator =
 		role.roleId === CREATOR_ROLE_ID || role.roleId === COORDINATOR_ROLE_ID
@@ -127,9 +125,7 @@ function ButtonTabContent({
 					'&:focus-within': {
 						outline: (theme) => `2px solid ${theme.palette.primary.main}`,
 					},
-					'&:hover': {
-						backgroundColor: darken(accentColor, 0.1),
-					},
+					'&:hover': { backgroundColor: darken(accentColor, 0.1) },
 				}}
 			>
 				<Typography
@@ -162,16 +158,17 @@ function ButtonTabContent({
 					return (
 						<Fade {...TransitionProps}>
 							<Box
-								bgcolor={accentColor}
-								boxShadow={(theme) => theme.shadows[5]}
-								borderRadius={2}
-								padding={6}
+								sx={{
+									bgcolor: accentColor,
+									boxShadow: (theme) => theme.shadows[5],
+									borderRadius: 2,
+									padding: 6,
+								}}
 							>
-								<Stack direction="column" gap={4}>
+								<Stack direction="column" sx={{ gap: 4 }}>
 									<Typography
 										variant="h1"
-										fontWeight={500}
-										sx={{ overflowWrap: 'break-word' }}
+										sx={{ fontWeight: 500, overflowWrap: 'break-word' }}
 									>
 										{displayedProjectName}
 									</Typography>
@@ -182,14 +179,13 @@ function ButtonTabContent({
 										</Typography>
 									) : null}
 
-									<Stack component={List} disablePadding gap={4}>
+									<Stack component={List} disablePadding sx={{ gap: 4 }}>
 										<Stack
 											component={ListItem}
 											disableGutters
 											disablePadding
 											direction="row"
-											gap={4}
-											alignItems="flex-start"
+											sx={{ gap: 4, alignItems: 'flex-start' }}
 										>
 											{isAtLeastCoordinator ? (
 												<>
@@ -198,7 +194,7 @@ function ButtonTabContent({
 														size={iconSize}
 													/>
 
-													<Typography fontWeight={500}>
+													<Typography sx={{ fontWeight: 500 }}>
 														{t(m.projectInfoRoleCoordinator)}
 													</Typography>
 												</>
@@ -206,7 +202,7 @@ function ButtonTabContent({
 												<>
 													<Icon name="material-people-filled" />
 
-													<Typography fontWeight={500}>
+													<Typography sx={{ fontWeight: 500 }}>
 														{t(m.projectInfoRoleParticipant)}
 													</Typography>
 												</>
@@ -218,8 +214,7 @@ function ButtonTabContent({
 											disableGutters
 											disablePadding
 											direction="row"
-											gap={4}
-											alignItems="flex-start"
+											sx={{ gap: 4, alignItems: 'flex-start' }}
 										>
 											<Icon name="material-symbols-apps" size={iconSize} />
 
@@ -230,7 +225,7 @@ function ButtonTabContent({
 															component="span"
 															variant="inherit"
 															color="textPrimary"
-															fontWeight={500}
+															sx={{ fontWeight: 500 }}
 														>
 															{projectSettings.configMetadata.name}
 														</Typography>
@@ -264,7 +259,7 @@ function ButtonTabContent({
 													</Typography>
 												</Box>
 											) : (
-												<Typography fontWeight={500}>
+												<Typography sx={{ fontWeight: 500 }}>
 													{t(m.fallbackCategoriesSetName)}
 												</Typography>
 											)}

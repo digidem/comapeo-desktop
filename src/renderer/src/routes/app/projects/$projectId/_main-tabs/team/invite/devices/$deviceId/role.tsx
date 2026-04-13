@@ -17,10 +17,7 @@ import { useLocalPeersState } from '../../../../../../../../../contexts/local-pe
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId/role',
-)({
-	pendingComponent: GenericRoutePendingComponent,
-	component: RouteComponent,
-})
+)({ pendingComponent: GenericRoutePendingComponent, component: RouteComponent })
 
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
@@ -38,14 +35,16 @@ function RouteComponent() {
 	const peer = updatedPeer || peerOnLoad
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
 				direction="row"
-				alignItems="center"
 				component="nav"
-				gap={4}
-				padding={4}
-				borderBottom={`1px solid ${BLUE_GREY}`}
+				sx={{
+					alignItems: 'center',
+					gap: 4,
+					padding: 4,
+					borderBottom: `1px solid ${BLUE_GREY}`,
+				}}
 			>
 				<IconButton
 					onClick={() => {
@@ -59,13 +58,16 @@ function RouteComponent() {
 					<Icon name="material-arrow-back" size={30} />
 				</IconButton>
 
-				<Typography variant="h1" fontWeight={500}>
+				<Typography variant="h1" sx={{ fontWeight: 500 }}>
 					{t(m.navTitle)}
 				</Typography>
 			</Stack>
 
-			<Stack direction="column" flex={1} overflow="auto" padding={6} gap={6}>
-				<Box border={`1px solid ${BLUE_GREY}`} borderRadius={2}>
+			<Stack
+				direction="column"
+				sx={{ flex: 1, overflow: 'auto', padding: 6, gap: 6 }}
+			>
+				<Box sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}>
 					<DeviceRow
 						deviceId={peer.deviceId}
 						deviceType={peer.deviceType}
@@ -74,7 +76,7 @@ function RouteComponent() {
 					/>
 				</Box>
 
-				<Typography variant="h2" fontWeight={500}>
+				<Typography variant="h2" sx={{ fontWeight: 500 }}>
 					{t(m.selectingRole)}
 				</Typography>
 
@@ -138,12 +140,13 @@ function RoleOption({
 				sx={{ padding: 0 }}
 				onClick={onClick}
 			>
-				<Stack direction="column" padding={6} gap={4}>
-					<Stack direction="row" alignItems="center" gap={3}>
+				<Stack direction="column" sx={{ padding: 6, gap: 4 }}>
+					<Stack direction="row" sx={{ alignItems: 'center', gap: 3 }}>
 						{icon}
 
-						<Typography fontWeight={500}>{name}</Typography>
+						<Typography sx={{ fontWeight: 500 }}>{name}</Typography>
 					</Stack>
+
 					<Typography>{description}</Typography>
 				</Stack>
 			</ListItemButton>

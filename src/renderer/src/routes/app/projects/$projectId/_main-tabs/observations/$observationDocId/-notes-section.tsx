@@ -21,17 +21,17 @@ export function ReadOnlyNotesSection({ notes }: { notes?: string }) {
 	const { formatMessage: t } = useIntl()
 
 	return (
-		<Stack direction="column" paddingInline={6} gap={4}>
+		<Stack direction="column" sx={{ paddingInline: 6, gap: 4 }}>
 			<Typography
 				id="notes-section-title"
 				component="h2"
 				variant="body1"
-				textTransform="uppercase"
+				sx={{ textTransform: 'uppercase' }}
 			>
 				{t(m.title)}
 			</Typography>
 
-			<Box padding={2}>
+			<Box sx={{ padding: 2 }}>
 				<Typography>
 					{notes === undefined || notes.length === 0 ? t(m.noNotes) : notes}
 				</Typography>
@@ -85,21 +85,18 @@ export function EditableNotesSection({
 		mutationFn: async ({ notes }: { notes: string }) => {
 			return updateObservationDocument.mutateAsync({
 				versionId: observation.versionId,
-				value: {
-					...observation,
-					tags: { ...observation.tags, notes },
-				},
+				value: { ...observation, tags: { ...observation.tags, notes } },
 			})
 		},
 	})
 
 	return (
 		<>
-			<Box paddingInline={6}>
+			<Box sx={{ paddingInline: 6 }}>
 				<EditableSection
 					disabled={disabled}
 					sectionTitle={
-						<Typography variant="inherit" textTransform="uppercase">
+						<Typography variant="inherit" sx={{ textTransform: 'uppercase' }}>
 							{t(m.title)}
 						</Typography>
 					}
@@ -132,18 +129,21 @@ export function EditableNotesSection({
 						(updateObservationNotes.status === 'success' &&
 							observationIsRefetching) ? (
 							<Typography
-								fontStyle={
-									updateObservationNotes.variables.notes.length === 0
-										? 'italic'
-										: undefined
-								}
+								sx={{
+									fontStyle:
+										updateObservationNotes.variables.notes.length === 0
+											? 'italic'
+											: undefined,
+								}}
 							>
 								{updateObservationNotes.variables.notes || t(m.noNotes)}
 							</Typography>
 						) : observation.tags.notes === undefined ||
 						  observation.tags.notes === null ||
 						  observation.tags.notes.toString().length === 0 ? (
-							<Typography fontStyle="italic">{t(m.noNotes)}</Typography>
+							<Typography sx={{ fontStyle: 'italic' }}>
+								{t(m.noNotes)}
+							</Typography>
 						) : (
 							<Typography>{observation.tags.notes}</Typography>
 						)
@@ -173,9 +173,7 @@ export function EditableNotesSection({
 	)
 }
 
-const NotesEditorSchema = v.object({
-	notes: v.pipe(v.string(), v.trim()),
-})
+const NotesEditorSchema = v.object({ notes: v.pipe(v.string(), v.trim()) })
 
 const FORM_ID = 'observation-notes-editor-form'
 
@@ -209,7 +207,7 @@ function NotesEditor({
 				form.handleSubmit()
 			}}
 		>
-			<Stack direction="column" gap={4}>
+			<Stack direction="column" sx={{ gap: 4 }}>
 				<form.AppField name="notes">
 					{(field) => (
 						<TextField
@@ -236,7 +234,7 @@ function NotesEditor({
 					)}
 				</form.AppField>
 
-				<Stack direction="row" justifyContent="space-between" gap={2}>
+				<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
 					<form.Subscribe selector={(state) => state.isSubmitting}>
 						{(isSubmitting) => (
 							<>

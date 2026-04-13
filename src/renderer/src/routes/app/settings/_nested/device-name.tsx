@@ -60,12 +60,8 @@ function RouteComponent() {
 	}, [t])
 
 	const form = useAppForm({
-		defaultValues: {
-			deviceName: deviceInfo.name ? deviceInfo.name : '',
-		},
-		validators: {
-			onChange: onChangeSchema,
-		},
+		defaultValues: { deviceName: deviceInfo.name ? deviceInfo.name : '' },
+		validators: { onChange: onChangeSchema },
 		onSubmit: async ({ value }) => {
 			const { deviceName } = v.parse(onChangeSchema, value)
 
@@ -93,7 +89,7 @@ function RouteComponent() {
 	return (
 		<>
 			<Container maxWidth="md" disableGutters>
-				<Stack direction="column" flex={1} padding={6} gap={10}>
+				<Stack direction="column" sx={{ flex: 1, padding: 6, gap: 10 }}>
 					<Box
 						component="form"
 						id={formId}
@@ -117,19 +113,13 @@ function RouteComponent() {
 									onChange={(event) => {
 										field.handleChange(event.target.value)
 									}}
-									slotProps={{
-										input: {
-											style: {
-												backgroundColor: WHITE,
-											},
-										},
-									}}
+									slotProps={{ input: { style: { backgroundColor: WHITE } } }}
 									onBlur={field.handleBlur}
 									helperText={
 										<Stack
 											component="span"
 											direction="row"
-											justifyContent="space-between"
+											sx={{ justifyContent: 'space-between' }}
 										>
 											<Box component="span">
 												{field.state.meta.errors[0]?.message}
@@ -159,7 +149,7 @@ function RouteComponent() {
 						</form.AppField>
 					</Box>
 
-					<Stack direction="row" gap={4} justifyContent="center">
+					<Stack direction="row" sx={{ gap: 4, justifyContent: 'center' }}>
 						<form.Subscribe
 							selector={(state) => [state.canSubmit, state.isSubmitting]}
 						>

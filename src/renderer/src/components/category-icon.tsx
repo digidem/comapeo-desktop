@@ -1,18 +1,13 @@
-import {
-	Suspense,
-	type CSSProperties,
-	type ComponentProps,
-	type ReactNode,
-} from 'react'
+import { Suspense, type CSSProperties, type ReactNode } from 'react'
 import { useIconUrl } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import { alpha } from '@mui/material/styles'
 
-import { WHITE } from '../colors'
-import { ErrorBoundary } from './error-boundary'
-import { Icon } from './icon'
-import { SuspenseImage } from './suspense-image'
+import { WHITE } from '../colors.ts'
+import { ErrorBoundary } from './error-boundary.tsx'
+import { Icon } from './icon.tsx'
+import { SuspenseImage } from './suspense-image.tsx'
 
 export function CategoryIconContainer({
 	children,
@@ -23,21 +18,23 @@ export function CategoryIconContainer({
 	children: ReactNode
 	color: string
 	applyBoxShadow?: boolean
-	padding?: ComponentProps<typeof Box>['padding']
+	padding?: number
 }) {
 	return (
 		<Box
-			display="flex"
-			flexDirection="column"
-			justifyContent="center"
-			alignItems="center"
-			bgcolor={WHITE}
-			borderRadius="50%"
-			padding={padding}
-			border={`3px solid ${color}`}
-			boxShadow={
-				applyBoxShadow ? `0px 0px 10px ${alpha(color, 0.25)}` : undefined
-			}
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'center',
+				alignItems: 'center',
+				bgcolor: WHITE,
+				borderRadius: '50%',
+				padding: padding,
+				border: `3px solid ${color}`,
+				boxShadow: applyBoxShadow
+					? `0px 0px 10px ${alpha(color, 0.25)}`
+					: undefined,
+			}}
 		>
 			{children}
 		</Box>
@@ -112,11 +109,15 @@ function LegacyCategoryIconImage({
 			getResetKey={() => iconUrl}
 			fallback={() => (
 				<Box
-					sx={imageStyle}
-					display="flex"
-					justifyContent="center"
-					alignItems="center"
-					flex={1}
+					sx={[
+						{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+							flex: 1,
+						},
+						...(Array.isArray(imageStyle) ? imageStyle : [imageStyle]),
+					]}
 				>
 					<Icon name="material-error" color="error" />
 				</Box>

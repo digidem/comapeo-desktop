@@ -7,7 +7,10 @@ export const Route = createFileRoute('/app/settings')({
 
 function RouteComponent() {
 	return (
-		<Box component="main" display="flex" flexDirection="column" flex={1}>
+		<Box
+			component="main"
+			sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}
+		>
 			<Outlet />
 		</Box>
 	)

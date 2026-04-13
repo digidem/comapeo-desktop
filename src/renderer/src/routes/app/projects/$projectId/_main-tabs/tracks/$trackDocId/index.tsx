@@ -116,14 +116,16 @@ function RouteComponent() {
 	const category = getMatchingCategoryForDocument(track, categories)
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
 				direction="row"
-				alignItems="center"
 				component="nav"
-				gap={4}
-				padding={4}
-				borderBottom={`1px solid ${BLUE_GREY}`}
+				sx={{
+					alignItems: 'center',
+					gap: 4,
+					padding: 4,
+					borderBottom: `1px solid ${BLUE_GREY}`,
+				}}
 			>
 				<IconButton
 					onClick={() => {
@@ -141,14 +143,15 @@ function RouteComponent() {
 				>
 					<Icon name="material-arrow-back" size={30} />
 				</IconButton>
-				<Typography variant="h1" fontWeight={500}>
+
+				<Typography variant="h1" sx={{ fontWeight: 500 }}>
 					{t(m.navTitle)}
 				</Typography>
 			</Stack>
 
-			<Box overflow="auto" flex={1}>
-				<Stack direction="column" paddingBlock={6} gap={6}>
-					<Box paddingInline={6}>
+			<Box sx={{ overflow: 'auto', flex: 1 }}>
+				<Stack direction="column" sx={{ paddingBlock: 6, gap: 6 }}>
+					<Box sx={{ paddingInline: 6 }}>
 						<Typography>
 							{formatDate(track.createdAt, {
 								year: 'numeric',
@@ -160,9 +163,12 @@ function RouteComponent() {
 							})}
 						</Typography>
 					</Box>
-					<Stack direction="column" paddingInline={6}>
-						<Box border={`1px solid ${BLUE_GREY}`} borderRadius={2}>
-							<Stack direction="row" alignItems="center" gap={4} padding={4}>
+					<Stack direction="column" sx={{ paddingInline: 6 }}>
+						<Box sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}>
+							<Stack
+								direction="row"
+								sx={{ alignItems: 'center', gap: 4, padding: 4 }}
+							>
 								{category ? (
 									<CategoryIconContainer
 										color={category.color || BLUE_GREY}
@@ -187,17 +193,17 @@ function RouteComponent() {
 									</CategoryIconContainer>
 								)}
 
-								<Typography variant="h2" fontWeight={500}>
+								<Typography variant="h2" sx={{ fontWeight: 500 }}>
 									{t(m.tracks)}
 								</Typography>
 							</Stack>
 						</Box>
 					</Stack>
-					<Stack direction="column" paddingInline={6} gap={4}>
+					<Stack direction="column" sx={{ paddingInline: 6, gap: 4 }}>
 						<Typography
 							component="h2"
 							variant="body1"
-							textTransform="uppercase"
+							sx={{ textTransform: 'uppercase' }}
 						>
 							{t(m.descriptionSectionTitle)}
 						</Typography>
@@ -205,7 +211,7 @@ function RouteComponent() {
 						<Typography>{track.tags.notes}</Typography>
 					</Stack>
 
-					<Stack direction="column" gap={2} overflow="auto"></Stack>
+					<Stack direction="column" sx={{ gap: 2, overflow: 'auto' }}></Stack>
 				</Stack>
 
 				<Divider />
@@ -213,12 +219,14 @@ function RouteComponent() {
 				<Suspense
 					fallback={
 						<Box
-							display="flex"
-							flexDirection="column"
-							justifyContent="center"
-							alignItems="center"
-							flex={1}
-							padding={6}
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								justifyContent: 'center',
+								alignItems: 'center',
+								flex: 1,
+								padding: 6,
+							}}
 						>
 							<CircularProgress disableShrink size={40} />
 						</Box>
@@ -283,9 +291,13 @@ function TrackObservationsSection({
 	}, [allObservations, categories, trackObservationDocIds])
 
 	return (
-		<Stack direction="column" flex={1}>
-			<Box padding={6}>
-				<Typography component="h2" variant="body1" textTransform="uppercase">
+		<Stack direction="column" sx={{ flex: 1 }}>
+			<Box sx={{ padding: 6 }}>
+				<Typography
+					component="h2"
+					variant="body1"
+					sx={{ textTransform: 'uppercase' }}
+				>
 					{t(m.observationsSectionTitle, {
 						count: displayedTrackObservations.length,
 					})}
@@ -316,26 +328,28 @@ function TrackObservationsSection({
 								<SyncedIndicatorLine createdByDeviceId={createdBy} />
 							</Suspense>
 
-							<Stack direction="row" flex={1} gap={2} overflow="auto">
+							<Stack direction="row" sx={{ flex: 1, gap: 2, overflow: 'auto' }}>
 								<Stack
 									direction="column"
-									flex={1}
-									justifyContent="center"
-									overflow="hidden"
+									sx={{ flex: 1, justifyContent: 'center', overflow: 'hidden' }}
 								>
 									<Typography
-										fontWeight={500}
-										textOverflow="ellipsis"
-										whiteSpace="nowrap"
-										overflow="hidden"
+										sx={{
+											fontWeight: 500,
+											textOverflow: 'ellipsis',
+											whiteSpace: 'nowrap',
+											overflow: 'hidden',
+										}}
 									>
 										{title}
 									</Typography>
 
 									<Typography
-										textOverflow="ellipsis"
-										whiteSpace="nowrap"
-										overflow="hidden"
+										sx={{
+											textOverflow: 'ellipsis',
+											whiteSpace: 'nowrap',
+											overflow: 'hidden',
+										}}
 									>
 										{formatDate(createdAt, {
 											year: 'numeric',
@@ -349,19 +363,23 @@ function TrackObservationsSection({
 								</Stack>
 
 								<Box
-									display="flex"
-									justifyContent="center"
-									alignItems="center"
-									width={CATEGORY_CONTAINER_SIZE_PX}
-									sx={{ aspectRatio: 1 }}
+									sx={{
+										display: 'flex',
+										justifyContent: 'center',
+										alignItems: 'center',
+										width: CATEGORY_CONTAINER_SIZE_PX,
+										aspectRatio: 1,
+									}}
 								>
-									<Box flex={1}>
+									<Box sx={{ flex: 1 }}>
 										<Suspense
 											fallback={
 												<Box
-													display="flex"
-													justifyContent="center"
-													alignItems="center"
+													sx={{
+														display: 'flex',
+														justifyContent: 'center',
+														alignItems: 'center',
+													}}
 												>
 													<CircularProgress disableShrink size={30} />
 												</Box>
@@ -406,12 +424,14 @@ function SyncedIndicatorLine({
 
 	return ownDeviceInfo.deviceId !== createdByDeviceId ? (
 		<Box
-			position="absolute"
-			width={8}
-			left={0}
-			bottom={0}
-			top={0}
-			bgcolor={COMAPEO_BLUE}
+			sx={{
+				position: 'absolute',
+				width: 8,
+				left: 0,
+				bottom: 0,
+				top: 0,
+				bgcolor: COMAPEO_BLUE,
+			}}
 		/>
 	) : null
 }

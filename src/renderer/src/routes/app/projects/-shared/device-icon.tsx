@@ -18,13 +18,15 @@ export function DeviceIcon({
 
 	return (
 		<Box
-			display="flex"
-			justifyContent="center"
-			alignItems="center"
-			borderRadius={`calc(${size} * 1.5)`}
-			bgcolor={LIGHT_GREY}
-			height={`calc(${size} * 1.5)`}
-			width={`calc(${size} * 1.5)`}
+			sx={{
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+				borderRadius: `calc(${size} * 1.5)`,
+				bgcolor: LIGHT_GREY,
+				height: `calc(${size} * 1.5)`,
+				width: `calc(${size} * 1.5)`,
+			}}
 		>
 			<Icon
 				titleAccess={t(getDeviceIconTitleMessage(deviceType))}

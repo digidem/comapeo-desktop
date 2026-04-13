@@ -21,21 +21,17 @@ export function ImageButtonLink({
 		<ButtonBaseLink
 			{...linkProps}
 			focusRipple
-			sx={{
-				'&:hover': {
-					'& .MuiImageBackdrop-root': {
-						opacity: 0.15,
-					},
-				},
-			}}
+			sx={{ '&:hover': { '& .MuiImageBackdrop-root': { opacity: 0.15 } } }}
 		>
 			<Box
-				height={height}
-				position="relative"
-				display="flex"
-				overflow="hidden"
-				borderRadius={2}
-				border={`1px solid ${borderColor}`}
+				sx={{
+					height: height,
+					position: 'relative',
+					display: 'flex',
+					overflow: 'hidden',
+					borderRadius: 2,
+					border: `1px solid ${borderColor}`,
+				}}
 			>
 				<Box
 					component="span"

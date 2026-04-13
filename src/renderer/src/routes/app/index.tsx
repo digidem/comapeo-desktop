@@ -49,9 +49,7 @@ const SearchParamsSchema = v.object({
 	projectsLayout: v.optional(v.union([v.literal('grid'), v.literal('list')])),
 	fromFlow: v.optional(
 		v.variant('name', [
-			v.object({
-				name: v.literal('onboarding'),
-			}),
+			v.object({ name: v.literal('onboarding') }),
 			v.object({
 				name: v.literal('project_leave'),
 				projectName: v.optional(v.string()),
@@ -101,9 +99,7 @@ function RouteComponent() {
 	// TODO: Persist?
 	const additionalProjectsLayout: NonNullable<
 		v.InferInput<typeof SearchParamsSchema>['projectsLayout']
-	> = Route.useSearch({
-		select: (values) => values.projectsLayout || 'grid',
-	})
+	> = Route.useSearch({ select: (values) => values.projectsLayout || 'grid' })
 
 	const { data: projects } = useManyProjects()
 
@@ -117,9 +113,7 @@ function RouteComponent() {
 		select: (values) => values.projectAction,
 	})
 
-	const fromFlow = Route.useSearch({
-		select: (values) => values.fromFlow,
-	})
+	const fromFlow = Route.useSearch({ select: (values) => values.fromFlow })
 
 	function handleBack() {
 		if (router.history.canGoBack()) {
@@ -148,31 +142,35 @@ function RouteComponent() {
 
 	return (
 		<>
-			<Stack component="main" direction="column" flex={1} overflow="auto">
-				<Stack direction="column" padding={6} gap={4}>
-					<Stack direction="row" gap={2} alignItems="center">
+			<Stack
+				component="main"
+				direction="column"
+				sx={{ flex: 1, overflow: 'auto' }}
+			>
+				<Stack direction="column" sx={{ padding: 6, gap: 4 }}>
+					<Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
 						<DeviceIcon
 							deviceType={ownDeviceInfo.deviceType}
 							size={deviceIconSize}
 						/>
 
-						<Typography variant="h1" fontWeight={500}>
+						<Typography variant="h1" sx={{ fontWeight: 500 }}>
 							{t(
 								fromFlow?.name === 'onboarding'
 									? m.postOnboardingPageTitle
 									: m.pageTitle,
-								{
-									name: ownDeviceInfo.name,
-								},
+								{ name: ownDeviceInfo.name },
 							)}
 						</Typography>
 					</Stack>
 
 					<Box
-						display="grid"
-						gridTemplateColumns={`repeat(${viewportIsNarrow ? 2 : 3}, minmax(auto, 1fr))`}
-						columnGap={5}
-						rowGap={5}
+						sx={{
+							display: 'grid',
+							gridTemplateColumns: `repeat(${viewportIsNarrow ? 2 : 3}, minmax(auto, 1fr))`,
+							columnGap: 5,
+							rowGap: 5,
+						}}
 					>
 						{activeProject ? (
 							<ListedProjectCard
@@ -183,7 +181,7 @@ function RouteComponent() {
 							/>
 						) : null}
 
-						<Stack direction="row" gap={4}>
+						<Stack direction="row" sx={{ gap: 4 }}>
 							<ButtonBase
 								sx={PROJECT_ACTION_CARD_SX}
 								onClick={() => {
@@ -197,9 +195,11 @@ function RouteComponent() {
 							>
 								<Stack
 									direction="column"
-									justifyContent="center"
-									alignItems="center"
-									gap={4}
+									sx={{
+										justifyContent: 'center',
+										alignItems: 'center',
+										gap: 4,
+									}}
 								>
 									<Icon name="material-people-filled" />
 
@@ -222,13 +222,15 @@ function RouteComponent() {
 							>
 								<Stack
 									direction="column"
-									justifyContent="center"
-									alignItems="center"
-									gap={4}
+									sx={{
+										justifyContent: 'center',
+										alignItems: 'center',
+										gap: 4,
+									}}
 								>
 									<Icon name="material-manage-accounts-filled" />
 
-									<Typography color="textPrimary" flex={1}>
+									<Typography color="textPrimary" sx={{ flex: 1 }}>
 										{t(m.startProjectCardTitle)}
 									</Typography>
 								</Stack>
@@ -239,31 +241,31 @@ function RouteComponent() {
 
 				{projects.length > 0 ? (
 					<>
-						<Box paddingX={6}>
+						<Box sx={{ paddingX: 6 }}>
 							<Divider variant="fullWidth" />
 						</Box>
 
-						<Stack direction="column" flex={1} gap={2}>
+						<Stack direction="column" sx={{ flex: 1, gap: 2 }}>
 							<Stack
 								direction="row"
-								justifyContent="space-between"
-								alignItems="center"
-								paddingInline={6}
-								paddingBlock={4}
-								position="sticky"
-								top={0}
-								left={0}
-								right={0}
-								zIndex={1}
-								bgcolor={WHITE}
+								sx={{
+									justifyContent: 'space-between',
+									alignItems: 'center',
+									paddingInline: 6,
+									paddingBlock: 4,
+									position: 'sticky',
+									top: 0,
+									left: 0,
+									right: 0,
+									zIndex: 1,
+									bgcolor: WHITE,
+								}}
 							>
 								<Stack
 									direction="row"
-									alignItems="baseline"
-									gap={2}
-									textAlign="center"
+									sx={{ alignItems: 'baseline', gap: 2, textAlign: 'center' }}
 								>
-									<Typography variant="h2" fontWeight={500}>
+									<Typography variant="h2" sx={{ fontWeight: 500 }}>
 										{t(m.additionalProjectsSectionTitle)}
 									</Typography>
 
@@ -328,16 +330,17 @@ function RouteComponent() {
 							</Stack>
 
 							<Box
-								display="grid"
-								gridTemplateColumns={
-									additionalProjectsLayout === 'grid'
-										? `repeat(${viewportIsNarrow ? 2 : 3}, minmax(auto, 1fr))`
-										: '1fr'
-								}
-								rowGap={5}
-								columnGap={5}
-								paddingInline={6}
-								paddingBlockEnd={6}
+								sx={{
+									display: 'grid',
+									gridTemplateColumns:
+										additionalProjectsLayout === 'grid'
+											? `repeat(${viewportIsNarrow ? 2 : 3}, minmax(auto, 1fr))`
+											: '1fr',
+									rowGap: 5,
+									columnGap: 5,
+									paddingInline: 6,
+									paddingBlockEnd: 6,
+								}}
 							>
 								{projects
 									.filter((p) => p !== activeProject)
@@ -351,13 +354,15 @@ function RouteComponent() {
 												additionalProjectsLayout === 'list' ? (
 													<Stack
 														direction="row"
-														flex={1}
-														alignItems="center"
-														gap={2}
-														paddingInline={6}
-														paddingBlock={4}
-														border={`1px solid ${LIGHT_GREY}`}
-														sx={{ borderRadius: 2 }}
+														sx={{
+															flex: 1,
+															alignItems: 'center',
+															gap: 2,
+															paddingInline: 6,
+															paddingBlock: 4,
+															border: `1px solid ${LIGHT_GREY}`,
+															borderRadius: 2,
+														}}
 													>
 														<Skeleton
 															variant="circular"
@@ -377,10 +382,12 @@ function RouteComponent() {
 												) : (
 													<Stack
 														direction="column"
-														gap={2}
-														padding={6}
-														border={`1px solid ${LIGHT_GREY}`}
-														sx={{ borderRadius: 2 }}
+														sx={{
+															gap: 2,
+															padding: 6,
+															border: `1px solid ${LIGHT_GREY}`,
+															borderRadius: 2,
+														}}
 													>
 														<Skeleton
 															variant="text"
@@ -390,7 +397,10 @@ function RouteComponent() {
 																	theme.typography.h1.fontSize,
 															}}
 														/>
-														<Stack direction="row" gap={2} alignItems="center">
+														<Stack
+															direction="row"
+															sx={{ gap: 2, alignItems: 'center' }}
+														>
 															<Skeleton
 																variant="circular"
 																width={24}
@@ -570,21 +580,24 @@ function ProjectCardContentGridVariant({
 	})
 
 	return (
-		<Stack direction="column" gap={2} flex={1} padding={6} overflow="auto">
+		<Stack
+			direction="column"
+			sx={{ gap: 2, flex: 1, padding: 6, overflow: 'auto' }}
+		>
 			<Stack
 				direction="row"
-				alignItems="center"
-				justifyContent="space-between"
-				flex={1}
+				sx={{ alignItems: 'center', justifyContent: 'space-between', flex: 1 }}
 			>
 				<Typography
 					component="p"
 					variant="h1"
 					color="textPrimary"
-					fontWeight={500}
-					textOverflow="ellipsis"
-					whiteSpace="nowrap"
-					overflow="hidden"
+					sx={{
+						fontWeight: 500,
+						textOverflow: 'ellipsis',
+						whiteSpace: 'nowrap',
+						overflow: 'hidden',
+					}}
 				>
 					{projectName}
 				</Typography>
@@ -598,7 +611,7 @@ function ProjectCardContentGridVariant({
 				) : null}
 			</Stack>
 
-			<Stack direction="row" alignItems="center" gap={2}>
+			<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
 				<Icon
 					name={
 						role === 'coordinator'
@@ -609,9 +622,11 @@ function ProjectCardContentGridVariant({
 				/>
 
 				<Typography
-					textOverflow="ellipsis"
-					whiteSpace="nowrap"
-					overflow="hidden"
+					sx={{
+						textOverflow: 'ellipsis',
+						whiteSpace: 'nowrap',
+						overflow: 'hidden',
+					}}
 				>
 					{t(
 						role === 'coordinator'
@@ -635,22 +650,22 @@ function ProjectCardContentListVariant({
 }) {
 	const { formatMessage: t } = useIntl()
 
-	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
-	})
+	const iconSize = useIconSizeBasedOnTypography({ typographyVariant: 'h1' })
 
 	return (
 		<Stack
 			direction="row"
-			gap={2}
-			flex={1}
-			justifyContent="space-between"
-			alignItems="center"
-			paddingInline={6}
-			paddingBlock={4}
-			overflow="auto"
+			sx={{
+				gap: 2,
+				flex: 1,
+				justifyContent: 'space-between',
+				alignItems: 'center',
+				paddingInline: 6,
+				paddingBlock: 4,
+				overflow: 'auto',
+			}}
 		>
-			<Stack direction="row" gap={2} flex={1} overflow="auto">
+			<Stack direction="row" sx={{ gap: 2, flex: 1, overflow: 'auto' }}>
 				<Icon
 					name={
 						role === 'coordinator'
@@ -660,15 +675,17 @@ function ProjectCardContentListVariant({
 					size={iconSize}
 				/>
 
-				<Box overflow="auto">
+				<Box sx={{ overflow: 'auto' }}>
 					<Typography
 						component="p"
 						variant="h1"
 						color="textPrimary"
-						fontWeight={500}
-						textOverflow="ellipsis"
-						whiteSpace="nowrap"
-						overflow="hidden"
+						sx={{
+							fontWeight: 500,
+							textOverflow: 'ellipsis',
+							whiteSpace: 'nowrap',
+							overflow: 'hidden',
+						}}
 					>
 						{projectName}
 					</Typography>

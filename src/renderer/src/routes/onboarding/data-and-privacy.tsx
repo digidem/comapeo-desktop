@@ -12,9 +12,7 @@ import { Icon } from '../../components/icon'
 import { ButtonLink } from '../../components/link'
 
 export const Route = createFileRoute('/onboarding/data-and-privacy')({
-	staticData: {
-		onboardingStepNumber: 1,
-	},
+	staticData: { onboardingStepNumber: 1 },
 	component: RouteComponent,
 })
 
@@ -23,18 +21,25 @@ function RouteComponent() {
 
 	return (
 		<Stack
-			display="flex"
 			direction="column"
-			justifyContent="space-between"
-			flex={1}
-			gap={10}
-			bgcolor={LIGHT_GREY}
-			padding={10}
-			borderRadius={2}
-			overflow="auto"
+			sx={{
+				display: 'flex',
+				justifyContent: 'space-between',
+				flex: 1,
+				gap: 10,
+				bgcolor: LIGHT_GREY,
+				padding: 10,
+				borderRadius: 2,
+				overflow: 'auto',
+			}}
 		>
-			<Container maxWidth="sm" component={Stack} direction="column" gap={5}>
-				<Box alignSelf="center">
+			<Container
+				maxWidth="sm"
+				component={Stack}
+				direction="column"
+				sx={{ gap: 5 }}
+			>
+				<Box sx={{ alignSelf: 'center' }}>
 					<Icon
 						name="material-symbols-encrypted-weight200"
 						size={80}
@@ -42,11 +47,11 @@ function RouteComponent() {
 					/>
 				</Box>
 
-				<Typography variant="h1" fontWeight={500} textAlign="center">
+				<Typography variant="h1" sx={{ fontWeight: 500, textAlign: 'center' }}>
 					{t(m.title)}
 				</Typography>
 
-				<Typography variant="h2" fontWeight={400} textAlign="center">
+				<Typography variant="h2" sx={{ fontWeight: 400, textAlign: 'center' }}>
 					{t(m.description)}
 				</Typography>
 
@@ -66,7 +71,7 @@ function RouteComponent() {
 				</List>
 			</Container>
 
-			<Stack direction="row" justifyContent="center" gap={5}>
+			<Stack direction="row" sx={{ justifyContent: 'center', gap: 5 }}>
 				<ButtonLink
 					to="/onboarding/privacy-policy"
 					variant="outlined"

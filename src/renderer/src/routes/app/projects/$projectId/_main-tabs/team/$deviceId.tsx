@@ -81,14 +81,16 @@ function RouteComponent() {
 
 	return (
 		<>
-			<Stack direction="column" flex={1} overflow="auto">
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Stack
 					direction="row"
-					alignItems="center"
 					component="nav"
-					gap={4}
-					padding={4}
-					borderBottom={`1px solid ${BLUE_GREY}`}
+					sx={{
+						alignItems: 'center',
+						gap: 4,
+						padding: 4,
+						borderBottom: `1px solid ${BLUE_GREY}`,
+					}}
 				>
 					<IconButton
 						aria-label={t(m.goBackAccessibleLabel)}
@@ -108,14 +110,14 @@ function RouteComponent() {
 						<Icon name="material-arrow-back" size={30} />
 					</IconButton>
 
-					<Typography variant="h1" fontWeight={500}>
+					<Typography variant="h1" sx={{ fontWeight: 500 }}>
 						{t(isSelf ? m.thisDevice : m.collaboratorNavTitle)}
 					</Typography>
 				</Stack>
 
 				<Suspense
 					fallback={
-						<Box display="grid" sx={{ placeItems: 'center' }} flex={1}>
+						<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
 							<CircularProgress disableShrink size={30} />
 						</Box>
 					}
@@ -184,9 +186,7 @@ function CollaboratorInfoContent({
 			<Typography
 				component="p"
 				variant="h3"
-				fontWeight={500}
-				textAlign="center"
-				sx={{ overflowWrap: 'anywhere' }}
+				sx={{ fontWeight: 500, textAlign: 'center', overflowWrap: 'anywhere' }}
 			>
 				{member.selfHostedServerDetails.baseUrl}
 			</Typography>
@@ -211,8 +211,7 @@ function CollaboratorInfoContent({
 				<Typography
 					component="p"
 					variant="h3"
-					fontWeight={500}
-					textAlign="center"
+					sx={{ fontWeight: 500, textAlign: 'center' }}
 				>
 					{t(isAtLeastCoordinator ? m.coordinator : m.participant)}
 				</Typography>
@@ -223,45 +222,51 @@ function CollaboratorInfoContent({
 	return (
 		<Stack
 			direction="column"
-			flex={1}
-			justifyContent="space-between"
-			overflow="auto"
-			padding={6}
-			gap={6}
+			sx={{
+				flex: 1,
+				justifyContent: 'space-between',
+				overflow: 'auto',
+				padding: 6,
+				gap: 6,
+			}}
 		>
 			<Stack
-				flex={1}
 				direction="column"
-				border={`1px solid ${BLUE_GREY}`}
-				borderRadius={2}
-				padding={10}
-				justifyContent="center"
-				gap={20}
-				sx={{ overflowWrap: 'break-word' }}
+				sx={{
+					flex: 1,
+					border: `1px solid ${BLUE_GREY}`,
+					borderRadius: 2,
+					padding: 10,
+					justifyContent: 'center',
+					gap: 20,
+					overflowWrap: 'break-word',
+				}}
 			>
-				<Stack direction="column" gap={4} alignItems="center">
+				<Stack direction="column" sx={{ gap: 4, alignItems: 'center' }}>
 					<DeviceIcon deviceType={member.deviceType} size="60px" />
 
-					<Typography variant="h1" fontWeight={500} textAlign="center">
+					<Typography
+						variant="h1"
+						sx={{ fontWeight: 500, textAlign: 'center' }}
+					>
 						{title}
 					</Typography>
 
-					<Stack direction="row" gap={2} alignItems="center">
+					<Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
 						{description}
 					</Stack>
 				</Stack>
 
-				<Stack direction="column" gap={4} alignItems="center">
+				<Stack direction="column" sx={{ gap: 4, alignItems: 'center' }}>
 					<Typography
 						color="textSecondary"
-						textAlign="center"
-						sx={{ overflowWrap: 'anywhere' }}
+						sx={{ textAlign: 'center', overflowWrap: 'anywhere' }}
 					>
 						{truncatedDeviceId}
 					</Typography>
 
 					{member.joinedAt ? (
-						<Typography color="textSecondary" textAlign="center">
+						<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
 							{t(m.addedOn, {
 								value: (
 									<time key={member.deviceId} dateTime={member.joinedAt}>
@@ -281,7 +286,13 @@ function CollaboratorInfoContent({
 			{isSelf &&
 			// NOTE: Remote archives go through different flow
 			!isRemoteArchive ? (
-				<Box display="flex" flexDirection="row" justifyContent="center">
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'center',
+					}}
+				>
 					<Button
 						variant="outlined"
 						fullWidth
@@ -352,17 +363,20 @@ function LeaveProjectDialogContent({
 	if (warningToShow) {
 		return (
 			<Stack direction="column">
-				<Stack direction="column" gap={10} flex={1} padding={20}>
-					<Stack direction="column" alignItems="center" gap={4}>
-						<Box position="relative">
+				<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+					<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
+						<Box sx={{ position: 'relative' }}>
 							<DeviceIcon deviceType={member.deviceType} size="60px" />
 
-							<Box position="absolute" right={-8} bottom={-16}>
+							<Box sx={{ position: 'absolute', right: -8, bottom: -16 }}>
 								<Icon name="material-error" color="error" size={36} />
 							</Box>
 						</Box>
 
-						<Typography variant="h1" fontWeight={500} textAlign="center">
+						<Typography
+							variant="h1"
+							sx={{ fontWeight: 500, textAlign: 'center' }}
+						>
 							{t(
 								warningToShow === 'last_device'
 									? m.lastDeviceWarningTitle
@@ -370,7 +384,7 @@ function LeaveProjectDialogContent({
 							)}
 						</Typography>
 
-						<Typography textAlign="center">
+						<Typography sx={{ textAlign: 'center' }}>
 							{t(
 								warningToShow === 'last_device'
 									? m.lastDeviceWarningDescription
@@ -379,17 +393,19 @@ function LeaveProjectDialogContent({
 						</Typography>
 
 						<Box
-							alignSelf="stretch"
-							padding={6}
-							borderRadius={2}
-							border={`1px solid ${BLUE_GREY}`}
-							sx={{ backgroundColor: PROJECT_ORANGE }}
+							sx={{
+								alignSelf: 'stretch',
+								padding: 6,
+								borderRadius: 2,
+								border: `1px solid ${BLUE_GREY}`,
+								backgroundColor: PROJECT_ORANGE,
+							}}
 						>
 							<List disablePadding>
-								<Stack direction="column" gap={2}>
+								<Stack direction="column" sx={{ gap: 2 }}>
 									{warningToShow === 'last_coordinator' ? (
 										<ListItem disableGutters disablePadding>
-											<Stack direction="row" gap={2}>
+											<Stack direction="row" sx={{ gap: 2 }}>
 												<Icon
 													name="openmoji-mobile-phone-with-arrow"
 													size={suggestionIconSize}
@@ -404,7 +420,7 @@ function LeaveProjectDialogContent({
 									) : null}
 
 									<ListItem disableGutters disablePadding>
-										<Stack direction="row" gap={2}>
+										<Stack direction="row" sx={{ gap: 2 }}>
 											<Icon
 												name="openmoji-download"
 												size={suggestionIconSize}
@@ -424,11 +440,13 @@ function LeaveProjectDialogContent({
 
 				<Stack
 					direction="row"
-					alignItems="center"
-					position="sticky"
-					bottom={0}
-					gap={4}
-					padding={6}
+					sx={{
+						alignItems: 'center',
+						position: 'sticky',
+						bottom: 0,
+						gap: 4,
+						padding: 6,
+					}}
 				>
 					<Button
 						fullWidth
@@ -497,15 +515,18 @@ function LeaveProjectConfirmation({
 	return (
 		<>
 			<Stack direction="column">
-				<Stack direction="column" gap={10} flex={1} padding={20}>
-					<Stack direction="column" alignItems="center" gap={4}>
+				<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+					<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
 						<Icon name="material-logout" htmlColor={BLUE_GREY} size={72} />
 
-						<Typography variant="h1" fontWeight={500} textAlign="center">
+						<Typography
+							variant="h1"
+							sx={{ fontWeight: 500, textAlign: 'center' }}
+						>
 							{t(m.leaveProjectConfirmationTitle)}
 						</Typography>
 
-						<Typography textAlign="center">
+						<Typography sx={{ textAlign: 'center' }}>
 							{t(m.leaveProjectConfirmationDescription, {
 								name: projectName || '',
 							})}
@@ -515,11 +536,13 @@ function LeaveProjectConfirmation({
 
 				<Stack
 					direction="row"
-					alignItems="center"
-					position="sticky"
-					bottom={0}
-					gap={4}
-					padding={6}
+					sx={{
+						alignItems: 'center',
+						position: 'sticky',
+						bottom: 0,
+						gap: 4,
+						padding: 6,
+					}}
 				>
 					<Button
 						fullWidth

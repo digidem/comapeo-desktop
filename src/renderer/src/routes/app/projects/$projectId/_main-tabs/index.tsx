@@ -100,11 +100,7 @@ function RouteComponent() {
 		lang,
 	})
 
-	const { data: tracks } = useManyDocs({
-		projectId,
-		docType: 'track',
-		lang,
-	})
+	const { data: tracks } = useManyDocs({ projectId, docType: 'track', lang })
 
 	const { data: activeMembers } = useManyMembers({
 		projectId,
@@ -189,26 +185,37 @@ function IntroPanel({
 	link: ReactNode
 }) {
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
-			<Stack direction="column" flex={1} padding={6} gap={10}>
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack direction="column" sx={{ flex: 1, padding: 6, gap: 10 }}>
 				<Stack
 					direction="column"
-					flex={1}
-					gap={4}
-					alignItems="center"
-					justifyContent="center"
-					padding={4}
+					sx={{
+						flex: 1,
+						gap: 4,
+						alignItems: 'center',
+						justifyContent: 'center',
+						padding: 4,
+					}}
 				>
 					<Box>{icon}</Box>
 
-					<Typography variant="h1" fontWeight={500} textAlign="center">
+					<Typography
+						variant="h1"
+						sx={{ fontWeight: 500, textAlign: 'center' }}
+					>
 						{title}
 					</Typography>
 
-					<Typography textAlign="center">{description}</Typography>
+					<Typography sx={{ textAlign: 'center' }}>{description}</Typography>
 				</Stack>
 
-				<Box display="flex" justifyContent="center" alignItems="center">
+				<Box
+					sx={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
 					{link}
 				</Box>
 			</Stack>

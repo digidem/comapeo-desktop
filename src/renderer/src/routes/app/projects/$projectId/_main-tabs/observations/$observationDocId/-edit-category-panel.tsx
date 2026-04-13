@@ -55,14 +55,16 @@ export function EditCategoryPanel({
 		}) > 0
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
 				direction="row"
-				alignItems="center"
 				component="nav"
-				gap={4}
-				padding={4}
-				borderBottom={`1px solid ${BLUE_GREY}`}
+				sx={{
+					alignItems: 'center',
+					gap: 4,
+					padding: 4,
+					borderBottom: `1px solid ${BLUE_GREY}`,
+				}}
 			>
 				<IconButton
 					aria-disabled={isCategoryUpdatePending}
@@ -78,19 +80,21 @@ export function EditCategoryPanel({
 					<Icon name="material-close" size={30} />
 				</IconButton>
 
-				<Typography variant="h1" fontWeight={500}>
+				<Typography variant="h1" sx={{ fontWeight: 500 }}>
 					{t(m.editCategoryPanelTitle)}
 				</Typography>
 			</Stack>
 
-			<Box overflow="auto">
+			<Box sx={{ overflow: 'auto' }}>
 				<Suspense
 					fallback={
 						<Box
-							display="flex"
-							flexDirection="column"
-							alignItems="center"
-							padding={10}
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								alignItems: 'center',
+								padding: 10,
+							}}
 						>
 							<CircularProgress disableShrink />
 						</Box>
@@ -161,10 +165,7 @@ function CategoriesList({
 			let newTags: Observation['tags']
 
 			if (currentCategory) {
-				newTags = {
-					...category.tags,
-					...category.addTags,
-				}
+				newTags = { ...category.tags, ...category.addTags }
 
 				// Apply tags from new category and remove tags from previous category
 				for (const [key, value] of Object.entries(observation.tags)) {
@@ -180,21 +181,14 @@ function CategoriesList({
 					}
 				}
 			} else {
-				newTags = {
-					...observation.tags,
-					...category.tags,
-					...category.addTags,
-				}
+				newTags = { ...observation.tags, ...category.tags, ...category.addTags }
 			}
 
 			return updateObservation.mutateAsync({
 				versionId: observation.versionId,
 				value: {
 					...observation,
-					presetRef: {
-						docId: category.docId,
-						versionId: category.versionId,
-					},
+					presetRef: { docId: category.docId, versionId: category.versionId },
 					tags: newTags,
 				},
 			})
@@ -204,12 +198,14 @@ function CategoriesList({
 	return (
 		<>
 			<Box
-				padding={6}
-				display="grid"
-				gridTemplateColumns={`repeat(auto-fill, minmax(120px, 33%))`}
-				justifyItems="center"
-				alignItems="self-start"
-				justifyContent="space-around"
+				sx={{
+					padding: 6,
+					display: 'grid',
+					gridTemplateColumns: `repeat(auto-fill, minmax(120px, 33%))`,
+					justifyItems: 'center',
+					alignItems: 'self-start',
+					justifyContent: 'space-around',
+				}}
 			>
 				{selectableCategories.map((category) => {
 					return (
@@ -238,7 +234,10 @@ function CategoriesList({
 								borderRadius: 2,
 							}}
 						>
-							<Stack direction="column" alignItems="center" gap={2} padding={4}>
+							<Stack
+								direction="column"
+								sx={{ alignItems: 'center', gap: 2, padding: 4 }}
+							>
 								<CategoryIconContainer
 									color={category.color || BLUE_GREY}
 									applyBoxShadow
@@ -258,7 +257,7 @@ function CategoriesList({
 									)}
 								</CategoryIconContainer>
 
-								<Typography fontWeight={450} textAlign="center">
+								<Typography sx={{ fontWeight: 450, textAlign: 'center' }}>
 									{category.name}
 								</Typography>
 							</Stack>
