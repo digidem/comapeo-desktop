@@ -109,7 +109,7 @@ const { onlineStyleUrl, rootKey, storageDirectory } = v.parse(
 	values,
 )
 
-const { manager, mapServer } = initializeCore({
+const { manager, mapServer, getMapServerPorts } = initializeCore({
 	onlineStyleUrl,
 	rootKey,
 	storageDirectory,
@@ -171,7 +171,11 @@ process.parentPort.on('message', (event) => {
 		)
 	} else {
 		const server = createAppRpcServer(
-			{ mapServer },
+			{
+				mapServer,
+				// @ts-expect-error Not worth patching IPC
+				getMapServerPorts,
+			},
 			new MessagePortLike(appChannelPort),
 		)
 
@@ -247,10 +251,8 @@ function initializeCore({
 		keyPair: mapServerKeyPair,
 	})
 
-	// Don't await, RPC client should call `appRpc.mapServer.getPorts()` to await
-	mapServer.listen().catch((err) => {
-		Sentry.captureException(err)
-	})
+	// Don't await, RPC client should call `appRpc.getMapServerPorts()` to await
+	const mapServerPromise = mapServer.listen()
 
 	// Don't await, methods that use the server will await this internally
 	fastifyController.start().catch((err) => {
@@ -260,6 +262,9 @@ function initializeCore({
 	return {
 		manager,
 		mapServer,
+		getMapServerPorts: async () => {
+			return mapServerPromise
+		},
 		fastifyController,
 	}
 }

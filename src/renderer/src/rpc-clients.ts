@@ -16,7 +16,9 @@ export function initRpcClients() {
 
 	const mapServerApi = {
 		async getBaseUrl() {
-			const { localPort } = await appRpc.mapServer.getPorts()
+			const { localPort } =
+				// @ts-expect-error Not worth patching IPC
+				await appRpc.getMapServerPorts()
 
 			return new URL(`http://127.0.0.1:${localPort}`)
 		},
