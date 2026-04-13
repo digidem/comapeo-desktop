@@ -46,7 +46,6 @@ const {
 	ONLINE_STYLE_URL,
 	SENTRY_DSN,
 	USER_DATA_PATH,
-	VITE_MAPBOX_ACCESS_TOKEN,
 } = v.parse(
 	v.object({
 		APP_TYPE: v.optional(
@@ -89,7 +88,6 @@ const {
 		ONLINE_STYLE_URL: v.pipe(v.string(), v.url()),
 		SENTRY_DSN: v.optional(v.pipe(v.string(), v.url())),
 		USER_DATA_PATH: v.optional(v.string()),
-		VITE_MAPBOX_ACCESS_TOKEN: v.optional(v.string()),
 	}),
 	process.env,
 )
@@ -159,24 +157,15 @@ class CoMapeoDesktopForgePlugin extends PluginBase<CoMapeoDesktopForgePluginConf
 			new URL('./app.config.json', import.meta.url),
 		)
 
-		// Use the `VITE_MAPBOX_ACCESS_TOKEN` to the online style URL
-		// if it's a Mapbox style that doesn't already have an access token param
 		const onlineStyleUrl = new URL(ONLINE_STYLE_URL)
 
-		if (onlineStyleUrl.host === 'api.mapbox.com') {
-			if (
-				!onlineStyleUrl.searchParams.has('access_token') &&
-				VITE_MAPBOX_ACCESS_TOKEN
-			) {
-				onlineStyleUrl.searchParams.set(
-					'access_token',
-					VITE_MAPBOX_ACCESS_TOKEN,
-				)
-			} else {
-				console.warn(
-					'⚠️ Using a Mapbox map requires an access token. Either update the `ONLINE_STYLE_URL` env variable or specify the `VITE_MAPBOX_ACCESS_TOKEN` env variable',
-				)
-			}
+		if (
+			onlineStyleUrl.host === 'api.mapbox.com' &&
+			!onlineStyleUrl.searchParams.has('access_token')
+		) {
+			console.warn(
+				'⚠️ Using a Mapbox style requires an access token. Update the `ONLINE_STYLE_URL` env variable to include it (`?access_token=<token>`)',
+			)
 		}
 
 		const appConfig: AppConfig = {

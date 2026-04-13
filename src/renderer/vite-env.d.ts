@@ -8,7 +8,6 @@ declare const __APP_TYPE__:
 
 interface ImportMetaEnv {
 	readonly VITE_FEATURE_TEST_DATA_UI?: string
-	readonly VITE_MAPBOX_ACCESS_TOKEN?: string
 }
 
 interface ImportMeta {
