@@ -16,7 +16,9 @@ import { Icon } from '../components/icon'
 import { ButtonLink } from '../components/link'
 import topographicPrintURL from '../images/topographic-print.svg'
 
-export const Route = createFileRoute('/welcome')({ component: RouteComponent })
+export const Route = createFileRoute('/welcome')({
+	component: RouteComponent,
+})
 
 const LIST_BACKGROUND_COLOR = alpha(BLACK, 0.4)
 

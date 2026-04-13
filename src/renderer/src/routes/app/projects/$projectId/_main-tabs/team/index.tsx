@@ -95,6 +95,7 @@ function RouteComponent() {
 					{t(m.navTitle)}
 				</Typography>
 			</Stack>
+
 			<Suspense
 				fallback={
 					<Box

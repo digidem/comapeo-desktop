@@ -22,6 +22,7 @@ export function AppTitleBar({
 				height: TITLE_BAR_HEIGHT,
 				display: 'flex',
 				alignItems: 'center',
+				// NOTE: macOS has the window controls on the left side by default.
 				justifyContent: platform === 'darwin' ? 'flex-end' : undefined,
 				paddingX: 6,
 				bgcolor: TITLE_BAR_COLOR,
