@@ -1,5 +1,10 @@
 import { Suspense } from 'react'
-import { useMapStyleUrl } from '@comapeo/core-react'
+import {
+	getErrorCode,
+	useGetCustomMapInfo,
+	useImportCustomMapFile,
+	useRemoveCustomMapFile,
+} from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -7,24 +12,14 @@ import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, LIGHT_GREY } from '../../../../colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
-import { ErrorBoundary } from '../../../../components/error-boundary.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../components/icon.tsx'
-import { useRefreshTokensActions } from '../../../../contexts/refresh-tokens-store-context.ts'
 import { bytesToMegabytes } from '../../../../lib/bytes-to-megabytes.ts'
-import { selectFileMutationOptions } from '../../../../lib/queries/file-system.ts'
-import { createGlobalMutationsKey } from '../../../../lib/queries/global-mutations.ts'
-import {
-	getCustomMapInfoQueryOptions,
-	importSMPFileMutationOptions,
-	removeSMPFileMutationOptions,
-} from '../../../../lib/queries/maps.ts'
 
 export const Route = createFileRoute('/app/settings/_nested/background-map')({
 	staticData: {
@@ -40,23 +35,27 @@ function RouteComponent() {
 
 	return (
 		<Container maxWidth="md" disableGutters>
-			<Stack direction="column" flex={1}>
-				<Stack direction="column" flex={1} overflow="auto">
-					<Stack direction="column" padding={6} gap={6}>
+			<Stack direction="column" sx={{ flex: 1 }}>
+				<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+					<Stack direction="column" sx={{ padding: 6, gap: 6 }}>
 						<Box
-							bgcolor={LIGHT_GREY}
-							border={`1px solid ${BLUE_GREY}`}
-							borderRadius={2}
-							padding={4}
+							sx={{
+								bgcolor: LIGHT_GREY,
+								border: `1px solid ${BLUE_GREY}`,
+								borderRadius: 2,
+								padding: 4,
+							}}
 						>
-							<Typography textAlign="center">{t(m.description)}</Typography>
+							<Typography sx={{ textAlign: 'center' }}>
+								{t(m.description)}
+							</Typography>
 						</Box>
 
 						<Divider />
 
 						<Suspense
 							fallback={
-								<Box display="grid" sx={{ placeItems: 'center' }}>
+								<Box sx={{ display: 'grid', placeItems: 'center' }}>
 									<CircularProgress disableShrink />
 								</Box>
 							}
@@ -70,148 +69,44 @@ function RouteComponent() {
 	)
 }
 
-const SELECT_FILE_MUTATION_KEY = createGlobalMutationsKey(['files', 'select'])
-
-const IMPORT_SMP_FILE_MUTATION_KEY = createGlobalMutationsKey([
-	'maps',
-	'import',
-])
-
-const REMOVE_CUSTOM_MAP_MUTATION_KEY = createGlobalMutationsKey([
-	'maps',
-	'remove',
-])
-
 function CustomMap() {
 	const { formatMessage: t } = useIntl()
 
-	const { data: styleUrl } = useMapStyleUrl()
-
-	const { update: updateRefreshToken } = useRefreshTokensActions()
-
-	const selectFile = useMutation({
-		...selectFileMutationOptions(),
-		mutationKey: SELECT_FILE_MUTATION_KEY,
-	})
-
-	const importSMPFile = useMutation({
-		...importSMPFileMutationOptions(),
-		mutationKey: IMPORT_SMP_FILE_MUTATION_KEY,
-	})
-
-	const removeCustomMap = useMutation({
-		...removeSMPFileMutationOptions(),
-		mutationKey: REMOVE_CUSTOM_MAP_MUTATION_KEY,
-	})
+	const importCustomMapFile = useImportCustomMapFile()
+	const removeCustomMapFile = useRemoveCustomMapFile()
 
 	return (
 		<>
-			<ErrorBoundary
-				getResetKey={() => styleUrl}
-				fallback={({ reset }) => (
-					<CustomMapInfoError
-						chooseIsPending={
-							selectFile.status === 'pending' ||
-							importSMPFile.status === 'pending'
-						}
-						onChooseMap={() => {
-							selectFile.mutate(
-								{ extensionFilters: ['smp'] },
-								{
-									onSuccess: (fileInfo) => {
-										if (!fileInfo) {
-											return
-										}
-
-										importSMPFile.mutate(
-											{ filePath: fileInfo.path },
-											{
-												onSuccess: () => {
-													updateRefreshToken('maps')
-													reset()
-												},
-											},
-										)
-									},
-								},
-							)
-						}}
-						removeIsPending={removeCustomMap.status === 'pending'}
-						onRemoveMap={() => {
-							removeCustomMap.mutate(undefined, {
-								onSuccess: () => {
-									updateRefreshToken('maps')
-									reset()
-								},
-							})
-						}}
-					/>
-				)}
-			>
-				<CustomMapInfo
-					onChooseMap={() => {
-						selectFile.mutate(
-							{ extensionFilters: ['smp'] },
-							{
-								onSuccess: (fileInfo) => {
-									if (!fileInfo) {
-										return
-									}
-
-									importSMPFile.mutate(
-										{ filePath: fileInfo.path },
-										{
-											onSuccess: () => {
-												updateRefreshToken('maps')
-											},
-										},
-									)
-								},
-							},
-						)
-					}}
-					removeIsPending={removeCustomMap.status === 'pending'}
-					chooseIsPending={
-						selectFile.status === 'pending' ||
-						importSMPFile.status === 'pending'
-					}
-					onRemoveMap={() => {
-						removeCustomMap.mutate(undefined, {
-							onSuccess: () => {
-								updateRefreshToken('maps')
-							},
-						})
-					}}
-					styleUrl={styleUrl}
-				/>
-			</ErrorBoundary>
+			<CustomMapInfo
+				onChooseMap={(file) => {
+					importCustomMapFile.mutate({ file })
+				}}
+				removeIsPending={removeCustomMapFile.status === 'pending'}
+				chooseIsPending={importCustomMapFile.status === 'pending'}
+				onRemoveMap={() => {
+					removeCustomMapFile.mutate(undefined)
+				}}
+			/>
 
 			<DecentDialog
 				fullWidth
 				maxWidth="sm"
 				value={
-					selectFile.status === 'error'
+					importCustomMapFile.status === 'error'
 						? {
-								errorMessage: selectFile.error.toString(),
+								errorMessage: importCustomMapFile.error.toString(),
 								onClose: () => {
-									selectFile.reset()
+									importCustomMapFile.reset()
 								},
 							}
-						: importSMPFile.status === 'error'
+						: removeCustomMapFile.status === 'error'
 							? {
-									errorMessage: importSMPFile.error.toString(),
+									errorMessage: removeCustomMapFile.error.toString(),
 									onClose: () => {
-										importSMPFile.reset()
+										removeCustomMapFile.reset()
 									},
 								}
-							: removeCustomMap.status === 'error'
-								? {
-										errorMessage: removeCustomMap.error.toString(),
-										onClose: () => {
-											removeCustomMap.reset()
-										},
-									}
-								: null
+							: null
 				}
 			>
 				{({ errorMessage, onClose }) => (
@@ -221,13 +116,16 @@ function CustomMap() {
 
 			<DecentDialog
 				maxWidth="sm"
-				value={importSMPFile.status === 'success' || null}
+				value={importCustomMapFile.status === 'success' || null}
 			>
 				{() => (
 					<Stack direction="column">
-						<Stack direction="column" gap={10} flex={1} padding={20}>
-							<Stack direction="column" alignItems="center" gap={4}>
-								<Typography variant="h1" fontWeight={500} textAlign="center">
+						<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+							<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
+								<Typography
+									variant="h1"
+									sx={{ fontWeight: 500, textAlign: 'center' }}
+								>
 									{t(m.mapUpdateSuccessTitle)}
 								</Typography>
 
@@ -236,17 +134,19 @@ function CustomMap() {
 						</Stack>
 
 						<Box
-							position="sticky"
-							bottom={0}
-							display="flex"
-							justifyContent="center"
-							padding={6}
+							sx={{
+								position: 'sticky',
+								bottom: 0,
+								display: 'flex',
+								justifyContent: 'center',
+								padding: 6,
+							}}
 						>
 							<Button
 								fullWidth
 								variant="outlined"
 								onClick={() => {
-									importSMPFile.reset()
+									importCustomMapFile.reset()
 								}}
 								sx={{ maxWidth: 400, alignSelf: 'center' }}
 							>
@@ -262,7 +162,7 @@ function CustomMap() {
 
 type MapFileProps = {
 	chooseIsPending: boolean
-	onChooseMap: () => void
+	onChooseMap: (file: File) => void
 	onRemoveMap: () => void
 	removeIsPending: boolean
 }
@@ -272,45 +172,76 @@ function CustomMapInfo({
 	onChooseMap,
 	onRemoveMap,
 	removeIsPending,
-	styleUrl,
-}: MapFileProps & { styleUrl: string }) {
+}: MapFileProps) {
 	const { formatMessage: t, formatDate } = useIntl()
 
-	const customMapInfo = useSuspenseQuery(
-		getCustomMapInfoQueryOptions({ styleUrl }),
-	)
+	const customMapInfo = useGetCustomMapInfo()
 
-	if (customMapInfo.status === 'error') {
-		return (
-			<CustomMapInfoError
-				onChooseMap={onChooseMap}
-				onRemoveMap={onRemoveMap}
-				chooseIsPending={chooseIsPending}
-				removeIsPending={removeIsPending}
-			/>
-		)
+	if (customMapInfo.status === 'pending') {
+		return null
 	}
 
-	if (customMapInfo.data === null) {
+	if (customMapInfo.status === 'error') {
+		if (getErrorCode(customMapInfo.error) === 'MAP_NOT_FOUND') {
+			return (
+				<Stack direction="column" sx={{ gap: 5 }}>
+					<Button
+						component="label"
+						variant="outlined"
+						fullWidth
+						sx={{ maxWidth: 400, alignSelf: 'center' }}
+						startIcon={<Icon name="material-file-download" />}
+						loading={chooseIsPending}
+						loadingPosition="start"
+						tabIndex={-1}
+						role={undefined}
+					>
+						{t(m.chooseFile)}
+
+						<HiddenSelectFileInput onClick={onChooseMap} />
+					</Button>
+
+					<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
+						{t(m.acceptedFileTypes)}
+					</Typography>
+				</Stack>
+			)
+		}
+
 		return (
-			<Stack direction="column" gap={5}>
+			<Stack direction="column" sx={{ gap: 4 }}>
+				<Typography sx={{ textAlign: 'center' }}>
+					{t(m.customMapInfoError)}
+				</Typography>
 				<Button
+					component="label"
 					variant="outlined"
 					fullWidth
-					sx={{ maxWidth: 400, alignSelf: 'center' }}
-					startIcon={<Icon name="material-file-download" />}
 					loading={chooseIsPending}
 					loadingPosition="start"
-					onClick={() => {
-						onChooseMap()
-					}}
+					sx={{ maxWidth: 400, alignSelf: 'center' }}
+					startIcon={<Icon name="material-file-download" />}
+					tabIndex={-1}
+					role={undefined}
 				>
 					{t(m.chooseFile)}
+
+					<HiddenSelectFileInput onClick={onChooseMap} />
 				</Button>
 
-				<Typography color="textSecondary" textAlign="center">
-					{t(m.acceptedFileTypes)}
-				</Typography>
+				<Button
+					variant="outlined"
+					color="error"
+					fullWidth
+					loading={removeIsPending}
+					loadingPosition="start"
+					sx={{ maxWidth: 400, alignSelf: 'center' }}
+					onClick={() => {
+						onRemoveMap()
+					}}
+				>
+					{t(m.removeMap)}
+				</Button>
 			</Stack>
 		)
 	}
@@ -319,8 +250,8 @@ function CustomMapInfo({
 	const displayedSize = parseInt(calculatedSize, 10) < 1 ? '<1' : calculatedSize
 
 	return (
-		<Stack direction="column" gap={4}>
-			<Stack direction="row" justifyContent="space-between">
+		<Stack direction="column" sx={{ gap: 4 }}>
+			<Stack direction="row" sx={{ justifyContent: 'space-between' }}>
 				<Typography color="textSecondary">{t(m.mapNameColumnLabel)}</Typography>
 
 				<Typography color="textSecondary">
@@ -330,18 +261,22 @@ function CustomMapInfo({
 
 			<Stack
 				direction="column"
-				border={`1px solid ${BLUE_GREY}`}
-				borderRadius={2}
-				padding={5}
-				gap={5}
+				sx={{
+					border: `1px solid ${BLUE_GREY}`,
+					borderRadius: 2,
+					padding: 5,
+					gap: 5,
+				}}
 			>
-				<Stack direction="row" gap={2}>
-					<Stack direction="column" flex={1} overflow="hidden">
+				<Stack direction="row" sx={{ gap: 2 }}>
+					<Stack direction="column" sx={{ flex: 1, overflow: 'hidden' }}>
 						<Typography
-							textOverflow="ellipsis"
-							whiteSpace="nowrap"
-							overflow="hidden"
-							fontWeight={500}
+							sx={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								fontWeight: 500,
+							}}
 						>
 							{customMapInfo.data.name}
 						</Typography>
@@ -352,7 +287,7 @@ function CustomMapInfo({
 					</Stack>
 
 					<Typography variant="body2" color="textSecondary">
-						<time dateTime={customMapInfo.data.created.toISOString()}>
+						<time dateTime={new Date(customMapInfo.data.created).toISOString()}>
 							{formatDate(customMapInfo.data.created, {
 								year: 'numeric',
 								month: 'long',
@@ -379,46 +314,34 @@ function CustomMapInfo({
 	)
 }
 
-function CustomMapInfoError({
-	chooseIsPending,
-	onChooseMap,
-	onRemoveMap,
-	removeIsPending,
-}: MapFileProps) {
-	const { formatMessage: t } = useIntl()
+const VISUALLY_HIDDEN = {
+	clip: 'rect(0 0 0 0)',
+	clipPath: 'inset(50%)',
+	height: 1,
+	overflow: 'hidden',
+	position: 'absolute',
+	bottom: 0,
+	left: 0,
+	whiteSpace: 'nowrap',
+	width: 1,
+} as const
 
+function HiddenSelectFileInput({ onClick }: { onClick: (file: File) => void }) {
 	return (
-		<Stack direction="column" gap={4}>
-			<Typography textAlign="center">{t(m.customMapInfoError)}</Typography>
+		<input
+			type="file"
+			onChange={(event) => {
+				const file = event.target.files?.item(0)
 
-			<Button
-				variant="outlined"
-				fullWidth
-				loading={chooseIsPending}
-				loadingPosition="start"
-				sx={{ maxWidth: 400, alignSelf: 'center' }}
-				startIcon={<Icon name="material-file-download" />}
-				onClick={() => {
-					onChooseMap()
-				}}
-			>
-				{t(m.chooseFile)}
-			</Button>
+				if (!file) {
+					return
+				}
 
-			<Button
-				variant="outlined"
-				color="error"
-				fullWidth
-				loading={removeIsPending}
-				loadingPosition="start"
-				sx={{ maxWidth: 400, alignSelf: 'center' }}
-				onClick={() => {
-					onRemoveMap()
-				}}
-			>
-				{t(m.removeMap)}
-			</Button>
-		</Stack>
+				onClick(file)
+			}}
+			accept=".smp"
+			style={VISUALLY_HIDDEN}
+		/>
 	)
 }
 

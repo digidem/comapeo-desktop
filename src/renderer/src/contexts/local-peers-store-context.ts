@@ -1,5 +1,5 @@
 import { createContext, use } from 'react'
-import type { PublicPeerInfo } from '@comapeo/core/dist/mapeo-manager'
+import type { PublicPeerInfo } from '@comapeo/core'
 import { type MapeoClientApi } from '@comapeo/ipc/client.js'
 import { captureException } from '@sentry/react'
 import { isEqual } from 'radashi'

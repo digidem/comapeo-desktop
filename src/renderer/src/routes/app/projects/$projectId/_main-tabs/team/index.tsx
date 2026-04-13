@@ -63,9 +63,10 @@ export const Route = createFileRoute(
 					'projects',
 					projectId,
 					'members',
+					{ includeLeft: true },
 				],
 				queryFn: async () => {
-					return projectApi.$member.getMany()
+					return projectApi.$member.getMany({ includeLeft: true })
 				},
 			}),
 		])
@@ -79,36 +80,49 @@ function RouteComponent() {
 	const { projectId } = Route.useParams()
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto" gap={10} padding={6}>
-			<Stack direction="column" gap={4} alignItems="center">
+		<Stack
+			direction="column"
+			sx={{ flex: 1, overflow: 'auto', gap: 10, padding: 6 }}
+		>
+			<Stack direction="column" sx={{ gap: 4, alignItems: 'center' }}>
 				<Icon
 					name="material-people-filled"
 					size={120}
 					htmlColor={DARKER_ORANGE}
 				/>
 
-				<Typography variant="h1" fontWeight={500} textAlign="center">
+				<Typography variant="h1" sx={{ fontWeight: 500, textAlign: 'center' }}>
 					{t(m.navTitle)}
 				</Typography>
 			</Stack>
 
 			<Suspense
 				fallback={
-					<Box display="flex" flexDirection="row" justifyContent="center">
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'row',
+							justifyContent: 'center',
+						}}
+					>
 						<CircularProgress disableShrink />
 					</Box>
 				}
 			>
 				<Stack direction="column">
-					<Box display="flex" flexDirection="row" justifyContent="center">
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'row',
+							justifyContent: 'center',
+						}}
+					>
 						<InviteButtonSection projectId={projectId} />
 					</Box>
 
 					<Stack
 						direction="column"
-						flex={1}
-						justifyContent="space-between"
-						paddingBlock={10}
+						sx={{ flex: 1, justifyContent: 'space-between', paddingBlock: 10 }}
 					>
 						<MembersSections projectId={projectId} />
 					</Stack>
@@ -147,7 +161,7 @@ function InviteButtonSection({ projectId }: { projectId: string }) {
 function MembersSections({ projectId }: { projectId: string }) {
 	const { formatMessage: t } = useIntl()
 
-	const { data: members } = useManyMembers({ projectId })
+	const { data: members } = useManyMembers({ projectId, includeLeft: true })
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
 	const { coordinators, participants, pastCollaborators, remoteArchives } =
@@ -159,12 +173,12 @@ function MembersSections({ projectId }: { projectId: string }) {
 	})
 
 	return (
-		<Stack direction="column" gap={6}>
-			<Stack direction="column" gap={2}>
-				<Stack direction="row" gap={4} alignItems="center">
+		<Stack direction="column" sx={{ gap: 6 }}>
+			<Stack direction="column" sx={{ gap: 2 }}>
+				<Stack direction="row" sx={{ gap: 4, alignItems: 'center' }}>
 					<Icon name="material-manage-accounts-filled" size={sectionIconSize} />
 
-					<Typography variant="h2" fontWeight={500}>
+					<Typography variant="h2" sx={{ fontWeight: 500 }}>
 						{t(m.coordinatorsSectionTitle)}
 					</Typography>
 				</Stack>
@@ -180,11 +194,11 @@ function MembersSections({ projectId }: { projectId: string }) {
 
 			<Divider variant="fullWidth" sx={{ bgcolor: LIGHT_GREY }} />
 
-			<Stack direction="column" gap={2}>
-				<Stack direction="row" gap={4} alignItems="center">
+			<Stack direction="column" sx={{ gap: 2 }}>
+				<Stack direction="row" sx={{ gap: 4, alignItems: 'center' }}>
 					<Icon name="material-people-filled" size={sectionIconSize} />
 
-					<Typography variant="h2" fontWeight={500}>
+					<Typography variant="h2" sx={{ fontWeight: 500 }}>
 						{t(m.participantsSectionTitle)}
 					</Typography>
 				</Stack>
@@ -206,14 +220,14 @@ function MembersSections({ projectId }: { projectId: string }) {
 				<>
 					<Divider variant="fullWidth" sx={{ bgcolor: LIGHT_GREY }} />
 
-					<Stack direction="column" gap={2}>
-						<Stack direction="row" gap={4} alignItems="center">
+					<Stack direction="column" sx={{ gap: 2 }}>
+						<Stack direction="row" sx={{ gap: 4, alignItems: 'center' }}>
 							<Icon
 								name="material-offline-bolt-outlined"
 								size={sectionIconSize}
 							/>
 
-							<Typography variant="h2" fontWeight={500}>
+							<Typography variant="h2" sx={{ fontWeight: 500 }}>
 								{t(m.remoteArchivesSectionTitle)}
 							</Typography>
 						</Stack>
@@ -233,11 +247,11 @@ function MembersSections({ projectId }: { projectId: string }) {
 				<>
 					<Divider variant="fullWidth" sx={{ bgcolor: LIGHT_GREY }} />
 
-					<Stack direction="column" gap={2}>
-						<Stack direction="row" gap={4} alignItems="center">
+					<Stack direction="column" sx={{ gap: 2 }}>
+						<Stack direction="row" sx={{ gap: 4, alignItems: 'center' }}>
 							<Icon name="material-group-off" size={sectionIconSize} />
 
-							<Typography variant="h2" fontWeight={500}>
+							<Typography variant="h2" sx={{ fontWeight: 500 }}>
 								{t(m.pastCollaboratorsSectionTitle)}
 							</Typography>
 						</Stack>
@@ -364,16 +378,16 @@ function PastCollaboratorsList({
 					<ListItem key={device.deviceId} disablePadding disableGutters>
 						<Stack
 							direction="row"
-							flex={1}
-							justifyContent="space-between"
-							alignItems="center"
-							overflow="auto"
+							sx={{
+								flex: 1,
+								justifyContent: 'space-between',
+								alignItems: 'center',
+								overflow: 'auto',
+							}}
 						>
 							<Stack
 								direction="row"
-								alignItems="center"
-								gap={3}
-								overflow="auto"
+								sx={{ alignItems: 'center', gap: 3, overflow: 'auto' }}
 							>
 								<Box sx={{ opacity: 0.5 }}>
 									<DeviceIcon
@@ -383,11 +397,13 @@ function PastCollaboratorsList({
 								</Box>
 
 								<Typography
-									textOverflow="ellipsis"
-									whiteSpace="nowrap"
-									overflow="hidden"
-									flex={1}
-									fontWeight={500}
+									sx={{
+										textOverflow: 'ellipsis',
+										whiteSpace: 'nowrap',
+										overflow: 'hidden',
+										flex: 1,
+										fontWeight: 500,
+									}}
 								>
 									{isSelf ? (
 										<>
@@ -454,12 +470,7 @@ function getDisplayableMembers(members: Array<MemberApi.MemberInfo>) {
 		}
 	}
 
-	return {
-		coordinators,
-		participants,
-		pastCollaborators,
-		remoteArchives,
-	}
+	return { coordinators, participants, pastCollaborators, remoteArchives }
 }
 
 const m = defineMessages({

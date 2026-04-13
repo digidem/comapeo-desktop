@@ -89,9 +89,7 @@ export function ObservationAudioAttachmentPreview({
 		>
 			<Stack
 				direction="column"
-				gap={2}
-				justifyContent="center"
-				alignItems="center"
+				sx={{ gap: 2, justifyContent: 'center', alignItems: 'center' }}
 			>
 				<Icon name="material-volume-up" htmlColor={DARK_GREY} />
 
@@ -122,10 +120,12 @@ export function ObservationUnsupportedAttachmentPreview({
 		>
 			<Stack
 				direction="column"
-				gap={2}
-				justifyContent="center"
-				alignItems="center"
-				overflow={'auto'}
+				sx={{
+					gap: 2,
+					justifyContent: 'center',
+					alignItems: 'center',
+					overflow: 'auto',
+				}}
 			>
 				<Icon name="material-attachment" htmlColor={DARK_GREY} />
 			</Stack>
@@ -173,7 +173,7 @@ function AudioDurationText({
 	const audioInfo = use(audioInfoResource(url))
 
 	return (
-		<Typography fontWeight={500}>
+		<Typography sx={{ fontWeight: 500 }}>
 			{getFormattedDuration(audioInfo.duration)}
 		</Typography>
 	)

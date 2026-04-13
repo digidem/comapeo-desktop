@@ -214,14 +214,16 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 	const peer = updatedPeer || peerOnLoad
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
 				direction="row"
-				alignItems="center"
 				component="nav"
-				gap={4}
-				padding={4}
-				borderBottom={`1px solid ${BLUE_GREY}`}
+				sx={{
+					alignItems: 'center',
+					gap: 4,
+					padding: 4,
+					borderBottom: `1px solid ${BLUE_GREY}`,
+				}}
 			>
 				<IconButton
 					onClick={() => {
@@ -235,39 +237,41 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 					<Icon name="material-arrow-back" size={30} />
 				</IconButton>
 
-				<Typography variant="h1" fontWeight={500}>
+				<Typography variant="h1" sx={{ fontWeight: 500 }}>
 					{t(m.navTitle)}
 				</Typography>
 			</Stack>
 
 			<Stack
 				direction="column"
-				flex={1}
-				overflow="auto"
-				justifyContent="space-between"
+				sx={{ flex: 1, overflow: 'auto', justifyContent: 'space-between' }}
 			>
-				<Box padding={6}>
+				<Box sx={{ padding: 6 }}>
 					<Stack
 						direction="column"
-						padding={6}
-						border={`1px solid ${BLUE_GREY}`}
-						borderRadius={2}
-						justifyContent="center"
-						alignItems="center"
-						gap={4}
+						sx={{
+							padding: 6,
+							border: `1px solid ${BLUE_GREY}`,
+							borderRadius: 2,
+							justifyContent: 'center',
+							alignItems: 'center',
+							gap: 4,
+						}}
 					>
 						<DeviceIcon deviceType={peer.deviceType} size="48px" />
 
 						{peer.status === 'disconnected' ? <DisconnectedIndicator /> : null}
 
-						<Typography textAlign="center">
+						<Typography sx={{ textAlign: 'center' }}>
 							{t(m.deviceBeingInvited, {
 								name: (
 									<Typography
 										variant="inherit"
 										component="span"
-										fontSize={(theme) => theme.typography.h1.fontSize}
-										fontWeight={500}
+										sx={{
+											fontSize: (theme) => theme.typography.h1.fontSize,
+											fontWeight: 500,
+										}}
 									>
 										{peer.name}
 									</Typography>
@@ -276,8 +280,10 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 									<Typography
 										variant="inherit"
 										component="span"
-										fontSize={(theme) => theme.typography.h2.fontSize}
-										fontWeight={500}
+										sx={{
+											fontSize: (theme) => theme.typography.h2.fontSize,
+											fontWeight: 500,
+										}}
 									>
 										{role === 'coordinator'
 											? t(m.coordinator)
@@ -290,14 +296,16 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 				</Box>
 
 				<Box
-					display="flex"
-					flexDirection="row"
-					justifyContent="center"
-					paddingInline={6}
-					paddingBlockEnd={6}
-					position="sticky"
-					bottom={0}
-					zIndex={1}
+					sx={{
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'center',
+						paddingInline: 6,
+						paddingBlockEnd: 6,
+						position: 'sticky',
+						bottom: 0,
+						zIndex: 1,
+					}}
 				>
 					<Button
 						fullWidth
@@ -337,18 +345,30 @@ function InvitePending({
 	}, [setCurrentTimestamp])
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
-			<Stack direction="column" justifyContent="space-between" flex={1} gap={6}>
-				<Stack direction="column" gap={3} alignItems="center" padding={6}>
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack
+				direction="column"
+				sx={{ justifyContent: 'space-between', flex: 1, gap: 6 }}
+			>
+				<Stack
+					direction="column"
+					sx={{ gap: 3, alignItems: 'center', padding: 6 }}
+				>
 					<Icon name="comapeo-send" htmlColor={COMAPEO_BLUE} size={240} />
 					<Container maxWidth="xs">
-						<Typography variant="h1" fontWeight={500} textAlign="center">
+						<Typography
+							variant="h1"
+							sx={{ fontWeight: 500, textAlign: 'center' }}
+						>
 							{t(m.waiting)}
 						</Typography>
 					</Container>
 				</Stack>
 
-				<Stack direction="column" gap={3} alignItems="center" padding={6}>
+				<Stack
+					direction="column"
+					sx={{ gap: 3, alignItems: 'center', padding: 6 }}
+				>
 					<Typography>
 						{t(m.timeSinceSent, {
 							time: getFormattedDuration(
@@ -389,31 +409,34 @@ function InviteRejected({
 	const peer = updatedPeer || peerOnLoad
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
 				direction="column"
-				flex={1}
-				overflow="auto"
-				justifyContent="space-between"
+				sx={{ flex: 1, overflow: 'auto', justifyContent: 'space-between' }}
 			>
 				<Stack
 					direction="column"
-					padding={6}
-					borderRadius={2}
-					justifyContent="center"
-					alignItems="center"
-					gap={4}
+					sx={{
+						padding: 6,
+						borderRadius: 2,
+						justifyContent: 'center',
+						alignItems: 'center',
+						gap: 4,
+					}}
 				>
 					<Box>
 						<Icon name="material-error" color="error" size={128} />
 					</Box>
 
-					<Typography variant="h1" fontWeight={500} textAlign="center">
+					<Typography
+						variant="h1"
+						sx={{ fontWeight: 500, textAlign: 'center' }}
+					>
 						{t(m.invitationDeclinedTitle)}
 					</Typography>
 
 					<Container maxWidth="xs">
-						<Typography textAlign="center">
+						<Typography sx={{ textAlign: 'center' }}>
 							{t(m.invitationDeclinedDescription)}
 						</Typography>
 					</Container>
@@ -426,14 +449,16 @@ function InviteRejected({
 				</Stack>
 
 				<Box
-					display="flex"
-					flexDirection="row"
-					justifyContent="center"
-					paddingInline={6}
-					paddingBlockEnd={6}
-					position="sticky"
-					bottom={0}
-					zIndex={1}
+					sx={{
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'center',
+						paddingInline: 6,
+						paddingBlockEnd: 6,
+						position: 'sticky',
+						bottom: 0,
+						zIndex: 1,
+					}}
 				>
 					<ButtonLink
 						to="/app/projects/$projectId/team/invite"
@@ -465,60 +490,68 @@ function InviteAccepted({
 	const { data: member } = useSingleMember({ projectId, deviceId })
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
 				direction="column"
-				flex={1}
-				overflow="auto"
-				justifyContent="space-between"
+				sx={{ flex: 1, overflow: 'auto', justifyContent: 'space-between' }}
 			>
-				<Box padding={6}>
+				<Box sx={{ padding: 6 }}>
 					<Stack
 						direction="column"
-						padding={6}
-						border={`1px solid ${BLUE_GREY}`}
-						borderRadius={2}
-						justifyContent="center"
-						alignItems="center"
-						gap={4}
+						sx={{
+							padding: 6,
+							border: `1px solid ${BLUE_GREY}`,
+							borderRadius: 2,
+							justifyContent: 'center',
+							alignItems: 'center',
+							gap: 4,
+						}}
 					>
-						<Box position="relative">
+						<Box sx={{ position: 'relative' }}>
 							<DeviceIcon deviceType={member.deviceType} size="60px" />
 							<Box
-								position="absolute"
-								right={-4}
-								bottom={-4}
-								zIndex={1}
-								display="flex"
-								flexDirection="column"
-								padding={2}
-								borderRadius="50%"
-								bgcolor={GREEN}
-								boxShadow={ICON_BOX_SHADOW}
+								sx={{
+									position: 'absolute',
+									right: -4,
+									bottom: -4,
+									zIndex: 1,
+									display: 'flex',
+									flexDirection: 'column',
+									padding: 2,
+									borderRadius: '50%',
+									bgcolor: GREEN,
+									boxShadow: ICON_BOX_SHADOW,
+								}}
 							>
 								<Icon name="material-check" htmlColor={WHITE} size={24} />
 							</Box>
 						</Box>
 
 						<Typography
-							fontSize={(theme) => theme.typography.h1.fontSize}
-							fontWeight={500}
-							textAlign="center"
+							sx={{
+								fontSize: (theme) => theme.typography.h1.fontSize,
+								fontWeight: 500,
+								textAlign: 'center',
+							}}
 						>
 							{member.name}
 						</Typography>
 
 						<Typography
-							fontSize={(theme) => theme.typography.h2.fontSize}
-							fontWeight={500}
-							textAlign="center"
+							sx={{
+								fontSize: (theme) => theme.typography.h2.fontSize,
+								fontWeight: 500,
+								textAlign: 'center',
+							}}
 						>
 							{t(m.accepted)}
 						</Typography>
 
 						<Typography
-							fontSize={(theme) => theme.typography.h2.fontSize}
-							textAlign="center"
+							sx={{
+								fontSize: (theme) => theme.typography.h2.fontSize,
+								textAlign: 'center',
+							}}
 						>
 							{t(
 								member.role.roleId === COORDINATOR_ROLE_ID
@@ -536,15 +569,17 @@ function InviteAccepted({
 				</Box>
 
 				<Box
-					display="flex"
-					flexDirection="column"
-					justifyContent="center"
-					paddingInline={6}
-					paddingBlockEnd={6}
-					gap={4}
-					position="sticky"
-					bottom={0}
-					zIndex={1}
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'center',
+						paddingInline: 6,
+						paddingBlockEnd: 6,
+						gap: 4,
+						position: 'sticky',
+						bottom: 0,
+						zIndex: 1,
+					}}
 				>
 					<ButtonLink
 						to="/app/projects/$projectId/team/invite/devices"

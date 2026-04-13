@@ -6,7 +6,7 @@ import {
 	useOwnRoleInProject,
 	useSingleDocByDocId,
 } from '@comapeo/core-react'
-import type { Field, Preset } from '@comapeo/schema'
+import type { Field, Preset } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
@@ -71,9 +71,7 @@ import {
 } from './-observation-attachment.tsx'
 import { getDisplayedTagValue, type EditableField } from './-shared.ts'
 
-const SearchParamsSchema = v.object({
-	fromTrackDocId: v.optional(v.string()),
-})
+const SearchParamsSchema = v.object({ fromTrackDocId: v.optional(v.string()) })
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/_main-tabs/observations/$observationDocId/',
@@ -268,19 +266,14 @@ function DeleteObservationSuccessPanel({
 	return (
 		<Stack
 			direction="column"
-			flex={1}
-			overflow="auto"
-			justifyContent="space-between"
+			sx={{ flex: 1, overflow: 'auto', justifyContent: 'space-between' }}
 		>
 			<Container maxWidth="xs">
 				<Stack
 					direction="column"
-					padding={6}
-					alignItems="center"
-					flex={1}
-					gap={6}
+					sx={{ padding: 6, alignItems: 'center', flex: 1, gap: 6 }}
 				>
-					<Box padding={6}>
+					<Box sx={{ padding: 6 }}>
 						<Icon
 							name="material-check-circle-rounded"
 							htmlColor={GREEN}
@@ -288,22 +281,27 @@ function DeleteObservationSuccessPanel({
 						/>
 					</Box>
 
-					<Typography variant="h1" fontWeight={500} textAlign="center">
+					<Typography
+						variant="h1"
+						sx={{ fontWeight: 500, textAlign: 'center' }}
+					>
 						{t(m.deleteObservationSuccessPanelTitle)}
 					</Typography>
 				</Stack>
 			</Container>
 
 			<Box
-				display="flex"
-				flexDirection="column"
-				gap={4}
-				paddingX={6}
-				paddingBottom={6}
-				position="sticky"
-				bottom={0}
-				alignItems="center"
-				zIndex={1}
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 4,
+					paddingX: 6,
+					paddingBottom: 6,
+					position: 'sticky',
+					bottom: 0,
+					alignItems: 'center',
+					zIndex: 1,
+				}}
 			>
 				<Button
 					onClick={() => {
@@ -388,11 +386,7 @@ function ObservationDetailsPanel({
 		docType: 'preset',
 		lang,
 	})
-	const { data: fields } = useManyDocs({
-		projectId,
-		docType: 'field',
-		lang,
-	})
+	const { data: fields } = useManyDocs({ projectId, docType: 'field', lang })
 	const category = getMatchingCategoryForDocument(observation, categories)
 	const fieldsToDisplay = category ? getFieldsToDisplay(category, fields) : []
 
@@ -424,14 +418,16 @@ function ObservationDetailsPanel({
 
 	return (
 		<>
-			<Stack direction="column" flex={1} overflow="auto">
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Stack
 					direction="row"
-					alignItems="center"
 					component="nav"
-					gap={4}
-					padding={4}
-					borderBottom={`1px solid ${BLUE_GREY}`}
+					sx={{
+						alignItems: 'center',
+						gap: 4,
+						padding: 4,
+						borderBottom: `1px solid ${BLUE_GREY}`,
+					}}
 				>
 					<IconButton
 						aria-disabled={deleteObservation.status === 'pending'}
@@ -455,20 +451,22 @@ function ObservationDetailsPanel({
 						<Icon name="material-arrow-back" size={30} />
 					</IconButton>
 
-					<Typography variant="h1" fontWeight={500}>
+					<Typography variant="h1" sx={{ fontWeight: 500 }}>
 						{t(m.navTitle)}
 					</Typography>
 				</Stack>
 
 				<Box
-					display="flex"
-					flexDirection="column"
-					flex={1}
-					overflow="auto"
-					position="relative"
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						flex: 1,
+						overflow: 'auto',
+						position: 'relative',
+					}}
 				>
-					<Stack direction="column" paddingBlock={6} gap={6}>
-						<Box paddingInline={6}>
+					<Stack direction="column" sx={{ paddingBlock: 6, gap: 6 }}>
+						<Box sx={{ paddingInline: 6 }}>
 							<Typography>
 								{formatDate(observation.createdAt, {
 									year: 'numeric',
@@ -481,18 +479,20 @@ function ObservationDetailsPanel({
 							</Typography>
 						</Box>
 
-						<Stack direction="column" paddingInline={6}>
-							<Box border={`1px solid ${BLUE_GREY}`} borderRadius={2}>
+						<Stack direction="column" sx={{ paddingInline: 6 }}>
+							<Box sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}>
 								<Stack
 									direction="row"
-									alignItems="center"
-									justifyContent="space-between"
-									flexWrap="wrap"
-									gap={4}
-									padding={4}
+									sx={{
+										alignItems: 'center',
+										justifyContent: 'space-between',
+										flexWrap: 'wrap',
+										gap: 4,
+										padding: 4,
+									}}
 								>
-									<Stack direction="row" alignItems="center" gap={4}>
-										<Box position="relative">
+									<Stack direction="row" sx={{ alignItems: 'center', gap: 4 }}>
+										<Box sx={{ position: 'relative' }}>
 											{category ? (
 												<CategoryIconContainer
 													color={category.color || BLUE_GREY}
@@ -521,10 +521,10 @@ function ObservationDetailsPanel({
 
 											{showCategoryUpdatedIndicator ? (
 												<Box
-													bgcolor={GREEN}
-													right={(theme) => theme.spacing(-1)}
-													bottom={(theme) => theme.spacing(-1)}
 													sx={{
+														bgcolor: GREEN,
+														right: (theme) => theme.spacing(-1),
+														bottom: (theme) => theme.spacing(-1),
 														position: 'absolute',
 														borderRadius: '50%',
 														padding: 1,
@@ -540,7 +540,7 @@ function ObservationDetailsPanel({
 											) : null}
 										</Box>
 
-										<Typography variant="h2" fontWeight={500}>
+										<Typography variant="h2" sx={{ fontWeight: 500 }}>
 											{category
 												? category.name
 												: t(m.observationCategoryNameFallback)}
@@ -548,7 +548,13 @@ function ObservationDetailsPanel({
 									</Stack>
 
 									{canEdit ? (
-										<Box display="flex" flex={0} justifyContent="center">
+										<Box
+											sx={{
+												display: 'flex',
+												flex: 0,
+												justifyContent: 'center',
+											}}
+										>
 											<Button
 												disabled={!!activeEditId}
 												variant="text"
@@ -564,7 +570,10 @@ function ObservationDetailsPanel({
 
 								<Divider variant="fullWidth" sx={{ color: BLUE_GREY }} />
 
-								<Stack direction="row" alignItems="center" padding={4} gap={3}>
+								<Stack
+									direction="row"
+									sx={{ alignItems: 'center', padding: 4, gap: 3 }}
+								>
 									<Icon
 										name="material-fmd-good-filled"
 										htmlColor={DARKER_ORANGE}
@@ -581,7 +590,7 @@ function ObservationDetailsPanel({
 
 											{typeof observation.metadata?.position?.coords
 												.accuracy === 'number' ? (
-												<Box component="span" marginInlineStart={4}>
+												<Box component="span" sx={{ marginInlineStart: 4 }}>
 													{t(m.locationAccuracy, {
 														value:
 															observation.metadata?.position?.coords.accuracy.toFixed(
@@ -598,8 +607,18 @@ function ObservationDetailsPanel({
 							</Box>
 						</Stack>
 
-						<Stack direction="column" gap={2} overflow="auto" paddingInline={6}>
-							<Box display="flex" flexWrap="wrap" gap={4} overflow="auto">
+						<Stack
+							direction="column"
+							sx={{ gap: 2, overflow: 'auto', paddingInline: 6 }}
+						>
+							<Box
+								sx={{
+									display: 'flex',
+									flexWrap: 'wrap',
+									gap: 4,
+									overflow: 'auto',
+								}}
+							>
 								{observation.attachments.map((attachment) => {
 									const key = `${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`
 
@@ -726,16 +745,16 @@ function ObservationDetailsPanel({
 						/>
 
 						{fieldsToDisplay.length > 0 ? (
-							<Stack direction="column" paddingInline={6} gap={4}>
+							<Stack direction="column" sx={{ paddingInline: 6, gap: 4 }}>
 								<Typography
 									component="h2"
 									variant="body1"
-									textTransform="uppercase"
+									sx={{ textTransform: 'uppercase' }}
 								>
 									{t(m.detailsSectionTitle)}
 								</Typography>
 
-								<Stack direction="column" gap={3}>
+								<Stack direction="column" sx={{ gap: 3 }}>
 									{fieldsToDisplay.map((field) => {
 										const editId = `${editPrefixId}/fields/${field.docId}`
 										const existingTagValue = observation.tags[field.tagKey]
@@ -859,11 +878,13 @@ function ObservationDetailsPanel({
 					<>
 						<Stack
 							direction="column"
-							gap={2}
-							justifyContent="center"
-							alignItems="center"
-							borderTop={`1px solid ${BLUE_GREY}`}
-							padding={6}
+							sx={{
+								gap: 2,
+								justifyContent: 'center',
+								alignItems: 'center',
+								borderTop: `1px solid ${BLUE_GREY}`,
+								padding: 6,
+							}}
 						>
 							<IconButton
 								disabled={!!activeEditId}
@@ -890,14 +911,19 @@ function ObservationDetailsPanel({
 							maxWidth="sm"
 						>
 							<Stack direction="column">
-								<Stack direction="column" gap={10} flex={1} padding={20}>
-									<Stack direction="column" alignItems="center" gap={4}>
+								<Stack
+									direction="column"
+									sx={{ gap: 10, flex: 1, padding: 20 }}
+								>
+									<Stack
+										direction="column"
+										sx={{ alignItems: 'center', gap: 4 }}
+									>
 										<Icon name="material-error" color="error" size={72} />
 
 										<Typography
 											variant="h1"
-											fontWeight={500}
-											textAlign="center"
+											sx={{ fontWeight: 500, textAlign: 'center' }}
 										>
 											{t(m.deleteObservationConfirmationDialogTitle)}
 										</Typography>
@@ -905,13 +931,15 @@ function ObservationDetailsPanel({
 								</Stack>
 
 								<Box
-									position="sticky"
-									bottom={0}
-									display="flex"
-									flexDirection="row"
-									justifyContent="space-between"
-									gap={6}
-									padding={6}
+									sx={{
+										position: 'sticky',
+										bottom: 0,
+										display: 'flex',
+										flexDirection: 'row',
+										justifyContent: 'space-between',
+										gap: 6,
+										padding: 6,
+									}}
 								>
 									<Button
 										fullWidth

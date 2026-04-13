@@ -5,7 +5,7 @@ import {
 	useOwnDeviceInfo,
 	usePresetsSelection,
 } from '@comapeo/core-react'
-import type { Observation, Track } from '@comapeo/schema'
+import type { Observation, Track } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
@@ -34,7 +34,7 @@ import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { GenericRoutePendingComponent } from '../../../../components/generic-route-pending-component.tsx'
 import { Map } from '../../../../components/map.tsx'
 import { useAppForm } from '../../../../hooks/forms.ts'
-import { useMapsRefreshToken } from '../../../../hooks/maps.ts'
+import { useNetworkAwareMapStyleUrl } from '../../../../hooks/maps.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../lib/comapeo.ts'
 import { getLocaleStateQueryOptions } from '../../../../lib/queries/app-settings.ts'
 import { createGlobalMutationsKey } from '../../../../lib/queries/global-mutations.ts'
@@ -60,12 +60,14 @@ export const Route = createFileRoute('/app/projects/$projectId/test-data')({
 				start={<GenericRoutePendingComponent />}
 				end={
 					<Box
-						display="flex"
-						flex={1}
-						justifyContent="center"
-						alignItems="center"
-						bgcolor={BLACK}
-						sx={{ opacity: 0.5 }}
+						sx={{
+							display: 'flex',
+							flex: 1,
+							justifyContent: 'center',
+							alignItems: 'center',
+							bgcolor: BLACK,
+							opacity: 0.5,
+						}}
 					>
 						<CircularProgress />
 					</Box>
@@ -107,15 +109,11 @@ function RouteComponent() {
 				v.toNumber(),
 				v.minValue(
 					MIN_OBSERVATION_COUNT,
-					t(m.minObservationCountError, {
-						value: MIN_OBSERVATION_COUNT,
-					}),
+					t(m.minObservationCountError, { value: MIN_OBSERVATION_COUNT }),
 				),
 				v.maxValue(
 					MAX_OBSERVATION_COUNT,
-					t(m.maxObservationCountError, {
-						value: MAX_OBSERVATION_COUNT,
-					}),
+					t(m.maxObservationCountError, { value: MAX_OBSERVATION_COUNT }),
 				),
 			),
 			boundedDistance: v.pipe(
@@ -143,9 +141,7 @@ function RouteComponent() {
 			longitude: 0,
 			createTrack: false,
 		},
-		validators: {
-			onChange: onChangeSchema,
-		},
+		validators: { onChange: onChangeSchema },
 		onSubmit: async ({ value }) => {
 			const parsedValue = v.parse(onChangeSchema, value)
 
@@ -164,7 +160,6 @@ function RouteComponent() {
 
 			setNotification({
 				type: 'success',
-				// eslint-disable-next-line react-hooks/purity
 				id: `id_${Date.now()}`,
 				message: `${t(m.observationCreateSuccess, {
 					count: parsedValue.observationCount,
@@ -216,27 +211,34 @@ function RouteComponent() {
 		<>
 			<TwoPanelLayout
 				start={
-					<Stack direction="column" flex={1} overflow="hidden">
+					<Stack direction="column" sx={{ flex: 1, overflow: 'hidden' }}>
 						<Stack
 							direction="row"
-							alignItems="center"
-							justifyContent="center"
 							component="nav"
-							padding={4}
-							borderBottom={`1px solid ${BLUE_GREY}`}
+							sx={{
+								alignItems: 'center',
+								justifyContent: 'center',
+								padding: 4,
+								borderBottom: `1px solid ${BLUE_GREY}`,
+							}}
 						>
-							<Typography variant="h1" fontWeight={500} textAlign="center">
+							<Typography
+								variant="h1"
+								sx={{ fontWeight: 500, textAlign: 'center' }}
+							>
 								{t(m.navTitle)}
 							</Typography>
 						</Stack>
 
 						<Stack
 							direction="column"
-							flex={1}
-							justifyContent="space-between"
-							overflow="auto"
+							sx={{
+								flex: 1,
+								justifyContent: 'space-between',
+								overflow: 'auto',
+							}}
 						>
-							<Box padding={6}>
+							<Box sx={{ padding: 6 }}>
 								<Box
 									component="form"
 									id={FORM_ID}
@@ -248,7 +250,7 @@ function RouteComponent() {
 										form.handleSubmit()
 									}}
 								>
-									<Stack direction="column" gap={10}>
+									<Stack direction="column" sx={{ gap: 10 }}>
 										<form.AppField name="observationCount">
 											{(field) => (
 												<TextField
@@ -288,18 +290,19 @@ function RouteComponent() {
 
 										<Box
 											component="fieldset"
-											display="flex"
-											flexDirection="column"
-											border="none"
-											padding={0}
-											gap={10}
+											sx={{
+												display: 'flex',
+												flexDirection: 'column',
+												border: 'none',
+												padding: 0,
+												gap: 10,
+											}}
 										>
-											<Stack direction="column" gap={5}>
+											<Stack direction="column" sx={{ gap: 5 }}>
 												<Typography>{t(m.coordinatesSelectionHint)}</Typography>
 												<Stack
 													direction="row"
-													gap={4}
-													justifyContent="space-between"
+													sx={{ gap: 4, justifyContent: 'space-between' }}
 												>
 													<form.AppField name="longitude">
 														{(field) => (
@@ -390,13 +393,15 @@ function RouteComponent() {
 
 							<Stack
 								direction="column"
-								gap={4}
-								paddingX={6}
-								paddingBottom={6}
-								position="sticky"
-								bottom={0}
-								alignItems="center"
-								zIndex={1}
+								sx={{
+									gap: 4,
+									paddingX: 6,
+									paddingBottom: 6,
+									position: 'sticky',
+									bottom: 0,
+									alignItems: 'center',
+									zIndex: 1,
+								}}
 							>
 								<form.Subscribe
 									selector={(state) =>
@@ -451,18 +456,20 @@ function RouteComponent() {
 					<Suspense
 						fallback={
 							<Box
-								display="flex"
-								flex={1}
-								justifyContent="center"
-								alignItems="center"
-								bgcolor={BLACK}
-								sx={{ opacity: 0.5 }}
+								sx={{
+									display: 'flex',
+									flex: 1,
+									justifyContent: 'center',
+									alignItems: 'center',
+									bgcolor: BLACK,
+									opacity: 0.5,
+								}}
 							>
 								<CircularProgress />
 							</Box>
 						}
 					>
-						<Box display="flex" flex={1}>
+						<Box sx={{ display: 'flex', flex: 1 }}>
 							<DisplayedMap
 								boundingBox={boundingBox}
 								coordinates={coordinates}
@@ -544,29 +551,21 @@ function DisplayedMap({
 		boundingBox ? [bboxPolygon(boundingBox)] : [],
 	)
 
-	const mapsRefreshToken = useMapsRefreshToken()
-	const { data: mapStyleUrl } = useMapStyleUrl({
-		refreshToken: mapsRefreshToken,
-	})
+	const { data: originalStyleUrl } = useMapStyleUrl()
+	const styleUrl = useNetworkAwareMapStyleUrl(originalStyleUrl)
 
 	return (
 		<Map
-			mapStyle={mapStyleUrl}
+			mapStyle={styleUrl}
 			initialViewState={{
-				fitBoundsOptions: {
-					padding: 40,
-					maxZoom: 12,
-				},
+				fitBoundsOptions: { padding: 40, maxZoom: 12 },
 				...(coordinates.latitude === 0 && coordinates.longitude === 0
 					? coordinates
 					: { bounds: boundingBox }),
 			}}
 			maxBounds={MAP_MAX_BOUNDS}
 			onClick={(event) => {
-				onChange({
-					latitude: event.lngLat.lat,
-					longitude: event.lngLat.lng,
-				})
+				onChange({ latitude: event.lngLat.lat, longitude: event.lngLat.lng })
 			}}
 			touchZoomRotate={false}
 			dragRotate={false}
@@ -719,10 +718,7 @@ function useCreateTestTrack({ projectId }: { projectId: string }) {
 		lang,
 	})
 
-	const createTrack = useCreateDocument({
-		projectId,
-		docType: 'track',
-	})
+	const createTrack = useCreateDocument({ projectId, docType: 'track' })
 
 	return useMutation({
 		mutationKey: CREATE_TEST_TRACK_MUTATION_KEY,

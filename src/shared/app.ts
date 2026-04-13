@@ -22,6 +22,8 @@ export const AppConfigSchema = v.object({
 	appVersion: v.string(),
 	/** Enables ASAR format */
 	asar: v.optional(v.boolean()),
+	/** Indicates that the app is running in a test environment (e.g. e2e testing) */
+	isTestEnvironment: v.optional(v.boolean()),
 	/** Metrics configuration */
 	metrics: v.object({
 		/**
@@ -33,8 +35,8 @@ export const AppConfigSchema = v.object({
 		 */
 		diagnosticsUrl: v.optional(v.pipe(v.string(), v.url())),
 	}),
-	/** Sets the online map style for @comapeo/core to use */
-	onlineStyleUrl: v.optional(v.pipe(v.string(), v.url())),
+	/** Sets the online map style for @comapeo/map-server to use */
+	onlineStyleUrl: v.pipe(v.string(), v.url()),
 	/** [Sentry DSN](https://docs.sentry.io/concepts/key-terms/dsn-explainer/) */
 	sentryDsn: v.optional(v.pipe(v.string(), v.url())),
 	/** Sets the user data directory for the application to use */

@@ -73,9 +73,7 @@ export function EditableSection({
 					backgroundColor: alpha(LIGHT_COMAPEO_BLUE, 0.5),
 					transition: (theme) => theme.transitions.create('background-color'),
 				},
-				':disabled': {
-					color: (theme) => theme.palette.text.disabled,
-				},
+				':disabled': { color: (theme) => theme.palette.text.disabled },
 				padding: 2,
 				display: 'inline-flex',
 				justifyContent: 'flex-start',
@@ -90,8 +88,8 @@ export function EditableSection({
 	)
 
 	return (
-		<Stack direction="column" gap={4} flex={1} flexWrap="wrap">
-			<Stack direction="row" gap={2}>
+		<Stack direction="column" sx={{ gap: 4, flex: 1, flexWrap: 'wrap' }}>
+			<Stack direction="row" sx={{ gap: 2 }}>
 				<Typography
 					component="h2"
 					variant="body1"
@@ -100,7 +98,13 @@ export function EditableSection({
 					{sectionTitle}
 				</Typography>
 
-				<Box display="flex" justifyContent="center" alignItems="center">
+				<Box
+					sx={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
 					{editIsPending ? (
 						<CircularProgress disableShrink size={iconSize} />
 					) : editState === 'success' ? (
@@ -124,7 +128,6 @@ export function EditableSection({
 					)}
 				</Box>
 			</Stack>
-
 			{editState === 'active' ? (
 				renderWhenEditing({
 					updateEditState: (state) => {
@@ -135,7 +138,7 @@ export function EditableSection({
 				triggerButton
 			) : (
 				<Tooltip title={tooltipText} slots={{ transition: Fade }}>
-					<Box component="span" display="flex">
+					<Box component="span" sx={{ display: 'flex' }}>
 						{triggerButton}
 					</Box>
 				</Tooltip>

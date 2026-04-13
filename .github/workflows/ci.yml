@@ -119,6 +119,7 @@ jobs:
         env:
           APP_TYPE: 'internal'
           COMAPEO_TEST: 'true'
+          ONLINE_STYLE_URL: ${{ secrets.ONLINE_STYLE_URL }}
           SENTRY_DSN: ${{ vars.COMAPEO_SENTRY_DSN }}
           VITE_FEATURE_TEST_DATA_UI: 'true'
           ### Uncomment the following if sourcemap uploads are needed for improved debugging
@@ -140,7 +141,7 @@ jobs:
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: playwright-report-${{ matrix.os.name }}-${{ github.sha }}
           path: tests-e2e/playwright-report/

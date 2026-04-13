@@ -18,7 +18,6 @@ import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
-	MEMBER_ROLE_ID,
 } from '../../../../../lib/comapeo.ts'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings.ts'
 import { DataList } from './-data-list.tsx'
@@ -101,20 +100,12 @@ function RouteComponent() {
 		lang,
 	})
 
-	const { data: tracks } = useManyDocs({
+	const { data: tracks } = useManyDocs({ projectId, docType: 'track', lang })
+
+	const { data: activeMembers } = useManyMembers({
 		projectId,
-		docType: 'track',
-		lang,
+		includeLeft: false,
 	})
-
-	const { data: members } = useManyMembers({ projectId })
-
-	const activeMembersCount = members.filter(
-		(m) =>
-			m.role.roleId === CREATOR_ROLE_ID ||
-			m.role.roleId === MEMBER_ROLE_ID ||
-			m.role.roleId === COORDINATOR_ROLE_ID,
-	).length
 
 	const { data: ownRole } = useOwnRoleInProject({ projectId })
 
@@ -123,7 +114,7 @@ function RouteComponent() {
 
 	const hasDataToShow = observations.length + tracks.length > 0
 
-	if (selfIsAtLeastCoordinator && activeMembersCount < 2 && !hasDataToShow) {
+	if (selfIsAtLeastCoordinator && activeMembers.length < 2 && !hasDataToShow) {
 		return (
 			<IntroPanel
 				title={t(m.inviteCollaboratorsPanelTitle)}
@@ -194,26 +185,37 @@ function IntroPanel({
 	link: ReactNode
 }) {
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
-			<Stack direction="column" flex={1} padding={6} gap={10}>
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack direction="column" sx={{ flex: 1, padding: 6, gap: 10 }}>
 				<Stack
 					direction="column"
-					flex={1}
-					gap={4}
-					alignItems="center"
-					justifyContent="center"
-					padding={4}
+					sx={{
+						flex: 1,
+						gap: 4,
+						alignItems: 'center',
+						justifyContent: 'center',
+						padding: 4,
+					}}
 				>
 					<Box>{icon}</Box>
 
-					<Typography variant="h1" fontWeight={500} textAlign="center">
+					<Typography
+						variant="h1"
+						sx={{ fontWeight: 500, textAlign: 'center' }}
+					>
 						{title}
 					</Typography>
 
-					<Typography textAlign="center">{description}</Typography>
+					<Typography sx={{ textAlign: 'center' }}>{description}</Typography>
 				</Stack>
 
-				<Box display="flex" justifyContent="center" alignItems="center">
+				<Box
+					sx={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
 					{link}
 				</Box>
 			</Stack>

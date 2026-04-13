@@ -1,5 +1,5 @@
 import { StrictMode, Suspense, type ReactElement } from 'react'
-import { ClientApiProvider } from '@comapeo/core-react'
+import { ComapeoCoreProvider } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -25,7 +25,6 @@ import { useIntl, type IntlShape } from 'react-intl'
 
 import type { LocaleState } from '../../shared/intl.ts'
 import { WHITE } from './colors.ts'
-import { initComapeoClient } from './comapeo-client.ts'
 import { AppTitleBar } from './components/app-title-bar.tsx'
 import { GenericRouteErrorComponent } from './components/generic-route-error-component.tsx'
 import { GenericRouteNotFoundComponent } from './components/generic-route-not-found-component.tsx'
@@ -39,14 +38,11 @@ import {
 	LocalPeersStoreProvider,
 	createLocalPeersStore,
 } from './contexts/local-peers-store-context.ts'
-import {
-	RefreshTokensStoreProvider,
-	createRefreshTokensStore,
-} from './contexts/refresh-tokens-store-context.ts'
 import { routeTree } from './generated/routeTree.gen.ts'
 import { useNetworkConnectionChangeListener } from './hooks/network.ts'
 import { DIALOG_CONTAINER_ID, TITLE_BAR_HEIGHT } from './lib/constants.ts'
 import { getLocaleStateQueryOptions } from './lib/queries/app-settings.ts'
+import { initRpcClients } from './rpc-clients.ts'
 import { createTheme } from './theme.ts'
 
 const { platform } = window.runtime.getAppInfo()
@@ -56,9 +52,8 @@ const theme = createTheme({ platform })
 const MAIN_CONTENT_HEIGHT =
 	platform === 'darwin' ? `calc(100% - ${TITLE_BAR_HEIGHT})` : '100%'
 
-const clientApi = initComapeoClient()
+const { clientApi, mapServerApi } = initRpcClients()
 
-const refreshTokensStore = createRefreshTokensStore()
 const localPeersStore = createLocalPeersStore({ clientApi })
 const activeProjectIdStore = createActiveProjectIdStore({
 	initialValue: window.runtime.getInitialProjectId(),
@@ -71,14 +66,8 @@ const queryClient = new QueryClient({
 	// to avoid surprises. Not using the queryClient `defaultOptions` because the API
 	// consumer might also use the same queryClient for network queries
 	defaultOptions: {
-		queries: {
-			networkMode: 'always',
-			retry: false,
-		},
-		mutations: {
-			networkMode: 'always',
-			retry: false,
-		},
+		queries: { networkMode: 'always', retry: false },
+		mutations: { networkMode: 'always', retry: false },
 	},
 })
 
@@ -161,49 +150,56 @@ export function App() {
 			<ThemeProvider theme={theme}>
 				<CssBaseline enableColorScheme />
 
-				<RefreshTokensStoreProvider value={refreshTokensStore}>
-					<ActiveProjectIdStoreProvider value={activeProjectIdStore}>
-						<QueryClientProvider client={queryClient}>
-							<IntlProvider>
-								<NetworkConnectionChangeListener />
+				<ActiveProjectIdStoreProvider value={activeProjectIdStore}>
+					<QueryClientProvider client={queryClient}>
+						<IntlProvider>
+							<NetworkConnectionChangeListener />
 
-								<Box height="100dvh">
-									{platform === 'darwin' ? (
-										<AppTitleBar platform={platform} testId="app-title-bar" />
-									) : null}
+							<Box sx={{ height: '100dvh' }}>
+								{platform === 'darwin' ? (
+									<AppTitleBar platform={platform} testId="app-title-bar" />
+								) : null}
 
-									<Box id={DIALOG_CONTAINER_ID} height={MAIN_CONTENT_HEIGHT}>
-										<Suspense
-											fallback={
-												<Box
-													display="flex"
-													justifyContent="center"
-													alignItems="center"
-													height="100%"
-												>
-													<CircularProgress />
-												</Box>
-											}
+								<Box
+									id={DIALOG_CONTAINER_ID}
+									sx={{ height: MAIN_CONTENT_HEIGHT }}
+								>
+									<Suspense
+										fallback={
+											<Box
+												sx={{
+													display: 'flex',
+													justifyContent: 'center',
+													alignItems: 'center',
+													height: '100%',
+												}}
+											>
+												<CircularProgress />
+											</Box>
+										}
+									>
+										<ComapeoCoreProvider
+											clientApi={clientApi}
+											queryClient={queryClient}
+											getMapServerBaseUrl={mapServerApi.getBaseUrl}
 										>
-											<ClientApiProvider clientApi={clientApi}>
-												<LocalPeersStoreProvider value={localPeersStore}>
-													<WithAddedRouteContext>
-														{({ formatMessage, localeState }) => (
-															<RouterProvider
-																router={router}
-																context={{ formatMessage, localeState }}
-															/>
-														)}
-													</WithAddedRouteContext>
-												</LocalPeersStoreProvider>
-											</ClientApiProvider>
-										</Suspense>
-									</Box>
+											<LocalPeersStoreProvider value={localPeersStore}>
+												<WithAddedRouteContext>
+													{({ formatMessage, localeState }) => (
+														<RouterProvider
+															router={router}
+															context={{ formatMessage, localeState }}
+														/>
+													)}
+												</WithAddedRouteContext>
+											</LocalPeersStoreProvider>
+										</ComapeoCoreProvider>
+									</Suspense>
 								</Box>
-							</IntlProvider>
-						</QueryClientProvider>
-					</ActiveProjectIdStoreProvider>
-				</RefreshTokensStoreProvider>
+							</Box>
+						</IntlProvider>
+					</QueryClientProvider>
+				</ActiveProjectIdStoreProvider>
 			</ThemeProvider>
 		</StrictMode>
 	)

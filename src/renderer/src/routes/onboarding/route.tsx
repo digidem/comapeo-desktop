@@ -49,16 +49,18 @@ function RouteComponent() {
 	const stepNumber = currentRoute.staticData?.onboardingStepNumber
 
 	return (
-		<Box bgcolor={DARK_COMAPEO_BLUE} padding={5} height="100%">
+		<Box sx={{ bgcolor: DARK_COMAPEO_BLUE, padding: 5, height: '100%' }}>
 			<Container
 				maxWidth="md"
 				component={Box}
-				height="100%"
-				display="grid"
-				gridTemplateRows="auto minmax(0, 1fr)"
-				rowGap={5}
+				sx={{
+					height: '100%',
+					display: 'grid',
+					gridTemplateRows: 'auto minmax(0, 1fr)',
+					rowGap: 5,
+				}}
 			>
-				<Stack direction="row" justifyContent="space-between">
+				<Stack direction="row" sx={{ justifyContent: 'space-between' }}>
 					<Box>
 						<Button
 							variant="text"
@@ -70,10 +72,7 @@ function RouteComponent() {
 								}
 
 								if (currentRoute.fullPath === '/onboarding/data-and-privacy') {
-									router.navigate({
-										to: '/welcome',
-										replace: true,
-									})
+									router.navigate({ to: '/welcome', replace: true })
 								} else if (
 									currentRoute.fullPath === '/onboarding/privacy-policy'
 								) {
@@ -99,7 +98,7 @@ function RouteComponent() {
 						</Button>
 					</Box>
 
-					<Stack direction="row" alignItems="center" gap={4}>
+					<Stack direction="row" sx={{ alignItems: 'center', gap: 4 }}>
 						<StepIndicator
 							isActive={stepNumber === 1}
 							label={t(m.step, { value: 1 })}
@@ -107,11 +106,7 @@ function RouteComponent() {
 
 						<Divider
 							aria-hidden="true"
-							sx={{
-								minWidth: 20,
-								maxWidth: 40,
-								backgroundColor: COMAPEO_BLUE,
-							}}
+							sx={{ minWidth: 20, maxWidth: 40, backgroundColor: COMAPEO_BLUE }}
 						/>
 
 						<StepIndicator
@@ -121,7 +116,7 @@ function RouteComponent() {
 					</Stack>
 				</Stack>
 
-				<Box component="main" display="flex" flexDirection="column">
+				<Box component="main" sx={{ display: 'flex', flexDirection: 'column' }}>
 					<Outlet />
 				</Box>
 			</Container>
@@ -138,18 +133,20 @@ function StepIndicator({
 }) {
 	return (
 		<Box
-			display="flex"
-			flexDirection="row"
-			alignItems="center"
-			justifyContent="center"
-			alignSelf="stretch"
-			bgcolor={isActive ? WHITE : undefined}
-			borderRadius={6}
-			paddingX={10}
+			sx={{
+				display: 'flex',
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+				alignSelf: 'stretch',
+				bgcolor: isActive ? WHITE : undefined,
+				borderRadius: 6,
+				paddingX: 10,
+			}}
 		>
 			<Typography
 				color={isActive ? 'textPrimary' : 'textInverted'}
-				fontWeight="bold"
+				sx={{ fontWeight: 'bold' }}
 			>
 				{label}
 			</Typography>

@@ -8,7 +8,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import Divider from '@mui/material/Divider'
-import Slide from '@mui/material/Slide'
+import Slide, { type SlideProps } from '@mui/material/Slide'
 import Snackbar from '@mui/material/Snackbar'
 import SnackbarContent from '@mui/material/SnackbarContent'
 import Stack from '@mui/material/Stack'
@@ -39,6 +39,7 @@ import {
 import { useActiveProjectId } from '../../contexts/active-project-id-store-context.ts'
 import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo.ts'
+import { getOnboardedAtQueryOptions } from '../../lib/queries/user.ts'
 import { ProjectTabButton } from './-project-tab-button.tsx'
 
 export const Route = createFileRoute('/app')({
@@ -57,6 +58,35 @@ export const Route = createFileRoute('/app')({
 			throw Route.redirect({ to: '/welcome', replace: true })
 		}
 	},
+	loader: async ({ context, preload }) => {
+		const { queryClient } = context
+
+		// NOTE: Backfill step for users who onboarded before we started persisting an `onboardedAt` timestamp.
+		// We assume that if they're able to navigate to any "app" page, then they have passed the checks for being "onboarded".
+		if (!preload) {
+			const onboardedAtQueryOptions = getOnboardedAtQueryOptions()
+
+			const onboardedAt = await queryClient.ensureQueryData(
+				onboardedAtQueryOptions,
+			)
+
+			if (onboardedAt === null) {
+				const updatedOnboardedAt = Date.now()
+
+				try {
+					await window.runtime.setOnboardedAt(updatedOnboardedAt)
+
+					// NOTE: We synchronously update to ensure the updated timestamp is used on initial render.
+					queryClient.setQueryData(
+						onboardedAtQueryOptions.queryKey,
+						updatedOnboardedAt,
+					)
+				} catch (err) {
+					captureException(err)
+				}
+			}
+		}
+	},
 	component: RouteComponent,
 })
 
@@ -66,15 +96,19 @@ function RouteComponent() {
 	const activeProjectId = useActiveProjectId()
 
 	return (
-		<Box bgcolor={WHITE} height="100%">
-			<Box display="grid" gridTemplateRows="auto 1fr" height="100%">
+		<Box sx={{ bgcolor: WHITE, height: '100%' }}>
+			<Box
+				sx={{ display: 'grid', gridTemplateRows: 'auto 1fr', height: '100%' }}
+			>
 				<Stack
 					component="nav"
-					overflow="auto"
 					direction="row"
-					bgcolor={darken(DARK_COMAPEO_BLUE, 0.5)}
-					height={48}
 					aria-label={t(m.appNavigationAccesibleLabel)}
+					sx={{
+						overflow: 'auto',
+						bgcolor: darken(DARK_COMAPEO_BLUE, 0.5),
+						height: 48,
+					}}
 				>
 					<Tooltip
 						title={t(m.homeTabLabel)}
@@ -115,14 +149,14 @@ function RouteComponent() {
 						sx={{ borderColor: TAB_DIVIDER_COLOR }}
 					/>
 
-					<Stack direction="row" padding={2} gap={2} sx={{ overflowX: 'auto' }}>
+					<Stack direction="row" sx={{ padding: 2, gap: 2, overflowX: 'auto' }}>
 						{activeProjectId ? (
 							<ProjectTabButton projectId={activeProjectId} />
 						) : null}
 					</Stack>
 				</Stack>
 
-				<Box display="flex" overflow="auto">
+				<Box sx={{ display: 'flex', overflow: 'auto' }}>
 					<Outlet />
 
 					<Suspense>
@@ -174,12 +208,9 @@ function ProjectInvite() {
 				key={pendingInvite ? pendingInvite.inviteId : undefined}
 				open={!!pendingInvite}
 				anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-				slots={{ transition: Slide }}
+				slots={{ transition: SnackbarSlideTransition }}
 				slotProps={{
-					root: {
-						sx: { bottom: '0 !important', right: '0 !important' },
-					},
-					transition: { direction: 'up' },
+					root: { sx: { bottom: '0 !important', right: '0 !important' } },
 					clickAwayListener: {
 						onClickAway: (event) => {
 							// @ts-expect-error Special MUI thing (https://mui.com/material-ui/react-snackbar/#preventing-default-click-away-event)
@@ -196,12 +227,11 @@ function ProjectInvite() {
 					}}
 					message={
 						pendingInvite ? (
-							<Stack direction="column" gap={2} maxWidth={400}>
+							<Stack direction="column" sx={{ gap: 2, maxWidth: 400 }}>
 								<Box>
 									<Typography
 										variant="body2"
-										fontWeight={500}
-										textTransform="uppercase"
+										sx={{ fontWeight: 500, textTransform: 'uppercase' }}
 									>
 										{t(m.projectInviteTitle)}
 									</Typography>
@@ -209,15 +239,20 @@ function ProjectInvite() {
 
 								<Stack
 									direction="column"
-									gap={6}
-									borderRadius={2}
-									padding={6}
-									bgcolor={pendingInvite.projectColor}
-									boxShadow={(theme) => theme.shadows[2]}
-									border={`1px solid ${BLUE_GREY}`}
+									sx={{
+										gap: 6,
+										borderRadius: 2,
+										padding: 6,
+										bgcolor: pendingInvite.projectColor,
+										boxShadow: (theme) => theme.shadows[2],
+										border: `1px solid ${BLUE_GREY}`,
+									}}
 								>
 									<Stack direction="column">
-										<Stack direction="row" gap={3} alignItems="center">
+										<Stack
+											direction="row"
+											sx={{ gap: 3, alignItems: 'center' }}
+										>
 											<Icon
 												name={
 													pendingInvite.roleName === 'Coordinator'
@@ -228,8 +263,12 @@ function ProjectInvite() {
 												size={iconSize}
 											/>
 
-											<Stack direction="column" gap={1}>
-												<Typography component="p" variant="h3" fontWeight={500}>
+											<Stack direction="column" sx={{ gap: 1 }}>
+												<Typography
+													component="p"
+													variant="h3"
+													sx={{ fontWeight: 500 }}
+												>
 													{pendingInvite.projectName}
 												</Typography>
 
@@ -242,28 +281,32 @@ function ProjectInvite() {
 										</Stack>
 									</Stack>
 
-									<Box position="relative">
+									<Box sx={{ position: 'relative' }}>
 										<Box
 											key={pendingInvite.inviteId}
-											position="absolute"
-											right={0}
-											left={0}
-											top={0}
-											bottom={0}
-											display={showRespondingToInviteLoader ? 'flex' : 'none'}
-											justifyContent="center"
-											alignItems="center"
+											sx={{
+												position: 'absolute',
+												right: 0,
+												left: 0,
+												top: 0,
+												bottom: 0,
+												display: showRespondingToInviteLoader ? 'flex' : 'none',
+												justifyContent: 'center',
+												alignItems: 'center',
+											}}
 										>
 											<CircularProgress disableShrink size={24} />
 										</Box>
 
 										<Stack
 											direction="row"
-											gap={4}
-											position="relative"
-											visibility={
-												showRespondingToInviteLoader ? 'hidden' : 'visible'
-											}
+											sx={{
+												gap: 4,
+												position: 'relative',
+												visibility: showRespondingToInviteLoader
+													? 'hidden'
+													: 'visible',
+											}}
 										>
 											<Button
 												variant="outlined"
@@ -351,9 +394,9 @@ function ProjectInvite() {
 			>
 				{({ projectId, projectName }) => (
 					<Stack direction="column">
-						<Stack direction="column" gap={10} flex={1} padding={20}>
-							<Stack direction="column" alignItems="center" gap={4}>
-								<Box position="relative">
+						<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+							<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
+								<Box sx={{ position: 'relative' }}>
 									<Icon
 										name="material-people-filled"
 										size={120}
@@ -361,33 +404,40 @@ function ProjectInvite() {
 									/>
 
 									<Box
-										position="absolute"
-										right={-12}
-										bottom={16}
-										zIndex={1}
-										display="flex"
-										flexDirection="column"
-										padding={2}
-										borderRadius="50%"
-										bgcolor={GREEN}
+										sx={{
+											position: 'absolute',
+											right: -12,
+											bottom: 16,
+											zIndex: 1,
+											display: 'flex',
+											flexDirection: 'column',
+											padding: 2,
+											borderRadius: '50%',
+											bgcolor: GREEN,
+										}}
 									>
 										<Icon name="material-check" htmlColor={WHITE} size={24} />
 									</Box>
 								</Box>
 
-								<Typography variant="h1" fontWeight={500} textAlign="center">
+								<Typography
+									variant="h1"
+									sx={{ fontWeight: 500, textAlign: 'center' }}
+								>
 									{t(m.projectJoinedTitle, { name: projectName })}
 								</Typography>
 							</Stack>
 						</Stack>
 
 						<Stack
-							position="sticky"
-							bottom={0}
 							direction="row"
-							gap={4}
-							padding={6}
-							justifyContent="center"
+							sx={{
+								position: 'sticky',
+								bottom: 0,
+								gap: 4,
+								padding: 6,
+								justifyContent: 'center',
+							}}
 						>
 							<Button
 								fullWidth
@@ -448,6 +498,10 @@ function ProjectInvite() {
 			</DecentDialog>
 		</>
 	)
+}
+
+function SnackbarSlideTransition(props: SlideProps) {
+	return <Slide {...props} direction="up" />
 }
 
 const TAB_DIVIDER_COLOR = lighten(DARK_COMAPEO_BLUE, 0.1)

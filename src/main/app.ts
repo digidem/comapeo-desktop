@@ -67,6 +67,24 @@ export async function start({
 	try {
 		const appRunPromise = Promise.withResolvers<void>()
 
+		if (app.hasSingleInstanceLock()) {
+			app.on('second-instance', () => {
+				log('Second instance requested')
+
+				const existingMainWindow = BrowserWindow.getAllWindows().find((w) => {
+					return APP_STATE.browserWindows.get(w)?.type === 'main'
+				})
+
+				if (existingMainWindow?.isMinimized()) {
+					log(
+						`Restoring and focusing main window with ID ${existingMainWindow.id}.`,
+					)
+					existingMainWindow.restore()
+					existingMainWindow.focus()
+				}
+			})
+		}
+
 		app.setAboutPanelOptions({ applicationVersion: appConfig.appVersion })
 
 		// Quit when all windows are closed, except on macOS. There, it's common
@@ -417,14 +435,16 @@ function initMainWindow({
 	// Set up communication channel between window and core service
 	// https://www.electronjs.org/docs/latest/tutorial/message-ports/#messageports-in-the-main-process
 	mainWindow.webContents.ipc.on('comapeo-port', (event) => {
-		const [port] = event.ports
-		if (!port) return // TODO: throw/report error
+		const [comapeoChannelPort, appChannelPort] = event.ports
+
+		if (!(comapeoChannelPort && appChannelPort)) return // TODO: throw/report error
+
 		coreService.postMessage(
 			{
 				type: 'main:new-client',
 				payload: { clientId: `window-${mainWindow.id}` },
 			} satisfies NewClientMessage,
-			[port],
+			[comapeoChannelPort, appChannelPort],
 		)
 	})
 

@@ -30,9 +30,10 @@ export const Route = createFileRoute(
 				'projects',
 				projectId,
 				'members',
+				{ includeLeft: true },
 			],
 			queryFn: async () => {
-				return projectApi.$member.getMany()
+				return projectApi.$member.getMany({ includeLeft: true })
 			},
 		})
 
@@ -55,14 +56,16 @@ function RouteComponent() {
 	const { projectId } = Route.useParams()
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
 				direction="row"
-				alignItems="center"
 				component="nav"
-				gap={4}
-				padding={4}
-				borderBottom={`1px solid ${BLUE_GREY}`}
+				sx={{
+					alignItems: 'center',
+					gap: 4,
+					padding: 4,
+					borderBottom: `1px solid ${BLUE_GREY}`,
+				}}
 			>
 				<IconButton
 					aria-label={t(m.goBackAccessibleLabel)}
@@ -82,29 +85,33 @@ function RouteComponent() {
 					<Icon name="material-arrow-back" size={30} />
 				</IconButton>
 
-				<Typography variant="h1" fontWeight={500}>
+				<Typography variant="h1" sx={{ fontWeight: 500 }}>
 					{t(m.navTitle)}
 				</Typography>
 			</Stack>
 
 			<Stack
 				direction="column"
-				flex={1}
-				justifyContent="space-between"
-				overflow="auto"
-				padding={6}
-				gap={6}
+				sx={{
+					flex: 1,
+					justifyContent: 'space-between',
+					overflow: 'auto',
+					padding: 6,
+					gap: 6,
+				}}
 			>
 				<Stack
 					direction="column"
-					borderRadius={2}
-					border={`1px solid ${BLUE_GREY}`}
-					flex={1}
-					justifyContent="center"
-					gap={5}
-					padding={6}
+					sx={{
+						borderRadius: 2,
+						border: `1px solid ${BLUE_GREY}`,
+						flex: 1,
+						justifyContent: 'center',
+						gap: 5,
+						padding: 6,
+					}}
 				>
-					<Box alignSelf="center">
+					<Box sx={{ alignSelf: 'center' }}>
 						<Icon
 							name="material-person-add"
 							htmlColor={DARK_ORANGE}
@@ -112,11 +119,17 @@ function RouteComponent() {
 						/>
 					</Box>
 
-					<Typography variant="h1" fontWeight={500} textAlign="center">
+					<Typography
+						variant="h1"
+						sx={{ fontWeight: 500, textAlign: 'center' }}
+					>
 						{t(m.inviteCollaborators)}
 					</Typography>
 
-					<Typography textAlign="center" color="textSecondary" fontWeight={500}>
+					<Typography
+						color="textSecondary"
+						sx={{ textAlign: 'center', fontWeight: 500 }}
+					>
 						{t(m.primaryDescription)}
 					</Typography>
 
@@ -148,7 +161,13 @@ function RouteComponent() {
 					</List>
 				</Stack>
 
-				<Box display="flex" flexDirection="row" justifyContent="center">
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'center',
+					}}
+				>
 					<ButtonLink
 						to="/app/projects/$projectId/team/invite/devices"
 						params={{ projectId }}

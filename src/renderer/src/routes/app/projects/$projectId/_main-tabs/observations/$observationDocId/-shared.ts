@@ -1,4 +1,4 @@
-import type { Field } from '@comapeo/schema'
+import type { Field } from '@comapeo/core/schema.js'
 import { defineMessages, type IntlShape } from 'react-intl'
 
 import type { TagValue } from '../../../../../../../lib/comapeo'

@@ -17,15 +17,18 @@ export function AppTitleBar({
 
 	return (
 		<Box
-			height={TITLE_BAR_HEIGHT}
-			display="flex"
-			alignItems="center"
-			// NOTE: macOS has the window controls on the left side by default.
-			justifyContent={platform === 'darwin' ? 'flex-end' : undefined}
-			paddingX={6}
-			bgcolor={TITLE_BAR_COLOR}
-			sx={{ appRegion: 'drag', WebkitAppRegion: 'drag' }}
 			data-testid={testId}
+			sx={{
+				height: TITLE_BAR_HEIGHT,
+				display: 'flex',
+				alignItems: 'center',
+				// NOTE: macOS has the window controls on the left side by default.
+				justifyContent: platform === 'darwin' ? 'flex-end' : undefined,
+				paddingX: 6,
+				bgcolor: TITLE_BAR_COLOR,
+				appRegion: 'drag',
+				WebkitAppRegion: 'drag',
+			}}
 		>
 			<Typography color="textInverted">{t(m.appName)}</Typography>
 		</Box>

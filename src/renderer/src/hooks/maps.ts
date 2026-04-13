@@ -1,36 +1,51 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-import {
-	useRefreshTokensActions,
-	useRefreshTokensState,
-	type RefreshTokensState,
-} from '../contexts/refresh-tokens-store-context'
-
-function mapsRefreshTokenSelector(state: RefreshTokensState) {
-	return state.maps
-}
-
-export function useMapsRefreshToken() {
-	const { update } = useRefreshTokensActions()
+export function useNetworkAwareMapStyleUrl(url: string) {
+	const [refreshToken, setRefreshToken] = useState<string | undefined>(
+		undefined,
+	)
 
 	useEffect(
 		/**
 		 * Update the refresh token when the network goes from disconnected to
 		 * connected.
 		 */
-		function updateMapRefreshTokenWhenOnline() {
-			function onChange() {
-				update('maps')
+		function updateRefreshTokenWhenOnline() {
+			let timeoutId: number | undefined
+
+			function handleOnOnline() {
+				// TODO: Should eventually remove this delay
+				// https://github.com/digidem/comapeo-map-server/issues/44
+				timeoutId = window.setTimeout(() => {
+					setRefreshToken(Date.now().toString())
+				}, 3_000)
 			}
 
-			window.addEventListener('online', onChange, { passive: true })
+			window.addEventListener('online', handleOnOnline, { passive: true })
 
 			return () => {
-				window.removeEventListener('online', onChange)
+				window.removeEventListener('online', handleOnOnline)
+				window.clearTimeout(timeoutId)
+				timeoutId = undefined
 			}
 		},
-		[update],
+		[setRefreshToken],
 	)
 
-	return useRefreshTokensState(mapsRefreshTokenSelector)
+	const result = useMemo(() => {
+		if (!refreshToken) {
+			return url
+		}
+
+		const u = new URL(url)
+
+		// NOTE: There's already a `refresh_token` param on the url from core-react
+		// but we want to avoid a situation where we incorrectly override it (e.g. invalidation occurs via write hook).
+		// Simplest solution is to just use a different param altogether instead of trying to do something smarter.
+		u.searchParams.set('online', refreshToken)
+
+		return u.toString()
+	}, [url, refreshToken])
+
+	return result
 }

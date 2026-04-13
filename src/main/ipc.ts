@@ -3,9 +3,10 @@ import { ipcMain } from 'electron/main'
 import si from 'systeminformation'
 import * as v from 'valibot'
 
+import type { AppUsageMetrics } from '../shared/metrics.ts'
 import type { IntlManager } from './intl-manager.ts'
 import {
-	PersistedStateV1Schema,
+	CurrentStoreStateSchema,
 	type PersistedStore,
 } from './persisted-store.ts'
 
@@ -45,10 +46,14 @@ export function setUpMainIPC({
 		return intlManager.localeState
 	})
 
+	ipcMain.handle('settings:get:appUsageMetrics', () => {
+		return persistedStore.getState().appUsageMetrics
+	})
+
 	// Settings (set)
 	ipcMain.handle('settings:set:coordinateFormat', (_event, value) => {
 		v.assert(
-			v.nonOptional(PersistedStateV1Schema.entries.coordinateFormat),
+			v.nonOptional(CurrentStoreStateSchema.entries.coordinateFormat),
 			value,
 		)
 		persistedStore.setState({ coordinateFormat: value })
@@ -56,22 +61,56 @@ export function setUpMainIPC({
 
 	ipcMain.handle('settings:set:diagnosticsEnabled', (_event, value) => {
 		v.assert(
-			v.nonOptional(PersistedStateV1Schema.entries.diagnosticsEnabled),
+			v.nonOptional(CurrentStoreStateSchema.entries.diagnosticsEnabled),
 			value,
 		)
 		persistedStore.setState({ diagnosticsEnabled: value })
 	})
 
 	ipcMain.handle('settings:set:locale', (_event, value) => {
-		v.assert(v.nonOptional(PersistedStateV1Schema.entries.locale), value)
+		v.assert(v.nonOptional(CurrentStoreStateSchema.entries.locale), value)
 		persistedStore.setState({ locale: value })
 	})
 
-	// Active project ID
-	ipcMain.handle('activeProjectId:set', (_event, value) => {
+	ipcMain.handle('settings:set:appUsageMetrics', (_event, value) => {
+		v.assert(
+			v.object({
+				status: v.union([v.literal('disabled'), v.literal('enabled')]),
+				shouldBumpAskCount: v.boolean(),
+			}),
+			value,
+		)
+
+		persistedStore.setState((prev) => {
+			const now = Date.now()
+
+			const updatedAskCount =
+				(prev.appUsageMetrics ? prev.appUsageMetrics.askCount : 0) +
+				(value.shouldBumpAskCount ? 1 : 0)
+
+			const updatedAppUsageMetrics: AppUsageMetrics =
+				value.status === 'disabled'
+					? {
+							status: value.status,
+							fromReset: false,
+							askCount: updatedAskCount,
+							updatedAt: now,
+						}
+					: {
+							status: value.status,
+							askCount: updatedAskCount,
+							updatedAt: now,
+						}
+
+			return { appUsageMetrics: updatedAppUsageMetrics }
+		})
+	})
+
+	// User
+	ipcMain.handle('user:activeProjectId:set', (_event, value) => {
 		v.assert(
 			v.union([
-				v.nonOptional(PersistedStateV1Schema.entries.activeProjectId),
+				v.nonOptional(CurrentStoreStateSchema.entries.activeProjectId),
 				v.null(),
 			]),
 			value,
@@ -80,5 +119,21 @@ export function setUpMainIPC({
 		persistedStore.setState({
 			activeProjectId: value === null ? undefined : value,
 		})
+	})
+
+	ipcMain.handle('user:onboardedAt:get', () => {
+		return persistedStore.getState().onboardedAt
+	})
+
+	ipcMain.handle('user:onboardedAt:set', (_event, value) => {
+		v.assert(v.nonOptional(CurrentStoreStateSchema.entries.onboardedAt), value)
+
+		const existingValue = persistedStore.getState().onboardedAt
+
+		if (existingValue !== undefined) {
+			throw new Error('`onboardedAt` is already recorded')
+		}
+
+		persistedStore.setState({ onboardedAt: value })
 	})
 }

@@ -6,7 +6,7 @@ import {
 	useSingleDocByDocId,
 	useUpdateDocument,
 } from '@comapeo/core-react'
-import type { Observation } from '@comapeo/schema'
+import type { Observation } from '@comapeo/core/schema.js'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -64,12 +64,7 @@ export const Route = createFileRoute(
 )({
 	params: {
 		parse: ({ driveId, type, variant, name, ...rest }) => {
-			const blobId = v.parse(BlobIdSchema, {
-				driveId,
-				type,
-				variant,
-				name,
-			})
+			const blobId = v.parse(BlobIdSchema, { driveId, type, variant, name })
 
 			return { ...rest, ...blobId }
 		},
@@ -178,19 +173,14 @@ function DeleteSuccessPanel({
 	return (
 		<Stack
 			direction="column"
-			flex={1}
-			overflow="auto"
-			justifyContent="space-between"
+			sx={{ flex: 1, overflow: 'auto', justifyContent: 'space-between' }}
 		>
 			<Container maxWidth="xs">
 				<Stack
 					direction="column"
-					padding={6}
-					alignItems="center"
-					flex={1}
-					gap={6}
+					sx={{ padding: 6, alignItems: 'center', flex: 1, gap: 6 }}
 				>
-					<Box padding={6}>
+					<Box sx={{ padding: 6 }}>
 						<Icon
 							name="material-check-circle-rounded"
 							htmlColor={GREEN}
@@ -198,22 +188,26 @@ function DeleteSuccessPanel({
 						/>
 					</Box>
 
-					<Typography variant="h1" fontWeight={500} textAlign="center">
+					<Typography
+						variant="h1"
+						sx={{ fontWeight: 500, textAlign: 'center' }}
+					>
 						{t(m.deleteSuccessPanelTitle, { type })}
 					</Typography>
 				</Stack>
 			</Container>
-
 			<Box
-				display="flex"
-				flexDirection="column"
-				gap={4}
-				paddingX={6}
-				paddingBottom={6}
-				position="sticky"
-				bottom={0}
-				alignItems="center"
-				zIndex={1}
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 4,
+					paddingX: 6,
+					paddingBottom: 6,
+					position: 'sticky',
+					bottom: 0,
+					alignItems: 'center',
+					zIndex: 1,
+				}}
 			>
 				<Button
 					onClick={() => {
@@ -279,14 +273,16 @@ function AttachmentPanel({
 		observation.createdBy === ownDeviceInfo.deviceId
 
 	return (
-		<Stack direction="column" flex={1} overflow="auto">
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
 				direction="row"
-				alignItems="center"
 				component="nav"
-				gap={4}
-				padding={4}
-				borderBottom={`1px solid ${BLUE_GREY}`}
+				sx={{
+					alignItems: 'center',
+					gap: 4,
+					padding: 4,
+					borderBottom: `1px solid ${BLUE_GREY}`,
+				}}
 			>
 				<IconButton
 					onClick={() => {
@@ -305,28 +301,27 @@ function AttachmentPanel({
 					<Icon name="material-arrow-back" size={30} />
 				</IconButton>
 
-				<Typography variant="h1" fontWeight={500}>
+				<Typography variant="h1" sx={{ fontWeight: 500 }}>
 					{t(blobId.type === 'photo' ? m.photoNavTitle : m.audioNavTitle)}
 				</Typography>
 			</Stack>
 
 			<Stack
 				direction="column"
-				flex={1}
-				justifyContent="space-between"
-				overflow="auto"
-				padding={6}
-				gap={6}
+				sx={{
+					flex: 1,
+					justifyContent: 'space-between',
+					overflow: 'auto',
+					padding: 6,
+					gap: 6,
+				}}
 			>
-				<Stack direction="column" gap={6}>
+				<Stack direction="column" sx={{ gap: 6 }}>
 					{blobId.type === 'audio' ? (
 						<Alert
 							severity="warning"
 							icon={<Icon name="material-warning-rounded" />}
-							sx={{
-								border: `1px solid ${BLUE_GREY}`,
-								borderRadius: 2,
-							}}
+							sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
 						>
 							<Typography>{t(m.playerUnavailable)}</Typography>
 						</Alert>
@@ -344,8 +339,8 @@ function AttachmentPanel({
 							// TODO: Consider redirecting to other variants recursively
 							fallback={() => (
 								<Box
-									display="grid"
 									sx={{
+										display: 'grid',
 										aspectRatio: 1,
 										border: `1px solid ${BLUE_GREY}`,
 										borderRadius: 2,
@@ -359,8 +354,8 @@ function AttachmentPanel({
 							<Suspense
 								fallback={
 									<Box
-										display="grid"
 										sx={{
+											display: 'grid',
 											aspectRatio: 1,
 											border: '1px solid ${BLUE_GREY}',
 											borderRadius: 2,
@@ -372,11 +367,11 @@ function AttachmentPanel({
 								}
 							>
 								<Box
-									display="flex"
-									flexDirection="column"
-									flex={1}
-									overflow="hidden"
 									sx={{
+										display: 'flex',
+										flexDirection: 'column',
+										flex: 1,
+										overflow: 'hidden',
 										border: `1px solid ${BLUE_GREY}`,
 										borderRadius: 2,
 									}}
@@ -392,17 +387,20 @@ function AttachmentPanel({
 						</ErrorBoundary>
 					) : (
 						<Box
-							display="flex"
-							flexDirection="row"
-							alignItems="center"
-							flex={1}
 							sx={{
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+								flex: 1,
 								border: `1px solid ${BLUE_GREY}`,
 								borderRadius: 4,
 								aspectRatio: 1,
 							}}
 						>
-							<Stack direction="column" gap={4} flex={1} alignItems="center">
+							<Stack
+								direction="column"
+								sx={{ gap: 4, flex: 1, alignItems: 'center' }}
+							>
 								<Box>
 									<Icon
 										name="material-play-arrow-filled"
@@ -412,10 +410,12 @@ function AttachmentPanel({
 								</Box>
 
 								<Box
-									alignSelf="stretch"
-									height={8}
-									bgcolor={LIGHT_GREY}
-									marginX="20%"
+									sx={{
+										alignSelf: 'stretch',
+										height: 8,
+										bgcolor: LIGHT_GREY,
+										marginX: '20%',
+									}}
 								/>
 							</Stack>
 						</Box>
@@ -424,7 +424,10 @@ function AttachmentPanel({
 
 				<ErrorBoundary getResetKey={() => errorResetKey} fallback={() => <></>}>
 					<Suspense>
-						<Stack direction="row" justifyContent="space-around" gap={6}>
+						<Stack
+							direction="row"
+							sx={{ justifyContent: 'space-around', gap: 6 }}
+						>
 							{canEdit ? (
 								<DeleteButton
 									projectId={projectId}
@@ -481,10 +484,7 @@ function DeleteButton({
 
 			await updateObservation.mutateAsync({
 				versionId: observation.versionId,
-				value: {
-					...observation,
-					attachments: updatedAttachments,
-				},
+				value: { ...observation, attachments: updatedAttachments },
 			})
 		},
 	})
@@ -493,9 +493,7 @@ function DeleteButton({
 		<>
 			<Stack
 				direction="column"
-				gap={2}
-				justifyContent="center"
-				alignItems="center"
+				sx={{ gap: 2, justifyContent: 'center', alignItems: 'center' }}
 			>
 				<IconButton
 					aria-labelledby="delete-button-label"
@@ -509,7 +507,6 @@ function DeleteButton({
 
 				<Typography id="delete-button-label">{t(m.delete)}</Typography>
 			</Stack>
-
 			<DeleteAttachmentConfirmationDialog
 				open={showConfirmation}
 				onCancel={() => {
@@ -567,24 +564,29 @@ function DeleteAttachmentConfirmationDialog({
 	return (
 		<Dialog open={open} fullWidth maxWidth="sm">
 			<Stack direction="column">
-				<Stack direction="column" gap={10} flex={1} padding={20}>
-					<Stack direction="column" alignItems="center" gap={4}>
+				<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+					<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
 						<Icon name="material-error" color="error" size={72} />
 
-						<Typography variant="h1" fontWeight={500} textAlign="center">
+						<Typography
+							variant="h1"
+							sx={{ fontWeight: 500, textAlign: 'center' }}
+						>
 							{t(m.deleteAttachmentDialogTitle, { type })}
 						</Typography>
 					</Stack>
 				</Stack>
 
 				<Box
-					position="sticky"
-					bottom={0}
-					display="flex"
-					flexDirection="row"
-					justifyContent="space-between"
-					gap={6}
-					padding={6}
+					sx={{
+						position: 'sticky',
+						bottom: 0,
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'space-between',
+						gap: 6,
+						padding: 6,
+					}}
 				>
 					<Button
 						fullWidth
@@ -625,10 +627,7 @@ function DownloadButton({
 }) {
 	const { formatMessage: t } = useIntl()
 
-	const { data: attachmentUrl } = useAttachmentUrl({
-		projectId,
-		blobId,
-	})
+	const { data: attachmentUrl } = useAttachmentUrl({ projectId, blobId })
 
 	const downloadUrl = useMutation({
 		...downloadURLMutationOptions(),
@@ -639,9 +638,7 @@ function DownloadButton({
 		<>
 			<Stack
 				direction="column"
-				gap={2}
-				justifyContent="center"
-				alignItems="center"
+				sx={{ gap: 2, justifyContent: 'center', alignItems: 'center' }}
 			>
 				<IconButton
 					aria-labelledby="download-button-label"

@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
+import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
@@ -18,6 +19,7 @@ import { Icon } from '../../components/icon.tsx'
 import { useAppForm } from '../../hooks/forms.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo.ts'
 import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../lib/constants.ts'
+import { setOnboardedAtMutationOptions } from '../../lib/queries/user.ts'
 import { createDeviceNameSchema } from '../../lib/validators/device.ts'
 
 export const Route = createFileRoute('/onboarding/device-name')({
@@ -31,9 +33,7 @@ export const Route = createFileRoute('/onboarding/device-name')({
 			},
 		})
 	},
-	staticData: {
-		onboardingStepNumber: 2,
-	},
+	staticData: { onboardingStepNumber: 2 },
 	component: RouteComponent,
 })
 
@@ -44,6 +44,8 @@ function RouteComponent() {
 
 	const { data: deviceInfo } = useOwnDeviceInfo()
 	const setOwnDeviceInfo = useSetOwnDeviceInfo()
+
+	const setOnboardedAt = useMutation(setOnboardedAtMutationOptions())
 
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
@@ -59,12 +61,8 @@ function RouteComponent() {
 	}, [t])
 
 	const form = useAppForm({
-		defaultValues: {
-			deviceName: deviceInfo.name ? deviceInfo.name : '',
-		},
-		validators: {
-			onChange: v.object({ deviceName: deviceNameSchema }),
-		},
+		defaultValues: { deviceName: deviceInfo.name ? deviceInfo.name : '' },
+		validators: { onChange: v.object({ deviceName: deviceNameSchema }) },
 		onSubmit: async ({ value }) => {
 			const parsedDeviceName = v.parse(deviceNameSchema, value.deviceName)
 
@@ -73,6 +71,8 @@ function RouteComponent() {
 					deviceType: 'desktop',
 					name: parsedDeviceName,
 				})
+
+				await setOnboardedAt.mutateAsync(Date.now())
 			} catch (err) {
 				captureException(err)
 			}
@@ -88,19 +88,26 @@ function RouteComponent() {
 	return (
 		<>
 			<Stack
-				display="flex"
 				direction="column"
-				justifyContent="space-between"
-				flex={1}
-				gap={10}
-				bgcolor={LIGHT_GREY}
-				padding={10}
-				borderRadius={2}
-				overflow="auto"
+				sx={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					flex: 1,
+					gap: 10,
+					bgcolor: LIGHT_GREY,
+					padding: 10,
+					borderRadius: 2,
+					overflow: 'auto',
+				}}
 			>
-				<Container maxWidth="sm" component={Stack} direction="column" gap={10}>
-					<Stack direction="column" gap={5}>
-						<Box alignSelf="center">
+				<Container
+					maxWidth="sm"
+					component={Stack}
+					direction="column"
+					sx={{ gap: 10 }}
+				>
+					<Stack direction="column" sx={{ gap: 5 }}>
+						<Box sx={{ alignSelf: 'center' }}>
 							<Icon
 								name="material-symbols-computer"
 								htmlColor={DARKER_ORANGE}
@@ -108,12 +115,18 @@ function RouteComponent() {
 							/>
 						</Box>
 
-						<Typography variant="h1" fontWeight={500} textAlign="center">
+						<Typography
+							variant="h1"
+							sx={{ fontWeight: 500, textAlign: 'center' }}
+						>
 							{t(m.title)}
 						</Typography>
 					</Stack>
 
-					<Typography variant="h2" fontWeight={400} textAlign="center">
+					<Typography
+						variant="h2"
+						sx={{ fontWeight: 400, textAlign: 'center' }}
+					>
 						{t(m.description)}
 					</Typography>
 
@@ -145,19 +158,13 @@ function RouteComponent() {
 									onChange={(event) => {
 										field.handleChange(event.target.value)
 									}}
-									slotProps={{
-										input: {
-											style: {
-												backgroundColor: WHITE,
-											},
-										},
-									}}
+									slotProps={{ input: { style: { backgroundColor: WHITE } } }}
 									onBlur={field.handleBlur}
 									helperText={
 										<Stack
 											component="span"
 											direction="row"
-											justifyContent="space-between"
+											sx={{ justifyContent: 'space-between' }}
 										>
 											<Box component="span">
 												{field.state.meta.errors[0]?.message}
@@ -188,7 +195,7 @@ function RouteComponent() {
 					</Box>
 				</Container>
 
-				<Box display="flex" justifyContent="center">
+				<Box sx={{ display: 'flex', justifyContent: 'center' }}>
 					<form.Subscribe selector={(state) => state.canSubmit}>
 						{(canSubmit) => (
 							<Button
