@@ -19,6 +19,14 @@
     "description": "Button text for try again button.",
     "message": "மீண்டும் முயற்சி"
   },
+  "routes.app.index.appUsageConsentSuccessCloseButton": {
+    "description": "Text for button to close app usage consent dialog.",
+    "message": "முடிந்தது"
+  },
+  "routes.app.index.appUsageConsentSuccessTitle": {
+    "description": "Title text for success state of app usage consent dialog.",
+    "message": "வெற்றி!"
+  },
   "routes.app.index.createProjectButton": {
     "description": "Text for button to create project.",
     "message": "Create Project"

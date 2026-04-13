@@ -79,6 +79,54 @@
     "description": "Tooltip text for button to display additional projects section as a list.",
     "message": "Als Liste anzeigen"
   },
+  "routes.app.index.appUsageConsentInterstitialAllowButton": {
+    "description": "Text for button to allow consent for app usage metrics.",
+    "message": "Ja, zähle mich in"
+  },
+  "routes.app.index.appUsageConsentInterstitialDenyButton": {
+    "description": "Text for button to deny consent for app usage metrics.",
+    "message": "Nein, jetzt nicht"
+  },
+  "routes.app.index.appUsageConsentInterstitialDescription": {
+    "description": "Description text for interstitial state of app usage consent dialog.",
+    "message": "Teilen Sie mit, wie Sie CoMapeo mit Awana Digital verwenden – keine Informationen, die Sie teilen, können verwendet werden, um Sie zu verfolgen."
+  },
+  "routes.app.index.appUsageConsentInterstitialDetailsIdNumbers": {
+    "description": "Text describing how IDs used for app usage metrics are used and generated.",
+    "message": "Die ID-Nummern werden zufällig gestrichen und jeden Monat geändert."
+  },
+  "routes.app.index.appUsageConsentInterstitialDetailsIpAddresses": {
+    "description": "Text describing how IP addresses are never stored.",
+    "message": "CoMapeo speichert niemals IP-Adressen."
+  },
+  "routes.app.index.appUsageConsentInterstitialDetailsTurnOffAnytime": {
+    "description": "Text describing how app usage metrics can be turned off at any time.",
+    "message": "Schalten Sie jederzeit aus."
+  },
+  "routes.app.index.appUsageConsentInterstitialTitle": {
+    "description": "Title text for interstitial state of app usage consent dialog.",
+    "message": "Helfen Sie mit, Ihre Erfahrung zu verbessern."
+  },
+  "routes.app.index.appUsageConsentSuccessCloseButton": {
+    "description": "Text for button to close app usage consent dialog.",
+    "message": "Fertig"
+  },
+  "routes.app.index.appUsageConsentSuccessDescription": {
+    "description": "Description text for success state of app usage consent dialog.",
+    "message": "<b>{deviceName}</b> teilt jetzt mit, wie Sie CoMapeo mit Awana Digital verwenden."
+  },
+  "routes.app.index.appUsageConsentSuccessDescriptionNoDeviceName": {
+    "description": "Description text for success state of app usage consent dialog when device name not present (edge case).",
+    "message": "Dieses Gerät teilt nun mit, wie Sie CoMapeo mit Awana Digital verwenden."
+  },
+  "routes.app.index.appUsageConsentSuccessDetailsChangeSetting": {
+    "description": "Description text for success state of app usage consent dialog.",
+    "message": "Ändern Sie dies jederzeit, indem Sie in den CoMapeo Einstellungen zu Daten & Privatsphäre navigieren."
+  },
+  "routes.app.index.appUsageConsentSuccessTitle": {
+    "description": "Title text for success state of app usage consent dialog.",
+    "message": "Erfolg!"
+  },
   "routes.app.index.characterCount": {
     "description": "Character count for project name input.",
     "message": "{count}/{max}"
@@ -1039,6 +1087,22 @@
     "description": "Fallback for when project is missing a name.",
     "message": "Unbenanntes Projekt"
   },
+  "routes.app.settings.-data-and-privacy-section.appUsageDescription": {
+    "description": "Description of app usage metrics settings section.",
+    "message": "Teilen Sie mit, wie Sie CoMapeo mit Awana Digital verwenden – keine Informationen, die Sie teilen, können verwendet werden, um Sie zu verfolgen."
+  },
+  "routes.app.settings.-data-and-privacy-section.appUsageDetailsIdNumbers": {
+    "description": "Text describing how IDs used for app usage metrics are used and generated.",
+    "message": "Die ID-Nummern werden zufällig gestrichen und jeden Monat geändert. Die ID-Nummern werden zufällig gestrichen und jeden Monat geändert."
+  },
+  "routes.app.settings.-data-and-privacy-section.appUsageDetailsIpAddresses": {
+    "description": "Text describing how IP addresses are never stored.",
+    "message": "CoMapeo speichert niemals IP-Adressen."
+  },
+  "routes.app.settings.-data-and-privacy-section.appUsageTitle": {
+    "description": "Title of app usage metrics settings section.",
+    "message": "App-Nutzung"
+  },
   "routes.app.settings.-data-and-privacy-section.description": {
     "description": "Description for data and privacy section in settings page.",
     "message": "CoMapeo respektiert Ihre Privatsphäre und Autonomie"
@@ -1062,6 +1126,10 @@
   "routes.app.settings.-data-and-privacy-section.learnMore": {
     "description": "Text for link that navigates to external URL for additional information info about data and privacy.",
     "message": "Mehr erfahren"
+  },
+  "routes.app.settings.-data-and-privacy-section.shareAppUsage": {
+    "description": "Text label for checkbox to toggle app usage sharing setting.",
+    "message": "App-Nutzung teilen"
   },
   "routes.app.settings.-data-and-privacy-section.shareDiagnosticInformation": {
     "description": "Label for checkbox to toggle sharing of diagnostic information.",

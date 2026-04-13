@@ -19,6 +19,14 @@
     "description": "Button text for try again button.",
     "message": "Thử lại"
   },
+  "routes.app.index.appUsageConsentSuccessCloseButton": {
+    "description": "Text for button to close app usage consent dialog.",
+    "message": "Hoàn thành"
+  },
+  "routes.app.index.appUsageConsentSuccessTitle": {
+    "description": "Title text for success state of app usage consent dialog.",
+    "message": "Thành công!"
+  },
   "routes.app.index.createProjectButton": {
     "description": "Text for button to create project.",
     "message": "Create Project"
