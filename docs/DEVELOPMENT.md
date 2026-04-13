@@ -59,8 +59,6 @@ If you need to use environment overrides, create a copy of the [`.env.template`]
 
 - `ONLINE_STYLE_URL` (required): Full URL that points to a compatible map's StyleJSON.
   - This should be a fully qualified http-based URL. For example, providers like Mapbox may use their own custom URL format, such as `mapbox://styles/mapbox/outdoors-v12`. Instead, you should convert this to something like `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12`.
-  - If it's a [Mapbox](https://www.mapbox.com/) style, it is preferable to omit the `access_token` search param and specify `VITE_MAPBOX_ACCESS_TOKEN` instead.
-- `VITE_MAPBOX_ACCESS_TOKEN` (optional): Public token necessary for accessing [Mapbox](https://www.mapbox.com/)-provided resources. Follow the instructions [here](https://docs.mapbox.com/help/getting-started/access-tokens/) or reach out to the maintainers to obtain one.
 
 If you want logs and errors to be sent to Sentry as you run the app, you need to specify the following environment variables:
 
