@@ -2,9 +2,5 @@
   "routes.app.settings_.test-data.cancel": {
     "description": "Label for cancel button.",
     "message": "Ghairi"
-  },
-  "routes.app.settings_.test-data.create": {
-    "description": "Label for create button.",
-    "message": "Create Project"
   }
 }
