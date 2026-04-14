@@ -39,10 +39,6 @@
     "description": "Accessible label for project-specific navigation bar.",
     "message": "Project navigatie"
   },
-  "routes.app.projects.$projectId.route.testDataTabLabel": {
-    "description": "Label for project test data tab link in navigation.",
-    "message": "Test Data"
-  },
   "routes.app.projects.$projectId.settings.categories.goBackAccessibleLabel": {
     "description": "Accessible label for back button.",
     "message": "Ga terug."
@@ -87,10 +83,6 @@
     "description": "Accessible label for link that navigates to project when clicked.",
     "message": "Ga naar project {name}."
   },
-  "routes.app.settings.breadCrumbAccessibleLabel": {
-    "description": "Accessible label for breadcrumb navigation when viewing nested settings page.",
-    "message": "breadcrumb"
-  },
   "routes.app.settings.device-name.characterCount": {
     "description": "Displays number of characters in input out of the maximum allowed characters.",
     "message": "{count}/{max}"
@@ -122,10 +114,6 @@
   "routes.app.settings_.test-data.coordinatesSelectionHint": {
     "description": "Instructions displayed for coordinates selection inputs.",
     "message": "Stel de coördinaten in door op de kaart te klikken of de locatie marker te slepen."
-  },
-  "routes.app.settings_.test-data.create": {
-    "description": "Label for create button.",
-    "message": "Create Project"
   },
   "routes.app.settings_.test-data.createTrack": {
     "description": "Label for toggle to create track when creating test data.",
