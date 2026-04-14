@@ -343,10 +343,6 @@
     "description": "Text for title of panel shown when project has collaborators but no data.",
     "message": "Échanger pour récolter des observations"
   },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
-    "description": "Accessible label for button to close panel.",
-    "message": "Close."
-  },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
     "description": "Title for edit category panel.",
     "message": "Changer de catégorie"
@@ -1026,10 +1022,6 @@
   "$1.routes.app.settings.background-map.mapUpdateSuccessTitle": {
     "description": "Title text for dialog when updating map successfully.",
     "message": "Mis à jour !"
-  },
-  "$1.routes.app.settings.background-map.navTitle": {
-    "description": "Title of the background map settings page.",
-    "message": "Map Management"
   },
   "$1.routes.app.settings.background-map.removeMap": {
     "description": "Text for button to remove map",

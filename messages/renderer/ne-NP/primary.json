@@ -115,10 +115,6 @@
     "description": "Label for app settings tab link in navigation.",
     "message": "सेटिङ"
   },
-  "$1.routes.app.settings.background-map.navTitle": {
-    "description": "Title of the background map settings page.",
-    "message": "Map Management"
-  },
   "$1.routes.app.settings.device-name.cancel": {
     "description": "Label for cancel button.",
     "message": "रद्द"

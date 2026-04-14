@@ -359,10 +359,6 @@
     "description": "Text for title of panel shown when project has collaborators but no data.",
     "message": "Ruil in om waarnemingen te verzamelen"
   },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
-    "description": "Accessible label for button to close panel.",
-    "message": "Close."
-  },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
     "description": "Title for edit category panel.",
     "message": "Wijzig categorie"
