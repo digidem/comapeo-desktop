@@ -27,10 +27,6 @@
     "description": "Label for error section",
     "message": "Error"
   },
-  "$1.components.generic-route-error-component.reload": {
-    "description": "Text for button to reload page.",
-    "message": "Reload"
-  },
   "$1.components.generic-route-error-component.restart": {
     "description": "Text for button to restart app.",
     "message": "Reiniciar"
@@ -315,10 +311,6 @@
     "description": "Text displayed when exchange is completed with currently connected devices.",
     "message": "¡Completado! Esperando a que se unan otros dispositivos."
   },
-  "$1.routes.app.projects.$projectId.exchange.index.devicesFound": {
-    "description": "Text displayed when other devices have been found.",
-    "message": "Devices found"
-  },
   "$1.routes.app.projects.$projectId.exchange.index.exchanging": {
     "description": "Text displayed when exchanging with other devices.",
     "message": "Intercambiando…"
@@ -438,10 +430,6 @@
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerNull": {
     "description": "Text displayed if a field is answered with \"null\"",
     "message": "NÚLL"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerTrue": {
-    "description": "Text displayed if a boolean field is answered with \"true\"",
-    "message": "TRUE"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
     "description": "Text for button to change category.",
@@ -923,10 +911,6 @@
     "description": "Text indicating that the member is a remote archive (displays when hovering over the icon).",
     "message": "Archivo Remoto"
   },
-  "$1.routes.app.projects.-shared.device-icon.deviceTypeTablet": {
-    "description": "Text indicating that the member is a tablet device (displays when hovering over the icon).",
-    "message": "Tablet"
-  },
   "$1.routes.app.projects.-shared.device-icon.deviceTypeUnknown": {
     "description": "Text indicating that the member device type is unknown (displays when hovering over the icon).",
     "message": "Tipo de dispositivo desconocido"
@@ -934,10 +918,6 @@
   "$1.routes.app.projects.-shared.device-icon.deviceTypeUnspecified": {
     "description": "Text indicating that the member device type is unspecified (displays when hovering over the icon).",
     "message": "Tipo de dispositivo no especificado"
-  },
-  "$1.routes.app.projects.-shared.network-connection-info.wifiInfoUnavailable": {
-    "description": "Text displayed when Wi-Fi info is unavailable.",
-    "message": "Wi-Fi info unavailable."
   },
   "$1.routes.app.route.appSettingsTabLabel": {
     "description": "Label for app settings tab link in navigation.",
@@ -1083,10 +1063,6 @@
     "description": "Title text for dialog when updating map successfully.",
     "message": "¡Actualizado!"
   },
-  "$1.routes.app.settings.background-map.navTitle": {
-    "description": "Title of the background map settings page.",
-    "message": "Map Management"
-  },
   "$1.routes.app.settings.background-map.removeMap": {
     "description": "Text for button to remove map",
     "message": "Eliminar mapa"
@@ -1147,10 +1123,6 @@
     "description": "Placeholder name of custom background map if name cannot be retrieved.",
     "message": "Fondo personalizado"
   },
-  "$1.routes.app.settings.index.decimalDegrees": {
-    "description": "Label for Decimal Degrees coordinate system.",
-    "message": "DD Coordinates"
-  },
   "$1.routes.app.settings.index.defaultBackground": {
     "description": "Name of the background map used if a custom one is not set.",
     "message": "Fondo por defecto"
@@ -1158,10 +1130,6 @@
   "$1.routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to device name settings page.",
     "message": "Ir a la configuración del nombre del dispositivo."
-  },
-  "$1.routes.app.settings.index.dmsCoordinates": {
-    "description": "Label for Degrees/Minutes/Seconds coordinate system.",
-    "message": "DMS Coordinates"
   },
   "$1.routes.app.settings.index.editDeviceName": {
     "description": "Button text for navigating to page to edit device name.",
