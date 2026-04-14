@@ -1,8 +1,4 @@
 {
-  "$1.components.app-title-bar.appName": {
-    "description": "Name of the app displayed in the title bar.",
-    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
-  },
   "$1.components.discard-edits-dialog.cancelButton": {
     "description": "Text for button to cancel action.",
     "message": "Cancelar"
@@ -26,10 +22,6 @@
   "$1.components.generic-route-error-component.error": {
     "description": "Label for error section",
     "message": "Erro"
-  },
-  "$1.components.generic-route-error-component.reload": {
-    "description": "Text for button to reload page.",
-    "message": "Reload"
   },
   "$1.components.generic-route-error-component.restart": {
     "description": "Text for button to restart app.",
@@ -647,10 +639,6 @@
     "description": "Button text to confirm leaving project.",
     "message": "Sim, Sair"
   },
-  "$1.routes.app.projects.$projectId.team.$deviceId.continueButton": {
-    "description": "Button text to continue to next step in leave project flow.",
-    "message": "Continue"
-  },
   "$1.routes.app.projects.$projectId.team.$deviceId.coordinator": {
     "description": "Text indicating collaborator is a coordinator.",
     "message": "Coordenador"
@@ -939,10 +927,6 @@
     "description": "Text indicating that the member device type is unspecified (displays when hovering over the icon).",
     "message": "Tipo de dispositivo não especificado"
   },
-  "$1.routes.app.projects.-shared.network-connection-info.wifiInfoUnavailable": {
-    "description": "Text displayed when Wi-Fi info is unavailable.",
-    "message": "Wi-Fi info unavailable."
-  },
   "$1.routes.app.route.appSettingsTabLabel": {
     "description": "Label for app settings tab link in navigation.",
     "message": "Ajustes"
@@ -1115,10 +1099,6 @@
     "description": "Title of the coordinate system settings page.",
     "message": "Sistema de Coordenadas"
   },
-  "$1.routes.app.settings.coordinate-system.utmOptionLabel": {
-    "description": "Label for the universal transverse mercator option.",
-    "message": "UTM (Universal Transverse Mercator)"
-  },
   "$1.routes.app.settings.device-name.cancel": {
     "description": "Label for cancel button.",
     "message": "Cancelar"
@@ -1151,10 +1131,6 @@
     "description": "Placeholder name of custom background map if name cannot be retrieved.",
     "message": "Fundo personalizado"
   },
-  "$1.routes.app.settings.index.decimalDegrees": {
-    "description": "Label for Decimal Degrees coordinate system.",
-    "message": "DD Coordinates"
-  },
   "$1.routes.app.settings.index.defaultBackground": {
     "description": "Name of the background map used if a custom one is not set.",
     "message": "Fundo padrão"
@@ -1162,10 +1138,6 @@
   "$1.routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to device name settings page.",
     "message": "Vá para configurações de nome do dispositivo."
-  },
-  "$1.routes.app.settings.index.dmsCoordinates": {
-    "description": "Label for Degrees/Minutes/Seconds coordinate system.",
-    "message": "DMS Coordinates"
   },
   "$1.routes.app.settings.index.editDeviceName": {
     "description": "Button text for navigating to page to edit device name.",
@@ -1386,10 +1358,6 @@
   "$1.routes.welcome.collaborate": {
     "description": "Detail about collaborating in welcome page.",
     "message": "Colabore com outras pessoas"
-  },
-  "$1.routes.welcome.comapeoDesktop": {
-    "description": "Name of app displayed in welcome page.",
-    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
   },
   "$1.routes.welcome.designedFor": {
     "description": "Detail about who app is designed for in welcome page.",
