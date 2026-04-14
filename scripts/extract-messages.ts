@@ -2,7 +2,7 @@ import { mkdirSync } from 'node:fs'
 import { glob, writeFile } from 'node:fs/promises'
 import { join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { parseArgs, styleText } from 'node:util'
+import { parseArgs } from 'node:util'
 import { extract } from '@formatjs/cli-lib'
 
 const { values } = parseArgs({
@@ -15,13 +15,10 @@ if (values.type !== 'main' && values.type !== 'renderer') {
 }
 
 const PROJECT_ROOT_DIR = fileURLToPath(new URL('..', import.meta.url))
-
 const MESSAGES_DIR = fileURLToPath(
 	new URL(`../messages/${values.type}`, import.meta.url),
 )
-
 const DEFAULT_LANGUAGE = 'en-US' as const
-
 const OUTPUT_DIR = join(MESSAGES_DIR, DEFAULT_LANGUAGE)
 
 mkdirSync(OUTPUT_DIR, { recursive: true })
@@ -44,7 +41,7 @@ const extracted = await extract(sourceFiles, {
 	throws: true,
 })
 
-const { primary, secondary } = getCategorizedMessages(JSON.parse(extracted))
+const { primary, secondary } = categorizeMessages(JSON.parse(extracted))
 
 await Promise.all([
 	writeFile(
@@ -60,13 +57,10 @@ await Promise.all([
 ])
 
 console.log(
-	styleText(
-		['green'],
-		`Extracted messages from ${join('src', values.type)} to ${relative(PROJECT_ROOT_DIR, OUTPUT_DIR)}`,
-	),
+	`✅ Extracted messages from ${join('src', values.type)} to ${relative(PROJECT_ROOT_DIR, OUTPUT_DIR)}`,
 )
 
-function getCategorizedMessages(messages: Record<string, unknown>) {
+function categorizeMessages(messages: Record<string, unknown>) {
 	const primary = {} as Record<string, unknown>
 	const secondary = {} as Record<string, unknown>
 

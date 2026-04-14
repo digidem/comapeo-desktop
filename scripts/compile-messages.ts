@@ -1,7 +1,7 @@
 import { mkdirSync, readdirSync, writeFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { parseArgs, styleText } from 'node:util'
+import { parseArgs } from 'node:util'
 import { compile } from '@formatjs/cli-lib'
 
 const { values } = parseArgs({
@@ -43,8 +43,5 @@ for (const d of directories) {
 }
 
 console.log(
-	styleText(
-		['green'],
-		`Compiled messages from ${relative(PROJECT_ROOT, sourceDir)} to ${relative(PROJECT_ROOT, outputDir)}`,
-	),
+	`✅ Compiled messages from ${relative(PROJECT_ROOT, sourceDir)} to ${relative(PROJECT_ROOT, outputDir)}`,
 )
