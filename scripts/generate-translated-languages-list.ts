@@ -63,13 +63,13 @@ for (const d of directories) {
 
 if (unsupportedLanguages.length > 0) {
 	console.warn(
-		`The following translated language tags are not listed as supported: ${unsupportedLanguages.join(', ')}\nUpdate languages.json with the relevant information in order for it to be displayed as an option in the application.\n`,
+		`⚠️ The following translated language tags are not listed as supported: ${unsupportedLanguages.join(', ')}\nUpdate languages.json with the relevant information in order for it to be displayed as an option in the application.\n`,
 	)
 }
 
 if (languagesMissingTranslations.length > 0) {
 	console.warn(
-		`The following language tags do not have translations: ${languagesMissingTranslations.join(', ')}.\nThese will not be available for the app to use.\n`,
+		`⚠️ The following language tags do not have translations: ${languagesMissingTranslations.join(', ')}.\nThese will not be available for the app to use.\n`,
 	)
 }
 
