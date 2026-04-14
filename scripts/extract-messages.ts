@@ -35,13 +35,24 @@ const sourceFiles = (
 	.filter((d) => d.isFile())
 	.map((d) => join(d.parentPath, d.name))
 
-const extracted = await extract(sourceFiles, {
-	ast: true,
-	format: 'crowdin',
-	throws: true,
-})
+const extracted: Record<string, unknown> = JSON.parse(
+	await extract(sourceFiles, {
+		ast: true,
+		format: 'crowdin',
+		throws: true,
+	}),
+)
 
-const { primary, secondary } = categorizeMessages(JSON.parse(extracted))
+const primary = {} as Record<string, unknown>
+const secondary = {} as Record<string, unknown>
+
+for (const messageId of Object.keys(extracted)) {
+	if (messageId.startsWith('$1.')) {
+		primary[messageId] = extracted[messageId]
+	} else {
+		secondary[messageId] = extracted[messageId]
+	}
+}
 
 await Promise.all([
 	writeFile(
@@ -59,18 +70,3 @@ await Promise.all([
 console.log(
 	`✅ Extracted messages from ${join('src', values.type)} to ${relative(PROJECT_ROOT_DIR, OUTPUT_DIR)}`,
 )
-
-function categorizeMessages(messages: Record<string, unknown>) {
-	const primary = {} as Record<string, unknown>
-	const secondary = {} as Record<string, unknown>
-
-	for (const messageId of Object.keys(messages)) {
-		if (messageId.startsWith('$1.')) {
-			primary[messageId] = messages[messageId]
-		} else {
-			secondary[messageId] = messages[messageId]
-		}
-	}
-
-	return { primary, secondary }
-}

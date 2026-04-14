@@ -22,11 +22,11 @@ const outputDir = join(TRANSLATIONS_DIR, values.type)
 
 mkdirSync(outputDir, { recursive: true })
 
-const directories = readdirSync(sourceDir, {
+const languageSourceDirectories = readdirSync(sourceDir, {
 	withFileTypes: true,
 }).filter((d) => d.isDirectory())
 
-for (const d of directories) {
+for (const d of languageSourceDirectories) {
 	const languageCode = d.name
 
 	const compiled = await compile(
