@@ -1,8 +1,4 @@
 {
-  "$1.components.app-title-bar.appName": {
-    "description": "Name of the app displayed in the title bar.",
-    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
-  },
   "$1.components.discard-edits-dialog.cancelButton": {
     "description": "Text for button to cancel action.",
     "message": "Annuler"
@@ -15,10 +11,6 @@
     "description": "Title of dialog displayed when trying to leave page while editing observation.",
     "message": "Ignorer les modifications ?"
   },
-  "$1.components.error-dialog.close": {
-    "description": "Button text for the close button in the error dialog.",
-    "message": "Close"
-  },
   "$1.components.error-dialog.somethingWentWrong": {
     "description": "Generic title text for the error dialog.",
     "message": "Quelque chose s'est mal passé"
@@ -26,10 +18,6 @@
   "$1.components.generic-route-error-component.error": {
     "description": "Label for error section",
     "message": "Erreur"
-  },
-  "$1.components.generic-route-error-component.reload": {
-    "description": "Text for button to reload page.",
-    "message": "Reload"
   },
   "$1.components.generic-route-error-component.restart": {
     "description": "Text for button to restart app.",
@@ -119,10 +107,6 @@
     "description": "Title text for success state of app usage consent dialog.",
     "message": "Succès !"
   },
-  "$1.routes.app.index.createProjectButton": {
-    "description": "Text for button to create project.",
-    "message": "Create Project"
-  },
   "$1.routes.app.index.joinProjectCardTitle": {
     "description": "Title card for joining a project.",
     "message": "Rejoindre un projet"
@@ -134,10 +118,6 @@
   "$1.routes.app.index.joinProjectDialogTitle": {
     "description": "Title of dialog shown for joining a project.",
     "message": "Rejoindre un projet"
-  },
-  "$1.routes.app.index.leftProjectDialogCloseButton": {
-    "description": "Text for button to close left project dialog.",
-    "message": "Open Settings"
   },
   "$1.routes.app.index.leftProjectDialogTitle": {
     "description": "Title text for left project dialog.",
@@ -159,10 +139,6 @@
     "description": "Displayed name of participant role on project card.",
     "message": "Participant"
   },
-  "$1.routes.app.index.projectNameInputLabel": {
-    "description": "Input label for input in start project dialog.",
-    "message": "Enter a name for the Project"
-  },
   "$1.routes.app.index.projectNameMaxLengthError": {
     "description": "Error message for when project name is too long.",
     "message": "Trop long, essayez un nom plus court."
@@ -171,17 +147,9 @@
     "description": "Error message for when project name is too short.",
     "message": "Entrez un nom de projet"
   },
-  "$1.routes.app.index.startProjectCardTitle": {
-    "description": "Title card for starting a new project.",
-    "message": "Create a Project"
-  },
   "$1.routes.app.index.startProjectDialogDescription": {
     "description": "Description of dialog shown for starting a project.",
     "message": "Nommez votre projet."
-  },
-  "$1.routes.app.index.startProjectDialogTitle": {
-    "description": "Description of dialog shown for starting a project.",
-    "message": "Create a Project"
   },
   "$1.routes.app.index.unnamedProject": {
     "description": "Fallback for when project is missing a name.",
@@ -422,10 +390,6 @@
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.title": {
     "description": "Title for notes section.",
     "message": "Notes"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerFalse": {
-    "description": "Text displayed if a boolean field is answered with \"false\"",
-    "message": "FALSE"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerNull": {
     "description": "Text displayed if a field is answered with \"null\"",
@@ -963,10 +927,6 @@
     "description": "Title of project invite.",
     "message": "Vous avez été invité à…"
   },
-  "$1.routes.app.route.projectJoinedCloseDialog": {
-    "description": "Text for button to close project joined dialog.",
-    "message": "Open Settings"
-  },
   "$1.routes.app.route.projectJoinedTitle": {
     "description": "Title of dialog displayed when joining a project successfully.",
     "message": "A rejoint le projet {name} avec succès."
@@ -1095,10 +1055,6 @@
     "description": "Title of the coordinate system settings page.",
     "message": "Système de coordonnées"
   },
-  "$1.routes.app.settings.coordinate-system.utmOptionLabel": {
-    "description": "Label for the universal transverse mercator option.",
-    "message": "UTM (Universal Transverse Mercator)"
-  },
   "$1.routes.app.settings.device-name.cancel": {
     "description": "Label for cancel button.",
     "message": "Annuler"
@@ -1131,10 +1087,6 @@
     "description": "Placeholder name of custom background map if name cannot be retrieved.",
     "message": "Fond d'écran personnalisé"
   },
-  "$1.routes.app.settings.index.decimalDegrees": {
-    "description": "Label for Decimal Degrees coordinate system.",
-    "message": "DD Coordinates"
-  },
   "$1.routes.app.settings.index.defaultBackground": {
     "description": "Name of the background map used if a custom one is not set.",
     "message": "Arrière-plan par défaut"
@@ -1142,10 +1094,6 @@
   "$1.routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to device name settings page.",
     "message": "Allez dans les paramètres du nom de l'appareil."
-  },
-  "$1.routes.app.settings.index.dmsCoordinates": {
-    "description": "Label for Degrees/Minutes/Seconds coordinate system.",
-    "message": "DMS Coordinates"
   },
   "$1.routes.app.settings.index.editDeviceName": {
     "description": "Button text for navigating to page to edit device name.",
@@ -1346,14 +1294,6 @@
   "$1.routes.welcome.appDescription": {
     "description": "Description of app in welcome page.",
     "message": "Voir et gérer les observations recueillies avec CoMapeo Mobile."
-  },
-  "$1.routes.welcome.collaborate": {
-    "description": "Detail about collaborating in welcome page.",
-    "message": "Collaborate with others"
-  },
-  "$1.routes.welcome.comapeoDesktop": {
-    "description": "Name of app displayed in welcome page.",
-    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
   },
   "$1.routes.welcome.designedFor": {
     "description": "Detail about who app is designed for in welcome page.",
