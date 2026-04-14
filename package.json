@@ -47,7 +47,7 @@
 		"intl:renderer:extract": "node scripts/extract-messages.ts --type renderer",
 		"intl:renderer:compile": "node scripts/compile-messages.ts --type renderer",
 		"intl:renderer": "node --run \"intl:renderer:extract\" && node --run \"intl:renderer:compile\"",
-		"intl:generate-translated-languages-list": "node scripts/generate-translated-languages-list.js",
+		"intl:generate-translated-languages-list": "node scripts/generate-translated-languages-list.ts",
 		"intl": "concurrently --pad-prefix \"node:intl:renderer\" \"node:intl:main\" && node --run \"intl:generate-translated-languages-list\"",
 		"checks:eslint": "eslint --cache .",
 		"checks:format": "prettier --cache --check .",
