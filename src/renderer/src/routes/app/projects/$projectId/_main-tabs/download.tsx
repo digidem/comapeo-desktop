@@ -455,7 +455,7 @@ const m = defineMessages({
 		description: 'Title of the all observations with media download option.',
 	},
 	downloadOptionsAccessibleLabel: {
-		id: '$1.routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel',
+		id: 'routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel',
 		defaultMessage: 'Data to download',
 		description: 'Accessible label of download options form input.',
 	},

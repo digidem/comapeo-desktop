@@ -290,7 +290,7 @@ function CategoriesList({
 
 const m = defineMessages({
 	closePanelAccessibleLabel: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel',
 		defaultMessage: 'Close.',
 		description: 'Accessible label for button to close panel.',
 	},

@@ -255,10 +255,6 @@
     "description": "Title of the download page.",
     "message": "Downloaden"
   },
-  "$1.routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
-    "description": "Accessible label of download options form input.",
-    "message": "Gegevens om te downloaden"
-  },
   "$1.routes.app.projects.$projectId.download.navTitle": {
     "description": "Title of the download observations page.",
     "message": "Waarnemingen downloaden"
@@ -530,10 +526,6 @@
   "$1.routes.app.projects.$projectId.settings.index.projectInfoActionLabel": {
     "description": "Text for action to update project info.",
     "message": "Bewerken"
-  },
-  "$1.routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to project info settings page.",
-    "message": "Ga naar de project info instellingen."
   },
   "$1.routes.app.projects.$projectId.settings.index.unnamedProject": {
     "description": "Fallback for when current project is missing a name.",
@@ -1098,10 +1090,6 @@
   "$1.routes.app.settings.index.defaultBackground": {
     "description": "Name of the background map used if a custom one is not set.",
     "message": "Standaard achtergrond"
-  },
-  "$1.routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to device name settings page.",
-    "message": "Ga naar de naam instellingen van het apparaat."
   },
   "$1.routes.app.settings.index.editDeviceName": {
     "description": "Button text for navigating to page to edit device name.",

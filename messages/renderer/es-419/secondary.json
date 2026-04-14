@@ -19,9 +19,17 @@
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icono para la categoría {name}"
   },
+  "routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
+    "description": "Accessible label of download options form input.",
+    "message": "Datos a descargar"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icono para la categoría {name}"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Cerrar."
   },
   "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.accessibleNotesInputLabel": {
     "description": "Accessible label for notes input field.",
@@ -50,6 +58,10 @@
   "routes.app.projects.$projectId.settings.index.categoriesLinkAccessibleLabel": {
     "description": "Accessible label for link item that navigates to project info settings page.",
     "message": "Ir a la configuración de categorías."
+  },
+  "routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to project info settings page.",
+    "message": "Ir a la configuración de información del proyecto."
   },
   "routes.app.projects.$projectId.settings.info.goBackAccessibleLabel": {
     "description": "Accessible label for back button.",
@@ -106,6 +118,10 @@
   "routes.app.settings.index.coordinateSystemSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to coordinate system settings page.",
     "message": "Ir a la configuración del sistema de coordenadas."
+  },
+  "routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to device name settings page.",
+    "message": "Ir a la configuración del nombre del dispositivo."
   },
   "routes.app.settings.index.languageSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to language settings page.",

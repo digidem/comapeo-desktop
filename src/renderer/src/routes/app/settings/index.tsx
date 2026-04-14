@@ -374,7 +374,7 @@ const m = defineMessages({
 		description: 'Label for selected language based on the system preferences.',
 	},
 	deviceNameSettingsAccessibleLabel: {
-		id: '$1.routes.app.settings.index.deviceNameSettingsAccessibleLabel',
+		id: 'routes.app.settings.index.deviceNameSettingsAccessibleLabel',
 		defaultMessage: 'Go to device name settings.',
 		description:
 			'Accessible label for link item that navigates to device name settings page.',

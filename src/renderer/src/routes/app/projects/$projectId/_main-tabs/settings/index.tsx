@@ -159,7 +159,7 @@ const m = defineMessages({
 		description: 'Text for action to update project info.',
 	},
 	projectSettingsLinkAccessibleLabel: {
-		id: '$1.routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel',
+		id: 'routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel',
 		defaultMessage: 'Go to project info settings.',
 		description:
 			'Accessible label for link item that navigates to project info settings page.',

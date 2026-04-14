@@ -275,10 +275,6 @@
     "description": "Title of the download page.",
     "message": "Download"
   },
-  "$1.routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
-    "description": "Accessible label of download options form input.",
-    "message": "Data to download"
-  },
   "$1.routes.app.projects.$projectId.download.navTitle": {
     "description": "Title of the download observations page.",
     "message": "Download Observations"
@@ -390,10 +386,6 @@
   "$1.routes.app.projects.$projectId.index.openExchangePanelTitle": {
     "description": "Text for title of panel shown when project has collaborators but no data.",
     "message": "Exchange to Gather Observations"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
-    "description": "Accessible label for button to close panel.",
-    "message": "Close."
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
     "description": "Title for edit category panel.",
@@ -570,10 +562,6 @@
   "$1.routes.app.projects.$projectId.settings.index.projectInfoActionLabel": {
     "description": "Text for action to update project info.",
     "message": "Edit"
-  },
-  "$1.routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to project info settings page.",
-    "message": "Go to project info settings."
   },
   "$1.routes.app.projects.$projectId.settings.index.unnamedProject": {
     "description": "Fallback for when current project is missing a name.",
@@ -1162,10 +1150,6 @@
   "$1.routes.app.settings.index.defaultBackground": {
     "description": "Name of the background map used if a custom one is not set.",
     "message": "Default Background"
-  },
-  "$1.routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to device name settings page.",
-    "message": "Go to device name settings."
   },
   "$1.routes.app.settings.index.dmsCoordinates": {
     "description": "Label for Degrees/Minutes/Seconds coordinate system.",

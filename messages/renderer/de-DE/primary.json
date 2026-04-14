@@ -247,10 +247,6 @@
     "description": "Description of the all observations with media download option.",
     "message": "Bilder und Audio in einer .zip-Datei"
   },
-  "$1.routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
-    "description": "Accessible label of download options form input.",
-    "message": "Zu ladende Daten"
-  },
   "$1.routes.app.projects.$projectId.download.navTitle": {
     "description": "Title of the download observations page.",
     "message": "Beobachtungen herunterladen"
@@ -494,10 +490,6 @@
   "$1.routes.app.projects.$projectId.settings.index.projectInfoActionLabel": {
     "description": "Text for action to update project info.",
     "message": "Bearbeiten"
-  },
-  "$1.routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to project info settings page.",
-    "message": "Gehe zu den Projekt-Info-Einstellungen."
   },
   "$1.routes.app.projects.$projectId.settings.index.unnamedProject": {
     "description": "Fallback for when current project is missing a name.",
@@ -1046,10 +1038,6 @@
   "$1.routes.app.settings.index.defaultBackground": {
     "description": "Name of the background map used if a custom one is not set.",
     "message": "Standard-Hintergrund"
-  },
-  "$1.routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to device name settings page.",
-    "message": "Gehe zu den Gerätenamen-Einstellungen."
   },
   "$1.routes.app.settings.index.editDeviceName": {
     "description": "Button text for navigating to page to edit device name.",

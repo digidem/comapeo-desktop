@@ -251,10 +251,6 @@
     "description": "Title of the download page.",
     "message": "ダウンロード"
   },
-  "$1.routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
-    "description": "Accessible label of download options form input.",
-    "message": "ダウンロードするデータ"
-  },
   "$1.routes.app.projects.$projectId.download.navTitle": {
     "description": "Title of the download observations page.",
     "message": "観察記録をダウンロード"
@@ -502,10 +498,6 @@
   "$1.routes.app.projects.$projectId.settings.index.projectInfoActionLabel": {
     "description": "Text for action to update project info.",
     "message": "編集"
-  },
-  "$1.routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to project info settings page.",
-    "message": "プロジェクト情報の設定に移動します。"
   },
   "$1.routes.app.projects.$projectId.settings.index.unnamedProject": {
     "description": "Fallback for when current project is missing a name.",
@@ -1030,10 +1022,6 @@
   "$1.routes.app.settings.index.defaultBackground": {
     "description": "Name of the background map used if a custom one is not set.",
     "message": "デフォルトの背景"
-  },
-  "$1.routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to device name settings page.",
-    "message": "デバイス名の設定に移動します。"
   },
   "$1.routes.app.settings.index.editDeviceName": {
     "description": "Button text for navigating to page to edit device name.",

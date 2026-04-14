@@ -19,6 +19,10 @@
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Symbol für {name} Kategorie"
   },
+  "routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
+    "description": "Accessible label of download options form input.",
+    "message": "Zu ladende Daten"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Symbol für {name} Kategorie"
@@ -50,6 +54,10 @@
   "routes.app.projects.$projectId.settings.index.categoriesLinkAccessibleLabel": {
     "description": "Accessible label for link item that navigates to project info settings page.",
     "message": "Gehe zu den Kategorie-Einstellungen."
+  },
+  "routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to project info settings page.",
+    "message": "Gehe zu den Projekt-Info-Einstellungen."
   },
   "routes.app.projects.$projectId.settings.info.goBackAccessibleLabel": {
     "description": "Accessible label for back button.",
@@ -102,6 +110,10 @@
   "routes.app.settings.index.coordinateSystemSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to coordinate system settings page.",
     "message": "Gehe zu den Koordinatensystemeinstellungen."
+  },
+  "routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to device name settings page.",
+    "message": "Gehe zu den Gerätenamen-Einstellungen."
   },
   "routes.app.settings.index.languageSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to language settings page.",
