@@ -1,8 +1,4 @@
 {
-  "$1.components.app-title-bar.appName": {
-    "description": "Name of the app displayed in the title bar.",
-    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
-  },
   "$1.components.discard-edits-dialog.cancelButton": {
     "description": "Text for button to cancel action.",
     "message": "Abbrechen"
@@ -15,10 +11,6 @@
     "description": "Title of dialog displayed when trying to leave page while editing observation.",
     "message": "Bearbeiten verwerfen?"
   },
-  "$1.components.error-dialog.close": {
-    "description": "Button text for the close button in the error dialog.",
-    "message": "Close"
-  },
   "$1.components.error-dialog.somethingWentWrong": {
     "description": "Generic title text for the error dialog.",
     "message": "Etwas ist schief"
@@ -26,10 +18,6 @@
   "$1.components.generic-route-error-component.error": {
     "description": "Label for error section",
     "message": "Fehler"
-  },
-  "$1.components.generic-route-error-component.reload": {
-    "description": "Text for button to reload page.",
-    "message": "Reload"
   },
   "$1.components.generic-route-error-component.restart": {
     "description": "Text for button to restart app.",
@@ -119,10 +107,6 @@
     "description": "Title text for success state of app usage consent dialog.",
     "message": "Erfolg!"
   },
-  "$1.routes.app.index.createProjectButton": {
-    "description": "Text for button to create project.",
-    "message": "Create Project"
-  },
   "$1.routes.app.index.joinProjectCardTitle": {
     "description": "Title card for joining a project.",
     "message": "Einem Projekt beitreten"
@@ -134,10 +118,6 @@
   "$1.routes.app.index.joinProjectDialogTitle": {
     "description": "Title of dialog shown for joining a project.",
     "message": "Einem Projekt beitreten"
-  },
-  "$1.routes.app.index.leftProjectDialogCloseButton": {
-    "description": "Text for button to close left project dialog.",
-    "message": "Open Settings"
   },
   "$1.routes.app.index.leftProjectDialogTitle": {
     "description": "Title text for left project dialog.",
@@ -162,10 +142,6 @@
   "$1.routes.app.index.projectCardRoleParticipant": {
     "description": "Displayed name of participant role on project card.",
     "message": "Teilnehmer"
-  },
-  "$1.routes.app.index.projectNameInputLabel": {
-    "description": "Input label for input in start project dialog.",
-    "message": "Enter a name for the Project"
   },
   "$1.routes.app.index.projectNameMaxLengthError": {
     "description": "Error message for when project name is too long.",
@@ -271,10 +247,6 @@
     "description": "Description of the all observations with media download option.",
     "message": "Bilder und Audio in einer .zip-Datei"
   },
-  "$1.routes.app.projects.$projectId.download.download": {
-    "description": "Title of the download page.",
-    "message": "Download"
-  },
   "$1.routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
     "description": "Accessible label of download options form input.",
     "message": "Zu ladende Daten"
@@ -311,21 +283,9 @@
     "description": "Description of tracks option.",
     "message": "Text nur als GeoJSON-Datei"
   },
-  "$1.routes.app.projects.$projectId.download.tracksOptionTitle": {
-    "description": "Title of the tracks option.",
-    "message": "Tracks"
-  },
-  "$1.routes.app.projects.$projectId.exchange.index.complete": {
-    "description": "Text displayed when exchange is completed with all devices.",
-    "message": "Complete! You're up to date"
-  },
   "$1.routes.app.projects.$projectId.exchange.index.completeAndWaiting": {
     "description": "Text displayed when exchange is completed with currently connected devices.",
     "message": "Fertig! Warte auf den Beitritt anderer Geräte."
-  },
-  "$1.routes.app.projects.$projectId.exchange.index.devicesFound": {
-    "description": "Text displayed when other devices have been found.",
-    "message": "Devices found"
   },
   "$1.routes.app.projects.$projectId.exchange.index.exchanging": {
     "description": "Text displayed when exchanging with other devices.",
@@ -351,17 +311,9 @@
     "description": "Text indicating that some remote archive is connected.",
     "message": "Entferntes Archiv verbunden"
   },
-  "$1.routes.app.projects.$projectId.exchange.index.start": {
-    "description": "Button text to start exchange.",
-    "message": "Start"
-  },
   "$1.routes.app.projects.$projectId.exchange.index.stop": {
     "description": "Button text to stop exchange.",
     "message": "Stoppen"
-  },
-  "$1.routes.app.projects.$projectId.exchange.index.upToDate": {
-    "description": "Text displayed when exchangable data is up to date.",
-    "message": "All data synced"
   },
   "$1.routes.app.projects.$projectId.exchange.index.waitingForDevices": {
     "description": "Text displayed when waiting for other devices to be found.",
@@ -390,10 +342,6 @@
   "$1.routes.app.projects.$projectId.index.openExchangePanelTitle": {
     "description": "Text for title of panel shown when project has collaborators but no data.",
     "message": "Beobachtungen eintauschen"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
-    "description": "Accessible label for button to close panel.",
-    "message": "Close."
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
     "description": "Title for edit category panel.",
@@ -439,18 +387,6 @@
     "description": "Title for notes section.",
     "message": "Notizen"
   },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerFalse": {
-    "description": "Text displayed if a boolean field is answered with \"false\"",
-    "message": "FALSE"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerNull": {
-    "description": "Text displayed if a field is answered with \"null\"",
-    "message": "NULL"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerTrue": {
-    "description": "Text displayed if a boolean field is answered with \"true\"",
-    "message": "TRUE"
-  },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
     "description": "Text for button to change category.",
     "message": "Bearbeiten"
@@ -483,14 +419,6 @@
     "description": "Title text for the successful observation deletion panel.",
     "message": "Beobachtung gelöscht"
   },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
-    "description": "Title for details section.",
-    "message": "Details"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy": {
-    "description": "Displayed accuracy for observation location in meters.",
-    "message": "± {value}m"
-  },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
     "message": "Beobachtung"
@@ -518,10 +446,6 @@
   "$1.routes.app.projects.$projectId.route.listTabLabel": {
     "description": "Label for project list tab link in navigation.",
     "message": "Liste"
-  },
-  "$1.routes.app.projects.$projectId.route.teamTabLabel": {
-    "description": "Label for project team tab link in navigation.",
-    "message": "Team"
   },
   "$1.routes.app.projects.$projectId.route.toolsTabLabel": {
     "description": "Label for project tools tab link in navigation.",
@@ -627,10 +551,6 @@
     "description": "Label for the project description input.",
     "message": "Projektbeschreibung"
   },
-  "$1.routes.app.projects.$projectId.settings.info.projectNameInputLabel": {
-    "description": "Label for the project name input.",
-    "message": "Enter a name for the Project"
-  },
   "$1.routes.app.projects.$projectId.settings.info.save": {
     "description": "Label for save button.",
     "message": "Speichern"
@@ -722,10 +642,6 @@
   "$1.routes.app.projects.$projectId.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Gerät einladen"
-  },
-  "$1.routes.app.projects.$projectId.team.index.navTitle": {
-    "description": "Title of the team page.",
-    "message": "Team"
   },
   "$1.routes.app.projects.$projectId.team.index.noParticipants": {
     "description": "Text indicating that no participants are part of the project yet.",
@@ -915,10 +831,6 @@
     "description": "Text displayed when track cannot be found.",
     "message": "Track mit ID {docId} konnte nicht gefunden werden"
   },
-  "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.tracks": {
-    "description": "Displayed title next to category icon.",
-    "message": "Tracks"
-  },
   "$1.routes.app.projects.-shared.device-icon.deviceTypeDesktop": {
     "description": "Text indicating that the member is a desktop device (displays when hovering over the icon).",
     "message": "Desktop"
@@ -942,10 +854,6 @@
   "$1.routes.app.projects.-shared.device-icon.deviceTypeUnspecified": {
     "description": "Text indicating that the member device type is unspecified (displays when hovering over the icon).",
     "message": "Nicht spezifizierter Gerätetyp"
-  },
-  "$1.routes.app.projects.-shared.network-connection-info.wifiInfoUnavailable": {
-    "description": "Text displayed when Wi-Fi info is unavailable.",
-    "message": "Wi-Fi info unavailable."
   },
   "$1.routes.app.route.appSettingsTabLabel": {
     "description": "Label for app settings tab link in navigation.",
@@ -986,10 +894,6 @@
   "$1.routes.app.route.projectInviteTitle": {
     "description": "Title of project invite.",
     "message": "Sie wurden zu… eingeladen"
-  },
-  "$1.routes.app.route.projectJoinedCloseDialog": {
-    "description": "Text for button to close project joined dialog.",
-    "message": "Open Settings"
   },
   "$1.routes.app.route.projectJoinedTitle": {
     "description": "Title of dialog displayed when joining a project successfully.",
@@ -1063,10 +967,6 @@
     "description": "Text for button to choose file.",
     "message": "Datei auswählen"
   },
-  "$1.routes.app.settings.background-map.close": {
-    "description": "Text displayed for closing dialogs",
-    "message": "Close"
-  },
   "$1.routes.app.settings.background-map.customMapInfoError": {
     "description": "Text displayed when info about a custom map cannot be retrieved.",
     "message": "Konnte die Karteninformationen nicht aus der Datei abrufen. Bitte entfernen Sie sie oder wählen Sie eine andere Datei."
@@ -1090,10 +990,6 @@
   "$1.routes.app.settings.background-map.mapUpdateSuccessTitle": {
     "description": "Title text for dialog when updating map successfully.",
     "message": "Aktualisiert!"
-  },
-  "$1.routes.app.settings.background-map.navTitle": {
-    "description": "Title of the background map settings page.",
-    "message": "Map Management"
   },
   "$1.routes.app.settings.background-map.removeMap": {
     "description": "Text for button to remove map",
@@ -1119,10 +1015,6 @@
     "description": "Title of the coordinate system settings page.",
     "message": "Koordinatensystem"
   },
-  "$1.routes.app.settings.coordinate-system.utmOptionLabel": {
-    "description": "Label for the universal transverse mercator option.",
-    "message": "UTM (Universal Transverse Mercator)"
-  },
   "$1.routes.app.settings.device-name.cancel": {
     "description": "Label for cancel button.",
     "message": "Abbrechen"
@@ -1147,17 +1039,9 @@
     "description": "Label for save button.",
     "message": "Speichern"
   },
-  "$1.routes.app.settings.index.aboutCoMapeoVersionLabel": {
-    "description": "Label for CoMapeo version",
-    "message": "CoMapeo Version"
-  },
   "$1.routes.app.settings.index.customBackground": {
     "description": "Placeholder name of custom background map if name cannot be retrieved.",
     "message": "Eigener Hintergrund"
-  },
-  "$1.routes.app.settings.index.decimalDegrees": {
-    "description": "Label for Decimal Degrees coordinate system.",
-    "message": "DD Coordinates"
   },
   "$1.routes.app.settings.index.defaultBackground": {
     "description": "Name of the background map used if a custom one is not set.",
@@ -1166,10 +1050,6 @@
   "$1.routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to device name settings page.",
     "message": "Gehe zu den Gerätenamen-Einstellungen."
-  },
-  "$1.routes.app.settings.index.dmsCoordinates": {
-    "description": "Label for Degrees/Minutes/Seconds coordinate system.",
-    "message": "DMS Coordinates"
   },
   "$1.routes.app.settings.index.editDeviceName": {
     "description": "Button text for navigating to page to edit device name.",
@@ -1386,14 +1266,6 @@
   "$1.routes.welcome.appDescription": {
     "description": "Description of app in welcome page.",
     "message": "Mit CoMapeo Mobile gesammelte Beobachtungen ansehen und verwalten."
-  },
-  "$1.routes.welcome.collaborate": {
-    "description": "Detail about collaborating in welcome page.",
-    "message": "Collaborate with others"
-  },
-  "$1.routes.welcome.comapeoDesktop": {
-    "description": "Name of app displayed in welcome page.",
-    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
   },
   "$1.routes.welcome.designedFor": {
     "description": "Detail about who app is designed for in welcome page.",

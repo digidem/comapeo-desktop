@@ -119,10 +119,6 @@
     "description": "Instructions displayed for coordinates selection inputs.",
     "message": "Stellen Sie die Koordinaten ein, indem Sie auf die Karte klicken oder den Standortmarker ziehen."
   },
-  "routes.app.settings_.test-data.create": {
-    "description": "Label for create button.",
-    "message": "Create Project"
-  },
   "routes.app.settings_.test-data.createTrack": {
     "description": "Label for toggle to create track when creating test data.",
     "message": "Track erstellen"
