@@ -23,10 +23,6 @@
     "description": "Label for error section",
     "message": "エラー"
   },
-  "$1.components.generic-route-error-component.reload": {
-    "description": "Text for button to reload page.",
-    "message": "Reload"
-  },
   "$1.components.generic-route-error-component.restart": {
     "description": "Text for button to restart app.",
     "message": "再起動"
@@ -115,10 +111,6 @@
     "description": "Title text for success state of app usage consent dialog.",
     "message": "成功！"
   },
-  "$1.routes.app.index.createProjectButton": {
-    "description": "Text for button to create project.",
-    "message": "Create Project"
-  },
   "$1.routes.app.index.joinProjectCardTitle": {
     "description": "Title card for joining a project.",
     "message": "プロジェクトに参加"
@@ -130,10 +122,6 @@
   "$1.routes.app.index.joinProjectDialogTitle": {
     "description": "Title of dialog shown for joining a project.",
     "message": "プロジェクトに参加"
-  },
-  "$1.routes.app.index.leftProjectDialogCloseButton": {
-    "description": "Text for button to close left project dialog.",
-    "message": "Open Settings"
   },
   "$1.routes.app.index.leftProjectDialogTitle": {
     "description": "Title text for left project dialog.",
@@ -151,17 +139,9 @@
     "description": "Text for button to close project join/create dialog.",
     "message": "戻る"
   },
-  "$1.routes.app.index.projectCardRoleCoordinator": {
-    "description": "Displayed name of coordinator role on project card.",
-    "message": "Coordinator"
-  },
   "$1.routes.app.index.projectCardRoleParticipant": {
     "description": "Displayed name of participant role on project card.",
     "message": "参加者"
-  },
-  "$1.routes.app.index.projectNameInputLabel": {
-    "description": "Input label for input in start project dialog.",
-    "message": "Enter a name for the Project"
   },
   "$1.routes.app.index.projectNameMaxLengthError": {
     "description": "Error message for when project name is too long.",
@@ -311,17 +291,9 @@
     "description": "Title of the tracks option.",
     "message": "トラック"
   },
-  "$1.routes.app.projects.$projectId.exchange.index.complete": {
-    "description": "Text displayed when exchange is completed with all devices.",
-    "message": "Complete! You're up to date"
-  },
   "$1.routes.app.projects.$projectId.exchange.index.completeAndWaiting": {
     "description": "Text displayed when exchange is completed with currently connected devices.",
     "message": "完了！他のデバイスの参加を待っています."
-  },
-  "$1.routes.app.projects.$projectId.exchange.index.devicesFound": {
-    "description": "Text displayed when other devices have been found.",
-    "message": "Devices found"
   },
   "$1.routes.app.projects.$projectId.exchange.index.inviteDevices": {
     "description": "Text for link to invite devices page.",
@@ -342,10 +314,6 @@
   "$1.routes.app.projects.$projectId.exchange.index.stop": {
     "description": "Button text to stop exchange.",
     "message": "停止"
-  },
-  "$1.routes.app.projects.$projectId.exchange.index.upToDate": {
-    "description": "Text displayed when exchangable data is up to date.",
-    "message": "All data synced"
   },
   "$1.routes.app.projects.$projectId.exchange.index.waitingForDevices": {
     "description": "Text displayed when waiting for other devices to be found.",
@@ -374,10 +342,6 @@
   "$1.routes.app.projects.$projectId.index.openExchangePanelTitle": {
     "description": "Text for title of panel shown when project has collaborators but no data.",
     "message": "観察記録の略奪と交換"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
-    "description": "Accessible label for button to close panel.",
-    "message": "Close."
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
     "description": "Title for edit category panel.",
@@ -423,18 +387,6 @@
     "description": "Title for notes section.",
     "message": "メモ"
   },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerFalse": {
-    "description": "Text displayed if a boolean field is answered with \"false\"",
-    "message": "FALSE"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerNull": {
-    "description": "Text displayed if a field is answered with \"null\"",
-    "message": "NULL"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerTrue": {
-    "description": "Text displayed if a boolean field is answered with \"true\"",
-    "message": "TRUE"
-  },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
     "description": "Text for button to change category.",
     "message": "変更"
@@ -470,10 +422,6 @@
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
     "message": "詳細情報"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy": {
-    "description": "Displayed accuracy for observation location in meters.",
-    "message": "± {value}m"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
@@ -699,10 +647,6 @@
     "description": "Description of the coordinators section in the team page.",
     "message": "コーディネーターは、デバイスの招待、データの編集、削除、プロジェクトの詳細の管理ができます。"
   },
-  "$1.routes.app.projects.$projectId.team.index.coordinatorsSectionTitle": {
-    "description": "Title of the coordinators section in the team page.",
-    "message": "Coordinators"
-  },
   "$1.routes.app.projects.$projectId.team.index.inviteDevice": {
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "デバイスを招待"
@@ -747,10 +691,6 @@
     "description": "Coordinator role description.",
     "message": "コーディネーターとして、このデバイスはユーザーの招待と削除、およびプロジェクトの詳細を管理することができます。"
   },
-  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.role.coordinatorTitle": {
-    "description": "Coordinator role name.",
-    "message": "Coordinator"
-  },
   "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.role.navTitle": {
     "description": "Title of the invite role selection page.",
     "message": "役割を選択"
@@ -767,10 +707,6 @@
     "description": "Description of action being taken in role selection page.",
     "message": "このデバイスのロールを選択しています:"
   },
-  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.accepted": {
-    "description": "Text displayed when invite is accepted.",
-    "message": "Invite Accepted"
-  },
   "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addAnotherDevice": {
     "description": "Text for button to add another device.",
     "message": "別のデバイスを追加"
@@ -782,14 +718,6 @@
   "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.cancelInvite": {
     "description": "Text for button to cancel invite.",
     "message": "招待をキャンセル"
-  },
-  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.close": {
-    "description": "Text for button to leave invite flow.",
-    "message": "Open Settings"
-  },
-  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.coordinator": {
-    "description": "Coordinator role name.",
-    "message": "Coordinator"
   },
   "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.deviceBeingInvited": {
     "description": "Text displaying the device and its role that it is being invited as.",
@@ -923,10 +851,6 @@
     "description": "Text indicating that the member device type is unspecified (displays when hovering over the icon).",
     "message": "指定されていないデバイスタイプ"
   },
-  "$1.routes.app.projects.-shared.network-connection-info.wifiInfoUnavailable": {
-    "description": "Text displayed when Wi-Fi info is unavailable.",
-    "message": "Wi-Fi info unavailable."
-  },
   "$1.routes.app.route.appSettingsTabLabel": {
     "description": "Label for app settings tab link in navigation.",
     "message": "設定"
@@ -943,10 +867,6 @@
     "description": "Text indicating creation date of categories set.",
     "message": "作成された {date}"
   },
-  "$1.routes.app.route.projectInfoRoleCoordinator": {
-    "description": "Indicates that user is a coordinator.",
-    "message": "Coordinator"
-  },
   "$1.routes.app.route.projectInfoRoleParticipant": {
     "description": "Indicates that user is a participant.",
     "message": "参加者"
@@ -958,10 +878,6 @@
   "$1.routes.app.route.projectInviteDecline": {
     "description": "Button text for declining project invite.",
     "message": "同意しない"
-  },
-  "$1.routes.app.route.projectJoinedCloseDialog": {
-    "description": "Text for button to close project joined dialog.",
-    "message": "Open Settings"
   },
   "$1.routes.app.route.projectJoinedTitle": {
     "description": "Title of dialog displayed when joining a project successfully.",
@@ -1035,10 +951,6 @@
     "description": "Text for button to choose file.",
     "message": "ファイルを選択"
   },
-  "$1.routes.app.settings.background-map.close": {
-    "description": "Text displayed for closing dialogs",
-    "message": "Close"
-  },
   "$1.routes.app.settings.background-map.customMapInfoError": {
     "description": "Text displayed when info about a custom map cannot be retrieved.",
     "message": "ファイルからカスタムマップ情報を取得できませんでした。削除するか、別のファイルを選択してください。"
@@ -1063,17 +975,9 @@
     "description": "Title text for dialog when updating map successfully.",
     "message": "更新されました！"
   },
-  "$1.routes.app.settings.background-map.navTitle": {
-    "description": "Title of the background map settings page.",
-    "message": "Map Management"
-  },
   "$1.routes.app.settings.background-map.removeMap": {
     "description": "Text for button to remove map",
     "message": "地図を削除"
-  },
-  "$1.routes.app.settings.background-map.sizeInMegabytes": {
-    "description": "Text describing what kind of files are usable for background maps.",
-    "message": "{value} MB"
   },
   "$1.routes.app.settings.comapeoSettingsBreadCrumbLink": {
     "description": "Text for breadcrumb link to go to main CoMapeo settings page when viewing nested settings page.",
@@ -1090,10 +994,6 @@
   "$1.routes.app.settings.coordinate-system.title": {
     "description": "Title of the coordinate system settings page.",
     "message": "座標系"
-  },
-  "$1.routes.app.settings.coordinate-system.utmOptionLabel": {
-    "description": "Label for the universal transverse mercator option.",
-    "message": "UTM (Universal Transverse Mercator)"
   },
   "$1.routes.app.settings.device-name.cancel": {
     "description": "Label for cancel button.",
@@ -1127,10 +1027,6 @@
     "description": "Placeholder name of custom background map if name cannot be retrieved.",
     "message": "カスタム背景"
   },
-  "$1.routes.app.settings.index.decimalDegrees": {
-    "description": "Label for Decimal Degrees coordinate system.",
-    "message": "DD Coordinates"
-  },
   "$1.routes.app.settings.index.defaultBackground": {
     "description": "Name of the background map used if a custom one is not set.",
     "message": "デフォルトの背景"
@@ -1138,10 +1034,6 @@
   "$1.routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to device name settings page.",
     "message": "デバイス名の設定に移動します。"
-  },
-  "$1.routes.app.settings.index.dmsCoordinates": {
-    "description": "Label for Degrees/Minutes/Seconds coordinate system.",
-    "message": "DMS Coordinates"
   },
   "$1.routes.app.settings.index.editDeviceName": {
     "description": "Button text for navigating to page to edit device name.",
@@ -1211,10 +1103,6 @@
     "description": "Text for submit button to save device name.",
     "message": "名前を追加"
   },
-  "$1.routes.onboarding.device-name.description": {
-    "description": "Description for device name page during onboarding.",
-    "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
-  },
   "$1.routes.onboarding.device-name.deviceName": {
     "description": "Label for device name text input.",
     "message": "端末名"
@@ -1250,10 +1138,6 @@
   "$1.routes.onboarding.privacy-policy.appUsage": {
     "description": "Title for app usage section in privacy policy page.",
     "message": "アプリの使用状況"
-  },
-  "$1.routes.onboarding.privacy-policy.comapeoDataPrivacy": {
-    "description": "Title for data privacy section in privacy policy page.",
-    "message": "CoMapeo Data Privacy"
   },
   "$1.routes.onboarding.privacy-policy.control": {
     "description": "Title for data control section in privacy policy page.",
@@ -1338,10 +1222,6 @@
   "$1.routes.welcome.appDescription": {
     "description": "Description of app in welcome page.",
     "message": "CoMapeo Mobileで収集した観察記録を表示および管理します。"
-  },
-  "$1.routes.welcome.collaborate": {
-    "description": "Detail about collaborating in welcome page.",
-    "message": "Collaborate with others"
   },
   "$1.routes.welcome.designedFor": {
     "description": "Detail about who app is designed for in welcome page.",

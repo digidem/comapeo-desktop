@@ -123,10 +123,6 @@
     "description": "Instructions displayed for coordinates selection inputs.",
     "message": "地図をクリックするか、位置マーカーをドラッグして座標を設定します。"
   },
-  "routes.app.settings_.test-data.create": {
-    "description": "Label for create button.",
-    "message": "Create Project"
-  },
   "routes.app.settings_.test-data.createTrack": {
     "description": "Label for toggle to create track when creating test data.",
     "message": "トラックを作成"
