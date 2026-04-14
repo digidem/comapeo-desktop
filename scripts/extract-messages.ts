@@ -55,7 +55,7 @@ async function extractMain() {
 	)
 
 	const extracted = JSON.parse(
-		await extract(files, { ast: true, format: 'crowdin' }),
+		await extract(files, { ast: true, format: 'crowdin', throws: true }),
 	)
 
 	return getCategorizedMessages(extracted)
