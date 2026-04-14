@@ -1,0 +1,14 @@
+{
+  "main.app.contextMenuInspectElement": {
+    "description": "Context menu item label for inspecting an element",
+    "message": "Periksa"
+  },
+  "main.app.contextMenuLearnSpelling": {
+    "description": "Context menu item label for learning the spelling of the selected text",
+    "message": "Belajar Ejaan {placeholder}"
+  },
+  "main.app.contextMenuLookUpSelection": {
+    "description": "Context menu item label for looking up selected text",
+    "message": "Cari {placeholder}"
+  }
+}

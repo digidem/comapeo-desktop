@@ -1,0 +1,6 @@
+{
+  "routes.app.settings_.test-data.create": {
+    "description": "Label for create button.",
+    "message": "Create Project"
+  }
+}

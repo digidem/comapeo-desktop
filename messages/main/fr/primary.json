@@ -1,0 +1,46 @@
+{
+  "$1.main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "Copier"
+  },
+  "$1.main.app.contextMenuCopyImage": {
+    "description": "Context menu item label for copying an image",
+    "message": "Copier l'image"
+  },
+  "$1.main.app.contextMenuCopyImageAddress": {
+    "description": "Context menu item label for copying the URL of an image",
+    "message": "Copier l'adresse de l'image"
+  },
+  "$1.main.app.contextMenuCopyLink": {
+    "description": "Context menu item label for copying a link",
+    "message": "Copier le lien"
+  },
+  "$1.main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "Couper"
+  },
+  "$1.main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "Coller"
+  },
+  "$1.main.app.contextMenuSaveImageAs": {
+    "description": "Context menu item label for saving an image as…",
+    "message": "Enregistrer l'image sous…"
+  },
+  "$1.main.app.contextMenuSelectAll": {
+    "description": "Context menu item label for selecting all",
+    "message": "Tout sélectionner"
+  },
+  "$1.main.app.fatalErrorDescriptionCoreService": {
+    "description": "Description for error dialog when core service in backend stops.",
+    "message": "Le service de base s'est arrêté de façon inattendue."
+  },
+  "$1.main.app.fatalErrorDescriptionGeneric": {
+    "description": "Description for error dialog when some error occurs in the backend.",
+    "message": "Une erreur fatale s'est produite. Fermez l'application et réessayez."
+  },
+  "$1.main.app.fatalErrorTitle": {
+    "description": "Title for error dialog when fatal error in backend occurs.",
+    "message": "Erreur fatale"
+  }
+}

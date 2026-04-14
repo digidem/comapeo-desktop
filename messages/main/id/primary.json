@@ -1,0 +1,46 @@
+{
+  "$1.main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "Salin"
+  },
+  "$1.main.app.contextMenuCopyImage": {
+    "description": "Context menu item label for copying an image",
+    "message": "Salin Gambar"
+  },
+  "$1.main.app.contextMenuCopyImageAddress": {
+    "description": "Context menu item label for copying the URL of an image",
+    "message": "Salin Alamat Gambar"
+  },
+  "$1.main.app.contextMenuCopyLink": {
+    "description": "Context menu item label for copying a link",
+    "message": "Salin Link"
+  },
+  "$1.main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "Potong"
+  },
+  "$1.main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "Tempelkan"
+  },
+  "$1.main.app.contextMenuSaveImageAs": {
+    "description": "Context menu item label for saving an image as…",
+    "message": "Simpan Gambar Sebagai…"
+  },
+  "$1.main.app.contextMenuSelectAll": {
+    "description": "Context menu item label for selecting all",
+    "message": "Pilih Semua"
+  },
+  "$1.main.app.fatalErrorDescriptionCoreService": {
+    "description": "Description for error dialog when core service in backend stops.",
+    "message": "Layanan inti berhenti tiba-tiba."
+  },
+  "$1.main.app.fatalErrorDescriptionGeneric": {
+    "description": "Description for error dialog when some error occurs in the backend.",
+    "message": "Terjadi error fatal. Tutup aplikasi dan coba lagi."
+  },
+  "$1.main.app.fatalErrorTitle": {
+    "description": "Title for error dialog when fatal error in backend occurs.",
+    "message": "Fatal Error"
+  }
+}

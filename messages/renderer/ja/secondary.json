@@ -1,0 +1,182 @@
+{
+  "components.error-dialog.advanced": {
+    "description": "Title text for the collapsible section that shows the actual error message.",
+    "message": "高度な設定"
+  },
+  "components.generic-route-error-component.stacktrace": {
+    "description": "Label for stack trace section",
+    "message": "スタックトレース"
+  },
+  "routes.app.index.characterCount": {
+    "description": "Character count for project name input.",
+    "message": "{count}/{max}"
+  },
+  "routes.app.projects.$projectId.-data-list.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "{name} カテゴリのアイコン"
+  },
+  "routes.app.projects.$projectId.-map-panel.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "{name} カテゴリのアイコン"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "{name} カテゴリのアイコン"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.accessibleNotesInputLabel": {
+    "description": "Accessible label for notes input field.",
+    "message": "メモ"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "{name} カテゴリのアイコン"
+  },
+  "routes.app.projects.$projectId.route.appNavigationAccesibleLabel": {
+    "description": "Accessible label for app-wide navigation bar.",
+    "message": "アプリナビゲーション"
+  },
+  "routes.app.projects.$projectId.route.projectNavigationAccessibleLabel": {
+    "description": "Accessible label for project-specific navigation bar.",
+    "message": "プロジェクトナビゲーション"
+  },
+  "routes.app.projects.$projectId.route.testDataTabLabel": {
+    "description": "Label for project test data tab link in navigation.",
+    "message": "テストデータ"
+  },
+  "routes.app.projects.$projectId.settings.categories.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
+  },
+  "routes.app.projects.$projectId.settings.index.categoriesLinkAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to project info settings page.",
+    "message": "カテゴリ設定に移動します。"
+  },
+  "routes.app.projects.$projectId.settings.info.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
+  },
+  "routes.app.projects.$projectId.team.index.memberLinkAccessibleLabel": {
+    "description": "Accessible label for link that navigates to member details.",
+    "message": "メンバー {name}を表示"
+  },
+  "routes.app.projects.$projectId.team.invite.devices.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button",
+    "message": "戻ってください。"
+  },
+  "routes.app.projects.$projectId.team.invite.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "戻ってください。"
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "{name} カテゴリのアイコン"
+  },
+  "routes.app.route.accessibleLabelGoTo": {
+    "description": "Accessible label for button that navigates to project when clicked.",
+    "message": "プロジェクト {name} に移動します。"
+  },
+  "routes.app.route.accessibleLabelShowProjectInfo": {
+    "description": "Accessible label for button that shows project info when clicked.",
+    "message": "プロジェクト {name} の情報を表示します。"
+  },
+  "routes.app.route.projectCardLinkAccessibleLabel": {
+    "description": "Accessible label for link that navigates to project when clicked.",
+    "message": "プロジェクト {name} に移動します。"
+  },
+  "routes.app.settings.breadCrumbAccessibleLabel": {
+    "description": "Accessible label for breadcrumb navigation when viewing nested settings page.",
+    "message": "breadcrunb"
+  },
+  "routes.app.settings.device-name.characterCount": {
+    "description": "Displays number of characters in input out of the maximum allowed characters.",
+    "message": "{count}/{max}"
+  },
+  "routes.app.settings.goBackAccessibleLabel": {
+    "description": "Accessible label for back button",
+    "message": "戻ってください。"
+  },
+  "routes.app.settings.index.backgroundMapSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to background map settings page.",
+    "message": "バックグラウンドマップの設定に移動します。"
+  },
+  "routes.app.settings.index.coordinateSystemSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to coordinate system settings page.",
+    "message": "座標系の設定に移動します。"
+  },
+  "routes.app.settings.index.languageSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to language settings page.",
+    "message": "言語設定に移動します。"
+  },
+  "routes.app.settings_.test-data.boundedDistanceLabel": {
+    "description": "Label for the bounded distance input.",
+    "message": "最大限界距離（キロメートル）"
+  },
+  "routes.app.settings_.test-data.cancel": {
+    "description": "Label for cancel button.",
+    "message": "取消"
+  },
+  "routes.app.settings_.test-data.coordinatesSelectionHint": {
+    "description": "Instructions displayed for coordinates selection inputs.",
+    "message": "地図をクリックするか、位置マーカーをドラッグして座標を設定します。"
+  },
+  "routes.app.settings_.test-data.create": {
+    "description": "Label for create button.",
+    "message": "Create Project"
+  },
+  "routes.app.settings_.test-data.createTrack": {
+    "description": "Label for toggle to create track when creating test data.",
+    "message": "トラックを作成"
+  },
+  "routes.app.settings_.test-data.invalidBoundedDistanceFormat": {
+    "description": "Error message for when bounded distance is not an decimal.",
+    "message": "小数点以下でなければなりません"
+  },
+  "routes.app.settings_.test-data.invalidObservationCountFormat": {
+    "description": "Error message for when observation count is not an integer.",
+    "message": "整数でなければなりません"
+  },
+  "routes.app.settings_.test-data.maxObservationCountError": {
+    "description": "Error message for when observation count is too large",
+    "message": "{value} より大きくすることはできません"
+  },
+  "routes.app.settings_.test-data.minBoundedDistanceError": {
+    "description": "Error message for when bounded distance is too small",
+    "message": "{value} キロメートル以上でなければなりません"
+  },
+  "routes.app.settings_.test-data.minObservationCountError": {
+    "description": "Error message for when observation count is too small",
+    "message": "{value} より大きくなければなりません"
+  },
+  "routes.app.settings_.test-data.navTitle": {
+    "description": "Title of test data page.",
+    "message": "テストデータの作成"
+  },
+  "routes.app.settings_.test-data.observationCountHelperText": {
+    "description": "Helper text for observation count input.",
+    "message": "{min} から {max} の間"
+  },
+  "routes.app.settings_.test-data.observationCountLabel": {
+    "description": "Label for the observation count input.",
+    "message": "観察記録の数"
+  },
+  "routes.app.settings_.test-data.observationCreateSuccess": {
+    "description": "Message displayed when observation creation succeeds.",
+    "message": "作成されました {count, plural, one {# 観察記録} other {# 観察記録}}"
+  },
+  "routes.app.settings_.test-data.requiredError": {
+    "description": "Error message for when required input is empty.",
+    "message": "必須"
+  },
+  "routes.app.settings_.test-data.trackCreateSuccess": {
+    "description": "Message displayed when track creation succeeds.",
+    "message": "作成されました {count, plural, one {# トラック} other {# トラック}}"
+  },
+  "routes.onboarding.device-name.characterCount": {
+    "description": "Displayed character count of device name input out of maximum allowed characters.",
+    "message": "{count}/{max}"
+  }
+}
