@@ -1,8 +1,9 @@
 // Creates a JSON file that lists the language tags for which we have renderer translations.
 // This is done so that this info is known at compile time instead of being calculated during run time.
 import fs, { readFileSync, readdirSync } from 'node:fs'
-import { join } from 'node:path'
+import { join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { styleText } from 'node:util'
 import * as v from 'valibot'
 
 import SUPPORTED_LANGUAGES from '../languages.json' with { type: 'json' }
@@ -17,9 +18,8 @@ const SupportedLanguageTagSchema = v.union(
 	SUPPORTED_LANGUAGE_TAGS.map((t) => v.literal(t)),
 )
 
-const RENDERER_MESSAGES_DIR = fileURLToPath(
-	new URL('../messages/renderer', import.meta.url),
-)
+const PROJECT_ROOT = fileURLToPath(new URL('..', import.meta.url))
+const RENDERER_MESSAGES_DIR = join(PROJECT_ROOT, 'messages', 'renderer')
 
 const unsupportedLanguages: Array<string> = []
 const languagesMissingTranslations: Array<SupportedLanguageTag> = []
@@ -63,23 +63,25 @@ for (const d of directories) {
 
 if (unsupportedLanguages.length > 0) {
 	console.warn(
-		`⚠️ The following translated language tags are not listed as supported: ${unsupportedLanguages.join(', ')}\nUpdate languages.json with the relevant information in order for it to be displayed as an option in the application.\n`,
+		`⚠️ The following translated language tags are not listed as supported: ${styleText('bold', unsupportedLanguages.join(', '))}\nUpdate languages.json with the relevant information in order for it to be displayed as an option in the application.\n`,
 	)
 }
 
 if (languagesMissingTranslations.length > 0) {
 	console.warn(
-		`⚠️ The following language tags do not have translations: ${languagesMissingTranslations.join(', ')}.\nThese will not be available for the app to use.\n`,
+		`⚠️ The following language tags do not have translations: ${styleText('bold', languagesMissingTranslations.join(', '))}.\nThese will not be available for the app to use.\n`,
 	)
 }
 
-const OUTPUT_FILE = fileURLToPath(
-	new URL(
-		'../src/renderer/src/generated/translated-languages.generated.json',
-		import.meta.url,
-	),
+const OUTPUT_FILE = join(
+	PROJECT_ROOT,
+	'src',
+	'renderer',
+	'src',
+	'generated',
+	'translated-languages.generated.json',
 )
 
 fs.writeFileSync(OUTPUT_FILE, JSON.stringify(translatedLanguages))
 
-console.log(`✅ Generated file at ${OUTPUT_FILE}`)
+console.log(`✅ Generated file at ${relative(PROJECT_ROOT, OUTPUT_FILE)}`)
