@@ -1,8 +1,4 @@
 {
-  "$1.components.app-title-bar.appName": {
-    "description": "Name of the app displayed in the title bar.",
-    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
-  },
   "$1.components.discard-edits-dialog.cancelButton": {
     "description": "Text for button to cancel action.",
     "message": "Batal"
@@ -14,10 +10,6 @@
   "$1.components.discard-edits-dialog.title": {
     "description": "Title of dialog displayed when trying to leave page while editing observation.",
     "message": "Hapus edit?"
-  },
-  "$1.components.error-dialog.close": {
-    "description": "Button text for the close button in the error dialog.",
-    "message": "Close"
   },
   "$1.components.error-dialog.somethingWentWrong": {
     "description": "Generic title text for the error dialog.",
@@ -275,17 +267,9 @@
     "description": "Title of the tracks option.",
     "message": "Trek"
   },
-  "$1.routes.app.projects.$projectId.exchange.index.complete": {
-    "description": "Text displayed when exchange is completed with all devices.",
-    "message": "Complete! You're up to date"
-  },
   "$1.routes.app.projects.$projectId.exchange.index.completeAndWaiting": {
     "description": "Text displayed when exchange is completed with currently connected devices.",
     "message": "Selesai! Menunggu perangkat lain bergabung."
-  },
-  "$1.routes.app.projects.$projectId.exchange.index.devicesFound": {
-    "description": "Text displayed when other devices have been found.",
-    "message": "Devices found"
   },
   "$1.routes.app.projects.$projectId.exchange.index.exchanging": {
     "description": "Text displayed when exchanging with other devices.",
@@ -315,14 +299,6 @@
     "description": "Button text to start exchange.",
     "message": "Mulai"
   },
-  "$1.routes.app.projects.$projectId.exchange.index.stop": {
-    "description": "Button text to stop exchange.",
-    "message": "Stop"
-  },
-  "$1.routes.app.projects.$projectId.exchange.index.upToDate": {
-    "description": "Text displayed when exchangable data is up to date.",
-    "message": "All data synced"
-  },
   "$1.routes.app.projects.$projectId.exchange.index.waitingForDevices": {
     "description": "Text displayed when waiting for other devices to be found.",
     "message": "Menunggu perangkat"
@@ -350,10 +326,6 @@
   "$1.routes.app.projects.$projectId.index.openExchangePanelTitle": {
     "description": "Text for title of panel shown when project has collaborators but no data.",
     "message": "Pertukaran untuk Mengumpulkan Pengamatan"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
-    "description": "Accessible label for button to close panel.",
-    "message": "Close."
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
     "description": "Title for edit category panel.",
@@ -554,10 +526,6 @@
   "$1.routes.app.projects.$projectId.settings.info.minProjectNameLengthError": {
     "description": "Error message for project name that is too short.",
     "message": "Masukkan Nama Proyek"
-  },
-  "$1.routes.app.projects.$projectId.settings.info.navTitle": {
-    "description": "Title of the project settings info page.",
-    "message": "Edit Info"
   },
   "$1.routes.app.projects.$projectId.settings.info.projectCardColorLabel": {
     "description": "Label for the project card color selector.",
@@ -879,21 +847,9 @@
     "description": "Displayed title next to category icon.",
     "message": "Trek"
   },
-  "$1.routes.app.projects.-shared.device-icon.deviceTypeDesktop": {
-    "description": "Text indicating that the member is a desktop device (displays when hovering over the icon).",
-    "message": "Desktop"
-  },
-  "$1.routes.app.projects.-shared.device-icon.deviceTypeMobile": {
-    "description": "Text indicating that the member is a mobile device (displays when hovering over the icon).",
-    "message": "Mobile"
-  },
   "$1.routes.app.projects.-shared.device-icon.deviceTypeRemoteArchive": {
     "description": "Text indicating that the member is a remote archive (displays when hovering over the icon).",
     "message": "Arsip Jarak Jauh"
-  },
-  "$1.routes.app.projects.-shared.device-icon.deviceTypeTablet": {
-    "description": "Text indicating that the member is a tablet device (displays when hovering over the icon).",
-    "message": "Tablet"
   },
   "$1.routes.app.projects.-shared.device-icon.deviceTypeUnknown": {
     "description": "Text indicating that the member device type is unknown (displays when hovering over the icon).",
@@ -946,10 +902,6 @@
   "$1.routes.app.route.projectInviteTitle": {
     "description": "Title of project invite.",
     "message": "Anda telah diundang untuk…"
-  },
-  "$1.routes.app.route.projectJoinedCloseDialog": {
-    "description": "Text for button to close project joined dialog.",
-    "message": "Open Settings"
   },
   "$1.routes.app.route.projectJoinedTitle": {
     "description": "Title of dialog displayed when joining a project successfully.",
@@ -1007,10 +959,6 @@
     "description": "Text for button to choose file.",
     "message": "Pilih File"
   },
-  "$1.routes.app.settings.background-map.close": {
-    "description": "Text displayed for closing dialogs",
-    "message": "Close"
-  },
   "$1.routes.app.settings.background-map.customMapInfoError": {
     "description": "Text displayed when info about a custom map cannot be retrieved.",
     "message": "Tidak bisa mendapatkan informasi peta kustom dari file. Silakan hapus atau pilih file lain."
@@ -1035,17 +983,9 @@
     "description": "Title text for dialog when updating map successfully.",
     "message": "Diperbarui!"
   },
-  "$1.routes.app.settings.background-map.navTitle": {
-    "description": "Title of the background map settings page.",
-    "message": "Map Management"
-  },
   "$1.routes.app.settings.background-map.removeMap": {
     "description": "Text for button to remove map",
     "message": "Hapus Peta"
-  },
-  "$1.routes.app.settings.background-map.sizeInMegabytes": {
-    "description": "Text describing what kind of files are usable for background maps.",
-    "message": "{value} MB"
   },
   "$1.routes.app.settings.comapeoSettingsBreadCrumbLink": {
     "description": "Text for breadcrumb link to go to main CoMapeo settings page when viewing nested settings page.",
@@ -1234,10 +1174,6 @@
   "$1.routes.onboarding.privacy-policy.controlDescription": {
     "description": "Description for data control section in privacy policy page.",
     "message": "Anda dapat memilih untuk tidak mengirim informasi apa pun ke Awana Digital.<br></br><br></br>Anda memilih di mana data Anda disimpan dan dengan siapa data tersebut dibagikan. Anda dapat memilih untuk membagikan data anonim dan ringkasan tentang cara Anda menggunakan CoMapeo dengan Awana Digital.<br></br><br></br>Kami akan selalu transparan tentang informasi apa yang Anda pilih untuk dibagikan untuk tujuan meningkatkan aplikasi, dan informasi ini tidak akan pernah menyertakan foto, video, audio, teks, atau lokasi tepat yang telah Anda masukkan ke CoMapeo."
-  },
-  "$1.routes.onboarding.privacy-policy.country": {
-    "description": "Details for country in app usage section in privacy policy page.",
-    "message": ""
   },
   "$1.routes.onboarding.privacy-policy.crashData": {
     "description": "Details for crash data in diagnostics section in privacy policy page.",
