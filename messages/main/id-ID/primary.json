@@ -38,9 +38,5 @@
   "$1.main.app.fatalErrorDescriptionGeneric": {
     "description": "Description for error dialog when some error occurs in the backend.",
     "message": "Terjadi error fatal. Tutup aplikasi dan coba lagi."
-  },
-  "$1.main.app.fatalErrorTitle": {
-    "description": "Title for error dialog when fatal error in backend occurs.",
-    "message": "Fatal Error"
   }
 }
