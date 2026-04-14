@@ -57,12 +57,12 @@ for (const messageId of Object.keys(extracted)) {
 await Promise.all([
 	writeFile(
 		join(OUTPUT_DIR, 'primary.json'),
-		JSON.stringify(primary, undefined, 2),
+		JSON.stringify(primary, undefined, 2) + '\n',
 		'utf-8',
 	),
 	writeFile(
 		join(OUTPUT_DIR, 'secondary.json'),
-		JSON.stringify(secondary, undefined, 2),
+		JSON.stringify(secondary, undefined, 2) + '\n',
 		'utf-8',
 	),
 ])
