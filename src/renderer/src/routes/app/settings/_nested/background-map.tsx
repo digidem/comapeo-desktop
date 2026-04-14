@@ -347,67 +347,67 @@ function HiddenSelectFileInput({ onClick }: { onClick: (file: File) => void }) {
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.settings.background-map.navTitle',
+		id: '$1.routes.app.settings.background-map.navTitle',
 		defaultMessage: 'Background Map',
 		description: 'Title of the background map settings page.',
 	},
 	description: {
-		id: 'routes.app.settings.background-map.description',
+		id: '$1.routes.app.settings.background-map.description',
 		defaultMessage:
 			'Custom background maps are viewable offline and only on this device.',
 		description: 'Description of how custom background maps work.',
 	},
 	chooseFile: {
-		id: 'routes.app.settings.background-map.chooseFile',
+		id: '$1.routes.app.settings.background-map.chooseFile',
 		defaultMessage: 'Choose File',
 		description: 'Text for button to choose file.',
 	},
 	acceptedFileTypes: {
-		id: 'routes.app.settings.background-map.acceptedFileTypes',
+		id: '$1.routes.app.settings.background-map.acceptedFileTypes',
 		defaultMessage: 'Accepted file types are .smp',
 		description:
 			'Text describing what kind of files are usable for background maps.',
 	},
 	mapNameColumnLabel: {
-		id: 'routes.app.settings.background-map.mapNameColumnLabel',
+		id: '$1.routes.app.settings.background-map.mapNameColumnLabel',
 		defaultMessage: 'Map Name',
 		description: 'Column label text for map name.',
 	},
 	dateAddedColumnColumnLabel: {
-		id: 'routes.app.settings.background-map.dateAdded',
+		id: '$1.routes.app.settings.background-map.dateAdded',
 		defaultMessage: 'Date Added',
 		description: 'Column label text for date added.',
 	},
 	sizeInMegabytes: {
-		id: 'routes.app.settings.background-map.sizeInMegabytes',
+		id: '$1.routes.app.settings.background-map.sizeInMegabytes',
 		defaultMessage: '{value} MB',
 		description:
 			'Text describing what kind of files are usable for background maps.',
 	},
 	removeMap: {
-		id: 'routes.app.settings.background-map.removeMap',
+		id: '$1.routes.app.settings.background-map.removeMap',
 		defaultMessage: 'Remove Map',
 		description: 'Text for button to remove map',
 	},
 	customMapInfoError: {
-		id: 'routes.app.settings.background-map.customMapInfoError',
+		id: '$1.routes.app.settings.background-map.customMapInfoError',
 		defaultMessage:
 			'Could not get custom map information from file. Please remove it or choose a different file.',
 		description:
 			'Text displayed when info about a custom map cannot be retrieved.',
 	},
 	mapUpdateSuccessTitle: {
-		id: 'routes.app.settings.background-map.mapUpdateSuccessTitle',
+		id: '$1.routes.app.settings.background-map.mapUpdateSuccessTitle',
 		defaultMessage: 'Updated!',
 		description: 'Title text for dialog when updating map successfully.',
 	},
 	mapUpdateSuccessDescription: {
-		id: 'routes.app.settings.background-map.mapUpdateSuccessDescription',
+		id: '$1.routes.app.settings.background-map.mapUpdateSuccessDescription',
 		defaultMessage: 'CoMapeo is now using the latest background map.',
 		description: 'Description text for dialog when updating map successfully.',
 	},
 	close: {
-		id: 'routes.app.settings.background-map.close',
+		id: '$1.routes.app.settings.background-map.close',
 		defaultMessage: 'Close',
 		description: 'Text displayed for closing dialogs',
 	},

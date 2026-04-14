@@ -283,7 +283,7 @@ const BASE_TAB_CONTAINER_SX_PROPS = {
 
 const m = defineMessages({
 	unnamedProject: {
-		id: 'routes.app.route.unnamedProject',
+		id: '$1.routes.app.route.unnamedProject',
 		defaultMessage: 'Unnamed Project',
 		description: 'Fallback for when project is missing a name.',
 	},
@@ -300,22 +300,22 @@ const m = defineMessages({
 			'Accessible label for button that shows project info when clicked.',
 	},
 	fallbackCategoriesSetName: {
-		id: 'routes.app.route.fallbackCategoriesSetName',
+		id: '$1.routes.app.route.fallbackCategoriesSetName',
 		defaultMessage: 'CoMapeo Categories',
 		description: 'Text shown when project does not use a categories set.',
 	},
 	projectInfoRoleCoordinator: {
-		id: 'routes.app.route.projectInfoRoleCoordinator',
+		id: '$1.routes.app.route.projectInfoRoleCoordinator',
 		defaultMessage: 'Coordinator',
 		description: 'Indicates that user is a coordinator.',
 	},
 	projectInfoRoleParticipant: {
-		id: 'routes.app.route.projectInfoRoleParticipant',
+		id: '$1.routes.app.route.projectInfoRoleParticipant',
 		defaultMessage: 'Participant',
 		description: 'Indicates that user is a participant.',
 	},
 	projectInfoCategoriesCreated: {
-		id: 'routes.app.route.projectInfoCategoriesCreated',
+		id: '$1.routes.app.route.projectInfoCategoriesCreated',
 		defaultMessage: 'Created {date}',
 		description: 'Text indicating creation date of categories set.',
 	},

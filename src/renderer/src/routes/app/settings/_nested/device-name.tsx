@@ -249,12 +249,12 @@ function RouteComponent() {
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.settings.device-name.navTitle',
+		id: '$1.routes.app.settings.device-name.navTitle',
 		defaultMessage: 'Device Name',
 		description: 'Title of the device name settings page.',
 	},
 	inputLabel: {
-		id: 'routes.app.settings.device-name.inputLabel',
+		id: '$1.routes.app.settings.device-name.inputLabel',
 		defaultMessage: 'Device Name',
 		description: 'Label for the device name input.',
 	},
@@ -265,22 +265,22 @@ const m = defineMessages({
 			'Displays number of characters in input out of the maximum allowed characters.',
 	},
 	save: {
-		id: 'routes.app.settings.device-name.save',
+		id: '$1.routes.app.settings.device-name.save',
 		defaultMessage: 'Save',
 		description: 'Label for save button.',
 	},
 	cancel: {
-		id: 'routes.app.settings.device-name.cancel',
+		id: '$1.routes.app.settings.device-name.cancel',
 		defaultMessage: 'Cancel',
 		description: 'Label for cancel button.',
 	},
 	minLengthError: {
-		id: 'routes.app.settings.device-name.minLengthError',
+		id: '$1.routes.app.settings.device-name.minLengthError',
 		defaultMessage: 'Enter a Device Name',
 		description: 'Error message for device name that is too short.',
 	},
 	maxLengthError: {
-		id: 'routes.app.settings.device-name.maxLengthError',
+		id: '$1.routes.app.settings.device-name.maxLengthError',
 		defaultMessage: 'Too long, try a shorter name.',
 		description: 'Error message for device name that is too long.',
 	},

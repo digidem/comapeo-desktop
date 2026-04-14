@@ -536,49 +536,49 @@ const m = defineMessages({
 		description: 'Accessible label for app-wide navigation bar.',
 	},
 	homeTabLabel: {
-		id: 'routes.app.route.homeTabTitle',
+		id: '$1.routes.app.route.homeTabTitle',
 		defaultMessage: 'Home',
 		description: 'Label for home tab link in navigation.',
 	},
 	appSettingsTabLabel: {
-		id: 'routes.app.route.appSettingsTabLabel',
+		id: '$1.routes.app.route.appSettingsTabLabel',
 		defaultMessage: 'Settings',
 		description: 'Label for app settings tab link in navigation.',
 	},
 	projectInviteTitle: {
-		id: 'routes.app.route.projectInviteTitle',
+		id: '$1.routes.app.route.projectInviteTitle',
 		defaultMessage: "You've been invited to…",
 		description: 'Title of project invite.',
 	},
 	projectInviteDescription: {
-		id: 'routes.app.route.projectInviteDescription',
+		id: '$1.routes.app.route.projectInviteDescription',
 		defaultMessage:
 			'Join as a <b>{role, select, coordinator {coordinator} other {participant}}</b>?',
 		description: 'Description for invite containing role being invited as.',
 	},
 	projectInviteDecline: {
-		id: 'routes.app.route.projectInviteDecline',
+		id: '$1.routes.app.route.projectInviteDecline',
 		defaultMessage: 'Decline',
 		description: 'Button text for declining project invite.',
 	},
 	projectInviteAccept: {
-		id: 'routes.app.route.projectInviteAccept',
+		id: '$1.routes.app.route.projectInviteAccept',
 		defaultMessage: 'Accept',
 		description: 'Button text for accepting project invite.',
 	},
 	projectJoinedTitle: {
-		id: 'routes.app.route.projectJoinedTitle',
+		id: '$1.routes.app.route.projectJoinedTitle',
 		defaultMessage: 'Joined project {name} successfully.',
 		description:
 			'Title of dialog displayed when joining a project successfully.',
 	},
 	projectJoinedCloseDialog: {
-		id: 'routes.app.route.projectJoinedCloseDialog',
+		id: '$1.routes.app.route.projectJoinedCloseDialog',
 		defaultMessage: 'Close',
 		description: 'Text for button to close project joined dialog.',
 	},
 	projectJoinedViewProject: {
-		id: 'routes.app.route.projectJoinedViewProject',
+		id: '$1.routes.app.route.projectJoinedViewProject',
 		defaultMessage: 'View Project',
 		description:
 			'Text for button to navigate to joined project in project joined dialog.',

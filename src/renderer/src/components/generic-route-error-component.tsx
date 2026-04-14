@@ -124,12 +124,12 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 
 const m = defineMessages({
 	somethingWentWrong: {
-		id: 'components.generic-route-error-component.somethinWentWrong',
+		id: '$1.components.generic-route-error-component.somethinWentWrong',
 		defaultMessage: 'Something went wrong',
 		description: 'Title text of page error',
 	},
 	error: {
-		id: 'components.generic-route-error-component.error',
+		id: '$1.components.generic-route-error-component.error',
 		defaultMessage: 'Error',
 		description: 'Label for error section',
 	},
@@ -139,12 +139,12 @@ const m = defineMessages({
 		description: 'Label for stack trace section',
 	},
 	reload: {
-		id: 'components.generic-route-error-component.reload',
+		id: '$1.components.generic-route-error-component.reload',
 		defaultMessage: 'Reload',
 		description: 'Text for button to reload page.',
 	},
 	restart: {
-		id: 'components.generic-route-error-component.restart',
+		id: '$1.components.generic-route-error-component.restart',
 		defaultMessage: 'Restart',
 		description: 'Text for button to restart app.',
 	},

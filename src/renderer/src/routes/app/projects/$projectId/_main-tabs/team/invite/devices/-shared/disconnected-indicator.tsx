@@ -30,7 +30,7 @@ export function DisconnectedIndicator() {
 
 const m = defineMessages({
 	disconnected: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.-shared.disconnected-indicator.disconnected',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.-shared.disconnected-indicator.disconnected',
 		defaultMessage: 'Disconnected',
 		description: 'Text displayed when external device is disconnected.',
 	},

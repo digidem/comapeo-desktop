@@ -89,37 +89,37 @@ function getDeviceIconTitleMessage(
 
 const m = defineMessages({
 	deviceTypeMobile: {
-		id: 'routes.app.projects.-shared.device-icon.deviceTypeMobile',
+		id: '$1.routes.app.projects.-shared.device-icon.deviceTypeMobile',
 		defaultMessage: 'Mobile',
 		description:
 			'Text indicating that the member is a mobile device (displays when hovering over the icon).',
 	},
 	deviceTypeDesktop: {
-		id: 'routes.app.projects.-shared.device-icon.deviceTypeDesktop',
+		id: '$1.routes.app.projects.-shared.device-icon.deviceTypeDesktop',
 		defaultMessage: 'Desktop',
 		description:
 			'Text indicating that the member is a desktop device (displays when hovering over the icon).',
 	},
 	deviceTypeTablet: {
-		id: 'routes.app.projects.-shared.device-icon.deviceTypeTablet',
+		id: '$1.routes.app.projects.-shared.device-icon.deviceTypeTablet',
 		defaultMessage: 'Tablet',
 		description:
 			'Text indicating that the member is a tablet device (displays when hovering over the icon).',
 	},
 	deviceTypeRemoteArchive: {
-		id: 'routes.app.projects.-shared.device-icon.deviceTypeRemoteArchive',
+		id: '$1.routes.app.projects.-shared.device-icon.deviceTypeRemoteArchive',
 		defaultMessage: 'Remote Archive',
 		description:
 			'Text indicating that the member is a remote archive (displays when hovering over the icon).',
 	},
 	deviceTypeUnspecified: {
-		id: 'routes.app.projects.-shared.device-icon.deviceTypeUnspecified',
+		id: '$1.routes.app.projects.-shared.device-icon.deviceTypeUnspecified',
 		defaultMessage: 'Unspecified device type',
 		description:
 			'Text indicating that the member device type is unspecified (displays when hovering over the icon).',
 	},
 	deviceTypeUnknown: {
-		id: 'routes.app.projects.-shared.device-icon.deviceTypeUnknown',
+		id: '$1.routes.app.projects.-shared.device-icon.deviceTypeUnknown',
 		defaultMessage: 'Unknown device type',
 		description:
 			'Text indicating that the member device type is unknown (displays when hovering over the icon).',

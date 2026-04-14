@@ -225,37 +225,37 @@ function IntroPanel({
 
 const m = defineMessages({
 	inviteCollaboratorsPanelTitle: {
-		id: 'routes.app.projects.$projectId.index.inviteCollaboratorsPanelTitle',
+		id: '$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelTitle',
 		defaultMessage: 'Invite Collaborators',
 		description:
 			'Text for title of panel shown when no active collaborators or data exist on project.',
 	},
 	inviteCollaboratorsPanelDescription: {
-		id: 'routes.app.projects.$projectId.index.inviteCollaboratorsPanelDescription',
+		id: '$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelDescription',
 		defaultMessage:
 			'Invite devices to start gathering observations and tracks.',
 		description:
 			'Text for description of panel shown when no active collaborators or data exist on project.',
 	},
 	inviteCollaboratorsPanelInviteLink: {
-		id: 'routes.app.projects.$projectId.index.inviteCollaboratorsPanelInviteLink',
+		id: '$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelInviteLink',
 		defaultMessage: 'Invite Device',
 		description: 'Text for link that navigates to invite page.',
 	},
 	openExchangePanelTitle: {
-		id: 'routes.app.projects.$projectId.index.openExchangePanelTitle',
+		id: '$1.routes.app.projects.$projectId.index.openExchangePanelTitle',
 		defaultMessage: 'Exchange to Gather Observations',
 		description:
 			'Text for title of panel shown when project has collaborators but no data.',
 	},
 	openExchangePanelDescription: {
-		id: 'routes.app.projects.$projectId.index.openExchangePanelDescription',
+		id: '$1.routes.app.projects.$projectId.index.openExchangePanelDescription',
 		defaultMessage: 'All observations and tracks will be listed here.',
 		description:
 			'Text for description of panel shown when project has collaborators but no data.',
 	},
 	openExchangePanelLink: {
-		id: 'routes.app.projects.$projectId.index.openExchangePanelLink',
+		id: '$1.routes.app.projects.$projectId.index.openExchangePanelLink',
 		defaultMessage: 'Open Exchange',
 		description: 'Text for link that navigates to exchange page.',
 	},

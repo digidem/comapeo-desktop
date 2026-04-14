@@ -235,35 +235,35 @@ function RouteComponent() {
 
 const m = defineMessages({
 	title: {
-		id: 'routes.onboarding.device-name.title',
+		id: '$1.routes.onboarding.device-name.title',
 		defaultMessage: 'Name Your Device',
 		description: 'Title for device name page during onboarding.',
 	},
 	description: {
-		id: 'routes.onboarding.device-name.description',
+		id: '$1.routes.onboarding.device-name.description',
 		defaultMessage:
 			'Distinct, memorable names help collaborators recognize you.',
 		description: 'Description for device name page during onboarding.',
 	},
 	deviceName: {
-		id: 'routes.onboarding.device-name.deviceName',
+		id: '$1.routes.onboarding.device-name.deviceName',
 		defaultMessage: 'Device Name',
 		description: 'Label for device name text input.',
 	},
 	minLengthError: {
-		id: 'routes.onboarding.device-name.minLengthError',
+		id: '$1.routes.onboarding.device-name.minLengthError',
 		defaultMessage: 'Enter a Device Name',
 		description:
 			'Message displayed when required minimum length for device name input is not met.',
 	},
 	maxLengthError: {
-		id: 'routes.onboarding.device-name.maxLengthError',
+		id: '$1.routes.onboarding.device-name.maxLengthError',
 		defaultMessage: 'Too long, try a shorter name.',
 		description:
 			'Message displayed when maximum length for device name input is exceeded.',
 	},
 	addName: {
-		id: 'routes.onboarding.device-name.addName',
+		id: '$1.routes.onboarding.device-name.addName',
 		defaultMessage: 'Add Name',
 		description: 'Text for submit button to save device name.',
 	},

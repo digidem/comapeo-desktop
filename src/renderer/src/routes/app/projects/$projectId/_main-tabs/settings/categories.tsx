@@ -289,38 +289,38 @@ function RouteComponent() {
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId.settings.categories.navTitle',
+		id: '$1.routes.app.projects.$projectId.settings.categories.navTitle',
 		defaultMessage: 'Categories Set',
 		description: 'Title of the categories set page.',
 	},
 	uploadNewSet: {
-		id: 'routes.app.projects.$projectId.settings.categories.uploadNewSet',
+		id: '$1.routes.app.projects.$projectId.settings.categories.uploadNewSet',
 		defaultMessage: 'Upload New Set',
 		description: 'Label for button to upload new categories set.',
 	},
 	fallbackCategoriesName: {
-		id: 'routes.app.projects.$projectId.settings.categories.fallbackCategoriesName',
+		id: '$1.routes.app.projects.$projectId.settings.categories.fallbackCategoriesName',
 		defaultMessage: 'CoMapeo Categories',
 		description: 'Fallback displayed name when project has no category set.',
 	},
 	dateAdded: {
-		id: 'routes.app.projects.$projectId.settings.categories.dateAdded',
+		id: '$1.routes.app.projects.$projectId.settings.categories.dateAdded',
 		defaultMessage: 'Added {date}',
 		description: 'Text indicating the date the categories set was added.',
 	},
 	dateCreated: {
-		id: 'routes.app.projects.$projectId.settings.categories.dateCreated',
+		id: '$1.routes.app.projects.$projectId.settings.categories.dateCreated',
 		defaultMessage: 'Created {date}',
 		description: 'Text indicating the date the categories set was created.',
 	},
 	defaultCategoriesExplainer: {
-		id: 'routes.app.projects.$projectId.settings.categories.defaultCategoriesExplainer',
+		id: '$1.routes.app.projects.$projectId.settings.categories.defaultCategoriesExplainer',
 		defaultMessage:
 			'Default categories help you start organizing your observations instantly.',
 		description: 'Explanation for default categories',
 	},
 	customCategoriesExplainer: {
-		id: 'routes.app.projects.$projectId.settings.categories.customCategoriesExplainer',
+		id: '$1.routes.app.projects.$projectId.settings.categories.customCategoriesExplainer',
 		defaultMessage:
 			'Use custom categories by importing new categories set files below.',
 		description: 'Explanation for custom categories',

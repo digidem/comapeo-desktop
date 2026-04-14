@@ -290,12 +290,12 @@ function CategoriesList({
 
 const m = defineMessages({
 	closePanelAccessibleLabel: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel',
 		defaultMessage: 'Close.',
 		description: 'Accessible label for button to close panel.',
 	},
 	editCategoryPanelTitle: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle',
 		defaultMessage: 'Change Category',
 		description: 'Title for edit category panel.',
 	},
@@ -306,7 +306,7 @@ const m = defineMessages({
 			'Alt text for icon image displayed for category (used for accessibility tools).',
 	},
 	observationCategoryNameFallback: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback',
 		defaultMessage: 'Observation',
 		description: 'Fallback name for observation without a matching category.',
 	},

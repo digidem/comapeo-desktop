@@ -333,48 +333,48 @@ function AboutCoMapeoSection() {
 
 const m = defineMessages({
 	title: {
-		id: 'routes.app.settings.index.title',
+		id: '$1.routes.app.settings.index.title',
 		defaultMessage: 'CoMapeo Settings',
 		description: 'Title of the settings page.',
 	},
 	editDeviceName: {
-		id: 'routes.app.settings.index.editDeviceName',
+		id: '$1.routes.app.settings.index.editDeviceName',
 		defaultMessage: 'Edit',
 		description: 'Button text for navigating to page to edit device name.',
 	},
 	defaultBackground: {
-		id: 'routes.app.settings.index.defaultBackground',
+		id: '$1.routes.app.settings.index.defaultBackground',
 		defaultMessage: 'Default Background',
 		description: 'Name of the background map used if a custom one is not set.',
 	},
 	customBackground: {
-		id: 'routes.app.settings.index.customBackground',
+		id: '$1.routes.app.settings.index.customBackground',
 		defaultMessage: 'Custom Background',
 		description:
 			'Placeholder name of custom background map if name cannot be retrieved.',
 	},
 	ddCoordinates: {
-		id: 'routes.app.settings.index.decimalDegrees',
+		id: '$1.routes.app.settings.index.decimalDegrees',
 		defaultMessage: 'DD Coordinates',
 		description: 'Label for Decimal Degrees coordinate system.',
 	},
 	utmCoordinates: {
-		id: 'routes.app.settings.index.utmCoordinates',
+		id: '$1.routes.app.settings.index.utmCoordinates',
 		defaultMessage: 'UTM Coordinates',
 		description: 'Label for Universal Transverse Mercator coordinate system.',
 	},
 	dmsCoordinates: {
-		id: 'routes.app.settings.index.dmsCoordinates',
+		id: '$1.routes.app.settings.index.dmsCoordinates',
 		defaultMessage: 'DMS Coordinates',
 		description: 'Label for Degrees/Minutes/Seconds coordinate system.',
 	},
 	languageFromSystemPreference: {
-		id: 'routes.app.settings.index.languageFromSystemPreference',
+		id: '$1.routes.app.settings.index.languageFromSystemPreference',
 		defaultMessage: '{name} (System Preference)',
 		description: 'Label for selected language based on the system preferences.',
 	},
 	deviceNameSettingsAccessibleLabel: {
-		id: 'routes.app.settings.index.deviceNameSettingsAccessibleLabel',
+		id: '$1.routes.app.settings.index.deviceNameSettingsAccessibleLabel',
 		defaultMessage: 'Go to device name settings.',
 		description:
 			'Accessible label for link item that navigates to device name settings page.',
@@ -398,17 +398,17 @@ const m = defineMessages({
 			'Accessible label for link item that navigates to background map settings page.',
 	},
 	sectionTitleGeneral: {
-		id: 'routes.app.settings.index.sectionTitleGeneral',
+		id: '$1.routes.app.settings.index.sectionTitleGeneral',
 		defaultMessage: 'General',
 		description: 'Text for general settings section title',
 	},
 	sectionTitleAboutCoMapeo: {
-		id: 'routes.app.settings.index.sectionTitleAboutCoMapeo',
+		id: '$1.routes.app.settings.index.sectionTitleAboutCoMapeo',
 		defaultMessage: 'About CoMapeo',
 		description: 'Text for data and privacy section title',
 	},
 	aboutCoMapeoVersionLabel: {
-		id: 'routes.app.settings.index.aboutCoMapeoVersionLabel',
+		id: '$1.routes.app.settings.index.aboutCoMapeoVersionLabel',
 		defaultMessage: 'CoMapeo Version',
 		description: 'Label for CoMapeo version',
 	},

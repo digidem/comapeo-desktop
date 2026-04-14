@@ -144,33 +144,33 @@ function SettingsList({ projectId }: { projectId: string }) {
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId.settings.index.navTitle',
+		id: '$1.routes.app.projects.$projectId.settings.index.navTitle',
 		defaultMessage: 'Coordinator Tools',
 		description: 'Title of the coordinator tools page.',
 	},
 	unnamedProject: {
-		id: 'routes.app.projects.$projectId.settings.index.unnamedProject',
+		id: '$1.routes.app.projects.$projectId.settings.index.unnamedProject',
 		defaultMessage: 'Unnamed Project',
 		description: 'Fallback for when current project is missing a name.',
 	},
 	projectInfoActionLabel: {
-		id: 'routes.app.projects.$projectId.settings.index.projectInfoActionLabel',
+		id: '$1.routes.app.projects.$projectId.settings.index.projectInfoActionLabel',
 		defaultMessage: 'Edit',
 		description: 'Text for action to update project info.',
 	},
 	projectSettingsLinkAccessibleLabel: {
-		id: 'routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel',
+		id: '$1.routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel',
 		defaultMessage: 'Go to project info settings.',
 		description:
 			'Accessible label for link item that navigates to project info settings page.',
 	},
 	fallbackCategoriesSetName: {
-		id: 'routes.app.projects.$projectId.settings.index.fallbackCategoriesSetName',
+		id: '$1.routes.app.projects.$projectId.settings.index.fallbackCategoriesSetName',
 		defaultMessage: 'CoMapeo Categories',
 		description: 'Text shown when project does not use a categories set.',
 	},
 	categoriesActionLabel: {
-		id: 'routes.app.projects.$projectId.settings.index.categoriesActionLabel',
+		id: '$1.routes.app.projects.$projectId.settings.index.categoriesActionLabel',
 		defaultMessage: 'Update',
 		description: 'Text for action to update categories set.',
 	},

@@ -151,12 +151,12 @@ function RadioOptionLabel({
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.settings.language.title',
+		id: '$1.routes.app.settings.language.title',
 		defaultMessage: 'Language',
 		description: 'Title of the language settings page.',
 	},
 	followSystemOptionLabel: {
-		id: 'routes.app.settings.language.followSystemOptionLabel',
+		id: '$1.routes.app.settings.language.followSystemOptionLabel',
 		defaultMessage: 'Follow system preferences',
 		description: 'Option label for following system preference for language.',
 	},

@@ -333,12 +333,12 @@ export function EditableFieldSection({
 
 const m = defineMessages({
 	fieldAnswerNoAnswer: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer',
 		defaultMessage: 'No answer',
 		description: 'Fallback text displayed if field has no meaningful value.',
 	},
 	editNotesTooltip: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-field-sections.editNotesTooltip',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-field-sections.editNotesTooltip',
 		defaultMessage: 'Click to Edit',
 		description: 'Text for tooltip when hovering over notes.',
 	},

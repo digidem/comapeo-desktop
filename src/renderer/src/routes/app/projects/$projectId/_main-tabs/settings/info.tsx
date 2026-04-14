@@ -569,22 +569,22 @@ function ProjectColorCheckboxControl({
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId.settings.info.navTitle',
+		id: '$1.routes.app.projects.$projectId.settings.info.navTitle',
 		defaultMessage: 'Edit Info',
 		description: 'Title of the project settings info page.',
 	},
 	projectNameInputLabel: {
-		id: 'routes.app.projects.$projectId.settings.info.projectNameInputLabel',
+		id: '$1.routes.app.projects.$projectId.settings.info.projectNameInputLabel',
 		defaultMessage: 'Project Name',
 		description: 'Label for the project name input.',
 	},
 	projectDescriptionInputLabel: {
-		id: 'routes.app.projects.$projectId.settings.info.projectDescriptionInputLabel',
+		id: '$1.routes.app.projects.$projectId.settings.info.projectDescriptionInputLabel',
 		defaultMessage: 'Project Description',
 		description: 'Label for the project description input.',
 	},
 	projectCardColorLabel: {
-		id: 'routes.app.projects.$projectId.settings.info.projectCardColorLabel',
+		id: '$1.routes.app.projects.$projectId.settings.info.projectCardColorLabel',
 		defaultMessage: 'Project Card Color',
 		description: 'Label for the project card color selector.',
 	},
@@ -595,52 +595,52 @@ const m = defineMessages({
 			'Displays number of characters in input out of the maximum allowed characters.',
 	},
 	minProjectNameLengthError: {
-		id: 'routes.app.projects.$projectId.settings.info.minProjectNameLengthError',
+		id: '$1.routes.app.projects.$projectId.settings.info.minProjectNameLengthError',
 		defaultMessage: 'Enter a Project Name',
 		description: 'Error message for project name that is too short.',
 	},
 	maxProjectNameLengthError: {
-		id: 'routes.app.projects.$projectId.settings.info.maxProjectNameLengthError',
+		id: '$1.routes.app.projects.$projectId.settings.info.maxProjectNameLengthError',
 		defaultMessage: 'Too long, try a shorter name.',
 		description: 'Error message for project name that is too long.',
 	},
 	maxProjectDescriptionLengthError: {
-		id: 'routes.app.projects.$projectId.settings.info.maxProjectDescriptionLengthError',
+		id: '$1.routes.app.projects.$projectId.settings.info.maxProjectDescriptionLengthError',
 		defaultMessage: 'Too long, try a shorter description.',
 		description: 'Error message for project description that is too long.',
 	},
 	projectColorOptionBlue: {
-		id: 'routes.app.projects.$projectId.settings.info.projectColorOptionBlue',
+		id: '$1.routes.app.projects.$projectId.settings.info.projectColorOptionBlue',
 		defaultMessage: 'Blue',
 		description: 'Label for blue option in project color selector.',
 	},
 	projectColorOptionGreen: {
-		id: 'routes.app.projects.$projectId.settings.info.projectColorOptionGreen',
+		id: '$1.routes.app.projects.$projectId.settings.info.projectColorOptionGreen',
 		defaultMessage: 'Green',
 		description: 'Label for green option in project color selector.',
 	},
 	projectColorOptionGrey: {
-		id: 'routes.app.projects.$projectId.settings.info.projectColorOptionGrey',
+		id: '$1.routes.app.projects.$projectId.settings.info.projectColorOptionGrey',
 		defaultMessage: 'Grey',
 		description: 'Label for grey option in project color selector.',
 	},
 	projectColorOptionOrange: {
-		id: 'routes.app.projects.$projectId.settings.info.projectColorOptionOrange',
+		id: '$1.routes.app.projects.$projectId.settings.info.projectColorOptionOrange',
 		defaultMessage: 'Orange',
 		description: 'Label for orange option in project color selector.',
 	},
 	projectColorOptionRed: {
-		id: 'routes.app.projects.$projectId.settings.info.projectColorOptionRed',
+		id: '$1.routes.app.projects.$projectId.settings.info.projectColorOptionRed',
 		defaultMessage: 'Red',
 		description: 'Label for grey option in project color selector.',
 	},
 	save: {
-		id: 'routes.app.projects.$projectId.settings.info.save',
+		id: '$1.routes.app.projects.$projectId.settings.info.save',
 		defaultMessage: 'Save',
 		description: 'Label for save button.',
 	},
 	cancel: {
-		id: 'routes.app.projects.$projectId.settings.info.cancel',
+		id: '$1.routes.app.projects.$projectId.settings.info.cancel',
 		defaultMessage: 'Cancel',
 		description: 'Label for cancel button.',
 	},
