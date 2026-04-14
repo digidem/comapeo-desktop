@@ -3,10 +3,6 @@
     "description": "Text for button to cancel action.",
     "message": "បោះបង់"
   },
-  "$1.components.error-dialog.close": {
-    "description": "Button text for the close button in the error dialog.",
-    "message": "Close"
-  },
   "$1.components.generic-route-error-component.error": {
     "description": "Label for error section",
     "message": "កំហុសឆ្គង"
@@ -18,26 +14,6 @@
   "$1.routes.app.index.appUsageConsentSuccessCloseButton": {
     "description": "Text for button to close app usage consent dialog.",
     "message": "រួចរាល់"
-  },
-  "$1.routes.app.index.createProjectButton": {
-    "description": "Text for button to create project.",
-    "message": "Create Project"
-  },
-  "$1.routes.app.index.leftProjectDialogCloseButton": {
-    "description": "Text for button to close left project dialog.",
-    "message": "Open Settings"
-  },
-  "$1.routes.app.index.projectNameInputLabel": {
-    "description": "Input label for input in start project dialog.",
-    "message": "Enter a name for the Project"
-  },
-  "$1.routes.app.index.startProjectCardTitle": {
-    "description": "Title card for starting a new project.",
-    "message": "Create a Project"
-  },
-  "$1.routes.app.index.startProjectDialogTitle": {
-    "description": "Description of dialog shown for starting a project.",
-    "message": "Create a Project"
   },
   "$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
@@ -66,22 +42,6 @@
   "$1.routes.app.projects.$projectId.download.successPanelDone": {
     "description": "Button text for exiting success panel.",
     "message": "រួចរាល់"
-  },
-  "$1.routes.app.projects.$projectId.exchange.index.complete": {
-    "description": "Text displayed when exchange is completed with all devices.",
-    "message": "Complete! You're up to date"
-  },
-  "$1.routes.app.projects.$projectId.exchange.index.devicesFound": {
-    "description": "Text displayed when other devices have been found.",
-    "message": "Devices found"
-  },
-  "$1.routes.app.projects.$projectId.exchange.index.upToDate": {
-    "description": "Text displayed when exchangable data is up to date.",
-    "message": "All data synced"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
-    "description": "Accessible label for button to close panel.",
-    "message": "Close."
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
@@ -143,10 +103,6 @@
     "description": "Label for cancel button.",
     "message": "បោះបង់"
   },
-  "$1.routes.app.projects.$projectId.settings.info.projectNameInputLabel": {
-    "description": "Label for the project name input.",
-    "message": "Enter a name for the Project"
-  },
   "$1.routes.app.projects.$projectId.settings.info.save": {
     "description": "Label for save button.",
     "message": "រក្សាទុក"
@@ -158,14 +114,6 @@
   "$1.routes.app.projects.$projectId.team.$deviceId.continueButton": {
     "description": "Button text to continue to next step in leave project flow.",
     "message": "បន្ត"
-  },
-  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.accepted": {
-    "description": "Text displayed when invite is accepted.",
-    "message": "Invite Accepted"
-  },
-  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.close": {
-    "description": "Text for button to leave invite flow.",
-    "message": "Open Settings"
   },
   "$1.routes.app.projects.$projectId.team.invite.devices.-shared.disconnected-indicator.disconnected": {
     "description": "Text displayed when external device is disconnected.",
@@ -187,18 +135,6 @@
     "description": "Label for home tab link in navigation.",
     "message": "ទំព័រ​ដើម"
   },
-  "$1.routes.app.route.projectJoinedCloseDialog": {
-    "description": "Text for button to close project joined dialog.",
-    "message": "Open Settings"
-  },
-  "$1.routes.app.settings.background-map.close": {
-    "description": "Text displayed for closing dialogs",
-    "message": "Close"
-  },
-  "$1.routes.app.settings.background-map.navTitle": {
-    "description": "Title of the background map settings page.",
-    "message": "Map Management"
-  },
   "$1.routes.app.settings.device-name.cancel": {
     "description": "Label for cancel button.",
     "message": "បោះបង់"
@@ -218,13 +154,5 @@
   "$1.routes.onboarding.data-and-privacy.next": {
     "description": "Text for link to next step in onboarding.",
     "message": "បន្ទាប់"
-  },
-  "$1.routes.onboarding.device-name.description": {
-    "description": "Description for device name page during onboarding.",
-    "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
-  },
-  "$1.routes.welcome.collaborate": {
-    "description": "Detail about collaborating in welcome page.",
-    "message": "Collaborate with others"
   }
 }
