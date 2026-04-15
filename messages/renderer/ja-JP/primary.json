@@ -27,7 +27,7 @@
     "description": "Text for button to restart app.",
     "message": "再起動"
   },
-  "$1.components.generic-route-error-component.somethinWentWrong": {
+  "$1.components.generic-route-error-component.somethingWentWrong": {
     "description": "Title text of page error",
     "message": "問題が発生しました"
   },

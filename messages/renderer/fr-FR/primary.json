@@ -23,7 +23,7 @@
     "description": "Text for button to restart app.",
     "message": "Redémarrer"
   },
-  "$1.components.generic-route-error-component.somethinWentWrong": {
+  "$1.components.generic-route-error-component.somethingWentWrong": {
     "description": "Title text of page error",
     "message": "Quelque chose s'est mal passé"
   },

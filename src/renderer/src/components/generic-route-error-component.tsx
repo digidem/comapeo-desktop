@@ -124,7 +124,7 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 
 const m = defineMessages({
 	somethingWentWrong: {
-		id: '$1.components.generic-route-error-component.somethinWentWrong',
+		id: '$1.components.generic-route-error-component.somethingWentWrong',
 		defaultMessage: 'Something went wrong',
 		description: 'Title text of page error',
 	},

@@ -27,7 +27,7 @@
     "description": "Text for button to restart app.",
     "message": "Memulai ulang"
   },
-  "$1.components.generic-route-error-component.somethinWentWrong": {
+  "$1.components.generic-route-error-component.somethingWentWrong": {
     "description": "Title text of page error",
     "message": "Terjadi error"
   },
