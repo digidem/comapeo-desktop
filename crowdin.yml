@@ -5,11 +5,9 @@ files:
     {
       'source': '/messages/main/en-US/*.json',
       'translation': '/messages/main/%locale%/%original_file_name%',
-      'exclude_target_languages': ['en-US'],
     },
     {
       'source': '/messages/renderer/en-US/*.json',
       'translation': '/messages/renderer/%locale%/%original_file_name%',
-      'exclude_target_languages': ['en-US'],
     },
   ]
