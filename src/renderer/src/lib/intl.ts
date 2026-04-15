@@ -4,7 +4,7 @@ import * as v from 'valibot'
 import {
 	SUPPORTED_LANGUAGES,
 	type SupportedLanguageTag,
-} from '../../../shared/intl'
+} from '../../../shared/intl.ts'
 import TRANSLATED_LANGUAGE_TAGS from '../generated/translated-languages.generated.json'
 
 const translations = import.meta.glob('./*.json', {
@@ -28,8 +28,40 @@ export const usableLanguages = TRANSLATED_LANGUAGE_TAGS.map((l) => {
 })
 
 export async function loadTranslations(
-	language: SupportedLanguageTag,
+	languageTag: SupportedLanguageTag,
 ): Promise<NonNullable<IntlConfig['messages']>> {
-	// @ts-expect-error Not worth fixing
-	return translations[`./${language}.json`]!()
+	const [baseTag, regionTag] = languageTag.split('-')
+
+	if (!baseTag) {
+		throw new Error(`Cannot get base tag from ${languageTag}`)
+	}
+
+	const relevantTranslations = Array.from(Object.entries(translations))
+		// NOTE: Only work with translations that share the same base tag
+		.filter(([filePath]) => {
+			return filePath.startsWith(`./${baseTag}-`)
+		}) // NOTE: Sort alphanumerically except for exact match, which should be last.
+		.sort(([a], [b]) => {
+			if (regionTag && a === `./${languageTag}.json`) {
+				return 1
+			}
+
+			return b.localeCompare(a)
+		})
+
+	let messages = {} as NonNullable<IntlConfig['messages']>
+
+	const importResults = await Promise.all(
+		relevantTranslations.map(([_filePath, importFn]) => importFn()),
+	)
+
+	for (const r of importResults) {
+		messages = {
+			...messages,
+			// @ts-expect-error Not worth fixing
+			...r,
+		}
+	}
+
+	return messages
 }

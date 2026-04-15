@@ -10,12 +10,12 @@ function getTranslatedMessagesQueryKey(language: SupportedLanguageTag) {
 }
 
 export function getTranslatedMessagesQueryOptions(
-	language: SupportedLanguageTag,
+	languageTag: SupportedLanguageTag,
 ) {
 	return queryOptions({
-		queryKey: getTranslatedMessagesQueryKey(language),
+		queryKey: getTranslatedMessagesQueryKey(languageTag),
 		queryFn: async () => {
-			return loadTranslations(language)
+			return loadTranslations(languageTag)
 		},
 		// Basically only want this to happen once.
 		staleTime: Infinity,

@@ -7,9 +7,10 @@ import {
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { IntlProvider as ReactIntlProvider } from 'react-intl'
 
-import { CORNFLOWER_BLUE, ORANGE } from '../colors'
-import { getLocaleStateQueryOptions } from '../lib/queries/app-settings'
-import { getTranslatedMessagesQueryOptions } from '../lib/queries/intl'
+import { DEFAULT_LANGUAGE_TAG } from '../../../shared/intl.ts'
+import { CORNFLOWER_BLUE, ORANGE } from '../colors.ts'
+import { getLocaleStateQueryOptions } from '../lib/queries/app-settings.ts'
+import { getTranslatedMessagesQueryOptions } from '../lib/queries/intl.ts'
 
 const RICH_TEXT_MAPPINGS: ComponentProps<
 	typeof ReactIntlProvider
@@ -34,12 +35,12 @@ export function IntlProvider({ children }: PropsWithChildren) {
 		select: ({ value }) => value,
 	})
 
-	// We always load the English ones to use as a fallback for missing message keys
-	const { data: englishMessages } = useSuspenseQuery(
-		getTranslatedMessagesQueryOptions('en'),
+	// NOTE: We always load the default language messages to use as a fallback for missing message keys
+	const { data: defaultLanguageMessages } = useSuspenseQuery(
+		getTranslatedMessagesQueryOptions(DEFAULT_LANGUAGE_TAG),
 	)
 
-	// Prevents the suspense boundary from showing the fallback when we update the locale,
+	// NOTE: Prevents the suspense boundary from showing the fallback when we update the locale,
 	// avoiding a jarring UI flicker.
 	const deferredLocale = useDeferredValue(persistedLocale)
 
@@ -47,16 +48,16 @@ export function IntlProvider({ children }: PropsWithChildren) {
 		getTranslatedMessagesQueryOptions(deferredLocale),
 	)
 
-	const messagesToUse = useMemo(() => {
-		return { ...englishMessages, ...localeMessages }
-	}, [englishMessages, localeMessages])
+	const combinedMessages = useMemo(() => {
+		return { ...defaultLanguageMessages, ...localeMessages }
+	}, [defaultLanguageMessages, localeMessages])
 
 	return (
 		<ReactIntlProvider
 			// @ts-expect-error Not worth fixing
-			messages={messagesToUse}
+			messages={combinedMessages}
 			locale={persistedLocale}
-			defaultLocale="en"
+			defaultLocale={DEFAULT_LANGUAGE_TAG}
 			defaultRichTextElements={RICH_TEXT_MAPPINGS}
 		>
 			{children}
