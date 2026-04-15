@@ -1,14 +1,1 @@
-{
-  "$1.main.app.contextMenuCopy": {
-    "description": "Context menu item label for copying text",
-    "message": "Хуулах"
-  },
-  "$1.main.app.contextMenuCut": {
-    "description": "Context menu item label for cutting text",
-    "message": "Зөөх"
-  },
-  "$1.main.app.contextMenuPaste": {
-    "description": "Context menu item label for paste",
-    "message": "Буулгах"
-  }
-}
+{}
