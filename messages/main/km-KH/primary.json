@@ -1,14 +1,1 @@
-{
-  "$1.main.app.contextMenuCopy": {
-    "description": "Context menu item label for copying text",
-    "message": "ចម្លង"
-  },
-  "$1.main.app.contextMenuCut": {
-    "description": "Context menu item label for cutting text",
-    "message": "កាត់"
-  },
-  "$1.main.app.contextMenuPaste": {
-    "description": "Context menu item label for paste",
-    "message": "ផាស"
-  }
-}
+{}
