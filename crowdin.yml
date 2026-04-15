@@ -8,8 +8,8 @@ files:
       'exclude_target_languages': ['en-US'],
     },
     {
-      'source': '/messages/en-US/*.json',
-      'translation': '/messages/%locale%/%original_file_name%',
+      'source': '/messages/renderer/en-US/*.json',
+      'translation': '/messages/renderer/%locale%/%original_file_name%',
       'exclude_target_languages': ['en-US'],
     },
   ]
