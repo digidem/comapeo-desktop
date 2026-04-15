@@ -18,10 +18,8 @@ const PROJECT_ROOT_DIR = fileURLToPath(new URL('..', import.meta.url))
 const MESSAGES_DIR = fileURLToPath(
 	new URL(`../messages/${values.type}`, import.meta.url),
 )
-const DEFAULT_LANGUAGE = 'en-US' as const
-const OUTPUT_DIR = join(MESSAGES_DIR, DEFAULT_LANGUAGE)
-
-mkdirSync(OUTPUT_DIR, { recursive: true })
+const DEFAULT_LANGUAGE_TAG = 'en-US' as const
+const OUTPUT_DIR = join(MESSAGES_DIR, DEFAULT_LANGUAGE_TAG)
 
 const sourceFiles = (
 	await Array.fromAsync(
@@ -53,6 +51,8 @@ for (const messageId of Object.keys(extracted)) {
 		secondary[messageId] = extracted[messageId]
 	}
 }
+
+mkdirSync(OUTPUT_DIR, { recursive: true })
 
 await Promise.all([
 	writeFile(

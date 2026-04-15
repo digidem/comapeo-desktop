@@ -1,4 +1,4 @@
-import { mkdirSync, readdirSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
@@ -20,6 +20,7 @@ const TRANSLATIONS_DIR = join(PROJECT_ROOT, 'translations')
 const sourceDir = join(MESSAGES_DIR, values.type)
 const outputDir = join(TRANSLATIONS_DIR, values.type)
 
+rmSync(outputDir, { recursive: true, force: true })
 mkdirSync(outputDir, { recursive: true })
 
 const languageSourceDirectories = readdirSync(sourceDir, {
