@@ -14,7 +14,7 @@ export function TwoPanelLayout({
 	end: ReactNode
 }) {
 	return (
-		<Box sx={{ display: 'flex', flex: 1 }}>
+		<Box sx={{ display: 'flex', flex: 1, overflow: 'auto' }}>
 			<Box
 				sx={{
 					display: 'flex',

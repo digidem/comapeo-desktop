@@ -381,6 +381,7 @@ function AttachmentPanel({
 										attachmentName={blobId.name}
 										attachmentVariant={blobId.variant}
 										projectId={projectId}
+										style={{ width: '100%' }}
 									/>
 								</Box>
 							</Suspense>
