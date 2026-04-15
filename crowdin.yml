@@ -1,5 +1,13 @@
 preserve_hierarchy: true
 
 files:
-  - source: /messages/*/en-US/*.json
-    translation: /messages/**/%locale%/%original_file_name%
+  [
+    {
+      'source': '/messages/main/en-US/*.json',
+      'translation': '/messages/main/%locale%/%original_file_name%',
+    },
+    {
+      'source': '/messages/renderer/en-US/*.json',
+      'translation': '/messages/renderer/%locale%/%original_file_name%',
+    },
+  ]
