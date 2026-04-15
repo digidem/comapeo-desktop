@@ -4,10 +4,12 @@ files:
   [
     {
       'source': '/messages/main/en-US/*.json',
+      'dest': '/main/%file_name%.json',
       'translation': '/messages/main/%locale%/%original_file_name%',
     },
     {
       'source': '/messages/renderer/en-US/*.json',
+      'dest': '/renderer/%file_name%.json',
       'translation': '/messages/renderer/%locale%/%original_file_name%',
     },
   ]
