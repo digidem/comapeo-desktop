@@ -1243,11 +1243,11 @@
     "description": "Details for performance data in diagnostics section in privacy policy page.",
     "message": "<b>Data Performa</b>: Seperti waktu launching, penggunaan energi, pembekuan aplikasi, dan daya tanggap."
   },
-  "$1.routes.onboarding.privacy-policy.prviateByDefault": {
+  "$1.routes.onboarding.privacy-policy.privateByDefault": {
     "description": "Title for private by default section in privacy policy page.",
     "message": "Pribadi secara default"
   },
-  "$1.routes.onboarding.privacy-policy.prviateByDefaultDescription": {
+  "$1.routes.onboarding.privacy-policy.privateByDefaultDescription": {
     "description": "Description for private by default section in privacy policy page.",
     "message": "Data yang Anda kumpulkan dan buat dengan CoMapeo (lokasi, foto, video, audio, teks) hanya disimpan di perangkat Anda secara default, dan tidak disimpan atau dikirim ke tempat lain.<br></br><br></br>Saat Anda berbagi data dengan kolaborator dengan bergabung dengan proyek dengan mereka, data tersebut dikirim terenkripsi, langsung ke perangkat kolaborator Anda. Ini berarti bahwa data tidak dikirim melalui Awana Digital, atau orang lain, dalam perjalanan ke kolaborator Anda.<br></br><br></br>Awana Digital tidak pernah melihat atau memiliki akses ke data apa pun yang Anda kumpulkan dengan CoMapeo kecuali Anda secara eksplisit mengirimkannya kepada kami."
   },

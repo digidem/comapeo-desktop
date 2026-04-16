@@ -1207,7 +1207,7 @@
     "description": "Details for performance data in diagnostics section in privacy policy page.",
     "message": "<b>パフォーマンスデータ</b>: 起動時間、エネルギー使用量、アプリのフリーズ、応答性など。"
   },
-  "$1.routes.onboarding.privacy-policy.prviateByDefault": {
+  "$1.routes.onboarding.privacy-policy.privateByDefault": {
     "description": "Title for private by default section in privacy policy page.",
     "message": "デフォルトでは非公開"
   },

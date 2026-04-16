@@ -1247,11 +1247,11 @@
     "description": "Details for performance data in diagnostics section in privacy policy page.",
     "message": "<b>Performance Data</b>: So wie Startzeit, Energieverbrauch, App-Einfrieren und Reaktionsfähigkeit."
   },
-  "$1.routes.onboarding.privacy-policy.prviateByDefault": {
+  "$1.routes.onboarding.privacy-policy.privateByDefault": {
     "description": "Title for private by default section in privacy policy page.",
     "message": "Standardmäßig privat"
   },
-  "$1.routes.onboarding.privacy-policy.prviateByDefaultDescription": {
+  "$1.routes.onboarding.privacy-policy.privateByDefaultDescription": {
     "description": "Description for private by default section in privacy policy page.",
     "message": "Die Daten, die Sie mit CoMapeo sammeln und erstellen (Orte, Fotos, Video, Audio, ) wird standardmäßig nur auf Ihrem Gerät gespeichert und wird nirgends gespeichert oder an anderer Stelle versendet.<br></br><br></br>Wenn Sie Daten mit Mitarbeitern teilen, indem Sie einem Projekt beitreten Es wird verschlüsselt, direkt an das Gerät Ihrer Mitarbeiter gesendet. Das bedeutet, dass die Daten weder über Awana Digital noch über irgendjemanden auf dem Weg zu Ihrem Mitarbeiter gesendet werden.<br></br><br></br>Awana Digital sieht noch hat keinen Zugriff auf die Daten, die Sie mit CoMapeo erheben, es sei denn, Sie senden sie uns explizit zu."
   },

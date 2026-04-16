@@ -1291,11 +1291,11 @@
     "description": "Details for performance data in diagnostics section in privacy policy page.",
     "message": "<b>Prestatiegegevens</b>: zoals opstartten, energiegebruik, bevriezing van apps en responsiviteit."
   },
-  "$1.routes.onboarding.privacy-policy.prviateByDefault": {
+  "$1.routes.onboarding.privacy-policy.privateByDefault": {
     "description": "Title for private by default section in privacy policy page.",
     "message": "Standaard Privé"
   },
-  "$1.routes.onboarding.privacy-policy.prviateByDefaultDescription": {
+  "$1.routes.onboarding.privacy-policy.privateByDefaultDescription": {
     "description": "Description for private by default section in privacy policy page.",
     "message": "De gegevens die u verzamelt en maakt met CoMapeo (locaties, foto's, video, audio, tekst) wordt standaard alleen op je apparaat opgeslagen en wordt nergens anders opgeslagen of verzonden.<br></br><br></br>Wanneer u gegevens deelt met medewerkers door deel te nemen aan een project met hen, het is versleuteld verstuurd, rechtstreeks naar het apparaat van medewerkers. Dit betekent dat de gegevens niet worden verzonden via Awana Digital, noch door iemand anders, op weg naar uw medewerker.<br></br><br></br>Awana Digitaal ziet en heeft geen toegang tot de gegevens die u met CoMapeo verzamelt tenzij u deze expliciet naar ons stuurt."
   },

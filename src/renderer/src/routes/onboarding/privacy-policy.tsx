@@ -379,12 +379,12 @@ const m = defineMessages({
 		description: 'Title for data privacy section in privacy policy page.',
 	},
 	privateByDefault: {
-		id: '$1.routes.onboarding.privacy-policy.prviateByDefault',
+		id: '$1.routes.onboarding.privacy-policy.privateByDefault',
 		defaultMessage: 'Private by default',
 		description: 'Title for private by default section in privacy policy page.',
 	},
 	privateByDefaultDescription: {
-		id: '$1.routes.onboarding.privacy-policy.prviateByDefaultDescription',
+		id: '$1.routes.onboarding.privacy-policy.privateByDefaultDescription',
 		defaultMessage:
 			"The data you collect and create with CoMapeo (locations, photos, video, audio, text) is only stored on your device by default, and is not stored or sent anywhere else.<br></br><br></br>When you share data with collaborators by joining a project with them, it is sent encrypted, directly to you collaborators' device. This means that the data is not sent via Awana Digital, nor anyone else, on its way to your collaborator.<br></br><br></br>Awana Digital never sees nor has access to any of the data you collect with CoMapeo unless you explicitly send it to us.",
 		description:

@@ -1315,7 +1315,7 @@
     "description": "Details for performance data in diagnostics section in privacy policy page.",
     "message": "<b>Datos de rendimiento</b>: tales como tiempo de lanzamiento, uso de energía, congelación de aplicaciones y recepción."
   },
-  "$1.routes.onboarding.privacy-policy.prviateByDefault": {
+  "$1.routes.onboarding.privacy-policy.privateByDefault": {
     "description": "Title for private by default section in privacy policy page.",
     "message": "Privado por defecto"
   },
