@@ -617,7 +617,7 @@ test('language', async ({ appInfo, userParams }) => {
 			const portugueseOption = main.getByRole('radio', { name: 'Portuguese' })
 			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
 			await portugueseOption.click()
-			await expect(portugueseOption).toBeChecked()
+			await expect(portugueseOption).toBeChecked({ timeout: 2_000 })
 
 			await expect(
 				main
@@ -666,7 +666,7 @@ test('language', async ({ appInfo, userParams }) => {
 			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
 			await expect(systemPreferencesOption).not.toBeChecked()
 			await systemPreferencesOption.click()
-			await expect(systemPreferencesOption).toBeChecked()
+			await expect(systemPreferencesOption).toBeChecked({ timeout: 2_000 })
 
 			await main
 				.getByRole('navigation', { name: 'breadcrumb', exact: true })
