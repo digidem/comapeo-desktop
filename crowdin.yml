@@ -4,7 +4,7 @@ files:
   [
     {
       'source': '/messages/en-US/*.json',
-      'dest': '/%file_name%.json',
+      'dest': '/desktop/%file_name%.json',
       'translation': '/messages/%locale%/%original_file_name%',
     },
   ]
