@@ -6,7 +6,7 @@
   "components.generic-route-error-component.stacktrace": {
     "description": "Label for stack trace section",
     "message": "Traza de la pila"
-  },  
+  },
   "main.app.contextMenuInspectElement": {
     "description": "Context menu item label for inspecting an element",
     "message": "Inspeccionar"

@@ -7,10 +7,6 @@
     "description": "Label for stack trace section",
     "message": "Trace de pile"
   },
-  "routes.app.index.characterCount": {
-    "description": "Character count for project name input.",
-    "message": "{count}/{max}"
-  },
   "main.app.contextMenuInspectElement": {
     "description": "Context menu item label for inspecting an element",
     "message": "Inspecter"
@@ -22,6 +18,10 @@
   "main.app.contextMenuLookUpSelection": {
     "description": "Context menu item label for looking up selected text",
     "message": "Rechercher {placeholder}"
+  },
+  "routes.app.index.characterCount": {
+    "description": "Character count for project name input.",
+    "message": "{count}/{max}"
   },
   "routes.app.projects.$projectId.-data-list.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",

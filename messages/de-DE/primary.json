@@ -43,7 +43,7 @@
     "description": "Button text for try again button.",
     "message": "Erneut versuchen"
   },
-    "$1.main.app.contextMenuCopy": {
+  "$1.main.app.contextMenuCopy": {
     "description": "Context menu item label for copying text",
     "message": "Kopieren"
   },
