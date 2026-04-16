@@ -24,7 +24,17 @@ export function getLanguageInfo(languageTag: SupportedLanguageTag) {
 
 export const usableLanguages = TRANSLATED_LANGUAGE_TAGS.map((l) => {
 	v.assert(SupportedLanguageTagSchema, l)
-	return { ...getLanguageInfo(l), languageTag: l }
+
+	const [baseTag, regionTag] = l.split('-')
+
+	v.assert(SupportedLanguageTagSchema, baseTag)
+
+	return {
+		...getLanguageInfo(l),
+		languageTag: l,
+		// NOTE: Attach the language info associated with the language tag's "base" language if applicable.
+		baseLanguageInfo: regionTag ? getLanguageInfo(baseTag) : undefined,
+	}
 })
 
 export async function loadTranslations(

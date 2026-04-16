@@ -94,15 +94,31 @@ function RouteComponent() {
 									}
 								/>
 								{sortedUsableLanguages.map(
-									({ languageTag, nativeName, englishName }) => (
+									({
+										languageTag,
+										englishName,
+										nativeName,
+										baseLanguageInfo,
+									}) => (
 										<FormControlLabel
 											key={languageTag}
 											value={languageTag}
 											control={<Radio />}
 											label={
+												// NOTE: We intentionally do not show the regional variant for now.
+												// This will change in the future once we have
+												// multiple language variants that we actually support.
 												<RadioOptionLabel
-													primaryText={nativeName}
-													secondaryText={englishName}
+													primaryText={
+														baseLanguageInfo
+															? baseLanguageInfo.nativeName
+															: nativeName
+													}
+													secondaryText={
+														baseLanguageInfo
+															? baseLanguageInfo.englishName
+															: englishName
+													}
 												/>
 											}
 										/>
