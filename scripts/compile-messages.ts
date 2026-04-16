@@ -61,4 +61,4 @@ await Promise.all(
 	}),
 )
 
-console.log('✅ Compiled messages from /messages to /translations')
+console.log('✅ Compiled messages from messages/ to translations/')
