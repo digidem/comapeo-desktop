@@ -17,6 +17,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { ListRowLink } from '../-components/list-row-link.tsx'
+import type { SupportedLanguageTag } from '../../../../../shared/intl.ts'
 import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors.ts'
 import { Icon } from '../../../components/icon.tsx'
 import { useIconSizeBasedOnTypography } from '../../../hooks/icon.ts'
@@ -112,7 +113,12 @@ function SettingsList() {
 	const { data: selectedLanguageName } = useSuspenseQuery({
 		...getLocaleStateQueryOptions(),
 		select: ({ source, value }) => {
-			const match = getLanguageInfo(value)
+			const baseTag = value.split('-')[0]!
+
+			// NOTE: We intentionally do not show the regional variant for now.
+			// This will change in the future once we have
+			// multiple language variants that we actually support.
+			const match = getLanguageInfo(baseTag as SupportedLanguageTag)
 
 			if (source === 'system') {
 				return t(m.languageFromSystemPreference, { name: match.nativeName })

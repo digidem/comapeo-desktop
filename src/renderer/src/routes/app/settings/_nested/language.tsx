@@ -11,13 +11,11 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
+import { SupportedLanguageTagSchema } from '../../../../../../shared/intl.ts'
 import { DARK_GREY } from '../../../../colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
-import {
-	SupportedLanguageTagSchema,
-	usableLanguages,
-} from '../../../../lib/intl.ts'
+import { usableLanguages } from '../../../../lib/intl.ts'
 import {
 	getLocaleStateQueryOptions,
 	setLocaleMutationOptions,

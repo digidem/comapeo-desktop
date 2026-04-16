@@ -3,6 +3,7 @@ import * as v from 'valibot'
 
 import {
 	SUPPORTED_LANGUAGES,
+	SupportedLanguageTagSchema,
 	type SupportedLanguageTag,
 } from '../../../shared/intl.ts'
 import TRANSLATED_LANGUAGE_TAGS from '../generated/translated-languages.generated.json'
@@ -11,12 +12,6 @@ const translations = import.meta.glob('./*.json', {
 	base: '../../../../translations/renderer',
 	import: 'default',
 })
-
-export const SupportedLanguageTagSchema = v.union(
-	(Object.keys(SUPPORTED_LANGUAGES) as Array<SupportedLanguageTag>).map((t) =>
-		v.literal(t),
-	),
-)
 
 export function getLanguageInfo(languageTag: SupportedLanguageTag) {
 	return SUPPORTED_LANGUAGES[languageTag]
