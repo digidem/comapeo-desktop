@@ -595,8 +595,13 @@ test('language', async ({ appInfo, userParams }) => {
 			).default
 
 			for (const languageCode of translatedLanguages) {
+				// NOTE: We intentionally do not show the regional variant for now.
+				// This will change in the future once we have
+				// multiple language variants that we actually support.
+				const baseTag = languageCode.split('-')[0]!
+
 				const { nativeName, englishName } =
-					allLanguages[languageCode as keyof typeof allLanguages]!
+					allLanguages[baseTag as keyof typeof allLanguages]!
 
 				const option = main.getByRole('radio', {
 					name: `${nativeName} ${englishName}`,
