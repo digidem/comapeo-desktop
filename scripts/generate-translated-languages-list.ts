@@ -19,15 +19,15 @@ const SupportedLanguageTagSchema = v.union(
 )
 
 const PROJECT_ROOT = fileURLToPath(new URL('..', import.meta.url))
-const RENDERER_MESSAGES_DIR = join(PROJECT_ROOT, 'messages', 'renderer')
+const MESSAGES_DIR = join(PROJECT_ROOT, 'messages')
 
 const unsupportedLanguages: Array<string> = []
 const languagesMissingTranslations: Array<SupportedLanguageTag> = []
 const translatedLanguages: Array<SupportedLanguageTag> = []
 
-const directories = readdirSync(RENDERER_MESSAGES_DIR, {
-	withFileTypes: true,
-}).filter((d) => d.isDirectory())
+const directories = readdirSync(MESSAGES_DIR, { withFileTypes: true }).filter(
+	(d) => d.isDirectory(),
+)
 
 for (const d of directories) {
 	const languageCode = d.name
@@ -49,11 +49,15 @@ for (const d of directories) {
 		}),
 	)
 
-	if (
-		Object.keys(primaryMessages).length +
-			Object.keys(secondaryMessages).length ===
-		0
-	) {
+	const rendererPrimaryIds = Object.keys(primaryMessages).filter(
+		(id) => !isMainId(id),
+	)
+
+	const rendererSecondaryIds = Object.keys(secondaryMessages).filter(
+		(id) => !isMainId(id),
+	)
+
+	if (rendererPrimaryIds.length + rendererSecondaryIds.length === 0) {
 		languagesMissingTranslations.push(languageCode)
 		continue
 	}
@@ -85,3 +89,7 @@ const OUTPUT_FILE = join(
 fs.writeFileSync(OUTPUT_FILE, JSON.stringify(translatedLanguages))
 
 console.log(`✅ Generated file at ${relative(PROJECT_ROOT, OUTPUT_FILE)}`)
+
+function isMainId(id: string) {
+	return id.startsWith('$1.main.') || id.startsWith('main.')
+}

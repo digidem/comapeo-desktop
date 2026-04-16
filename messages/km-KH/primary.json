@@ -1,0 +1,170 @@
+{
+  "$1.components.discard-edits-dialog.cancelButton": {
+    "description": "Text for button to cancel action.",
+    "message": "បោះបង់"
+  },
+  "$1.components.generic-route-error-component.error": {
+    "description": "Label for error section",
+    "message": "កំហុសឆ្គង"
+  },
+  "$1.components.generic-route-error-component.restart": {
+    "description": "Text for button to restart app.",
+    "message": "ចាប់ផ្ដើមឡើងវិញ"
+  },
+  "$1.main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "ចម្លង"
+  },
+  "$1.main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "កាត់"
+  },
+  "$1.main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "ផាស"
+  },
+  "$1.routes.app.index.appUsageConsentSuccessCloseButton": {
+    "description": "Text for button to close app usage consent dialog.",
+    "message": "រួចរាល់"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "ការសង្កេត"
+  },
+  "$1.routes.app.projects.$projectId.-map-panel.zoomToData": {
+    "description": "Text displayed when hovering over map control for zooming to data.",
+    "message": "ពង្រីកទៅកាន់ទិន្នន័យ"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "លុប"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "បោះបង់"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
+    "description": "Label text for download button",
+    "message": "ទាញយក"
+  },
+  "$1.routes.app.projects.$projectId.download.download": {
+    "description": "Title of the download page.",
+    "message": "ទាញយក"
+  },
+  "$1.routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "រួចរាល់"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "ការសង្កេត"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "បោះបង់"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "រក្សាទុក"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "គ្មាន​ចម្លើយ"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "បោះបង់"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "រក្សាទុក"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "ផ្លាស់ប្តូរ"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
+    "description": "Text for delete observation button.",
+    "message": "លុប"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "បោះបង់"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
+    "description": "Title for details section.",
+    "message": "ព័ត៌មានលម្អិត"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
+    "description": "Title of the observation details page.",
+    "message": "ការសង្កេត"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "ការសង្កេត"
+  },
+  "$1.routes.app.projects.$projectId.settings.index.categoriesActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "ធ្វើបច្ចុប្បន្នភាព"
+  },
+  "$1.routes.app.projects.$projectId.settings.index.projectInfoActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "កែរ"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.cancel": {
+    "description": "Label for cancel button.",
+    "message": "បោះបង់"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.save": {
+    "description": "Label for save button.",
+    "message": "រក្សាទុក"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.cancelButton": {
+    "description": "Button text to cancel leaving project.",
+    "message": "បោះបង់"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.continueButton": {
+    "description": "Button text to continue to next step in leave project flow.",
+    "message": "បន្ត"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.-shared.disconnected-indicator.disconnected": {
+    "description": "Text displayed when external device is disconnected.",
+    "message": "បាន​ផ្ដាច់"
+  },
+  "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.descriptionSectionTitle": {
+    "description": "Title for description section.",
+    "message": "សេចក្ដីពិពណ៌នា"
+  },
+  "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "ការសង្កេត"
+  },
+  "$1.routes.app.route.appSettingsTabLabel": {
+    "description": "Label for app settings tab link in navigation.",
+    "message": "ការកំណត់"
+  },
+  "$1.routes.app.route.homeTabTitle": {
+    "description": "Label for home tab link in navigation.",
+    "message": "ទំព័រ​ដើម"
+  },
+  "$1.routes.app.settings.device-name.cancel": {
+    "description": "Label for cancel button.",
+    "message": "បោះបង់"
+  },
+  "$1.routes.app.settings.device-name.save": {
+    "description": "Label for save button.",
+    "message": "រក្សាទុក"
+  },
+  "$1.routes.app.settings.index.editDeviceName": {
+    "description": "Button text for navigating to page to edit device name.",
+    "message": "កែរ"
+  },
+  "$1.routes.app.settings.language.title": {
+    "description": "Title of the language settings page.",
+    "message": "ភាសា"
+  },
+  "$1.routes.onboarding.data-and-privacy.next": {
+    "description": "Text for link to next step in onboarding.",
+    "message": "បន្ទាប់"
+  }
+}

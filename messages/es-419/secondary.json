@@ -1,0 +1,210 @@
+{
+  "components.error-dialog.advanced": {
+    "description": "Title text for the collapsible section that shows the actual error message.",
+    "message": "Avanzado"
+  },
+  "components.generic-route-error-component.stacktrace": {
+    "description": "Label for stack trace section",
+    "message": "Traza de la pila"
+  },  
+  "main.app.contextMenuInspectElement": {
+    "description": "Context menu item label for inspecting an element",
+    "message": "Inspeccionar"
+  },
+  "main.app.contextMenuLearnSpelling": {
+    "description": "Context menu item label for learning the spelling of the selected text",
+    "message": "Aprende a escribir {placeholder}"
+  },
+  "main.app.contextMenuLookUpSelection": {
+    "description": "Context menu item label for looking up selected text",
+    "message": "Buscar {placeholder}"
+  },
+  "routes.app.index.characterCount": {
+    "description": "Character count for project name input.",
+    "message": "{count}/{max}"
+  },
+  "routes.app.projects.$projectId.-data-list.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Icono para la categoría {name}"
+  },
+  "routes.app.projects.$projectId.-map-panel.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Icono para la categoría {name}"
+  },
+  "routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
+    "description": "Accessible label of download options form input.",
+    "message": "Datos a descargar"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Icono para la categoría {name}"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
+    "description": "Accessible label for button to close panel.",
+    "message": "Cerrar."
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.accessibleNotesInputLabel": {
+    "description": "Accessible label for notes input field.",
+    "message": "Notas"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Icono para la categoría {name}"
+  },
+  "routes.app.projects.$projectId.route.appNavigationAccesibleLabel": {
+    "description": "Accessible label for app-wide navigation bar.",
+    "message": "Navegación"
+  },
+  "routes.app.projects.$projectId.route.projectNavigationAccessibleLabel": {
+    "description": "Accessible label for project-specific navigation bar.",
+    "message": "Navegación del proyecto"
+  },
+  "routes.app.projects.$projectId.route.testDataTabLabel": {
+    "description": "Label for project test data tab link in navigation.",
+    "message": "Probar datos"
+  },
+  "routes.app.projects.$projectId.settings.categories.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Regresar."
+  },
+  "routes.app.projects.$projectId.settings.index.categoriesLinkAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to project info settings page.",
+    "message": "Ir a la configuración de categorías."
+  },
+  "routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to project info settings page.",
+    "message": "Ir a la configuración de información del proyecto."
+  },
+  "routes.app.projects.$projectId.settings.info.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Regresar."
+  },
+  "routes.app.projects.$projectId.team.$deviceId.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Regresar."
+  },
+  "routes.app.projects.$projectId.team.index.memberLinkAccessibleLabel": {
+    "description": "Accessible label for link that navigates to member details.",
+    "message": "Ver miembro {name}."
+  },
+  "routes.app.projects.$projectId.team.invite.devices.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button",
+    "message": "Regresar."
+  },
+  "routes.app.projects.$projectId.team.invite.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Regresar."
+  },
+  "routes.app.projects.$projectId.tracks.$trackDocId.index.categoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Icono para la categoría {name}"
+  },
+  "routes.app.route.accessibleLabelGoTo": {
+    "description": "Accessible label for button that navigates to project when clicked.",
+    "message": "Ir al proyecto {name}."
+  },
+  "routes.app.route.accessibleLabelShowProjectInfo": {
+    "description": "Accessible label for button that shows project info when clicked.",
+    "message": "Mostrar información para el proyecto {name}."
+  },
+  "routes.app.route.projectCardLinkAccessibleLabel": {
+    "description": "Accessible label for link that navigates to project when clicked.",
+    "message": "Ir al proyecto {name}."
+  },
+  "routes.app.settings.breadCrumbAccessibleLabel": {
+    "description": "Accessible label for breadcrumb navigation when viewing nested settings page.",
+    "message": "migas de pan"
+  },
+  "routes.app.settings.device-name.characterCount": {
+    "description": "Displays number of characters in input out of the maximum allowed characters.",
+    "message": "{count}/{max}"
+  },
+  "routes.app.settings.goBackAccessibleLabel": {
+    "description": "Accessible label for back button",
+    "message": "Regresar."
+  },
+  "routes.app.settings.index.backgroundMapSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to background map settings page.",
+    "message": "Ir a la configuración del mapa de fondo."
+  },
+  "routes.app.settings.index.coordinateSystemSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to coordinate system settings page.",
+    "message": "Ir a la configuración del sistema de coordenadas."
+  },
+  "routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to device name settings page.",
+    "message": "Ir a la configuración del nombre del dispositivo."
+  },
+  "routes.app.settings.index.languageSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to language settings page.",
+    "message": "Ir a la configuración de idioma."
+  },
+  "routes.app.settings_.test-data.boundedDistanceLabel": {
+    "description": "Label for the bounded distance input.",
+    "message": "Distancia máxima límite (kilómetros)"
+  },
+  "routes.app.settings_.test-data.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Cancelar"
+  },
+  "routes.app.settings_.test-data.coordinatesSelectionHint": {
+    "description": "Instructions displayed for coordinates selection inputs.",
+    "message": "Establezca las coordenadas haciendo clic en el mapa o arrastrando el marcador de ubicación."
+  },
+  "routes.app.settings_.test-data.create": {
+    "description": "Label for create button.",
+    "message": "Crear proyecto"
+  },
+  "routes.app.settings_.test-data.createTrack": {
+    "description": "Label for toggle to create track when creating test data.",
+    "message": "Crear pista"
+  },
+  "routes.app.settings_.test-data.invalidBoundedDistanceFormat": {
+    "description": "Error message for when bounded distance is not an decimal.",
+    "message": "Debe ser un decimal"
+  },
+  "routes.app.settings_.test-data.invalidObservationCountFormat": {
+    "description": "Error message for when observation count is not an integer.",
+    "message": "Debe ser un entero"
+  },
+  "routes.app.settings_.test-data.maxObservationCountError": {
+    "description": "Error message for when observation count is too large",
+    "message": "No puede ser mayor que {value}"
+  },
+  "routes.app.settings_.test-data.minBoundedDistanceError": {
+    "description": "Error message for when bounded distance is too small",
+    "message": "Debe ser mayor que {value} kilómetros"
+  },
+  "routes.app.settings_.test-data.minObservationCountError": {
+    "description": "Error message for when observation count is too small",
+    "message": "Debe ser mayor que {value}"
+  },
+  "routes.app.settings_.test-data.navTitle": {
+    "description": "Title of test data page.",
+    "message": "Crear datos de prueba"
+  },
+  "routes.app.settings_.test-data.observationCountHelperText": {
+    "description": "Helper text for observation count input.",
+    "message": "Entre {min} y {max}"
+  },
+  "routes.app.settings_.test-data.observationCountLabel": {
+    "description": "Label for the observation count input.",
+    "message": "Número de observaciones"
+  },
+  "routes.app.settings_.test-data.observationCreateSuccess": {
+    "description": "Message displayed when observation creation succeeds.",
+    "message": "¡Creado {count, plural, one {# observación} other {# observaciones}}."
+  },
+  "routes.app.settings_.test-data.requiredError": {
+    "description": "Error message for when required input is empty.",
+    "message": "Requerido"
+  },
+  "routes.app.settings_.test-data.trackCreateSuccess": {
+    "description": "Message displayed when track creation succeeds.",
+    "message": "¡Creado {count, plural, one {# pista} other {# pistas}}."
+  },
+  "routes.onboarding.device-name.characterCount": {
+    "description": "Displayed character count of device name input out of maximum allowed characters.",
+    "message": "{count}/{max}"
+  }
+}

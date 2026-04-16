@@ -1,31 +1,20 @@
 import { mkdirSync } from 'node:fs'
 import { glob, writeFile } from 'node:fs/promises'
-import { join, relative } from 'node:path'
+import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { parseArgs } from 'node:util'
 import { extract } from '@formatjs/cli-lib'
 
-const { values } = parseArgs({
-	strict: true,
-	options: { type: { type: 'string' } },
-})
-
-if (values.type !== 'main' && values.type !== 'renderer') {
-	throw new Error('type must be either main or renderer')
-}
-
 const PROJECT_ROOT_DIR = fileURLToPath(new URL('..', import.meta.url))
-const MESSAGES_DIR = fileURLToPath(
-	new URL(`../messages/${values.type}`, import.meta.url),
-)
+const MESSAGES_DIR = join(PROJECT_ROOT_DIR, 'messages')
+
 const DEFAULT_LANGUAGE_TAG = 'en-US' as const
 const OUTPUT_DIR = join(MESSAGES_DIR, DEFAULT_LANGUAGE_TAG)
 
 const sourceFiles = (
 	await Array.fromAsync(
-		glob(`src/${values.type}/**/*.{js,jsx,ts,tsx}`, {
+		glob(`src/**/*.{js,jsx,ts,tsx}`, {
 			cwd: PROJECT_ROOT_DIR,
-			exclude: [`src/${values.type}/**/*.d.ts`],
+			exclude: [`src/**/*.d.ts`],
 			withFileTypes: true,
 		}),
 	)
@@ -34,11 +23,7 @@ const sourceFiles = (
 	.map((d) => join(d.parentPath, d.name))
 
 const extracted: Record<string, unknown> = JSON.parse(
-	await extract(sourceFiles, {
-		ast: true,
-		format: 'crowdin',
-		throws: true,
-	}),
+	await extract(sourceFiles, { ast: true, format: 'crowdin', throws: true }),
 )
 
 const primary = {} as Record<string, unknown>
@@ -67,6 +52,4 @@ await Promise.all([
 	),
 ])
 
-console.log(
-	`✅ Extracted messages from ${join('src', values.type)} to ${relative(PROJECT_ROOT_DIR, OUTPUT_DIR)}`,
-)
+console.log('✅ Extracted messages from src/ to messages/')
