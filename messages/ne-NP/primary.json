@@ -1,0 +1,134 @@
+{
+  "$1.components.discard-edits-dialog.cancelButton": {
+    "description": "Text for button to cancel action.",
+    "message": "रद्द"
+  },
+  "$1.components.generic-route-error-component.error": {
+    "description": "Label for error section",
+    "message": "समस्या"
+  },
+  "$1.routes.app.index.appUsageConsentSuccessCloseButton": {
+    "description": "Text for button to close app usage consent dialog.",
+    "message": "भयाे"
+  },
+  "$1.routes.app.index.appUsageConsentSuccessTitle": {
+    "description": "Title text for success state of app usage consent dialog.",
+    "message": "सफल!"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "अवलाेकन"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "मेटाउने"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "रद्द"
+  },
+  "$1.routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "भयाे"
+  },
+  "$1.routes.app.projects.$projectId.download.successPanelTitle": {
+    "description": "Title text for success panel.",
+    "message": "सफल!"
+  },
+  "$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelInviteLink": {
+    "description": "Text for link that navigates to invite page.",
+    "message": "उपकरणलाई निमन्त्रणा"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "अवलाेकन"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "रद्द"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "संग्रह"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "उत्तर छैन"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "रद्द"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "संग्रह"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "परिवर्तन"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
+    "description": "Text for delete observation button.",
+    "message": "मेटाउने"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "रद्द"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
+    "description": "Title for details section.",
+    "message": "विवरणहरू"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
+    "description": "Title of the observation details page.",
+    "message": "अवलाेकन"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "अवलाेकन"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.cancel": {
+    "description": "Label for cancel button.",
+    "message": "रद्द"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.save": {
+    "description": "Label for save button.",
+    "message": "संग्रह"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.cancelButton": {
+    "description": "Button text to cancel leaving project.",
+    "message": "रद्द"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.continueButton": {
+    "description": "Button text to continue to next step in leave project flow.",
+    "message": "जारी राख्ने"
+  },
+  "$1.routes.app.projects.$projectId.team.index.inviteDevice": {
+    "description": "Text for button that initiates steps for inviting device to project.",
+    "message": "उपकरणलाई निमन्त्रणा"
+  },
+  "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "अवलाेकन"
+  },
+  "$1.routes.app.route.appSettingsTabLabel": {
+    "description": "Label for app settings tab link in navigation.",
+    "message": "सेटिङ"
+  },
+  "$1.routes.app.settings.device-name.cancel": {
+    "description": "Label for cancel button.",
+    "message": "रद्द"
+  },
+  "$1.routes.app.settings.device-name.save": {
+    "description": "Label for save button.",
+    "message": "संग्रह"
+  },
+  "$1.routes.app.settings.language.title": {
+    "description": "Title of the language settings page.",
+    "message": "भाषा"
+  },
+  "$1.routes.onboarding.data-and-privacy.next": {
+    "description": "Text for link to next step in onboarding.",
+    "message": "अर्काे"
+  }
+}

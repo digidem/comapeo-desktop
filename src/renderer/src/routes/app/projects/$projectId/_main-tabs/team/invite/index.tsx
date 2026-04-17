@@ -186,37 +186,37 @@ function RouteComponent() {
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId.team.invite.index.navTitle',
+		id: '$1.routes.app.projects.$projectId.team.invite.index.navTitle',
 		defaultMessage: 'Get Started',
 		description: 'Title of the Invite Get Started page.',
 	},
 	inviteCollaborators: {
-		id: 'routes.app.projects.$projectId.team.invite.index.inviteCollaborators',
+		id: '$1.routes.app.projects.$projectId.team.invite.index.inviteCollaborators',
 		defaultMessage: 'Invite Collaborators',
 		description: 'Title of the Invite Get Started page.',
 	},
 	primaryDescription: {
-		id: 'routes.app.projects.$projectId.team.invite.index.primaryDescription',
+		id: '$1.routes.app.projects.$projectId.team.invite.index.primaryDescription',
 		defaultMessage: 'Invite devices using CoMapeo to start collaborating.',
 		description: 'Primary description text.',
 	},
 	onlyInvitedDevices: {
-		id: 'routes.app.projects.$projectId.team.invite.index.onlyInvitedDevices',
+		id: '$1.routes.app.projects.$projectId.team.invite.index.onlyInvitedDevices',
 		defaultMessage: 'Only invited devices contribute.',
 		description: 'Detail about who contributes.',
 	},
 	shareUsingExchange: {
-		id: 'routes.app.projects.$projectId.team.invite.index.shareUsingExchange',
+		id: '$1.routes.app.projects.$projectId.team.invite.index.shareUsingExchange',
 		defaultMessage: 'Collaborators share securely using Exchange.',
 		description: 'Detail about how collaborators share data.',
 	},
 	controlSharing: {
-		id: 'routes.app.projects.$projectId.team.invite.index.controlSharing',
+		id: '$1.routes.app.projects.$projectId.team.invite.index.controlSharing',
 		defaultMessage: 'Control sharing in Project Settings.',
 		description: 'Detail about how to control data sharing.',
 	},
 	selectDevice: {
-		id: 'routes.app.projects.$projectId.team.invite.index.selectDevice',
+		id: '$1.routes.app.projects.$projectId.team.invite.index.selectDevice',
 		defaultMessage: 'Select a Device',
 		description: 'Text for button to navigate to device selection.',
 	},

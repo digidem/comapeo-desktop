@@ -154,22 +154,22 @@ const EXAMPLE_UTM = formatCoords({ lon: 0, lat: 0, format: 'utm' })
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.settings.coordinate-system.title',
+		id: '$1.routes.app.settings.coordinate-system.title',
 		defaultMessage: 'Coordinate System',
 		description: 'Title of the coordinate system settings page.',
 	},
 	ddOptionLabel: {
-		id: 'routes.app.settings.coordinate-system.ddOptionLabel',
+		id: '$1.routes.app.settings.coordinate-system.ddOptionLabel',
 		defaultMessage: 'DD (Decimal Degrees)',
 		description: 'Label for the decimal degrees option.',
 	},
 	dmsOptionLabel: {
-		id: 'routes.app.settings.coordinate-system.dmsOptionLabel',
+		id: '$1.routes.app.settings.coordinate-system.dmsOptionLabel',
 		defaultMessage: 'DMS (Decimal/Minutes/Seconds)',
 		description: 'Label for the degrees/minutes/seconds option.',
 	},
 	utmOptionLabel: {
-		id: 'routes.app.settings.coordinate-system.utmOptionLabel',
+		id: '$1.routes.app.settings.coordinate-system.utmOptionLabel',
 		defaultMessage: 'UTM (Universal Transverse Mercator)',
 		description: 'Label for the universal transverse mercator option.',
 	},

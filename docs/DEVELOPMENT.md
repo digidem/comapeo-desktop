@@ -112,19 +112,23 @@ When the tests finish, you can view a HTML report of the results using `npx play
 
 ## Translations
 
-The `messages/` directory contains the translation strings used by the app. Within this directory are directories for the main process (`messages/main/`) and renderer process (`messages/renderer/`). Messages found in `messages/main/` are typically needed for translating text that lives in native UI (e.g. the menu bar), whereas messages in `messages/renderer/` are needed for translating text that's used in the rendered web app.
+The `messages/` directory contains the translation strings used by the app. Within this directory are directories for each language that is supported. Each language directory contains two files: `primary.json` and `secondary.json`. These are used to distinguish strings based on priority for translators in Crowdin. When defining messages in the app, primary strings must have an ID that starts with `$1.` e.g. `$1.some.id`. Additionally, messages that are defined in main process code must start with `$1.main.` for primary or `main.` for secondary.
 
-In order to update translations, run `node --run intl`, which will extract messages and place them in the relevant `messages/` directory and then compile those messages into translated strings and place them in the `translations/` directory. For the renderer process specifically, it also generates a JSON file called [`translated-languages-list.json`](../src/renderer/src/generated/translated-languages.generated.json), which is used to by the app to know which languages are displayable without having to do that calculation it at runtime.
+In order to extract and compile translations for app use, run `node --run intl`. This will:
+
+1. Extract messages defined in app code and place them in the relevant `messages/` directory.
+2. Compile messages in the `messages/` directory into a format that can be consumed by the app and place them in the `translations/` directory. The `translations/` directory separates between main and renderer i.e. `translations/main/...` and `translations/renderer/...`. This is mostly an optimization for the app.
+3. Generates a JSON file called [`translated-languages-list.json`](../src/renderer/src/generated/translated-languages.generated.json), which is used by the renderer process to know which languages are displayable without having to do that calculation at runtime.
 
 ### Translations workflow
 
 - For the main process:
   1. Use `defineMessages` from `@formatjs/intl` to create messages and use in the main process code.
-  2. Run `node --run intl:main` (or `node --run intl`).
+  2. Run `node --run intl`.
 
 - For the renderer process:
   1. Use `defineMessages` from `react-intl` to create messages and use in the renderer process code.
-  2. Run `node --run intl:renderer` (or `node --run intl`).
+  2. Run `node --run intl`.
 
 ## Building the app
 

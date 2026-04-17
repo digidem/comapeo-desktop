@@ -8,6 +8,7 @@ import { describe, expect, test, vi, type TestContext } from 'vitest'
 import type { AppUsageMetrics } from '../shared/metrics.ts'
 import { daysToMilliseconds } from '../shared/time.ts'
 import {
+	BASE_LANGUAGE_TO_REGIONAL_VARIANT,
 	CurrentStoreStateSchema,
 	PersistedStorageV2Schema,
 	StoreStateV1Schema,
@@ -240,6 +241,75 @@ describe('app usage metrics reset behavior', () => {
 			'storage is updated with reset value',
 		).toStrictEqual(expectedAppUsageMetrics)
 	})
+})
+
+describe('locale migration', () => {
+	test('does not occur when using system preferences', async (t) => {
+		const { filePath } = await setup(t)
+
+		const initialStorage: PersistedStorageV2 = {
+			version: 2,
+			state: {
+				...v.getDefaults(CurrentStoreStateSchema),
+				locale: { useSystemPreferences: true, languageTag: null },
+			},
+		}
+
+		writeFileSync(filePath, JSON.stringify(initialStorage), 'utf-8')
+
+		const store = createPersistedStore({ filePath })
+
+		expect(store.getState().locale).toStrictEqual({
+			useSystemPreferences: true,
+			languageTag: null,
+		})
+	})
+
+	test('does not occur for non-applicable language', async (t) => {
+		const { filePath } = await setup(t)
+
+		const initialStorage: PersistedStorageV2 = {
+			version: 2,
+			state: {
+				...v.getDefaults(CurrentStoreStateSchema),
+				locale: { useSystemPreferences: false, languageTag: 'way' },
+			},
+		}
+
+		writeFileSync(filePath, JSON.stringify(initialStorage), 'utf-8')
+
+		const store = createPersistedStore({ filePath })
+
+		expect(store.getState().locale).toStrictEqual({
+			useSystemPreferences: false,
+			languageTag: 'way',
+		})
+	})
+
+	for (const [baseLanguageTag, expectedRegionalVariant] of Object.entries(
+		BASE_LANGUAGE_TO_REGIONAL_VARIANT,
+	)) {
+		test(`${baseLanguageTag} to ${expectedRegionalVariant}`, async (t) => {
+			const { filePath } = await setup(t)
+
+			const initialStorage: PersistedStorageV2 = {
+				version: 2,
+				state: {
+					...v.getDefaults(CurrentStoreStateSchema),
+					locale: { useSystemPreferences: false, languageTag: baseLanguageTag },
+				},
+			}
+
+			writeFileSync(filePath, JSON.stringify(initialStorage), 'utf-8')
+
+			const store = createPersistedStore({ filePath })
+
+			expect(store.getState().locale).toStrictEqual({
+				useSystemPreferences: false,
+				languageTag: expectedRegionalVariant,
+			})
+		})
+	}
 })
 
 async function setup(t: TestContext) {

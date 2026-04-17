@@ -141,39 +141,39 @@ function RouteComponent() {
 
 const m = defineMessages({
 	getStarted: {
-		id: 'routes.welcome.getStarted',
+		id: '$1.routes.welcome.getStarted',
 		defaultMessage: 'Get Started',
 		description: 'Text for link to navigate to next step.',
 	},
 	appDescription: {
-		id: 'routes.welcome.appDescription',
+		id: '$1.routes.welcome.appDescription',
 		defaultMessage:
 			'View and manage observations collected with CoMapeo Mobile.',
 		description: 'Description of app in welcome page.',
 	},
 	mapAnywhere: {
-		id: 'routes.welcome.mapAnywhere',
+		id: '$1.routes.welcome.mapAnywhere',
 		defaultMessage: 'Map anywhere and everywhere',
 		description: 'Detail about mapping in welcome page.',
 	},
 	collaborate: {
-		id: 'routes.welcome.collaborate',
+		id: '$1.routes.welcome.collaborate',
 		defaultMessage: 'Collaborate on projects',
 		description: 'Detail about collaborating in welcome page.',
 	},
 	ownData: {
-		id: 'routes.welcome.ownData',
+		id: '$1.routes.welcome.ownData',
 		defaultMessage: 'Own and control your data',
 		description: 'Detail about owning data in welcome page.',
 	},
 	designedFor: {
-		id: 'routes.welcome.designedFor',
+		id: '$1.routes.welcome.designedFor',
 		defaultMessage:
 			'Designed with and for Indigenous peoples & frontline communities',
 		description: 'Detail about who app is designed for in welcome page.',
 	},
 	comapeoDesktop: {
-		id: 'routes.welcome.comapeoDesktop',
+		id: '$1.routes.welcome.comapeoDesktop',
 		defaultMessage: '<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>',
 		description: 'Name of app displayed in welcome page.',
 	},

@@ -475,67 +475,67 @@ function getDisplayableMembers(members: Array<MemberApi.MemberInfo>) {
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId.team.index.navTitle',
+		id: '$1.routes.app.projects.$projectId.team.index.navTitle',
 		defaultMessage: 'Team',
 		description: 'Title of the team page.',
 	},
 	inviteDevice: {
-		id: 'routes.app.projects.$projectId.team.index.inviteDevice',
+		id: '$1.routes.app.projects.$projectId.team.index.inviteDevice',
 		defaultMessage: 'Invite Device',
 		description:
 			'Text for button that initiates steps for inviting device to project.',
 	},
 	coordinatorsSectionTitle: {
-		id: 'routes.app.projects.$projectId.team.index.coordinatorsSectionTitle',
+		id: '$1.routes.app.projects.$projectId.team.index.coordinatorsSectionTitle',
 		defaultMessage: 'Coordinators',
 		description: 'Title of the coordinators section in the team page.',
 	},
 	coordinatorsSectionDescription: {
-		id: 'routes.app.projects.$projectId.team.index.coordinatorsSectionDescription',
+		id: '$1.routes.app.projects.$projectId.team.index.coordinatorsSectionDescription',
 		defaultMessage:
 			'Coordinators can invite devices, edit and delete data, and manage project details.',
 		description: 'Description of the coordinators section in the team page.',
 	},
 	participantsSectionTitle: {
-		id: 'routes.app.projects.$projectId.team.index.participantsSectionTitle',
+		id: '$1.routes.app.projects.$projectId.team.index.participantsSectionTitle',
 		defaultMessage: 'Participants',
 		description: 'Title of the participants section in the team page.',
 	},
 	participantsSectionDescription: {
-		id: 'routes.app.projects.$projectId.team.index.participantsSectionDescription',
+		id: '$1.routes.app.projects.$projectId.team.index.participantsSectionDescription',
 		defaultMessage:
 			'Participants can take and share observations. They cannot manage users or project details.',
 		description: 'Description of the participants section in the team page.',
 	},
 	noParticipants: {
-		id: 'routes.app.projects.$projectId.team.index.noParticipants',
+		id: '$1.routes.app.projects.$projectId.team.index.noParticipants',
 		defaultMessage: 'No Participants have been added to this project.',
 		description:
 			'Text indicating that no participants are part of the project yet.',
 	},
 	remoteArchivesSectionTitle: {
-		id: 'routes.app.projects.$projectId.team.index.remoteArchivesSectionTitle',
+		id: '$1.routes.app.projects.$projectId.team.index.remoteArchivesSectionTitle',
 		defaultMessage: 'Remote Archives',
 		description: 'Title of the remote archives section in the team page.',
 	},
 	remoteArchivesSectionDescription: {
-		id: 'routes.app.projects.$projectId.team.index.remoteArchivesSectionDescription',
+		id: '$1.routes.app.projects.$projectId.team.index.remoteArchivesSectionDescription',
 		defaultMessage: 'This project is sharing with secure, encrypted servers.',
 		description: 'Description of the remote archives section in the team page.',
 	},
 	pastCollaboratorsSectionTitle: {
-		id: 'routes.app.projects.$projectId.team.index.pastCollaboratorsSectionTitle',
+		id: '$1.routes.app.projects.$projectId.team.index.pastCollaboratorsSectionTitle',
 		defaultMessage: 'Past Collaborators',
 		description: 'Title of the past collaborators section in the team page.',
 	},
 	pastCollaboratorsSectionDescription: {
-		id: 'routes.app.projects.$projectId.team.index.pastCollaboratorsSectionDescription',
+		id: '$1.routes.app.projects.$projectId.team.index.pastCollaboratorsSectionDescription',
 		defaultMessage: 'Devices no longer contributing to this project.',
 		description:
 			'Description of the past collaborators section in the team page.',
 	},
 	thisDevice: {
-		id: 'routes.app.projects.$projectId.team.index.thisDevice',
+		id: '$1.routes.app.projects.$projectId.team.index.thisDevice',
 		defaultMessage: 'This device',
 		description:
 			'Text indicating that the listed device refers to the one currently being used.',

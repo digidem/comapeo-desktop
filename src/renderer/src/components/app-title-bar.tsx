@@ -37,7 +37,7 @@ export function AppTitleBar({
 
 const m = defineMessages({
 	appName: {
-		id: 'components.app-title-bar.appName',
+		id: '$1.components.app-title-bar.appName',
 		defaultMessage: '<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>',
 		description: 'Name of the app displayed in the title bar.',
 	},

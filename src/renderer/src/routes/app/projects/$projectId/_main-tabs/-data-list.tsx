@@ -635,12 +635,12 @@ function TrackCategory({
 
 const m = defineMessages({
 	observationCategoryNameFallback: {
-		id: 'routes.app.projects.$projectId.-data-list.observationCategoryNameFallback',
+		id: '$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback',
 		defaultMessage: 'Observation',
 		description: 'Fallback name for observation without a matching category.',
 	},
 	trackItemTitle: {
-		id: 'routes.app.projects.$projectId.-data-list.trackItemTitle',
+		id: '$1.routes.app.projects.$projectId.-data-list.trackItemTitle',
 		defaultMessage: 'Track',
 		description: 'Title for list item that is a track.',
 	},
@@ -651,7 +651,7 @@ const m = defineMessages({
 			'Alt text for icon image displayed for category (used for accessibility tools).',
 	},
 	downloadObservations: {
-		id: 'routes.app.projects.$projectId.-data-list.downloadObservations',
+		id: '$1.routes.app.projects.$projectId.-data-list.downloadObservations',
 		defaultMessage: 'Download Observations',
 		description: 'Link text to navigate to download observations page.',
 	},

@@ -715,50 +715,50 @@ function ProjectCardContentListVariant({
 
 const m = defineMessages({
 	postOnboardingPageTitle: {
-		id: 'routes.app.index.postOnboardingPageTitle',
+		id: '$1.routes.app.index.postOnboardingPageTitle',
 		defaultMessage: '{name} is ready!',
 		description: 'Title of home page after completing onboarding.',
 	},
 	pageTitle: {
-		id: 'routes.app.index.pageTitle',
+		id: '$1.routes.app.index.pageTitle',
 		defaultMessage: "{name}'s Projects",
 		description: 'Title of home page.',
 	},
 	joinProjectCardTitle: {
-		id: 'routes.app.index.joinProjectCardTitle',
+		id: '$1.routes.app.index.joinProjectCardTitle',
 		defaultMessage: 'Join a Project',
 		description: 'Title card for joining a project.',
 	},
 	startProjectCardTitle: {
-		id: 'routes.app.index.startProjectCardTitle',
+		id: '$1.routes.app.index.startProjectCardTitle',
 		defaultMessage: 'Start New Project',
 		description: 'Title card for starting a new project.',
 	},
 	additionalProjectsSectionTitle: {
-		id: 'routes.app.index.additionalProjectsSecitionTitle',
+		id: '$1.routes.app.index.additionalProjectsSecitionTitle',
 		defaultMessage: 'Additional Projects',
 		description: 'Title text for the additional projects section.',
 	},
 	additionalProjectsSectionDescription: {
-		id: 'routes.app.index.additionalProjectsSectionDescription',
+		id: '$1.routes.app.index.additionalProjectsSectionDescription',
 		defaultMessage: 'Ordered by most recently created',
 		description:
 			'Text describing sorting order of the additional projects section.',
 	},
 	additionalProjectsSectionShowAsGrid: {
-		id: 'routes.app.index.additionalProjectsSectionShowAsGrid',
+		id: '$1.routes.app.index.additionalProjectsSectionShowAsGrid',
 		defaultMessage: 'Show as grid',
 		description:
 			'Tooltip text for button to display additional projects section as a grid.',
 	},
 	additionalProjectsSectionShowAsList: {
-		id: 'routes.app.index.additionalProjectsSectionShowAsList',
+		id: '$1.routes.app.index.additionalProjectsSectionShowAsList',
 		defaultMessage: 'Show as list',
 		description:
 			'Tooltip text for button to display additional projects section as a list.',
 	},
 	unnamedProject: {
-		id: 'routes.app.index.unnamedProject',
+		id: '$1.routes.app.index.unnamedProject',
 		defaultMessage: 'Unnamed Project',
 		description: 'Fallback for when project is missing a name.',
 	},
@@ -769,12 +769,12 @@ const m = defineMessages({
 			'Accessible label for link that navigates to project when clicked.',
 	},
 	projectCardRoleCoordinator: {
-		id: 'routes.app.index.projectCardRoleCoordinator',
+		id: '$1.routes.app.index.projectCardRoleCoordinator',
 		defaultMessage: 'Coordinator',
 		description: 'Displayed name of coordinator role on project card.',
 	},
 	projectCardRoleParticipant: {
-		id: 'routes.app.index.projectCardRoleParticipant',
+		id: '$1.routes.app.index.projectCardRoleParticipant',
 		defaultMessage: 'Participant',
 		description: 'Displayed name of participant role on project card.',
 	},

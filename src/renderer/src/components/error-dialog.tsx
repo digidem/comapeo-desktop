@@ -131,12 +131,12 @@ const m = defineMessages({
 			'Title text for the collapsible section that shows the actual error message.',
 	},
 	close: {
-		id: 'components.error-dialog.close',
+		id: '$1.components.error-dialog.close',
 		defaultMessage: 'Close',
 		description: 'Button text for the close button in the error dialog.',
 	},
 	somethingWentWrong: {
-		id: 'components.error-dialog.somethingWentWrong',
+		id: '$1.components.error-dialog.somethingWentWrong',
 		defaultMessage: 'Something Went Wrong',
 		description: 'Generic title text for the error dialog.',
 	},

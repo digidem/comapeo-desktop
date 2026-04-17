@@ -618,108 +618,108 @@ function LeaveProjectConfirmation({
 
 const m = defineMessages({
 	collaboratorNavTitle: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.collaboratorNavTitle',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.collaboratorNavTitle',
 		defaultMessage: 'Collaborator Info',
 		description: 'Title of the team collaborator info page.',
 	},
 	leaveProjectNavTitle: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectNavTitle',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.leaveProjectNavTitle',
 		defaultMessage: 'Leave Project',
 		description:
 			'Title of the team collaborator info page when the leave project flow is initiated.',
 	},
 	thisDevice: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.thisDevice',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.thisDevice',
 		defaultMessage: 'This Device',
 		description: 'Text indicating that user is viewing itself.',
 	},
 	coordinator: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.coordinator',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.coordinator',
 		defaultMessage: 'Coordinator',
 		description: 'Text indicating collaborator is a coordinator.',
 	},
 	participant: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.participant',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.participant',
 		defaultMessage: 'Participant',
 		description: 'Text indicating collaborator is a participant.',
 	},
 	remoteArchive: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.remoteArchive',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.remoteArchive',
 		defaultMessage: 'Remote Archive',
 		description: 'Fallback name used if remote archive does not have name.',
 	},
 	addedOn: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.addedOn',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.addedOn',
 		defaultMessage: 'Added on {value}',
 		description: 'Text indicating date collaborator was added to the project.',
 	},
 	leaveProjectButton: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectButton',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.leaveProjectButton',
 		defaultMessage: 'Leave Project',
 		description: 'Button text to initiate leave project flow.',
 	},
 	lastCoordinatorWarningTitle: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningTitle',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningTitle',
 		defaultMessage: 'Device is last coordinator.',
 		description:
 			'Title text for last coordinator warning when leaving a project.',
 	},
 	lastCoordinatorWarningDescription: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningDescription',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningDescription',
 		defaultMessage:
 			'If this device leaves, then no other device can add or remove devices, adjust project info, or update the categories set.',
 		description:
 			'Description text for last coordinator warning when leaving a project.',
 	},
 	lastDeviceWarningTitle: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningTitle',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningTitle',
 		defaultMessage: 'Device is last device.',
 		description: 'Title text for last device warning when leaving a project.',
 	},
 	lastDeviceWarningDescription: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningDescription',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningDescription',
 		defaultMessage:
 			'If this device leaves, then all data on this project will be lost.',
 		description:
 			'Description text for last device warning when leaving a project.',
 	},
 	suggestionExportData: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.suggestionExportData',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.suggestionExportData',
 		defaultMessage: 'Before leaving, export any important data.',
 		description:
 			'Text for export data suggestion in warning when leaving a project.',
 	},
 	suggestionInviteCoordinator: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.suggestionInviteCoordinator',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.suggestionInviteCoordinator',
 		defaultMessage: 'To avoid this, invite a new device as a coordinator.',
 		description:
 			'Text for invite coordinator suggestion in warning when leaving a project.',
 	},
 	leaveProjectConfirmationTitle: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitle',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitle',
 		defaultMessage: 'Leave this project?',
 		description:
 			'Title text for leave project confirmation when leaving a project.',
 	},
 	leaveProjectConfirmationDescription: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationDescription',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationDescription',
 		defaultMessage:
 			'Device will no longer be able to view, contribute to, or adjust the project <b>{name}</b>.',
 		description:
 			'Description for leave project confirmation when leaving a project.',
 	},
 	cancelButton: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.cancelButton',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.cancelButton',
 		defaultMessage: 'Cancel',
 		description: 'Button text to cancel leaving project.',
 	},
 	continueButton: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.continueButton',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.continueButton',
 		defaultMessage: 'Continue',
 		description: 'Button text to continue to next step in leave project flow.',
 	},
 	confirmButton: {
-		id: 'routes.app.projects.$projectId.team.$deviceId.confirmButton',
+		id: '$1.routes.app.projects.$projectId.team.$deviceId.confirmButton',
 		defaultMessage: 'Yes, Leave',
 		description: 'Button text to confirm leaving project.',
 	},

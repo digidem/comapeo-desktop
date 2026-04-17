@@ -1,0 +1,238 @@
+{
+  "$1.components.discard-edits-dialog.cancelButton": {
+    "description": "Text for button to cancel action.",
+    "message": "Ghairi"
+  },
+  "$1.components.generic-route-error-component.error": {
+    "description": "Label for error section",
+    "message": "Hitilafu"
+  },
+  "$1.components.generic-route-error-component.restart": {
+    "description": "Text for button to restart app.",
+    "message": "Anzisha tena"
+  },
+  "$1.components.generic-route-not-found-component.tryAgain": {
+    "description": "Button text for try again button.",
+    "message": "Jaribu Tena"
+  },
+  "$1.main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "Nakili"
+  },
+  "$1.main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "Kata"
+  },
+  "$1.main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "Bandika"
+  },
+  "$1.routes.app.index.appUsageConsentSuccessCloseButton": {
+    "description": "Text for button to close app usage consent dialog.",
+    "message": "Imekamilika"
+  },
+  "$1.routes.app.index.appUsageConsentSuccessTitle": {
+    "description": "Title text for success state of app usage consent dialog.",
+    "message": "Imefaulu!"
+  },
+  "$1.routes.app.index.joinProjectCardTitle": {
+    "description": "Title card for joining a project.",
+    "message": "Jiunge na Mradi"
+  },
+  "$1.routes.app.index.joinProjectDialogTitle": {
+    "description": "Title of dialog shown for joining a project.",
+    "message": "Jiunge na Mradi"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Uchunguzi"
+  },
+  "$1.routes.app.projects.$projectId.-map-panel.zoomToData": {
+    "description": "Text displayed when hovering over map control for zooming to data.",
+    "message": "Kuza kwa data"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "Futa"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "Ghairi"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogConfirm": {
+    "description": "Text for confirm button in delete attachment confirmation dialog",
+    "message": "Ndiyo, Futa"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
+    "description": "Label text for download button",
+    "message": "Pakua"
+  },
+  "$1.routes.app.projects.$projectId.download.download": {
+    "description": "Title of the download page.",
+    "message": "Pakua"
+  },
+  "$1.routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "Imekamilika"
+  },
+  "$1.routes.app.projects.$projectId.download.successPanelTitle": {
+    "description": "Title text for success panel.",
+    "message": "Imefaulu!"
+  },
+  "$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelInviteLink": {
+    "description": "Text for link that navigates to invite page.",
+    "message": "Alika Kifaa"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Uchunguzi"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Ghairi"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "Hifadhi"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "Hakuna jibu"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Ghairi"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "Hifadhi"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "Badilisha"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
+    "description": "Text for delete observation button.",
+    "message": "Futa"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "Ghairi"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogConfirm": {
+    "description": "Text for confirmation button of delete observation confirmation dialog.",
+    "message": "Ndiyo, Futa"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
+    "description": "Title for details section.",
+    "message": "Maelezo"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
+    "description": "Title of the observation details page.",
+    "message": "Uchunguzi"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Uchunguzi"
+  },
+  "$1.routes.app.projects.$projectId.route.toolsTabLabel": {
+    "description": "Label for project tools tab link in navigation.",
+    "message": "Zana"
+  },
+  "$1.routes.app.projects.$projectId.settings.index.categoriesActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "Sasisha"
+  },
+  "$1.routes.app.projects.$projectId.settings.index.projectInfoActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "Hariri"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Ghairi"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.projectNameInputLabel": {
+    "description": "Label for the project name input.",
+    "message": "Enter a name for the Project"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.save": {
+    "description": "Label for save button.",
+    "message": "Hifadhi"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.cancelButton": {
+    "description": "Button text to cancel leaving project.",
+    "message": "Ghairi"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.continueButton": {
+    "description": "Button text to continue to next step in leave project flow.",
+    "message": "Endelea"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.leaveProjectButton": {
+    "description": "Button text to initiate leave project flow.",
+    "message": "Ondoka kwenye Mradi"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.leaveProjectNavTitle": {
+    "description": "Title of the team collaborator info page when the leave project flow is initiated.",
+    "message": "Ondoka kwenye Mradi"
+  },
+  "$1.routes.app.projects.$projectId.team.index.inviteDevice": {
+    "description": "Text for button that initiates steps for inviting device to project.",
+    "message": "Alika Kifaa"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.close": {
+    "description": "Text for button to leave invite flow.",
+    "message": "Funga"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.-shared.disconnected-indicator.disconnected": {
+    "description": "Text displayed when external device is disconnected.",
+    "message": "Imetenganishwa"
+  },
+  "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.descriptionSectionTitle": {
+    "description": "Title for description section.",
+    "message": "Maelezo"
+  },
+  "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Uchunguzi"
+  },
+  "$1.routes.app.route.appSettingsTabLabel": {
+    "description": "Label for app settings tab link in navigation.",
+    "message": "Mipangilio"
+  },
+  "$1.routes.app.settings.background-map.removeMap": {
+    "description": "Text for button to remove map",
+    "message": "Ondoa Ramani"
+  },
+  "$1.routes.app.settings.device-name.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Ghairi"
+  },
+  "$1.routes.app.settings.device-name.inputLabel": {
+    "description": "Label for the device name input.",
+    "message": "Jina la Kifaa"
+  },
+  "$1.routes.app.settings.device-name.navTitle": {
+    "description": "Title of the device name settings page.",
+    "message": "Jina la Kifaa"
+  },
+  "$1.routes.app.settings.device-name.save": {
+    "description": "Label for save button.",
+    "message": "Hifadhi"
+  },
+  "$1.routes.app.settings.index.editDeviceName": {
+    "description": "Button text for navigating to page to edit device name.",
+    "message": "Hariri"
+  },
+  "$1.routes.app.settings.language.title": {
+    "description": "Title of the language settings page.",
+    "message": "Lugha"
+  },
+  "$1.routes.onboarding.data-and-privacy.next": {
+    "description": "Text for link to next step in onboarding.",
+    "message": "Inayofuata"
+  },
+  "$1.routes.onboarding.device-name.deviceName": {
+    "description": "Label for device name text input.",
+    "message": "Jina la Kifaa"
+  }
+}

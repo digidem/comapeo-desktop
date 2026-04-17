@@ -430,27 +430,27 @@ function DownloadOption({
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId.download.navTitle',
+		id: '$1.routes.app.projects.$projectId.download.navTitle',
 		defaultMessage: 'Download Observations',
 		description: 'Title of the download observations page.',
 	},
 	download: {
-		id: 'routes.app.projects.$projectId.download.download',
+		id: '$1.routes.app.projects.$projectId.download.download',
 		defaultMessage: 'Download',
 		description: 'Title of the download page.',
 	},
 	allObservationsOptionTitle: {
-		id: 'routes.app.projects.$projectId.download.allObservationsOptionTitle',
+		id: '$1.routes.app.projects.$projectId.download.allObservationsOptionTitle',
 		defaultMessage: 'All Observations',
 		description: 'Title of the all observations download option.',
 	},
 	allObservationsOptionDescription: {
-		id: 'routes.app.projects.$projectId.download.allObservationsOptionDescription',
+		id: '$1.routes.app.projects.$projectId.download.allObservationsOptionDescription',
 		defaultMessage: 'Text only as a GeoJSON file',
 		description: 'Description of the all observations download option.',
 	},
 	allObservationsWithMediaOptionTitle: {
-		id: 'routes.app.projects.$projectId.download.allObservationsWithMedia',
+		id: '$1.routes.app.projects.$projectId.download.allObservationsWithMedia',
 		defaultMessage: 'All Observations with Media',
 		description: 'Title of the all observations with media download option.',
 	},
@@ -460,54 +460,54 @@ const m = defineMessages({
 		description: 'Accessible label of download options form input.',
 	},
 	allObservationsWithMediaOptionDescription: {
-		id: 'routes.app.projects.$projectId.download.allObservationsWithMediaOptionDescription',
+		id: '$1.routes.app.projects.$projectId.download.allObservationsWithMediaOptionDescription',
 		defaultMessage: 'Images and audio in a .zip file',
 		description:
 			'Description of the all observations with media download option.',
 	},
 	tracksOptionTitle: {
-		id: 'routes.app.projects.$projectId.download.tracksOptionTitle',
+		id: '$1.routes.app.projects.$projectId.download.tracksOptionTitle',
 		defaultMessage: 'Tracks',
 		description: 'Title of the tracks option.',
 	},
 	tracksOptionDescription: {
-		id: 'routes.app.projects.$projectId.download.tracksOptionDescription',
+		id: '$1.routes.app.projects.$projectId.download.tracksOptionDescription',
 		defaultMessage: 'Text only as a GeoJSON file',
 		description: 'Description of tracks option.',
 	},
 	successPanelTitle: {
-		id: 'routes.app.projects.$projectId.download.successPanelTitle',
+		id: '$1.routes.app.projects.$projectId.download.successPanelTitle',
 		defaultMessage: 'Success!',
 		description: 'Title text for success panel.',
 	},
 	successPanelDescriptionObservations: {
-		id: 'routes.app.projects.$projectId.download.successPanelDescriptionObservations',
+		id: '$1.routes.app.projects.$projectId.download.successPanelDescriptionObservations',
 		defaultMessage:
 			'<b>All observations</b><br></br> have been downloaded to your device.',
 		description:
 			'Description text for success panel when downloading observations.',
 	},
 	successPanelDescriptionObservationsWithMedia: {
-		id: 'routes.app.projects.$projectId.download.successPanelDescriptionObservationsWithMedia',
+		id: '$1.routes.app.projects.$projectId.download.successPanelDescriptionObservationsWithMedia',
 		defaultMessage:
 			'<b>All observations with media</b><br></br> have been downloaded to your device.',
 		description:
 			'Description text for success panel when downloading observations with media.',
 	},
 	successPanelDescriptionTracks: {
-		id: 'routes.app.projects.$projectId.download.successPanelDescriptionTracks',
+		id: '$1.routes.app.projects.$projectId.download.successPanelDescriptionTracks',
 		defaultMessage:
 			'<b>All tracks</b><br></br> have been downloaded to your device.',
 		description: 'Description text for success panel when downloading tracks.',
 	},
 	successPanelViewInFileManager: {
-		id: 'routes.app.projects.$projectId.download.successPanelViewInFileManager',
+		id: '$1.routes.app.projects.$projectId.download.successPanelViewInFileManager',
 		defaultMessage: 'View in file manager',
 		description:
 			'Button text for viewing the downloaded file in the system file manager.',
 	},
 	successPanelDone: {
-		id: 'routes.app.projects.$projectId.download.successPanelDone',
+		id: '$1.routes.app.projects.$projectId.download.successPanelDone',
 		defaultMessage: 'Done',
 		description: 'Button text for exiting success panel.',
 	},

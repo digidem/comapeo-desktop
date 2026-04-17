@@ -95,44 +95,44 @@ function RouteComponent() {
 
 const m = defineMessages({
 	title: {
-		id: 'routes.onboarding.data-and-privacy.title',
+		id: '$1.routes.onboarding.data-and-privacy.title',
 		defaultMessage: 'Review Data & Privacy',
 		description: 'Title for review data and privacy page in onboarding.',
 	},
 	description: {
-		id: 'routes.onboarding.data-and-privacy.description',
+		id: '$1.routes.onboarding.data-and-privacy.description',
 		defaultMessage:
 			'CoMapeo allows teams to map offline without needing internet servers.',
 		description: 'Description for review data and privacy page in onboarding.',
 	},
 	learnMore: {
-		id: 'routes.onboarding.data-and-privacy.learnMore',
+		id: '$1.routes.onboarding.data-and-privacy.learnMore',
 		defaultMessage: 'Learn More',
 		description:
 			'Text for link that navigates to external URL for additional information info about data and privacy.',
 	},
 	next: {
-		id: 'routes.onboarding.data-and-privacy.next',
+		id: '$1.routes.onboarding.data-and-privacy.next',
 		defaultMessage: 'Next',
 		description: 'Text for link to next step in onboarding.',
 	},
 	dataStays: {
-		id: 'routes.onboarding.data-and-privacy.dataStays',
+		id: '$1.routes.onboarding.data-and-privacy.dataStays',
 		defaultMessage: 'Your data stays on your devices.',
 		description: 'Detail about data staying on device.',
 	},
 	dataEncrypted: {
-		id: 'routes.onboarding.data-and-privacy.dataEncrypted',
+		id: '$1.routes.onboarding.data-and-privacy.dataEncrypted',
 		defaultMessage: 'All data stays fully encrypted.',
 		description: 'Detail about data being fully encrypted.',
 	},
 	sharingAndCollaboration: {
-		id: 'routes.onboarding.data-and-privacy.sharingAndCollaboration',
+		id: '$1.routes.onboarding.data-and-privacy.sharingAndCollaboration',
 		defaultMessage: 'Easily manage and control sharing and collaboration.',
 		description: 'Detail about data sharing and collaboration.',
 	},
 	privateByDefault: {
-		id: 'routes.onboarding.data-and-privacy.privateByDefault',
+		id: '$1.routes.onboarding.data-and-privacy.privateByDefault',
 		defaultMessage:
 			'Private by default — diagnostic information is made fully anonymous and you can opt-out any time.',
 		description: 'Detail about privacy by default.',

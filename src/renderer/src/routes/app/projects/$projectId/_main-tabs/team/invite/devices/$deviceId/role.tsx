@@ -156,33 +156,33 @@ function RoleOption({
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.role.navTitle',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.role.navTitle',
 		defaultMessage: 'Select a Role',
 		description: 'Title of the invite role selection page.',
 	},
 	selectingRole: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.role.selectingRole',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.role.selectingRole',
 		defaultMessage: 'You are selecting a role for this device:',
 		description: 'Description of action being taken in role selection page.',
 	},
 	participantTitle: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.role.participantTitle',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.role.participantTitle',
 		defaultMessage: 'Participant',
 		description: 'Participant role name.',
 	},
 	participantDescription: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.role.participantDescription',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.role.participantDescription',
 		defaultMessage:
 			'As a Participant this device can take and share observations. They cannot manage users or project details.',
 		description: 'Participant role description.',
 	},
 	coordinatorTitle: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.role.coordinatorTitle',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.role.coordinatorTitle',
 		defaultMessage: 'Coordinator',
 		description: 'Coordinator role name.',
 	},
 	coordinatorDescription: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.role.coordinatorDescription',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.role.coordinatorDescription',
 		defaultMessage:
 			'As a Coordinator this device can invite and remove users, and manage project details.',
 		description: 'Coordinator role description.',

@@ -8,7 +8,7 @@ import { persist, type PersistStorage } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 
 import { CoordinateFormatSchema } from '../shared/coordinate-format.ts'
-import { LocaleSchema } from '../shared/intl.ts'
+import { LocaleSchema, type SupportedLanguageTag } from '../shared/intl.ts'
 import {
 	AppUsageMetricsSchema,
 	type AppUsageMetrics,
@@ -166,6 +166,24 @@ export function createPersistedStore(opts: { filePath: string }) {
 		store.setState({ appUsageMetrics: updatedAppUsageMetrics })
 	}
 
+	// NOTE: We started to include the region tags for persisted languages after initial release
+	// so - if necessary - we migrate existing persisted values to the regional variants that we initially defined.
+	if (!state.locale.useSystemPreferences) {
+		const languageTagToMigrateTo: SupportedLanguageTag | undefined =
+			BASE_LANGUAGE_TO_REGIONAL_VARIANT[state.locale.languageTag]
+
+		if (languageTagToMigrateTo) {
+			log(`Migrating ${state.locale.languageTag} to ${languageTagToMigrateTo}`)
+
+			store.setState({
+				locale: {
+					useSystemPreferences: false,
+					languageTag: languageTagToMigrateTo,
+				},
+			})
+		}
+	}
+
 	return store
 }
 
@@ -188,4 +206,27 @@ function shouldRotateSentryUser(idMonth: string): boolean {
 
 function generateMetricsDeviceId() {
 	return randomBytes(16).toString('hex')
+}
+
+// NOTE: Defines the initial mappings of potentially existing persisted language tags
+// to the initial regional variants that we decided on, as part of the change in our translations setup.
+export const BASE_LANGUAGE_TO_REGIONAL_VARIANT: Record<
+	string,
+	SupportedLanguageTag
+> = {
+	en: 'en-US',
+	fr: 'fr-FR',
+	es: 'es-419',
+	id: 'id-ID',
+	ja: 'ja-JP',
+	km: 'km-KH',
+	my: 'my-MM',
+	ne: 'ne-NP',
+	nl: 'nl-NL',
+	pt: 'pt-BR',
+	si: 'si-LK',
+	sw: 'sw-KE',
+	ta: 'ta-IN',
+	th: 'th-TH',
+	vi: 'vi-VN',
 }

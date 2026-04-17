@@ -462,12 +462,12 @@ export function MultiSelectFieldEditor({
 
 const m = defineMessages({
 	saveButtonText: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText',
 		defaultMessage: 'Save',
 		description: 'Text for save button.',
 	},
 	cancelButtonText: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText',
 		defaultMessage: 'Cancel',
 		description: 'Text for cancel button.',
 	},

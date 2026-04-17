@@ -1,0 +1,210 @@
+{
+  "$1.components.discard-edits-dialog.cancelButton": {
+    "description": "Text for button to cancel action.",
+    "message": "Hủy"
+  },
+  "$1.components.generic-route-error-component.error": {
+    "description": "Label for error section",
+    "message": "Lỗi"
+  },
+  "$1.components.generic-route-error-component.restart": {
+    "description": "Text for button to restart app.",
+    "message": "Khởi động lại"
+  },
+  "$1.components.generic-route-not-found-component.tryAgain": {
+    "description": "Button text for try again button.",
+    "message": "Thử lại"
+  },
+  "$1.main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "Sao chép"
+  },
+  "$1.main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "Cắt"
+  },
+  "$1.main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "Dán"
+  },
+  "$1.routes.app.index.appUsageConsentSuccessCloseButton": {
+    "description": "Text for button to close app usage consent dialog.",
+    "message": "Hoàn thành"
+  },
+  "$1.routes.app.index.appUsageConsentSuccessTitle": {
+    "description": "Title text for success state of app usage consent dialog.",
+    "message": "Thành công!"
+  },
+  "$1.routes.app.index.joinProjectCardTitle": {
+    "description": "Title card for joining a project.",
+    "message": "Tham gia một dự án"
+  },
+  "$1.routes.app.index.joinProjectDialogTitle": {
+    "description": "Title of dialog shown for joining a project.",
+    "message": "Tham gia một dự án"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Quan sát"
+  },
+  "$1.routes.app.projects.$projectId.-map-panel.zoomToData": {
+    "description": "Text displayed when hovering over map control for zooming to data.",
+    "message": "Phóng vừa khít"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "Xóa"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "Hủy"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogConfirm": {
+    "description": "Text for confirm button in delete attachment confirmation dialog",
+    "message": "Có, xoá đi"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
+    "description": "Label text for download button",
+    "message": "Tải xuống"
+  },
+  "$1.routes.app.projects.$projectId.download.download": {
+    "description": "Title of the download page.",
+    "message": "Tải xuống"
+  },
+  "$1.routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "Hoàn thành"
+  },
+  "$1.routes.app.projects.$projectId.download.successPanelTitle": {
+    "description": "Title text for success panel.",
+    "message": "Thành công!"
+  },
+  "$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelInviteLink": {
+    "description": "Text for link that navigates to invite page.",
+    "message": "Mời thiết bị tham gia"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Quan sát"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Hủy"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "Không có câu trả lời"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Hủy"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "Thay đổi"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
+    "description": "Text for delete observation button.",
+    "message": "Xóa"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "Hủy"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogConfirm": {
+    "description": "Text for confirmation button of delete observation confirmation dialog.",
+    "message": "Có, xoá đi"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
+    "description": "Title for details section.",
+    "message": "Chi tiết"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
+    "description": "Title of the observation details page.",
+    "message": "Quan sát"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Quan sát"
+  },
+  "$1.routes.app.projects.$projectId.settings.index.categoriesActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "Cập nhật"
+  },
+  "$1.routes.app.projects.$projectId.settings.index.projectInfoActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "Sửa"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Hủy"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.cancelButton": {
+    "description": "Button text to cancel leaving project.",
+    "message": "Hủy"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.continueButton": {
+    "description": "Button text to continue to next step in leave project flow.",
+    "message": "Tiếp tục"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.leaveProjectButton": {
+    "description": "Button text to initiate leave project flow.",
+    "message": "Rời khỏi dự án"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.leaveProjectNavTitle": {
+    "description": "Title of the team collaborator info page when the leave project flow is initiated.",
+    "message": "Rời khỏi dự án"
+  },
+  "$1.routes.app.projects.$projectId.team.index.inviteDevice": {
+    "description": "Text for button that initiates steps for inviting device to project.",
+    "message": "Mời thiết bị tham gia"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.-shared.disconnected-indicator.disconnected": {
+    "description": "Text displayed when external device is disconnected.",
+    "message": "Ngừng kết nối"
+  },
+  "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.descriptionSectionTitle": {
+    "description": "Title for description section.",
+    "message": "Mô tả"
+  },
+  "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Quan sát"
+  },
+  "$1.routes.app.route.appSettingsTabLabel": {
+    "description": "Label for app settings tab link in navigation.",
+    "message": "Cài đặt"
+  },
+  "$1.routes.app.route.homeTabTitle": {
+    "description": "Label for home tab link in navigation.",
+    "message": "Trang Chủ"
+  },
+  "$1.routes.app.settings.background-map.removeMap": {
+    "description": "Text for button to remove map",
+    "message": "Gỡ bỏ bản đồ"
+  },
+  "$1.routes.app.settings.device-name.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Hủy"
+  },
+  "$1.routes.app.settings.device-name.inputLabel": {
+    "description": "Label for the device name input.",
+    "message": "Tên thiết bị"
+  },
+  "$1.routes.app.settings.device-name.navTitle": {
+    "description": "Title of the device name settings page.",
+    "message": "Tên thiết bị"
+  },
+  "$1.routes.app.settings.index.editDeviceName": {
+    "description": "Button text for navigating to page to edit device name.",
+    "message": "Sửa"
+  },
+  "$1.routes.onboarding.data-and-privacy.next": {
+    "description": "Text for link to next step in onboarding.",
+    "message": "Tiếp theo"
+  },
+  "$1.routes.onboarding.device-name.deviceName": {
+    "description": "Label for device name text input.",
+    "message": "Tên thiết bị"
+  }
+}

@@ -678,56 +678,56 @@ function DownloadButton({
 
 const m = defineMessages({
 	photoNavTitle: {
-		id: 'routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.photoNavTitle',
+		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.photoNavTitle',
 		defaultMessage: 'Photo Info',
 		description: 'Title of the photo attachment page.',
 	},
 	audioNavTitle: {
-		id: 'routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.audioNavTitle',
+		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.audioNavTitle',
 		defaultMessage: 'Audio Recording',
 		description: 'Title of the audio attachment page.',
 	},
 	playerUnavailable: {
-		id: 'routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.playerUnavailable',
+		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.playerUnavailable',
 		defaultMessage: 'Player unavailable. Download file to preview.',
 		description: 'Alert text indicating inability to play audio attachment.',
 	},
 	download: {
-		id: 'routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download',
+		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download',
 		defaultMessage: 'Download',
 		description: 'Label text for download button',
 	},
 	delete: {
-		id: 'routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete',
+		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete',
 		defaultMessage: 'Delete',
 		description: 'Label text for delete button',
 	},
 	deleteAttachmentDialogTitle: {
-		id: 'routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogTitle',
+		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogTitle',
 		defaultMessage:
 			'Delete {type, select, photo {Photo} audio {Audio Recording} other {Attachment}}?',
 		description: 'Title text for delete attachment confirmation dialog',
 	},
 	deleteAttachmentDialogCancel: {
-		id: 'routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel',
+		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel',
 		defaultMessage: 'Cancel',
 		description:
 			'Text for cancel button in delete attachment confirmation dialog',
 	},
 	deleteAttachmentDialogConfirm: {
-		id: 'routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogConfirm',
+		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogConfirm',
 		defaultMessage: 'Yes, Delete',
 		description:
 			'Text for confirm button in delete attachment confirmation dialog',
 	},
 	deleteSuccessPanelTitle: {
-		id: 'routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteSuccessPanelTitle',
+		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteSuccessPanelTitle',
 		defaultMessage:
 			'{type, select, photo {Photo} audio {Audio Recording} other {Attachment}} Deleted',
 		description: 'Title text for the successful deletion panel.',
 	},
 	returnToObservation: {
-		id: 'routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.returnToObservation',
+		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.returnToObservation',
 		defaultMessage: 'Return to Observation',
 		description: 'Button text for the successful deletion panel.',
 	},

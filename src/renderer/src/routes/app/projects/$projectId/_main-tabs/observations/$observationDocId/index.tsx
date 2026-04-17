@@ -1179,7 +1179,7 @@ function getFieldsToDisplay(category: Preset, fields: Array<Field>) {
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.navTitle',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.navTitle',
 		defaultMessage: 'Observation',
 		description: 'Title of the observation details page.',
 	},
@@ -1190,78 +1190,78 @@ const m = defineMessages({
 			'Alt text for icon image displayed for category (used for accessibility tools).',
 	},
 	observationCategoryNameFallback: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback',
 		defaultMessage: 'Observation',
 		description: 'Fallback name for observation without a matching category.',
 	},
 	noLocation: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.noLocation',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.noLocation',
 		defaultMessage: 'No location',
 		description:
 			'Fallback for location when observation does not have location specified.',
 	},
 	unableToGetDurationTime: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.unableToGetDurationTime',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.unableToGetDurationTime',
 		defaultMessage: 'Unable to get duration time.',
 		description:
 			'Text displayed when the duration of an audio attachment cannot be determined.',
 	},
 	detailsSectionTitle: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle',
 		defaultMessage: 'Details',
 		description: 'Title for details section.',
 	},
 	observationNotFound: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound',
 		defaultMessage: 'Could not find observation with ID {docId}',
 		description: 'Text displayed when observation cannot be found.',
 	},
 	changeCategory: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory',
 		defaultMessage: 'Change',
 		description: 'Text for button to change category.',
 	},
 	deleteObservationButtonText: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText',
 		defaultMessage: 'Delete',
 		description: 'Text for delete observation button.',
 	},
 	deleteObservationConfirmationDialogTitle: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogTitle',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogTitle',
 		defaultMessage: 'Delete Observation?',
 		description: 'Text for title of delete observation confirmation dialog.',
 	},
 	deleteObservationConfirmationDialogConfirm: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogConfirm',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogConfirm',
 		defaultMessage: 'Yes, Delete',
 		description:
 			'Text for confirmation button of delete observation confirmation dialog.',
 	},
 	deleteObservationConfirmationDialogCancel: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel',
 		defaultMessage: 'Cancel',
 		description:
 			'Text for cancel button of delete observation confirmation dialog.',
 	},
 	deleteObservationSuccessPanelTitle: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelTitle',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelTitle',
 		defaultMessage: 'Observation Deleted',
 		description: 'Title text for the successful observation deletion panel.',
 	},
 	deleteObservationSuccessPanelReturnToObservations: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelReturnToObservations',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelReturnToObservations',
 		defaultMessage: 'Return to Observations List',
 		description:
 			'Text for button to return to observations list in successful observation deletion panel.',
 	},
 	deleteObservationSuccessPanelReturnToTrack: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelReturnToTrack',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelReturnToTrack',
 		defaultMessage: 'Return to Track',
 		description:
 			'Text for button to return to track in successful observation deletion panel.',
 	},
 	locationAccuracy: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy',
 		defaultMessage: '± {value}m',
 		description: 'Displayed accuracy for observation location in meters.',
 	},

@@ -156,12 +156,12 @@ function StepIndicator({
 
 const m = defineMessages({
 	goBack: {
-		id: 'routes.onboarding.route.goBack',
+		id: '$1.routes.onboarding.route.goBack',
 		defaultMessage: 'Go back',
 		description: 'Button text for button to navigate back in onboarding steps.',
 	},
 	step: {
-		id: 'routes.onboarding.route.step',
+		id: '$1.routes.onboarding.route.step',
 		defaultMessage: 'Step {value}',
 		description: 'Text indicating step number in onboarding.',
 	},

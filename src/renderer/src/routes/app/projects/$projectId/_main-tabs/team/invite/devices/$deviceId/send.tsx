@@ -610,79 +610,79 @@ function InviteAccepted({
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.navTitle',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.navTitle',
 		defaultMessage: 'Review Invitation',
 		description: 'Title of the review invite page.',
 	},
 	participant: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.participant',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.participant',
 		defaultMessage: 'Participant',
 		description: 'Participant role name.',
 	},
 	coordinator: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.coordinator',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.coordinator',
 		defaultMessage: 'Coordinator',
 		description: 'Coordinator role name.',
 	},
 	sendInvite: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.sendInvite',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.sendInvite',
 		defaultMessage: 'Send Invite',
 		description: 'Button text for sending invite.',
 	},
 	deviceBeingInvited: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.deviceBeingInvited',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.deviceBeingInvited',
 		defaultMessage:
 			'{name}<br></br><br></br> is being invited as <br></br><br></br>{role}',
 		description:
 			'Text displaying the device and its role that it is being invited as.',
 	},
 	waiting: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.waiting',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.waiting',
 		defaultMessage: 'Waiting for Device to Accept Invite',
 		description: 'Text displayed while waiting for invite response.',
 	},
 	inviteAccepted: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteAccepted',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteAccepted',
 		defaultMessage: 'Invite Accepted',
 		description: 'Text displayed when invite is accepted.',
 	},
 	timeSinceSent: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.timeSinceSent',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.timeSinceSent',
 		defaultMessage: 'Invite sent {time}s ago',
 		description: 'Text showing time elapsed since invite was sent',
 	},
 	cancelInvite: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.cancelInvite',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.cancelInvite',
 		defaultMessage: 'Cancel Invite',
 		description: 'Text for button to cancel invite.',
 	},
 	accepted: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.accepted',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.accepted',
 		defaultMessage: 'Accepted!',
 		description: 'Text displayed when invite is accepted.',
 	},
 	addedOn: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addedOn',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addedOn',
 		defaultMessage: 'Added on {date, date, long}',
 		description: 'Text showing when device was added to project.',
 	},
 	addAnotherDevice: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addAnotherDevice',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addAnotherDevice',
 		defaultMessage: 'Add Another Device',
 		description: 'Text for button to add another device.',
 	},
 	close: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.close',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.close',
 		defaultMessage: 'Close',
 		description: 'Text for button to leave invite flow.',
 	},
 	invitationDeclinedTitle: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedTitle',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedTitle',
 		defaultMessage: 'Invitation Declined',
 		description: 'Title of page when invite is declined.',
 	},
 	invitationDeclinedDescription: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedDescription',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedDescription',
 		defaultMessage:
 			'This device has declined your invitation. They have not joined the project.',
 		description: 'Description of a declined invite.',

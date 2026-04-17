@@ -100,7 +100,7 @@ function WifiIcon({
 
 const m = defineMessages({
 	wifiInfoUnavailable: {
-		id: 'routes.app.projects.-shared.network-connection-info.wifiInfoUnavailable',
+		id: '$1.routes.app.projects.-shared.network-connection-info.wifiInfoUnavailable',
 		defaultMessage: 'Wi-Fi info unavailable.',
 		description: 'Text displayed when Wi-Fi info is unavailable.',
 	},

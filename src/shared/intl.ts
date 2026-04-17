@@ -33,3 +33,5 @@ export const LocaleSchema = v.variant('useSystemPreferences', [
 ])
 
 export type Locale = v.InferOutput<typeof LocaleSchema>
+
+export const DEFAULT_LANGUAGE_TAG: SupportedLanguageTag = 'en-US' as const

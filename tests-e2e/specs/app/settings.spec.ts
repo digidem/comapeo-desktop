@@ -595,8 +595,13 @@ test('language', async ({ appInfo, userParams }) => {
 			).default
 
 			for (const languageCode of translatedLanguages) {
+				// NOTE: We intentionally do not show the regional variant for now.
+				// This will change in the future once we have
+				// multiple language variants that we actually support.
+				const baseTag = languageCode.split('-')[0]!
+
 				const { nativeName, englishName } =
-					allLanguages[languageCode as keyof typeof allLanguages]!
+					allLanguages[baseTag as keyof typeof allLanguages]!
 
 				const option = main.getByRole('radio', {
 					name: `${nativeName} ${englishName}`,
@@ -612,7 +617,7 @@ test('language', async ({ appInfo, userParams }) => {
 			const portugueseOption = main.getByRole('radio', { name: 'Portuguese' })
 			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
 			await portugueseOption.click()
-			await expect(portugueseOption).toBeChecked()
+			await expect(portugueseOption).toBeChecked({ timeout: 2_000 })
 
 			await expect(
 				main
@@ -661,7 +666,7 @@ test('language', async ({ appInfo, userParams }) => {
 			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
 			await expect(systemPreferencesOption).not.toBeChecked()
 			await systemPreferencesOption.click()
-			await expect(systemPreferencesOption).toBeChecked()
+			await expect(systemPreferencesOption).toBeChecked({ timeout: 2_000 })
 
 			await main
 				.getByRole('navigation', { name: 'breadcrumb', exact: true })

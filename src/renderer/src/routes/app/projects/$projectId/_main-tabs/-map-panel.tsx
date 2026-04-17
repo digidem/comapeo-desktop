@@ -991,19 +991,19 @@ const m = defineMessages({
 			'Alt text for icon image displayed for category (used for accessibility tools).',
 	},
 	zoomToData: {
-		id: 'routes.app.projects.$projectId.-map-panel.zoomToData',
+		id: '$1.routes.app.projects.$projectId.-map-panel.zoomToData',
 		defaultMessage: 'Zoom to data',
 		description:
 			'Text displayed when hovering over map control for zooming to data.',
 	},
 	zoomToSelected: {
-		id: 'routes.app.projects.$projectId.-map-panel.zoomToSelected',
+		id: '$1.routes.app.projects.$projectId.-map-panel.zoomToSelected',
 		defaultMessage: 'Zoom to selected',
 		description:
 			'Text displayed when hovering over map control for zooming to selected.',
 	},
 	cannotDisplayFeature: {
-		id: 'routes.app.projects.$projectId.-map-panel.cannotDisplayFeature',
+		id: '$1.routes.app.projects.$projectId.-map-panel.cannotDisplayFeature',
 		defaultMessage: 'Cannot display feature',
 		description:
 			'Text displayed when map feature for selected data cannot be displayed',

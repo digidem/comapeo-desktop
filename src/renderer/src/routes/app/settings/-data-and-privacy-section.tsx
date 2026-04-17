@@ -269,78 +269,78 @@ const PRIVACY_POLICY_URL =
 
 const m = defineMessages({
 	title: {
-		id: 'routes.app.settings.-data-and-privacy-section.title',
+		id: '$1.routes.app.settings.-data-and-privacy-section.title',
 		defaultMessage: 'Data & Privacy',
 		description: 'Title for data and privacy section in settings page.',
 	},
 	description: {
-		id: 'routes.app.settings.-data-and-privacy-section.description',
+		id: '$1.routes.app.settings.-data-and-privacy-section.description',
 		defaultMessage: 'CoMapeo respects your privacy and autonomy',
 		description: 'Description for data and privacy section in settings page.',
 	},
 	learnMore: {
-		id: 'routes.app.settings.-data-and-privacy-section.learnMore',
+		id: '$1.routes.app.settings.-data-and-privacy-section.learnMore',
 		defaultMessage: 'Learn More',
 		description:
 			'Text for link that navigates to external URL for additional information info about data and privacy.',
 	},
 	diagnosticInformationTitle: {
-		id: 'routes.app.settings.-data-and-privacy-section.diagnosticInformationTitle',
+		id: '$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationTitle',
 		defaultMessage: 'Diagnostic Information',
 		description: 'Title for diagnostic information section in settings page.',
 	},
 	diagnosticInformationDescription: {
-		id: 'routes.app.settings.-data-and-privacy-section.diagnosticInformationDescription',
+		id: '$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationDescription',
 		defaultMessage:
 			'Anonymized information about your device, app crashes, errors and performance helps Awana Digital improve the app and fix errors.',
 		description:
 			'Description for diagnostic information section in settings page.',
 	},
 	diagnosticInformationPersonalInfo: {
-		id: 'routes.app.settings.-data-and-privacy-section.diagnosticInformationPersonalInfo',
+		id: '$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationPersonalInfo',
 		defaultMessage:
 			'This never includes any of your data or personal information.',
 		description:
 			'Details about personal info in diagnostic information section in settings page.',
 	},
 	diagnosticInformationOptOut: {
-		id: 'routes.app.settings.-data-and-privacy-section.diagnosticInformationOptOut',
+		id: '$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationOptOut',
 		defaultMessage:
 			'You can opt-out of sharing diagnostic information at any time.',
 		description:
 			'Details about opting out in diagnostic information section in settings page.',
 	},
 	shareDiagnosticInformation: {
-		id: 'routes.app.settings.-data-and-privacy-section.shareDiagnosticInformation',
+		id: '$1.routes.app.settings.-data-and-privacy-section.shareDiagnosticInformation',
 		defaultMessage: 'Share Diagnostic Information',
 		description:
 			'Label for checkbox to toggle sharing of diagnostic information.',
 	},
 	appUsageTitle: {
-		id: 'routes.app.settings.-data-and-privacy-section.appUsageTitle',
+		id: '$1.routes.app.settings.-data-and-privacy-section.appUsageTitle',
 		defaultMessage: 'App Usage',
 		description: 'Title of app usage metrics settings section.',
 	},
 	appUsageDescription: {
-		id: 'routes.app.settings.-data-and-privacy-section.appUsageDescription',
+		id: '$1.routes.app.settings.-data-and-privacy-section.appUsageDescription',
 		defaultMessage:
 			'Share how you use CoMapeo with Awana Digital — no information you share can be used to track you.',
 		description: 'Description of app usage metrics settings section.',
 	},
 	appUsageDetailsIdNumbers: {
-		id: 'routes.app.settings.-data-and-privacy-section.appUsageDetailsIdNumbers',
+		id: '$1.routes.app.settings.-data-and-privacy-section.appUsageDetailsIdNumbers',
 		defaultMessage:
 			'ID numbers are scrambled randomly and changed every month. ID numbers are scrambled randomly and changed every month.',
 		description:
 			'Text describing how IDs used for app usage metrics are used and generated.',
 	},
 	appUsageDetailsIpAddresses: {
-		id: 'routes.app.settings.-data-and-privacy-section.appUsageDetailsIpAddresses',
+		id: '$1.routes.app.settings.-data-and-privacy-section.appUsageDetailsIpAddresses',
 		defaultMessage: 'CoMapeo never stores IP addresses.',
 		description: 'Text describing how IP addresses are never stored.',
 	},
 	shareAppUsage: {
-		id: 'routes.app.settings.-data-and-privacy-section.shareAppUsage',
+		id: '$1.routes.app.settings.-data-and-privacy-section.shareAppUsage',
 		defaultMessage: 'Share App Usage',
 		description: 'Text label for checkbox to toggle app usage sharing setting.',
 	},

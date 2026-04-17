@@ -425,22 +425,22 @@ const m = defineMessages({
 		description: 'Accessible label for project-specific navigation bar.',
 	},
 	listTabLabel: {
-		id: 'routes.app.projects.$projectId.route.listTabLabel',
+		id: '$1.routes.app.projects.$projectId.route.listTabLabel',
 		defaultMessage: 'List',
 		description: 'Label for project list tab link in navigation.',
 	},
 	exchangeTabLabel: {
-		id: 'routes.app.projects.$projectId.route.exchangeTabLabel',
+		id: '$1.routes.app.projects.$projectId.route.exchangeTabLabel',
 		defaultMessage: 'Exchange',
 		description: 'Label for project exchange tab link in navigation.',
 	},
 	teamTabLabel: {
-		id: 'routes.app.projects.$projectId.route.teamTabLabel',
+		id: '$1.routes.app.projects.$projectId.route.teamTabLabel',
 		defaultMessage: 'Team',
 		description: 'Label for project team tab link in navigation.',
 	},
 	toolsTabLabel: {
-		id: 'routes.app.projects.$projectId.route.toolsTabLabel',
+		id: '$1.routes.app.projects.$projectId.route.toolsTabLabel',
 		defaultMessage: 'Tools',
 		description: 'Label for project tools tab link in navigation.',
 	},

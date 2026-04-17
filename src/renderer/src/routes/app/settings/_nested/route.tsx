@@ -116,7 +116,7 @@ const m = defineMessages({
 			'Accessible label for breadcrumb navigation when viewing nested settings page.',
 	},
 	comapeoSettingsBreadCrumbLink: {
-		id: 'routes.app.settings.comapeoSettingsBreadCrumbLink',
+		id: '$1.routes.app.settings.comapeoSettingsBreadCrumbLink',
 		defaultMessage: 'CoMapeo Settings',
 		description:
 			'Text for breadcrumb link to go to main CoMapeo settings page when viewing nested settings page.',

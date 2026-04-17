@@ -277,12 +277,12 @@ function NotesEditor({
 
 const m = defineMessages({
 	title: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-notes-section.title',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.title',
 		defaultMessage: 'Notes',
 		description: 'Title for notes section.',
 	},
 	noNotes: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-notes-section.noNotes',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.noNotes',
 		defaultMessage: 'No notes.',
 		description: 'Text for when notes are empty.',
 	},
@@ -292,17 +292,17 @@ const m = defineMessages({
 		description: 'Accessible label for notes input field.',
 	},
 	saveButtonText: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText',
 		defaultMessage: 'Save',
 		description: 'Text for save button.',
 	},
 	cancelButtonText: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText',
 		defaultMessage: 'Cancel',
 		description: 'Text for cancel button.',
 	},
 	editNotesTooltip: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-notes-section.editNotesTooltip',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.editNotesTooltip',
 		defaultMessage: 'Click to Edit',
 		description: 'Text for tooltip when hovering over notes.',
 	},

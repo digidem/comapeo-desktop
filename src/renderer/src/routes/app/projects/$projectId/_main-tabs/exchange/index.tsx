@@ -455,68 +455,68 @@ function SyncProgress({
 
 const m = defineMessages({
 	gettingWifiInfo: {
-		id: 'routes.app.projects.$projectId.exchange.index.gettingWifiInfo',
+		id: '$1.routes.app.projects.$projectId.exchange.index.gettingWifiInfo',
 		defaultMessage: 'Getting Wi-Fi information…',
 		description: 'Text displayed when waiting for Wi-Fi information.',
 	},
 	waitingForDevices: {
-		id: 'routes.app.projects.$projectId.exchange.index.waitingForDevices',
+		id: '$1.routes.app.projects.$projectId.exchange.index.waitingForDevices',
 		defaultMessage: 'Waiting for Devices',
 		description: 'Text displayed when waiting for other devices to be found.',
 	},
 	lookingForDevices: {
-		id: 'routes.app.projects.$projectId.exchange.index.lookingForDevices',
+		id: '$1.routes.app.projects.$projectId.exchange.index.lookingForDevices',
 		defaultMessage: 'Looking for devices…',
 		description: 'Text displayed when no other devices have been found.',
 	},
 	devicesFound: {
-		id: 'routes.app.projects.$projectId.exchange.index.devicesFound',
+		id: '$1.routes.app.projects.$projectId.exchange.index.devicesFound',
 		defaultMessage: 'Devices found.',
 		description: 'Text displayed when other devices have been found.',
 	},
 	exchanging: {
-		id: 'routes.app.projects.$projectId.exchange.index.exchanging',
+		id: '$1.routes.app.projects.$projectId.exchange.index.exchanging',
 		defaultMessage: 'Exchanging…',
 		description: 'Text displayed when exchanging with other devices.',
 	},
 	completeAndWaiting: {
-		id: 'routes.app.projects.$projectId.exchange.index.completeAndWaiting',
+		id: '$1.routes.app.projects.$projectId.exchange.index.completeAndWaiting',
 		defaultMessage: 'Complete! Waiting for other devices to join.',
 		description:
 			'Text displayed when exchange is completed with currently connected devices.',
 	},
 	complete: {
-		id: 'routes.app.projects.$projectId.exchange.index.complete',
+		id: '$1.routes.app.projects.$projectId.exchange.index.complete',
 		defaultMessage: 'Complete!',
 		description: 'Text displayed when exchange is completed with all devices.',
 	},
 	upToDate: {
-		id: 'routes.app.projects.$projectId.exchange.index.upToDate',
+		id: '$1.routes.app.projects.$projectId.exchange.index.upToDate',
 		defaultMessage: 'Up to date!',
 		description: 'Text displayed when exchangable data is up to date.',
 	},
 	start: {
-		id: 'routes.app.projects.$projectId.exchange.index.start',
+		id: '$1.routes.app.projects.$projectId.exchange.index.start',
 		defaultMessage: 'Start',
 		description: 'Button text to start exchange.',
 	},
 	stop: {
-		id: 'routes.app.projects.$projectId.exchange.index.stop',
+		id: '$1.routes.app.projects.$projectId.exchange.index.stop',
 		defaultMessage: 'Stop',
 		description: 'Button text to stop exchange.',
 	},
 	remoteArchiveConnected: {
-		id: 'routes.app.projects.$projectId.exchange.index.remoteArchiveConnected',
+		id: '$1.routes.app.projects.$projectId.exchange.index.remoteArchiveConnected',
 		defaultMessage: 'Remote Archive connected',
 		description: 'Text indicating that some remote archive is connected.',
 	},
 	noOtherDevicesOnProject: {
-		id: 'routes.app.projects.$projectId.exchange.index.noOtherDevicesOnProject',
+		id: '$1.routes.app.projects.$projectId.exchange.index.noOtherDevicesOnProject',
 		defaultMessage: 'No other devices are on this project.',
 		description: 'Text indicating no other active devices are on the project.',
 	},
 	inviteDevices: {
-		id: 'routes.app.projects.$projectId.exchange.index.inviteDevices',
+		id: '$1.routes.app.projects.$projectId.exchange.index.inviteDevices',
 		defaultMessage: 'Invite Devices',
 		description: 'Text for link to invite devices page.',
 	},

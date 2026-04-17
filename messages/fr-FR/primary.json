@@ -1,0 +1,1338 @@
+{
+  "$1.components.discard-edits-dialog.cancelButton": {
+    "description": "Text for button to cancel action.",
+    "message": "Annuler"
+  },
+  "$1.components.discard-edits-dialog.confirmButton": {
+    "description": "Text for button to confirm discarding changes.",
+    "message": "Oui, rejeter"
+  },
+  "$1.components.discard-edits-dialog.title": {
+    "description": "Title of dialog displayed when trying to leave page while editing observation.",
+    "message": "Ignorer les modifications ?"
+  },
+  "$1.components.error-dialog.somethingWentWrong": {
+    "description": "Generic title text for the error dialog.",
+    "message": "Quelque chose s'est mal passé"
+  },
+  "$1.components.generic-route-error-component.error": {
+    "description": "Label for error section",
+    "message": "Erreur"
+  },
+  "$1.components.generic-route-error-component.restart": {
+    "description": "Text for button to restart app.",
+    "message": "Redémarrer"
+  },
+  "$1.components.generic-route-error-component.somethingWentWrong": {
+    "description": "Title text of page error",
+    "message": "Quelque chose s'est mal passé"
+  },
+  "$1.components.generic-route-not-found-component.goBack": {
+    "description": "Button text for back button.",
+    "message": "Revenir en arrière"
+  },
+  "$1.components.generic-route-not-found-component.reloadApp": {
+    "description": "Button text for reload app button.",
+    "message": "Recharger l'application"
+  },
+  "$1.components.generic-route-not-found-component.title": {
+    "description": "Title text shown when page is not found.",
+    "message": "Page introuvable"
+  },
+  "$1.components.generic-route-not-found-component.tryAgain": {
+    "description": "Button text for try again button.",
+    "message": "Réessayer"
+  },
+  "$1.main.app.contextMenuCopy": {
+    "description": "Context menu item label for copying text",
+    "message": "Copier"
+  },
+  "$1.main.app.contextMenuCopyImage": {
+    "description": "Context menu item label for copying an image",
+    "message": "Copier l'image"
+  },
+  "$1.main.app.contextMenuCopyImageAddress": {
+    "description": "Context menu item label for copying the URL of an image",
+    "message": "Copier l'adresse de l'image"
+  },
+  "$1.main.app.contextMenuCopyLink": {
+    "description": "Context menu item label for copying a link",
+    "message": "Copier le lien"
+  },
+  "$1.main.app.contextMenuCut": {
+    "description": "Context menu item label for cutting text",
+    "message": "Couper"
+  },
+  "$1.main.app.contextMenuPaste": {
+    "description": "Context menu item label for paste",
+    "message": "Coller"
+  },
+  "$1.main.app.contextMenuSaveImageAs": {
+    "description": "Context menu item label for saving an image as…",
+    "message": "Enregistrer l'image sous…"
+  },
+  "$1.main.app.contextMenuSelectAll": {
+    "description": "Context menu item label for selecting all",
+    "message": "Tout sélectionner"
+  },
+  "$1.main.app.fatalErrorDescriptionCoreService": {
+    "description": "Description for error dialog when core service in backend stops.",
+    "message": "Le service de base s'est arrêté de façon inattendue."
+  },
+  "$1.main.app.fatalErrorDescriptionGeneric": {
+    "description": "Description for error dialog when some error occurs in the backend.",
+    "message": "Une erreur fatale s'est produite. Fermez l'application et réessayez."
+  },
+  "$1.main.app.fatalErrorTitle": {
+    "description": "Title for error dialog when fatal error in backend occurs.",
+    "message": "Erreur fatale"
+  },
+  "$1.routes.app.index.additionalProjectsSecitionTitle": {
+    "description": "Title text for the additional projects section.",
+    "message": "Projets supplémentaires"
+  },
+  "$1.routes.app.index.additionalProjectsSectionDescription": {
+    "description": "Text describing sorting order of the additional projects section.",
+    "message": "Commandé par la dernière création"
+  },
+  "$1.routes.app.index.additionalProjectsSectionShowAsGrid": {
+    "description": "Tooltip text for button to display additional projects section as a grid.",
+    "message": "Afficher en tant que grille"
+  },
+  "$1.routes.app.index.additionalProjectsSectionShowAsList": {
+    "description": "Tooltip text for button to display additional projects section as a list.",
+    "message": "Afficher en tant que liste"
+  },
+  "$1.routes.app.index.appUsageConsentInterstitialAllowButton": {
+    "description": "Text for button to allow consent for app usage metrics.",
+    "message": "Oui, comptez-moi dans"
+  },
+  "$1.routes.app.index.appUsageConsentInterstitialDenyButton": {
+    "description": "Text for button to deny consent for app usage metrics.",
+    "message": "Non, pas maintenant"
+  },
+  "$1.routes.app.index.appUsageConsentInterstitialDescription": {
+    "description": "Description text for interstitial state of app usage consent dialog.",
+    "message": "Partagez la façon dont vous utilisez CoMapeo avec Awana Digital — aucune information que vous partagez ne peut être utilisée pour vous suivre."
+  },
+  "$1.routes.app.index.appUsageConsentInterstitialDetailsIdNumbers": {
+    "description": "Text describing how IDs used for app usage metrics are used and generated.",
+    "message": "Les numéros d’identification sont mélangés aléatoirement et changés chaque mois."
+  },
+  "$1.routes.app.index.appUsageConsentInterstitialDetailsIpAddresses": {
+    "description": "Text describing how IP addresses are never stored.",
+    "message": "CoMapeo ne stocke jamais les adresses IP."
+  },
+  "$1.routes.app.index.appUsageConsentInterstitialDetailsTurnOffAnytime": {
+    "description": "Text describing how app usage metrics can be turned off at any time.",
+    "message": "Désactiver à tout moment."
+  },
+  "$1.routes.app.index.appUsageConsentInterstitialTitle": {
+    "description": "Title text for interstitial state of app usage consent dialog.",
+    "message": "Aidez à améliorer votre expérience."
+  },
+  "$1.routes.app.index.appUsageConsentSuccessCloseButton": {
+    "description": "Text for button to close app usage consent dialog.",
+    "message": "Terminé"
+  },
+  "$1.routes.app.index.appUsageConsentSuccessDescription": {
+    "description": "Description text for success state of app usage consent dialog.",
+    "message": "<b>{deviceName}</b> partage maintenant la façon dont vous utilisez CoMapeo avec Awana Digital."
+  },
+  "$1.routes.app.index.appUsageConsentSuccessDescriptionNoDeviceName": {
+    "description": "Description text for success state of app usage consent dialog when device name not present (edge case).",
+    "message": "Cet appareil partage maintenant la façon dont vous utilisez CoMapeo avec Awana Digital."
+  },
+  "$1.routes.app.index.appUsageConsentSuccessDetailsChangeSetting": {
+    "description": "Description text for success state of app usage consent dialog.",
+    "message": "Changez ceci à tout moment en accédant à Data & Privacy dans les paramètres de CoMapeo."
+  },
+  "$1.routes.app.index.appUsageConsentSuccessTitle": {
+    "description": "Title text for success state of app usage consent dialog.",
+    "message": "Succès !"
+  },
+  "$1.routes.app.index.joinProjectCardTitle": {
+    "description": "Title card for joining a project.",
+    "message": "Rejoindre un projet"
+  },
+  "$1.routes.app.index.joinProjectDialogDescription": {
+    "description": "Description of dialog shown for joining a project.",
+    "message": "Coordonnez avec votre équipe pour recevoir une invitation de projet."
+  },
+  "$1.routes.app.index.joinProjectDialogTitle": {
+    "description": "Title of dialog shown for joining a project.",
+    "message": "Rejoindre un projet"
+  },
+  "$1.routes.app.index.leftProjectDialogTitle": {
+    "description": "Title text for left project dialog.",
+    "message": "Cet appareil a quitté le projet {name}."
+  },
+  "$1.routes.app.index.postOnboardingPageTitle": {
+    "description": "Title of home page after completing onboarding.",
+    "message": "{name} est prêt !"
+  },
+  "$1.routes.app.index.projectActionDialogGoBack": {
+    "description": "Text for button to close project join/create dialog.",
+    "message": "Revenir en arrière"
+  },
+  "$1.routes.app.index.projectCardRoleCoordinator": {
+    "description": "Displayed name of coordinator role on project card.",
+    "message": "Coordonnateur"
+  },
+  "$1.routes.app.index.projectCardRoleParticipant": {
+    "description": "Displayed name of participant role on project card.",
+    "message": "Participant"
+  },
+  "$1.routes.app.index.projectNameMaxLengthError": {
+    "description": "Error message for when project name is too long.",
+    "message": "Trop long, essayez un nom plus court."
+  },
+  "$1.routes.app.index.projectNameMinLengthError": {
+    "description": "Error message for when project name is too short.",
+    "message": "Entrez un nom de projet"
+  },
+  "$1.routes.app.index.startProjectDialogDescription": {
+    "description": "Description of dialog shown for starting a project.",
+    "message": "Nommez votre projet."
+  },
+  "$1.routes.app.index.unnamedProject": {
+    "description": "Fallback for when project is missing a name.",
+    "message": "Projet sans nom"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.downloadObservations": {
+    "description": "Link text to navigate to download observations page.",
+    "message": "Télécharger les observations"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Observation"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.trackItemTitle": {
+    "description": "Title for list item that is a track.",
+    "message": "Piste"
+  },
+  "$1.routes.app.projects.$projectId.-map-panel.cannotDisplayFeature": {
+    "description": "Text displayed when map feature for selected data cannot be displayed",
+    "message": "Impossible d'afficher la fonctionnalité"
+  },
+  "$1.routes.app.projects.$projectId.-map-panel.zoomToData": {
+    "description": "Text displayed when hovering over map control for zooming to data.",
+    "message": "Zoom sur les données"
+  },
+  "$1.routes.app.projects.$projectId.-map-panel.zoomToSelected": {
+    "description": "Text displayed when hovering over map control for zooming to selected.",
+    "message": "Zoom sur la sélection"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.audioNavTitle": {
+    "description": "Title of the audio attachment page.",
+    "message": "Enregistrement audio"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
+    "description": "Label text for delete button",
+    "message": "Effacer"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "Annuler"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogConfirm": {
+    "description": "Text for confirm button in delete attachment confirmation dialog",
+    "message": "Oui, supprimer"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogTitle": {
+    "description": "Title text for delete attachment confirmation dialog",
+    "message": "Supprimez {type, select, photo {Photo} audio {Enregistrement audio} other {Pièce jointe}}?"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteSuccessPanelTitle": {
+    "description": "Title text for the successful deletion panel.",
+    "message": "{type, select, photo {Photo} audio {Enregistrement audio} other {Pièce jointe}} Supprimée"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
+    "description": "Label text for download button",
+    "message": "Télécharger"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.photoNavTitle": {
+    "description": "Title of the photo attachment page.",
+    "message": "Informations sur la photo"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.playerUnavailable": {
+    "description": "Alert text indicating inability to play audio attachment.",
+    "message": "Lecteur indisponible. Télécharger le fichier pour l'aperçu."
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.returnToObservation": {
+    "description": "Button text for the successful deletion panel.",
+    "message": "Retourner à l’observation"
+  },
+  "$1.routes.app.projects.$projectId.download.allObservationsOptionDescription": {
+    "description": "Description of the all observations download option.",
+    "message": "Texte uniquement en tant que fichier GeoJSON"
+  },
+  "$1.routes.app.projects.$projectId.download.allObservationsOptionTitle": {
+    "description": "Title of the all observations download option.",
+    "message": "Toutes les observations"
+  },
+  "$1.routes.app.projects.$projectId.download.allObservationsWithMedia": {
+    "description": "Title of the all observations with media download option.",
+    "message": "Toutes les observations avec les médias"
+  },
+  "$1.routes.app.projects.$projectId.download.allObservationsWithMediaOptionDescription": {
+    "description": "Description of the all observations with media download option.",
+    "message": "Images et audio dans un fichier .zip"
+  },
+  "$1.routes.app.projects.$projectId.download.download": {
+    "description": "Title of the download page.",
+    "message": "Télécharger"
+  },
+  "$1.routes.app.projects.$projectId.download.navTitle": {
+    "description": "Title of the download observations page.",
+    "message": "Télécharger les observations"
+  },
+  "$1.routes.app.projects.$projectId.download.successPanelDone": {
+    "description": "Button text for exiting success panel.",
+    "message": "Terminé"
+  },
+  "$1.routes.app.projects.$projectId.download.successPanelTitle": {
+    "description": "Title text for success panel.",
+    "message": "Succès !"
+  },
+  "$1.routes.app.projects.$projectId.download.successPanelViewInFileManager": {
+    "description": "Button text for viewing the downloaded file in the system file manager.",
+    "message": "Voir dans le gestionnaire de fichiers"
+  },
+  "$1.routes.app.projects.$projectId.download.tracksOptionDescription": {
+    "description": "Description of tracks option.",
+    "message": "Texte uniquement en tant que fichier GeoJSON"
+  },
+  "$1.routes.app.projects.$projectId.download.tracksOptionTitle": {
+    "description": "Title of the tracks option.",
+    "message": "Pistes"
+  },
+  "$1.routes.app.projects.$projectId.exchange.index.complete": {
+    "description": "Text displayed when exchange is completed with all devices.",
+    "message": "Complete! You're up to date"
+  },
+  "$1.routes.app.projects.$projectId.exchange.index.completeAndWaiting": {
+    "description": "Text displayed when exchange is completed with currently connected devices.",
+    "message": "Terminé ! En attente que d'autres appareils rejoignent."
+  },
+  "$1.routes.app.projects.$projectId.exchange.index.devicesFound": {
+    "description": "Text displayed when other devices have been found.",
+    "message": "Devices found"
+  },
+  "$1.routes.app.projects.$projectId.exchange.index.exchanging": {
+    "description": "Text displayed when exchanging with other devices.",
+    "message": "Echange de…"
+  },
+  "$1.routes.app.projects.$projectId.exchange.index.gettingWifiInfo": {
+    "description": "Text displayed when waiting for Wi-Fi information.",
+    "message": "Récupération des informations Wi-Fi…"
+  },
+  "$1.routes.app.projects.$projectId.exchange.index.inviteDevices": {
+    "description": "Text for link to invite devices page.",
+    "message": "Inviter des appareils"
+  },
+  "$1.routes.app.projects.$projectId.exchange.index.lookingForDevices": {
+    "description": "Text displayed when no other devices have been found.",
+    "message": "Recherche des appareils…"
+  },
+  "$1.routes.app.projects.$projectId.exchange.index.noOtherDevicesOnProject": {
+    "description": "Text indicating no other active devices are on the project.",
+    "message": "Aucun autre appareil n'est sur ce projet."
+  },
+  "$1.routes.app.projects.$projectId.exchange.index.remoteArchiveConnected": {
+    "description": "Text indicating that some remote archive is connected.",
+    "message": "Archive distante connectée"
+  },
+  "$1.routes.app.projects.$projectId.exchange.index.start": {
+    "description": "Button text to start exchange.",
+    "message": "Début"
+  },
+  "$1.routes.app.projects.$projectId.exchange.index.stop": {
+    "description": "Button text to stop exchange.",
+    "message": "Arrêter"
+  },
+  "$1.routes.app.projects.$projectId.exchange.index.upToDate": {
+    "description": "Text displayed when exchangable data is up to date.",
+    "message": "All data synced"
+  },
+  "$1.routes.app.projects.$projectId.exchange.index.waitingForDevices": {
+    "description": "Text displayed when waiting for other devices to be found.",
+    "message": "En attente des appareils"
+  },
+  "$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelDescription": {
+    "description": "Text for description of panel shown when no active collaborators or data exist on project.",
+    "message": "Invitez les appareils à commencer à collecter des observations et des pistes."
+  },
+  "$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelInviteLink": {
+    "description": "Text for link that navigates to invite page.",
+    "message": "Inviter un appareil"
+  },
+  "$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelTitle": {
+    "description": "Text for title of panel shown when no active collaborators or data exist on project.",
+    "message": "Inviter des collaborateurs"
+  },
+  "$1.routes.app.projects.$projectId.index.openExchangePanelDescription": {
+    "description": "Text for description of panel shown when project has collaborators but no data.",
+    "message": "Toutes les observations et les pistes seront listées ici."
+  },
+  "$1.routes.app.projects.$projectId.index.openExchangePanelLink": {
+    "description": "Text for link that navigates to exchange page.",
+    "message": "Échange ouvert"
+  },
+  "$1.routes.app.projects.$projectId.index.openExchangePanelTitle": {
+    "description": "Text for title of panel shown when project has collaborators but no data.",
+    "message": "Échanger pour récolter des observations"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
+    "description": "Title for edit category panel.",
+    "message": "Changer de catégorie"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Observation"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Annuler"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "Enregistrer"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-sections.editNotesTooltip": {
+    "description": "Text for tooltip when hovering over notes.",
+    "message": "Cliquez pour modifier"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "Pas de réponse"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Annuler"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.editNotesTooltip": {
+    "description": "Text for tooltip when hovering over notes.",
+    "message": "Cliquez pour modifier"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.noNotes": {
+    "description": "Text for when notes are empty.",
+    "message": "Pas de notes."
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText": {
+    "description": "Text for save button.",
+    "message": "Enregistrer"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.title": {
+    "description": "Title for notes section.",
+    "message": "Notes"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerNull": {
+    "description": "Text displayed if a field is answered with \"null\"",
+    "message": "NULL"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerTrue": {
+    "description": "Text displayed if a boolean field is answered with \"true\"",
+    "message": "VRAI"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
+    "description": "Text for button to change category.",
+    "message": "Modifier"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
+    "description": "Text for delete observation button.",
+    "message": "Effacer"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "Annuler"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogConfirm": {
+    "description": "Text for confirmation button of delete observation confirmation dialog.",
+    "message": "Oui, supprimer"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogTitle": {
+    "description": "Text for title of delete observation confirmation dialog.",
+    "message": "Supprimer l’observation ?"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelReturnToObservations": {
+    "description": "Text for button to return to observations list in successful observation deletion panel.",
+    "message": "Retour à la liste des observations"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelReturnToTrack": {
+    "description": "Text for button to return to track in successful observation deletion panel.",
+    "message": "Retour à la trace"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationSuccessPanelTitle": {
+    "description": "Title text for the successful observation deletion panel.",
+    "message": "Observation supprimée"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
+    "description": "Title for details section.",
+    "message": "Détails"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy": {
+    "description": "Displayed accuracy for observation location in meters.",
+    "message": "± {value}m"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
+    "description": "Title of the observation details page.",
+    "message": "Observation"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.noLocation": {
+    "description": "Fallback for location when observation does not have location specified.",
+    "message": "Aucun emplacement"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Observation"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound": {
+    "description": "Text displayed when observation cannot be found.",
+    "message": "Impossible de trouver une observation avec l'ID {docId}"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.unableToGetDurationTime": {
+    "description": "Text displayed when the duration of an audio attachment cannot be determined.",
+    "message": "Impossible d'obtenir le temps de durée."
+  },
+  "$1.routes.app.projects.$projectId.route.exchangeTabLabel": {
+    "description": "Label for project exchange tab link in navigation.",
+    "message": "Échanger"
+  },
+  "$1.routes.app.projects.$projectId.route.listTabLabel": {
+    "description": "Label for project list tab link in navigation.",
+    "message": "Liste"
+  },
+  "$1.routes.app.projects.$projectId.route.teamTabLabel": {
+    "description": "Label for project team tab link in navigation.",
+    "message": "Equipe"
+  },
+  "$1.routes.app.projects.$projectId.route.toolsTabLabel": {
+    "description": "Label for project tools tab link in navigation.",
+    "message": "Outils"
+  },
+  "$1.routes.app.projects.$projectId.settings.categories.customCategoriesExplainer": {
+    "description": "Explanation for custom categories",
+    "message": "Utilisez des catégories personnalisées en important les nouveaux fichiers définis de catégories ci-dessous."
+  },
+  "$1.routes.app.projects.$projectId.settings.categories.dateAdded": {
+    "description": "Text indicating the date the categories set was added.",
+    "message": "Ajouté {date}"
+  },
+  "$1.routes.app.projects.$projectId.settings.categories.defaultCategoriesExplainer": {
+    "description": "Explanation for default categories",
+    "message": "Les catégories par défaut vous aident à commencer à organiser vos observations instantanément."
+  },
+  "$1.routes.app.projects.$projectId.settings.categories.fallbackCategoriesName": {
+    "description": "Fallback displayed name when project has no category set.",
+    "message": "Catégories CoMapeo"
+  },
+  "$1.routes.app.projects.$projectId.settings.categories.navTitle": {
+    "description": "Title of the categories set page.",
+    "message": "Jeu de catégories"
+  },
+  "$1.routes.app.projects.$projectId.settings.categories.uploadNewSet": {
+    "description": "Label for button to upload new categories set.",
+    "message": "Télécharger un nouveau jeu"
+  },
+  "$1.routes.app.projects.$projectId.settings.index.categoriesActionLabel": {
+    "description": "Text for action to update categories set.",
+    "message": "Mise à jour"
+  },
+  "$1.routes.app.projects.$projectId.settings.index.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set.",
+    "message": "Catégories CoMapeo"
+  },
+  "$1.routes.app.projects.$projectId.settings.index.navTitle": {
+    "description": "Title of the coordinator tools page.",
+    "message": "Outils de coordinator"
+  },
+  "$1.routes.app.projects.$projectId.settings.index.projectInfoActionLabel": {
+    "description": "Text for action to update project info.",
+    "message": "Modifier"
+  },
+  "$1.routes.app.projects.$projectId.settings.index.unnamedProject": {
+    "description": "Fallback for when current project is missing a name.",
+    "message": "Projet sans nom"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Annuler"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.maxProjectDescriptionLengthError": {
+    "description": "Error message for project description that is too long.",
+    "message": "Trop long, essayez une description plus courte."
+  },
+  "$1.routes.app.projects.$projectId.settings.info.maxProjectNameLengthError": {
+    "description": "Error message for project name that is too long.",
+    "message": "Trop long, essayez un nom plus court."
+  },
+  "$1.routes.app.projects.$projectId.settings.info.minProjectNameLengthError": {
+    "description": "Error message for project name that is too short.",
+    "message": "Entrez un nom de projet"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.navTitle": {
+    "description": "Title of the project settings info page.",
+    "message": "Modifier les infos"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.projectCardColorLabel": {
+    "description": "Label for the project card color selector.",
+    "message": "Couleur de la carte du projet"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.projectColorOptionBlue": {
+    "description": "Label for blue option in project color selector.",
+    "message": "Bleu"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.projectColorOptionGreen": {
+    "description": "Label for green option in project color selector.",
+    "message": "Vert"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.projectColorOptionGrey": {
+    "description": "Label for grey option in project color selector.",
+    "message": "Gris"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.projectColorOptionOrange": {
+    "description": "Label for orange option in project color selector.",
+    "message": "Orange"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.projectColorOptionRed": {
+    "description": "Label for grey option in project color selector.",
+    "message": "Rouge"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.projectDescriptionInputLabel": {
+    "description": "Label for the project description input.",
+    "message": "Description du projet"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.projectNameInputLabel": {
+    "description": "Label for the project name input.",
+    "message": "Enter a name for the Project"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.save": {
+    "description": "Label for save button.",
+    "message": "Enregistrer"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.addedOn": {
+    "description": "Text indicating date collaborator was added to the project.",
+    "message": "Ajouté le {value}"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.cancelButton": {
+    "description": "Button text to cancel leaving project.",
+    "message": "Annuler"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.collaboratorNavTitle": {
+    "description": "Title of the team collaborator info page.",
+    "message": "Informations sur le collaborateur"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.confirmButton": {
+    "description": "Button text to confirm leaving project.",
+    "message": "Oui, quitter"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.continueButton": {
+    "description": "Button text to continue to next step in leave project flow.",
+    "message": "Continuer"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.coordinator": {
+    "description": "Text indicating collaborator is a coordinator.",
+    "message": "Coordonnateur"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningDescription": {
+    "description": "Description text for last coordinator warning when leaving a project.",
+    "message": "Si cet appareil quitte, alors aucun autre appareil ne peut ajouter ou supprimer des périphériques, ajuster les informations du projet, ou mettre à jour les catégories définies."
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.lastCoordinatorWarningTitle": {
+    "description": "Title text for last coordinator warning when leaving a project.",
+    "message": "L'appareil est le dernier coordinator."
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningDescription": {
+    "description": "Description text for last device warning when leaving a project.",
+    "message": "Si cet appareil quitte, toutes les données de ce projet seront perdues."
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.lastDeviceWarningTitle": {
+    "description": "Title text for last device warning when leaving a project.",
+    "message": "L'appareil est le dernier appareil."
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.leaveProjectButton": {
+    "description": "Button text to initiate leave project flow.",
+    "message": "Quitter le projet"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationDescription": {
+    "description": "Description for leave project confirmation when leaving a project.",
+    "message": "L'appareil ne pourra plus visualiser, contribuer ou ajuster le projet <b>{name}</b>."
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.leaveProjectConfirmationTitle": {
+    "description": "Title text for leave project confirmation when leaving a project.",
+    "message": "Quitter ce projet?"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.leaveProjectNavTitle": {
+    "description": "Title of the team collaborator info page when the leave project flow is initiated.",
+    "message": "Quitter le projet"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.participant": {
+    "description": "Text indicating collaborator is a participant.",
+    "message": "Participant"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.remoteArchive": {
+    "description": "Fallback name used if remote archive does not have name.",
+    "message": "Archives distantes"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.suggestionExportData": {
+    "description": "Text for export data suggestion in warning when leaving a project.",
+    "message": "Avant de partir, exportez des données importantes."
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.suggestionInviteCoordinator": {
+    "description": "Text for invite coordinator suggestion in warning when leaving a project.",
+    "message": "Pour éviter cela, invitez un nouvel appareil en tant que coordinateur."
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.thisDevice": {
+    "description": "Text indicating that user is viewing itself.",
+    "message": "Cet appareil"
+  },
+  "$1.routes.app.projects.$projectId.team.index.coordinatorsSectionDescription": {
+    "description": "Description of the coordinators section in the team page.",
+    "message": "Les coordinateurs peuvent inviter des appareils, modifier et supprimer des données et gérer les détails du projet."
+  },
+  "$1.routes.app.projects.$projectId.team.index.coordinatorsSectionTitle": {
+    "description": "Title of the coordinators section in the team page.",
+    "message": "Coordonnateurs"
+  },
+  "$1.routes.app.projects.$projectId.team.index.inviteDevice": {
+    "description": "Text for button that initiates steps for inviting device to project.",
+    "message": "Inviter un appareil"
+  },
+  "$1.routes.app.projects.$projectId.team.index.navTitle": {
+    "description": "Title of the team page.",
+    "message": "Equipe"
+  },
+  "$1.routes.app.projects.$projectId.team.index.noParticipants": {
+    "description": "Text indicating that no participants are part of the project yet.",
+    "message": "Aucun participant n'a été ajouté à ce projet."
+  },
+  "$1.routes.app.projects.$projectId.team.index.participantsSectionDescription": {
+    "description": "Description of the participants section in the team page.",
+    "message": "Les participants peuvent prendre et partager des observations. Ils ne peuvent pas gérer les utilisateurs ou les détails du projet."
+  },
+  "$1.routes.app.projects.$projectId.team.index.participantsSectionTitle": {
+    "description": "Title of the participants section in the team page.",
+    "message": "Participants"
+  },
+  "$1.routes.app.projects.$projectId.team.index.pastCollaboratorsSectionDescription": {
+    "description": "Description of the past collaborators section in the team page.",
+    "message": "Les appareils ne contribuent plus à ce projet."
+  },
+  "$1.routes.app.projects.$projectId.team.index.pastCollaboratorsSectionTitle": {
+    "description": "Title of the past collaborators section in the team page.",
+    "message": "Collaborateurs passés"
+  },
+  "$1.routes.app.projects.$projectId.team.index.remoteArchivesSectionDescription": {
+    "description": "Description of the remote archives section in the team page.",
+    "message": "Ce projet partage avec des serveurs sécurisés et chiffrés."
+  },
+  "$1.routes.app.projects.$projectId.team.index.remoteArchivesSectionTitle": {
+    "description": "Title of the remote archives section in the team page.",
+    "message": "Archives distantes"
+  },
+  "$1.routes.app.projects.$projectId.team.index.thisDevice": {
+    "description": "Text indicating that the listed device refers to the one currently being used.",
+    "message": "Cet appareil"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.role.coordinatorDescription": {
+    "description": "Coordinator role description.",
+    "message": "En tant que coordinateur, cet appareil peut inviter et supprimer des utilisateurs, et gérer les détails du projet."
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.role.coordinatorTitle": {
+    "description": "Coordinator role name.",
+    "message": "Coordonnateur"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.role.navTitle": {
+    "description": "Title of the invite role selection page.",
+    "message": "Sélectionnez un rôle"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.role.participantDescription": {
+    "description": "Participant role description.",
+    "message": "En tant que participant, cet appareil peut prendre et partager des observations. Il ne peut pas gérer les détails des utilisateurs ou du projet."
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.role.participantTitle": {
+    "description": "Participant role name.",
+    "message": "Participant"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.role.selectingRole": {
+    "description": "Description of action being taken in role selection page.",
+    "message": "Vous sélectionnez un rôle pour cet appareil:"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.accepted": {
+    "description": "Text displayed when invite is accepted.",
+    "message": "Invite Accepted"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addAnotherDevice": {
+    "description": "Text for button to add another device.",
+    "message": "Ajouter un autre appareil"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addedOn": {
+    "description": "Text showing when device was added to project.",
+    "message": "Ajouté le {date, date, long}"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.cancelInvite": {
+    "description": "Text for button to cancel invite.",
+    "message": "Annuler l'invitation"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.close": {
+    "description": "Text for button to leave invite flow.",
+    "message": "Fermer"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.coordinator": {
+    "description": "Coordinator role name.",
+    "message": "Coordonnateur"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.deviceBeingInvited": {
+    "description": "Text displaying the device and its role that it is being invited as.",
+    "message": "{name}<br></br><br></br> est invité comme <br></br><br></br>{role}"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedDescription": {
+    "description": "Description of a declined invite.",
+    "message": "Cet appareil a refusé votre invitation. Ils n'ont pas rejoint le projet."
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedTitle": {
+    "description": "Title of page when invite is declined.",
+    "message": "Invitation refusée"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteAccepted": {
+    "description": "Text displayed when invite is accepted.",
+    "message": "Invitation acceptée"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.navTitle": {
+    "description": "Title of the review invite page.",
+    "message": "Revoir l'invitation"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.participant": {
+    "description": "Participant role name.",
+    "message": "Participant"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.sendInvite": {
+    "description": "Button text for sending invite.",
+    "message": "Envoyer une invitation"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.timeSinceSent": {
+    "description": "Text showing time elapsed since invite was sent",
+    "message": "Invitation envoyée il y a {time}s"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.waiting": {
+    "description": "Text displayed while waiting for invite response.",
+    "message": "En attente d'acceptation de l'invitation de l'appareil"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.-shared.disconnected-indicator.disconnected": {
+    "description": "Text displayed when external device is disconnected.",
+    "message": "Déconnecté"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingSameNetwork": {
+    "description": "Text explaining that devices need to be on same Wi-Fi network.",
+    "message": "Vérifiez que les appareils sont sur le même réseau Wi-Fi"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingSameVersion": {
+    "description": "Text explaining that devices need to be using same version of CoMapeo.",
+    "message": "Confirmez que les appareils utilisent la même version de CoMapeo"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingTitle": {
+    "description": "Title for device discovery troubleshooting section.",
+    "message": "Vous ne voyez pas d'appareil?"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.index.gettingWifiInfo": {
+    "description": "Text displayed when waiting for Wi-Fi information.",
+    "message": "Récupération des informations Wi-Fi…"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.index.navTitle": {
+    "description": "Title of the device selection for invite page.",
+    "message": "Sélectionnez un appareil"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.index.controlSharing": {
+    "description": "Detail about how to control data sharing.",
+    "message": "Contrôle du partage dans les paramètres du projet."
+  },
+  "$1.routes.app.projects.$projectId.team.invite.index.inviteCollaborators": {
+    "description": "Title of the Invite Get Started page.",
+    "message": "Inviter des collaborateurs"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.index.navTitle": {
+    "description": "Title of the Invite Get Started page.",
+    "message": "Commencer"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.index.onlyInvitedDevices": {
+    "description": "Detail about who contributes.",
+    "message": "Seulement les appareils invités contribuent."
+  },
+  "$1.routes.app.projects.$projectId.team.invite.index.primaryDescription": {
+    "description": "Primary description text.",
+    "message": "Invitez des appareils à utiliser CoMapeo pour commencer à collaborer."
+  },
+  "$1.routes.app.projects.$projectId.team.invite.index.selectDevice": {
+    "description": "Text for button to navigate to device selection.",
+    "message": "Sélectionnez un appareil"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.index.shareUsingExchange": {
+    "description": "Detail about how collaborators share data.",
+    "message": "Les collaborateurs se partagent en toute sécurité en utilisant Exchange."
+  },
+  "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.descriptionSectionTitle": {
+    "description": "Title for description section.",
+    "message": "Description"
+  },
+  "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.navTitle": {
+    "description": "Displayed title.",
+    "message": "Piste"
+  },
+  "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback": {
+    "description": "Fallback name for observation without a matching category.",
+    "message": "Observation"
+  },
+  "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationsSectionTitle": {
+    "description": "Title for the track observations section.",
+    "message": "{count, plural, one {# Observation} other {# Observations}}"
+  },
+  "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.trackNotFound": {
+    "description": "Text displayed when track cannot be found.",
+    "message": "Impossible de trouver la piste avec l'ID {docId}"
+  },
+  "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.tracks": {
+    "description": "Displayed title next to category icon.",
+    "message": "Pistes"
+  },
+  "$1.routes.app.projects.-shared.device-icon.deviceTypeDesktop": {
+    "description": "Text indicating that the member is a desktop device (displays when hovering over the icon).",
+    "message": "Bureau"
+  },
+  "$1.routes.app.projects.-shared.device-icon.deviceTypeMobile": {
+    "description": "Text indicating that the member is a mobile device (displays when hovering over the icon).",
+    "message": "Téléphone mobile"
+  },
+  "$1.routes.app.projects.-shared.device-icon.deviceTypeRemoteArchive": {
+    "description": "Text indicating that the member is a remote archive (displays when hovering over the icon).",
+    "message": "Archives distantes"
+  },
+  "$1.routes.app.projects.-shared.device-icon.deviceTypeTablet": {
+    "description": "Text indicating that the member is a tablet device (displays when hovering over the icon).",
+    "message": "Tablette"
+  },
+  "$1.routes.app.projects.-shared.device-icon.deviceTypeUnknown": {
+    "description": "Text indicating that the member device type is unknown (displays when hovering over the icon).",
+    "message": "Type de périphérique inconnu"
+  },
+  "$1.routes.app.projects.-shared.device-icon.deviceTypeUnspecified": {
+    "description": "Text indicating that the member device type is unspecified (displays when hovering over the icon).",
+    "message": "Type de périphérique non spécifié"
+  },
+  "$1.routes.app.projects.-shared.network-connection-info.wifiInfoUnavailable": {
+    "description": "Text displayed when Wi-Fi info is unavailable.",
+    "message": "Wi-Fi info unavailable."
+  },
+  "$1.routes.app.route.appSettingsTabLabel": {
+    "description": "Label for app settings tab link in navigation.",
+    "message": "Paramètres"
+  },
+  "$1.routes.app.route.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set.",
+    "message": "Catégories CoMapeo"
+  },
+  "$1.routes.app.route.homeTabTitle": {
+    "description": "Label for home tab link in navigation.",
+    "message": "Domicile"
+  },
+  "$1.routes.app.route.projectInfoRoleCoordinator": {
+    "description": "Indicates that user is a coordinator.",
+    "message": "Coordonnateur"
+  },
+  "$1.routes.app.route.projectInfoRoleParticipant": {
+    "description": "Indicates that user is a participant.",
+    "message": "Participant"
+  },
+  "$1.routes.app.route.projectInviteAccept": {
+    "description": "Button text for accepting project invite.",
+    "message": "Accepter"
+  },
+  "$1.routes.app.route.projectInviteDecline": {
+    "description": "Button text for declining project invite.",
+    "message": "Refuser"
+  },
+  "$1.routes.app.route.projectInviteDescription": {
+    "description": "Description for invite containing role being invited as.",
+    "message": "Rejoignez en tant que <b>{role, select, coordinator {coordinateur} other {participant}}</b>?"
+  },
+  "$1.routes.app.route.projectInviteTitle": {
+    "description": "Title of project invite.",
+    "message": "Vous avez été invité à…"
+  },
+  "$1.routes.app.route.projectJoinedTitle": {
+    "description": "Title of dialog displayed when joining a project successfully.",
+    "message": "A rejoint le projet {name} avec succès."
+  },
+  "$1.routes.app.route.projectJoinedViewProject": {
+    "description": "Text for button to navigate to joined project in project joined dialog.",
+    "message": "Voir le projet"
+  },
+  "$1.routes.app.route.unnamedProject": {
+    "description": "Fallback for when project is missing a name.",
+    "message": "Projet sans nom"
+  },
+  "$1.routes.app.settings.-data-and-privacy-section.appUsageDescription": {
+    "description": "Description of app usage metrics settings section.",
+    "message": "Partagez la façon dont vous utilisez CoMapeo avec Awana Digital — aucune information que vous partagez ne peut être utilisée pour vous suivre."
+  },
+  "$1.routes.app.settings.-data-and-privacy-section.appUsageDetailsIdNumbers": {
+    "description": "Text describing how IDs used for app usage metrics are used and generated.",
+    "message": "Les numéros d’identification sont mélangés aléatoirement et changés chaque mois. Les numéros d’identification sont mélangés aléatoirement et changés chaque mois."
+  },
+  "$1.routes.app.settings.-data-and-privacy-section.appUsageDetailsIpAddresses": {
+    "description": "Text describing how IP addresses are never stored.",
+    "message": "CoMapeo ne stocke jamais les adresses IP."
+  },
+  "$1.routes.app.settings.-data-and-privacy-section.appUsageTitle": {
+    "description": "Title of app usage metrics settings section.",
+    "message": "Utilisation de l'application"
+  },
+  "$1.routes.app.settings.-data-and-privacy-section.description": {
+    "description": "Description for data and privacy section in settings page.",
+    "message": "CoMapeo respecte votre vie privée et votre autonomie"
+  },
+  "$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationDescription": {
+    "description": "Description for diagnostic information section in settings page.",
+    "message": "Des informations anonymes sur votre appareil, des plantages d'applications, des erreurs et des performances aident Awana Digital à améliorer l'application et à corriger les erreurs."
+  },
+  "$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationOptOut": {
+    "description": "Details about opting out in diagnostic information section in settings page.",
+    "message": "Vous pouvez refuser de partager des informations de diagnostic à tout moment."
+  },
+  "$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationPersonalInfo": {
+    "description": "Details about personal info in diagnostic information section in settings page.",
+    "message": "Cela ne comprend jamais vos données ou vos informations personnelles."
+  },
+  "$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationTitle": {
+    "description": "Title for diagnostic information section in settings page.",
+    "message": "Informations sur le diagnostic"
+  },
+  "$1.routes.app.settings.-data-and-privacy-section.learnMore": {
+    "description": "Text for link that navigates to external URL for additional information info about data and privacy.",
+    "message": "En savoir plus"
+  },
+  "$1.routes.app.settings.-data-and-privacy-section.shareAppUsage": {
+    "description": "Text label for checkbox to toggle app usage sharing setting.",
+    "message": "Partager l'utilisation de l'application"
+  },
+  "$1.routes.app.settings.-data-and-privacy-section.shareDiagnosticInformation": {
+    "description": "Label for checkbox to toggle sharing of diagnostic information.",
+    "message": "Partager les informations de diagnostic"
+  },
+  "$1.routes.app.settings.-data-and-privacy-section.title": {
+    "description": "Title for data and privacy section in settings page.",
+    "message": "Données & Confidentialité"
+  },
+  "$1.routes.app.settings.background-map.acceptedFileTypes": {
+    "description": "Text describing what kind of files are usable for background maps.",
+    "message": "Les types de fichiers acceptés sont .smp"
+  },
+  "$1.routes.app.settings.background-map.chooseFile": {
+    "description": "Text for button to choose file.",
+    "message": "Choisir un fichier"
+  },
+  "$1.routes.app.settings.background-map.close": {
+    "description": "Text displayed for closing dialogs",
+    "message": "Close"
+  },
+  "$1.routes.app.settings.background-map.customMapInfoError": {
+    "description": "Text displayed when info about a custom map cannot be retrieved.",
+    "message": "Impossible d'obtenir des informations de carte personnalisées à partir du fichier. Veuillez le supprimer ou choisir un autre fichier."
+  },
+  "$1.routes.app.settings.background-map.dateAdded": {
+    "description": "Column label text for date added.",
+    "message": "Date d'ajout"
+  },
+  "$1.routes.app.settings.background-map.description": {
+    "description": "Description of how custom background maps work.",
+    "message": "Les cartes d'arrière-plan personnalisées sont visibles hors ligne et uniquement sur cet appareil."
+  },
+  "$1.routes.app.settings.background-map.mapNameColumnLabel": {
+    "description": "Column label text for map name.",
+    "message": "Nom de carte"
+  },
+  "$1.routes.app.settings.background-map.mapUpdateSuccessDescription": {
+    "description": "Description text for dialog when updating map successfully.",
+    "message": "CoMapeo utilise maintenant la dernière carte en arrière-plan."
+  },
+  "$1.routes.app.settings.background-map.mapUpdateSuccessTitle": {
+    "description": "Title text for dialog when updating map successfully.",
+    "message": "Mis à jour !"
+  },
+  "$1.routes.app.settings.background-map.removeMap": {
+    "description": "Text for button to remove map",
+    "message": "Supprimer la carte"
+  },
+  "$1.routes.app.settings.background-map.sizeInMegabytes": {
+    "description": "Text describing what kind of files are usable for background maps.",
+    "message": "{value} MB"
+  },
+  "$1.routes.app.settings.comapeoSettingsBreadCrumbLink": {
+    "description": "Text for breadcrumb link to go to main CoMapeo settings page when viewing nested settings page.",
+    "message": "Paramètres de CoMapeo"
+  },
+  "$1.routes.app.settings.coordinate-system.ddOptionLabel": {
+    "description": "Label for the decimal degrees option.",
+    "message": "DD (Degrés décimaux)"
+  },
+  "$1.routes.app.settings.coordinate-system.dmsOptionLabel": {
+    "description": "Label for the degrees/minutes/seconds option.",
+    "message": "DMS (Décimal/Minutes/Secondes)"
+  },
+  "$1.routes.app.settings.coordinate-system.title": {
+    "description": "Title of the coordinate system settings page.",
+    "message": "Système de coordonnées"
+  },
+  "$1.routes.app.settings.device-name.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Annuler"
+  },
+  "$1.routes.app.settings.device-name.inputLabel": {
+    "description": "Label for the device name input.",
+    "message": "Nom de l'appareil"
+  },
+  "$1.routes.app.settings.device-name.maxLengthError": {
+    "description": "Error message for device name that is too long.",
+    "message": "Trop long, essayez un nom plus court."
+  },
+  "$1.routes.app.settings.device-name.minLengthError": {
+    "description": "Error message for device name that is too short.",
+    "message": "Entrez un nom de périphérique"
+  },
+  "$1.routes.app.settings.device-name.navTitle": {
+    "description": "Title of the device name settings page.",
+    "message": "Nom de l'appareil"
+  },
+  "$1.routes.app.settings.device-name.save": {
+    "description": "Label for save button.",
+    "message": "Enregistrer"
+  },
+  "$1.routes.app.settings.index.aboutCoMapeoVersionLabel": {
+    "description": "Label for CoMapeo version",
+    "message": "Version de CoMapeo"
+  },
+  "$1.routes.app.settings.index.customBackground": {
+    "description": "Placeholder name of custom background map if name cannot be retrieved.",
+    "message": "Fond d'écran personnalisé"
+  },
+  "$1.routes.app.settings.index.defaultBackground": {
+    "description": "Name of the background map used if a custom one is not set.",
+    "message": "Arrière-plan par défaut"
+  },
+  "$1.routes.app.settings.index.editDeviceName": {
+    "description": "Button text for navigating to page to edit device name.",
+    "message": "Modifier"
+  },
+  "$1.routes.app.settings.index.languageFromSystemPreference": {
+    "description": "Label for selected language based on the system preferences.",
+    "message": "{name} (Préférence Système)"
+  },
+  "$1.routes.app.settings.index.sectionTitleAboutCoMapeo": {
+    "description": "Text for data and privacy section title",
+    "message": "À propos de CoMapeo"
+  },
+  "$1.routes.app.settings.index.sectionTitleGeneral": {
+    "description": "Text for general settings section title",
+    "message": "Généraux"
+  },
+  "$1.routes.app.settings.index.title": {
+    "description": "Title of the settings page.",
+    "message": "Paramètres de CoMapeo"
+  },
+  "$1.routes.app.settings.index.utmCoordinates": {
+    "description": "Label for Universal Transverse Mercator coordinate system.",
+    "message": "Coordonnées UTM"
+  },
+  "$1.routes.app.settings.language.followSystemOptionLabel": {
+    "description": "Option label for following system preference for language.",
+    "message": "Suivre les préférences du système"
+  },
+  "$1.routes.app.settings.language.title": {
+    "description": "Title of the language settings page.",
+    "message": "Langage"
+  },
+  "$1.routes.onboarding.data-and-privacy.dataEncrypted": {
+    "description": "Detail about data being fully encrypted.",
+    "message": "Toutes les données restent entièrement chiffrées."
+  },
+  "$1.routes.onboarding.data-and-privacy.dataStays": {
+    "description": "Detail about data staying on device.",
+    "message": "Vos données restent sur vos appareils."
+  },
+  "$1.routes.onboarding.data-and-privacy.description": {
+    "description": "Description for review data and privacy page in onboarding.",
+    "message": "CoMapeo permet aux équipes de cartographier hors ligne sans avoir besoin de serveurs Internet."
+  },
+  "$1.routes.onboarding.data-and-privacy.learnMore": {
+    "description": "Text for link that navigates to external URL for additional information info about data and privacy.",
+    "message": "En savoir plus"
+  },
+  "$1.routes.onboarding.data-and-privacy.next": {
+    "description": "Text for link to next step in onboarding.",
+    "message": "Suivant"
+  },
+  "$1.routes.onboarding.data-and-privacy.privateByDefault": {
+    "description": "Detail about privacy by default.",
+    "message": "Privé par défaut — les informations de diagnostic sont entièrement anonymes et vous pouvez vous désinscrire à tout moment."
+  },
+  "$1.routes.onboarding.data-and-privacy.sharingAndCollaboration": {
+    "description": "Detail about data sharing and collaboration.",
+    "message": "Gérer et contrôler facilement le partage et la collaboration."
+  },
+  "$1.routes.onboarding.data-and-privacy.title": {
+    "description": "Title for review data and privacy page in onboarding.",
+    "message": "Examiner les données et la confidentialité"
+  },
+  "$1.routes.onboarding.device-name.addName": {
+    "description": "Text for submit button to save device name.",
+    "message": "Ajouter un nom"
+  },
+  "$1.routes.onboarding.device-name.description": {
+    "description": "Description for device name page during onboarding.",
+    "message": "You can start mapping alone or start mapping with a team. Create or join a project in order to share data with other devices that are part of the same project."
+  },
+  "$1.routes.onboarding.device-name.deviceName": {
+    "description": "Label for device name text input.",
+    "message": "Nom de l'appareil"
+  },
+  "$1.routes.onboarding.device-name.maxLengthError": {
+    "description": "Message displayed when maximum length for device name input is exceeded.",
+    "message": "Trop long, essayez un nom plus court."
+  },
+  "$1.routes.onboarding.device-name.minLengthError": {
+    "description": "Message displayed when required minimum length for device name input is not met.",
+    "message": "Entrez un nom de périphérique"
+  },
+  "$1.routes.onboarding.device-name.title": {
+    "description": "Title for device name page during onboarding.",
+    "message": "Nommez votre appareil"
+  },
+  "$1.routes.onboarding.privacy-policy.aboutAwanaDigital": {
+    "description": "Title for about section in privacy policy page.",
+    "message": "À propos d'Awana Digital"
+  },
+  "$1.routes.onboarding.privacy-policy.aboutAwanaDigitalDescription": {
+    "description": "Description for about section in privacy policy page.",
+    "message": "CoMapeo est développé par Awana Digital, une organisation à but non lucratif de 501c3 enregistrée aux États-Unis. Awana Digital travaille en solidarité avec les communautés de première ligne pour utiliser la technologie pour défendre leurs droits et lutter contre le changement climatique."
+  },
+  "$1.routes.onboarding.privacy-policy.appErrors": {
+    "description": "Details for app errors in diagnostics section in privacy policy page.",
+    "message": "<b>Erreurs d'application</b>: Informations sur les erreurs internes qui font que l'application ne fonctionne pas comme prévu."
+  },
+  "$1.routes.onboarding.privacy-policy.appInfo": {
+    "description": "Details for app info in diagnostics section in privacy policy page.",
+    "message": "<b>App Info</b>: La version et la locale (langue) de CoMapeo."
+  },
+  "$1.routes.onboarding.privacy-policy.appUsage": {
+    "description": "Title for app usage section in privacy policy page.",
+    "message": "Utilisation de l'application"
+  },
+  "$1.routes.onboarding.privacy-policy.comapeoDataPrivacy": {
+    "description": "Title for data privacy section in privacy policy page.",
+    "message": "Confidentialité des données de CoMapeo"
+  },
+  "$1.routes.onboarding.privacy-policy.control": {
+    "description": "Title for data control section in privacy policy page.",
+    "message": "Vous êtes sous contrôle"
+  },
+  "$1.routes.onboarding.privacy-policy.country": {
+    "description": "Details for country in app usage section in privacy policy page.",
+    "message": "<b>Pays</b>: Le pays où CoMapeo est utilisé."
+  },
+  "$1.routes.onboarding.privacy-policy.crashData": {
+    "description": "Details for crash data in diagnostics section in privacy policy page.",
+    "message": "<b>Données plantées</b>: Informations sur ce qui a causé la fermeture inattendue de l'application."
+  },
+  "$1.routes.onboarding.privacy-policy.dataCollection": {
+    "description": "Title for data collection section in privacy policy page.",
+    "message": "Collecte de données CoMapeo"
+  },
+  "$1.routes.onboarding.privacy-policy.description": {
+    "description": "Description for privacy policy page during onboarding.",
+    "message": "Ce qui suit explique quelles informations (ou \"données\") sont envoyées de CoMapeo au développeur de l'application, Awana Digital, et comment ces informations sont utilisées."
+  },
+  "$1.routes.onboarding.privacy-policy.deviceInfo": {
+    "description": "Details for device info in diagnostics section in privacy policy page.",
+    "message": "<b>Informations sur l'appareil</b>: comme le modèle et le fabricant de votre appareil ; le système d'exploitation des périphériques ; la taille de l'écran ; la locale du périphérique (langue) ; la mémoire du périphérique."
+  },
+  "$1.routes.onboarding.privacy-policy.diagnostics": {
+    "description": "Title for diagnostics section in privacy policy page.",
+    "message": "Diagnostics"
+  },
+  "$1.routes.onboarding.privacy-policy.noPII": {
+    "description": "Title for no PII section in privacy policy page.",
+    "message": "Aucune information personnellement identifiable"
+  },
+  "$1.routes.onboarding.privacy-policy.noPIIDescription": {
+    "description": "Description for no PII section in privacy policy page.",
+    "message": "L'utilisation de CoMapeo ne nécessite pas de compte utilisateur.<br></br><br></br>Awana Digital ne collecte pas votre nom, votre adresse e-mail ou toute autre information personnelle.<br></br><br></br>Aucun identifiant d'utilisateur ou identifiant de périphérique permanent n'est jamais partagé avec Awana Digital, et nous prenons des mesures supplémentaires pour nous assurer qu'aucune information que vous partagez ne peut être utilisée pour vous suivre : les identifiants sont randomisés et tournés (changés) chaque mois et nous ne stockons pas d'adresses IP."
+  },
+  "$1.routes.onboarding.privacy-policy.openSource": {
+    "description": "Title for open source section in privacy policy page.",
+    "message": "Open Source et la version \"Officielle\""
+  },
+  "$1.routes.onboarding.privacy-policy.performanceData": {
+    "description": "Details for performance data in diagnostics section in privacy policy page.",
+    "message": "<b>Données de performance</b>: telles que le temps de lancement, la consommation d'énergie, le gel des applications et la réactivité."
+  },
+  "$1.routes.onboarding.privacy-policy.privateByDefault": {
+    "description": "Title for private by default section in privacy policy page.",
+    "message": "Privé par défaut"
+  },
+  "$1.routes.onboarding.privacy-policy.shareDiagnosticInformation": {
+    "description": "Label for checkbox to toggle sharing of diagnostic information.",
+    "message": "Partager les informations de diagnostic"
+  },
+  "$1.routes.onboarding.privacy-policy.title": {
+    "description": "Title for privacy policy page during onboarding.",
+    "message": "Politique de confidentialité"
+  },
+  "$1.routes.onboarding.privacy-policy.whatIsCollected": {
+    "description": "Title for what is collected section in privacy policy page.",
+    "message": "Qu'est-ce qui est collecté?"
+  },
+  "$1.routes.onboarding.privacy-policy.whatIsCollectedDescription": {
+    "description": "Description for what is collected section in privacy policy page.",
+    "message": "Par défaut, des informations de diagnostic anonymes sur votre appareil, des plantages d'applications, des erreurs et des performances sont partagées avec Awana Digital.<br></br><br></br>Vous pouvez refuser de partager ces informations à tout moment. Ces informations de diagnostic sont totalement anonymes et ne contiennent jamais vos données (les données que vous avez collectées avec CoMapeo)."
+  },
+  "$1.routes.onboarding.privacy-policy.whatIsNotCollected": {
+    "description": "Title for what is not collected in app usage section in privacy policy page.",
+    "message": "Qu'est-ce qui n'est pas collecté?"
+  },
+  "$1.routes.onboarding.privacy-policy.whatIsNotCollectedDescription": {
+    "description": "Description for what is not collected in app usage section in privacy policy page.",
+    "message": "Nous ne collectons aucune donnée personnelle ou de quoi que ce soit qui puisse être utilisé pour identifier ou suivre un utilisateur ou un périphérique. Les identifiants d'appareils utilisés pour agréger les informations sont aléatoires, anonymes et modifiés chaque mois. Les informations diagnostiques n'incluent pas de données sur la façon dont vous utilisez l'application, et il ne comprend jamais les données que vous avez collectées avec l'application. Nous ne collectons pas votre emplacement précis ou grossier, seulement le pays où vous utilisez CoMapeo."
+  },
+  "$1.routes.onboarding.privacy-policy.whyIsThisDataCollected": {
+    "description": "Title for why data is collected in app usage section in privacy policy page.",
+    "message": "Pourquoi ces données sont-elles collectées ?"
+  },
+  "$1.routes.onboarding.route.goBack": {
+    "description": "Button text for button to navigate back in onboarding steps.",
+    "message": "Revenir en arrière"
+  },
+  "$1.routes.onboarding.route.step": {
+    "description": "Text indicating step number in onboarding.",
+    "message": "Étape {value}"
+  },
+  "$1.routes.welcome.appDescription": {
+    "description": "Description of app in welcome page.",
+    "message": "Voir et gérer les observations recueillies avec CoMapeo Mobile."
+  },
+  "$1.routes.welcome.designedFor": {
+    "description": "Detail about who app is designed for in welcome page.",
+    "message": "Conçu avec et pour les peuples indigènes et les communautés de première ligne"
+  },
+  "$1.routes.welcome.getStarted": {
+    "description": "Text for link to navigate to next step.",
+    "message": "Commencer"
+  },
+  "$1.routes.welcome.mapAnywhere": {
+    "description": "Detail about mapping in welcome page.",
+    "message": "Carte partout et n'importe où"
+  },
+  "$1.routes.welcome.ownData": {
+    "description": "Detail about owning data in welcome page.",
+    "message": "Posséder et contrôler vos données"
+  }
+}

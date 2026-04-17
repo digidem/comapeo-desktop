@@ -1,0 +1,46 @@
+{
+  "$1.components.discard-edits-dialog.cancelButton": {
+    "description": "Text for button to cancel action.",
+    "message": "Noomtee"
+  },
+  "$1.routes.app.index.leftProjectDialogCloseButton": {
+    "description": "Text for button to close left project dialog.",
+    "message": "Keer"
+  },
+  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.deleteAttachmentDialogCancel": {
+    "description": "Text for cancel button in delete attachment confirmation dialog",
+    "message": "Noomtee"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Noomtee"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
+    "description": "Text for cancel button.",
+    "message": "Noomtee"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationConfirmationDialogCancel": {
+    "description": "Text for cancel button of delete observation confirmation dialog.",
+    "message": "Noomtee"
+  },
+  "$1.routes.app.projects.$projectId.settings.info.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Noomtee"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.cancelButton": {
+    "description": "Button text to cancel leaving project.",
+    "message": "Noomtee"
+  },
+  "$1.routes.app.projects.$projectId.team.$deviceId.continueButton": {
+    "description": "Button text to continue to next step in leave project flow.",
+    "message": "Taastay"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.close": {
+    "description": "Text for button to leave invite flow.",
+    "message": "Keer"
+  },
+  "$1.routes.app.settings.device-name.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Noomtee"
+  }
+}

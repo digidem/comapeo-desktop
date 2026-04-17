@@ -109,22 +109,22 @@ export function GenericRouteNotFoundComponent({
 
 const m = defineMessages({
 	title: {
-		id: 'components.generic-route-not-found-component.title',
+		id: '$1.components.generic-route-not-found-component.title',
 		defaultMessage: 'Page not found',
 		description: 'Title text shown when page is not found.',
 	},
 	goBack: {
-		id: 'components.generic-route-not-found-component.goBack',
+		id: '$1.components.generic-route-not-found-component.goBack',
 		defaultMessage: 'Go back',
 		description: 'Button text for back button.',
 	},
 	tryAgain: {
-		id: 'components.generic-route-not-found-component.tryAgain',
+		id: '$1.components.generic-route-not-found-component.tryAgain',
 		defaultMessage: 'Try Again',
 		description: 'Button text for try again button.',
 	},
 	reloadApp: {
-		id: 'components.generic-route-not-found-component.reloadApp',
+		id: '$1.components.generic-route-not-found-component.reloadApp',
 		defaultMessage: 'Reload App',
 		description: 'Button text for reload app button.',
 	},

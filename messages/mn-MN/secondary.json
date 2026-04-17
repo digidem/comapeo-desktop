@@ -1,0 +1,6 @@
+{
+  "routes.app.settings_.test-data.cancel": {
+    "description": "Label for cancel button.",
+    "message": "Цуцлах"
+  }
+}

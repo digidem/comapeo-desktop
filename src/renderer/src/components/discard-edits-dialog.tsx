@@ -70,18 +70,18 @@ export function DiscardEditsDialogContent({
 
 const m = defineMessages({
 	title: {
-		id: 'components.discard-edits-dialog.title',
+		id: '$1.components.discard-edits-dialog.title',
 		defaultMessage: 'Discard Edits?',
 		description:
 			'Title of dialog displayed when trying to leave page while editing observation.',
 	},
 	cancelButton: {
-		id: 'components.discard-edits-dialog.cancelButton',
+		id: '$1.components.discard-edits-dialog.cancelButton',
 		defaultMessage: 'Cancel',
 		description: 'Text for button to cancel action.',
 	},
 	confirmButton: {
-		id: 'components.discard-edits-dialog.confirmButton',
+		id: '$1.components.discard-edits-dialog.confirmButton',
 		defaultMessage: 'Yes, Discard',
 		description: 'Text for button to confirm discarding changes.',
 	},

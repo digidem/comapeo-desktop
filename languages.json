@@ -339,9 +339,13 @@
 		"nativeName": "Avañe'ẽ",
 		"englishName": "Guarani"
 	},
-	"gu-IN": {
+	"gu": {
 		"nativeName": "ગુજરાતી",
 		"englishName": "Gujarati"
+	},
+	"gu-IN": {
+		"nativeName": "ગુજરાતી",
+		"englishName": "Gujarati (India)"
 	},
 	"gx-GR": {
 		"nativeName": "Ἑλληνική ἀρχαία",
@@ -463,6 +467,10 @@
 		"nativeName": "ಕನ್ನಡ (India)",
 		"englishName": "Kannada (India)"
 	},
+	"knm": {
+		"nativeName": "Kanamari",
+		"englishName": "Kanamari"
+	},
 	"ko": {
 		"nativeName": "한국어",
 		"englishName": "Korean"
@@ -515,6 +523,10 @@
 		"nativeName": "मैथिली, মৈথিলী",
 		"englishName": "Maithili"
 	},
+	"mcf": {
+		"nativeName": "Mayoruna",
+		"englishName": "Matsés"
+	},
 	"mg": {
 		"nativeName": "Malagasy",
 		"englishName": "Malagasy"
@@ -547,6 +559,10 @@
 		"nativeName": "Монгол",
 		"englishName": "Mongolian"
 	},
+	"mpq": {
+		"nativeName": "Matis",
+		"englishName": "Matis"
+	},
 	"mr": {
 		"nativeName": "मराठी",
 		"englishName": "Marathi"
@@ -574,6 +590,14 @@
 	"my": {
 		"nativeName": "ဗမာစကာ",
 		"englishName": "Burmese"
+	},
+	"my-MM": {
+		"nativeName": "ဗမာစကာ",
+		"englishName": "Burmese (Myanmar)"
+	},
+	"mzr": {
+		"nativeName": "Marúbo",
+		"englishName": "Marubo"
 	},
 	"no": {
 		"nativeName": "Norsk",

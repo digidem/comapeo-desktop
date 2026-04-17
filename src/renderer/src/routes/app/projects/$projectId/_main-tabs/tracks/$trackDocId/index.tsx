@@ -438,28 +438,28 @@ function SyncedIndicatorLine({
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId.tracks.$trackDocId.index.navTitle',
+		id: '$1.routes.app.projects.$projectId.tracks.$trackDocId.index.navTitle',
 		defaultMessage: 'Track',
 		description: 'Displayed title.',
 	},
 	descriptionSectionTitle: {
-		id: 'routes.app.projects.$projectId.tracks.$trackDocId.index.descriptionSectionTitle',
+		id: '$1.routes.app.projects.$projectId.tracks.$trackDocId.index.descriptionSectionTitle',
 		defaultMessage: 'Description',
 		description: 'Title for description section.',
 	},
 	tracks: {
-		id: 'routes.app.projects.$projectId.tracks.$trackDocId.index.tracks',
+		id: '$1.routes.app.projects.$projectId.tracks.$trackDocId.index.tracks',
 		defaultMessage: 'Tracks',
 		description: 'Displayed title next to category icon.',
 	},
 	observationsSectionTitle: {
-		id: 'routes.app.projects.$projectId.tracks.$trackDocId.index.observationsSectionTitle',
+		id: '$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationsSectionTitle',
 		defaultMessage:
 			'{count, plural, one {# Observation} other {# Observations}}',
 		description: 'Title for the track observations section.',
 	},
 	observationCategoryNameFallback: {
-		id: 'routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback',
+		id: '$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback',
 		defaultMessage: 'Observation',
 		description: 'Fallback name for observation without a matching category.',
 	},
@@ -470,7 +470,7 @@ const m = defineMessages({
 			'Alt text for icon image displayed for category (used for accessibility tools).',
 	},
 	trackNotFound: {
-		id: 'routes.app.projects.$projectId.tracks.$trackDocId.index.trackNotFound',
+		id: '$1.routes.app.projects.$projectId.tracks.$trackDocId.index.trackNotFound',
 		defaultMessage: 'Could not find track with ID {docId}',
 		description: 'Text displayed when track cannot be found.',
 	},

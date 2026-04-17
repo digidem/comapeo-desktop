@@ -1,4 +1,6 @@
-import { readFileSync } from 'node:fs'
+import { globSync, readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { createIntl, createIntlCache, type IntlShape } from '@formatjs/intl'
 import { captureException } from '@sentry/electron'
 import debug from 'debug'
@@ -7,6 +9,7 @@ import { TypedEmitter } from 'tiny-typed-emitter'
 import * as v from 'valibot'
 
 import {
+	DEFAULT_LANGUAGE_TAG,
 	SupportedLanguageTagSchema,
 	type LocaleSource,
 	type LocaleState,
@@ -17,8 +20,13 @@ import type { CurrentStoreState } from './persisted-store.ts'
 const log = debug('comapeo:main:intl-manager')
 
 const messagesCache = new Map<SupportedLanguageTag, Record<string, unknown>>(
-	// Load the English messages immediately
-	[['en', loadMessages('en') as Record<string, unknown>]],
+	// Load the default language's messages immediately
+	[
+		[
+			DEFAULT_LANGUAGE_TAG,
+			loadMessages(DEFAULT_LANGUAGE_TAG) as Record<string, unknown>,
+		],
+	],
 )
 
 type IntlManagerEvents = {
@@ -46,20 +54,18 @@ export class IntlManager extends TypedEmitter<IntlManagerEvents> {
 	}
 
 	#createIntl(locale: SupportedLanguageTag): IntlShape<SupportedLanguageTag> {
-		// Always use the English messages for fallback purposes
-		let messages = messagesCache.get('en')!
+		// Always use the default language's messages for fallback purposes
+		let messages = messagesCache.get(DEFAULT_LANGUAGE_TAG)!
 
-		const baseTag = locale.split('-')[0]
-
-		if (v.is(SupportedLanguageTagSchema, baseTag)) {
-			let localeMessages = messagesCache.get(baseTag)
+		if (v.is(SupportedLanguageTagSchema, locale)) {
+			let localeMessages = messagesCache.get(locale)
 
 			if (!localeMessages) {
 				log(`Loading and caching messages for '${locale}'`)
 
 				try {
-					localeMessages = loadMessages(baseTag) as Record<string, unknown>
-					messagesCache.set(baseTag, localeMessages)
+					localeMessages = loadMessages(locale)
+					messagesCache.set(locale, localeMessages)
 				} catch (err) {
 					captureException(err)
 				}
@@ -70,13 +76,13 @@ export class IntlManager extends TypedEmitter<IntlManagerEvents> {
 				...localeMessages,
 			}
 		} else {
-			log(`Could not extract base tag from language tag: ${locale}`)
+			log(`${locale} is not a supported locale.`)
 		}
 
 		return createIntl(
 			{
 				locale,
-				defaultLocale: 'en',
+				defaultLocale: DEFAULT_LANGUAGE_TAG,
 				// @ts-expect-error Not worth fixing
 				messages,
 			},
@@ -100,24 +106,15 @@ export class IntlManager extends TypedEmitter<IntlManagerEvents> {
 				getBestMatchingLanguageFromSystemPreferences()
 
 			if (systemPreferredLocale) {
-				return {
-					value: systemPreferredLocale,
-					source: 'system',
-				}
+				return { value: systemPreferredLocale, source: 'system' }
 			} else {
-				return {
-					value: 'en',
-					source: 'fallback',
-				}
+				return { value: DEFAULT_LANGUAGE_TAG, source: 'fallback' }
 			}
 		}
 
 		v.assert(SupportedLanguageTagSchema, locale.languageTag)
 
-		return {
-			source: 'selected',
-			value: locale.languageTag,
-		}
+		return { source: 'selected', value: locale.languageTag }
 	}
 
 	updateLocale(locale: CurrentStoreState['locale']) {
@@ -144,19 +141,23 @@ export class IntlManager extends TypedEmitter<IntlManagerEvents> {
 	}
 }
 
-// We only support generalized locales for now (i.e., no difference between
-// Spanish/Espana and Spanish/Latin America)
 function getBestMatchingLanguageFromSystemPreferences() {
 	const preferred = app.getPreferredSystemLanguages()
 
 	for (const languageTag of preferred) {
-		const baseTag = languageTag.split('-')[0]
+		const [baseTag, regionTag] = languageTag.split('-')
 
-		// Shouldn't happen
+		// NOTE: Shouldn't happen
 		if (!baseTag) {
-			throw new Error(
-				`Could not extract base tag from language tag: ${languageTag}`,
-			)
+			throw new Error(`Cannot get base tag from ${languageTag}`)
+		}
+
+		if (regionTag) {
+			const constructed = `${baseTag}-${regionTag}`
+
+			if (v.is(SupportedLanguageTagSchema, constructed)) {
+				return constructed
+			}
 		}
 
 		if (v.is(SupportedLanguageTagSchema, baseTag)) {
@@ -169,11 +170,38 @@ function getBestMatchingLanguageFromSystemPreferences() {
 	return null
 }
 
-function loadMessages(baseTag: SupportedLanguageTag) {
-	return JSON.parse(
-		readFileSync(
-			new URL(`../../translations/main/${baseTag}.json`, import.meta.url),
-			{ encoding: 'utf-8' },
-		),
-	) as unknown
+function loadMessages(languageTag: SupportedLanguageTag) {
+	const [baseTag, regionTag] = languageTag.split('-')
+
+	if (!baseTag) {
+		throw new Error(`Cannot get base tag from ${languageTag}`)
+	}
+
+	const translationsDir = fileURLToPath(
+		new URL(`../../translations/main`, import.meta.url),
+	)
+
+	const translationsFiles = Array.from(
+		globSync(`${baseTag}*.json`, { cwd: translationsDir }),
+	)
+		// NOTE: Sort alphanumerically except for exact match, which should be last.
+		.sort((a, b) => {
+			if (regionTag && a.startsWith(languageTag)) {
+				return 1
+			}
+
+			return b.localeCompare(a)
+		})
+
+	let messages = {} as Record<string, unknown>
+
+	for (const filename of translationsFiles) {
+		const translationMessages = JSON.parse(
+			readFileSync(join(translationsDir, filename), 'utf-8'),
+		)
+
+		messages = { ...messages, ...translationMessages }
+	}
+
+	return messages
 }

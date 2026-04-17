@@ -11,13 +11,11 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
+import { SupportedLanguageTagSchema } from '../../../../../../shared/intl.ts'
 import { DARK_GREY } from '../../../../colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
-import {
-	SupportedLanguageTagSchema,
-	usableLanguages,
-} from '../../../../lib/intl.ts'
+import { usableLanguages } from '../../../../lib/intl.ts'
 import {
 	getLocaleStateQueryOptions,
 	setLocaleMutationOptions,
@@ -94,15 +92,31 @@ function RouteComponent() {
 									}
 								/>
 								{sortedUsableLanguages.map(
-									({ languageTag, nativeName, englishName }) => (
+									({
+										languageTag,
+										englishName,
+										nativeName,
+										baseLanguageInfo,
+									}) => (
 										<FormControlLabel
 											key={languageTag}
 											value={languageTag}
 											control={<Radio />}
 											label={
+												// NOTE: We intentionally do not show the regional variant for now.
+												// This will change in the future once we have
+												// multiple language variants that we actually support.
 												<RadioOptionLabel
-													primaryText={nativeName}
-													secondaryText={englishName}
+													primaryText={
+														baseLanguageInfo
+															? baseLanguageInfo.nativeName
+															: nativeName
+													}
+													secondaryText={
+														baseLanguageInfo
+															? baseLanguageInfo.englishName
+															: englishName
+													}
 												/>
 											}
 										/>
@@ -151,12 +165,12 @@ function RadioOptionLabel({
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.settings.language.title',
+		id: '$1.routes.app.settings.language.title',
 		defaultMessage: 'Language',
 		description: 'Title of the language settings page.',
 	},
 	followSystemOptionLabel: {
-		id: 'routes.app.settings.language.followSystemOptionLabel',
+		id: '$1.routes.app.settings.language.followSystemOptionLabel',
 		defaultMessage: 'Follow system preferences',
 		description: 'Option label for following system preference for language.',
 	},

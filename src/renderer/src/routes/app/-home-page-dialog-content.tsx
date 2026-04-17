@@ -597,48 +597,48 @@ function AppUsageInterstitial({
 
 const m = defineMessages({
 	projectActionDialogGoBack: {
-		id: 'routes.app.index.projectActionDialogGoBack',
+		id: '$1.routes.app.index.projectActionDialogGoBack',
 		defaultMessage: 'Go back',
 		description: 'Text for button to close project join/create dialog.',
 	},
 	joinProjectDialogTitle: {
-		id: 'routes.app.index.joinProjectDialogTitle',
+		id: '$1.routes.app.index.joinProjectDialogTitle',
 		defaultMessage: 'Join a Project',
 		description: 'Title of dialog shown for joining a project.',
 	},
 	joinProjectDialogDescription: {
-		id: 'routes.app.index.joinProjectDialogDescription',
+		id: '$1.routes.app.index.joinProjectDialogDescription',
 		defaultMessage:
 			'Coordinate with your team to receive a project invitation.',
 		description: 'Description of dialog shown for joining a project.',
 	},
 	startProjectDialogTitle: {
-		id: 'routes.app.index.startProjectDialogTitle',
+		id: '$1.routes.app.index.startProjectDialogTitle',
 		defaultMessage: 'Start New Project',
 		description: 'Description of dialog shown for starting a project.',
 	},
 	startProjectDialogDescription: {
-		id: 'routes.app.index.startProjectDialogDescription',
+		id: '$1.routes.app.index.startProjectDialogDescription',
 		defaultMessage: 'Name your project.',
 		description: 'Description of dialog shown for starting a project.',
 	},
 	projectNameInputLabel: {
-		id: 'routes.app.index.projectNameInputLabel',
+		id: '$1.routes.app.index.projectNameInputLabel',
 		defaultMessage: 'Project Name',
 		description: 'Input label for input in start project dialog.',
 	},
 	projectNameMinLengthError: {
-		id: 'routes.app.index.projectNameMinLengthError',
+		id: '$1.routes.app.index.projectNameMinLengthError',
 		defaultMessage: 'Enter a Project Name',
 		description: 'Error message for when project name is too short.',
 	},
 	projectNameMaxLengthError: {
-		id: 'routes.app.index.projectNameMaxLengthError',
+		id: '$1.routes.app.index.projectNameMaxLengthError',
 		defaultMessage: 'Too long, try a shorter name.',
 		description: 'Error message for when project name is too long.',
 	},
 	createProjectButton: {
-		id: 'routes.app.index.createProjectButton',
+		id: '$1.routes.app.index.createProjectButton',
 		defaultMessage: 'Create',
 		description: 'Text for button to create project.',
 	},
@@ -648,84 +648,84 @@ const m = defineMessages({
 		description: 'Character count for project name input.',
 	},
 	leftProjectDialogTitle: {
-		id: 'routes.app.index.leftProjectDialogTitle',
+		id: '$1.routes.app.index.leftProjectDialogTitle',
 		defaultMessage: 'This device has left the project {name}.',
 		description: 'Title text for left project dialog.',
 	},
 	leftProjectDialogCloseButton: {
-		id: 'routes.app.index.leftProjectDialogCloseButton',
+		id: '$1.routes.app.index.leftProjectDialogCloseButton',
 		defaultMessage: 'Close',
 		description: 'Text for button to close left project dialog.',
 	},
 	appUsageConsentInterstitialTitle: {
-		id: 'routes.app.index.appUsageConsentInterstitialTitle',
+		id: '$1.routes.app.index.appUsageConsentInterstitialTitle',
 		defaultMessage: 'Help improve your experience.',
 		description:
 			'Title text for interstitial state of app usage consent dialog.',
 	},
 	appUsageConsentInterstitialDescription: {
-		id: 'routes.app.index.appUsageConsentInterstitialDescription',
+		id: '$1.routes.app.index.appUsageConsentInterstitialDescription',
 		defaultMessage:
 			'Share how you use CoMapeo with Awana Digital — no information you share can be used to track you.',
 		description:
 			'Description text for interstitial state of app usage consent dialog.',
 	},
 	appUsageConsentInterstitialDetailsIdNumbers: {
-		id: 'routes.app.index.appUsageConsentInterstitialDetailsIdNumbers',
+		id: '$1.routes.app.index.appUsageConsentInterstitialDetailsIdNumbers',
 		defaultMessage:
 			'ID numbers are scrambled randomly and changed every month.',
 		description:
 			'Text describing how IDs used for app usage metrics are used and generated.',
 	},
 	appUsageConsentInterstitialDetailsIpAddresses: {
-		id: 'routes.app.index.appUsageConsentInterstitialDetailsIpAddresses',
+		id: '$1.routes.app.index.appUsageConsentInterstitialDetailsIpAddresses',
 		defaultMessage: 'CoMapeo never stores IP addresses.',
 		description: 'Text describing how IP addresses are never stored.',
 	},
 	appUsageConsentInterstitialDetailsTurnOffAnytime: {
-		id: 'routes.app.index.appUsageConsentInterstitialDetailsTurnOffAnytime',
+		id: '$1.routes.app.index.appUsageConsentInterstitialDetailsTurnOffAnytime',
 		defaultMessage: 'Turn off any time.',
 		description:
 			'Text describing how app usage metrics can be turned off at any time.',
 	},
 	appUsageConsentInterstitialDenyButton: {
-		id: 'routes.app.index.appUsageConsentInterstitialDenyButton',
+		id: '$1.routes.app.index.appUsageConsentInterstitialDenyButton',
 		defaultMessage: 'No, not now',
 		description: 'Text for button to deny consent for app usage metrics.',
 	},
 	appUsageConsentInterstitialAllowButton: {
-		id: 'routes.app.index.appUsageConsentInterstitialAllowButton',
+		id: '$1.routes.app.index.appUsageConsentInterstitialAllowButton',
 		defaultMessage: 'Yes, count me in',
 		description: 'Text for button to allow consent for app usage metrics.',
 	},
 	appUsageConsentSuccessTitle: {
-		id: 'routes.app.index.appUsageConsentSuccessTitle',
+		id: '$1.routes.app.index.appUsageConsentSuccessTitle',
 		defaultMessage: 'Success!',
 		description: 'Title text for success state of app usage consent dialog.',
 	},
 	appUsageConsentSuccessDescription: {
-		id: 'routes.app.index.appUsageConsentSuccessDescription',
+		id: '$1.routes.app.index.appUsageConsentSuccessDescription',
 		defaultMessage:
 			'<b>{deviceName}</b> is now sharing how you use CoMapeo with Awana Digital.',
 		description:
 			'Description text for success state of app usage consent dialog.',
 	},
 	appUsageConsentSuccessDescriptionNoDeviceName: {
-		id: 'routes.app.index.appUsageConsentSuccessDescriptionNoDeviceName',
+		id: '$1.routes.app.index.appUsageConsentSuccessDescriptionNoDeviceName',
 		defaultMessage:
 			'This device is now sharing how you use CoMapeo with Awana Digital.',
 		description:
 			'Description text for success state of app usage consent dialog when device name not present (edge case).',
 	},
 	appUsageConsentSuccessDetailsChangeSetting: {
-		id: 'routes.app.index.appUsageConsentSuccessDetailsChangeSetting',
+		id: '$1.routes.app.index.appUsageConsentSuccessDetailsChangeSetting',
 		defaultMessage:
 			'Change this anytime by navigating to Data & Privacy in CoMapeo Settings.',
 		description:
 			'Description text for success state of app usage consent dialog.',
 	},
 	appUsageConsentSuccessCloseButton: {
-		id: 'routes.app.index.appUsageConsentSuccessCloseButton',
+		id: '$1.routes.app.index.appUsageConsentSuccessCloseButton',
 		defaultMessage: 'Done',
 		description: 'Text for button to close app usage consent dialog.',
 	},

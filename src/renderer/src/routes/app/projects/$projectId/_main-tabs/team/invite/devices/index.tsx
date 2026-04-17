@@ -208,28 +208,28 @@ function InvitablePeersList({ projectId }: { projectId: string }) {
 
 const m = defineMessages({
 	navTitle: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.index.navTitle',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.index.navTitle',
 		defaultMessage: 'Select a Device',
 		description: 'Title of the device selection for invite page.',
 	},
 	gettingWifiInfo: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.index.gettingWifiInfo',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.index.gettingWifiInfo',
 		defaultMessage: 'Getting Wi-Fi information…',
 		description: 'Text displayed when waiting for Wi-Fi information.',
 	},
 	discoveryTroubleshootingTitle: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingTitle',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingTitle',
 		defaultMessage: 'Not seeing a device?',
 		description: 'Title for device discovery troubleshooting section.',
 	},
 	discoveryTroubleshootingSameNetwork: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingSameNetwork',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingSameNetwork',
 		defaultMessage: 'Check that devices are on the same Wi-Fi network',
 		description:
 			'Text explaining that devices need to be on same Wi-Fi network.',
 	},
 	discoveryTroubleshootingSameVersion: {
-		id: 'routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingSameVersion',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingSameVersion',
 		defaultMessage:
 			'Confirm that devices are using the same version of CoMapeo',
 		description:
