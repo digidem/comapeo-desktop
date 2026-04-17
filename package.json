@@ -25,7 +25,7 @@
 	"devEngines": {
 		"runtime": {
 			"name": "node",
-			"version": "~24.14.0",
+			"version": "~24.14.1",
 			"onFail": "warn"
 		},
 		"packageManager": {
@@ -136,7 +136,7 @@
 		"@vitejs/plugin-react": "6.0.1",
 		"concurrently": "9.2.1",
 		"date-fns": "4.1.0",
-		"electron": "41.2.0",
+		"electron": "41.2.1",
 		"electron-playwright-helpers": "2.1.0",
 		"eslint": "10.2.0",
 		"eslint-plugin-formatjs": "6.4.5",
