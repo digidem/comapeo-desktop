@@ -149,7 +149,7 @@
 		"network-information-types": "0.1.1",
 		"patch-package": "8.0.1",
 		"playwright": "1.59.1",
-		"prettier": "3.8.2",
+		"prettier": "3.8.3",
 		"prettier-plugin-jsdoc": "1.8.0",
 		"radashi": "12.7.2",
 		"react": "19.2.5",
