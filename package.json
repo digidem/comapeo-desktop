@@ -66,7 +66,7 @@
 		"vite:build": "vite build src/renderer"
 	},
 	"dependencies": {
-		"@comapeo/core": "7.0.1",
+		"@comapeo/core": "7.1.0",
 		"@comapeo/default-categories": "1.0.1",
 		"@comapeo/fallback-smp": "1.0.0",
 		"@comapeo/ipc": "8.0.0",
