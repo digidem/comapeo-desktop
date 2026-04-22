@@ -163,7 +163,7 @@
 		"utm": "1.1.1",
 		"vite": "8.0.9",
 		"vite-plugin-icons-spritesheet": "3.0.1",
-		"vitest": "4.1.4"
+		"vitest": "4.1.5"
 	},
 	"overrides": {
 		"better-sqlite3": "12.9.0",
