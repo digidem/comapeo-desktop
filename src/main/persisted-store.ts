@@ -45,7 +45,7 @@ const StoreStateV2Schema = v.object({
 export const CurrentStoreStateSchema = StoreStateV2Schema
 export type CurrentStoreState = v.InferOutput<typeof StoreStateV2Schema>
 
-export const PersistedStorageV1Schema = v.object({
+const PersistedStorageV1Schema = v.object({
 	version: v.literal(1),
 	state: StoreStateV1Schema,
 })
