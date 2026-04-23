@@ -143,7 +143,7 @@
 		"eslint-plugin-react-refresh": "0.5.2",
 		"globals": "17.5.0",
 		"husky": "9.1.7",
-		"knip": "6.6.1",
+		"knip": "6.6.2",
 		"maplibre-gl": "5.24.0",
 		"nano-staged": "1.0.2",
 		"network-information-types": "0.1.1",
