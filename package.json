@@ -136,7 +136,7 @@
 		"@vitejs/plugin-react": "6.0.1",
 		"concurrently": "9.2.1",
 		"date-fns": "4.1.0",
-		"electron": "41.2.2",
+		"electron": "41.3.0",
 		"electron-playwright-helpers": "2.1.0",
 		"eslint": "10.2.1",
 		"eslint-plugin-formatjs": "6.4.5",
