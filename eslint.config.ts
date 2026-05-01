@@ -1,5 +1,4 @@
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
 import react from '@eslint-react/eslint-plugin'
 import { includeIgnoreFile } from '@eslint/compat'
 import js from '@eslint/js'
@@ -11,17 +10,8 @@ import { defineConfig } from 'eslint/config'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
-const gitignorePath = path.join(
-	path.dirname(fileURLToPath(import.meta.url)),
-	'.gitignore',
-)
-
-const gitExcludePath = path.join(
-	path.dirname(fileURLToPath(import.meta.url)),
-	'.git',
-	'info',
-	'exclude',
-)
+const gitignorePath = join(import.meta.dirname, '.gitignore')
+const gitExcludePath = join(import.meta.dirname, '.git', 'info', 'exclude')
 
 export default defineConfig(
 	includeIgnoreFile(gitignorePath),
