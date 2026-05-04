@@ -138,7 +138,7 @@
 		"date-fns": "4.1.0",
 		"electron": "41.4.0",
 		"electron-playwright-helpers": "2.1.0",
-		"eslint": "10.2.1",
+		"eslint": "10.3.0",
 		"eslint-plugin-formatjs": "6.4.7",
 		"eslint-plugin-react-refresh": "0.5.2",
 		"globals": "17.6.0",
