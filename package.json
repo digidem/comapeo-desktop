@@ -109,7 +109,7 @@
 		"@formatjs/cli-lib": "8.5.5",
 		"@formatjs/unplugin": "1.1.10",
 		"@ianvs/prettier-plugin-sort-imports": "4.7.1",
-		"@mui/material": "9.0.0",
+		"@mui/material": "9.0.1",
 		"@playwright/test": "1.59.1",
 		"@reforged/maker-appimage": "5.2.0",
 		"@sentry/react": "10.50.0",
