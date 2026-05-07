@@ -1037,18 +1037,19 @@ function ObservationDetailsPanel({
 }
 
 function isEditableField(field: Field): field is EditableField {
-	if (field.type === 'UNRECOGNIZED' || field.type === 'type_unspecified') {
-		return false
+	switch (field.type) {
+		case 'number':
+		case 'text': {
+			return true
+		}
+		case 'selectOne':
+		case 'selectMultiple': {
+			return field.options !== undefined
+		}
+		default: {
+			return false
+		}
 	}
-
-	if (
-		(field.type === 'selectMultiple' || field.type === 'selectOne') &&
-		field.options === undefined
-	) {
-		return false
-	}
-
-	return true
 }
 
 /**
