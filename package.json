@@ -113,7 +113,7 @@
 		"@playwright/test": "1.60.0",
 		"@reforged/maker-appimage": "5.2.0",
 		"@sentry/react": "10.50.0",
-		"@sentry/vite-plugin": "5.2.1",
+		"@sentry/vite-plugin": "5.3.0",
 		"@tanstack/eslint-plugin-query": "5.100.10",
 		"@tanstack/eslint-plugin-router": "1.162.0",
 		"@tanstack/react-form": "1.32.0",
