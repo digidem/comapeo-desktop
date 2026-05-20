@@ -144,6 +144,15 @@ activeProjectIdStore.instance.subscribe((state) => {
 
 localPeersStore.actions.subscribe()
 
+// NOTE: Refresh locale state when user changes language preferences at operating system level
+window.addEventListener('languagechange', () => {
+	window.runtime.refreshLocale()
+
+	queryClient.invalidateQueries({
+		queryKey: getLocaleStateQueryOptions().queryKey,
+	})
+})
+
 export function App() {
 	return (
 		<StrictMode>

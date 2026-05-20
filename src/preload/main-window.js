@@ -92,6 +92,9 @@ const runtimeApi = {
 	setLocale: async (value) => {
 		return ipcRenderer.invoke('settings:set:locale', value)
 	},
+	refreshLocale: () => {
+		return ipcRenderer.send('settings:locale:refresh')
+	},
 
 	getAppUsageMetrics: async () => {
 		const result = await ipcRenderer.invoke('settings:get:appUsageMetrics')

@@ -72,6 +72,10 @@ export function setUpMainIPC({
 		persistedStore.setState({ locale: value })
 	})
 
+	ipcMain.on('settings:locale:refresh', () => {
+		intlManager.updateLocale(persistedStore.getState().locale)
+	})
+
 	ipcMain.handle('settings:set:appUsageMetrics', (_event, value) => {
 		v.assert(
 			v.object({
