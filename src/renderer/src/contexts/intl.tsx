@@ -1,5 +1,6 @@
 import {
 	useDeferredValue,
+	useEffect,
 	useMemo,
 	type ComponentProps,
 	type PropsWithChildren,
@@ -51,6 +52,13 @@ export function IntlProvider({ children }: PropsWithChildren) {
 	const combinedMessages = useMemo(() => {
 		return { ...defaultLanguageMessages, ...localeMessages }
 	}, [defaultLanguageMessages, localeMessages])
+
+	useEffect(
+		function updateDocumentLang() {
+			document.documentElement.lang = persistedLocale
+		},
+		[persistedLocale],
+	)
 
 	return (
 		<ReactIntlProvider
