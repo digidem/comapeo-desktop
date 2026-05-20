@@ -57,7 +57,7 @@ const runtimeApi = {
 		return { appVersion, systemVersion, platform: process.platform }
 	},
 	getWifiConnections: async () => {
-		return ipcRenderer.invoke('system:get:wifiConnections')
+		return ipcRenderer.invoke('system:wifiConnections:get')
 	},
 
 	// Shell
@@ -73,35 +73,35 @@ const runtimeApi = {
 
 	// Settings
 	getCoordinateFormat: async () => {
-		return ipcRenderer.invoke('settings:get:coordinateFormat')
+		return ipcRenderer.invoke('settings:coordinateFormat:get')
 	},
 	setCoordinateFormat: async (value) => {
-		return ipcRenderer.invoke('settings:set:coordinateFormat', value)
+		return ipcRenderer.invoke('settings:coordinateFormat:set', value)
 	},
 
 	getDiagnosticsEnabled: async () => {
-		return ipcRenderer.invoke('settings:get:diagnosticsEnabled')
+		return ipcRenderer.invoke('settings:diagnosticsEnabled:get')
 	},
 	setDiagnosticsEnabled: async (value) => {
-		return ipcRenderer.invoke('settings:set:diagnosticsEnabled', value)
+		return ipcRenderer.invoke('settings:diagnosticsEnabled:set', value)
 	},
 
 	getLocaleState: async () => {
-		return ipcRenderer.invoke('settings:get:locale')
+		return ipcRenderer.invoke('settings:locale:get')
 	},
 	setLocale: async (value) => {
-		return ipcRenderer.invoke('settings:set:locale', value)
+		return ipcRenderer.invoke('settings:locale:set', value)
 	},
 	refreshLocale: () => {
 		return ipcRenderer.send('settings:locale:refresh')
 	},
 
 	getAppUsageMetrics: async () => {
-		const result = await ipcRenderer.invoke('settings:get:appUsageMetrics')
+		const result = await ipcRenderer.invoke('settings:appUsageMetrics:get')
 		return result || null
 	},
 	setAppUsageMetrics: async (value) => {
-		return ipcRenderer.invoke('settings:set:appUsageMetrics', value)
+		return ipcRenderer.invoke('settings:appUsageMetrics:set', value)
 	},
 
 	// User
