@@ -284,6 +284,22 @@ async function initializePeerDiscovery(manager: MapeoManager) {
 		type: 'comapeo',
 	})
 
+	// NOTE: Gracefully handle announce errors. See relevant patch for @homebridge/ciao
+	service.on(
+		// @ts-expect-error Not worth fixing in patch
+		'announce-error',
+		(reason: unknown) => {
+			log('Announce error occurred', reason)
+			Sentry.captureException(reason)
+
+			// Service is now UNANNOUNCED — safe to call advertise() again
+			service.advertise().catch((error) => {
+				log('Attempting to advertise again failed', error)
+				Sentry.captureException(error)
+			})
+		},
+	)
+
 	let shutdownPromise: Promise<void> | undefined
 
 	async function cleanup() {
