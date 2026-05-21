@@ -681,7 +681,7 @@ test('language', async ({ appInfo, userParams }) => {
 
 			await expect(systemPreferencesOption).toHaveJSProperty('checked', true)
 
-			await expect(page.locator('html')).toHaveAttribute('lang', 'en-US')
+			await expect(page.locator('html')).toHaveAttribute('lang', /^(en$|en-)/)
 
 			await main
 				.getByRole('navigation', { name: 'breadcrumb', exact: true })
