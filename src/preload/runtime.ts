@@ -39,6 +39,7 @@ export type RuntimeApi = {
 
 	getLocaleState: () => Promise<LocaleState>
 	setLocale: (value: Locale) => Promise<void>
+	refreshLocale: () => void
 
 	getAppUsageMetrics: () => Promise<AppUsageMetrics | null>
 	setAppUsageMetrics: (value: {

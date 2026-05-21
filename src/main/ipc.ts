@@ -29,29 +29,16 @@ export function setUpMainIPC({
 	})
 
 	// System
-	ipcMain.handle('system:get:wifiConnections', () => {
+	ipcMain.handle('system:wifiConnections:get', () => {
 		return si.wifiConnections()
 	})
 
-	// Settings (get)
-	ipcMain.handle('settings:get:coordinateFormat', () => {
+	// Settings
+	ipcMain.handle('settings:coordinateFormat:get', () => {
 		return persistedStore.getState().coordinateFormat
 	})
 
-	ipcMain.handle('settings:get:diagnosticsEnabled', () => {
-		return persistedStore.getState().diagnosticsEnabled
-	})
-
-	ipcMain.handle('settings:get:locale', () => {
-		return intlManager.localeState
-	})
-
-	ipcMain.handle('settings:get:appUsageMetrics', () => {
-		return persistedStore.getState().appUsageMetrics
-	})
-
-	// Settings (set)
-	ipcMain.handle('settings:set:coordinateFormat', (_event, value) => {
+	ipcMain.handle('settings:coordinateFormat:set', (_event, value) => {
 		v.assert(
 			v.nonOptional(CurrentStoreStateSchema.entries.coordinateFormat),
 			value,
@@ -59,7 +46,11 @@ export function setUpMainIPC({
 		persistedStore.setState({ coordinateFormat: value })
 	})
 
-	ipcMain.handle('settings:set:diagnosticsEnabled', (_event, value) => {
+	ipcMain.handle('settings:diagnosticsEnabled:get', () => {
+		return persistedStore.getState().diagnosticsEnabled
+	})
+
+	ipcMain.handle('settings:diagnosticsEnabled:set', (_event, value) => {
 		v.assert(
 			v.nonOptional(CurrentStoreStateSchema.entries.diagnosticsEnabled),
 			value,
@@ -67,12 +58,24 @@ export function setUpMainIPC({
 		persistedStore.setState({ diagnosticsEnabled: value })
 	})
 
-	ipcMain.handle('settings:set:locale', (_event, value) => {
+	ipcMain.handle('settings:locale:get', () => {
+		return intlManager.localeState
+	})
+
+	ipcMain.handle('settings:locale:set', (_event, value) => {
 		v.assert(v.nonOptional(CurrentStoreStateSchema.entries.locale), value)
 		persistedStore.setState({ locale: value })
 	})
 
-	ipcMain.handle('settings:set:appUsageMetrics', (_event, value) => {
+	ipcMain.on('settings:locale:refresh', () => {
+		intlManager.updateLocale(persistedStore.getState().locale)
+	})
+
+	ipcMain.handle('settings:appUsageMetrics:get', () => {
+		return persistedStore.getState().appUsageMetrics
+	})
+
+	ipcMain.handle('settings:appUsageMetrics:set', (_event, value) => {
 		v.assert(
 			v.object({
 				status: v.union([v.literal('disabled'), v.literal('enabled')]),

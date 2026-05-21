@@ -128,10 +128,21 @@ export class IntlManager extends TypedEmitter<IntlManagerEvents> {
 			log(`Using selected language: ${value}`)
 		}
 
-		this.#intl = this.#createIntl(value)
-		this.#localeSource = source
+		let didChange = false
 
-		this.emit('locale-state', this.localeState)
+		if (this.#intl.locale !== value) {
+			this.#intl = this.#createIntl(value)
+			didChange = true
+		}
+
+		if (this.#localeSource !== source) {
+			this.#localeSource = source
+			didChange = true
+		}
+
+		if (didChange) {
+			this.emit('locale-state', this.localeState)
+		}
 	}
 
 	// Exposing mostly for convenience of usage
