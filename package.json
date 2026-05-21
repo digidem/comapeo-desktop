@@ -127,7 +127,7 @@
 		"@turf/random": "7.3.5",
 		"@types/geojson": "7946.0.16",
 		"@types/node": "24.12.4",
-		"@types/react": "19.2.14",
+		"@types/react": "19.2.15",
 		"@types/react-dom": "19.2.3",
 		"@types/semver": "7.7.1",
 		"@types/sodium-native": "2.3.9",
