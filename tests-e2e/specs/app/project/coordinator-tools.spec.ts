@@ -343,7 +343,6 @@ test.describe('project info', () => {
 					})
 					.fill('Description in back button test')
 
-				// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
 				await main
 					.getByLabel('Project Card Color', { exact: true })
 					.getByRole('checkbox')
@@ -423,7 +422,6 @@ test.describe('project info', () => {
 					})
 					.fill('Description in cancel button test')
 
-				// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
 				await main
 					.getByLabel('Project Card Color', { exact: true })
 					.getByRole('checkbox')
@@ -593,7 +591,6 @@ test.describe('project info', () => {
 					})
 					.fill(updatedProjectParams.projectDescription)
 
-				// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
 				await main
 					.getByLabel('Project Card Color', { exact: true })
 					.getByRole('checkbox', { checked: true })

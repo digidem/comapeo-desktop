@@ -187,10 +187,9 @@ test('index', async ({ appInfo, userParams }) => {
 				exact: true,
 			})
 
-			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
-			await expect(diagnosticCheckbox).toBeChecked()
+			await expect(diagnosticCheckbox).toHaveJSProperty('checked', true)
 			await diagnosticCheckbox.click()
-			await expect(diagnosticCheckbox).not.toBeChecked()
+			await expect(diagnosticCheckbox).toHaveJSProperty('checked', false)
 		}
 
 		/// App Usage section
@@ -226,12 +225,11 @@ test('index', async ({ appInfo, userParams }) => {
 				exact: true,
 			})
 
-			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
-			await expect(appUsageCheckbox).not.toBeChecked()
+			await expect(appUsageCheckbox).toHaveJSProperty('checked', false)
 			await appUsageCheckbox.click()
-			await expect(appUsageCheckbox).toBeChecked()
+			await expect(appUsageCheckbox).toHaveJSProperty('checked', true)
 			await appUsageCheckbox.click()
-			await expect(appUsageCheckbox).not.toBeChecked()
+			await expect(appUsageCheckbox).toHaveJSProperty('checked', false)
 		}
 
 		/// About CoMapeo section
@@ -571,9 +569,13 @@ test('language', async ({ appInfo, userParams }) => {
 			)
 		}
 
+		const radioGroup = main.getByRole('radiogroup')
+
 		//// Initial state
 		{
-			const systemPreferencesOption = main.getByRole('radio', {
+			await expect(radioGroup).toHaveAccessibleName('Language')
+
+			const systemPreferencesOption = radioGroup.getByRole('radio', {
 				name: 'Follow system preferences',
 				exact: true,
 				checked: true,
@@ -603,21 +605,24 @@ test('language', async ({ appInfo, userParams }) => {
 				const { nativeName, englishName } =
 					allLanguages[baseTag as keyof typeof allLanguages]!
 
-				const option = main.getByRole('radio', {
+				const option = radioGroup.getByRole('radio', {
 					name: `${nativeName} ${englishName}`,
 				})
 
 				await expect(option).toHaveValue(languageCode)
-				await expect(option).not.toBeChecked()
+				await expect(option).toHaveJSProperty('checked', false)
 			}
 		}
 
 		//// Updating selected value
 		{
-			const portugueseOption = main.getByRole('radio', { name: 'Portuguese' })
-			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
+			const portugueseOption = radioGroup.getByRole('radio', {
+				name: 'Portuguese',
+			})
 			await portugueseOption.click()
-			await expect(portugueseOption).toBeChecked({ timeout: 2_000 })
+			await expect(portugueseOption).toHaveJSProperty('checked', true)
+
+			await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR')
 
 			await expect(
 				main
@@ -629,8 +634,10 @@ test('language', async ({ appInfo, userParams }) => {
 					.getByRole('link', { name: 'Idioma', exact: true }),
 			).toBeVisible()
 
+			await expect(radioGroup).toHaveAccessibleName('Idioma')
+
 			await expect(
-				main.getByRole('radio', {
+				radioGroup.getByRole('radio', {
 					name: 'Seguir preferências do sistema',
 					exact: true,
 				}),
@@ -656,17 +663,25 @@ test('language', async ({ appInfo, userParams }) => {
 		//// Returning to language settings page and restoring selection
 		{
 			await expect(
-				main.getByRole('radio', { name: 'Portuguese', checked: true }),
+				radioGroup.getByRole('radio', { name: 'Portuguese', checked: true }),
 			).toBeVisible()
 
-			const systemPreferencesOption = main.getByRole('radio', {
+			let systemPreferencesOption = radioGroup.getByRole('radio', {
 				name: 'Seguir preferências do sistema',
 				exact: true,
 			})
-			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
-			await expect(systemPreferencesOption).not.toBeChecked()
+
+			await expect(systemPreferencesOption).toHaveJSProperty('checked', false)
 			await systemPreferencesOption.click()
-			await expect(systemPreferencesOption).toBeChecked({ timeout: 2_000 })
+
+			systemPreferencesOption = radioGroup.getByRole('radio', {
+				name: 'Follow system preferences',
+				exact: true,
+			})
+
+			await expect(systemPreferencesOption).toHaveJSProperty('checked', true)
+
+			await expect(page.locator('html')).toHaveAttribute('lang', /^(en$|en-)/)
 
 			await main
 				.getByRole('navigation', { name: 'breadcrumb', exact: true })
@@ -753,19 +768,21 @@ test('coordinate system', async ({ appInfo, userParams }) => {
 			)
 		}
 
+		const radioGroup = main.getByRole('radiogroup', {
+			name: 'Coordinate System',
+			exact: true,
+		})
+
 		//// Initial state
 		{
-			const radioGroup = main.getByRole('radiogroup')
-			await expect(radioGroup).toHaveAccessibleName('Coordinate System')
-
-			const utmOption = main.getByRole('radio', {
+			const utmOption = radioGroup.getByRole('radio', {
 				name: 'UTM (Universal Transverse Mercator)',
 				exact: true,
 				checked: true,
 			})
 			await expect(utmOption).toHaveValue('utm')
 
-			const uncheckedOptions = main.getByRole('radio', { checked: false })
+			const uncheckedOptions = radioGroup.getByRole('radio', { checked: false })
 			await expect(uncheckedOptions).toHaveCount(2)
 			await expect(uncheckedOptions.first()).toHaveAccessibleName(
 				'DD (Decimal Degrees)',
@@ -779,13 +796,12 @@ test('coordinate system', async ({ appInfo, userParams }) => {
 
 		//// Updating selected value
 		{
-			const ddOption = main.getByRole('radio', {
+			const ddOption = radioGroup.getByRole('radio', {
 				name: 'DD (Decimal Degrees)',
 				exact: true,
 			})
-			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
 			await ddOption.click()
-			await expect(ddOption).toBeChecked()
+			await expect(ddOption).toHaveJSProperty('checked', true)
 
 			await main
 				.getByRole('navigation', { name: 'breadcrumb', exact: true })
@@ -818,9 +834,8 @@ test('coordinate system', async ({ appInfo, userParams }) => {
 				name: 'UTM (Universal Transverse Mercator)',
 				exact: true,
 			})
-			// NOTE: Using [`Locator.check()`](https://playwright.dev/docs/api/class-locator#locator-check) is sometimes flaky in CI
 			await utmOption.click()
-			await expect(utmOption).toBeChecked()
+			await expect(utmOption).toHaveJSProperty('checked', true)
 
 			await main
 				.getByRole('navigation', { name: 'breadcrumb', exact: true })

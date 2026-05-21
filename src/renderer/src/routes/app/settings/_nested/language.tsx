@@ -11,7 +11,10 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { SupportedLanguageTagSchema } from '../../../../../../shared/intl.ts'
+import {
+	SupportedLanguageTagSchema,
+	type SupportedLanguageTag,
+} from '../../../../../../shared/intl.ts'
 import { DARK_GREY } from '../../../../colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
@@ -20,6 +23,7 @@ import {
 	getLocaleStateQueryOptions,
 	setLocaleMutationOptions,
 } from '../../../../lib/queries/app-settings.ts'
+import { BREADCRUMB_NAV_CURRENT_PAGE_LINK_ID } from './-shared.ts'
 
 export const Route = createFileRoute('/app/settings/_nested/language')({
 	staticData: {
@@ -52,7 +56,7 @@ function RouteComponent() {
 				<Stack direction="column" sx={{ flex: 1, padding: 6 }}>
 					<FormControl>
 						<RadioGroup
-							aria-labelledby="language-selection-label"
+							aria-labelledby={BREADCRUMB_NAV_CURRENT_PAGE_LINK_ID}
 							value={
 								localeState.source !== 'selected' ? 'system' : localeState.value
 							}
@@ -87,6 +91,7 @@ function RouteComponent() {
 									control={<Radio />}
 									label={
 										<RadioOptionLabel
+											languageTag={localeState.value}
 											primaryText={t(m.followSystemOptionLabel)}
 										/>
 									}
@@ -107,6 +112,7 @@ function RouteComponent() {
 												// This will change in the future once we have
 												// multiple language variants that we actually support.
 												<RadioOptionLabel
+													languageTag={languageTag}
 													primaryText={
 														baseLanguageInfo
 															? baseLanguageInfo.nativeName
@@ -147,15 +153,20 @@ function RouteComponent() {
 }
 
 function RadioOptionLabel({
+	languageTag,
 	primaryText,
 	secondaryText,
 }: {
+	languageTag: SupportedLanguageTag
 	primaryText: string
 	secondaryText?: string
 }) {
 	return (
 		<Stack direction="column">
-			<Typography sx={{ fontWeight: 500 }}>{primaryText}</Typography>
+			<Typography sx={{ fontWeight: 500 }}>
+				<bdi lang={languageTag}>{primaryText}</bdi>
+			</Typography>
+
 			{secondaryText ? (
 				<Typography color={DARK_GREY}>{secondaryText}</Typography>
 			) : null}
