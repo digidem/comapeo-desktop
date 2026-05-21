@@ -3,8 +3,8 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createIntl, createIntlCache, type IntlShape } from '@formatjs/intl'
 import { captureException } from '@sentry/electron'
-import debug from 'debug'
 import { app } from 'electron/main'
+import { createDebug } from 'obug'
 import { TypedEmitter } from 'tiny-typed-emitter'
 import * as v from 'valibot'
 
@@ -17,7 +17,7 @@ import {
 } from '../shared/intl.ts'
 import type { CurrentStoreState } from './persisted-store.ts'
 
-const log = debug('comapeo:main:intl-manager')
+const log = createDebug('comapeo:main:intl-manager')
 
 const messagesCache = new Map<SupportedLanguageTag, Record<string, unknown>>(
 	// Load the default language's messages immediately

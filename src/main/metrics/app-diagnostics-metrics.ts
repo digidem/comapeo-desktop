@@ -1,8 +1,8 @@
 import { readFile, rm, writeFile } from 'node:fs/promises'
 import { platform, version } from 'node:os'
 import { captureException } from '@sentry/electron'
-import debug from 'debug'
 import { app } from 'electron'
+import { createDebug } from 'obug'
 import * as v from 'valibot'
 
 import type { AppConfig } from '../../shared/app.ts'
@@ -14,7 +14,7 @@ import {
 	parseReportDateGenerated,
 } from './utils.ts'
 
-const log = debug('comapeo:main:metrics:app-diagnostics-metrics')
+const log = createDebug('comapeo:main:metrics:app-diagnostics-metrics')
 
 const AppDiagnosticsDataSchema = v.object({
 	appId: v.optional(v.string()),

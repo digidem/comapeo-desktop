@@ -87,7 +87,7 @@ node --run start   # Build translations, then build the app in development mode 
   - Easier to debug because you don't have to spend as much time to figure out which directory to look at (it's different depending on the operating system).
 - If you want to change the `userData` directory, define an environment variable called `USER_DATA_PATH` that can be used when calling `node --run start`. For example, running `USER_DATA_PATH=./data/custom node --run start` will create and use the `data/custom` directory relative to the project root. This is useful for creating different "profiles" and isolating data for the purpose of working on features or reproducing bugs.
 - **If you are installing a package that is only going to be used by code in the renderer (e.g. a React component library), you most likely should install it as a dev dependency instead of a direct dependency**. This differs from typical development workflows you see elsewhere, but the reasoning is that during the packaging stage of the app [`@electron/packager`](https://github.com/electron/packager) avoids copying dev dependencies found in the `node_modules` directory. Since we bundle our renderer code, we do not need to copy over these dependencies, which results in a significant decrease in disk space occupied by the app.
-- We use [`debug`](https://github.com/debug-js/debug) for much of our logging in the main process. In order to see them, you can specify the `DEBUG` environment variable when running the app e.g. `DEBUG=comapeo:* node --run start`.
+- We use [`obug`](https://github.com/sxzz/obug) for much of our logging in the main process. In order to see them, you can specify the `DEBUG` environment variable when running the app e.g. `DEBUG=comapeo:* node --run start`.
 
 ### Helpful tips about configuration
 
@@ -140,6 +140,6 @@ The [Electron Forge docs](https://www.electronforge.io/) are pretty informative 
 
 All commands place the built assets in the `out/` directory.
 
-If you're running into an error with any of the Forge-related commands but not seeing any output in the console, you probably have to prefix the command with `DEBUG=electron-forge` e.g. `DEBUG=electron-forge node --run forge:package`.
+If you're running into an error with any of the Forge-related commands but not seeing any output in the console, you probably have to prefix the command with `DEBUG=electron-forge*` e.g. `DEBUG=electron-forge* node --run forge:package`.
 
 By default, we package the app in the [ASAR](https://github.com/electron/asar) format. However, it can be helpful to avoid doing that for debugging purposes (e.g. building locally), in which case you can specify a `ASAR=false` environment variable when running the relevant Forge command e.g. `ASAR=false APP_TYPE=internal node --run forge:package`.

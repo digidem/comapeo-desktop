@@ -2,7 +2,7 @@ import { randomBytes } from 'node:crypto'
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname } from 'node:path'
 import { writeFileSync as atomicWriteFileSync } from 'atomically'
-import debug from 'debug'
+import { createDebug } from 'obug'
 import * as v from 'valibot'
 import { persist, type PersistStorage } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
@@ -15,7 +15,7 @@ import {
 } from '../shared/metrics.ts'
 import { daysToMilliseconds } from '../shared/time.ts'
 
-const log = debug('comapeo:main:persisted-store')
+const log = createDebug('comapeo:main:persisted-store')
 
 export const StoreStateV1Schema = v.object({
 	activeProjectId: v.optional(v.string()),
