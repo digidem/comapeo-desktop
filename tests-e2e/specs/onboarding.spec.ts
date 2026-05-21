@@ -141,9 +141,9 @@ test('data and privacy step', async ({ appInfo }) => {
 			name: 'Share Diagnostic Information',
 			exact: true,
 		})
-		await expect(diagnosticCheckbox).toBeChecked()
+		await expect(diagnosticCheckbox).toHaveJSProperty('checked', true)
 		await diagnosticCheckbox.click()
-		await expect(diagnosticCheckbox).not.toBeChecked()
+		await expect(diagnosticCheckbox).toHaveJSProperty('checked', false)
 
 		await page.getByRole('button', { name: 'Go back', exact: true }).click()
 		await page.getByRole('link', { name: 'Learn More', exact: true }).click()
@@ -153,7 +153,7 @@ test('data and privacy step', async ({ appInfo }) => {
 				name: 'Share Diagnostic Information',
 				exact: true,
 			}),
-		).not.toBeChecked()
+		).toHaveJSProperty('checked', false)
 
 		await page.getByRole('button', { name: 'Go back', exact: true }).click()
 
