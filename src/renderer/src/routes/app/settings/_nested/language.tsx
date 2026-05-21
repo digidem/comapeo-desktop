@@ -23,6 +23,7 @@ import {
 	getLocaleStateQueryOptions,
 	setLocaleMutationOptions,
 } from '../../../../lib/queries/app-settings.ts'
+import { BREADCRUMB_NAV_CURRENT_PAGE_LINK_ID } from './-shared.ts'
 
 export const Route = createFileRoute('/app/settings/_nested/language')({
 	staticData: {
@@ -55,7 +56,7 @@ function RouteComponent() {
 				<Stack direction="column" sx={{ flex: 1, padding: 6 }}>
 					<FormControl>
 						<RadioGroup
-							aria-labelledby="language-selection-label"
+							aria-labelledby={BREADCRUMB_NAV_CURRENT_PAGE_LINK_ID}
 							value={
 								localeState.source !== 'selected' ? 'system' : localeState.value
 							}
