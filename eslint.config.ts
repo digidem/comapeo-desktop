@@ -1,12 +1,11 @@
 import { join } from 'node:path'
 import react from '@eslint-react/eslint-plugin'
-import { includeIgnoreFile } from '@eslint/compat'
 import js from '@eslint/js'
 import pluginQuery from '@tanstack/eslint-plugin-query'
 import pluginRouter from '@tanstack/eslint-plugin-router'
 import formatjs from 'eslint-plugin-formatjs'
 import { reactRefresh } from 'eslint-plugin-react-refresh'
-import { defineConfig } from 'eslint/config'
+import { defineConfig, includeIgnoreFile } from 'eslint/config'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 

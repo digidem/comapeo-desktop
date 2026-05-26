@@ -262,12 +262,12 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteRouteWithChildren
   '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/welcome': typeof WelcomeRoute
-  '/app/settings': typeof AppSettingsNestedRouteRouteWithChildren
+  '/app/settings': typeof AppSettingsRouteRouteWithChildren
   '/onboarding/data-and-privacy': typeof OnboardingDataAndPrivacyRoute
   '/onboarding/device-name': typeof OnboardingDeviceNameRoute
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
   '/app/': typeof AppIndexRoute
-  '/app/projects/$projectId': typeof AppProjectsProjectIdMainTabsRouteRouteWithChildren
+  '/app/projects/$projectId': typeof AppProjectsProjectIdRouteRouteWithChildren
   '/app/settings/': typeof AppSettingsIndexRoute
   '/app/projects/$projectId/test-data': typeof AppProjectsProjectIdTestDataRoute
   '/app/settings/background-map': typeof AppSettingsNestedBackgroundMapRoute

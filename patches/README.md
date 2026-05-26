@@ -11,6 +11,6 @@ By default, core sets up a file watcher for the `fallbackMapPath` option that's 
 
 ## @homebridge/ciao
 
-### [Do not exit the process on republishing errors](./@homebridge+ciao+1.3.8+001+handle-republish-errors.patch)
+### [Do not exit the process on republishing errors](./@homebridge+ciao+1.3.9+001+handle-republish-errors.patch)
 
 Instead of exiting the process on republishing errors, we emit events that allow graceful error handling to occur in consuming application code. See description in https://github.com/gmaclennan/ciao/pull/1 for more details.

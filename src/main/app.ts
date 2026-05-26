@@ -2,7 +2,6 @@ import { randomBytes } from 'node:crypto'
 import { copyFile, mkdir, rm } from 'node:fs/promises'
 import { basename, isAbsolute, join, relative } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import debug from 'debug'
 import contextMenu from 'electron-context-menu'
 import { CancelError, download } from 'electron-dl'
 import {
@@ -15,6 +14,7 @@ import {
 	utilityProcess,
 	type UtilityProcess,
 } from 'electron/main'
+import { createDebug } from 'obug'
 import * as v from 'valibot'
 
 import type { NewClientMessage } from '../services/core.ts'
@@ -33,7 +33,7 @@ import { createAppDiagnosticsMetricsScheduler } from './metrics/app-diagnostics-
 import { DeviceDiagnosticsMetrics } from './metrics/device-diagnostics-metrics.ts'
 import type { PersistedStore } from './persisted-store.ts'
 
-const log = debug('comapeo:main:app')
+const log = createDebug('comapeo:main:app')
 
 type AppState = {
 	tryingToQuitApp: boolean

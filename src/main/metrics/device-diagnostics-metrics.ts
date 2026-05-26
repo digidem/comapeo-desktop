@@ -1,8 +1,8 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import { platform, totalmem } from 'node:os'
 import { captureException } from '@sentry/electron'
-import debug from 'debug'
 import { screen } from 'electron'
+import { createDebug } from 'obug'
 import si from 'systeminformation'
 import * as v from 'valibot'
 
@@ -14,7 +14,7 @@ import {
 	isSameUtcMonthAndYear,
 } from './utils.ts'
 
-const log = debug('comapeo:main:metrics:device-diagnostics-metrics')
+const log = createDebug('comapeo:main:metrics:device-diagnostics-metrics')
 
 const DeviceDiagnosticsStorageSchema = v.object({
 	lastSentAt: v.optional(v.number()),
