@@ -133,7 +133,7 @@
 		"@types/sodium-native": "2.3.9",
 		"@types/utm": "1.1.4",
 		"@vitejs/plugin-react": "6.0.2",
-		"date-fns": "4.2.1",
+		"date-fns": "4.3.0",
 		"electron": "41.7.0",
 		"electron-playwright-helpers": "2.1.0",
 		"eslint": "10.4.0",
