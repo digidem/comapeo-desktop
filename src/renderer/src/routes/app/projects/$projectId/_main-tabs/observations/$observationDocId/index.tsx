@@ -497,7 +497,10 @@ function ObservationDetailsPanel({
 										padding: 4,
 									}}
 								>
-									<Stack direction="row" sx={{ alignItems: 'center', gap: 4 }}>
+									<Stack
+										direction="row"
+										sx={{ alignItems: 'center', gap: 4, overflow: 'auto' }}
+									>
 										<Box sx={{ position: 'relative' }}>
 											{category ? (
 												<CategoryIconContainer
@@ -546,7 +549,15 @@ function ObservationDetailsPanel({
 											) : null}
 										</Box>
 
-										<Typography variant="h2" sx={{ fontWeight: 500 }}>
+										<Typography
+											variant="h2"
+											sx={{
+												fontWeight: 500,
+												textOverflow: 'ellipsis',
+												whiteSpace: 'nowrap',
+												overflow: 'hidden',
+											}}
+										>
 											{category
 												? category.name
 												: t(m.observationCategoryNameFallback)}
