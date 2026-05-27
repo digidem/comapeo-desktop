@@ -1,6 +1,5 @@
 import {
 	Suspense,
-	useCallback,
 	useEffect,
 	useEffectEvent,
 	useMemo,
@@ -50,10 +49,6 @@ const CATEGORY_CONTAINER_SIZE_PX = 64
 const APPROXIMATE_ITEM_HEIGHT_PX = CATEGORY_CONTAINER_SIZE_PX + 16 * 2 + 1
 
 export function DataList({ projectId }: { projectId: string }) {
-	// NOTE: Necessary due to @tanstack/react-virtual
-	// https://github.com/TanStack/virtual/issues/736
-	'use no memo'
-
 	const { formatMessage: t, formatDate } = useIntl()
 
 	const { data: lang } = useSuspenseQuery({
@@ -105,7 +100,6 @@ export function DataList({ projectId }: { projectId: string }) {
 
 	const listRef = useRef<HTMLUListElement | null>(null)
 	const rowVirtualizer = useVirtual(listRef, sortedListData)
-	const { scrollToIndex } = rowVirtualizer
 
 	const scrollToHighlightedItem = useEffectEvent(
 		(document: HighlightedDocument) => {
@@ -116,7 +110,7 @@ export function DataList({ projectId }: { projectId: string }) {
 				: undefined
 
 			if (itemIndexToScrollTo) {
-				scrollToIndex(itemIndexToScrollTo, { align: 'center' })
+				rowVirtualizer.scrollToIndex(itemIndexToScrollTo, { align: 'center' })
 			}
 		},
 	)
@@ -367,8 +361,15 @@ function useVirtual(
 		| { type: 'track'; document: Track; category?: Preset }
 	>,
 ) {
-	const getItemKey = useCallback(
-		(index: number) => {
+	// NOTE: Necessary due to @tanstack/react-virtual
+	// https://github.com/TanStack/virtual/issues/736
+	'use no memo'
+
+	// eslint-disable-next-line react-hooks/incompatible-library
+	const virtualizer = useVirtualizer({
+		count: data.length,
+		estimateSize: () => APPROXIMATE_ITEM_HEIGHT_PX,
+		getItemKey: (index) => {
 			const item = data[index]
 
 			// Shouldn't happen but fail loudly if it does
@@ -378,17 +379,18 @@ function useVirtual(
 
 			return item.document.docId
 		},
-		[data],
-	)
-
-	// eslint-disable-next-line react-hooks/incompatible-library
-	return useVirtualizer({
-		count: data.length,
 		getScrollElement: () => listRef.current,
-		estimateSize: () => APPROXIMATE_ITEM_HEIGHT_PX,
-		getItemKey,
 		overscan: 10,
 	})
+
+	return {
+		virtualizer,
+		getTotalSize: () => virtualizer.getTotalSize(),
+		getVirtualItems: () => virtualizer.getVirtualItems(),
+		scrollToIndex: (
+			...options: Parameters<(typeof virtualizer)['scrollToIndex']>
+		) => virtualizer.scrollToIndex(...options),
+	}
 }
 
 function SyncedIndicatorLine({
