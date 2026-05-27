@@ -4,6 +4,7 @@ import js from '@eslint/js'
 import pluginQuery from '@tanstack/eslint-plugin-query'
 import pluginRouter from '@tanstack/eslint-plugin-router'
 import formatjs from 'eslint-plugin-formatjs'
+import reactHooks from 'eslint-plugin-react-hooks'
 import { reactRefresh } from 'eslint-plugin-react-refresh'
 import { defineConfig, includeIgnoreFile } from 'eslint/config'
 import globals from 'globals'
@@ -70,6 +71,9 @@ export default defineConfig(
 				// https://github.com/ArnaudBarre/eslint-plugin-react-refresh/releases/tag/v0.5.0
 				extraHOCs: ['createFileRoute', 'createRootRouteWithContext'],
 			}),
+			reactHooks.configs.flat.recommended,
+			// NOTE: Must come after eslint-plugin-react-hooks config
+			react.configs['disable-conflict-eslint-plugin-react-hooks'],
 		],
 		rules: {
 			'@eslint-react/exhaustive-deps': 'error',
