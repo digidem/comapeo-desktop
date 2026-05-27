@@ -1,12 +1,15 @@
 import {
 	Suspense,
+	useCallback,
 	useEffect,
 	useEffectEvent,
 	useMemo,
 	useRef,
 	type CSSProperties,
+	type RefObject,
 } from 'react'
 import { useManyDocs, useOwnDeviceInfo } from '@comapeo/core-react'
+import type { Observation, Preset, Track } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import List from '@mui/material/List'
@@ -101,26 +104,8 @@ export function DataList({ projectId }: { projectId: string }) {
 	}, [observationsWithCategory, tracksWithCategory])
 
 	const listRef = useRef<HTMLUListElement | null>(null)
-
-	// eslint-disable-next-line react-hooks/incompatible-library
-	const rowVirtualizer = useVirtualizer({
-		count: sortedListData.length,
-		getItemKey: (index) => {
-			const item = sortedListData[index]
-
-			// NOTE: Shouldn't happen but fail loudly if it does
-			if (!item) {
-				throw new Error(`Could not get item from listed data at index ${index}`)
-			}
-
-			return item.document.docId
-		},
-		getScrollElement: () => listRef.current,
-		estimateSize: () => APPROXIMATE_ITEM_HEIGHT_PX,
-		overscan: 10,
-	})
-
-	const { getVirtualItems, scrollToIndex } = rowVirtualizer
+	const rowVirtualizer = useVirtual(listRef, sortedListData)
+	const { scrollToIndex } = rowVirtualizer
 
 	const scrollToHighlightedItem = useEffectEvent(
 		(document: HighlightedDocument) => {
@@ -209,7 +194,7 @@ export function DataList({ projectId }: { projectId: string }) {
 								width: '100%',
 							}}
 						>
-							{getVirtualItems().map((row) => {
+							{rowVirtualizer.getVirtualItems().map((row) => {
 								const { type, category, document } = sortedListData[row.index]!
 								const { createdAt, docId, createdBy } = document
 
@@ -373,6 +358,37 @@ export function DataList({ projectId }: { projectId: string }) {
 			</Box>
 		</Stack>
 	)
+}
+
+function useVirtual(
+	listRef: RefObject<HTMLUListElement | null>,
+	data: Array<
+		| { type: 'observation'; document: Observation; category?: Preset }
+		| { type: 'track'; document: Track; category?: Preset }
+	>,
+) {
+	const getItemKey = useCallback(
+		(index: number) => {
+			const item = data[index]
+
+			// Shouldn't happen but fail loudly if it does
+			if (!item) {
+				throw new Error(`Could not get item from listed data at index ${index}`)
+			}
+
+			return item.document.docId
+		},
+		[data],
+	)
+
+	// eslint-disable-next-line react-hooks/incompatible-library
+	return useVirtualizer({
+		count: data.length,
+		getScrollElement: () => listRef.current,
+		estimateSize: () => APPROXIMATE_ITEM_HEIGHT_PX,
+		getItemKey,
+		overscan: 10,
+	})
 }
 
 function SyncedIndicatorLine({
