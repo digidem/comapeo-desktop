@@ -71,8 +71,9 @@ export default defineConfig(
 				// https://github.com/ArnaudBarre/eslint-plugin-react-refresh/releases/tag/v0.5.0
 				extraHOCs: ['createFileRoute', 'createRootRouteWithContext'],
 			}),
-			react.configs['disable-conflict-eslint-plugin-react-hooks'],
 			reactHooks.configs.flat.recommended,
+			// NOTE: Must come after eslint-plugin-react-hooks config
+			react.configs['disable-conflict-eslint-plugin-react-hooks'],
 		],
 		rules: {
 			'@eslint-react/exhaustive-deps': 'error',
