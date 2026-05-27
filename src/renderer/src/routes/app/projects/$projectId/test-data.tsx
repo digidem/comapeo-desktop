@@ -160,7 +160,10 @@ function RouteComponent() {
 
 			setNotification({
 				type: 'success',
-				id: `id_${Date.now()}`,
+				id: `id_${
+					// eslint-disable-next-line react-hooks/purity
+					Date.now()
+				}`,
 				message: `${t(m.observationCreateSuccess, {
 					count: parsedValue.observationCount,
 				})} ${t(m.trackCreateSuccess, { count: parsedValue.createTrack ? 1 : 0 })}`,
