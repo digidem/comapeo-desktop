@@ -45,6 +45,12 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      - name: Ensure intl outputs are up-to-date
+        run: |
+          node --run intl:extract
+          node --run intl:generate
+          git diff --exit-code
+
       - name: Compile translations
         run: node --run intl:compile
 
