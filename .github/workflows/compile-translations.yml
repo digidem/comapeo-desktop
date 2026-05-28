@@ -14,13 +14,13 @@ on:
     outputs:
       artifact_id:
         description: ID of uploaded artifact containing compiled translations
-        value: ${{ jobs.translations.outputs.artifact_id }}
+        value: ${{ jobs.compile.outputs.artifact_id }}
 
 env:
   COMMIT_SHA: ${{ inputs.commit_sha || github.sha }}
 
 jobs:
-  translations:
+  compile:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:

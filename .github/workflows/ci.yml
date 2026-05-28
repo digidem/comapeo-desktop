@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   compile_translations:
+    name: Compile translations
     permissions:
       contents: read
     uses: ./.github/workflows/compile-translations.yml
