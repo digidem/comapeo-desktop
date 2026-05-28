@@ -172,6 +172,6 @@
 		"@electron-forge/shared-types": {
 			"tar": "7.5.15"
 		},
-		"tmp": "0.2.5"
+		"tmp": "0.2.7"
 	}
 }
