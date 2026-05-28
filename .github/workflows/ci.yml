@@ -66,9 +66,6 @@ jobs:
           artifact-ids: ${{ needs.compile_translations.outputs.artifact_id }}
           path: translations/
 
-      - name: Generate translated languages manifest
-        run: node --run intl:generate
-
       - name: Run checks
         run: node --run checks
 
@@ -148,9 +145,6 @@ jobs:
         with:
           artifact-ids: ${{ needs.compile_translations.outputs.artifact_id }}
           path: translations/
-
-      - name: Generate translated languages manifest
-        run: node --run intl:generate
 
       - name: Create packaged app
         env:
