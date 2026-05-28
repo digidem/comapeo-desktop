@@ -34,6 +34,7 @@ jobs:
   validate_inputs:
     name: Validate inputs
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - name: Validate app_type input
         if: ${{ !(inputs.app_type == 'internal' || inputs.app_type == 'release-candidate' || inputs.app_type == 'production') }}
@@ -41,9 +42,17 @@ jobs:
           echo "app_type input must be one of the following: internal, release-candidate, production"
           exit 1
 
+  compile_translations:
+    name: Compile translations
+    permissions:
+      contents: read
+    uses: ./.github/workflows/compile-translations.yml
+    with:
+      commit_sha: ${{ inputs.build_sha || github.sha }}
+
   builds:
     name: Create builds
-    needs: validate_inputs
+    needs: [validate_inputs, compile_translations]
     strategy:
       fail-fast: false
       matrix:
@@ -55,6 +64,8 @@ jobs:
             { name: 'windows', image: 'windows-latest' },
           ]
     runs-on: ${{ matrix.os.image }}
+    permissions:
+      contents: read
     steps:
       - name: Create GitHub App Token
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
@@ -68,8 +79,8 @@ jobs:
           BUILD_SHA: ${{ env.BUILD_SHA }}
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
+          persist-credentials: false
           ref: ${{ env.BUILD_SHA }}
-          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
@@ -82,8 +93,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build translations
-        run: node --run intl
+      - name: Use built translations artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          artifact-ids: ${{ needs.compile_translations.outputs.artifact_id }}
+          path: translations/
 
         # Roughly follows https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
       - name: Set up Apple code signing
