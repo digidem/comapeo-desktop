@@ -173,5 +173,15 @@
 			"tar": "7.5.15"
 		},
 		"tmp": "0.2.7"
+	},
+	"allowScripts": {
+		"@sentry/cli@2.58.6": true,
+		"better-sqlite3": false,
+		"electron-winstaller@5.4.0": true,
+		"electron@41.7.1": true,
+		"fs-xattr": false,
+		"fsevents": false,
+		"macos-alias": false,
+		"protobufjs": false
 	}
 }
