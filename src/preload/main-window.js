@@ -105,8 +105,7 @@ const runtimeApi = {
 	},
 
 	getUnitSystem: async () => {
-		const result = await ipcRenderer.invoke('settings:unitSystem:get')
-		return result
+		return ipcRenderer.invoke('settings:unitSystem:get')
 	},
 	setUnitSystem: async (value) => {
 		return ipcRenderer.invoke('settings:unitSystem:set', value)
