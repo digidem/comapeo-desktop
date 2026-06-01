@@ -62,7 +62,10 @@ import {
 import { Map } from '../../../../../components/map.tsx'
 import { useNetworkAwareMapStyleUrl } from '../../../../../hooks/maps.ts'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo.ts'
-import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings.ts'
+import {
+	getLocaleStateQueryOptions,
+	getUnitSystemQueryOptions,
+} from '../../../../../lib/queries/app-settings.ts'
 import type { HighlightedDocument } from './-shared.ts'
 
 // TODO: Move to lib/colors
@@ -187,6 +190,8 @@ export function MapPanel() {
 		...getLocaleStateQueryOptions(),
 		select: ({ value }) => value,
 	})
+
+	const { data: unitSystem } = useSuspenseQuery(getUnitSystemQueryOptions())
 
 	const { data: observations } = useManyDocs({
 		projectId,
@@ -670,7 +675,7 @@ export function MapPanel() {
 				pitchWithRotate={false}
 				touchZoomRotate={false}
 			>
-				<ScaleControl />
+				<ScaleControl unit={unitSystem} />
 
 				<NavigationControl showCompass={false} />
 

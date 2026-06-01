@@ -14,33 +14,6 @@ export function getCoordinateFormatQueryOptions() {
 	})
 }
 
-export function getDiagnosticsEnabledQueryOptions() {
-	return queryOptions({
-		queryKey: [BASE_QUERY_KEY, 'diagnosticsEnabled'] as const,
-		queryFn: async () => {
-			return window.runtime.getDiagnosticsEnabled()
-		},
-	})
-}
-
-export function getLocaleStateQueryOptions() {
-	return queryOptions({
-		queryKey: [BASE_QUERY_KEY, 'locale'] as const,
-		queryFn: async () => {
-			return window.runtime.getLocaleState()
-		},
-	})
-}
-
-export function getAppUsageMetricsQueryOptions() {
-	return queryOptions({
-		queryKey: [BASE_QUERY_KEY, 'appUsageMetrics'] as const,
-		queryFn: async () => {
-			return window.runtime.getAppUsageMetrics()
-		},
-	})
-}
-
 export function setCoordinateFormatMutationOptions() {
 	return {
 		mutationFn: async (vars) => {
@@ -58,6 +31,15 @@ export function setCoordinateFormatMutationOptions() {
 	>
 }
 
+export function getDiagnosticsEnabledQueryOptions() {
+	return queryOptions({
+		queryKey: [BASE_QUERY_KEY, 'diagnosticsEnabled'] as const,
+		queryFn: async () => {
+			return window.runtime.getDiagnosticsEnabled()
+		},
+	})
+}
+
 export function setDiagnosticsEnabledMutationOptions() {
 	return {
 		mutationFn: async (vars) => {
@@ -73,6 +55,15 @@ export function setDiagnosticsEnabledMutationOptions() {
 		Error,
 		Parameters<RuntimeApi['setDiagnosticsEnabled']>[0]
 	>
+}
+
+export function getLocaleStateQueryOptions() {
+	return queryOptions({
+		queryKey: [BASE_QUERY_KEY, 'locale'] as const,
+		queryFn: async () => {
+			return window.runtime.getLocaleState()
+		},
+	})
 }
 
 export function setLocaleMutationOptions() {
@@ -93,6 +84,15 @@ export function setLocaleMutationOptions() {
 	>
 }
 
+export function getAppUsageMetricsQueryOptions() {
+	return queryOptions({
+		queryKey: [BASE_QUERY_KEY, 'appUsageMetrics'] as const,
+		queryFn: async () => {
+			return window.runtime.getAppUsageMetrics()
+		},
+	})
+}
+
 export function setAppUsageMetricsMutationOptions() {
 	return {
 		mutationFn: async (vars) => {
@@ -108,4 +108,13 @@ export function setAppUsageMetricsMutationOptions() {
 		Error,
 		Parameters<RuntimeApi['setAppUsageMetrics']>[0]
 	>
+}
+
+export function getUnitSystemQueryOptions() {
+	return queryOptions({
+		queryKey: [BASE_QUERY_KEY, 'unitSystem'] as const,
+		queryFn: async () => {
+			return window.runtime.getUnitSystem()
+		},
+	})
 }
