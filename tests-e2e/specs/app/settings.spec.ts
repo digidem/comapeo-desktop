@@ -50,7 +50,7 @@ test('index', async ({ appInfo, userParams }) => {
 			.getByRole('listitem')
 			.filter({ has: page.getByRole('link') })
 
-		await expect(settingsItems).toHaveCount(4)
+		await expect(settingsItems).toHaveCount(5)
 
 		//// Device name settings item
 		{
@@ -111,9 +111,25 @@ test('index', async ({ appInfo, userParams }) => {
 			).toBeVisible()
 		}
 
+		//// Unit system settings item
+		{
+			const unitSystemSettingsItem = settingsItems.nth(3)
+
+			await expect(
+				unitSystemSettingsItem.getByRole('link', {
+					name: 'Go to unit system settings.',
+					exact: true,
+				}),
+			).toBeVisible()
+
+			await expect(
+				unitSystemSettingsItem.getByText('Metric System', { exact: true }),
+			).toBeVisible()
+		}
+
 		//// Background map settings item
 		{
-			const backgroundMapSettingsItem = settingsItems.nth(3)
+			const backgroundMapSettingsItem = settingsItems.nth(4)
 
 			await expect(
 				backgroundMapSettingsItem.getByRole('link', {
@@ -836,6 +852,156 @@ test('coordinate system', async ({ appInfo, userParams }) => {
 			})
 			await utmOption.click()
 			await expect(utmOption).toHaveJSProperty('checked', true)
+
+			await main
+				.getByRole('navigation', { name: 'breadcrumb', exact: true })
+				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+				.click()
+		}
+	} finally {
+		// 3. Cleanup
+		await electronApp.close()
+		cleanup()
+	}
+})
+
+test('unit system', async ({ appInfo, userParams }) => {
+	const { launchApp, cleanup } = await setup()
+	const electronApp = await launchApp({ appInfo })
+
+	try {
+		const page = await electronApp.firstWindow()
+
+		// 1. Setup
+		await simulateOnboarding({
+			page,
+			deviceName: userParams.deviceName,
+		})
+
+		// 2. Main tests
+		const main = page.getByRole('main')
+
+		/// Navigation
+		{
+			// Navigate to coordinate system settings page
+			const settingsNavLink = page
+				.getByRole('navigation', { name: 'App navigation', exact: true })
+				.getByRole('link', { name: 'Settings', exact: true })
+
+			await settingsNavLink.click()
+
+			const unitSystemSettingsLink = main.getByRole('link', {
+				name: 'Go to unit system settings.',
+				exact: true,
+			})
+
+			await expect(
+				unitSystemSettingsLink.getByText('Metric System', {
+					exact: true,
+				}),
+			).toBeVisible()
+
+			await unitSystemSettingsLink.click()
+
+			// Assert app nav bar state
+			await expect(settingsNavLink).toHaveCSS(
+				'background-color',
+				hexToRgb(DARK_COMAPEO_BLUE),
+			)
+		}
+
+		/// Main
+
+		// Subpage navigation
+		{
+			await expect(
+				main.getByRole('button', { name: 'Go back.', exact: true }),
+			).toBeVisible()
+
+			const breadcrumbNav = main.getByRole('navigation', {
+				name: 'breadcrumb',
+				exact: true,
+			})
+
+			const breadcrumbItems = breadcrumbNav
+				.getByRole('listitem')
+				.getByRole('link')
+
+			await expect(breadcrumbItems).toHaveCount(2)
+
+			await expect(breadcrumbItems.nth(0)).toHaveText('CoMapeo Settings')
+
+			await expect(breadcrumbItems.nth(1)).toHaveText('Unit System')
+			await expect(breadcrumbItems.nth(1)).toHaveAttribute(
+				'aria-current',
+				'page',
+			)
+		}
+
+		const radioGroup = main.getByRole('radiogroup', {
+			name: 'Unit System',
+			exact: true,
+		})
+
+		//// Initial state
+		{
+			const metricOption = radioGroup.getByRole('radio', {
+				name: 'Metric System',
+				exact: true,
+				checked: true,
+			})
+			await expect(metricOption).toHaveValue('metric')
+
+			const uncheckedOptions = radioGroup.getByRole('radio', { checked: false })
+			await expect(uncheckedOptions).toHaveCount(1)
+			await expect(uncheckedOptions.first()).toHaveAccessibleName(
+				'Imperial System',
+			)
+			await expect(uncheckedOptions.first()).toHaveValue('imperial')
+		}
+
+		//// Updating selected value
+		{
+			const imperialOption = radioGroup.getByRole('radio', {
+				name: 'Imperial System',
+				exact: true,
+			})
+			await imperialOption.click()
+			await expect(imperialOption).toHaveJSProperty('checked', true)
+
+			await main
+				.getByRole('navigation', { name: 'breadcrumb', exact: true })
+				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+				.click()
+
+			const unitSystemSettingsLink = main.getByRole('link', {
+				name: 'Go to unit system settings.',
+				exact: true,
+			})
+			await expect(
+				unitSystemSettingsLink.getByText('Imperial System', {
+					exact: true,
+				}),
+			).toBeVisible()
+			await unitSystemSettingsLink.click()
+		}
+
+		//// Return to coordinate system settings page and restore selection
+		{
+			await expect(
+				main.getByRole('radio', {
+					name: 'Imperial System',
+					exact: true,
+					checked: true,
+				}),
+			).toBeVisible()
+
+			const metricOption = main.getByRole('radio', {
+				name: 'Metric System',
+				exact: true,
+			})
+			await metricOption.click()
+			await expect(metricOption).toHaveJSProperty('checked', true)
 
 			await main
 				.getByRole('navigation', { name: 'breadcrumb', exact: true })
