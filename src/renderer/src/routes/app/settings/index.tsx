@@ -25,6 +25,7 @@ import { getLanguageInfo } from '../../../lib/intl.ts'
 import {
 	getCoordinateFormatQueryOptions,
 	getLocaleStateQueryOptions,
+	getUnitSystemQueryOptions,
 } from '../../../lib/queries/app-settings.ts'
 import { DataAndPrivacySection } from './-data-and-privacy-section.tsx'
 
@@ -109,6 +110,8 @@ function SettingsList() {
 	const { data: coordinateFormat } = useSuspenseQuery(
 		getCoordinateFormatQueryOptions(),
 	)
+
+	const { data: unitSystem } = useSuspenseQuery(getUnitSystemQueryOptions())
 
 	const { data: selectedLanguageName } = useSuspenseQuery({
 		...getLocaleStateQueryOptions(),
@@ -235,6 +238,36 @@ function SettingsList() {
 									: coordinateFormat === 'dd'
 										? m.ddCoordinates
 										: m.dmsCoordinates,
+							)}
+						/>
+					</ListItem>
+
+					<ListItem
+						disableGutters
+						disablePadding
+						sx={{ display: 'flex', alignItems: 'stretch' }}
+					>
+						<ListRowLink
+							to="/app/settings/unit-system"
+							start={
+								<Icon
+									name="material-symbols-square-foot"
+									htmlColor={DARK_GREY}
+									size={startIconSize}
+								/>
+							}
+							end={
+								<Icon
+									name="material-chevron-right-rounded"
+									htmlColor={DARK_GREY}
+									size={actionIconSize}
+								/>
+							}
+							aria-label={t(m.unitSystemSettingsAccessibleLabel)}
+							label={t(
+								unitSystem === 'imperial'
+									? m.unitSystemImperial
+									: m.unitSystemMetric,
 							)}
 						/>
 					</ListItem>
@@ -397,6 +430,12 @@ const m = defineMessages({
 		description:
 			'Accessible label for link item that navigates to coordinate system settings page.',
 	},
+	unitSystemSettingsAccessibleLabel: {
+		id: 'routes.app.settings.index.unitSystemSettingsAccessibleLabel',
+		defaultMessage: 'Go to unit system settings.',
+		description:
+			'Accessible label for link item that navigates to unit system settings page.',
+	},
 	backgroundMapSettingsAccessibleLabel: {
 		id: 'routes.app.settings.index.backgroundMapSettingsAccessibleLabel',
 		defaultMessage: 'Go to background map settings.',
@@ -417,5 +456,15 @@ const m = defineMessages({
 		id: '$1.routes.app.settings.index.aboutCoMapeoVersionLabel',
 		defaultMessage: 'CoMapeo Version',
 		description: 'Label for CoMapeo version',
+	},
+	unitSystemImperial: {
+		id: '$1.routes.app.settings.index.unitSystemImperial',
+		defaultMessage: 'Imperial System',
+		description: 'Label for imperial unit system',
+	},
+	unitSystemMetric: {
+		id: '$1.routes.app.settings.index.unitSystemMetric',
+		defaultMessage: 'Metric System',
+		description: 'Label for metric unit system',
 	},
 })

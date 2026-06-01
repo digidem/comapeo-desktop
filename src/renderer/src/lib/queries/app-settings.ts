@@ -118,3 +118,20 @@ export function getUnitSystemQueryOptions() {
 		},
 	})
 }
+
+export function setUnitSystemMutationOptions() {
+	return {
+		mutationFn: async (vars) => {
+			return window.runtime.setUnitSystem(vars)
+		},
+		onSuccess: (_data, _variables, _mutateResult, context) => {
+			context.client.invalidateQueries({
+				queryKey: getUnitSystemQueryOptions().queryKey,
+			})
+		},
+	} satisfies UseMutationOptions<
+		void,
+		Error,
+		Parameters<RuntimeApi['setUnitSystem']>[0]
+	>
+}

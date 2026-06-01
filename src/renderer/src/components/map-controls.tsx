@@ -144,7 +144,7 @@ class ZoomToSelectedDocumentControl implements IControl {
 			button.innerHTML = `
                 <span style="display: flex; justify-content: center; align-items: center">
                     <svg focusable="false" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
-                        <use href="${getIconURL('material-icons-center-focus-weak')}"></use>
+                        <use href="${getIconURL('material-symbols-center-focus-weak')}"></use>
                     </svg>
                 </span>
             `
