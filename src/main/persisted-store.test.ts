@@ -10,12 +10,29 @@ import { daysToMilliseconds } from '../shared/time.ts'
 import {
 	BASE_LANGUAGE_TO_REGIONAL_VARIANT,
 	CurrentStoreStateSchema,
-	PersistedStorageV2Schema,
+	PersistedStorageV3Schema,
 	StoreStateV1Schema,
+	StoreStateV2Schema,
 	createPersistedStore,
 	type PersistedStorageV1,
 	type PersistedStorageV2,
+	type PersistedStorageV3,
 } from './persisted-store.ts'
+
+test('default store state value', () => {
+	expect(v.getDefaults(CurrentStoreStateSchema)).toStrictEqual({
+		activeProjectId: undefined,
+		appUsageMetrics: undefined,
+		coordinateFormat: 'utm',
+		diagnosticsEnabled: true,
+		locale: { languageTag: null, useSystemPreferences: true },
+		onboardedAt: undefined,
+		rootKey: undefined,
+		sentryUser: { id: expect.any(String), idMonth: expect.any(String) },
+		metricsDeviceId: expect.any(String),
+		unitSystem: 'metric',
+	})
+})
 
 test('no initial storage value', async (t) => {
 	const { filePath } = await setup(t)
@@ -27,7 +44,7 @@ test('no initial storage value', async (t) => {
 		const storage = JSON.parse(readFileSync(filePath, 'utf-8'))
 
 		expect(storage).toStrictEqual(
-			expect.schemaMatching(PersistedStorageV2Schema),
+			expect.schemaMatching(PersistedStorageV3Schema),
 		)
 	}
 
@@ -40,7 +57,7 @@ test('no initial storage value', async (t) => {
 		const storage = JSON.parse(readFileSync(filePath, 'utf-8'))
 
 		expect(storage).toStrictEqual(
-			expect.schemaMatching(PersistedStorageV2Schema),
+			expect.schemaMatching(PersistedStorageV3Schema),
 		)
 
 		expect(storage.state.activeProjectId).toBe(activeProjectId)
@@ -52,7 +69,7 @@ test('with initial storage value matching current schema', async (t) => {
 
 	const initialStorage: PersistedStorageV2 = JSON.parse(
 		JSON.stringify({
-			version: 2,
+			version: 3,
 			state: v.getDefaults(CurrentStoreStateSchema),
 		}),
 	)
@@ -100,7 +117,7 @@ describe('migrations', () => {
 		const updatedStorage = JSON.parse(readFileSync(filePath, 'utf-8'))
 
 		expect(updatedStorage, 'storage value is migrated').toStrictEqual(
-			expect.schemaMatching(PersistedStorageV2Schema),
+			expect.schemaMatching(PersistedStorageV3Schema),
 		)
 
 		expect(
@@ -128,7 +145,35 @@ describe('migrations', () => {
 		const updatedStorage = JSON.parse(readFileSync(filePath, 'utf-8'))
 
 		expect(updatedStorage, 'storage value is migrated').toStrictEqual(
-			expect.schemaMatching(PersistedStorageV2Schema),
+			expect.schemaMatching(PersistedStorageV3Schema),
+		)
+
+		expect(
+			store.getState(),
+			'original state values are not lost',
+		).toMatchObject(initialStorage.state)
+	})
+
+	test('from v2', async (t) => {
+		const { filePath } = await setup(t)
+
+		const initialStorage: PersistedStorageV2 = {
+			version: 2,
+			state: v.getDefaults(StoreStateV2Schema),
+		}
+
+		writeFileSync(filePath, JSON.stringify(initialStorage), 'utf-8')
+
+		const store = createPersistedStore({ filePath })
+
+		expect(store.getState()).toStrictEqual(
+			expect.schemaMatching(CurrentStoreStateSchema),
+		)
+
+		const updatedStorage = JSON.parse(readFileSync(filePath, 'utf-8'))
+
+		expect(updatedStorage, 'storage value is migrated').toStrictEqual(
+			expect.schemaMatching(PersistedStorageV3Schema),
 		)
 
 		expect(
@@ -247,8 +292,8 @@ describe('locale migration', () => {
 	test('does not occur when using system preferences', async (t) => {
 		const { filePath } = await setup(t)
 
-		const initialStorage: PersistedStorageV2 = {
-			version: 2,
+		const initialStorage: PersistedStorageV3 = {
+			version: 3,
 			state: {
 				...v.getDefaults(CurrentStoreStateSchema),
 				locale: { useSystemPreferences: true, languageTag: null },
