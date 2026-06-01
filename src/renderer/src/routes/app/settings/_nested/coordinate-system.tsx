@@ -5,7 +5,6 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
@@ -13,7 +12,6 @@ import { defineMessages, useIntl } from 'react-intl'
 import { parse } from 'valibot'
 
 import { CoordinateFormatSchema } from '../../../../../../shared/coordinate-format.ts'
-import { DARK_GREY } from '../../../../colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { formatCoords } from '../../../../lib/coordinate-format.ts'
@@ -21,6 +19,7 @@ import {
 	getCoordinateFormatQueryOptions,
 	setCoordinateFormatMutationOptions,
 } from '../../../../lib/queries/app-settings.ts'
+import { RadioOptionLabel } from './-radio-option-label.tsx'
 import { BREADCRUMB_NAV_CURRENT_PAGE_LINK_ID } from './-shared.ts'
 
 export const Route = createFileRoute('/app/settings/_nested/coordinate-system')(
@@ -82,6 +81,7 @@ function RouteComponent() {
 											/>
 										}
 									/>
+
 									<FormControlLabel
 										value="dms"
 										control={<Radio />}
@@ -92,6 +92,7 @@ function RouteComponent() {
 											/>
 										}
 									/>
+
 									<FormControlLabel
 										value="utm"
 										control={<Radio />}
@@ -128,23 +129,6 @@ function RouteComponent() {
 				)}
 			</DecentDialog>
 		</>
-	)
-}
-
-function RadioOptionLabel({
-	primaryText,
-	secondaryText,
-}: {
-	primaryText: string
-	secondaryText: string
-}) {
-	return (
-		<Stack direction="column">
-			<Typography sx={{ fontWeight: 500 }}>{primaryText}</Typography>
-			<Typography color={DARK_GREY} aria-hidden>
-				{secondaryText}
-			</Typography>
-		</Stack>
 	)
 }
 

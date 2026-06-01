@@ -104,6 +104,13 @@ const runtimeApi = {
 		return ipcRenderer.invoke('settings:appUsageMetrics:set', value)
 	},
 
+	getUnitSystem: async () => {
+		return ipcRenderer.invoke('settings:unitSystem:get')
+	},
+	setUnitSystem: async (value) => {
+		return ipcRenderer.invoke('settings:unitSystem:set', value)
+	},
+
 	// User
 	getSentryConfig: () => {
 		const enabled = getProcessArgValue('comapeo-sentry-enabled') === 'true'

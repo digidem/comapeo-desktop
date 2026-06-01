@@ -523,9 +523,13 @@
     "description": "Title for details section.",
     "message": "Details"
   },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy": {
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyFeet": {
+    "description": "Displayed accuracy for observation location in feet.",
+    "message": "± {value} ft"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyMeters": {
     "description": "Displayed accuracy for observation location in meters.",
-    "message": "± {value}m"
+    "message": "± {value} m"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
@@ -1219,6 +1223,14 @@
     "description": "Title of the settings page.",
     "message": "CoMapeo Settings"
   },
+  "$1.routes.app.settings.index.unitSystemImperial": {
+    "description": "Label for imperial unit system",
+    "message": "Imperial System"
+  },
+  "$1.routes.app.settings.index.unitSystemMetric": {
+    "description": "Label for metric unit system",
+    "message": "Metric System"
+  },
   "$1.routes.app.settings.index.utmCoordinates": {
     "description": "Label for Universal Transverse Mercator coordinate system.",
     "message": "UTM Coordinates"
@@ -1230,6 +1242,26 @@
   "$1.routes.app.settings.language.title": {
     "description": "Title of the language settings page.",
     "message": "Language"
+  },
+  "$1.routes.app.settings.unit-system.imperialOptionExample": {
+    "description": "Displayed examples for the imperial option.",
+    "message": "Inches, feet, miles"
+  },
+  "$1.routes.app.settings.unit-system.imperialOptionLabel": {
+    "description": "Label for the imperial option.",
+    "message": "Imperial System"
+  },
+  "$1.routes.app.settings.unit-system.metricOptionExample": {
+    "description": "Displayed examples for the metric option.",
+    "message": "Kilometers, meters"
+  },
+  "$1.routes.app.settings.unit-system.metricOptionLabel": {
+    "description": "Label for the metric option.",
+    "message": "Metric System"
+  },
+  "$1.routes.app.settings.unit-system.navTitle": {
+    "description": "Title of the unit system settings page.",
+    "message": "Unit System"
   },
   "$1.routes.onboarding.data-and-privacy.dataEncrypted": {
     "description": "Detail about data being fully encrypted.",

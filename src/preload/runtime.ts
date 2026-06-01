@@ -4,6 +4,7 @@ import type { CoordinateFormat } from '../shared/coordinate-format.ts'
 import type { Locale, LocaleState } from '../shared/intl.ts'
 import type { SelectedFile } from '../shared/ipc.ts'
 import type { AppUsageMetrics } from '../shared/metrics.ts'
+import type { UnitSystem } from '../shared/unit-system.ts'
 
 export type RuntimeApi = {
 	// Files
@@ -46,6 +47,9 @@ export type RuntimeApi = {
 		status: AppUsageMetrics['status']
 		shouldBumpAskCount: boolean
 	}) => Promise<void>
+
+	getUnitSystem: () => Promise<UnitSystem>
+	setUnitSystem: (value: UnitSystem) => Promise<void>
 
 	// User
 	getSentryConfig: () => {

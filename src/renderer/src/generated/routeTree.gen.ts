@@ -21,6 +21,7 @@ import { Route as AppSettingsRouteRouteImport } from './../routes/app/settings/r
 import { Route as AppSettingsIndexRouteImport } from './../routes/app/settings/index'
 import { Route as AppSettingsNestedRouteRouteImport } from './../routes/app/settings/_nested/route'
 import { Route as AppProjectsProjectIdRouteRouteImport } from './../routes/app/projects/$projectId/route'
+import { Route as AppSettingsNestedUnitSystemRouteImport } from './../routes/app/settings/_nested/unit-system'
 import { Route as AppSettingsNestedLanguageRouteImport } from './../routes/app/settings/_nested/language'
 import { Route as AppSettingsNestedDeviceNameRouteImport } from './../routes/app/settings/_nested/device-name'
 import { Route as AppSettingsNestedCoordinateSystemRouteImport } from './../routes/app/settings/_nested/coordinate-system'
@@ -106,6 +107,12 @@ const AppProjectsProjectIdRouteRoute =
     id: '/projects/$projectId',
     path: '/projects/$projectId',
     getParentRoute: () => AppRouteRoute,
+  } as any)
+const AppSettingsNestedUnitSystemRoute =
+  AppSettingsNestedUnitSystemRouteImport.update({
+    id: '/unit-system',
+    path: '/unit-system',
+    getParentRoute: () => AppSettingsNestedRouteRoute,
   } as any)
 const AppSettingsNestedLanguageRoute =
   AppSettingsNestedLanguageRouteImport.update({
@@ -274,6 +281,7 @@ export interface FileRoutesByFullPath {
   '/app/settings/coordinate-system': typeof AppSettingsNestedCoordinateSystemRoute
   '/app/settings/device-name': typeof AppSettingsNestedDeviceNameRoute
   '/app/settings/language': typeof AppSettingsNestedLanguageRoute
+  '/app/settings/unit-system': typeof AppSettingsNestedUnitSystemRoute
   '/app/projects/$projectId/settings': typeof AppProjectsProjectIdMainTabsSettingsRouteRouteWithChildren
   '/app/projects/$projectId/download': typeof AppProjectsProjectIdMainTabsDownloadRoute
   '/app/projects/$projectId/': typeof AppProjectsProjectIdMainTabsIndexRoute
@@ -308,6 +316,7 @@ export interface FileRoutesByTo {
   '/app/settings/coordinate-system': typeof AppSettingsNestedCoordinateSystemRoute
   '/app/settings/device-name': typeof AppSettingsNestedDeviceNameRoute
   '/app/settings/language': typeof AppSettingsNestedLanguageRoute
+  '/app/settings/unit-system': typeof AppSettingsNestedUnitSystemRoute
   '/app/projects/$projectId/download': typeof AppProjectsProjectIdMainTabsDownloadRoute
   '/app/projects/$projectId/settings/categories': typeof AppProjectsProjectIdMainTabsSettingsCategoriesRoute
   '/app/projects/$projectId/settings/info': typeof AppProjectsProjectIdMainTabsSettingsInfoRoute
@@ -344,6 +353,7 @@ export interface FileRoutesById {
   '/app/settings/_nested/coordinate-system': typeof AppSettingsNestedCoordinateSystemRoute
   '/app/settings/_nested/device-name': typeof AppSettingsNestedDeviceNameRoute
   '/app/settings/_nested/language': typeof AppSettingsNestedLanguageRoute
+  '/app/settings/_nested/unit-system': typeof AppSettingsNestedUnitSystemRoute
   '/app/projects/$projectId/_main-tabs/settings': typeof AppProjectsProjectIdMainTabsSettingsRouteRouteWithChildren
   '/app/projects/$projectId/_main-tabs/download': typeof AppProjectsProjectIdMainTabsDownloadRoute
   '/app/projects/$projectId/_main-tabs/': typeof AppProjectsProjectIdMainTabsIndexRoute
@@ -382,6 +392,7 @@ export interface FileRouteTypes {
     | '/app/settings/coordinate-system'
     | '/app/settings/device-name'
     | '/app/settings/language'
+    | '/app/settings/unit-system'
     | '/app/projects/$projectId/settings'
     | '/app/projects/$projectId/download'
     | '/app/projects/$projectId/'
@@ -416,6 +427,7 @@ export interface FileRouteTypes {
     | '/app/settings/coordinate-system'
     | '/app/settings/device-name'
     | '/app/settings/language'
+    | '/app/settings/unit-system'
     | '/app/projects/$projectId/download'
     | '/app/projects/$projectId/settings/categories'
     | '/app/projects/$projectId/settings/info'
@@ -451,6 +463,7 @@ export interface FileRouteTypes {
     | '/app/settings/_nested/coordinate-system'
     | '/app/settings/_nested/device-name'
     | '/app/settings/_nested/language'
+    | '/app/settings/_nested/unit-system'
     | '/app/projects/$projectId/_main-tabs/settings'
     | '/app/projects/$projectId/_main-tabs/download'
     | '/app/projects/$projectId/_main-tabs/'
@@ -563,6 +576,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/projects/$projectId'
       preLoaderRoute: typeof AppProjectsProjectIdRouteRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/app/settings/_nested/unit-system': {
+      id: '/app/settings/_nested/unit-system'
+      path: '/unit-system'
+      fullPath: '/app/settings/unit-system'
+      preLoaderRoute: typeof AppSettingsNestedUnitSystemRouteImport
+      parentRoute: typeof AppSettingsNestedRouteRoute
     }
     '/app/settings/_nested/language': {
       id: '/app/settings/_nested/language'
@@ -740,6 +760,7 @@ interface AppSettingsNestedRouteRouteChildren {
   AppSettingsNestedCoordinateSystemRoute: typeof AppSettingsNestedCoordinateSystemRoute
   AppSettingsNestedDeviceNameRoute: typeof AppSettingsNestedDeviceNameRoute
   AppSettingsNestedLanguageRoute: typeof AppSettingsNestedLanguageRoute
+  AppSettingsNestedUnitSystemRoute: typeof AppSettingsNestedUnitSystemRoute
 }
 
 const AppSettingsNestedRouteRouteChildren: AppSettingsNestedRouteRouteChildren =
@@ -749,6 +770,7 @@ const AppSettingsNestedRouteRouteChildren: AppSettingsNestedRouteRouteChildren =
       AppSettingsNestedCoordinateSystemRoute,
     AppSettingsNestedDeviceNameRoute: AppSettingsNestedDeviceNameRoute,
     AppSettingsNestedLanguageRoute: AppSettingsNestedLanguageRoute,
+    AppSettingsNestedUnitSystemRoute: AppSettingsNestedUnitSystemRoute,
   }
 
 const AppSettingsNestedRouteRouteWithChildren =

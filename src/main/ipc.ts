@@ -109,6 +109,15 @@ export function setUpMainIPC({
 		})
 	})
 
+	ipcMain.handle('settings:unitSystem:get', () => {
+		return persistedStore.getState().unitSystem
+	})
+
+	ipcMain.handle('settings:unitSystem:set', (_event, value) => {
+		v.assert(v.nonOptional(CurrentStoreStateSchema.entries.unitSystem), value)
+		persistedStore.setState({ unitSystem: value })
+	})
+
 	// User
 	ipcMain.handle('user:activeProjectId:set', (_event, value) => {
 		v.assert(
