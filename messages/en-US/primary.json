@@ -523,9 +523,13 @@
     "description": "Title for details section.",
     "message": "Details"
   },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy": {
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyFeet": {
+    "description": "Displayed accuracy for observation location in feet.",
+    "message": "± {value} ft"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyMeters": {
     "description": "Displayed accuracy for observation location in meters.",
-    "message": "± {value}m"
+    "message": "± {value} m"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
