@@ -14,6 +14,7 @@ import {
 	type AppUsageMetrics,
 } from '../shared/metrics.ts'
 import { daysToMilliseconds } from '../shared/time.ts'
+import { UnitSystemSchema } from '../shared/unit-system.ts'
 
 const log = createDebug('comapeo:main:persisted-store')
 
@@ -44,10 +45,7 @@ export const StoreStateV2Schema = v.object({
 
 const StoreStateV3Schema = v.object({
 	...StoreStateV2Schema.entries,
-	unitSystem: v.optional(
-		v.union([v.literal('metric'), v.literal('imperial')]),
-		'metric',
-	),
+	unitSystem: v.optional(UnitSystemSchema, 'metric'),
 })
 
 export const CurrentStoreStateSchema = StoreStateV3Schema
