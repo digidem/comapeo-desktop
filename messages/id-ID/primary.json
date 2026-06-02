@@ -455,10 +455,6 @@
     "description": "Title for details section.",
     "message": "Rincian"
   },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy": {
-    "description": "Displayed accuracy for observation location in meters.",
-    "message": "± {value}m"
-  },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
     "message": "Pengamatan"
