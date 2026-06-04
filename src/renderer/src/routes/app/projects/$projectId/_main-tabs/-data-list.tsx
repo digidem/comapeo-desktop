@@ -5,10 +5,8 @@ import {
 	useMemo,
 	useRef,
 	type CSSProperties,
-	type RefObject,
 } from 'react'
 import { useManyDocs, useOwnDeviceInfo } from '@comapeo/core-react'
-import type { Observation, Preset, Track } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import List from '@mui/material/List'
@@ -99,7 +97,28 @@ export function DataList({ projectId }: { projectId: string }) {
 	}, [observationsWithCategory, tracksWithCategory])
 
 	const listRef = useRef<HTMLUListElement | null>(null)
-	const rowVirtualizer = useVirtual(listRef, sortedListData)
+
+	// NOTE: Incompatibility in [@tanstack/react-virtual](https://github.com/TanStack/virtual/releases/tag/%40tanstack%2Freact-virtual%403.14.0)
+	// (see https://github.com/TanStack/virtual/issues/736#issuecomment-4600048069).
+	// eslint-disable-next-line react-hooks/incompatible-library
+	const rowVirtualizer = useVirtualizer({
+		count: sortedListData.length,
+		estimateSize: () => APPROXIMATE_ITEM_HEIGHT_PX,
+		getItemKey: (index) => {
+			const item = sortedListData[index]
+
+			// Shouldn't happen but fail loudly if it does
+			if (!item) {
+				throw new Error(`Could not get item from listed data at index ${index}`)
+			}
+
+			return item.document.docId
+		},
+		getScrollElement: () => listRef.current,
+		overscan: 10,
+		directDomUpdates: true,
+		directDomUpdatesMode: 'transform',
+	})
 
 	const scrollToHighlightedItem = useEffectEvent(
 		(document: HighlightedDocument) => {
@@ -182,11 +201,8 @@ export function DataList({ projectId }: { projectId: string }) {
 						sx={{ overflow: 'auto', scrollbarColor: 'initial' }}
 					>
 						<Box
-							sx={{
-								position: 'relative',
-								height: `${rowVirtualizer.getTotalSize()}px`,
-								width: '100%',
-							}}
+							ref={rowVirtualizer.containerRef}
+							sx={{ position: 'relative', width: '100%' }}
 						>
 							{rowVirtualizer.getVirtualItems().map((row) => {
 								const { type, category, document } = sortedListData[row.index]!
@@ -352,45 +368,6 @@ export function DataList({ projectId }: { projectId: string }) {
 			</Box>
 		</Stack>
 	)
-}
-
-function useVirtual(
-	listRef: RefObject<HTMLUListElement | null>,
-	data: Array<
-		| { type: 'observation'; document: Observation; category?: Preset }
-		| { type: 'track'; document: Track; category?: Preset }
-	>,
-) {
-	// NOTE: Necessary due to @tanstack/react-virtual
-	// https://github.com/TanStack/virtual/issues/736
-	'use no memo'
-
-	// eslint-disable-next-line react-hooks/incompatible-library
-	const virtualizer = useVirtualizer({
-		count: data.length,
-		estimateSize: () => APPROXIMATE_ITEM_HEIGHT_PX,
-		getItemKey: (index) => {
-			const item = data[index]
-
-			// Shouldn't happen but fail loudly if it does
-			if (!item) {
-				throw new Error(`Could not get item from listed data at index ${index}`)
-			}
-
-			return item.document.docId
-		},
-		getScrollElement: () => listRef.current,
-		overscan: 10,
-	})
-
-	return {
-		virtualizer,
-		getTotalSize: () => virtualizer.getTotalSize(),
-		getVirtualItems: () => virtualizer.getVirtualItems(),
-		scrollToIndex: (
-			...options: Parameters<(typeof virtualizer)['scrollToIndex']>
-		) => virtualizer.scrollToIndex(...options),
-	}
 }
 
 function SyncedIndicatorLine({
