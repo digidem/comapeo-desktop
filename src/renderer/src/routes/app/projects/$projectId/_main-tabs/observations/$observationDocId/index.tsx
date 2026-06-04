@@ -51,6 +51,7 @@ import { customNotFound } from '../../../../../../../lib/navigation.ts'
 import {
 	getCoordinateFormatQueryOptions,
 	getLocaleStateQueryOptions,
+	getUnitSystemQueryOptions,
 } from '../../../../../../../lib/queries/app-settings.ts'
 import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations.ts'
 import { EditCategoryPanel } from './-edit-category-panel.tsx'
@@ -70,6 +71,9 @@ import {
 	ObservationUnsupportedAttachmentPreview,
 } from './-observation-attachment.tsx'
 import { getDisplayedTagValue, type EditableField } from './-shared.ts'
+
+// NOTE: Vendored from Convert (https://github.com/jonahsnider/convert/blob/9e077c6d9cff8a43bc4b431c915712039353c5c0/src/conversions/measures/length.ts#L15)
+const FOOT_TO_METER_RATIO = 0.3048
 
 const SearchParamsSchema = v.object({ fromTrackDocId: v.optional(v.string()) })
 
@@ -375,6 +379,8 @@ function ObservationDetailsPanel({
 		getCoordinateFormatQueryOptions(),
 	)
 
+	const { data: unitSystem } = useSuspenseQuery(getUnitSystemQueryOptions())
+
 	const { data: observation } = useSingleDocByDocId({
 		projectId,
 		docType: 'observation',
@@ -591,12 +597,19 @@ function ObservationDetailsPanel({
 											{typeof observation.metadata?.position?.coords
 												.accuracy === 'number' ? (
 												<Box component="span" sx={{ marginInlineStart: 4 }}>
-													{t(m.locationAccuracy, {
-														value:
-															observation.metadata?.position?.coords.accuracy.toFixed(
-																0,
-															),
-													})}
+													{unitSystem === 'imperial'
+														? t(m.locationAccuracyFeet, {
+																value: (
+																	observation.metadata.position.coords
+																		.accuracy * FOOT_TO_METER_RATIO
+																).toFixed(0),
+															})
+														: t(m.locationAccuracyMeters, {
+																value:
+																	observation.metadata.position.coords.accuracy.toFixed(
+																		0,
+																	),
+															})}
 												</Box>
 											) : null}
 										</Typography>
@@ -1037,18 +1050,19 @@ function ObservationDetailsPanel({
 }
 
 function isEditableField(field: Field): field is EditableField {
-	if (field.type === 'UNRECOGNIZED' || field.type === 'type_unspecified') {
-		return false
+	switch (field.type) {
+		case 'number':
+		case 'text': {
+			return true
+		}
+		case 'selectOne':
+		case 'selectMultiple': {
+			return field.options !== undefined
+		}
+		default: {
+			return false
+		}
 	}
-
-	if (
-		(field.type === 'selectMultiple' || field.type === 'selectOne') &&
-		field.options === undefined
-	) {
-		return false
-	}
-
-	return true
 }
 
 /**
@@ -1260,9 +1274,14 @@ const m = defineMessages({
 		description:
 			'Text for button to return to track in successful observation deletion panel.',
 	},
-	locationAccuracy: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracy',
-		defaultMessage: '± {value}m',
+	locationAccuracyMeters: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyMeters',
+		defaultMessage: '± {value} m',
 		description: 'Displayed accuracy for observation location in meters.',
+	},
+	locationAccuracyFeet: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyFeet',
+		defaultMessage: '± {value} ft',
+		description: 'Displayed accuracy for observation location in feet.',
 	},
 })

@@ -8,9 +8,9 @@ import { createServer as createMapServer } from '@comapeo/map-server'
 import ciao, { type Protocol } from '@homebridge/ciao'
 import { KeyManager } from '@mapeo/crypto'
 import * as Sentry from '@sentry/electron/utility'
-import debug from 'debug'
 import type { MessagePortMain } from 'electron'
 import Fastify from 'fastify'
+import { createDebug } from 'obug'
 import sodium from 'sodium-native'
 import * as v from 'valibot'
 
@@ -48,7 +48,7 @@ process.on('uncaughtException', (error) => {
 	// NOTE: We let Sentry handle exiting the process in order to properly capture exceptions
 })
 
-const log = debug('comapeo:services:core')
+const log = createDebug('comapeo:services:core')
 
 // Patching due to issues with sodium-native in more recent versions of Electron due to removal of APIs that the module relies on.
 // Replaces the usage of SecureBuffer in sodium's malloc with just a normal Buffer, which may have security implications.
@@ -283,6 +283,22 @@ async function initializePeerDiscovery(manager: MapeoManager) {
 		protocol: 'tcp' as Protocol,
 		type: 'comapeo',
 	})
+
+	// NOTE: Gracefully handle announce errors. See relevant patch for @homebridge/ciao
+	service.on(
+		// @ts-expect-error Not worth fixing in patch
+		'announce-error',
+		(reason: unknown) => {
+			log('Announce error occurred', reason)
+			Sentry.captureException(reason)
+
+			// Service is now UNANNOUNCED — safe to call advertise() again
+			service.advertise().catch((error) => {
+				log('Attempting to advertise again failed', error)
+				Sentry.captureException(error)
+			})
+		},
+	)
 
 	let shutdownPromise: Promise<void> | undefined
 

@@ -1,6 +1,6 @@
 import { mkdirSync, readdirSync, rmSync } from 'node:fs'
 import { writeFile } from 'node:fs/promises'
-import { join } from 'node:path'
+import { join, posix, win32 } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { compile } from '@formatjs/cli-lib'
 
@@ -21,12 +21,21 @@ mkdirSync(TRANSLATIONS_DIR_RENDERER, { recursive: true })
 
 await Promise.all(
 	languageSourceDirectories.map(async (directory) => {
-		const languageCode = directory.name
+		let baseInputPath = join(directory.parentPath, directory.name)
+
+		// NOTE: Workaround due to regression in `@formatjs/cli-lib`
+		// https://github.com/formatjs/formatjs/issues/6603
+		if (process.platform === 'win32') {
+			baseInputPath = new URL(baseInputPath).pathname.replaceAll(
+				win32.sep,
+				posix.sep,
+			)
+		}
 
 		const compiled = await compile(
 			[
-				join(directory.parentPath, directory.name, 'primary.json'),
-				join(directory.parentPath, directory.name, 'secondary.json'),
+				posix.join(baseInputPath, 'primary.json'),
+				posix.join(baseInputPath, 'secondary.json'),
 			],
 			{ ast: true, format: 'crowdin' },
 		)
@@ -45,6 +54,8 @@ await Promise.all(
 				compiledRenderer[id] = parsed[id]
 			}
 		}
+
+		const languageCode = directory.name
 
 		return Promise.all([
 			writeFile(

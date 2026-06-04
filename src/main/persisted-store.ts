@@ -2,9 +2,9 @@ import { randomBytes } from 'node:crypto'
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname } from 'node:path'
 import { writeFileSync as atomicWriteFileSync } from 'atomically'
-import debug from 'debug'
+import { createDebug } from 'obug'
 import * as v from 'valibot'
-import { persist, type PersistStorage } from 'zustand/middleware'
+import { persist } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 
 import { CoordinateFormatSchema } from '../shared/coordinate-format.ts'
@@ -14,8 +14,9 @@ import {
 	type AppUsageMetrics,
 } from '../shared/metrics.ts'
 import { daysToMilliseconds } from '../shared/time.ts'
+import { UnitSystemSchema } from '../shared/unit-system.ts'
 
-const log = debug('comapeo:main:persisted-store')
+const log = createDebug('comapeo:main:persisted-store')
 
 export const StoreStateV1Schema = v.object({
 	activeProjectId: v.optional(v.string()),
@@ -36,30 +37,42 @@ export const StoreStateV1Schema = v.object({
 	metricsDeviceId: v.optional(v.string(), () => generateMetricsDeviceId()),
 })
 
-const StoreStateV2Schema = v.object({
+export const StoreStateV2Schema = v.object({
 	...StoreStateV1Schema.entries,
 	appUsageMetrics: v.optional(AppUsageMetricsSchema),
 	onboardedAt: v.optional(v.pipe(v.number(), v.gtValue(0))),
 })
 
-export const CurrentStoreStateSchema = StoreStateV2Schema
-export type CurrentStoreState = v.InferOutput<typeof StoreStateV2Schema>
+const StoreStateV3Schema = v.object({
+	...StoreStateV2Schema.entries,
+	unitSystem: v.optional(UnitSystemSchema, 'metric'),
+})
 
-export const PersistedStorageV1Schema = v.object({
+export const CurrentStoreStateSchema = StoreStateV3Schema
+export type CurrentStoreState = v.InferOutput<typeof StoreStateV3Schema>
+
+const PersistedStorageV1Schema = v.object({
 	version: v.literal(1),
 	state: StoreStateV1Schema,
 })
 export type PersistedStorageV1 = v.InferOutput<typeof PersistedStorageV1Schema>
 
-export const PersistedStorageV2Schema = v.object({
+const PersistedStorageV2Schema = v.object({
 	version: v.literal(2),
 	state: StoreStateV2Schema,
 })
 export type PersistedStorageV2 = v.InferOutput<typeof PersistedStorageV2Schema>
 
+export const PersistedStorageV3Schema = v.object({
+	version: v.literal(3),
+	state: StoreStateV3Schema,
+})
+export type PersistedStorageV3 = v.InferOutput<typeof PersistedStorageV3Schema>
+
 const PersistedStorageSchema = v.variant('version', [
 	PersistedStorageV1Schema,
 	PersistedStorageV2Schema,
+	PersistedStorageV3Schema,
 ])
 
 export function createPersistedStore(opts: { filePath: string }) {
@@ -67,7 +80,7 @@ export function createPersistedStore(opts: { filePath: string }) {
 		mkdirSync(dirname(opts.filePath), { recursive: true })
 	}
 
-	const storage: PersistStorage<CurrentStoreState> = {
+	const storage = {
 		getItem: () => {
 			let content
 			try {
@@ -84,7 +97,7 @@ export function createPersistedStore(opts: { filePath: string }) {
 		removeItem: () => {
 			return rmSync(opts.filePath, { force: true })
 		},
-		setItem: (_name, value) => {
+		setItem: (_name: string, value: unknown) => {
 			ensureDirectory()
 
 			const data =
@@ -117,7 +130,7 @@ export function createPersistedStore(opts: { filePath: string }) {
 			},
 			{
 				name: 'comapeo-persisted',
-				version: 2,
+				version: 3,
 				storage,
 				migrate: (prevState, version) => {
 					if (version === 1) {
@@ -127,6 +140,16 @@ export function createPersistedStore(opts: { filePath: string }) {
 
 						if (stateV1.success) {
 							return stateV1.output
+						}
+					}
+
+					if (version === 2) {
+						const stateV2 = v.safeParse(StoreStateV2Schema, prevState, {
+							abortEarly: true,
+						})
+
+						if (stateV2.success) {
+							return stateV2.output
 						}
 					}
 

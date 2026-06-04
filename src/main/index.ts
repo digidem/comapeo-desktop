@@ -4,8 +4,8 @@ import { createRequire } from 'node:module'
 import { platform } from 'node:os'
 import * as path from 'node:path'
 import * as Sentry from '@sentry/electron/main'
-import debug from 'debug'
 import { app, dialog, protocol } from 'electron/main'
+import { createDebug } from 'obug'
 import { parse } from 'valibot'
 
 import {
@@ -24,7 +24,7 @@ if (require('electron-squirrel-startup')) {
 	app.quit()
 }
 
-const log = debug('comapeo:main:index')
+const log = createDebug('comapeo:main:index')
 
 const appConfigFile = await readFile(
 	path.join(app.getAppPath(), 'app.config.json'),

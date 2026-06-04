@@ -1,27 +1,17 @@
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
 import react from '@eslint-react/eslint-plugin'
-import { includeIgnoreFile } from '@eslint/compat'
 import js from '@eslint/js'
 import pluginQuery from '@tanstack/eslint-plugin-query'
 import pluginRouter from '@tanstack/eslint-plugin-router'
 import formatjs from 'eslint-plugin-formatjs'
+import reactHooks from 'eslint-plugin-react-hooks'
 import { reactRefresh } from 'eslint-plugin-react-refresh'
-import { defineConfig } from 'eslint/config'
+import { defineConfig, includeIgnoreFile } from 'eslint/config'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
-const gitignorePath = path.join(
-	path.dirname(fileURLToPath(import.meta.url)),
-	'.gitignore',
-)
-
-const gitExcludePath = path.join(
-	path.dirname(fileURLToPath(import.meta.url)),
-	'.git',
-	'info',
-	'exclude',
-)
+const gitignorePath = join(import.meta.dirname, '.gitignore')
+const gitExcludePath = join(import.meta.dirname, '.git', 'info', 'exclude')
 
 export default defineConfig(
 	includeIgnoreFile(gitignorePath),
@@ -81,6 +71,9 @@ export default defineConfig(
 				// https://github.com/ArnaudBarre/eslint-plugin-react-refresh/releases/tag/v0.5.0
 				extraHOCs: ['createFileRoute', 'createRootRouteWithContext'],
 			}),
+			reactHooks.configs.flat.recommended,
+			// NOTE: Must come after eslint-plugin-react-hooks config
+			react.configs['disable-conflict-eslint-plugin-react-hooks'],
 		],
 		rules: {
 			'@eslint-react/exhaustive-deps': 'error',
