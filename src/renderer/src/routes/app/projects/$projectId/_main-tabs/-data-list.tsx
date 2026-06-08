@@ -2,17 +2,30 @@ import {
 	Suspense,
 	useEffect,
 	useEffectEvent,
+	useId,
 	useMemo,
 	useRef,
+	useState,
 	type CSSProperties,
 } from 'react'
 import { useManyDocs, useOwnDeviceInfo } from '@comapeo/core-react'
+import type { Preset } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import ButtonBase from '@mui/material/ButtonBase'
+import Checkbox from '@mui/material/Checkbox'
 import CircularProgress from '@mui/material/CircularProgress'
+import ClickAwayListener from '@mui/material/ClickAwayListener'
+import Fade from '@mui/material/Fade'
+import IconButton from '@mui/material/IconButton'
+import InputBase from '@mui/material/InputBase'
 import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
+import Popper from '@mui/material/Popper'
 import Stack from '@mui/material/Stack'
+import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import { captureException, captureMessage } from '@sentry/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useNavigate, useSearch } from '@tanstack/react-router'
@@ -23,6 +36,8 @@ import {
 	BLACK,
 	BLUE_GREY,
 	COMAPEO_BLUE,
+	DARK_GREY,
+	LIGHT_COMAPEO_BLUE,
 	LIGHT_GREY,
 	WHITE,
 } from '../../../../../colors.ts'
@@ -32,7 +47,8 @@ import {
 } from '../../../../../components/category-icon.tsx'
 import { ErrorBoundary } from '../../../../../components/error-boundary.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
-import { ButtonLink } from '../../../../../components/link.tsx'
+import { IconButtonLink } from '../../../../../components/link.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
 import {
 	getMatchingCategoryForDocument,
 	type Attachment,
@@ -74,6 +90,8 @@ export function DataList({ projectId }: { projectId: string }) {
 		lang,
 	})
 
+	const [categoryFilters, setCategoryFilters] = useState<Array<Preset>>([])
+
 	const observationsWithCategory = useMemo(() => {
 		return observations.map((o) => ({
 			type: 'observation' as const,
@@ -91,10 +109,24 @@ export function DataList({ projectId }: { projectId: string }) {
 	}, [tracks, categories])
 
 	const sortedListData = useMemo(() => {
-		return [...observationsWithCategory, ...tracksWithCategory].sort((a, b) => {
+		let result = [...observationsWithCategory, ...tracksWithCategory]
+
+		if (categoryFilters.length > 0) {
+			const categoryIdsToInclude = new Set(categoryFilters.map((c) => c.docId))
+
+			result = result.filter((item) => {
+				if (!item.category?.docId) {
+					return false
+				}
+
+				return categoryIdsToInclude.has(item.category.docId)
+			})
+		}
+
+		return result.sort((a, b) => {
 			return a.document.createdAt < b.document.createdAt ? 1 : -1
 		})
-	}, [observationsWithCategory, tracksWithCategory])
+	}, [observationsWithCategory, tracksWithCategory, categoryFilters])
 
 	const listRef = useRef<HTMLUListElement | null>(null)
 
@@ -155,6 +187,20 @@ export function DataList({ projectId }: { projectId: string }) {
 		[highlightedDocument],
 	)
 
+	const downloadButtonSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+		multiplier: 1.25,
+	})
+
+	const removeFilterButtonSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+		multiplier: 0.75,
+	})
+
+	const filterIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'button',
+	})
+
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Box
@@ -165,26 +211,167 @@ export function DataList({ projectId }: { projectId: string }) {
 					flex: 1,
 				}}
 			>
-				<Box
+				<Stack
+					direction="column"
 					sx={{
-						display: 'flex',
-						flexDirection: 'row',
-						justifyContent: 'center',
-						padding: 6,
-						borderTop: `1px solid ${BLUE_GREY}`,
-						borderBottom: `1px solid ${BLUE_GREY}`,
+						borderBottom: `2px solid ${BLUE_GREY}`,
+						gap: 4,
+						paddingBlock: 4,
+						paddingInline: 6,
 					}}
 				>
-					<ButtonLink
-						fullWidth
-						startIcon={<Icon name="material-file-download" />}
-						variant="outlined"
-						to="/app/projects/$projectId/download"
-						params={{ projectId }}
+					<Stack direction="row" sx={{ justifyContent: 'space-between' }}>
+						<Stack
+							direction="row"
+							sx={{ alignItems: 'center', gap: 4, flexWrap: 'wrap' }}
+						>
+							<Typography variant="h1" sx={{ fontWeight: 500 }}>
+								{t(m.listTitle)}
+							</Typography>
+
+							<Box
+								sx={{
+									borderRadius: 2,
+									backgroundColor:
+										sortedListData.length === 0
+											? LIGHT_GREY
+											: LIGHT_COMAPEO_BLUE,
+									padding: 2,
+								}}
+							>
+								<Typography
+									color={
+										sortedListData.length === 0 ? 'textDisabled' : 'primary'
+									}
+									sx={{ fontWeight: 500 }}
+								>
+									{t(m.resultsCount, { count: sortedListData.length })}
+								</Typography>
+							</Box>
+						</Stack>
+
+						<Tooltip title={t(m.downloadObservations)} placement="right">
+							<IconButtonLink
+								to="/app/projects/$projectId/download"
+								aria-label={t(m.downloadObservations)}
+							>
+								<Icon name="material-file-download" size={downloadButtonSize} />
+							</IconButtonLink>
+						</Tooltip>
+					</Stack>
+
+					<Stack direction="row" sx={{ gap: 4, flex: 1, flexWrap: 'wrap' }}>
+						<Stack
+							direction="row"
+							sx={{ gap: 2, flex: 1, alignItems: 'center' }}
+						>
+							<Tooltip
+								title={t(m.categoryFilterLabel)}
+								disableFocusListener
+								placement="bottom"
+							>
+								<Icon
+									name="material-symbols-apps"
+									htmlColor={BLUE_GREY}
+									size={filterIconSize}
+								/>
+							</Tooltip>
+
+							<CategoryFilterSelect
+								categories={categories}
+								categoryFilters={categoryFilters}
+								onChange={setCategoryFilters}
+							/>
+						</Stack>
+
+						<Stack
+							direction="row"
+							sx={{ gap: 2, flex: 1, alignItems: 'center' }}
+						>
+							<Icon
+								name="material-symbols-schedule"
+								htmlColor={BLUE_GREY}
+								size={filterIconSize}
+							/>
+
+							<Box
+								sx={{
+									flex: 1,
+									border: `1px solid orange`,
+									alignSelf: 'stretch',
+									minWidth: 100,
+								}}
+							/>
+						</Stack>
+					</Stack>
+				</Stack>
+
+				{categoryFilters.length > 0 ? (
+					<Stack
+						direction="row"
+						sx={{
+							overflowInline: 'auto',
+							gap: 2,
+							paddingInline: 6,
+							paddingBlock: 4,
+							borderBottom: `2px solid ${BLUE_GREY}`,
+						}}
 					>
-						{t(m.downloadObservations)}
-					</ButtonLink>
-				</Box>
+						<Button
+							variant="outlined"
+							sx={{ flexShrink: 0, fontWeight: 'normal' }}
+							onClick={() => {
+								setCategoryFilters([])
+							}}
+						>
+							{t(m.clearFiltersButton)}
+						</Button>
+
+						{categoryFilters.map((category) => {
+							return (
+								<Stack
+									direction="row"
+									key={category.docId}
+									sx={{
+										alignItems: 'center',
+										border: `1px solid ${BLUE_GREY}`,
+										justifyContent: 'space-between',
+										borderRadius: 2,
+										paddingInline: 4,
+										gap: 4,
+										backgroundColor: category.color
+											? alpha(category.color, 0.1)
+											: WHITE,
+									}}
+								>
+									<Typography sx={{ whiteSpace: 'nowrap' }}>
+										{category.name}
+									</Typography>
+
+									<IconButton
+										onClick={() => {
+											setCategoryFilters((prev) =>
+												prev.filter((p) => p.docId !== category.docId),
+											)
+										}}
+										sx={{
+											flex: 0,
+											padding: 0,
+											borderRadius: '50%',
+											border: `1px solid ${DARK_GREY}`,
+										}}
+									>
+										<Icon
+											name="material-close"
+											htmlColor={DARK_GREY}
+											size={removeFilterButtonSize}
+										/>
+									</IconButton>
+								</Stack>
+							)
+						})}
+					</Stack>
+				) : null}
 
 				<Box
 					sx={{
@@ -617,6 +804,353 @@ function TrackCategory({
 	)
 }
 
+function CategoryFilterSelect({
+	categories,
+	categoryFilters,
+	onChange,
+}: {
+	categories: Array<Preset>
+	categoryFilters: Array<Preset>
+	onChange: (value: Array<Preset>) => void
+}) {
+	const { formatMessage: t } = useIntl()
+
+	const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null)
+
+	const [lastFocusedCategoryItem, setLastFocusedCategoryItem] = useState<
+		string | null
+	>(null)
+
+	const categoryItemsListRef = useRef<HTMLUListElement>(null)
+
+	const showAllItemId = useId()
+
+	function focusCategoryItem() {
+		if (!categoryItemsListRef.current) {
+			return
+		}
+
+		const itemToFocus = categoryItemsListRef.current.querySelector(
+			`[role="option"][data-item-id="${lastFocusedCategoryItem || showAllItemId}"]`,
+		)
+
+		if (itemToFocus instanceof HTMLElement) {
+			itemToFocus.focus()
+		}
+	}
+
+	return (
+		<ClickAwayListener
+			onClickAway={() => {
+				setAnchorElement(null)
+			}}
+		>
+			<Box
+				onKeyDown={(event) => {
+					if (event.key === 'Escape') {
+						setAnchorElement(null)
+					}
+				}}
+				sx={{ display: 'flex', flex: 1 }}
+			>
+				<ButtonBase
+					type="button"
+					aria-expanded={!!anchorElement}
+					aria-haspopup="listbox"
+					disableRipple
+					disableTouchRipple
+					role="combobox"
+					onClick={(event) => {
+						setAnchorElement((prev) => (prev ? null : event.currentTarget))
+					}}
+					onKeyDown={(event) => {
+						if (event.key === 'Enter' && !anchorElement) {
+							event.preventDefault()
+							setAnchorElement(event.currentTarget)
+						}
+					}}
+					sx={{
+						flex: 1,
+						borderRadius: 2,
+						justifyContent: 'flex-start',
+						outline: (theme) => `1px solid ${theme.palette.action.disabled}`,
+						'&:focus': {
+							outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+						},
+					}}
+				>
+					<Stack
+						direction="row"
+						sx={{
+							flex: 1,
+							overflow: 'hidden',
+							padding: 2,
+							position: 'relative',
+						}}
+					>
+						<Typography
+							variant="button"
+							sx={{
+								flex: 1,
+								overflow: 'hidden',
+								whiteSpace: 'nowrap',
+								textOverflow: 'ellipsis',
+								textAlign: 'start',
+							}}
+						>
+							{categoryFilters.length === 0
+								? t(m.categoryFilterShowAll)
+								: t(m.categoryFilterValue, { count: categoryFilters.length })}
+						</Typography>
+
+						<Icon
+							name="material-expand-more-rounded"
+							sx={{ transform: anchorElement ? 'rotate(180deg)' : undefined }}
+							htmlColor={DARK_GREY}
+						/>
+					</Stack>
+
+					<InputBase
+						readOnly
+						value={categoryFilters.map((c) => c.name).join(', ')}
+						slotProps={{
+							input: { tabIndex: -1 },
+						}}
+						sx={{
+							position: 'absolute',
+							left: 0,
+							bottom: 0,
+							visibility: 'hidden',
+						}}
+					/>
+				</ButtonBase>
+
+				<Popper
+					placement="bottom-start"
+					transition
+					sx={{ zIndex: 1 }}
+					disablePortal
+					modifiers={[
+						{ name: 'offset', options: { offset: [0, 8] } },
+						{ name: 'eventListeners', enabled: true },
+					]}
+					anchorEl={anchorElement}
+					open={!!anchorElement}
+				>
+					{({ TransitionProps }) => {
+						return (
+							<Fade {...TransitionProps}>
+								<Box
+									sx={{
+										overflow: 'hidden',
+										bgcolor: WHITE,
+										boxShadow: (theme) => theme.shadows[5],
+										borderRadius: 2,
+										scrollbarColor: 'initial',
+									}}
+								>
+									<Stack
+										direction="column"
+										sx={{ maxHeight: '50dvh', position: 'relative' }}
+									>
+										<Stack
+											component={List}
+											disablePadding
+											role="listbox"
+											aria-multiselectable
+											ref={categoryItemsListRef}
+											sx={{ overflow: 'auto' }}
+											onFocus={(event) => {
+												if (event.currentTarget === event.target) {
+													event.preventDefault()
+													focusCategoryItem()
+												}
+											}}
+											onKeyDown={(event) => {
+												switch (event.key) {
+													case 'ArrowDown': {
+														if (
+															'nextElementSibling' in event.target &&
+															event.target.nextElementSibling instanceof
+																HTMLElement
+														) {
+															event.preventDefault()
+															event.target.nextElementSibling.focus()
+														}
+
+														return
+													}
+													case 'ArrowUp': {
+														if (
+															'previousElementSibling' in event.target &&
+															event.target.previousElementSibling instanceof
+																HTMLElement
+														) {
+															event.preventDefault()
+															event.target.previousElementSibling.focus()
+														}
+
+														return
+													}
+												}
+											}}
+										>
+											<ListItemButton
+												role="option"
+												disableGutters
+												disableRipple
+												tabIndex={-1}
+												sx={{
+													padding: 4,
+													borderBottom: `1px solid ${BLUE_GREY}`,
+												}}
+												data-item-id={showAllItemId}
+												onFocus={() => {
+													setLastFocusedCategoryItem(showAllItemId)
+												}}
+												onClick={() => {
+													if (categoryFilters.length === 0) {
+														return
+													}
+
+													onChange([])
+												}}
+											>
+												<Stack
+													direction="row"
+													sx={{
+														gap: 2,
+														alignItems: 'center',
+														overflow: 'auto',
+													}}
+												>
+													<Checkbox
+														disableRipple
+														checked={categoryFilters.length === 0}
+														slotProps={{
+															input: {
+																'aria-label': 'controlled',
+																tabIndex: -1,
+															},
+														}}
+														sx={{ padding: 0 }}
+													/>
+
+													<Typography
+														sx={{
+															whiteSpace: 'nowrap',
+															overflow: 'hidden',
+															textOverflow: 'ellipsis',
+														}}
+													>
+														{t(m.categoryFilterShowAll)}
+													</Typography>
+												</Stack>
+											</ListItemButton>
+
+											{categories.map((category) => {
+												const isSelected = !!categoryFilters.find(
+													(f) => f.docId === category.docId,
+												)
+
+												return (
+													<ListItemButton
+														key={category.docId}
+														role="option"
+														disableGutters
+														disableRipple
+														tabIndex={-1}
+														data-item-id={category.docId}
+														onFocus={() => {
+															setLastFocusedCategoryItem(category.docId)
+														}}
+														sx={{ padding: 4 }}
+														onClick={() => {
+															onChange(
+																isSelected
+																	? categoryFilters.filter(
+																			(f) => f.docId !== category.docId,
+																		)
+																	: [...categoryFilters, category],
+															)
+														}}
+													>
+														<Stack
+															direction="row"
+															sx={{
+																alignItems: 'center',
+																gap: 2,
+																overflow: 'auto',
+															}}
+														>
+															<Checkbox
+																checked={isSelected}
+																slotProps={{
+																	input: {
+																		'aria-label': 'controlled',
+																		tabIndex: -1,
+																	},
+																}}
+																sx={{ padding: 0 }}
+															/>
+
+															<Typography
+																sx={{
+																	whiteSpace: 'nowrap',
+																	overflow: 'hidden',
+																	textOverflow: 'ellipsis',
+																}}
+															>
+																{category.name}
+															</Typography>
+														</Stack>
+													</ListItemButton>
+												)
+											})}
+										</Stack>
+
+										<Box
+											sx={{
+												position: 'sticky',
+												bottom: 0,
+												right: 0,
+												left: 0,
+												padding: 2,
+												backgroundColor: WHITE,
+												borderTop: `1px solid ${BLUE_GREY}`,
+											}}
+										>
+											<Button
+												fullWidth
+												variant="outlined"
+												sx={{ maxWidth: 400 }}
+												onKeyDown={(event) => {
+													if (event.key !== 'Tab') {
+														return
+													}
+
+													if (event.shiftKey) {
+														event.preventDefault()
+														focusCategoryItem()
+													} else {
+														// TODO: Close popper
+													}
+												}}
+											>
+												{t(m.categoryFilterAdvanced)}
+											</Button>
+										</Box>
+									</Stack>
+								</Box>
+							</Fade>
+						)
+					}}
+				</Popper>
+			</Box>
+		</ClickAwayListener>
+	)
+}
+
 const m = defineMessages({
 	observationCategoryNameFallback: {
 		id: '$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback',
@@ -638,5 +1172,42 @@ const m = defineMessages({
 		id: '$1.routes.app.projects.$projectId.-data-list.downloadObservations',
 		defaultMessage: 'Download Observations',
 		description: 'Link text to navigate to download observations page.',
+	},
+	listTitle: {
+		id: '$1.routes.app.projects.$projectId.-data-list.listTitle',
+		defaultMessage: 'List',
+		description: 'Title for listed data page.',
+	},
+	resultsCount: {
+		id: '$1.routes.app.projects.$projectId.-data-list.resultsCount',
+		defaultMessage:
+			'{count, plural, =0 {No results} one {# result} other {# results}}',
+		description: 'Number of items listed',
+	},
+	clearFiltersButton: {
+		id: '$1.routes.app.projects.$projectId.-data-list.clearFiltersButton',
+		defaultMessage: 'Clear All',
+		description: 'Text for button to clear all filters',
+	},
+	categoryFilterLabel: {
+		id: '$1.routes.app.projects.$projectId.-data-list.categoryFilterLabel',
+		defaultMessage: 'Filter by Category',
+		description: 'Text displayed describing the category filter input.',
+	},
+	categoryFilterValue: {
+		id: '$1.routes.app.projects.$projectId.-data-list.categoryFilterValue',
+		defaultMessage:
+			'{count, plural, =0 {0 categories} one {# category} other {# categories}}',
+		description: 'Text displayed describing the selected category filters.',
+	},
+	categoryFilterShowAll: {
+		id: '$1.routes.app.projects.$projectId.-data-list.categoryFilterShowAll',
+		defaultMessage: 'Show All',
+		description: 'Text shown when all categories are being shown.',
+	},
+	categoryFilterAdvanced: {
+		id: '$1.routes.app.projects.$projectId.-data-list.categoriesFiltersAdvanced',
+		defaultMessage: 'Advanced…',
+		description: 'Text for button to clear all filters',
 	},
 })
