@@ -87,6 +87,7 @@ export default defineConfig(
 					},
 				},
 			],
+			'react-hooks/incompatible-library': 'error',
 		},
 		languageOptions: {
 			globals: { ...globals.browser },
