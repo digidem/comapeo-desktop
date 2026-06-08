@@ -122,6 +122,16 @@
 			<path d="M0 0h24v24H0z" fill="none"></path>
 			<path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"></path>
 		</symbol>
+		<symbol
+			fill="currentColor"
+			viewBox="0 0 24 24"
+			id="material-expand-more-rounded"
+		>
+			<path fill="none" d="M24 24H0V0h24z" opacity=".87"></path>
+			<path
+				d="M15.88 9.29 12 13.17 8.12 9.29a.996.996 0 1 0-1.41 1.41l4.59 4.59c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41c-.39-.38-1.03-.39-1.42 0"
+			></path>
+		</symbol>
 		<symbol viewBox="0 0 24 24" id="material-expand-more">
 			<path d="M0 0h24v24H0z" fill="none"></path>
 			<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
@@ -334,6 +344,15 @@
 		<symbol viewBox="0 -960 960 960" id="material-symbols-lists">
 			<path
 				d="M80-160v-160h160v160zm240 0v-160h560v160zM80-400v-160h160v160zm240 0v-160h560v160zM80-640v-160h160v160zm240 0v-160h560v160z"
+			></path>
+		</symbol>
+		<symbol
+			fill="currentColor"
+			viewBox="0 -960 960 960"
+			id="material-symbols-schedule"
+		>
+			<path
+				d="m612-292 56-56-148-148v-184h-80v216zM480-80q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80m0-80q133 0 226.5-93.5T800-480t-93.5-226.5T480-800t-226.5 93.5T160-480t93.5 226.5T480-160"
 			></path>
 		</symbol>
 		<symbol
