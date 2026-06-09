@@ -255,6 +255,26 @@
     "description": "Text for button to clear all filters",
     "message": "Clear All"
   },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterLabel": {
+    "description": "Text displayed describing the date filter input.",
+    "message": "Filter by Date"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionFromStart": {
+    "description": "Text for option to show data from earliest starting date.",
+    "message": "From Start"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionLastNDays": {
+    "description": "Text for option to show data from the last N days.",
+    "message": "Last {count, number} Days"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionSame": {
+    "description": "Text for option to show data from the same month.",
+    "message": "Same Month"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionSameYear": {
+    "description": "Text for option to show data from the same year.",
+    "message": "Same Year"
+  },
   "$1.routes.app.projects.$projectId.-data-list.downloadObservations": {
     "description": "Link text to navigate to download observations page.",
     "message": "Download Observations"
