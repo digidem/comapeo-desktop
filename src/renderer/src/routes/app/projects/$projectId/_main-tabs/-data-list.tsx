@@ -12,16 +12,12 @@ import { useManyDocs, useOwnDeviceInfo } from '@comapeo/core-react'
 import type { Preset } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import ButtonBase from '@mui/material/ButtonBase'
 import Checkbox from '@mui/material/Checkbox'
 import CircularProgress from '@mui/material/CircularProgress'
-import ClickAwayListener from '@mui/material/ClickAwayListener'
-import Fade from '@mui/material/Fade'
 import IconButton from '@mui/material/IconButton'
 import InputBase from '@mui/material/InputBase'
 import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
-import Popper from '@mui/material/Popper'
 import Radio from '@mui/material/Radio'
 import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
@@ -67,6 +63,7 @@ import {
 	type Attachment,
 } from '../../../../../lib/comapeo.ts'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings.ts'
+import { FilterSelect } from './-filter-select.tsx'
 import type { HighlightedDocument } from './-shared.ts'
 import { PhotoAttachmentImage } from './observations/$observationDocId/-components/photo-attachment-image.tsx'
 
@@ -104,7 +101,8 @@ export function DataList({ projectId }: { projectId: string }) {
 	})
 
 	const [categoryFilters, setCategoryFilters] = useState<Array<Preset>>([])
-	const [dateFilter, setDateFilter] = useState<DateFilterOption | null>(null)
+
+	const [dateFilter, setDateFilter] = useState<DateFilter | null>(null)
 
 	const observationsWithCategory = useMemo(() => {
 		return observations.map((o) => ({
@@ -348,8 +346,8 @@ export function DataList({ projectId }: { projectId: string }) {
 							</Tooltip>
 
 							<CategoryFilterSelect
-								categories={categories}
-								categoryFilters={categoryFilters}
+								value={categoryFilters}
+								options={categories}
 								onChange={setCategoryFilters}
 							/>
 						</Stack>
@@ -370,19 +368,7 @@ export function DataList({ projectId }: { projectId: string }) {
 								/>
 							</Tooltip>
 
-							{/* <Box
-								sx={{
-									flex: 1,
-									border: `1px solid orange`,
-									alignSelf: 'stretch',
-									minWidth: 100,
-								}}
-							/> */}
-
-							<DateFilterSelect
-								dateFilter={dateFilter}
-								onChange={setDateFilter}
-							/>
+							<DateFilterSelect value={dateFilter} onChange={setDateFilter} />
 						</Stack>
 					</Stack>
 				</Stack>
@@ -886,492 +872,244 @@ function TrackCategory({
 }
 
 function CategoryFilterSelect({
-	categories,
-	categoryFilters,
+	value,
+	options,
 	onChange,
 }: {
-	categories: Array<Preset>
-	categoryFilters: Array<Preset>
+	value: Array<Preset>
+	options: Array<Preset>
 	onChange: (value: Array<Preset>) => void
 }) {
 	const { formatMessage: t } = useIntl()
 
-	const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null)
-
-	const [lastFocusedCategoryItem, setLastFocusedCategoryItem] = useState<
-		string | null
-	>(null)
-
-	const categoryItemsListRef = useRef<HTMLUListElement>(null)
-
-	const showAllItemId = useId()
-
-	function focusCategoryItem() {
-		if (!categoryItemsListRef.current) {
-			return
-		}
-
-		const itemToFocus = categoryItemsListRef.current.querySelector(
-			`[role="option"][data-item-id="${lastFocusedCategoryItem || showAllItemId}"]`,
-		)
-
-		if (itemToFocus instanceof HTMLElement) {
-			itemToFocus.focus()
-		}
-	}
+	const dataOptionPrefixId = useId()
 
 	return (
-		<ClickAwayListener
-			onClickAway={() => {
-				setAnchorElement(null)
-			}}
-		>
-			<Box
-				onKeyDown={(event) => {
-					if (event.key === 'Escape') {
-						setAnchorElement(null)
-					}
-				}}
-				sx={{ display: 'flex', flex: 1 }}
-			>
-				<ButtonBase
-					type="button"
-					aria-expanded={!!anchorElement}
-					aria-haspopup="listbox"
-					disableRipple
-					disableTouchRipple
-					role="combobox"
-					onClick={(event) => {
-						setAnchorElement((prev) => (prev ? null : event.currentTarget))
-					}}
-					onKeyDown={(event) => {
-						if (event.key === 'Enter' && !anchorElement) {
-							event.preventDefault()
-							setAnchorElement(event.currentTarget)
-						}
-					}}
+		<FilterSelect
+			multiSelect
+			displayedValue={
+				value.length === 0
+					? t(m.categoryFilterShowAll)
+					: t(m.categoryFilterValue, {
+							count: value.length,
+						})
+			}
+			hiddenInput={
+				<InputBase
+					readOnly
+					aria-hidden="true"
+					value={value.map((c) => c.name).join(', ')}
+					slotProps={{ input: { tabIndex: -1 } }}
 					sx={{
-						flex: 1,
-						borderRadius: 2,
-						justifyContent: 'flex-start',
-						outline: (theme) => `1px solid ${theme.palette.action.disabled}`,
-						'&:focus': {
-							outline: (theme) => `2px solid ${theme.palette.primary.main}`,
-						},
+						position: 'absolute',
+						left: 0,
+						bottom: 0,
+						visibility: 'hidden',
 					}}
+				/>
+			}
+			footer={
+				<Button fullWidth variant="outlined" sx={{ maxWidth: 400 }}>
+					{t(m.categoryFilterAdvanced)}
+				</Button>
+			}
+		>
+			<ListItemButton
+				role="option"
+				disableGutters
+				disableRipple
+				tabIndex={-1}
+				sx={{ padding: 4, borderBottom: `1px solid ${BLUE_GREY}` }}
+				selected={value.length === 0}
+				aria-selected={value.length === 0}
+				data-option-id={`${dataOptionPrefixId}-show-all`}
+				onClick={() => {
+					if (value.length === 0) {
+						return
+					}
+
+					onChange([])
+				}}
+			>
+				<Stack
+					direction="row"
+					sx={{ gap: 2, alignItems: 'center', overflow: 'auto' }}
 				>
-					<Stack
-						direction="row"
+					<Checkbox
+						disableRipple
+						checked={value.length === 0}
+						slotProps={{
+							input: { 'aria-label': 'controlled', tabIndex: -1 },
+						}}
+						sx={{ padding: 0 }}
+					/>
+
+					<Typography
 						sx={{
-							flex: 1,
+							whiteSpace: 'nowrap',
 							overflow: 'hidden',
-							padding: 2,
-							position: 'relative',
+							textOverflow: 'ellipsis',
 						}}
 					>
-						<Typography
-							variant="button"
+						{t(m.categoryFilterShowAll)}
+					</Typography>
+				</Stack>
+			</ListItemButton>
+
+			{options.map((category) => {
+				const isSelected = !!value.find((f) => f.docId === category.docId)
+
+				return (
+					<ListItemButton
+						key={category.docId}
+						role="option"
+						disableGutters
+						disableRipple
+						tabIndex={-1}
+						selected={isSelected}
+						aria-selected={isSelected}
+						data-option-id={`${value.length === 0}-${category.docId}`}
+						sx={{ padding: 4 }}
+						onClick={() => {
+							onChange(
+								isSelected
+									? value.filter((f) => f.docId !== category.docId)
+									: [...value, category],
+							)
+						}}
+					>
+						<Stack
+							direction="row"
 							sx={{
-								flex: 1,
-								overflow: 'hidden',
-								whiteSpace: 'nowrap',
-								textOverflow: 'ellipsis',
-								textAlign: 'start',
+								alignItems: 'center',
+								gap: 2,
+								overflow: 'auto',
 							}}
 						>
-							{categoryFilters.length === 0
-								? t(m.categoryFilterShowAll)
-								: t(m.categoryFilterValue, { count: categoryFilters.length })}
-						</Typography>
+							<Checkbox
+								checked={isSelected}
+								slotProps={{
+									input: {
+										'aria-label': 'controlled',
+										tabIndex: -1,
+									},
+								}}
+								sx={{ padding: 0 }}
+							/>
 
-						<Icon
-							name="material-expand-more-rounded"
-							sx={{ transform: anchorElement ? 'rotate(180deg)' : undefined }}
-							htmlColor={DARK_GREY}
-						/>
-					</Stack>
-
-					<InputBase
-						readOnly
-						aria-hidden="true"
-						value={categoryFilters.map((c) => c.name).join(', ')}
-						slotProps={{
-							input: { tabIndex: -1 },
-						}}
-						sx={{
-							position: 'absolute',
-							left: 0,
-							bottom: 0,
-							visibility: 'hidden',
-						}}
-					/>
-				</ButtonBase>
-
-				<Popper
-					placement="bottom-start"
-					transition
-					sx={{ zIndex: 1 }}
-					modifiers={[
-						{ name: 'offset', options: { offset: [0, 8] } },
-						{ name: 'eventListeners', enabled: true },
-					]}
-					anchorEl={anchorElement}
-					open={!!anchorElement}
-				>
-					{({ TransitionProps }) => {
-						return (
-							<Fade {...TransitionProps}>
-								<Box
-									sx={{
-										overflow: 'hidden',
-										bgcolor: WHITE,
-										boxShadow: (theme) => theme.shadows[5],
-										borderRadius: 2,
-										scrollbarColor: 'initial',
-									}}
-								>
-									<Stack
-										direction="column"
-										sx={{ maxHeight: '50dvh', position: 'relative' }}
-									>
-										<Stack
-											component={List}
-											disablePadding
-											role="listbox"
-											aria-multiselectable
-											ref={categoryItemsListRef}
-											sx={{ overflow: 'auto' }}
-											onFocus={(event) => {
-												if (event.currentTarget === event.target) {
-													event.preventDefault()
-													focusCategoryItem()
-												}
-											}}
-											onKeyDown={(event) => {
-												switch (event.key) {
-													case 'ArrowDown': {
-														if (
-															'nextElementSibling' in event.target &&
-															event.target.nextElementSibling instanceof
-																HTMLElement
-														) {
-															event.preventDefault()
-															event.target.nextElementSibling.focus()
-														}
-
-														return
-													}
-													case 'ArrowUp': {
-														if (
-															'previousElementSibling' in event.target &&
-															event.target.previousElementSibling instanceof
-																HTMLElement
-														) {
-															event.preventDefault()
-															event.target.previousElementSibling.focus()
-														}
-
-														return
-													}
-												}
-											}}
-										>
-											<ListItemButton
-												role="option"
-												disableGutters
-												disableRipple
-												tabIndex={-1}
-												sx={{
-													padding: 4,
-													borderBottom: `1px solid ${BLUE_GREY}`,
-												}}
-												data-item-id={showAllItemId}
-												onFocus={() => {
-													setLastFocusedCategoryItem(showAllItemId)
-												}}
-												onClick={() => {
-													if (categoryFilters.length === 0) {
-														return
-													}
-
-													onChange([])
-												}}
-											>
-												<Stack
-													direction="row"
-													sx={{
-														gap: 2,
-														alignItems: 'center',
-														overflow: 'auto',
-													}}
-												>
-													<Checkbox
-														disableRipple
-														checked={categoryFilters.length === 0}
-														slotProps={{
-															input: {
-																'aria-label': 'controlled',
-																tabIndex: -1,
-															},
-														}}
-														sx={{ padding: 0 }}
-													/>
-
-													<Typography
-														sx={{
-															whiteSpace: 'nowrap',
-															overflow: 'hidden',
-															textOverflow: 'ellipsis',
-														}}
-													>
-														{t(m.categoryFilterShowAll)}
-													</Typography>
-												</Stack>
-											</ListItemButton>
-
-											{categories.map((category) => {
-												const isSelected = !!categoryFilters.find(
-													(f) => f.docId === category.docId,
-												)
-
-												return (
-													<ListItemButton
-														key={category.docId}
-														role="option"
-														disableGutters
-														disableRipple
-														tabIndex={-1}
-														data-item-id={category.docId}
-														onFocus={() => {
-															setLastFocusedCategoryItem(category.docId)
-														}}
-														sx={{ padding: 4 }}
-														onClick={() => {
-															onChange(
-																isSelected
-																	? categoryFilters.filter(
-																			(f) => f.docId !== category.docId,
-																		)
-																	: [...categoryFilters, category],
-															)
-														}}
-													>
-														<Stack
-															direction="row"
-															sx={{
-																alignItems: 'center',
-																gap: 2,
-																overflow: 'auto',
-															}}
-														>
-															<Checkbox
-																checked={isSelected}
-																slotProps={{
-																	input: {
-																		'aria-label': 'controlled',
-																		tabIndex: -1,
-																	},
-																}}
-																sx={{ padding: 0 }}
-															/>
-
-															<Typography
-																sx={{
-																	whiteSpace: 'nowrap',
-																	overflow: 'hidden',
-																	textOverflow: 'ellipsis',
-																}}
-															>
-																{category.name}
-															</Typography>
-														</Stack>
-													</ListItemButton>
-												)
-											})}
-										</Stack>
-
-										<Box
-											sx={{
-												position: 'sticky',
-												bottom: 0,
-												right: 0,
-												left: 0,
-												padding: 2,
-												backgroundColor: WHITE,
-												borderTop: `1px solid ${BLUE_GREY}`,
-											}}
-										>
-											<Button
-												fullWidth
-												variant="outlined"
-												sx={{ maxWidth: 400 }}
-												onKeyDown={(event) => {
-													if (event.key !== 'Tab') {
-														return
-													}
-
-													if (event.shiftKey) {
-														event.preventDefault()
-														focusCategoryItem()
-													} else {
-														// TODO: Close popper
-													}
-												}}
-											>
-												{t(m.categoryFilterAdvanced)}
-											</Button>
-										</Box>
-									</Stack>
-								</Box>
-							</Fade>
-						)
-					}}
-				</Popper>
-			</Box>
-		</ClickAwayListener>
+							<Typography
+								sx={{
+									whiteSpace: 'nowrap',
+									overflow: 'hidden',
+									textOverflow: 'ellipsis',
+								}}
+							>
+								{category.name}
+							</Typography>
+						</Stack>
+					</ListItemButton>
+				)
+			})}
+		</FilterSelect>
 	)
 }
 
-type DateFilterOption =
-	| {
-			type: 'range'
-			start: Date
-			end: Date
-	  }
+type DateFilter =
+	| { type: 'range'; start: Date; end: Date }
 	| { type: 'same'; unit: 'month' | 'year' }
 	| { type: 'relative'; unit: 'days'; value: number }
 
 function DateFilterSelect({
-	dateFilter,
+	value,
 	onChange,
 }: {
-	dateFilter: DateFilterOption | null
-	onChange: (value: DateFilterOption | null) => void
+	value: DateFilter | null
+	onChange: (value: DateFilter | null) => void
 }) {
 	const { formatMessage: t } = useIntl()
 
-	const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null)
+	const dataItemPrefixId = useId()
 
-	const [lastFocusedItem, setLastFocusedItem] = useState<string | null>(null)
+	const [stableNowDate] = useState(() => {
+		console.log('*** STABLE DATE')
+		return new Date()
+	})
 
-	const optionsListRef = useRef<HTMLUListElement>(null)
-
-	const optionPrefixId = useId()
-
-	const [startDateInputValue, endDateInputValue] = useMemo(() => {
-		const now = new Date()
-
-		if (!dateFilter) {
-			return ['', formatISO(addDays(now, 1), { representation: 'date' })]
+	const selectedOption = useMemo(() => {
+		if (!value) {
+			return {
+				id: 'from-start' as const,
+				label: t(m.dateFilterOptionFromStart),
+				inputValues: {
+					start: '',
+					end: formatISO(addDays(stableNowDate, 1), { representation: 'date' }),
+				},
+			}
 		}
 
-		switch (dateFilter.type) {
+		switch (value.type) {
 			case 'range': {
-				return [
-					formatISO(dateFilter.start, { representation: 'date' }),
-					formatISO(dateFilter.end, { representation: 'date' }),
-				]
+				return {
+					id: 'custom' as const,
+					label: 'range',
+					inputValues: {
+						start: formatISO(value.start, { representation: 'date' }),
+						end: formatISO(value.end, { representation: 'date' }),
+					},
+				}
 			}
 			case 'relative': {
-				return [
-					formatISO(subDays(now, dateFilter.value), { representation: 'date' }),
-					formatISO(addDays(now, 1), { representation: 'date' }),
-				]
+				return {
+					id: `last-${value.value}-days` as const,
+					label: t(m.dateFilterOptionLastNDays, {
+						count: value.value,
+					}),
+					inputValues: {
+						start: formatISO(subDays(stableNowDate, value.value), {
+							representation: 'date',
+						}),
+						end: formatISO(addDays(stableNowDate, 1), {
+							representation: 'date',
+						}),
+					},
+				}
 			}
 			case 'same': {
 				const startDate =
-					dateFilter.unit === 'month' ? startOfMonth(now) : startOfYear(now)
+					value.unit === 'month'
+						? startOfMonth(stableNowDate)
+						: startOfYear(stableNowDate)
 
-				return [
-					formatISO(startDate, { representation: 'date' }),
-					formatISO(addDays(now, 1), { representation: 'date' }),
-				]
+				return {
+					id: `same-${value.unit}` as const,
+					label: t(
+						value.unit === 'month'
+							? m.dateFilterOptionSameMonth
+							: m.dateFilterOptionSameYear,
+					),
+					inputValues: {
+						start: formatISO(startDate, { representation: 'date' }),
+						end: formatISO(addDays(stableNowDate, 1), {
+							representation: 'date',
+						}),
+					},
+				}
 			}
 		}
-	}, [dateFilter])
-
-	console.log('***', { startDateInputValue, endDateInputValue })
+	}, [value, stableNowDate, t])
 
 	return (
-		<ClickAwayListener
-			onClickAway={() => {
-				setAnchorElement(null)
-			}}
-		>
-			<Box
-				onKeyDown={(event) => {
-					if (event.key === 'Escape') {
-						setAnchorElement(null)
-					}
-				}}
-				sx={{ display: 'flex', flex: 1 }}
-			>
-				<ButtonBase
-					type="button"
-					aria-expanded={!!anchorElement}
-					aria-haspopup="listbox"
-					disableRipple
-					disableTouchRipple
-					role="combobox"
-					onClick={(event) => {
-						setAnchorElement((prev) => (prev ? null : event.currentTarget))
-					}}
-					onKeyDown={(event) => {
-						if (event.key === 'Enter' && !anchorElement) {
-							event.preventDefault()
-							setAnchorElement(event.currentTarget)
-						}
-					}}
-					sx={{
-						flex: 1,
-						borderRadius: 2,
-						justifyContent: 'flex-start',
-						outline: (theme) => `1px solid ${theme.palette.action.disabled}`,
-						'&:focus': {
-							outline: (theme) => `2px solid ${theme.palette.primary.main}`,
-						},
-					}}
-				>
-					<Stack
-						direction="row"
-						sx={{
-							flex: 1,
-							overflow: 'hidden',
-							padding: 2,
-							position: 'relative',
-						}}
-					>
-						<Typography
-							variant="button"
-							sx={{
-								flex: 1,
-								overflow: 'hidden',
-								whiteSpace: 'nowrap',
-								textOverflow: 'ellipsis',
-								textAlign: 'start',
-							}}
-						>
-							{dateFilter
-								? getDisplayedDateFilterValue(dateFilter, t)
-								: t(m.dateFilterOptionFromStart)}
-						</Typography>
-
-						<Icon
-							name="material-expand-more-rounded"
-							sx={{ transform: anchorElement ? 'rotate(180deg)' : undefined }}
-							htmlColor={DARK_GREY}
-						/>
-					</Stack>
-
+		<FilterSelect
+			displayedValue={selectedOption.label}
+			hiddenInput={
+				<>
 					<InputBase
 						type="date"
 						readOnly
 						name="start"
-						value={startDateInputValue}
+						value={selectedOption.inputValues.start}
 						aria-hidden="true"
-						slotProps={{
-							input: { tabIndex: -1 },
-						}}
+						slotProps={{ input: { tabIndex: -1 } }}
 						sx={{
 							position: 'absolute',
 							left: 0,
@@ -1385,10 +1123,8 @@ function DateFilterSelect({
 						readOnly
 						name="end"
 						aria-hidden="true"
-						value={endDateInputValue}
-						slotProps={{
-							input: { tabIndex: -1 },
-						}}
+						value={selectedOption.inputValues.end}
+						slotProps={{ input: { tabIndex: -1 } }}
 						sx={{
 							position: 'absolute',
 							left: 0,
@@ -1396,429 +1132,273 @@ function DateFilterSelect({
 							visibility: 'hidden',
 						}}
 					/>
-				</ButtonBase>
+				</>
+			}
+			footer={
+				<Button fullWidth variant="outlined" sx={{ maxWidth: 400 }}>
+					{t(m.categoryFilterAdvanced)}
+				</Button>
+			}
+		>
+			<ListItemButton
+				role="option"
+				disableGutters
+				disableRipple
+				selected={selectedOption.id === 'from-start'}
+				aria-selected={value === null}
+				tabIndex={-1}
+				sx={{ padding: 4, borderBottom: `1px solid ${BLUE_GREY}` }}
+				data-option-id={`${dataItemPrefixId}-from-start`}
+				onClick={() => {
+					if (selectedOption.id === 'from-start') {
+						return
+					}
 
-				<Popper
-					placement="bottom-start"
-					transition
-					sx={{ zIndex: 1 }}
-					modifiers={[
-						{ name: 'offset', options: { offset: [0, 8] } },
-						{ name: 'eventListeners', enabled: true },
-					]}
-					anchorEl={anchorElement}
-					open={!!anchorElement}
-				>
-					{({ TransitionProps }) => {
-						return (
-							<Fade {...TransitionProps}>
-								<Box
-									sx={{
-										overflow: 'hidden',
-										bgcolor: WHITE,
-										boxShadow: (theme) => theme.shadows[5],
-										borderRadius: 2,
-										scrollbarColor: 'initial',
-									}}
-								>
-									<Stack
-										direction="column"
-										sx={{ maxHeight: '50dvh', position: 'relative' }}
-									>
-										<Stack
-											component={List}
-											disablePadding
-											role="listbox"
-											aria-multiselectable
-											ref={optionsListRef}
-											sx={{ overflow: 'auto' }}
-											onFocus={(event) => {
-												// if (event.currentTarget === event.target) {
-												// 	event.preventDefault()
-												// 	focusCategoryItem()
-												// }
-											}}
-											onKeyDown={(event) => {
-												switch (event.key) {
-													case 'ArrowDown': {
-														if (
-															'nextElementSibling' in event.target &&
-															event.target.nextElementSibling instanceof
-																HTMLElement
-														) {
-															event.preventDefault()
-															event.target.nextElementSibling.focus()
-														}
-
-														return
-													}
-													case 'ArrowUp': {
-														if (
-															'previousElementSibling' in event.target &&
-															event.target.previousElementSibling instanceof
-																HTMLElement
-														) {
-															event.preventDefault()
-															event.target.previousElementSibling.focus()
-														}
-
-														return
-													}
-												}
-											}}
-										>
-											<ListItemButton
-												role="option"
-												disableGutters
-												disableRipple
-												tabIndex={-1}
-												sx={{
-													minWidth: 200,
-													padding: 4,
-													borderBottom: `1px solid ${BLUE_GREY}`,
-												}}
-												data-item-id={`${optionPrefixId}-from-start`}
-												onFocus={() => {
-													setLastFocusedItem('from-start')
-												}}
-												onClick={() => {
-													if (dateFilter === null) {
-														return
-													}
-
-													onChange(null)
-												}}
-											>
-												<Stack
-													direction="row"
-													sx={{
-														gap: 2,
-														alignItems: 'center',
-														overflow: 'auto',
-													}}
-												>
-													<Radio
-														disableRipple
-														checked={dateFilter === null}
-														slotProps={{
-															input: {
-																'aria-label': 'controlled',
-																tabIndex: -1,
-															},
-														}}
-														sx={{ padding: 0 }}
-													/>
-
-													<Typography
-														sx={{
-															whiteSpace: 'nowrap',
-															overflow: 'hidden',
-															textOverflow: 'ellipsis',
-														}}
-													>
-														{t(m.dateFilterOptionFromStart)}
-													</Typography>
-												</Stack>
-											</ListItemButton>
-
-											{/* TODO: Conditionally render range date filter */}
-
-											<ListItemButton
-												role="option"
-												disableGutters
-												disableRipple
-												tabIndex={-1}
-												sx={{ padding: 4 }}
-												data-item-id={`${optionPrefixId}-last-7-days`}
-												onFocus={() => {
-													setLastFocusedItem('last-7-days')
-												}}
-												onClick={() => {
-													if (
-														isEqual(dateFilter, {
-															type: 'relative',
-															unit: 'days',
-															value: 7,
-														})
-													) {
-														return
-													}
-
-													onChange({ type: 'relative', unit: 'days', value: 7 })
-												}}
-											>
-												<Stack
-													direction="row"
-													sx={{
-														gap: 2,
-														alignItems: 'center',
-														overflow: 'auto',
-													}}
-												>
-													<Radio
-														disableRipple
-														checked={isEqual(dateFilter, {
-															type: 'relative',
-															unit: 'days',
-															value: 7,
-														})}
-														slotProps={{
-															input: {
-																'aria-label': 'controlled',
-																tabIndex: -1,
-															},
-														}}
-														sx={{ padding: 0 }}
-													/>
-
-													<Typography
-														sx={{
-															whiteSpace: 'nowrap',
-															overflow: 'hidden',
-															textOverflow: 'ellipsis',
-														}}
-													>
-														{t(m.dateFilterOptionLastNDays, { count: 7 })}
-													</Typography>
-												</Stack>
-											</ListItemButton>
-
-											<ListItemButton
-												role="option"
-												disableGutters
-												disableRipple
-												tabIndex={-1}
-												sx={{ padding: 4 }}
-												data-item-id={`${optionPrefixId}-last-30-days`}
-												onFocus={() => {
-													setLastFocusedItem('last-30-days')
-												}}
-												onClick={() => {
-													if (
-														isEqual(dateFilter, {
-															type: 'relative',
-															unit: 'days',
-															value: 30,
-														})
-													) {
-														return
-													}
-
-													onChange({
-														type: 'relative',
-														unit: 'days',
-														value: 30,
-													})
-												}}
-											>
-												<Stack
-													direction="row"
-													sx={{
-														gap: 2,
-														alignItems: 'center',
-														overflow: 'auto',
-													}}
-												>
-													<Radio
-														disableRipple
-														checked={isEqual(dateFilter, {
-															type: 'relative',
-															unit: 'days',
-															value: 30,
-														})}
-														slotProps={{
-															input: {
-																'aria-label': 'controlled',
-																tabIndex: -1,
-															},
-														}}
-														sx={{ padding: 0 }}
-													/>
-
-													<Typography
-														sx={{
-															whiteSpace: 'nowrap',
-															overflow: 'hidden',
-															textOverflow: 'ellipsis',
-														}}
-													>
-														{t(m.dateFilterOptionLastNDays, { count: 30 })}
-													</Typography>
-												</Stack>
-											</ListItemButton>
-
-											<ListItemButton
-												role="option"
-												disableGutters
-												disableRipple
-												tabIndex={-1}
-												sx={{ padding: 4 }}
-												data-item-id={`${optionPrefixId}-same-month`}
-												onFocus={() => {
-													setLastFocusedItem('same-month')
-												}}
-												onClick={() => {
-													if (
-														isEqual(dateFilter, { type: 'same', unit: 'month' })
-													) {
-														return
-													}
-
-													onChange({ type: 'same', unit: 'month' })
-												}}
-											>
-												<Stack
-													direction="row"
-													sx={{
-														gap: 2,
-														alignItems: 'center',
-														overflow: 'auto',
-													}}
-												>
-													<Radio
-														disableRipple
-														checked={isEqual(dateFilter, {
-															type: 'same',
-															unit: 'month',
-														})}
-														slotProps={{
-															input: {
-																'aria-label': 'controlled',
-																tabIndex: -1,
-															},
-														}}
-														sx={{ padding: 0 }}
-													/>
-
-													<Typography
-														sx={{
-															whiteSpace: 'nowrap',
-															overflow: 'hidden',
-															textOverflow: 'ellipsis',
-														}}
-													>
-														{t(m.dateFilterOptionSameMonth)}
-													</Typography>
-												</Stack>
-											</ListItemButton>
-
-											<ListItemButton
-												role="option"
-												disableGutters
-												disableRipple
-												tabIndex={-1}
-												sx={{ padding: 4 }}
-												data-item-id={`${optionPrefixId}-same-year`}
-												onFocus={() => {
-													setLastFocusedItem('same-year')
-												}}
-												onClick={() => {
-													if (
-														isEqual(dateFilter, { type: 'same', unit: 'year' })
-													) {
-														return
-													}
-
-													onChange({ type: 'same', unit: 'year' })
-												}}
-											>
-												<Stack
-													direction="row"
-													sx={{
-														gap: 2,
-														alignItems: 'center',
-														overflow: 'auto',
-													}}
-												>
-													<Radio
-														disableRipple
-														checked={isEqual(dateFilter, {
-															type: 'same',
-															unit: 'year',
-														})}
-														slotProps={{
-															input: {
-																'aria-label': 'controlled',
-																tabIndex: -1,
-															},
-														}}
-														sx={{ padding: 0 }}
-													/>
-
-													<Typography
-														sx={{
-															whiteSpace: 'nowrap',
-															overflow: 'hidden',
-															textOverflow: 'ellipsis',
-														}}
-													>
-														{t(m.dateFilterOptionSameYear)}
-													</Typography>
-												</Stack>
-											</ListItemButton>
-										</Stack>
-
-										<Box
-											sx={{
-												position: 'sticky',
-												bottom: 0,
-												right: 0,
-												left: 0,
-												padding: 2,
-												backgroundColor: WHITE,
-												borderTop: `1px solid ${BLUE_GREY}`,
-											}}
-										>
-											<Button
-												fullWidth
-												variant="outlined"
-												sx={{ maxWidth: 400 }}
-												onKeyDown={(event) => {
-													if (event.key !== 'Tab') {
-														return
-													}
-
-													if (event.shiftKey) {
-														event.preventDefault()
-														// focusCategoryItem()
-													} else {
-														// TODO: Close popper
-													}
-												}}
-											>
-												{t(m.categoryFilterAdvanced)}
-											</Button>
-										</Box>
-									</Stack>
-								</Box>
-							</Fade>
-						)
+					onChange(null)
+				}}
+			>
+				<Stack
+					direction="row"
+					sx={{
+						gap: 2,
+						alignItems: 'center',
+						overflow: 'auto',
 					}}
-				</Popper>
-			</Box>
-		</ClickAwayListener>
-	)
-}
+				>
+					<Radio
+						disableRipple
+						checked={value === null}
+						slotProps={{
+							input: { 'aria-label': 'controlled', tabIndex: -1 },
+						}}
+						sx={{ padding: 0 }}
+					/>
 
-function getDisplayedDateFilterValue(
-	filter: DateFilterOption,
-	formatMessage: IntlShape['formatMessage'],
-) {
-	switch (filter.type) {
-		case 'range': {
-			return 'range'
-		}
-		case 'relative': {
-			return formatMessage(m.dateFilterOptionLastNDays, { count: filter.value })
-		}
-		case 'same': {
-			return formatMessage(
-				filter.unit === 'month'
-					? m.dateFilterOptionSameMonth
-					: m.dateFilterOptionSameYear,
-			)
-		}
-	}
+					<Typography
+						sx={{
+							whiteSpace: 'nowrap',
+							overflow: 'hidden',
+							textOverflow: 'ellipsis',
+						}}
+					>
+						{t(m.dateFilterOptionFromStart)}
+					</Typography>
+				</Stack>
+			</ListItemButton>
+
+			{/* TODO: Conditionally render range date filter */}
+
+			<ListItemButton
+				role="option"
+				disableGutters
+				disableRipple
+				tabIndex={-1}
+				selected={selectedOption.id === 'last-7-days'}
+				aria-selected={selectedOption.id === 'last-7-days'}
+				sx={{ padding: 4 }}
+				data-option-id={`${dataItemPrefixId}-last-7-days`}
+				onClick={() => {
+					if (selectedOption.id === 'last-7-days') {
+						return
+					}
+
+					onChange({ type: 'relative', unit: 'days', value: 7 })
+				}}
+			>
+				<Stack
+					direction="row"
+					sx={{
+						gap: 2,
+						alignItems: 'center',
+						overflow: 'auto',
+					}}
+				>
+					<Radio
+						disableRipple
+						checked={isEqual(value, {
+							type: 'relative',
+							unit: 'days',
+							value: 7,
+						})}
+						slotProps={{
+							input: {
+								'aria-label': 'controlled',
+								tabIndex: -1,
+							},
+						}}
+						sx={{ padding: 0 }}
+					/>
+
+					<Typography
+						sx={{
+							whiteSpace: 'nowrap',
+							overflow: 'hidden',
+							textOverflow: 'ellipsis',
+						}}
+					>
+						{t(m.dateFilterOptionLastNDays, { count: 7 })}
+					</Typography>
+				</Stack>
+			</ListItemButton>
+
+			<ListItemButton
+				role="option"
+				disableGutters
+				disableRipple
+				tabIndex={-1}
+				sx={{ padding: 4 }}
+				selected={selectedOption.id === 'last-30-days'}
+				aria-selected={selectedOption.id === 'last-30-days'}
+				data-option-id={`${dataItemPrefixId}-last-30-days`}
+				onClick={() => {
+					if (selectedOption.id === 'last-30-days') {
+						return
+					}
+
+					onChange({ type: 'relative', unit: 'days', value: 30 })
+				}}
+			>
+				<Stack
+					direction="row"
+					sx={{
+						gap: 2,
+						alignItems: 'center',
+						overflow: 'auto',
+					}}
+				>
+					<Radio
+						disableRipple
+						checked={isEqual(value, {
+							type: 'relative',
+							unit: 'days',
+							value: 30,
+						})}
+						slotProps={{
+							input: {
+								'aria-label': 'controlled',
+								tabIndex: -1,
+							},
+						}}
+						sx={{ padding: 0 }}
+					/>
+
+					<Typography
+						sx={{
+							whiteSpace: 'nowrap',
+							overflow: 'hidden',
+							textOverflow: 'ellipsis',
+						}}
+					>
+						{t(m.dateFilterOptionLastNDays, { count: 30 })}
+					</Typography>
+				</Stack>
+			</ListItemButton>
+
+			<ListItemButton
+				role="option"
+				disableGutters
+				disableRipple
+				selected={selectedOption.id === 'same-month'}
+				aria-selected={selectedOption.id === 'same-month'}
+				tabIndex={-1}
+				sx={{ padding: 4 }}
+				data-option-id={`${dataItemPrefixId}-same-month`}
+				onClick={() => {
+					if (selectedOption.id === 'same-month') {
+						return
+					}
+
+					onChange({ type: 'same', unit: 'month' })
+				}}
+			>
+				<Stack
+					direction="row"
+					sx={{
+						gap: 2,
+						alignItems: 'center',
+						overflow: 'auto',
+					}}
+				>
+					<Radio
+						disableRipple
+						checked={isEqual(value, {
+							type: 'same',
+							unit: 'month',
+						})}
+						slotProps={{
+							input: {
+								'aria-label': 'controlled',
+								tabIndex: -1,
+							},
+						}}
+						sx={{ padding: 0 }}
+					/>
+
+					<Typography
+						sx={{
+							whiteSpace: 'nowrap',
+							overflow: 'hidden',
+							textOverflow: 'ellipsis',
+						}}
+					>
+						{t(m.dateFilterOptionSameMonth)}
+					</Typography>
+				</Stack>
+			</ListItemButton>
+
+			<ListItemButton
+				role="option"
+				disableGutters
+				disableRipple
+				tabIndex={-1}
+				sx={{ padding: 4 }}
+				selected={selectedOption.id === 'same-year'}
+				aria-selected={selectedOption.id === 'same-year'}
+				data-option-id={`${dataItemPrefixId}-same-year`}
+				onClick={() => {
+					if (selectedOption.id === 'same-year') {
+						return
+					}
+
+					onChange({ type: 'same', unit: 'year' })
+				}}
+			>
+				<Stack
+					direction="row"
+					sx={{
+						gap: 2,
+						alignItems: 'center',
+						overflow: 'auto',
+					}}
+				>
+					<Radio
+						disableRipple
+						checked={isEqual(value, {
+							type: 'same',
+							unit: 'year',
+						})}
+						slotProps={{
+							input: {
+								'aria-label': 'controlled',
+								tabIndex: -1,
+							},
+						}}
+						sx={{ padding: 0 }}
+					/>
+
+					<Typography
+						sx={{
+							whiteSpace: 'nowrap',
+							overflow: 'hidden',
+							textOverflow: 'ellipsis',
+						}}
+					>
+						{t(m.dateFilterOptionSameYear)}
+					</Typography>
+				</Stack>
+			</ListItemButton>
+		</FilterSelect>
+	)
 }
 
 const m = defineMessages({
