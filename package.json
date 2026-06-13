@@ -148,7 +148,7 @@
 		"maplibre-gl": "5.24.0",
 		"nano-staged": "1.0.2",
 		"network-information-types": "0.1.1",
-		"npm-run-all2": "9.0.1",
+		"npm-run-all2": "9.0.2",
 		"patch-package": "8.0.1",
 		"playwright": "1.60.0",
 		"prettier": "3.8.4",
