@@ -168,7 +168,7 @@
 		"vitest": "4.1.9"
 	},
 	"overrides": {
-		"better-sqlite3": "12.10.0",
+		"better-sqlite3": "12.10.1",
 		"@electron-forge/shared-types": {
 			"tar": "7.5.16"
 		},
