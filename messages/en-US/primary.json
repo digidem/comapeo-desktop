@@ -459,6 +459,34 @@
     "description": "Text displayed when waiting for other devices to be found.",
     "message": "Waiting for Devices"
   },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionDeselectAll": {
+    "description": "Text for button to deselect all in categories filter section in advanced filters dialog.",
+    "message": "Deselect All"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionTitle": {
+    "description": "Title for categories filter section in advanced filters dialog.",
+    "message": "Categories"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersDateEndLabel": {
+    "description": "Label for end date input in advanced filters dialog.",
+    "message": "End Date"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersDateSectionTitle": {
+    "description": "Title for date filter section in advanced filters dialog.",
+    "message": "Date"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersDateStartLabel": {
+    "description": "Label for start date input in advanced filters dialog.",
+    "message": "Start Date"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersShowResults": {
+    "description": "Text for submit button to apply selected filters in advanced filters dialog.",
+    "message": "Show {count, number} Results"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersTitle": {
+    "description": "Title for advanced filters dialog.",
+    "message": "Advanced Filters"
+  },
   "$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelDescription": {
     "description": "Text for description of panel shown when no active collaborators or data exist on project.",
     "message": "Invite devices to start gathering observations and tracks."

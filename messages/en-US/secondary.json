@@ -35,6 +35,14 @@
     "description": "Accessible label of download options form input.",
     "message": "Data to download"
   },
+  "routes.app.projects.$projectId.index.advancedFiltersCategoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Icon for {name} category"
+  },
+  "routes.app.projects.$projectId.index.advancedFiltersCloseAccessibleLabel": {
+    "description": "Accessible label for button to close advanced filters dialog.",
+    "message": "Close"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"

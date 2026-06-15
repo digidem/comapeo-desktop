@@ -30,10 +30,6 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import {
 	addDays,
 	formatISO,
-	isAfter,
-	isBefore,
-	isEqual as isDateEqual,
-	startOfDay,
 	startOfMonth,
 	startOfYear,
 	subDays,
@@ -54,6 +50,7 @@ import {
 	CategoryIconContainer,
 	CategoryIconImage,
 } from '../../../../../components/category-icon.tsx'
+import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
 import { ErrorBoundary } from '../../../../../components/error-boundary.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
 import { IconButtonLink } from '../../../../../components/link.tsx'
@@ -63,8 +60,14 @@ import {
 	type Attachment,
 } from '../../../../../lib/comapeo.ts'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings.ts'
+import { AdvancedFiltersDialogContent } from './-advanced-filters-dialog.tsx'
 import { FilterSelect } from './-filter-select.tsx'
-import type { HighlightedDocument } from './-shared.ts'
+import {
+	dateFilterToDateRange,
+	isDocumentIncludedByFilters,
+	type DateFilter,
+	type HighlightedDocument,
+} from './-shared.ts'
 import { PhotoAttachmentImage } from './observations/$observationDocId/-components/photo-attachment-image.tsx'
 
 const CATEGORY_CONTAINER_SIZE_PX = 64
@@ -121,70 +124,15 @@ export function DataList({ projectId }: { projectId: string }) {
 	}, [tracks, categories])
 
 	const sortedListData = useMemo(() => {
+		// TODO: Does this make sense?
 		const now = new Date()
-
-		const categoryIdsToInclude = new Set(categoryFilters.map((c) => c.docId))
-
-		let dateRangeToUse: { start: Date | null; end: Date } | null = null
-
-		if (dateFilter) {
-			switch (dateFilter.type) {
-				case 'range': {
-					dateRangeToUse = { start: dateFilter.start, end: dateFilter.end }
-					break
-				}
-				case 'relative': {
-					dateRangeToUse = {
-						start: subDays(startOfDay(now), dateFilter.value),
-						end: now,
-					}
-					break
-				}
-				case 'same': {
-					dateRangeToUse = {
-						start: startOfMonth(now),
-						end: now,
-					}
-					break
-				}
-			}
-		}
 
 		return [...observationsWithCategory, ...tracksWithCategory]
 			.filter((item) => {
-				if (dateRangeToUse) {
-					const { createdAt } = item.document
-
-					const isBeforeEndDateInclusive =
-						isDateEqual(createdAt, dateRangeToUse.end) ||
-						isBefore(createdAt, dateRangeToUse.end)
-
-					if (!isBeforeEndDateInclusive) {
-						return false
-					}
-
-					if (dateRangeToUse.start) {
-						const isAfterStartDateInclusive =
-							isDateEqual(createdAt, dateRangeToUse.start) ||
-							isAfter(createdAt, dateRangeToUse.start)
-
-						if (!isAfterStartDateInclusive) {
-							return false
-						}
-					}
-				}
-
-				if (categoryIdsToInclude.size > 0) {
-					if (!item.category?.docId) {
-						return false
-					}
-
-					if (!categoryIdsToInclude.has(item.category.docId)) {
-						return false
-					}
-				}
-
-				return true
+				return isDocumentIncludedByFilters(item, {
+					categories: categoryFilters,
+					date: dateFilter ? dateFilterToDateRange(dateFilter, now) : undefined,
+				})
 			})
 			.sort((a, b) => {
 				return a.document.createdAt < b.document.createdAt ? 1 : -1
@@ -260,186 +208,17 @@ export function DataList({ projectId }: { projectId: string }) {
 		multiplier: 1.25,
 	})
 
-	const removeFilterButtonSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
-		multiplier: 0.75,
-	})
-
 	const filterIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'button',
 	})
 
+	const [showAdvancedFiltersDialog, setShowAdvancedFiltersDialog] = useState<
+		true | undefined
+	>(undefined)
+
 	return (
-		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-			<Box
-				sx={{
-					overflow: 'auto',
-					display: 'flex',
-					flexDirection: 'column',
-					flex: 1,
-				}}
-			>
-				<Stack
-					direction="column"
-					sx={{
-						borderBottom: `2px solid ${BLUE_GREY}`,
-						gap: 4,
-						paddingBlock: 4,
-						paddingInline: 6,
-					}}
-				>
-					<Stack direction="row" sx={{ justifyContent: 'space-between' }}>
-						<Stack
-							direction="row"
-							sx={{ alignItems: 'center', gap: 4, flexWrap: 'wrap' }}
-						>
-							<Typography variant="h1" sx={{ fontWeight: 500 }}>
-								{t(m.listTitle)}
-							</Typography>
-
-							<Box
-								sx={{
-									borderRadius: 2,
-									backgroundColor:
-										sortedListData.length === 0
-											? LIGHT_GREY
-											: LIGHT_COMAPEO_BLUE,
-									padding: 2,
-								}}
-							>
-								<Typography
-									color={
-										sortedListData.length === 0 ? 'textDisabled' : 'primary'
-									}
-									sx={{ fontWeight: 500 }}
-								>
-									{t(m.resultsCount, { count: sortedListData.length })}
-								</Typography>
-							</Box>
-						</Stack>
-
-						<Tooltip title={t(m.downloadObservations)} placement="right">
-							<IconButtonLink
-								to="/app/projects/$projectId/download"
-								aria-label={t(m.downloadObservations)}
-							>
-								<Icon name="material-file-download" size={downloadButtonSize} />
-							</IconButtonLink>
-						</Tooltip>
-					</Stack>
-
-					<Stack direction="row" sx={{ gap: 4, flex: 1, flexWrap: 'wrap' }}>
-						<Stack
-							direction="row"
-							sx={{ gap: 2, flex: 1, alignItems: 'center' }}
-						>
-							<Tooltip
-								title={t(m.categoryFilterLabel)}
-								disableFocusListener
-								placement="bottom"
-							>
-								<Icon
-									name="material-symbols-apps"
-									htmlColor={BLUE_GREY}
-									size={filterIconSize}
-								/>
-							</Tooltip>
-
-							<CategoryFilterSelect
-								value={categoryFilters}
-								options={categories}
-								onChange={setCategoryFilters}
-							/>
-						</Stack>
-
-						<Stack
-							direction="row"
-							sx={{ gap: 2, flex: 1, alignItems: 'center' }}
-						>
-							<Tooltip
-								title={t(m.dateFilterLabel)}
-								disableFocusListener
-								placement="bottom"
-							>
-								<Icon
-									name="material-symbols-schedule"
-									htmlColor={BLUE_GREY}
-									size={filterIconSize}
-								/>
-							</Tooltip>
-
-							<DateFilterSelect value={dateFilter} onChange={setDateFilter} />
-						</Stack>
-					</Stack>
-				</Stack>
-
-				{categoryFilters.length > 0 ? (
-					<Stack
-						direction="row"
-						sx={{
-							overflowInline: 'auto',
-							gap: 2,
-							paddingInline: 6,
-							paddingBlock: 4,
-							borderBottom: `2px solid ${BLUE_GREY}`,
-						}}
-					>
-						<Button
-							variant="outlined"
-							sx={{ flexShrink: 0, fontWeight: 'normal' }}
-							onClick={() => {
-								setCategoryFilters([])
-							}}
-						>
-							{t(m.clearFiltersButton)}
-						</Button>
-
-						{categoryFilters.map((category) => {
-							return (
-								<Stack
-									direction="row"
-									key={category.docId}
-									sx={{
-										alignItems: 'center',
-										border: `1px solid ${BLUE_GREY}`,
-										justifyContent: 'space-between',
-										borderRadius: 2,
-										paddingInline: 4,
-										gap: 4,
-										backgroundColor: category.color
-											? alpha(category.color, 0.1)
-											: WHITE,
-									}}
-								>
-									<Typography sx={{ whiteSpace: 'nowrap' }}>
-										{category.name}
-									</Typography>
-
-									<IconButton
-										onClick={() => {
-											setCategoryFilters((prev) =>
-												prev.filter((p) => p.docId !== category.docId),
-											)
-										}}
-										sx={{
-											flex: 0,
-											padding: 0,
-											borderRadius: '50%',
-											border: `1px solid ${DARK_GREY}`,
-										}}
-									>
-										<Icon
-											name="material-close"
-											htmlColor={DARK_GREY}
-											size={removeFilterButtonSize}
-										/>
-									</IconButton>
-								</Stack>
-							)
-						})}
-					</Stack>
-				) : null}
-
+		<>
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Box
 					sx={{
 						overflow: 'auto',
@@ -448,178 +227,417 @@ export function DataList({ projectId }: { projectId: string }) {
 						flex: 1,
 					}}
 				>
-					<List
-						component="ul"
-						ref={listRef}
-						disablePadding
-						sx={{ overflow: 'auto', scrollbarColor: 'initial' }}
+					<Stack
+						direction="column"
+						sx={{
+							borderBottom: `2px solid ${BLUE_GREY}`,
+							gap: 4,
+							paddingBlock: 4,
+							paddingInline: 6,
+						}}
 					>
-						<Box
-							ref={rowVirtualizer.containerRef}
-							sx={{ position: 'relative', width: '100%' }}
-						>
-							{rowVirtualizer.getVirtualItems().map((row) => {
-								const { type, category, document } = sortedListData[row.index]!
-								const { createdAt, docId, createdBy } = document
+						<Stack direction="row" sx={{ justifyContent: 'space-between' }}>
+							<Stack
+								direction="row"
+								sx={{ alignItems: 'center', gap: 4, flexWrap: 'wrap' }}
+							>
+								<Typography variant="h1" sx={{ fontWeight: 500 }}>
+									{t(m.listTitle)}
+								</Typography>
 
-								const title =
-									type === 'track'
-										? t(m.trackItemTitle)
-										: category?.name || t(m.observationCategoryNameFallback)
-
-								const isHighlighted = docId === highlightedDocument?.docId
-
-								return (
-									<Box
-										key={row.key}
-										sx={{
-											position: 'absolute',
-											top: 0,
-											left: 0,
-											width: '100%',
-											height: `${row.size}px`,
-											transform: `translateY(${row.start}px)`,
-										}}
+								<Box
+									sx={{
+										borderRadius: 2,
+										backgroundColor:
+											sortedListData.length === 0
+												? LIGHT_GREY
+												: LIGHT_COMAPEO_BLUE,
+										padding: 2,
+									}}
+								>
+									<Typography
+										color={
+											sortedListData.length === 0 ? 'textDisabled' : 'primary'
+										}
+										sx={{ fontWeight: 500 }}
 									>
-										<ListItemButton
-											data-docid={docId}
-											disableGutters
-											disableTouchRipple
-											selected={isHighlighted}
-											autoFocus={isHighlighted}
-											onClick={() => {
-												if (!isHighlighted) {
-													navigate({
-														search: {
-															highlightedDocument: {
-																type,
-																docId,
-																from: 'list',
-															},
-														},
-														replace: true,
-													})
+										{t(m.resultsCount, { count: sortedListData.length })}
+									</Typography>
+								</Box>
+							</Stack>
 
-													return
-												}
+							<Tooltip title={t(m.downloadObservations)} placement="right">
+								<IconButtonLink
+									to="/app/projects/$projectId/download"
+									aria-label={t(m.downloadObservations)}
+								>
+									<Icon
+										name="material-file-download"
+										size={downloadButtonSize}
+									/>
+								</IconButtonLink>
+							</Tooltip>
+						</Stack>
 
-												if (type === 'observation') {
-													navigate({
-														to: './observations/$observationDocId',
-														params: { observationDocId: docId },
-													})
-												} else {
-													navigate({
-														to: './tracks/$trackDocId',
-														params: { trackDocId: docId },
-													})
-												}
-											}}
-											sx={{
-												borderBottom: `1px solid ${LIGHT_GREY}`,
-												padding: 4,
-											}}
-										>
-											<Suspense>
-												<SyncedIndicatorLine createdByDeviceId={createdBy} />
-											</Suspense>
+						<Stack direction="row" sx={{ gap: 4, flex: 1, flexWrap: 'wrap' }}>
+							<Stack
+								direction="row"
+								sx={{ gap: 2, flex: 1, alignItems: 'center' }}
+							>
+								<Tooltip
+									title={t(m.categoryFilterLabel)}
+									disableFocusListener
+									placement="bottom"
+								>
+									<Icon
+										name="material-symbols-apps"
+										htmlColor={BLUE_GREY}
+										size={filterIconSize}
+									/>
+								</Tooltip>
 
-											<Stack
-												direction="row"
-												sx={{ flex: 1, gap: 2, overflow: 'auto' }}
-											>
-												<Stack
-													direction="column"
-													sx={{
-														flex: 1,
-														justifyContent: 'center',
-														overflow: 'hidden',
-													}}
-												>
-													<Typography
-														sx={{
-															fontWeight: 500,
-															textOverflow: 'ellipsis',
-															whiteSpace: 'nowrap',
-															overflow: 'hidden',
-														}}
-													>
-														{title}
-													</Typography>
+								<CategoryFilterSelect
+									value={categoryFilters}
+									options={categories}
+									onAdvancedClick={() => {
+										setShowAdvancedFiltersDialog(true)
+									}}
+									onChange={setCategoryFilters}
+								/>
+							</Stack>
 
-													<Typography
-														sx={{
-															textOverflow: 'ellipsis',
-															whiteSpace: 'nowrap',
-															overflow: 'hidden',
-														}}
-													>
-														{formatDate(createdAt, {
-															year: 'numeric',
-															month: 'short',
-															day: '2-digit',
-															minute: '2-digit',
-															hour: '2-digit',
-															hourCycle: 'h12',
-														})}
-													</Typography>
-												</Stack>
+							<Stack
+								direction="row"
+								sx={{ gap: 2, flex: 1, alignItems: 'center' }}
+							>
+								<Tooltip
+									title={t(m.dateFilterLabel)}
+									disableFocusListener
+									placement="bottom"
+								>
+									<Icon
+										name="material-symbols-schedule"
+										htmlColor={BLUE_GREY}
+										size={filterIconSize}
+									/>
+								</Tooltip>
 
-												<Box
-													sx={{
-														display: 'flex',
-														justifyContent: 'center',
-														alignItems: 'center',
-														width: CATEGORY_CONTAINER_SIZE_PX,
-														aspectRatio: 1,
-													}}
-												>
-													<Box sx={{ flex: 1 }}>
-														<Suspense
-															fallback={
-																<Box
-																	sx={{
-																		display: 'flex',
-																		justifyContent: 'center',
-																		alignItems: 'center',
-																	}}
-																>
-																	<CircularProgress disableShrink size={30} />
-																</Box>
-															}
-														>
-															{type === 'observation' ? (
-																<ObservationCategory
-																	attachments={document.attachments}
-																	categoryColor={category?.color}
-																	categoryName={category?.name}
-																	categoryIconDocumentId={
-																		category?.iconRef?.docId
-																	}
-																	projectId={projectId}
-																/>
-															) : (
-																<TrackCategory
-																	categoryIconDocumentId={
-																		category?.iconRef?.docId
-																	}
-																	categoryColor={category?.color}
-																	categoryName={category?.name}
-																	projectId={projectId}
-																/>
-															)}
-														</Suspense>
-													</Box>
-												</Box>
-											</Stack>
-										</ListItemButton>
-									</Box>
+								<DateFilterSelect
+									value={dateFilter}
+									onAdvancedClick={() => {
+										setShowAdvancedFiltersDialog(true)
+									}}
+									onChange={setDateFilter}
+								/>
+							</Stack>
+						</Stack>
+					</Stack>
+
+					{!!dateFilter || categoryFilters.length > 0 ? (
+						<Stack
+							direction="row"
+							sx={{
+								overflowInline: 'auto',
+								gap: 2,
+								paddingInline: 6,
+								paddingBlock: 4,
+								borderBottom: `2px solid ${BLUE_GREY}`,
+							}}
+						>
+							<Button
+								variant="outlined"
+								sx={{ flexShrink: 0, fontWeight: 'normal' }}
+								onClick={() => {
+									setCategoryFilters([])
+								}}
+							>
+								{t(m.clearFiltersButton)}
+							</Button>
+
+							{dateFilter ? (
+								<FilterPill
+									label={getDateFilterOptionLabel(dateFilter, t)}
+									color={LIGHT_GREY}
+									onRemove={() => {
+										setDateFilter(null)
+									}}
+								/>
+							) : null}
+
+							{categoryFilters.map((category) => {
+								return (
+									<FilterPill
+										key={category.docId}
+										color={category.color ? alpha(category.color, 0.1) : WHITE}
+										label={category.name}
+										onRemove={() => {
+											setCategoryFilters((prev) =>
+												prev.filter((p) => p.docId !== category.docId),
+											)
+										}}
+									/>
 								)
 							})}
-						</Box>
-					</List>
+						</Stack>
+					) : null}
+
+					<Box
+						sx={{
+							overflow: 'auto',
+							display: 'flex',
+							flexDirection: 'column',
+							flex: 1,
+						}}
+					>
+						<List
+							component="ul"
+							ref={listRef}
+							disablePadding
+							sx={{ overflow: 'auto', scrollbarColor: 'initial' }}
+						>
+							<Box
+								ref={rowVirtualizer.containerRef}
+								sx={{ position: 'relative', width: '100%' }}
+							>
+								{rowVirtualizer.getVirtualItems().map((row) => {
+									const { type, category, document } =
+										sortedListData[row.index]!
+									const { createdAt, docId, createdBy } = document
+
+									const title =
+										type === 'track'
+											? t(m.trackItemTitle)
+											: category?.name || t(m.observationCategoryNameFallback)
+
+									const isHighlighted = docId === highlightedDocument?.docId
+
+									return (
+										<Box
+											key={row.key}
+											sx={{
+												position: 'absolute',
+												top: 0,
+												left: 0,
+												width: '100%',
+												height: `${row.size}px`,
+												transform: `translateY(${row.start}px)`,
+											}}
+										>
+											<ListItemButton
+												data-docid={docId}
+												disableGutters
+												disableTouchRipple
+												selected={isHighlighted}
+												autoFocus={isHighlighted}
+												onClick={() => {
+													if (!isHighlighted) {
+														navigate({
+															search: {
+																highlightedDocument: {
+																	type,
+																	docId,
+																	from: 'list',
+																},
+															},
+															replace: true,
+														})
+
+														return
+													}
+
+													if (type === 'observation') {
+														navigate({
+															to: './observations/$observationDocId',
+															params: { observationDocId: docId },
+														})
+													} else {
+														navigate({
+															to: './tracks/$trackDocId',
+															params: { trackDocId: docId },
+														})
+													}
+												}}
+												sx={{
+													borderBottom: `1px solid ${LIGHT_GREY}`,
+													padding: 4,
+												}}
+											>
+												<Suspense>
+													<SyncedIndicatorLine createdByDeviceId={createdBy} />
+												</Suspense>
+
+												<Stack
+													direction="row"
+													sx={{ flex: 1, gap: 2, overflow: 'auto' }}
+												>
+													<Stack
+														direction="column"
+														sx={{
+															flex: 1,
+															justifyContent: 'center',
+															overflow: 'hidden',
+														}}
+													>
+														<Typography
+															sx={{
+																fontWeight: 500,
+																textOverflow: 'ellipsis',
+																whiteSpace: 'nowrap',
+																overflow: 'hidden',
+															}}
+														>
+															{title}
+														</Typography>
+
+														<Typography
+															sx={{
+																textOverflow: 'ellipsis',
+																whiteSpace: 'nowrap',
+																overflow: 'hidden',
+															}}
+														>
+															{formatDate(createdAt, {
+																year: 'numeric',
+																month: 'short',
+																day: '2-digit',
+																minute: '2-digit',
+																hour: '2-digit',
+																hourCycle: 'h12',
+															})}
+														</Typography>
+													</Stack>
+
+													<Box
+														sx={{
+															display: 'flex',
+															justifyContent: 'center',
+															alignItems: 'center',
+															width: CATEGORY_CONTAINER_SIZE_PX,
+															aspectRatio: 1,
+														}}
+													>
+														<Box sx={{ flex: 1 }}>
+															<Suspense
+																fallback={
+																	<Box
+																		sx={{
+																			display: 'flex',
+																			justifyContent: 'center',
+																			alignItems: 'center',
+																		}}
+																	>
+																		<CircularProgress disableShrink size={30} />
+																	</Box>
+																}
+															>
+																{type === 'observation' ? (
+																	<ObservationCategory
+																		attachments={document.attachments}
+																		categoryColor={category?.color}
+																		categoryName={category?.name}
+																		categoryIconDocumentId={
+																			category?.iconRef?.docId
+																		}
+																		projectId={projectId}
+																	/>
+																) : (
+																	<TrackCategory
+																		categoryIconDocumentId={
+																			category?.iconRef?.docId
+																		}
+																		categoryColor={category?.color}
+																		categoryName={category?.name}
+																		projectId={projectId}
+																	/>
+																)}
+															</Suspense>
+														</Box>
+													</Box>
+												</Stack>
+											</ListItemButton>
+										</Box>
+									)
+								})}
+							</Box>
+						</List>
+					</Box>
 				</Box>
-			</Box>
+			</Stack>
+
+			<DecentDialog
+				fullScreen
+				sx={{ padding: 10 }}
+				value={showAdvancedFiltersDialog}
+			>
+				{() => (
+					<AdvancedFiltersDialogContent
+						categories={categories}
+						categoryFilters={categoryFilters}
+						dateFilter={dateFilter}
+						onCancel={() => {
+							setShowAdvancedFiltersDialog(undefined)
+						}}
+						onSubmit={(value) => {
+							setCategoryFilters(value.categories)
+							setShowAdvancedFiltersDialog(undefined)
+						}}
+						projectId={projectId}
+						observationsWithCategory={observationsWithCategory}
+						tracksWithCategory={tracksWithCategory}
+					/>
+				)}
+			</DecentDialog>
+		</>
+	)
+}
+
+function FilterPill({
+	label,
+	onRemove,
+	color,
+}: {
+	color?: string
+	label: string
+	onRemove: () => void
+}) {
+	const removeFilterButtonSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+		multiplier: 0.75,
+	})
+
+	return (
+		<Stack
+			direction="row"
+			sx={{
+				alignItems: 'center',
+				border: `1px solid ${BLUE_GREY}`,
+				borderRadius: 2,
+				paddingInline: 4,
+				gap: 4,
+				backgroundColor: color,
+			}}
+		>
+			<Typography sx={{ fontWeight: 500, whiteSpace: 'nowrap' }}>
+				{label}
+			</Typography>
+
+			<IconButton
+				onClick={() => {
+					onRemove()
+				}}
+				sx={{
+					flex: 0,
+					padding: 0,
+					borderRadius: '50%',
+					border: `1px solid ${DARK_GREY}`,
+				}}
+			>
+				<Icon
+					name="material-close"
+					htmlColor={DARK_GREY}
+					size={removeFilterButtonSize}
+				/>
+			</IconButton>
 		</Stack>
 	)
 }
@@ -874,10 +892,12 @@ function TrackCategory({
 function CategoryFilterSelect({
 	value,
 	options,
+	onAdvancedClick,
 	onChange,
 }: {
 	value: Array<Preset>
 	options: Array<Preset>
+	onAdvancedClick: () => void
 	onChange: (value: Array<Preset>) => void
 }) {
 	const { formatMessage: t } = useIntl()
@@ -909,7 +929,12 @@ function CategoryFilterSelect({
 				/>
 			}
 			footer={
-				<Button fullWidth variant="outlined" sx={{ maxWidth: 400 }}>
+				<Button
+					fullWidth
+					variant="outlined"
+					sx={{ maxWidth: 400 }}
+					onClick={onAdvancedClick}
+				>
 					{t(m.categoryFilterAdvanced)}
 				</Button>
 			}
@@ -935,11 +960,12 @@ function CategoryFilterSelect({
 					direction="row"
 					sx={{ gap: 2, alignItems: 'center', overflow: 'auto' }}
 				>
+					{/* TODO: Add aria-labelledby */}
 					<Checkbox
 						disableRipple
 						checked={value.length === 0}
 						slotProps={{
-							input: { 'aria-label': 'controlled', tabIndex: -1 },
+							input: { tabIndex: -1 },
 						}}
 						sx={{ padding: 0 }}
 					/>
@@ -1014,17 +1040,38 @@ function CategoryFilterSelect({
 	)
 }
 
-type DateFilter =
-	| { type: 'range'; start: Date; end: Date }
-	| { type: 'same'; unit: 'month' | 'year' }
-	| { type: 'relative'; unit: 'days'; value: number }
+function getDateFilterOptionLabel(
+	value: DateFilter,
+	formatMessage: IntlShape['formatMessage'],
+) {
+	switch (value.type) {
+		case 'range': {
+			// TODO: Show actual values
+			return 'range'
+		}
+		case 'relative': {
+			return formatMessage(m.dateFilterOptionLastNDays, {
+				count: value.value,
+			})
+		}
+		case 'same': {
+			return formatMessage(
+				value.unit === 'month'
+					? m.dateFilterOptionSameMonth
+					: m.dateFilterOptionSameYear,
+			)
+		}
+	}
+}
 
 function DateFilterSelect({
 	value,
+	onAdvancedClick,
 	onChange,
 }: {
 	value: DateFilter | null
 	onChange: (value: DateFilter | null) => void
+	onAdvancedClick: () => void
 }) {
 	const { formatMessage: t } = useIntl()
 
@@ -1047,11 +1094,13 @@ function DateFilterSelect({
 			}
 		}
 
+		const label = getDateFilterOptionLabel(value, t)
+
 		switch (value.type) {
 			case 'range': {
 				return {
 					id: 'custom' as const,
-					label: 'range',
+					label,
 					inputValues: {
 						start: formatISO(value.start, { representation: 'date' }),
 						end: formatISO(value.end, { representation: 'date' }),
@@ -1061,9 +1110,7 @@ function DateFilterSelect({
 			case 'relative': {
 				return {
 					id: `last-${value.value}-days` as const,
-					label: t(m.dateFilterOptionLastNDays, {
-						count: value.value,
-					}),
+					label,
 					inputValues: {
 						start: formatISO(subDays(stableNowDate, value.value), {
 							representation: 'date',
@@ -1082,11 +1129,7 @@ function DateFilterSelect({
 
 				return {
 					id: `same-${value.unit}` as const,
-					label: t(
-						value.unit === 'month'
-							? m.dateFilterOptionSameMonth
-							: m.dateFilterOptionSameYear,
-					),
+					label,
 					inputValues: {
 						start: formatISO(startDate, { representation: 'date' }),
 						end: formatISO(addDays(stableNowDate, 1), {
@@ -1135,7 +1178,12 @@ function DateFilterSelect({
 				</>
 			}
 			footer={
-				<Button fullWidth variant="outlined" sx={{ maxWidth: 400 }}>
+				<Button
+					fullWidth
+					variant="outlined"
+					sx={{ maxWidth: 400 }}
+					onClick={onAdvancedClick}
+				>
 					{t(m.categoryFilterAdvanced)}
 				</Button>
 			}
