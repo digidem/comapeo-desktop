@@ -113,10 +113,9 @@ test.describe('Invite device flow', () => {
 					'invite-devices-list-network-connection-info',
 				)
 
-				await expect(networkConnectionInfo).not.toHaveText(
-					'Getting Wi-Fi information…',
-					{ timeout: 10_000 },
-				)
+				await expect
+					.soft(networkConnectionInfo)
+					.not.toHaveText('Getting Wi-Fi information…', { timeout: 10_000 })
 
 				await expect(networkConnectionInfo).not.toBeEmpty()
 

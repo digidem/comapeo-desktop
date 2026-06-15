@@ -63,14 +63,12 @@ test('solo', async ({ appInfo, projectParams, userParams }) => {
 			const networkConnectionInfo = main.getByTestId(
 				'exchange-network-connection-info',
 			)
-			await expect(networkConnectionInfo).toHaveText(
-				'Getting Wi-Fi information…',
-				{ timeout: 0 },
-			)
-			await expect(networkConnectionInfo).not.toHaveText(
-				'Getting Wi-Fi information…',
-				{ timeout: 20_000 },
-			)
+			await expect
+				.soft(networkConnectionInfo)
+				.toHaveText('Getting Wi-Fi information…', { timeout: 0 })
+			await expect
+				.soft(networkConnectionInfo)
+				.not.toHaveText('Getting Wi-Fi information…', { timeout: 20_000 })
 			// TODO: Ideally check for actual values
 			await expect(networkConnectionInfo).not.toBeEmpty()
 			await expect(networkConnectionInfo).not.toHaveText('&lt;redacted&gt;')
