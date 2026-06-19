@@ -11,22 +11,25 @@ import Typography from '@mui/material/Typography'
 import { BLUE_GREY, DARK_GREY, WHITE } from '../../../../../colors.ts'
 import { Icon } from '../../../../../components/icon.tsx'
 
-// TODO: Fix issue where shift tabbing out does not close popper (should close popper, focus trigger)
-// TODO: Fix issue where tabbing out does not close popper (should close popper, focus trigger)
 export function FilterSelect({
 	children,
 	displayedValue,
+	header,
 	hiddenInput,
 	footer,
 	multiSelect,
+	onClose,
 }: PropsWithChildren<{
 	displayedValue: string
+	header?: ReactNode
 	hiddenInput: ReactNode
-	footer: ReactNode
+	footer?: ReactNode
 	multiSelect?: boolean
+	onClose?: () => void
 }>) {
 	const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null)
 
+	const [isFocusWithinList, setIsFocusWithinList] = useState(false)
 	const [lastFocusedItem, setLastFocusedItem] = useState<string | null>(null)
 
 	const popperRef = useRef<HTMLDivElement | null>(null)
@@ -170,7 +173,13 @@ export function FilterSelect({
 				>
 					{({ TransitionProps }) => {
 						return (
-							<Fade {...TransitionProps}>
+							<Fade
+								{...TransitionProps}
+								onExited={() => {
+									TransitionProps?.onExited()
+									onClose?.()
+								}}
+							>
 								<Box
 									sx={{
 										overflow: 'hidden',
@@ -184,15 +193,43 @@ export function FilterSelect({
 										direction="column"
 										sx={{ maxHeight: '50dvh', position: 'relative' }}
 									>
+										{header ? (
+											<Box
+												onKeyDown={(event) => {
+													// TODO: Kind of hacky and assumes only one focusable element within
+													if (event.key === 'Tab' && event.shiftKey) {
+														event.preventDefault()
+														setAnchorElement(null)
+														triggerRef.current?.focus()
+													}
+												}}
+												sx={{
+													borderBottom: `1px solid ${BLUE_GREY}`,
+													padding: 2,
+												}}
+											>
+												{header}
+											</Box>
+										) : null}
+
 										<Stack
 											component={List}
 											disablePadding
 											role="listbox"
 											aria-multiselectable={multiSelect}
 											ref={optionsListRef}
-											sx={{ overflow: 'auto' }}
-											tabIndex={0}
+											sx={{ flex: 1, overflow: 'auto' }}
+											tabIndex={isFocusWithinList ? -1 : 0}
 											onKeyDown={(event) => {
+												if (!header) {
+													if (event.key === 'Tab' && event.shiftKey) {
+														event.preventDefault()
+														setAnchorElement(null)
+														triggerRef.current?.focus()
+														return
+													}
+												}
+
 												switch (event.key) {
 													case 'ArrowDown': {
 														if (
@@ -220,56 +257,51 @@ export function FilterSelect({
 													}
 												}
 											}}
+											onBlur={() => {
+												setIsFocusWithinList(false)
+											}}
 											onFocus={(event) => {
-												if (event.currentTarget === event.target) {
-													event.preventDefault()
+												const focusOnSelf = event.currentTarget === event.target
 
-													if (
-														event.currentTarget.contains(event.relatedTarget)
-													) {
-														setAnchorElement(null)
-														triggerRef.current?.focus()
-													} else {
+												const enteredFromOutside =
+													!event.currentTarget.contains(event.relatedTarget)
+
+												if (focusOnSelf) {
+													if (enteredFromOutside) {
 														focusLastFocusedItem()
 													}
+												} else {
+													const isOption =
+														event.target.getAttribute('role') === 'option'
+													const itemId =
+														event.target.getAttribute('data-option-id')
 
-													return
+													if (isOption && itemId) {
+														setLastFocusedItem(itemId)
+													}
 												}
 
-												const itemId =
-													event.target?.getAttribute('data-option-id')
-
-												if (itemId) {
-													event.preventDefault()
-													setLastFocusedItem(itemId)
-												}
+												setIsFocusWithinList(true)
 											}}
 										>
 											{children}
 										</Stack>
 
-										<Box
-											sx={{
-												position: 'sticky',
-												bottom: 0,
-												right: 0,
-												left: 0,
-												padding: 2,
-												backgroundColor: WHITE,
-												borderTop: `1px solid ${BLUE_GREY}`,
-											}}
-											tabIndex={-1}
-											onKeyDown={(event) => {
-												// TODO: Kind of hacky and assumes only one focusable element in the footer
-												if (event.key === 'Tab' && !event.shiftKey) {
-													event.preventDefault()
-													setAnchorElement(null)
-													triggerRef.current?.focus()
-												}
-											}}
-										>
-											{footer}
-										</Box>
+										{footer ? (
+											<Box
+												onKeyDown={(event) => {
+													// TODO: Kind of hacky and assumes only one focusable element within
+													if (event.key === 'Tab' && !event.shiftKey) {
+														event.preventDefault()
+														setAnchorElement(null)
+														triggerRef.current?.focus()
+													}
+												}}
+												sx={{ borderTop: `1px solid ${BLUE_GREY}`, padding: 2 }}
+											>
+												{footer}
+											</Box>
+										) : null}
 									</Stack>
 								</Box>
 							</Fade>

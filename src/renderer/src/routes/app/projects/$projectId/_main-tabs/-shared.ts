@@ -48,7 +48,19 @@ export function isDocumentIncludedByFilters(
 	item: { document: Observation | Track; category?: Preset },
 	filters: { categories: Array<Preset>; date?: DateRange },
 ) {
-	const categoryIdsToInclude = new Set(filters.categories.map((c) => c.docId))
+	if (filters.categories.length > 0) {
+		const categoryIdsToInclude = new Set(filters.categories.map((c) => c.docId))
+
+		if (!item.category?.docId) {
+			return false
+		}
+
+		if (!categoryIdsToInclude.has(item.category.docId)) {
+			return false
+		}
+	} else {
+		return false
+	}
 
 	if (filters.date) {
 		const { createdAt } = item.document
@@ -69,16 +81,6 @@ export function isDocumentIncludedByFilters(
 			if (!isAfterStartDateInclusive) {
 				return false
 			}
-		}
-	}
-
-	if (categoryIdsToInclude.size > 0) {
-		if (!item.category?.docId) {
-			return false
-		}
-
-		if (!categoryIdsToInclude.has(item.category.docId)) {
-			return false
 		}
 	}
 

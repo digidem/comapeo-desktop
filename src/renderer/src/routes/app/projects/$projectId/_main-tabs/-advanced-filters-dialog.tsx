@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
-import { isAfter } from 'date-fns'
+import { endOfDay, isAfter, isBefore, isEqual, startOfDay } from 'date-fns'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
@@ -31,32 +31,48 @@ import {
 	type DateFilter,
 } from './-shared.ts'
 
-const OnChangeSchema = v.object({
-	startDate: v.union([v.date(), v.null()]),
-	endDate: v.date(),
-	categories: v.array(
-		v.custom<Preset>((input) => {
-			if (typeof input !== 'object') {
-				return false
-			}
+function isValidDateRange(start: Date, end: Date) {
+	return isEqual(start, end) || isBefore(start, end)
+}
 
-			if (input === null) {
-				return false
-			}
+const AdvancedFiltersSchema = v.pipe(
+	v.object({
+		startDate: v.union([v.date(), v.null()]),
+		endDate: v.union([v.date(), v.null()]),
+		categories: v.array(
+			// NOTE: Not exhaustive but sufficient
+			v.custom<Preset>((input) => {
+				if (typeof input !== 'object') {
+					return false
+				}
 
-			const hasSchemaName =
-				'schemaName' in input && input.schemaName === 'preset'
+				if (input === null) {
+					return false
+				}
 
-			const hasDocId = 'docId' in input && typeof input.docId === 'string'
+				const hasSchemaName =
+					'schemaName' in input && input.schemaName === 'preset'
 
-			return hasSchemaName && hasDocId
-		}),
-	),
-})
+				const hasDocId = 'docId' in input && typeof input.docId === 'string'
+
+				return hasSchemaName && hasDocId
+			}),
+		),
+	}),
+	v.check((input) => {
+		if (input.startDate && input.endDate) {
+			return isValidDateRange(input.startDate, input.endDate)
+		}
+
+		return true
+	}, 'Invalid date range'),
+)
+
+type AdvancedFilters = v.InferOutput<typeof AdvancedFiltersSchema>
 
 export function AdvancedFiltersDialogContent({
 	categories,
-	categoryFilters,
+	categoryFilter,
 	dateFilter,
 	observationsWithCategory,
 	onCancel,
@@ -65,11 +81,14 @@ export function AdvancedFiltersDialogContent({
 	tracksWithCategory,
 }: {
 	categories: Array<Preset>
-	categoryFilters: Array<Preset>
+	categoryFilter: Array<Preset>
 	dateFilter: DateFilter | null
 	observationsWithCategory: Array<{ document: Observation; category?: Preset }>
 	onCancel: () => void
-	onSubmit: (value: { categories: Array<Preset> }) => void
+	onSubmit: (values: {
+		categories: Array<Preset>
+		date: DateFilter | null
+	}) => void
 	projectId: string
 	tracksWithCategory: Array<{ document: Track; category?: Preset }>
 }) {
@@ -82,21 +101,31 @@ export function AdvancedFiltersDialogContent({
 
 	const [initialDateRange] = useState(() => {
 		if (!dateFilter) {
-			return { start: null, end: stableNowDate }
+			return { start: null, end: null }
 		}
 
 		return dateFilterToDateRange(dateFilter, stableNowDate)
 	})
 
+	const defaultValues: AdvancedFilters = {
+		startDate: initialDateRange.start,
+		endDate: initialDateRange.end,
+		categories: categoryFilter,
+	}
+
 	const form = useAppForm({
-		defaultValues: {
-			startDate: initialDateRange.start,
-			endDate: initialDateRange.end,
-			categories: categoryFilters,
-		},
-		validators: { onChange: OnChangeSchema },
+		defaultValues,
+		validators: { onChange: AdvancedFiltersSchema },
 		onSubmit: ({ value }) => {
-			onSubmit({ categories: value.categories })
+			const parsed = v.parse(AdvancedFiltersSchema, value)
+
+			onSubmit({
+				categories: parsed.categories,
+				date:
+					parsed.startDate && parsed.endDate
+						? { type: 'range', start: parsed.startDate, end: parsed.endDate }
+						: null,
+			})
 		},
 	})
 
@@ -170,42 +199,104 @@ export function AdvancedFiltersDialogContent({
 							</Stack>
 
 							<Stack direction="row" sx={{ gap: 4, paddingBlock: 4 }}>
-								{/* https://tanstack.com/form/latest/docs/framework/react/guides/linked-fields */}
-								<form.AppField name="startDate">
-									{(formField) => (
-										<DesktopDatePicker
-											disableFuture
-											shouldDisableDate={(day) => {
-												return isAfter(day, form.getFieldValue('endDate'))
-											}}
-											value={formField.state.value}
-											label={t(m.advancedFiltersDateStartLabel)}
-											onChange={(value) => {
-												console.log('*** start', value)
-												formField.setValue(value ? new Date(value) : null)
-											}}
-											slotProps={{
-												field: { clearable: true },
-												textField: { sx: { flex: 1 } },
-											}}
-										/>
-									)}
+								<form.AppField
+									name="startDate"
+									validators={{
+										onChangeListenTo: ['endDate'],
+										onChange: ({ value, fieldApi }) => {
+											if (!value) {
+												return undefined
+											}
+
+											const endDate = fieldApi.form.getFieldValue('endDate')
+
+											if (!endDate) {
+												return undefined
+											}
+
+											if (!isValidDateRange(value, endDate)) {
+												return new Error('Invalid date range')
+											}
+										},
+									}}
+								>
+									{(formField) => {
+										const error = formField.state.meta.errors[0]
+
+										return (
+											<DesktopDatePicker
+												disableFuture
+												shouldDisableDate={(day) => {
+													const endDate = form.getFieldValue('endDate')
+
+													if (!endDate) {
+														return false
+													}
+
+													return isAfter(day, endDate)
+												}}
+												value={formField.state.value}
+												label={t(m.advancedFiltersDateStartLabel)}
+												onChange={(value) => {
+													formField.handleChange(
+														value ? startOfDay(value) : null,
+													)
+												}}
+												slotProps={{
+													field: { clearable: true },
+													textField: {
+														error: !!error,
+														helperText: error?.message,
+														sx: { flex: 1 },
+													},
+												}}
+											/>
+										)
+									}}
 								</form.AppField>
 
-								<form.AppField name="endDate">
-									{(formField) => (
-										<DesktopDatePicker
-											label={t(m.advancedFiltersDateEndLabel)}
-											onChange={(value) => {
-												formField.setValue(value ? new Date(value) : null)
-											}}
-											slotProps={{
-												field: { clearable: true },
-												textField: { sx: { flex: 1 } },
-											}}
-											value={formField.state.value}
-										/>
-									)}
+								<form.AppField
+									name="endDate"
+									validators={{
+										onChangeListenTo: ['startDate'],
+										onChange: ({ value, fieldApi }) => {
+											if (!value) {
+												return undefined
+											}
+
+											const startDate = fieldApi.form.getFieldValue('startDate')
+
+											if (!startDate) {
+												return undefined
+											}
+
+											if (!isValidDateRange(startDate, value)) {
+												return new Error('Invalid date range')
+											}
+										},
+									}}
+								>
+									{(formField) => {
+										const error = formField.state.meta.errors[0]
+
+										return (
+											<DesktopDatePicker
+												label={t(m.advancedFiltersDateEndLabel)}
+												onChange={(value) => {
+													formField.handleChange(value ? endOfDay(value) : null)
+												}}
+												slotProps={{
+													field: { clearable: true },
+													textField: {
+														error: !!error,
+														helperText: error?.message,
+														sx: { flex: 1 },
+													},
+												}}
+												value={formField.state.value}
+											/>
+										)
+									}}
 								</form.AppField>
 							</Stack>
 						</Stack>
@@ -240,17 +331,22 @@ export function AdvancedFiltersDialogContent({
 												variant="text"
 												size="small"
 												onClick={() => {
-													formField.clearValues()
+													if (formField.state.value.length > 0) {
+														formField.clearValues()
+													} else {
+														formField.handleChange(categories)
+													}
 												}}
 											>
-												{t(m.advancedFiltersCategoriesSectionDeselectAll)}
+												{t(
+													formField.state.value.length > 0
+														? m.advancedFiltersCategoriesSectionDeselectAll
+														: m.advancedFiltersCategoriesSectionSelectAll,
+												)}
 											</Button>
 										</Stack>
 
-										<FormControl
-											error={formField.state.meta.errors[0]}
-											component="fieldset"
-										>
+										<FormControl component="fieldset">
 											<FormGroup
 												sx={{
 													display: 'grid',
@@ -411,6 +507,13 @@ export function AdvancedFiltersDialogContent({
 											].filter((document) =>
 												isDocumentIncludedByFilters(document, {
 													categories: state.values.categories,
+													date:
+														state.values.startDate && state.values.endDate
+															? {
+																	start: state.values.startDate,
+																	end: state.values.endDate,
+																}
+															: undefined,
 												}),
 											).length
 										}}
@@ -469,6 +572,12 @@ const m = defineMessages({
 		defaultMessage: 'Deselect All',
 		description:
 			'Text for button to deselect all in categories filter section in advanced filters dialog.',
+	},
+	advancedFiltersCategoriesSectionSelectAll: {
+		id: '$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionSelectAll',
+		defaultMessage: 'Select All',
+		description:
+			'Text for button to select all in categories filter section in advanced filters dialog.',
 	},
 	advancedFiltersCategoryIconAlt: {
 		id: 'routes.app.projects.$projectId.index.advancedFiltersCategoryIconAlt',
