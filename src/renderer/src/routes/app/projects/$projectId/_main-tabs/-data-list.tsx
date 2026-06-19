@@ -103,7 +103,12 @@ export function DataList({ projectId }: { projectId: string }) {
 		lang,
 	})
 
-	const [categoryFilters, setCategoryFilters] = useState<Array<Preset>>([])
+	const [categoryFilter, setCategoryFilter] = useState<Array<Preset>>(() => {
+		// TODO: Order of precedence
+		// 1. URL search params
+		// 2. Local storage
+		return categories
+	})
 
 	const [dateFilter, setDateFilter] = useState<DateFilter | null>(null)
 
@@ -130,19 +135,14 @@ export function DataList({ projectId }: { projectId: string }) {
 		return [...observationsWithCategory, ...tracksWithCategory]
 			.filter((item) => {
 				return isDocumentIncludedByFilters(item, {
-					categories: categoryFilters,
+					categories: categoryFilter,
 					date: dateFilter ? dateFilterToDateRange(dateFilter, now) : undefined,
 				})
 			})
 			.sort((a, b) => {
 				return a.document.createdAt < b.document.createdAt ? 1 : -1
 			})
-	}, [
-		observationsWithCategory,
-		tracksWithCategory,
-		categoryFilters,
-		dateFilter,
-	])
+	}, [observationsWithCategory, tracksWithCategory, categoryFilter, dateFilter])
 
 	const listRef = useRef<HTMLUListElement | null>(null)
 
@@ -297,12 +297,27 @@ export function DataList({ projectId }: { projectId: string }) {
 								</Tooltip>
 
 								<CategoryFilterSelect
-									value={categoryFilters}
+									selected={categoryFilter}
 									options={categories}
 									onAdvancedClick={() => {
 										setShowAdvancedFiltersDialog(true)
 									}}
-									onChange={setCategoryFilters}
+									onDeselectAll={() => {
+										setCategoryFilter([])
+									}}
+									onSelectAll={() => {
+										setCategoryFilter(categories)
+									}}
+									onChange={(action, value) => {
+										setCategoryFilter((prev) => {
+											if (action === 'select') {
+												return Array.from(new Set([...prev, value]))
+											} else {
+												return prev.filter((p) => p.docId !== value.docId)
+											}
+										})
+									}}
+									projectId={projectId}
 								/>
 							</Stack>
 
@@ -333,7 +348,9 @@ export function DataList({ projectId }: { projectId: string }) {
 						</Stack>
 					</Stack>
 
-					{!!dateFilter || categoryFilters.length > 0 ? (
+					{!!dateFilter ||
+					(categoryFilter.length > 0 &&
+						!isEqualByItemKey(categories, categoryFilter, 'docId')) ? (
 						<Stack
 							direction="row"
 							sx={{
@@ -348,10 +365,11 @@ export function DataList({ projectId }: { projectId: string }) {
 								variant="outlined"
 								sx={{ flexShrink: 0, fontWeight: 'normal' }}
 								onClick={() => {
-									setCategoryFilters([])
+									setCategoryFilter(categories)
+									setDateFilter(null)
 								}}
 							>
-								{t(m.clearFiltersButton)}
+								{t(m.clearFilters)}
 							</Button>
 
 							{dateFilter ? (
@@ -364,20 +382,33 @@ export function DataList({ projectId }: { projectId: string }) {
 								/>
 							) : null}
 
-							{categoryFilters.map((category) => {
-								return (
-									<FilterPill
-										key={category.docId}
-										color={category.color ? alpha(category.color, 0.1) : WHITE}
-										label={category.name}
-										onRemove={() => {
-											setCategoryFilters((prev) =>
-												prev.filter((p) => p.docId !== category.docId),
-											)
-										}}
-									/>
-								)
-							})}
+							{categoryFilter.length > 0 &&
+							!isEqualByItemKey(categories, categoryFilter, 'docId')
+								? categoryFilter.map((category) => {
+										return (
+											<FilterPill
+												key={category.docId}
+												color={
+													category.color ? alpha(category.color, 0.1) : WHITE
+												}
+												label={category.name}
+												onRemove={() => {
+													setCategoryFilter((prev) => {
+														const updatedFilter = prev.filter(
+															(p) => p.docId !== category.docId,
+														)
+
+														if (updatedFilter.length === 0) {
+															return categories
+														}
+
+														return updatedFilter
+													})
+												}}
+											/>
+										)
+									})
+								: null}
 						</Stack>
 					) : null}
 
@@ -387,13 +418,14 @@ export function DataList({ projectId }: { projectId: string }) {
 							display: 'flex',
 							flexDirection: 'column',
 							flex: 1,
+							backgroundColor: LIGHT_GREY,
 						}}
 					>
 						<List
 							component="ul"
 							ref={listRef}
 							disablePadding
-							sx={{ overflow: 'auto', scrollbarColor: 'initial' }}
+							sx={{ flex: 1, overflow: 'auto', scrollbarColor: 'initial' }}
 						>
 							<Box
 								ref={rowVirtualizer.containerRef}
@@ -421,6 +453,7 @@ export function DataList({ projectId }: { projectId: string }) {
 												width: '100%',
 												height: `${row.size}px`,
 												transform: `translateY(${row.start}px)`,
+												backgroundColor: WHITE,
 											}}
 										>
 											<ListItemButton
@@ -572,13 +605,14 @@ export function DataList({ projectId }: { projectId: string }) {
 				{() => (
 					<AdvancedFiltersDialogContent
 						categories={categories}
-						categoryFilters={categoryFilters}
+						categoryFilter={categoryFilter}
 						dateFilter={dateFilter}
 						onCancel={() => {
 							setShowAdvancedFiltersDialog(undefined)
 						}}
 						onSubmit={(value) => {
-							setCategoryFilters(value.categories)
+							setCategoryFilter(value.categories)
+							setDateFilter(value.date)
 							setShowAdvancedFiltersDialog(undefined)
 						}}
 						projectId={projectId}
@@ -890,43 +924,74 @@ function TrackCategory({
 }
 
 function CategoryFilterSelect({
-	value,
+	selected,
 	options,
 	onAdvancedClick,
 	onChange,
+	onDeselectAll,
+	onSelectAll,
+	projectId,
 }: {
-	value: Array<Preset>
+	selected: Array<Preset>
 	options: Array<Preset>
 	onAdvancedClick: () => void
-	onChange: (value: Array<Preset>) => void
+	onSelectAll: () => void
+	onDeselectAll: () => void
+	onChange: (action: 'select' | 'deselect', value: Preset) => void
+	projectId: string
 }) {
 	const { formatMessage: t } = useIntl()
 
 	const dataOptionPrefixId = useId()
 
+	const categoryIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+		multiplier: 0.75,
+	})
+
+	const allSelected = isEqualByItemKey(options, selected, 'docId')
+
 	return (
 		<FilterSelect
 			multiSelect
 			displayedValue={
-				value.length === 0
-					? t(m.categoryFilterShowAll)
-					: t(m.categoryFilterValue, {
-							count: value.length,
-						})
+				allSelected
+					? t(m.categoryFilterAll)
+					: t(m.categoryFilterValue, { count: selected.length })
 			}
 			hiddenInput={
 				<InputBase
 					readOnly
 					aria-hidden="true"
-					value={value.map((c) => c.name).join(', ')}
+					value={selected.map((c) => c.name).join(', ')}
 					slotProps={{ input: { tabIndex: -1 } }}
 					sx={{
-						position: 'absolute',
-						left: 0,
 						bottom: 0,
+						left: 0,
+						position: 'absolute',
 						visibility: 'hidden',
 					}}
 				/>
+			}
+			header={
+				<Button
+					variant="text"
+					size="small"
+					sx={{ maxWidth: 400 }}
+					onClick={() => {
+						if (selected.length === 0) {
+							onSelectAll()
+						} else {
+							onDeselectAll()
+						}
+					}}
+				>
+					{t(
+						selected.length === 0
+							? m.categoryFilterSelectAll
+							: m.categoryFilterDeselectAll,
+					)}
+				</Button>
 			}
 			footer={
 				<Button
@@ -939,51 +1004,8 @@ function CategoryFilterSelect({
 				</Button>
 			}
 		>
-			<ListItemButton
-				role="option"
-				disableGutters
-				disableRipple
-				tabIndex={-1}
-				sx={{ padding: 4, borderBottom: `1px solid ${BLUE_GREY}` }}
-				selected={value.length === 0}
-				aria-selected={value.length === 0}
-				data-option-id={`${dataOptionPrefixId}-show-all`}
-				onClick={() => {
-					if (value.length === 0) {
-						return
-					}
-
-					onChange([])
-				}}
-			>
-				<Stack
-					direction="row"
-					sx={{ gap: 2, alignItems: 'center', overflow: 'auto' }}
-				>
-					{/* TODO: Add aria-labelledby */}
-					<Checkbox
-						disableRipple
-						checked={value.length === 0}
-						slotProps={{
-							input: { tabIndex: -1 },
-						}}
-						sx={{ padding: 0 }}
-					/>
-
-					<Typography
-						sx={{
-							whiteSpace: 'nowrap',
-							overflow: 'hidden',
-							textOverflow: 'ellipsis',
-						}}
-					>
-						{t(m.categoryFilterShowAll)}
-					</Typography>
-				</Stack>
-			</ListItemButton>
-
 			{options.map((category) => {
-				const isSelected = !!value.find((f) => f.docId === category.docId)
+				const isSelected = !!selected.find((f) => f.docId === category.docId)
 
 				return (
 					<ListItemButton
@@ -994,49 +1016,70 @@ function CategoryFilterSelect({
 						tabIndex={-1}
 						selected={isSelected}
 						aria-selected={isSelected}
-						data-option-id={`${value.length === 0}-${category.docId}`}
+						data-option-id={`${dataOptionPrefixId}-${category.docId}`}
 						sx={{ padding: 4 }}
 						onClick={() => {
-							onChange(
-								isSelected
-									? value.filter((f) => f.docId !== category.docId)
-									: [...value, category],
-							)
+							onChange(isSelected ? 'deselect' : 'select', category)
 						}}
 					>
 						<Stack
 							direction="row"
-							sx={{
-								alignItems: 'center',
-								gap: 2,
-								overflow: 'auto',
-							}}
+							sx={{ alignItems: 'center', gap: 2, overflow: 'auto' }}
 						>
 							<Checkbox
 								checked={isSelected}
-								slotProps={{
-									input: {
-										'aria-label': 'controlled',
-										tabIndex: -1,
-									},
-								}}
+								slotProps={{ input: { tabIndex: -1 } }}
 								sx={{ padding: 0 }}
 							/>
 
-							<Typography
-								sx={{
-									whiteSpace: 'nowrap',
-									overflow: 'hidden',
-									textOverflow: 'ellipsis',
-								}}
-							>
-								{category.name}
-							</Typography>
+							<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
+								<Box aria-hidden>
+									<CategoryIconContainer color={category.color || BLUE_GREY}>
+										{category.iconRef?.docId ? (
+											<CategoryIconImage
+												altText={t(m.categoryFilterCategoryIconAlt, {
+													name: category.name,
+												})}
+												iconDocumentId={category.iconRef.docId}
+												projectId={projectId}
+												imageStyle={{
+													width: categoryIconSize,
+													aspectRatio: 1,
+												}}
+											/>
+										) : (
+											<Icon name="material-place" size={categoryIconSize} />
+										)}
+									</CategoryIconContainer>
+								</Box>
+
+								<Typography
+									sx={{
+										overflow: 'hidden',
+										textOverflow: 'ellipsis',
+										whiteSpace: 'nowrap',
+									}}
+								>
+									{category.name}
+								</Typography>
+							</Stack>
 						</Stack>
 					</ListItemButton>
 				)
 			})}
 		</FilterSelect>
+	)
+}
+
+function isEqualByItemKey<T>(
+	options: Array<T>,
+	selected: Array<T>,
+	field: keyof T,
+) {
+	return (
+		new Set(options.map((o) => o[field])).difference(
+			new Set(selected.map((s) => s[field])),
+		).size === 0
 	)
 }
 
@@ -1046,8 +1089,7 @@ function getDateFilterOptionLabel(
 ) {
 	switch (value.type) {
 		case 'range': {
-			// TODO: Show actual values
-			return 'range'
+			return formatMessage(m.dateFilterValueCustom)
 		}
 		case 'relative': {
 			return formatMessage(m.dateFilterOptionLastNDays, {
@@ -1078,9 +1120,19 @@ function DateFilterSelect({
 	const dataItemPrefixId = useId()
 
 	const [stableNowDate] = useState(() => {
-		console.log('*** STABLE DATE')
 		return new Date()
 	})
+
+	const [customRangeOption, setCustomRangeOption] = useState<
+		(DateFilter & { type: 'range' }) | null
+	>(() => {
+		return value?.type === 'range' ? value : null
+	})
+
+	// TODO: Display range option
+	// if (value?.type === 'range') {
+	// setCustomRangeOption(value)
+	// }
 
 	const selectedOption = useMemo(() => {
 		if (!value) {
@@ -1207,18 +1259,12 @@ function DateFilterSelect({
 			>
 				<Stack
 					direction="row"
-					sx={{
-						gap: 2,
-						alignItems: 'center',
-						overflow: 'auto',
-					}}
+					sx={{ alignItems: 'center', gap: 2, overflow: 'auto' }}
 				>
 					<Radio
 						disableRipple
 						checked={value === null}
-						slotProps={{
-							input: { 'aria-label': 'controlled', tabIndex: -1 },
-						}}
+						slotProps={{ input: { tabIndex: -1 } }}
 						sx={{ padding: 0 }}
 					/>
 
@@ -1234,7 +1280,50 @@ function DateFilterSelect({
 				</Stack>
 			</ListItemButton>
 
-			{/* TODO: Conditionally render range date filter */}
+			{customRangeOption ? (
+				<ListItemButton
+					role="option"
+					disableGutters
+					disableRipple
+					tabIndex={-1}
+					selected={selectedOption.id === 'custom'}
+					aria-selected={selectedOption.id === 'custom'}
+					sx={{ padding: 4 }}
+					data-option-id={`${dataItemPrefixId}-custom`}
+					onClick={() => {
+						if (selectedOption.id === 'custom') {
+							return
+						}
+
+						onChange(customRangeOption)
+					}}
+				>
+					<Stack
+						direction="row"
+						sx={{ alignItems: 'center', gap: 2, overflow: 'auto' }}
+					>
+						<Radio
+							disableRipple
+							checked={isEqual(value, customRangeOption)}
+							slotProps={{ input: { tabIndex: -1 } }}
+							sx={{ padding: 0 }}
+						/>
+
+						<Typography
+							sx={{
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								textOverflow: 'ellipsis',
+							}}
+						>
+							{t(m.dateFilterOptionCustom, {
+								start: customRangeOption.start,
+								end: customRangeOption.end,
+							})}
+						</Typography>
+					</Stack>
+				</ListItemButton>
+			) : null}
 
 			<ListItemButton
 				role="option"
@@ -1255,11 +1344,7 @@ function DateFilterSelect({
 			>
 				<Stack
 					direction="row"
-					sx={{
-						gap: 2,
-						alignItems: 'center',
-						overflow: 'auto',
-					}}
+					sx={{ alignItems: 'center', gap: 2, overflow: 'auto' }}
 				>
 					<Radio
 						disableRipple
@@ -1268,12 +1353,7 @@ function DateFilterSelect({
 							unit: 'days',
 							value: 7,
 						})}
-						slotProps={{
-							input: {
-								'aria-label': 'controlled',
-								tabIndex: -1,
-							},
-						}}
+						slotProps={{ input: { tabIndex: -1 } }}
 						sx={{ padding: 0 }}
 					/>
 
@@ -1308,11 +1388,7 @@ function DateFilterSelect({
 			>
 				<Stack
 					direction="row"
-					sx={{
-						gap: 2,
-						alignItems: 'center',
-						overflow: 'auto',
-					}}
+					sx={{ alignItems: 'center', gap: 2, overflow: 'auto' }}
 				>
 					<Radio
 						disableRipple
@@ -1321,12 +1397,7 @@ function DateFilterSelect({
 							unit: 'days',
 							value: 30,
 						})}
-						slotProps={{
-							input: {
-								'aria-label': 'controlled',
-								tabIndex: -1,
-							},
-						}}
+						slotProps={{ input: { tabIndex: -1 } }}
 						sx={{ padding: 0 }}
 					/>
 
@@ -1361,11 +1432,7 @@ function DateFilterSelect({
 			>
 				<Stack
 					direction="row"
-					sx={{
-						gap: 2,
-						alignItems: 'center',
-						overflow: 'auto',
-					}}
+					sx={{ alignItems: 'center', gap: 2, overflow: 'auto' }}
 				>
 					<Radio
 						disableRipple
@@ -1373,12 +1440,7 @@ function DateFilterSelect({
 							type: 'same',
 							unit: 'month',
 						})}
-						slotProps={{
-							input: {
-								'aria-label': 'controlled',
-								tabIndex: -1,
-							},
-						}}
+						slotProps={{ input: { tabIndex: -1 } }}
 						sx={{ padding: 0 }}
 					/>
 
@@ -1413,11 +1475,7 @@ function DateFilterSelect({
 			>
 				<Stack
 					direction="row"
-					sx={{
-						gap: 2,
-						alignItems: 'center',
-						overflow: 'auto',
-					}}
+					sx={{ alignItems: 'center', gap: 2, overflow: 'auto' }}
 				>
 					<Radio
 						disableRipple
@@ -1425,12 +1483,7 @@ function DateFilterSelect({
 							type: 'same',
 							unit: 'year',
 						})}
-						slotProps={{
-							input: {
-								'aria-label': 'controlled',
-								tabIndex: -1,
-							},
-						}}
+						slotProps={{ input: { tabIndex: -1 } }}
 						sx={{ padding: 0 }}
 					/>
 
@@ -1482,8 +1535,8 @@ const m = defineMessages({
 			'{count, plural, =0 {No results} one {# result} other {# results}}',
 		description: 'Number of items listed',
 	},
-	clearFiltersButton: {
-		id: '$1.routes.app.projects.$projectId.-data-list.clearFiltersButton',
+	clearFilters: {
+		id: '$1.routes.app.projects.$projectId.-data-list.clearFilters',
 		defaultMessage: 'Clear All',
 		description: 'Text for button to clear all filters',
 	},
@@ -1498,10 +1551,26 @@ const m = defineMessages({
 			'{count, plural, =0 {0 categories} one {# category} other {# categories}}',
 		description: 'Text displayed describing the selected category filters.',
 	},
-	categoryFilterShowAll: {
-		id: '$1.routes.app.projects.$projectId.-data-list.categoryFilterShowAll',
-		defaultMessage: 'Show All',
+	categoryFilterAll: {
+		id: '$1.routes.app.projects.$projectId.-data-list.categoryFilterAll',
+		defaultMessage: 'All Categories',
 		description: 'Text shown when all categories are being shown.',
+	},
+	categoryFilterDeselectAll: {
+		id: '$1.routes.app.projects.$projectId.-data-list.categoryFilterDeselectAll',
+		defaultMessage: 'Deselect All',
+		description: 'Text for button to deselect all categories.',
+	},
+	categoryFilterSelectAll: {
+		id: '$1.routes.app.projects.$projectId.-data-list.categoryFilterSelectAll',
+		defaultMessage: 'Select All',
+		description: 'Text for button to select all categories.',
+	},
+	categoryFilterCategoryIconAlt: {
+		id: 'routes.app.projects.$projectId.-data-list.categoryFilterCategoryIconAlt',
+		defaultMessage: 'Icon for {name} category',
+		description:
+			'Alt text for icon image displayed for category (used for accessibility tools).',
 	},
 	categoryFilterAdvanced: {
 		id: '$1.routes.app.projects.$projectId.-data-list.categoriesFiltersAdvanced',
@@ -1517,6 +1586,16 @@ const m = defineMessages({
 		id: '$1.routes.app.projects.$projectId.-data-list.dateFilterOptionFromStart',
 		defaultMessage: 'From Start',
 		description: 'Text for option to show data from earliest starting date.',
+	},
+	dateFilterOptionCustom: {
+		id: '$1.routes.app.projects.$projectId.-data-list.dateFilterOptionCustom',
+		defaultMessage: '{start, date, long} to {end, date, long}',
+		description: 'Text for value displayed when custom date range is selected.',
+	},
+	dateFilterValueCustom: {
+		id: '$1.routes.app.projects.$projectId.-data-list.dateFilterValueCustom',
+		defaultMessage: 'Custom',
+		description: 'Text for value displayed when custom date range is selected.',
 	},
 	dateFilterOptionLastNDays: {
 		id: '$1.routes.app.projects.$projectId.-data-list.dateFilterOptionLastNDays',

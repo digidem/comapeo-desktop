@@ -239,25 +239,37 @@
     "description": "Text for button to clear all filters",
     "message": "Advanced…"
   },
+  "$1.routes.app.projects.$projectId.-data-list.categoryFilterAll": {
+    "description": "Text shown when all categories are being shown.",
+    "message": "All Categories"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoryFilterDeselectAll": {
+    "description": "Text for button to deselect all categories.",
+    "message": "Deselect All"
+  },
   "$1.routes.app.projects.$projectId.-data-list.categoryFilterLabel": {
     "description": "Text displayed describing the category filter input.",
     "message": "Filter by Category"
   },
-  "$1.routes.app.projects.$projectId.-data-list.categoryFilterShowAll": {
-    "description": "Text shown when all categories are being shown.",
-    "message": "Show All"
+  "$1.routes.app.projects.$projectId.-data-list.categoryFilterSelectAll": {
+    "description": "Text for button to select all categories.",
+    "message": "Select All"
   },
   "$1.routes.app.projects.$projectId.-data-list.categoryFilterValue": {
     "description": "Text displayed describing the selected category filters.",
     "message": "{count, plural, =0 {0 categories} one {# category} other {# categories}}"
   },
-  "$1.routes.app.projects.$projectId.-data-list.clearFiltersButton": {
+  "$1.routes.app.projects.$projectId.-data-list.clearFilters": {
     "description": "Text for button to clear all filters",
     "message": "Clear All"
   },
   "$1.routes.app.projects.$projectId.-data-list.dateFilterLabel": {
     "description": "Text displayed describing the date filter input.",
     "message": "Filter by Date"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionCustom": {
+    "description": "Text for value displayed when custom date range is selected.",
+    "message": "{start, date, long} to {end, date, long}"
   },
   "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionFromStart": {
     "description": "Text for option to show data from earliest starting date.",
@@ -274,6 +286,10 @@
   "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionSameYear": {
     "description": "Text for option to show data from the same year.",
     "message": "Same Year"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterValueCustom": {
+    "description": "Text for value displayed when custom date range is selected.",
+    "message": "Custom"
   },
   "$1.routes.app.projects.$projectId.-data-list.downloadObservations": {
     "description": "Link text to navigate to download observations page.",
@@ -462,6 +478,10 @@
   "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionDeselectAll": {
     "description": "Text for button to deselect all in categories filter section in advanced filters dialog.",
     "message": "Deselect All"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionSelectAll": {
+    "description": "Text for button to select all in categories filter section in advanced filters dialog.",
+    "message": "Select All"
   },
   "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionTitle": {
     "description": "Title for categories filter section in advanced filters dialog.",
