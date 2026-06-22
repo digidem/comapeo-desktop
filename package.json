@@ -184,7 +184,6 @@
 		"@sentry/cli@2.58.6": true,
 		"better-sqlite3": false,
 		"electron-winstaller@5.4.0": true,
-		"electron@41.7.2": true,
 		"fs-xattr": false,
 		"fsevents": false,
 		"macos-alias": false,
