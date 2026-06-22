@@ -169,6 +169,9 @@
 	},
 	"overrides": {
 		"better-sqlite3": "12.11.1",
+		"@electron/packager": {
+			"extract-zip": "npm:@electron-internal/extract-zip@1.0.3"
+		},
 		"@electron-forge/shared-types": {
 			"tar": "7.5.16"
 		},
