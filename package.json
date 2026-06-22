@@ -168,13 +168,16 @@
 		"vitest": "4.1.9"
 	},
 	"overrides": {
-		"better-sqlite3": "12.11.1",
+		"@comapeo/map-server": {
+			"typebox": "1.1.27"
+		},
 		"@electron/packager": {
 			"extract-zip": "npm:@electron-internal/extract-zip@1.0.3"
 		},
 		"@electron-forge/shared-types": {
 			"tar": "7.5.16"
 		},
+		"better-sqlite3": "12.11.1",
 		"tmp": "0.2.7"
 	},
 	"allowScripts": {
