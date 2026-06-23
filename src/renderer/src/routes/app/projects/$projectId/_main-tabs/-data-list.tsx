@@ -1123,16 +1123,17 @@ function DateFilterSelect({
 		return new Date()
 	})
 
-	const [customRangeOption, setCustomRangeOption] = useState<
-		(DateFilter & { type: 'range' }) | null
-	>(() => {
-		return value?.type === 'range' ? value : null
-	})
+	const rangeOptionRef = useRef<(DateFilter & { type: 'range' }) | null>(null)
 
-	// TODO: Display range option
-	// if (value?.type === 'range') {
-	// setCustomRangeOption(value)
-	// }
+	// TODO: Need to persist in select menu after changing
+	const customRangeOption = useMemo(() => {
+		if (value?.type === 'range') {
+			rangeOptionRef.current = value
+			return value
+		} else {
+			return rangeOptionRef.current
+		}
+	}, [value])
 
 	const selectedOption = useMemo(() => {
 		if (!value) {
@@ -1239,6 +1240,9 @@ function DateFilterSelect({
 					{t(m.categoryFilterAdvanced)}
 				</Button>
 			}
+			onClose={() => {
+				rangeOptionRef.current = null
+			}}
 		>
 			<ListItemButton
 				role="option"
@@ -1288,7 +1292,7 @@ function DateFilterSelect({
 					tabIndex={-1}
 					selected={selectedOption.id === 'custom'}
 					aria-selected={selectedOption.id === 'custom'}
-					sx={{ padding: 4 }}
+					sx={{ padding: 4, borderBottom: `1px solid ${BLUE_GREY}` }}
 					data-option-id={`${dataItemPrefixId}-custom`}
 					onClick={() => {
 						if (selectedOption.id === 'custom') {
