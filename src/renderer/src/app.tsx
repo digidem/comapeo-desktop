@@ -164,6 +164,7 @@ export function App() {
 				<ActiveProjectIdStoreProvider value={activeProjectIdStore}>
 					<QueryClientProvider client={queryClient}>
 						<IntlProvider>
+							{/* TODO: Need to set this up more thoroughly */}
 							<LocalizationProvider dateAdapter={AdapterDateFns}>
 								<NetworkConnectionChangeListener />
 

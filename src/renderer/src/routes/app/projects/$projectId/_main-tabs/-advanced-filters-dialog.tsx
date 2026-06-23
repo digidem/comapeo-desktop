@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
-import { endOfDay, isAfter, isBefore, isEqual, startOfDay } from 'date-fns'
+import { endOfDay, isAfter, isBefore, isEqual, min, startOfDay } from 'date-fns'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
@@ -119,6 +119,8 @@ export function AdvancedFiltersDialogContent({
 		onSubmit: ({ value }) => {
 			const parsed = v.parse(AdvancedFiltersSchema, value)
 
+			console.log('***', parsed)
+
 			onSubmit({
 				categories: parsed.categories,
 				date:
@@ -142,6 +144,16 @@ export function AdvancedFiltersDialogContent({
 	const viewportIsNarrow = useMediaQuery((theme) =>
 		theme.breakpoints.down('md'),
 	)
+
+	const oldestSelectableDate = startOfDay(
+		min(
+			[...observationsWithCategory, ...tracksWithCategory].map(
+				({ document }) => new Date(document.createdAt),
+			),
+		),
+	)
+
+	console.log('***', oldestSelectableDate)
 
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
@@ -226,7 +238,12 @@ export function AdvancedFiltersDialogContent({
 										return (
 											<DesktopDatePicker
 												disableFuture
+												// TODO: Should disable month and year too?
 												shouldDisableDate={(day) => {
+													if (isBefore(day, oldestSelectableDate)) {
+														return true
+													}
+
 													const endDate = form.getFieldValue('endDate')
 
 													if (!endDate) {
@@ -282,6 +299,22 @@ export function AdvancedFiltersDialogContent({
 										return (
 											<DesktopDatePicker
 												label={t(m.advancedFiltersDateEndLabel)}
+												disableFuture
+												// TODO: Should disable month and year too?
+												shouldDisableDate={(day) => {
+													if (isBefore(day, oldestSelectableDate)) {
+														return true
+													}
+
+													// TODO: Allow picking older than selected start date?
+													const startDate = form.getFieldValue('startDate')
+
+													if (!startDate) {
+														return false
+													}
+
+													return isBefore(day, startDate)
+												}}
 												onChange={(value) => {
 													formField.handleChange(value ? endOfDay(value) : null)
 												}}
