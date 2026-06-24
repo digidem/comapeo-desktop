@@ -138,7 +138,7 @@ Sentry.init({
 	// take effect here until the app is restarted.
 	enabled: persistedStoreState.diagnosticsEnabled,
 	enableMetrics: false,
-	sendDefaultPii: false,
+	dataCollection: { userInfo: false },
 	// TODO: Enable tracing based on user consent in production
 	tracesSampleRate: sentryEnvironment === 'production' ? 0 : 1.0,
 	environment: sentryEnvironment,
