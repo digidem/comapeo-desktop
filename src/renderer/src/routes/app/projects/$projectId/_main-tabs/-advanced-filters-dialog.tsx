@@ -25,10 +25,11 @@ import {
 import { Icon } from '../../../../../components/icon.tsx'
 import { useAppForm } from '../../../../../hooks/forms.ts'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
+import type { DateFilter } from '../../../../../lib/local-storage.ts'
 import {
 	dateFilterToDateRange,
 	isDocumentIncludedByFilters,
-	type DateFilter,
+	isEqualByItemKey,
 } from './-shared.ts'
 
 function isValidDateRange(start: Date, end: Date) {
@@ -74,6 +75,7 @@ export function AdvancedFiltersDialogContent({
 	categories,
 	categoryFilter,
 	dateFilter,
+	nowTimestamp,
 	observationsWithCategory,
 	onCancel,
 	onSubmit,
@@ -82,29 +84,23 @@ export function AdvancedFiltersDialogContent({
 }: {
 	categories: Array<Preset>
 	categoryFilter: Array<Preset>
-	dateFilter: DateFilter | null
+	dateFilter: DateFilter | undefined
+	nowTimestamp: number
 	observationsWithCategory: Array<{ document: Observation; category?: Preset }>
 	onCancel: () => void
-	onSubmit: (values: {
-		categories: Array<Preset>
-		date: DateFilter | null
-	}) => void
+	onSubmit: (values: { categories?: Array<Preset>; date?: DateFilter }) => void
 	projectId: string
 	tracksWithCategory: Array<{ document: Track; category?: Preset }>
 }) {
 	const { formatMessage: t } = useIntl()
 	const formId = useId()
 
-	const [stableNowDate] = useState(() => {
-		return new Date()
-	})
-
 	const [initialDateRange] = useState(() => {
 		if (!dateFilter) {
 			return { start: null, end: null }
 		}
 
-		return dateFilterToDateRange(dateFilter, stableNowDate)
+		return dateFilterToDateRange(dateFilter, new Date(nowTimestamp))
 	})
 
 	const defaultValues: AdvancedFilters = {
@@ -119,14 +115,22 @@ export function AdvancedFiltersDialogContent({
 		onSubmit: ({ value }) => {
 			const parsed = v.parse(AdvancedFiltersSchema, value)
 
-			console.log('***', parsed)
+			const allSelected = isEqualByItemKey(
+				categories,
+				value.categories,
+				'docId',
+			)
 
 			onSubmit({
-				categories: parsed.categories,
+				categories: allSelected ? undefined : parsed.categories,
 				date:
 					parsed.startDate && parsed.endDate
-						? { type: 'range', start: parsed.startDate, end: parsed.endDate }
-						: null,
+						? {
+								type: 'range',
+								start: parsed.startDate.toISOString(),
+								end: parsed.endDate.toISOString(),
+							}
+						: undefined,
 			})
 		},
 	})
@@ -152,8 +156,6 @@ export function AdvancedFiltersDialogContent({
 			),
 		),
 	)
-
-	console.log('***', oldestSelectableDate)
 
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>

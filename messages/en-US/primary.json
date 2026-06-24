@@ -268,7 +268,7 @@
     "message": "Filter by Date"
   },
   "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionCustom": {
-    "description": "Text for value displayed when custom date range is selected.",
+    "description": "Text for label used for custom date range option.",
     "message": "{start, date, long} to {end, date, long}"
   },
   "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionFromStart": {

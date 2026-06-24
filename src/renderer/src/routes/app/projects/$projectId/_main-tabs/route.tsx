@@ -11,11 +11,18 @@ import * as v from 'valibot'
 import { TwoPanelLayout } from '../../../-components/two-panel-layout.tsx'
 import { BLACK, LIGHT_GREY } from '../../../../../colors.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo.ts'
+import { DateFilterSchema } from '../../../../../lib/local-storage.ts'
 import { MapPanel } from './-map-panel.tsx'
 import { HighlightedDocumentSchema } from './-shared.ts'
 
 const SearchParamsSchema = v.object({
 	highlightedDocument: v.optional(HighlightedDocumentSchema),
+	filters: v.optional(
+		v.object({
+			categories: v.optional(v.array(v.string())),
+			date: v.optional(DateFilterSchema),
+		}),
+	),
 })
 
 export const Route = createFileRoute('/app/projects/$projectId/_main-tabs')({
