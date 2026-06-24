@@ -8,7 +8,7 @@ import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARKER_ORANGE } from '../../../../../colors.ts'
@@ -19,6 +19,7 @@ import {
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 } from '../../../../../lib/comapeo.ts'
+import { getItem } from '../../../../../lib/local-storage.ts'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings.ts'
 import { DataList } from './-data-list.tsx'
 
@@ -80,6 +81,28 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs/')({
 				},
 			}),
 		])
+	},
+	onEnter: () => {
+		const categoryFilters = getItem('comapeo:filters:category') ?? undefined
+		const dateFilter = getItem('comapeo:filters:date') ?? undefined
+
+		throw redirect({
+			to: '.',
+			replace: true,
+			search: (prev) => {
+				const updatedFilters = {
+					...prev.filters,
+					categories: categoryFilters,
+					dateFilter,
+				}
+
+				if (Object.values(updatedFilters).some((v) => v !== undefined)) {
+					return { ...prev, filters: updatedFilters }
+				}
+
+				return { ...prev, filters: undefined }
+			},
+		})
 	},
 	component: RouteComponent,
 })

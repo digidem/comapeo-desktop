@@ -14,18 +14,20 @@ import { Icon } from '../../../../../components/icon.tsx'
 export function FilterSelect({
 	children,
 	displayedValue,
+	footer,
 	header,
 	hiddenInput,
-	footer,
 	multiSelect,
 	onClose,
+	onOpen,
 }: PropsWithChildren<{
 	displayedValue: string
+	footer?: ReactNode
 	header?: ReactNode
 	hiddenInput: ReactNode
-	footer?: ReactNode
 	multiSelect?: boolean
 	onClose?: () => void
+	onOpen?: () => void
 }>) {
 	const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null)
 
@@ -175,6 +177,10 @@ export function FilterSelect({
 						return (
 							<Fade
 								{...TransitionProps}
+								onEnter={() => {
+									TransitionProps?.onEnter()
+									onOpen?.()
+								}}
 								onExited={() => {
 									TransitionProps?.onExited()
 									onClose?.()

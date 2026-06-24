@@ -9,6 +9,8 @@ import {
 } from 'date-fns'
 import * as v from 'valibot'
 
+import type { DateFilter } from '../../../../../lib/local-storage.ts'
+
 export const HighlightedDocumentSchema = v.object({
 	type: v.union([v.literal('observation'), v.literal('track')]),
 	docId: v.string(),
@@ -16,11 +18,6 @@ export const HighlightedDocumentSchema = v.object({
 })
 
 export type HighlightedDocument = v.InferInput<typeof HighlightedDocumentSchema>
-
-export type DateFilter =
-	| { type: 'range'; start: Date; end: Date }
-	| { type: 'same'; unit: 'month' | 'year' }
-	| { type: 'relative'; unit: 'days'; value: number }
 
 type DateRange = { start: Date | null; end: Date }
 
@@ -30,12 +27,15 @@ export function dateFilterToDateRange(
 ): DateRange {
 	switch (dateFilter.type) {
 		case 'range': {
-			return { start: dateFilter.start, end: dateFilter.end }
+			return {
+				start: new Date(dateFilter.start),
+				end: new Date(dateFilter.end),
+			}
 		}
 		case 'relative': {
 			return {
 				start: subDays(startOfDay(now), dateFilter.value),
-				end: now,
+				end: new Date(now),
 			}
 		}
 		case 'same': {
@@ -85,4 +85,11 @@ export function isDocumentIncludedByFilters(
 	}
 
 	return true
+}
+
+export function isEqualByItemKey<T>(a: Array<T>, b: Array<T>, field: keyof T) {
+	return (
+		new Set(a.map((o) => o[field])).difference(new Set(b.map((s) => s[field])))
+			.size === 0
+	)
 }

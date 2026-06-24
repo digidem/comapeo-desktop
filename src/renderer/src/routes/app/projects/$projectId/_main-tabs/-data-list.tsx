@@ -34,7 +34,7 @@ import {
 	startOfYear,
 	subDays,
 } from 'date-fns'
-import { isEqual } from 'radashi'
+import { isArrayEqual, isEqual } from 'radashi'
 import { defineMessages, useIntl, type IntlShape } from 'react-intl'
 
 import {
@@ -59,13 +59,18 @@ import {
 	getMatchingCategoryForDocument,
 	type Attachment,
 } from '../../../../../lib/comapeo.ts'
+import {
+	removeItem,
+	setItem,
+	type DateFilter,
+} from '../../../../../lib/local-storage.ts'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings.ts'
 import { AdvancedFiltersDialogContent } from './-advanced-filters-dialog.tsx'
 import { FilterSelect } from './-filter-select.tsx'
 import {
 	dateFilterToDateRange,
 	isDocumentIncludedByFilters,
-	type DateFilter,
+	isEqualByItemKey,
 	type HighlightedDocument,
 } from './-shared.ts'
 import { PhotoAttachmentImage } from './observations/$observationDocId/-components/photo-attachment-image.tsx'
@@ -83,8 +88,27 @@ export function DataList({ projectId }: { projectId: string }) {
 		select: ({ value }) => value,
 	})
 
-	const { highlightedDocument } = useSearch({
+	const activeCategoryFilters = useSearch({
 		from: '/app/projects/$projectId/_main-tabs',
+		select: (value) => {
+			// TODO: Filter out and warn about irrelevant categories?
+			return value.filters?.categories
+		},
+	})
+
+	const activeDateFilter = useSearch({
+		from: '/app/projects/$projectId/_main-tabs',
+		select: (value) => {
+			// TODO: Filter out and warn about irrelevant categories?
+			return value.filters?.date
+		},
+	})
+
+	const highlightedDocument = useSearch({
+		from: '/app/projects/$projectId/_main-tabs',
+		select: (value) => {
+			return value.highlightedDocument
+		},
 	})
 
 	const navigate = useNavigate({ from: '/app/projects/$projectId/' })
@@ -103,14 +127,13 @@ export function DataList({ projectId }: { projectId: string }) {
 		lang,
 	})
 
-	const [categoryFilter, setCategoryFilter] = useState<Array<Preset>>(() => {
-		// TODO: Order of precedence
-		// 1. URL search params
-		// 2. Local storage
-		return categories
-	})
+	const allCategoryDocIds = categories.map((c) => c.docId)
 
-	const [dateFilter, setDateFilter] = useState<DateFilter | null>(null)
+	const filteredCategories = activeCategoryFilters
+		? categories.filter((c) => {
+				return activeCategoryFilters.includes(c.docId)
+			})
+		: categories
 
 	const observationsWithCategory = useMemo(() => {
 		return observations.map((o) => ({
@@ -135,14 +158,21 @@ export function DataList({ projectId }: { projectId: string }) {
 		return [...observationsWithCategory, ...tracksWithCategory]
 			.filter((item) => {
 				return isDocumentIncludedByFilters(item, {
-					categories: categoryFilter,
-					date: dateFilter ? dateFilterToDateRange(dateFilter, now) : undefined,
+					categories: filteredCategories,
+					date: activeDateFilter
+						? dateFilterToDateRange(activeDateFilter, now)
+						: undefined,
 				})
 			})
 			.sort((a, b) => {
 				return a.document.createdAt < b.document.createdAt ? 1 : -1
 			})
-	}, [observationsWithCategory, tracksWithCategory, categoryFilter, dateFilter])
+	}, [
+		activeDateFilter,
+		filteredCategories,
+		observationsWithCategory,
+		tracksWithCategory,
+	])
 
 	const listRef = useRef<HTMLUListElement | null>(null)
 
@@ -215,6 +245,74 @@ export function DataList({ projectId }: { projectId: string }) {
 	const [showAdvancedFiltersDialog, setShowAdvancedFiltersDialog] = useState<
 		true | undefined
 	>(undefined)
+
+	function setCategoryFilters(value: Array<string>) {
+		setItem('comapeo:filters:category', value)
+
+		navigate({
+			replace: true,
+			search: (prev) => {
+				return { ...prev, filters: { ...prev.filters, categories: value } }
+			},
+		}).catch((err) => {
+			captureException(err)
+		})
+	}
+
+	function unsetCategoryFilters() {
+		removeItem('comapeo:filters:category')
+
+		navigate({
+			replace: true,
+			search: (prev) => {
+				const updatedFilters = { ...prev.filters, categories: undefined }
+
+				if (Object.values(updatedFilters).some((v) => v !== undefined)) {
+					return { ...prev, filters: updatedFilters }
+				}
+
+				return { ...prev, filters: undefined }
+			},
+		}).catch((err) => {
+			captureException(err)
+		})
+	}
+
+	function setDateFilter(value: DateFilter) {
+		setItem('comapeo:filters:date', value)
+
+		navigate({
+			replace: true,
+			search: (prev) => {
+				return { ...prev, filters: { ...prev.filters, date: value } }
+			},
+		}).catch((err) => {
+			captureException(err)
+		})
+	}
+
+	const [nowTimestamp, setNowTimestamp] = useState(() => {
+		return Date.now()
+	})
+
+	function unsetDateFilter() {
+		removeItem('comapeo:filters:date')
+
+		navigate({
+			replace: true,
+			search: (prev) => {
+				const updatedFilters = { ...prev.filters, date: undefined }
+
+				if (Object.values(updatedFilters).some((v) => v !== undefined)) {
+					return { ...prev, filters: updatedFilters }
+				}
+
+				return { ...prev, filters: undefined }
+			},
+		}).catch((err) => {
+			captureException(err)
+		})
+	}
 
 	return (
 		<>
@@ -297,25 +395,33 @@ export function DataList({ projectId }: { projectId: string }) {
 								</Tooltip>
 
 								<CategoryFilterSelect
-									selected={categoryFilter}
+									selected={filteredCategories}
 									options={categories}
 									onAdvancedClick={() => {
 										setShowAdvancedFiltersDialog(true)
 									}}
 									onDeselectAll={() => {
-										setCategoryFilter([])
+										setCategoryFilters([])
 									}}
 									onSelectAll={() => {
-										setCategoryFilter(categories)
+										unsetCategoryFilters()
 									}}
 									onChange={(action, value) => {
-										setCategoryFilter((prev) => {
-											if (action === 'select') {
-												return Array.from(new Set([...prev, value]))
-											} else {
-												return prev.filter((p) => p.docId !== value.docId)
-											}
-										})
+										if (action === 'select') {
+											setCategoryFilters(
+												activeCategoryFilters
+													? Array.from(
+															new Set([...activeCategoryFilters, value]),
+														)
+													: [value],
+											)
+										} else {
+											setCategoryFilters(
+												activeCategoryFilters
+													? activeCategoryFilters.filter((f) => f !== value)
+													: allCategoryDocIds.filter((id) => id !== value),
+											)
+										}
 									}}
 									projectId={projectId}
 								/>
@@ -338,19 +444,28 @@ export function DataList({ projectId }: { projectId: string }) {
 								</Tooltip>
 
 								<DateFilterSelect
-									value={dateFilter}
+									value={activeDateFilter}
+									nowTimestamp={nowTimestamp}
 									onAdvancedClick={() => {
 										setShowAdvancedFiltersDialog(true)
 									}}
-									onChange={setDateFilter}
+									onChange={(value) => {
+										if (value) {
+											setDateFilter(value)
+										} else {
+											unsetDateFilter()
+										}
+										setNowTimestamp(Date.now())
+									}}
 								/>
 							</Stack>
 						</Stack>
 					</Stack>
 
-					{!!dateFilter ||
-					(categoryFilter.length > 0 &&
-						!isEqualByItemKey(categories, categoryFilter, 'docId')) ? (
+					{!!activeDateFilter ||
+					(activeCategoryFilters &&
+						activeCategoryFilters.length > 0 &&
+						!isArrayEqual(allCategoryDocIds, activeCategoryFilters)) ? (
 						<Stack
 							direction="row"
 							sx={{
@@ -365,26 +480,34 @@ export function DataList({ projectId }: { projectId: string }) {
 								variant="outlined"
 								sx={{ flexShrink: 0, fontWeight: 'normal' }}
 								onClick={() => {
-									setCategoryFilter(categories)
-									setDateFilter(null)
+									unsetCategoryFilters()
+									unsetDateFilter()
 								}}
 							>
 								{t(m.clearFilters)}
 							</Button>
 
-							{dateFilter ? (
+							{activeDateFilter ? (
 								<FilterPill
-									label={getDateFilterOptionLabel(dateFilter, t)}
+									label={
+										activeDateFilter.type === 'range'
+											? t(m.dateFilterOptionCustom, {
+													start: new Date(activeDateFilter.start),
+													end: new Date(activeDateFilter.end),
+												})
+											: getDateFilterOptionDisplayedValue(activeDateFilter, t)
+									}
 									color={LIGHT_GREY}
 									onRemove={() => {
-										setDateFilter(null)
+										unsetDateFilter()
 									}}
 								/>
 							) : null}
 
-							{categoryFilter.length > 0 &&
-							!isEqualByItemKey(categories, categoryFilter, 'docId')
-								? categoryFilter.map((category) => {
+							{activeCategoryFilters &&
+							activeCategoryFilters.length > 0 &&
+							!isArrayEqual(allCategoryDocIds, activeCategoryFilters)
+								? filteredCategories.map((category) => {
 										return (
 											<FilterPill
 												key={category.docId}
@@ -393,17 +516,15 @@ export function DataList({ projectId }: { projectId: string }) {
 												}
 												label={category.name}
 												onRemove={() => {
-													setCategoryFilter((prev) => {
-														const updatedFilter = prev.filter(
-															(p) => p.docId !== category.docId,
-														)
+													const updatedFilter = activeCategoryFilters.filter(
+														(f) => f !== category.docId,
+													)
 
-														if (updatedFilter.length === 0) {
-															return categories
-														}
-
-														return updatedFilter
-													})
+													setCategoryFilters(
+														updatedFilter.length === 0
+															? allCategoryDocIds
+															: updatedFilter,
+													)
 												}}
 											/>
 										)
@@ -465,14 +586,15 @@ export function DataList({ projectId }: { projectId: string }) {
 												onClick={() => {
 													if (!isHighlighted) {
 														navigate({
-															search: {
+															replace: true,
+															search: (prev) => ({
+																...prev,
 																highlightedDocument: {
 																	type,
 																	docId,
 																	from: 'list',
 																},
-															},
-															replace: true,
+															}),
 														})
 
 														return
@@ -605,14 +727,25 @@ export function DataList({ projectId }: { projectId: string }) {
 				{() => (
 					<AdvancedFiltersDialogContent
 						categories={categories}
-						categoryFilter={categoryFilter}
-						dateFilter={dateFilter}
+						categoryFilter={filteredCategories}
+						dateFilter={activeDateFilter}
+						nowTimestamp={nowTimestamp}
 						onCancel={() => {
 							setShowAdvancedFiltersDialog(undefined)
 						}}
 						onSubmit={(value) => {
-							setCategoryFilter(value.categories)
-							setDateFilter(value.date)
+							if (value.categories) {
+								setCategoryFilters(value.categories.map((c) => c.docId))
+							} else {
+								unsetCategoryFilters()
+							}
+
+							if (value.date) {
+								setDateFilter(value.date)
+							} else {
+								unsetDateFilter()
+							}
+
 							setShowAdvancedFiltersDialog(undefined)
 						}}
 						projectId={projectId}
@@ -937,7 +1070,7 @@ function CategoryFilterSelect({
 	onAdvancedClick: () => void
 	onSelectAll: () => void
 	onDeselectAll: () => void
-	onChange: (action: 'select' | 'deselect', value: Preset) => void
+	onChange: (action: 'select' | 'deselect', value: string) => void
 	projectId: string
 }) {
 	const { formatMessage: t } = useIntl()
@@ -1019,7 +1152,7 @@ function CategoryFilterSelect({
 						data-option-id={`${dataOptionPrefixId}-${category.docId}`}
 						sx={{ padding: 4 }}
 						onClick={() => {
-							onChange(isSelected ? 'deselect' : 'select', category)
+							onChange(isSelected ? 'deselect' : 'select', category.docId)
 						}}
 					>
 						<Stack
@@ -1036,17 +1169,34 @@ function CategoryFilterSelect({
 								<Box aria-hidden>
 									<CategoryIconContainer color={category.color || BLUE_GREY}>
 										{category.iconRef?.docId ? (
-											<CategoryIconImage
-												altText={t(m.categoryFilterCategoryIconAlt, {
-													name: category.name,
-												})}
-												iconDocumentId={category.iconRef.docId}
-												projectId={projectId}
-												imageStyle={{
-													width: categoryIconSize,
-													aspectRatio: 1,
-												}}
-											/>
+											<Suspense
+												fallback={
+													<Box
+														sx={{
+															display: 'flex',
+															justifyContent: 'center',
+															alignItems: 'center',
+														}}
+													>
+														<CircularProgress
+															disableShrink
+															size={categoryIconSize}
+														/>
+													</Box>
+												}
+											>
+												<CategoryIconImage
+													altText={t(m.categoryFilterCategoryIconAlt, {
+														name: category.name,
+													})}
+													iconDocumentId={category.iconRef.docId}
+													projectId={projectId}
+													imageStyle={{
+														width: categoryIconSize,
+														aspectRatio: 1,
+													}}
+												/>
+											</Suspense>
 										) : (
 											<Icon name="material-place" size={categoryIconSize} />
 										)}
@@ -1071,19 +1221,7 @@ function CategoryFilterSelect({
 	)
 }
 
-function isEqualByItemKey<T>(
-	options: Array<T>,
-	selected: Array<T>,
-	field: keyof T,
-) {
-	return (
-		new Set(options.map((o) => o[field])).difference(
-			new Set(selected.map((s) => s[field])),
-		).size === 0
-	)
-}
-
-function getDateFilterOptionLabel(
+function getDateFilterOptionDisplayedValue(
 	value: DateFilter,
 	formatMessage: IntlShape['formatMessage'],
 ) {
@@ -1107,53 +1245,52 @@ function getDateFilterOptionLabel(
 }
 
 function DateFilterSelect({
-	value,
+	nowTimestamp,
 	onAdvancedClick,
 	onChange,
+	value,
 }: {
-	value: DateFilter | null
-	onChange: (value: DateFilter | null) => void
+	nowTimestamp: number
 	onAdvancedClick: () => void
+	onChange: (value: DateFilter | null) => void
+	value: DateFilter | undefined
 }) {
 	const { formatMessage: t } = useIntl()
 
 	const dataItemPrefixId = useId()
 
-	const [stableNowDate] = useState(() => {
-		return new Date()
+	const [customRangeOption, setCustomRangeOption] = useState(() => {
+		if (value?.type === 'range') {
+			return value
+		}
+
+		return undefined
 	})
 
-	const rangeOptionRef = useRef<(DateFilter & { type: 'range' }) | null>(null)
-
-	// TODO: Need to persist in select menu after changing
-	const customRangeOption = useMemo(() => {
-		if (value?.type === 'range') {
-			rangeOptionRef.current = value
-			return value
-		} else {
-			return rangeOptionRef.current
-		}
-	}, [value])
+	// TODO: Custom range option should not persist when pressing Clear button in filter pills section
+	if (value?.type === 'range' && customRangeOption !== value) {
+		setCustomRangeOption(value)
+	}
 
 	const selectedOption = useMemo(() => {
 		if (!value) {
 			return {
 				id: 'from-start' as const,
-				label: t(m.dateFilterOptionFromStart),
+				displayedValue: t(m.dateFilterOptionFromStart),
 				inputValues: {
 					start: '',
-					end: formatISO(addDays(stableNowDate, 1), { representation: 'date' }),
+					end: formatISO(addDays(nowTimestamp, 1), { representation: 'date' }),
 				},
 			}
 		}
 
-		const label = getDateFilterOptionLabel(value, t)
+		const displayedValue = getDateFilterOptionDisplayedValue(value, t)
 
 		switch (value.type) {
 			case 'range': {
 				return {
 					id: 'custom' as const,
-					label,
+					displayedValue,
 					inputValues: {
 						start: formatISO(value.start, { representation: 'date' }),
 						end: formatISO(value.end, { representation: 'date' }),
@@ -1163,12 +1300,12 @@ function DateFilterSelect({
 			case 'relative': {
 				return {
 					id: `last-${value.value}-days` as const,
-					label,
+					displayedValue,
 					inputValues: {
-						start: formatISO(subDays(stableNowDate, value.value), {
+						start: formatISO(subDays(nowTimestamp, value.value), {
 							representation: 'date',
 						}),
-						end: formatISO(addDays(stableNowDate, 1), {
+						end: formatISO(addDays(nowTimestamp, 1), {
 							representation: 'date',
 						}),
 					},
@@ -1177,26 +1314,26 @@ function DateFilterSelect({
 			case 'same': {
 				const startDate =
 					value.unit === 'month'
-						? startOfMonth(stableNowDate)
-						: startOfYear(stableNowDate)
+						? startOfMonth(nowTimestamp)
+						: startOfYear(nowTimestamp)
 
 				return {
 					id: `same-${value.unit}` as const,
-					label,
+					displayedValue,
 					inputValues: {
 						start: formatISO(startDate, { representation: 'date' }),
-						end: formatISO(addDays(stableNowDate, 1), {
+						end: formatISO(addDays(nowTimestamp, 1), {
 							representation: 'date',
 						}),
 					},
 				}
 			}
 		}
-	}, [value, stableNowDate, t])
+	}, [value, nowTimestamp, t])
 
 	return (
 		<FilterSelect
-			displayedValue={selectedOption.label}
+			displayedValue={selectedOption.displayedValue}
 			hiddenInput={
 				<>
 					<InputBase
@@ -1241,7 +1378,14 @@ function DateFilterSelect({
 				</Button>
 			}
 			onClose={() => {
-				rangeOptionRef.current = null
+				if (value?.type !== 'range') {
+					setCustomRangeOption(undefined)
+				}
+			}}
+			onOpen={() => {
+				if (value?.type === 'range' && customRangeOption === undefined) {
+					setCustomRangeOption(value)
+				}
 			}}
 		>
 			<ListItemButton
@@ -1249,7 +1393,7 @@ function DateFilterSelect({
 				disableGutters
 				disableRipple
 				selected={selectedOption.id === 'from-start'}
-				aria-selected={value === null}
+				aria-selected={value === undefined}
 				tabIndex={-1}
 				sx={{ padding: 4, borderBottom: `1px solid ${BLUE_GREY}` }}
 				data-option-id={`${dataItemPrefixId}-from-start`}
@@ -1267,7 +1411,7 @@ function DateFilterSelect({
 				>
 					<Radio
 						disableRipple
-						checked={value === null}
+						checked={value === undefined}
 						slotProps={{ input: { tabIndex: -1 } }}
 						sx={{ padding: 0 }}
 					/>
@@ -1321,8 +1465,8 @@ function DateFilterSelect({
 							}}
 						>
 							{t(m.dateFilterOptionCustom, {
-								start: customRangeOption.start,
-								end: customRangeOption.end,
+								start: new Date(customRangeOption.start),
+								end: new Date(customRangeOption.end),
 							})}
 						</Typography>
 					</Stack>
@@ -1594,7 +1738,7 @@ const m = defineMessages({
 	dateFilterOptionCustom: {
 		id: '$1.routes.app.projects.$projectId.-data-list.dateFilterOptionCustom',
 		defaultMessage: '{start, date, long} to {end, date, long}',
-		description: 'Text for value displayed when custom date range is selected.',
+		description: 'Text for label used for custom date range option.',
 	},
 	dateFilterValueCustom: {
 		id: '$1.routes.app.projects.$projectId.-data-list.dateFilterValueCustom',
