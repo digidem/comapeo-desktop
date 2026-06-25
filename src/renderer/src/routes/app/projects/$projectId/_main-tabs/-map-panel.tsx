@@ -62,11 +62,16 @@ import {
 import { Map } from '../../../../../components/map.tsx'
 import { useNetworkAwareMapStyleUrl } from '../../../../../hooks/maps.ts'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo.ts'
+import type { DateFilter } from '../../../../../lib/local-storage.ts'
 import {
 	getLocaleStateQueryOptions,
 	getUnitSystemQueryOptions,
 } from '../../../../../lib/queries/app-settings.ts'
-import type { HighlightedDocument } from './-shared.ts'
+import {
+	dateFilterToDateRange,
+	isDocumentIncludedByFilters,
+	type HighlightedDocument,
+} from './-shared.ts'
 
 // TODO: Move to lib/colors
 const SHADOW_COLOR = '#686868'
@@ -133,8 +138,25 @@ export function MapPanel() {
 		from: '/app/projects/$projectId/_main-tabs',
 	})
 
-	const { highlightedDocument: documentFromSearch } = useSearch({
+	const documentFromSearch = useSearch({
 		from: '/app/projects/$projectId/_main-tabs',
+		select: (value) => {
+			return value?.highlightedDocument
+		},
+	})
+
+	const categoriesFilter = useSearch({
+		from: '/app/projects/$projectId/_main-tabs',
+		select: (value) => {
+			return value?.filters?.categories
+		},
+	})
+
+	const dateFilter = useSearch({
+		from: '/app/projects/$projectId/_main-tabs',
+		select: (value) => {
+			return value?.filters?.date
+		},
 	})
 
 	const [mapLoaded, setMapLoaded] = useState(false)
@@ -211,8 +233,12 @@ export function MapPanel() {
 	const mapStyleUrl = useNetworkAwareMapStyleUrl(originalStyleUrl)
 
 	const observationsFeatureCollection = useMemo(() => {
-		return observationsToFeatureCollection(observations, categories)
-	}, [observations, categories])
+		return observationsToFeatureCollection({
+			categories,
+			filters: { categories: categoriesFilter, date: dateFilter },
+			observations,
+		})
+	}, [observations, categories, categoriesFilter, dateFilter])
 
 	const tracksFeatureCollection = useMemo(() => {
 		return tracksToFeatureCollection(tracks)
@@ -291,7 +317,9 @@ export function MapPanel() {
 
 			if (!feature) {
 				if (documentToHighlight) {
-					navigate({ search: { highlightedDocument: undefined } })
+					navigate({
+						search: (prev) => ({ ...prev, highlightedDocument: undefined }),
+					})
 				}
 
 				return
@@ -324,6 +352,14 @@ export function MapPanel() {
 				navigate({
 					to: './observations/$observationDocId',
 					params: { observationDocId: feature.properties.docId },
+					mask: {
+						to: './observations/$observationDocId',
+						params: { observationDocId: feature.properties.docId },
+						search: (prev) => ({
+							...prev,
+							highlightedDocument: undefined,
+						}),
+					},
 				})
 
 				return
@@ -347,6 +383,11 @@ export function MapPanel() {
 				navigate({
 					to: './tracks/$trackDocId',
 					params: { trackDocId: feature.properties.docId },
+					mask: {
+						to: './tracks/$trackDocId',
+						params: { trackDocId: feature.properties.docId },
+						search: (prev) => ({ ...prev, highlightedDocument: undefined }),
+					},
 				})
 
 				return
@@ -892,10 +933,18 @@ function CategoryIconMarker({
 	)
 }
 
-function observationsToFeatureCollection(
-	observations: Array<Observation>,
-	categories: Array<Preset>,
-) {
+function observationsToFeatureCollection({
+	categories,
+	filters,
+	observations,
+}: {
+	categories: Array<Preset>
+	observations: Array<Observation>
+	filters?: {
+		categories?: Array<string>
+		date?: DateFilter
+	}
+}) {
 	const displayablePoints: Array<
 		Feature<
 			Point,
@@ -907,11 +956,30 @@ function observationsToFeatureCollection(
 		if (typeof obs.lon === 'number' && typeof obs.lat === 'number') {
 			const category = getMatchingCategoryForDocument(obs, categories)
 
+			const categoryFilters = filters?.categories
+
+			const isVisible = isDocumentIncludedByFilters(
+				{ document: obs, category },
+				{
+					categories: categoryFilters
+						? categories.filter((c) => categoryFilters.includes(c.docId))
+						: categories,
+					date: filters?.date
+						? dateFilterToDateRange(
+								filters.date,
+								// TODO: Use a stable date
+								new Date(),
+							)
+						: undefined,
+				},
+			)
+
 			displayablePoints.push(
 				point([obs.lon, obs.lat], {
 					type: 'observation' as const,
 					docId: obs.docId,
 					categoryDocId: category?.docId,
+					visible: isVisible,
 				}),
 			)
 		}
@@ -977,6 +1045,16 @@ function createObservationLayerPaintProperty(
 			categoryColorPairs.length > 0
 				? ['match', ['get', 'categoryDocId'], ...categoryColorPairs, ORANGE]
 				: ORANGE,
+		'circle-opacity': [
+			'case',
+			[
+				'any',
+				['boolean', ['get', 'visible'], true],
+				['boolean', ['feature-state', 'highlight'], false],
+			],
+			1,
+			0.1,
+		],
 		'circle-radius': [
 			'case',
 			['boolean', ['feature-state', 'highlight'], false],

@@ -4,6 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import {
 	Outlet,
 	createFileRoute,
+	retainSearchParams,
 	useChildMatches,
 } from '@tanstack/react-router'
 import * as v from 'valibot'
@@ -27,6 +28,9 @@ const SearchParamsSchema = v.object({
 
 export const Route = createFileRoute('/app/projects/$projectId/_main-tabs')({
 	validateSearch: SearchParamsSchema,
+	// search: {
+	// 	middlewares: [retainSearchParams(['filters'])],
+	// },
 	loader: async ({ context, params }) => {
 		const {
 			projectApi,
