@@ -142,19 +142,12 @@ function RouteComponent() {
 		</Stack>
 	) : (
 		<>
-			{syncState ? (
-				<>
-					<Suspense>
-						<RemoteArchiveIndicator
-							projectId={projectId}
-							remoteDeviceIdsToExchangeWith={Object.keys(
-								syncState.remoteDeviceSyncState,
-							)}
-						/>
-					</Suspense>
+			<Suspense>
+				<RemoteArchiveIndicator projectId={projectId} />
+			</Suspense>
 
-					<DisplayedSyncState projectId={projectId} syncState={syncState} />
-				</>
+			{syncState ? (
+				<DisplayedSyncState projectId={projectId} syncState={syncState} />
 			) : (
 				<CircularProgress />
 			)}
@@ -321,21 +314,11 @@ function RouteComponent() {
 	)
 }
 
-function RemoteArchiveIndicator({
-	projectId,
-	remoteDeviceIdsToExchangeWith,
-}: {
-	projectId: string
-	remoteDeviceIdsToExchangeWith: Array<string>
-}) {
+function RemoteArchiveIndicator({ projectId }: { projectId: string }) {
 	const { formatMessage: t } = useIntl()
 	const { data: members } = useManyMembers({ projectId, includeLeft: false })
 
-	const activeRemoteArchives = members.filter(
-		(m) =>
-			memberIsRemoteArchive(m) &&
-			remoteDeviceIdsToExchangeWith.includes(m.deviceId),
-	)
+	const activeRemoteArchives = members.filter((m) => memberIsRemoteArchive(m))
 
 	const { online } = useBrowserNetInfo()
 
