@@ -82,26 +82,44 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs/')({
 			}),
 		])
 	},
-	onEnter: () => {
+	onEnter: ({ search }) => {
+		console.log('*** ENTER')
 		const categoryFilters = getItem('comapeo:filters:category') ?? undefined
 		const dateFilter = getItem('comapeo:filters:date') ?? undefined
 
+		console.log('*** DATE FILTER', dateFilter)
+
+		console.log('*** search', search)
+
+		const updatedFilters = {
+			...search.filters,
+			categories: categoryFilters,
+			dateFilter,
+		}
+
+		console.log('*** updatedfilters', updatedFilters)
 		throw redirect({
 			to: '.',
 			replace: true,
-			search: (prev) => {
-				const updatedFilters = {
-					...prev.filters,
-					categories: categoryFilters,
-					dateFilter,
-				}
+			search: Object.values(updatedFilters).some((v) => v !== undefined)
+				? { ...search, filters: updatedFilters }
+				: { ...search, filters: undefined },
 
-				if (Object.values(updatedFilters).some((v) => v !== undefined)) {
-					return { ...prev, filters: updatedFilters }
-				}
+			// search: (prev) => {
+			// 	const updatedFilters = {
+			// 		...prev.filters,
+			// 		categories: categoryFilters,
+			// 		dateFilter,
+			// 	}
 
-				return { ...prev, filters: undefined }
-			},
+			// 	console.log('*** UPDATED FILTERS', updatedFilters)
+
+			// 	if (Object.values(updatedFilters).some((v) => v !== undefined)) {
+			// 		return { ...prev, filters: updatedFilters }
+			// 	}
+
+			// 	return { ...prev, filters: undefined }
+			// },
 		})
 	},
 	component: RouteComponent,
