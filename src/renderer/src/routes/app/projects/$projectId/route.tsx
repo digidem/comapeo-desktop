@@ -10,6 +10,7 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
+import { captureException } from '@sentry/react'
 import { useIsMutating } from '@tanstack/react-query'
 import {
 	Outlet,
@@ -111,11 +112,17 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 
 		// NOTE: Update the active project ID whenever we navigate to a relevant project-specific page.
 		context.activeProjectIdStore.actions.update(params.projectId)
+
+		// NOTE: Enable connection to remote archives when entering a project-specific route
+		context.projectApi.$sync.connectServers().catch(captureException)
 	},
-	onLeave: () => {
+	onLeave: ({ context }) => {
 		window.localStorage.removeItem(
 			LOCAL_STORAGE_KEYS.USE_ACTIVE_PROJECT_ID_FOR_INITIAL_ROUTE,
 		)
+
+		// NOTE: Disconnect from remote archives when leaving a project-specific route
+		context.projectApi.$sync.disconnectServers().catch(captureException)
 	},
 	component: RouteComponent,
 })
