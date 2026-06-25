@@ -83,14 +83,20 @@ export const Route = createFileRoute(
 	},
 	onEnter: async ({ context }) => {
 		try {
-			await context.projectApi.$sync.setAutostopDataSyncTimeout(null)
+			await Promise.all([
+				context.projectApi.$sync.setAutostopDataSyncTimeout(null),
+				context.projectApi.$sync.connectServers(),
+			])
 		} catch (err) {
 			captureException(err)
 		}
 	},
 	onLeave: async ({ context }) => {
 		try {
-			await context.projectApi.$sync.setAutostopDataSyncTimeout(30_000)
+			await Promise.all([
+				context.projectApi.$sync.setAutostopDataSyncTimeout(30_000),
+				context.projectApi.$sync.disconnectServers(),
+			])
 		} catch (err) {
 			captureException(err)
 		}
@@ -146,12 +152,19 @@ function RouteComponent() {
 		</Stack>
 	) : (
 		<>
-			<Suspense>
-				<RemoteArchiveIndicator projectId={projectId} />
-			</Suspense>
-
 			{syncState ? (
-				<DisplayedSyncState projectId={projectId} syncState={syncState} />
+				<>
+					<Suspense>
+						<RemoteArchiveIndicator
+							projectId={projectId}
+							remoteDeviceIdsToExchangeWith={Object.keys(
+								syncState.remoteDeviceSyncState,
+							)}
+						/>
+					</Suspense>
+
+					<DisplayedSyncState projectId={projectId} syncState={syncState} />
+				</>
 			) : (
 				<CircularProgress />
 			)}
@@ -318,11 +331,21 @@ function RouteComponent() {
 	)
 }
 
-function RemoteArchiveIndicator({ projectId }: { projectId: string }) {
+function RemoteArchiveIndicator({
+	projectId,
+	remoteDeviceIdsToExchangeWith,
+}: {
+	projectId: string
+	remoteDeviceIdsToExchangeWith: Array<string>
+}) {
 	const { formatMessage: t } = useIntl()
 	const { data: members } = useManyMembers({ projectId, includeLeft: false })
 
-	const activeRemoteArchives = members.filter((m) => memberIsRemoteArchive(m))
+	const activeRemoteArchives = members.filter(
+		(m) =>
+			memberIsRemoteArchive(m) &&
+			remoteDeviceIdsToExchangeWith.includes(m.deviceId),
+	)
 
 	const { online } = useBrowserNetInfo()
 
