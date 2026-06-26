@@ -1,7 +1,7 @@
 import * as v from 'valibot'
 
 type LocalStorageKey =
-	| 'comapeo:filters:category'
+	| 'comapeo:filters:categories'
 	| 'comapeo:filters:date'
 	| 'comapeo:use_active_project_id_for_initial_route'
 
@@ -25,7 +25,7 @@ export const DateFilterSchema = v.variant('type', [
 export type DateFilter = v.InferOutput<typeof DateFilterSchema>
 
 const CodecMappings = {
-	'comapeo:filters:category': {
+	'comapeo:filters:categories': {
 		deserialize: v.pipe(v.string(), v.parseJson(), v.array(v.string())),
 		serialize: v.pipe(v.array(v.string()), v.stringifyJson()),
 	},

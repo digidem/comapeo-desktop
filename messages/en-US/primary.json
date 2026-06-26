@@ -235,29 +235,29 @@
     "description": "Fallback for when project is missing a name.",
     "message": "Unnamed Project"
   },
-  "$1.routes.app.projects.$projectId.-data-list.categoriesFiltersAdvanced": {
-    "description": "Text for button to clear all filters",
-    "message": "Advanced…"
-  },
-  "$1.routes.app.projects.$projectId.-data-list.categoryFilterAll": {
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterAll": {
     "description": "Text shown when all categories are being shown.",
     "message": "All Categories"
   },
-  "$1.routes.app.projects.$projectId.-data-list.categoryFilterDeselectAll": {
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterDeselectAll": {
     "description": "Text for button to deselect all categories.",
     "message": "Deselect All"
   },
-  "$1.routes.app.projects.$projectId.-data-list.categoryFilterLabel": {
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterLabel": {
     "description": "Text displayed describing the category filter input.",
     "message": "Filter by Category"
   },
-  "$1.routes.app.projects.$projectId.-data-list.categoryFilterSelectAll": {
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterSelectAll": {
     "description": "Text for button to select all categories.",
     "message": "Select All"
   },
-  "$1.routes.app.projects.$projectId.-data-list.categoryFilterValue": {
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterValue": {
     "description": "Text displayed describing the selected category filters.",
     "message": "{count, plural, =0 {0 categories} one {# category} other {# categories}}"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFiltersAdvanced": {
+    "description": "Text for button to clear all filters",
+    "message": "Advanced…"
   },
   "$1.routes.app.projects.$projectId.-data-list.clearFilters": {
     "description": "Text for button to clear all filters",
