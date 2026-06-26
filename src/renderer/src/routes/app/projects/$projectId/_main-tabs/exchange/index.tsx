@@ -81,19 +81,15 @@ export const Route = createFileRoute(
 			}),
 		])
 	},
-	onEnter: async ({ context }) => {
-		try {
-			await context.projectApi.$sync.setAutostopDataSyncTimeout(null)
-		} catch (err) {
-			captureException(err)
-		}
+	onEnter: ({ context }) => {
+		context.projectApi.$sync
+			.setAutostopDataSyncTimeout(null)
+			.catch(captureException)
 	},
 	onLeave: async ({ context }) => {
-		try {
-			await context.projectApi.$sync.setAutostopDataSyncTimeout(30_000)
-		} catch (err) {
-			captureException(err)
-		}
+		context.projectApi.$sync
+			.setAutostopDataSyncTimeout(30_000)
+			.catch(captureException)
 	},
 	component: RouteComponent,
 })
