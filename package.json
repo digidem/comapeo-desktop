@@ -174,7 +174,7 @@
 			"extract-zip": "npm:@electron-internal/extract-zip@1.0.4"
 		},
 		"@electron-forge/shared-types": {
-			"tar": "7.5.16"
+			"tar": "7.5.17"
 		},
 		"better-sqlite3": "12.11.1",
 		"tmp": "0.2.7"
