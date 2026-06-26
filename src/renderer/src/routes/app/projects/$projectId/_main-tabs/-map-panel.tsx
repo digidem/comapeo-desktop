@@ -87,6 +87,16 @@ const TRACKS_LAYER_LAYOUT: LineLayerSpecification['layout'] = {
 const TRACKS_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] = {
 	'line-color': BLACK,
 	'line-width': 4,
+	'line-opacity': [
+		'case',
+		[
+			'any',
+			['boolean', ['get', 'visible'], true],
+			['boolean', ['feature-state', 'highlight'], false],
+		],
+		1,
+		0.1,
+	],
 }
 const TRACKS_HOVER_OUTLINE_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] =
 	{
@@ -180,8 +190,12 @@ export function MapPanel({
 	}, [observations, categories, categoriesFilter, dateFilter])
 
 	const tracksFeatureCollection = useMemo(() => {
-		return tracksToFeatureCollection(tracks)
-	}, [tracks])
+		return tracksToFeatureCollection({
+			categories,
+			filters: { categories: categoriesFilter, date: dateFilter },
+			tracks,
+		})
+	}, [tracks, categories, categoriesFilter, dateFilter])
 
 	const observationsLayerPaint = useMemo(() => {
 		return createObservationLayerPaintProperty(categories)
@@ -923,7 +937,15 @@ function observationsToFeatureCollection({
 	return featureCollection(displayablePoints)
 }
 
-function tracksToFeatureCollection(tracks: Array<Track>) {
+function tracksToFeatureCollection({
+	categories,
+	filters,
+	tracks,
+}: {
+	categories: Array<Preset>
+	filters?: { categories?: Array<string>; date?: DateFilter }
+	tracks: Array<Track>
+}) {
 	const displayableTracks = []
 
 	for (const t of tracks) {
@@ -941,7 +963,31 @@ function tracksToFeatureCollection(tracks: Array<Track>) {
 			location.coords.latitude,
 		])
 
-		const featureProperties = { type: 'track' as const, docId: t.docId }
+		const category = getMatchingCategoryForDocument(t, categories)
+
+		const categoriesFilter = filters?.categories
+
+		const isVisible = isDocumentIncludedByFilters(
+			{ document: t, category },
+			{
+				categories: categoriesFilter
+					? categories.filter((c) => categoriesFilter.includes(c.docId))
+					: categories,
+				date: filters?.date
+					? dateFilterToDateRange(
+							filters.date,
+							// TODO: Use a stable date
+							new Date(),
+						)
+					: undefined,
+			},
+		)
+
+		const featureProperties = {
+			type: 'track' as const,
+			docId: t.docId,
+			visible: isVisible,
+		} as const
 
 		// NOTE: We still want to show tracks despite having only 1 location
 		// so we duplicate the lone point to make it a valid line string.
