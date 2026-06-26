@@ -23,7 +23,7 @@
     "description": "Character count for project name input.",
     "message": "{count}/{max}"
   },
-  "routes.app.projects.$projectId.-data-list.categoryFilterCategoryIconAlt": {
+  "routes.app.projects.$projectId.-data-list.categoriesFilterCategoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
   },

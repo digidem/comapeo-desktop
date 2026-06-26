@@ -73,7 +73,7 @@ type AdvancedFilters = v.InferOutput<typeof AdvancedFiltersSchema>
 
 export function AdvancedFiltersDialogContent({
 	categories,
-	categoryFilter,
+	categoriesFilter,
 	dateFilter,
 	nowTimestamp,
 	observationsWithCategory,
@@ -83,7 +83,7 @@ export function AdvancedFiltersDialogContent({
 	tracksWithCategory,
 }: {
 	categories: Array<Preset>
-	categoryFilter: Array<Preset>
+	categoriesFilter: Array<Preset>
 	dateFilter: DateFilter | undefined
 	nowTimestamp: number
 	observationsWithCategory: Array<{ document: Observation; category?: Preset }>
@@ -106,7 +106,7 @@ export function AdvancedFiltersDialogContent({
 	const defaultValues: AdvancedFilters = {
 		startDate: initialDateRange.start,
 		endDate: initialDateRange.end,
-		categories: categoryFilter,
+		categories: categoriesFilter,
 	}
 
 	const form = useAppForm({

@@ -4,33 +4,17 @@ import CircularProgress from '@mui/material/CircularProgress'
 import {
 	Outlet,
 	createFileRoute,
-	retainSearchParams,
 	useChildMatches,
+	useSearch,
 } from '@tanstack/react-router'
-import * as v from 'valibot'
 
 import { TwoPanelLayout } from '../../../-components/two-panel-layout.tsx'
 import { BLACK, LIGHT_GREY } from '../../../../../colors.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo.ts'
-import { DateFilterSchema } from '../../../../../lib/local-storage.ts'
 import { MapPanel } from './-map-panel.tsx'
-import { HighlightedDocumentSchema } from './-shared.ts'
-
-const SearchParamsSchema = v.object({
-	highlightedDocument: v.optional(HighlightedDocumentSchema),
-	filters: v.optional(
-		v.object({
-			categories: v.optional(v.array(v.string())),
-			date: v.optional(DateFilterSchema),
-		}),
-	),
-})
+import { type HighlightedDocument } from './-shared.ts'
 
 export const Route = createFileRoute('/app/projects/$projectId/_main-tabs')({
-	validateSearch: SearchParamsSchema,
-	// search: {
-	// 	middlewares: [retainSearchParams(['filters'])],
-	// },
 	loader: async ({ context, params }) => {
 		const {
 			projectApi,
@@ -82,6 +66,12 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs')({
 })
 
 function RouteComponent() {
+	const projectId = Route.useParams({
+		select: (value) => {
+			return value.projectId
+		},
+	})
+
 	const currentRoute = useChildMatches({
 		select: (matches) => {
 			return matches.at(-1)!
@@ -115,12 +105,110 @@ function RouteComponent() {
 							</Box>
 						}
 					>
-						<MapPanel />
+						<RouteAwareMapPanel projectId={projectId} />
 					</Suspense>
 				) : (
 					<Box sx={{ bgcolor: LIGHT_GREY, display: 'flex', flex: 1 }} />
 				)
 			}
+		/>
+	)
+}
+
+function RouteAwareMapPanel({ projectId }: { projectId: string }) {
+	const categoriesFilter = useSearch({
+		from: '/app/projects/$projectId/_main-tabs/',
+		select: (value) => {
+			// TODO: Filter out and warn about irrelevant categories?
+			return value?.filters?.categories
+		},
+		shouldThrow: false,
+	})
+
+	const dateFilter = useSearch({
+		from: '/app/projects/$projectId/_main-tabs/',
+		select: (value) => {
+			return value?.filters?.date
+		},
+		shouldThrow: false,
+	})
+
+	const documentFromRouteParams: HighlightedDocument | undefined =
+		useChildMatches({
+			select: (matches) => {
+				for (const m of matches) {
+					if (
+						m.fullPath ===
+							'/app/projects/$projectId/observations/$observationDocId/' ||
+						m.fullPath ===
+							'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
+					) {
+						return {
+							type: 'observation' as const,
+							docId: m.params.observationDocId,
+							from: 'list' as const,
+						}
+					}
+
+					if (m.fullPath === '/app/projects/$projectId/tracks/$trackDocId/') {
+						return {
+							type: 'track' as const,
+							docId: m.params.trackDocId,
+							from: 'list' as const,
+						}
+					}
+				}
+
+				return undefined
+			},
+		})
+
+	const documentFromSearchParams = useSearch({
+		from: '/app/projects/$projectId/_main-tabs/',
+		select: (value) => {
+			return value?.highlightedDocument
+		},
+		shouldThrow: false,
+	})
+
+	// Highlighting should occur under the following scenarios:
+	// 1. A feature on the map while on the main project page is hovered over.
+	// 2. A feature on the map while on the main project page is clicked on.
+	// 3. An observation or track in the list on the main project page is hovered over.
+	// 4. An observation or track in the list on the main project page is clicked on.
+	// 5. A specific observation's page is being viewed.
+	// 6. A specific track's page is being viewed.
+	const documentToHighlight =
+		documentFromRouteParams || documentFromSearchParams
+
+	const { allowHighlightedDocumentMarker, isDocumentRoute } = useChildMatches({
+		select: (matches) => {
+			const currentRoute = matches.at(-1)!
+
+			return {
+				allowHighlightedDocumentMarker:
+					currentRoute.fullPath === '/app/projects/$projectId/' ||
+					currentRoute.fullPath ===
+						'/app/projects/$projectId/observations/$observationDocId/' ||
+					currentRoute.fullPath ===
+						'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name',
+				isDocumentRoute:
+					currentRoute.fullPath ===
+						'/app/projects/$projectId/observations/$observationDocId/' ||
+					currentRoute.fullPath ===
+						'/app/projects/$projectId/tracks/$trackDocId/',
+			}
+		},
+	})
+
+	return (
+		<MapPanel
+			allowHighlightedDocumentMarker={allowHighlightedDocumentMarker}
+			categoriesFilter={categoriesFilter}
+			dateFilter={dateFilter}
+			documentToHighlight={documentToHighlight}
+			isDocumentRoute={isDocumentRoute}
+			projectId={projectId}
 		/>
 	)
 }

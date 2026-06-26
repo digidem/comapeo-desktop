@@ -8,8 +8,9 @@ import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
+import * as v from 'valibot'
 
 import { BLUE_GREY, DARKER_ORANGE } from '../../../../../colors.ts'
 import { Icon } from '../../../../../components/icon.tsx'
@@ -19,11 +20,68 @@ import {
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 } from '../../../../../lib/comapeo.ts'
-import { getItem } from '../../../../../lib/local-storage.ts'
+import {
+	DateFilterSchema,
+	getItem,
+	removeItem,
+	setItem,
+} from '../../../../../lib/local-storage.ts'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings.ts'
 import { DataList } from './-data-list.tsx'
+import { HighlightedDocumentSchema } from './-shared.ts'
+
+const SearchParamsSchema = v.object({
+	highlightedDocument: v.optional(HighlightedDocumentSchema),
+	filters: v.optional(
+		v.object({
+			categories: v.optional(v.array(v.string())),
+			date: v.optional(DateFilterSchema),
+		}),
+	),
+})
 
 export const Route = createFileRoute('/app/projects/$projectId/_main-tabs/')({
+	validateSearch: SearchParamsSchema,
+	beforeLoad: ({ cause, search }) => {
+		if (cause === 'enter') {
+			const routeHasNoSearchFilters =
+				!search?.filters || Object.keys(search.filters).length === 0
+
+			if (routeHasNoSearchFilters) {
+				const categoriesFilter =
+					getItem('comapeo:filters:categories') ?? undefined
+				const dateFilter = getItem('comapeo:filters:date') ?? undefined
+
+				if (categoriesFilter || dateFilter) {
+					throw Route.redirect({
+						replace: true,
+						search: (prev) => {
+							return {
+								...prev,
+								filters: { categories: categoriesFilter, date: dateFilter },
+							}
+						},
+					})
+				}
+			}
+
+			// NOTE: Update local storage using the values (or lack thereof from the route's search params)
+
+			// TODO: Filter out irrelevant categories first?
+			if (search.filters?.categories) {
+				setItem('comapeo:filters:categories', search.filters.categories)
+			} else {
+				removeItem('comapeo:filters:categories')
+			}
+
+			// TODO: Validate date range first?
+			if (search.filters?.date) {
+				setItem('comapeo:filters:date', search.filters.date)
+			} else {
+				removeItem('comapeo:filters:date')
+			}
+		}
+	},
 	loader: async ({ context, params }) => {
 		const {
 			projectApi,
@@ -81,46 +139,6 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs/')({
 				},
 			}),
 		])
-	},
-	onEnter: ({ search }) => {
-		console.log('*** ENTER')
-		const categoryFilters = getItem('comapeo:filters:category') ?? undefined
-		const dateFilter = getItem('comapeo:filters:date') ?? undefined
-
-		console.log('*** DATE FILTER', dateFilter)
-
-		console.log('*** search', search)
-
-		const updatedFilters = {
-			...search.filters,
-			categories: categoryFilters,
-			dateFilter,
-		}
-
-		console.log('*** updatedfilters', updatedFilters)
-		throw redirect({
-			to: '.',
-			replace: true,
-			search: Object.values(updatedFilters).some((v) => v !== undefined)
-				? { ...search, filters: updatedFilters }
-				: { ...search, filters: undefined },
-
-			// search: (prev) => {
-			// 	const updatedFilters = {
-			// 		...prev.filters,
-			// 		categories: categoryFilters,
-			// 		dateFilter,
-			// 	}
-
-			// 	console.log('*** UPDATED FILTERS', updatedFilters)
-
-			// 	if (Object.values(updatedFilters).some((v) => v !== undefined)) {
-			// 		return { ...prev, filters: updatedFilters }
-			// 	}
-
-			// 	return { ...prev, filters: undefined }
-			// },
-		})
 	},
 	component: RouteComponent,
 })
@@ -211,7 +229,7 @@ function RouteComponent() {
 		)
 	}
 
-	return <DataList projectId={projectId} />
+	return <RouteAwareDataList projectId={projectId} />
 }
 
 function IntroPanel({
@@ -261,6 +279,35 @@ function IntroPanel({
 				</Box>
 			</Stack>
 		</Stack>
+	)
+}
+
+function RouteAwareDataList({ projectId }: { projectId: string }) {
+	const categoriesFilter = Route.useSearch({
+		select: (value) => {
+			return value.filters?.categories
+		},
+	})
+
+	const dateFilter = Route.useSearch({
+		select: (value) => {
+			return value.filters?.date
+		},
+	})
+
+	const highlightedDocument = Route.useSearch({
+		select: (value) => {
+			return value.highlightedDocument
+		},
+	})
+
+	return (
+		<DataList
+			categoriesFilter={categoriesFilter}
+			dateFilter={dateFilter}
+			highlightedDocument={highlightedDocument}
+			projectId={projectId}
+		/>
 	)
 }
 
