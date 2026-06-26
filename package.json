@@ -108,7 +108,7 @@
 		"@formatjs/unplugin": "1.1.20",
 		"@ianvs/prettier-plugin-sort-imports": "4.7.1",
 		"@mui/material": "9.1.2",
-		"@mui/x-date-pickers": "9.5.0",
+		"@mui/x-date-pickers": "9.7.0",
 		"@playwright/test": "1.61.1",
 		"@reforged/maker-appimage": "5.2.0",
 		"@rolldown/plugin-babel": "0.2.3",
@@ -183,6 +183,7 @@
 	"allowScripts": {
 		"@sentry/cli@2.58.6": true,
 		"better-sqlite3": false,
+		"core-js-pure": false,
 		"electron-winstaller@5.4.4": true,
 		"fs-xattr@0.3.1": true,
 		"fsevents": false,
