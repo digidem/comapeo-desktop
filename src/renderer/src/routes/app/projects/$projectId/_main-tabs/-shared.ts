@@ -32,10 +32,15 @@ export const DateSearchParamsSchema = v.union([
 		]),
 	}),
 	// TODO: Potentially allow start or end to be optional
-	v.object({
-		start: v.pipe(v.string(), v.isoTimestamp()),
-		end: v.pipe(v.string(), v.isoTimestamp()),
-	}),
+	v.pipe(
+		v.object({
+			start: v.pipe(v.string(), v.isoTimestamp()),
+			end: v.pipe(v.string(), v.isoTimestamp()),
+		}),
+		v.check((input) => {
+			return isBefore(input.start, input.end)
+		}),
+	),
 	v.strictObject({}),
 ])
 
@@ -150,7 +155,6 @@ export function dateSearchParamsToFilter(
 
 		return value
 	} else if ('start' in params) {
-		// TODO: Validate date range first?
 		return { type: 'range', start: params.start, end: params.end }
 	}
 }

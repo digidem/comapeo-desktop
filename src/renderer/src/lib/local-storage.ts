@@ -1,3 +1,4 @@
+import { isBefore } from 'date-fns'
 import * as v from 'valibot'
 
 type LocalStorageKey =
@@ -6,11 +7,16 @@ type LocalStorageKey =
 	| 'comapeo:use_active_project_id_for_initial_route'
 
 export const DateFilterSchema = v.variant('type', [
-	v.object({
-		type: v.literal('range'),
-		start: v.pipe(v.string(), v.isoTimestamp()),
-		end: v.pipe(v.string(), v.isoTimestamp()),
-	}),
+	v.pipe(
+		v.object({
+			type: v.literal('range'),
+			start: v.pipe(v.string(), v.isoTimestamp()),
+			end: v.pipe(v.string(), v.isoTimestamp()),
+		}),
+		v.check((input) => {
+			return isBefore(input.start, input.end)
+		}),
+	),
 	v.object({
 		type: v.literal('same'),
 		unit: v.union([v.literal('month'), v.literal('year')]),
