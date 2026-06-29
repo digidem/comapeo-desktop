@@ -75,9 +75,10 @@ export function AdvancedFiltersDialogContent({
 	categories,
 	categoriesFilter,
 	dateFilter,
-	nowTimestamp,
+	filterReferenceDate,
 	observationsWithCategory,
 	onCancel,
+	onDateFilterChange,
 	onSubmit,
 	projectId,
 	tracksWithCategory,
@@ -85,9 +86,10 @@ export function AdvancedFiltersDialogContent({
 	categories: Array<Preset>
 	categoriesFilter: Array<Preset>
 	dateFilter: DateFilter | undefined
-	nowTimestamp: number
+	filterReferenceDate: Date
 	observationsWithCategory: Array<{ document: Observation; category?: Preset }>
 	onCancel: () => void
+	onDateFilterChange?: () => void
 	onSubmit: (values: { categories?: Array<Preset>; date?: DateFilter }) => void
 	projectId: string
 	tracksWithCategory: Array<{ document: Track; category?: Preset }>
@@ -100,7 +102,7 @@ export function AdvancedFiltersDialogContent({
 			return { start: null, end: null }
 		}
 
-		return dateFilterToDateRange(dateFilter, new Date(nowTimestamp))
+		return dateFilterToDateRange(dateFilter, filterReferenceDate || new Date())
 	})
 
 	const defaultValues: AdvancedFilters = {
@@ -240,7 +242,6 @@ export function AdvancedFiltersDialogContent({
 										return (
 											<DesktopDatePicker
 												disableFuture
-												// TODO: Should disable month and year too?
 												shouldDisableDate={(day) => {
 													if (isBefore(day, oldestSelectableDate)) {
 														return true
@@ -260,6 +261,8 @@ export function AdvancedFiltersDialogContent({
 													formField.handleChange(
 														value ? startOfDay(value) : null,
 													)
+
+													onDateFilterChange?.()
 												}}
 												slotProps={{
 													field: { clearable: true },
@@ -302,13 +305,11 @@ export function AdvancedFiltersDialogContent({
 											<DesktopDatePicker
 												label={t(m.advancedFiltersDateEndLabel)}
 												disableFuture
-												// TODO: Should disable month and year too?
 												shouldDisableDate={(day) => {
 													if (isBefore(day, oldestSelectableDate)) {
 														return true
 													}
 
-													// TODO: Allow picking older than selected start date?
 													const startDate = form.getFieldValue('startDate')
 
 													if (!startDate) {
@@ -319,6 +320,8 @@ export function AdvancedFiltersDialogContent({
 												}}
 												onChange={(value) => {
 													formField.handleChange(value ? endOfDay(value) : null)
+
+													onDateFilterChange?.()
 												}}
 												slotProps={{
 													field: { clearable: true },

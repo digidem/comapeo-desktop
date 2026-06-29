@@ -29,7 +29,9 @@ import { useRouter } from '@tanstack/react-router'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import {
 	addDays,
+	endOfToday,
 	formatISO,
+	max,
 	startOfMonth,
 	startOfYear,
 	subDays,
@@ -84,11 +86,13 @@ const APPROXIMATE_ITEM_HEIGHT_PX = CATEGORY_CONTAINER_SIZE_PX + 16 * 2 + 1
 export function DataList({
 	categoriesFilter,
 	dateFilter,
+	filterReferenceDate,
 	highlightedDocument,
 	projectId,
 }: {
 	categoriesFilter?: Array<string>
 	dateFilter?: DateFilter
+	filterReferenceDate?: Date
 	highlightedDocument?: HighlightedDocument
 	projectId: string
 }) {
@@ -139,15 +143,25 @@ export function DataList({
 		}))
 	}, [tracks, categories])
 
-	const sortedListData = useMemo(() => {
-		// TODO: Does this make sense?
-		const now = new Date()
+	// NOTE: Accounts for cases where the app is left open for a while
+	// and the user performs an interaction that relies on a more updated date value.
+	const [lastDateFilterInteractionDate, setLastDateFilterInteractionDate] =
+		useState<Date>(() => {
+			return filterReferenceDate || endOfToday()
+		})
 
+	const referenceDateToUse = filterReferenceDate
+		? max([filterReferenceDate, lastDateFilterInteractionDate])
+		: lastDateFilterInteractionDate
+
+	const sortedListData = useMemo(() => {
 		return [...observationsWithCategory, ...tracksWithCategory]
 			.filter((item) => {
 				return isDocumentIncludedByFilters(item, {
 					categories: filteredCategories,
-					date: dateFilter ? dateFilterToDateRange(dateFilter, now) : undefined,
+					date: dateFilter
+						? dateFilterToDateRange(dateFilter, referenceDateToUse)
+						: undefined,
 				})
 			})
 			.sort((a, b) => {
@@ -157,6 +171,7 @@ export function DataList({
 		dateFilter,
 		filteredCategories,
 		observationsWithCategory,
+		referenceDateToUse,
 		tracksWithCategory,
 	])
 
@@ -281,10 +296,6 @@ export function DataList({
 				captureException(err)
 			})
 	}
-
-	const [nowTimestamp, setNowTimestamp] = useState(() => {
-		return Date.now()
-	})
 
 	function unsetDateFilter() {
 		removeItem('comapeo:filters:date')
@@ -436,7 +447,7 @@ export function DataList({
 
 								<DateFilterSelect
 									value={dateFilter}
-									nowTimestamp={nowTimestamp}
+									todayDate={referenceDateToUse}
 									onAdvancedClick={() => {
 										setShowAdvancedFiltersDialog(true)
 									}}
@@ -446,7 +457,7 @@ export function DataList({
 										} else {
 											unsetDateFilter()
 										}
-										setNowTimestamp(Date.now())
+										setLastDateFilterInteractionDate(endOfToday())
 									}}
 								/>
 							</Stack>
@@ -721,9 +732,12 @@ export function DataList({
 						categories={categories}
 						categoriesFilter={filteredCategories}
 						dateFilter={dateFilter}
-						nowTimestamp={nowTimestamp}
+						filterReferenceDate={referenceDateToUse}
 						onCancel={() => {
 							setShowAdvancedFiltersDialog(undefined)
+						}}
+						onDateFilterChange={() => {
+							setLastDateFilterInteractionDate(endOfToday())
 						}}
 						onSubmit={(value) => {
 							if (value.categories) {
@@ -739,6 +753,7 @@ export function DataList({
 							}
 
 							setShowAdvancedFiltersDialog(undefined)
+							setLastDateFilterInteractionDate(endOfToday())
 						}}
 						projectId={projectId}
 						observationsWithCategory={observationsWithCategory}
@@ -1237,12 +1252,12 @@ function getDateFilterOptionDisplayedValue(
 }
 
 function DateFilterSelect({
-	nowTimestamp,
+	todayDate,
 	onAdvancedClick,
 	onChange,
 	value,
 }: {
-	nowTimestamp: number
+	todayDate: Date
 	onAdvancedClick: () => void
 	onChange: (value: DateFilter | null) => void
 	value: DateFilter | undefined
@@ -1271,7 +1286,7 @@ function DateFilterSelect({
 				displayedValue: t(m.dateFilterOptionFromStart),
 				inputValues: {
 					start: '',
-					end: formatISO(addDays(nowTimestamp, 1), { representation: 'date' }),
+					end: formatISO(addDays(todayDate, 1), { representation: 'date' }),
 				},
 			}
 		}
@@ -1294,10 +1309,10 @@ function DateFilterSelect({
 					id: `last-${value.value}-days` as const,
 					displayedValue,
 					inputValues: {
-						start: formatISO(subDays(nowTimestamp, value.value), {
+						start: formatISO(subDays(todayDate, value.value), {
 							representation: 'date',
 						}),
-						end: formatISO(addDays(nowTimestamp, 1), {
+						end: formatISO(addDays(todayDate, 1), {
 							representation: 'date',
 						}),
 					},
@@ -1306,22 +1321,22 @@ function DateFilterSelect({
 			case 'same': {
 				const startDate =
 					value.unit === 'month'
-						? startOfMonth(nowTimestamp)
-						: startOfYear(nowTimestamp)
+						? startOfMonth(todayDate)
+						: startOfYear(todayDate)
 
 				return {
 					id: `same-${value.unit}` as const,
 					displayedValue,
 					inputValues: {
 						start: formatISO(startDate, { representation: 'date' }),
-						end: formatISO(addDays(nowTimestamp, 1), {
+						end: formatISO(addDays(todayDate, 1), {
 							representation: 'date',
 						}),
 					},
 				}
 			}
 		}
-	}, [value, nowTimestamp, t])
+	}, [value, todayDate, t])
 
 	return (
 		<FilterSelect

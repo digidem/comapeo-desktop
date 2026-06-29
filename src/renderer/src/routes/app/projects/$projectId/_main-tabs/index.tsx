@@ -9,6 +9,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { endOfToday } from 'date-fns'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
@@ -155,6 +156,8 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs/')({
 				},
 			}),
 		])
+
+		return { todayDate: endOfToday() }
 	},
 	component: RouteComponent,
 })
@@ -299,6 +302,12 @@ function IntroPanel({
 }
 
 function RouteAwareDataList({ projectId }: { projectId: string }) {
+	const todayDate = Route.useLoaderData({
+		select: (data) => {
+			return data.todayDate
+		},
+	})
+
 	const categoriesFilter = Route.useSearch({
 		select: (value) => {
 			return value?.categories
@@ -321,6 +330,7 @@ function RouteAwareDataList({ projectId }: { projectId: string }) {
 		<DataList
 			categoriesFilter={categoriesFilter}
 			dateFilter={dateFilter}
+			filterReferenceDate={todayDate}
 			highlightedDocument={highlightedDocument}
 			projectId={projectId}
 		/>

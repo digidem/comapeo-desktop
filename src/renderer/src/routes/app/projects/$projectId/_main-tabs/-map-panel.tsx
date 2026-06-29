@@ -139,6 +139,7 @@ export function MapPanel({
 	categoriesFilter,
 	dateFilter,
 	documentToHighlight,
+	filterReferenceDate,
 	isDocumentRoute,
 	projectId,
 }: {
@@ -146,6 +147,7 @@ export function MapPanel({
 	categoriesFilter?: Array<string>
 	dateFilter?: DateFilter
 	documentToHighlight?: HighlightedDocument
+	filterReferenceDate?: Date
 	isDocumentRoute: boolean
 	projectId: string
 }) {
@@ -186,16 +188,24 @@ export function MapPanel({
 			categories,
 			filters: { categories: categoriesFilter, date: dateFilter },
 			observations,
+			referenceDate: filterReferenceDate || new Date(),
 		})
-	}, [observations, categories, categoriesFilter, dateFilter])
+	}, [
+		observations,
+		categories,
+		categoriesFilter,
+		dateFilter,
+		filterReferenceDate,
+	])
 
 	const tracksFeatureCollection = useMemo(() => {
 		return tracksToFeatureCollection({
 			categories,
 			filters: { categories: categoriesFilter, date: dateFilter },
 			tracks,
+			referenceDate: filterReferenceDate || new Date(),
 		})
-	}, [tracks, categories, categoriesFilter, dateFilter])
+	}, [tracks, categories, categoriesFilter, dateFilter, filterReferenceDate])
 
 	const observationsLayerPaint = useMemo(() => {
 		return createObservationLayerPaintProperty(categories)
@@ -886,10 +896,12 @@ function observationsToFeatureCollection({
 	categories,
 	filters,
 	observations,
+	referenceDate,
 }: {
 	categories: Array<Preset>
 	observations: Array<Observation>
 	filters?: { categories?: Array<string>; date?: DateFilter }
+	referenceDate: Date
 }) {
 	const displayablePoints: Array<
 		Feature<
@@ -911,11 +923,7 @@ function observationsToFeatureCollection({
 						? categories.filter((c) => categoriesFilter.includes(c.docId))
 						: categories,
 					date: filters?.date
-						? dateFilterToDateRange(
-								filters.date,
-								// TODO: Use a stable date
-								new Date(),
-							)
+						? dateFilterToDateRange(filters.date, referenceDate)
 						: undefined,
 				},
 			)
@@ -937,10 +945,12 @@ function observationsToFeatureCollection({
 function tracksToFeatureCollection({
 	categories,
 	filters,
+	referenceDate,
 	tracks,
 }: {
 	categories: Array<Preset>
 	filters?: { categories?: Array<string>; date?: DateFilter }
+	referenceDate: Date
 	tracks: Array<Track>
 }) {
 	const displayableTracks = []
@@ -971,11 +981,7 @@ function tracksToFeatureCollection({
 					? categories.filter((c) => categoriesFilter.includes(c.docId))
 					: categories,
 				date: filters?.date
-					? dateFilterToDateRange(
-							filters.date,
-							// TODO: Use a stable date
-							new Date(),
-						)
+					? dateFilterToDateRange(filters.date, referenceDate)
 					: undefined,
 			},
 		)

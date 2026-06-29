@@ -7,6 +7,7 @@ import {
 	useChildMatches,
 	useSearch,
 } from '@tanstack/react-router'
+import { endOfToday } from 'date-fns'
 
 import { TwoPanelLayout } from '../../../-components/two-panel-layout.tsx'
 import { BLACK, LIGHT_GREY } from '../../../../../colors.ts'
@@ -64,6 +65,8 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs')({
 				},
 			}),
 		])
+
+		return { todayDate: endOfToday() }
 	},
 	component: RouteComponent,
 })
@@ -119,6 +122,12 @@ function RouteComponent() {
 }
 
 function RouteAwareMapPanel({ projectId }: { projectId: string }) {
+	const todayDate = Route.useLoaderData({
+		select: (data) => {
+			return data.todayDate
+		},
+	})
+
 	const categoriesFilter = useSearch({
 		from: '/app/projects/$projectId/_main-tabs/',
 		select: (value) => {
@@ -210,6 +219,7 @@ function RouteAwareMapPanel({ projectId }: { projectId: string }) {
 			categoriesFilter={categoriesFilter}
 			dateFilter={dateFilter}
 			documentToHighlight={documentToHighlight}
+			filterReferenceDate={todayDate}
 			isDocumentRoute={isDocumentRoute}
 			projectId={projectId}
 		/>
