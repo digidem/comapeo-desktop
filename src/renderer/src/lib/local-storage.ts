@@ -1,10 +1,13 @@
 import { isBefore } from 'date-fns'
 import * as v from 'valibot'
 
-type LocalStorageKey =
-	| 'comapeo:filters:categories'
-	| 'comapeo:filters:date'
-	| 'comapeo:use_active_project_id_for_initial_route'
+const COMAPEO_KEY_PREFIX = 'comapeo' as const
+
+type ProjectScopedKeyPaths = 'filters/categories' | 'filters/date'
+
+type KeyPaths =
+	| 'use_active_project_id_for_initial_route'
+	| ProjectScopedKeyPaths
 
 export const DateFilterSchema = v.variant('type', [
 	v.pipe(
@@ -31,54 +34,73 @@ export const DateFilterSchema = v.variant('type', [
 export type DateFilter = v.InferOutput<typeof DateFilterSchema>
 
 const CodecMappings = {
-	'comapeo:filters:categories': {
+	'filters/categories': {
+		projectSpecific: true,
 		deserialize: v.pipe(v.string(), v.parseJson(), v.array(v.string())),
 		serialize: v.pipe(v.array(v.string()), v.stringifyJson()),
 	},
-	'comapeo:filters:date': {
+	'filters/date': {
+		projectSpecific: true,
 		deserialize: v.pipe(v.string(), v.parseJson(), DateFilterSchema),
 		serialize: v.pipe(DateFilterSchema, v.stringifyJson()),
 	},
-	'comapeo:use_active_project_id_for_initial_route': {
+	use_active_project_id_for_initial_route: {
+		projectSpecific: false,
 		deserialize: v.string(),
 		serialize: v.string(),
 	},
 } as const satisfies {
-	[K in LocalStorageKey]: {
+	[K in KeyPaths]: {
+		projectSpecific: boolean
 		deserialize: v.GenericSchema
 		serialize: v.GenericSchema
 	}
 }
 
 type KeyToSerializedValueMapping = {
-	[key in LocalStorageKey]: v.InferInput<
-		(typeof CodecMappings)[key]['serialize']
-	>
+	[key in KeyPaths]: v.InferInput<(typeof CodecMappings)[key]['serialize']>
 }
 
 type KeyToDeserializedValueMapping = {
-	[key in LocalStorageKey]: v.InferOutput<
-		(typeof CodecMappings)[key]['deserialize']
-	>
+	[key in KeyPaths]: v.InferOutput<(typeof CodecMappings)[key]['deserialize']>
 }
 
-export function setItem<K extends LocalStorageKey>(
-	key: K,
-	value: KeyToSerializedValueMapping[K],
+function getLocalStoragePrefix(projectId?: string) {
+	const base = `${COMAPEO_KEY_PREFIX}:`
+
+	if (projectId) {
+		return base + `${projectId}/`
+	}
+
+	return base
+}
+
+export function setItem<K extends KeyPaths>(
+	...args: K extends ProjectScopedKeyPaths
+		? [K, KeyToSerializedValueMapping[K], string]
+		: [K, KeyToSerializedValueMapping[K]]
 ) {
+	const [key, value, projectId] = args
+
 	const serialized = v.parse(CodecMappings[key]['serialize'], value)
 
-	localStorage.setItem(key, serialized)
+	localStorage.setItem(getLocalStoragePrefix(projectId) + key, serialized)
 }
 
-export function removeItem(key: keyof typeof CodecMappings) {
-	localStorage.removeItem(key)
+export function removeItem<K extends KeyPaths>(
+	...args: K extends ProjectScopedKeyPaths ? [K, string] : [K]
+) {
+	const [key, projectId] = args
+
+	localStorage.removeItem(getLocalStoragePrefix(projectId) + key)
 }
 
-export function getItem<K extends LocalStorageKey>(
-	key: K,
+export function getItem<K extends KeyPaths>(
+	...args: K extends ProjectScopedKeyPaths ? [K, string] : [K]
 ): KeyToDeserializedValueMapping[K] | null {
-	const raw = localStorage.getItem(key)
+	const [key, projectId] = args
+
+	const raw = localStorage.getItem(getLocalStoragePrefix(projectId) + key)
 
 	if (raw === null) {
 		return raw

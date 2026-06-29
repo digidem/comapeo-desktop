@@ -48,7 +48,7 @@ const SearchParamsSchema = v.fallback(
 
 export const Route = createFileRoute('/app/projects/$projectId/_main-tabs/')({
 	validateSearch: SearchParamsSchema,
-	beforeLoad: ({ cause, search }) => {
+	beforeLoad: ({ cause, params, search }) => {
 		if (cause === 'enter') {
 			let routeHasNoSearchFilters = true
 
@@ -62,8 +62,9 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs/')({
 
 			if (routeHasNoSearchFilters) {
 				const categoriesFilter =
-					getItem('comapeo:filters:categories') ?? undefined
-				const dateFilter = getItem('comapeo:filters:date') ?? undefined
+					getItem('filters/categories', params.projectId) ?? undefined
+				const dateFilter =
+					getItem('filters/date', params.projectId) ?? undefined
 
 				if (categoriesFilter || dateFilter) {
 					throw Route.redirect({
@@ -85,17 +86,17 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs/')({
 
 			// TODO: Filter out irrelevant categories first?
 			if (search.categories) {
-				setItem('comapeo:filters:categories', search.categories)
+				setItem('filters/categories', search.categories, params.projectId)
 			} else {
-				removeItem('comapeo:filters:categories')
+				removeItem('filters/categories', params.projectId)
 			}
 
 			const updatedDateFilter = dateSearchParamsToFilter(search)
 
 			if (updatedDateFilter) {
-				setItem('comapeo:filters:date', updatedDateFilter)
+				setItem('filters/date', updatedDateFilter, params.projectId)
 			} else {
-				removeItem('comapeo:filters:date')
+				removeItem('filters/date', params.projectId)
 			}
 		}
 	},
