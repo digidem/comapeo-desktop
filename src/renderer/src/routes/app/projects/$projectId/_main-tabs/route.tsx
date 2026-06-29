@@ -12,7 +12,10 @@ import { TwoPanelLayout } from '../../../-components/two-panel-layout.tsx'
 import { BLACK, LIGHT_GREY } from '../../../../../colors.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo.ts'
 import { MapPanel } from './-map-panel.tsx'
-import { type HighlightedDocument } from './-shared.ts'
+import {
+	dateSearchParamsToFilter,
+	type HighlightedDocument,
+} from './-shared.ts'
 
 export const Route = createFileRoute('/app/projects/$projectId/_main-tabs')({
 	loader: async ({ context, params }) => {
@@ -120,7 +123,7 @@ function RouteAwareMapPanel({ projectId }: { projectId: string }) {
 		from: '/app/projects/$projectId/_main-tabs/',
 		select: (value) => {
 			// TODO: Filter out and warn about irrelevant categories?
-			return value?.filters?.categories
+			return value?.categories
 		},
 		shouldThrow: false,
 	})
@@ -128,7 +131,7 @@ function RouteAwareMapPanel({ projectId }: { projectId: string }) {
 	const dateFilter = useSearch({
 		from: '/app/projects/$projectId/_main-tabs/',
 		select: (value) => {
-			return value?.filters?.date
+			return dateSearchParamsToFilter(value)
 		},
 		shouldThrow: false,
 	})
