@@ -248,7 +248,7 @@ export function DataList({
 	>(undefined)
 
 	function setCategoriesFilter(value: Array<string>) {
-		setItem('comapeo:filters:categories', value)
+		setItem('filters/categories', value, projectId)
 
 		router
 			.navigate({
@@ -264,7 +264,7 @@ export function DataList({
 	}
 
 	function unsetCategoriesFilter() {
-		removeItem('comapeo:filters:categories')
+		removeItem('filters/categories', projectId)
 
 		router
 			.navigate({
@@ -280,7 +280,7 @@ export function DataList({
 	}
 
 	function setDateFilter(value: DateFilter) {
-		setItem('comapeo:filters:date', value)
+		setItem('filters/date', value, projectId)
 
 		const dateSearchParams = dateFilterToSearchParams(value)
 
@@ -298,7 +298,7 @@ export function DataList({
 	}
 
 	function unsetDateFilter() {
-		removeItem('comapeo:filters:date')
+		removeItem('filters/date', projectId)
 
 		router
 			.navigate({
