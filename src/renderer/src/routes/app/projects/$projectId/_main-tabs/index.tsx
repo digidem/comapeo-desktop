@@ -21,31 +21,43 @@ import {
 	CREATOR_ROLE_ID,
 } from '../../../../../lib/comapeo.ts'
 import {
-	DateFilterSchema,
 	getItem,
 	removeItem,
 	setItem,
 } from '../../../../../lib/local-storage.ts'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings.ts'
 import { DataList } from './-data-list.tsx'
-import { HighlightedDocumentSchema } from './-shared.ts'
+import {
+	DateSearchParamsSchema,
+	HighlightedDocumentSchema,
+	dateFilterToSearchParams,
+	dateSearchParamsToFilter,
+} from './-shared.ts'
 
-const SearchParamsSchema = v.object({
-	highlightedDocument: v.optional(HighlightedDocumentSchema),
-	filters: v.optional(
+const SearchParamsSchema = v.fallback(
+	v.intersect([
 		v.object({
 			categories: v.optional(v.array(v.string())),
-			date: v.optional(DateFilterSchema),
+			highlightedDocument: v.optional(HighlightedDocumentSchema),
 		}),
-	),
-})
+		v.fallback(DateSearchParamsSchema, {}),
+	]),
+	{},
+)
 
 export const Route = createFileRoute('/app/projects/$projectId/_main-tabs/')({
 	validateSearch: SearchParamsSchema,
 	beforeLoad: ({ cause, search }) => {
 		if (cause === 'enter') {
-			const routeHasNoSearchFilters =
-				!search?.filters || Object.keys(search.filters).length === 0
+			let routeHasNoSearchFilters = true
+
+			if (search?.categories) {
+				routeHasNoSearchFilters = false
+			} else if ('period' in search) {
+				routeHasNoSearchFilters = false
+			} else if ('start' in search) {
+				routeHasNoSearchFilters = false
+			}
 
 			if (routeHasNoSearchFilters) {
 				const categoriesFilter =
@@ -58,7 +70,10 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs/')({
 						search: (prev) => {
 							return {
 								...prev,
-								filters: { categories: categoriesFilter, date: dateFilter },
+								...(dateFilter
+									? dateFilterToSearchParams(dateFilter)
+									: undefined),
+								categories: categoriesFilter,
 							}
 						},
 					})
@@ -68,15 +83,16 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs/')({
 			// NOTE: Update local storage using the values (or lack thereof from the route's search params)
 
 			// TODO: Filter out irrelevant categories first?
-			if (search.filters?.categories) {
-				setItem('comapeo:filters:categories', search.filters.categories)
+			if (search.categories) {
+				setItem('comapeo:filters:categories', search.categories)
 			} else {
 				removeItem('comapeo:filters:categories')
 			}
 
-			// TODO: Validate date range first?
-			if (search.filters?.date) {
-				setItem('comapeo:filters:date', search.filters.date)
+			const updatedDateFilter = dateSearchParamsToFilter(search)
+
+			if (updatedDateFilter) {
+				setItem('comapeo:filters:date', updatedDateFilter)
 			} else {
 				removeItem('comapeo:filters:date')
 			}
@@ -285,13 +301,13 @@ function IntroPanel({
 function RouteAwareDataList({ projectId }: { projectId: string }) {
 	const categoriesFilter = Route.useSearch({
 		select: (value) => {
-			return value.filters?.categories
+			return value?.categories
 		},
 	})
 
 	const dateFilter = Route.useSearch({
 		select: (value) => {
-			return value.filters?.date
+			return dateSearchParamsToFilter(value)
 		},
 	})
 

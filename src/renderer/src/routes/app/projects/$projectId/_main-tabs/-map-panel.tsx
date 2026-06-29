@@ -889,10 +889,7 @@ function observationsToFeatureCollection({
 }: {
 	categories: Array<Preset>
 	observations: Array<Observation>
-	filters?: {
-		categories?: Array<string>
-		date?: DateFilter
-	}
+	filters?: { categories?: Array<string>; date?: DateFilter }
 }) {
 	const displayablePoints: Array<
 		Feature<

@@ -19,6 +19,28 @@ export const HighlightedDocumentSchema = v.object({
 
 export type HighlightedDocument = v.InferInput<typeof HighlightedDocumentSchema>
 
+export const DateSearchParamsSchema = v.union([
+	v.object({
+		period: v.union([
+			// TODO: Support other units (hours, months, years, etc)
+			v.custom<`${number}d`>((input) => {
+				return typeof input === 'string' ? /^\d+d$/.test(input) : false
+			}),
+			// TODO: Support other units (day)
+			v.literal('same-month'),
+			v.literal('same-year'),
+		]),
+	}),
+	// TODO: Potentially allow start or end to be optional
+	v.object({
+		start: v.pipe(v.string(), v.isoTimestamp()),
+		end: v.pipe(v.string(), v.isoTimestamp()),
+	}),
+	v.strictObject({}),
+])
+
+type DateSearchParams = v.InferOutput<typeof DateSearchParamsSchema>
+
 type DateRange = { start: Date | null; end: Date }
 
 export function dateFilterToDateRange(
@@ -85,6 +107,52 @@ export function isDocumentIncludedByFilters(
 	}
 
 	return true
+}
+
+export function dateFilterToSearchParams(
+	filter: DateFilter,
+): DateSearchParams | undefined {
+	switch (filter.type) {
+		case 'range': {
+			return { start: filter.start, end: filter.end }
+		}
+		case 'relative': {
+			// TODO: Add support for other units
+			if (filter.unit !== 'days') {
+				return undefined
+			}
+
+			return { period: `${filter.value}d` }
+		}
+		case 'same': {
+			return { period: `same-${filter.unit}` }
+		}
+	}
+}
+
+export function dateSearchParamsToFilter(
+	params: DateSearchParams,
+): DateFilter | undefined {
+	if ('period' in params) {
+		let value: DateFilter
+
+		if (params.period === 'same-month') {
+			value = { type: 'same', unit: 'month' }
+		} else if (params.period === 'same-year') {
+			value = { type: 'same', unit: 'year' }
+		} else {
+			value = {
+				type: 'relative',
+				unit: 'days',
+				value: parseInt(params.period.replaceAll('d', ''), 10),
+			}
+		}
+
+		return value
+	} else if ('start' in params) {
+		// TODO: Validate date range first?
+		return { type: 'range', start: params.start, end: params.end }
+	}
 }
 
 export function isEqualByItemKey<T>(a: Array<T>, b: Array<T>, field: keyof T) {

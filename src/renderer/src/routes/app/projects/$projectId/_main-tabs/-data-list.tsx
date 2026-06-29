@@ -69,6 +69,7 @@ import { AdvancedFiltersDialogContent } from './-advanced-filters-dialog.tsx'
 import { FilterSelect } from './-filter-select.tsx'
 import {
 	dateFilterToDateRange,
+	dateFilterToSearchParams,
 	isDocumentIncludedByFilters,
 	isEqualByItemKey,
 	type HighlightedDocument,
@@ -239,7 +240,7 @@ export function DataList({
 				to: '.',
 				replace: true,
 				search: (prev) => {
-					return { ...prev, filters: { ...prev.filters, categories: value } }
+					return { ...prev, categories: value }
 				},
 			})
 			.catch((err) => {
@@ -255,13 +256,7 @@ export function DataList({
 				to: '.',
 				replace: true,
 				search: (prev) => {
-					const updatedFilters = { ...prev.filters, categories: undefined }
-
-					if (Object.values(updatedFilters).some((v) => v !== undefined)) {
-						return { ...prev, filters: updatedFilters }
-					}
-
-					return { ...prev, filters: undefined }
+					return { ...prev, categories: undefined }
 				},
 			})
 			.catch((err) => {
@@ -272,12 +267,14 @@ export function DataList({
 	function setDateFilter(value: DateFilter) {
 		setItem('comapeo:filters:date', value)
 
+		const dateSearchParams = dateFilterToSearchParams(value)
+
 		router
 			.navigate({
 				to: '.',
 				replace: true,
 				search: (prev) => {
-					return { ...prev, filters: { ...prev.filters, date: value } }
+					return { ...prev, ...dateSearchParams }
 				},
 			})
 			.catch((err) => {
@@ -297,13 +294,12 @@ export function DataList({
 				to: '.',
 				replace: true,
 				search: (prev) => {
-					const updatedFilters = { ...prev.filters, date: undefined }
-
-					if (Object.values(updatedFilters).some((v) => v !== undefined)) {
-						return { ...prev, filters: updatedFilters }
+					return {
+						...prev,
+						period: undefined,
+						start: undefined,
+						end: undefined,
 					}
-
-					return { ...prev, filters: undefined }
 				},
 			})
 			.catch((err) => {
