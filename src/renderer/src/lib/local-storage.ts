@@ -46,8 +46,18 @@ const CodecMappings = {
 	},
 	use_active_project_id_for_initial_route: {
 		projectSpecific: false,
-		deserialize: v.string(),
-		serialize: v.string(),
+		deserialize: v.pipe(
+			v.union([v.literal('true'), v.literal('false')]),
+			v.transform((input) => {
+				return input === 'true'
+			}),
+		),
+		serialize: v.pipe(
+			v.boolean(),
+			v.transform((input) => {
+				return input ? 'true' : 'false'
+			}),
+		),
 	},
 } as const satisfies {
 	[K in KeyPaths]: {
