@@ -20,12 +20,7 @@ import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { captureMessage } from '@sentry/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import {
-	useChildMatches,
-	useNavigate,
-	useParams,
-	useSearch,
-} from '@tanstack/react-router'
+import { useRouter } from '@tanstack/react-router'
 import { bbox } from '@turf/bbox'
 import { center } from '@turf/center'
 import { featureCollection, lineString, point } from '@turf/helpers'
@@ -62,11 +57,16 @@ import {
 import { Map } from '../../../../../components/map.tsx'
 import { useNetworkAwareMapStyleUrl } from '../../../../../hooks/maps.ts'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo.ts'
+import type { DateFilter } from '../../../../../lib/local-storage.ts'
 import {
 	getLocaleStateQueryOptions,
 	getUnitSystemQueryOptions,
 } from '../../../../../lib/queries/app-settings.ts'
-import type { HighlightedDocument } from './-shared.ts'
+import {
+	dateFilterToDateRange,
+	isDocumentIncludedByFilters,
+	type HighlightedDocument,
+} from './-shared.ts'
 
 // TODO: Move to lib/colors
 const SHADOW_COLOR = '#686868'
@@ -87,6 +87,16 @@ const TRACKS_LAYER_LAYOUT: LineLayerSpecification['layout'] = {
 const TRACKS_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] = {
 	'line-color': BLACK,
 	'line-width': 4,
+	'line-opacity': [
+		'case',
+		[
+			'any',
+			['boolean', ['get', 'visible'], true],
+			['boolean', ['feature-state', 'highlight'], false],
+		],
+		1,
+		0.1,
+	],
 }
 const TRACKS_HOVER_OUTLINE_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] =
 	{
@@ -124,65 +134,28 @@ const BASE_FIT_BOUNDS_OPTIONS: FitBoundsOptions = {
 	linear: true,
 }
 
-export function MapPanel() {
+export function MapPanel({
+	allowHighlightedDocumentMarker,
+	categoriesFilter,
+	dateFilter,
+	documentToHighlight,
+	filterReferenceDate,
+	isDocumentRoute,
+	projectId,
+}: {
+	allowHighlightedDocumentMarker: boolean
+	categoriesFilter?: Array<string>
+	dateFilter?: DateFilter
+	documentToHighlight?: HighlightedDocument
+	filterReferenceDate?: Date
+	isDocumentRoute: boolean
+	projectId: string
+}) {
+	const router = useRouter()
+
 	const { formatMessage: t } = useIntl()
 
-	const navigate = useNavigate({ from: '/app/projects/$projectId/' })
-
-	const { projectId } = useParams({
-		from: '/app/projects/$projectId/_main-tabs',
-	})
-
-	const { highlightedDocument: documentFromSearch } = useSearch({
-		from: '/app/projects/$projectId/_main-tabs',
-	})
-
 	const [mapLoaded, setMapLoaded] = useState(false)
-
-	const currentRoute = useChildMatches({
-		select: (matches) => {
-			return matches.at(-1)!
-		},
-	})
-
-	const documentFromRouteParams: HighlightedDocument | undefined =
-		useChildMatches({
-			select: (matches) => {
-				for (const m of matches) {
-					if (
-						m.fullPath ===
-							'/app/projects/$projectId/observations/$observationDocId/' ||
-						m.fullPath ===
-							'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
-					) {
-						return {
-							type: 'observation' as const,
-							docId: m.params.observationDocId,
-							from: 'list' as const,
-						}
-					}
-
-					if (m.fullPath === '/app/projects/$projectId/tracks/$trackDocId/') {
-						return {
-							type: 'track' as const,
-							docId: m.params.trackDocId,
-							from: 'list' as const,
-						}
-					}
-				}
-
-				return undefined
-			},
-		})
-
-	// Highlighting should occur under the following scenarios:
-	// 1. A feature on the map while on the main project page is hovered over.
-	// 2. A feature on the map while on the main project page is clicked on.
-	// 3. An observation or track in the list on the main project page is hovered over.
-	// 4. An observation or track in the list on the main project page is clicked on.
-	// 5. A specific observation's page is being viewed.
-	// 6. A specific track's page is being viewed.
-	const documentToHighlight = documentFromRouteParams || documentFromSearch
 
 	const mapRef = useRef<MapRef>(null)
 
@@ -211,12 +184,28 @@ export function MapPanel() {
 	const mapStyleUrl = useNetworkAwareMapStyleUrl(originalStyleUrl)
 
 	const observationsFeatureCollection = useMemo(() => {
-		return observationsToFeatureCollection(observations, categories)
-	}, [observations, categories])
+		return observationsToFeatureCollection({
+			categories,
+			filters: { categories: categoriesFilter, date: dateFilter },
+			observations,
+			referenceDate: filterReferenceDate || new Date(),
+		})
+	}, [
+		observations,
+		categories,
+		categoriesFilter,
+		dateFilter,
+		filterReferenceDate,
+	])
 
 	const tracksFeatureCollection = useMemo(() => {
-		return tracksToFeatureCollection(tracks)
-	}, [tracks])
+		return tracksToFeatureCollection({
+			categories,
+			filters: { categories: categoriesFilter, date: dateFilter },
+			tracks,
+			referenceDate: filterReferenceDate || new Date(),
+		})
+	}, [tracks, categories, categoriesFilter, dateFilter, filterReferenceDate])
 
 	const observationsLayerPaint = useMemo(() => {
 		return createObservationLayerPaintProperty(categories)
@@ -291,7 +280,10 @@ export function MapPanel() {
 
 			if (!feature) {
 				if (documentToHighlight) {
-					navigate({ search: { highlightedDocument: undefined } })
+					router.navigate({
+						to: '.',
+						search: (prev) => ({ ...prev, highlightedDocument: undefined }),
+					})
 				}
 
 				return
@@ -321,9 +313,20 @@ export function MapPanel() {
 					)
 				}
 
-				navigate({
-					to: './observations/$observationDocId',
-					params: { observationDocId: feature.properties.docId },
+				router.navigate({
+					to: '/app/projects/$projectId/observations/$observationDocId',
+					params: {
+						projectId,
+						observationDocId: feature.properties.docId,
+					},
+					mask: {
+						to: '/app/projects/$projectId/observations/$observationDocId',
+						params: { projectId, observationDocId: feature.properties.docId },
+						search: (prev) => ({
+							...prev,
+							highlightedDocument: undefined,
+						}),
+					},
 				})
 
 				return
@@ -344,9 +347,14 @@ export function MapPanel() {
 					)
 				}
 
-				navigate({
-					to: './tracks/$trackDocId',
-					params: { trackDocId: feature.properties.docId },
+				router.navigate({
+					to: '/app/projects/$projectId/tracks/$trackDocId',
+					params: { projectId, trackDocId: feature.properties.docId },
+					mask: {
+						to: '/app/projects/$projectId/tracks/$trackDocId',
+						params: { projectId, trackDocId: feature.properties.docId },
+						search: (prev) => ({ ...prev, highlightedDocument: undefined }),
+					},
 				})
 
 				return
@@ -356,9 +364,10 @@ export function MapPanel() {
 			documentToHighlight,
 			moveMapToObservation,
 			moveMapToTrack,
-			navigate,
 			observationsFeatureCollection,
 			tracksFeatureCollection,
+			router,
+			projectId,
 		],
 	)
 
@@ -448,7 +457,6 @@ export function MapPanel() {
 
 				// NOTE: Highlight the associated track as well
 				if (trackDocIdToHighlight) {
-					// highlightTrack(trackDocIdToHighlight, mapInstance)
 					mapInstance.setFeatureState(
 						{ source: TRACKS_SOURCE_ID, id: trackDocIdToHighlight },
 						{ highlight: true },
@@ -745,11 +753,7 @@ export function MapPanel() {
 					/>
 				</Source>
 
-				{(currentRoute.fullPath === '/app/projects/$projectId/' ||
-					currentRoute.fullPath ===
-						'/app/projects/$projectId/observations/$observationDocId/' ||
-					currentRoute.fullPath ===
-						'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name') &&
+				{allowHighlightedDocumentMarker &&
 				highlightedFeature &&
 				highlightedFeature.geometry.type === 'Point' &&
 				highlightedFeature.properties.type === 'observation' ? (
@@ -789,11 +793,7 @@ export function MapPanel() {
 					</Marker>
 				) : null}
 
-				{(currentRoute.fullPath ===
-					'/app/projects/$projectId/observations/$observationDocId/' ||
-					currentRoute.fullPath ===
-						'/app/projects/$projectId/tracks/$trackDocId/') &&
-				!highlightedFeature ? (
+				{isDocumentRoute && !highlightedFeature ? (
 					<Box
 						sx={{
 							position: 'absolute',
@@ -892,10 +892,17 @@ function CategoryIconMarker({
 	)
 }
 
-function observationsToFeatureCollection(
-	observations: Array<Observation>,
-	categories: Array<Preset>,
-) {
+function observationsToFeatureCollection({
+	categories,
+	filters,
+	observations,
+	referenceDate,
+}: {
+	categories: Array<Preset>
+	observations: Array<Observation>
+	filters?: { categories?: Array<string>; date?: DateFilter }
+	referenceDate: Date
+}) {
 	const displayablePoints: Array<
 		Feature<
 			Point,
@@ -907,11 +914,26 @@ function observationsToFeatureCollection(
 		if (typeof obs.lon === 'number' && typeof obs.lat === 'number') {
 			const category = getMatchingCategoryForDocument(obs, categories)
 
+			const categoriesFilter = filters?.categories
+
+			const isVisible = isDocumentIncludedByFilters(
+				{ document: obs, category },
+				{
+					categories: categoriesFilter
+						? categories.filter((c) => categoriesFilter.includes(c.docId))
+						: categories,
+					date: filters?.date
+						? dateFilterToDateRange(filters.date, referenceDate)
+						: undefined,
+				},
+			)
+
 			displayablePoints.push(
 				point([obs.lon, obs.lat], {
 					type: 'observation' as const,
 					docId: obs.docId,
 					categoryDocId: category?.docId,
+					visible: isVisible,
 				}),
 			)
 		}
@@ -920,7 +942,17 @@ function observationsToFeatureCollection(
 	return featureCollection(displayablePoints)
 }
 
-function tracksToFeatureCollection(tracks: Array<Track>) {
+function tracksToFeatureCollection({
+	categories,
+	filters,
+	referenceDate,
+	tracks,
+}: {
+	categories: Array<Preset>
+	filters?: { categories?: Array<string>; date?: DateFilter }
+	referenceDate: Date
+	tracks: Array<Track>
+}) {
 	const displayableTracks = []
 
 	for (const t of tracks) {
@@ -938,7 +970,27 @@ function tracksToFeatureCollection(tracks: Array<Track>) {
 			location.coords.latitude,
 		])
 
-		const featureProperties = { type: 'track' as const, docId: t.docId }
+		const category = getMatchingCategoryForDocument(t, categories)
+
+		const categoriesFilter = filters?.categories
+
+		const isVisible = isDocumentIncludedByFilters(
+			{ document: t, category },
+			{
+				categories: categoriesFilter
+					? categories.filter((c) => categoriesFilter.includes(c.docId))
+					: categories,
+				date: filters?.date
+					? dateFilterToDateRange(filters.date, referenceDate)
+					: undefined,
+			},
+		)
+
+		const featureProperties = {
+			type: 'track' as const,
+			docId: t.docId,
+			visible: isVisible,
+		} as const
 
 		// NOTE: We still want to show tracks despite having only 1 location
 		// so we duplicate the lone point to make it a valid line string.
@@ -977,6 +1029,16 @@ function createObservationLayerPaintProperty(
 			categoryColorPairs.length > 0
 				? ['match', ['get', 'categoryDocId'], ...categoryColorPairs, ORANGE]
 				: ORANGE,
+		'circle-opacity': [
+			'case',
+			[
+				'any',
+				['boolean', ['get', 'visible'], true],
+				['boolean', ['feature-state', 'highlight'], false],
+			],
+			1,
+			0.1,
+		],
 		'circle-radius': [
 			'case',
 			['boolean', ['feature-state', 'highlight'], false],

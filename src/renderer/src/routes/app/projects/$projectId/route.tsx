@@ -33,7 +33,7 @@ import {
 	CREATOR_ROLE_ID,
 	MEMBER_ROLE_ID,
 } from '../../../../lib/comapeo.ts'
-import { LOCAL_STORAGE_KEYS } from '../../../../lib/constants.ts'
+import { removeItem, setItem } from '../../../../lib/local-storage.ts'
 import { GLOBAL_MUTATIONS_BASE_KEY } from '../../../../lib/queries/global-mutations.ts'
 
 export const Route = createFileRoute('/app/projects/$projectId')({
@@ -105,10 +105,7 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 	onEnter: ({ context, params }) => {
 		// NOTE: Used by the initial route (`/`) to determine whether we should use
 		// the persisted active project ID for redirecting when opening the app.
-		window.localStorage.setItem(
-			LOCAL_STORAGE_KEYS.USE_ACTIVE_PROJECT_ID_FOR_INITIAL_ROUTE,
-			'true',
-		)
+		setItem('use_active_project_id_for_initial_route', true)
 
 		// NOTE: Update the active project ID whenever we navigate to a relevant project-specific page.
 		context.activeProjectIdStore.actions.update(params.projectId)
@@ -117,9 +114,7 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 		context.projectApi.$sync.connectServers().catch(captureException)
 	},
 	onLeave: ({ context }) => {
-		window.localStorage.removeItem(
-			LOCAL_STORAGE_KEYS.USE_ACTIVE_PROJECT_ID_FOR_INITIAL_ROUTE,
-		)
+		removeItem('use_active_project_id_for_initial_route')
 
 		// NOTE: Disconnect from remote archives when leaving a project-specific route
 		context.projectApi.$sync.disconnectServers().catch(captureException)
