@@ -3,10 +3,7 @@ import * as v from 'valibot'
 export type SentryEnvironment = 'development' | 'qa' | 'production'
 
 export type AppType =
-	| 'development'
-	| 'internal'
-	| 'release-candidate'
-	| 'production'
+	'development' | 'internal' | 'release-candidate' | 'production'
 
 export const AppConfigSchema = v.object({
 	/** Indicates the application ID e.g. `app.comapeo` */
