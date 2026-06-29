@@ -35,17 +35,14 @@ export type DateFilter = v.InferOutput<typeof DateFilterSchema>
 
 const CodecMappings = {
 	'filters/categories': {
-		projectSpecific: true,
 		deserialize: v.pipe(v.string(), v.parseJson(), v.array(v.string())),
 		serialize: v.pipe(v.array(v.string()), v.stringifyJson()),
 	},
 	'filters/date': {
-		projectSpecific: true,
 		deserialize: v.pipe(v.string(), v.parseJson(), DateFilterSchema),
 		serialize: v.pipe(DateFilterSchema, v.stringifyJson()),
 	},
 	use_active_project_id_for_initial_route: {
-		projectSpecific: false,
 		deserialize: v.pipe(
 			v.union([v.literal('true'), v.literal('false')]),
 			v.transform((input) => {
@@ -61,7 +58,6 @@ const CodecMappings = {
 	},
 } as const satisfies {
 	[K in KeyPaths]: {
-		projectSpecific: boolean
 		deserialize: v.GenericSchema
 		serialize: v.GenericSchema
 	}
