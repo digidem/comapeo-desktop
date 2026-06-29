@@ -23,8 +23,13 @@ import {
 	defineMessages,
 	useIntl,
 } from 'react-intl'
+import { is } from 'valibot'
 
-import { DEFAULT_LANGUAGE_TAG } from '../../../shared/intl.ts'
+import {
+	DEFAULT_LANGUAGE_TAG,
+	SupportedLanguageTagSchema,
+	type SupportedLanguageTag,
+} from '../../../shared/intl.ts'
 import { CORNFLOWER_BLUE, ORANGE } from '../colors.ts'
 import { getLocaleStateQueryOptions } from '../lib/queries/app-settings.ts'
 import { getTranslatedMessagesQueryOptions } from '../lib/queries/intl.ts'
@@ -62,22 +67,32 @@ export function IntlProvider({ children }: PropsWithChildren) {
 		select: ({ value }) => value,
 	})
 
-	// NOTE: We always load the default language messages to use as a fallback for missing message keys
-	const { data: defaultLanguageMessages } = useSuspenseQuery(
-		getTranslatedMessagesQueryOptions(DEFAULT_LANGUAGE_TAG),
-	)
-
 	// NOTE: Prevents the suspense boundary from showing the fallback when we update the locale,
 	// avoiding a jarring UI flicker.
 	const deferredLocale = useDeferredValue(persistedLocale)
 
-	const { data: localeMessages } = useSuspenseQuery(
-		getTranslatedMessagesQueryOptions(deferredLocale),
+	const allLocales: Array<SupportedLanguageTag> = Array.from(
+		new Set([
+			deferredLocale,
+			...navigator.languages.filter((l) => is(SupportedLanguageTagSchema, l)),
+			// NOTE: We always load the default language messages to use as a fallback for missing message keys
+			'en-US',
+		]),
 	)
 
-	const combinedMessages = useMemo(() => {
-		return { ...defaultLanguageMessages, ...localeMessages }
-	}, [defaultLanguageMessages, localeMessages])
+	const combinedMessages = useSuspenseQueries({
+		queries: allLocales.map((l) => getTranslatedMessagesQueryOptions(l)),
+		combine: (results) => {
+			let combined: Record<string, unknown> = {}
+
+			// NOTE: Reverse results so that highest preference gets applied latest
+			for (const r of results.reverse()) {
+				combined = { ...combined, ...r.data }
+			}
+
+			return combined
+		},
+	})
 
 	useEffect(
 		function updateDocumentLang() {
