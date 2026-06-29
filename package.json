@@ -135,7 +135,7 @@
 		"@vitejs/plugin-react": "6.0.3",
 		"babel-plugin-react-compiler": "1.0.0",
 		"date-fns": "4.4.0",
-		"electron": "42.5.0",
+		"electron": "42.5.1",
 		"electron-playwright-helpers": "2.1.0",
 		"eslint": "10.6.0",
 		"eslint-plugin-formatjs": "6.4.16",
