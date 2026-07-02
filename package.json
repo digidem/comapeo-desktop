@@ -182,7 +182,7 @@
 	"allowScripts": {
 		"@sentry/cli@2.58.6": true,
 		"better-sqlite3": false,
-		"electron-winstaller@5.4.3": true,
+		"electron-winstaller@5.4.4": true,
 		"fs-xattr@0.3.1": true,
 		"fsevents": false,
 		"macos-alias@0.2.12": true,
