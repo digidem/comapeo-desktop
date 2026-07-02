@@ -1,10 +1,17 @@
-import type { ReactNode } from 'react'
-import Box from '@mui/material/Box'
+import { type ReactNode } from 'react'
 import { alpha } from '@mui/material/styles'
+import {
+	Group,
+	Panel,
+	Separator,
+	useDefaultLayout,
+} from 'react-resizable-panels'
 
 import { BLACK } from '../../../colors.ts'
 
 const BOX_SHADOW = `0px 5px 20px 0px ${alpha(BLACK, 0.25)}`
+
+const LOCALSTORAGE_SUFFIX = 'comapeo-project-panels'
 
 export function TwoPanelLayout({
 	start,
@@ -13,23 +20,28 @@ export function TwoPanelLayout({
 	start: ReactNode
 	end: ReactNode
 }) {
+	const { defaultLayout, onLayoutChanged } = useDefaultLayout({
+		id: LOCALSTORAGE_SUFFIX,
+		storage: localStorage,
+	})
+
 	return (
-		<Box sx={{ display: 'flex', flex: 1, overflow: 'auto' }}>
-			<Box
-				sx={{
-					display: 'flex',
-					overflow: 'auto',
-					boxShadow: BOX_SHADOW,
-					minWidth: 250,
-					flex: 1,
-					maxWidth: `min(calc(50%), 450px)`,
-					zIndex: 1,
-				}}
+		<Group defaultLayout={defaultLayout} onLayoutChanged={onLayoutChanged}>
+			<Panel
+				id="start"
+				minSize={280}
+				defaultSize="30%"
+				maxSize="75%"
+				style={{ boxShadow: BOX_SHADOW, display: 'flex', zIndex: 1 }}
 			>
 				{start}
-			</Box>
+			</Panel>
 
-			<Box sx={{ display: 'flex', flex: 1, overflow: 'auto' }}>{end}</Box>
-		</Box>
+			<Separator style={{ width: 1 }} />
+
+			<Panel id="end" style={{ display: 'flex', flex: 1 }}>
+				{end}
+			</Panel>
+		</Group>
 	)
 }

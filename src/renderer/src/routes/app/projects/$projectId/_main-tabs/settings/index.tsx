@@ -54,7 +54,7 @@ function RouteComponent() {
 					htmlColor={DARKER_ORANGE}
 				/>
 
-				<Typography variant="h1" sx={{ fontWeight: 500 }}>
+				<Typography variant="h1" sx={{ fontWeight: 500, textAlign: 'center' }}>
 					{t(m.navTitle)}
 				</Typography>
 			</Stack>

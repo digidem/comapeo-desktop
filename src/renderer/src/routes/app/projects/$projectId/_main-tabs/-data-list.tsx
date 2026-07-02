@@ -181,6 +181,7 @@ export function DataList({ projectId }: { projectId: string }) {
 						variant="outlined"
 						to="/app/projects/$projectId/download"
 						params={{ projectId }}
+						sx={{ maxWidth: 400 }}
 					>
 						{t(m.downloadObservations)}
 					</ButtonLink>
