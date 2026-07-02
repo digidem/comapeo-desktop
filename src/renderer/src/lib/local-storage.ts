@@ -6,8 +6,7 @@ const COMAPEO_KEY_PREFIX = 'comapeo' as const
 type ProjectScopedKeyPaths = 'filters/categories' | 'filters/date'
 
 type KeyPaths =
-	| 'use_active_project_id_for_initial_route'
-	| ProjectScopedKeyPaths
+	'use_active_project_id_for_initial_route' | ProjectScopedKeyPaths
 
 export const DateFilterSchema = v.variant('type', [
 	v.pipe(
