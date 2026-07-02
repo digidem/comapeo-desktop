@@ -1,6 +1,11 @@
 import { type ReactNode } from 'react'
 import { alpha } from '@mui/material/styles'
-import { Group, Panel, useDefaultLayout } from 'react-resizable-panels'
+import {
+	Group,
+	Panel,
+	Separator,
+	useDefaultLayout,
+} from 'react-resizable-panels'
 
 import { BLACK } from '../../../colors.ts'
 
@@ -31,6 +36,8 @@ export function TwoPanelLayout({
 			>
 				{start}
 			</Panel>
+
+			<Separator style={{ width: 1 }} />
 
 			<Panel id="end" style={{ display: 'flex', flex: 1 }}>
 				{end}
