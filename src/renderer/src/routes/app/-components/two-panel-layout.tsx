@@ -27,8 +27,6 @@ export function TwoPanelLayout({
 				minSize={280}
 				maxSize="75%"
 				style={{ boxShadow: BOX_SHADOW, display: 'flex', zIndex: 1 }}
-				// TODO: Consider using this
-				// groupResizeBehavior="preserve-pixel-size"
 			>
 				{start}
 			</Panel>
