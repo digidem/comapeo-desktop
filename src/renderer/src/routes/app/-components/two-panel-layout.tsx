@@ -25,6 +25,7 @@ export function TwoPanelLayout({
 			<Panel
 				id="start"
 				minSize={280}
+				defaultSize="30%"
 				maxSize="75%"
 				style={{ boxShadow: BOX_SHADOW, display: 'flex', zIndex: 1 }}
 			>
