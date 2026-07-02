@@ -323,6 +323,10 @@
     "description": "Title of the download observations page.",
     "message": "Download Observations"
   },
+  "$1.routes.app.projects.$projectId.download.selectDirectoryDialogActionLabel": {
+    "description": "Text used for action button in system dialog for selecting directory to use for download.",
+    "message": "Select"
+  },
   "$1.routes.app.projects.$projectId.download.successPanelDescriptionObservations": {
     "description": "Description text for success panel when downloading observations.",
     "message": "<b>All observations</b><br></br> have been downloaded to your device."
