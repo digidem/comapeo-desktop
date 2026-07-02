@@ -200,7 +200,9 @@ function DownloadForm({
 		}: {
 			dataToDownload: DataToDownload
 		}) => {
-			const selectDirectoryResult = await selectDirectory.mutateAsync(undefined)
+			const selectDirectoryResult = await selectDirectory.mutateAsync({
+				actionLabel: t(m.selectDirectoryDialogActionLabel),
+			})
 
 			if (!selectDirectoryResult) {
 				return undefined
@@ -474,6 +476,12 @@ const m = defineMessages({
 		id: '$1.routes.app.projects.$projectId.download.tracksOptionDescription',
 		defaultMessage: 'Text only as a GeoJSON file',
 		description: 'Description of tracks option.',
+	},
+	selectDirectoryDialogActionLabel: {
+		id: '$1.routes.app.projects.$projectId.download.selectDirectoryDialogActionLabel',
+		defaultMessage: 'Select',
+		description:
+			'Text used for action button in system dialog for selecting directory to use for download.',
 	},
 	successPanelTitle: {
 		id: '$1.routes.app.projects.$projectId.download.successPanelTitle',
