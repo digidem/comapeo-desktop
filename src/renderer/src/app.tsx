@@ -54,10 +54,6 @@ const MAIN_CONTENT_HEIGHT =
 
 const { coreClient, servicesClient } = initRpcClients()
 
-const getMapServerBaseUrl = async () => {
-	return new URL(await servicesClient.mapServer.getBaseUrl())
-}
-
 const localPeersStore = createLocalPeersStore({ coreClient })
 const activeProjectIdStore = createActiveProjectIdStore({
 	initialValue: window.runtime.getInitialProjectId(),
@@ -194,7 +190,7 @@ export function App() {
 										<ComapeoCoreProvider
 											clientApi={coreClient}
 											queryClient={queryClient}
-											getMapServerBaseUrl={getMapServerBaseUrl}
+											getMapServerBaseUrl={servicesClient.mapServer.getBaseUrl}
 										>
 											<LocalPeersStoreProvider value={localPeersStore}>
 												<WithAddedRouteContext>
