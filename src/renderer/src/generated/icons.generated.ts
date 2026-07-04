@@ -52,6 +52,8 @@ export const iconNames = [
 	'material-symbols-lists',
 	'material-symbols-schedule',
 	'material-symbols-square-foot',
+	'material-symbols-visibility-off',
+	'material-symbols-visibility',
 	'material-symbols-waving-hand',
 	'material-tablet-android',
 	'material-volume-up',

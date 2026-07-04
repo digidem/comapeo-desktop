@@ -522,11 +522,11 @@ export function DataList({
 														(f) => f !== category.docId,
 													)
 
-													setCategoriesFilter(
-														updatedFilter.length === 0
-															? allCategoryDocIds
-															: updatedFilter,
-													)
+													if (updatedFilter.length === 0) {
+														unsetCategoriesFilter()
+													} else {
+														setCategoriesFilter(updatedFilter)
+													}
 												}}
 											/>
 										)
