@@ -3,7 +3,8 @@ import * as v from 'valibot'
 
 const COMAPEO_KEY_PREFIX = 'comapeo' as const
 
-type ProjectScopedKeyPaths = 'filters/categories' | 'filters/date'
+type ProjectScopedKeyPaths =
+	'filters/categories' | 'filters/date' | 'map/show_omitted'
 
 type KeyPaths =
 	'use_active_project_id_for_initial_route' | ProjectScopedKeyPaths
@@ -40,6 +41,10 @@ const CodecMappings = {
 	'filters/date': {
 		deserialize: v.pipe(v.string(), v.parseJson(), DateFilterSchema),
 		serialize: v.pipe(DateFilterSchema, v.stringifyJson()),
+	},
+	'map/show_omitted': {
+		deserialize: v.pipe(v.string(), v.parseJson(), v.boolean()),
+		serialize: v.pipe(v.boolean(), v.stringifyJson()),
 	},
 	use_active_project_id_for_initial_route: {
 		deserialize: v.pipe(

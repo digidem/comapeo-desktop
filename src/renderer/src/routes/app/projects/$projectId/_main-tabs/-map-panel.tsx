@@ -51,13 +51,20 @@ import {
 } from '../../../../../components/category-icon.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
 import {
+	type OmittedVisibility,
+	ToggleOmittedVisibilityMapControl,
 	ZoomToDataMapControl,
 	ZoomToSelectedDocumentMapControl,
 } from '../../../../../components/map-controls.tsx'
 import { Map } from '../../../../../components/map.tsx'
 import { useNetworkAwareMapStyleUrl } from '../../../../../hooks/maps.ts'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo.ts'
-import type { DateFilter } from '../../../../../lib/local-storage.ts'
+import {
+	getItem,
+	removeItem,
+	setItem,
+	type DateFilter,
+} from '../../../../../lib/local-storage.ts'
 import {
 	getLocaleStateQueryOptions,
 	getUnitSystemQueryOptions,
@@ -642,6 +649,13 @@ export function MapPanel({
 		[documentToHighlight],
 	)
 
+	const [omittedVisibility, setOmittedVisibility] = useState<OmittedVisibility>(
+		() => {
+			const stored = getItem('map/show_omitted', projectId)
+			return stored ? 'visible' : 'hidden'
+		},
+	)
+
 	return (
 		<Box sx={{ position: 'relative', display: 'flex', flex: 1 }}>
 			{mapLoaded ? null : (
@@ -710,12 +724,42 @@ export function MapPanel({
 					/>
 				) : null}
 
+				{categoriesFilter || dateFilter ? (
+					<ToggleOmittedVisibilityMapControl
+						initialValue={omittedVisibility}
+						onToggle={() => {
+							setOmittedVisibility((prev) => {
+								const updatedValue = prev === 'hidden' ? 'visible' : 'hidden'
+
+								if (updatedValue === 'hidden') {
+									removeItem('map/show_omitted', projectId)
+								} else {
+									setItem(
+										'map/show_omitted',
+										updatedValue === 'visible',
+										projectId,
+									)
+								}
+
+								return updatedValue
+							})
+						}}
+						buttonTitle={t(m.toggleOmittedVisibility)}
+					/>
+				) : null}
+
 				<Source
 					type="geojson"
 					id={TRACKS_SOURCE_ID}
 					data={tracksFeatureCollection}
 					// NOTE: Need this in order for the feature-state querying to work when hovering
 					promoteId="docId"
+					filter={[
+						'case',
+						['boolean', omittedVisibility === 'visible'],
+						true,
+						['boolean', ['get', 'visible'], true],
+					]}
 				>
 					<Layer
 						type="line"
@@ -750,6 +794,12 @@ export function MapPanel({
 						type="circle"
 						id={OBSERVATIONS_LAYER_ID}
 						paint={observationsLayerPaint}
+						filter={[
+							'case',
+							['boolean', omittedVisibility === 'visible'],
+							true,
+							['boolean', ['get', 'visible'], true],
+						]}
 					/>
 				</Source>
 
@@ -1037,7 +1087,7 @@ function createObservationLayerPaintProperty(
 				['boolean', ['feature-state', 'highlight'], false],
 			],
 			1,
-			0.1,
+			0.2,
 		],
 		'circle-radius': [
 			'case',
@@ -1074,5 +1124,11 @@ const m = defineMessages({
 		defaultMessage: 'Cannot display feature',
 		description:
 			'Text displayed when map feature for selected data cannot be displayed',
+	},
+	toggleOmittedVisibility: {
+		id: '$1.routes.app.projects.$projectId.-map-panel.toggleOmittedVisibility',
+		defaultMessage: 'Toggle omitted visibility',
+		description:
+			'Text displayed when hovering over map control for toggling visibility of features omitted by filters.',
 	},
 })
