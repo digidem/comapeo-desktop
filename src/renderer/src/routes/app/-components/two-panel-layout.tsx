@@ -6,6 +6,7 @@ import {
 	Panel,
 	Separator,
 	useDefaultLayout,
+	usePanelRef,
 } from 'react-resizable-panels'
 
 import { BLACK, BLUE_GREY, LIGHT_GREY, WHITE } from '../../../colors.ts'
@@ -34,6 +35,7 @@ export function TwoPanelLayout({
 	})
 
 	const separatorRef = useRef<HTMLDivElement | null>(null)
+	const startPanelRef = usePanelRef()
 
 	return (
 		<Group
@@ -44,6 +46,7 @@ export function TwoPanelLayout({
 			style={{ position: 'relative' }}
 		>
 			<Panel
+				panelRef={startPanelRef}
 				id="start"
 				onResize={(panelSize) => {
 					if (separatorRef?.current) {
@@ -65,7 +68,28 @@ export function TwoPanelLayout({
 
 			<Separator
 				elementRef={separatorRef}
+				// NOTE: Have to override default arrow key behavior due to absolute positioning
+				onKeyDownCapture={(event) => {
+					if (!startPanelRef.current) {
+						return
+					}
+
+					if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
+						return
+					}
+
+					event.stopPropagation()
+
+					const currentSize = startPanelRef.current.getSize()
+
+					const moveByPixels = event.key === 'ArrowRight' ? 50 : -50
+
+					startPanelRef.current.resize(
+						`${currentSize.inPixels + moveByPixels}px`,
+					)
+				}}
 				style={{
+					alignSelf: 'center',
 					backgroundColor: WHITE,
 					borderBottomRightRadius: 4,
 					borderBottomWidth: 1,
@@ -77,8 +101,8 @@ export function TwoPanelLayout({
 					borderTopWidth: 1,
 					display: 'flex',
 					justifyContent: 'center',
+					margin: 'auto',
 					position: 'absolute',
-					top: '50%',
 					zIndex: 1,
 				}}
 			>
