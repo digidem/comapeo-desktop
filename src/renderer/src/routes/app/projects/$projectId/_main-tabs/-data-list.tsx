@@ -36,7 +36,7 @@ import {
 	startOfYear,
 	subDays,
 } from 'date-fns'
-import { isArrayEqual, isEqual } from 'radashi'
+import { counting, isArrayEqual, isEqual } from 'radashi'
 import { defineMessages, useIntl, type IntlShape } from 'react-intl'
 
 import {
@@ -142,6 +142,15 @@ export function DataList({
 			category: getMatchingCategoryForDocument(t, categories),
 		}))
 	}, [tracks, categories])
+
+	const groupedByCategoryCount = useMemo(() => {
+		const { _, ...result } = counting(
+			[...observations, ...tracks],
+			(document) => document.presetRef?.docId || '_',
+		)
+
+		return result
+	}, [observations, tracks])
 
 	// NOTE: Accounts for cases where the app is left open for a while
 	// and the user performs an interaction that relies on a more updated date value.
@@ -399,6 +408,7 @@ export function DataList({
 								</Tooltip>
 
 								<CategoriesFilterSelect
+									groupedByCategoryCount={groupedByCategoryCount}
 									selected={filteredCategories}
 									options={categories}
 									onAdvancedClick={() => {
@@ -1064,6 +1074,7 @@ function TrackCategory({
 }
 
 function CategoriesFilterSelect({
+	groupedByCategoryCount,
 	selected,
 	options,
 	onAdvancedClick,
@@ -1072,6 +1083,7 @@ function CategoriesFilterSelect({
 	onSelectAll,
 	projectId,
 }: {
+	groupedByCategoryCount: Record<string, number>
 	selected: Array<Preset>
 	options: Array<Preset>
 	onAdvancedClick: () => void
@@ -1147,6 +1159,8 @@ function CategoriesFilterSelect({
 			{options.map((category) => {
 				const isSelected = !!selected.find((f) => f.docId === category.docId)
 
+				const count = groupedByCategoryCount[category.docId] || 0
+
 				return (
 					<ListItemButton
 						key={category.docId}
@@ -1164,7 +1178,7 @@ function CategoriesFilterSelect({
 					>
 						<Stack
 							direction="row"
-							sx={{ alignItems: 'center', gap: 2, overflow: 'auto' }}
+							sx={{ alignItems: 'center', gap: 2, overflow: 'auto', flex: 1 }}
 						>
 							<Checkbox
 								checked={isSelected}
@@ -1172,7 +1186,15 @@ function CategoriesFilterSelect({
 								sx={{ padding: 0 }}
 							/>
 
-							<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
+							<Stack
+								direction="row"
+								sx={{
+									alignItems: 'center',
+									flex: 1,
+									gap: 2,
+									overflow: 'auto',
+								}}
+							>
 								<Box aria-hidden>
 									<CategoryIconContainer color={category.color || BLUE_GREY}>
 										{category.iconRef?.docId ? (
@@ -1212,12 +1234,33 @@ function CategoriesFilterSelect({
 
 								<Typography
 									sx={{
+										display: 'flex',
+										flex: 1,
+										flexDirection: 'row',
+										gap: 2,
 										overflow: 'hidden',
-										textOverflow: 'ellipsis',
-										whiteSpace: 'nowrap',
 									}}
 								>
-									{category.name}
+									<Typography
+										component="span"
+										variant="inherit"
+										sx={{
+											flex: 1,
+											overflow: 'hidden',
+											textOverflow: 'ellipsis',
+											whiteSpace: 'nowrap',
+										}}
+									>
+										{category.name}
+									</Typography>
+
+									<Typography
+										component="span"
+										variant="inherit"
+										color="textSecondary"
+									>
+										{count}
+									</Typography>
 								</Typography>
 							</Stack>
 						</Stack>

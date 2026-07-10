@@ -1,4 +1,4 @@
-import { useId, useState } from 'react'
+import { useId, useMemo, useState } from 'react'
 import type { Observation, Preset, Track } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -31,6 +31,7 @@ import {
 	isDocumentIncludedByFilters,
 	isEqualByItemKey,
 } from './-shared.ts'
+import { counting } from 'radashi'
 
 function isValidDateRange(start: Date, end: Date) {
 	return isEqual(start, end) || isBefore(start, end)
@@ -158,6 +159,15 @@ export function AdvancedFiltersDialogContent({
 			),
 		),
 	)
+
+	const groupedByCategoryCount = useMemo(() => {
+		const { _, ...result } = counting(
+			[...observationsWithCategory, ...tracksWithCategory],
+			(document) => document.category?.docId || '_',
+		)
+
+		return result
+	}, [observationsWithCategory, tracksWithCategory])
 
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
@@ -398,6 +408,9 @@ export function AdvancedFiltersDialogContent({
 														(c) => c.docId === category.docId,
 													)
 
+													const count =
+														groupedByCategoryCount[category.docId] || 0
+
 													return (
 														<FormControlLabel
 															disableTypography
@@ -409,10 +422,16 @@ export function AdvancedFiltersDialogContent({
 																	value={category.docId}
 																/>
 															}
+
 															label={
 																<Stack
 																	direction="row"
-																	sx={{ alignItems: 'center', gap: 2 }}
+																	sx={{
+																		alignItems: 'center',
+																		flex: 1,
+																		gap: 2,
+																		overflow: 'hidden',
+																	}}
 																>
 																	<Box aria-hidden>
 																		<CategoryIconContainer
@@ -442,7 +461,36 @@ export function AdvancedFiltersDialogContent({
 																		</CategoryIconContainer>
 																	</Box>
 
-																	<Typography>{category.name}</Typography>
+																	<Typography
+																		sx={{
+																			flex: 1,
+																			display: 'flex',
+																			flexDirection: 'row',
+																			overflow: 'hidden',
+																			gap: 2,
+																		}}
+																	>
+																		<Typography
+																			component="span"
+																			variant="inherit"
+																			sx={{
+																				flex: 1,
+																				overflow: 'hidden',
+																				textOverflow: 'ellipsis',
+																				whiteSpace: 'nowrap',
+																			}}
+																		>
+																			{category.name}
+																		</Typography>
+
+																		<Typography
+																			component="span"
+																			variant="inherit"
+																			color="textSecondary"
+																		>
+																			{count}
+																		</Typography>
+																	</Typography>
 																</Stack>
 															}
 															onChange={(_event, checked) => {
@@ -465,6 +513,7 @@ export function AdvancedFiltersDialogContent({
 																borderRadius: 2,
 																display: 'flex',
 																margin: 0,
+																overflow: 'auto',
 																padding: 2,
 																transition: (theme) =>
 																	theme.transitions.create('background-color'),
