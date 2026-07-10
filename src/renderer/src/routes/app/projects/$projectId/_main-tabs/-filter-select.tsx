@@ -21,7 +21,7 @@ export function FilterSelect({
 	onClose,
 	onOpen,
 }: PropsWithChildren<{
-	displayedValue: string
+	displayedValue: ReactNode
 	footer?: ReactNode
 	header?: ReactNode
 	hiddenInput: ReactNode

@@ -243,10 +243,6 @@
     "description": "Text for button to deselect all categories.",
     "message": "Deselect All"
   },
-  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterLabel": {
-    "description": "Text displayed describing the category filter input.",
-    "message": "Filter by Category"
-  },
   "$1.routes.app.projects.$projectId.-data-list.categoriesFilterSelectAll": {
     "description": "Text for button to select all categories.",
     "message": "Select All"
@@ -262,10 +258,6 @@
   "$1.routes.app.projects.$projectId.-data-list.clearFilters": {
     "description": "Text for button to clear all filters",
     "message": "Clear All"
-  },
-  "$1.routes.app.projects.$projectId.-data-list.dateFilterLabel": {
-    "description": "Text displayed describing the date filter input.",
-    "message": "Filter by Date"
   },
   "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionCustom": {
     "description": "Text for label used for custom date range option.",

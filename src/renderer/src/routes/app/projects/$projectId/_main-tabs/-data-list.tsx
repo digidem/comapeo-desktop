@@ -248,10 +248,6 @@ export function DataList({
 		multiplier: 1.25,
 	})
 
-	const filterIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'button',
-	})
-
 	const [showAdvancedFiltersDialog, setShowAdvancedFiltersDialog] = useState<
 		true | undefined
 	>(undefined)
@@ -391,86 +387,52 @@ export function DataList({
 						</Stack>
 
 						<Stack direction="row" sx={{ gap: 4, flex: 1, flexWrap: 'wrap' }}>
-							<Stack
-								direction="row"
-								sx={{ gap: 2, flex: 1, alignItems: 'center' }}
-							>
-								<Tooltip
-									title={t(m.categoriesFilterLabel)}
-									disableFocusListener
-									placement="bottom"
-								>
-									<Icon
-										name="material-symbols-apps"
-										htmlColor={BLUE_GREY}
-										size={filterIconSize}
-									/>
-								</Tooltip>
+							<CategoriesFilterSelect
+								groupedByCategoryCount={groupedByCategoryCount}
+								selected={filteredCategories}
+								options={categories}
+								onAdvancedClick={() => {
+									setShowAdvancedFiltersDialog(true)
+								}}
+								onDeselectAll={() => {
+									setCategoriesFilter([])
+								}}
+								onSelectAll={() => {
+									unsetCategoriesFilter()
+								}}
+								onChange={(action, value) => {
+									if (action === 'select') {
+										setCategoriesFilter(
+											categoriesFilter
+												? Array.from(new Set([...categoriesFilter, value]))
+												: [value],
+										)
+									} else {
+										setCategoriesFilter(
+											categoriesFilter
+												? categoriesFilter.filter((f) => f !== value)
+												: allCategoryDocIds.filter((id) => id !== value),
+										)
+									}
+								}}
+								projectId={projectId}
+							/>
 
-								<CategoriesFilterSelect
-									groupedByCategoryCount={groupedByCategoryCount}
-									selected={filteredCategories}
-									options={categories}
-									onAdvancedClick={() => {
-										setShowAdvancedFiltersDialog(true)
-									}}
-									onDeselectAll={() => {
-										setCategoriesFilter([])
-									}}
-									onSelectAll={() => {
-										unsetCategoriesFilter()
-									}}
-									onChange={(action, value) => {
-										if (action === 'select') {
-											setCategoriesFilter(
-												categoriesFilter
-													? Array.from(new Set([...categoriesFilter, value]))
-													: [value],
-											)
-										} else {
-											setCategoriesFilter(
-												categoriesFilter
-													? categoriesFilter.filter((f) => f !== value)
-													: allCategoryDocIds.filter((id) => id !== value),
-											)
-										}
-									}}
-									projectId={projectId}
-								/>
-							</Stack>
-
-							<Stack
-								direction="row"
-								sx={{ gap: 2, flex: 1, alignItems: 'center' }}
-							>
-								<Tooltip
-									title={t(m.dateFilterLabel)}
-									disableFocusListener
-									placement="bottom"
-								>
-									<Icon
-										name="material-symbols-schedule"
-										htmlColor={BLUE_GREY}
-										size={filterIconSize}
-									/>
-								</Tooltip>
-
-								<DateFilterSelect
-									value={dateFilter}
-									todayDate={referenceDateToUse}
-									onAdvancedClick={() => {
-										setShowAdvancedFiltersDialog(true)
-									}}
-									onChange={(value) => {
-										if (value) {
-											setDateFilter(value)
-										} else {
-											unsetDateFilter()
-										}
-										setLastDateFilterInteractionDate(endOfToday())
-									}}
-								/>
-							</Stack>
+							<DateFilterSelect
+								value={dateFilter}
+								todayDate={referenceDateToUse}
+								onAdvancedClick={() => {
+									setShowAdvancedFiltersDialog(true)
+								}}
+								onChange={(value) => {
+									if (value) {
+										setDateFilter(value)
+									} else {
+										unsetDateFilter()
+									}
+									setLastDateFilterInteractionDate(endOfToday())
+								}}
+							/>
 						</Stack>
 					</Stack>
 
@@ -1107,9 +1069,17 @@ function CategoriesFilterSelect({
 		<FilterSelect
 			multiSelect
 			displayedValue={
-				allSelected
-					? t(m.categoriesFilterAll)
-					: t(m.categoriesFilterValue, { count: selected.length })
+				<Stack direction="row" sx={{ gap: 2 }}>
+					<Icon
+						aria-hidden
+						name="material-symbols-apps"
+						htmlColor={BLUE_GREY}
+					/>
+
+					{allSelected
+						? t(m.categoriesFilterAll)
+						: t(m.categoriesFilterValue, { count: selected.length })}
+				</Stack>
 			}
 			hiddenInput={
 				<InputBase
@@ -1383,7 +1353,17 @@ function DateFilterSelect({
 
 	return (
 		<FilterSelect
-			displayedValue={selectedOption.displayedValue}
+			displayedValue={
+				<Stack direction="row" sx={{ gap: 2 }}>
+					<Icon
+						aria-hidden
+						name="material-symbols-schedule"
+						htmlColor={BLUE_GREY}
+					/>
+
+					{selectedOption.displayedValue}
+				</Stack>
+			}
 			hiddenInput={
 				<>
 					<InputBase
@@ -1738,11 +1718,6 @@ const m = defineMessages({
 		defaultMessage: 'Clear All',
 		description: 'Text for button to clear all filters',
 	},
-	categoriesFilterLabel: {
-		id: '$1.routes.app.projects.$projectId.-data-list.categoriesFilterLabel',
-		defaultMessage: 'Filter by Category',
-		description: 'Text displayed describing the category filter input.',
-	},
 	categoriesFilterValue: {
 		id: '$1.routes.app.projects.$projectId.-data-list.categoriesFilterValue',
 		defaultMessage:
@@ -1774,11 +1749,6 @@ const m = defineMessages({
 		id: '$1.routes.app.projects.$projectId.-data-list.categoriesFiltersAdvanced',
 		defaultMessage: 'Advanced…',
 		description: 'Text for button to clear all filters',
-	},
-	dateFilterLabel: {
-		id: '$1.routes.app.projects.$projectId.-data-list.dateFilterLabel',
-		defaultMessage: 'Filter by Date',
-		description: 'Text displayed describing the date filter input.',
 	},
 	dateFilterOptionFromStart: {
 		id: '$1.routes.app.projects.$projectId.-data-list.dateFilterOptionFromStart',
