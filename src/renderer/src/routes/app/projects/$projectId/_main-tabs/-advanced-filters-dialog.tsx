@@ -487,6 +487,9 @@ export function AdvancedFiltersDialogContent({
 																			component="span"
 																			variant="inherit"
 																			color="textSecondary"
+																			sx={{
+																				fontVariantNumeric: 'tabular-nums',
+																			}}
 																		>
 																			{count}
 																		</Typography>
