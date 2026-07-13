@@ -4,8 +4,6 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
-import { LocalizationProvider } from '@mui/x-date-pickers'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { init as initSentryElectron } from '@sentry/electron/renderer'
 import {
 	captureException,
@@ -164,55 +162,50 @@ export function App() {
 				<ActiveProjectIdStoreProvider value={activeProjectIdStore}>
 					<QueryClientProvider client={queryClient}>
 						<IntlProvider>
-							{/* TODO: Need to set this up more thoroughly */}
-							<LocalizationProvider dateAdapter={AdapterDateFns}>
-								<NetworkConnectionChangeListener />
+							<NetworkConnectionChangeListener />
 
-								<Box sx={{ height: '100dvh' }}>
-									{platform === 'darwin' ? (
-										<AppTitleBar platform={platform} testId="app-title-bar" />
-									) : null}
+							<Box sx={{ height: '100dvh' }}>
+								{platform === 'darwin' ? (
+									<AppTitleBar platform={platform} testId="app-title-bar" />
+								) : null}
 
-									<Box
-										id={DIALOG_CONTAINER_ID}
-										sx={{ height: MAIN_CONTENT_HEIGHT }}
-									>
-										<Suspense
-											fallback={
-												<Box
-													sx={{
-														display: 'flex',
-														justifyContent: 'center',
-														alignItems: 'center',
-														height: '100%',
-													}}
-												>
-													<CircularProgress />
-												</Box>
-											}
-										>
-											<ComapeoCoreProvider
-												clientApi={coreClient}
-												queryClient={queryClient}
-												getMapServerBaseUrl={
-													servicesClient.mapServer.getBaseUrl
-												}
+								<Box
+									id={DIALOG_CONTAINER_ID}
+									sx={{ height: MAIN_CONTENT_HEIGHT }}
+								>
+									<Suspense
+										fallback={
+											<Box
+												sx={{
+													display: 'flex',
+													justifyContent: 'center',
+													alignItems: 'center',
+													height: '100%',
+												}}
 											>
-												<LocalPeersStoreProvider value={localPeersStore}>
-													<WithAddedRouteContext>
-														{({ formatMessage, localeState }) => (
-															<RouterProvider
-																router={router}
-																context={{ formatMessage, localeState }}
-															/>
-														)}
-													</WithAddedRouteContext>
-												</LocalPeersStoreProvider>
-											</ComapeoCoreProvider>
-										</Suspense>
-									</Box>
+												<CircularProgress />
+											</Box>
+										}
+									>
+										<ComapeoCoreProvider
+											clientApi={coreClient}
+											queryClient={queryClient}
+											getMapServerBaseUrl={servicesClient.mapServer.getBaseUrl}
+										>
+											<LocalPeersStoreProvider value={localPeersStore}>
+												<WithAddedRouteContext>
+													{({ formatMessage, localeState }) => (
+														<RouterProvider
+															router={router}
+															context={{ formatMessage, localeState }}
+														/>
+													)}
+												</WithAddedRouteContext>
+											</LocalPeersStoreProvider>
+										</ComapeoCoreProvider>
+									</Suspense>
 								</Box>
-							</LocalizationProvider>
+							</Box>
 						</IntlProvider>
 					</QueryClientProvider>
 				</ActiveProjectIdStoreProvider>

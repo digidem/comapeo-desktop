@@ -5,7 +5,14 @@ import {
 	type ComponentProps,
 	type PropsWithChildren,
 } from 'react'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import {
+	queryOptions,
+	useSuspenseQueries,
+	useSuspenseQuery,
+} from '@tanstack/react-query'
+import type { Locale } from 'date-fns'
 import { IntlProvider as ReactIntlProvider } from 'react-intl'
 
 import { DEFAULT_LANGUAGE_TAG } from '../../../shared/intl.ts'
@@ -30,6 +37,11 @@ const RICH_TEXT_MAPPINGS: ComponentProps<
 	},
 }
 
+const DATE_FN_LOCALES = import.meta.glob<Locale>(['./*.js', '!./cdn.*'], {
+	base: '/../../node_modules/date-fns/locale/',
+	import: 'default',
+})
+
 export function IntlProvider({ children }: PropsWithChildren) {
 	const { data: persistedLocale } = useSuspenseQuery({
 		...getLocaleStateQueryOptions(),
@@ -48,6 +60,35 @@ export function IntlProvider({ children }: PropsWithChildren) {
 	const { data: localeMessages } = useSuspenseQuery(
 		getTranslatedMessagesQueryOptions(deferredLocale),
 	)
+
+	const dateFnLocale = useSuspenseQueries({
+		queries: Array.from(new Set([deferredLocale, 'en-US'])).map((l) =>
+			queryOptions({
+				queryKey: ['dateFnLocale', l] as const,
+				queryFn: async () => {
+					const baseTag = l.split('-')[0]!
+
+					const localePromise =
+						DATE_FN_LOCALES[`./${l}.js`] || DATE_FN_LOCALES[`./${baseTag}.js`]
+
+					return localePromise ? localePromise() : null
+				},
+				// Basically only want this to happen once.
+				staleTime: Infinity,
+				gcTime: Infinity,
+			}),
+		),
+		combine: (queries) => {
+			for (const q of queries) {
+				if (q.data !== null) {
+					return q.data
+				}
+			}
+
+			// NOTE: Shouldn't happen
+			throw new Error('All date-fn locale queries are missing data')
+		},
+	})
 
 	const combinedMessages = useMemo(() => {
 		return { ...defaultLanguageMessages, ...localeMessages }
@@ -68,7 +109,12 @@ export function IntlProvider({ children }: PropsWithChildren) {
 			defaultLocale={DEFAULT_LANGUAGE_TAG}
 			defaultRichTextElements={RICH_TEXT_MAPPINGS}
 		>
-			{children}
+			<LocalizationProvider
+				dateAdapter={AdapterDateFns}
+				adapterLocale={dateFnLocale}
+			>
+				{children}
+			</LocalizationProvider>
 		</ReactIntlProvider>
 	)
 }
