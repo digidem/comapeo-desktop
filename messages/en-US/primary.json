@@ -235,13 +235,69 @@
     "description": "Fallback for when project is missing a name.",
     "message": "Unnamed Project"
   },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterAll": {
+    "description": "Text shown when all categories are being shown.",
+    "message": "All Categories"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterDeselectAll": {
+    "description": "Text for button to deselect all categories.",
+    "message": "Deselect All"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterSelectAll": {
+    "description": "Text for button to select all categories.",
+    "message": "Select All"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterValue": {
+    "description": "Text displayed describing the selected category filters.",
+    "message": "{count, plural, =0 {0 categories} one {# category} other {# categories}}"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFiltersAdvanced": {
+    "description": "Text for button to clear all filters",
+    "message": "Advanced…"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.clearFilters": {
+    "description": "Text for button to clear all filters",
+    "message": "Clear All"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionCustom": {
+    "description": "Text for label used for custom date range option.",
+    "message": "{start, date, long} to {end, date, long}"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionFromStart": {
+    "description": "Text for option to show data from earliest starting date.",
+    "message": "From Start"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionLastNDays": {
+    "description": "Text for option to show data from the last N days.",
+    "message": "Last {count, number} Days"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionSame": {
+    "description": "Text for option to show data from the same month.",
+    "message": "Same Month"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionSameYear": {
+    "description": "Text for option to show data from the same year.",
+    "message": "Same Year"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterValueCustom": {
+    "description": "Text for value displayed when custom date range is selected.",
+    "message": "Custom"
+  },
   "$1.routes.app.projects.$projectId.-data-list.downloadObservations": {
     "description": "Link text to navigate to download observations page.",
     "message": "Download Observations"
   },
+  "$1.routes.app.projects.$projectId.-data-list.listTitle": {
+    "description": "Title for listed data page.",
+    "message": "List"
+  },
   "$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
     "message": "Observation"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.resultsCount": {
+    "description": "Number of items listed",
+    "message": "{count, plural, =0 {No results} one {# result} other {# results}}"
   },
   "$1.routes.app.projects.$projectId.-data-list.trackItemTitle": {
     "description": "Title for list item that is a track.",
@@ -250,6 +306,10 @@
   "$1.routes.app.projects.$projectId.-map-panel.cannotDisplayFeature": {
     "description": "Text displayed when map feature for selected data cannot be displayed",
     "message": "Cannot display feature"
+  },
+  "$1.routes.app.projects.$projectId.-map-panel.toggleOmittedVisibility": {
+    "description": "Text displayed when hovering over map control for toggling visibility of features omitted by filters.",
+    "message": "Toggle omitted visibility"
   },
   "$1.routes.app.projects.$projectId.-map-panel.zoomToData": {
     "description": "Text displayed when hovering over map control for zooming to data.",
@@ -410,6 +470,46 @@
   "$1.routes.app.projects.$projectId.exchange.index.waitingForDevices": {
     "description": "Text displayed when waiting for other devices to be found.",
     "message": "Waiting for Devices"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionDeselectAll": {
+    "description": "Text for button to deselect all in categories filter section in advanced filters dialog.",
+    "message": "Deselect All"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionSelectAll": {
+    "description": "Text for button to select all in categories filter section in advanced filters dialog.",
+    "message": "Select All"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionTitle": {
+    "description": "Title for categories filter section in advanced filters dialog.",
+    "message": "Categories"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersDateEndLabel": {
+    "description": "Label for end date input in advanced filters dialog.",
+    "message": "End Date"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersDateSectionTitle": {
+    "description": "Title for date filter section in advanced filters dialog.",
+    "message": "Date"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersDateStartLabel": {
+    "description": "Label for start date input in advanced filters dialog.",
+    "message": "Start Date"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersShowResults": {
+    "description": "Text for submit button to apply selected filters in advanced filters dialog.",
+    "message": "Show {count, number} Results"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersTitle": {
+    "description": "Title for advanced filters dialog.",
+    "message": "Advanced Filters"
+  },
+  "$1.routes.app.projects.$projectId.index.invalidEndDateError": {
+    "description": "Text indicating invalid end date for custom date range filter.",
+    "message": "End date must be later than start date."
+  },
+  "$1.routes.app.projects.$projectId.index.invalidStartDateError": {
+    "description": "Text indicating invalid start date for custom date range filter.",
+    "message": "Start date must be earlier than end date."
   },
   "$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelDescription": {
     "description": "Text for description of panel shown when no active collaborators or data exist on project.",
