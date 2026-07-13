@@ -56,6 +56,7 @@ export function FilterSelect({
 
 	return (
 		<ClickAwayListener
+			mouseEvent="onPointerDown"
 			onClickAway={() => {
 				setAnchorElement(null)
 			}}
