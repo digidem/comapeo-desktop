@@ -1095,7 +1095,7 @@ function createObservationLayerPaintProperty(
 				['boolean', ['feature-state', 'highlight'], false],
 			],
 			1,
-			0.2,
+			0.1,
 		],
 		'circle-radius': [
 			'case',
