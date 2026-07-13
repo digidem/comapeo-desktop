@@ -83,14 +83,19 @@ const OBSERVATIONS_SOURCE_ID = 'observations_source' as const
 const TRACKS_SOURCE_ID = 'tracks_source' as const
 
 const OBSERVATIONS_LAYER_ID = 'observations_layer' as const
+const TRACKS_LAYER_ID = 'tracks_layer' as const
 const TRACKS_HOVER_OUTLINE_LAYER_ID = 'tracks_hover_outline_layer' as const
 const TRACKS_HOVER_SHADOW_LAYER_ID = 'tracks_hover_shadow_layer' as const
 
-const TRACKS_LAYER_ID = 'tracks_layer' as const
-
+const OBSERVATIONS_LAYER_LAYOUT: CircleLayerSpecification['layout'] = {
+	// NOTE: Ensures that visible features appear on top of hidden ones (when filters are active)
+	'circle-sort-key': ['case', ['boolean', ['get', 'visible'], true], 1, 0],
+}
 const TRACKS_LAYER_LAYOUT: LineLayerSpecification['layout'] = {
 	'line-cap': 'round',
 	'line-join': 'round',
+	// NOTE: Ensures that visible features appear on top of hidden ones (when filters are active)
+	'line-sort-key': ['case', ['boolean', ['get', 'visible'], true], 1, 0],
 }
 const TRACKS_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] = {
 	'line-color': BLACK,
@@ -801,6 +806,7 @@ export function MapPanel({
 						type="circle"
 						id={OBSERVATIONS_LAYER_ID}
 						paint={observationsLayerPaint}
+						layout={OBSERVATIONS_LAYER_LAYOUT}
 						filter={layerFilter}
 					/>
 				</Source>
