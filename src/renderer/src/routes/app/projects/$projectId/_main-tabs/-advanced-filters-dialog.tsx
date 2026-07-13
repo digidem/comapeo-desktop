@@ -16,6 +16,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
 import { endOfDay, isAfter, isBefore, isEqual, min, startOfDay } from 'date-fns'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
+import { counting } from 'radashi'
 
 import { BLUE_GREY, WHITE } from '../../../../../colors.ts'
 import {
@@ -31,46 +32,6 @@ import {
 	isDocumentIncludedByFilters,
 	isEqualByItemKey,
 } from './-shared.ts'
-import { counting } from 'radashi'
-
-function isValidDateRange(start: Date, end: Date) {
-	return isEqual(start, end) || isBefore(start, end)
-}
-
-const AdvancedFiltersSchema = v.pipe(
-	v.object({
-		startDate: v.union([v.date(), v.null()]),
-		endDate: v.union([v.date(), v.null()]),
-		categories: v.array(
-			// NOTE: Not exhaustive but sufficient
-			v.custom<Preset>((input) => {
-				if (typeof input !== 'object') {
-					return false
-				}
-
-				if (input === null) {
-					return false
-				}
-
-				const hasSchemaName =
-					'schemaName' in input && input.schemaName === 'preset'
-
-				const hasDocId = 'docId' in input && typeof input.docId === 'string'
-
-				return hasSchemaName && hasDocId
-			}),
-		),
-	}),
-	v.check((input) => {
-		if (input.startDate && input.endDate) {
-			return isValidDateRange(input.startDate, input.endDate)
-		}
-
-		return true
-	}, 'Invalid date range'),
-)
-
-type AdvancedFilters = v.InferOutput<typeof AdvancedFiltersSchema>
 
 export function AdvancedFiltersDialogContent({
 	categories,
@@ -106,17 +67,50 @@ export function AdvancedFiltersDialogContent({
 		return dateFilterToDateRange(dateFilter, filterReferenceDate || new Date())
 	})
 
-	const defaultValues: AdvancedFilters = {
-		startDate: initialDateRange.start,
-		endDate: initialDateRange.end,
-		categories: categoriesFilter,
-	}
+	const advancedFiltersSchema = useMemo(() => {
+		return v.pipe(
+			v.object({
+				startDate: v.union([v.date(), v.null()]),
+				endDate: v.union([v.date(), v.null()]),
+				categories: v.array(
+					// NOTE: Not exhaustive but sufficient
+					v.custom<Preset>((input) => {
+						if (typeof input !== 'object') {
+							return false
+						}
+
+						if (input === null) {
+							return false
+						}
+
+						const hasSchemaName =
+							'schemaName' in input && input.schemaName === 'preset'
+
+						const hasDocId = 'docId' in input && typeof input.docId === 'string'
+
+						return hasSchemaName && hasDocId
+					}),
+				),
+			}),
+			v.check((input) => {
+				if (input.startDate && input.endDate) {
+					return isValidStartDate(input.startDate, input.endDate)
+				}
+
+				return true
+			}, t(m.invalidStartDateError)),
+		)
+	}, [t])
 
 	const form = useAppForm({
-		defaultValues,
-		validators: { onChange: AdvancedFiltersSchema },
+		defaultValues: {
+			startDate: initialDateRange.start,
+			endDate: initialDateRange.end,
+			categories: categoriesFilter,
+		} satisfies v.InferOutput<typeof advancedFiltersSchema>,
+		validators: { onChange: advancedFiltersSchema },
 		onSubmit: ({ value }) => {
-			const parsed = v.parse(AdvancedFiltersSchema, value)
+			const parsed = v.parse(advancedFiltersSchema, value)
 
 			const allSelected = isEqualByItemKey(
 				categories,
@@ -240,7 +234,7 @@ export function AdvancedFiltersDialogContent({
 												return undefined
 											}
 
-											if (!isValidDateRange(value, endDate)) {
+											if (!isValidStartDate(value, endDate)) {
 												return new Error('Invalid date range')
 											}
 										},
@@ -302,7 +296,7 @@ export function AdvancedFiltersDialogContent({
 												return undefined
 											}
 
-											if (!isValidDateRange(startDate, value)) {
+											if (!isValidStartDate(startDate, value)) {
 												return new Error('Invalid date range')
 											}
 										},
@@ -624,6 +618,10 @@ export function AdvancedFiltersDialogContent({
 	)
 }
 
+function isValidStartDate(start: Date, end: Date) {
+	return isEqual(start, end) || isBefore(start, end)
+}
+
 const m = defineMessages({
 	advancedFiltersCloseAccessibleLabel: {
 		id: 'routes.app.projects.$projectId.index.advancedFiltersCloseAccessibleLabel',
@@ -678,6 +676,12 @@ const m = defineMessages({
 	advancedFiltersShowResults: {
 		id: '$1.routes.app.projects.$projectId.index.advancedFiltersShowResults',
 		defaultMessage: 'Show {count, number} Results',
+		description:
+			'Text for submit button to apply selected filters in advanced filters dialog.',
+	},
+	invalidStartDateError: {
+		id: '$1.routes.app.projects.$projectId.index.invalidStartDateError',
+		defaultMessage: 'Start date must be earlier than end date.',
 		description:
 			'Text for submit button to apply selected filters in advanced filters dialog.',
 	},

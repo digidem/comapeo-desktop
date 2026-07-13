@@ -503,6 +503,10 @@
     "description": "Title for advanced filters dialog.",
     "message": "Advanced Filters"
   },
+  "$1.routes.app.projects.$projectId.index.invalidStartDateError": {
+    "description": "Text for submit button to apply selected filters in advanced filters dialog.",
+    "message": "Start date must be earlier than end date."
+  },
   "$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelDescription": {
     "description": "Text for description of panel shown when no active collaborators or data exist on project.",
     "message": "Invite devices to start gathering observations and tracks."
