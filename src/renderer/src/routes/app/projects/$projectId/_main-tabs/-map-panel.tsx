@@ -26,6 +26,7 @@ import { center } from '@turf/center'
 import { featureCollection, lineString, point } from '@turf/helpers'
 import type { Feature, Point } from 'geojson'
 import type {
+	FilterSpecification,
 	FitBoundsOptions,
 	LineLayerSpecification,
 	MapLibreEvent,
@@ -213,6 +214,8 @@ export function MapPanel({
 			referenceDate: filterReferenceDate || new Date(),
 		})
 	}, [tracks, categories, categoriesFilter, dateFilter, filterReferenceDate])
+
+	console.log('*** tracksFeatureCollection', tracksFeatureCollection)
 
 	const observationsLayerPaint = useMemo(() => {
 		return createObservationLayerPaintProperty(categories)
@@ -656,6 +659,13 @@ export function MapPanel({
 		},
 	)
 
+	const layerFilter: FilterSpecification = [
+		'case',
+		['boolean', omittedVisibility === 'visible'],
+		true,
+		['boolean', ['get', 'visible'], true],
+	]
+
 	return (
 		<Box sx={{ position: 'relative', display: 'flex', flex: 1 }}>
 			{mapLoaded ? null : (
@@ -754,18 +764,13 @@ export function MapPanel({
 					data={tracksFeatureCollection}
 					// NOTE: Need this in order for the feature-state querying to work when hovering
 					promoteId="docId"
-					filter={[
-						'case',
-						['boolean', omittedVisibility === 'visible'],
-						true,
-						['boolean', ['get', 'visible'], true],
-					]}
 				>
 					<Layer
 						type="line"
 						id={TRACKS_HOVER_SHADOW_LAYER_ID}
 						paint={TRACKS_HOVER_SHADOW_LAYER_PAINT_PROPERTY}
 						layout={TRACKS_LAYER_LAYOUT}
+						filter={layerFilter}
 					/>
 
 					<Layer
@@ -773,6 +778,7 @@ export function MapPanel({
 						id={TRACKS_HOVER_OUTLINE_LAYER_ID}
 						paint={TRACKS_HOVER_OUTLINE_LAYER_PAINT_PROPERTY}
 						layout={TRACKS_LAYER_LAYOUT}
+						filter={layerFilter}
 					/>
 
 					<Layer
@@ -780,6 +786,7 @@ export function MapPanel({
 						id={TRACKS_LAYER_ID}
 						paint={TRACKS_LAYER_PAINT_PROPERTY}
 						layout={TRACKS_LAYER_LAYOUT}
+						filter={layerFilter}
 					/>
 				</Source>
 
@@ -794,12 +801,7 @@ export function MapPanel({
 						type="circle"
 						id={OBSERVATIONS_LAYER_ID}
 						paint={observationsLayerPaint}
-						filter={[
-							'case',
-							['boolean', omittedVisibility === 'visible'],
-							true,
-							['boolean', ['get', 'visible'], true],
-						]}
+						filter={layerFilter}
 					/>
 				</Source>
 
