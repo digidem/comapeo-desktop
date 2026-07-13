@@ -15,7 +15,7 @@ import Snackbar from '@mui/material/Snackbar'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import { useStore } from '@tanstack/react-form'
+import { useSelector } from '@tanstack/react-form'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { bboxPolygon } from '@turf/bbox-polygon'
@@ -172,7 +172,7 @@ function RouteComponent() {
 
 	const createTestTrack = useCreateTestTrack({ projectId })
 
-	const boundedDistance = useStore(form.store, (state) => {
+	const boundedDistance = useSelector(form.store, (state) => {
 		if (
 			state.fieldMeta.boundedDistance &&
 			!state.fieldMeta.boundedDistance.isValid
@@ -186,7 +186,7 @@ function RouteComponent() {
 		)
 	})
 
-	const coordinates = useStore(form.store, (state) => {
+	const coordinates = useSelector(form.store, (state) => {
 		return {
 			longitude: state.values.longitude,
 			latitude: state.values.latitude,
