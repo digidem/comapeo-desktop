@@ -220,8 +220,6 @@ export function MapPanel({
 		})
 	}, [tracks, categories, categoriesFilter, dateFilter, filterReferenceDate])
 
-	console.log('*** tracksFeatureCollection', tracksFeatureCollection)
-
 	const observationsLayerPaint = useMemo(() => {
 		return createObservationLayerPaintProperty(categories)
 	}, [categories])
