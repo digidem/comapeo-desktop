@@ -235,7 +235,7 @@ export function AdvancedFiltersDialogContent({
 											}
 
 											if (!isValidStartDate(value, endDate)) {
-												return new Error('Invalid date range')
+												return new Error(t(m.invalidStartDateError))
 											}
 										},
 									}}
@@ -297,7 +297,7 @@ export function AdvancedFiltersDialogContent({
 											}
 
 											if (!isValidStartDate(startDate, value)) {
-												return new Error('Invalid date range')
+												return new Error(t(m.invalidEndDateError))
 											}
 										},
 									}}
@@ -683,6 +683,12 @@ const m = defineMessages({
 		id: '$1.routes.app.projects.$projectId.index.invalidStartDateError',
 		defaultMessage: 'Start date must be earlier than end date.',
 		description:
-			'Text for submit button to apply selected filters in advanced filters dialog.',
+			'Text indicating invalid start date for custom date range filter.',
+	},
+	invalidEndDateError: {
+		id: '$1.routes.app.projects.$projectId.index.invalidEndDateError',
+		defaultMessage: 'End date must be later than start date.',
+		description:
+			'Text indicating invalid end date for custom date range filter.',
 	},
 })
