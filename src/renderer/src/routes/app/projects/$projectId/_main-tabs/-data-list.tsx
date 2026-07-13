@@ -73,7 +73,6 @@ import {
 	dateFilterToDateRange,
 	dateFilterToSearchParams,
 	isDocumentIncludedByFilters,
-	isEqualByItemKey,
 	type HighlightedDocument,
 } from './-shared.ts'
 import { PhotoAttachmentImage } from './observations/$observationDocId/-components/photo-attachment-image.tsx'
@@ -90,7 +89,7 @@ export function DataList({
 	highlightedDocument,
 	projectId,
 }: {
-	categoriesFilter?: Array<string>
+	categoriesFilter: Array<string> | undefined
 	dateFilter?: DateFilter
 	filterReferenceDate?: Date
 	highlightedDocument?: HighlightedDocument
@@ -167,7 +166,7 @@ export function DataList({
 		return [...observationsWithCategory, ...tracksWithCategory]
 			.filter((item) => {
 				return isDocumentIncludedByFilters(item, {
-					categories: filteredCategories,
+					categories: categoriesFilter || categories.map((c) => c.docId),
 					date: dateFilter
 						? dateFilterToDateRange(dateFilter, referenceDateToUse)
 						: undefined,
@@ -177,8 +176,9 @@ export function DataList({
 				return a.document.createdAt < b.document.createdAt ? 1 : -1
 			})
 	}, [
+		categories,
+		categoriesFilter,
 		dateFilter,
-		filteredCategories,
 		observationsWithCategory,
 		referenceDateToUse,
 		tracksWithCategory,
@@ -702,7 +702,7 @@ export function DataList({
 				{() => (
 					<AdvancedFiltersDialogContent
 						categories={categories}
-						categoriesFilter={filteredCategories}
+						categoriesFilter={categoriesFilter}
 						dateFilter={dateFilter}
 						filterReferenceDate={referenceDateToUse}
 						onCancel={() => {
@@ -713,7 +713,7 @@ export function DataList({
 						}}
 						onSubmit={(value) => {
 							if (value.categories) {
-								setCategoriesFilter(value.categories.map((c) => c.docId))
+								setCategoriesFilter(value.categories)
 							} else {
 								unsetCategoriesFilter()
 							}
@@ -1063,7 +1063,10 @@ function CategoriesFilterSelect({
 		multiplier: 0.75,
 	})
 
-	const allSelected = isEqualByItemKey(options, selected, 'docId')
+	const allSelected =
+		new Set(options.map((o) => o.docId)).difference(
+			new Set(selected.map((s) => s.docId)),
+		).size === 0
 
 	return (
 		<FilterSelect

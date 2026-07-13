@@ -73,10 +73,10 @@ export function dateFilterToDateRange(
 
 export function isDocumentIncludedByFilters(
 	item: { document: Observation | Track; category?: Preset },
-	filters: { categories: Array<Preset>; date?: DateRange },
+	filters: { categories: Array<string>; date?: DateRange },
 ) {
 	if (filters.categories.length > 0) {
-		const categoryIdsToInclude = new Set(filters.categories.map((c) => c.docId))
+		const categoryIdsToInclude = new Set(filters.categories)
 
 		if (!item.category?.docId) {
 			return false
@@ -157,11 +157,4 @@ export function dateSearchParamsToFilter(
 	} else if ('start' in params) {
 		return { type: 'range', start: params.start, end: params.end }
 	}
-}
-
-export function isEqualByItemKey<T>(a: Array<T>, b: Array<T>, field: keyof T) {
-	return (
-		new Set(a.map((o) => o[field])).difference(new Set(b.map((s) => s[field])))
-			.size === 0
-	)
 }

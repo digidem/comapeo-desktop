@@ -975,9 +975,7 @@ function observationsToFeatureCollection({
 			const isVisible = isDocumentIncludedByFilters(
 				{ document: obs, category },
 				{
-					categories: categoriesFilter
-						? categories.filter((c) => categoriesFilter.includes(c.docId))
-						: categories,
+					categories: categoriesFilter || categories.map((c) => c.docId),
 					date: filters?.date
 						? dateFilterToDateRange(filters.date, referenceDate)
 						: undefined,
@@ -1033,9 +1031,7 @@ function tracksToFeatureCollection({
 		const isVisible = isDocumentIncludedByFilters(
 			{ document: t, category },
 			{
-				categories: categoriesFilter
-					? categories.filter((c) => categoriesFilter.includes(c.docId))
-					: categories,
+				categories: categoriesFilter || categories.map((c) => c.docId),
 				date: filters?.date
 					? dateFilterToDateRange(filters.date, referenceDate)
 					: undefined,

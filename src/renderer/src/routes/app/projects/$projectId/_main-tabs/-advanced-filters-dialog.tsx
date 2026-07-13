@@ -30,7 +30,6 @@ import type { DateFilter } from '../../../../../lib/local-storage.ts'
 import {
 	dateFilterToDateRange,
 	isDocumentIncludedByFilters,
-	isEqualByItemKey,
 } from './-shared.ts'
 
 export function AdvancedFiltersDialogContent({
@@ -46,13 +45,13 @@ export function AdvancedFiltersDialogContent({
 	tracksWithCategory,
 }: {
 	categories: Array<Preset>
-	categoriesFilter: Array<Preset>
+	categoriesFilter: Array<string> | undefined
 	dateFilter: DateFilter | undefined
 	filterReferenceDate: Date
 	observationsWithCategory: Array<{ document: Observation; category?: Preset }>
 	onCancel: () => void
 	onDateFilterChange?: () => void
-	onSubmit: (values: { categories?: Array<Preset>; date?: DateFilter }) => void
+	onSubmit: (values: { categories?: Array<string>; date?: DateFilter }) => void
 	projectId: string
 	tracksWithCategory: Array<{ document: Track; category?: Preset }>
 }) {
@@ -72,25 +71,7 @@ export function AdvancedFiltersDialogContent({
 			v.object({
 				startDate: v.union([v.date(), v.null()]),
 				endDate: v.union([v.date(), v.null()]),
-				categories: v.array(
-					// NOTE: Not exhaustive but sufficient
-					v.custom<Preset>((input) => {
-						if (typeof input !== 'object') {
-							return false
-						}
-
-						if (input === null) {
-							return false
-						}
-
-						const hasSchemaName =
-							'schemaName' in input && input.schemaName === 'preset'
-
-						const hasDocId = 'docId' in input && typeof input.docId === 'string'
-
-						return hasSchemaName && hasDocId
-					}),
-				),
+				categories: v.undefinedable(v.array(v.string())),
 			}),
 			v.check((input) => {
 				if (input.startDate && input.endDate) {
@@ -112,14 +93,8 @@ export function AdvancedFiltersDialogContent({
 		onSubmit: ({ value }) => {
 			const parsed = v.parse(advancedFiltersSchema, value)
 
-			const allSelected = isEqualByItemKey(
-				categories,
-				value.categories,
-				'docId',
-			)
-
 			onSubmit({
-				categories: allSelected ? undefined : parsed.categories,
+				categories: parsed.categories,
 				date:
 					parsed.startDate && parsed.endDate
 						? {
@@ -373,15 +348,21 @@ export function AdvancedFiltersDialogContent({
 												variant="text"
 												size="small"
 												onClick={() => {
-													if (formField.state.value.length > 0) {
+													if (
+														formField.state.value === undefined ||
+														formField.state.value.length > 0
+													) {
 														formField.clearValues()
 													} else {
-														formField.handleChange(categories)
+														formField.handleChange(
+															categories.map((c) => c.docId),
+														)
 													}
 												}}
 											>
 												{t(
-													formField.state.value.length > 0
+													formField.state.value === undefined ||
+														formField.state.value.length > 0
 														? m.advancedFiltersCategoriesSectionDeselectAll
 														: m.advancedFiltersCategoriesSectionSelectAll,
 												)}
@@ -398,9 +379,11 @@ export function AdvancedFiltersDialogContent({
 												}}
 											>
 												{categories.map((category) => {
-													const isSelected = !!formField.state.value.find(
-														(c) => c.docId === category.docId,
-													)
+													const isSelected = formField.state.value
+														? !!formField.state.value.find(
+																(filterDocId) => category.docId === filterDocId,
+															)
+														: true
 
 													const count =
 														groupedByCategoryCount[category.docId] || 0
@@ -492,11 +475,16 @@ export function AdvancedFiltersDialogContent({
 															}
 															onChange={(_event, checked) => {
 																formField.handleChange((prev) => {
-																	return checked
-																		? [...prev, category]
-																		: prev.filter(
-																				(p) => p.docId !== category.docId,
-																			)
+																	if (prev) {
+																		return checked
+																			? [...prev, category.docId]
+																			: prev.filter(
+																					(previousDocId) =>
+																						previousDocId !== category.docId,
+																				)
+																	}
+
+																	return checked ? [category.docId] : prev
 																})
 															}}
 															sx={{
@@ -562,56 +550,47 @@ export function AdvancedFiltersDialogContent({
 			>
 				<form.Subscribe
 					selector={(state) => {
-						return [...observationsWithCategory, ...tracksWithCategory].filter(
-							(document) =>
-								isDocumentIncludedByFilters(document, {
-									categories: state.values.categories,
-								}),
-						).length
+						return [state.canSubmit, state.isSubmitting]
 					}}
 				>
-					<form.Subscribe
-						selector={(state) => {
-							return [state.canSubmit, state.isSubmitting]
-						}}
-					>
-						{([canSubmit, isSubmitting]) => {
-							return (
-								<Button
-									type="submit"
-									aria-disabled={!canSubmit || isSubmitting}
-									form={formId}
-									sx={{ maxWidth: 400 }}
+					{([canSubmit, isSubmitting]) => {
+						return (
+							<Button
+								type="submit"
+								aria-disabled={!canSubmit || isSubmitting}
+								form={formId}
+								sx={{ maxWidth: 400 }}
+							>
+								<form.Subscribe
+									selector={(state) => {
+										return [
+											...observationsWithCategory,
+											...tracksWithCategory,
+										].filter((document) =>
+											isDocumentIncludedByFilters(document, {
+												categories:
+													state.values.categories ||
+													categories.map((c) => c.docId),
+												date:
+													state.values.startDate && state.values.endDate
+														? {
+																start: state.values.startDate,
+																end: state.values.endDate,
+															}
+														: undefined,
+											}),
+										).length
+									}}
 								>
-									<form.Subscribe
-										selector={(state) => {
-											return [
-												...observationsWithCategory,
-												...tracksWithCategory,
-											].filter((document) =>
-												isDocumentIncludedByFilters(document, {
-													categories: state.values.categories,
-													date:
-														state.values.startDate && state.values.endDate
-															? {
-																	start: state.values.startDate,
-																	end: state.values.endDate,
-																}
-															: undefined,
-												}),
-											).length
-										}}
-									>
-										{(filteredDocumentsCount) => {
-											return t(m.advancedFiltersShowResults, {
-												count: filteredDocumentsCount,
-											})
-										}}
-									</form.Subscribe>
-								</Button>
-							)
-						}}
-					</form.Subscribe>
+									{(filteredDocumentsCount) => {
+										return t(m.advancedFiltersShowResults, {
+											count: filteredDocumentsCount,
+										})
+									}}
+								</form.Subscribe>
+							</Button>
+						)
+					}}
 				</form.Subscribe>
 			</Box>
 		</Stack>
