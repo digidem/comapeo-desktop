@@ -137,7 +137,7 @@ export function FilterSelect({
 					ref={popperRef}
 					role="presentation"
 					placement="bottom-start"
-					sx={{ zIndex: 1 }}
+					sx={{ zIndex: 2 }}
 					modifiers={[
 						{ name: 'offset', options: { offset: [0, 8] } },
 						{ name: 'eventListeners', enabled: true },
