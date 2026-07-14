@@ -132,7 +132,7 @@ export function AdvancedFiltersDialogContent({
 	const groupedByCategoryCount = useMemo(() => {
 		const { _, ...result } = counting(
 			[...observationsWithCategory, ...tracksWithCategory],
-			(document) => document.category?.docId || '_',
+			({ category }) => category?.docId || '_',
 		)
 
 		return result
