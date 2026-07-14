@@ -11,6 +11,7 @@ import {
 	net,
 	protocol,
 	safeStorage,
+	screen,
 	utilityProcess,
 	type UtilityProcess,
 } from 'electron/main'
@@ -378,9 +379,7 @@ function initMainWindow({
 }): BrowserWindow {
 	const mainWindow = new BrowserWindow({
 		width: 1200,
-		minWidth: 800,
 		height: 800,
-		minHeight: 500,
 		// NOTE: Needs to be explicitly set for Linux
 		// https://www.electronforge.io/guides/create-and-add-icons#linux
 		icon:
@@ -404,6 +403,19 @@ function initMainWindow({
 		},
 	})
 
+	function updateMainWindowMinimumSize() {
+		const display = screen.getDisplayMatching(mainWindow.getBounds())
+
+		const width = display.size.width * 0.4
+		const height = display.size.height * 0.5
+
+		log('Updating main window minimum size', { width, height })
+
+		mainWindow.setMinimumSize(width, height)
+	}
+
+	updateMainWindowMinimumSize()
+
 	mainWindow.setAutoHideMenuBar(true)
 
 	if (isDevelopment) {
@@ -418,6 +430,11 @@ function initMainWindow({
 		// NOTE: host (`renderer`) needs to match whatever is matched against in the protocol handler
 		mainWindow.loadURL('comapeo://renderer/index.html')
 	}
+
+	mainWindow.on('focus', updateMainWindowMinimumSize)
+	screen.on('display-added', updateMainWindowMinimumSize)
+	screen.on('display-metrics-changed', updateMainWindowMinimumSize)
+	screen.on('display-removed', updateMainWindowMinimumSize)
 
 	mainWindow.on('close', (event) => {
 		if (process.platform === 'darwin' && !APP_STATE.tryingToQuitApp) {
