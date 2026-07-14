@@ -148,7 +148,7 @@ function ButtonTabContent({
 				transition
 				sx={{
 					width: `clamp(250px, 25%, 350px)`,
-					zIndex: (theme) => theme.zIndex.tooltip,
+					zIndex: (theme) => theme.zIndex.modal - 1,
 				}}
 				modifiers={[
 					{ name: 'offset', options: { offset: [0, 2] } },
