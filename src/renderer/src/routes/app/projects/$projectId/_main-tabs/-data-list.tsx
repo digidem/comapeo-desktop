@@ -144,12 +144,12 @@ export function DataList({
 
 	const groupedByCategoryCount = useMemo(() => {
 		const { _, ...result } = counting(
-			[...observations, ...tracks],
-			(document) => document.presetRef?.docId || '_',
+			[...observationsWithCategory, ...tracksWithCategory],
+			({ category }) => category?.docId || '_',
 		)
 
 		return result
-	}, [observations, tracks])
+	}, [observationsWithCategory, tracksWithCategory])
 
 	// NOTE: Accounts for cases where the app is left open for a while
 	// and the user performs an interaction that relies on a more updated date value.
