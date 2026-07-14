@@ -146,7 +146,10 @@ function ButtonTabContent({
 				role="dialog"
 				placement="right-start"
 				transition
-				sx={{ width: `clamp(250px, 25%, 350px)`, zIndex: 1 }}
+				sx={{
+					width: `clamp(250px, 25%, 350px)`,
+					zIndex: (theme) => theme.zIndex.tooltip,
+				}}
 				modifiers={[
 					{ name: 'offset', options: { offset: [0, 2] } },
 					{ name: 'eventListeners', enabled: true },
