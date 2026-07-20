@@ -41,7 +41,9 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
           sparse-checkout: |
+            .github/update-npm-version/action.yml
             package.json
+            package-lock.json
           sparse-checkout-cone-mode: false
 
       - name: Update npm version
