@@ -103,7 +103,7 @@
 		"@emotion/styled": "11.14.1",
 		"@eslint-react/eslint-plugin": "5.17.3",
 		"@eslint/js": "10.0.1",
-		"@fontsource-variable/rubik": "5.2.8",
+		"@fontsource-variable/rubik": "5.3.0",
 		"@formatjs/cli-lib": "9.0.0",
 		"@formatjs/unplugin": "1.2.3",
 		"@ianvs/prettier-plugin-sort-imports": "4.7.1",
