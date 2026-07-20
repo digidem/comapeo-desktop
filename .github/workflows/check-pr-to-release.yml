@@ -28,17 +28,21 @@ jobs:
   check_release_branch:
     name: No Commits
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+          persist-credentials: true
 
       - name: Fetch base branch
+        env:
+          BASE_BRANCH_REF: ${{ github.event.pull_request.base.ref }}
         run: |
-          git fetch origin ${{ github.event.pull_request.base.ref }}
+          git fetch origin $BASE_BRANCH_REF
 
       - name: Check base branch has no commits since merge base
         env:
@@ -57,7 +61,7 @@ jobs:
   check_source_branch:
     name: Check source branch
     runs-on: ubuntu-latest
-
+    permissions: {}
     steps:
       - name: Assert source branch is RC branch
         if: ${{ !startsWith(github.head_ref, 'rc/') }}
@@ -67,16 +71,24 @@ jobs:
     name: Check release version
     needs: check_source_branch
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
     steps:
       - name: Checkout necessary files
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           sparse-checkout: |
             .github/update-npm-version/action.yml
+            .nvmrc
             package.json
             package-lock.json
           sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - name: Use Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
 
       - name: Update npm version
         uses: ./.github/update-npm-version
