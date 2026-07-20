@@ -76,6 +76,9 @@ jobs:
             package.json
           sparse-checkout-cone-mode: false
 
+      - name: Update npm version
+        uses: ./.github/update-npm-version
+
       - run: npm install --no-save semver
         shell: bash
 
