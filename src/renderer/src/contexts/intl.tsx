@@ -19,8 +19,8 @@ import {
 import type { Locale } from 'date-fns'
 import { shake } from 'radashi'
 import {
-	defineMessages,
 	IntlProvider as ReactIntlProvider,
+	defineMessages,
 	useIntl,
 } from 'react-intl'
 
