@@ -7,7 +7,7 @@ export default {
 	singleQuote: true,
 	arrowParens: 'always',
 	trailingComma: 'all',
-	plugins: ['@ianvs/prettier-plugin-sort-imports', 'prettier-plugin-jsdoc'],
+	plugins: ['prettier-plugin-jsdoc', '@ianvs/prettier-plugin-sort-imports'],
 	/**
 	 * Configuration @ianvs/prettier-plugin-sort-imports
 	 */
@@ -21,7 +21,7 @@ export default {
 		'',
 		'.css$',
 	],
-	importOrderTypeScriptVersion: '7.0.1',
+	importOrderTypeScriptVersion: '7.0.2',
 	importOrderCaseSensitive: true,
 	/**
 	 * Configuration for prettier-plugin-jsdoc
