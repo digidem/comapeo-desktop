@@ -52,10 +52,10 @@ import {
 } from '../../../../../components/category-icon.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
 import {
-	type OmittedVisibility,
 	ToggleOmittedVisibilityMapControl,
 	ZoomToDataMapControl,
 	ZoomToSelectedDocumentMapControl,
+	type OmittedVisibility,
 } from '../../../../../components/map-controls.tsx'
 import { Map } from '../../../../../components/map.tsx'
 import { useNetworkAwareMapStyleUrl } from '../../../../../hooks/maps.ts'
