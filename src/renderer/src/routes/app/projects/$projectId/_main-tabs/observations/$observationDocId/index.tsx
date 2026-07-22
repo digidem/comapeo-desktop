@@ -477,12 +477,7 @@ function ObservationDetailsPanel({
 					}}
 				>
 					<Stack direction="column" sx={{ paddingBlock: 6, gap: 6 }}>
-						<Box
-							sx={{
-								display: 'flex',
-								justifyContent: 'center',
-							}}
-						>
+						<Box sx={{ display: 'flex', justifyContent: 'center' }}>
 							<Tooltip
 								describeChild={false}
 								placement="right-end"
@@ -1342,14 +1337,18 @@ function ObservationMetadataPanel({
 											overflow: 'hidden',
 											textOverflow: 'ellipsis',
 											whiteSpace: 'nowrap',
-											fontVariantNumeric: 'tabular-nums',
 											width: `clamp(10ch, 20ch, 30ch)`,
 										}}
 									>
 										{metadata.label}
 									</Typography>
 
-									<Typography sx={{ whiteSpace: 'nowrap' }}>
+									<Typography
+										sx={{
+											fontVariantNumeric: 'tabular-nums',
+											whiteSpace: 'nowrap',
+										}}
+									>
 										{metadata.value}
 									</Typography>
 								</Stack>
