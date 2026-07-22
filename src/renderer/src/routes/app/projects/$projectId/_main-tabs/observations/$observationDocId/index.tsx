@@ -1329,6 +1329,7 @@ function ObservationMetadataPanel({
 								<Stack
 									direction="row"
 									sx={{
+										alignItems: 'center',
 										flex: 1,
 										gap: 2,
 										justifyContent: 'space-between',
@@ -1342,12 +1343,15 @@ function ObservationMetadataPanel({
 											textOverflow: 'ellipsis',
 											whiteSpace: 'nowrap',
 											fontVariantNumeric: 'tabular-nums',
+											width: `clamp(10ch, 20ch, 30ch)`,
 										}}
 									>
 										{metadata.label}
 									</Typography>
 
-									<Typography>{metadata.value}</Typography>
+									<Typography sx={{ whiteSpace: 'nowrap' }}>
+										{metadata.value}
+									</Typography>
 								</Stack>
 							</Stack>
 						))}
