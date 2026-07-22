@@ -647,6 +647,66 @@
     "description": "Fallback name for observation without a matching category.",
     "message": "Observation"
   },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyFeet": {
+    "description": "Displayed altitude accuracy for observation in feet.",
+    "message": "± {value} ft"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyLabel": {
+    "description": "Label for observation metadata altitude accuracy.",
+    "message": "Altitude Accuracy"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyMeters": {
+    "description": "Displayed altitude accuracy for observation in meters.",
+    "message": "± {value} m"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeFeet": {
+    "description": "Displayed altitude for observation metadata in feet.",
+    "message": "{value} ft"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeLabel": {
+    "description": "Label for observation metadata altitude.",
+    "message": "Altitude"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeMeters": {
+    "description": "Displayed altitude for observation metadata in meters.",
+    "message": "{value} m"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataCoordinate": {
+    "description": "Displayed coordinate (latitude or longitude) for observation metadata.",
+    "message": "{value}°"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLatitudeLabel": {
+    "description": "Label for observation metadata latitude.",
+    "message": "Latitude"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyFeet": {
+    "description": "Displayed location accuracy for observation metadata in feet.",
+    "message": "± {value} ft"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyLabel": {
+    "description": "Label for observation metadata location accuracy.",
+    "message": "Accuracy"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyMeters": {
+    "description": "Displayed location accuracy for observation metadata in meters.",
+    "message": "± {value} m"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLongitudeLabel": {
+    "description": "Label for observation metadata longitude.",
+    "message": "Longitude"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedFeet": {
+    "description": "Displayed speed for observation in feet per second.",
+    "message": "{value} ft/s"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedLabel": {
+    "description": "Label for observation metadata speed.",
+    "message": "Speed"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedMeters": {
+    "description": "Displayed speed for observation in meters per second.",
+    "message": "{value} m/s"
+  },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound": {
     "description": "Text displayed when observation cannot be found.",
     "message": "Could not find observation with ID {docId}"
