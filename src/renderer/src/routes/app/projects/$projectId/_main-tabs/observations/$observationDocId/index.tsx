@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useId, useState, type JSX } from 'react'
+import { Suspense, useEffect, useId, useMemo, useState, type JSX } from 'react'
 import {
 	useDeleteDocument,
 	useManyDocs,
@@ -1124,104 +1124,117 @@ function ObservationMetadataPanel({
 }) {
 	const { formatMessage: t, formatDate } = useIntl()
 
-	const latitude = observation.lat
-	const longitude = observation.lon
-	const accuracy = observation.metadata?.position?.coords.accuracy
-	const altitude = observation.metadata?.position?.coords.altitude
-	const altitudeAccuracy =
-		observation.metadata?.position?.coords.altitudeAccuracy
-	const speed = observation.metadata?.position?.coords.speed
+	const metadataRows = useMemo(() => {
+		const accuracy = observation.metadata?.position?.coords.accuracy
+		const altitude = observation.metadata?.position?.coords.altitude
+		const altitudeAccuracy =
+			observation.metadata?.position?.coords.altitudeAccuracy
+		const latitude = observation.lat
+		const longitude = observation.lon
+		const speed = observation.metadata?.position?.coords.speed
 
-	const metadataRows: Array<{
-		id: string
-		icon: JSX.Element
-		label: string
-		value: string
-	}> = [
-		latitude !== undefined
-			? {
-					id: 'latitude',
-					icon: <Icon name="comapeo-latitude" htmlColor={DARK_GREY} />,
-					label: t(m.observationMetadataLatitudeLabel),
-					value: t(m.observationMetadataCoordinate, { value: latitude }),
-				}
-			: undefined,
-		longitude !== undefined
-			? {
-					id: 'longitude',
-					icon: <Icon name="comapeo-longitude" htmlColor={DARK_GREY} />,
-					label: t(m.observationMetadataLongitudeLabel),
-					value: t(m.observationMetadataCoordinate, { value: longitude }),
-				}
-			: undefined,
-		accuracy !== undefined
-			? {
-					id: 'accuracy',
-					icon: <Icon name="comapeo-accuracy" htmlColor={DARK_GREY} />,
-					label: t(m.observationMetadataLocationAccuracyLabel),
-					value:
-						unitSystem === 'imperial'
-							? t(m.observationMetadataLocationAccuracyFeet, {
-									value: (Math.abs(accuracy) * FOOT_TO_METER_RATIO).toFixed(3),
-								})
-							: t(m.observationMetadataLocationAccuracyMeters, {
-									value: Math.abs(accuracy).toFixed(3),
-								}),
-				}
-			: undefined,
-		altitude !== undefined
-			? {
-					id: 'altitude',
-					icon: (
-						<Icon name="material-symbols-landscape" htmlColor={DARK_GREY} />
-					),
-					label: t(m.observationMetadataAltitudeLabel),
-					value:
-						unitSystem === 'imperial'
-							? t(m.observationMetadataAltitudeFeet, {
-									value: (altitude * FOOT_TO_METER_RATIO).toFixed(3),
-								})
-							: t(m.observationMetadataAltitudeMeters, {
-									value: altitude.toFixed(3),
-								}),
-				}
-			: undefined,
-		altitudeAccuracy !== undefined
-			? {
-					id: 'altitude-accuracy',
-					icon: (
-						<Icon
-							name="material-symbols-keyboard-double-arrow-up"
-							htmlColor={DARK_GREY}
-						/>
-					),
-					label: t(m.observationMetadataAltitudeAccuracyLabel),
-					value:
-						unitSystem === 'imperial'
-							? t(m.observationMetadataAltitudeAccuracyFeet, {
-									value: (
-										Math.abs(altitudeAccuracy) * FOOT_TO_METER_RATIO
-									).toFixed(3),
-								})
-							: t(m.observationMetadataAltitudeAccuracyMeters, {
-									value: Math.abs(altitudeAccuracy).toFixed(3),
-								}),
-				}
-			: undefined,
-		speed !== undefined
-			? {
-					id: 'speed',
-					icon: <Icon name="material-symbols-speed" htmlColor={DARK_GREY} />,
-					label: t(m.observationMetadataSpeedLabel),
-					value: t(
-						unitSystem === 'imperial'
-							? m.observationMetadataSpeedFeet
-							: m.observationMetadataSpeedMeters,
-						{ value: speed.toFixed(3) },
-					),
-				}
-			: undefined,
-	].filter((item) => !!item)
+		const result: Array<{
+			id: string
+			icon: JSX.Element
+			label: string
+			value: string
+		}> = []
+
+		if (latitude !== undefined) {
+			result.push({
+				id: 'latitude',
+				icon: <Icon name="comapeo-latitude" htmlColor={DARK_GREY} />,
+				label: t(m.observationMetadataLatitudeLabel),
+				value: t(m.observationMetadataCoordinate, { value: latitude }),
+			})
+		}
+
+		if (longitude !== undefined) {
+			result.push({
+				id: 'longitude',
+				icon: <Icon name="comapeo-longitude" htmlColor={DARK_GREY} />,
+				label: t(m.observationMetadataLongitudeLabel),
+				value: t(m.observationMetadataCoordinate, { value: longitude }),
+			})
+		}
+
+		if (accuracy !== undefined) {
+			const value =
+				unitSystem === 'imperial'
+					? t(m.observationMetadataLocationAccuracyFeet, {
+							value: (Math.abs(accuracy) * FOOT_TO_METER_RATIO).toFixed(3),
+						})
+					: t(m.observationMetadataLocationAccuracyMeters, {
+							value: Math.abs(accuracy).toFixed(3),
+						})
+
+			result.push({
+				id: 'accuracy',
+				icon: <Icon name="comapeo-accuracy" htmlColor={DARK_GREY} />,
+				label: t(m.observationMetadataLocationAccuracyLabel),
+				value,
+			})
+		}
+
+		if (altitude !== undefined) {
+			const value =
+				unitSystem === 'imperial'
+					? t(m.observationMetadataAltitudeFeet, {
+							value: (altitude * FOOT_TO_METER_RATIO).toFixed(3),
+						})
+					: t(m.observationMetadataAltitudeMeters, {
+							value: altitude.toFixed(3),
+						})
+
+			result.push({
+				id: 'altitude',
+				icon: <Icon name="material-symbols-landscape" htmlColor={DARK_GREY} />,
+				label: t(m.observationMetadataAltitudeLabel),
+				value,
+			})
+		}
+
+		if (altitudeAccuracy !== undefined) {
+			const value =
+				unitSystem === 'imperial'
+					? t(m.observationMetadataAltitudeAccuracyFeet, {
+							value: (Math.abs(altitudeAccuracy) * FOOT_TO_METER_RATIO).toFixed(
+								3,
+							),
+						})
+					: t(m.observationMetadataAltitudeAccuracyMeters, {
+							value: Math.abs(altitudeAccuracy).toFixed(3),
+						})
+
+			result.push({
+				id: 'altitude-accuracy',
+				icon: (
+					<Icon
+						name="material-symbols-keyboard-double-arrow-up"
+						htmlColor={DARK_GREY}
+					/>
+				),
+				label: t(m.observationMetadataAltitudeAccuracyLabel),
+				value,
+			})
+		}
+
+		if (speed !== undefined) {
+			result.push({
+				id: 'speed',
+				icon: <Icon name="material-symbols-speed" htmlColor={DARK_GREY} />,
+				label: t(m.observationMetadataSpeedLabel),
+				value: t(
+					unitSystem === 'imperial'
+						? m.observationMetadataSpeedFeet
+						: m.observationMetadataSpeedMeters,
+					{ value: speed.toFixed(3) },
+				),
+			})
+		}
+
+		return result
+	}, [observation, t, unitSystem])
 
 	return (
 		<Stack direction="column">
