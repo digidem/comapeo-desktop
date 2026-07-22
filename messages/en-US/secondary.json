@@ -7,6 +7,78 @@
     "description": "Label for stack trace section",
     "message": "Stack trace"
   },
+  "intl.date-pickers.calendarViewCalendarSwitchingButtonAriaLabel": {
+    "description": "Accessible label for button to switch from calendar view to year view in date picker.",
+    "message": "calendar view is open, switch to year view"
+  },
+  "intl.date-pickers.calendarViewYearSwitchingButtonAriaLabel": {
+    "description": "Accessible label for button to switch from year view to calendar view in date picker.",
+    "message": "year view is open, switch to calendar view"
+  },
+  "intl.date-pickers.day": {
+    "description": "Name of the day view in date picker.",
+    "message": "Day"
+  },
+  "intl.date-pickers.empty": {
+    "description": "Label for empty state in date picker.",
+    "message": "Empty"
+  },
+  "intl.date-pickers.fieldClearLabel": {
+    "description": "Accessible label for button to clear the date picker input.",
+    "message": "Clear"
+  },
+  "intl.date-pickers.hours": {
+    "description": "Name of the hours view in date picker.",
+    "message": "Hours"
+  },
+  "intl.date-pickers.meridiem": {
+    "description": "Name of the meridiem view in date picker.",
+    "message": "Meridiem"
+  },
+  "intl.date-pickers.minutes": {
+    "description": "Name of the minutes view in date picker.",
+    "message": "Minutes"
+  },
+  "intl.date-pickers.month": {
+    "description": "Name of the month view in date picker.",
+    "message": "Month"
+  },
+  "intl.date-pickers.nextMonth": {
+    "description": "Accessible label for button to navigate to next month in date picker calendar view.",
+    "message": "Next month"
+  },
+  "intl.date-pickers.openDatePickerDialogue": {
+    "description": "Accessible label for open date picker dialogue in date picker.",
+    "message": "Choose date"
+  },
+  "intl.date-pickers.openDatePickerDialogueSelected": {
+    "description": "Accessible label for open date picker dialogue with selected date in date picker.",
+    "message": "Choose date, selected date is {formattedDate}"
+  },
+  "intl.date-pickers.openNextView": {
+    "description": "Accessible label for button to open next view in date picker.",
+    "message": "Open next view"
+  },
+  "intl.date-pickers.openPreviousView": {
+    "description": "Accessible label for button to open previous view in date picker.",
+    "message": "Open previous view"
+  },
+  "intl.date-pickers.previousMonth": {
+    "description": "Accessible label for button to navigate to previous month in date picker calendar view.",
+    "message": "Previous month"
+  },
+  "intl.date-pickers.seconds": {
+    "description": "Name of the seconds view in date picker.",
+    "message": "Seconds"
+  },
+  "intl.date-pickers.weekDay": {
+    "description": "Name of the week day view in date picker.",
+    "message": "Week day"
+  },
+  "intl.date-pickers.year": {
+    "description": "Name of the year view in date picker.",
+    "message": "Year"
+  },
   "main.app.contextMenuInspectElement": {
     "description": "Context menu item label for inspecting an element",
     "message": "Inspect"
@@ -23,6 +95,10 @@
     "description": "Character count for project name input.",
     "message": "{count}/{max}"
   },
+  "routes.app.projects.$projectId.-data-list.categoriesFilterCategoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Icon for {name} category"
+  },
   "routes.app.projects.$projectId.-data-list.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
@@ -34,6 +110,14 @@
   "routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
     "description": "Accessible label of download options form input.",
     "message": "Data to download"
+  },
+  "routes.app.projects.$projectId.index.advancedFiltersCategoryIconAlt": {
+    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+    "message": "Icon for {name} category"
+  },
+  "routes.app.projects.$projectId.index.advancedFiltersCloseAccessibleLabel": {
+    "description": "Accessible label for button to close advanced filters dialog.",
+    "message": "Close"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",

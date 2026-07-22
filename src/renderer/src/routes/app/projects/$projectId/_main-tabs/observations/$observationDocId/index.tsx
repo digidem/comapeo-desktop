@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useId, useState, type JSX } from 'react'
+import { Suspense, useEffect, useId, useMemo, useState, type JSX } from 'react'
 import {
 	useDeleteDocument,
 	useManyDocs,
@@ -6,7 +6,8 @@ import {
 	useOwnRoleInProject,
 	useSingleDocByDocId,
 } from '@comapeo/core-react'
-import type { Field, Preset } from '@comapeo/core/schema.js'
+import type { Field, Observation, Preset } from '@comapeo/core/schema.js'
+import { Fade, Tooltip } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
@@ -21,10 +22,14 @@ import { Block, createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
+import type { CoordinateFormat } from '../../../../../../../../../shared/coordinate-format.ts'
+import type { UnitSystem } from '../../../../../../../../../shared/unit-system.ts'
 import {
 	BLUE_GREY,
 	DARKER_ORANGE,
+	DARK_GREY,
 	GREEN,
+	LIGHT_GREY,
 	WHITE,
 } from '../../../../../../../colors.ts'
 import {
@@ -472,17 +477,57 @@ function ObservationDetailsPanel({
 					}}
 				>
 					<Stack direction="column" sx={{ paddingBlock: 6, gap: 6 }}>
-						<Box sx={{ paddingInline: 6 }}>
-							<Typography>
-								{formatDate(observation.createdAt, {
-									year: 'numeric',
-									month: 'short',
-									day: '2-digit',
-									minute: '2-digit',
-									hour: '2-digit',
-									hourCycle: 'h12',
-								})}
-							</Typography>
+						<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+							<Tooltip
+								describeChild={false}
+								placement="right-end"
+								slots={{ transition: Fade }}
+								slotProps={{
+									tooltip: {
+										style: {
+											maxWidth: 'unset',
+											overflow: 'hidden',
+											padding: 0,
+										},
+									},
+									popper: {
+										modifiers: [
+											{ name: 'offset', options: { offset: [0, 8] } },
+										],
+									},
+								}}
+								title={
+									<ObservationMetadataPanel
+										coordinateFormat={coordinateFormat}
+										observation={observation}
+										unitSystem={unitSystem}
+									/>
+								}
+							>
+								<Stack direction="row" sx={{ gap: 4 }}>
+									<Typography
+										tabIndex={0}
+										sx={{
+											textAlign: 'center',
+											textDecoration: 'underline dashed',
+											textUnderlineOffset: 8,
+										}}
+									>
+										<time dateTime={observation.createdAt}>
+											{formatDate(observation.createdAt, {
+												year: 'numeric',
+												month: 'short',
+												day: '2-digit',
+												minute: '2-digit',
+												hour: '2-digit',
+												hourCycle: 'h12',
+											})}
+										</time>
+									</Typography>
+
+									<Icon name="comapeo-validated-badge" aria-hidden />
+								</Stack>
+							</Tooltip>
 						</Box>
 
 						<Stack direction="column" sx={{ paddingInline: 6 }}>
@@ -497,7 +542,10 @@ function ObservationDetailsPanel({
 										padding: 4,
 									}}
 								>
-									<Stack direction="row" sx={{ alignItems: 'center', gap: 4 }}>
+									<Stack
+										direction="row"
+										sx={{ alignItems: 'center', gap: 4, overflow: 'auto' }}
+									>
 										<Box sx={{ position: 'relative' }}>
 											{category ? (
 												<CategoryIconContainer
@@ -546,7 +594,15 @@ function ObservationDetailsPanel({
 											) : null}
 										</Box>
 
-										<Typography variant="h2" sx={{ fontWeight: 500 }}>
+										<Typography
+											variant="h2"
+											sx={{
+												fontWeight: 500,
+												textOverflow: 'ellipsis',
+												whiteSpace: 'nowrap',
+												overflow: 'hidden',
+											}}
+										>
 											{category
 												? category.name
 												: t(m.observationCategoryNameFallback)}
@@ -581,7 +637,7 @@ function ObservationDetailsPanel({
 									sx={{ alignItems: 'center', padding: 4, gap: 3 }}
 								>
 									<Icon
-										name="material-fmd-good-filled"
+										name="material-symbols-location-filled"
 										htmlColor={DARKER_ORANGE}
 									/>
 
@@ -1049,6 +1105,262 @@ function ObservationDetailsPanel({
 	)
 }
 
+function ObservationMetadataPanel({
+	coordinateFormat,
+	observation,
+	unitSystem,
+}: {
+	coordinateFormat: CoordinateFormat
+	observation: Observation
+	unitSystem: UnitSystem
+}) {
+	const { formatMessage: t, formatDate } = useIntl()
+
+	const metadataRows = useMemo(() => {
+		const accuracy = observation.metadata?.position?.coords.accuracy
+		const altitude = observation.metadata?.position?.coords.altitude
+		const altitudeAccuracy =
+			observation.metadata?.position?.coords.altitudeAccuracy
+		const latitude = observation.lat
+		const longitude = observation.lon
+		const speed = observation.metadata?.position?.coords.speed
+
+		const result: Array<{
+			id: string
+			icon: JSX.Element
+			label: string
+			value: string
+		}> = []
+
+		if (latitude !== undefined) {
+			result.push({
+				id: 'latitude',
+				icon: <Icon name="comapeo-latitude" htmlColor={DARK_GREY} />,
+				label: t(m.observationMetadataLatitudeLabel),
+				value: t(m.observationMetadataCoordinate, {
+					value: latitude.toFixed(5),
+				}),
+			})
+		}
+
+		if (longitude !== undefined) {
+			result.push({
+				id: 'longitude',
+				icon: <Icon name="comapeo-longitude" htmlColor={DARK_GREY} />,
+				label: t(m.observationMetadataLongitudeLabel),
+				value: t(m.observationMetadataCoordinate, {
+					value: longitude.toFixed(5),
+				}),
+			})
+		}
+
+		if (accuracy !== undefined) {
+			const value =
+				unitSystem === 'imperial'
+					? t(m.observationMetadataLocationAccuracyFeet, {
+							value: (Math.abs(accuracy) * FOOT_TO_METER_RATIO).toFixed(0),
+						})
+					: t(m.observationMetadataLocationAccuracyMeters, {
+							value: Math.abs(accuracy).toFixed(0),
+						})
+
+			result.push({
+				id: 'accuracy',
+				icon: <Icon name="comapeo-accuracy" htmlColor={DARK_GREY} />,
+				label: t(m.observationMetadataLocationAccuracyLabel),
+				value,
+			})
+		}
+
+		if (altitude !== undefined) {
+			const value =
+				unitSystem === 'imperial'
+					? t(m.observationMetadataAltitudeFeet, {
+							value: (altitude * FOOT_TO_METER_RATIO).toFixed(0),
+						})
+					: t(m.observationMetadataAltitudeMeters, {
+							value: altitude.toFixed(0),
+						})
+
+			result.push({
+				id: 'altitude',
+				icon: <Icon name="material-symbols-landscape" htmlColor={DARK_GREY} />,
+				label: t(m.observationMetadataAltitudeLabel),
+				value,
+			})
+		}
+
+		if (altitudeAccuracy !== undefined) {
+			const value =
+				unitSystem === 'imperial'
+					? t(m.observationMetadataAltitudeAccuracyFeet, {
+							value: (Math.abs(altitudeAccuracy) * FOOT_TO_METER_RATIO).toFixed(
+								0,
+							),
+						})
+					: t(m.observationMetadataAltitudeAccuracyMeters, {
+							value: Math.abs(altitudeAccuracy).toFixed(0),
+						})
+
+			result.push({
+				id: 'altitude-accuracy',
+				icon: (
+					<Icon
+						name="material-symbols-keyboard-double-arrow-up"
+						htmlColor={DARK_GREY}
+					/>
+				),
+				label: t(m.observationMetadataAltitudeAccuracyLabel),
+				value,
+			})
+		}
+
+		if (speed !== undefined) {
+			result.push({
+				id: 'speed',
+				icon: <Icon name="material-symbols-speed" htmlColor={DARK_GREY} />,
+				label: t(m.observationMetadataSpeedLabel),
+				value: t(
+					unitSystem === 'imperial'
+						? m.observationMetadataSpeedFeet
+						: m.observationMetadataSpeedMeters,
+					{ value: speed.toFixed(2) },
+				),
+			})
+		}
+
+		return result
+	}, [observation, t, unitSystem])
+
+	return (
+		<Stack direction="column">
+			<Box
+				sx={{
+					flex: 1,
+					display: 'flex',
+					justifyContent: 'center',
+					padding: 6,
+				}}
+			>
+				<Box sx={{ position: 'relative' }}>
+					<Icon name="comapeo-validated-badge" size={64} />
+
+					<Box
+						sx={{
+							bgcolor: GREEN,
+							borderRadius: '50%',
+							bottom: 0,
+							display: 'flex',
+							padding: 1,
+							position: 'absolute',
+							right: (theme) => theme.spacing(-1),
+						}}
+					>
+						<Icon name="material-check" htmlColor={WHITE} size={20} />
+					</Box>
+				</Box>
+			</Box>
+
+			<Stack direction="column" sx={{ gap: 6 }}>
+				<Stack direction="column" sx={{ gap: 2, paddingInline: 6 }}>
+					<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
+						<Icon
+							name="material-symbols-calendar-today"
+							htmlColor={DARK_GREY}
+							sx={{ alignSelf: 'center' }}
+						/>
+
+						<Typography>
+							<time dateTime={observation.createdAt}>
+								{formatDate(observation.createdAt, {
+									year: 'numeric',
+									month: 'short',
+									day: '2-digit',
+									minute: '2-digit',
+									hour: '2-digit',
+									hourCycle: 'h12',
+								})}
+							</time>
+						</Typography>
+					</Stack>
+
+					<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
+						<Icon
+							name="material-symbols-location-filled"
+							htmlColor={DARK_GREY}
+							sx={{ alignSelf: 'center' }}
+						/>
+
+						{typeof observation.lon === 'number' &&
+						typeof observation.lat === 'number' ? (
+							<Typography>
+								{formatCoords({
+									lon: observation.lon,
+									lat: observation.lat,
+									format: coordinateFormat,
+								})}
+							</Typography>
+						) : null}
+					</Stack>
+				</Stack>
+
+				{metadataRows.length > 0 ? (
+					<Stack direction="column">
+						{metadataRows.map((metadata, index) => (
+							<Stack
+								key={metadata.id}
+								direction="row"
+								sx={{
+									alignItems: 'center',
+									backgroundColor: index % 2 === 0 ? LIGHT_GREY : WHITE,
+									gap: 2,
+									justifyContent: 'space-between',
+									paddingBlock: 4,
+									paddingInline: 6,
+								}}
+							>
+								{metadata.icon}
+
+								<Stack
+									direction="row"
+									sx={{
+										alignItems: 'center',
+										flex: 1,
+										gap: 2,
+										justifyContent: 'space-between',
+										overflow: 'hidden',
+									}}
+								>
+									<Typography
+										sx={{
+											fontWeight: 500,
+											overflow: 'hidden',
+											textOverflow: 'ellipsis',
+											whiteSpace: 'nowrap',
+											width: `clamp(10ch, 20ch, 30ch)`,
+										}}
+									>
+										{metadata.label}
+									</Typography>
+
+									<Typography
+										sx={{
+											fontVariantNumeric: 'tabular-nums',
+											whiteSpace: 'nowrap',
+										}}
+									>
+										{metadata.value}
+									</Typography>
+								</Stack>
+							</Stack>
+						))}
+					</Stack>
+				) : null}
+			</Stack>
+		</Stack>
+	)
+}
+
 function isEditableField(field: Field): field is EditableField {
 	switch (field.type) {
 		case 'number':
@@ -1283,5 +1595,83 @@ const m = defineMessages({
 		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyFeet',
 		defaultMessage: '± {value} ft',
 		description: 'Displayed accuracy for observation location in feet.',
+	},
+	observationMetadataLatitudeLabel: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLatitudeLabel',
+		defaultMessage: 'Latitude',
+		description: 'Label for observation metadata latitude.',
+	},
+	observationMetadataLongitudeLabel: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLongitudeLabel',
+		defaultMessage: 'Longitude',
+		description: 'Label for observation metadata longitude.',
+	},
+	observationMetadataCoordinate: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataCoordinate',
+		defaultMessage: '{value}°',
+		description:
+			'Displayed coordinate (latitude or longitude) for observation metadata.',
+	},
+	observationMetadataLocationAccuracyLabel: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyLabel',
+		defaultMessage: 'Accuracy',
+		description: 'Label for observation metadata location accuracy.',
+	},
+	observationMetadataLocationAccuracyMeters: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyMeters',
+		defaultMessage: '± {value} m',
+		description:
+			'Displayed location accuracy for observation metadata in meters.',
+	},
+	observationMetadataLocationAccuracyFeet: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyFeet',
+		defaultMessage: '± {value} ft',
+		description:
+			'Displayed location accuracy for observation metadata in feet.',
+	},
+	observationMetadataAltitudeLabel: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeLabel',
+		defaultMessage: 'Altitude',
+		description: 'Label for observation metadata altitude.',
+	},
+	observationMetadataAltitudeMeters: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeMeters',
+		defaultMessage: '{value} m',
+		description: 'Displayed altitude for observation metadata in meters.',
+	},
+	observationMetadataAltitudeFeet: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeFeet',
+		defaultMessage: '{value} ft',
+		description: 'Displayed altitude for observation metadata in feet.',
+	},
+	observationMetadataAltitudeAccuracyLabel: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyLabel',
+		defaultMessage: 'Altitude Accuracy',
+		description: 'Label for observation metadata altitude accuracy.',
+	},
+	observationMetadataAltitudeAccuracyMeters: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyMeters',
+		defaultMessage: '± {value} m',
+		description: 'Displayed altitude accuracy for observation in meters.',
+	},
+	observationMetadataAltitudeAccuracyFeet: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyFeet',
+		defaultMessage: '± {value} ft',
+		description: 'Displayed altitude accuracy for observation in feet.',
+	},
+	observationMetadataSpeedLabel: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedLabel',
+		defaultMessage: 'Speed',
+		description: 'Label for observation metadata speed.',
+	},
+	observationMetadataSpeedMeters: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedMeters',
+		defaultMessage: '{value} m/s',
+		description: 'Displayed speed for observation in meters per second.',
+	},
+	observationMetadataSpeedFeet: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedFeet',
+		defaultMessage: '{value} ft/s',
+		description: 'Displayed speed for observation in feet per second.',
 	},
 })

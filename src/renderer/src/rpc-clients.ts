@@ -1,4 +1,7 @@
-import { createAppRpcClient, createMapeoClient } from '@comapeo/ipc/client.js'
+import {
+	createComapeoCoreClient,
+	createComapeoServicesClient,
+} from '@comapeo/ipc/client.js'
 
 export function initRpcClients() {
 	const comapeoChannel = new MessageChannel()
@@ -9,23 +12,15 @@ export function initRpcClients() {
 		appChannel.port2,
 	])
 
-	const clientApi = createMapeoClient(comapeoChannel.port1, {
+	const coreClient = createComapeoCoreClient(comapeoChannel.port1, {
 		timeout: Infinity,
 	})
-	const appRpc = createAppRpcClient(appChannel.port1, { timeout: Infinity })
-
-	const mapServerApi = {
-		async getBaseUrl() {
-			const { localPort } =
-				// @ts-expect-error Not worth patching IPC
-				await appRpc.getMapServerPorts()
-
-			return new URL(`http://127.0.0.1:${localPort}`)
-		},
-	}
+	const servicesClient = createComapeoServicesClient(appChannel.port1, {
+		timeout: Infinity,
+	})
 
 	comapeoChannel.port1.start()
 	appChannel.port1.start()
 
-	return { clientApi, mapServerApi }
+	return { coreClient, servicesClient }
 }

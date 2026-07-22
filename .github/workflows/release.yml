@@ -37,12 +37,25 @@ jobs:
           private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
 
       - name: Checkout repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           token: ${{ steps.app-token.outputs.token }}
           sparse-checkout: |
+            .github/update-npm-version/action.yml
+            .nvmrc
             package.json
+            package-lock.json
           sparse-checkout-cone-mode: false
+          persist-credentials: true
+
+      - name: Use Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+          package-manager-cache: false
+
+      - name: Update npm version
+        uses: ./.github/update-npm-version
 
       - run: npm install --no-save semver
         shell: bash

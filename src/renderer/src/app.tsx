@@ -52,9 +52,9 @@ const theme = createTheme({ platform })
 const MAIN_CONTENT_HEIGHT =
 	platform === 'darwin' ? `calc(100% - ${TITLE_BAR_HEIGHT})` : '100%'
 
-const { clientApi, mapServerApi } = initRpcClients()
+const { coreClient, servicesClient } = initRpcClients()
 
-const localPeersStore = createLocalPeersStore({ clientApi })
+const localPeersStore = createLocalPeersStore({ coreClient })
 const activeProjectIdStore = createActiveProjectIdStore({
 	initialValue: window.runtime.getInitialProjectId(),
 })
@@ -78,7 +78,7 @@ const router = createRouter({
 	history: hashHistory,
 	context: {
 		activeProjectIdStore,
-		clientApi,
+		clientApi: coreClient,
 		// NOTE: Populated at render time
 		formatMessage: undefined!,
 		history: hashHistory,
@@ -188,9 +188,9 @@ export function App() {
 										}
 									>
 										<ComapeoCoreProvider
-											clientApi={clientApi}
+											clientApi={coreClient}
 											queryClient={queryClient}
-											getMapServerBaseUrl={mapServerApi.getBaseUrl}
+											getMapServerBaseUrl={servicesClient.mapServer.getBaseUrl}
 										>
 											<LocalPeersStoreProvider value={localPeersStore}>
 												<WithAddedRouteContext>
