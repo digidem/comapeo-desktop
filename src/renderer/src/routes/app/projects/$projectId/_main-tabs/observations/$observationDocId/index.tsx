@@ -1224,7 +1224,7 @@ function ObservationMetadataPanel({
 					unitSystem === 'imperial'
 						? m.observationMetadataSpeedFeet
 						: m.observationMetadataSpeedMeters,
-					{ value: speed.toFixed(1) },
+					{ value: speed.toFixed(2) },
 				),
 			})
 		}
