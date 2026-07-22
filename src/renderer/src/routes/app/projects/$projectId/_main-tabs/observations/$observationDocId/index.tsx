@@ -666,12 +666,12 @@ function ObservationDetailsPanel({
 																value: (
 																	observation.metadata.position.coords
 																		.accuracy * FOOT_TO_METER_RATIO
-																).toFixed(0),
+																).toFixed(3),
 															})
 														: t(m.locationAccuracyMeters, {
 																value:
 																	observation.metadata.position.coords.accuracy.toFixed(
-																		0,
+																		3,
 																	),
 															})}
 												</Box>
@@ -1124,9 +1124,7 @@ function ObservationMetadataPanel({
 }) {
 	const { formatMessage: t, formatDate } = useIntl()
 
-	// TODO: Use metadata position as fallback?
 	const latitude = observation.lat
-	// TODO: Use metadata position as fallback?
 	const longitude = observation.lon
 	const accuracy = observation.metadata?.position?.coords.accuracy
 	const altitude = observation.metadata?.position?.coords.altitude
@@ -1145,10 +1143,7 @@ function ObservationMetadataPanel({
 					id: 'latitude',
 					icon: <Icon name="comapeo-latitude" htmlColor={DARK_GREY} />,
 					label: t(m.observationMetadataLatitudeLabel),
-					value: t(m.observationMetadataCoordinate, {
-						// TODO: Fix to 6?
-						value: latitude,
-					}),
+					value: t(m.observationMetadataCoordinate, { value: latitude }),
 				}
 			: undefined,
 		longitude !== undefined
@@ -1156,10 +1151,7 @@ function ObservationMetadataPanel({
 					id: 'longitude',
 					icon: <Icon name="comapeo-longitude" htmlColor={DARK_GREY} />,
 					label: t(m.observationMetadataLongitudeLabel),
-					value: t(m.observationMetadataCoordinate, {
-						// TODO: Fix to 6?
-						value: longitude,
-					}),
+					value: t(m.observationMetadataCoordinate, { value: longitude }),
 				}
 			: undefined,
 		accuracy !== undefined
@@ -1170,12 +1162,10 @@ function ObservationMetadataPanel({
 					value:
 						unitSystem === 'imperial'
 							? t(m.observationMetadataLocationAccuracyFeet, {
-									// TODO: Fix to 0?
-									value: Math.abs(accuracy) * FOOT_TO_METER_RATIO,
+									value: (Math.abs(accuracy) * FOOT_TO_METER_RATIO).toFixed(3),
 								})
 							: t(m.observationMetadataLocationAccuracyMeters, {
-									// TODO: Fix to 0?
-									value: Math.abs(accuracy),
+									value: Math.abs(accuracy).toFixed(3),
 								}),
 				}
 			: undefined,
@@ -1189,12 +1179,10 @@ function ObservationMetadataPanel({
 					value:
 						unitSystem === 'imperial'
 							? t(m.observationMetadataAltitudeFeet, {
-									// TODO: Fix to 0?
-									value: altitude * FOOT_TO_METER_RATIO,
+									value: (altitude * FOOT_TO_METER_RATIO).toFixed(3),
 								})
 							: t(m.observationMetadataAltitudeMeters, {
-									// TODO: Fix to 0?
-									value: altitude,
+									value: altitude.toFixed(3),
 								}),
 				}
 			: undefined,
@@ -1211,12 +1199,12 @@ function ObservationMetadataPanel({
 					value:
 						unitSystem === 'imperial'
 							? t(m.observationMetadataAltitudeAccuracyFeet, {
-									// TODO: Fix to 0?
-									value: Math.abs(altitudeAccuracy) * FOOT_TO_METER_RATIO,
+									value: (
+										Math.abs(altitudeAccuracy) * FOOT_TO_METER_RATIO
+									).toFixed(3),
 								})
 							: t(m.observationMetadataAltitudeAccuracyMeters, {
-									// TODO: Fix to 0?
-									value: Math.abs(altitudeAccuracy),
+									value: Math.abs(altitudeAccuracy).toFixed(3),
 								}),
 				}
 			: undefined,
@@ -1229,7 +1217,7 @@ function ObservationMetadataPanel({
 						unitSystem === 'imperial'
 							? m.observationMetadataSpeedFeet
 							: m.observationMetadataSpeedMeters,
-						{ value: speed },
+						{ value: speed.toFixed(3) },
 					),
 				}
 			: undefined,
@@ -1316,7 +1304,7 @@ function ObservationMetadataPanel({
 								sx={{
 									alignItems: 'center',
 									backgroundColor: index % 2 === 0 ? LIGHT_GREY : WHITE,
-									gap: 4,
+									gap: 2,
 									justifyContent: 'space-between',
 									paddingBlock: 4,
 									paddingInline: 6,
