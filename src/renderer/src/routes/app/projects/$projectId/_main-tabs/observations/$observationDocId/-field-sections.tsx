@@ -12,10 +12,12 @@ import type {
 	ObservationTagValue,
 	TagValue,
 } from '../../../../../../../lib/comapeo.ts'
+import { ExhaustivenessError } from '../../../../../../../lib/exhaustiveness-error.ts'
 import { getLocaleStateQueryOptions } from '../../../../../../../lib/queries/app-settings.ts'
 import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations.ts'
 import { EditableSection } from './-components/editable-section.tsx'
 import {
+	DateFieldEditor,
 	MultiSelectFieldEditor,
 	NumberFieldEditor,
 	SingleSelectFieldEditor,
@@ -64,7 +66,7 @@ export function EditableFieldSection({
 	onStopEditMode: () => void
 	projectId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: lang } = useSuspenseQuery({
 		...getLocaleStateQueryOptions(),
@@ -95,6 +97,7 @@ export function EditableFieldSection({
 
 	const updateObservationField = useMutation({
 		mutationKey: updateObservationFieldMutationKey,
+		// TODO: Allow unsetting the value
 		mutationFn: async ({ value }: { value: ObservationTagValue }) => {
 			return updateObservationDocument.mutateAsync({
 				versionId: observation.versionId,
@@ -111,7 +114,7 @@ export function EditableFieldSection({
 			? undefined
 			: getDisplayedTagValue({
 					tagValue: initialTagValue,
-					formatMessage: t,
+					intl,
 					selectionOptions:
 						field.type === 'selectOne' || field.type === 'selectMultiple'
 							? field.options
@@ -130,7 +133,9 @@ export function EditableFieldSection({
 						onStopEditMode()
 					}
 
-					switch (field.type) {
+					const fieldType = field.type
+
+					switch (fieldType) {
 						case 'text': {
 							if (
 								initialTagValue !== undefined &&
@@ -150,9 +155,11 @@ export function EditableFieldSection({
 										updateEditState('idle')
 
 										try {
+											// TODO: Allow unsetting the value
 											if (value !== undefined) {
 												await updateObservationField.mutateAsync({ value })
 											}
+
 											updateEditState('success')
 										} catch (err) {
 											captureException(err)
@@ -182,9 +189,11 @@ export function EditableFieldSection({
 										updateEditState('idle')
 
 										try {
+											// TODO: Allow unsetting the value
 											if (value !== undefined) {
 												await updateObservationField.mutateAsync({ value })
 											}
+
 											updateEditState('success')
 										} catch (err) {
 											captureException(err)
@@ -214,9 +223,11 @@ export function EditableFieldSection({
 										updateEditState('idle')
 
 										try {
+											// TODO: Allow unsetting the value
 											if (value !== undefined) {
 												await updateObservationField.mutateAsync({ value })
 											}
+
 											updateEditState('success')
 										} catch (err) {
 											captureException(err)
@@ -248,6 +259,7 @@ export function EditableFieldSection({
 										updateEditState('idle')
 
 										try {
+											// TODO: Allow unsetting the value
 											await updateObservationField.mutateAsync({ value })
 											updateEditState('success')
 										} catch (err) {
@@ -258,6 +270,43 @@ export function EditableFieldSection({
 									}}
 								/>
 							)
+						}
+						case 'date': {
+							if (
+								initialTagValue !== undefined &&
+								typeof initialTagValue !== 'string'
+							) {
+								throw new Error(
+									`Expected string type for initial tag value. Received ${typeof initialTagValue}`,
+								)
+							}
+
+							return (
+								<DateFieldEditor
+									field={field}
+									initialValue={initialTagValue}
+									onCancel={onCancel}
+									onSave={async (value) => {
+										updateEditState('idle')
+
+										try {
+											// TODO: Allow unsetting the value
+											if (value !== undefined) {
+												await updateObservationField.mutateAsync({ value })
+											}
+
+											updateEditState('success')
+										} catch (err) {
+											captureException(err)
+										}
+
+										onStopEditMode()
+									}}
+								/>
+							)
+						}
+						default: {
+							throw new ExhaustivenessError(fieldType)
 						}
 					}
 				}}
@@ -270,7 +319,7 @@ export function EditableFieldSection({
 						{field.label}
 					</Typography>
 				}
-				tooltipText={t(m.editNotesTooltip)}
+				tooltipText={intl.formatMessage(m.editNotesTooltip)}
 				renderWhenIdle={() => {
 					if (
 						updateObservationField.status === 'pending' ||
@@ -279,7 +328,7 @@ export function EditableFieldSection({
 					) {
 						const displayedVariableValue = getDisplayedTagValue({
 							tagValue: updateObservationField.variables.value,
-							formatMessage: t,
+							intl,
 							selectionOptions:
 								field.type === 'selectOne' || field.type === 'selectMultiple'
 									? field.options
@@ -292,7 +341,8 @@ export function EditableFieldSection({
 									fontStyle: displayedVariableValue ? undefined : 'italic',
 								}}
 							>
-								{displayedVariableValue || t(m.fieldAnswerNoAnswer)}
+								{displayedVariableValue ||
+									intl.formatMessage(m.fieldAnswerNoAnswer)}
 							</Typography>
 						)
 					}
@@ -303,7 +353,8 @@ export function EditableFieldSection({
 								fontStyle: displayedReadOnlyTagValue ? undefined : 'italic',
 							}}
 						>
-							{displayedReadOnlyTagValue || t(m.fieldAnswerNoAnswer)}
+							{displayedReadOnlyTagValue ||
+								intl.formatMessage(m.fieldAnswerNoAnswer)}
 						</Typography>
 					)
 				}}

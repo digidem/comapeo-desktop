@@ -7,18 +7,21 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
+import { DesktopDatePicker } from '@mui/x-date-pickers'
+import { startOfDay } from 'date-fns'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { Icon } from '../../../../../../../components/icon'
-import { useAppForm } from '../../../../../../../hooks/forms'
+import { Icon } from '../../../../../../../components/icon.tsx'
+import { useAppForm } from '../../../../../../../hooks/forms.ts'
 import {
 	getDisplayedTagValue,
+	type EditableDateField,
 	type EditableMultiSelectField,
 	type EditableNumberField,
 	type EditableSingleSelectField,
 	type EditableTextField,
-} from './-shared'
+} from './-shared.ts'
 
 const TextFieldEditorSchema = v.object({
 	answer: v.union([v.undefined(), v.pipe(v.string(), v.trim())]),
@@ -244,7 +247,7 @@ export function SingleSelectFieldEditor({
 	onCancel: () => void
 	onSave: (value: string | boolean | number | null | undefined) => Promise<void>
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const form = useAppForm({
 		defaultValues: { answer: initialValue },
@@ -291,7 +294,7 @@ export function SingleSelectFieldEditor({
 										control={<Radio />}
 										label={getDisplayedTagValue({
 											tagValue: initialValue,
-											formatMessage: t,
+											intl,
 										})}
 									/>
 								) : null}
@@ -329,7 +332,7 @@ export function SingleSelectFieldEditor({
 								loading={isSubmitting}
 								endIcon={<Icon name="material-check-circle-outline-rounded" />}
 							>
-								{t(m.saveButtonText)}
+								{intl.formatMessage(m.saveButtonText)}
 							</Button>
 
 							<Button
@@ -345,7 +348,7 @@ export function SingleSelectFieldEditor({
 									onCancel()
 								}}
 							>
-								{t(m.cancelButtonText)}
+								{intl.formatMessage(m.cancelButtonText)}
 							</Button>
 						</>
 					)}
@@ -421,6 +424,125 @@ export function MultiSelectFieldEditor({
 					</form.AppField>
 				))}
 			</FormGroup>
+
+			<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
+				<form.Subscribe selector={(state) => state.isSubmitting}>
+					{(isSubmitting) => (
+						<>
+							<Button
+								type="submit"
+								fullWidth
+								sx={{ maxWidth: 400 }}
+								loadingPosition="start"
+								loading={isSubmitting}
+								endIcon={<Icon name="material-check-circle-outline-rounded" />}
+							>
+								{t(m.saveButtonText)}
+							</Button>
+
+							<Button
+								type="button"
+								variant="outlined"
+								fullWidth
+								sx={{ maxWidth: 400 }}
+								onClick={() => {
+									if (isSubmitting) {
+										return
+									}
+
+									onCancel()
+								}}
+							>
+								{t(m.cancelButtonText)}
+							</Button>
+						</>
+					)}
+				</form.Subscribe>
+			</Stack>
+		</Stack>
+	)
+}
+
+const DateFieldEditorSchema = v.object({
+	answer: v.union([v.undefined(), v.pipe(v.string(), v.isoTimestamp())]),
+})
+
+export function DateFieldEditor({
+	field,
+	initialValue,
+	onCancel,
+	onSave,
+}: {
+	field: EditableDateField
+	initialValue: string | undefined
+	onCancel: () => void
+	onSave: (value: string | undefined) => Promise<void>
+}) {
+	const { formatMessage: t } = useIntl()
+
+	const form = useAppForm({
+		defaultValues: { answer: initialValue },
+		validators: { onChange: DateFieldEditorSchema },
+		onSubmit: async ({ value }) => {
+			const parsedValue = v.parse(DateFieldEditorSchema, value)
+
+			await onSave(parsedValue.answer)
+		},
+	})
+
+	return (
+		<Stack
+			direction="column"
+			component="form"
+			id={`${field.label}-form`}
+			onSubmit={(event) => {
+				event.preventDefault()
+				if (form.state.isSubmitting) return
+				form.handleSubmit()
+			}}
+			sx={{ gap: 4 }}
+		>
+			<form.AppField name="answer">
+				{(formField) => {
+					const error = formField.state.meta.errors[0]
+
+					return (
+						<DesktopDatePicker
+							disableFuture
+							autoFocus
+							value={
+								formField.state.value ? startOfDay(formField.state.value) : null
+							}
+							onChange={(value) => {
+								formField.handleChange(
+									value ? startOfDay(value).toISOString() : undefined,
+								)
+							}}
+							slotProps={{
+								field: {
+									'aria-label': field.label,
+									clearable: true,
+									onBlur: formField.handleBlur,
+								},
+								textField: {
+									error: !!error,
+									helperText: error?.message,
+									slotProps: {
+										input: {
+											slotProps: {
+												input: {
+													// NOTE: Prevents horizontal overflow when panel is very narrow
+													style: { width: '100%' },
+												},
+											},
+										},
+									},
+								},
+							}}
+						/>
+					)
+				}}
+			</form.AppField>
 
 			<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
 				<form.Subscribe selector={(state) => state.isSubmitting}>
