@@ -88,17 +88,19 @@ export function TextFieldEditor({
 				)}
 			</form.AppField>
 
-			<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
+			<Stack
+				direction="row"
+				sx={{ flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}
+			>
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
 							<Button
 								type="submit"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								loadingPosition="start"
 								loading={isSubmitting}
 								endIcon={<Icon name="material-check-circle-outline-rounded" />}
+								sx={{ flex: 1, minwidth: 200, maxWidth: 400 }}
 							>
 								{t(m.saveButtonText)}
 							</Button>
@@ -106,8 +108,6 @@ export function TextFieldEditor({
 							<Button
 								type="button"
 								variant="outlined"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -115,6 +115,7 @@ export function TextFieldEditor({
 
 									onCancel()
 								}}
+								sx={{ flex: 1, minwidth: 200, maxWidth: 400 }}
 							>
 								{t(m.cancelButtonText)}
 							</Button>
@@ -198,17 +199,19 @@ export function NumberFieldEditor({
 				)}
 			</form.AppField>
 
-			<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
+			<Stack
+				direction="row"
+				sx={{ flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}
+			>
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
 							<Button
 								type="submit"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								loadingPosition="start"
 								loading={isSubmitting}
 								endIcon={<Icon name="material-check-circle-outline-rounded" />}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
 							>
 								{t(m.saveButtonText)}
 							</Button>
@@ -216,8 +219,6 @@ export function NumberFieldEditor({
 							<Button
 								type="button"
 								variant="outlined"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -225,6 +226,7 @@ export function NumberFieldEditor({
 
 									onCancel()
 								}}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
 							>
 								{t(m.cancelButtonText)}
 							</Button>
@@ -320,17 +322,19 @@ export function SingleSelectFieldEditor({
 				}}
 			</form.AppField>
 
-			<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
+			<Stack
+				direction="row"
+				sx={{ flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}
+			>
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
 							<Button
 								type="submit"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								loadingPosition="start"
 								loading={isSubmitting}
 								endIcon={<Icon name="material-check-circle-outline-rounded" />}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
 							>
 								{intl.formatMessage(m.saveButtonText)}
 							</Button>
@@ -338,8 +342,6 @@ export function SingleSelectFieldEditor({
 							<Button
 								type="button"
 								variant="outlined"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -347,6 +349,7 @@ export function SingleSelectFieldEditor({
 
 									onCancel()
 								}}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
 							>
 								{intl.formatMessage(m.cancelButtonText)}
 							</Button>
@@ -425,17 +428,19 @@ export function MultiSelectFieldEditor({
 				))}
 			</FormGroup>
 
-			<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
+			<Stack
+				direction="row"
+				sx={{ flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}
+			>
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
 							<Button
 								type="submit"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								loadingPosition="start"
 								loading={isSubmitting}
 								endIcon={<Icon name="material-check-circle-outline-rounded" />}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
 							>
 								{t(m.saveButtonText)}
 							</Button>
@@ -443,8 +448,6 @@ export function MultiSelectFieldEditor({
 							<Button
 								type="button"
 								variant="outlined"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -452,6 +455,7 @@ export function MultiSelectFieldEditor({
 
 									onCancel()
 								}}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
 							>
 								{t(m.cancelButtonText)}
 							</Button>
@@ -544,17 +548,19 @@ export function DateFieldEditor({
 				}}
 			</form.AppField>
 
-			<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
+			<Stack
+				direction="row"
+				sx={{ flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}
+			>
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
 							<Button
 								type="submit"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								loadingPosition="start"
 								loading={isSubmitting}
 								endIcon={<Icon name="material-check-circle-outline-rounded" />}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
 							>
 								{t(m.saveButtonText)}
 							</Button>
@@ -562,8 +568,6 @@ export function DateFieldEditor({
 							<Button
 								type="button"
 								variant="outlined"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -571,6 +575,7 @@ export function DateFieldEditor({
 
 									onCancel()
 								}}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
 							>
 								{t(m.cancelButtonText)}
 							</Button>
