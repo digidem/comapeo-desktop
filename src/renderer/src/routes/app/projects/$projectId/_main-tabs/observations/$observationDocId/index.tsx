@@ -52,6 +52,7 @@ import {
 	type ObservationTagValue,
 } from '../../../../../../../lib/comapeo.ts'
 import { formatCoords } from '../../../../../../../lib/coordinate-format.ts'
+import { ExhaustivenessError } from '../../../../../../../lib/exhaustiveness-error.ts'
 import { customNotFound } from '../../../../../../../lib/navigation.ts'
 import {
 	getCoordinateFormatQueryOptions,
@@ -75,7 +76,11 @@ import {
 	ObservationPhotoAttachmentPreview,
 	ObservationUnsupportedAttachmentPreview,
 } from './-observation-attachment.tsx'
-import { getDisplayedTagValue, type EditableField } from './-shared.ts'
+import {
+	IsoTimestampSchema,
+	getDisplayedTagValue,
+	type EditableField,
+} from './-shared.ts'
 
 // NOTE: Vendored from Convert (https://github.com/jonahsnider/convert/blob/9e077c6d9cff8a43bc4b431c915712039353c5c0/src/conversions/measures/length.ts#L15)
 const FOOT_TO_METER_RATIO = 0.3048
@@ -366,7 +371,7 @@ function ObservationDetailsPanel({
 	projectId: string
 	showCategoryUpdatedIndicator: boolean
 }) {
-	const { formatDate, formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const router = useRouter()
 
@@ -463,7 +468,7 @@ function ObservationDetailsPanel({
 					</IconButton>
 
 					<Typography variant="h1" sx={{ fontWeight: 500 }}>
-						{t(m.navTitle)}
+						{intl.formatMessage(m.navTitle)}
 					</Typography>
 				</Stack>
 
@@ -514,7 +519,7 @@ function ObservationDetailsPanel({
 										}}
 									>
 										<time dateTime={observation.createdAt}>
-											{formatDate(observation.createdAt, {
+											{intl.formatDate(observation.createdAt, {
 												year: 'numeric',
 												month: 'short',
 												day: '2-digit',
@@ -554,10 +559,12 @@ function ObservationDetailsPanel({
 												>
 													{category.iconRef?.docId ? (
 														<CategoryIconImage
-															altText={t(m.categoryIconAlt, {
+															altText={intl.formatMessage(m.categoryIconAlt, {
 																name:
 																	category.name ||
-																	t(m.observationCategoryNameFallback),
+																	intl.formatMessage(
+																		m.observationCategoryNameFallback,
+																	),
 															})}
 															iconDocumentId={category.iconRef.docId}
 															projectId={projectId}
@@ -605,7 +612,7 @@ function ObservationDetailsPanel({
 										>
 											{category
 												? category.name
-												: t(m.observationCategoryNameFallback)}
+												: intl.formatMessage(m.observationCategoryNameFallback)}
 										</Typography>
 									</Stack>
 
@@ -624,7 +631,7 @@ function ObservationDetailsPanel({
 													onEditCategory()
 												}}
 											>
-												{t(m.changeCategory)}
+												{intl.formatMessage(m.changeCategory)}
 											</Button>
 										</Box>
 									) : null}
@@ -654,13 +661,13 @@ function ObservationDetailsPanel({
 												.accuracy === 'number' ? (
 												<Box component="span" sx={{ marginInlineStart: 4 }}>
 													{unitSystem === 'imperial'
-														? t(m.locationAccuracyFeet, {
+														? intl.formatMessage(m.locationAccuracyFeet, {
 																value: (
 																	observation.metadata.position.coords
 																		.accuracy * FOOT_TO_METER_RATIO
 																).toFixed(0),
 															})
-														: t(m.locationAccuracyMeters, {
+														: intl.formatMessage(m.locationAccuracyMeters, {
 																value:
 																	observation.metadata.position.coords.accuracy.toFixed(
 																		0,
@@ -670,7 +677,7 @@ function ObservationDetailsPanel({
 											) : null}
 										</Typography>
 									) : (
-										<Typography>{t(m.noLocation)}</Typography>
+										<Typography>{intl.formatMessage(m.noLocation)}</Typography>
 									)}
 								</Stack>
 							</Box>
@@ -820,7 +827,7 @@ function ObservationDetailsPanel({
 									variant="body1"
 									sx={{ textTransform: 'uppercase' }}
 								>
-									{t(m.detailsSectionTitle)}
+									{intl.formatMessage(m.detailsSectionTitle)}
 								</Typography>
 
 								<Stack direction="column" sx={{ gap: 3 }}>
@@ -828,24 +835,39 @@ function ObservationDetailsPanel({
 										const editId = `${editPrefixId}/fields/${field.docId}`
 										const existingTagValue = observation.tags[field.tagKey]
 
+										let displayedReadOnlyValue =
+											existingTagValue === undefined
+												? undefined
+												: getDisplayedTagValue({
+														tagValue: existingTagValue,
+														intl,
+														selectionOptions:
+															field.type === 'selectOne' ||
+															field.type === 'selectMultiple'
+																? field.options
+																: undefined,
+													})
+
+										if (
+											field.type === 'date' &&
+											v.is(IsoTimestampSchema, displayedReadOnlyValue)
+										) {
+											displayedReadOnlyValue = intl.formatDate(
+												displayedReadOnlyValue,
+												{
+													month: 'long',
+													day: '2-digit',
+													year: 'numeric',
+												},
+											)
+										}
+
 										if (!canEdit || !isEditableField(field)) {
 											return (
 												<ReadOnlyFieldSection
 													key={field.docId}
 													label={field.label}
-													value={
-														existingTagValue === undefined
-															? undefined
-															: getDisplayedTagValue({
-																	tagValue: existingTagValue,
-																	formatMessage: t,
-																	selectionOptions:
-																		field.type === 'selectOne' ||
-																		field.type === 'selectMultiple'
-																			? field.options
-																			: undefined,
-																})
-													}
+													value={displayedReadOnlyValue}
 												/>
 											)
 										}
@@ -874,7 +896,7 @@ function ObservationDetailsPanel({
 												? undefined
 												: tryToCoerceTagValue(existingTagValue, field.type)
 
-										// If the tag value cannot be coerced, render it as non-editable
+										// NOTE: If the tag value cannot be coerced, render it as non-editable
 										if (coercedTagValue === undefined) {
 											return (
 												<ReadOnlyFieldSection
@@ -885,7 +907,7 @@ function ObservationDetailsPanel({
 															? undefined
 															: getDisplayedTagValue({
 																	tagValue: existingTagValue,
-																	formatMessage: t,
+																	intl,
 																	selectionOptions:
 																		field.type === 'selectOne' ||
 																		field.type === 'selectMultiple'
@@ -905,19 +927,7 @@ function ObservationDetailsPanel({
 													<ReadOnlyFieldSection
 														key={field.docId}
 														label={field.label}
-														value={
-															existingTagValue === undefined
-																? undefined
-																: getDisplayedTagValue({
-																		tagValue: existingTagValue,
-																		formatMessage: t,
-																		selectionOptions:
-																			field.type === 'selectOne' ||
-																			field.type === 'selectMultiple'
-																				? field.options
-																				: undefined,
-																	})
-														}
+														value={displayedReadOnlyValue}
 													/>
 												)}
 											>
@@ -970,7 +980,7 @@ function ObservationDetailsPanel({
 								id="delete-observation-button-label"
 								color={activeEditId ? 'textDisabled' : undefined}
 							>
-								{t(m.deleteObservationButtonText)}
+								{intl.formatMessage(m.deleteObservationButtonText)}
 							</Typography>
 						</Stack>
 
@@ -994,7 +1004,9 @@ function ObservationDetailsPanel({
 											variant="h1"
 											sx={{ fontWeight: 500, textAlign: 'center' }}
 										>
-											{t(m.deleteObservationConfirmationDialogTitle)}
+											{intl.formatMessage(
+												m.deleteObservationConfirmationDialogTitle,
+											)}
 										</Typography>
 									</Stack>
 								</Stack>
@@ -1022,7 +1034,9 @@ function ObservationDetailsPanel({
 										}
 										sx={{ maxWidth: 400 }}
 									>
-										{t(m.deleteObservationConfirmationDialogCancel)}
+										{intl.formatMessage(
+											m.deleteObservationConfirmationDialogCancel,
+										)}
 									</Button>
 
 									<Button
@@ -1051,7 +1065,9 @@ function ObservationDetailsPanel({
 										startIcon={<Icon name="material-symbols-delete" />}
 										sx={{ maxWidth: 400 }}
 									>
-										{t(m.deleteObservationConfirmationDialogConfirm)}
+										{intl.formatMessage(
+											m.deleteObservationConfirmationDialogConfirm,
+										)}
 									</Button>
 								</Box>
 							</Stack>
@@ -1363,6 +1379,7 @@ function ObservationMetadataPanel({
 
 function isEditableField(field: Field): field is EditableField {
 	switch (field.type) {
+		case 'date':
 		case 'number':
 		case 'text': {
 			return true
@@ -1485,6 +1502,20 @@ function tryToCoerceTagValue(
 			}
 
 			return undefined
+		}
+		case 'date': {
+			if (typeof tagValue === 'string') {
+				try {
+					return new Date(tagValue).toISOString()
+				} catch {
+					return undefined
+				}
+			}
+
+			return undefined
+		}
+		default: {
+			throw new ExhaustivenessError(fieldType)
 		}
 	}
 }

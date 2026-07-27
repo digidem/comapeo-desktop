@@ -212,7 +212,7 @@ function DatePickersLocalizationProvider({
 				? (formattedDate) => {
 						const localeTextFromMessages = formattedDate
 							? getLocaleTextOverride(
-									t(m.openDatePickerDialogueSelected),
+									t(m.openDatePickerDialogueSelected, { formattedDate }),
 									formatters
 										.getMessageFormat(
 											m.openDatePickerDialogueSelected.defaultMessage,
@@ -238,12 +238,17 @@ function DatePickersLocalizationProvider({
 								.format(),
 					  ) &&
 					  !!getLocaleTextOverride(
-							t(m.openDatePickerDialogueSelected),
+							t(
+								m.openDatePickerDialogueSelected,
+								// NOTE: react-intl complains if you don't provide values when message string defines them
+								{ formattedDate: '_' },
+							),
 							formatters
 								.getMessageFormat(
 									m.openDatePickerDialogueSelected.defaultMessage,
 								)
-								.format(),
+								// NOTE: react-intl complains if you don't provide values when message string defines them
+								.format({ formattedDate: '_' }),
 					  )
 					? (formattedDate) =>
 							formattedDate
