@@ -24,14 +24,6 @@ import { useRouter } from '@tanstack/react-router'
 import { bbox } from '@turf/bbox'
 import { center } from '@turf/center'
 import { featureCollection, lineString, point } from '@turf/helpers'
-import type { Feature, Point } from 'geojson'
-import type {
-	FilterSpecification,
-	FitBoundsOptions,
-	LineLayerSpecification,
-	MapLibreEvent,
-} from 'maplibre-gl'
-import { defineMessages, useIntl } from 'react-intl'
 import {
 	Layer,
 	Marker,
@@ -42,7 +34,15 @@ import {
 	type MapInstance,
 	type MapLayerMouseEvent,
 	type MapRef,
-} from 'react-map-gl/maplibre'
+} from '@vis.gl/react-maplibre'
+import type { Feature, Point } from 'geojson'
+import type {
+	FilterSpecification,
+	FitBoundsOptions,
+	LineLayerSpecification,
+	MapLibreEvent,
+} from 'maplibre-gl'
+import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
 import { BLACK, BLUE_GREY, ORANGE, WHITE } from '../../../../../colors.ts'
