@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
@@ -7,18 +8,20 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
+import { DesktopDatePicker } from '@mui/x-date-pickers'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { Icon } from '../../../../../../../components/icon'
-import { useAppForm } from '../../../../../../../hooks/forms'
+import { Icon } from '../../../../../../../components/icon.tsx'
+import { useAppForm } from '../../../../../../../hooks/forms.ts'
 import {
 	getDisplayedTagValue,
+	type EditableDateField,
 	type EditableMultiSelectField,
 	type EditableNumberField,
 	type EditableSingleSelectField,
 	type EditableTextField,
-} from './-shared'
+} from './-shared.ts'
 
 const TextFieldEditorSchema = v.object({
 	answer: v.union([v.undefined(), v.pipe(v.string(), v.trim())]),
@@ -85,17 +88,19 @@ export function TextFieldEditor({
 				)}
 			</form.AppField>
 
-			<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
+			<Stack
+				direction="row"
+				sx={{ flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}
+			>
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
 							<Button
 								type="submit"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								loadingPosition="start"
 								loading={isSubmitting}
 								endIcon={<Icon name="material-check-circle-outline-rounded" />}
+								sx={{ flex: 1, minwidth: 200, maxWidth: 400 }}
 							>
 								{t(m.saveButtonText)}
 							</Button>
@@ -103,8 +108,6 @@ export function TextFieldEditor({
 							<Button
 								type="button"
 								variant="outlined"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -112,6 +115,7 @@ export function TextFieldEditor({
 
 									onCancel()
 								}}
+								sx={{ flex: 1, minwidth: 200, maxWidth: 400 }}
 							>
 								{t(m.cancelButtonText)}
 							</Button>
@@ -195,17 +199,19 @@ export function NumberFieldEditor({
 				)}
 			</form.AppField>
 
-			<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
+			<Stack
+				direction="row"
+				sx={{ flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}
+			>
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
 							<Button
 								type="submit"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								loadingPosition="start"
 								loading={isSubmitting}
 								endIcon={<Icon name="material-check-circle-outline-rounded" />}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
 							>
 								{t(m.saveButtonText)}
 							</Button>
@@ -213,8 +219,6 @@ export function NumberFieldEditor({
 							<Button
 								type="button"
 								variant="outlined"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -222,6 +226,7 @@ export function NumberFieldEditor({
 
 									onCancel()
 								}}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
 							>
 								{t(m.cancelButtonText)}
 							</Button>
@@ -244,7 +249,7 @@ export function SingleSelectFieldEditor({
 	onCancel: () => void
 	onSave: (value: string | boolean | number | null | undefined) => Promise<void>
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const form = useAppForm({
 		defaultValues: { answer: initialValue },
@@ -291,7 +296,7 @@ export function SingleSelectFieldEditor({
 										control={<Radio />}
 										label={getDisplayedTagValue({
 											tagValue: initialValue,
-											formatMessage: t,
+											intl,
 										})}
 									/>
 								) : null}
@@ -317,26 +322,26 @@ export function SingleSelectFieldEditor({
 				}}
 			</form.AppField>
 
-			<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
+			<Stack
+				direction="row"
+				sx={{ flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}
+			>
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
 							<Button
 								type="submit"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								loadingPosition="start"
 								loading={isSubmitting}
 								endIcon={<Icon name="material-check-circle-outline-rounded" />}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
 							>
-								{t(m.saveButtonText)}
+								{intl.formatMessage(m.saveButtonText)}
 							</Button>
 
 							<Button
 								type="button"
 								variant="outlined"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -344,8 +349,9 @@ export function SingleSelectFieldEditor({
 
 									onCancel()
 								}}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
 							>
-								{t(m.cancelButtonText)}
+								{intl.formatMessage(m.cancelButtonText)}
 							</Button>
 						</>
 					)}
@@ -422,17 +428,19 @@ export function MultiSelectFieldEditor({
 				))}
 			</FormGroup>
 
-			<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
+			<Stack
+				direction="row"
+				sx={{ flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}
+			>
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<>
 							<Button
 								type="submit"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								loadingPosition="start"
 								loading={isSubmitting}
 								endIcon={<Icon name="material-check-circle-outline-rounded" />}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
 							>
 								{t(m.saveButtonText)}
 							</Button>
@@ -440,8 +448,6 @@ export function MultiSelectFieldEditor({
 							<Button
 								type="button"
 								variant="outlined"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -449,6 +455,134 @@ export function MultiSelectFieldEditor({
 
 									onCancel()
 								}}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
+							>
+								{t(m.cancelButtonText)}
+							</Button>
+						</>
+					)}
+				</form.Subscribe>
+			</Stack>
+		</Stack>
+	)
+}
+
+export function DateFieldEditor({
+	field,
+	initialValue,
+	onCancel,
+	onSave,
+}: {
+	field: EditableDateField
+	initialValue: string | undefined
+	onCancel: () => void
+	onSave: (value: string | undefined) => Promise<void>
+}) {
+	const { formatMessage: t } = useIntl()
+
+	const dateFieldEditorSchema = useMemo(() => {
+		return v.object({
+			answer: v.message(
+				v.pipe(
+					v.date(),
+					v.transform((input) => {
+						return input.toISOString()
+					}),
+				),
+				t(m.invalidDateError),
+			),
+		})
+	}, [t])
+
+	const form = useAppForm({
+		defaultValues: {
+			answer: initialValue ? new Date(initialValue) : undefined,
+		},
+		validators: { onSubmit: dateFieldEditorSchema },
+		onSubmit: async ({ value }) => {
+			const parsedValue = v.parse(dateFieldEditorSchema, value)
+
+			await onSave(parsedValue.answer)
+		},
+	})
+
+	return (
+		<Stack
+			direction="column"
+			component="form"
+			id={`${field.label}-form`}
+			onSubmit={(event) => {
+				event.preventDefault()
+				if (form.state.isSubmitting) return
+				form.handleSubmit()
+			}}
+			sx={{ gap: 4 }}
+		>
+			<form.AppField name="answer">
+				{(formField) => {
+					const error = formField.state.meta.errors[0]
+
+					return (
+						<DesktopDatePicker
+							autoFocus
+							value={formField.state.value ? formField.state.value : null}
+							onChange={(value) => {
+								formField.handleChange(value || undefined)
+							}}
+							slotProps={{
+								field: {
+									'aria-label': field.label,
+									clearable: true,
+									onBlur: formField.handleBlur,
+								},
+								textField: {
+									error: !!error,
+									helperText: error?.message,
+									slotProps: {
+										input: {
+											slotProps: {
+												input: {
+													// NOTE: Prevents horizontal overflow when panel is very narrow
+													style: { width: '100%' },
+												},
+											},
+										},
+									},
+								},
+							}}
+						/>
+					)
+				}}
+			</form.AppField>
+
+			<Stack
+				direction="row"
+				sx={{ flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}
+			>
+				<form.Subscribe selector={(state) => state.isSubmitting}>
+					{(isSubmitting) => (
+						<>
+							<Button
+								type="submit"
+								loadingPosition="start"
+								loading={isSubmitting}
+								endIcon={<Icon name="material-check-circle-outline-rounded" />}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
+							>
+								{t(m.saveButtonText)}
+							</Button>
+
+							<Button
+								type="button"
+								variant="outlined"
+								onClick={() => {
+									if (isSubmitting) {
+										return
+									}
+
+									onCancel()
+								}}
+								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
 							>
 								{t(m.cancelButtonText)}
 							</Button>
@@ -470,5 +604,11 @@ const m = defineMessages({
 		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText',
 		defaultMessage: 'Cancel',
 		description: 'Text for cancel button.',
+	},
+	invalidDateError: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.invalidDateError',
+		defaultMessage: 'Invalid date',
+		description:
+			'Validation error message when specifying an invalid value for date field.',
 	},
 })
