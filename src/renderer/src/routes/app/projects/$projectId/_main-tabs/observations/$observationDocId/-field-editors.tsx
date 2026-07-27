@@ -512,7 +512,6 @@ export function DateFieldEditor({
 
 					return (
 						<DesktopDatePicker
-							disableFuture
 							autoFocus
 							value={
 								formField.state.value ? startOfDay(formField.state.value) : null
