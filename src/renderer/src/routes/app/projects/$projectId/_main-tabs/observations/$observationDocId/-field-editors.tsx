@@ -9,7 +9,6 @@ import RadioGroup from '@mui/material/RadioGroup'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import { DesktopDatePicker } from '@mui/x-date-pickers'
-import { startOfDay } from 'date-fns'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
@@ -484,14 +483,21 @@ export function DateFieldEditor({
 	const dateFieldEditorSchema = useMemo(() => {
 		return v.object({
 			answer: v.message(
-				v.pipe(v.string(), v.isoTimestamp()),
+				v.pipe(
+					v.date(),
+					v.transform((input) => {
+						return input.toISOString()
+					}),
+				),
 				t(m.invalidDateError),
 			),
 		})
 	}, [t])
 
 	const form = useAppForm({
-		defaultValues: { answer: initialValue },
+		defaultValues: {
+			answer: initialValue ? new Date(initialValue) : undefined,
+		},
 		validators: { onSubmit: dateFieldEditorSchema },
 		onSubmit: async ({ value }) => {
 			const parsedValue = v.parse(dateFieldEditorSchema, value)
@@ -519,13 +525,9 @@ export function DateFieldEditor({
 					return (
 						<DesktopDatePicker
 							autoFocus
-							value={
-								formField.state.value ? startOfDay(formField.state.value) : null
-							}
+							value={formField.state.value ? formField.state.value : null}
 							onChange={(value) => {
-								formField.handleChange(
-									value ? startOfDay(value).toISOString() : undefined,
-								)
+								formField.handleChange(value || undefined)
 							}}
 							slotProps={{
 								field: {
