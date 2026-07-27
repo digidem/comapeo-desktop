@@ -3,7 +3,7 @@ import {
 	Map as ReactMapLibre,
 	type MapProps,
 	type MapRef,
-} from 'react-map-gl/maplibre'
+} from '@vis.gl/react-maplibre'
 
 import 'maplibre-gl/dist/maplibre-gl.css'
 
