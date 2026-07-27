@@ -2,7 +2,7 @@ import type { Field } from '@comapeo/core/schema.js'
 import { defineMessages, type IntlShape } from 'react-intl'
 import * as v from 'valibot'
 
-import type { TagValue } from '../../../../../../../lib/comapeo'
+import type { TagValue } from '../../../../../../../lib/comapeo.ts'
 
 export type EditableTextField = Field & {
 	type: 'text'
@@ -72,19 +72,13 @@ export function getDisplayedTagValue({
 					)
 				}
 
-				if (v.is(v.pipe(v.string(), v.isoTimestamp()), value)) {
-					return intl.formatDate(value, {
-						month: 'long',
-						day: '2-digit',
-						year: 'numeric',
-					})
-				}
-
 				return value
 			})
 			.join(', ')
 	)
 }
+
+export const IsoTimestampSchema = v.pipe(v.string(), v.isoTimestamp())
 
 const m = defineMessages({
 	fieldAnswerTrue: {

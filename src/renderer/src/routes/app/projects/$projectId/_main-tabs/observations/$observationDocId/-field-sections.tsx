@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
+import * as v from 'valibot'
 
 import { DecentDialog } from '../../../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../../../components/error-dialog.tsx'
@@ -23,7 +24,11 @@ import {
 	SingleSelectFieldEditor,
 	TextFieldEditor,
 } from './-field-editors.tsx'
-import { getDisplayedTagValue, type EditableField } from './-shared.ts'
+import {
+	IsoTimestampSchema,
+	getDisplayedTagValue,
+	type EditableField,
+} from './-shared.ts'
 
 export function ReadOnlyFieldSection({
 	label,
@@ -108,18 +113,6 @@ export function EditableFieldSection({
 			})
 		},
 	})
-
-	const displayedReadOnlyTagValue =
-		initialTagValue === undefined
-			? undefined
-			: getDisplayedTagValue({
-					tagValue: initialTagValue,
-					intl,
-					selectionOptions:
-						field.type === 'selectOne' || field.type === 'selectMultiple'
-							? field.options
-							: undefined,
-				})
 
 	return (
 		<>
@@ -326,7 +319,7 @@ export function EditableFieldSection({
 						(updateObservationField.status === 'success' &&
 							observationsIsRefetching)
 					) {
-						const displayedVariableValue = getDisplayedTagValue({
+						let displayedVariableValue = getDisplayedTagValue({
 							tagValue: updateObservationField.variables.value,
 							intl,
 							selectionOptions:
@@ -334,6 +327,17 @@ export function EditableFieldSection({
 									? field.options
 									: undefined,
 						})
+
+						if (
+							field.type === 'date' &&
+							v.is(IsoTimestampSchema, displayedVariableValue)
+						) {
+							displayedVariableValue = intl.formatDate(displayedVariableValue, {
+								month: 'long',
+								day: '2-digit',
+								year: 'numeric',
+							})
+						}
 
 						return (
 							<Typography
@@ -347,14 +351,37 @@ export function EditableFieldSection({
 						)
 					}
 
+					let displayedTagValue =
+						initialTagValue === undefined
+							? undefined
+							: getDisplayedTagValue({
+									tagValue: initialTagValue,
+									intl,
+									selectionOptions:
+										field.type === 'selectOne' ||
+										field.type === 'selectMultiple'
+											? field.options
+											: undefined,
+								})
+
+					if (
+						field.type === 'date' &&
+						v.is(IsoTimestampSchema, displayedTagValue)
+					) {
+						displayedTagValue = intl.formatDate(displayedTagValue, {
+							month: 'long',
+							day: '2-digit',
+							year: 'numeric',
+						})
+					}
+
 					return (
 						<Typography
 							sx={{
-								fontStyle: displayedReadOnlyTagValue ? undefined : 'italic',
+								fontStyle: displayedTagValue ? undefined : 'italic',
 							}}
 						>
-							{displayedReadOnlyTagValue ||
-								intl.formatMessage(m.fieldAnswerNoAnswer)}
+							{displayedTagValue || intl.formatMessage(m.fieldAnswerNoAnswer)}
 						</Typography>
 					)
 				}}

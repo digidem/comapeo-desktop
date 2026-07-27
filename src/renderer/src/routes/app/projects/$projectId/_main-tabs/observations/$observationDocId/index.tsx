@@ -76,7 +76,11 @@ import {
 	ObservationPhotoAttachmentPreview,
 	ObservationUnsupportedAttachmentPreview,
 } from './-observation-attachment.tsx'
-import { getDisplayedTagValue, type EditableField } from './-shared.ts'
+import {
+	IsoTimestampSchema,
+	getDisplayedTagValue,
+	type EditableField,
+} from './-shared.ts'
 
 // NOTE: Vendored from Convert (https://github.com/jonahsnider/convert/blob/9e077c6d9cff8a43bc4b431c915712039353c5c0/src/conversions/measures/length.ts#L15)
 const FOOT_TO_METER_RATIO = 0.3048
@@ -831,24 +835,39 @@ function ObservationDetailsPanel({
 										const editId = `${editPrefixId}/fields/${field.docId}`
 										const existingTagValue = observation.tags[field.tagKey]
 
+										let displayedReadOnlyValue =
+											existingTagValue === undefined
+												? undefined
+												: getDisplayedTagValue({
+														tagValue: existingTagValue,
+														intl,
+														selectionOptions:
+															field.type === 'selectOne' ||
+															field.type === 'selectMultiple'
+																? field.options
+																: undefined,
+													})
+
+										if (
+											field.type === 'date' &&
+											v.is(IsoTimestampSchema, displayedReadOnlyValue)
+										) {
+											displayedReadOnlyValue = intl.formatDate(
+												displayedReadOnlyValue,
+												{
+													month: 'long',
+													day: '2-digit',
+													year: 'numeric',
+												},
+											)
+										}
+
 										if (!canEdit || !isEditableField(field)) {
 											return (
 												<ReadOnlyFieldSection
 													key={field.docId}
 													label={field.label}
-													value={
-														existingTagValue === undefined
-															? undefined
-															: getDisplayedTagValue({
-																	tagValue: existingTagValue,
-																	intl,
-																	selectionOptions:
-																		field.type === 'selectOne' ||
-																		field.type === 'selectMultiple'
-																			? field.options
-																			: undefined,
-																})
-													}
+													value={displayedReadOnlyValue}
 												/>
 											)
 										}
@@ -908,19 +927,7 @@ function ObservationDetailsPanel({
 													<ReadOnlyFieldSection
 														key={field.docId}
 														label={field.label}
-														value={
-															existingTagValue === undefined
-																? undefined
-																: getDisplayedTagValue({
-																		tagValue: existingTagValue,
-																		intl,
-																		selectionOptions:
-																			field.type === 'selectOne' ||
-																			field.type === 'selectMultiple'
-																				? field.options
-																				: undefined,
-																	})
-														}
+														value={displayedReadOnlyValue}
 													/>
 												)}
 											>
