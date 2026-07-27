@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
@@ -467,10 +468,6 @@ export function MultiSelectFieldEditor({
 	)
 }
 
-const DateFieldEditorSchema = v.object({
-	answer: v.union([v.undefined(), v.pipe(v.string(), v.isoTimestamp())]),
-})
-
 export function DateFieldEditor({
 	field,
 	initialValue,
@@ -484,11 +481,20 @@ export function DateFieldEditor({
 }) {
 	const { formatMessage: t } = useIntl()
 
+	const dateFieldEditorSchema = useMemo(() => {
+		return v.object({
+			answer: v.message(
+				v.pipe(v.string(), v.isoTimestamp()),
+				t(m.invalidDateError),
+			),
+		})
+	}, [t])
+
 	const form = useAppForm({
 		defaultValues: { answer: initialValue },
-		validators: { onChange: DateFieldEditorSchema },
+		validators: { onSubmit: dateFieldEditorSchema },
 		onSubmit: async ({ value }) => {
-			const parsedValue = v.parse(DateFieldEditorSchema, value)
+			const parsedValue = v.parse(dateFieldEditorSchema, value)
 
 			await onSave(parsedValue.answer)
 		},
@@ -596,5 +602,11 @@ const m = defineMessages({
 		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText',
 		defaultMessage: 'Cancel',
 		description: 'Text for cancel button.',
+	},
+	invalidDateError: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.invalidDateError',
+		defaultMessage: 'Invalid date',
+		description:
+			'Validation error message when specifying an invalid value for date field.',
 	},
 })

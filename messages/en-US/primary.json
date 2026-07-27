@@ -547,6 +547,10 @@
     "description": "Text for cancel button.",
     "message": "Cancel"
   },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.invalidDateError": {
+    "description": "Validation error message when specifying an invalid value for date field.",
+    "message": "Invalid date"
+  },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
     "description": "Text for save button.",
     "message": "Save"
