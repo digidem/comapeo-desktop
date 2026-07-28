@@ -378,8 +378,10 @@ function initMainWindow({
 	}
 }): BrowserWindow {
 	const mainWindow = new BrowserWindow({
-		width: 1200,
+		minHeight: 500,
 		height: 800,
+		minWidth: 800,
+		width: 1200,
 		// NOTE: Needs to be explicitly set for Linux
 		// https://www.electronforge.io/guides/create-and-add-icons#linux
 		icon:
@@ -404,10 +406,27 @@ function initMainWindow({
 	})
 
 	function updateMainWindowMinimumSize() {
-		const display = screen.getDisplayMatching(mainWindow.getBounds())
+		let display: Electron.Display | undefined = undefined
 
-		const width = display.size.width * 0.4
+		try {
+			display = screen.getDisplayMatching(mainWindow.getBounds())
+		} catch (err) {
+			log('Unable to get display', err)
+		}
+
+		if (!display) {
+			const [width, height] = mainWindow.getMinimumSize()
+
+			log(
+				'Unable to update main window minimum size. Current minimum size is %o',
+				{ width, height },
+			)
+
+			return
+		}
+
 		const height = display.size.height * 0.5
+		const width = display.size.width * 0.4
 
 		log('Updating main window minimum size', { width, height })
 
