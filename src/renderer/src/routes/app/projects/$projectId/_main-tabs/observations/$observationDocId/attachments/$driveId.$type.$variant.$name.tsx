@@ -7,7 +7,6 @@ import {
 	useUpdateDocument,
 } from '@comapeo/core-react'
 import type { Observation } from '@comapeo/core/schema.js'
-import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -16,14 +15,27 @@ import Dialog from '@mui/material/Dialog'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { styled, type SxProps, type Theme } from '@mui/material/styles'
 import { captureMessage } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
+import {
+	MediaController,
+	MediaPlayButton,
+	MediaTimeDisplay,
+	MediaTimeRange,
+} from 'media-chrome/react'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
 import { PhotoAttachmentImage } from '../-components/photo-attachment-image.tsx'
-import { BLUE_GREY, GREEN, LIGHT_GREY } from '../../../../../../../../colors.ts'
+import {
+	BLACK,
+	BLUE_GREY,
+	COMAPEO_BLUE,
+	GREEN,
+	WHITE,
+} from '../../../../../../../../colors.ts'
 import { DecentDialog } from '../../../../../../../../components/decent-dialog.tsx'
 import { ErrorBoundary } from '../../../../../../../../components/error-boundary.tsx'
 import { ErrorDialogContent } from '../../../../../../../../components/error-dialog.tsx'
@@ -233,6 +245,34 @@ function DeleteSuccessPanel({
 	)
 }
 
+const StyledMediaController = styled(MediaController)(({ theme }) => ({
+	'--media-background-color': WHITE,
+	'--media-control-hover-background': theme.palette.action.hover,
+	'--media-focus-box-shadow': `inset 0 0 0 2px ${COMAPEO_BLUE}`,
+	'--media-font-family': 'Rubik Variable, sans-serif',
+	'--media-primary-color': BLACK,
+	'--media-secondary-color': WHITE,
+	padding: theme.spacing(2),
+}))
+
+const StyledMediaPlayButton = styled(MediaPlayButton)(() => ({
+	'--media-control-height': '128px',
+	alignSelf: 'center',
+}))
+
+const StyledMediaTimeRange = styled(MediaTimeRange)(() => ({
+	'--media-range-bar-color': COMAPEO_BLUE,
+	'--media-range-thumb-background': COMAPEO_BLUE,
+	'--media-range-thumb': COMAPEO_BLUE,
+	'--media-range-track-background': BLUE_GREY,
+	'--media-range-track-border-radius': '8px',
+	width: '100%',
+}))
+
+const StyledMediaTimeDisplay = styled(MediaTimeDisplay)(() => ({
+	'--media-font-weight': 500,
+}))
+
 function AttachmentPanel({
 	blobId,
 	observationDocId,
@@ -244,7 +284,7 @@ function AttachmentPanel({
 	onDeleteSuccess: () => void
 	projectId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const router = useRouter()
 
@@ -271,6 +311,18 @@ function AttachmentPanel({
 		ownRole.roleId === COORDINATOR_ROLE_ID ||
 		ownRole.roleId === CREATOR_ROLE_ID ||
 		observation.createdBy === ownDeviceInfo.deviceId
+
+	// NOTE: Okay to do non-null assertion here because
+	// existence check is done in beforeLoad
+	const attachment = observation.attachments.find((a) => {
+		return (
+			a.driveDiscoveryId === blobId.driveId &&
+			a.type === blobId.type &&
+			a.name === blobId.name
+		)
+	})!
+
+	const { data: attachmentUrl } = useAttachmentUrl({ projectId, blobId })
 
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
@@ -302,31 +354,23 @@ function AttachmentPanel({
 				</IconButton>
 
 				<Typography variant="h1" sx={{ fontWeight: 500 }}>
-					{t(blobId.type === 'photo' ? m.photoNavTitle : m.audioNavTitle)}
+					{intl.formatMessage(
+						blobId.type === 'photo' ? m.photoNavTitle : m.audioNavTitle,
+					)}
 				</Typography>
 			</Stack>
 
-			<Stack
-				direction="column"
-				sx={{
-					flex: 1,
-					justifyContent: 'space-between',
-					overflow: 'auto',
-					padding: 6,
-					gap: 6,
-				}}
-			>
-				<Stack direction="column" sx={{ gap: 6 }}>
-					{blobId.type === 'audio' ? (
-						<Alert
-							severity="warning"
-							icon={<Icon name="material-warning-rounded" />}
-							sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
-						>
-							<Typography>{t(m.playerUnavailable)}</Typography>
-						</Alert>
-					) : null}
-
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+				<Box
+					sx={{
+						display: 'flex',
+						flex: 1,
+						flexDirection: 'row',
+						justifyContent: 'center',
+						overflow: 'auto',
+						padding: 6,
+					}}
+				>
 					{blobId.type === 'photo' ? (
 						<ErrorBoundary
 							getResetKey={() => errorResetKey}
@@ -338,96 +382,84 @@ function AttachmentPanel({
 							}}
 							// TODO: Consider redirecting to other variants recursively
 							fallback={() => (
-								<Box
-									sx={{
-										display: 'grid',
-										aspectRatio: 1,
-										border: `1px solid ${BLUE_GREY}`,
-										borderRadius: 2,
-										placeItems: 'center',
-									}}
-								>
+								<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
 									<Icon name="material-error" size={80} color="error" />
 								</Box>
 							)}
 						>
 							<Suspense
 								fallback={
-									<Box
-										sx={{
-											display: 'grid',
-											aspectRatio: 1,
-											border: '1px solid ${BLUE_GREY}',
-											borderRadius: 2,
-											placeItems: 'center',
-										}}
-									>
+									<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
 										<CircularProgress disableShrink size={30} />
 									</Box>
 								}
 							>
-								<Box
-									sx={{
-										display: 'flex',
-										flexDirection: 'column',
-										flex: 1,
-										overflow: 'hidden',
+								<PhotoAttachmentImage
+									attachmentDriveId={blobId.driveId}
+									attachmentName={blobId.name}
+									attachmentVariant={blobId.variant}
+									projectId={projectId}
+									style={{
 										border: `1px solid ${BLUE_GREY}`,
-										borderRadius: 2,
+										borderRadius: 4,
+										margin: 'auto',
+										maxHeight: '100%',
+										maxWidth: '100%',
 									}}
-								>
-									<PhotoAttachmentImage
-										attachmentDriveId={blobId.driveId}
-										attachmentName={blobId.name}
-										attachmentVariant={blobId.variant}
-										projectId={projectId}
-										style={{ width: '100%' }}
-									/>
-								</Box>
+								/>
 							</Suspense>
 						</ErrorBoundary>
 					) : (
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'row',
-								alignItems: 'center',
-								flex: 1,
-								border: `1px solid ${BLUE_GREY}`,
-								borderRadius: 4,
-								aspectRatio: 1,
-							}}
-						>
-							<Stack
-								direction="column"
-								sx={{ gap: 4, flex: 1, alignItems: 'center' }}
-							>
-								<Box>
-									<Icon
-										name="material-play-arrow-filled"
-										size={160}
-										htmlColor={LIGHT_GREY}
-									/>
-								</Box>
+						<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
+							<Stack direction="column" sx={{ flex: 1, gap: 4 }}>
+								<StyledMediaController audio lang={lang}>
+									<audio slot="media" src={attachmentUrl}></audio>
 
-								<Box
-									sx={{
-										alignSelf: 'stretch',
-										height: 8,
-										bgcolor: LIGHT_GREY,
-										marginX: '20%',
-									}}
-								/>
+									<Stack direction="column">
+										<StyledMediaPlayButton noTooltip />
+
+										<StyledMediaTimeRange>
+											<span slot="preview" />
+										</StyledMediaTimeRange>
+
+										<StyledMediaTimeDisplay noToggle showDuration />
+									</Stack>
+								</StyledMediaController>
+
+								{attachment.createdAt ? (
+									<Typography
+										color="textSecondary"
+										variant="body2"
+										sx={{ textAlign: 'center', textWrap: 'balance' }}
+									>
+										<time dateTime={attachment.createdAt}>
+											{intl.formatDate(attachment.createdAt, {
+												year: 'numeric',
+												month: 'short',
+												day: '2-digit',
+												minute: '2-digit',
+												hour: '2-digit',
+												hourCycle: 'h12',
+											})}
+										</time>
+									</Typography>
+								) : null}
 							</Stack>
 						</Box>
 					)}
-				</Stack>
+				</Box>
 
 				<ErrorBoundary getResetKey={() => errorResetKey} fallback={() => <></>}>
 					<Suspense>
 						<Stack
 							direction="row"
-							sx={{ justifyContent: 'space-around', gap: 6 }}
+							sx={{
+								borderTop: `1px solid ${BLUE_GREY}`,
+								flexWrap: 'wrap',
+								gap: 6,
+								justifyContent: 'space-around',
+								padding: 6,
+							}}
 						>
 							{canEdit ? (
 								<DeleteButton
@@ -446,6 +478,18 @@ function AttachmentPanel({
 		</Stack>
 	)
 }
+
+const BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE: SxProps<Theme> = {
+	alignItems: 'center',
+	border: `1px solid ${BLUE_GREY}`,
+	borderRadius: 4,
+	display: 'flex',
+	flexDirection: 'row',
+	height: 400,
+	justifyContent: 'center',
+	padding: 6,
+	width: 400,
+} as const
 
 const DELETE_ATTACHMENT_MUTATION_KEY = createGlobalMutationsKey([
 	'attachments',
@@ -508,6 +552,7 @@ function DeleteButton({
 
 				<Typography id="delete-button-label">{t(m.delete)}</Typography>
 			</Stack>
+
 			<DeleteAttachmentConfirmationDialog
 				open={showConfirmation}
 				onCancel={() => {
