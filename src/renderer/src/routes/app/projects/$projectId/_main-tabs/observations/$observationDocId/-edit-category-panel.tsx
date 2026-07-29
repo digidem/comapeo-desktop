@@ -20,7 +20,7 @@ import {
 } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY } from '../../../../../../../colors.ts'
+import { BLACK, BLUE_GREY } from '../../../../../../../colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -239,21 +239,21 @@ function CategoriesList({
 								sx={{ alignItems: 'center', gap: 2, padding: 4 }}
 							>
 								<CategoryIconContainer
-									color={category.color || BLUE_GREY}
+									color={category.color || BLACK}
 									applyBoxShadow
 								>
 									{category.iconRef?.docId ? (
 										<CategoryIconImage
-											altText={t(m.categoryIconAlt, {
-												name:
-													category.name || t(m.observationCategoryNameFallback),
-											})}
+											altText={t(m.categoryIconAlt, { name: category.name })}
 											iconDocumentId={category.iconRef.docId}
 											projectId={projectId}
 											imageStyle={{ width: 48, aspectRatio: 1 }}
 										/>
 									) : (
-										<Icon name="material-place" size={40} />
+										<Icon
+											name="material-symbols-indeterminate-question-box"
+											size={40}
+										/>
 									)}
 								</CategoryIconContainer>
 
@@ -304,10 +304,5 @@ const m = defineMessages({
 		defaultMessage: 'Icon for {name} category',
 		description:
 			'Alt text for icon image displayed for category (used for accessibility tools).',
-	},
-	observationCategoryNameFallback: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback',
-		defaultMessage: 'Observation',
-		description: 'Fallback name for observation without a matching category.',
 	},
 })

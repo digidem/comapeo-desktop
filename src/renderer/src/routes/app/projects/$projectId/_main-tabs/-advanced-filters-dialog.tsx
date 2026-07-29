@@ -17,7 +17,7 @@ import { endOfDay, isAfter, isBefore, isEqual, min, startOfDay } from 'date-fns'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLUE_GREY, WHITE } from '../../../../../colors.ts'
+import { BLACK, BLUE_GREY, WHITE } from '../../../../../colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -154,8 +154,8 @@ export function AdvancedFiltersDialogContent({
 				</Typography>
 			</Stack>
 
-			<Box sx={{ overflow: 'auto' }}>
-				<Container maxWidth="md">
+			<Box sx={{ overflow: 'auto', flex: 1 }}>
+				<Container maxWidth="lg">
 					<Stack
 						id={formId}
 						direction="column"
@@ -398,7 +398,7 @@ export function AdvancedFiltersDialogContent({
 																>
 																	<Box aria-hidden>
 																		<CategoryIconContainer
-																			color={option.color || BLUE_GREY}
+																			color={option.color || BLACK}
 																		>
 																			{option.iconId ? (
 																				<CategoryIconImage
@@ -415,7 +415,7 @@ export function AdvancedFiltersDialogContent({
 																				/>
 																			) : (
 																				<Icon
-																					name="material-place"
+																					name="material-symbols-indeterminate-question-box"
 																					size={categoryIconSize}
 																				/>
 																			)}

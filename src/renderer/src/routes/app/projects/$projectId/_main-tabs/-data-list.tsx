@@ -7,8 +7,10 @@ import {
 	useRef,
 	useState,
 	type CSSProperties,
+	type JSX,
 } from 'react'
 import { useManyDocs, useOwnDeviceInfo } from '@comapeo/core-react'
+import type { Preset } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
@@ -152,7 +154,7 @@ export function DataList({
 		return [
 			{
 				id: NOT_CATEGORY_FILTER_ID,
-				color: BLUE_GREY,
+				color: BLACK,
 				name: t(m.categoriesFilterNotCategorized),
 				matchCount: groupedByFilterIdCount[NOT_CATEGORY_FILTER_ID] || 0,
 			},
@@ -550,14 +552,85 @@ export function DataList({
 									{rowVirtualizer.getVirtualItems().map((row) => {
 										const { type, category, document } =
 											sortedListData[row.index]!
+
 										const { createdAt, docId, createdBy } = document
 
-										const title =
-											type === 'track'
-												? t(m.trackItemTitle)
-												: category?.name || t(m.observationCategoryNameFallback)
+										const title: string = category
+											? category.name
+											: t(
+													type === 'track'
+														? m.trackItemTitle
+														: m.observationCategoryNameFallback,
+												)
 
 										const isHighlighted = docId === highlightedDocument?.docId
+
+										let categorySlot: JSX.Element
+
+										if (type === 'track') {
+											categorySlot = category ? (
+												<CategoryIconContainer color={category.color || BLACK}>
+													{category.iconRef?.docId ? (
+														<CategoryIconImage
+															projectId={projectId}
+															iconDocumentId={category.iconRef.docId}
+															altText={t(m.categoryIconAlt, {
+																name: category.name,
+															})}
+															imageStyle={{ aspectRatio: 1, width: '100%' }}
+														/>
+													) : (
+														<Icon name="material-hiking" size={40} />
+													)}
+												</CategoryIconContainer>
+											) : (
+												<CategoryIconContainer color={BLACK}>
+													<Icon name="material-hiking" size={40} />
+												</CategoryIconContainer>
+											)
+										} else {
+											const displayableAttachments =
+												document.attachments.filter((a) => a.type === 'photo')
+
+											if (displayableAttachments.length > 0) {
+												categorySlot = (
+													<ObservationCategoryWithAttachmentsPreview
+														attachments={displayableAttachments}
+														category={category}
+														projectId={projectId}
+													/>
+												)
+											} else {
+												categorySlot = category ? (
+													<CategoryIconContainer
+														color={category.color || BLACK}
+													>
+														{category.iconRef?.docId ? (
+															<CategoryIconImage
+																projectId={projectId}
+																iconDocumentId={category.iconRef.docId}
+																altText={t(m.categoryIconAlt, {
+																	name: category.name,
+																})}
+																imageStyle={{ aspectRatio: 1, width: '100%' }}
+															/>
+														) : (
+															<Icon
+																name="material-symbols-indeterminate-question-box"
+																size={40}
+															/>
+														)}
+													</CategoryIconContainer>
+												) : (
+													<CategoryIconContainer color={BLACK}>
+														<Icon
+															name="material-symbols-indeterminate-question-box"
+															size={40}
+														/>
+													</CategoryIconContainer>
+												)
+											}
+										}
 
 										return (
 											<Box
@@ -686,26 +759,7 @@ export function DataList({
 																		</Box>
 																	}
 																>
-																	{type === 'observation' ? (
-																		<ObservationCategory
-																			attachments={document.attachments}
-																			categoryColor={category?.color}
-																			categoryName={category?.name}
-																			categoryIconDocumentId={
-																				category?.iconRef?.docId
-																			}
-																			projectId={projectId}
-																		/>
-																	) : (
-																		<TrackCategory
-																			categoryIconDocumentId={
-																				category?.iconRef?.docId
-																			}
-																			categoryColor={category?.color}
-																			categoryName={category?.name}
-																			projectId={projectId}
-																		/>
-																	)}
+																	{categorySlot}
 																</Suspense>
 															</Box>
 														</Box>
@@ -776,7 +830,7 @@ export function DataList({
 			>
 				{() => (
 					<AdvancedFiltersDialogContent
-						options={selectedCategoryFilterOptions}
+						options={categoryFilterOptions}
 						categoriesFilter={categoriesFilter}
 						dateFilter={dateFilter}
 						filterReferenceDate={referenceDateToUse}
@@ -884,229 +938,168 @@ function SyncedIndicatorLine({
 	) : null
 }
 
-function ObservationCategory({
+const ATTACHMENT_STYLE: CSSProperties = {
+	aspectRatio: 1,
+	width: '100%',
+	objectFit: 'cover',
+} as const
+
+function ObservationCategoryWithAttachmentsPreview({
 	attachments,
 	projectId,
-	categoryName,
-	categoryColor,
-	categoryIconDocumentId,
+	category,
 }: {
-	attachments: Array<Attachment>
-	categoryColor?: string
-	categoryIconDocumentId?: string
-	categoryName?: string
+	// TODO: Support other attachment types
+	attachments: Array<Extract<Attachment, { type: 'photo' }>>
+	category?: Preset
 	projectId: string
 }) {
 	const { formatMessage: t } = useIntl()
 
-	const displayableAttachments = attachments.filter(
-		// TODO: Support other attachment types
-		(a): a is Extract<Attachment, { type: 'photo' }> => a.type === 'photo',
+	const shouldStack = attachments.length > 1
+
+	const iconImage = category?.iconRef?.docId ? (
+		<CategoryIconImage
+			projectId={projectId}
+			iconDocumentId={category.iconRef.docId}
+			altText={t(m.categoryIconAlt, { name: category.name })}
+			imageStyle={{ aspectRatio: 1, height: 12, objectFit: 'contain' }}
+		/>
+	) : (
+		<Box
+			sx={{
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+				maxHeight: 12,
+				aspectRatio: 1,
+			}}
+		>
+			<Icon name="material-symbols-indeterminate-question-box" />
+		</Box>
 	)
 
-	const color = categoryColor || BLUE_GREY
-	const name = categoryName || t(m.observationCategoryNameFallback)
+	const categoryIcon = (
+		<CategoryIconContainer color={category?.color || BLACK}>
+			{iconImage}
+		</CategoryIconContainer>
+	)
 
-	if (displayableAttachments.length > 0) {
-		const shouldStack = displayableAttachments.length > 1
+	return (
+		<>
+			<Box
+				sx={{
+					overflow: 'hidden',
+					borderRadius: 2,
+					display: 'flex',
+					flexDirection: 'column',
+					position: 'relative',
+					width: '100%',
+					aspectRatio: 1,
+				}}
+			>
+				{
+					// NOTE: We only display the first three
+					attachments.slice(0, 3).map((a, index) => {
+						const key = `${a.driveDiscoveryId}/${a.type}/${a.name}/${a.hash}`
 
-		const categoryIcon = (
-			<CategoryIconContainer color={color}>
-				{categoryIconDocumentId ? (
-					<CategoryIconImage
-						projectId={projectId}
-						iconDocumentId={categoryIconDocumentId}
-						altText={t(m.categoryIconAlt, { name })}
-						imageStyle={{ aspectRatio: 1, height: 12, objectFit: 'contain' }}
-					/>
-				) : (
-					<Box
-						sx={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
-							maxHeight: 12,
-							aspectRatio: 1,
-						}}
-					>
-						<Icon name="material-place" />
-					</Box>
-				)}
-			</CategoryIconContainer>
-		)
-
-		return (
-			<>
-				<Box
-					sx={{
-						overflow: 'hidden',
-						borderRadius: 2,
-						display: 'flex',
-						flexDirection: 'column',
-						position: 'relative',
-						width: '100%',
-						aspectRatio: 1,
-					}}
-				>
-					{
-						// NOTE: We only display the first three
-						displayableAttachments.slice(0, 3).map((attachment, index) => {
-							const key = `${attachment.driveDiscoveryId}/${attachment.type}/${attachment.name}/${attachment.hash}`
-
-							const attachmentStyle: CSSProperties = {
-								aspectRatio: 1,
-								width: '100%',
-								objectFit: 'cover',
-							}
-
-							return (
-								<Box
-									key={key}
-									sx={[
-										{
-											position: 'absolute',
-											overflow: 'hidden',
-											borderRadius: 2,
-										},
-										shouldStack
-											? {
-													aspectRatio: 1,
-													border: `1px solid ${BLUE_GREY}`,
-													width: '80%',
-													top: index * 5,
-													left: index * 5,
-												}
-											: {
-													border: `1px solid ${BLUE_GREY}`,
-													top: 0,
-													right: 0,
-													left: 0,
-													bottom: 0,
-												},
-									]}
+						return (
+							<Box
+								key={key}
+								sx={[
+									{ position: 'absolute', overflow: 'hidden', borderRadius: 2 },
+									shouldStack
+										? {
+												aspectRatio: 1,
+												border: `1px solid ${BLUE_GREY}`,
+												width: '80%',
+												top: index * 5,
+												left: index * 5,
+											}
+										: {
+												border: `1px solid ${BLUE_GREY}`,
+												top: 0,
+												right: 0,
+												left: 0,
+												bottom: 0,
+											},
+								]}
+							>
+								<ErrorBoundary
+									getResetKey={() => key}
+									onError={(err) => {
+										captureException(new Error('Failed to load attachment'), {
+											originalException: err,
+											data: {
+												driveId: a.driveDiscoveryId,
+												name: a.name,
+												type: a.type,
+											},
+										})
+									}}
+									fallback={() => (
+										<Box
+											sx={{
+												display: 'flex',
+												flex: 1,
+												justifyContent: 'center',
+												alignItems: 'center',
+												height: '100%',
+												width: '100%',
+												bgcolor: WHITE,
+											}}
+										>
+											<Icon name="material-error" color="error" />
+										</Box>
+									)}
 								>
 									<ErrorBoundary
-										getResetKey={() => key}
-										onError={(err) => {
-											captureException(new Error('Failed to load attachment'), {
-												originalException: err,
-												data: {
-													driveId: attachment.driveDiscoveryId,
-													name: attachment.name,
-													type: attachment.type,
+										getResetKey={() => key + ':preview'}
+										onError={() => {
+											captureMessage('Failed to load preview image', {
+												level: 'info',
+												extra: {
+													driveId: a.driveDiscoveryId,
+													name: a.name,
 												},
 											})
 										}}
 										fallback={() => (
-											<Box
-												sx={{
-													display: 'flex',
-													flex: 1,
-													justifyContent: 'center',
-													alignItems: 'center',
-													height: '100%',
-													width: '100%',
-													bgcolor: WHITE,
-												}}
-											>
-												<Icon name="material-error" color="error" />
-											</Box>
-										)}
-									>
-										<ErrorBoundary
-											getResetKey={() => key + ':preview'}
-											onError={() => {
-												captureMessage('Failed to load preview image', {
-													level: 'info',
-													extra: {
-														driveId: attachment.driveDiscoveryId,
-														name: attachment.name,
-													},
-												})
-											}}
-											fallback={() => (
-												<PhotoAttachmentImage
-													projectId={projectId}
-													attachmentDriveId={attachment.driveDiscoveryId}
-													attachmentName={attachment.name}
-													attachmentVariant="thumbnail"
-													style={attachmentStyle}
-												/>
-											)}
-										>
 											<PhotoAttachmentImage
 												projectId={projectId}
-												attachmentDriveId={attachment.driveDiscoveryId}
-												attachmentName={attachment.name}
-												attachmentVariant="preview"
-												style={attachmentStyle}
+												attachmentDriveId={a.driveDiscoveryId}
+												attachmentName={a.name}
+												attachmentVariant="thumbnail"
+												style={ATTACHMENT_STYLE}
 											/>
-										</ErrorBoundary>
+										)}
+									>
+										<PhotoAttachmentImage
+											projectId={projectId}
+											attachmentDriveId={a.driveDiscoveryId}
+											attachmentName={a.name}
+											attachmentVariant="preview"
+											style={ATTACHMENT_STYLE}
+										/>
 									</ErrorBoundary>
-								</Box>
-							)
-						})
-					}
-				</Box>
+								</ErrorBoundary>
+							</Box>
+						)
+					})
+				}
+			</Box>
 
-				<Box
-					sx={{
-						position: 'absolute',
-						right: (theme) => theme.spacing(2),
-						bottom: (theme) => theme.spacing(2),
-						zIndex: 1,
-					}}
-				>
-					{categoryIcon}
-				</Box>
-			</>
-		)
-	}
-
-	return categoryIconDocumentId ? (
-		<CategoryIconContainer color={color}>
-			<CategoryIconImage
-				projectId={projectId}
-				iconDocumentId={categoryIconDocumentId}
-				altText={t(m.categoryIconAlt, { name })}
-				imageStyle={{ aspectRatio: 1, width: '100%' }}
-			/>
-		</CategoryIconContainer>
-	) : (
-		<CategoryIconContainer color={BLUE_GREY}>
-			<Icon name="material-place" size={40} />
-		</CategoryIconContainer>
-	)
-}
-
-function TrackCategory({
-	categoryColor,
-	categoryIconDocumentId,
-	categoryName,
-	projectId,
-}: {
-	projectId: string
-	categoryColor?: string
-	categoryIconDocumentId?: string
-	categoryName?: string
-}) {
-	const { formatMessage: t } = useIntl()
-
-	return categoryIconDocumentId ? (
-		<CategoryIconContainer color={categoryColor || BLUE_GREY}>
-			<CategoryIconImage
-				projectId={projectId}
-				iconDocumentId={categoryIconDocumentId}
-				altText={t(m.categoryIconAlt, {
-					name: categoryName || t(m.trackItemTitle),
-				})}
-				imageStyle={{ aspectRatio: 1, width: '100%' }}
-			/>
-		</CategoryIconContainer>
-	) : (
-		<CategoryIconContainer color={BLACK}>
-			<Icon name="material-hiking" size={40} />
-		</CategoryIconContainer>
+			<Box
+				sx={{
+					position: 'absolute',
+					right: (theme) => theme.spacing(2),
+					bottom: (theme) => theme.spacing(2),
+					zIndex: 1,
+				}}
+			>
+				{categoryIcon}
+			</Box>
+		</>
 	)
 }
 
@@ -1240,7 +1233,7 @@ function CategoriesFilterSelect({
 								}}
 							>
 								<Box aria-hidden>
-									<CategoryIconContainer color={o.color || BLUE_GREY}>
+									<CategoryIconContainer color={o.color || BLACK}>
 										{o.iconId ? (
 											<Suspense
 												fallback={
@@ -1271,7 +1264,10 @@ function CategoriesFilterSelect({
 												/>
 											</Suspense>
 										) : (
-											<Icon name="material-place" size={categoryIconSize} />
+											<Icon
+												name="material-symbols-indeterminate-question-box"
+												size={categoryIconSize}
+											/>
 										)}
 									</CategoryIconContainer>
 								</Box>
@@ -1758,7 +1754,7 @@ function DateFilterSelect({
 const m = defineMessages({
 	observationCategoryNameFallback: {
 		id: '$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback',
-		defaultMessage: 'Observation',
+		defaultMessage: 'Not categorized',
 		description: 'Fallback name for observation without a matching category.',
 	},
 	trackItemTitle: {

@@ -45,7 +45,7 @@ import type {
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLACK, BLUE_GREY, ORANGE, WHITE } from '../../../../../colors.ts'
+import { BLACK, WHITE } from '../../../../../colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -834,16 +834,12 @@ export function MapPanel({
 								/>
 							</Suspense>
 						) : (
-							<IconMarkerContainer
-								color={BLUE_GREY}
-								markerSize={MARKER_SIZE_PX}
-							>
-								<CategoryIconContainer
-									color={BLUE_GREY}
-									applyBoxShadow
-									padding={2}
-								>
-									<Icon name="material-place" size={CATEGORY_ICON_SIZE_PX} />
+							<IconMarkerContainer color={BLACK} markerSize={MARKER_SIZE_PX}>
+								<CategoryIconContainer color={BLACK} applyBoxShadow padding={2}>
+									<Icon
+										name="material-symbols-indeterminate-question-box"
+										size={CATEGORY_ICON_SIZE_PX}
+									/>
 								</CategoryIconContainer>
 							</IconMarkerContainer>
 						)}
@@ -929,7 +925,7 @@ function CategoryIconMarker({
 		lang,
 	})
 
-	const color = category.color || BLUE_GREY
+	const color = category.color || BLACK
 
 	return (
 		<IconMarkerContainer color={color} markerSize={MARKER_SIZE_PX}>
@@ -942,7 +938,10 @@ function CategoryIconMarker({
 						altText={t(m.categoryIconAlt, { name: category.name })}
 					/>
 				) : (
-					<Icon name="material-place" size={CATEGORY_ICON_SIZE_PX} />
+					<Icon
+						name="material-symbols-indeterminate-question-box"
+						size={CATEGORY_ICON_SIZE_PX}
+					/>
 				)}
 			</CategoryIconContainer>
 		</IconMarkerContainer>
@@ -1086,8 +1085,8 @@ function createObservationLayerPaintProperty(
 		// @ts-expect-error Type def doesn't like the spread of the pairs
 		'circle-color':
 			categoryColorPairs.length > 0
-				? ['match', ['get', 'categoryDocId'], ...categoryColorPairs, ORANGE]
-				: ORANGE,
+				? ['match', ['get', 'categoryDocId'], ...categoryColorPairs, BLACK]
+				: BLACK,
 		'circle-opacity': [
 			'case',
 			[

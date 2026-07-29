@@ -305,7 +305,7 @@
   },
   "$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
+    "message": "Not categorized"
   },
   "$1.routes.app.projects.$projectId.-data-list.resultsCount": {
     "description": "Number of items listed",
@@ -555,10 +555,6 @@
     "description": "Title for edit category panel.",
     "message": "Change Category"
   },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
-    "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
-  },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
     "description": "Text for cancel button.",
     "message": "Cancel"
@@ -665,7 +661,7 @@
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
+    "message": "Not categorized"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyFeet": {
     "description": "Displayed altitude accuracy for observation in feet.",
@@ -1125,7 +1121,7 @@
   },
   "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
+    "message": "Not categorized"
   },
   "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationsSectionTitle": {
     "description": "Title for the track observations section.",
