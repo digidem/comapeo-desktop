@@ -259,6 +259,10 @@
     "description": "Text for button to clear all filters",
     "message": "Advanced…"
   },
+  "$1.routes.app.projects.$projectId.-data-list.categoryUnavailable": {
+    "description": "Text for tooltip that appears when hovering over outdated active category filter.",
+    "message": "Category unavailable"
+  },
   "$1.routes.app.projects.$projectId.-data-list.clearFilters": {
     "description": "Text for button to clear all filters",
     "message": "Clear All"

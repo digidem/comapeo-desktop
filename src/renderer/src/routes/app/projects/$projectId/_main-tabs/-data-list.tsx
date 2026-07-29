@@ -9,7 +9,11 @@ import {
 	type CSSProperties,
 	type JSX,
 } from 'react'
-import { useManyDocs, useOwnDeviceInfo } from '@comapeo/core-react'
+import {
+	useManyDocs,
+	useOwnDeviceInfo,
+	useSingleDocByDocId,
+} from '@comapeo/core-react'
 import type { Preset } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -123,12 +127,6 @@ export function DataList({
 
 	const allCategoryDocIds = categories.map((c) => c.docId)
 
-	// const filteredCategories = categoriesFilter
-	// 	? categories.filter((c) => {
-	// 			return categoriesFilter.includes(c.docId)
-	// 		})
-	// 	: categories
-
 	const observationsWithCategory = useMemo(() => {
 		return observations.map((o) => ({
 			type: 'observation' as const,
@@ -167,6 +165,8 @@ export function DataList({
 			})),
 		]
 	}, [categories, observationsWithCategory, tracksWithCategory, t])
+
+	console.log('***', { categoryFilterOptions })
 
 	const selectedCategoryFilterOptions: Array<CategoriesFilterOption> =
 		categoriesFilter
@@ -505,15 +505,74 @@ export function DataList({
 							{categoriesFilter &&
 							categoriesFilter.length > 0 &&
 							!isArrayEqual(allCategoryDocIds, categoriesFilter)
-								? selectedCategoryFilterOptions.map((option) => {
+								? categoriesFilter.map((filterId) => {
+										const matchingFilterOption = categoryFilterOptions.find(
+											(o) => o.id === filterId,
+										)
+
+										if (!matchingFilterOption) {
+											return (
+												<ErrorBoundary
+													key={filterId}
+													getResetKey={() => filterId}
+													// NOTE: Let's hope that this doesn't happen...
+													fallback={() => (
+														<FilterPill
+															outdated
+															label={filterId}
+															onRemove={() => {
+																const updatedFilter = categoriesFilter.filter(
+																	(f) => f !== filterId,
+																)
+
+																if (updatedFilter.length === 0) {
+																	unsetCategoriesFilter()
+																} else {
+																	setCategoriesFilter(updatedFilter)
+																}
+															}}
+														/>
+													)}
+													onError={(err) => {
+														captureException(
+															new Error('Failed to load filter'),
+															{ originalException: err, data: { filterId } },
+														)
+													}}
+												>
+													<Suspense>
+														<OutdatedFilterPill
+															projectId={projectId}
+															categoryDocId={filterId}
+															onRemove={() => {
+																const updatedFilter = categoriesFilter.filter(
+																	(f) => f !== filterId,
+																)
+
+																if (updatedFilter.length === 0) {
+																	unsetCategoriesFilter()
+																} else {
+																	setCategoriesFilter(updatedFilter)
+																}
+															}}
+														/>
+													</Suspense>
+												</ErrorBoundary>
+											)
+										}
+
 										return (
 											<FilterPill
-												key={option.id}
-												color={option.color ? alpha(option.color, 0.1) : WHITE}
-												label={option.name}
+												key={filterId}
+												color={
+													matchingFilterOption.color
+														? alpha(matchingFilterOption.color, 0.1)
+														: WHITE
+												}
+												label={matchingFilterOption.name}
 												onRemove={() => {
 													const updatedFilter = categoriesFilter.filter(
-														(f) => f !== option.id,
+														(f) => f !== matchingFilterOption.id,
 													)
 
 													if (updatedFilter.length === 0) {
@@ -866,19 +925,94 @@ export function DataList({
 	)
 }
 
+function OutdatedFilterPill({
+	categoryDocId,
+	projectId,
+	onRemove,
+}: {
+	categoryDocId: string
+	projectId: string
+	onRemove: () => void
+}) {
+	const { data: category } = useSingleDocByDocId({
+		projectId,
+		docId: categoryDocId,
+		docType: 'preset',
+	})
+
+	return (
+		<FilterPill
+			outdated
+			color={category.color ? alpha(category.color, 0.1) : WHITE}
+			label={category.name}
+			onRemove={onRemove}
+		/>
+	)
+}
+
 function FilterPill({
+	color,
 	label,
 	onRemove,
-	color,
+	outdated,
 }: {
 	color?: string
 	label: string
 	onRemove: () => void
+	outdated?: boolean
 }) {
+	const { formatMessage: t } = useIntl()
+
 	const removeFilterButtonSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
 		multiplier: 0.75,
 	})
+
+	const removeButton = (
+		<IconButton
+			onClick={() => {
+				onRemove()
+			}}
+			sx={{
+				flex: 0,
+				padding: 0,
+				borderRadius: '50%',
+				border: `1px solid ${DARK_GREY}`,
+			}}
+		>
+			<Icon
+				name="material-close"
+				htmlColor={DARK_GREY}
+				size={removeFilterButtonSize}
+			/>
+		</IconButton>
+	)
+
+	if (outdated) {
+		return (
+			<Tooltip title={t(m.categoryUnavailable)} placement="bottom-start">
+				<Stack
+					direction="row"
+					sx={{
+						alignItems: 'center',
+						border: `1px solid ${BLUE_GREY}`,
+						borderRadius: 2,
+						paddingInline: 4,
+						gap: 4,
+					}}
+				>
+					<Typography
+						color="textSecondary"
+						sx={{ fontWeight: 500, whiteSpace: 'nowrap', fontStyle: 'italic' }}
+					>
+						{label}
+					</Typography>
+
+					{removeButton}
+				</Stack>
+			</Tooltip>
+		)
+	}
 
 	return (
 		<Stack
@@ -889,30 +1023,17 @@ function FilterPill({
 				borderRadius: 2,
 				paddingInline: 4,
 				gap: 4,
-				backgroundColor: color,
+				backgroundColor: outdated ? undefined : color,
 			}}
 		>
-			<Typography sx={{ fontWeight: 500, whiteSpace: 'nowrap' }}>
+			<Typography
+				color="textPrimary"
+				sx={{ fontWeight: 500, whiteSpace: 'nowrap' }}
+			>
 				{label}
 			</Typography>
 
-			<IconButton
-				onClick={() => {
-					onRemove()
-				}}
-				sx={{
-					flex: 0,
-					padding: 0,
-					borderRadius: '50%',
-					border: `1px solid ${DARK_GREY}`,
-				}}
-			>
-				<Icon
-					name="material-close"
-					htmlColor={DARK_GREY}
-					size={removeFilterButtonSize}
-				/>
-			</IconButton>
+			{removeButton}
 		</Stack>
 	)
 }
@@ -1868,5 +1989,11 @@ const m = defineMessages({
 		defaultMessage: 'Reset Filters',
 		description:
 			'Text for button to reset filters when no results are available based on active filters.',
+	},
+	categoryUnavailable: {
+		id: '$1.routes.app.projects.$projectId.-data-list.categoryUnavailable',
+		defaultMessage: 'Category unavailable',
+		description:
+			'Text for tooltip that appears when hovering over outdated active category filter.',
 	},
 })
