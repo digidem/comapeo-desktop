@@ -243,6 +243,10 @@
     "description": "Text for button to deselect all categories.",
     "message": "Deselect All"
   },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterNotCategorized": {
+    "description": "Text for category filter option for data without a matching category.",
+    "message": "Not categorized"
+  },
   "$1.routes.app.projects.$projectId.-data-list.categoriesFilterSelectAll": {
     "description": "Text for button to select all categories.",
     "message": "Select All"
@@ -482,6 +486,10 @@
   "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionDeselectAll": {
     "description": "Text for button to deselect all in categories filter section in advanced filters dialog.",
     "message": "Deselect All"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionNotCategorizedOption": {
+    "description": "Text for category filter option for data without a matching category in advanced filters dialog.",
+    "message": "Not categorized"
   },
   "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionSelectAll": {
     "description": "Text for button to select all in categories filter section in advanced filters dialog.",

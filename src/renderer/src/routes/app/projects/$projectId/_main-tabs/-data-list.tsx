@@ -9,7 +9,6 @@ import {
 	type CSSProperties,
 } from 'react'
 import { useManyDocs, useOwnDeviceInfo } from '@comapeo/core-react'
-import type { Preset } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
@@ -70,9 +69,11 @@ import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-setti
 import { AdvancedFiltersDialogContent } from './-advanced-filters-dialog.tsx'
 import { FilterSelect } from './-filter-select.tsx'
 import {
+	NOT_CATEGORY_FILTER_ID,
 	dateFilterToDateRange,
 	dateFilterToSearchParams,
 	isDocumentIncludedByFilters,
+	type CategoriesFilterOption,
 	type HighlightedDocument,
 } from './-shared.ts'
 import { PhotoAttachmentImage } from './observations/$observationDocId/-components/photo-attachment-image.tsx'
@@ -120,11 +121,11 @@ export function DataList({
 
 	const allCategoryDocIds = categories.map((c) => c.docId)
 
-	const filteredCategories = categoriesFilter
-		? categories.filter((c) => {
-				return categoriesFilter.includes(c.docId)
-			})
-		: categories
+	// const filteredCategories = categoriesFilter
+	// 	? categories.filter((c) => {
+	// 			return categoriesFilter.includes(c.docId)
+	// 		})
+	// 	: categories
 
 	const observationsWithCategory = useMemo(() => {
 		return observations.map((o) => ({
@@ -142,14 +143,35 @@ export function DataList({
 		}))
 	}, [tracks, categories])
 
-	const groupedByCategoryCount = useMemo(() => {
-		const { _, ...result } = counting(
+	const categoryFilterOptions: Array<CategoriesFilterOption> = useMemo(() => {
+		const groupedByFilterIdCount = counting(
 			[...observationsWithCategory, ...tracksWithCategory],
-			({ category }) => category?.docId || '_',
+			({ category }) => (category ? category.docId : NOT_CATEGORY_FILTER_ID),
 		)
 
-		return result
-	}, [observationsWithCategory, tracksWithCategory])
+		return [
+			{
+				id: NOT_CATEGORY_FILTER_ID,
+				color: BLUE_GREY,
+				name: t(m.categoriesFilterNotCategorized),
+				matchCount: groupedByFilterIdCount[NOT_CATEGORY_FILTER_ID] || 0,
+			},
+			...categories.map((category) => ({
+				id: category.docId,
+				name: category.name,
+				color: category.color,
+				iconId: category.iconRef?.docId,
+				matchCount: groupedByFilterIdCount[category.docId] || 0,
+			})),
+		]
+	}, [categories, observationsWithCategory, tracksWithCategory, t])
+
+	const selectedCategoryFilterOptions: Array<CategoriesFilterOption> =
+		categoriesFilter
+			? categoryFilterOptions.filter((c) => {
+					return categoriesFilter.includes(c.id)
+				})
+			: categoryFilterOptions
 
 	// NOTE: Accounts for cases where the app is left open for a while
 	// and the user performs an interaction that relies on a more updated date value.
@@ -166,7 +188,8 @@ export function DataList({
 		return [...observationsWithCategory, ...tracksWithCategory]
 			.filter((item) => {
 				return isDocumentIncludedByFilters(item, {
-					categories: categoriesFilter || categories.map((c) => c.docId),
+					categories:
+						categoriesFilter || categoryFilterOptions.map((c) => c.id),
 					date: dateFilter
 						? dateFilterToDateRange(dateFilter, referenceDateToUse)
 						: undefined,
@@ -176,8 +199,8 @@ export function DataList({
 				return a.document.createdAt < b.document.createdAt ? 1 : -1
 			})
 	}, [
-		categories,
 		categoriesFilter,
+		categoryFilterOptions,
 		dateFilter,
 		observationsWithCategory,
 		referenceDateToUse,
@@ -388,9 +411,9 @@ export function DataList({
 
 						<Stack direction="row" sx={{ gap: 4, flex: 1, flexWrap: 'wrap' }}>
 							<CategoriesFilterSelect
-								groupedByCategoryCount={groupedByCategoryCount}
-								selected={filteredCategories}
-								options={categories}
+								projectId={projectId}
+								selected={selectedCategoryFilterOptions}
+								options={categoryFilterOptions}
 								onAdvancedClick={() => {
 									setShowAdvancedFiltersDialog(true)
 								}}
@@ -415,7 +438,6 @@ export function DataList({
 										)
 									}
 								}}
-								projectId={projectId}
 							/>
 
 							<DateFilterSelect
@@ -481,17 +503,15 @@ export function DataList({
 							{categoriesFilter &&
 							categoriesFilter.length > 0 &&
 							!isArrayEqual(allCategoryDocIds, categoriesFilter)
-								? filteredCategories.map((category) => {
+								? selectedCategoryFilterOptions.map((option) => {
 										return (
 											<FilterPill
-												key={category.docId}
-												color={
-													category.color ? alpha(category.color, 0.1) : WHITE
-												}
-												label={category.name}
+												key={option.id}
+												color={option.color ? alpha(option.color, 0.1) : WHITE}
+												label={option.name}
 												onRemove={() => {
 													const updatedFilter = categoriesFilter.filter(
-														(f) => f !== category.docId,
+														(f) => f !== option.id,
 													)
 
 													if (updatedFilter.length === 0) {
@@ -756,7 +776,7 @@ export function DataList({
 			>
 				{() => (
 					<AdvancedFiltersDialogContent
-						categories={categories}
+						options={selectedCategoryFilterOptions}
 						categoriesFilter={categoriesFilter}
 						dateFilter={dateFilter}
 						filterReferenceDate={referenceDateToUse}
@@ -1091,7 +1111,6 @@ function TrackCategory({
 }
 
 function CategoriesFilterSelect({
-	groupedByCategoryCount,
 	selected,
 	options,
 	onAdvancedClick,
@@ -1100,9 +1119,8 @@ function CategoriesFilterSelect({
 	onSelectAll,
 	projectId,
 }: {
-	groupedByCategoryCount: Record<string, number>
-	selected: Array<Preset>
-	options: Array<Preset>
+	selected: Array<CategoriesFilterOption>
+	options: Array<CategoriesFilterOption>
 	onAdvancedClick: () => void
 	onSelectAll: () => void
 	onDeselectAll: () => void
@@ -1119,8 +1137,8 @@ function CategoriesFilterSelect({
 	})
 
 	const allSelected =
-		new Set(options.map((o) => o.docId)).difference(
-			new Set(selected.map((s) => s.docId)),
+		new Set(options.map((o) => o.id)).difference(
+			new Set(selected.map((s) => s.id)),
 		).size === 0
 
 	return (
@@ -1184,24 +1202,22 @@ function CategoriesFilterSelect({
 				</Button>
 			}
 		>
-			{options.map((category) => {
-				const isSelected = !!selected.find((f) => f.docId === category.docId)
-
-				const count = groupedByCategoryCount[category.docId] || 0
+			{options.map((o) => {
+				const isSelected = !!selected.find((s) => s.id === o.id)
 
 				return (
 					<ListItemButton
-						key={category.docId}
+						key={o.id}
 						role="option"
 						disableGutters
 						disableRipple
 						tabIndex={-1}
 						selected={isSelected}
 						aria-selected={isSelected}
-						data-option-id={`${dataOptionPrefixId}-${category.docId}`}
+						data-option-id={`${dataOptionPrefixId}-${o.id}`}
 						sx={{ padding: 4 }}
 						onClick={() => {
-							onChange(isSelected ? 'deselect' : 'select', category.docId)
+							onChange(isSelected ? 'deselect' : 'select', o.id)
 						}}
 					>
 						<Stack
@@ -1224,8 +1240,8 @@ function CategoriesFilterSelect({
 								}}
 							>
 								<Box aria-hidden>
-									<CategoryIconContainer color={category.color || BLUE_GREY}>
-										{category.iconRef?.docId ? (
+									<CategoryIconContainer color={o.color || BLUE_GREY}>
+										{o.iconId ? (
 											<Suspense
 												fallback={
 													<Box
@@ -1244,9 +1260,9 @@ function CategoriesFilterSelect({
 											>
 												<CategoryIconImage
 													altText={t(m.categoriesFilterCategoryIconAlt, {
-														name: category.name,
+														name: o.name,
 													})}
-													iconDocumentId={category.iconRef.docId}
+													iconDocumentId={o.iconId}
 													projectId={projectId}
 													imageStyle={{
 														width: categoryIconSize,
@@ -1279,7 +1295,7 @@ function CategoriesFilterSelect({
 											whiteSpace: 'nowrap',
 										}}
 									>
-										{category.name}
+										{o.name}
 									</Typography>
 
 									<Typography
@@ -1288,7 +1304,7 @@ function CategoriesFilterSelect({
 										color="textSecondary"
 										sx={{ fontVariantNumeric: 'tabular-nums' }}
 									>
-										{count}
+										{o.matchCount}
 									</Typography>
 								</Typography>
 							</Stack>
@@ -1797,6 +1813,12 @@ const m = defineMessages({
 		id: '$1.routes.app.projects.$projectId.-data-list.categoriesFilterSelectAll',
 		defaultMessage: 'Select All',
 		description: 'Text for button to select all categories.',
+	},
+	categoriesFilterNotCategorized: {
+		id: '$1.routes.app.projects.$projectId.-data-list.categoriesFilterNotCategorized',
+		defaultMessage: 'Not categorized',
+		description:
+			'Text for category filter option for data without a matching category.',
 	},
 	categoriesFilterCategoryIconAlt: {
 		id: 'routes.app.projects.$projectId.-data-list.categoriesFilterCategoryIconAlt',

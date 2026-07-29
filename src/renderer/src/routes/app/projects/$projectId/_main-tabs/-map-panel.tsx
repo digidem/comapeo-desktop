@@ -71,6 +71,7 @@ import {
 	getUnitSystemQueryOptions,
 } from '../../../../../lib/queries/app-settings.ts'
 import {
+	NOT_CATEGORY_FILTER_ID,
 	dateFilterToDateRange,
 	isDocumentIncludedByFilters,
 	type HighlightedDocument,
@@ -975,7 +976,10 @@ function observationsToFeatureCollection({
 			const isVisible = isDocumentIncludedByFilters(
 				{ document: obs, category },
 				{
-					categories: categoriesFilter || categories.map((c) => c.docId),
+					categories: categoriesFilter || [
+						NOT_CATEGORY_FILTER_ID,
+						...categories.map((c) => c.docId),
+					],
 					date: filters?.date
 						? dateFilterToDateRange(filters.date, referenceDate)
 						: undefined,
@@ -1031,7 +1035,10 @@ function tracksToFeatureCollection({
 		const isVisible = isDocumentIncludedByFilters(
 			{ document: t, category },
 			{
-				categories: categoriesFilter || categories.map((c) => c.docId),
+				categories: categoriesFilter || [
+					NOT_CATEGORY_FILTER_ID,
+					...categories.map((c) => c.docId),
+				],
 				date: filters?.date
 					? dateFilterToDateRange(filters.date, referenceDate)
 					: undefined,
