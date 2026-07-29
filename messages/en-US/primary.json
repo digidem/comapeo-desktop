@@ -291,6 +291,14 @@
     "description": "Title for listed data page.",
     "message": "List"
   },
+  "$1.routes.app.projects.$projectId.-data-list.noResultsResetFilters": {
+    "description": "Text for button to reset filters when no results are available based on active filters.",
+    "message": "Reset Filters"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.noResultsTitle": {
+    "description": "Title for panel when no results are available based on active filters.",
+    "message": "No Results"
+  },
   "$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
     "message": "Observation"
