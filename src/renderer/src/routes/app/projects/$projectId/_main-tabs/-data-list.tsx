@@ -337,7 +337,7 @@ export function DataList({
 					<Stack
 						direction="column"
 						sx={{
-							borderBottom: `2px solid ${BLUE_GREY}`,
+							borderBottom: `1px solid ${BLUE_GREY}`,
 							gap: 4,
 							paddingBlock: 4,
 							paddingInline: 6,
@@ -447,7 +447,7 @@ export function DataList({
 								gap: 2,
 								paddingInline: 6,
 								paddingBlock: 4,
-								borderBottom: `2px solid ${BLUE_GREY}`,
+								borderBottom: `1px solid ${BLUE_GREY}`,
 							}}
 						>
 							<Button
