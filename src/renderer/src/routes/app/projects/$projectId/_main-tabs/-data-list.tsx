@@ -337,7 +337,7 @@ export function DataList({
 					<Stack
 						direction="column"
 						sx={{
-							borderBottom: `2px solid ${BLUE_GREY}`,
+							borderBottom: `1px solid ${BLUE_GREY}`,
 							gap: 4,
 							paddingBlock: 4,
 							paddingInline: 6,
@@ -447,7 +447,7 @@ export function DataList({
 								gap: 2,
 								paddingInline: 6,
 								paddingBlock: 4,
-								borderBottom: `2px solid ${BLUE_GREY}`,
+								borderBottom: `1px solid ${BLUE_GREY}`,
 							}}
 						>
 							<Button
@@ -507,190 +507,245 @@ export function DataList({
 						</Stack>
 					) : null}
 
-					<Box
-						sx={{
-							overflow: 'auto',
-							display: 'flex',
-							flexDirection: 'column',
-							flex: 1,
-							backgroundColor: LIGHT_GREY,
-						}}
-					>
-						<List
-							component="ul"
-							ref={listRef}
-							disablePadding
-							sx={{ flex: 1, overflow: 'auto', scrollbarColor: 'initial' }}
+					{sortedListData.length > 0 ? (
+						<Box
+							sx={{
+								overflow: 'auto',
+								display: 'flex',
+								flexDirection: 'column',
+								flex: 1,
+								backgroundColor: LIGHT_GREY,
+							}}
 						>
-							<Box
-								ref={rowVirtualizer.containerRef}
-								sx={{ position: 'relative', width: '100%' }}
+							<List
+								component="ul"
+								ref={listRef}
+								disablePadding
+								sx={{ flex: 1, overflow: 'auto', scrollbarColor: 'initial' }}
 							>
-								{rowVirtualizer.getVirtualItems().map((row) => {
-									const { type, category, document } =
-										sortedListData[row.index]!
-									const { createdAt, docId, createdBy } = document
+								<Box
+									ref={rowVirtualizer.containerRef}
+									sx={{ position: 'relative', width: '100%' }}
+								>
+									{rowVirtualizer.getVirtualItems().map((row) => {
+										const { type, category, document } =
+											sortedListData[row.index]!
+										const { createdAt, docId, createdBy } = document
 
-									const title =
-										type === 'track'
-											? t(m.trackItemTitle)
-											: category?.name || t(m.observationCategoryNameFallback)
+										const title =
+											type === 'track'
+												? t(m.trackItemTitle)
+												: category?.name || t(m.observationCategoryNameFallback)
 
-									const isHighlighted = docId === highlightedDocument?.docId
+										const isHighlighted = docId === highlightedDocument?.docId
 
-									return (
-										<Box
-											key={row.key}
-											sx={{
-												position: 'absolute',
-												top: 0,
-												left: 0,
-												width: '100%',
-												height: `${row.size}px`,
-												transform: `translateY(${row.start}px)`,
-												backgroundColor: WHITE,
-											}}
-										>
-											<ListItemButton
-												data-docid={docId}
-												disableGutters
-												disableTouchRipple
-												selected={isHighlighted}
-												autoFocus={isHighlighted}
-												onClick={() => {
-													if (!isHighlighted) {
-														router.navigate({
-															to: '.',
-															replace: true,
-															search: (prev) => ({
-																...prev,
-																highlightedDocument: {
-																	type,
-																	docId,
-																	from: 'list',
-																},
-															}),
-														})
-
-														return
-													}
-
-													if (type === 'observation') {
-														router.navigate({
-															to: '/app/projects/$projectId/observations/$observationDocId',
-															params: { projectId, observationDocId: docId },
-														})
-													} else {
-														router.navigate({
-															to: '/app/projects/$projectId/tracks/$trackDocId',
-															params: { projectId, trackDocId: docId },
-														})
-													}
-												}}
+										return (
+											<Box
+												key={row.key}
 												sx={{
-													borderBottom: `1px solid ${LIGHT_GREY}`,
-													padding: 4,
+													position: 'absolute',
+													top: 0,
+													left: 0,
+													width: '100%',
+													height: `${row.size}px`,
+													transform: `translateY(${row.start}px)`,
+													backgroundColor: WHITE,
 												}}
 											>
-												<Suspense>
-													<SyncedIndicatorLine createdByDeviceId={createdBy} />
-												</Suspense>
+												<ListItemButton
+													data-docid={docId}
+													disableGutters
+													disableTouchRipple
+													selected={isHighlighted}
+													autoFocus={isHighlighted}
+													onClick={() => {
+														if (!isHighlighted) {
+															router.navigate({
+																to: '.',
+																replace: true,
+																search: (prev) => ({
+																	...prev,
+																	highlightedDocument: {
+																		type,
+																		docId,
+																		from: 'list',
+																	},
+																}),
+															})
 
-												<Stack
-													direction="row"
-													sx={{ flex: 1, gap: 2, overflow: 'auto' }}
+															return
+														}
+
+														if (type === 'observation') {
+															router.navigate({
+																to: '/app/projects/$projectId/observations/$observationDocId',
+																params: { projectId, observationDocId: docId },
+															})
+														} else {
+															router.navigate({
+																to: '/app/projects/$projectId/tracks/$trackDocId',
+																params: { projectId, trackDocId: docId },
+															})
+														}
+													}}
+													sx={{
+														borderBottom: `1px solid ${LIGHT_GREY}`,
+														padding: 4,
+													}}
 												>
+													<Suspense>
+														<SyncedIndicatorLine
+															createdByDeviceId={createdBy}
+														/>
+													</Suspense>
+
 													<Stack
-														direction="column"
-														sx={{
-															flex: 1,
-															justifyContent: 'center',
-															overflow: 'hidden',
-														}}
+														direction="row"
+														sx={{ flex: 1, gap: 2, overflow: 'auto' }}
 													>
-														<Typography
+														<Stack
+															direction="column"
 															sx={{
-																fontWeight: 500,
-																textOverflow: 'ellipsis',
-																whiteSpace: 'nowrap',
+																flex: 1,
+																justifyContent: 'center',
 																overflow: 'hidden',
 															}}
 														>
-															{title}
-														</Typography>
-
-														<Typography
-															sx={{
-																textOverflow: 'ellipsis',
-																whiteSpace: 'nowrap',
-																overflow: 'hidden',
-															}}
-														>
-															{formatDate(createdAt, {
-																year: 'numeric',
-																month: 'short',
-																day: '2-digit',
-																minute: '2-digit',
-																hour: '2-digit',
-																hourCycle: 'h12',
-															})}
-														</Typography>
-													</Stack>
-
-													<Box
-														sx={{
-															display: 'flex',
-															justifyContent: 'center',
-															alignItems: 'center',
-															width: CATEGORY_CONTAINER_SIZE_PX,
-															aspectRatio: 1,
-														}}
-													>
-														<Box sx={{ flex: 1 }}>
-															<Suspense
-																fallback={
-																	<Box
-																		sx={{
-																			display: 'flex',
-																			justifyContent: 'center',
-																			alignItems: 'center',
-																		}}
-																	>
-																		<CircularProgress disableShrink size={30} />
-																	</Box>
-																}
+															<Typography
+																sx={{
+																	fontWeight: 500,
+																	textOverflow: 'ellipsis',
+																	whiteSpace: 'nowrap',
+																	overflow: 'hidden',
+																}}
 															>
-																{type === 'observation' ? (
-																	<ObservationCategory
-																		attachments={document.attachments}
-																		categoryColor={category?.color}
-																		categoryName={category?.name}
-																		categoryIconDocumentId={
-																			category?.iconRef?.docId
-																		}
-																		projectId={projectId}
-																	/>
-																) : (
-																	<TrackCategory
-																		categoryIconDocumentId={
-																			category?.iconRef?.docId
-																		}
-																		categoryColor={category?.color}
-																		categoryName={category?.name}
-																		projectId={projectId}
-																	/>
-																)}
-															</Suspense>
+																{title}
+															</Typography>
+
+															<Typography
+																sx={{
+																	textOverflow: 'ellipsis',
+																	whiteSpace: 'nowrap',
+																	overflow: 'hidden',
+																}}
+															>
+																{formatDate(createdAt, {
+																	year: 'numeric',
+																	month: 'short',
+																	day: '2-digit',
+																	minute: '2-digit',
+																	hour: '2-digit',
+																	hourCycle: 'h12',
+																})}
+															</Typography>
+														</Stack>
+
+														<Box
+															sx={{
+																display: 'flex',
+																justifyContent: 'center',
+																alignItems: 'center',
+																width: CATEGORY_CONTAINER_SIZE_PX,
+																aspectRatio: 1,
+															}}
+														>
+															<Box sx={{ flex: 1 }}>
+																<Suspense
+																	fallback={
+																		<Box
+																			sx={{
+																				display: 'flex',
+																				justifyContent: 'center',
+																				alignItems: 'center',
+																			}}
+																		>
+																			<CircularProgress
+																				disableShrink
+																				size={30}
+																			/>
+																		</Box>
+																	}
+																>
+																	{type === 'observation' ? (
+																		<ObservationCategory
+																			attachments={document.attachments}
+																			categoryColor={category?.color}
+																			categoryName={category?.name}
+																			categoryIconDocumentId={
+																				category?.iconRef?.docId
+																			}
+																			projectId={projectId}
+																		/>
+																	) : (
+																		<TrackCategory
+																			categoryIconDocumentId={
+																				category?.iconRef?.docId
+																			}
+																			categoryColor={category?.color}
+																			categoryName={category?.name}
+																			projectId={projectId}
+																		/>
+																	)}
+																</Suspense>
+															</Box>
 														</Box>
-													</Box>
-												</Stack>
-											</ListItemButton>
-										</Box>
-									)
-								})}
-							</Box>
-						</List>
-					</Box>
+													</Stack>
+												</ListItemButton>
+											</Box>
+										)
+									})}
+								</Box>
+							</List>
+						</Box>
+					) : (
+						<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+							<Stack direction="column" sx={{ flex: 1, padding: 6, gap: 10 }}>
+								<Stack
+									direction="column"
+									sx={{
+										flex: 1,
+										gap: 10,
+										alignItems: 'center',
+										justifyContent: 'center',
+										padding: 4,
+									}}
+								>
+									<Box
+										sx={{
+											display: 'flex',
+
+											border: `4px solid ${LIGHT_GREY}`,
+											borderRadius: '50%',
+											padding: 10,
+										}}
+									>
+										<Icon
+											name="noun-project-notebook"
+											size={64}
+											htmlColor={BLUE_GREY}
+										/>
+									</Box>
+
+									<Typography
+										variant="h1"
+										sx={{ fontWeight: 500, textAlign: 'center' }}
+									>
+										{t(m.noResultsTitle)}
+									</Typography>
+
+									<Button
+										variant="text"
+										onClick={() => {
+											unsetCategoriesFilter()
+											unsetDateFilter()
+										}}
+									>
+										{t(m.noResultsResetFilters)}
+									</Button>
+								</Stack>
+							</Stack>
+						</Stack>
+					)}
 				</Box>
 			</Stack>
 
@@ -1725,12 +1780,12 @@ const m = defineMessages({
 	categoriesFilterValue: {
 		id: '$1.routes.app.projects.$projectId.-data-list.categoriesFilterValue',
 		defaultMessage:
-			'{count, plural, =0 {0 categories} one {# category} other {# categories}}',
+			'{count, plural, =0 {No categories} one {# category} other {# categories}}',
 		description: 'Text displayed describing the selected category filters.',
 	},
 	categoriesFilterAll: {
 		id: '$1.routes.app.projects.$projectId.-data-list.categoriesFilterAll',
-		defaultMessage: 'All Categories',
+		defaultMessage: 'All categories',
 		description: 'Text shown when all categories are being shown.',
 	},
 	categoriesFilterDeselectAll: {
@@ -1783,5 +1838,17 @@ const m = defineMessages({
 		id: '$1.routes.app.projects.$projectId.-data-list.dateFilterOptionSameYear',
 		defaultMessage: 'Same Year',
 		description: 'Text for option to show data from the same year.',
+	},
+	noResultsTitle: {
+		id: '$1.routes.app.projects.$projectId.-data-list.noResultsTitle',
+		defaultMessage: 'No Results',
+		description:
+			'Title for panel when no results are available based on active filters.',
+	},
+	noResultsResetFilters: {
+		id: '$1.routes.app.projects.$projectId.-data-list.noResultsResetFilters',
+		defaultMessage: 'Reset Filters',
+		description:
+			'Text for button to reset filters when no results are available based on active filters.',
 	},
 })
