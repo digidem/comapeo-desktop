@@ -1913,7 +1913,7 @@ const m = defineMessages({
 	categoriesFilterValue: {
 		id: '$1.routes.app.projects.$projectId.-data-list.categoriesFilterValue',
 		defaultMessage:
-			'{count, plural, =0 {No categories} one {# category} other {# categories}}',
+			'{count, plural, =0 {0 Categories} one {# Category} other {# Categories}}',
 		description: 'Text displayed describing the selected category filters.',
 	},
 	categoriesFilterAll: {
