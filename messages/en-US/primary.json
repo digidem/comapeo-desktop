@@ -237,7 +237,7 @@
   },
   "$1.routes.app.projects.$projectId.-data-list.categoriesFilterAll": {
     "description": "Text shown when all categories are being shown.",
-    "message": "All Categories"
+    "message": "All categories"
   },
   "$1.routes.app.projects.$projectId.-data-list.categoriesFilterDeselectAll": {
     "description": "Text for button to deselect all categories.",
@@ -249,7 +249,7 @@
   },
   "$1.routes.app.projects.$projectId.-data-list.categoriesFilterValue": {
     "description": "Text displayed describing the selected category filters.",
-    "message": "{count, plural, =0 {0 categories} one {# category} other {# categories}}"
+    "message": "{count, plural, =0 {No categories} one {# category} other {# categories}}"
   },
   "$1.routes.app.projects.$projectId.-data-list.categoriesFiltersAdvanced": {
     "description": "Text for button to clear all filters",
