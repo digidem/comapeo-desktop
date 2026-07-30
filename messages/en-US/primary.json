@@ -243,17 +243,25 @@
     "description": "Text for button to deselect all categories.",
     "message": "Deselect All"
   },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterNotCategorized": {
+    "description": "Text for category filter option for data without a matching category.",
+    "message": "Not categorized"
+  },
   "$1.routes.app.projects.$projectId.-data-list.categoriesFilterSelectAll": {
     "description": "Text for button to select all categories.",
     "message": "Select All"
   },
   "$1.routes.app.projects.$projectId.-data-list.categoriesFilterValue": {
     "description": "Text displayed describing the selected category filters.",
-    "message": "{count, plural, =0 {No categories} one {# category} other {# categories}}"
+    "message": "{count, plural, =0 {0 Categories} one {# Category} other {# Categories}}"
   },
   "$1.routes.app.projects.$projectId.-data-list.categoriesFiltersAdvanced": {
     "description": "Text for button to clear all filters",
     "message": "Advanced…"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoryUnavailable": {
+    "description": "Text for tooltip that appears when hovering over outdated active category filter.",
+    "message": "Category unavailable"
   },
   "$1.routes.app.projects.$projectId.-data-list.clearFilters": {
     "description": "Text for button to clear all filters",
@@ -301,7 +309,7 @@
   },
   "$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
+    "message": "Not categorized"
   },
   "$1.routes.app.projects.$projectId.-data-list.resultsCount": {
     "description": "Number of items listed",
@@ -483,6 +491,10 @@
     "description": "Text for button to deselect all in categories filter section in advanced filters dialog.",
     "message": "Deselect All"
   },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionNotCategorizedOption": {
+    "description": "Text for category filter option for data without a matching category in advanced filters dialog.",
+    "message": "Not categorized"
+  },
   "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionSelectAll": {
     "description": "Text for button to select all in categories filter section in advanced filters dialog.",
     "message": "Select All"
@@ -546,10 +558,6 @@
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
     "description": "Title for edit category panel.",
     "message": "Change Category"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
-    "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
     "description": "Text for cancel button.",
@@ -657,7 +665,7 @@
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
+    "message": "Not categorized"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyFeet": {
     "description": "Displayed altitude accuracy for observation in feet.",
@@ -1117,7 +1125,7 @@
   },
   "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
+    "message": "Not categorized"
   },
   "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationsSectionTitle": {
     "description": "Title for the track observations section.",

@@ -45,7 +45,7 @@ import type {
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLACK, BLUE_GREY, ORANGE, WHITE } from '../../../../../colors.ts'
+import { BLACK, WHITE } from '../../../../../colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -71,6 +71,7 @@ import {
 	getUnitSystemQueryOptions,
 } from '../../../../../lib/queries/app-settings.ts'
 import {
+	NOT_CATEGORY_FILTER_ID,
 	dateFilterToDateRange,
 	isDocumentIncludedByFilters,
 	type HighlightedDocument,
@@ -833,16 +834,12 @@ export function MapPanel({
 								/>
 							</Suspense>
 						) : (
-							<IconMarkerContainer
-								color={BLUE_GREY}
-								markerSize={MARKER_SIZE_PX}
-							>
-								<CategoryIconContainer
-									color={BLUE_GREY}
-									applyBoxShadow
-									padding={2}
-								>
-									<Icon name="material-place" size={CATEGORY_ICON_SIZE_PX} />
+							<IconMarkerContainer color={BLACK} markerSize={MARKER_SIZE_PX}>
+								<CategoryIconContainer color={BLACK} applyBoxShadow padding={2}>
+									<Icon
+										name="material-symbols-indeterminate-question-box"
+										size={CATEGORY_ICON_SIZE_PX}
+									/>
 								</CategoryIconContainer>
 							</IconMarkerContainer>
 						)}
@@ -928,7 +925,7 @@ function CategoryIconMarker({
 		lang,
 	})
 
-	const color = category.color || BLUE_GREY
+	const color = category.color || BLACK
 
 	return (
 		<IconMarkerContainer color={color} markerSize={MARKER_SIZE_PX}>
@@ -941,7 +938,10 @@ function CategoryIconMarker({
 						altText={t(m.categoryIconAlt, { name: category.name })}
 					/>
 				) : (
-					<Icon name="material-place" size={CATEGORY_ICON_SIZE_PX} />
+					<Icon
+						name="material-symbols-indeterminate-question-box"
+						size={CATEGORY_ICON_SIZE_PX}
+					/>
 				)}
 			</CategoryIconContainer>
 		</IconMarkerContainer>
@@ -975,7 +975,10 @@ function observationsToFeatureCollection({
 			const isVisible = isDocumentIncludedByFilters(
 				{ document: obs, category },
 				{
-					categories: categoriesFilter || categories.map((c) => c.docId),
+					categories: categoriesFilter || [
+						NOT_CATEGORY_FILTER_ID,
+						...categories.map((c) => c.docId),
+					],
 					date: filters?.date
 						? dateFilterToDateRange(filters.date, referenceDate)
 						: undefined,
@@ -1031,7 +1034,10 @@ function tracksToFeatureCollection({
 		const isVisible = isDocumentIncludedByFilters(
 			{ document: t, category },
 			{
-				categories: categoriesFilter || categories.map((c) => c.docId),
+				categories: categoriesFilter || [
+					NOT_CATEGORY_FILTER_ID,
+					...categories.map((c) => c.docId),
+				],
 				date: filters?.date
 					? dateFilterToDateRange(filters.date, referenceDate)
 					: undefined,
@@ -1079,8 +1085,8 @@ function createObservationLayerPaintProperty(
 		// @ts-expect-error Type def doesn't like the spread of the pairs
 		'circle-color':
 			categoryColorPairs.length > 0
-				? ['match', ['get', 'categoryDocId'], ...categoryColorPairs, ORANGE]
-				: ORANGE,
+				? ['match', ['get', 'categoryDocId'], ...categoryColorPairs, BLACK]
+				: BLACK,
 		'circle-opacity': [
 			'case',
 			[
