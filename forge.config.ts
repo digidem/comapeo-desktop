@@ -361,6 +361,11 @@ export default {
 		name: properties.appNameExternal,
 		executableName: properties.executableName,
 	},
+	rebuildConfig: {
+		// NOTE: Prevent trying to rebuild any native modules.
+		// Comment this out if prebuilds from known native modules do not include platform that is being built for.
+		onlyModules: [],
+	},
 	makers: [
 		new MakerSquirrel((arch) => ({
 			iconUrl:
