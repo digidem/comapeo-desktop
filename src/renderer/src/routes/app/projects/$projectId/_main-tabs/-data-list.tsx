@@ -166,8 +166,6 @@ export function DataList({
 		]
 	}, [categories, observationsWithCategory, tracksWithCategory, t])
 
-	console.log('***', { categoryFilterOptions })
-
 	const selectedCategoryFilterOptions: Array<CategoriesFilterOption> =
 		categoriesFilter
 			? categoryFilterOptions.filter((c) => {
