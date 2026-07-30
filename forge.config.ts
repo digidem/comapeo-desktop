@@ -361,7 +361,6 @@ export default {
 		name: properties.appNameExternal,
 		executableName: properties.executableName,
 	},
-	rebuildConfig: {},
 	makers: [
 		new MakerSquirrel((arch) => ({
 			iconUrl:
