@@ -14,11 +14,10 @@ import { alpha } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
 import { endOfDay, isAfter, isBefore, isEqual, min, startOfDay } from 'date-fns'
-import { counting } from 'radashi'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLUE_GREY, WHITE } from '../../../../../colors.ts'
+import { BLACK, BLUE_GREY, WHITE } from '../../../../../colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -30,10 +29,10 @@ import type { DateFilter } from '../../../../../lib/local-storage.ts'
 import {
 	dateFilterToDateRange,
 	isDocumentIncludedByFilters,
+	type CategoriesFilterOption,
 } from './-shared.ts'
 
 export function AdvancedFiltersDialogContent({
-	categories,
 	categoriesFilter,
 	dateFilter,
 	filterReferenceDate,
@@ -41,10 +40,10 @@ export function AdvancedFiltersDialogContent({
 	onCancel,
 	onDateFilterChange,
 	onSubmit,
+	options,
 	projectId,
 	tracksWithCategory,
 }: {
-	categories: Array<Preset>
 	categoriesFilter: Array<string> | undefined
 	dateFilter: DateFilter | undefined
 	filterReferenceDate: Date
@@ -52,6 +51,7 @@ export function AdvancedFiltersDialogContent({
 	onCancel: () => void
 	onDateFilterChange?: () => void
 	onSubmit: (values: { categories?: Array<string>; date?: DateFilter }) => void
+	options: Array<CategoriesFilterOption>
 	projectId: string
 	tracksWithCategory: Array<{ document: Track; category?: Preset }>
 }) {
@@ -129,15 +129,6 @@ export function AdvancedFiltersDialogContent({
 		),
 	)
 
-	const groupedByCategoryCount = useMemo(() => {
-		const { _, ...result } = counting(
-			[...observationsWithCategory, ...tracksWithCategory],
-			({ category }) => category?.docId || '_',
-		)
-
-		return result
-	}, [observationsWithCategory, tracksWithCategory])
-
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
@@ -163,8 +154,8 @@ export function AdvancedFiltersDialogContent({
 				</Typography>
 			</Stack>
 
-			<Box sx={{ overflow: 'auto' }}>
-				<Container maxWidth="md">
+			<Box sx={{ overflow: 'auto', flex: 1 }}>
+				<Container maxWidth="lg">
 					<Stack
 						id={formId}
 						direction="column"
@@ -354,9 +345,7 @@ export function AdvancedFiltersDialogContent({
 													) {
 														formField.clearValues()
 													} else {
-														formField.handleChange(
-															categories.map((c) => c.docId),
-														)
+														formField.handleChange(options.map((o) => o.id))
 													}
 												}}
 											>
@@ -378,25 +367,22 @@ export function AdvancedFiltersDialogContent({
 													columnGap: 4,
 												}}
 											>
-												{categories.map((category) => {
+												{options.map((option) => {
 													const isSelected = formField.state.value
 														? !!formField.state.value.find(
-																(filterDocId) => category.docId === filterDocId,
+																(filterDocId) => option.id === filterDocId,
 															)
 														: true
-
-													const count =
-														groupedByCategoryCount[category.docId] || 0
 
 													return (
 														<FormControlLabel
 															disableTypography
-															key={category.docId}
+															key={option.id}
 															control={
 																<Checkbox
 																	disableTouchRipple
 																	checked={isSelected}
-																	value={category.docId}
+																	value={option.id}
 																/>
 															}
 
@@ -412,17 +398,15 @@ export function AdvancedFiltersDialogContent({
 																>
 																	<Box aria-hidden>
 																		<CategoryIconContainer
-																			color={category.color || BLUE_GREY}
+																			color={option.color || BLACK}
 																		>
-																			{category.iconRef?.docId ? (
+																			{option.iconId ? (
 																				<CategoryIconImage
 																					altText={t(
 																						m.advancedFiltersCategoryIconAlt,
-																						{ name: category.name },
+																						{ name: option.name },
 																					)}
-																					iconDocumentId={
-																						category.iconRef.docId
-																					}
+																					iconDocumentId={option.iconId}
 																					projectId={projectId}
 																					imageStyle={{
 																						width: categoryIconSize,
@@ -431,7 +415,7 @@ export function AdvancedFiltersDialogContent({
 																				/>
 																			) : (
 																				<Icon
-																					name="material-place"
+																					name="material-symbols-indeterminate-question-box"
 																					size={categoryIconSize}
 																				/>
 																			)}
@@ -457,7 +441,7 @@ export function AdvancedFiltersDialogContent({
 																				whiteSpace: 'nowrap',
 																			}}
 																		>
-																			{category.name}
+																			{option.name}
 																		</Typography>
 
 																		<Typography
@@ -468,7 +452,7 @@ export function AdvancedFiltersDialogContent({
 																				fontVariantNumeric: 'tabular-nums',
 																			}}
 																		>
-																			{count}
+																			{option.matchCount}
 																		</Typography>
 																	</Typography>
 																</Stack>
@@ -477,14 +461,14 @@ export function AdvancedFiltersDialogContent({
 																formField.handleChange((prev) => {
 																	if (prev) {
 																		return checked
-																			? [...prev, category.docId]
+																			? [...prev, option.id]
 																			: prev.filter(
-																					(previousDocId) =>
-																						previousDocId !== category.docId,
+																					(previousOptionId) =>
+																						previousOptionId !== option.id,
 																				)
 																	}
 
-																	return checked ? [category.docId] : prev
+																	return checked ? [option.id] : prev
 																})
 															}}
 															sx={{
@@ -569,8 +553,7 @@ export function AdvancedFiltersDialogContent({
 										].filter((document) =>
 											isDocumentIncludedByFilters(document, {
 												categories:
-													state.values.categories ||
-													categories.map((c) => c.docId),
+													state.values.categories || options.map((o) => o.id),
 												date:
 													state.values.startDate && state.values.endDate
 														? {
@@ -645,6 +628,12 @@ const m = defineMessages({
 		defaultMessage: 'Select All',
 		description:
 			'Text for button to select all in categories filter section in advanced filters dialog.',
+	},
+	advancedFiltersCategoriesSectionNotCategorizedOption: {
+		id: '$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionNotCategorizedOption',
+		defaultMessage: 'Not categorized',
+		description:
+			'Text for category filter option for data without a matching category in advanced filters dialog.',
 	},
 	advancedFiltersCategoryIconAlt: {
 		id: 'routes.app.projects.$projectId.index.advancedFiltersCategoryIconAlt',

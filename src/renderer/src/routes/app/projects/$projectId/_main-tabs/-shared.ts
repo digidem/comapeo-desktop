@@ -11,6 +11,17 @@ import * as v from 'valibot'
 
 import type { DateFilter } from '../../../../../lib/local-storage.ts'
 
+export type CategoriesFilterOption = {
+	id: string
+	color?: string
+	iconId?: string
+	name: string
+	matchCount: number
+}
+
+// NOTE: String used for persistence of "Not categorized" category filter option.
+export const NOT_CATEGORY_FILTER_ID = '__NO_CATEGORY__' as const
+
 export const HighlightedDocumentSchema = v.object({
 	type: v.union([v.literal('observation'), v.literal('track')]),
 	docId: v.string(),
@@ -76,13 +87,13 @@ export function isDocumentIncludedByFilters(
 	filters: { categories: Array<string>; date?: DateRange },
 ) {
 	if (filters.categories.length > 0) {
-		const categoryIdsToInclude = new Set(filters.categories)
+		const categoryFilterIdsToInclude = new Set(filters.categories)
 
-		if (!item.category?.docId) {
-			return false
+		if (item.category === undefined) {
+			return categoryFilterIdsToInclude.has(NOT_CATEGORY_FILTER_ID)
 		}
 
-		if (!categoryIdsToInclude.has(item.category.docId)) {
+		if (!categoryFilterIdsToInclude.has(item.category.docId)) {
 			return false
 		}
 	} else {

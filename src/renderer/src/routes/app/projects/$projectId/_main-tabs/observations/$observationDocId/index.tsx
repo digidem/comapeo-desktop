@@ -25,6 +25,7 @@ import * as v from 'valibot'
 import type { CoordinateFormat } from '../../../../../../../../../shared/coordinate-format.ts'
 import type { UnitSystem } from '../../../../../../../../../shared/unit-system.ts'
 import {
+	BLACK,
 	BLUE_GREY,
 	DARKER_ORANGE,
 	DARK_GREY,
@@ -536,47 +537,57 @@ function ObservationDetailsPanel({
 						</Box>
 
 						<Stack direction="column" sx={{ paddingInline: 6 }}>
-							<Box sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}>
+							<Box
+								sx={{
+									border: `1px solid ${BLUE_GREY}`,
+									borderRadius: 2,
+								}}
+							>
 								<Stack
 									direction="row"
 									sx={{
 										alignItems: 'center',
 										justifyContent: 'space-between',
 										flexWrap: 'wrap',
-										gap: 4,
-										padding: 4,
 									}}
 								>
 									<Stack
 										direction="row"
-										sx={{ alignItems: 'center', gap: 4, overflow: 'auto' }}
+										sx={{
+											alignItems: 'center',
+											gap: 4,
+											overflow: 'auto',
+											padding: 4,
+										}}
 									>
 										<Box sx={{ position: 'relative' }}>
 											{category ? (
 												<CategoryIconContainer
-													color={category.color || BLUE_GREY}
+													color={category.color || BLACK}
 													applyBoxShadow
 												>
 													{category.iconRef?.docId ? (
 														<CategoryIconImage
 															altText={intl.formatMessage(m.categoryIconAlt, {
-																name:
-																	category.name ||
-																	intl.formatMessage(
-																		m.observationCategoryNameFallback,
-																	),
+																name: category.name,
 															})}
 															iconDocumentId={category.iconRef.docId}
 															projectId={projectId}
 															imageStyle={{ width: 48, aspectRatio: 1 }}
 														/>
 													) : (
-														<Icon name="material-place" size={40} />
+														<Icon
+															name="material-symbols-indeterminate-question-box"
+															size={40}
+														/>
 													)}
 												</CategoryIconContainer>
 											) : (
-												<CategoryIconContainer color={BLUE_GREY} applyBoxShadow>
-													<Icon name="material-place" size={40} />
+												<CategoryIconContainer color={BLACK} applyBoxShadow>
+													<Icon
+														name="material-symbols-indeterminate-question-box"
+														size={40}
+													/>
 												</CategoryIconContainer>
 											)}
 
@@ -622,6 +633,7 @@ function ObservationDetailsPanel({
 												display: 'flex',
 												flex: 0,
 												justifyContent: 'center',
+												padding: 4,
 											}}
 										>
 											<Button
@@ -1548,7 +1560,7 @@ const m = defineMessages({
 	},
 	observationCategoryNameFallback: {
 		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback',
-		defaultMessage: 'Observation',
+		defaultMessage: 'Not categorized',
 		description: 'Fallback name for observation without a matching category.',
 	},
 	noLocation: {

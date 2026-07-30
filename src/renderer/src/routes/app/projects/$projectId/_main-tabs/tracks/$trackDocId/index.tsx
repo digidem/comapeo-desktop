@@ -171,7 +171,7 @@ function RouteComponent() {
 							>
 								{category ? (
 									<CategoryIconContainer
-										color={category.color || BLUE_GREY}
+										color={category.color || BLACK}
 										applyBoxShadow
 									>
 										{category.iconRef?.docId ? (
@@ -308,8 +308,34 @@ function TrackObservationsSection({
 				{displayedTrackObservations.map(({ document, category }) => {
 					const { createdAt, docId, createdBy } = document
 
-					const title = category?.name || t(m.observationCategoryNameFallback)
+					const title = category
+						? category.name
+						: t(m.observationCategoryNameFallback)
 
+					const renderedCategory = category ? (
+						<CategoryIconContainer color={category.color || BLACK}>
+							{category.iconRef?.docId ? (
+								<CategoryIconImage
+									projectId={projectId}
+									iconDocumentId={category.iconRef.docId}
+									altText={t(m.categoryIconAlt, { name: category.name })}
+									imageStyle={{ width: '100%', aspectRatio: 1 }}
+								/>
+							) : (
+								<Icon
+									name="material-symbols-indeterminate-question-box"
+									size={40}
+								/>
+							)}
+						</CategoryIconContainer>
+					) : (
+						<CategoryIconContainer color={BLACK}>
+							<Icon
+								name="material-symbols-indeterminate-question-box"
+								size={40}
+							/>
+						</CategoryIconContainer>
+					)
 					return (
 						<ListItemButton
 							key={docId}
@@ -385,24 +411,7 @@ function TrackObservationsSection({
 												</Box>
 											}
 										>
-											{category?.iconRef?.docId ? (
-												<CategoryIconContainer
-													color={category.color || BLUE_GREY}
-												>
-													<CategoryIconImage
-														projectId={projectId}
-														iconDocumentId={category.iconRef.docId}
-														altText={t(m.categoryIconAlt, {
-															name: category?.name || t(m.tracks),
-														})}
-														imageStyle={{ width: '100%', aspectRatio: 1 }}
-													/>
-												</CategoryIconContainer>
-											) : (
-												<CategoryIconContainer color={BLACK}>
-													<Icon name="material-hiking" size={40} />
-												</CategoryIconContainer>
-											)}
+											{renderedCategory}
 										</Suspense>
 									</Box>
 								</Box>
@@ -460,7 +469,7 @@ const m = defineMessages({
 	},
 	observationCategoryNameFallback: {
 		id: '$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback',
-		defaultMessage: 'Observation',
+		defaultMessage: 'Not categorized',
 		description: 'Fallback name for observation without a matching category.',
 	},
 	categoryIconAlt: {
