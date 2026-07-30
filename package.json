@@ -175,7 +175,7 @@
 		"@electron-forge/shared-types": {
 			"tar": "7.5.22"
 		},
-		"better-sqlite3": "13.0.2",
+		"better-sqlite3": "12.11.1",
 		"tmp": "0.2.7"
 	},
 	"allowScripts": {
