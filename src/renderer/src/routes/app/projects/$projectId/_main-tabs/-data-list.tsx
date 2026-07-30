@@ -542,6 +542,7 @@ export function DataList({
 														<OutdatedFilterPill
 															projectId={projectId}
 															categoryDocId={filterId}
+															lang={lang}
 															onRemove={() => {
 																const updatedFilter = categoriesFilter.filter(
 																	(f) => f !== filterId,
@@ -925,10 +926,12 @@ export function DataList({
 
 function OutdatedFilterPill({
 	categoryDocId,
+	lang,
 	projectId,
 	onRemove,
 }: {
 	categoryDocId: string
+	lang: string
 	projectId: string
 	onRemove: () => void
 }) {
@@ -936,6 +939,7 @@ function OutdatedFilterPill({
 		projectId,
 		docId: categoryDocId,
 		docType: 'preset',
+		lang,
 	})
 
 	return (
