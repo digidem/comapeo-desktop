@@ -1,13 +1,13 @@
 import { captureException } from '@sentry/react'
-import bbox from '@turf/bbox'
-import center from '@turf/center'
+import { bbox } from '@turf/bbox'
+import { center } from '@turf/center'
 import { feature } from '@turf/helpers'
 import { useControl, type MapInstance } from '@vis.gl/react-maplibre'
-import {
+import type {
+	ControlPosition,
+	FitBoundsOptions,
 	GeoJSONSource,
-	type ControlPosition,
-	type FitBoundsOptions,
-	type IControl,
+	IControl,
 } from 'maplibre-gl'
 
 import { getIconURL } from '../lib/icons'
@@ -115,7 +115,9 @@ class ZoomToSelectedDocumentControl implements IControl {
 
 							const c = center(match)
 
-							const [minLon, minLat, maxLon, maxLat] = bbox(match)
+							const [minLon, minLat, maxLon, maxLat] = bbox(match, {
+								recompute: true,
+							})
 
 							map.panTo(
 								{

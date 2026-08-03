@@ -996,7 +996,11 @@ function observationsToFeatureCollection({
 		}
 	}
 
-	return featureCollection(displayablePoints)
+	const result = featureCollection(displayablePoints)
+
+	result.bbox = bbox(result, { recompute: true })
+
+	return result
 }
 
 function tracksToFeatureCollection({
@@ -1066,7 +1070,11 @@ function tracksToFeatureCollection({
 		}
 	}
 
-	return featureCollection(displayableTracks)
+	const result = featureCollection(displayableTracks)
+
+	result.bbox = bbox(result, { recompute: true })
+
+	return result
 }
 
 function createObservationLayerPaintProperty(
