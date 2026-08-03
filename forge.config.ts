@@ -361,7 +361,13 @@ export default {
 		name: properties.appNameExternal,
 		executableName: properties.executableName,
 	},
-	rebuildConfig: {},
+	rebuildConfig: {
+		// NOTE: Fixes an issue where @electron/rebuild attempts to rebuild better-sqlite@13 instead of using the prebuilds on Windows
+		// (see https://github.com/WiseLibs/better-sqlite3/issues/1503#issuecomment-5134468366).
+		// Empty array disables rebuilding for all native modules. If building for a platform where prebuilds do not exist,
+		// will need to update this line with the relevant module(s).
+		onlyModules: [],
+	},
 	makers: [
 		new MakerSquirrel((arch) => ({
 			iconUrl:
