@@ -147,7 +147,7 @@
 		"globals": "17.9.0",
 		"husky": "9.1.7",
 		"knip": "6.31.0",
-		"maplibre-gl": "6.0.0",
+		"maplibre-gl": "6.1.0",
 		"nano-staged": "1.0.2",
 		"npm-run-all2": "9.0.3",
 		"patch-package": "8.0.1",
