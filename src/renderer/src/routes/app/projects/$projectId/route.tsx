@@ -21,6 +21,7 @@ import {
 import { defineMessages, useIntl } from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 
+import { getProjectApiQueryOptions } from '../-shared/query-options.ts'
 import { BLUE_GREY, COMAPEO_BLUE, DARK_GREY } from '../../../../colors.ts'
 import { Icon } from '../../../../components/icon.tsx'
 import {
@@ -43,12 +44,9 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 
 		let projectApi
 		try {
-			projectApi = await queryClient.ensureQueryData({
-				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects', projectId],
-				queryFn: async () => {
-					return clientApi.getProject(projectId)
-				},
-			})
+			projectApi = await queryClient.ensureQueryData(
+				getProjectApiQueryOptions({ clientApi, projectId }),
+			)
 		} catch {
 			throw notFound()
 		}
@@ -103,21 +101,51 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 		])
 	},
 	onEnter: ({ context, params }) => {
+		const { activeProjectIdStore, clientApi, queryClient } = context
+		const { projectId } = params
+
 		// NOTE: Used by the initial route (`/`) to determine whether we should use
 		// the persisted active project ID for redirecting when opening the app.
 		setItem('use_active_project_id_for_initial_route', true)
 
 		// NOTE: Update the active project ID whenever we navigate to a relevant project-specific page.
-		context.activeProjectIdStore.actions.update(params.projectId)
+		activeProjectIdStore.actions.update(projectId)
 
-		// NOTE: Enable connection to remote archives when entering a project-specific route
-		context.projectApi.$sync.connectServers().catch(captureException)
+		;(async () => {
+			let projectApi = context.projectApi
+
+			// NOTE: Variables from beforeLoad may be undefined unexpectedly.
+			// https://github.com/TanStack/router/issues/3293
+			if (!projectApi) {
+				projectApi = await queryClient.ensureQueryData(
+					getProjectApiQueryOptions({ clientApi, projectId }),
+				)
+			}
+
+			// NOTE: Enable connection to remote archives when entering a project-specific route
+			await projectApi.$sync.connectServers()
+		})().catch(captureException)
 	},
-	onLeave: ({ context }) => {
+	onLeave: ({ context, params }) => {
+		const { clientApi, queryClient } = context
+		const { projectId } = params
+
 		removeItem('use_active_project_id_for_initial_route')
 
-		// NOTE: Disconnect from remote archives when leaving a project-specific route
-		context.projectApi.$sync.disconnectServers().catch(captureException)
+		;(async () => {
+			let projectApi = context.projectApi
+
+			// NOTE: Variables from beforeLoad may be undefined unexpectedly.
+			// https://github.com/TanStack/router/issues/3293
+			if (!projectApi) {
+				projectApi = await queryClient.ensureQueryData(
+					getProjectApiQueryOptions({ clientApi, projectId }),
+				)
+			}
+
+			// NOTE: Disconnect from remote archives when leaving a project-specific route
+			await projectApi.$sync.disconnectServers()
+		})().catch(captureException)
 	},
 	component: RouteComponent,
 })

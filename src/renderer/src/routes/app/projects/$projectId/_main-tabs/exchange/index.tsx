@@ -21,6 +21,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { NetworkConnectionInfo } from '../../../-shared/network-connection-info.tsx'
+import { getProjectApiQueryOptions } from '../../../-shared/query-options.ts'
 import {
 	BLUE_GREY,
 	COMAPEO_BLUE,
@@ -81,15 +82,45 @@ export const Route = createFileRoute(
 			}),
 		])
 	},
-	onEnter: ({ context }) => {
-		context.projectApi.$sync
-			.setAutostopDataSyncTimeout(null)
-			.catch(captureException)
+	onEnter: async ({ context, params }) => {
+		const { clientApi, queryClient } = context
+		const { projectId } = params
+
+		let projectApi = context.projectApi
+
+		try {
+			// NOTE: Variables from beforeLoad may be undefined unexpectedly.
+			// https://github.com/TanStack/router/issues/3293
+			if (!projectApi) {
+				projectApi = await queryClient.ensureQueryData(
+					getProjectApiQueryOptions({ clientApi, projectId }),
+				)
+			}
+
+			await projectApi.$sync.setAutostopDataSyncTimeout(null)
+		} catch (err) {
+			captureException(err)
+		}
 	},
-	onLeave: async ({ context }) => {
-		context.projectApi.$sync
-			.setAutostopDataSyncTimeout(30_000)
-			.catch(captureException)
+	onLeave: async ({ context, params }) => {
+		const { clientApi, queryClient } = context
+		const { projectId } = params
+
+		let projectApi = context.projectApi
+
+		try {
+			// NOTE: Variables from beforeLoad may be undefined unexpectedly.
+			// https://github.com/TanStack/router/issues/3293
+			if (!projectApi) {
+				projectApi = await queryClient.ensureQueryData(
+					getProjectApiQueryOptions({ clientApi, projectId }),
+				)
+			}
+
+			await projectApi.$sync.setAutostopDataSyncTimeout(30_000)
+		} catch (err) {
+			captureException(err)
+		}
 	},
 	component: RouteComponent,
 })
