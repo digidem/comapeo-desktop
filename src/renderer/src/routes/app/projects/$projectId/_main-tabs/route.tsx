@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
+import { ErrorBoundary } from '@sentry/react'
 import {
 	Outlet,
 	createFileRoute,
@@ -11,6 +12,7 @@ import { endOfToday } from 'date-fns'
 
 import { TwoPanelLayout } from '../../../-components/two-panel-layout.tsx'
 import { BLACK, LIGHT_GREY } from '../../../../../colors.ts'
+import { GenericRouteErrorComponent } from '../../../../../components/generic-route-error-component.tsx'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo.ts'
 import { MapPanel } from './-map-panel.tsx'
 import {
@@ -95,24 +97,37 @@ function RouteComponent() {
 			start={<Outlet />}
 			end={
 				showMapPanel ? (
-					<Suspense
-						fallback={
-							<Box
-								sx={{
-									display: 'flex',
-									flex: 1,
-									justifyContent: 'center',
-									alignItems: 'center',
-									bgcolor: BLACK,
-									opacity: 0.5,
-								}}
-							>
-								<CircularProgress />
-							</Box>
-						}
+					<ErrorBoundary
+						fallback={({ error, resetError }) => (
+							<GenericRouteErrorComponent
+								error={
+									Error.isError(error)
+										? error
+										: new Error('Failed to render map', { cause: error })
+								}
+								reset={resetError}
+							/>
+						)}
 					>
-						<RouteAwareMapPanel projectId={projectId} />
-					</Suspense>
+						<Suspense
+							fallback={
+								<Box
+									sx={{
+										display: 'flex',
+										flex: 1,
+										justifyContent: 'center',
+										alignItems: 'center',
+										bgcolor: BLACK,
+										opacity: 0.5,
+									}}
+								>
+									<CircularProgress />
+								</Box>
+							}
+						>
+							<RouteAwareMapPanel projectId={projectId} />
+						</Suspense>
+					</ErrorBoundary>
 				) : (
 					<Box sx={{ bgcolor: LIGHT_GREY, display: 'flex', flex: 1 }} />
 				)
