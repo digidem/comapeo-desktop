@@ -24,7 +24,7 @@
 	"devEngines": {
 		"runtime": {
 			"name": "node",
-			"version": "~24.18.0",
+			"version": "~24.18.1",
 			"onFail": "warn"
 		},
 		"packageManager": {
@@ -101,13 +101,13 @@
 		"@electron/fuses": "1.8.0",
 		"@emotion/react": "11.14.0",
 		"@emotion/styled": "11.14.1",
-		"@eslint-react/eslint-plugin": "5.18.1",
+		"@eslint-react/eslint-plugin": "5.18.2",
 		"@eslint/js": "10.0.1",
 		"@fontsource-variable/rubik": "5.3.0",
 		"@formatjs/cli-lib": "9.0.2",
 		"@formatjs/unplugin": "1.2.4",
 		"@ianvs/prettier-plugin-sort-imports": "4.7.1",
-		"@mui/material": "9.2.0",
+		"@mui/material": "9.3.0",
 		"@mui/x-date-pickers": "9.10.1",
 		"@playwright/test": "1.62.1",
 		"@reforged/maker-appimage": "5.2.0",
@@ -138,7 +138,7 @@
 		"@vitejs/plugin-react": "6.0.5",
 		"babel-plugin-react-compiler": "1.0.0",
 		"date-fns": "4.4.0",
-		"electron": "43.2.0",
+		"electron": "43.3.0",
 		"electron-playwright-helpers": "2.1.0",
 		"eslint": "10.8.0",
 		"eslint-plugin-formatjs": "6.4.20",
@@ -162,7 +162,7 @@
 		"semver": "7.8.5",
 		"spin-delay": "2.0.1",
 		"typescript": "npm:@typescript/typescript6@6.0.3",
-		"typescript-eslint": "8.65.0",
+		"typescript-eslint": "8.66.0",
 		"utm": "1.1.1",
 		"vite": "8.2.0",
 		"vite-plugin-icons-spritesheet": "3.1.0",
