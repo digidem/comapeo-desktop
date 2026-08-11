@@ -41,7 +41,7 @@ import {
 	startOfYear,
 	subDays,
 } from 'date-fns'
-import { counting, isArrayEqual, isEqual } from 'radashi'
+import { counting, isEqual } from 'radashi'
 import { defineMessages, useIntl, type IntlShape } from 'react-intl'
 
 import {
@@ -125,8 +125,6 @@ export function DataList({
 		lang,
 	})
 
-	const allCategoryDocIds = categories.map((c) => c.docId)
-
 	const observationsWithCategory = useMemo(() => {
 		return observations.map((o) => ({
 			type: 'observation' as const,
@@ -165,6 +163,8 @@ export function DataList({
 			})),
 		]
 	}, [categories, observationsWithCategory, tracksWithCategory, t])
+
+	const allCategoriesFilterOptionsIds = categoryFilterOptions.map((o) => o.id)
 
 	const selectedCategoryFilterOptions: Array<CategoriesFilterOption> =
 		categoriesFilter
@@ -346,6 +346,12 @@ export function DataList({
 			})
 	}
 
+	const allCategoriesFilterOptionsSelected = categoriesFilter
+		? new Set(allCategoriesFilterOptionsIds).difference(
+				new Set(categoriesFilter),
+			).size === 0
+		: true
+
 	return (
 		<>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
@@ -434,7 +440,9 @@ export function DataList({
 										setCategoriesFilter(
 											categoriesFilter
 												? categoriesFilter.filter((f) => f !== value)
-												: allCategoryDocIds.filter((id) => id !== value),
+												: allCategoriesFilterOptionsIds.filter(
+														(id) => id !== value,
+													),
 										)
 									}
 								}}
@@ -461,7 +469,7 @@ export function DataList({
 					{!!dateFilter ||
 					(categoriesFilter &&
 						categoriesFilter.length > 0 &&
-						!isArrayEqual(allCategoryDocIds, categoriesFilter)) ? (
+						!allCategoriesFilterOptionsSelected) ? (
 						<Stack
 							direction="row"
 							sx={{
@@ -502,7 +510,7 @@ export function DataList({
 
 							{categoriesFilter &&
 							categoriesFilter.length > 0 &&
-							!isArrayEqual(allCategoryDocIds, categoriesFilter)
+							!allCategoriesFilterOptionsSelected
 								? categoriesFilter.map((filterId) => {
 										const matchingFilterOption = categoryFilterOptions.find(
 											(o) => o.id === filterId,
