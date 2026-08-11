@@ -193,13 +193,87 @@ export async function start({
 			coreProcessArgs.push(`--onlineStyleUrl=${appConfig.onlineStyleUrl}`)
 		}
 
+		const persisted = persistedStore.getState()
+		const activeProjectId = persisted.activeProjectId
+		const diagnosticsEnabled = persisted.diagnosticsEnabled
+		const sentryUserId = persisted.sentryUser.id
+
+		let sentryEnvironment: SentryEnvironment = 'development'
+
+		if (appConfig.appType === 'release-candidate') {
+			sentryEnvironment = 'qa'
+		} else if (appConfig.appType === 'production') {
+			sentryEnvironment = 'production'
+		}
+
+		let isMigrating = true
+
+		const mainWindow = initMainWindow({
+			activeProjectId,
+			appVersion: appConfig.appVersion,
+			// coreService,
+			comapeoUserDataDirectory,
+			isDevelopment: appConfig.appType === 'development',
+			sentryConfig: {
+				enabled: diagnosticsEnabled,
+				environment: sentryEnvironment,
+				userId: sentryUserId,
+			},
+		})
+
+		log(`Created main window with id ${mainWindow.id}`)
+
+		mainWindow.addListener('ready-to-show', () => {
+			mainWindow.show()
+		})
+
+		mainWindow.webContents.ipc.handle('migration:info:get', () => {
+			return { isMigrating }
+		})
+
+		const migrationPromise = Promise.withResolvers<void>()
+
+		if (isMigrating) {
+			let progress = 0
+			const intervalId = setInterval(() => {
+				if (progress === 100) {
+					clearInterval(intervalId)
+					migrationPromise.resolve()
+					return
+				}
+				progress += 10
+
+				mainWindow.webContents.send('migration_progress', progress)
+			}, 1000)
+		} else {
+			migrationPromise.resolve()
+		}
+
+		await migrationPromise.promise
+
+		isMigrating = false
+
 		const coreService = utilityProcess.fork(
 			CORE_SERVICE_PATH,
 			coreProcessArgs,
-			{
-				serviceName: `CoMapeo Core Service`,
-			},
+			{ serviceName: 'CoMapeo Core Service' },
 		)
+
+		// Set up communication channel between window and core service
+		// https://www.electronjs.org/docs/latest/tutorial/message-ports/#messageports-in-the-main-process
+		mainWindow.webContents.ipc.on('comapeo-port', (event) => {
+			const [comapeoChannelPort, appChannelPort] = event.ports
+
+			if (!(comapeoChannelPort && appChannelPort)) return // TODO: throw/report error
+
+			coreService.postMessage(
+				{
+					type: 'main:new-client',
+					payload: { clientId: `window-${mainWindow.id}` },
+				} satisfies NewClientMessage,
+				[comapeoChannelPort, appChannelPort],
+			)
+		})
 
 		// NOTE: Exit the app if the core service exits for some reason
 		coreService.on('exit', (code) => {
@@ -224,14 +298,6 @@ export async function start({
 				coreService.kill()
 			}
 		})
-
-		let sentryEnvironment: SentryEnvironment = 'development'
-
-		if (appConfig.appType === 'release-candidate') {
-			sentryEnvironment = 'qa'
-		} else if (appConfig.appType === 'production') {
-			sentryEnvironment = 'production'
-		}
 
 		app.on('activate', () => {
 			log('App activated')
@@ -260,7 +326,7 @@ export async function start({
 				const mainWindow = initMainWindow({
 					activeProjectId,
 					appVersion: appConfig.appVersion,
-					coreService,
+					// coreService,
 					comapeoUserDataDirectory,
 					isDevelopment: appConfig.appType === 'development',
 					sentryConfig: {
@@ -275,11 +341,6 @@ export async function start({
 				log(`Created main window with id ${mainWindow.id}`)
 			}
 		})
-
-		const persisted = persistedStore.getState()
-		const activeProjectId = persisted.activeProjectId
-		const diagnosticsEnabled = persisted.diagnosticsEnabled
-		const sentryUserId = persisted.sentryUser.id
 
 		protocol.handle('comapeo', (request: Request) => {
 			const { hash, host, pathname } = new URL(request.url)
@@ -324,18 +385,18 @@ export async function start({
 			return net.fetch(pathToFileURL(requestedPath).toString())
 		})
 
-		const mainWindow = initMainWindow({
-			activeProjectId,
-			appVersion: appConfig.appVersion,
-			coreService,
-			comapeoUserDataDirectory,
-			isDevelopment: appConfig.appType === 'development',
-			sentryConfig: {
-				enabled: diagnosticsEnabled,
-				environment: sentryEnvironment,
-				userId: sentryUserId,
-			},
-		})
+		// const mainWindow = initMainWindow({
+		// 	activeProjectId,
+		// 	appVersion: appConfig.appVersion,
+		// 	coreService,
+		// 	comapeoUserDataDirectory,
+		// 	isDevelopment: appConfig.appType === 'development',
+		// 	sentryConfig: {
+		// 		enabled: diagnosticsEnabled,
+		// 		environment: sentryEnvironment,
+		// 		userId: sentryUserId,
+		// 	},
+		// })
 
 		log(`Created main window with id ${mainWindow.id}`)
 
@@ -363,14 +424,14 @@ export async function start({
 function initMainWindow({
 	activeProjectId,
 	appVersion,
-	coreService,
+	// coreService,
 	comapeoUserDataDirectory,
 	isDevelopment,
 	sentryConfig,
 }: {
 	activeProjectId?: string
 	appVersion: string
-	coreService: UtilityProcess
+	// coreService: UtilityProcess
 	comapeoUserDataDirectory: string
 	isDevelopment: boolean
 	sentryConfig: {
@@ -444,22 +505,6 @@ function initMainWindow({
 		APP_STATE.browserWindows.delete(mainWindow)
 
 		log(`Main window with id ${mainWindow.id} closed`)
-	})
-
-	// Set up communication channel between window and core service
-	// https://www.electronjs.org/docs/latest/tutorial/message-ports/#messageports-in-the-main-process
-	mainWindow.webContents.ipc.on('comapeo-port', (event) => {
-		const [comapeoChannelPort, appChannelPort] = event.ports
-
-		if (!(comapeoChannelPort && appChannelPort)) return // TODO: throw/report error
-
-		coreService.postMessage(
-			{
-				type: 'main:new-client',
-				payload: { clientId: `window-${mainWindow.id}` },
-			} satisfies NewClientMessage,
-			[comapeoChannelPort, appChannelPort],
-		)
 	})
 
 	// Set up IPC specific to the main window

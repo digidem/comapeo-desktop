@@ -63,4 +63,7 @@ export type RuntimeApi = {
 
 	getOnboardedAt: () => Promise<number | null>
 	setOnboardedAt: (value: number) => Promise<void>
+
+	getMigrationInfo: () => Promise<{ isMigrating: boolean }>
+	onMigrationProgress: (callback: (progress: number) => void) => () => void
 }

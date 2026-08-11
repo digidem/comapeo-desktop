@@ -150,6 +150,24 @@ const runtimeApi = {
 	setOnboardedAt: async (value) => {
 		return ipcRenderer.invoke('user:onboardedAt:set', value)
 	},
+
+	getMigrationInfo: async () => {
+		const result = await ipcRenderer.invoke('migration:info:get')
+
+		return result
+	},
+	onMigrationProgress: (callback) => {
+		/** @type {Parameters<import('electron/renderer').IpcRenderer['on']>[1]} */
+		const listener = (_event, value) => {
+			callback(value)
+		}
+
+		ipcRenderer.on('migration_progress', listener)
+
+		return () => {
+			ipcRenderer.off('migration_progress', listener)
+		}
+	},
 }
 
 /**

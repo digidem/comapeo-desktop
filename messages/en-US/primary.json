@@ -1303,6 +1303,86 @@
     "description": "Title of the unit system settings page.",
     "message": "Unit System"
   },
+  "$1.routes.migration.index.dataSafetyDetail": {
+    "description": "Line item describing data safety during migration.",
+    "message": "All data is safe and protected"
+  },
+  "$1.routes.migration.index.doNotCloseAppWarning": {
+    "description": "Text for warning to not close app while migrating.",
+    "message": "Do not close app while updating!"
+  },
+  "$1.routes.migration.index.freeUpSpaceWarning": {
+    "description": "Text for warning to free up disk space to allow migration.",
+    "message": "Free up space to continue."
+  },
+  "$1.routes.migration.index.genericMigrationErrorTitle": {
+    "description": "Title text for when an error occurs while migrating.",
+    "message": "Something went wrong"
+  },
+  "$1.routes.migration.index.inProgressDescription": {
+    "description": "Description text for in-progress migration state.",
+    "message": "Projects are migrating to a newer, faster format"
+  },
+  "$1.routes.migration.index.inProgressProjectDetail": {
+    "description": "Line item displaying which project is being migrated for in-progress migration state.",
+    "message": "Updating {current, number} of {total, number}…"
+  },
+  "$1.routes.migration.index.inProgressTitle": {
+    "description": "Title text for in-progress migration state.",
+    "message": "Updating CoMapeo…"
+  },
+  "$1.routes.migration.index.notEnoughSpaceDescription": {
+    "description": "Description text for when there is not enough space to migrate automatically.",
+    "message": "New update available with performance improvements"
+  },
+  "$1.routes.migration.index.notEnoughSpaceSpaceRequiredDetail": {
+    "description": "Line item displaying amount of disk space needed for migration.",
+    "message": "~{value} required to update"
+  },
+  "$1.routes.migration.index.notEnoughSpaceTitle": {
+    "description": "Title text for when there is not enough space to migrate automatically.",
+    "message": "Update CoMapeo"
+  },
+  "$1.routes.migration.index.openSettingsButton": {
+    "description": "Text for button to open system settings.",
+    "message": "Open Settings"
+  },
+  "$1.routes.migration.index.outOfStorageErrorDescription": {
+    "description": "Title text for when storage runs out while migrating.",
+    "message": "Projects stopped migrating because device ran out of space"
+  },
+  "$1.routes.migration.index.outOfStorageErrorTitle": {
+    "description": "Title text for when storage runs out while migrating.",
+    "message": "Out of storage space"
+  },
+  "$1.routes.migration.index.skipForNowButton": {
+    "description": "Text for button to skip migration.",
+    "message": "Skip for Now"
+  },
+  "$1.routes.migration.index.spaceRequiredGb": {
+    "description": "Displayed amount of space needed for migration, in gigabytes.",
+    "message": "{value, number} GB"
+  },
+  "$1.routes.migration.index.spaceRequiredMb": {
+    "description": "Displayed amount of space needed for migration, in megabytes.",
+    "message": "{value, number} MB"
+  },
+  "$1.routes.migration.index.startUsingComapeoButton": {
+    "description": "Text for button to navigate to main app after migration finishes.",
+    "message": "Start using CoMapeo"
+  },
+  "$1.routes.migration.index.successDescription": {
+    "description": "Title text for when migration finishes.",
+    "message": "The latest version of CoMapeo is ready to use"
+  },
+  "$1.routes.migration.index.successTitle": {
+    "description": "Title text for when migration finishes.",
+    "message": "Update Complete!"
+  },
+  "$1.routes.migration.index.updateStoppedDetail": {
+    "description": "Line item indicating that migration stopped.",
+    "message": "Update stopped…"
+  },
   "$1.routes.onboarding.data-and-privacy.dataEncrypted": {
     "description": "Detail about data being fully encrypted.",
     "message": "All data stays fully encrypted."

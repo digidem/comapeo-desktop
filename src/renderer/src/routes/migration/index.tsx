@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react'
+import { useDeferredValue, useEffect, useState, type ReactNode } from 'react'
 import {
 	Alert,
 	Box,
@@ -11,18 +11,45 @@ import {
 } from '@mui/material'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLUE_GREY, DARKER_ORANGE, GREEN, WHITE } from '../../colors.ts'
 import { AdvancedErrorDetails } from '../../components/advanced-error-details.tsx'
 import { Icon } from '../../components/icon.tsx'
+import { buildDocumentReloadURL } from '../../lib/navigation.ts'
 
 export const Route = createFileRoute('/migration/')({
 	component: RouteComponent,
 })
 
+type MigrationState =
+	| { type: 'in_progress'; progress: number }
+	| { type: 'error'; error: Error }
+	| { type: 'success' }
+	| { type: 'space_required'; spaceRequired: number }
+
 function RouteComponent() {
+	const [migrationState, setMigrationState] = useState<MigrationState>(() => {
+		return { type: 'in_progress', progress: 0 }
+	})
+
+	useEffect(() => {
+		const unsubscribe = window.runtime.onMigrationProgress((progress) => {
+			if (progress === 100) {
+				setMigrationState({ type: 'success' })
+			} else {
+				setMigrationState({ type: 'in_progress', progress })
+			}
+		})
+
+		return () => {
+			unsubscribe()
+		}
+	}, [setMigrationState])
+
+	const deferredMigrationState = useDeferredValue(migrationState)
+
 	return (
 		<Box
 			sx={{
@@ -34,31 +61,31 @@ function RouteComponent() {
 			}}
 		>
 			<Container maxWidth="sm" sx={{ display: 'flex', flex: 1 }}>
-				<MigrationPanel
-					stage="in-progress"
-					// stage="space-required"
-					// stage="error"
-					// stage="success"
-				/>
+				<MigrationPanel migrationState={deferredMigrationState} />
 			</Container>
 		</Box>
 	)
 }
 
 function MigrationPanel({
-	stage,
+	migrationState,
 }: {
-	stage: 'in-progress' | 'space-required' | 'error' | 'success'
+	migrationState: MigrationState
 }) {
 	const { formatMessage: t } = useIntl()
 
-	if (stage === 'in-progress') {
+	const router = useRouter()
+
+	if (migrationState.type === 'in_progress') {
 		return (
 			<MigrationPanelLayout
 				details={
 					<Stack direction="column">
 						<Stack direction="column">
-							<LinearProgress variant="determinate" value={50} />
+							<LinearProgress
+								variant="determinate"
+								value={migrationState.progress}
+							/>
 						</Stack>
 
 						<List>
@@ -107,7 +134,7 @@ function MigrationPanel({
 		)
 	}
 
-	if (stage === 'space-required') {
+	if (migrationState.type === 'space_required') {
 		return (
 			<MigrationPanelLayout
 				actions={
@@ -171,7 +198,7 @@ function MigrationPanel({
 		)
 	}
 
-	if (stage === 'error') {
+	if (migrationState.type === 'error') {
 		return (
 			<MigrationPanelLayout
 				actions={
@@ -273,7 +300,17 @@ function MigrationPanel({
 						justifyContent: 'center',
 					}}
 				>
-					<Button fullWidth variant="contained" sx={{ maxWidth: 400 }}>
+					<Button
+						onClick={() => {
+							router.navigate({
+								href: buildDocumentReloadURL(router, '/'),
+								reloadDocument: true,
+							})
+						}}
+						fullWidth
+						variant="contained"
+						sx={{ maxWidth: 400 }}
+					>
 						{t(m.startUsingComapeoButton)}
 					</Button>
 				</Box>

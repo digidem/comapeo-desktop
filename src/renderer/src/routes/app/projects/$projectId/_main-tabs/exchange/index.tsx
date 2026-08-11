@@ -28,7 +28,6 @@ import {
 	GREEN,
 } from '../../../../../../colors.ts'
 import { DecentDialog } from '../../../../../../components/decent-dialog.tsx'
-import { ErrorDialogContent } from '../../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../../components/icon.tsx'
 import { ButtonLink } from '../../../../../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../../hooks/icon.ts'
@@ -47,6 +46,7 @@ import {
 	getSyncingPeersCount,
 	type SyncStage,
 } from '../../../../../../lib/sync.ts'
+import { ErrorDialogContent } from '.././../../../../../components/error-dialog.tsx'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/_main-tabs/exchange/',

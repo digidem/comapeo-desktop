@@ -33,3 +33,12 @@ export function setOnboardedAtMutationOptions() {
 		Parameters<RuntimeApi['setOnboardedAt']>[0]
 	>)
 }
+
+export function getMigrationInfoQueryOptions() {
+	return queryOptions({
+		queryKey: [BASE_QUERY_KEY, 'migration', 'info'],
+		queryFn: async () => {
+			return window.runtime.getMigrationInfo()
+		},
+	})
+}
