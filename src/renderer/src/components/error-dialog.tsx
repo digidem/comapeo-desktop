@@ -1,14 +1,10 @@
-import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import ButtonBase from '@mui/material/ButtonBase'
-import Collapse from '@mui/material/Collapse'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY, LIGHT_GREY } from '../colors.ts'
+import { AdvancedErrorDetails } from './advanced-error-details.tsx'
 import { Icon } from './icon.tsx'
 
 export function ErrorDialogContent({
@@ -19,8 +15,6 @@ export function ErrorDialogContent({
 	onClose: () => void
 }) {
 	const { formatMessage: t } = useIntl()
-
-	const [advancedExpanded, setAdvancedExpanded] = useState(false)
 
 	return (
 		<Stack direction="column">
@@ -36,68 +30,10 @@ export function ErrorDialogContent({
 					</Typography>
 				</Stack>
 
-				<Stack direction="column" sx={{ flex: 1, gap: 2 }}>
-					<ButtonBase
-						disableRipple
-						onClick={() => {
-							setAdvancedExpanded((prev) => !prev)
-						}}
-						sx={{
-							':hover, :focus': {
-								backgroundColor: alpha(BLUE_GREY, 0.2),
-								transition: (theme) =>
-									theme.transitions.create('background-color'),
-							},
-							padding: 2,
-							borderRadius: 2,
-						}}
-					>
-						<Stack
-							direction="row"
-							sx={{
-								flex: 1,
-								justifyContent: 'space-between',
-								'&::marker': { content: 'none' },
-							}}
-						>
-							<Typography color="textSecondary">{t(m.advanced)}</Typography>
-
-							<Icon
-								name={
-									advancedExpanded
-										? 'material-expand-less'
-										: 'material-expand-more'
-								}
-								htmlColor={DARK_GREY}
-							/>
-						</Stack>
-					</ButtonBase>
-
-					<Collapse in={advancedExpanded}>
-						<Box
-							sx={{
-								bgcolor: LIGHT_GREY,
-								padding: 4,
-								border: `1px solid ${BLUE_GREY}`,
-								maxHeight: 300,
-								overflow: 'auto',
-								borderRadius: 2,
-							}}
-						>
-							<Typography
-								component="pre"
-								variant="body2"
-								sx={{
-									fontFamily: 'monospace',
-									whiteSpace: 'pre-wrap',
-									overflowWrap: 'break-word',
-								}}
-							>
-								{errorMessage}
-							</Typography>
-						</Box>
-					</Collapse>
-				</Stack>
+				<AdvancedErrorDetails
+					errorMessage={errorMessage}
+					title={t(m.advanced)}
+				/>
 			</Stack>
 			<Box
 				sx={{

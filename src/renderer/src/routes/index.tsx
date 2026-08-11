@@ -5,6 +5,8 @@ import { getItem, removeItem } from '../lib/local-storage.ts'
 
 export const Route = createFileRoute('/')({
 	beforeLoad: async ({ context }) => {
+		throw Route.redirect({ to: '/migration', replace: true })
+
 		const { activeProjectIdStore, clientApi, queryClient } = context
 
 		const ownDeviceInfo = await queryClient.query({

@@ -15,6 +15,7 @@ import { Route as OnboardingRouteRouteImport } from './../routes/onboarding/rout
 import { Route as WelcomeRouteImport } from './../routes/welcome'
 import { Route as AppIndexRouteImport } from './../routes/app/index'
 import { Route as AppSettingsRouteRouteImport } from './../routes/app/settings/route'
+import { Route as MigrationIndexRouteImport } from './../routes/migration/index'
 import { Route as OnboardingDataAndPrivacyRouteImport } from './../routes/onboarding/data-and-privacy'
 import { Route as OnboardingDeviceNameRouteImport } from './../routes/onboarding/device-name'
 import { Route as OnboardingPrivacyPolicyRouteImport } from './../routes/onboarding/privacy-policy'
@@ -76,6 +77,11 @@ const AppSettingsRouteRoute = AppSettingsRouteRouteImport.update({
   id: '/settings',
   path: '/settings',
   getParentRoute: () => AppRouteRoute,
+} as any)
+const MigrationIndexRoute = MigrationIndexRouteImport.update({
+  id: '/migration/',
+  path: '/migration/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingDataAndPrivacyRoute =
   OnboardingDataAndPrivacyRouteImport.update({
@@ -274,6 +280,7 @@ export interface FileRoutesByFullPath {
   '/onboarding/device-name': typeof OnboardingDeviceNameRoute
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
   '/app/': typeof AppIndexRoute
+  '/migration/': typeof MigrationIndexRoute
   '/app/projects/$projectId': typeof AppProjectsProjectIdRouteRouteWithChildren
   '/app/settings/': typeof AppSettingsIndexRoute
   '/app/projects/$projectId/test-data': typeof AppProjectsProjectIdTestDataRoute
@@ -309,6 +316,7 @@ export interface FileRoutesByTo {
   '/onboarding/device-name': typeof OnboardingDeviceNameRoute
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
   '/app': typeof AppIndexRoute
+  '/migration': typeof MigrationIndexRoute
   '/app/projects/$projectId': typeof AppProjectsProjectIdMainTabsIndexRoute
   '/app/settings': typeof AppSettingsIndexRoute
   '/app/projects/$projectId/test-data': typeof AppProjectsProjectIdTestDataRoute
@@ -344,6 +352,7 @@ export interface FileRoutesById {
   '/onboarding/device-name': typeof OnboardingDeviceNameRoute
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
   '/app/': typeof AppIndexRoute
+  '/migration/': typeof MigrationIndexRoute
   '/app/projects/$projectId': typeof AppProjectsProjectIdRouteRouteWithChildren
   '/app/settings/_nested': typeof AppSettingsNestedRouteRouteWithChildren
   '/app/settings/': typeof AppSettingsIndexRoute
@@ -385,6 +394,7 @@ export interface FileRouteTypes {
     | '/onboarding/device-name'
     | '/onboarding/privacy-policy'
     | '/app/'
+    | '/migration/'
     | '/app/projects/$projectId'
     | '/app/settings/'
     | '/app/projects/$projectId/test-data'
@@ -420,6 +430,7 @@ export interface FileRouteTypes {
     | '/onboarding/device-name'
     | '/onboarding/privacy-policy'
     | '/app'
+    | '/migration'
     | '/app/projects/$projectId'
     | '/app/settings'
     | '/app/projects/$projectId/test-data'
@@ -454,6 +465,7 @@ export interface FileRouteTypes {
     | '/onboarding/device-name'
     | '/onboarding/privacy-policy'
     | '/app/'
+    | '/migration/'
     | '/app/projects/$projectId'
     | '/app/settings/_nested'
     | '/app/settings/'
@@ -489,6 +501,7 @@ export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
   OnboardingRouteRoute: typeof OnboardingRouteRouteWithChildren
   WelcomeRoute: typeof WelcomeRoute
+  MigrationIndexRoute: typeof MigrationIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -534,6 +547,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/settings'
       preLoaderRoute: typeof AppSettingsRouteRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/migration/': {
+      id: '/migration/'
+      path: '/migration'
+      fullPath: '/migration/'
+      preLoaderRoute: typeof MigrationIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/onboarding/data-and-privacy': {
       id: '/onboarding/data-and-privacy'
@@ -947,6 +967,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
   OnboardingRouteRoute: OnboardingRouteRouteWithChildren,
   WelcomeRoute: WelcomeRoute,
+  MigrationIndexRoute: MigrationIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
