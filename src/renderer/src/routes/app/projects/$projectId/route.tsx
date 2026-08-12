@@ -77,9 +77,21 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 
 		return { projectApi }
 	},
-	loader: async ({ context, params }) => {
+	loader: async ({ cause, context, params }) => {
 		const { clientApi, projectApi, queryClient } = context
 		const { projectId } = params
+
+		if (cause !== 'preload') {
+			// NOTE: Used by the initial route (`/`) to determine whether we should use
+			// the persisted active project ID for redirecting when opening the app.
+			setItem('use_active_project_id_for_initial_route', true)
+
+			// NOTE: Update the active project ID whenever we navigate to a relevant project-specific page.
+			context.activeProjectIdStore.actions.update(params.projectId)
+
+			// NOTE: Enable connection to remote archives when entering a project-specific route
+			context.projectApi.$sync.connectServers().catch(captureException)
+		}
 
 		await Promise.all([
 			queryClient.ensureQueryData({
@@ -101,17 +113,6 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 				},
 			}),
 		])
-	},
-	onEnter: ({ context, params }) => {
-		// NOTE: Used by the initial route (`/`) to determine whether we should use
-		// the persisted active project ID for redirecting when opening the app.
-		setItem('use_active_project_id_for_initial_route', true)
-
-		// NOTE: Update the active project ID whenever we navigate to a relevant project-specific page.
-		context.activeProjectIdStore.actions.update(params.projectId)
-
-		// NOTE: Enable connection to remote archives when entering a project-specific route
-		context.projectApi.$sync.connectServers().catch(captureException)
 	},
 	onLeave: ({ context }) => {
 		removeItem('use_active_project_id_for_initial_route')
