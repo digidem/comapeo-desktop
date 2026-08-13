@@ -1193,7 +1193,11 @@
   },
   "$1.routes.app.route.projectInviteAccept": {
     "description": "Button text for accepting project invite.",
-    "message": "Accept"
+    "message": "Join"
+  },
+  "$1.routes.app.route.projectInviteAdditionalInvitesCount": {
+    "description": "Text displaying how many additional invites there are to address.",
+    "message": "{inviteCount, plural, one {# additional invite} other {# additional invites}}…"
   },
   "$1.routes.app.route.projectInviteDecline": {
     "description": "Button text for declining project invite.",
@@ -1201,19 +1205,43 @@
   },
   "$1.routes.app.route.projectInviteDescription": {
     "description": "Description for invite containing role being invited as.",
-    "message": "Join as a <b>{role, select, coordinator {coordinator} other {participant}}</b>?"
+    "message": "Join as a {role, select, coordinator {coordinator} other {participant}}."
   },
   "$1.routes.app.route.projectInviteTitle": {
     "description": "Title of project invite.",
     "message": "You've been invited to…"
   },
+  "$1.routes.app.route.projectJoinedAdditionalInvitesCount": {
+    "description": "Text displaying how many additional invites there are to address.",
+    "message": "{inviteCount, plural, one {# additional invite} other {# additional invites}}…"
+  },
+  "$1.routes.app.route.projectJoinedAdditionalInvitesWaiting": {
+    "description": "Text indicating that there are additional invites waiting to be addressed after successfully joining a project.",
+    "message": "Additional invites waiting"
+  },
   "$1.routes.app.route.projectJoinedCloseDialog": {
     "description": "Text for button to close project joined dialog.",
     "message": "Close"
   },
+  "$1.routes.app.route.projectJoinedDetailsDescription": {
+    "description": "Description in invite details after successfully joining a project.",
+    "message": "{projectName} added."
+  },
+  "$1.routes.app.route.projectJoinedDetailsTitle": {
+    "description": "Title in invite details after successfully joining a project.",
+    "message": "Success!"
+  },
+  "$1.routes.app.route.projectJoinedNextInvite": {
+    "description": "Text for button to view next pending invite.",
+    "message": "View Next Invite"
+  },
+  "$1.routes.app.route.projectJoinedNoAdditionalInvitesWaiting": {
+    "description": "Text indicating that there are no additional invites waiting to be addressed after successfully joining a project.",
+    "message": "No additional invites waiting"
+  },
   "$1.routes.app.route.projectJoinedTitle": {
     "description": "Title of dialog displayed when joining a project successfully.",
-    "message": "Joined project {name} successfully."
+    "message": "Project added"
   },
   "$1.routes.app.route.projectJoinedViewProject": {
     "description": "Text for button to navigate to joined project in project joined dialog.",
