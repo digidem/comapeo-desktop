@@ -71,7 +71,7 @@
 		"@comapeo/ipc": "9.0.1",
 		"@comapeo/map-server": "1.1.6",
 		"@formatjs/intl": "4.1.18",
-		"@homebridge/ciao": "1.3.10",
+		"@homebridge/ciao": "1.3.11",
 		"@mapeo/crypto": "1.1.0",
 		"@sentry/electron": "7.16.0",
 		"atomically": "2.1.1",
