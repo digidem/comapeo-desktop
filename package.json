@@ -110,7 +110,7 @@
 		"@mui/material": "9.3.1",
 		"@mui/x-date-pickers": "9.11.0",
 		"@playwright/test": "1.62.1",
-		"@reforged/maker-appimage": "5.2.0",
+		"@reforged/maker-appimage": "5.3.1",
 		"@rolldown/plugin-babel": "0.2.3",
 		"@sentry/react": "10.67.0",
 		"@sentry/vite-plugin": "5.4.0",
