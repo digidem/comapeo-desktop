@@ -143,7 +143,7 @@
 		"eslint": "10.8.1",
 		"eslint-plugin-formatjs": "6.4.20",
 		"eslint-plugin-react-hooks": "7.1.1",
-		"eslint-plugin-react-refresh": "0.5.3",
+		"eslint-plugin-react-refresh": "0.5.4",
 		"globals": "17.11.0",
 		"husky": "9.1.7",
 		"knip": "6.32.2",
