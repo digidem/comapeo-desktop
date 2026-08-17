@@ -11,8 +11,3 @@ const FALLBACK_TITLE_BAR_HEIGHT_PX = 40
 export const TITLE_BAR_HEIGHT = `env(titlebar-area-height, ${FALLBACK_TITLE_BAR_HEIGHT_PX}px)`
 
 export const DIALOG_CONTAINER_ID = 'dialog-container' as const
-
-export const LOCAL_STORAGE_KEYS = {
-	USE_ACTIVE_PROJECT_ID_FOR_INITIAL_ROUTE:
-		'comapeo:use_active_project_id_for_initial_route',
-}

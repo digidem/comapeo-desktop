@@ -3,7 +3,10 @@ import path, { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 import { FastifyController, MapeoManager } from '@comapeo/core'
-import { createAppRpcServer, createMapeoServer } from '@comapeo/ipc/server.js'
+import {
+	createComapeoCoreServer,
+	createComapeoServicesServer,
+} from '@comapeo/ipc/server.js'
 import { createServer as createMapServer } from '@comapeo/map-server'
 import ciao, { type Protocol } from '@homebridge/ciao'
 import { KeyManager } from '@mapeo/crypto'
@@ -109,7 +112,7 @@ const { onlineStyleUrl, rootKey, storageDirectory } = v.parse(
 	values,
 )
 
-const { manager, mapServer, getMapServerPorts } = initializeCore({
+const { manager, getMapServerPorts } = initializeCore({
 	onlineStyleUrl,
 	rootKey,
 	storageDirectory,
@@ -147,7 +150,7 @@ process.parentPort.on('message', (event) => {
 			`CoMapeo channel message port already set up for '${event.data.type}' message from client ${clientId}.`,
 		)
 	} else {
-		const server = createMapeoServer(
+		const server = createComapeoCoreServer(
 			manager,
 			new MessagePortLike(comapeoChannelPort),
 		)
@@ -170,11 +173,14 @@ process.parentPort.on('message', (event) => {
 			`App channel message port already set up for '${event.data.type}' message from client ${clientId}.`,
 		)
 	} else {
-		const server = createAppRpcServer(
+		const server = createComapeoServicesServer(
 			{
-				mapServer,
-				// @ts-expect-error Not worth patching IPC
-				getMapServerPorts,
+				mapServer: {
+					getBaseUrl: async () => {
+						const { localPort } = await getMapServerPorts()
+						return `http://127.0.0.1:${localPort}`
+					},
+				},
 			},
 			new MessagePortLike(appChannelPort),
 		)
@@ -334,11 +340,17 @@ class MessagePortLike {
 		this.#port.postMessage(message)
 	}
 
-	addEventListener(event: 'message', listener: () => void) {
+	addEventListener(
+		event: 'message',
+		listener: (event: Electron.MessageEvent) => void,
+	) {
 		this.#port.addListener(event, listener)
 	}
 
-	removeEventListener(event: 'message', listener: () => void) {
+	removeEventListener(
+		event: 'message',
+		listener: (event: Electron.MessageEvent) => void,
+	) {
 		this.#port.removeListener(event, listener)
 	}
 }

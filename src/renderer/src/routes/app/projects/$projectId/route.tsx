@@ -33,7 +33,7 @@ import {
 	CREATOR_ROLE_ID,
 	MEMBER_ROLE_ID,
 } from '../../../../lib/comapeo.ts'
-import { LOCAL_STORAGE_KEYS } from '../../../../lib/constants.ts'
+import { removeItem, setItem } from '../../../../lib/local-storage.ts'
 import { GLOBAL_MUTATIONS_BASE_KEY } from '../../../../lib/queries/global-mutations.ts'
 
 export const Route = createFileRoute('/app/projects/$projectId')({
@@ -77,9 +77,21 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 
 		return { projectApi }
 	},
-	loader: async ({ context, params }) => {
+	loader: async ({ cause, context, params }) => {
 		const { clientApi, projectApi, queryClient } = context
 		const { projectId } = params
+
+		if (cause !== 'preload') {
+			// NOTE: Used by the initial route (`/`) to determine whether we should use
+			// the persisted active project ID for redirecting when opening the app.
+			setItem('use_active_project_id_for_initial_route', true)
+
+			// NOTE: Update the active project ID whenever we navigate to a relevant project-specific page.
+			context.activeProjectIdStore.actions.update(params.projectId)
+
+			// NOTE: Enable connection to remote archives when entering a project-specific route
+			context.projectApi.$sync.connectServers().catch(captureException)
+		}
 
 		await Promise.all([
 			queryClient.ensureQueryData({
@@ -102,24 +114,8 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 			}),
 		])
 	},
-	onEnter: ({ context, params }) => {
-		// NOTE: Used by the initial route (`/`) to determine whether we should use
-		// the persisted active project ID for redirecting when opening the app.
-		window.localStorage.setItem(
-			LOCAL_STORAGE_KEYS.USE_ACTIVE_PROJECT_ID_FOR_INITIAL_ROUTE,
-			'true',
-		)
-
-		// NOTE: Update the active project ID whenever we navigate to a relevant project-specific page.
-		context.activeProjectIdStore.actions.update(params.projectId)
-
-		// NOTE: Enable connection to remote archives when entering a project-specific route
-		context.projectApi.$sync.connectServers().catch(captureException)
-	},
 	onLeave: ({ context }) => {
-		window.localStorage.removeItem(
-			LOCAL_STORAGE_KEYS.USE_ACTIVE_PROJECT_ID_FOR_INITIAL_ROUTE,
-		)
+		removeItem('use_active_project_id_for_initial_route')
 
 		// NOTE: Disconnect from remote archives when leaving a project-specific route
 		context.projectApi.$sync.disconnectServers().catch(captureException)

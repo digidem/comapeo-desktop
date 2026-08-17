@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../lib/comapeo.ts'
-import { LOCAL_STORAGE_KEYS } from '../lib/constants.ts'
+import { getItem, removeItem } from '../lib/local-storage.ts'
 
 export const Route = createFileRoute('/')({
 	beforeLoad: async ({ context }) => {
@@ -17,18 +17,15 @@ export const Route = createFileRoute('/')({
 		// NOTE: Implicit check that the user hasn't completed the onboarding yet.
 		if (!ownDeviceInfo.name) {
 			// NOTE: Clear any persisted state related to last active project
-			window.localStorage.removeItem(
-				LOCAL_STORAGE_KEYS.USE_ACTIVE_PROJECT_ID_FOR_INITIAL_ROUTE,
-			)
+			removeItem('use_active_project_id_for_initial_route')
 			activeProjectIdStore.actions.update(undefined)
 
 			throw Route.redirect({ to: '/welcome', replace: true })
 		}
 
-		const shouldUseActiveProjectIdForInitialRoute =
-			window.localStorage.getItem(
-				LOCAL_STORAGE_KEYS.USE_ACTIVE_PROJECT_ID_FOR_INITIAL_ROUTE,
-			) === 'true'
+		const shouldUseActiveProjectIdForInitialRoute = getItem(
+			'use_active_project_id_for_initial_route',
+		)
 
 		if (shouldUseActiveProjectIdForInitialRoute) {
 			const activeProjectId = activeProjectIdStore.instance.getState()
@@ -57,9 +54,7 @@ export const Route = createFileRoute('/')({
 
 		// NOTE: Could not make use of the active project ID stored
 		// so we remove persisted items related to using it when opening the app.
-		window.localStorage.removeItem(
-			LOCAL_STORAGE_KEYS.USE_ACTIVE_PROJECT_ID_FOR_INITIAL_ROUTE,
-		)
+		removeItem('use_active_project_id_for_initial_route')
 		activeProjectIdStore.actions.update(undefined)
 
 		throw Route.redirect({ to: '/app', replace: true })

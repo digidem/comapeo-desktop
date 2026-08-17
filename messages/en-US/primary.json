@@ -235,13 +235,85 @@
     "description": "Fallback for when project is missing a name.",
     "message": "Unnamed Project"
   },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterAll": {
+    "description": "Text shown when all categories are being shown.",
+    "message": "All categories"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterDeselectAll": {
+    "description": "Text for button to deselect all categories.",
+    "message": "Deselect All"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterNotCategorized": {
+    "description": "Text for category filter option for data without a matching category.",
+    "message": "Not categorized"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterSelectAll": {
+    "description": "Text for button to select all categories.",
+    "message": "Select All"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterValue": {
+    "description": "Text displayed describing the selected category filters.",
+    "message": "{count, plural, =0 {0 Categories} one {# Category} other {# Categories}}"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFiltersAdvanced": {
+    "description": "Text for button to clear all filters",
+    "message": "Advanced…"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoryUnavailable": {
+    "description": "Text for tooltip that appears when hovering over outdated active category filter.",
+    "message": "Category unavailable"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.clearFilters": {
+    "description": "Text for button to clear all filters",
+    "message": "Clear All"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionCustom": {
+    "description": "Text for label used for custom date range option.",
+    "message": "{start, date, long} to {end, date, long}"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionFromStart": {
+    "description": "Text for option to show data from earliest starting date.",
+    "message": "From Start"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionLastNDays": {
+    "description": "Text for option to show data from the last N days.",
+    "message": "Last {count, number} Days"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionSame": {
+    "description": "Text for option to show data from the same month.",
+    "message": "Same Month"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionSameYear": {
+    "description": "Text for option to show data from the same year.",
+    "message": "Same Year"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterValueCustom": {
+    "description": "Text for value displayed when custom date range is selected.",
+    "message": "Custom"
+  },
   "$1.routes.app.projects.$projectId.-data-list.downloadObservations": {
     "description": "Link text to navigate to download observations page.",
     "message": "Download Observations"
   },
+  "$1.routes.app.projects.$projectId.-data-list.listTitle": {
+    "description": "Title for listed data page.",
+    "message": "List"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.noResultsResetFilters": {
+    "description": "Text for button to reset filters when no results are available based on active filters.",
+    "message": "Reset Filters"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.noResultsTitle": {
+    "description": "Title for panel when no results are available based on active filters.",
+    "message": "No Results"
+  },
   "$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
+    "message": "Not categorized"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.resultsCount": {
+    "description": "Number of items listed",
+    "message": "{count, plural, =0 {No results} one {# result} other {# results}}"
   },
   "$1.routes.app.projects.$projectId.-data-list.trackItemTitle": {
     "description": "Title for list item that is a track.",
@@ -250,6 +322,10 @@
   "$1.routes.app.projects.$projectId.-map-panel.cannotDisplayFeature": {
     "description": "Text displayed when map feature for selected data cannot be displayed",
     "message": "Cannot display feature"
+  },
+  "$1.routes.app.projects.$projectId.-map-panel.toggleOmittedVisibility": {
+    "description": "Text displayed when hovering over map control for toggling visibility of features omitted by filters.",
+    "message": "Toggle omitted visibility"
   },
   "$1.routes.app.projects.$projectId.-map-panel.zoomToData": {
     "description": "Text displayed when hovering over map control for zooming to data.",
@@ -322,6 +398,10 @@
   "$1.routes.app.projects.$projectId.download.navTitle": {
     "description": "Title of the download observations page.",
     "message": "Download Observations"
+  },
+  "$1.routes.app.projects.$projectId.download.selectDirectoryDialogActionLabel": {
+    "description": "Text used for action button in system dialog for selecting directory to use for download.",
+    "message": "Select"
   },
   "$1.routes.app.projects.$projectId.download.successPanelDescriptionObservations": {
     "description": "Description text for success panel when downloading observations.",
@@ -407,6 +487,50 @@
     "description": "Text displayed when waiting for other devices to be found.",
     "message": "Waiting for Devices"
   },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionDeselectAll": {
+    "description": "Text for button to deselect all in categories filter section in advanced filters dialog.",
+    "message": "Deselect All"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionNotCategorizedOption": {
+    "description": "Text for category filter option for data without a matching category in advanced filters dialog.",
+    "message": "Not categorized"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionSelectAll": {
+    "description": "Text for button to select all in categories filter section in advanced filters dialog.",
+    "message": "Select All"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionTitle": {
+    "description": "Title for categories filter section in advanced filters dialog.",
+    "message": "Categories"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersDateEndLabel": {
+    "description": "Label for end date input in advanced filters dialog.",
+    "message": "End Date"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersDateSectionTitle": {
+    "description": "Title for date filter section in advanced filters dialog.",
+    "message": "Date"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersDateStartLabel": {
+    "description": "Label for start date input in advanced filters dialog.",
+    "message": "Start Date"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersShowResults": {
+    "description": "Text for submit button to apply selected filters in advanced filters dialog.",
+    "message": "Show {count, number} Results"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersTitle": {
+    "description": "Title for advanced filters dialog.",
+    "message": "Advanced Filters"
+  },
+  "$1.routes.app.projects.$projectId.index.invalidEndDateError": {
+    "description": "Text indicating invalid end date for custom date range filter.",
+    "message": "End date must be later than start date."
+  },
+  "$1.routes.app.projects.$projectId.index.invalidStartDateError": {
+    "description": "Text indicating invalid start date for custom date range filter.",
+    "message": "Start date must be earlier than end date."
+  },
   "$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelDescription": {
     "description": "Text for description of panel shown when no active collaborators or data exist on project.",
     "message": "Invite devices to start gathering observations and tracks."
@@ -435,13 +559,13 @@
     "description": "Title for edit category panel.",
     "message": "Change Category"
   },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
-    "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
-  },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
     "description": "Text for cancel button.",
     "message": "Cancel"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.invalidDateError": {
+    "description": "Validation error message when specifying an invalid value for date field.",
+    "message": "Invalid date"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
     "description": "Text for save button.",
@@ -541,7 +665,67 @@
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
+    "message": "Not categorized"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyFeet": {
+    "description": "Displayed altitude accuracy for observation in feet.",
+    "message": "± {value} ft"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyLabel": {
+    "description": "Label for observation metadata altitude accuracy.",
+    "message": "Altitude Accuracy"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyMeters": {
+    "description": "Displayed altitude accuracy for observation in meters.",
+    "message": "± {value} m"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeFeet": {
+    "description": "Displayed altitude for observation metadata in feet.",
+    "message": "{value} ft"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeLabel": {
+    "description": "Label for observation metadata altitude.",
+    "message": "Altitude"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeMeters": {
+    "description": "Displayed altitude for observation metadata in meters.",
+    "message": "{value} m"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataCoordinate": {
+    "description": "Displayed coordinate (latitude or longitude) for observation metadata.",
+    "message": "{value}°"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLatitudeLabel": {
+    "description": "Label for observation metadata latitude.",
+    "message": "Latitude"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyFeet": {
+    "description": "Displayed location accuracy for observation metadata in feet.",
+    "message": "± {value} ft"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyLabel": {
+    "description": "Label for observation metadata location accuracy.",
+    "message": "Accuracy"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyMeters": {
+    "description": "Displayed location accuracy for observation metadata in meters.",
+    "message": "± {value} m"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLongitudeLabel": {
+    "description": "Label for observation metadata longitude.",
+    "message": "Longitude"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedFeet": {
+    "description": "Displayed speed for observation in feet per second.",
+    "message": "{value} ft/s"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedLabel": {
+    "description": "Label for observation metadata speed.",
+    "message": "Speed"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedMeters": {
+    "description": "Displayed speed for observation in meters per second.",
+    "message": "{value} m/s"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound": {
     "description": "Text displayed when observation cannot be found.",
@@ -873,7 +1057,7 @@
   },
   "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.timeSinceSent": {
     "description": "Text showing time elapsed since invite was sent",
-    "message": "Invite sent {time}s ago"
+    "message": "Invite sent {time} seconds ago"
   },
   "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.waiting": {
     "description": "Text displayed while waiting for invite response.",
@@ -941,7 +1125,7 @@
   },
   "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
+    "message": "Not categorized"
   },
   "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationsSectionTitle": {
     "description": "Title for the track observations section.",

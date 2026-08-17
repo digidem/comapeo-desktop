@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
-import { useStore } from '@tanstack/react-form'
+import { useSelector } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
 import { draw } from 'radashi'
 import { defineMessages, useIntl } from 'react-intl'
@@ -139,7 +139,7 @@ export function StartProjectDialogContent({
 		},
 	})
 
-	const isSubmitting = useStore(form.store, (state) => state.isSubmitting)
+	const isSubmitting = useSelector(form.store, (state) => state.isSubmitting)
 
 	return (
 		<Stack direction="column" sx={{ flex: 1 }}>

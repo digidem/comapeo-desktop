@@ -108,6 +108,7 @@ function RouteComponent() {
 						flex: 1,
 						justifyContent: 'center',
 						gap: 5,
+						overflowWrap: 'break-word',
 						padding: 6,
 					}}
 				>

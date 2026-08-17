@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
+import * as v from 'valibot'
 
 import { DecentDialog } from '../../../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../../../components/error-dialog.tsx'
@@ -12,16 +13,22 @@ import type {
 	ObservationTagValue,
 	TagValue,
 } from '../../../../../../../lib/comapeo.ts'
+import { ExhaustivenessError } from '../../../../../../../lib/exhaustiveness-error.ts'
 import { getLocaleStateQueryOptions } from '../../../../../../../lib/queries/app-settings.ts'
 import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations.ts'
 import { EditableSection } from './-components/editable-section.tsx'
 import {
+	DateFieldEditor,
 	MultiSelectFieldEditor,
 	NumberFieldEditor,
 	SingleSelectFieldEditor,
 	TextFieldEditor,
 } from './-field-editors.tsx'
-import { getDisplayedTagValue, type EditableField } from './-shared.ts'
+import {
+	IsoTimestampSchema,
+	getDisplayedTagValue,
+	type EditableField,
+} from './-shared.ts'
 
 export function ReadOnlyFieldSection({
 	label,
@@ -64,7 +71,7 @@ export function EditableFieldSection({
 	onStopEditMode: () => void
 	projectId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: lang } = useSuspenseQuery({
 		...getLocaleStateQueryOptions(),
@@ -95,6 +102,7 @@ export function EditableFieldSection({
 
 	const updateObservationField = useMutation({
 		mutationKey: updateObservationFieldMutationKey,
+		// TODO: Allow unsetting the value
 		mutationFn: async ({ value }: { value: ObservationTagValue }) => {
 			return updateObservationDocument.mutateAsync({
 				versionId: observation.versionId,
@@ -105,18 +113,6 @@ export function EditableFieldSection({
 			})
 		},
 	})
-
-	const displayedReadOnlyTagValue =
-		initialTagValue === undefined
-			? undefined
-			: getDisplayedTagValue({
-					tagValue: initialTagValue,
-					formatMessage: t,
-					selectionOptions:
-						field.type === 'selectOne' || field.type === 'selectMultiple'
-							? field.options
-							: undefined,
-				})
 
 	return (
 		<>
@@ -130,7 +126,9 @@ export function EditableFieldSection({
 						onStopEditMode()
 					}
 
-					switch (field.type) {
+					const fieldType = field.type
+
+					switch (fieldType) {
 						case 'text': {
 							if (
 								initialTagValue !== undefined &&
@@ -150,9 +148,11 @@ export function EditableFieldSection({
 										updateEditState('idle')
 
 										try {
+											// TODO: Allow unsetting the value
 											if (value !== undefined) {
 												await updateObservationField.mutateAsync({ value })
 											}
+
 											updateEditState('success')
 										} catch (err) {
 											captureException(err)
@@ -182,9 +182,11 @@ export function EditableFieldSection({
 										updateEditState('idle')
 
 										try {
+											// TODO: Allow unsetting the value
 											if (value !== undefined) {
 												await updateObservationField.mutateAsync({ value })
 											}
+
 											updateEditState('success')
 										} catch (err) {
 											captureException(err)
@@ -214,9 +216,11 @@ export function EditableFieldSection({
 										updateEditState('idle')
 
 										try {
+											// TODO: Allow unsetting the value
 											if (value !== undefined) {
 												await updateObservationField.mutateAsync({ value })
 											}
+
 											updateEditState('success')
 										} catch (err) {
 											captureException(err)
@@ -248,6 +252,7 @@ export function EditableFieldSection({
 										updateEditState('idle')
 
 										try {
+											// TODO: Allow unsetting the value
 											await updateObservationField.mutateAsync({ value })
 											updateEditState('success')
 										} catch (err) {
@@ -258,6 +263,43 @@ export function EditableFieldSection({
 									}}
 								/>
 							)
+						}
+						case 'date': {
+							if (
+								initialTagValue !== undefined &&
+								typeof initialTagValue !== 'string'
+							) {
+								throw new Error(
+									`Expected string type for initial tag value. Received ${typeof initialTagValue}`,
+								)
+							}
+
+							return (
+								<DateFieldEditor
+									field={field}
+									initialValue={initialTagValue}
+									onCancel={onCancel}
+									onSave={async (value) => {
+										updateEditState('idle')
+
+										try {
+											// TODO: Allow unsetting the value
+											if (value !== undefined) {
+												await updateObservationField.mutateAsync({ value })
+											}
+
+											updateEditState('success')
+										} catch (err) {
+											captureException(err)
+										}
+
+										onStopEditMode()
+									}}
+								/>
+							)
+						}
+						default: {
+							throw new ExhaustivenessError(fieldType)
 						}
 					}
 				}}
@@ -270,21 +312,32 @@ export function EditableFieldSection({
 						{field.label}
 					</Typography>
 				}
-				tooltipText={t(m.editNotesTooltip)}
+				tooltipText={intl.formatMessage(m.editNotesTooltip)}
 				renderWhenIdle={() => {
 					if (
 						updateObservationField.status === 'pending' ||
 						(updateObservationField.status === 'success' &&
 							observationsIsRefetching)
 					) {
-						const displayedVariableValue = getDisplayedTagValue({
+						let displayedVariableValue = getDisplayedTagValue({
 							tagValue: updateObservationField.variables.value,
-							formatMessage: t,
+							intl,
 							selectionOptions:
 								field.type === 'selectOne' || field.type === 'selectMultiple'
 									? field.options
 									: undefined,
 						})
+
+						if (
+							field.type === 'date' &&
+							v.is(IsoTimestampSchema, displayedVariableValue)
+						) {
+							displayedVariableValue = intl.formatDate(displayedVariableValue, {
+								month: 'long',
+								day: '2-digit',
+								year: 'numeric',
+							})
+						}
 
 						return (
 							<Typography
@@ -292,18 +345,43 @@ export function EditableFieldSection({
 									fontStyle: displayedVariableValue ? undefined : 'italic',
 								}}
 							>
-								{displayedVariableValue || t(m.fieldAnswerNoAnswer)}
+								{displayedVariableValue ||
+									intl.formatMessage(m.fieldAnswerNoAnswer)}
 							</Typography>
 						)
+					}
+
+					let displayedTagValue =
+						initialTagValue === undefined
+							? undefined
+							: getDisplayedTagValue({
+									tagValue: initialTagValue,
+									intl,
+									selectionOptions:
+										field.type === 'selectOne' ||
+										field.type === 'selectMultiple'
+											? field.options
+											: undefined,
+								})
+
+					if (
+						field.type === 'date' &&
+						v.is(IsoTimestampSchema, displayedTagValue)
+					) {
+						displayedTagValue = intl.formatDate(displayedTagValue, {
+							month: 'long',
+							day: '2-digit',
+							year: 'numeric',
+						})
 					}
 
 					return (
 						<Typography
 							sx={{
-								fontStyle: displayedReadOnlyTagValue ? undefined : 'italic',
+								fontStyle: displayedTagValue ? undefined : 'italic',
 							}}
 						>
-							{displayedReadOnlyTagValue || t(m.fieldAnswerNoAnswer)}
+							{displayedTagValue || intl.formatMessage(m.fieldAnswerNoAnswer)}
 						</Typography>
 					)
 				}}

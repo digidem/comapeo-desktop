@@ -1,4 +1,4 @@
-import type { MapeoClientApi } from '@comapeo/ipc/client.js'
+import type { ComapeoCoreClientApi } from '@comapeo/ipc/client.js'
 import type { QueryClient } from '@tanstack/react-query'
 import {
 	Outlet,
@@ -12,7 +12,7 @@ import type { ActiveProjectIdStore } from '../contexts/active-project-id-store-c
 
 export interface RootRouterContext {
 	activeProjectIdStore: ActiveProjectIdStore
-	clientApi: MapeoClientApi
+	clientApi: ComapeoCoreClientApi
 	formatMessage: IntlShape['formatMessage']
 	history: RouterHistory
 	localeState: LocaleState

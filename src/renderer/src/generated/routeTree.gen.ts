@@ -9,52 +9,47 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './../routes/__root'
-import { Route as WelcomeRouteImport } from './../routes/welcome'
-import { Route as OnboardingRouteRouteImport } from './../routes/onboarding/route'
-import { Route as AppRouteRouteImport } from './../routes/app/route'
 import { Route as IndexRouteImport } from './../routes/index'
+import { Route as AppRouteRouteImport } from './../routes/app/route'
+import { Route as OnboardingRouteRouteImport } from './../routes/onboarding/route'
+import { Route as WelcomeRouteImport } from './../routes/welcome'
 import { Route as AppIndexRouteImport } from './../routes/app/index'
-import { Route as OnboardingPrivacyPolicyRouteImport } from './../routes/onboarding/privacy-policy'
-import { Route as OnboardingDeviceNameRouteImport } from './../routes/onboarding/device-name'
-import { Route as OnboardingDataAndPrivacyRouteImport } from './../routes/onboarding/data-and-privacy'
 import { Route as AppSettingsRouteRouteImport } from './../routes/app/settings/route'
+import { Route as OnboardingDataAndPrivacyRouteImport } from './../routes/onboarding/data-and-privacy'
+import { Route as OnboardingDeviceNameRouteImport } from './../routes/onboarding/device-name'
+import { Route as OnboardingPrivacyPolicyRouteImport } from './../routes/onboarding/privacy-policy'
+import { Route as AppProjectsProjectIdRouteRouteImport } from './../routes/app/projects/$projectId/route'
 import { Route as AppSettingsIndexRouteImport } from './../routes/app/settings/index'
 import { Route as AppSettingsNestedRouteRouteImport } from './../routes/app/settings/_nested/route'
-import { Route as AppProjectsProjectIdRouteRouteImport } from './../routes/app/projects/$projectId/route'
-import { Route as AppSettingsNestedUnitSystemRouteImport } from './../routes/app/settings/_nested/unit-system'
-import { Route as AppSettingsNestedLanguageRouteImport } from './../routes/app/settings/_nested/language'
-import { Route as AppSettingsNestedDeviceNameRouteImport } from './../routes/app/settings/_nested/device-name'
-import { Route as AppSettingsNestedCoordinateSystemRouteImport } from './../routes/app/settings/_nested/coordinate-system'
-import { Route as AppSettingsNestedBackgroundMapRouteImport } from './../routes/app/settings/_nested/background-map'
-import { Route as AppProjectsProjectIdTestDataRouteImport } from './../routes/app/projects/$projectId/test-data'
 import { Route as AppProjectsProjectIdMainTabsRouteRouteImport } from './../routes/app/projects/$projectId/_main-tabs/route'
+import { Route as AppProjectsProjectIdTestDataRouteImport } from './../routes/app/projects/$projectId/test-data'
+import { Route as AppSettingsNestedBackgroundMapRouteImport } from './../routes/app/settings/_nested/background-map'
+import { Route as AppSettingsNestedCoordinateSystemRouteImport } from './../routes/app/settings/_nested/coordinate-system'
+import { Route as AppSettingsNestedDeviceNameRouteImport } from './../routes/app/settings/_nested/device-name'
+import { Route as AppSettingsNestedLanguageRouteImport } from './../routes/app/settings/_nested/language'
+import { Route as AppSettingsNestedUnitSystemRouteImport } from './../routes/app/settings/_nested/unit-system'
 import { Route as AppProjectsProjectIdMainTabsIndexRouteImport } from './../routes/app/projects/$projectId/_main-tabs/index'
 import { Route as AppProjectsProjectIdMainTabsDownloadRouteImport } from './../routes/app/projects/$projectId/_main-tabs/download'
 import { Route as AppProjectsProjectIdMainTabsSettingsRouteRouteImport } from './../routes/app/projects/$projectId/_main-tabs/settings/route'
-import { Route as AppProjectsProjectIdMainTabsTeamIndexRouteImport } from './../routes/app/projects/$projectId/_main-tabs/team/index'
-import { Route as AppProjectsProjectIdMainTabsSettingsIndexRouteImport } from './../routes/app/projects/$projectId/_main-tabs/settings/index'
 import { Route as AppProjectsProjectIdMainTabsExchangeIndexRouteImport } from './../routes/app/projects/$projectId/_main-tabs/exchange/index'
-import { Route as AppProjectsProjectIdMainTabsTeamDeviceIdRouteImport } from './../routes/app/projects/$projectId/_main-tabs/team/$deviceId'
-import { Route as AppProjectsProjectIdMainTabsSettingsInfoRouteImport } from './../routes/app/projects/$projectId/_main-tabs/settings/info'
+import { Route as AppProjectsProjectIdMainTabsSettingsIndexRouteImport } from './../routes/app/projects/$projectId/_main-tabs/settings/index'
 import { Route as AppProjectsProjectIdMainTabsSettingsCategoriesRouteImport } from './../routes/app/projects/$projectId/_main-tabs/settings/categories'
+import { Route as AppProjectsProjectIdMainTabsSettingsInfoRouteImport } from './../routes/app/projects/$projectId/_main-tabs/settings/info'
+import { Route as AppProjectsProjectIdMainTabsTeamIndexRouteImport } from './../routes/app/projects/$projectId/_main-tabs/team/index'
+import { Route as AppProjectsProjectIdMainTabsTeamDeviceIdRouteImport } from './../routes/app/projects/$projectId/_main-tabs/team/$deviceId'
 import { Route as AppProjectsProjectIdMainTabsTeamInviteRouteRouteImport } from './../routes/app/projects/$projectId/_main-tabs/team/invite/route'
-import { Route as AppProjectsProjectIdMainTabsTracksTrackDocIdIndexRouteImport } from './../routes/app/projects/$projectId/_main-tabs/tracks/$trackDocId/index'
-import { Route as AppProjectsProjectIdMainTabsTeamInviteIndexRouteImport } from './../routes/app/projects/$projectId/_main-tabs/team/invite/index'
 import { Route as AppProjectsProjectIdMainTabsObservationsObservationDocIdIndexRouteImport } from './../routes/app/projects/$projectId/_main-tabs/observations/$observationDocId/index'
+import { Route as AppProjectsProjectIdMainTabsTeamInviteIndexRouteImport } from './../routes/app/projects/$projectId/_main-tabs/team/invite/index'
+import { Route as AppProjectsProjectIdMainTabsTracksTrackDocIdIndexRouteImport } from './../routes/app/projects/$projectId/_main-tabs/tracks/$trackDocId/index'
 import { Route as AppProjectsProjectIdMainTabsTeamInviteDevicesIndexRouteImport } from './../routes/app/projects/$projectId/_main-tabs/team/invite/devices/index'
 import { Route as AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdRouteRouteImport } from './../routes/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId/route'
-import { Route as AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdSendRouteImport } from './../routes/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId/send'
 import { Route as AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdRoleRouteImport } from './../routes/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId/role'
+import { Route as AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdSendRouteImport } from './../routes/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId/send'
 import { Route as AppProjectsProjectIdMainTabsObservationsObservationDocIdAttachmentsDriveIdTypeVariantNameRouteImport } from './../routes/app/projects/$projectId/_main-tabs/observations/$observationDocId/attachments/$driveId.$type.$variant.$name'
 
-const WelcomeRoute = WelcomeRouteImport.update({
-  id: '/welcome',
-  path: '/welcome',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OnboardingRouteRoute = OnboardingRouteRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRouteRoute = AppRouteRouteImport.update({
@@ -62,9 +57,14 @@ const AppRouteRoute = AppRouteRouteImport.update({
   path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const OnboardingRouteRoute = OnboardingRouteRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -72,15 +72,10 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const OnboardingPrivacyPolicyRoute = OnboardingPrivacyPolicyRouteImport.update({
-  id: '/privacy-policy',
-  path: '/privacy-policy',
-  getParentRoute: () => OnboardingRouteRoute,
-} as any)
-const OnboardingDeviceNameRoute = OnboardingDeviceNameRouteImport.update({
-  id: '/device-name',
-  path: '/device-name',
-  getParentRoute: () => OnboardingRouteRoute,
+const AppSettingsRouteRoute = AppSettingsRouteRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const OnboardingDataAndPrivacyRoute =
   OnboardingDataAndPrivacyRouteImport.update({
@@ -88,11 +83,22 @@ const OnboardingDataAndPrivacyRoute =
     path: '/data-and-privacy',
     getParentRoute: () => OnboardingRouteRoute,
   } as any)
-const AppSettingsRouteRoute = AppSettingsRouteRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AppRouteRoute,
+const OnboardingDeviceNameRoute = OnboardingDeviceNameRouteImport.update({
+  id: '/device-name',
+  path: '/device-name',
+  getParentRoute: () => OnboardingRouteRoute,
 } as any)
+const OnboardingPrivacyPolicyRoute = OnboardingPrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => OnboardingRouteRoute,
+} as any)
+const AppProjectsProjectIdRouteRoute =
+  AppProjectsProjectIdRouteRouteImport.update({
+    id: '/projects/$projectId',
+    path: '/projects/$projectId',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
 const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -102,28 +108,21 @@ const AppSettingsNestedRouteRoute = AppSettingsNestedRouteRouteImport.update({
   id: '/_nested',
   getParentRoute: () => AppSettingsRouteRoute,
 } as any)
-const AppProjectsProjectIdRouteRoute =
-  AppProjectsProjectIdRouteRouteImport.update({
-    id: '/projects/$projectId',
-    path: '/projects/$projectId',
-    getParentRoute: () => AppRouteRoute,
+const AppProjectsProjectIdMainTabsRouteRoute =
+  AppProjectsProjectIdMainTabsRouteRouteImport.update({
+    id: '/_main-tabs',
+    getParentRoute: () => AppProjectsProjectIdRouteRoute,
   } as any)
-const AppSettingsNestedUnitSystemRoute =
-  AppSettingsNestedUnitSystemRouteImport.update({
-    id: '/unit-system',
-    path: '/unit-system',
-    getParentRoute: () => AppSettingsNestedRouteRoute,
+const AppProjectsProjectIdTestDataRoute =
+  AppProjectsProjectIdTestDataRouteImport.update({
+    id: '/test-data',
+    path: '/test-data',
+    getParentRoute: () => AppProjectsProjectIdRouteRoute,
   } as any)
-const AppSettingsNestedLanguageRoute =
-  AppSettingsNestedLanguageRouteImport.update({
-    id: '/language',
-    path: '/language',
-    getParentRoute: () => AppSettingsNestedRouteRoute,
-  } as any)
-const AppSettingsNestedDeviceNameRoute =
-  AppSettingsNestedDeviceNameRouteImport.update({
-    id: '/device-name',
-    path: '/device-name',
+const AppSettingsNestedBackgroundMapRoute =
+  AppSettingsNestedBackgroundMapRouteImport.update({
+    id: '/background-map',
+    path: '/background-map',
     getParentRoute: () => AppSettingsNestedRouteRoute,
   } as any)
 const AppSettingsNestedCoordinateSystemRoute =
@@ -132,22 +131,23 @@ const AppSettingsNestedCoordinateSystemRoute =
     path: '/coordinate-system',
     getParentRoute: () => AppSettingsNestedRouteRoute,
   } as any)
-const AppSettingsNestedBackgroundMapRoute =
-  AppSettingsNestedBackgroundMapRouteImport.update({
-    id: '/background-map',
-    path: '/background-map',
+const AppSettingsNestedDeviceNameRoute =
+  AppSettingsNestedDeviceNameRouteImport.update({
+    id: '/device-name',
+    path: '/device-name',
     getParentRoute: () => AppSettingsNestedRouteRoute,
   } as any)
-const AppProjectsProjectIdTestDataRoute =
-  AppProjectsProjectIdTestDataRouteImport.update({
-    id: '/test-data',
-    path: '/test-data',
-    getParentRoute: () => AppProjectsProjectIdRouteRoute,
+const AppSettingsNestedLanguageRoute =
+  AppSettingsNestedLanguageRouteImport.update({
+    id: '/language',
+    path: '/language',
+    getParentRoute: () => AppSettingsNestedRouteRoute,
   } as any)
-const AppProjectsProjectIdMainTabsRouteRoute =
-  AppProjectsProjectIdMainTabsRouteRouteImport.update({
-    id: '/_main-tabs',
-    getParentRoute: () => AppProjectsProjectIdRouteRoute,
+const AppSettingsNestedUnitSystemRoute =
+  AppSettingsNestedUnitSystemRouteImport.update({
+    id: '/unit-system',
+    path: '/unit-system',
+    getParentRoute: () => AppSettingsNestedRouteRoute,
   } as any)
 const AppProjectsProjectIdMainTabsIndexRoute =
   AppProjectsProjectIdMainTabsIndexRouteImport.update({
@@ -167,10 +167,10 @@ const AppProjectsProjectIdMainTabsSettingsRouteRoute =
     path: '/settings',
     getParentRoute: () => AppProjectsProjectIdMainTabsRouteRoute,
   } as any)
-const AppProjectsProjectIdMainTabsTeamIndexRoute =
-  AppProjectsProjectIdMainTabsTeamIndexRouteImport.update({
-    id: '/team/',
-    path: '/team/',
+const AppProjectsProjectIdMainTabsExchangeIndexRoute =
+  AppProjectsProjectIdMainTabsExchangeIndexRouteImport.update({
+    id: '/exchange/',
+    path: '/exchange/',
     getParentRoute: () => AppProjectsProjectIdMainTabsRouteRoute,
   } as any)
 const AppProjectsProjectIdMainTabsSettingsIndexRoute =
@@ -179,10 +179,22 @@ const AppProjectsProjectIdMainTabsSettingsIndexRoute =
     path: '/',
     getParentRoute: () => AppProjectsProjectIdMainTabsSettingsRouteRoute,
   } as any)
-const AppProjectsProjectIdMainTabsExchangeIndexRoute =
-  AppProjectsProjectIdMainTabsExchangeIndexRouteImport.update({
-    id: '/exchange/',
-    path: '/exchange/',
+const AppProjectsProjectIdMainTabsSettingsCategoriesRoute =
+  AppProjectsProjectIdMainTabsSettingsCategoriesRouteImport.update({
+    id: '/categories',
+    path: '/categories',
+    getParentRoute: () => AppProjectsProjectIdMainTabsSettingsRouteRoute,
+  } as any)
+const AppProjectsProjectIdMainTabsSettingsInfoRoute =
+  AppProjectsProjectIdMainTabsSettingsInfoRouteImport.update({
+    id: '/info',
+    path: '/info',
+    getParentRoute: () => AppProjectsProjectIdMainTabsSettingsRouteRoute,
+  } as any)
+const AppProjectsProjectIdMainTabsTeamIndexRoute =
+  AppProjectsProjectIdMainTabsTeamIndexRouteImport.update({
+    id: '/team/',
+    path: '/team/',
     getParentRoute: () => AppProjectsProjectIdMainTabsRouteRoute,
   } as any)
 const AppProjectsProjectIdMainTabsTeamDeviceIdRoute =
@@ -191,35 +203,11 @@ const AppProjectsProjectIdMainTabsTeamDeviceIdRoute =
     path: '/team/$deviceId',
     getParentRoute: () => AppProjectsProjectIdMainTabsRouteRoute,
   } as any)
-const AppProjectsProjectIdMainTabsSettingsInfoRoute =
-  AppProjectsProjectIdMainTabsSettingsInfoRouteImport.update({
-    id: '/info',
-    path: '/info',
-    getParentRoute: () => AppProjectsProjectIdMainTabsSettingsRouteRoute,
-  } as any)
-const AppProjectsProjectIdMainTabsSettingsCategoriesRoute =
-  AppProjectsProjectIdMainTabsSettingsCategoriesRouteImport.update({
-    id: '/categories',
-    path: '/categories',
-    getParentRoute: () => AppProjectsProjectIdMainTabsSettingsRouteRoute,
-  } as any)
 const AppProjectsProjectIdMainTabsTeamInviteRouteRoute =
   AppProjectsProjectIdMainTabsTeamInviteRouteRouteImport.update({
     id: '/team/invite',
     path: '/team/invite',
     getParentRoute: () => AppProjectsProjectIdMainTabsRouteRoute,
-  } as any)
-const AppProjectsProjectIdMainTabsTracksTrackDocIdIndexRoute =
-  AppProjectsProjectIdMainTabsTracksTrackDocIdIndexRouteImport.update({
-    id: '/tracks/$trackDocId/',
-    path: '/tracks/$trackDocId/',
-    getParentRoute: () => AppProjectsProjectIdMainTabsRouteRoute,
-  } as any)
-const AppProjectsProjectIdMainTabsTeamInviteIndexRoute =
-  AppProjectsProjectIdMainTabsTeamInviteIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AppProjectsProjectIdMainTabsTeamInviteRouteRoute,
   } as any)
 const AppProjectsProjectIdMainTabsObservationsObservationDocIdIndexRoute =
   AppProjectsProjectIdMainTabsObservationsObservationDocIdIndexRouteImport.update(
@@ -229,6 +217,18 @@ const AppProjectsProjectIdMainTabsObservationsObservationDocIdIndexRoute =
       getParentRoute: () => AppProjectsProjectIdMainTabsRouteRoute,
     } as any,
   )
+const AppProjectsProjectIdMainTabsTeamInviteIndexRoute =
+  AppProjectsProjectIdMainTabsTeamInviteIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppProjectsProjectIdMainTabsTeamInviteRouteRoute,
+  } as any)
+const AppProjectsProjectIdMainTabsTracksTrackDocIdIndexRoute =
+  AppProjectsProjectIdMainTabsTracksTrackDocIdIndexRouteImport.update({
+    id: '/tracks/$trackDocId/',
+    path: '/tracks/$trackDocId/',
+    getParentRoute: () => AppProjectsProjectIdMainTabsRouteRoute,
+  } as any)
 const AppProjectsProjectIdMainTabsTeamInviteDevicesIndexRoute =
   AppProjectsProjectIdMainTabsTeamInviteDevicesIndexRouteImport.update({
     id: '/devices/',
@@ -241,17 +241,17 @@ const AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdRouteRoute =
     path: '/devices/$deviceId',
     getParentRoute: () => AppProjectsProjectIdMainTabsTeamInviteRouteRoute,
   } as any)
-const AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdSendRoute =
-  AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdSendRouteImport.update({
-    id: '/send',
-    path: '/send',
-    getParentRoute: () =>
-      AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdRouteRoute,
-  } as any)
 const AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdRoleRoute =
   AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdRoleRouteImport.update({
     id: '/role',
     path: '/role',
+    getParentRoute: () =>
+      AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdRouteRoute,
+  } as any)
+const AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdSendRoute =
+  AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdSendRouteImport.update({
+    id: '/send',
+    path: '/send',
     getParentRoute: () =>
       AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdRouteRoute,
   } as any)
@@ -493,18 +493,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/welcome': {
-      id: '/welcome'
-      path: '/welcome'
-      fullPath: '/welcome'
-      preLoaderRoute: typeof WelcomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/onboarding': {
-      id: '/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof OnboardingRouteRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -514,11 +507,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/': {
@@ -528,11 +528,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/onboarding/privacy-policy': {
-      id: '/onboarding/privacy-policy'
-      path: '/privacy-policy'
-      fullPath: '/onboarding/privacy-policy'
-      preLoaderRoute: typeof OnboardingPrivacyPolicyRouteImport
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/onboarding/data-and-privacy': {
+      id: '/onboarding/data-and-privacy'
+      path: '/data-and-privacy'
+      fullPath: '/onboarding/data-and-privacy'
+      preLoaderRoute: typeof OnboardingDataAndPrivacyRouteImport
       parentRoute: typeof OnboardingRouteRoute
     }
     '/onboarding/device-name': {
@@ -542,18 +549,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingDeviceNameRouteImport
       parentRoute: typeof OnboardingRouteRoute
     }
-    '/onboarding/data-and-privacy': {
-      id: '/onboarding/data-and-privacy'
-      path: '/data-and-privacy'
-      fullPath: '/onboarding/data-and-privacy'
-      preLoaderRoute: typeof OnboardingDataAndPrivacyRouteImport
+    '/onboarding/privacy-policy': {
+      id: '/onboarding/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/onboarding/privacy-policy'
+      preLoaderRoute: typeof OnboardingPrivacyPolicyRouteImport
       parentRoute: typeof OnboardingRouteRoute
     }
-    '/app/settings': {
-      id: '/app/settings'
-      path: '/settings'
-      fullPath: '/app/settings'
-      preLoaderRoute: typeof AppSettingsRouteRouteImport
+    '/app/projects/$projectId': {
+      id: '/app/projects/$projectId'
+      path: '/projects/$projectId'
+      fullPath: '/app/projects/$projectId'
+      preLoaderRoute: typeof AppProjectsProjectIdRouteRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/app/settings/': {
@@ -570,32 +577,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsNestedRouteRouteImport
       parentRoute: typeof AppSettingsRouteRoute
     }
-    '/app/projects/$projectId': {
-      id: '/app/projects/$projectId'
-      path: '/projects/$projectId'
+    '/app/projects/$projectId/_main-tabs': {
+      id: '/app/projects/$projectId/_main-tabs'
+      path: ''
       fullPath: '/app/projects/$projectId'
-      preLoaderRoute: typeof AppProjectsProjectIdRouteRouteImport
-      parentRoute: typeof AppRouteRoute
+      preLoaderRoute: typeof AppProjectsProjectIdMainTabsRouteRouteImport
+      parentRoute: typeof AppProjectsProjectIdRouteRoute
     }
-    '/app/settings/_nested/unit-system': {
-      id: '/app/settings/_nested/unit-system'
-      path: '/unit-system'
-      fullPath: '/app/settings/unit-system'
-      preLoaderRoute: typeof AppSettingsNestedUnitSystemRouteImport
-      parentRoute: typeof AppSettingsNestedRouteRoute
+    '/app/projects/$projectId/test-data': {
+      id: '/app/projects/$projectId/test-data'
+      path: '/test-data'
+      fullPath: '/app/projects/$projectId/test-data'
+      preLoaderRoute: typeof AppProjectsProjectIdTestDataRouteImport
+      parentRoute: typeof AppProjectsProjectIdRouteRoute
     }
-    '/app/settings/_nested/language': {
-      id: '/app/settings/_nested/language'
-      path: '/language'
-      fullPath: '/app/settings/language'
-      preLoaderRoute: typeof AppSettingsNestedLanguageRouteImport
-      parentRoute: typeof AppSettingsNestedRouteRoute
-    }
-    '/app/settings/_nested/device-name': {
-      id: '/app/settings/_nested/device-name'
-      path: '/device-name'
-      fullPath: '/app/settings/device-name'
-      preLoaderRoute: typeof AppSettingsNestedDeviceNameRouteImport
+    '/app/settings/_nested/background-map': {
+      id: '/app/settings/_nested/background-map'
+      path: '/background-map'
+      fullPath: '/app/settings/background-map'
+      preLoaderRoute: typeof AppSettingsNestedBackgroundMapRouteImport
       parentRoute: typeof AppSettingsNestedRouteRoute
     }
     '/app/settings/_nested/coordinate-system': {
@@ -605,26 +605,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsNestedCoordinateSystemRouteImport
       parentRoute: typeof AppSettingsNestedRouteRoute
     }
-    '/app/settings/_nested/background-map': {
-      id: '/app/settings/_nested/background-map'
-      path: '/background-map'
-      fullPath: '/app/settings/background-map'
-      preLoaderRoute: typeof AppSettingsNestedBackgroundMapRouteImport
+    '/app/settings/_nested/device-name': {
+      id: '/app/settings/_nested/device-name'
+      path: '/device-name'
+      fullPath: '/app/settings/device-name'
+      preLoaderRoute: typeof AppSettingsNestedDeviceNameRouteImport
       parentRoute: typeof AppSettingsNestedRouteRoute
     }
-    '/app/projects/$projectId/test-data': {
-      id: '/app/projects/$projectId/test-data'
-      path: '/test-data'
-      fullPath: '/app/projects/$projectId/test-data'
-      preLoaderRoute: typeof AppProjectsProjectIdTestDataRouteImport
-      parentRoute: typeof AppProjectsProjectIdRouteRoute
+    '/app/settings/_nested/language': {
+      id: '/app/settings/_nested/language'
+      path: '/language'
+      fullPath: '/app/settings/language'
+      preLoaderRoute: typeof AppSettingsNestedLanguageRouteImport
+      parentRoute: typeof AppSettingsNestedRouteRoute
     }
-    '/app/projects/$projectId/_main-tabs': {
-      id: '/app/projects/$projectId/_main-tabs'
-      path: ''
-      fullPath: '/app/projects/$projectId'
-      preLoaderRoute: typeof AppProjectsProjectIdMainTabsRouteRouteImport
-      parentRoute: typeof AppProjectsProjectIdRouteRoute
+    '/app/settings/_nested/unit-system': {
+      id: '/app/settings/_nested/unit-system'
+      path: '/unit-system'
+      fullPath: '/app/settings/unit-system'
+      preLoaderRoute: typeof AppSettingsNestedUnitSystemRouteImport
+      parentRoute: typeof AppSettingsNestedRouteRoute
     }
     '/app/projects/$projectId/_main-tabs/': {
       id: '/app/projects/$projectId/_main-tabs/'
@@ -647,11 +647,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsProjectIdMainTabsSettingsRouteRouteImport
       parentRoute: typeof AppProjectsProjectIdMainTabsRouteRoute
     }
-    '/app/projects/$projectId/_main-tabs/team/': {
-      id: '/app/projects/$projectId/_main-tabs/team/'
-      path: '/team'
-      fullPath: '/app/projects/$projectId/team/'
-      preLoaderRoute: typeof AppProjectsProjectIdMainTabsTeamIndexRouteImport
+    '/app/projects/$projectId/_main-tabs/exchange/': {
+      id: '/app/projects/$projectId/_main-tabs/exchange/'
+      path: '/exchange'
+      fullPath: '/app/projects/$projectId/exchange/'
+      preLoaderRoute: typeof AppProjectsProjectIdMainTabsExchangeIndexRouteImport
       parentRoute: typeof AppProjectsProjectIdMainTabsRouteRoute
     }
     '/app/projects/$projectId/_main-tabs/settings/': {
@@ -661,11 +661,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsProjectIdMainTabsSettingsIndexRouteImport
       parentRoute: typeof AppProjectsProjectIdMainTabsSettingsRouteRoute
     }
-    '/app/projects/$projectId/_main-tabs/exchange/': {
-      id: '/app/projects/$projectId/_main-tabs/exchange/'
-      path: '/exchange'
-      fullPath: '/app/projects/$projectId/exchange/'
-      preLoaderRoute: typeof AppProjectsProjectIdMainTabsExchangeIndexRouteImport
+    '/app/projects/$projectId/_main-tabs/settings/categories': {
+      id: '/app/projects/$projectId/_main-tabs/settings/categories'
+      path: '/categories'
+      fullPath: '/app/projects/$projectId/settings/categories'
+      preLoaderRoute: typeof AppProjectsProjectIdMainTabsSettingsCategoriesRouteImport
+      parentRoute: typeof AppProjectsProjectIdMainTabsSettingsRouteRoute
+    }
+    '/app/projects/$projectId/_main-tabs/settings/info': {
+      id: '/app/projects/$projectId/_main-tabs/settings/info'
+      path: '/info'
+      fullPath: '/app/projects/$projectId/settings/info'
+      preLoaderRoute: typeof AppProjectsProjectIdMainTabsSettingsInfoRouteImport
+      parentRoute: typeof AppProjectsProjectIdMainTabsSettingsRouteRoute
+    }
+    '/app/projects/$projectId/_main-tabs/team/': {
+      id: '/app/projects/$projectId/_main-tabs/team/'
+      path: '/team'
+      fullPath: '/app/projects/$projectId/team/'
+      preLoaderRoute: typeof AppProjectsProjectIdMainTabsTeamIndexRouteImport
       parentRoute: typeof AppProjectsProjectIdMainTabsRouteRoute
     }
     '/app/projects/$projectId/_main-tabs/team/$deviceId': {
@@ -675,20 +689,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsProjectIdMainTabsTeamDeviceIdRouteImport
       parentRoute: typeof AppProjectsProjectIdMainTabsRouteRoute
     }
-    '/app/projects/$projectId/_main-tabs/settings/info': {
-      id: '/app/projects/$projectId/_main-tabs/settings/info'
-      path: '/info'
-      fullPath: '/app/projects/$projectId/settings/info'
-      preLoaderRoute: typeof AppProjectsProjectIdMainTabsSettingsInfoRouteImport
-      parentRoute: typeof AppProjectsProjectIdMainTabsSettingsRouteRoute
-    }
-    '/app/projects/$projectId/_main-tabs/settings/categories': {
-      id: '/app/projects/$projectId/_main-tabs/settings/categories'
-      path: '/categories'
-      fullPath: '/app/projects/$projectId/settings/categories'
-      preLoaderRoute: typeof AppProjectsProjectIdMainTabsSettingsCategoriesRouteImport
-      parentRoute: typeof AppProjectsProjectIdMainTabsSettingsRouteRoute
-    }
     '/app/projects/$projectId/_main-tabs/team/invite': {
       id: '/app/projects/$projectId/_main-tabs/team/invite'
       path: '/team/invite'
@@ -696,11 +696,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsProjectIdMainTabsTeamInviteRouteRouteImport
       parentRoute: typeof AppProjectsProjectIdMainTabsRouteRoute
     }
-    '/app/projects/$projectId/_main-tabs/tracks/$trackDocId/': {
-      id: '/app/projects/$projectId/_main-tabs/tracks/$trackDocId/'
-      path: '/tracks/$trackDocId'
-      fullPath: '/app/projects/$projectId/tracks/$trackDocId/'
-      preLoaderRoute: typeof AppProjectsProjectIdMainTabsTracksTrackDocIdIndexRouteImport
+    '/app/projects/$projectId/_main-tabs/observations/$observationDocId/': {
+      id: '/app/projects/$projectId/_main-tabs/observations/$observationDocId/'
+      path: '/observations/$observationDocId'
+      fullPath: '/app/projects/$projectId/observations/$observationDocId/'
+      preLoaderRoute: typeof AppProjectsProjectIdMainTabsObservationsObservationDocIdIndexRouteImport
       parentRoute: typeof AppProjectsProjectIdMainTabsRouteRoute
     }
     '/app/projects/$projectId/_main-tabs/team/invite/': {
@@ -710,11 +710,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsProjectIdMainTabsTeamInviteIndexRouteImport
       parentRoute: typeof AppProjectsProjectIdMainTabsTeamInviteRouteRoute
     }
-    '/app/projects/$projectId/_main-tabs/observations/$observationDocId/': {
-      id: '/app/projects/$projectId/_main-tabs/observations/$observationDocId/'
-      path: '/observations/$observationDocId'
-      fullPath: '/app/projects/$projectId/observations/$observationDocId/'
-      preLoaderRoute: typeof AppProjectsProjectIdMainTabsObservationsObservationDocIdIndexRouteImport
+    '/app/projects/$projectId/_main-tabs/tracks/$trackDocId/': {
+      id: '/app/projects/$projectId/_main-tabs/tracks/$trackDocId/'
+      path: '/tracks/$trackDocId'
+      fullPath: '/app/projects/$projectId/tracks/$trackDocId/'
+      preLoaderRoute: typeof AppProjectsProjectIdMainTabsTracksTrackDocIdIndexRouteImport
       parentRoute: typeof AppProjectsProjectIdMainTabsRouteRoute
     }
     '/app/projects/$projectId/_main-tabs/team/invite/devices/': {
@@ -731,18 +731,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdRouteRouteImport
       parentRoute: typeof AppProjectsProjectIdMainTabsTeamInviteRouteRoute
     }
-    '/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId/send': {
-      id: '/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId/send'
-      path: '/send'
-      fullPath: '/app/projects/$projectId/team/invite/devices/$deviceId/send'
-      preLoaderRoute: typeof AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdSendRouteImport
-      parentRoute: typeof AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdRouteRoute
-    }
     '/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId/role': {
       id: '/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId/role'
       path: '/role'
       fullPath: '/app/projects/$projectId/team/invite/devices/$deviceId/role'
       preLoaderRoute: typeof AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdRoleRouteImport
+      parentRoute: typeof AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdRouteRoute
+    }
+    '/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId/send': {
+      id: '/app/projects/$projectId/_main-tabs/team/invite/devices/$deviceId/send'
+      path: '/send'
+      fullPath: '/app/projects/$projectId/team/invite/devices/$deviceId/send'
+      preLoaderRoute: typeof AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdSendRouteImport
       parentRoute: typeof AppProjectsProjectIdMainTabsTeamInviteDevicesDeviceIdRouteRoute
     }
     '/app/projects/$projectId/_main-tabs/observations/$observationDocId/attachments/$driveId/$type/$variant/$name': {

@@ -40,7 +40,7 @@ import {
 	MEMBER_ROLE_ID,
 	memberIsRemoteArchive,
 } from '../../../../../../lib/comapeo.ts'
-import { ExhaustivenessError } from '../../../../../../lib/exchaustiveness-error.ts'
+import { ExhaustivenessError } from '../../../../../../lib/exhaustiveness-error.ts'
 import {
 	deriveSyncStage,
 	getConnectedPeersCount,
@@ -86,7 +86,7 @@ export const Route = createFileRoute(
 			.setAutostopDataSyncTimeout(null)
 			.catch(captureException)
 	},
-	onLeave: async ({ context }) => {
+	onLeave: ({ context }) => {
 		context.projectApi.$sync
 			.setAutostopDataSyncTimeout(30_000)
 			.catch(captureException)

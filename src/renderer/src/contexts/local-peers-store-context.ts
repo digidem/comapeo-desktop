@@ -1,6 +1,6 @@
 import { createContext, use } from 'react'
 import type { PublicPeerInfo } from '@comapeo/core'
-import { type MapeoClientApi } from '@comapeo/ipc/client.js'
+import { type ComapeoCoreClientApi } from '@comapeo/ipc/client.js'
 import { captureException } from '@sentry/react'
 import { isEqual } from 'radashi'
 import { useStore } from 'zustand'
@@ -13,9 +13,9 @@ import { createStore } from 'zustand/vanilla'
 export type LocalPeersState = Array<PublicPeerInfo>
 
 export function createLocalPeersStore({
-	clientApi,
+	coreClient,
 }: {
-	clientApi: MapeoClientApi
+	coreClient: ComapeoCoreClientApi
 }) {
 	const instance = createStore<LocalPeersState>(() => {
 		return []
@@ -47,19 +47,19 @@ export function createLocalPeersStore({
 		subscribe: () => {
 			isSubscribed = true
 
-			clientApi
+			coreClient
 				.listLocalPeers()
 				.then(onPeers)
 				.catch((err) => {
 					captureException(err)
 				})
 
-			clientApi.on('local-peers', onPeers)
+			coreClient.on('local-peers', onPeers)
 		},
 		unsubscribe: () => {
 			isSubscribed = false
 
-			clientApi.off('local-peers', onPeers)
+			coreClient.off('local-peers', onPeers)
 		},
 	}
 
