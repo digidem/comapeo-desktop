@@ -1057,7 +1057,7 @@
   },
   "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.timeSinceSent": {
     "description": "Text showing time elapsed since invite was sent",
-    "message": "Invite sent {time}s ago"
+    "message": "Invite sent {time} seconds ago"
   },
   "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.waiting": {
     "description": "Text displayed while waiting for invite response.",
