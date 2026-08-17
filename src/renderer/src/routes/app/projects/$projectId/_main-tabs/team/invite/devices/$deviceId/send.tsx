@@ -648,7 +648,7 @@ const m = defineMessages({
 	},
 	timeSinceSent: {
 		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.timeSinceSent',
-		defaultMessage: 'Invite sent {time}s ago',
+		defaultMessage: 'Invite sent {time} seconds ago',
 		description: 'Text showing time elapsed since invite was sent',
 	},
 	cancelInvite: {
