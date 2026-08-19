@@ -757,11 +757,6 @@ const m = defineMessages({
 		defaultMessage: 'Audio Recording',
 		description: 'Title of the audio attachment page.',
 	},
-	playerUnavailable: {
-		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.playerUnavailable',
-		defaultMessage: 'Player unavailable. Download file to preview.',
-		description: 'Alert text indicating inability to play audio attachment.',
-	},
 	download: {
 		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download',
 		defaultMessage: 'Download',
