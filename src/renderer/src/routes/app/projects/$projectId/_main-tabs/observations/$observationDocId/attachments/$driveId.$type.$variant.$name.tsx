@@ -482,7 +482,7 @@ function AudioPlayback({
 				<StyledMediaController audio lang={lang}>
 					<audio slot="media" src={attachmentUrl}></audio>
 
-					<Stack direction="column">
+					<Stack direction="column" sx={{ gap: 2 }}>
 						<StyledMediaPlayButton noTooltip />
 
 						<StyledMediaTimeRange>
