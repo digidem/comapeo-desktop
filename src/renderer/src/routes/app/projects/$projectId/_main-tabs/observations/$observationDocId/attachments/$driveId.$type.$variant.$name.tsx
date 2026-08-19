@@ -245,33 +245,17 @@ function DeleteSuccessPanel({
 	)
 }
 
-const StyledMediaController = styled(MediaController)(({ theme }) => ({
-	'--media-background-color': WHITE,
-	'--media-control-hover-background': theme.palette.action.hover,
-	'--media-focus-box-shadow': `inset 0 0 0 2px ${COMAPEO_BLUE}`,
-	'--media-font-family': 'Rubik Variable, sans-serif',
-	'--media-primary-color': BLACK,
-	'--media-secondary-color': WHITE,
-	padding: theme.spacing(2),
-}))
-
-const StyledMediaPlayButton = styled(MediaPlayButton)(() => ({
-	'--media-control-height': '128px',
-	alignSelf: 'center',
-}))
-
-const StyledMediaTimeRange = styled(MediaTimeRange)(() => ({
-	'--media-range-bar-color': COMAPEO_BLUE,
-	'--media-range-thumb-background': COMAPEO_BLUE,
-	'--media-range-thumb': COMAPEO_BLUE,
-	'--media-range-track-background': BLUE_GREY,
-	'--media-range-track-border-radius': '8px',
-	width: '100%',
-}))
-
-const StyledMediaTimeDisplay = styled(MediaTimeDisplay)(() => ({
-	'--media-font-weight': 500,
-}))
+const BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE: SxProps<Theme> = {
+	alignItems: 'center',
+	border: `1px solid ${BLUE_GREY}`,
+	borderRadius: 4,
+	display: 'flex',
+	flexDirection: 'row',
+	height: 400,
+	justifyContent: 'center',
+	padding: 6,
+	width: 400,
+} as const
 
 function AttachmentPanel({
 	blobId,
@@ -322,8 +306,6 @@ function AttachmentPanel({
 		)
 	})!
 
-	const { data: attachmentUrl } = useAttachmentUrl({ projectId, blobId })
-
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
@@ -371,29 +353,31 @@ function AttachmentPanel({
 						padding: 6,
 					}}
 				>
-					{blobId.type === 'photo' ? (
-						<ErrorBoundary
-							getResetKey={() => errorResetKey}
-							onError={() => {
-								captureMessage(`Failed to load ${blobId.variant} image`, {
-									level: 'info',
-									extra: blobId,
-								})
-							}}
-							// TODO: Consider redirecting to other variants recursively
-							fallback={() => (
+					<ErrorBoundary
+						getResetKey={() => errorResetKey}
+						onError={(error) => {
+							captureMessage(
+								`Failed to load ${blobId.variant} ${blobId.type === 'photo' ? 'image' : 'audio'}`,
+								{ level: 'info', extra: blobId },
+							)
+
+							console.error(error)
+						}}
+						// TODO: Consider redirecting to other variants recursively for image blobs
+						fallback={() => (
+							<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
+								<Icon name="material-error" size={80} color="error" />
+							</Box>
+						)}
+					>
+						<Suspense
+							fallback={
 								<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
-									<Icon name="material-error" size={80} color="error" />
+									<CircularProgress disableShrink size={30} />
 								</Box>
-							)}
+							}
 						>
-							<Suspense
-								fallback={
-									<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
-										<CircularProgress disableShrink size={30} />
-									</Box>
-								}
-							>
+							{blobId.type === 'photo' ? (
 								<PhotoAttachmentImage
 									attachmentDriveId={blobId.driveId}
 									attachmentName={blobId.name}
@@ -407,46 +391,16 @@ function AttachmentPanel({
 										maxWidth: '100%',
 									}}
 								/>
-							</Suspense>
-						</ErrorBoundary>
-					) : (
-						<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
-							<Stack direction="column" sx={{ flex: 1, gap: 4 }}>
-								<StyledMediaController audio lang={lang}>
-									<audio slot="media" src={attachmentUrl}></audio>
-
-									<Stack direction="column">
-										<StyledMediaPlayButton noTooltip />
-
-										<StyledMediaTimeRange>
-											<span slot="preview" />
-										</StyledMediaTimeRange>
-
-										<StyledMediaTimeDisplay noToggle showDuration />
-									</Stack>
-								</StyledMediaController>
-
-								{attachment.createdAt ? (
-									<Typography
-										color="textSecondary"
-										variant="body2"
-										sx={{ textAlign: 'center', textWrap: 'balance' }}
-									>
-										<time dateTime={attachment.createdAt}>
-											{intl.formatDate(attachment.createdAt, {
-												year: 'numeric',
-												month: 'short',
-												day: '2-digit',
-												minute: '2-digit',
-												hour: '2-digit',
-												hourCycle: 'h12',
-											})}
-										</time>
-									</Typography>
-								) : null}
-							</Stack>
-						</Box>
-					)}
+							) : (
+								<AudioPlayback
+									blobId={blobId}
+									createdAt={attachment.createdAt}
+									lang={lang}
+									projectId={projectId}
+								/>
+							)}
+						</Suspense>
+					</ErrorBoundary>
 				</Box>
 
 				<ErrorBoundary getResetKey={() => errorResetKey} fallback={() => <></>}>
@@ -479,17 +433,88 @@ function AttachmentPanel({
 	)
 }
 
-const BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE: SxProps<Theme> = {
-	alignItems: 'center',
-	border: `1px solid ${BLUE_GREY}`,
-	borderRadius: 4,
-	display: 'flex',
-	flexDirection: 'row',
-	height: 400,
-	justifyContent: 'center',
-	padding: 6,
-	width: 400,
-} as const
+const StyledMediaController = styled(MediaController)(({ theme }) => ({
+	'--media-background-color': WHITE,
+	'--media-control-hover-background': theme.palette.action.hover,
+	'--media-focus-box-shadow': `inset 0 0 0 2px ${COMAPEO_BLUE}`,
+	'--media-font-family': 'Rubik Variable, sans-serif',
+	'--media-primary-color': BLACK,
+	'--media-secondary-color': WHITE,
+	padding: theme.spacing(2),
+}))
+
+const StyledMediaPlayButton = styled(MediaPlayButton)(() => ({
+	'--media-control-height': '128px',
+	alignSelf: 'center',
+}))
+
+const StyledMediaTimeRange = styled(MediaTimeRange)(() => ({
+	'--media-range-bar-color': COMAPEO_BLUE,
+	'--media-range-thumb-background': COMAPEO_BLUE,
+	'--media-range-thumb': COMAPEO_BLUE,
+	'--media-range-track-background': BLUE_GREY,
+	'--media-range-track-border-radius': '8px',
+	width: '100%',
+}))
+
+const StyledMediaTimeDisplay = styled(MediaTimeDisplay)(() => ({
+	'--media-font-weight': 500,
+}))
+
+function AudioPlayback({
+	blobId,
+	createdAt,
+	lang,
+	projectId,
+}: {
+	blobId: BlobId
+	createdAt: string | undefined
+	lang: string
+	projectId: string
+}) {
+	const intl = useIntl()
+
+	const { data: attachmentUrl } = useAttachmentUrl({ projectId, blobId })
+
+	return (
+		<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
+			<Stack direction="column" sx={{ flex: 1, gap: 4 }}>
+				<StyledMediaController audio lang={lang}>
+					<audio slot="media" src={attachmentUrl}></audio>
+
+					<Stack direction="column">
+						<StyledMediaPlayButton noTooltip />
+
+						<StyledMediaTimeRange>
+							<span slot="preview" />
+						</StyledMediaTimeRange>
+
+						<StyledMediaTimeDisplay noToggle showDuration />
+					</Stack>
+				</StyledMediaController>
+
+				{createdAt ? (
+					<Typography
+						color="textSecondary"
+						variant="body2"
+						sx={{ textAlign: 'center', textWrap: 'balance' }}
+					>
+						<time dateTime={createdAt}>
+							{intl.formatDate(createdAt, {
+								year: 'numeric',
+								month: 'short',
+								day: '2-digit',
+								minute: '2-digit',
+								hour: '2-digit',
+								hourCycle: 'h12',
+							})}
+						</time>
+					</Typography>
+				) : null}
+			</Stack>
+		</Box>
+	)
+}
 
 const DELETE_ATTACHMENT_MUTATION_KEY = createGlobalMutationsKey([
 	'attachments',
