@@ -241,10 +241,10 @@ const BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE: SxProps<Theme> = {
 	borderRadius: 4,
 	display: 'flex',
 	flexDirection: 'row',
-	height: 400,
+	height: 'min(100%, 400px)',
 	justifyContent: 'center',
 	padding: 6,
-	width: 400,
+	width: 'min(100%, 400px)',
 } as const
 
 function AttachmentPanel({
@@ -335,12 +335,11 @@ function AttachmentPanel({
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Box
 					sx={{
-						display: 'flex',
+						display: 'grid',
 						flex: 1,
-						flexDirection: 'row',
-						justifyContent: 'center',
 						overflow: 'auto',
 						padding: 6,
+						placeItems: 'center',
 					}}
 				>
 					<ErrorBoundary
@@ -377,12 +376,11 @@ function AttachmentPanel({
 										border: `1px solid ${BLUE_GREY}`,
 										borderRadius: 4,
 										margin: 'auto',
-										maxHeight: '100%',
 										maxWidth: '100%',
 									}}
 								/>
 							) : (
-								<RecordingCard
+								<AudioRecordingCard
 									blobId={blobId}
 									createdAt={attachment.createdAt}
 									lang={lang}
