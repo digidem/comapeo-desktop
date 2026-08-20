@@ -198,6 +198,7 @@ function DeleteSuccessPanel({
 					</Typography>
 				</Stack>
 			</Container>
+
 			<Box
 				sx={{
 					display: 'flex',
@@ -262,40 +263,6 @@ function AttachmentPanel({
 
 	const router = useRouter()
 
-	const { data: lang } = useSuspenseQuery({
-		...getLocaleStateQueryOptions(),
-		select: (state) => {
-			return state.value
-		},
-	})
-
-	const { data: observation } = useSingleDocByDocId({
-		projectId,
-		docType: 'observation',
-		docId: observationDocId,
-		lang,
-	})
-
-	const { data: ownRole } = useOwnRoleInProject({ projectId })
-	const { data: ownDeviceInfo } = useOwnDeviceInfo()
-
-	const errorResetKey = `${blobId.driveId}/${blobId.type}/${blobId.variant}/${blobId.name}`
-
-	const canEdit =
-		ownRole.roleId === COORDINATOR_ROLE_ID ||
-		ownRole.roleId === CREATOR_ROLE_ID ||
-		observation.createdBy === ownDeviceInfo.deviceId
-
-	// NOTE: Okay to do non-null assertion here because
-	// existence check is done in beforeLoad
-	const attachment = observation.attachments.find((a) => {
-		return (
-			a.driveDiscoveryId === blobId.driveId &&
-			a.type === blobId.type &&
-			a.name === blobId.name
-		)
-	})!
-
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
@@ -332,91 +299,159 @@ function AttachmentPanel({
 				</Typography>
 			</Stack>
 
-			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-				<Box
-					sx={{
-						display: 'grid',
-						flex: 1,
-						overflow: 'auto',
-						padding: 6,
-						placeItems: 'center',
-					}}
-				>
-					<ErrorBoundary
-						getResetKey={() => errorResetKey}
-						onError={(error) => {
-							captureMessage(
-								`Failed to load ${blobId.variant} ${blobId.type === 'photo' ? 'image' : 'audio'}`,
-								{ level: 'info', extra: blobId },
-							)
-
-							console.error(error)
+			<Suspense
+				fallback={
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+							flex: 1,
 						}}
-						// TODO: Consider redirecting to other variants recursively for image blobs
-						fallback={() => (
-							<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
-								<Icon name="material-error" size={80} color="error" />
-							</Box>
-						)}
 					>
-						<Suspense
-							fallback={
-								<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
-									<CircularProgress disableShrink size={30} />
-								</Box>
-							}
-						>
-							{blobId.type === 'photo' ? (
-								<PhotoAttachmentImage
-									attachmentDriveId={blobId.driveId}
-									attachmentName={blobId.name}
-									attachmentVariant={blobId.variant}
-									projectId={projectId}
-									style={{
-										border: `1px solid ${BLUE_GREY}`,
-										borderRadius: 4,
-										margin: 'auto',
-										width: 'min(100%, 400px)',
-									}}
-								/>
-							) : (
-								<AudioRecordingCard
-									blobId={blobId}
-									createdAt={attachment.createdAt}
-									lang={lang}
-									projectId={projectId}
-								/>
-							)}
-						</Suspense>
-					</ErrorBoundary>
-				</Box>
+						<CircularProgress disableShrink size={30} />
+					</Box>
+				}
+			>
+				<LoadedAttachmentSection
+					blobId={blobId}
+					observationDocId={observationDocId}
+					onDeleteSuccess={onDeleteSuccess}
+					projectId={projectId}
+				/>
+			</Suspense>
+		</Stack>
+	)
+}
 
-				<ErrorBoundary getResetKey={() => errorResetKey} fallback={() => <></>}>
-					<Suspense>
-						<Stack
-							direction="row"
-							sx={{
-								borderTop: `1px solid ${BLUE_GREY}`,
-								flexWrap: 'wrap',
-								gap: 6,
-								justifyContent: 'space-around',
-								padding: 6,
-							}}
-						>
-							{canEdit ? (
-								<DeleteButton
-									projectId={projectId}
-									observation={observation}
-									blobId={blobId}
-									onSuccess={onDeleteSuccess}
-								/>
-							) : null}
+function LoadedAttachmentSection({
+	blobId,
+	observationDocId,
+	onDeleteSuccess,
+	projectId,
+}: {
+	blobId: BlobId
+	observationDocId: string
+	onDeleteSuccess: () => void
+	projectId: string
+}) {
+	const { data: lang } = useSuspenseQuery({
+		...getLocaleStateQueryOptions(),
+		select: (state) => {
+			return state.value
+		},
+	})
 
-							<DownloadButton projectId={projectId} blobId={blobId} />
-						</Stack>
+	const { data: observation } = useSingleDocByDocId({
+		projectId,
+		docType: 'observation',
+		docId: observationDocId,
+		lang,
+	})
+
+	const { data: ownRole } = useOwnRoleInProject({ projectId })
+	const { data: ownDeviceInfo } = useOwnDeviceInfo()
+
+	const errorResetKey = `${blobId.driveId}/${blobId.type}/${blobId.variant}/${blobId.name}`
+
+	const canEdit =
+		ownRole.roleId === COORDINATOR_ROLE_ID ||
+		ownRole.roleId === CREATOR_ROLE_ID ||
+		observation.createdBy === ownDeviceInfo.deviceId
+
+	// NOTE: Okay to do non-null assertion here because
+	// existence check is done in beforeLoad
+	const attachment = observation.attachments.find((a) => {
+		return (
+			a.driveDiscoveryId === blobId.driveId &&
+			a.type === blobId.type &&
+			a.name === blobId.name
+		)
+	})!
+
+	return (
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Box
+				sx={{
+					display: 'grid',
+					flex: 1,
+					overflow: 'auto',
+					padding: 6,
+					placeItems: 'center',
+				}}
+			>
+				<ErrorBoundary
+					getResetKey={() => errorResetKey}
+					onError={(error) => {
+						captureMessage(
+							`Failed to load ${blobId.variant} ${blobId.type === 'photo' ? 'image' : 'audio'}`,
+							{ level: 'info', extra: blobId },
+						)
+
+						console.error(error)
+					}}
+					// TODO: Consider redirecting to other variants recursively for image blobs
+					fallback={() => (
+						<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
+							<Icon name="material-error" size={80} color="error" />
+						</Box>
+					)}
+				>
+					<Suspense
+						fallback={
+							<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
+								<CircularProgress disableShrink size={30} />
+							</Box>
+						}
+					>
+						{blobId.type === 'photo' ? (
+							<PhotoAttachmentImage
+								attachmentDriveId={blobId.driveId}
+								attachmentName={blobId.name}
+								attachmentVariant={blobId.variant}
+								projectId={projectId}
+								style={{
+									border: `1px solid ${BLUE_GREY}`,
+									borderRadius: 4,
+									margin: 'auto',
+									width: 'min(100%, 400px)',
+								}}
+							/>
+						) : (
+							<AudioRecordingCard
+								blobId={blobId}
+								createdAt={attachment.createdAt}
+								lang={lang}
+								projectId={projectId}
+							/>
+						)}
 					</Suspense>
 				</ErrorBoundary>
-			</Stack>
+			</Box>
+
+			<ErrorBoundary getResetKey={() => errorResetKey} fallback={() => <></>}>
+				<Stack
+					direction="row"
+					sx={{
+						borderTop: `1px solid ${BLUE_GREY}`,
+						flexWrap: 'wrap',
+						gap: 6,
+						justifyContent: 'space-around',
+						padding: 6,
+					}}
+				>
+					{canEdit ? (
+						<DeleteButton
+							projectId={projectId}
+							observation={observation}
+							blobId={blobId}
+							onSuccess={onDeleteSuccess}
+						/>
+					) : null}
+
+					<DownloadButton projectId={projectId} blobId={blobId} />
+				</Stack>
+			</ErrorBoundary>
 		</Stack>
 	)
 }
