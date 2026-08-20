@@ -367,10 +367,6 @@
     "description": "Title of the photo attachment page.",
     "message": "Photo Info"
   },
-  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.playerUnavailable": {
-    "description": "Alert text indicating inability to play audio attachment.",
-    "message": "Player unavailable. Download file to preview."
-  },
   "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.returnToObservation": {
     "description": "Button text for the successful deletion panel.",
     "message": "Return to Observation"

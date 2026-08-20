@@ -7,7 +7,6 @@ import {
 	useUpdateDocument,
 } from '@comapeo/core-react'
 import type { Observation } from '@comapeo/core/schema.js'
-import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -16,14 +15,16 @@ import Dialog from '@mui/material/Dialog'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { type SxProps, type Theme } from '@mui/material/styles'
 import { captureMessage } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { MediaProvider } from 'media-chrome/react/media-store'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
 import { PhotoAttachmentImage } from '../-components/photo-attachment-image.tsx'
-import { BLUE_GREY, GREEN, LIGHT_GREY } from '../../../../../../../../colors.ts'
+import { BLUE_GREY, GREEN } from '../../../../../../../../colors.ts'
 import { DecentDialog } from '../../../../../../../../components/decent-dialog.tsx'
 import { ErrorBoundary } from '../../../../../../../../components/error-boundary.tsx'
 import { ErrorDialogContent } from '../../../../../../../../components/error-dialog.tsx'
@@ -36,6 +37,7 @@ import {
 import { getLocaleStateQueryOptions } from '../../../../../../../../lib/queries/app-settings.ts'
 import { createGlobalMutationsKey } from '../../../../../../../../lib/queries/global-mutations.ts'
 import { downloadURLMutationOptions } from '../../../../../../../../lib/queries/system.ts'
+import { AudioPlayback } from './-audio-playback.tsx'
 
 // TODO: Support video type
 const BlobIdSchema = v.variant('type', [
@@ -196,6 +198,7 @@ function DeleteSuccessPanel({
 					</Typography>
 				</Stack>
 			</Container>
+
 			<Box
 				sx={{
 					display: 'flex',
@@ -233,6 +236,18 @@ function DeleteSuccessPanel({
 	)
 }
 
+const BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE: SxProps<Theme> = {
+	alignItems: 'center',
+	border: `1px solid ${BLUE_GREY}`,
+	borderRadius: 4,
+	display: 'flex',
+	flexDirection: 'row',
+	height: 'min(100%, 400px)',
+	justifyContent: 'center',
+	padding: 6,
+	width: 'min(100%, 400px)',
+} as const
+
 function AttachmentPanel({
 	blobId,
 	observationDocId,
@@ -244,33 +259,9 @@ function AttachmentPanel({
 	onDeleteSuccess: () => void
 	projectId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const router = useRouter()
-
-	const { data: lang } = useSuspenseQuery({
-		...getLocaleStateQueryOptions(),
-		select: (state) => {
-			return state.value
-		},
-	})
-
-	const { data: observation } = useSingleDocByDocId({
-		projectId,
-		docType: 'observation',
-		docId: observationDocId,
-		lang,
-	})
-
-	const { data: ownRole } = useOwnRoleInProject({ projectId })
-	const { data: ownDeviceInfo } = useOwnDeviceInfo()
-
-	const errorResetKey = `${blobId.driveId}/${blobId.type}/${blobId.variant}/${blobId.name}`
-
-	const canEdit =
-		ownRole.roleId === COORDINATOR_ROLE_ID ||
-		ownRole.roleId === CREATOR_ROLE_ID ||
-		observation.createdBy === ownDeviceInfo.deviceId
 
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
@@ -302,148 +293,211 @@ function AttachmentPanel({
 				</IconButton>
 
 				<Typography variant="h1" sx={{ fontWeight: 500 }}>
-					{t(blobId.type === 'photo' ? m.photoNavTitle : m.audioNavTitle)}
+					{intl.formatMessage(
+						blobId.type === 'photo' ? m.photoNavTitle : m.audioNavTitle,
+					)}
 				</Typography>
 			</Stack>
 
-			<Stack
-				direction="column"
+			<Suspense
+				fallback={
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+							flex: 1,
+						}}
+					>
+						<CircularProgress disableShrink size={30} />
+					</Box>
+				}
+			>
+				<LoadedAttachmentSection
+					blobId={blobId}
+					observationDocId={observationDocId}
+					onDeleteSuccess={onDeleteSuccess}
+					projectId={projectId}
+				/>
+			</Suspense>
+		</Stack>
+	)
+}
+
+function LoadedAttachmentSection({
+	blobId,
+	observationDocId,
+	onDeleteSuccess,
+	projectId,
+}: {
+	blobId: BlobId
+	observationDocId: string
+	onDeleteSuccess: () => void
+	projectId: string
+}) {
+	const { data: lang } = useSuspenseQuery({
+		...getLocaleStateQueryOptions(),
+		select: (state) => {
+			return state.value
+		},
+	})
+
+	const { data: observation } = useSingleDocByDocId({
+		projectId,
+		docType: 'observation',
+		docId: observationDocId,
+		lang,
+	})
+
+	const { data: ownRole } = useOwnRoleInProject({ projectId })
+	const { data: ownDeviceInfo } = useOwnDeviceInfo()
+
+	const errorResetKey = `${blobId.driveId}/${blobId.type}/${blobId.variant}/${blobId.name}`
+
+	const canEdit =
+		ownRole.roleId === COORDINATOR_ROLE_ID ||
+		ownRole.roleId === CREATOR_ROLE_ID ||
+		observation.createdBy === ownDeviceInfo.deviceId
+
+	// NOTE: Okay to do non-null assertion here because
+	// existence check is done in beforeLoad
+	const attachment = observation.attachments.find((a) => {
+		return (
+			a.driveDiscoveryId === blobId.driveId &&
+			a.type === blobId.type &&
+			a.name === blobId.name
+		)
+	})!
+
+	return (
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Box
 				sx={{
+					display: 'grid',
 					flex: 1,
-					justifyContent: 'space-between',
 					overflow: 'auto',
 					padding: 6,
-					gap: 6,
+					placeItems: 'center',
 				}}
 			>
-				<Stack direction="column" sx={{ gap: 6 }}>
-					{blobId.type === 'audio' ? (
-						<Alert
-							severity="warning"
-							icon={<Icon name="material-warning-rounded" />}
-							sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
-						>
-							<Typography>{t(m.playerUnavailable)}</Typography>
-						</Alert>
-					) : null}
+				<ErrorBoundary
+					getResetKey={() => errorResetKey}
+					onError={(error) => {
+						captureMessage(
+							`Failed to load ${blobId.variant} ${blobId.type === 'photo' ? 'image' : 'audio'}`,
+							{ level: 'info', extra: blobId },
+						)
 
-					{blobId.type === 'photo' ? (
-						<ErrorBoundary
-							getResetKey={() => errorResetKey}
-							onError={() => {
-								captureMessage(`Failed to load ${blobId.variant} image`, {
-									level: 'info',
-									extra: blobId,
-								})
-							}}
-							// TODO: Consider redirecting to other variants recursively
-							fallback={() => (
-								<Box
-									sx={{
-										display: 'grid',
-										aspectRatio: 1,
-										border: `1px solid ${BLUE_GREY}`,
-										borderRadius: 2,
-										placeItems: 'center',
-									}}
-								>
-									<Icon name="material-error" size={80} color="error" />
-								</Box>
-							)}
-						>
-							<Suspense
-								fallback={
-									<Box
-										sx={{
-											display: 'grid',
-											aspectRatio: 1,
-											border: '1px solid ${BLUE_GREY}',
-											borderRadius: 2,
-											placeItems: 'center',
-										}}
-									>
-										<CircularProgress disableShrink size={30} />
-									</Box>
-								}
-							>
-								<Box
-									sx={{
-										display: 'flex',
-										flexDirection: 'column',
-										flex: 1,
-										overflow: 'hidden',
-										border: `1px solid ${BLUE_GREY}`,
-										borderRadius: 2,
-									}}
-								>
-									<PhotoAttachmentImage
-										attachmentDriveId={blobId.driveId}
-										attachmentName={blobId.name}
-										attachmentVariant={blobId.variant}
-										projectId={projectId}
-										style={{ width: '100%' }}
-									/>
-								</Box>
-							</Suspense>
-						</ErrorBoundary>
-					) : (
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'row',
-								alignItems: 'center',
-								flex: 1,
-								border: `1px solid ${BLUE_GREY}`,
-								borderRadius: 4,
-								aspectRatio: 1,
-							}}
-						>
-							<Stack
-								direction="column"
-								sx={{ gap: 4, flex: 1, alignItems: 'center' }}
-							>
-								<Box>
-									<Icon
-										name="material-play-arrow-filled"
-										size={160}
-										htmlColor={LIGHT_GREY}
-									/>
-								</Box>
-
-								<Box
-									sx={{
-										alignSelf: 'stretch',
-										height: 8,
-										bgcolor: LIGHT_GREY,
-										marginX: '20%',
-									}}
-								/>
-							</Stack>
+						console.error(error)
+					}}
+					// TODO: Consider redirecting to other variants recursively for image blobs
+					fallback={() => (
+						<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
+							<Icon name="material-error" size={80} color="error" />
 						</Box>
 					)}
-				</Stack>
-
-				<ErrorBoundary getResetKey={() => errorResetKey} fallback={() => <></>}>
-					<Suspense>
-						<Stack
-							direction="row"
-							sx={{ justifyContent: 'space-around', gap: 6 }}
-						>
-							{canEdit ? (
-								<DeleteButton
-									projectId={projectId}
-									observation={observation}
-									blobId={blobId}
-									onSuccess={onDeleteSuccess}
-								/>
-							) : null}
-
-							<DownloadButton projectId={projectId} blobId={blobId} />
-						</Stack>
+				>
+					<Suspense
+						fallback={
+							<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
+								<CircularProgress disableShrink size={30} />
+							</Box>
+						}
+					>
+						{blobId.type === 'photo' ? (
+							<PhotoAttachmentImage
+								attachmentDriveId={blobId.driveId}
+								attachmentName={blobId.name}
+								attachmentVariant={blobId.variant}
+								projectId={projectId}
+								style={{
+									border: `1px solid ${BLUE_GREY}`,
+									borderRadius: 4,
+									margin: 'auto',
+									width: 'min(100%, 400px)',
+								}}
+							/>
+						) : (
+							<AudioRecordingCard
+								blobId={blobId}
+								createdAt={attachment.createdAt}
+								lang={lang}
+								projectId={projectId}
+							/>
+						)}
 					</Suspense>
 				</ErrorBoundary>
-			</Stack>
+			</Box>
+
+			<ErrorBoundary getResetKey={() => errorResetKey} fallback={() => <></>}>
+				<Stack
+					direction="row"
+					sx={{
+						borderTop: `1px solid ${BLUE_GREY}`,
+						flexWrap: 'wrap',
+						gap: 6,
+						justifyContent: 'space-around',
+						padding: 6,
+					}}
+				>
+					{canEdit ? (
+						<DeleteButton
+							projectId={projectId}
+							observation={observation}
+							blobId={blobId}
+							onSuccess={onDeleteSuccess}
+						/>
+					) : null}
+
+					<DownloadButton projectId={projectId} blobId={blobId} />
+				</Stack>
+			</ErrorBoundary>
 		</Stack>
+	)
+}
+
+function AudioRecordingCard({
+	blobId,
+	createdAt,
+	lang,
+	projectId,
+}: {
+	blobId: BlobId
+	createdAt: string | undefined
+	lang: string
+	projectId: string
+}) {
+	const intl = useIntl()
+
+	const { data: attachmentUrl } = useAttachmentUrl({ projectId, blobId })
+
+	return (
+		<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
+			<Stack direction="column" sx={{ flex: 1, gap: 4 }}>
+				<MediaProvider>
+					<AudioPlayback lang={lang} src={attachmentUrl} />
+				</MediaProvider>
+
+				{createdAt ? (
+					<Typography
+						color="textSecondary"
+						variant="body2"
+						sx={{ textAlign: 'center', textWrap: 'balance' }}
+					>
+						<time dateTime={createdAt}>
+							{intl.formatDate(createdAt, {
+								year: 'numeric',
+								month: 'short',
+								day: '2-digit',
+								minute: '2-digit',
+								hour: '2-digit',
+								hourCycle: 'h12',
+							})}
+						</time>
+					</Typography>
+				) : null}
+			</Stack>
+		</Box>
 	)
 }
 
@@ -508,6 +562,7 @@ function DeleteButton({
 
 				<Typography id="delete-button-label">{t(m.delete)}</Typography>
 			</Stack>
+
 			<DeleteAttachmentConfirmationDialog
 				open={showConfirmation}
 				onCancel={() => {
@@ -686,11 +741,6 @@ const m = defineMessages({
 		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.audioNavTitle',
 		defaultMessage: 'Audio Recording',
 		description: 'Title of the audio attachment page.',
-	},
-	playerUnavailable: {
-		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.playerUnavailable',
-		defaultMessage: 'Player unavailable. Download file to preview.',
-		description: 'Alert text indicating inability to play audio attachment.',
 	},
 	download: {
 		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download',
