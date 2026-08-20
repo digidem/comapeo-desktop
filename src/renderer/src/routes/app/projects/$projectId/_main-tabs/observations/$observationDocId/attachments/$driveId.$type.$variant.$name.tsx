@@ -376,7 +376,7 @@ function AttachmentPanel({
 										border: `1px solid ${BLUE_GREY}`,
 										borderRadius: 4,
 										margin: 'auto',
-										maxWidth: '100%',
+										width: 'min(100%, 400px)',
 									}}
 								/>
 							) : (
