@@ -444,7 +444,7 @@ const StyledMediaController = styled(MediaController)(({ theme }) => ({
 }))
 
 const StyledMediaPlayButton = styled(MediaPlayButton)(() => ({
-	'--media-control-height': '128px',
+	'--media-control-height': '96px',
 	alignSelf: 'center',
 }))
 
