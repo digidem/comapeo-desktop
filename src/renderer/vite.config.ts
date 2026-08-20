@@ -3,10 +3,9 @@
 import * as path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import formatJs from '@formatjs/unplugin/vite'
-import babel from '@rolldown/plugin-babel'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
-import react, { reactCompilerPreset } from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { iconsSpritesheet } from 'vite-plugin-icons-spritesheet'
 
@@ -48,8 +47,7 @@ export default defineConfig((configEnv) => {
 				target: 'react',
 				generatedRouteTree: path.join(GENERATED_DIR, 'routeTree.gen.ts'),
 			}),
-			react(),
-			babel({ presets: [reactCompilerPreset()] }),
+			react({ compiler: true }),
 			// TODO: `cwd` option is broken. should submit a fix at some point
 			iconsSpritesheet({
 				inputDir: fileURLToPath(new URL('./icons', import.meta.url)),
