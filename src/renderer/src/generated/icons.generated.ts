@@ -57,6 +57,7 @@ export const iconNames = [
 	'material-symbols-landscape',
 	'material-symbols-lists',
 	'material-symbols-location-filled',
+	'material-symbols-replay',
 	'material-symbols-schedule',
 	'material-symbols-speed',
 	'material-symbols-square-foot',

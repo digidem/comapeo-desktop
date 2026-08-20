@@ -15,27 +15,16 @@ import Dialog from '@mui/material/Dialog'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { styled, type SxProps, type Theme } from '@mui/material/styles'
+import { type SxProps, type Theme } from '@mui/material/styles'
 import { captureMessage } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import {
-	MediaController,
-	MediaPlayButton,
-	MediaTimeDisplay,
-	MediaTimeRange,
-} from 'media-chrome/react'
+import { MediaProvider } from 'media-chrome/react/media-store'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
 import { PhotoAttachmentImage } from '../-components/photo-attachment-image.tsx'
-import {
-	BLACK,
-	BLUE_GREY,
-	COMAPEO_BLUE,
-	GREEN,
-	WHITE,
-} from '../../../../../../../../colors.ts'
+import { BLUE_GREY, GREEN } from '../../../../../../../../colors.ts'
 import { DecentDialog } from '../../../../../../../../components/decent-dialog.tsx'
 import { ErrorBoundary } from '../../../../../../../../components/error-boundary.tsx'
 import { ErrorDialogContent } from '../../../../../../../../components/error-dialog.tsx'
@@ -48,6 +37,7 @@ import {
 import { getLocaleStateQueryOptions } from '../../../../../../../../lib/queries/app-settings.ts'
 import { createGlobalMutationsKey } from '../../../../../../../../lib/queries/global-mutations.ts'
 import { downloadURLMutationOptions } from '../../../../../../../../lib/queries/system.ts'
+import { AudioPlayback } from './-audio-playback.tsx'
 
 // TODO: Support video type
 const BlobIdSchema = v.variant('type', [
@@ -392,7 +382,7 @@ function AttachmentPanel({
 									}}
 								/>
 							) : (
-								<AudioPlayback
+								<RecordingCard
 									blobId={blobId}
 									createdAt={attachment.createdAt}
 									lang={lang}
@@ -433,35 +423,7 @@ function AttachmentPanel({
 	)
 }
 
-const StyledMediaController = styled(MediaController)(({ theme }) => ({
-	'--media-background-color': WHITE,
-	'--media-control-hover-background': theme.palette.action.hover,
-	'--media-focus-box-shadow': `inset 0 0 0 2px ${COMAPEO_BLUE}`,
-	'--media-font-family': 'Rubik Variable, sans-serif',
-	'--media-primary-color': BLACK,
-	'--media-secondary-color': WHITE,
-	padding: theme.spacing(2),
-}))
-
-const StyledMediaPlayButton = styled(MediaPlayButton)(() => ({
-	'--media-control-height': '96px',
-	alignSelf: 'center',
-}))
-
-const StyledMediaTimeRange = styled(MediaTimeRange)(() => ({
-	'--media-range-bar-color': COMAPEO_BLUE,
-	'--media-range-thumb-background': COMAPEO_BLUE,
-	'--media-range-thumb': COMAPEO_BLUE,
-	'--media-range-track-background': BLUE_GREY,
-	'--media-range-track-border-radius': '8px',
-	width: '100%',
-}))
-
-const StyledMediaTimeDisplay = styled(MediaTimeDisplay)(() => ({
-	'--media-font-weight': 500,
-}))
-
-function AudioPlayback({
+function AudioRecordingCard({
 	blobId,
 	createdAt,
 	lang,
@@ -479,19 +441,9 @@ function AudioPlayback({
 	return (
 		<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
 			<Stack direction="column" sx={{ flex: 1, gap: 4 }}>
-				<StyledMediaController audio lang={lang}>
-					<audio slot="media" src={attachmentUrl}></audio>
-
-					<Stack direction="column" sx={{ gap: 2 }}>
-						<StyledMediaPlayButton noTooltip />
-
-						<StyledMediaTimeRange>
-							<span slot="preview" />
-						</StyledMediaTimeRange>
-
-						<StyledMediaTimeDisplay noToggle showDuration />
-					</Stack>
-				</StyledMediaController>
+				<MediaProvider>
+					<AudioPlayback lang={lang} src={attachmentUrl} />
+				</MediaProvider>
 
 				{createdAt ? (
 					<Typography
