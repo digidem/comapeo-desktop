@@ -646,12 +646,20 @@ function updateWindowMinimumSize(window: BaseWindow) {
 		return undefined
 	}
 
-	const updatedHeight = display.size.height * 0.5
-	const updatedWidth = display.size.width * 0.4
+	const updatedHeight = Math.floor(display.size.height * 0.5)
+	const updatedWidth = Math.floor(display.size.width * 0.4)
 
 	if (currentWidth === updatedWidth && currentHeight === updatedHeight) {
 		log(
 			`Calculated minimum size is same as existing minimum size for window ${window.id}.`,
+		)
+
+		return undefined
+	}
+
+	if (updatedWidth === 0 || updatedHeight === 0) {
+		log(
+			`Unable to update window ${window.id} minimum size due to invalid calculated size ${{ width: updatedWidth, height: updatedHeight }}`,
 		)
 
 		return undefined
