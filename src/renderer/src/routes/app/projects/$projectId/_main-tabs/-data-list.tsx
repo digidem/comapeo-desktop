@@ -9,11 +9,7 @@ import {
 	type CSSProperties,
 	type JSX,
 } from 'react'
-import {
-	useManyDocs,
-	useOwnDeviceInfo,
-	useSingleDocByDocId,
-} from '@comapeo/core-react'
+import { useManyDocs, useSingleDocByDocId } from '@comapeo/core-react'
 import type { Preset } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -44,10 +40,10 @@ import {
 import { counting, isEqual } from 'radashi'
 import { defineMessages, useIntl, type IntlShape } from 'react-intl'
 
+import { SyncedIndicatorLine } from '../../-shared/synced-indicator-line.tsx'
 import {
 	BLACK,
 	BLUE_GREY,
-	COMAPEO_BLUE,
 	DARK_GREY,
 	LIGHT_COMAPEO_BLUE,
 	LIGHT_GREY,
@@ -1046,27 +1042,6 @@ function FilterPill({
 			{removeButton}
 		</Stack>
 	)
-}
-
-function SyncedIndicatorLine({
-	createdByDeviceId,
-}: {
-	createdByDeviceId: string
-}) {
-	const { data: ownDeviceInfo } = useOwnDeviceInfo()
-
-	return ownDeviceInfo.deviceId !== createdByDeviceId ? (
-		<Box
-			sx={{
-				position: 'absolute',
-				width: 8,
-				left: 0,
-				bottom: 0,
-				top: 0,
-				bgcolor: COMAPEO_BLUE,
-			}}
-		/>
-	) : null
 }
 
 const ATTACHMENT_STYLE: CSSProperties = {
