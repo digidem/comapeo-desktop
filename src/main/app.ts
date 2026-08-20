@@ -13,9 +13,11 @@ import {
 	safeStorage,
 	screen,
 	utilityProcess,
+	type BaseWindow,
 	type UtilityProcess,
 } from 'electron/main'
 import { createDebug } from 'obug'
+import { debounce } from 'radashi'
 import * as v from 'valibot'
 
 import type { NewClientMessage } from '../services/core.ts'
@@ -405,35 +407,7 @@ function initMainWindow({
 		},
 	})
 
-	function updateMainWindowMinimumSize() {
-		let display: Electron.Display | undefined = undefined
-
-		try {
-			display = screen.getDisplayMatching(mainWindow.getBounds())
-		} catch (err) {
-			log('Unable to get display', err)
-		}
-
-		if (!display) {
-			const [width, height] = mainWindow.getMinimumSize()
-
-			log(
-				'Unable to update main window minimum size. Current minimum size is %o',
-				{ width, height },
-			)
-
-			return
-		}
-
-		const height = display.size.height * 0.5
-		const width = display.size.width * 0.4
-
-		log('Updating main window minimum size', { width, height })
-
-		mainWindow.setMinimumSize(width, height)
-	}
-
-	updateMainWindowMinimumSize()
+	updateWindowMinimumSize(mainWindow)
 
 	mainWindow.setAutoHideMenuBar(true)
 
@@ -450,7 +424,11 @@ function initMainWindow({
 		mainWindow.loadURL('comapeo://renderer/index.html')
 	}
 
-	mainWindow.on('focus', updateMainWindowMinimumSize)
+	const updateMainWindowMinimumSize = debounce({ delay: 500 }, () => {
+		updateWindowMinimumSize(mainWindow)
+	})
+
+	mainWindow.on('moved', updateMainWindowMinimumSize)
 	screen.on('display-added', updateMainWindowMinimumSize)
 	screen.on('display-metrics-changed', updateMainWindowMinimumSize)
 	screen.on('display-removed', updateMainWindowMinimumSize)
@@ -647,4 +625,44 @@ function createAppContextMenu({
 			selectAll: intlManager.formatMessage(messages.contextMenuSelectAll),
 		},
 	})
+}
+
+function updateWindowMinimumSize(window: BaseWindow) {
+	let display: Electron.Display | undefined = undefined
+
+	try {
+		display = screen.getDisplayMatching(window.getBounds())
+	} catch (err) {
+		log('Unable to get display', err)
+	}
+
+	const [currentWidth, currentHeight] = window.getMinimumSize()
+
+	if (!display) {
+		log(
+			`Unable to update window ${window.id} minimum size. Current minimum size is ${{ width: currentWidth, height: currentHeight }}`,
+		)
+
+		return undefined
+	}
+
+	const updatedHeight = display.size.height * 0.5
+	const updatedWidth = display.size.width * 0.4
+
+	if (currentWidth === updatedWidth && currentHeight === updatedHeight) {
+		log(
+			`Calculated minimum size is same as existing minimum size for window ${window.id}.`,
+		)
+
+		return undefined
+	}
+
+	log(`Updating minimum size of window ${window.id}`, {
+		width: updatedWidth,
+		height: updatedHeight,
+	})
+
+	window.setMinimumSize(updatedWidth, updatedHeight)
+
+	return { height: updatedHeight, width: updatedWidth }
 }
