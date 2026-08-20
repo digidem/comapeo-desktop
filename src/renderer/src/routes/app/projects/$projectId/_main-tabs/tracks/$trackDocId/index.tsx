@@ -1,9 +1,5 @@
 import { Suspense, useMemo } from 'react'
-import {
-	useManyDocs,
-	useOwnDeviceInfo,
-	useSingleDocByDocId,
-} from '@comapeo/core-react'
+import { useManyDocs, useSingleDocByDocId } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import Divider from '@mui/material/Divider'
@@ -16,7 +12,8 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK, BLUE_GREY, COMAPEO_BLUE } from '../../../../../../../colors'
+import { SyncedIndicatorLine } from '../../../../-shared/synced-indicator-line'
+import { BLACK, BLUE_GREY } from '../../../../../../../colors'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -422,27 +419,6 @@ function TrackObservationsSection({
 			</List>
 		</Stack>
 	)
-}
-
-function SyncedIndicatorLine({
-	createdByDeviceId,
-}: {
-	createdByDeviceId: string
-}) {
-	const { data: ownDeviceInfo } = useOwnDeviceInfo()
-
-	return ownDeviceInfo.deviceId !== createdByDeviceId ? (
-		<Box
-			sx={{
-				position: 'absolute',
-				width: 8,
-				left: 0,
-				bottom: 0,
-				top: 0,
-				bgcolor: COMAPEO_BLUE,
-			}}
-		/>
-	) : null
 }
 
 const m = defineMessages({
