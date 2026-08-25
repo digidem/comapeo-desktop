@@ -185,7 +185,9 @@ jobs:
           $metadata | ConvertTo-Json | Set-Content -Path $metadata_path -Encoding utf8
 
           # Install SignTool and Artifact Signing dlib package
+          ## https://www.nuget.org/packages/Microsoft.Windows.SDK.BuildTools
           nuget install Microsoft.Windows.SDK.BuildTools -ExcludeVersion -Version 10.0.28000.2526 -OutputDirectory "$output_dir"
+          ## https://www.nuget.org/packages/Microsoft.ArtifactSigning.Client
           nuget install Microsoft.ArtifactSigning.Client -ExcludeVersion -Version 1.0.128 -OutputDirectory "$output_dir"
 
           # Set relevant outputs for subsequent job steps
