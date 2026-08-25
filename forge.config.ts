@@ -543,12 +543,12 @@ function getOsxPackagerConfig(
 
 function getWindowsSignConfig() {
 	const WindowsSignEnv = v.object({
-		AZURE_CLIENT_ID: v.string(),
-		AZURE_CLIENT_SECRET: v.string(),
-		AZURE_CODE_SIGNING_DLIB: v.string(),
-		AZURE_METADATA_JSON: v.string(),
-		AZURE_TENANT_ID: v.string(),
-		SIGNTOOL_PATH: v.string(),
+		AZURE_CLIENT_ID: v.pipe(v.string(), v.minLength(1)),
+		AZURE_CLIENT_SECRET: v.pipe(v.string(), v.minLength(1)),
+		AZURE_CODE_SIGNING_DLIB: v.pipe(v.string(), v.minLength(1)),
+		AZURE_METADATA_JSON: v.pipe(v.string(), v.minLength(1)),
+		AZURE_TENANT_ID: v.pipe(v.string(), v.minLength(1)),
+		SIGNTOOL_PATH: v.pipe(v.string(), v.minLength(1)),
 	})
 
 	const { AZURE_CODE_SIGNING_DLIB, AZURE_METADATA_JSON, SIGNTOOL_PATH } =
