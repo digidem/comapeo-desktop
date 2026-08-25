@@ -35,10 +35,6 @@ try {
 
 const {
 	APP_TYPE,
-	APPLE_API_KEY_ID,
-	APPLE_API_KEY_ISSUER,
-	APPLE_API_KEY_PATH,
-	APPLE_SIGN_IDENTITY,
 	ASAR,
 	COMAPEO_DIAGNOSTICS_METRICS_URL,
 	COMAPEO_METRICS_ACCESS_TOKEN,
@@ -60,10 +56,6 @@ const {
 			),
 			'development',
 		),
-		APPLE_API_KEY_ID: v.optional(v.string()),
-		APPLE_API_KEY_ISSUER: v.optional(v.string()),
-		APPLE_API_KEY_PATH: v.optional(v.string()),
-		APPLE_SIGN_IDENTITY: v.optional(v.string()),
 		ASAR: v.optional(
 			v.pipe(
 				v.union(
@@ -480,10 +472,24 @@ function getOsxPackagerConfig(
 			>
 	  >
 	| undefined {
-	const mustSignAndNotarize =
-		appType === 'release-candidate' || appType === 'production'
+	const AppleNotarizeEnv = v.object({
+		APPLE_API_KEY_ID: v.optional(v.pipe(v.string(), v.minLength(1))),
+		APPLE_API_KEY_ISSUER: v.optional(v.pipe(v.string(), v.minLength(1))),
+		APPLE_API_KEY_PATH: v.optional(v.pipe(v.string(), v.minLength(1))),
+		APPLE_SIGN_IDENTITY: v.optional(v.pipe(v.string(), v.minLength(1))),
+	})
+
+	const {
+		APPLE_API_KEY_ID,
+		APPLE_API_KEY_ISSUER,
+		APPLE_API_KEY_PATH,
+		APPLE_SIGN_IDENTITY,
+	} = v.parse(AppleNotarizeEnv, process.env)
 
 	if (!APPLE_SIGN_IDENTITY) {
+		const mustSignAndNotarize =
+			appType === 'release-candidate' || appType === 'production'
+
 		if (mustSignAndNotarize) {
 			throw new Error(
 				'App signing and notarization is required but APPLE_SIGN_IDENTITY env variable is not set.',
