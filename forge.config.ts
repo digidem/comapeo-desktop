@@ -351,6 +351,8 @@ if (ASAR) {
 const osxPackagerConfig =
 	platform() === 'darwin' ? getOsxPackagerConfig(APP_TYPE) : undefined
 
+const windowsSign = platform() === 'win32' ? getWindowsSignConfig() : undefined
+
 export default {
 	packagerConfig: {
 		...osxPackagerConfig,
@@ -360,6 +362,7 @@ export default {
 		icon: './assets/icon',
 		name: properties.appNameExternal,
 		executableName: properties.executableName,
+		windowsSign,
 	},
 	rebuildConfig: {
 		// NOTE: Fixes an issue where @electron/rebuild attempts to rebuild better-sqlite@13 instead of using the prebuilds on Windows
@@ -379,6 +382,7 @@ export default {
 			exe: `${properties.executableName}.exe`,
 			setupExe: `${properties.executableName}-${packageJSON.version}-win32-${arch}-setup.exe`,
 			noMsi: true,
+			windowsSign,
 		})),
 		new MakerDMG({ icon: './assets/icon.icns' }),
 		new MakerZIP(undefined, ['darwin']),
@@ -528,6 +532,30 @@ function getOsxPackagerConfig(
 			appleApiKey: APPLE_API_KEY_PATH,
 			appleApiKeyId: APPLE_API_KEY_ID,
 		},
+	}
+}
+
+function getWindowsSignConfig() {
+	const WindowsSignEnv = v.object({
+		AZURE_CLIENT_ID: v.string(),
+		AZURE_CLIENT_SECRET: v.string(),
+		AZURE_CODE_SIGNING_DLIB: v.string(),
+		AZURE_METADATA_JSON: v.string(),
+		AZURE_TENANT_ID: v.string(),
+		SIGNTOOL_PATH: v.string(),
+	})
+
+	const { AZURE_CODE_SIGNING_DLIB, AZURE_METADATA_JSON, SIGNTOOL_PATH } =
+		v.parse(WindowsSignEnv, process.env)
+
+	return {
+		signToolPath: SIGNTOOL_PATH,
+		signWithParams: `/v /debug /dlib ${AZURE_CODE_SIGNING_DLIB} /dmdf ${AZURE_METADATA_JSON}`,
+		timestampServer: 'http://timestamp.acs.microsoft.com',
+		hashes: [
+			// NOTE: Bypasses need to use enum type from @electron/windows-sign
+			'sha256' as never,
+		],
 	}
 }
 
