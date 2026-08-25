@@ -140,10 +140,8 @@ jobs:
             exit 1
           fi
 
-          # Set relevant env variables for subsequent job steps
-          echo "APPLE_SIGN_IDENTITY=$IDENTITY" >> "$GITHUB_ENV"
-
       - name: Set up Apple notarization
+        id: apple-notarization-setup
         if: ${{ startsWith(matrix.os.name, 'macos') }}
         env:
           KEY: ${{ secrets.APPLE_APP_STORE_CONNECT_AUTH_KEY }}
@@ -155,10 +153,10 @@ jobs:
           # Generate the key file
           echo -n "$KEY" | base64 -d -o "$KEY_PATH"
 
-          # Set relevant env variables for subsequent job steps
-          echo "APPLE_API_KEY_ID=$KEY_ID" >> "$GITHUB_ENV"
-          echo "APPLE_API_KEY_ISSUER=$KEY_ISSUER" >> "$GITHUB_ENV"
-          echo "APPLE_API_KEY_PATH=$KEY_PATH" >> "$GITHUB_ENV"
+          # Set outputs for subsequent job steps
+          echo "key_id=$KEY_ID" >> "$GITHUB_OUTPUT"
+          echo "key_issuer=$KEY_ISSUER" >> "$GITHUB_OUTPUT"
+          echo "key_path=$KEY_PATH" >> "$GITHUB_OUTPUT"
 
       - name: Create distributables
         env:
@@ -171,6 +169,11 @@ jobs:
           SENTRY_DSN: ${{ vars.COMAPEO_SENTRY_DSN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          # Apple-specific
+          APPLE_API_KEY_ID: ${{ steps.apple-notarization-setup.outputs.key_id }}
+          APPLE_API_KEY_ISSUER: ${{ steps.apple-notarization-setup.outputs.key_issuer }}
+          APPLE_API_KEY_PATH: ${{ steps.apple-notarization-setup.outputs.key_path }}
+          APPLE_SIGN_IDENTITY: ${{ vars.APPLE_SIGN_IDENTITY }}
         run: node --run forge:make
 
       - name: Upload artifact
