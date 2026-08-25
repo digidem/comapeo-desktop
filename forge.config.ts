@@ -340,10 +340,14 @@ if (ASAR) {
 	plugins.push(new AutoUnpackNativesPlugin({}))
 }
 
-const osxPackagerConfig =
-	platform() === 'darwin' ? getOsxPackagerConfig(APP_TYPE) : undefined
+const SIGNING_REQUIRED =
+	APP_TYPE === 'release-candidate' || APP_TYPE === 'production'
 
-const windowsSign = platform() === 'win32' ? getWindowsSignConfig() : undefined
+const osxPackagerConfig =
+	platform() === 'darwin' ? getOsxPackagerConfig(SIGNING_REQUIRED) : undefined
+
+const windowsSign =
+	platform() === 'win32' ? getWindowsSignConfig(SIGNING_REQUIRED) : undefined
 
 export default {
 	packagerConfig: {
@@ -463,7 +467,7 @@ export default {
 } satisfies ForgeConfig
 
 function getOsxPackagerConfig(
-	appType: AppType,
+	signingRequired: boolean,
 ):
 	| Required<
 			Pick<
@@ -487,10 +491,7 @@ function getOsxPackagerConfig(
 	} = v.parse(AppleNotarizeEnv, process.env)
 
 	if (!APPLE_SIGN_IDENTITY) {
-		const mustSignAndNotarize =
-			appType === 'release-candidate' || appType === 'production'
-
-		if (mustSignAndNotarize) {
+		if (signingRequired) {
 			throw new Error(
 				'App signing and notarization is required but APPLE_SIGN_IDENTITY env variable is not set.',
 			)
@@ -541,18 +542,49 @@ function getOsxPackagerConfig(
 	}
 }
 
-function getWindowsSignConfig() {
+function getWindowsSignConfig(signingRequired: boolean) {
 	const WindowsSignEnv = v.object({
-		AZURE_CLIENT_ID: v.pipe(v.string(), v.minLength(1)),
-		AZURE_CLIENT_SECRET: v.pipe(v.string(), v.minLength(1)),
-		AZURE_CODE_SIGNING_DLIB: v.pipe(v.string(), v.minLength(1)),
-		AZURE_METADATA_JSON: v.pipe(v.string(), v.minLength(1)),
-		AZURE_TENANT_ID: v.pipe(v.string(), v.minLength(1)),
-		SIGNTOOL_PATH: v.pipe(v.string(), v.minLength(1)),
+		AZURE_CLIENT_ID: v.optional(v.pipe(v.string(), v.minLength(1))),
+		AZURE_CLIENT_SECRET: v.optional(v.pipe(v.string(), v.minLength(1))),
+		AZURE_CODE_SIGNING_DLIB: v.optional(v.pipe(v.string(), v.minLength(1))),
+		AZURE_METADATA_JSON: v.optional(v.pipe(v.string(), v.minLength(1))),
+		AZURE_TENANT_ID: v.optional(v.pipe(v.string(), v.minLength(1))),
+		SIGNTOOL_PATH: v.optional(v.pipe(v.string(), v.minLength(1))),
 	})
 
-	const { AZURE_CODE_SIGNING_DLIB, AZURE_METADATA_JSON, SIGNTOOL_PATH } =
-		v.parse(WindowsSignEnv, process.env)
+	const {
+		AZURE_CLIENT_ID,
+		AZURE_CLIENT_SECRET,
+		AZURE_CODE_SIGNING_DLIB,
+		AZURE_METADATA_JSON,
+		AZURE_TENANT_ID,
+		SIGNTOOL_PATH,
+	} = v.parse(
+		signingRequired ? v.required(WindowsSignEnv) : WindowsSignEnv,
+		process.env,
+	)
+
+	const missingEnvVariables: Array<string> = []
+
+	for (const [name, value] of Object.entries({
+		AZURE_CLIENT_ID,
+		AZURE_CLIENT_SECRET,
+		AZURE_CODE_SIGNING_DLIB,
+		AZURE_METADATA_JSON,
+		AZURE_TENANT_ID,
+		SIGNTOOL_PATH,
+	})) {
+		if (!value) {
+			missingEnvVariables.push(name)
+		}
+	}
+
+	if (missingEnvVariables.length > 0) {
+		console.log(
+			`⚠️ App will not be signed due to missing environment variables: ${missingEnvVariables.join(', ')}`,
+		)
+		return undefined
+	}
 
 	return {
 		signToolPath: SIGNTOOL_PATH,
