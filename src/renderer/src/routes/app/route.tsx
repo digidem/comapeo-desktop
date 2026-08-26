@@ -24,7 +24,7 @@ export const Route = createFileRoute('/app')({
 	beforeLoad: async ({ context }) => {
 		const { queryClient, clientApi } = context
 
-		const ownDeviceInfo = await queryClient.fetchQuery({
+		const ownDeviceInfo = await queryClient.query({
 			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 			queryFn: async () => {
 				return clientApi.getDeviceInfo()
@@ -44,9 +44,10 @@ export const Route = createFileRoute('/app')({
 		if (!preload) {
 			const onboardedAtQueryOptions = getOnboardedAtQueryOptions()
 
-			const onboardedAt = await queryClient.ensureQueryData(
-				onboardedAtQueryOptions,
-			)
+			const onboardedAt = await queryClient.query({
+				...onboardedAtQueryOptions,
+				staleTime: 'static',
+			})
 
 			if (onboardedAt === null) {
 				const updatedOnboardedAt = Date.now()

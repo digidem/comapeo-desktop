@@ -7,7 +7,7 @@ export const Route = createFileRoute('/')({
 	beforeLoad: async ({ context }) => {
 		const { activeProjectIdStore, clientApi, queryClient } = context
 
-		const ownDeviceInfo = await queryClient.fetchQuery({
+		const ownDeviceInfo = await queryClient.query({
 			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 			queryFn: async () => {
 				return clientApi.getDeviceInfo()
@@ -31,7 +31,7 @@ export const Route = createFileRoute('/')({
 			const activeProjectId = activeProjectIdStore.instance.getState()
 
 			if (activeProjectId) {
-				const projects = await queryClient.fetchQuery({
+				const projects = await queryClient.query({
 					queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects'],
 					queryFn: async () => {
 						return clientApi.listProjects()

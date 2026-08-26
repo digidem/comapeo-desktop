@@ -32,7 +32,10 @@ export const Route = createFileRoute('/app/settings/_nested/coordinate-system')(
 		loader: async ({ context }) => {
 			const { queryClient } = context
 
-			await queryClient.ensureQueryData(getCoordinateFormatQueryOptions())
+			await queryClient.query({
+				...getCoordinateFormatQueryOptions(),
+				staleTime: 'static',
+			})
 		},
 		component: RouteComponent,
 	},

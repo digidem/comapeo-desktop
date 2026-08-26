@@ -28,7 +28,11 @@ import {
 export const Route = createFileRoute('/onboarding/privacy-policy')({
 	loader: async ({ context }) => {
 		const { queryClient } = context
-		await queryClient.ensureQueryData(getDiagnosticsEnabledQueryOptions())
+
+		await queryClient.query({
+			...getDiagnosticsEnabledQueryOptions(),
+			staleTime: 'static',
+		})
 	},
 	staticData: { onboardingStepNumber: 1 },
 	component: RouteComponent,
