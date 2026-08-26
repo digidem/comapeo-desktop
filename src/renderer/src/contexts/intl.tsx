@@ -76,7 +76,7 @@ export function IntlProvider({ children }: PropsWithChildren) {
 			deferredLocale,
 			...navigator.languages.filter((l) => is(SupportedLanguageTagSchema, l)),
 			// NOTE: We always load the default language messages to use as a fallback for missing message keys
-			'en-US',
+			DEFAULT_LANGUAGE_TAG,
 		]),
 	)
 
@@ -126,21 +126,22 @@ function DatePickersLocalizationProvider({
 	const deferredLocale = useDeferredValue(locale)
 
 	const dateFnLocale = useSuspenseQueries({
-		queries: Array.from(new Set([deferredLocale, 'en-US'])).map((l) =>
-			queryOptions({
-				queryKey: ['dateFnLocale', l] as const,
-				queryFn: async () => {
-					const baseTag = l.split('-')[0]!
+		queries: Array.from(new Set([deferredLocale, DEFAULT_LANGUAGE_TAG])).map(
+			(l) =>
+				queryOptions({
+					queryKey: ['dateFnLocale', l] as const,
+					queryFn: async () => {
+						const baseTag = l.split('-')[0]!
 
-					const localePromise =
-						DATE_FN_LOCALES[`./${l}.js`] || DATE_FN_LOCALES[`./${baseTag}.js`]
+						const localePromise =
+							DATE_FN_LOCALES[`./${l}.js`] || DATE_FN_LOCALES[`./${baseTag}.js`]
 
-					return localePromise ? localePromise() : null
-				},
-				// Basically only want this to happen once.
-				staleTime: Infinity,
-				gcTime: Infinity,
-			}),
+						return localePromise ? localePromise() : null
+					},
+					// Basically only want this to happen once.
+					staleTime: Infinity,
+					gcTime: Infinity,
+				}),
 		),
 		combine: (queries) => {
 			for (const q of queries) {
