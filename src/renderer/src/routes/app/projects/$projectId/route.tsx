@@ -53,7 +53,7 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 			throw notFound()
 		}
 
-		const role = await queryClient.fetchQuery({
+		const role = await queryClient.query({
 			queryKey: [
 				COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 				'projects',

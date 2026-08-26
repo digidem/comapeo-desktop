@@ -31,7 +31,7 @@ export const Route = createFileRoute('/')({
 			const activeProjectId = activeProjectIdStore.instance.getState()
 
 			if (activeProjectId) {
-				const projects = await queryClient.fetchQuery({
+				const projects = await queryClient.query({
 					queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects'],
 					queryFn: async () => {
 						return clientApi.listProjects()

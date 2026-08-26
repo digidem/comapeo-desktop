@@ -20,7 +20,7 @@ export const Route = createFileRoute('/onboarding')({
 	beforeLoad: async ({ context }) => {
 		const { clientApi, queryClient } = context
 
-		const ownDeviceInfo = await queryClient.fetchQuery({
+		const ownDeviceInfo = await queryClient.query({
 			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 			queryFn: async () => {
 				return clientApi.getDeviceInfo()
