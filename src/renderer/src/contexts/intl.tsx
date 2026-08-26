@@ -71,7 +71,15 @@ export function IntlProvider({ children }: PropsWithChildren) {
 	// avoiding a jarring UI flicker.
 	const deferredLocale = useDeferredValue(persistedLocale)
 
-	const allLocales: Array<SupportedLanguageTag> = Array.from(
+	// NOTE: Locales to use for loading translations. Ordered in preference of:
+	//
+	// 1. Locale resolved by the backend
+	// 2. What the browser detects using the built-in web APIs
+	// 3. App fallback (en-US)
+	//
+	// The value returned by (1) is calculated using a similar approach but using Electron's APIs
+	// for getting the system-preferred languages (see main/intl-manager.ts).
+	const languagesToUse: Array<SupportedLanguageTag> = Array.from(
 		new Set([
 			deferredLocale,
 			...navigator.languages.filter((l) => is(SupportedLanguageTagSchema, l)),
@@ -81,7 +89,7 @@ export function IntlProvider({ children }: PropsWithChildren) {
 	)
 
 	const combinedMessages = useSuspenseQueries({
-		queries: allLocales.map((l) => getTranslatedMessagesQueryOptions(l)),
+		queries: languagesToUse.map((l) => getTranslatedMessagesQueryOptions(l)),
 		combine: (results) => {
 			let combined: Record<string, unknown> = {}
 
