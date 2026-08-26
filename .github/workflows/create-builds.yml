@@ -193,7 +193,7 @@ jobs:
           # Set relevant outputs for subsequent job steps
           "dlib_path=$output_dir\Microsoft.ArtifactSigning.Client\bin\x64\Azure.CodeSigning.Dlib.dll" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           "metadata_path=$metadata_path" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append 
-          "signtool_path=$output_dir\Microsoft.Windows.SDK.BuildTools\bin\10.0.28000\x64\signtool.exe" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "signtool_path=$output_dir\Microsoft.Windows.SDK.BuildTools\bin\10.0.28000.0\x64\signtool.exe" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
       - name: Create distributables
         env:
