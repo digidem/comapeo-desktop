@@ -340,8 +340,14 @@ if (ASAR) {
 	plugins.push(new AutoUnpackNativesPlugin({}))
 }
 
+const SIGNING_REQUIRED =
+	APP_TYPE === 'release-candidate' || APP_TYPE === 'production'
+
 const osxPackagerConfig =
-	platform() === 'darwin' ? getOsxPackagerConfig(APP_TYPE) : undefined
+	platform() === 'darwin' ? getOsxPackagerConfig(SIGNING_REQUIRED) : undefined
+
+const windowsSign =
+	platform() === 'win32' ? getWindowsSignConfig(SIGNING_REQUIRED) : undefined
 
 export default {
 	packagerConfig: {
@@ -352,6 +358,7 @@ export default {
 		icon: './assets/icon',
 		name: properties.appNameExternal,
 		executableName: properties.executableName,
+		windowsSign,
 	},
 	rebuildConfig: {
 		// NOTE: Fixes an issue where @electron/rebuild attempts to rebuild better-sqlite@13 instead of using the prebuilds on Windows
@@ -371,6 +378,7 @@ export default {
 			exe: `${properties.executableName}.exe`,
 			setupExe: `${properties.executableName}-${packageJSON.version}-win32-${arch}-setup.exe`,
 			noMsi: true,
+			windowsSign,
 		})),
 		new MakerDMG({ icon: './assets/icon.icns' }),
 		new MakerZIP(undefined, ['darwin']),
@@ -459,7 +467,7 @@ export default {
 } satisfies ForgeConfig
 
 function getOsxPackagerConfig(
-	appType: AppType,
+	signingRequired: boolean,
 ):
 	| Required<
 			Pick<
@@ -483,10 +491,7 @@ function getOsxPackagerConfig(
 	} = v.parse(AppleNotarizeEnv, process.env)
 
 	if (!APPLE_SIGN_IDENTITY) {
-		const mustSignAndNotarize =
-			appType === 'release-candidate' || appType === 'production'
-
-		if (mustSignAndNotarize) {
+		if (signingRequired) {
 			throw new Error(
 				'App signing and notarization is required but APPLE_SIGN_IDENTITY env variable is not set.',
 			)
@@ -534,6 +539,61 @@ function getOsxPackagerConfig(
 			appleApiKey: APPLE_API_KEY_PATH,
 			appleApiKeyId: APPLE_API_KEY_ID,
 		},
+	}
+}
+
+function getWindowsSignConfig(signingRequired: boolean) {
+	const WindowsSignEnv = v.object({
+		AZURE_CLIENT_ID: v.optional(v.pipe(v.string(), v.minLength(1))),
+		AZURE_CLIENT_SECRET: v.optional(v.pipe(v.string(), v.minLength(1))),
+		AZURE_CODE_SIGNING_DLIB: v.optional(v.pipe(v.string(), v.minLength(1))),
+		AZURE_METADATA_JSON: v.optional(v.pipe(v.string(), v.minLength(1))),
+		AZURE_TENANT_ID: v.optional(v.pipe(v.string(), v.minLength(1))),
+		SIGNTOOL_PATH: v.optional(v.pipe(v.string(), v.minLength(1))),
+	})
+
+	const {
+		AZURE_CLIENT_ID,
+		AZURE_CLIENT_SECRET,
+		AZURE_CODE_SIGNING_DLIB,
+		AZURE_METADATA_JSON,
+		AZURE_TENANT_ID,
+		SIGNTOOL_PATH,
+	} = v.parse(
+		signingRequired ? v.required(WindowsSignEnv) : WindowsSignEnv,
+		process.env,
+	)
+
+	const missingEnvVariables: Array<string> = []
+
+	for (const [name, value] of Object.entries({
+		AZURE_CLIENT_ID,
+		AZURE_CLIENT_SECRET,
+		AZURE_CODE_SIGNING_DLIB,
+		AZURE_METADATA_JSON,
+		AZURE_TENANT_ID,
+		SIGNTOOL_PATH,
+	})) {
+		if (!value) {
+			missingEnvVariables.push(name)
+		}
+	}
+
+	if (missingEnvVariables.length > 0) {
+		console.log(
+			`⚠️ App will not be signed due to missing environment variables: ${missingEnvVariables.join(', ')}`,
+		)
+		return undefined
+	}
+
+	return {
+		signToolPath: SIGNTOOL_PATH,
+		signWithParams: `/v /debug /dlib ${AZURE_CODE_SIGNING_DLIB} /dmdf ${AZURE_METADATA_JSON}`,
+		timestampServer: 'http://timestamp.acs.microsoft.com',
+		hashes: [
+			// NOTE: Bypasses need to use enum type from @electron/windows-sign
+			'sha256' as never,
+		],
 	}
 }
 
