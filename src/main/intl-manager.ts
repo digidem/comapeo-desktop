@@ -54,29 +54,51 @@ export class IntlManager extends TypedEmitter<IntlManagerEvents> {
 	}
 
 	#createIntl(locale: SupportedLanguageTag): IntlShape<SupportedLanguageTag> {
-		// Always use the default language's messages for fallback purposes
-		let messages = messagesCache.get(DEFAULT_LANGUAGE_TAG)!
+		const systemPreferredLocales = app
+			.getPreferredSystemLanguages()
+			.filter((l) => v.is(SupportedLanguageTagSchema, l))
+
+		let languagesToUse: Array<SupportedLanguageTag>
 
 		if (v.is(SupportedLanguageTagSchema, locale)) {
-			let localeMessages = messagesCache.get(locale)
+			languagesToUse = Array.from(
+				new Set([
+					locale,
+					...systemPreferredLocales,
+					// NOTE: Always use the default language's messages for fallback purposes
+					DEFAULT_LANGUAGE_TAG,
+				]),
+			)
+		} else {
+			log(`${locale} is not a supported locale.`)
+
+			languagesToUse = Array.from(
+				new Set([
+					...systemPreferredLocales,
+					// NOTE: Always use the default language's messages for fallback purposes
+					DEFAULT_LANGUAGE_TAG,
+				]),
+			)
+		}
+
+		let combinedMessages: Record<string, unknown> = {}
+
+		// NOTE: Reverse results so that highest preference gets applied latest
+		for (const l of languagesToUse.reverse()) {
+			let localeMessages = messagesCache.get(l)
 
 			if (!localeMessages) {
-				log(`Loading and caching messages for '${locale}'`)
+				log(`Loading and caching messages for '${l}'`)
 
 				try {
-					localeMessages = loadMessages(locale)
-					messagesCache.set(locale, localeMessages)
+					localeMessages = loadMessages(l)
+					messagesCache.set(l, localeMessages)
 				} catch (err) {
 					captureException(err)
 				}
 			}
 
-			messages = {
-				...messages,
-				...localeMessages,
-			}
-		} else {
-			log(`${locale} is not a supported locale.`)
+			combinedMessages = { ...combinedMessages, ...localeMessages }
 		}
 
 		return createIntl(
@@ -84,7 +106,7 @@ export class IntlManager extends TypedEmitter<IntlManagerEvents> {
 				locale,
 				defaultLocale: DEFAULT_LANGUAGE_TAG,
 				// @ts-expect-error Not worth fixing
-				messages,
+				messages: combinedMessages,
 			},
 			IntlManager.cache,
 		)
@@ -128,21 +150,11 @@ export class IntlManager extends TypedEmitter<IntlManagerEvents> {
 			log(`Using selected language: ${value}`)
 		}
 
-		let didChange = false
+		this.#intl = this.#createIntl(value)
 
-		if (this.#intl.locale !== value) {
-			this.#intl = this.#createIntl(value)
-			didChange = true
-		}
+		this.#localeSource = source
 
-		if (this.#localeSource !== source) {
-			this.#localeSource = source
-			didChange = true
-		}
-
-		if (didChange) {
-			this.emit('locale-state', this.localeState)
-		}
+		this.emit('locale-state', this.localeState)
 	}
 
 	// Exposing mostly for convenience of usage
