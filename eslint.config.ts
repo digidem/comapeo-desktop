@@ -17,7 +17,17 @@ export default defineConfig(
 	includeIgnoreFile(gitignorePath),
 	includeIgnoreFile(gitExcludePath),
 	js.configs.recommended,
-	formatjs.configs['recommended'],
+	{
+		name: 'formatjs',
+		extends: [formatjs.configs['recommended']],
+		rules: {
+			// NOTE: Removes blocklisted ICU message syntax from recommended FormatJS
+			// (https://formatjs.github.io/docs/tooling/linter/#blocklist-elements).
+			// Configuration of this depends on translation platform being used.
+			// In this case, Crowdin has comprehensive support (https://support.crowdin.com/icu-message-syntax/).
+			'formatjs/blocklist-elements': ['error', []],
+		},
+	},
 	{
 		name: 'typescript',
 		extends: tseslint.configs.recommended,
