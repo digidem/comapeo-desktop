@@ -44,9 +44,10 @@ export const Route = createFileRoute('/app')({
 		if (!preload) {
 			const onboardedAtQueryOptions = getOnboardedAtQueryOptions()
 
-			const onboardedAt = await queryClient.ensureQueryData(
-				onboardedAtQueryOptions,
-			)
+			const onboardedAt = await queryClient.query({
+				...onboardedAtQueryOptions,
+				staleTime: 'static',
+			})
 
 			if (onboardedAt === null) {
 				const updatedOnboardedAt = Date.now()

@@ -43,7 +43,8 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 
 		let projectApi
 		try {
-			projectApi = await queryClient.ensureQueryData({
+			projectApi = await queryClient.query({
+				staleTime: 'static',
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects', projectId],
 				queryFn: async () => {
 					return clientApi.getProject(projectId)
@@ -94,13 +95,15 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 		}
 
 		await Promise.all([
-			queryClient.ensureQueryData({
+			queryClient.query({
+				staleTime: 'static',
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 				queryFn: async () => {
 					return clientApi.getDeviceInfo()
 				},
 			}),
-			queryClient.ensureQueryData({
+			queryClient.query({
+				staleTime: 'static',
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',

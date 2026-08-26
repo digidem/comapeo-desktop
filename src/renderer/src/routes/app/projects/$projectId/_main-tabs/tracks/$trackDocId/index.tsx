@@ -40,8 +40,8 @@ export const Route = createFileRoute(
 		const { projectId, trackDocId } = params
 
 		try {
-			// TODO: Not ideal but requires changes to core-react
-			await queryClient.ensureQueryData({
+			await queryClient.query({
+				staleTime: 'static',
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',
@@ -64,8 +64,8 @@ export const Route = createFileRoute(
 			})
 		}
 
-		// TODO: Not ideal but requires changes to core-react
-		await queryClient.ensureQueryData({
+		await queryClient.query({
+			staleTime: 'static',
 			queryKey: [
 				COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 				'projects',

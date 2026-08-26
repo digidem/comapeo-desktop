@@ -30,7 +30,10 @@ export const Route = createFileRoute('/app/settings/_nested/unit-system')({
 	loader: async ({ context }) => {
 		const { queryClient } = context
 
-		await queryClient.ensureQueryData(getUnitSystemQueryOptions())
+		await queryClient.query({
+			...getUnitSystemQueryOptions(),
+			staleTime: 'static',
+		})
 	},
 	component: RouteComponent,
 })

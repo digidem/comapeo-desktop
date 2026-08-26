@@ -109,7 +109,8 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs/')({
 		const { projectId } = params
 
 		await Promise.all([
-			queryClient.ensureQueryData({
+			queryClient.query({
+				staleTime: 'static',
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',
@@ -120,7 +121,8 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs/')({
 					return projectApi.$getOwnRole()
 				},
 			}),
-			queryClient.ensureQueryData({
+			queryClient.query({
+				staleTime: 'static',
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',
@@ -132,7 +134,8 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs/')({
 					return projectApi.observation.getMany({ lang })
 				},
 			}),
-			queryClient.ensureQueryData({
+			queryClient.query({
+				staleTime: 'static',
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',
@@ -144,7 +147,8 @@ export const Route = createFileRoute('/app/projects/$projectId/_main-tabs/')({
 					return projectApi.track.getMany({ lang })
 				},
 			}),
-			queryClient.ensureQueryData({
+			queryClient.query({
+				staleTime: 'static',
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',

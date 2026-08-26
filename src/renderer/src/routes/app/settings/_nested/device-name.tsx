@@ -27,7 +27,8 @@ export const Route = createFileRoute('/app/settings/_nested/device-name')({
 	loader: async ({ context }) => {
 		const { clientApi, queryClient } = context
 
-		await queryClient.ensureQueryData({
+		await queryClient.query({
+			staleTime: 'static',
 			queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 			queryFn: async () => {
 				return clientApi.getDeviceInfo()

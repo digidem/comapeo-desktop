@@ -41,13 +41,15 @@ export const Route = createFileRoute(
 		const { projectId, deviceId } = params
 
 		await Promise.all([
-			queryClient.ensureQueryData({
+			queryClient.query({
+				staleTime: 'static',
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 				queryFn: async () => {
 					return clientApi.getDeviceInfo()
 				},
 			}),
-			queryClient.ensureQueryData({
+			queryClient.query({
+				staleTime: 'static',
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',

@@ -24,7 +24,8 @@ export const Route = createFileRoute(
 		const { projectApi, queryClient } = context
 		const { projectId } = params
 
-		const members = await queryClient.ensureQueryData({
+		const members = await queryClient.query({
+			staleTime: 'static',
 			queryKey: [
 				COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 				'projects',

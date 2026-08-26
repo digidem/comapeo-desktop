@@ -65,14 +65,19 @@ export const Route = createFileRoute('/app/')({
 		const { clientApi, queryClient } = context
 
 		await Promise.all([
-			queryClient.ensureQueryData(getOnboardedAtQueryOptions()),
-			queryClient.ensureQueryData({
+			queryClient.query({
+				...getOnboardedAtQueryOptions(),
+				staleTime: 'static',
+			}),
+			queryClient.query({
+				staleTime: 'static',
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 				queryFn: async () => {
 					return clientApi.getDeviceInfo()
 				},
 			}),
-			queryClient.ensureQueryData({
+			queryClient.query({
+				staleTime: 'static',
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects'],
 				queryFn: async () => {
 					return clientApi.listProjects()
