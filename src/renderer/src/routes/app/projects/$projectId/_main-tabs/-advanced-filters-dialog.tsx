@@ -602,12 +602,12 @@ const m = defineMessages({
 		description: 'Title for date filter section in advanced filters dialog.',
 	},
 	advancedFiltersDateStartLabel: {
-		id: '$1.routes.app.projects.$projectId.index.advancedFiltersDateStartLabel',
+		id: 'routes.app.projects.$projectId.index.advancedFiltersDateStartLabel',
 		defaultMessage: 'Start Date',
 		description: 'Label for start date input in advanced filters dialog.',
 	},
 	advancedFiltersDateEndLabel: {
-		id: '$1.routes.app.projects.$projectId.index.advancedFiltersDateEndLabel',
+		id: 'routes.app.projects.$projectId.index.advancedFiltersDateEndLabel',
 		defaultMessage: 'End Date',
 		description: 'Label for end date input in advanced filters dialog.',
 	},

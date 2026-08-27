@@ -119,6 +119,14 @@
     "description": "Accessible label for button to close advanced filters dialog.",
     "message": "Close"
   },
+  "routes.app.projects.$projectId.index.advancedFiltersDateEndLabel": {
+    "description": "Label for end date input in advanced filters dialog.",
+    "message": "End Date"
+  },
+  "routes.app.projects.$projectId.index.advancedFiltersDateStartLabel": {
+    "description": "Label for start date input in advanced filters dialog.",
+    "message": "Start Date"
+  },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
