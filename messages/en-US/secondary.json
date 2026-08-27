@@ -199,6 +199,18 @@
     "description": "Accessible label for breadcrumb navigation when viewing nested settings page.",
     "message": "breadcrumb"
   },
+  "routes.app.settings.coordinate-system.ddOptionLabel": {
+    "description": "Label for the decimal degrees option.",
+    "message": "DD (Decimal Degrees)"
+  },
+  "routes.app.settings.coordinate-system.dmsOptionLabel": {
+    "description": "Label for the degrees/minutes/seconds option.",
+    "message": "DMS (Decimal/Minutes/Seconds)"
+  },
+  "routes.app.settings.coordinate-system.utmOptionLabel": {
+    "description": "Label for the universal transverse mercator option.",
+    "message": "UTM (Universal Transverse Mercator)"
+  },
   "routes.app.settings.device-name.characterCount": {
     "description": "Displays number of characters in input out of the maximum allowed characters.",
     "message": "{count}/{max}"
