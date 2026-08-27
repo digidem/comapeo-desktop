@@ -303,22 +303,22 @@ const m = defineMessages({
 			'Accessible label for button that shows project info when clicked.',
 	},
 	fallbackCategoriesSetName: {
-		id: '$1.routes.app.route.fallbackCategoriesSetName',
+		id: 'routes.app.route.fallbackCategoriesSetName',
 		defaultMessage: 'CoMapeo Categories',
 		description: 'Text shown when project does not use a categories set.',
 	},
 	projectInfoRoleCoordinator: {
-		id: '$1.routes.app.route.projectInfoRoleCoordinator',
+		id: 'routes.app.route.projectInfoRoleCoordinator',
 		defaultMessage: 'Coordinator',
 		description: 'Indicates that user is a coordinator.',
 	},
 	projectInfoRoleParticipant: {
-		id: '$1.routes.app.route.projectInfoRoleParticipant',
+		id: 'routes.app.route.projectInfoRoleParticipant',
 		defaultMessage: 'Participant',
 		description: 'Indicates that user is a participant.',
 	},
 	projectInfoCategoriesCreated: {
-		id: '$1.routes.app.route.projectInfoCategoriesCreated',
+		id: 'routes.app.route.projectInfoCategoriesCreated',
 		defaultMessage: 'Created {date}',
 		description: 'Text indicating creation date of categories set.',
 	},

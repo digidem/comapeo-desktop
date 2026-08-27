@@ -107,6 +107,14 @@
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
   },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.audioNavTitle": {
+    "description": "Title of the audio attachment page.",
+    "message": "Audio Recording"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.photoNavTitle": {
+    "description": "Title of the photo attachment page.",
+    "message": "Photo Info"
+  },
   "routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
     "description": "Accessible label of download options form input.",
     "message": "Data to download"
@@ -118,6 +126,14 @@
   "routes.app.projects.$projectId.index.advancedFiltersCloseAccessibleLabel": {
     "description": "Accessible label for button to close advanced filters dialog.",
     "message": "Close"
+  },
+  "routes.app.projects.$projectId.index.advancedFiltersDateEndLabel": {
+    "description": "Label for end date input in advanced filters dialog.",
+    "message": "End Date"
+  },
+  "routes.app.projects.$projectId.index.advancedFiltersDateStartLabel": {
+    "description": "Label for start date input in advanced filters dialog.",
+    "message": "Start Date"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
@@ -135,6 +151,74 @@
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
   },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyFeet": {
+    "description": "Displayed accuracy for observation location in feet.",
+    "message": "± {value} ft"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyMeters": {
+    "description": "Displayed accuracy for observation location in meters.",
+    "message": "± {value} m"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyFeet": {
+    "description": "Displayed altitude accuracy for observation in feet.",
+    "message": "± {value} ft"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyLabel": {
+    "description": "Label for observation metadata altitude accuracy.",
+    "message": "Altitude Accuracy"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyMeters": {
+    "description": "Displayed altitude accuracy for observation in meters.",
+    "message": "± {value} m"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeFeet": {
+    "description": "Displayed altitude for observation metadata in feet.",
+    "message": "{value} ft"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeLabel": {
+    "description": "Label for observation metadata altitude.",
+    "message": "Altitude"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeMeters": {
+    "description": "Displayed altitude for observation metadata in meters.",
+    "message": "{value} m"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataCoordinate": {
+    "description": "Displayed coordinate (latitude or longitude) for observation metadata.",
+    "message": "{value}°"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLatitudeLabel": {
+    "description": "Label for observation metadata latitude.",
+    "message": "Latitude"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyFeet": {
+    "description": "Displayed location accuracy for observation metadata in feet.",
+    "message": "± {value} ft"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyLabel": {
+    "description": "Label for observation metadata location accuracy.",
+    "message": "Accuracy"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyMeters": {
+    "description": "Displayed location accuracy for observation metadata in meters.",
+    "message": "± {value} m"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLongitudeLabel": {
+    "description": "Label for observation metadata longitude.",
+    "message": "Longitude"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedFeet": {
+    "description": "Displayed speed for observation in feet per second.",
+    "message": "{value} ft/s"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedLabel": {
+    "description": "Label for observation metadata speed.",
+    "message": "Speed"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedMeters": {
+    "description": "Displayed speed for observation in meters per second.",
+    "message": "{value} m/s"
+  },
   "routes.app.projects.$projectId.route.appNavigationAccesibleLabel": {
     "description": "Accessible label for app-wide navigation bar.",
     "message": "App navigation"
@@ -147,6 +231,14 @@
     "description": "Label for project test data tab link in navigation.",
     "message": "Test Data"
   },
+  "routes.app.projects.$projectId.settings.categories.dateAdded": {
+    "description": "Text indicating the date the categories set was added.",
+    "message": "Added {date}"
+  },
+  "routes.app.projects.$projectId.settings.categories.dateCreated": {
+    "description": "Text indicating the date the categories set was created.",
+    "message": "Created {date}"
+  },
   "routes.app.projects.$projectId.settings.categories.goBackAccessibleLabel": {
     "description": "Accessible label for back button.",
     "message": "Go back."
@@ -154,6 +246,10 @@
   "routes.app.projects.$projectId.settings.index.categoriesLinkAccessibleLabel": {
     "description": "Accessible label for link item that navigates to project info settings page.",
     "message": "Go to categories settings."
+  },
+  "routes.app.projects.$projectId.settings.index.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set.",
+    "message": "CoMapeo Categories"
   },
   "routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel": {
     "description": "Accessible label for link item that navigates to project info settings page.",
@@ -163,6 +259,30 @@
     "description": "Accessible label for back button.",
     "message": "Go back."
   },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionBlue": {
+    "description": "Label for blue option in project color selector.",
+    "message": "Blue"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionGreen": {
+    "description": "Label for green option in project color selector.",
+    "message": "Green"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionGrey": {
+    "description": "Label for grey option in project color selector.",
+    "message": "Grey"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionOrange": {
+    "description": "Label for orange option in project color selector.",
+    "message": "Orange"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionRed": {
+    "description": "Label for grey option in project color selector.",
+    "message": "Red"
+  },
+  "routes.app.projects.$projectId.team.$deviceId.addedOn": {
+    "description": "Text indicating date collaborator was added to the project.",
+    "message": "Added on {value}"
+  },
   "routes.app.projects.$projectId.team.$deviceId.goBackAccessibleLabel": {
     "description": "Accessible label for back button.",
     "message": "Go back."
@@ -170,6 +290,10 @@
   "routes.app.projects.$projectId.team.index.memberLinkAccessibleLabel": {
     "description": "Accessible label for link that navigates to member details.",
     "message": "View member {name}."
+  },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addedOn": {
+    "description": "Text showing when device was added to project.",
+    "message": "Added on {date, date, long}"
   },
   "routes.app.projects.$projectId.team.invite.devices.index.goBackAccessibleLabel": {
     "description": "Accessible label for back button",
@@ -191,13 +315,41 @@
     "description": "Accessible label for button that shows project info when clicked.",
     "message": "Show info for project {name}."
   },
+  "routes.app.route.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set.",
+    "message": "CoMapeo Categories"
+  },
   "routes.app.route.projectCardLinkAccessibleLabel": {
     "description": "Accessible label for link that navigates to project when clicked.",
     "message": "Go to project {name}."
   },
+  "routes.app.route.projectInfoCategoriesCreated": {
+    "description": "Text indicating creation date of categories set.",
+    "message": "Created {date}"
+  },
+  "routes.app.route.projectInfoRoleCoordinator": {
+    "description": "Indicates that user is a coordinator.",
+    "message": "Coordinator"
+  },
+  "routes.app.route.projectInfoRoleParticipant": {
+    "description": "Indicates that user is a participant.",
+    "message": "Participant"
+  },
   "routes.app.settings.breadCrumbAccessibleLabel": {
     "description": "Accessible label for breadcrumb navigation when viewing nested settings page.",
     "message": "breadcrumb"
+  },
+  "routes.app.settings.coordinate-system.ddOptionLabel": {
+    "description": "Label for the decimal degrees option.",
+    "message": "DD (Decimal Degrees)"
+  },
+  "routes.app.settings.coordinate-system.dmsOptionLabel": {
+    "description": "Label for the degrees/minutes/seconds option.",
+    "message": "DMS (Decimal/Minutes/Seconds)"
+  },
+  "routes.app.settings.coordinate-system.utmOptionLabel": {
+    "description": "Label for the universal transverse mercator option.",
+    "message": "UTM (Universal Transverse Mercator)"
   },
   "routes.app.settings.device-name.characterCount": {
     "description": "Displays number of characters in input out of the maximum allowed characters.",
@@ -215,9 +367,17 @@
     "description": "Accessible label for link item that navigates to coordinate system settings page.",
     "message": "Go to coordinate system settings."
   },
+  "routes.app.settings.index.decimalDegrees": {
+    "description": "Label for Decimal Degrees coordinate system.",
+    "message": "DD Coordinates"
+  },
   "routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to device name settings page.",
     "message": "Go to device name settings."
+  },
+  "routes.app.settings.index.dmsCoordinates": {
+    "description": "Label for Degrees/Minutes/Seconds coordinate system.",
+    "message": "DMS Coordinates"
   },
   "routes.app.settings.index.languageSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to language settings page.",
@@ -226,6 +386,10 @@
   "routes.app.settings.index.unitSystemSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to unit system settings page.",
     "message": "Go to unit system settings."
+  },
+  "routes.app.settings.index.utmCoordinates": {
+    "description": "Label for Universal Transverse Mercator coordinate system.",
+    "message": "UTM Coordinates"
   },
   "routes.app.settings_.test-data.boundedDistanceLabel": {
     "description": "Label for the bounded distance input.",

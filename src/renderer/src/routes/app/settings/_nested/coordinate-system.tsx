@@ -146,17 +146,17 @@ const m = defineMessages({
 		description: 'Title of the coordinate system settings page.',
 	},
 	ddOptionLabel: {
-		id: '$1.routes.app.settings.coordinate-system.ddOptionLabel',
+		id: 'routes.app.settings.coordinate-system.ddOptionLabel',
 		defaultMessage: 'DD (Decimal Degrees)',
 		description: 'Label for the decimal degrees option.',
 	},
 	dmsOptionLabel: {
-		id: '$1.routes.app.settings.coordinate-system.dmsOptionLabel',
+		id: 'routes.app.settings.coordinate-system.dmsOptionLabel',
 		defaultMessage: 'DMS (Decimal/Minutes/Seconds)',
 		description: 'Label for the degrees/minutes/seconds option.',
 	},
 	utmOptionLabel: {
-		id: '$1.routes.app.settings.coordinate-system.utmOptionLabel',
+		id: 'routes.app.settings.coordinate-system.utmOptionLabel',
 		defaultMessage: 'UTM (Universal Transverse Mercator)',
 		description: 'Label for the universal transverse mercator option.',
 	},

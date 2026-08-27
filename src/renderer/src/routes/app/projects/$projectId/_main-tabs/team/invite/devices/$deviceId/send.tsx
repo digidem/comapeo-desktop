@@ -662,7 +662,7 @@ const m = defineMessages({
 		description: 'Text displayed when invite is accepted.',
 	},
 	addedOn: {
-		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addedOn',
+		id: 'routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addedOn',
 		defaultMessage: 'Added on {date, date, long}',
 		description: 'Text showing when device was added to project.',
 	},

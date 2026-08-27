@@ -736,12 +736,12 @@ function DownloadButton({
 
 const m = defineMessages({
 	photoNavTitle: {
-		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.photoNavTitle',
+		id: 'routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.photoNavTitle',
 		defaultMessage: 'Photo Info',
 		description: 'Title of the photo attachment page.',
 	},
 	audioNavTitle: {
-		id: '$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.audioNavTitle',
+		id: 'routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.audioNavTitle',
 		defaultMessage: 'Audio Recording',
 		description: 'Title of the audio attachment page.',
 	},

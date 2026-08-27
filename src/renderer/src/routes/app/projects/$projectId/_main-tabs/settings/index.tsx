@@ -166,7 +166,7 @@ const m = defineMessages({
 			'Accessible label for link item that navigates to project info settings page.',
 	},
 	fallbackCategoriesSetName: {
-		id: '$1.routes.app.projects.$projectId.settings.index.fallbackCategoriesSetName',
+		id: 'routes.app.projects.$projectId.settings.index.fallbackCategoriesSetName',
 		defaultMessage: 'CoMapeo Categories',
 		description: 'Text shown when project does not use a categories set.',
 	},

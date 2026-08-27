@@ -651,7 +651,7 @@ const m = defineMessages({
 		description: 'Fallback name used if remote archive does not have name.',
 	},
 	addedOn: {
-		id: '$1.routes.app.projects.$projectId.team.$deviceId.addedOn',
+		id: 'routes.app.projects.$projectId.team.$deviceId.addedOn',
 		defaultMessage: 'Added on {value}',
 		description: 'Text indicating date collaborator was added to the project.',
 	},
