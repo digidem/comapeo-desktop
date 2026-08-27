@@ -1575,12 +1575,6 @@ const m = defineMessages({
 		description:
 			'Fallback for location when observation does not have location specified.',
 	},
-	unableToGetDurationTime: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.unableToGetDurationTime',
-		defaultMessage: 'Unable to get duration time.',
-		description:
-			'Text displayed when the duration of an audio attachment cannot be determined.',
-	},
 	detailsSectionTitle: {
 		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle',
 		defaultMessage: 'Details',

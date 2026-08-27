@@ -727,10 +727,6 @@
     "description": "Text displayed when observation cannot be found.",
     "message": "Could not find observation with ID {docId}"
   },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.unableToGetDurationTime": {
-    "description": "Text displayed when the duration of an audio attachment cannot be determined.",
-    "message": "Unable to get duration time."
-  },
   "$1.routes.app.projects.$projectId.route.exchangeTabLabel": {
     "description": "Label for project exchange tab link in navigation.",
     "message": "Exchange"
