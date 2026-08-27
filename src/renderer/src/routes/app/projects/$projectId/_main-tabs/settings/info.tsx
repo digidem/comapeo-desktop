@@ -610,27 +610,27 @@ const m = defineMessages({
 		description: 'Error message for project description that is too long.',
 	},
 	projectColorOptionBlue: {
-		id: '$1.routes.app.projects.$projectId.settings.info.projectColorOptionBlue',
+		id: 'routes.app.projects.$projectId.settings.info.projectColorOptionBlue',
 		defaultMessage: 'Blue',
 		description: 'Label for blue option in project color selector.',
 	},
 	projectColorOptionGreen: {
-		id: '$1.routes.app.projects.$projectId.settings.info.projectColorOptionGreen',
+		id: 'routes.app.projects.$projectId.settings.info.projectColorOptionGreen',
 		defaultMessage: 'Green',
 		description: 'Label for green option in project color selector.',
 	},
 	projectColorOptionGrey: {
-		id: '$1.routes.app.projects.$projectId.settings.info.projectColorOptionGrey',
+		id: 'routes.app.projects.$projectId.settings.info.projectColorOptionGrey',
 		defaultMessage: 'Grey',
 		description: 'Label for grey option in project color selector.',
 	},
 	projectColorOptionOrange: {
-		id: '$1.routes.app.projects.$projectId.settings.info.projectColorOptionOrange',
+		id: 'routes.app.projects.$projectId.settings.info.projectColorOptionOrange',
 		defaultMessage: 'Orange',
 		description: 'Label for orange option in project color selector.',
 	},
 	projectColorOptionRed: {
-		id: '$1.routes.app.projects.$projectId.settings.info.projectColorOptionRed',
+		id: 'routes.app.projects.$projectId.settings.info.projectColorOptionRed',
 		defaultMessage: 'Red',
 		description: 'Label for grey option in project color selector.',
 	},

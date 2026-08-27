@@ -167,6 +167,26 @@
     "description": "Accessible label for back button.",
     "message": "Go back."
   },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionBlue": {
+    "description": "Label for blue option in project color selector.",
+    "message": "Blue"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionGreen": {
+    "description": "Label for green option in project color selector.",
+    "message": "Green"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionGrey": {
+    "description": "Label for grey option in project color selector.",
+    "message": "Grey"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionOrange": {
+    "description": "Label for orange option in project color selector.",
+    "message": "Orange"
+  },
+  "routes.app.projects.$projectId.settings.info.projectColorOptionRed": {
+    "description": "Label for grey option in project color selector.",
+    "message": "Red"
+  },
   "routes.app.projects.$projectId.team.$deviceId.addedOn": {
     "description": "Text indicating date collaborator was added to the project.",
     "message": "Added on {value}"

@@ -811,26 +811,6 @@
     "description": "Label for the project card color selector.",
     "message": "Project Card Color"
   },
-  "$1.routes.app.projects.$projectId.settings.info.projectColorOptionBlue": {
-    "description": "Label for blue option in project color selector.",
-    "message": "Blue"
-  },
-  "$1.routes.app.projects.$projectId.settings.info.projectColorOptionGreen": {
-    "description": "Label for green option in project color selector.",
-    "message": "Green"
-  },
-  "$1.routes.app.projects.$projectId.settings.info.projectColorOptionGrey": {
-    "description": "Label for grey option in project color selector.",
-    "message": "Grey"
-  },
-  "$1.routes.app.projects.$projectId.settings.info.projectColorOptionOrange": {
-    "description": "Label for orange option in project color selector.",
-    "message": "Orange"
-  },
-  "$1.routes.app.projects.$projectId.settings.info.projectColorOptionRed": {
-    "description": "Label for grey option in project color selector.",
-    "message": "Red"
-  },
   "$1.routes.app.projects.$projectId.settings.info.projectDescriptionInputLabel": {
     "description": "Label for the project description input.",
     "message": "Project Description"
