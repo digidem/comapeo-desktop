@@ -304,12 +304,12 @@ const m = defineMessages({
 		description: 'Fallback displayed name when project has no category set.',
 	},
 	dateAdded: {
-		id: '$1.routes.app.projects.$projectId.settings.categories.dateAdded',
+		id: 'routes.app.projects.$projectId.settings.categories.dateAdded',
 		defaultMessage: 'Added {date}',
 		description: 'Text indicating the date the categories set was added.',
 	},
 	dateCreated: {
-		id: '$1.routes.app.projects.$projectId.settings.categories.dateCreated',
+		id: 'routes.app.projects.$projectId.settings.categories.dateCreated',
 		defaultMessage: 'Created {date}',
 		description: 'Text indicating the date the categories set was created.',
 	},

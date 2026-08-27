@@ -747,14 +747,6 @@
     "description": "Explanation for custom categories",
     "message": "Use custom categories by importing new categories set files below."
   },
-  "$1.routes.app.projects.$projectId.settings.categories.dateAdded": {
-    "description": "Text indicating the date the categories set was added.",
-    "message": "Added {date}"
-  },
-  "$1.routes.app.projects.$projectId.settings.categories.dateCreated": {
-    "description": "Text indicating the date the categories set was created.",
-    "message": "Created {date}"
-  },
   "$1.routes.app.projects.$projectId.settings.categories.defaultCategoriesExplainer": {
     "description": "Explanation for default categories",
     "message": "Default categories help you start organizing your observations instantly."
