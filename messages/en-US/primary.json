@@ -335,10 +335,6 @@
     "description": "Text displayed when hovering over map control for zooming to selected.",
     "message": "Zoom to selected"
   },
-  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.audioNavTitle": {
-    "description": "Title of the audio attachment page.",
-    "message": "Audio Recording"
-  },
   "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
     "description": "Label text for delete button",
     "message": "Delete"
@@ -362,10 +358,6 @@
   "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
     "description": "Label text for download button",
     "message": "Download"
-  },
-  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.photoNavTitle": {
-    "description": "Title of the photo attachment page.",
-    "message": "Photo Info"
   },
   "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.returnToObservation": {
     "description": "Button text for the successful deletion panel.",

@@ -107,6 +107,14 @@
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
   },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.audioNavTitle": {
+    "description": "Title of the audio attachment page.",
+    "message": "Audio Recording"
+  },
+  "routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.photoNavTitle": {
+    "description": "Title of the photo attachment page.",
+    "message": "Photo Info"
+  },
   "routes.app.projects.$projectId.download.downloadOptionsAccessibleLabel": {
     "description": "Accessible label of download options form input.",
     "message": "Data to download"
