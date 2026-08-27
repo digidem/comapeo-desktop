@@ -1163,25 +1163,9 @@
     "description": "Label for app settings tab link in navigation.",
     "message": "Settings"
   },
-  "$1.routes.app.route.fallbackCategoriesSetName": {
-    "description": "Text shown when project does not use a categories set.",
-    "message": "CoMapeo Categories"
-  },
   "$1.routes.app.route.homeTabTitle": {
     "description": "Label for home tab link in navigation.",
     "message": "Home"
-  },
-  "$1.routes.app.route.projectInfoCategoriesCreated": {
-    "description": "Text indicating creation date of categories set.",
-    "message": "Created {date}"
-  },
-  "$1.routes.app.route.projectInfoRoleCoordinator": {
-    "description": "Indicates that user is a coordinator.",
-    "message": "Coordinator"
-  },
-  "$1.routes.app.route.projectInfoRoleParticipant": {
-    "description": "Indicates that user is a participant.",
-    "message": "Participant"
   },
   "$1.routes.app.route.projectInviteAccept": {
     "description": "Button text for accepting project invite.",

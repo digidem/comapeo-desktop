@@ -191,9 +191,25 @@
     "description": "Accessible label for button that shows project info when clicked.",
     "message": "Show info for project {name}."
   },
+  "routes.app.route.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set.",
+    "message": "CoMapeo Categories"
+  },
   "routes.app.route.projectCardLinkAccessibleLabel": {
     "description": "Accessible label for link that navigates to project when clicked.",
     "message": "Go to project {name}."
+  },
+  "routes.app.route.projectInfoCategoriesCreated": {
+    "description": "Text indicating creation date of categories set.",
+    "message": "Created {date}"
+  },
+  "routes.app.route.projectInfoRoleCoordinator": {
+    "description": "Indicates that user is a coordinator.",
+    "message": "Coordinator"
+  },
+  "routes.app.route.projectInfoRoleParticipant": {
+    "description": "Indicates that user is a participant.",
+    "message": "Participant"
   },
   "routes.app.settings.breadCrumbAccessibleLabel": {
     "description": "Accessible label for breadcrumb navigation when viewing nested settings page.",
