@@ -163,6 +163,10 @@
     "description": "Accessible label for back button.",
     "message": "Go back."
   },
+  "routes.app.projects.$projectId.team.$deviceId.addedOn": {
+    "description": "Text indicating date collaborator was added to the project.",
+    "message": "Added on {value}"
+  },
   "routes.app.projects.$projectId.team.$deviceId.goBackAccessibleLabel": {
     "description": "Accessible label for back button.",
     "message": "Go back."

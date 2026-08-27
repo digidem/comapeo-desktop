@@ -847,10 +847,6 @@
     "description": "Label for save button.",
     "message": "Save"
   },
-  "$1.routes.app.projects.$projectId.team.$deviceId.addedOn": {
-    "description": "Text indicating date collaborator was added to the project.",
-    "message": "Added on {value}"
-  },
   "$1.routes.app.projects.$projectId.team.$deviceId.cancelButton": {
     "description": "Button text to cancel leaving project.",
     "message": "Cancel"
