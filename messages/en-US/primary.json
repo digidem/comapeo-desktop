@@ -1395,17 +1395,9 @@
     "description": "Placeholder name of custom background map if name cannot be retrieved.",
     "message": "Custom Background"
   },
-  "$1.routes.app.settings.index.decimalDegrees": {
-    "description": "Label for Decimal Degrees coordinate system.",
-    "message": "DD Coordinates"
-  },
   "$1.routes.app.settings.index.defaultBackground": {
     "description": "Name of the background map used if a custom one is not set.",
     "message": "Default Background"
-  },
-  "$1.routes.app.settings.index.dmsCoordinates": {
-    "description": "Label for Degrees/Minutes/Seconds coordinate system.",
-    "message": "DMS Coordinates"
   },
   "$1.routes.app.settings.index.editDeviceName": {
     "description": "Button text for navigating to page to edit device name.",
@@ -1434,10 +1426,6 @@
   "$1.routes.app.settings.index.unitSystemMetric": {
     "description": "Label for metric unit system",
     "message": "Metric System"
-  },
-  "$1.routes.app.settings.index.utmCoordinates": {
-    "description": "Label for Universal Transverse Mercator coordinate system.",
-    "message": "UTM Coordinates"
   },
   "$1.routes.app.settings.language.followSystemOptionLabel": {
     "description": "Option label for following system preference for language.",

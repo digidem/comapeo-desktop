@@ -215,9 +215,17 @@
     "description": "Accessible label for link item that navigates to coordinate system settings page.",
     "message": "Go to coordinate system settings."
   },
+  "routes.app.settings.index.decimalDegrees": {
+    "description": "Label for Decimal Degrees coordinate system.",
+    "message": "DD Coordinates"
+  },
   "routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to device name settings page.",
     "message": "Go to device name settings."
+  },
+  "routes.app.settings.index.dmsCoordinates": {
+    "description": "Label for Degrees/Minutes/Seconds coordinate system.",
+    "message": "DMS Coordinates"
   },
   "routes.app.settings.index.languageSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to language settings page.",
@@ -226,6 +234,10 @@
   "routes.app.settings.index.unitSystemSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to unit system settings page.",
     "message": "Go to unit system settings."
+  },
+  "routes.app.settings.index.utmCoordinates": {
+    "description": "Label for Universal Transverse Mercator coordinate system.",
+    "message": "UTM Coordinates"
   },
   "routes.app.settings_.test-data.boundedDistanceLabel": {
     "description": "Label for the bounded distance input.",

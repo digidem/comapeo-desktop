@@ -393,17 +393,17 @@ const m = defineMessages({
 			'Placeholder name of custom background map if name cannot be retrieved.',
 	},
 	ddCoordinates: {
-		id: '$1.routes.app.settings.index.decimalDegrees',
+		id: 'routes.app.settings.index.decimalDegrees',
 		defaultMessage: 'DD Coordinates',
 		description: 'Label for Decimal Degrees coordinate system.',
 	},
 	utmCoordinates: {
-		id: '$1.routes.app.settings.index.utmCoordinates',
+		id: 'routes.app.settings.index.utmCoordinates',
 		defaultMessage: 'UTM Coordinates',
 		description: 'Label for Universal Transverse Mercator coordinate system.',
 	},
 	dmsCoordinates: {
-		id: '$1.routes.app.settings.index.dmsCoordinates',
+		id: 'routes.app.settings.index.dmsCoordinates',
 		defaultMessage: 'DMS Coordinates',
 		description: 'Label for Degrees/Minutes/Seconds coordinate system.',
 	},
