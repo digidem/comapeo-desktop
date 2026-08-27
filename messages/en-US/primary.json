@@ -775,10 +775,6 @@
     "description": "Text for action to update categories set.",
     "message": "Update"
   },
-  "$1.routes.app.projects.$projectId.settings.index.fallbackCategoriesSetName": {
-    "description": "Text shown when project does not use a categories set.",
-    "message": "CoMapeo Categories"
-  },
   "$1.routes.app.projects.$projectId.settings.index.navTitle": {
     "description": "Title of the coordinator tools page.",
     "message": "Coordinator Tools"

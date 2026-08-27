@@ -155,6 +155,10 @@
     "description": "Accessible label for link item that navigates to project info settings page.",
     "message": "Go to categories settings."
   },
+  "routes.app.projects.$projectId.settings.index.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set.",
+    "message": "CoMapeo Categories"
+  },
   "routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel": {
     "description": "Accessible label for link item that navigates to project info settings page.",
     "message": "Go to project info settings."
