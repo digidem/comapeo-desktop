@@ -1630,90 +1630,90 @@ const m = defineMessages({
 			'Text for button to return to track in successful observation deletion panel.',
 	},
 	locationAccuracyMeters: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyMeters',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyMeters',
 		defaultMessage: '± {value} m',
 		description: 'Displayed accuracy for observation location in meters.',
 	},
 	locationAccuracyFeet: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyFeet',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyFeet',
 		defaultMessage: '± {value} ft',
 		description: 'Displayed accuracy for observation location in feet.',
 	},
 	observationMetadataLatitudeLabel: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLatitudeLabel',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLatitudeLabel',
 		defaultMessage: 'Latitude',
 		description: 'Label for observation metadata latitude.',
 	},
 	observationMetadataLongitudeLabel: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLongitudeLabel',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLongitudeLabel',
 		defaultMessage: 'Longitude',
 		description: 'Label for observation metadata longitude.',
 	},
 	observationMetadataCoordinate: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataCoordinate',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataCoordinate',
 		defaultMessage: '{value}°',
 		description:
 			'Displayed coordinate (latitude or longitude) for observation metadata.',
 	},
 	observationMetadataLocationAccuracyLabel: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyLabel',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyLabel',
 		defaultMessage: 'Accuracy',
 		description: 'Label for observation metadata location accuracy.',
 	},
 	observationMetadataLocationAccuracyMeters: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyMeters',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyMeters',
 		defaultMessage: '± {value} m',
 		description:
 			'Displayed location accuracy for observation metadata in meters.',
 	},
 	observationMetadataLocationAccuracyFeet: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyFeet',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataLocationAccuracyFeet',
 		defaultMessage: '± {value} ft',
 		description:
 			'Displayed location accuracy for observation metadata in feet.',
 	},
 	observationMetadataAltitudeLabel: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeLabel',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeLabel',
 		defaultMessage: 'Altitude',
 		description: 'Label for observation metadata altitude.',
 	},
 	observationMetadataAltitudeMeters: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeMeters',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeMeters',
 		defaultMessage: '{value} m',
 		description: 'Displayed altitude for observation metadata in meters.',
 	},
 	observationMetadataAltitudeFeet: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeFeet',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeFeet',
 		defaultMessage: '{value} ft',
 		description: 'Displayed altitude for observation metadata in feet.',
 	},
 	observationMetadataAltitudeAccuracyLabel: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyLabel',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyLabel',
 		defaultMessage: 'Altitude Accuracy',
 		description: 'Label for observation metadata altitude accuracy.',
 	},
 	observationMetadataAltitudeAccuracyMeters: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyMeters',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyMeters',
 		defaultMessage: '± {value} m',
 		description: 'Displayed altitude accuracy for observation in meters.',
 	},
 	observationMetadataAltitudeAccuracyFeet: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyFeet',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataAltitudeAccuracyFeet',
 		defaultMessage: '± {value} ft',
 		description: 'Displayed altitude accuracy for observation in feet.',
 	},
 	observationMetadataSpeedLabel: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedLabel',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedLabel',
 		defaultMessage: 'Speed',
 		description: 'Label for observation metadata speed.',
 	},
 	observationMetadataSpeedMeters: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedMeters',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedMeters',
 		defaultMessage: '{value} m/s',
 		description: 'Displayed speed for observation in meters per second.',
 	},
 	observationMetadataSpeedFeet: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedFeet',
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedFeet',
 		defaultMessage: '{value} ft/s',
 		description: 'Displayed speed for observation in feet per second.',
 	},
