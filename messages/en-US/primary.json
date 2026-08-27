@@ -967,10 +967,6 @@
     "description": "Text for button to add another device.",
     "message": "Add Another Device"
   },
-  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addedOn": {
-    "description": "Text showing when device was added to project.",
-    "message": "Added on {date, date, long}"
-  },
   "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.cancelInvite": {
     "description": "Text for button to cancel invite.",
     "message": "Cancel Invite"

@@ -207,6 +207,10 @@
     "description": "Accessible label for link that navigates to member details.",
     "message": "View member {name}."
   },
+  "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addedOn": {
+    "description": "Text showing when device was added to project.",
+    "message": "Added on {date, date, long}"
+  },
   "routes.app.projects.$projectId.team.invite.devices.index.goBackAccessibleLabel": {
     "description": "Accessible label for back button",
     "message": "Go back."
