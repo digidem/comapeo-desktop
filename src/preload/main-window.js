@@ -7,12 +7,12 @@ window.onmessage = (event) => {
 
 	if (event.data !== 'comapeo-port') return
 
-	const [comapeoChannelPort, appChannelPort] = event.ports
+	const [coreChannelPort, appChannelPort] = event.ports
 
-	if (!(comapeoChannelPort && appChannelPort)) return // TODO: throw/report error
+	if (!(coreChannelPort && appChannelPort)) return // TODO: throw/report error
 
 	ipcRenderer.postMessage('comapeo-port', null, [
-		comapeoChannelPort,
+		coreChannelPort,
 		appChannelPort,
 	])
 }
@@ -152,9 +152,7 @@ const runtimeApi = {
 	},
 
 	getMigrationInfo: async () => {
-		const result = await ipcRenderer.invoke('migration:info:get')
-
-		return result
+		return ipcRenderer.invoke('migration:info:get')
 	},
 	onMigrationProgress: (callback) => {
 		/** @type {Parameters<import('electron/renderer').IpcRenderer['on']>[1]} */

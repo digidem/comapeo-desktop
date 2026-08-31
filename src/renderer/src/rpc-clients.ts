@@ -3,24 +3,28 @@ import {
 	createComapeoServicesClient,
 } from '@comapeo/ipc/client.js'
 
-export function initRpcClients() {
-	const comapeoChannel = new MessageChannel()
+export function createRpcClients() {
+	const coreChannel = new MessageChannel()
 	const appChannel = new MessageChannel()
 
-	window.postMessage('comapeo-port', '*', [
-		comapeoChannel.port2,
-		appChannel.port2,
-	])
-
-	const coreClient = createComapeoCoreClient(comapeoChannel.port1, {
+	const coreClient = createComapeoCoreClient(coreChannel.port1, {
 		timeout: Infinity,
 	})
 	const servicesClient = createComapeoServicesClient(appChannel.port1, {
 		timeout: Infinity,
 	})
 
-	comapeoChannel.port1.start()
+	coreChannel.port1.start()
 	appChannel.port1.start()
 
-	return { coreClient, servicesClient }
+	return {
+		coreClient,
+		servicesClient,
+		sendInitRequest: () => {
+			window.postMessage('comapeo-port', '*', [
+				coreChannel.port2,
+				appChannel.port2,
+			])
+		},
+	}
 }

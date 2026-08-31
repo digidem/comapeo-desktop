@@ -14,7 +14,8 @@ import {
 	screen,
 	utilityProcess,
 	type BaseWindow,
-	type UtilityProcess,
+	type IpcMainEvent,
+	type MessagePortMain,
 } from 'electron/main'
 import { createDebug } from 'obug'
 import { debounce } from 'radashi'
@@ -206,12 +207,9 @@ export async function start({
 			sentryEnvironment = 'production'
 		}
 
-		let isMigrating = true
-
 		const mainWindow = initMainWindow({
 			activeProjectId,
 			appVersion: appConfig.appVersion,
-			// coreService,
 			comapeoUserDataDirectory,
 			isDevelopment: appConfig.appType === 'development',
 			sentryConfig: {
@@ -227,14 +225,21 @@ export async function start({
 			mainWindow.show()
 		})
 
-		mainWindow.webContents.ipc.handle('migration:info:get', () => {
-			return { isMigrating }
-		})
-
 		const migrationPromise = Promise.withResolvers<void>()
 
+		let progress = 0
+
+		let isMigrating = true
+
+		mainWindow.webContents.ipc.handle('migration:info:get', () => {
+			if (!isMigrating) {
+				return { status: 'done' }
+			}
+
+			return { status: 'pending', progress }
+		})
+
 		if (isMigrating) {
-			let progress = 0
 			const intervalId = setInterval(() => {
 				if (progress === 100) {
 					clearInterval(intervalId)
@@ -249,6 +254,30 @@ export async function start({
 			migrationPromise.resolve()
 		}
 
+		const pendingPortRequests: Array<{
+			core: MessagePortMain
+			app: MessagePortMain
+		}> = []
+
+		function handleRpcInitRequest(event: IpcMainEvent) {
+			const [coreChannelPort, appChannelPort] = event.ports
+
+			if (!(coreChannelPort && appChannelPort)) {
+				// TODO: Throw or report error
+				return
+			}
+
+			if (isMigrating) {
+				pendingPortRequests.push({ core: coreChannelPort, app: appChannelPort })
+			} else {
+				sendNewClientMessage({ coreChannelPort, appChannelPort })
+			}
+		}
+
+		// Set up communication channel between window and core service
+		// https://www.electronjs.org/docs/latest/tutorial/message-ports/#messageports-in-the-main-process
+		mainWindow.webContents.ipc.on('comapeo-port', handleRpcInitRequest)
+
 		await migrationPromise.promise
 
 		isMigrating = false
@@ -259,21 +288,36 @@ export async function start({
 			{ serviceName: 'CoMapeo Core Service' },
 		)
 
-		// Set up communication channel between window and core service
-		// https://www.electronjs.org/docs/latest/tutorial/message-ports/#messageports-in-the-main-process
-		mainWindow.webContents.ipc.on('comapeo-port', (event) => {
-			const [comapeoChannelPort, appChannelPort] = event.ports
-
-			if (!(comapeoChannelPort && appChannelPort)) return // TODO: throw/report error
-
+		function sendNewClientMessage({
+			coreChannelPort,
+			appChannelPort,
+		}: {
+			coreChannelPort: MessagePortMain
+			appChannelPort: MessagePortMain
+		}) {
 			coreService.postMessage(
 				{
 					type: 'main:new-client',
 					payload: { clientId: `window-${mainWindow.id}` },
 				} satisfies NewClientMessage,
-				[comapeoChannelPort, appChannelPort],
+				[coreChannelPort, appChannelPort],
 			)
-		})
+		}
+
+		let pendingPorts = pendingPortRequests.shift()
+
+		while (pendingPorts) {
+			sendNewClientMessage({
+				coreChannelPort: pendingPorts.core,
+				appChannelPort: pendingPorts.app,
+			})
+
+			pendingPorts = pendingPortRequests.shift()
+		}
+
+		// Set up communication channel between window and core service
+		// https://www.electronjs.org/docs/latest/tutorial/message-ports/#messageports-in-the-main-process
+		// mainWindow.webContents.ipc.on('comapeo-port', handleNewClientRequest)
 
 		// NOTE: Exit the app if the core service exits for some reason
 		coreService.on('exit', (code) => {
@@ -326,7 +370,6 @@ export async function start({
 				const mainWindow = initMainWindow({
 					activeProjectId,
 					appVersion: appConfig.appVersion,
-					// coreService,
 					comapeoUserDataDirectory,
 					isDevelopment: appConfig.appType === 'development',
 					sentryConfig: {
@@ -335,6 +378,8 @@ export async function start({
 						userId: sentryUserId,
 					},
 				})
+
+				mainWindow.webContents.ipc.on('comapeo-port', handleRpcInitRequest)
 
 				mainWindow.show()
 
@@ -385,19 +430,6 @@ export async function start({
 			return net.fetch(pathToFileURL(requestedPath).toString())
 		})
 
-		// const mainWindow = initMainWindow({
-		// 	activeProjectId,
-		// 	appVersion: appConfig.appVersion,
-		// 	coreService,
-		// 	comapeoUserDataDirectory,
-		// 	isDevelopment: appConfig.appType === 'development',
-		// 	sentryConfig: {
-		// 		enabled: diagnosticsEnabled,
-		// 		environment: sentryEnvironment,
-		// 		userId: sentryUserId,
-		// 	},
-		// })
-
 		log(`Created main window with id ${mainWindow.id}`)
 
 		mainWindow.addListener('ready-to-show', () => {
@@ -424,14 +456,12 @@ export async function start({
 function initMainWindow({
 	activeProjectId,
 	appVersion,
-	// coreService,
 	comapeoUserDataDirectory,
 	isDevelopment,
 	sentryConfig,
 }: {
 	activeProjectId?: string
 	appVersion: string
-	// coreService: UtilityProcess
 	comapeoUserDataDirectory: string
 	isDevelopment: boolean
 	sentryConfig: {

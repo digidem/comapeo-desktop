@@ -133,10 +133,10 @@ process.parentPort.on('message', (event) => {
 		return
 	}
 
-	const [comapeoChannelPort, appChannelPort] = event.ports
+	const [coreChannelPort, appChannelPort] = event.ports
 
-	if (!comapeoChannelPort) {
-		throw new Error('Expected comapeoChannelPort to be defined')
+	if (!coreChannelPort) {
+		throw new Error('Expected coreChannelPort to be defined')
 	}
 
 	if (!appChannelPort) {
@@ -145,27 +145,27 @@ process.parentPort.on('message', (event) => {
 
 	const { clientId } = event.data.payload
 
-	if (connectedRpcPorts.has(comapeoChannelPort)) {
+	if (connectedRpcPorts.has(coreChannelPort)) {
 		log(
-			`CoMapeo channel message port already set up for '${event.data.type}' message from client ${clientId}.`,
+			`Core channel message port already set up for '${event.data.type}' message from client ${clientId}.`,
 		)
 	} else {
 		const server = createComapeoCoreServer(
 			manager,
-			new MessagePortLike(comapeoChannelPort),
+			new MessagePortLike(coreChannelPort),
 		)
 
-		comapeoChannelPort.on('close', () => {
-			log(`CoMapeo channel port associated with client ${clientId} closed`)
+		coreChannelPort.on('close', () => {
+			log(`Core channel port associated with client ${clientId} closed`)
 			server.close()
-			connectedRpcPorts.delete(comapeoChannelPort)
+			connectedRpcPorts.delete(coreChannelPort)
 		})
 
-		connectedRpcPorts.add(comapeoChannelPort)
+		connectedRpcPorts.add(coreChannelPort)
 
-		comapeoChannelPort.start()
+		coreChannelPort.start()
 
-		log(`Initialized comapeo rpc server for client ${clientId}`)
+		log(`Initialized core rpc server for client ${clientId}`)
 	}
 
 	if (connectedRpcPorts.has(appChannelPort)) {

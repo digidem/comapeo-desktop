@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import {
 	Alert,
 	Box,
@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
@@ -18,6 +19,7 @@ import { BLUE_GREY, DARKER_ORANGE, GREEN, WHITE } from '../../colors.ts'
 import { AdvancedErrorDetails } from '../../components/advanced-error-details.tsx'
 import { Icon } from '../../components/icon.tsx'
 import { buildDocumentReloadURL } from '../../lib/navigation.ts'
+import { getMigrationInfoQueryOptions } from '../../lib/queries/user.ts'
 
 export const Route = createFileRoute('/migration/')({
 	component: RouteComponent,
@@ -30,8 +32,16 @@ type MigrationState =
 	| { type: 'space_required'; spaceRequired: number }
 
 function RouteComponent() {
+	const { data: migrationInfo } = useSuspenseQuery(
+		getMigrationInfoQueryOptions(),
+	)
+
 	const [migrationState, setMigrationState] = useState<MigrationState>(() => {
-		return { type: 'in_progress', progress: 0 }
+		if (migrationInfo.status === 'done') {
+			return { type: 'success' }
+		}
+
+		return { type: 'in_progress', progress: migrationInfo.progress }
 	})
 
 	useEffect(() => {
@@ -48,7 +58,7 @@ function RouteComponent() {
 		}
 	}, [setMigrationState])
 
-	const deferredMigrationState = useDeferredValue(migrationState)
+	console.log('***', { migrationState })
 
 	return (
 		<Box
@@ -61,7 +71,7 @@ function RouteComponent() {
 			}}
 		>
 			<Container maxWidth="sm" sx={{ display: 'flex', flex: 1 }}>
-				<MigrationPanel migrationState={deferredMigrationState} />
+				<MigrationPanel migrationState={migrationState} />
 			</Container>
 		</Box>
 	)

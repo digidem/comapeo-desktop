@@ -42,7 +42,7 @@ import { routeTree } from './generated/routeTree.gen.ts'
 import { useNetworkConnectionChangeListener } from './hooks/network.ts'
 import { DIALOG_CONTAINER_ID, TITLE_BAR_HEIGHT } from './lib/constants.ts'
 import { getLocaleStateQueryOptions } from './lib/queries/app-settings.ts'
-import { initRpcClients } from './rpc-clients.ts'
+import { createRpcClients } from './rpc-clients.ts'
 import { createTheme } from './theme.ts'
 
 const { platform } = window.runtime.getAppInfo()
@@ -52,7 +52,9 @@ const theme = createTheme({ platform })
 const MAIN_CONTENT_HEIGHT =
 	platform === 'darwin' ? `calc(100% - ${TITLE_BAR_HEIGHT})` : '100%'
 
-const { coreClient, servicesClient } = initRpcClients()
+const { coreClient, servicesClient, sendInitRequest } = createRpcClients()
+
+sendInitRequest()
 
 const localPeersStore = createLocalPeersStore({ coreClient })
 const activeProjectIdStore = createActiveProjectIdStore({
