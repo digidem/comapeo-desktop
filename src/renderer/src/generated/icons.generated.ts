@@ -44,6 +44,7 @@ export const iconNames = [
 	'material-square-filled',
 	'material-symbols-apps',
 	'material-symbols-arrow-circle-right',
+	'material-symbols-autorenew',
 	'material-symbols-calendar-today',
 	'material-symbols-center-focus-weak',
 	'material-symbols-computer',

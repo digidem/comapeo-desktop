@@ -2,7 +2,7 @@ import type { Systeminformation } from 'systeminformation'
 
 import type { CoordinateFormat } from '../shared/coordinate-format.ts'
 import type { Locale, LocaleState } from '../shared/intl.ts'
-import type { SelectedFile } from '../shared/ipc.ts'
+import type { MigrationStatus, SelectedFile } from '../shared/ipc.ts'
 import type { AppUsageMetrics } from '../shared/metrics.ts'
 import type { UnitSystem } from '../shared/unit-system.ts'
 
@@ -64,8 +64,8 @@ export type RuntimeApi = {
 	getOnboardedAt: () => Promise<number | null>
 	setOnboardedAt: (value: number) => Promise<void>
 
-	getMigrationInfo: () => Promise<
-		{ status: 'done' } | { status: 'pending'; progress: number }
-	>
-	onMigrationProgress: (callback: (progress: number) => void) => () => void
+	getMigrationStatus: () => Promise<MigrationStatus>
+	onMigrationStatusUpdate: (
+		callback: (status: MigrationStatus) => void,
+	) => () => void
 }

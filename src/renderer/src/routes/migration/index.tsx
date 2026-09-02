@@ -1,8 +1,9 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useId, type ReactNode } from 'react'
 import {
 	Alert,
 	Box,
 	Button,
+	CircularProgress,
 	Container,
 	LinearProgress,
 	List,
@@ -11,54 +12,27 @@ import {
 } from '@mui/material'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { keyframes } from '@mui/material/styles'
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
+import type { MigrationStatus } from '../../../../shared/ipc.ts'
 import { BLUE_GREY, DARKER_ORANGE, GREEN, WHITE } from '../../colors.ts'
 import { AdvancedErrorDetails } from '../../components/advanced-error-details.tsx'
 import { Icon } from '../../components/icon.tsx'
+import { bytesToMegabytes } from '../../lib/bytes-to-megabytes.ts'
 import { buildDocumentReloadURL } from '../../lib/navigation.ts'
-import { getMigrationInfoQueryOptions } from '../../lib/queries/user.ts'
+import { getMigrationStatusQueryOptions } from '../../lib/queries/user.ts'
 
 export const Route = createFileRoute('/migration/')({
 	component: RouteComponent,
 })
 
-type MigrationState =
-	| { type: 'in_progress'; progress: number }
-	| { type: 'error'; error: Error }
-	| { type: 'success' }
-	| { type: 'space_required'; spaceRequired: number }
-
 function RouteComponent() {
-	const { data: migrationInfo } = useSuspenseQuery(
-		getMigrationInfoQueryOptions(),
-	)
+	const { data: migrationStatus } = useMigrationStatusQuery()
 
-	const [migrationState, setMigrationState] = useState<MigrationState>(() => {
-		if (migrationInfo.status === 'done') {
-			return { type: 'success' }
-		}
-
-		return { type: 'in_progress', progress: migrationInfo.progress }
-	})
-
-	useEffect(() => {
-		const unsubscribe = window.runtime.onMigrationProgress((progress) => {
-			if (progress === 100) {
-				setMigrationState({ type: 'success' })
-			} else {
-				setMigrationState({ type: 'in_progress', progress })
-			}
-		})
-
-		return () => {
-			unsubscribe()
-		}
-	}, [setMigrationState])
-
-	console.log('***', { migrationState })
+	console.log('*** migrationStatus', migrationStatus)
 
 	return (
 		<Box
@@ -71,55 +45,106 @@ function RouteComponent() {
 			}}
 		>
 			<Container maxWidth="sm" sx={{ display: 'flex', flex: 1 }}>
-				<MigrationPanel migrationState={migrationState} />
+				<MigrationPanel migrationStatus={migrationStatus} />
 			</Container>
 		</Box>
 	)
 }
 
+function useMigrationStatusQuery() {
+	const queryClient = useQueryClient()
+	const query = useSuspenseQuery(getMigrationStatusQueryOptions())
+
+	useEffect(() => {
+		const unsubscribe = window.runtime.onMigrationStatusUpdate((status) => {
+			queryClient.setQueryData(
+				getMigrationStatusQueryOptions().queryKey,
+				status,
+			)
+		})
+
+		return () => {
+			unsubscribe()
+		}
+	}, [queryClient])
+
+	return query
+}
+
+const rotate = keyframes`
+	100% {
+		transform: rotate(360deg)
+	}
+`
+
 function MigrationPanel({
-	migrationState,
+	migrationStatus,
 }: {
-	migrationState: MigrationState
+	migrationStatus: MigrationStatus
 }) {
 	const { formatMessage: t } = useIntl()
 
 	const router = useRouter()
 
-	if (migrationState.type === 'in_progress') {
+	const progressId = useId()
+
+	if (migrationStatus.type === 'progress') {
 		return (
 			<MigrationPanelLayout
 				details={
-					<Stack direction="column">
-						<Stack direction="column">
-							<LinearProgress
-								variant="determinate"
-								value={migrationState.progress}
+					migrationStatus.total === 0 ? (
+						<Box sx={{ display: 'grid', placeItems: 'center' }}>
+							<CircularProgress
+								variant="indeterminate"
+								disableShrink
+								size={40}
 							/>
+						</Box>
+					) : (
+						<Stack direction="column">
+							<Stack direction="column" sx={{ gap: 2 }}>
+								<Icon
+									name="material-symbols-autorenew"
+									color="primary"
+									sx={{ animation: `${rotate} 1.5s linear infinite` }}
+								/>
+
+								<LinearProgress
+									aria-labelledby={progressId}
+									max={migrationStatus.total}
+									sx={{ height: 8 }}
+									value={migrationStatus.current}
+									variant="determinate"
+								/>
+							</Stack>
+
+							<List>
+								<ListItem sx={{ alignItems: 'center', gap: 5 }}>
+									<Icon name="openmoji-save" size="40px" />
+
+									<ListItemText
+										id={progressId}
+										slotProps={{ primary: { color: 'textSecondary' } }}
+									>
+										{t(m.inProgressProjectDetail, {
+											current: migrationStatus.current,
+											total: migrationStatus.total,
+										})}
+									</ListItemText>
+								</ListItem>
+
+								<ListItem sx={{ alignItems: 'center', gap: 5 }}>
+									<Icon name="openmoji-safety" size="40px" />
+
+									<ListItemText
+										slotProps={{ primary: { color: 'textSecondary' } }}
+									>
+										{t(m.dataSafetyDetail)}
+									</ListItemText>
+								</ListItem>
+							</List>
 						</Stack>
-
-						<List>
-							<ListItem sx={{ alignItems: 'center', gap: 5 }}>
-								<Icon name="openmoji-save" size="40px" />
-
-								<ListItemText
-									slotProps={{ primary: { color: 'textSecondary' } }}
-								>
-									{t(m.inProgressProjectDetail, { current: 0, total: 1 })}
-								</ListItemText>
-							</ListItem>
-
-							<ListItem sx={{ alignItems: 'center', gap: 5 }}>
-								<Icon name="openmoji-safety" size="40px" />
-
-								<ListItemText
-									slotProps={{ primary: { color: 'textSecondary' } }}
-								>
-									{t(m.dataSafetyDetail)}
-								</ListItemText>
-							</ListItem>
-						</List>
-					</Stack>
+					)
 				}
 				description={t(m.inProgressDescription)}
 				icon={
@@ -144,7 +169,9 @@ function MigrationPanel({
 		)
 	}
 
-	if (migrationState.type === 'space_required') {
+	if (migrationStatus.type === 'error:needs_space') {
+		const spaceNeededMb = bytesToMegabytes(migrationStatus.spaceNeeded)
+
 		return (
 			<MigrationPanelLayout
 				actions={
@@ -168,7 +195,10 @@ function MigrationPanel({
 									slotProps={{ primary: { color: 'textSecondary' } }}
 								>
 									{t(m.notEnoughSpaceSpaceRequiredDetail, {
-										value: t(m.spaceRequiredMb, { value: 100 }),
+										value:
+											spaceNeededMb >= 1000
+												? t(m.spaceRequiredGb, { value: spaceNeededMb / 1_000 })
+												: t(m.spaceRequiredMb, { value: spaceNeededMb }),
 									})}
 								</ListItemText>
 							</ListItem>
@@ -208,7 +238,7 @@ function MigrationPanel({
 		)
 	}
 
-	if (migrationState.type === 'error') {
+	if (migrationStatus.type === 'error') {
 		return (
 			<MigrationPanelLayout
 				actions={
@@ -417,8 +447,7 @@ const m = defineMessages({
 	inProgressProjectDetail: {
 		id: '$1.routes.migration.index.inProgressProjectDetail',
 		defaultMessage: 'Updating {current, number} of {total, number}…',
-		description:
-			'Line item displaying which project is being migrated for in-progress migration state.',
+		description: 'Line item displaying numeric migration progress.',
 	},
 	notEnoughSpaceTitle: {
 		id: '$1.routes.migration.index.notEnoughSpaceTitle',

@@ -151,19 +151,19 @@ const runtimeApi = {
 		return ipcRenderer.invoke('user:onboardedAt:set', value)
 	},
 
-	getMigrationInfo: async () => {
-		return ipcRenderer.invoke('migration:info:get')
+	getMigrationStatus: async () => {
+		return ipcRenderer.invoke('migration:status:get')
 	},
-	onMigrationProgress: (callback) => {
+	onMigrationStatusUpdate: (callback) => {
 		/** @type {Parameters<import('electron/renderer').IpcRenderer['on']>[1]} */
 		const listener = (_event, value) => {
 			callback(value)
 		}
 
-		ipcRenderer.on('migration_progress', listener)
+		ipcRenderer.on('migration_status_update', listener)
 
 		return () => {
-			ipcRenderer.off('migration_progress', listener)
+			ipcRenderer.off('migration_status_update', listener)
 		}
 	},
 }

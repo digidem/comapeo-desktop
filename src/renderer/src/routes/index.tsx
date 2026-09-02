@@ -2,15 +2,15 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../lib/comapeo.ts'
 import { getItem, removeItem } from '../lib/local-storage.ts'
-import { getMigrationInfoQueryOptions } from '../lib/queries/user.ts'
+import { getMigrationStatusQueryOptions } from '../lib/queries/user.ts'
 
 export const Route = createFileRoute('/')({
 	beforeLoad: async ({ context }) => {
-		const migrationInfo = await context.queryClient.query(
-			getMigrationInfoQueryOptions(),
+		const migrationStatus = await context.queryClient.query(
+			getMigrationStatusQueryOptions(),
 		)
 
-		if (migrationInfo.status === 'pending') {
+		if (migrationStatus.type !== 'done') {
 			throw Route.redirect({ to: '/migration', replace: true })
 		}
 

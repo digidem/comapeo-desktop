@@ -1324,7 +1324,7 @@
     "message": "Projects are migrating to a newer, faster format"
   },
   "$1.routes.migration.index.inProgressProjectDetail": {
-    "description": "Line item displaying which project is being migrated for in-progress migration state.",
+    "description": "Line item displaying numeric migration progress.",
     "message": "Updating {current, number} of {total, number}…"
   },
   "$1.routes.migration.index.inProgressTitle": {

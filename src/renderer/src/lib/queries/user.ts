@@ -34,11 +34,11 @@ export function setOnboardedAtMutationOptions() {
 	>)
 }
 
-export function getMigrationInfoQueryOptions() {
+export function getMigrationStatusQueryOptions() {
 	return queryOptions({
-		queryKey: [BASE_QUERY_KEY, 'migration', 'info'],
+		queryKey: [BASE_QUERY_KEY, 'migration', 'status'],
 		queryFn: async () => {
-			return window.runtime.getMigrationInfo()
+			return window.runtime.getMigrationStatus()
 		},
 	})
 }
