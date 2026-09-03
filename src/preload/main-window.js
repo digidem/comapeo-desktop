@@ -70,6 +70,9 @@ const runtimeApi = {
 	showItemInFolder: async (filePath) => {
 		return ipcRenderer.invoke('shell:show-item-in-folder', filePath)
 	},
+	openSystemSettings: async (namespace) => {
+		return ipcRenderer.invoke('shell:open-system-settings', namespace)
+	},
 
 	// Settings
 	getCoordinateFormat: async () => {

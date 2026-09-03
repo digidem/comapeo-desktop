@@ -30,6 +30,7 @@ export type RuntimeApi = {
 	downloadURL: (params: { url: string; saveAs: boolean }) => Promise<void>
 	openExternalURL: (url: string) => Promise<void>
 	showItemInFolder: (path: string) => Promise<void>
+	openSystemSettings: (namespace?: 'storage') => Promise<void>
 
 	// Settings
 	getCoordinateFormat: () => Promise<CoordinateFormat>

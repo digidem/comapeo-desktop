@@ -28,6 +28,43 @@ export function setUpMainIPC({
 		return shell.showItemInFolder(filePath)
 	})
 
+	ipcMain.handle(
+		'shell:open-system-settings',
+		async (_event, namespace?: 'storage') => {
+			let systemSettingsURI = ''
+
+			switch (process.platform) {
+				case 'darwin': {
+					systemSettingsURI = 'x-apple.systempreferences:'
+					break
+				}
+				case 'win32': {
+					systemSettingsURI = 'ms-settings:'
+					break
+				}
+			}
+
+			if (namespace === 'storage') {
+				switch (process.platform) {
+					case 'darwin': {
+						systemSettingsURI += 'com.apple.settings.Storage'
+						break
+					}
+					case 'win32': {
+						systemSettingsURI += 'storagesense'
+						break
+					}
+				}
+			}
+
+			if (!systemSettingsURI) {
+				throw new Error('Cannot determine system settings URI')
+			}
+
+			return shell.openExternal(systemSettingsURI)
+		},
+	)
+
 	// System
 	ipcMain.handle('system:wifiConnections:get', () => {
 		return si.wifiConnections()

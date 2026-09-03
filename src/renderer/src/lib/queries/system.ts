@@ -48,3 +48,15 @@ export function showItemInFolderMutationOptions() {
 		Parameters<RuntimeApi['showItemInFolder']>[0]
 	>
 }
+
+export function openSystemSettingsMutationOptions() {
+	return {
+		mutationFn: async (vars) => {
+			return window.runtime.openSystemSettings(vars)
+		},
+	} satisfies UseMutationOptions<
+		void,
+		Error,
+		Parameters<RuntimeApi['openSystemSettings']>[0]
+	>
+}
