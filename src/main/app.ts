@@ -226,7 +226,6 @@ export async function start({
 			mainWindow.show()
 		})
 
-		let isMigrationStepDone = false
 		const migrationStep = await setupMigrationStep(comapeoUserDataDirectory)
 
 		mainWindow.webContents.ipc.handle('migration:status:get', async () => {
@@ -246,11 +245,7 @@ export async function start({
 				return
 			}
 
-			if (!isMigrationStepDone) {
-				pendingPortRequests.push({ core: coreChannelPort, app: appChannelPort })
-			} else {
-				sendNewClientMessage({ coreChannelPort, appChannelPort })
-			}
+			pendingPortRequests.push({ core: coreChannelPort, app: appChannelPort })
 		}
 
 		// Set up communication channel between window and core service
@@ -259,10 +254,7 @@ export async function start({
 
 		await migrationStep.run({
 			onStatusUpdate: (status) => {
-				console.log('*** status', status)
-				setTimeout(() => {
-					mainWindow.webContents.send('migration_status_update', status)
-				}, 1_000)
+				mainWindow.webContents.send('migration_status_update', status)
 			},
 			onError: (retry) => {
 				mainWindow.webContents.ipc.handleOnce('migration:retry', async () => {
@@ -276,13 +268,24 @@ export async function start({
 			},
 		})
 
-		isMigrationStepDone = true
+		mainWindow.webContents.ipc.off('comapeo-port', handleRpcInitRequest)
 
 		const coreService = utilityProcess.fork(
 			CORE_SERVICE_PATH,
 			coreProcessArgs,
 			{ serviceName: 'CoMapeo Core Service' },
 		)
+
+		mainWindow.webContents.ipc.on('comapeo-port', (event) => {
+			const [coreChannelPort, appChannelPort] = event.ports
+
+			if (!(coreChannelPort && appChannelPort)) {
+				// TODO: Throw or report error
+				return
+			}
+
+			sendNewClientMessage({ coreChannelPort, appChannelPort })
+		})
 
 		function sendNewClientMessage({
 			coreChannelPort,
@@ -310,10 +313,6 @@ export async function start({
 
 			pendingPorts = pendingPortRequests.shift()
 		}
-
-		// Set up communication channel between window and core service
-		// https://www.electronjs.org/docs/latest/tutorial/message-ports/#messageports-in-the-main-process
-		// mainWindow.webContents.ipc.on('comapeo-port', handleNewClientRequest)
 
 		// NOTE: Exit the app if the core service exits for some reason
 		coreService.on('exit', (code) => {
@@ -378,7 +377,17 @@ export async function start({
 				mainWindow.webContents.ipc.handle('migration:status:get', async () => {
 					return migrationStep.getStatus()
 				})
-				mainWindow.webContents.ipc.on('comapeo-port', handleRpcInitRequest)
+
+				mainWindow.webContents.ipc.on('comapeo-port', (event) => {
+					const [coreChannelPort, appChannelPort] = event.ports
+
+					if (!(coreChannelPort && appChannelPort)) {
+						// TODO: Throw or report error
+						return
+					}
+
+					sendNewClientMessage({ coreChannelPort, appChannelPort })
+				})
 
 				mainWindow.show()
 
