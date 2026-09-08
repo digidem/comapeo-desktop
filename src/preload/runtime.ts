@@ -69,4 +69,5 @@ export type RuntimeApi = {
 	onMigrationStatusUpdate: (
 		callback: (status: MigrationStatus) => void,
 	) => () => void
+	retryMigration: () => Promise<void>
 }

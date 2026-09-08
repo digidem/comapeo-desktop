@@ -35,6 +35,7 @@ import { setUpMainIPC } from './ipc.ts'
 import { messages } from './messages.ts'
 import { createAppDiagnosticsMetricsScheduler } from './metrics/app-diagnostics-metrics.ts'
 import { DeviceDiagnosticsMetrics } from './metrics/device-diagnostics-metrics.ts'
+import { setupMigrationStep } from './migration.ts'
 import type { PersistedStore } from './persisted-store.ts'
 
 const log = createDebug('comapeo:main:app')
@@ -130,6 +131,9 @@ export async function start({
 			})
 		})
 
+		// const comapeoUserDataDirectory = await getComapeoUserDataDirectory(
+		// 	app.getPath('userData'),
+		// )
 		const comapeoUserDataDirectory = join(app.getPath('userData'), 'comapeo')
 
 		const metricsDirectory = join(comapeoUserDataDirectory, 'metrics')
@@ -225,34 +229,12 @@ export async function start({
 			mainWindow.show()
 		})
 
-		const migrationPromise = Promise.withResolvers<void>()
+		let isMigrationStepDone = false
+		const migrationStep = await setupMigrationStep(comapeoUserDataDirectory)
 
-		let progress = 0
-
-		let isMigrating = true
-
-		mainWindow.webContents.ipc.handle('migration:info:get', () => {
-			if (!isMigrating) {
-				return { status: 'done' }
-			}
-
-			return { status: 'pending', progress }
+		mainWindow.webContents.ipc.handle('migration:status:get', async () => {
+			return migrationStep.getStatus()
 		})
-
-		if (isMigrating) {
-			const intervalId = setInterval(() => {
-				if (progress === 100) {
-					clearInterval(intervalId)
-					migrationPromise.resolve()
-					return
-				}
-				progress += 10
-
-				mainWindow.webContents.send('migration_progress', progress)
-			}, 1000)
-		} else {
-			migrationPromise.resolve()
-		}
 
 		const pendingPortRequests: Array<{
 			core: MessagePortMain
@@ -267,7 +249,7 @@ export async function start({
 				return
 			}
 
-			if (isMigrating) {
+			if (!isMigrationStepDone) {
 				pendingPortRequests.push({ core: coreChannelPort, app: appChannelPort })
 			} else {
 				sendNewClientMessage({ coreChannelPort, appChannelPort })
@@ -278,9 +260,34 @@ export async function start({
 		// https://www.electronjs.org/docs/latest/tutorial/message-ports/#messageports-in-the-main-process
 		mainWindow.webContents.ipc.on('comapeo-port', handleRpcInitRequest)
 
-		await migrationPromise.promise
+		await migrationStep.run({
+			onStatusUpdate: (status) => {
+				mainWindow.webContents.send('migration_status_update', status)
+			},
+			onError: (retry) => {
+				mainWindow.webContents.ipc.handleOnce('migration:retry', async () => {
+					return retry()
+				})
+			},
+		})
 
-		isMigrating = false
+		isMigrationStepDone = true
+
+		// await maybeMigrateStorage(comapeoUserDataDirectory, {
+		// 	onStatusUpdate: (status) => {
+		// 		migrationInitPromise.resolve()
+		// 		migrationStatus = status
+		// 		mainWindow.webContents.send('migration_status_update', status)
+		// 	},
+		// 	onError: (retry) => {
+		// 		mainWindow.webContents.ipc.handleOnce('migration:retry', async () => {
+		// 			return retry()
+		// 		})
+		// 	},
+		// })
+
+		// migrationStatus = { type: 'done' }
+		// mainWindow.webContents.send('migration_status_update', migrationStatus)
 
 		const coreService = utilityProcess.fork(
 			CORE_SERVICE_PATH,

@@ -1303,6 +1303,10 @@
     "description": "Title of the unit system settings page.",
     "message": "Unit System"
   },
+  "$1.routes.migration.index.continue": {
+    "description": "Text for button to initiate migration after addressing storage limitations.",
+    "message": "Continue"
+  },
   "$1.routes.migration.index.dataSafetyDetail": {
     "description": "Line item describing data safety during migration.",
     "message": "All data is safe and protected"
@@ -1314,10 +1318,6 @@
   "$1.routes.migration.index.freeUpSpaceWarning": {
     "description": "Text for warning to free up disk space to allow migration.",
     "message": "Free up space to continue."
-  },
-  "$1.routes.migration.index.genericMigrationErrorTitle": {
-    "description": "Title text for when an error occurs while migrating.",
-    "message": "Something went wrong"
   },
   "$1.routes.migration.index.inProgressDescription": {
     "description": "Description text for in-progress migration state.",
@@ -1331,6 +1331,14 @@
     "description": "Title text for in-progress migration state.",
     "message": "Updating CoMapeo…"
   },
+  "$1.routes.migration.index.migrationErrorDescription": {
+    "description": "Description text for when an error occurs during migration.",
+    "message": "Projects stopped migrating because of an error"
+  },
+  "$1.routes.migration.index.migrationErrorTitle": {
+    "description": "Title text for when an error occurs during migration.",
+    "message": "Something went wrong"
+  },
   "$1.routes.migration.index.notEnoughSpaceDescription": {
     "description": "Description text for when there is not enough space to migrate automatically.",
     "message": "New update available with performance improvements"
@@ -1343,21 +1351,13 @@
     "description": "Title text for when there is not enough space to migrate automatically.",
     "message": "Update CoMapeo"
   },
-  "$1.routes.migration.index.openSettingsButton": {
+  "$1.routes.migration.index.openSettings": {
     "description": "Text for button to open system settings.",
     "message": "Open Settings"
   },
-  "$1.routes.migration.index.outOfStorageErrorDescription": {
-    "description": "Title text for when storage runs out while migrating.",
-    "message": "Projects stopped migrating because device ran out of space"
-  },
-  "$1.routes.migration.index.outOfStorageErrorTitle": {
-    "description": "Title text for when storage runs out while migrating.",
-    "message": "Out of storage space"
-  },
-  "$1.routes.migration.index.skipForNowButton": {
-    "description": "Text for button to skip migration.",
-    "message": "Skip for Now"
+  "$1.routes.migration.index.progressStopped": {
+    "description": "Label for progress indicator displayed when an error occurs.",
+    "message": "Stopped"
   },
   "$1.routes.migration.index.spaceRequiredGb": {
     "description": "Displayed amount of space needed for migration, in gigabytes.",
@@ -1378,6 +1378,10 @@
   "$1.routes.migration.index.successTitle": {
     "description": "Title text for when migration finishes.",
     "message": "Update Complete!"
+  },
+  "$1.routes.migration.index.tryAgain": {
+    "description": "Text for button to retry migration when it stops or fails.",
+    "message": "Try Again"
   },
   "$1.routes.migration.index.updateStoppedDetail": {
     "description": "Line item indicating that migration stopped.",

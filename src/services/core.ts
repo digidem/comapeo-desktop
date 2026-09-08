@@ -80,7 +80,7 @@ const DEFAULT_FALLBACK_MAP_FILE_PATH = fileURLToPath(
 
 // Do not touch these!
 const DB_DIR_NAME = 'sqlite-dbs'
-const CORE_STORAGE_DIR_NAME = 'core-storage'
+const CORE_STORAGE_DIR_NAME = 'core-storage-000'
 const CUSTOM_MAPS_DIR_NAME = 'maps'
 const DEFAULT_CUSTOM_MAP_FILE_NAME = 'default.smp'
 

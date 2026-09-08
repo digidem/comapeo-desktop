@@ -169,6 +169,9 @@ const runtimeApi = {
 			ipcRenderer.off('migration_status_update', listener)
 		}
 	},
+	retryMigration: async () => {
+		return ipcRenderer.invoke('migration:retry')
+	},
 }
 
 /**

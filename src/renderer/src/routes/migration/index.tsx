@@ -13,47 +13,36 @@ import {
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import { keyframes } from '@mui/material/styles'
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import {
+	useMutation,
+	useQueryClient,
+	useSuspenseQuery,
+} from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import type { MigrationStatus } from '../../../../shared/ipc.ts'
 import { BLUE_GREY, DARKER_ORANGE, GREEN, WHITE } from '../../colors.ts'
 import { AdvancedErrorDetails } from '../../components/advanced-error-details.tsx'
 import { Icon } from '../../components/icon.tsx'
 import { bytesToMegabytes } from '../../lib/bytes-to-megabytes.ts'
+import { ExhaustivenessError } from '../../lib/exhaustiveness-error.ts'
 import { buildDocumentReloadURL } from '../../lib/navigation.ts'
-import { getMigrationStatusQueryOptions } from '../../lib/queries/user.ts'
+import { openSystemSettingsMutationOptions } from '../../lib/queries/system.ts'
+import {
+	getMigrationStatusQueryOptions,
+	retryMigrationMutationOptions,
+} from '../../lib/queries/user.ts'
 
 export const Route = createFileRoute('/migration/')({
 	component: RouteComponent,
 })
 
 function RouteComponent() {
-	const { data: migrationStatus } = useMigrationStatusQuery()
-
-	console.log('*** migrationStatus', migrationStatus)
-
-	return (
-		<Box
-			sx={{
-				display: 'flex',
-				flexDirection: 'column',
-				bgcolor: WHITE,
-				height: '100%',
-				overflow: 'auto',
-			}}
-		>
-			<Container maxWidth="sm" sx={{ display: 'flex', flex: 1 }}>
-				<MigrationPanel migrationStatus={migrationStatus} />
-			</Container>
-		</Box>
-	)
-}
-
-function useMigrationStatusQuery() {
 	const queryClient = useQueryClient()
-	const query = useSuspenseQuery(getMigrationStatusQueryOptions())
+
+	const { data: migrationStatus } = useSuspenseQuery(
+		getMigrationStatusQueryOptions(),
+	)
 
 	useEffect(() => {
 		const unsubscribe = window.runtime.onMigrationStatusUpdate((status) => {
@@ -68,231 +57,381 @@ function useMigrationStatusQuery() {
 		}
 	}, [queryClient])
 
-	return query
+	let panel: React.JSX.Element
+
+	const status = migrationStatus.type
+
+	switch (status) {
+		case 'progress': {
+			panel = (
+				<InProgressPanel
+					current={migrationStatus.current}
+					total={migrationStatus.total}
+				/>
+			)
+
+			break
+		}
+		case 'error:needs_space': {
+			panel = <NeedsSpacePanel spaceNeeded={migrationStatus.spaceNeeded} />
+			break
+		}
+		case 'error': {
+			panel = (
+				<ErrorPanel
+					current={migrationStatus.current}
+					error={migrationStatus.error}
+					total={migrationStatus.total}
+				/>
+			)
+			break
+		}
+		case 'done': {
+			panel = <SuccessPanel />
+			break
+		}
+		default: {
+			throw new ExhaustivenessError(status)
+		}
+	}
+
+	return (
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				bgcolor: WHITE,
+				height: '100%',
+				overflow: 'auto',
+			}}
+		>
+			<Container maxWidth="sm" sx={{ display: 'flex', flex: 1 }}>
+				{panel}
+			</Container>
+		</Box>
+	)
+}
+
+function ErrorPanel({
+	error,
+	current,
+	total,
+}: {
+	current: number
+	error: Error
+	total: number
+}) {
+	const intl = useIntl()
+
+	const progressId = useId()
+
+	const retryMigration = useMutation(retryMigrationMutationOptions())
+
+	return (
+		<MigrationPanelLayout
+			actions={
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'center',
+					}}
+				>
+					<Button
+						fullWidth
+						variant="contained"
+						loading={retryMigration.status === 'pending'}
+						onClick={() => {
+							if (retryMigration.status === 'pending') {
+								return
+							}
+
+							retryMigration.mutate()
+						}}
+						sx={{ maxWidth: 400 }}
+					>
+						{intl.formatMessage(m.tryAgain)}
+					</Button>
+				</Box>
+			}
+			details={
+				<Stack direction="column" sx={{ gap: 6 }}>
+					<Stack direction="column" sx={{ gap: 2 }}>
+						<Typography id={progressId} color="error">
+							{intl.formatMessage(m.progressStopped)}
+						</Typography>
+
+						<LinearProgress
+							aria-labelledby={progressId}
+							sx={{ height: 8 }}
+							value={current}
+							variant="determinate"
+							color="error"
+							{...(total === 0
+								? { value: 0, max: 1 }
+								: { current, total, max: total })}
+						/>
+					</Stack>
+
+					<List
+						disablePadding
+						sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+					>
+						<ListItem
+							disableGutters
+							disablePadding
+							sx={{ alignItems: 'center', gap: 5 }}
+						>
+							<Icon name="openmoji-no-entry" size="40px" />
+
+							<ListItemText slotProps={{ primary: { color: 'textSecondary' } }}>
+								{intl.formatMessage(m.updateStoppedDetail)}
+							</ListItemText>
+						</ListItem>
+
+						<ListItem
+							disableGutters
+							disablePadding
+							sx={{ alignItems: 'center', gap: 5 }}
+						>
+							<Icon name="openmoji-safety" size="40px" />
+
+							<ListItemText slotProps={{ primary: { color: 'textSecondary' } }}>
+								{intl.formatMessage(m.dataSafetyDetail)}
+							</ListItemText>
+						</ListItem>
+					</List>
+
+					<AdvancedErrorDetails
+						errorMessage={error.toString()}
+						title={intl.formatMessage(m.advanced)}
+					/>
+				</Stack>
+			}
+			description={intl.formatMessage(m.migrationErrorDescription)}
+			icon={<Icon name="material-error" color="error" size="128px" />}
+			title={intl.formatMessage(m.migrationErrorTitle)}
+			warning={intl.formatMessage(m.doNotCloseAppWarning)}
+		/>
+	)
+}
+
+function NeedsSpacePanel({ spaceNeeded }: { spaceNeeded: number }) {
+	const intl = useIntl()
+
+	const spaceNeededMb = bytesToMegabytes(spaceNeeded)
+
+	const openSystemSettings = useMutation(openSystemSettingsMutationOptions())
+
+	const retryMigration = useMutation(retryMigrationMutationOptions())
+
+	return (
+		<MigrationPanelLayout
+			actions={
+				<Stack
+					direction="row"
+					sx={{
+						justifyContent: 'center',
+						gap: 4,
+					}}
+				>
+					<Button
+						fullWidth
+						variant="contained"
+						sx={{ maxWidth: 400 }}
+						onClick={() => {
+							openSystemSettings.mutate('storage')
+						}}
+					>
+						{intl.formatMessage(m.openSettings)}
+					</Button>
+
+					<Button
+						fullWidth
+						variant="outlined"
+						sx={{ maxWidth: 400 }}
+						loading={retryMigration.status === 'pending'}
+						onClick={() => {
+							if (retryMigration.status === 'pending') {
+								return
+							}
+
+							retryMigration.mutate()
+						}}
+					>
+						{intl.formatMessage(m.continue)}
+					</Button>
+				</Stack>
+			}
+			details={
+				<List
+					disablePadding
+					sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+				>
+					<ListItem
+						disableGutters
+						disablePadding
+						sx={{ alignItems: 'center', gap: 5 }}
+					>
+						<Icon name="openmoji-save" size="40px" />
+
+						<ListItemText slotProps={{ primary: { color: 'textSecondary' } }}>
+							{intl.formatMessage(m.notEnoughSpaceSpaceRequiredDetail, {
+								value:
+									spaceNeededMb >= 1000
+										? intl.formatMessage(m.spaceRequiredGb, {
+												value: spaceNeededMb / 1_000,
+											})
+										: intl.formatMessage(m.spaceRequiredMb, {
+												value: spaceNeededMb,
+											}),
+							})}
+						</ListItemText>
+					</ListItem>
+
+					<ListItem
+						disableGutters
+						disablePadding
+						sx={{ alignItems: 'center', gap: 5 }}
+					>
+						<Icon name="openmoji-safety" size="40px" />
+
+						<ListItemText slotProps={{ primary: { color: 'textSecondary' } }}>
+							{intl.formatMessage(m.dataSafetyDetail)}
+						</ListItemText>
+					</ListItem>
+				</List>
+			}
+			description={intl.formatMessage(m.notEnoughSpaceDescription)}
+			icon={
+				<Box
+					sx={{
+						backgroundColor: DARKER_ORANGE,
+						borderRadius: '50%',
+						display: 'flex',
+						padding: 6,
+					}}
+				>
+					<Icon
+						name="material-symbols-deployed-code-update"
+						htmlColor={WHITE}
+						size="64px"
+					/>
+				</Box>
+			}
+			title={intl.formatMessage(m.notEnoughSpaceTitle)}
+			warning={intl.formatMessage(m.freeUpSpaceWarning)}
+		/>
+	)
 }
 
 const rotate = keyframes`
 	100% {
-		transform: rotate(360deg)
+		transform: rotate(360deg);
 	}
 `
 
-function MigrationPanel({
-	migrationStatus,
+function InProgressPanel({
+	current,
+	total,
 }: {
-	migrationStatus: MigrationStatus
+	current: number
+	total: number
 }) {
-	const { formatMessage: t } = useIntl()
-
-	const router = useRouter()
+	const intl = useIntl()
 
 	const progressId = useId()
 
-	if (migrationStatus.type === 'progress') {
-		return (
-			<MigrationPanelLayout
-				details={
-					migrationStatus.total === 0 ? (
-						<Box sx={{ display: 'grid', placeItems: 'center' }}>
-							<CircularProgress
-								variant="indeterminate"
-								disableShrink
-								size={40}
-							/>
-						</Box>
-					) : (
-						<Stack direction="column">
-							<Stack direction="column" sx={{ gap: 2 }}>
-								<Icon
-									name="material-symbols-autorenew"
-									color="primary"
-									sx={{ animation: `${rotate} 1.5s linear infinite` }}
-								/>
-
-								<LinearProgress
-									aria-labelledby={progressId}
-									max={migrationStatus.total}
-									sx={{ height: 8 }}
-									value={migrationStatus.current}
-									variant="determinate"
-								/>
-							</Stack>
-
-							<List>
-								<ListItem sx={{ alignItems: 'center', gap: 5 }}>
-									<Icon name="openmoji-save" size="40px" />
-
-									<ListItemText
-										id={progressId}
-										slotProps={{ primary: { color: 'textSecondary' } }}
-									>
-										{t(m.inProgressProjectDetail, {
-											current: migrationStatus.current,
-											total: migrationStatus.total,
-										})}
-									</ListItemText>
-								</ListItem>
-
-								<ListItem sx={{ alignItems: 'center', gap: 5 }}>
-									<Icon name="openmoji-safety" size="40px" />
-
-									<ListItemText
-										slotProps={{ primary: { color: 'textSecondary' } }}
-									>
-										{t(m.dataSafetyDetail)}
-									</ListItemText>
-								</ListItem>
-							</List>
-						</Stack>
-					)
-				}
-				description={t(m.inProgressDescription)}
-				icon={
-					<Box
-						sx={{
-							backgroundColor: DARKER_ORANGE,
-							borderRadius: '50%',
-							display: 'flex',
-							padding: 6,
-						}}
-					>
-						<Icon
-							name="material-symbols-deployed-code-update"
-							htmlColor={WHITE}
-							size={64}
-						/>
+	return (
+		<MigrationPanelLayout
+			details={
+				total === 0 ? (
+					<Box sx={{ display: 'grid', placeItems: 'center' }}>
+						<CircularProgress variant="indeterminate" disableShrink size={40} />
 					</Box>
-				}
-				title={t(m.inProgressTitle)}
-				warning={t(m.doNotCloseAppWarning)}
-			/>
-		)
-	}
+				) : (
+					<Stack direction="column" sx={{ gap: 6 }}>
+						<Stack direction="column" sx={{ gap: 2 }}>
+							<Icon
+								name="material-symbols-autorenew"
+								color="primary"
+								sx={{ animation: `${rotate} 1.5s linear infinite` }}
+							/>
 
-	if (migrationStatus.type === 'error:needs_space') {
-		const spaceNeededMb = bytesToMegabytes(migrationStatus.spaceNeeded)
+							<LinearProgress
+								aria-labelledby={progressId}
+								max={total}
+								sx={{ height: 8 }}
+								value={current}
+								variant="determinate"
+							/>
+						</Stack>
 
-		return (
-			<MigrationPanelLayout
-				actions={
-					<Stack direction="row" sx={{ gap: 4 }}>
-						<Button fullWidth variant="contained" sx={{ maxWidth: 400 }}>
-							{t(m.openSettingsButton)}
-						</Button>
-
-						<Button fullWidth variant="outlined" sx={{ maxWidth: 400 }}>
-							{t(m.skipForNowButton)}
-						</Button>
-					</Stack>
-				}
-				details={
-					<Stack direction="column">
-						<List>
-							<ListItem sx={{ alignItems: 'center', gap: 5 }}>
+						<List
+							disablePadding
+							sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+						>
+							<ListItem
+								disableGutters
+								disablePadding
+								sx={{ alignItems: 'center', gap: 5 }}
+							>
 								<Icon name="openmoji-save" size="40px" />
 
 								<ListItemText
+									id={progressId}
 									slotProps={{ primary: { color: 'textSecondary' } }}
 								>
-									{t(m.notEnoughSpaceSpaceRequiredDetail, {
-										value:
-											spaceNeededMb >= 1000
-												? t(m.spaceRequiredGb, { value: spaceNeededMb / 1_000 })
-												: t(m.spaceRequiredMb, { value: spaceNeededMb }),
+									{intl.formatMessage(m.inProgressProjectDetail, {
+										current,
+										total,
 									})}
 								</ListItemText>
 							</ListItem>
 
-							<ListItem sx={{ alignItems: 'center', gap: 5 }}>
+							<ListItem
+								disableGutters
+								disablePadding
+								sx={{ alignItems: 'center', gap: 5 }}
+							>
 								<Icon name="openmoji-safety" size="40px" />
 
 								<ListItemText
 									slotProps={{ primary: { color: 'textSecondary' } }}
 								>
-									{t(m.dataSafetyDetail)}
+									{intl.formatMessage(m.dataSafetyDetail)}
 								</ListItemText>
 							</ListItem>
 						</List>
 					</Stack>
-				}
-				description={t(m.notEnoughSpaceDescription)}
-				icon={
-					<Box
-						sx={{
-							backgroundColor: DARKER_ORANGE,
-							borderRadius: '50%',
-							display: 'flex',
-							padding: 6,
-						}}
-					>
-						<Icon
-							name="material-symbols-deployed-code-update"
-							htmlColor={WHITE}
-							size="64px"
-						/>
-					</Box>
-				}
-				title={t(m.notEnoughSpaceTitle)}
-				warning={t(m.freeUpSpaceWarning)}
-			/>
-		)
-	}
+				)
+			}
+			description={intl.formatMessage(m.inProgressDescription)}
+			icon={
+				<Box
+					sx={{
+						backgroundColor: DARKER_ORANGE,
+						borderRadius: '50%',
+						display: 'flex',
+						padding: 6,
+					}}
+				>
+					<Icon
+						name="material-symbols-deployed-code-update"
+						htmlColor={WHITE}
+						size={64}
+					/>
+				</Box>
+			}
+			title={intl.formatMessage(m.inProgressTitle)}
+			warning={intl.formatMessage(m.doNotCloseAppWarning)}
+		/>
+	)
+}
 
-	if (migrationStatus.type === 'error') {
-		return (
-			<MigrationPanelLayout
-				actions={
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'row',
-							justifyContent: 'center',
-						}}
-					>
-						<Button fullWidth variant="contained" sx={{ maxWidth: 400 }}>
-							{t(m.openSettingsButton)}
-						</Button>
-					</Box>
-				}
-				details={
-					<Stack>
-						<Stack direction="column">
-							<List>
-								<ListItem sx={{ alignItems: 'center', gap: 5 }}>
-									<Icon name="openmoji-no-entry" size="40px" />
-
-									<ListItemText
-										slotProps={{ primary: { color: 'textSecondary' } }}
-									>
-										{t(m.updateStoppedDetail)}
-									</ListItemText>
-								</ListItem>
-
-								<ListItem sx={{ alignItems: 'center', gap: 5 }}>
-									<Icon name="openmoji-safety" size="40px" />
-
-									<ListItemText
-										slotProps={{ primary: { color: 'textSecondary' } }}
-									>
-										{t(m.dataSafetyDetail)}
-									</ListItemText>
-								</ListItem>
-							</List>
-						</Stack>
-
-						<AdvancedErrorDetails
-							errorMessage={'Some error'}
-							title="Advanced"
-						/>
-					</Stack>
-				}
-				description={t(m.outOfStorageErrorDescription)}
-				icon={<Icon name="material-error" color="error" size="128px" />}
-				title={t(m.outOfStorageErrorTitle)}
-				warning={t(m.doNotCloseAppWarning)}
-			/>
-		)
-	}
+function SuccessPanel() {
+	const intl = useIntl()
+	const router = useRouter()
 
 	return (
 		<Stack direction="column">
@@ -317,7 +456,7 @@ function MigrationPanel({
 						variant="h1"
 						sx={{ fontWeight: 500, textAlign: 'center', textWrap: 'balance' }}
 					>
-						{t(m.successTitle)}
+						{intl.formatMessage(m.successTitle)}
 					</Typography>
 
 					<Typography
@@ -325,7 +464,7 @@ function MigrationPanel({
 						variant="h2"
 						sx={{ fontWeight: 400, textAlign: 'center', textWrap: 'balance' }}
 					>
-						{t(m.successDescription)}
+						{intl.formatMessage(m.successDescription)}
 					</Typography>
 				</Stack>
 			</Stack>
@@ -351,7 +490,7 @@ function MigrationPanel({
 						variant="contained"
 						sx={{ maxWidth: 400 }}
 					>
-						{t(m.startUsingComapeoButton)}
+						{intl.formatMessage(m.startUsingComapeoButton)}
 					</Button>
 				</Box>
 			</Box>
@@ -479,36 +618,41 @@ const m = defineMessages({
 		description:
 			'Line item displaying amount of disk space needed for migration.',
 	},
-	outOfStorageErrorTitle: {
-		id: '$1.routes.migration.index.outOfStorageErrorTitle',
-		defaultMessage: 'Out of storage space',
-		description: 'Title text for when storage runs out while migrating.',
-	},
-	outOfStorageErrorDescription: {
-		id: '$1.routes.migration.index.outOfStorageErrorDescription',
-		defaultMessage:
-			'Projects stopped migrating because device ran out of space',
-		description: 'Title text for when storage runs out while migrating.',
-	},
-	genericMigrationErrorTitle: {
-		id: '$1.routes.migration.index.genericMigrationErrorTitle',
+	migrationErrorTitle: {
+		id: '$1.routes.migration.index.migrationErrorTitle',
 		defaultMessage: 'Something went wrong',
-		description: 'Title text for when an error occurs while migrating.',
+		description: 'Title text for when an error occurs during migration.',
+	},
+	migrationErrorDescription: {
+		id: '$1.routes.migration.index.migrationErrorDescription',
+		defaultMessage: 'Projects stopped migrating because of an error',
+		description: 'Description text for when an error occurs during migration.',
+	},
+	progressStopped: {
+		id: '$1.routes.migration.index.progressStopped',
+		defaultMessage: 'Stopped',
+		description: 'Label for progress indicator displayed when an error occurs.',
+	},
+	tryAgain: {
+		id: '$1.routes.migration.index.tryAgain',
+		defaultMessage: 'Try Again',
+		description: 'Text for button to retry migration when it stops or fails.',
 	},
 	updateStoppedDetail: {
 		id: '$1.routes.migration.index.updateStoppedDetail',
 		defaultMessage: 'Update stopped…',
 		description: 'Line item indicating that migration stopped.',
 	},
-	openSettingsButton: {
-		id: '$1.routes.migration.index.openSettingsButton',
+	openSettings: {
+		id: '$1.routes.migration.index.openSettings',
 		defaultMessage: 'Open Settings',
 		description: 'Text for button to open system settings.',
 	},
-	skipForNowButton: {
-		id: '$1.routes.migration.index.skipForNowButton',
-		defaultMessage: 'Skip for Now',
-		description: 'Text for button to skip migration.',
+	continue: {
+		id: '$1.routes.migration.index.continue',
+		defaultMessage: 'Continue',
+		description:
+			'Text for button to initiate migration after addressing storage limitations.',
 	},
 	dataSafetyDetail: {
 		id: '$1.routes.migration.index.dataSafetyDetail',
@@ -530,5 +674,11 @@ const m = defineMessages({
 		defaultMessage: 'Start using CoMapeo',
 		description:
 			'Text for button to navigate to main app after migration finishes.',
+	},
+	advanced: {
+		id: '1.routes.migration.index.advanced',
+		defaultMessage: 'Advanced',
+		description:
+			'Title text for the collapsible section that shows the actual error message.',
 	},
 })

@@ -1,4 +1,8 @@
 {
+  "1.routes.migration.index.advanced": {
+    "description": "Title text for the collapsible section that shows the actual error message.",
+    "message": "Advanced"
+  },
   "components.error-dialog.advanced": {
     "description": "Title text for the collapsible section that shows the actual error message.",
     "message": "Advanced"

@@ -1,8 +1,3 @@
-import type {
-	MIGRATION_REASON_NO_SPACE,
-	MigrationReason,
-	NeedsSpace,
-} from '@comapeo/core/migration.js'
 import * as v from 'valibot'
 
 export type SelectedFile = {
@@ -40,6 +35,6 @@ export const DownloadURLParamsSchema = v.object({
 
 export type MigrationStatus =
 	| { type: 'progress'; current: number; total: number }
-	| { type: 'error'; error: Error }
+	| { type: 'error'; error: Error; current: number; total: number }
 	| { type: 'error:needs_space'; spaceNeeded: number }
 	| { type: 'done' }

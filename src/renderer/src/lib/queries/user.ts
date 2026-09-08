@@ -42,3 +42,16 @@ export function getMigrationStatusQueryOptions() {
 		},
 	})
 }
+
+export function retryMigrationMutationOptions() {
+	return mutationOptions({
+		mutationFn: async () => {
+			return window.runtime.retryMigration()
+		},
+		onSuccess: (_data, _variables, _onMutateResult, context) => {
+			context.client.invalidateQueries({
+				queryKey: getMigrationStatusQueryOptions().queryKey,
+			})
+		},
+	})
+}
