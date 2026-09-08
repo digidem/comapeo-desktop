@@ -131,9 +131,6 @@ export async function start({
 			})
 		})
 
-		// const comapeoUserDataDirectory = await getComapeoUserDataDirectory(
-		// 	app.getPath('userData'),
-		// )
 		const comapeoUserDataDirectory = join(app.getPath('userData'), 'comapeo')
 
 		const metricsDirectory = join(comapeoUserDataDirectory, 'metrics')
@@ -262,32 +259,24 @@ export async function start({
 
 		await migrationStep.run({
 			onStatusUpdate: (status) => {
-				mainWindow.webContents.send('migration_status_update', status)
+				console.log('*** status', status)
+				setTimeout(() => {
+					mainWindow.webContents.send('migration_status_update', status)
+				}, 1_000)
 			},
 			onError: (retry) => {
 				mainWindow.webContents.ipc.handleOnce('migration:retry', async () => {
-					return retry()
+					await Promise.race([
+						new Promise((_res, rej) =>
+							setTimeout(() => rej(new Error('Operation timed out')), 3_000),
+						),
+						retry(),
+					])
 				})
 			},
 		})
 
 		isMigrationStepDone = true
-
-		// await maybeMigrateStorage(comapeoUserDataDirectory, {
-		// 	onStatusUpdate: (status) => {
-		// 		migrationInitPromise.resolve()
-		// 		migrationStatus = status
-		// 		mainWindow.webContents.send('migration_status_update', status)
-		// 	},
-		// 	onError: (retry) => {
-		// 		mainWindow.webContents.ipc.handleOnce('migration:retry', async () => {
-		// 			return retry()
-		// 		})
-		// 	},
-		// })
-
-		// migrationStatus = { type: 'done' }
-		// mainWindow.webContents.send('migration_status_update', migrationStatus)
 
 		const coreService = utilityProcess.fork(
 			CORE_SERVICE_PATH,
@@ -386,6 +375,9 @@ export async function start({
 					},
 				})
 
+				mainWindow.webContents.ipc.handle('migration:status:get', async () => {
+					return migrationStep.getStatus()
+				})
 				mainWindow.webContents.ipc.on('comapeo-port', handleRpcInitRequest)
 
 				mainWindow.show()
