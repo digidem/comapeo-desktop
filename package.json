@@ -79,7 +79,7 @@
 		"electron-dl": "4.0.0",
 		"electron-squirrel-startup": "1.0.1",
 		"fastify": "4.29.1",
-		"obug": "2.1.4",
+		"obug": "3.0.0",
 		"radashi": "12.9.2",
 		"sodium-native": "5.1.0",
 		"systeminformation": "5.33.10",
