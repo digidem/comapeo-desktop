@@ -1,12 +1,9 @@
 import { access, cp, rm, statfs } from 'node:fs/promises'
 import { join } from 'node:path'
 import {
-	MIGRATION_REASON_NEEDS_UPGRADE,
 	MIGRATION_REASON_NO_SPACE,
 	checkShouldMigrate,
 	migrateStorage,
-	type MigrationCheckResult,
-	type MigrationResult,
 } from '@comapeo/core/migration.js'
 import { createDebug } from 'obug'
 
@@ -33,18 +30,6 @@ export async function setupMigrationStep(comapeoDataDirectory: string) {
 	}) {
 		const availableStorage = await getAvailableStorage()
 
-		// TODO: Remove
-		// const migrationCheck = await mockedCheckShouldMigrate(
-		// 	storageLocation,
-		// 	availableStorage,
-		// 	migrationStatus
-		// 		? undefined
-		// 		: {
-		// 				shouldUpgrade: false,
-		// 				reason: MIGRATION_REASON_NO_SPACE,
-		// 				spaceNeeded: 1_000_000,
-		// 			},
-		// )
 		const migrationCheck = await checkShouldMigrate(
 			targetCoreStoragePath,
 			availableStorage,
@@ -77,19 +62,6 @@ export async function setupMigrationStep(comapeoDataDirectory: string) {
 
 		migrationStatus = { type: 'progress', current: 0, total: 0 }
 
-		// TODO: Remove
-		// const migrationResults = await mockedMigrateStorage(
-		// 	storageLocation,
-		// 	(doneSoFar, totalCores) => {
-		// 		migrationStatus = {
-		// 			type: 'progress',
-		// 			current: doneSoFar,
-		// 			total: totalCores,
-		// 		}
-
-		// 		onStatusUpdate(migrationStatus)
-		// 	},
-		// )
 		const migrationResults = await migrateStorage(
 			targetCoreStoragePath,
 			(doneSoFar, totalCores) => {
@@ -189,119 +161,4 @@ async function getCoreStorageDirectories(comapeoDataDirectory: string) {
 	}
 
 	return { legacy, target }
-}
-
-// TODO: REMOVE
-async function mockedCheckShouldMigrate(
-	_managerPath: string,
-	_availableStorage: number,
-	initialResult?: MigrationCheckResult,
-): Promise<MigrationCheckResult> {
-	if (initialResult) {
-		return initialResult
-	}
-
-	const result = {
-		shouldUpgrade: true,
-		reason: MIGRATION_REASON_NEEDS_UPGRADE,
-
-		// shouldUpgrade: false,
-		// reason: MIGRATION_REASON_NO_SPACE,
-		// spaceNeeded: 1_000_000,
-
-		// shouldUpgrade: false,
-		// reason: MIGRATION_REASON_ALREADY_UPGRADED,
-	} satisfies MigrationCheckResult
-
-	return result
-}
-
-// TODO: REMOVE
-async function mockedMigrateStorage(
-	_storageLocation: string,
-	onProgress?: (doneSoFar: number, totalCores: number) => void,
-): Promise<Record<string, MigrationResult>> {
-	const progressMap = new Map<string, { current: number; total: number }>([
-		['Project 1', { current: 0, total: 100 }],
-		['Project 2', { current: 0, total: 50 }],
-		['Project 3', { current: 0, total: 10 }],
-	])
-
-	function emitProgress() {
-		if (!onProgress) {
-			return
-		}
-
-		let doneSoFar = 0
-		let totalCores = 0
-
-		for (const [, { current, total }] of progressMap.entries()) {
-			doneSoFar += current
-			totalCores += total
-		}
-
-		onProgress(doneSoFar, totalCores)
-	}
-
-	const results = await Promise.all(
-		progressMap.entries().map(async ([name, { total: totalCores }]) => {
-			let migrationResult: MigrationResult
-
-			try {
-				await simulateProjectMigration(name, totalCores, (doneSoFar) => {
-					progressMap.set(name, { current: doneSoFar, total: totalCores })
-					emitProgress()
-				})
-				migrationResult = { migrated: true }
-			} catch (reason) {
-				migrationResult = {
-					migrated: false,
-					error:
-						reason instanceof Error
-							? reason
-							: new Error('Error occurred', { cause: reason }),
-				}
-			}
-
-			return [name, migrationResult] as const
-		}),
-	)
-
-	return results.reduce(
-		(result, current) => {
-			result[current[0]] = current[1]
-			return result
-		},
-		{} as Record<string, MigrationResult>,
-	)
-}
-
-// TODO: REMOVE
-async function simulateProjectMigration(
-	name: string,
-	totalCores: number,
-	onUpdate: (doneSoFar: number) => void,
-) {
-	const migrateStoragePromise = Promise.withResolvers<void>()
-
-	let doneSoFar = 0
-
-	const interval = setInterval(() => {
-		doneSoFar += 10
-
-		// if (Math.random() >= 0.75) {
-		// 	clearInterval(interval)
-		// 	migrateStoragePromise.reject(`Failed to migrate project ${name}`)
-		// 	return
-		// }
-
-		onUpdate(doneSoFar)
-
-		if (doneSoFar === totalCores) {
-			clearInterval(interval)
-			migrateStoragePromise.resolve()
-		}
-	}, 1_000)
-
-	return migrateStoragePromise.promise
 }
