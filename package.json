@@ -175,7 +175,7 @@
 		"@electron/packager": {
 			"extract-zip": "npm:@electron-internal/extract-zip@1.0.5"
 		},
-		"@electron/windows-sign": "2.0.6",
+		"@electron/windows-sign": "2.1.0",
 		"better-sqlite3": "13.0.3",
 		"sodium-native": "$sodium-native",
 		"tmp": "0.2.7"
