@@ -24,7 +24,7 @@
 	"devEngines": {
 		"runtime": {
 			"name": "node",
-			"version": "~24.19.0",
+			"version": "~24.20.0",
 			"onFail": "warn"
 		},
 		"packageManager": {
@@ -75,7 +75,7 @@
 		"@homebridge/ciao": "1.3.12",
 		"@sentry/electron": "7.18.0",
 		"atomically": "2.1.1",
-		"electron-context-menu": "4.1.2",
+		"electron-context-menu": "5.0.0",
 		"electron-dl": "4.0.0",
 		"electron-squirrel-startup": "1.0.1",
 		"fastify": "4.29.1",
@@ -137,7 +137,7 @@
 		"@vis.gl/react-maplibre": "8.1.3",
 		"@vitejs/plugin-react": "6.1.1",
 		"date-fns": "4.4.0",
-		"electron": "43.5.0",
+		"electron": "44.3.0",
 		"electron-playwright-helpers": "3.1.2",
 		"eslint": "10.10.0",
 		"eslint-plugin-formatjs": "6.6.2",
