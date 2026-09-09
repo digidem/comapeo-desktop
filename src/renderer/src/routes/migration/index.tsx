@@ -97,15 +97,9 @@ function RouteComponent() {
 
 	return (
 		<Box
-			sx={{
-				display: 'flex',
-				flexDirection: 'column',
-				bgcolor: WHITE,
-				height: '100%',
-				overflow: 'auto',
-			}}
+			sx={{ bgcolor: WHITE, display: 'flex', height: '100%', overflow: 'auto' }}
 		>
-			<Container maxWidth="sm" sx={{ display: 'flex', flex: 1 }}>
+			<Container disableGutters maxWidth="sm" sx={{ display: 'flex', flex: 1 }}>
 				{panel}
 			</Container>
 		</Box>
@@ -228,13 +222,7 @@ function NeedsSpacePanel({ spaceNeeded }: { spaceNeeded: number }) {
 	return (
 		<MigrationPanelLayout
 			actions={
-				<Stack
-					direction="row"
-					sx={{
-						justifyContent: 'center',
-						gap: 4,
-					}}
-				>
+				<Stack direction="row" sx={{ gap: 4, justifyContent: 'center' }}>
 					<Button
 						fullWidth
 						variant="contained"
@@ -434,7 +422,7 @@ function SuccessPanel() {
 	const router = useRouter()
 
 	return (
-		<Stack direction="column">
+		<Stack direction="column" sx={{ flex: 1 }}>
 			<Stack
 				direction="column"
 				sx={{
@@ -514,7 +502,7 @@ function MigrationPanelLayout({
 	warning: string
 }) {
 	return (
-		<Stack direction="column">
+		<Stack direction="column" sx={{ flex: 1 }}>
 			<Stack
 				direction="column"
 				sx={{ flex: 1, padding: 6, gap: 10, overflow: 'auto' }}
