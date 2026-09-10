@@ -12,8 +12,24 @@ import type { MigrationStatus } from '../shared/ipc.ts'
 const log = createDebug('comapeo:main:migration')
 
 export async function setupMigrationStep(comapeoDataDirectory: string) {
-	const { legacy: legacyCoreStoragePath, target: targetCoreStoragePath } =
-		await getCoreStorageDirectories(comapeoDataDirectory)
+	const legacyCoreStorageDirectory = join(comapeoDataDirectory, 'core-storage')
+	const targetCoreStorageDirectory = join(
+		comapeoDataDirectory,
+		// NOTE: Must correspond with `CORE_STORAGE_DIR_NAME` variable in core service
+		'core-storage-000',
+	)
+
+	const legacyExists = await access(legacyCoreStorageDirectory)
+		.then(() => true)
+		.catch(() => false)
+
+	if (legacyExists) {
+		await rm(targetCoreStorageDirectory, { force: true, recursive: true })
+		await cp(legacyCoreStorageDirectory, targetCoreStorageDirectory, {
+			force: true,
+			recursive: true,
+		})
+	}
 
 	let migrationStatus: MigrationStatus
 
@@ -31,7 +47,7 @@ export async function setupMigrationStep(comapeoDataDirectory: string) {
 		const availableStorage = await getAvailableStorage()
 
 		const migrationCheck = await checkShouldMigrate(
-			targetCoreStoragePath,
+			targetCoreStorageDirectory,
 			availableStorage,
 		)
 
@@ -63,7 +79,7 @@ export async function setupMigrationStep(comapeoDataDirectory: string) {
 		migrationStatus = { type: 'progress', current: 0, total: 0 }
 
 		const migrationResults = await migrateStorage(
-			targetCoreStoragePath,
+			targetCoreStorageDirectory,
 			(doneSoFar, totalCores) => {
 				migrationStatus = {
 					type: 'progress',
@@ -125,13 +141,13 @@ export async function setupMigrationStep(comapeoDataDirectory: string) {
 		}) => {
 			await executeMigration({
 				onError,
-				onStatusUpdate: async (status) => {
+				onStatusUpdate: (status) => {
 					initPromise.resolve()
 					onStatusUpdate(status)
 				},
 			})
 
-			// await rm(legacyCoreStoragePath, { force: true, recursive: true })
+			// TODO: Eventually delete `legacyCoreStorageDirectory`
 		},
 	}
 }
@@ -144,21 +160,4 @@ async function getAvailableStorage() {
 	const used = total - free
 
 	return used
-}
-
-async function getCoreStorageDirectories(comapeoDataDirectory: string) {
-	const legacy = join(comapeoDataDirectory, 'core-storage')
-	// NOTE: Must correspond with `CORE_STORAGE_DIR_NAME` variable in core service
-	const target = join(comapeoDataDirectory, 'core-storage-000')
-
-	const legacyExists = await access(legacy)
-		.then(() => true)
-		.catch(() => false)
-
-	if (legacyExists) {
-		await rm(target, { force: true, recursive: true })
-		await cp(legacy, target, { force: true, recursive: true })
-	}
-
-	return { legacy, target }
 }
