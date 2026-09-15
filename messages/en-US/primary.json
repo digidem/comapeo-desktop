@@ -99,22 +99,6 @@
     "description": "Title for error dialog when fatal error in backend occurs.",
     "message": "Fatal Error"
   },
-  "$1.routes.app.index.additionalProjectsSecitionTitle": {
-    "description": "Title text for the additional projects section.",
-    "message": "Additional Projects"
-  },
-  "$1.routes.app.index.additionalProjectsSectionDescription": {
-    "description": "Text describing sorting order of the additional projects section.",
-    "message": "Ordered by most recently created"
-  },
-  "$1.routes.app.index.additionalProjectsSectionShowAsGrid": {
-    "description": "Tooltip text for button to display additional projects section as a grid.",
-    "message": "Show as grid"
-  },
-  "$1.routes.app.index.additionalProjectsSectionShowAsList": {
-    "description": "Tooltip text for button to display additional projects section as a list.",
-    "message": "Show as list"
-  },
   "$1.routes.app.index.appUsageConsentInterstitialAllowButton": {
     "description": "Text for button to allow consent for app usage metrics.",
     "message": "Yes, count me in"
@@ -167,17 +151,25 @@
     "description": "Text for button to create project.",
     "message": "Create"
   },
-  "$1.routes.app.index.joinProjectCardTitle": {
-    "description": "Title card for joining a project.",
-    "message": "Join a Project"
+  "$1.routes.app.index.getStartedDescription": {
+    "description": "Description text for get started panel.",
+    "message": "Coordinate with a team to join them or start a new project."
   },
-  "$1.routes.app.index.joinProjectDialogDescription": {
-    "description": "Description of dialog shown for joining a project.",
-    "message": "Coordinate with your team to receive a project invitation."
+  "$1.routes.app.index.getStartedMapAnywhereDetail": {
+    "description": "Detail about mapping in get started panel.",
+    "message": "Map anywhere and everywhere"
   },
-  "$1.routes.app.index.joinProjectDialogTitle": {
-    "description": "Title of dialog shown for joining a project.",
-    "message": "Join a Project"
+  "$1.routes.app.index.getStartedOwnDataDetail": {
+    "description": "Detail about data ownership in get started panel.",
+    "message": "Own and control your data"
+  },
+  "$1.routes.app.index.getStartedShareDetail": {
+    "description": "Detail about sharing in get started panel.",
+    "message": "Securely share with others"
+  },
+  "$1.routes.app.index.getStartedTitle": {
+    "description": "Title text for get started panel.",
+    "message": "{name} is ready!"
   },
   "$1.routes.app.index.leftProjectDialogCloseButton": {
     "description": "Text for button to close left project dialog.",
@@ -187,13 +179,13 @@
     "description": "Title text for left project dialog.",
     "message": "This device has left the project {name}."
   },
+  "$1.routes.app.index.mostRecent": {
+    "description": "Text for describing order of listed projects in all projects page.",
+    "message": "Most Recent"
+  },
   "$1.routes.app.index.pageTitle": {
     "description": "Title of home page.",
-    "message": "{name}'s Projects"
-  },
-  "$1.routes.app.index.postOnboardingPageTitle": {
-    "description": "Title of home page after completing onboarding.",
-    "message": "{name} is ready!"
+    "message": "All Projects"
   },
   "$1.routes.app.index.projectActionDialogGoBack": {
     "description": "Text for button to close project join/create dialog.",
@@ -219,8 +211,16 @@
     "description": "Error message for when project name is too short.",
     "message": "Enter a Project Name"
   },
-  "$1.routes.app.index.startProjectCardTitle": {
-    "description": "Title card for starting a new project.",
+  "$1.routes.app.index.projectsListSectionTitleCurrent": {
+    "description": "Title for section displaying current project.",
+    "message": "Current Project"
+  },
+  "$1.routes.app.index.projectsListSectionTitleOthers": {
+    "description": "Title for section displaying all other projects.",
+    "message": "Other Projects"
+  },
+  "$1.routes.app.index.startNewProject": {
+    "description": "Title for button to start a new project.",
     "message": "Start New Project"
   },
   "$1.routes.app.index.startProjectDialogDescription": {

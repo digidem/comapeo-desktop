@@ -35,55 +35,6 @@ import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../lib/constants.ts'
 import { setAppUsageMetricsMutationOptions } from '../../lib/queries/app-settings.ts'
 import { createProjectNameSchema } from '../../lib/validators/project.ts'
 
-export function JoinProjectDialogContent({ onBack }: { onBack: () => void }) {
-	const { formatMessage: t } = useIntl()
-
-	return (
-		<Stack direction="column" sx={{ flex: 1 }}>
-			<Box sx={{ padding: 2 }}>
-				<Button
-					variant="text"
-					startIcon={<Icon name="material-arrow-back" />}
-					aria-disabled={!onBack}
-					onClick={onBack}
-				>
-					{t(m.projectActionDialogGoBack)}
-				</Button>
-			</Box>
-
-			<Divider variant="fullWidth" />
-
-			<Stack
-				direction="column"
-				sx={{
-					gap: 10,
-					justifyContent: 'center',
-					textAlign: 'center',
-					flex: 1,
-					padding: 6,
-					overflow: 'auto',
-				}}
-			>
-				<Box>
-					<Box>
-						<Icon
-							name="material-people-filled"
-							htmlColor={DARKER_ORANGE}
-							size={120}
-						/>
-					</Box>
-
-					<Typography variant="h1" sx={{ fontWeight: 500 }}>
-						{t(m.joinProjectDialogTitle)}
-					</Typography>
-				</Box>
-
-				<Typography>{t(m.joinProjectDialogDescription)}</Typography>
-			</Stack>
-		</Stack>
-	)
-}
-
 export function StartProjectDialogContent({
 	onProjectCreated,
 	onBack,
@@ -600,17 +551,6 @@ const m = defineMessages({
 		id: '$1.routes.app.index.projectActionDialogGoBack',
 		defaultMessage: 'Go back',
 		description: 'Text for button to close project join/create dialog.',
-	},
-	joinProjectDialogTitle: {
-		id: '$1.routes.app.index.joinProjectDialogTitle',
-		defaultMessage: 'Join a Project',
-		description: 'Title of dialog shown for joining a project.',
-	},
-	joinProjectDialogDescription: {
-		id: '$1.routes.app.index.joinProjectDialogDescription',
-		defaultMessage:
-			'Coordinate with your team to receive a project invitation.',
-		description: 'Description of dialog shown for joining a project.',
 	},
 	startProjectDialogTitle: {
 		id: '$1.routes.app.index.startProjectDialogTitle',

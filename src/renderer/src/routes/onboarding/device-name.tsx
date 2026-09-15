@@ -78,11 +78,7 @@ function RouteComponent() {
 				captureException(err)
 			}
 
-			await router.navigate({
-				to: '/app',
-				search: { fromFlow: { name: 'onboarding' } },
-				mask: { to: '/app', unmaskOnReload: true },
-			})
+			await router.navigate({ to: '/app' })
 		},
 	})
 

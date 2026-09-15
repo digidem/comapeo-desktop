@@ -298,6 +298,13 @@
 			<path fill="none" d="M0 0h24v24H0z"></path>
 			<path d="M3 3h18v18H3z"></path>
 		</symbol>
+		<symbol viewBox="0 0 24 24" id="material-symbols-add-circle-outline">
+			<path d="M0 0h24v24H0z" fill="none"></path>
+			<path
+				fill="currentColor"
+				d="M11 17h2v-4h4v-2h-4V7h-2v4H7v2h4zm1 5q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"
+			></path>
+		</symbol>
 		<symbol
 			fill="currentColor"
 			viewBox="0 -960 960 960"
@@ -440,6 +447,15 @@
 		>
 			<path
 				d="M208-120q-37 0-62.5-25.5T120-208v-548q0-29 27-40.5t47 8.5l90 90-54 54 28 28 54-54 104 104-54 54 28 28 54-54 104 104-54 54 28 28 54-54 104 104-54 54 28 28 54-54 80 80q20 20 8.5 47T756-120zm32-120h332L240-572z"
+			></path>
+		</symbol>
+		<symbol
+			fill="currentColor"
+			viewBox="0 -960 960 960"
+			id="material-symbols-view-agenda"
+		>
+			<path
+				d="M200-520q-33 0-56.5-23.5T120-600v-160q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v160q0 33-23.5 56.5T760-520zm0-80h560v-160H200zm0 480q-33 0-56.5-23.5T120-200v-160q0-33 23.5-56.5T200-440h560q33 0 56.5 23.5T840-360v160q0 33-23.5 56.5T760-120zm0-80h560v-160H200zm0-560v160zm0 400v160z"
 			></path>
 		</symbol>
 		<symbol
