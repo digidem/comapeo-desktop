@@ -36,3 +36,10 @@ Make sure you have the preferred versions of tooling installed:
 ## License
 
 [GPL-3.0](./LICENSE)
+
+## Translating CoMapeo
+
+We know how critical it can be for users and communities to have tools like this one available in their local languages. We use Crowdin platform to manage translations. If you are interested in translating CoMapeo to your local language, please reach out to malvarez@awana.digital. Our team will help you get set up and guide you through the process to start translating CoMapeo to your language! 
+
+If you want to view the current status of translations for various languages CoMapeo supports, take a look here : https://crowdin.com/project/comapeo
+
