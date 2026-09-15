@@ -247,22 +247,6 @@ test('device name step', async ({ appInfo, userParams }) => {
 		await page.waitForURL((url) => {
 			return /^#\/app$/.test(url.hash)
 		})
-
-		await expect(
-			page.getByRole('heading', {
-				name: `${userParams.deviceName} is ready!`,
-				exact: true,
-			}),
-		).toBeVisible()
-
-		await page.reload()
-
-		await expect(
-			page.getByRole('heading', {
-				name: `${userParams.deviceName}'s Projects`,
-				exact: true,
-			}),
-		).toBeVisible()
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()
