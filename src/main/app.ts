@@ -210,8 +210,8 @@ export async function start({
 
 				appRunPromise.reject(
 					new AppRunError({
-						title: intlManager.formatMessage(messages.fatalErrorTitle),
-						description: intlManager.formatMessage(
+						title: intlManager.intl.formatMessage(messages.fatalErrorTitle),
+						description: intlManager.intl.formatMessage(
 							messages.fatalErrorDescriptionCoreService,
 						),
 					}),
@@ -350,11 +350,13 @@ export async function start({
 		}
 
 		throw new AppRunError({
-			title: intlManager.formatMessage(messages.fatalErrorTitle),
+			title: intlManager.intl.formatMessage(messages.fatalErrorTitle),
 			description:
 				reason instanceof Error
 					? `${reason.name}: ${reason.message}`
-					: intlManager.formatMessage(messages.fatalErrorDescriptionGeneric),
+					: intlManager.intl.formatMessage(
+							messages.fatalErrorDescriptionGeneric,
+						),
 			cause: reason,
 		})
 	}
@@ -596,15 +598,17 @@ function createAppContextMenu({
 		showSaveImageAs: true,
 		showSearchWithGoogle: false,
 		labels: {
-			copy: intlManager.formatMessage(messages.contextMenuCopy),
-			copyImage: intlManager.formatMessage(messages.contextMenuCopyImage),
-			copyImageAddress: intlManager.formatMessage(
+			copy: intlManager.intl.formatMessage(messages.contextMenuCopy),
+			copyImage: intlManager.intl.formatMessage(messages.contextMenuCopyImage),
+			copyImageAddress: intlManager.intl.formatMessage(
 				messages.contextMenuCopyImageAddress,
 			),
-			copyLink: intlManager.formatMessage(messages.contextMenuCopyLink),
-			cut: intlManager.formatMessage(messages.contextMenuCut),
-			inspect: intlManager.formatMessage(messages.contextMenuInspectElement),
-			learnSpelling: intlManager.formatMessage(
+			copyLink: intlManager.intl.formatMessage(messages.contextMenuCopyLink),
+			cut: intlManager.intl.formatMessage(messages.contextMenuCut),
+			inspect: intlManager.intl.formatMessage(
+				messages.contextMenuInspectElement,
+			),
+			learnSpelling: intlManager.intl.formatMessage(
 				messages.contextMenuLearnSpelling,
 				{
 					// NOTE: Kind of awkward but need `{selection}` to be literally inlined for the replacement to work
@@ -612,7 +616,7 @@ function createAppContextMenu({
 					placeholder: '"{selection}"',
 				},
 			),
-			lookUpSelection: intlManager.formatMessage(
+			lookUpSelection: intlManager.intl.formatMessage(
 				messages.contextMenuLookUpSelection,
 				{
 					// NOTE: Kind of awkward but need `{selection}` to be literally inlined for the replacement to work
@@ -620,9 +624,11 @@ function createAppContextMenu({
 					placeholder: '"{selection}"',
 				},
 			),
-			paste: intlManager.formatMessage(messages.contextMenuPaste),
-			saveImageAs: intlManager.formatMessage(messages.contextMenuSaveImageAs),
-			selectAll: intlManager.formatMessage(messages.contextMenuSelectAll),
+			paste: intlManager.intl.formatMessage(messages.contextMenuPaste),
+			saveImageAs: intlManager.intl.formatMessage(
+				messages.contextMenuSaveImageAs,
+			),
+			selectAll: intlManager.intl.formatMessage(messages.contextMenuSelectAll),
 		},
 	})
 }

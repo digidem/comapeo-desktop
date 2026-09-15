@@ -112,6 +112,10 @@ export class IntlManager extends TypedEmitter<IntlManagerEvents> {
 		)
 	}
 
+	get intl() {
+		return this.#intl
+	}
+
 	get localeState(): LocaleState {
 		return {
 			source: this.#localeSource,
@@ -155,12 +159,6 @@ export class IntlManager extends TypedEmitter<IntlManagerEvents> {
 		this.#localeSource = source
 
 		this.emit('locale-state', this.localeState)
-	}
-
-	// Exposing mostly for convenience of usage
-	formatMessage(...args: Parameters<IntlShape['formatMessage']>): string {
-		const result = this.#intl.formatMessage(...args)
-		return Array.isArray(result) ? result.join() : result
 	}
 }
 
