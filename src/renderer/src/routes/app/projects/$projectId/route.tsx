@@ -192,17 +192,19 @@ function RouteComponent() {
 					dense
 					disablePadding
 					sx={{
+						alignItems: 'stretch',
 						display: 'flex',
 						flexDirection: 'column',
+						gap: 5,
 						justifyContent: 'space-between',
-						paddingInline: 2,
+						overflow: 'auto',
 						paddingBlock: 4,
-						gap: 10,
+						scrollbarGutter: 'stable both-edges',
+						scrollbarWidth: 'thin',
 						textAlign: 'center',
-						alignItems: 'stretch',
 					}}
 				>
-					<Stack direction="column" sx={{ gap: 5 }}>
+					<Stack direction="column" sx={{ flex: 1, gap: 5 }}>
 						<ListItem
 							dense
 							disableGutters
