@@ -219,13 +219,21 @@
     "description": "Displayed speed for observation in meters per second.",
     "message": "{value} m/s"
   },
-  "routes.app.projects.$projectId.route.appNavigationAccesibleLabel": {
-    "description": "Accessible label for app-wide navigation bar.",
-    "message": "App navigation"
+  "routes.app.projects.$projectId.route.backgroundMapTabLabel": {
+    "description": "Label for background map tab link in navigation.",
+    "message": "Background Map"
+  },
+  "routes.app.projects.$projectId.route.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set in project info dialog.",
+    "message": "CoMapeo Categories"
   },
   "routes.app.projects.$projectId.route.projectNavigationAccessibleLabel": {
     "description": "Accessible label for project-specific navigation bar.",
     "message": "Project navigation"
+  },
+  "routes.app.projects.$projectId.route.settingsTabLabel": {
+    "description": "Label for app settings tab link in navigation.",
+    "message": "Settings"
   },
   "routes.app.projects.$projectId.route.testDataTabLabel": {
     "description": "Label for project test data tab link in navigation.",
@@ -307,33 +315,9 @@
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
   },
-  "routes.app.route.accessibleLabelGoTo": {
-    "description": "Accessible label for button that navigates to project when clicked.",
-    "message": "Go to project {name}."
-  },
-  "routes.app.route.accessibleLabelShowProjectInfo": {
-    "description": "Accessible label for button that shows project info when clicked.",
-    "message": "Show info for project {name}."
-  },
-  "routes.app.route.fallbackCategoriesSetName": {
-    "description": "Text shown when project does not use a categories set.",
-    "message": "CoMapeo Categories"
-  },
   "routes.app.route.projectCardLinkAccessibleLabel": {
     "description": "Accessible label for link that navigates to project when clicked.",
     "message": "Go to project {name}."
-  },
-  "routes.app.route.projectInfoCategoriesCreated": {
-    "description": "Text indicating creation date of categories set.",
-    "message": "Created {date}"
-  },
-  "routes.app.route.projectInfoRoleCoordinator": {
-    "description": "Indicates that user is a coordinator.",
-    "message": "Coordinator"
-  },
-  "routes.app.route.projectInfoRoleParticipant": {
-    "description": "Indicates that user is a participant.",
-    "message": "Participant"
   },
   "routes.app.settings.breadCrumbAccessibleLabel": {
     "description": "Accessible label for breadcrumb navigation when viewing nested settings page.",
