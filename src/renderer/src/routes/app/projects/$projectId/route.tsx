@@ -1,4 +1,10 @@
-import { Suspense, useId, useState, type MouseEventHandler } from 'react'
+import {
+	Suspense,
+	useEffect,
+	useId,
+	useState,
+	type MouseEventHandler,
+} from 'react'
 import {
 	useImportProjectCategories,
 	useManyMembers,
@@ -118,9 +124,6 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 
 			// NOTE: Update the active project ID whenever we navigate to a relevant project-specific page.
 			context.activeProjectIdStore.actions.update(params.projectId)
-
-			// NOTE: Enable connection to remote archives when entering a project-specific route
-			context.projectApi.$sync.connectServers().catch(captureException)
 		}
 
 		await Promise.all([
@@ -146,12 +149,11 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 			}),
 		])
 	},
-	onLeave: ({ context }) => {
+	onLeave: () => {
 		removeItem('use_active_project_id_for_initial_route')
-
-		// NOTE: Disconnect from remote archives when leaving a project-specific route
-		context.projectApi.$sync.disconnectServers().catch(captureException)
 	},
+	// NOTE: Prevents an OOM issue in the renderer when switching between projects.
+	remountDeps: ({ params }) => params,
 	component: RouteComponent,
 })
 
@@ -185,6 +187,18 @@ function RouteComponent() {
 		someGlobalMutationIsPending,
 		{ delay: 100 },
 	)
+
+	const { data: projectApi } = useSingleProject({ projectId })
+
+	useEffect(() => {
+		// NOTE: Enable connection to remote archives when entering a project-specific route
+		projectApi.$sync.connectServers().catch(captureException)
+
+		return () => {
+			// NOTE: Disconnect from remote archives when leaving a project-specific route
+			projectApi.$sync.disconnectServers().catch(captureException)
+		}
+	}, [projectId, projectApi])
 
 	return (
 		<Box
