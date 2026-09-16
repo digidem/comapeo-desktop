@@ -4,6 +4,7 @@ import {
 	useGetCustomMapInfo,
 	useOwnDeviceInfo,
 } from '@comapeo/core-react'
+import { IconButton } from '@mui/material'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import Container from '@mui/material/Container'
@@ -13,12 +14,12 @@ import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { ListRowLink } from '../-components/list-row-link.tsx'
 import type { SupportedLanguageTag } from '../../../../../shared/intl.ts'
-import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors.ts'
+import { BLUE_GREY, DARK_GREY } from '../../../colors.ts'
 import { Icon } from '../../../components/icon.tsx'
 import { useIconSizeBasedOnTypography } from '../../../hooks/icon.ts'
 import { getLanguageInfo } from '../../../lib/intl.ts'
@@ -36,6 +37,8 @@ export const Route = createFileRoute('/app/settings/')({
 function RouteComponent() {
 	const { formatMessage: t } = useIntl()
 
+	const router = useRouter()
+
 	const headerIconHeight = useIconSizeBasedOnTypography({
 		typographyVariant: 'h1',
 		multiplier: 1.5,
@@ -45,11 +48,20 @@ function RouteComponent() {
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack direction="column" sx={{ gap: 6, padding: 6 }}>
 				<Stack direction="row" sx={{ gap: 4, alignItems: 'center', flex: 1 }}>
-					<Icon
-						name="material-settings"
-						size={headerIconHeight}
-						htmlColor={DARKER_ORANGE}
-					/>
+					<IconButton
+						aria-label={t(m.goBackAccessibleLabel)}
+						color="inherit"
+						onClick={() => {
+							if (router.history.canGoBack()) {
+								router.history.back()
+								return
+							}
+
+							router.navigate({ to: '/app', replace: true })
+						}}
+					>
+						<Icon name="material-arrow-back" size={headerIconHeight} />
+					</IconButton>
 
 					<Typography
 						variant="h1"
@@ -371,6 +383,11 @@ function AboutCoMapeoSection() {
 }
 
 const m = defineMessages({
+	goBackAccessibleLabel: {
+		id: 'routes.app.settings.index.goBackAccessibleLabel',
+		defaultMessage: 'Go back.',
+		description: 'Accessible label for back button',
+	},
 	title: {
 		id: '$1.routes.app.settings.index.title',
 		defaultMessage: 'CoMapeo Settings',
