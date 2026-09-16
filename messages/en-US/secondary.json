@@ -367,6 +367,10 @@
     "description": "Label for Degrees/Minutes/Seconds coordinate system.",
     "message": "DMS Coordinates"
   },
+  "routes.app.settings.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button",
+    "message": "Go back."
+  },
   "routes.app.settings.index.languageSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to language settings page.",
     "message": "Go to language settings."

@@ -530,7 +530,7 @@ function ProjectSwitcherButton({
 		>
 			<Box
 				onKeyDown={(event) => {
-					if (event.key === 'Tab' || event.key === 'Escape') {
+					if (event.key === 'Escape') {
 						setAnchorElement(null)
 					}
 				}}
