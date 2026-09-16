@@ -221,105 +221,31 @@ function RouteComponent() {
 						alignItems: 'stretch',
 						display: 'flex',
 						flexDirection: 'column',
-						gap: 5,
-						justifyContent: 'space-between',
-						overflow: 'auto',
 						paddingBlock: 4,
-						scrollbarGutter: 'stable both-edges',
-						scrollbarWidth: 'thin',
-						textAlign: 'center',
 					}}
 				>
-					<Stack direction="column" sx={{ flex: 1, gap: 5 }}>
-						<ListItem
-							dense
-							disableGutters
-							disablePadding
-							sx={{ justifyContent: 'center' }}
-						>
-							<ProjectInfoTabButton projectId={projectId} />
-						</ListItem>
+					<ListItem
+						dense
+						disableGutters
+						disablePadding
+						sx={{ justifyContent: 'center' }}
+					>
+						<ProjectInfoTabButton projectId={projectId} />
+					</ListItem>
 
-						<ListItem
-							dense
-							disableGutters
-							disablePadding
-							sx={{ justifyContent: 'center' }}
-						>
-							<Tooltip
-								title={t(m.listTabLabel)}
-								disableFocusListener
-								placement="right"
-							>
-								<IconButtonLink
-									to="/app/projects/$projectId"
-									params={{ projectId }}
-									disabled={globalMutationsAreVisiblyPending}
-									onClick={(event) => {
-										if (someGlobalMutationIsPending) {
-											event.preventDefault()
-										}
-									}}
-									inactiveProps={BASE_INACTIVE_LINK_PROPS}
-									activeProps={
-										// NOTE: Subroutes of the project that also live as project nav bar tab links
-										currentRoute.fullPath.startsWith(
-											'/app/projects/$projectId/exchange',
-										) ||
-										currentRoute.fullPath.startsWith(
-											'/app/projects/$projectId/settings',
-										) ||
-										currentRoute.fullPath.startsWith(
-											'/app/projects/$projectId/team',
-										) ||
-										currentRoute.fullPath.startsWith(
-											'/app/projects/$projectId/team/invite',
-										) ||
-										currentRoute.fullPath ===
-											'/app/projects/$projectId/test-data'
-											? BASE_INACTIVE_LINK_PROPS
-											: BASE_ACTIVE_LINK_PROPS
-									}
-								>
-									<Icon name="noun-project-notebook" size={24} />
-								</IconButtonLink>
-							</Tooltip>
-						</ListItem>
-
-						<ListItem
-							dense
-							disableGutters
-							disablePadding
-							sx={{ justifyContent: 'center' }}
-						>
-							<Tooltip
-								title={t(m.teamTabLabel)}
-								disableFocusListener
-								placement="right"
-							>
-								<IconButtonLink
-									to="/app/projects/$projectId/team"
-									params={{ projectId }}
-									disabled={
-										globalMutationsAreVisiblyPending &&
-										!currentRoute.fullPath.startsWith(
-											'/app/projects/$projectId/team',
-										)
-									}
-									onClick={(event) => {
-										if (someGlobalMutationIsPending) {
-											event.preventDefault()
-										}
-									}}
-									inactiveProps={BASE_INACTIVE_LINK_PROPS}
-									activeProps={BASE_ACTIVE_LINK_PROPS}
-								>
-									<Icon name="material-people-filled" size={24} />
-								</IconButtonLink>
-							</Tooltip>
-						</ListItem>
-
-						{isCoordinator ? (
+					<Stack
+						direction="column"
+						sx={{
+							flex: 1,
+							gap: 5,
+							justifyContent: 'space-between',
+							overflow: 'auto',
+							paddingBlock: 5,
+							scrollbarGutter: 'stable both-edges',
+							scrollbarWidth: 'thin',
+						}}
+					>
+						<Stack sx={{ gap: 5 }}>
 							<ListItem
 								dense
 								disableGutters
@@ -327,52 +253,63 @@ function RouteComponent() {
 								sx={{ justifyContent: 'center' }}
 							>
 								<Tooltip
-									title={t(m.toolsTabLabel)}
+									title={t(m.listTabLabel)}
 									disableFocusListener
 									placement="right"
 								>
 									<IconButtonLink
-										to="/app/projects/$projectId/settings"
+										to="/app/projects/$projectId"
 										params={{ projectId }}
-										disabled={
-											globalMutationsAreVisiblyPending &&
-											!currentRoute.fullPath.startsWith(
-												'/app/projects/$projectId/settings',
-											)
-										}
+										disabled={globalMutationsAreVisiblyPending}
 										onClick={(event) => {
 											if (someGlobalMutationIsPending) {
 												event.preventDefault()
 											}
 										}}
 										inactiveProps={BASE_INACTIVE_LINK_PROPS}
-										activeProps={BASE_ACTIVE_LINK_PROPS}
-									>
-										<Icon name="material-manage-accounts-filled" size={24} />
-									</IconButtonLink>
-								</Tooltip>
-							</ListItem>
-						) : null}
-
-						{selfIsOnlyProjectMemberEver ? null : (
-							<ListItem
-								dense
-								disableGutters
-								disablePadding
-								sx={{ justifyContent: 'center' }}
-							>
-								<Tooltip
-									title={t(m.exchangeTabLabel)}
-									disableFocusListener
-									placement="right"
-								>
-									<IconButtonLink
-										to="/app/projects/$projectId/exchange"
-										params={{ projectId }}
-										disabled={
-											globalMutationsAreVisiblyPending &&
-											!currentRoute.fullPath.startsWith(
+										activeProps={
+											// NOTE: Subroutes of the project that also live as project nav bar tab links
+											currentRoute.fullPath.startsWith(
 												'/app/projects/$projectId/exchange',
+											) ||
+											currentRoute.fullPath.startsWith(
+												'/app/projects/$projectId/settings',
+											) ||
+											currentRoute.fullPath.startsWith(
+												'/app/projects/$projectId/team',
+											) ||
+											currentRoute.fullPath.startsWith(
+												'/app/projects/$projectId/team/invite',
+											) ||
+											currentRoute.fullPath ===
+												'/app/projects/$projectId/test-data'
+												? BASE_INACTIVE_LINK_PROPS
+												: BASE_ACTIVE_LINK_PROPS
+										}
+									>
+										<Icon name="noun-project-notebook" size={24} />
+									</IconButtonLink>
+								</Tooltip>
+							</ListItem>
+
+							<ListItem
+								dense
+								disableGutters
+								disablePadding
+								sx={{ justifyContent: 'center' }}
+							>
+								<Tooltip
+									title={t(m.teamTabLabel)}
+									disableFocusListener
+									placement="right"
+								>
+									<IconButtonLink
+										to="/app/projects/$projectId/team"
+										params={{ projectId }}
+										disabled={
+											globalMutationsAreVisiblyPending &&
+											!currentRoute.fullPath.startsWith(
+												'/app/projects/$projectId/team',
 											)
 										}
 										onClick={(event) => {
@@ -383,99 +320,169 @@ function RouteComponent() {
 										inactiveProps={BASE_INACTIVE_LINK_PROPS}
 										activeProps={BASE_ACTIVE_LINK_PROPS}
 									>
-										<Icon name="material-offline-bolt-filled" size={24} />
+										<Icon name="material-people-filled" size={24} />
 									</IconButtonLink>
 								</Tooltip>
 							</ListItem>
-						)}
 
-						{__APP_TYPE__ !== 'production' &&
-						import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
-							<Suspense>
-								<TestDataTabLink
-									disabled={
-										globalMutationsAreVisiblyPending &&
-										currentRoute.fullPath !==
-											'/app/projects/$projectId/test-data'
-									}
-									onClick={(event) => {
-										if (someGlobalMutationIsPending) {
-											event.preventDefault()
+							{isCoordinator ? (
+								<ListItem
+									dense
+									disableGutters
+									disablePadding
+									sx={{ justifyContent: 'center' }}
+								>
+									<Tooltip
+										title={t(m.toolsTabLabel)}
+										disableFocusListener
+										placement="right"
+									>
+										<IconButtonLink
+											to="/app/projects/$projectId/settings"
+											params={{ projectId }}
+											disabled={
+												globalMutationsAreVisiblyPending &&
+												!currentRoute.fullPath.startsWith(
+													'/app/projects/$projectId/settings',
+												)
+											}
+											onClick={(event) => {
+												if (someGlobalMutationIsPending) {
+													event.preventDefault()
+												}
+											}}
+											inactiveProps={BASE_INACTIVE_LINK_PROPS}
+											activeProps={BASE_ACTIVE_LINK_PROPS}
+										>
+											<Icon name="material-manage-accounts-filled" size={24} />
+										</IconButtonLink>
+									</Tooltip>
+								</ListItem>
+							) : null}
+
+							{selfIsOnlyProjectMemberEver ? null : (
+								<ListItem
+									dense
+									disableGutters
+									disablePadding
+									sx={{ justifyContent: 'center' }}
+								>
+									<Tooltip
+										title={t(m.exchangeTabLabel)}
+										disableFocusListener
+										placement="right"
+									>
+										<IconButtonLink
+											to="/app/projects/$projectId/exchange"
+											params={{ projectId }}
+											disabled={
+												globalMutationsAreVisiblyPending &&
+												!currentRoute.fullPath.startsWith(
+													'/app/projects/$projectId/exchange',
+												)
+											}
+											onClick={(event) => {
+												if (someGlobalMutationIsPending) {
+													event.preventDefault()
+												}
+											}}
+											inactiveProps={BASE_INACTIVE_LINK_PROPS}
+											activeProps={BASE_ACTIVE_LINK_PROPS}
+										>
+											<Icon name="material-offline-bolt-filled" size={24} />
+										</IconButtonLink>
+									</Tooltip>
+								</ListItem>
+							)}
+
+							{__APP_TYPE__ !== 'production' &&
+							import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
+								<Suspense>
+									<TestDataTabLink
+										disabled={
+											globalMutationsAreVisiblyPending &&
+											currentRoute.fullPath !==
+												'/app/projects/$projectId/test-data'
 										}
-									}}
-									projectId={projectId}
-								/>
-							</Suspense>
-						) : null}
+										onClick={(event) => {
+											if (someGlobalMutationIsPending) {
+												event.preventDefault()
+											}
+										}}
+										projectId={projectId}
+									/>
+								</Suspense>
+							) : null}
+						</Stack>
+
+						<Stack direction="column" sx={{ gap: 5 }}>
+							<ListItem
+								dense
+								disableGutters
+								disablePadding
+								sx={{ justifyContent: 'center' }}
+							>
+								<Tooltip
+									title={t(m.backgroundMapTabLabel)}
+									disableFocusListener
+									placement="right"
+								>
+									<IconButtonLink
+										to="/app/settings/background-map"
+										disabled={globalMutationsAreVisiblyPending}
+										onClick={(event) => {
+											if (someGlobalMutationIsPending) {
+												event.preventDefault()
+											}
+										}}
+										inactiveProps={BASE_INACTIVE_LINK_PROPS}
+										activeProps={BASE_ACTIVE_LINK_PROPS}
+									>
+										<Icon name="material-layers-outlined" size={24} />
+									</IconButtonLink>
+								</Tooltip>
+							</ListItem>
+
+							<ListItem
+								dense
+								disableGutters
+								disablePadding
+								sx={{ justifyContent: 'center' }}
+							>
+								<Tooltip
+									title={t(m.settingsTabLabel)}
+									disableFocusListener
+									placement="right"
+								>
+									<IconButtonLink
+										to="/app/settings"
+										disabled={globalMutationsAreVisiblyPending}
+										onClick={(event) => {
+											if (someGlobalMutationIsPending) {
+												event.preventDefault()
+											}
+										}}
+										inactiveProps={BASE_INACTIVE_LINK_PROPS}
+										activeProps={BASE_ACTIVE_LINK_PROPS}
+									>
+										<Icon name="material-settings" size={24} />
+									</IconButtonLink>
+								</Tooltip>
+							</ListItem>
+						</Stack>
 					</Stack>
 
-					<Stack direction="column" sx={{ gap: 5 }}>
-						<ListItem
-							dense
-							disableGutters
-							disablePadding
-							sx={{ justifyContent: 'center' }}
-						>
-							<Tooltip
-								title={t(m.backgroundMapTabLabel)}
-								disableFocusListener
-								placement="right"
-							>
-								<IconButtonLink
-									to="/app/settings/background-map"
-									disabled={globalMutationsAreVisiblyPending}
-									onClick={(event) => {
-										if (someGlobalMutationIsPending) {
-											event.preventDefault()
-										}
-									}}
-									inactiveProps={BASE_INACTIVE_LINK_PROPS}
-									activeProps={BASE_ACTIVE_LINK_PROPS}
-								>
-									<Icon name="material-layers-outlined" size={24} />
-								</IconButtonLink>
-							</Tooltip>
-						</ListItem>
-
-						<ListItem
-							dense
-							disableGutters
-							disablePadding
-							sx={{ justifyContent: 'center' }}
-						>
-							<Tooltip
-								title={t(m.settingsTabLabel)}
-								disableFocusListener
-								placement="right"
-							>
-								<IconButtonLink
-									to="/app/settings"
-									disabled={globalMutationsAreVisiblyPending}
-									onClick={(event) => {
-										if (someGlobalMutationIsPending) {
-											event.preventDefault()
-										}
-									}}
-									inactiveProps={BASE_INACTIVE_LINK_PROPS}
-									activeProps={BASE_ACTIVE_LINK_PROPS}
-								>
-									<Icon name="material-settings" size={24} />
-								</IconButtonLink>
-							</Tooltip>
-						</ListItem>
-
-						<ListItem
-							dense
-							disableGutters
-							disablePadding
-							sx={{ justifyContent: 'center' }}
-						>
-							<ProjectSwitcherButton
-								currentProjectId={projectId}
-								deviceName={ownDeviceInfo.name}
-							/>
-						</ListItem>
-					</Stack>
+					<ListItem
+						dense
+						disableGutters
+						disablePadding
+						sx={{ justifyContent: 'center' }}
+					>
+						<ProjectSwitcherButton
+							currentProjectId={projectId}
+							deviceName={ownDeviceInfo.name}
+						/>
+					</ListItem>
 				</List>
 			</Box>
 
@@ -729,10 +736,18 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 					onClick={() => {
 						setShowProjectInfoDialog(true)
 					}}
-					sx={{ display: 'flex', flex: 1, color: BLACK }}
+					sx={{ display: 'flex', flex: 1, color: BLACK, padding: 3 }}
 				>
 					<Box
-						sx={{ backgroundColor: accentColor, borderRadius: '50%', flex: 1 }}
+						sx={{
+							alignItems: 'center',
+							aspectRatio: 1,
+							backgroundColor: accentColor,
+							borderRadius: '50%',
+							display: 'flex',
+							flex: 1,
+							justifyContent: 'center',
+						}}
 					>
 						<Typography sx={{ fontWeight: 500 }}>
 							{displayedProjectName[0]}
