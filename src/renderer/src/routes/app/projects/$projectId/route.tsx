@@ -758,240 +758,244 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 
 			<DecentDialog fullWidth maxWidth="sm" value={showProjectInfoDialog}>
 				{() => (
-					<Stack direction="column" sx={{ gap: 4, padding: 4 }}>
+					<Stack direction="column" sx={{ overflow: 'auto' }}>
 						<Stack
 							direction="column"
-							sx={{
-								alignItems: 'flex-start',
-								backgroundColor: accentColor,
-								borderRadius: 2,
-								gap: 4,
-								padding: 6,
-							}}
+							sx={{ gap: 4, overflow: 'auto', padding: 4 }}
 						>
-							<Typography
-								variant="h1"
-								sx={{ fontWeight: 500, overflowWrap: 'break-word' }}
+							<Stack
+								direction="column"
+								sx={{
+									alignItems: 'flex-start',
+									backgroundColor: accentColor,
+									borderRadius: 2,
+									gap: 4,
+									padding: 6,
+								}}
 							>
-								{displayedProjectName}
-							</Typography>
-
-							{projectSettings.projectDescription ? (
 								<Typography
-									color="textSecondary"
-									sx={{ overflowWrap: 'break-word' }}
+									variant="h1"
+									sx={{ fontWeight: 500, overflowWrap: 'break-word' }}
 								>
-									{projectSettings.projectDescription}
+									{displayedProjectName}
 								</Typography>
-							) : null}
 
-							<Box>
-								<ButtonLink
-									to="/app/projects/$projectId/settings/info"
-									params={{ projectId }}
-									aria-disabled={selectAndImportMutation.status === 'pending'}
-									endIcon={
-										<Icon
-											aria-hidden
-											name="material-arrow-back"
-											sx={{ transform: 'rotate(180deg)' }}
-										/>
-									}
-									onClick={(event) => {
-										if (selectAndImportMutation.status === 'pending') {
-											event.preventDefault()
-											return
-										}
+								{projectSettings.projectDescription ? (
+									<Typography
+										color="textSecondary"
+										sx={{ overflowWrap: 'break-word' }}
+									>
+										{projectSettings.projectDescription}
+									</Typography>
+								) : null}
 
-										setShowProjectInfoDialog(null)
-									}}
-									variant="text"
-									sx={{ marginInlineStart: -3 }}
-								>
-									{intl.formatMessage(m.projectInfoEditInfo)}
-								</ButtonLink>
-							</Box>
-						</Stack>
-
-						<List
-							disablePadding
-							sx={{
-								display: 'flex',
-								flexDirection: 'column',
-								gap: 4,
-								padding: 4,
-							}}
-						>
-							<ListItem disableGutters disablePadding sx={{ gap: 4 }}>
-								<Stack
-									direction="row"
-									sx={{
-										alignItems: 'flex-start',
-										flex: 1,
-										gap: 4,
-										overflow: 'hidden',
-									}}
-								>
-									{isAtLeastCoordinator ? (
-										<>
+								<Box>
+									<ButtonLink
+										to="/app/projects/$projectId/settings/info"
+										params={{ projectId }}
+										aria-disabled={selectAndImportMutation.status === 'pending'}
+										endIcon={
 											<Icon
-												name="material-manage-accounts-filled"
-												size={projectSettingsItemIconSize}
+												aria-hidden
+												name="material-arrow-back"
+												sx={{ transform: 'rotate(180deg)' }}
 											/>
-
-											<Typography
-												sx={{
-													fontWeight: 500,
-													textOverflow: 'ellipsis',
-													whiteSpace: 'nowrap',
-													overflow: 'hidden',
-												}}
-											>
-												{intl.formatMessage(m.projectInfoRoleCoordinator)}
-											</Typography>
-										</>
-									) : (
-										<>
-											<Icon name="material-people-filled" />
-
-											<Typography
-												sx={{
-													fontWeight: 500,
-													textOverflow: 'ellipsis',
-													whiteSpace: 'nowrap',
-													overflow: 'hidden',
-												}}
-											>
-												{intl.formatMessage(m.projectInfoRoleParticipant)}
-											</Typography>
-										</>
-									)}
-								</Stack>
-
-								<ButtonLink
-									to="/app/projects/$projectId/team"
-									params={{ projectId }}
-									aria-disabled={selectAndImportMutation.status === 'pending'}
-									onClick={(event) => {
-										if (selectAndImportMutation.status === 'pending') {
-											event.preventDefault()
-											return
 										}
+										onClick={(event) => {
+											if (selectAndImportMutation.status === 'pending') {
+												event.preventDefault()
+												return
+											}
 
-										setShowProjectInfoDialog(null)
-									}}
-									sx={{ marginInlineEnd: -3 }}
-									variant="text"
-								>
-									{intl.formatMessage(m.projectInfoViewTeam)}
-								</ButtonLink>
-							</ListItem>
+											setShowProjectInfoDialog(null)
+										}}
+										variant="text"
+										sx={{ marginInlineStart: -3 }}
+									>
+										{intl.formatMessage(m.projectInfoEditInfo)}
+									</ButtonLink>
+								</Box>
+							</Stack>
 
-							<Divider variant="fullWidth" />
+							<List
+								disablePadding
+								sx={{
+									display: 'flex',
+									flexDirection: 'column',
+									gap: 4,
+									padding: 4,
+								}}
+							>
+								<ListItem disableGutters disablePadding sx={{ gap: 4 }}>
+									<Stack
+										direction="row"
+										sx={{
+											alignItems: 'flex-start',
+											flex: 1,
+											gap: 4,
+											overflow: 'hidden',
+										}}
+									>
+										{isAtLeastCoordinator ? (
+											<>
+												<Icon
+													name="material-manage-accounts-filled"
+													size={projectSettingsItemIconSize}
+												/>
 
-							<ListItem disableGutters disablePadding sx={{ gap: 4 }}>
-								<Stack
-									direction="row"
-									sx={{ alignItems: 'flex-start', flex: 1, gap: 4 }}
-								>
-									<Icon
-										name="material-symbols-apps"
-										size={projectSettingsItemIconSize}
-									/>
-
-									{projectSettings.configMetadata ? (
-										<Box>
-											<Typography color="textSecondary">
 												<Typography
-													component="span"
-													variant="inherit"
-													color="textPrimary"
-													sx={{ fontWeight: 500 }}
+													sx={{
+														fontWeight: 500,
+														textOverflow: 'ellipsis',
+														whiteSpace: 'nowrap',
+														overflow: 'hidden',
+													}}
 												>
-													{projectSettings.configMetadata.name}
+													{intl.formatMessage(m.projectInfoRoleCoordinator)}
 												</Typography>
-												{
-													// eslint-disable-next-line formatjs/no-literal-string-in-jsx
-													' '
-												}
-												{projectSettings.configMetadata.fileVersion}
-											</Typography>
+											</>
+										) : (
+											<>
+												<Icon name="material-people-filled" />
 
-											<Typography color="textSecondary">
-												{intl.formatMessage(m.projectInfoCategoriesCreated, {
-													date: (
-														<time
-															key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
-															dateTime={
-																projectSettings.configMetadata.buildDate
-															}
-														>
-															{intl.formatDate(
-																projectSettings.configMetadata.buildDate,
-																{
-																	year: 'numeric',
-																	month: 'long',
-																	day: 'numeric',
-																},
-															)}
-														</time>
-													),
-												})}
-											</Typography>
+												<Typography
+													sx={{
+														fontWeight: 500,
+														textOverflow: 'ellipsis',
+														whiteSpace: 'nowrap',
+														overflow: 'hidden',
+													}}
+												>
+													{intl.formatMessage(m.projectInfoRoleParticipant)}
+												</Typography>
+											</>
+										)}
+									</Stack>
 
-											<Typography color="textSecondary">
-												{intl.formatMessage(m.projectInfoCategoriesAdded, {
-													date: (
-														<time
-															key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
-															dateTime={
-																projectSettings.configMetadata.importDate
-															}
-														>
-															{intl.formatDate(
-																projectSettings.configMetadata.importDate,
-																{
-																	year: 'numeric',
-																	month: 'long',
-																	day: 'numeric',
-																},
-															)}
-														</time>
-													),
-												})}
-											</Typography>
-										</Box>
-									) : (
-										<Typography sx={{ fontWeight: 500 }}>
-											{intl.formatMessage(m.fallbackCategoriesSetName)}
-										</Typography>
-									)}
-								</Stack>
+									<ButtonLink
+										to="/app/projects/$projectId/team"
+										params={{ projectId }}
+										aria-disabled={selectAndImportMutation.status === 'pending'}
+										onClick={(event) => {
+											if (selectAndImportMutation.status === 'pending') {
+												event.preventDefault()
+												return
+											}
 
-								<Button
-									loading={selectAndImportMutation.status === 'pending'}
-									onClick={() => {
-										selectAndImportMutation.mutate(undefined, {
-											onError: (err) => {
-												captureException(err)
-											},
-										})
-									}}
-									variant="text"
-									sx={{ marginInlineEnd: -3 }}
-								>
-									{intl.formatMessage(m.projectInfoUpdateCategories)}
-								</Button>
-							</ListItem>
-						</List>
+											setShowProjectInfoDialog(null)
+										}}
+										sx={{ marginInlineEnd: -3 }}
+										variant="text"
+									>
+										{intl.formatMessage(m.projectInfoViewTeam)}
+									</ButtonLink>
+								</ListItem>
+
+								<Divider variant="fullWidth" />
+
+								<ListItem disableGutters disablePadding sx={{ gap: 4 }}>
+									<Stack
+										direction="row"
+										sx={{ alignItems: 'flex-start', flex: 1, gap: 4 }}
+									>
+										<Icon
+											name="material-symbols-apps"
+											size={projectSettingsItemIconSize}
+										/>
+
+										{projectSettings.configMetadata ? (
+											<Box>
+												<Typography color="textSecondary">
+													<Typography
+														component="span"
+														variant="inherit"
+														color="textPrimary"
+														sx={{ fontWeight: 500 }}
+													>
+														{projectSettings.configMetadata.name}
+													</Typography>
+													{
+														// eslint-disable-next-line formatjs/no-literal-string-in-jsx
+														' '
+													}
+													{projectSettings.configMetadata.fileVersion}
+												</Typography>
+
+												<Typography color="textSecondary">
+													{intl.formatMessage(m.projectInfoCategoriesCreated, {
+														date: (
+															<time
+																key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
+																dateTime={
+																	projectSettings.configMetadata.buildDate
+																}
+															>
+																{intl.formatDate(
+																	projectSettings.configMetadata.buildDate,
+																	{
+																		year: 'numeric',
+																		month: 'long',
+																		day: 'numeric',
+																	},
+																)}
+															</time>
+														),
+													})}
+												</Typography>
+
+												<Typography color="textSecondary">
+													{intl.formatMessage(m.projectInfoCategoriesAdded, {
+														date: (
+															<time
+																key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
+																dateTime={
+																	projectSettings.configMetadata.importDate
+																}
+															>
+																{intl.formatDate(
+																	projectSettings.configMetadata.importDate,
+																	{
+																		year: 'numeric',
+																		month: 'long',
+																		day: 'numeric',
+																	},
+																)}
+															</time>
+														),
+													})}
+												</Typography>
+											</Box>
+										) : (
+											<Typography sx={{ fontWeight: 500 }}>
+												{intl.formatMessage(m.fallbackCategoriesSetName)}
+											</Typography>
+										)}
+									</Stack>
+
+									<Button
+										loading={selectAndImportMutation.status === 'pending'}
+										onClick={() => {
+											selectAndImportMutation.mutate(undefined, {
+												onError: (err) => {
+													captureException(err)
+												},
+											})
+										}}
+										variant="text"
+										sx={{ marginInlineEnd: -3 }}
+									>
+										{intl.formatMessage(m.projectInfoUpdateCategories)}
+									</Button>
+								</ListItem>
+							</List>
+						</Stack>
 
 						<Box
 							sx={{
-								bottom: 0,
 								display: 'flex',
-								flexDirection: 'row',
+								flexDirection: 'center',
 								justifyContent: 'center',
-								position: 'sticky',
+								padding: 4,
 							}}
 						>
 							<Button
