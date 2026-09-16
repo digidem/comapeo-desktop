@@ -1,17 +1,21 @@
-import { Suspense, type MouseEventHandler } from 'react'
+import { Suspense, useState, type MouseEventHandler } from 'react'
 import {
+	useImportProjectCategories,
 	useManyMembers,
 	useManyProjects,
 	useOwnDeviceInfo,
 	useOwnRoleInProject,
+	useProjectSettings,
 } from '@comapeo/core-react'
+import type { Role } from '@comapeo/core/schema.js'
+import { Button, Divider, IconButton, Typography } from '@mui/material'
 import Box from '@mui/material/Box'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
 import { captureException } from '@sentry/react'
-import { useIsMutating } from '@tanstack/react-query'
+import { useIsMutating, useMutation } from '@tanstack/react-query'
 import {
 	Outlet,
 	createFileRoute,
@@ -21,12 +25,16 @@ import {
 import { defineMessages, useIntl } from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 
-import { BLUE_GREY, COMAPEO_BLUE, DARK_GREY } from '../../../../colors.ts'
+import { BLACK, DARK_BLUE, LIGHT_GREY, WHITE } from '../../../../colors.ts'
+import { DecentDialog } from '../../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../components/icon.tsx'
 import {
+	ButtonLink,
 	IconButtonLink,
 	type IconButtonLinkProps,
 } from '../../../../components/link.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../hooks/icon.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -34,7 +42,11 @@ import {
 	MEMBER_ROLE_ID,
 } from '../../../../lib/comapeo.ts'
 import { removeItem, setItem } from '../../../../lib/local-storage.ts'
-import { GLOBAL_MUTATIONS_BASE_KEY } from '../../../../lib/queries/global-mutations.ts'
+import { selectFileMutationOptions } from '../../../../lib/queries/file-system.ts'
+import {
+	GLOBAL_MUTATIONS_BASE_KEY,
+	createGlobalMutationsKey,
+} from '../../../../lib/queries/global-mutations.ts'
 
 export const Route = createFileRoute('/app/projects/$projectId')({
 	beforeLoad: async ({ context, params }) => {
@@ -137,13 +149,14 @@ function RouteComponent() {
 		},
 	})
 
+	const { data: members } = useManyMembers({ projectId, includeLeft: true })
+
+	const { data: ownDeviceInfo } = useOwnDeviceInfo()
+
 	const { data: role } = useOwnRoleInProject({ projectId })
 
 	const isCoordinator =
 		role.roleId === CREATOR_ROLE_ID || role.roleId === COORDINATOR_ROLE_ID
-
-	const { data: members } = useManyMembers({ projectId, includeLeft: true })
-	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
 	const selfIsOnlyProjectMemberEver =
 		members.length === 1 && members[0]?.deviceId === ownDeviceInfo.deviceId
@@ -158,16 +171,17 @@ function RouteComponent() {
 
 	return (
 		<Box
-			sx={{ flex: 1, display: 'grid', gridTemplateColumns: 'min-content 1fr' }}
+			sx={{
+				backgroundColor: DARK_BLUE,
+				flex: 1,
+				display: 'grid',
+				gridTemplateColumns: 'min-content 1fr',
+			}}
 		>
 			<Box
 				component="nav"
 				aria-label={t(m.projectNavigationAccessibleLabel)}
-				sx={{
-					display: 'flex',
-					borderRight: `2px solid ${BLUE_GREY}`,
-					overflow: 'auto',
-				}}
+				sx={{ display: 'flex', overflow: 'auto' }}
 			>
 				<List
 					dense
@@ -176,14 +190,23 @@ function RouteComponent() {
 						display: 'flex',
 						flexDirection: 'column',
 						justifyContent: 'space-between',
-						paddingInline: 4,
-						paddingBlock: 6,
+						paddingInline: 2,
+						paddingBlock: 4,
 						gap: 10,
 						textAlign: 'center',
 						alignItems: 'stretch',
 					}}
 				>
 					<Stack direction="column" sx={{ gap: 5 }}>
+						<ListItem
+							dense
+							disableGutters
+							disablePadding
+							sx={{ justifyContent: 'center' }}
+						>
+							<CurrentProjectTabButton projectId={projectId} role={role} />
+						</ListItem>
+
 						<ListItem
 							dense
 							disableGutters
@@ -225,7 +248,7 @@ function RouteComponent() {
 											: BASE_ACTIVE_LINK_PROPS
 									}
 								>
-									<Icon name="noun-project-notebook" size={32} />
+									<Icon name="noun-project-notebook" size={24} />
 								</IconButtonLink>
 							</Tooltip>
 						</ListItem>
@@ -258,7 +281,7 @@ function RouteComponent() {
 									inactiveProps={BASE_INACTIVE_LINK_PROPS}
 									activeProps={BASE_ACTIVE_LINK_PROPS}
 								>
-									<Icon name="material-people-filled" size={32} />
+									<Icon name="material-people-filled" size={24} />
 								</IconButtonLink>
 							</Tooltip>
 						</ListItem>
@@ -292,33 +315,12 @@ function RouteComponent() {
 										inactiveProps={BASE_INACTIVE_LINK_PROPS}
 										activeProps={BASE_ACTIVE_LINK_PROPS}
 									>
-										<Icon name="material-manage-accounts-filled" size={32} />
+										<Icon name="material-manage-accounts-filled" size={24} />
 									</IconButtonLink>
 								</Tooltip>
 							</ListItem>
 						) : null}
 
-						{__APP_TYPE__ !== 'production' &&
-						import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
-							<Suspense>
-								<TestDataTabLink
-									disabled={
-										globalMutationsAreVisiblyPending &&
-										currentRoute.fullPath !==
-											'/app/projects/$projectId/test-data'
-									}
-									onClick={(event) => {
-										if (someGlobalMutationIsPending) {
-											event.preventDefault()
-										}
-									}}
-									projectId={projectId}
-								/>
-							</Suspense>
-						) : null}
-					</Stack>
-
-					<Stack direction="column" sx={{ gap: 5 }}>
 						{selfIsOnlyProjectMemberEver ? null : (
 							<ListItem
 								dense
@@ -348,19 +350,418 @@ function RouteComponent() {
 										inactiveProps={BASE_INACTIVE_LINK_PROPS}
 										activeProps={BASE_ACTIVE_LINK_PROPS}
 									>
-										<Icon name="material-offline-bolt-filled" size={32} />
+										<Icon name="material-offline-bolt-filled" size={24} />
 									</IconButtonLink>
 								</Tooltip>
 							</ListItem>
 						)}
+
+						{__APP_TYPE__ !== 'production' &&
+						import.meta.env.VITE_FEATURE_TEST_DATA_UI === 'true' ? (
+							<Suspense>
+								<TestDataTabLink
+									disabled={
+										globalMutationsAreVisiblyPending &&
+										currentRoute.fullPath !==
+											'/app/projects/$projectId/test-data'
+									}
+									onClick={(event) => {
+										if (someGlobalMutationIsPending) {
+											event.preventDefault()
+										}
+									}}
+									projectId={projectId}
+								/>
+							</Suspense>
+						) : null}
+					</Stack>
+
+					<Stack direction="column" sx={{ gap: 5 }}>
+						<ListItem
+							dense
+							disableGutters
+							disablePadding
+							sx={{ justifyContent: 'center' }}
+						>
+							<Tooltip
+								title={t(m.backgroundMapTabLabel)}
+								disableFocusListener
+								placement="right"
+							>
+								<IconButtonLink
+									to="/app/settings/background-map"
+									disabled={globalMutationsAreVisiblyPending}
+									onClick={(event) => {
+										if (someGlobalMutationIsPending) {
+											event.preventDefault()
+										}
+									}}
+									inactiveProps={BASE_INACTIVE_LINK_PROPS}
+									activeProps={BASE_ACTIVE_LINK_PROPS}
+								>
+									<Icon name="material-layers-outlined" size={24} />
+								</IconButtonLink>
+							</Tooltip>
+						</ListItem>
+
+						<ListItem
+							dense
+							disableGutters
+							disablePadding
+							sx={{ justifyContent: 'center' }}
+						>
+							<Tooltip
+								title={t(m.settingsTabLabel)}
+								disableFocusListener
+								placement="right"
+							>
+								<IconButtonLink
+									to="/app/settings"
+									disabled={globalMutationsAreVisiblyPending}
+									onClick={(event) => {
+										if (someGlobalMutationIsPending) {
+											event.preventDefault()
+										}
+									}}
+									inactiveProps={BASE_INACTIVE_LINK_PROPS}
+									activeProps={BASE_ACTIVE_LINK_PROPS}
+								>
+									<Icon name="material-settings" size={24} />
+								</IconButtonLink>
+							</Tooltip>
+						</ListItem>
 					</Stack>
 				</List>
 			</Box>
 
-			<Box component="main" sx={{ display: 'flex', overflow: 'auto' }}>
+			<Box
+				component="main"
+				sx={{
+					backgroundColor: WHITE,
+					borderStartStartRadius: 10,
+					display: 'flex',
+					overflow: 'auto',
+				}}
+			>
 				<Outlet />
 			</Box>
 		</Box>
+	)
+}
+
+const SELECT_AND_IMPORT_CATEGORY_MUTATION_KEY = createGlobalMutationsKey([
+	'category',
+	'select-and-import',
+])
+
+function CurrentProjectTabButton({
+	projectId,
+	role,
+}: {
+	projectId: string
+	role: Role
+}) {
+	const [showProjectInfoDialog, setShowProjectInfoDialog] = useState<
+		true | null
+	>(null)
+
+	const intl = useIntl()
+
+	const { data: projectSettings } = useProjectSettings({ projectId })
+
+	const projectSettingsItemIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+	})
+
+	const selectFile = useMutation(selectFileMutationOptions())
+
+	const importCategoriesFile = useImportProjectCategories({ projectId })
+
+	const selectAndImportMutation = useMutation({
+		mutationKey: SELECT_AND_IMPORT_CATEGORY_MUTATION_KEY,
+		mutationFn: async () => {
+			const fileInfo = await selectFile.mutateAsync({
+				extensionFilters: ['comapeocat'],
+			})
+
+			if (!fileInfo) {
+				return
+			}
+
+			return importCategoriesFile.mutateAsync({ filePath: fileInfo.path })
+		},
+	})
+
+	const displayedProjectName = projectSettings.name || 'unnamed'
+
+	const accentColor = projectSettings.projectColor || WHITE
+
+	const isAtLeastCoordinator =
+		role.roleId === CREATOR_ROLE_ID || role.roleId === COORDINATOR_ROLE_ID
+
+	return (
+		<>
+			<IconButton
+				onClick={() => {
+					setShowProjectInfoDialog(true)
+				}}
+				sx={{ display: 'flex', flex: 1, color: BLACK }}
+			>
+				<Box
+					sx={{ backgroundColor: accentColor, borderRadius: '50%', flex: 1 }}
+				>
+					<Typography sx={{ fontWeight: 500 }}>
+						{displayedProjectName[0]}
+					</Typography>
+				</Box>
+			</IconButton>
+
+			<DecentDialog fullWidth maxWidth="sm" value={showProjectInfoDialog}>
+				{() => (
+					<Stack direction="column" sx={{ gap: 4, padding: 4 }}>
+						<Stack
+							direction="column"
+							sx={{
+								alignItems: 'flex-start',
+								backgroundColor: accentColor,
+								borderRadius: 2,
+								gap: 4,
+								padding: 6,
+							}}
+						>
+							<Typography
+								variant="h1"
+								sx={{ fontWeight: 500, overflowWrap: 'break-word' }}
+							>
+								{displayedProjectName}
+							</Typography>
+
+							{projectSettings.projectDescription ? (
+								<Typography
+									color="textSecondary"
+									sx={{ overflowWrap: 'break-word' }}
+								>
+									{projectSettings.projectDescription}
+								</Typography>
+							) : null}
+
+							<Box>
+								<ButtonLink
+									to="/app/projects/$projectId/settings/info"
+									params={{ projectId }}
+									aria-disabled={selectAndImportMutation.status === 'pending'}
+									endIcon={
+										<Icon
+											aria-hidden
+											name="material-arrow-back"
+											sx={{ transform: 'rotate(180deg)' }}
+										/>
+									}
+									onClick={(event) => {
+										if (selectAndImportMutation.status === 'pending') {
+											event.preventDefault()
+											return
+										}
+
+										setShowProjectInfoDialog(null)
+									}}
+									variant="text"
+									sx={{ marginInlineStart: -3 }}
+								>
+									{intl.formatMessage(m.projectInfoEditInfo)}
+								</ButtonLink>
+							</Box>
+						</Stack>
+
+						<List
+							disablePadding
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								gap: 4,
+								padding: 4,
+							}}
+						>
+							<ListItem disableGutters disablePadding sx={{ gap: 4 }}>
+								<Stack
+									direction="row"
+									sx={{ flex: 1, gap: 4, overflow: 'hidden' }}
+								>
+									{isAtLeastCoordinator ? (
+										<>
+											<Icon
+												name="material-manage-accounts-filled"
+												size={projectSettingsItemIconSize}
+											/>
+
+											<Typography
+												sx={{
+													fontWeight: 500,
+													textOverflow: 'ellipsis',
+													whiteSpace: 'nowrap',
+													overflow: 'hidden',
+												}}
+											>
+												{intl.formatMessage(m.projectInfoRoleCoordinator)}
+											</Typography>
+										</>
+									) : (
+										<>
+											<Icon name="material-people-filled" />
+
+											<Typography
+												sx={{
+													fontWeight: 500,
+													textOverflow: 'ellipsis',
+													whiteSpace: 'nowrap',
+													overflow: 'hidden',
+												}}
+											>
+												{intl.formatMessage(m.projectInfoRoleParticipant)}
+											</Typography>
+										</>
+									)}
+								</Stack>
+
+								<ButtonLink
+									to="/app/projects/$projectId/team"
+									params={{ projectId }}
+									aria-disabled={selectAndImportMutation.status === 'pending'}
+									onClick={(event) => {
+										if (selectAndImportMutation.status === 'pending') {
+											event.preventDefault()
+											return
+										}
+
+										setShowProjectInfoDialog(null)
+									}}
+									sx={{ marginInlineEnd: 3 }}
+									variant="text"
+								>
+									{intl.formatMessage(m.projectInfoViewTeam)}
+								</ButtonLink>
+							</ListItem>
+
+							<Divider variant="fullWidth" />
+
+							<ListItem
+								disableGutters
+								disablePadding
+								sx={{ gap: 4, alignItems: 'flex-start' }}
+							>
+								<Stack direction="row" sx={{ flex: 1, gap: 4 }}>
+									<Icon
+										name="material-symbols-apps"
+										size={projectSettingsItemIconSize}
+									/>
+
+									{projectSettings.configMetadata ? (
+										<Box>
+											<Typography color="textSecondary">
+												<Typography
+													component="span"
+													variant="inherit"
+													color="textPrimary"
+													sx={{ fontWeight: 500 }}
+												>
+													{projectSettings.configMetadata.name}
+												</Typography>
+												{
+													// eslint-disable-next-line formatjs/no-literal-string-in-jsx
+													' '
+												}
+												{projectSettings.configMetadata.fileVersion}
+											</Typography>
+
+											<Typography color="textSecondary">
+												{intl.formatMessage(m.projectInfoCategoriesCreated, {
+													date: (
+														<time
+															key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
+															dateTime={
+																projectSettings.configMetadata.buildDate
+															}
+														>
+															{intl.formatDate(
+																projectSettings.configMetadata.buildDate,
+																{
+																	year: 'numeric',
+																	month: 'long',
+																	day: 'numeric',
+																},
+															)}
+														</time>
+													),
+												})}
+											</Typography>
+										</Box>
+									) : (
+										<Typography sx={{ fontWeight: 500 }}>
+											{intl.formatMessage(m.fallbackCategoriesSetName)}
+										</Typography>
+									)}
+								</Stack>
+
+								<Button
+									loading={selectAndImportMutation.status === 'pending'}
+									onClick={() => {
+										selectAndImportMutation.mutate(undefined, {
+											onError: (err) => {
+												captureException(err)
+											},
+										})
+									}}
+									variant="text"
+									sx={{ marginInlineEnd: 3 }}
+								>
+									{intl.formatMessage(m.projectInfoUpdateCategories)}
+								</Button>
+							</ListItem>
+						</List>
+
+						<Box
+							sx={{
+								bottom: 0,
+								display: 'flex',
+								flexDirection: 'row',
+								justifyContent: 'center',
+								position: 'sticky',
+							}}
+						>
+							<Button
+								fullWidth
+								variant="outlined"
+								onClick={() => {
+									setShowProjectInfoDialog(null)
+								}}
+								sx={{ maxWidth: 400 }}
+							>
+								{intl.formatMessage(m.projectInfoClose)}
+							</Button>
+						</Box>
+					</Stack>
+				)}
+			</DecentDialog>
+
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					selectAndImportMutation.status === 'error'
+						? selectAndImportMutation.error
+						: null
+				}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							selectAndImportMutation.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
+		</>
 	)
 }
 
@@ -401,7 +802,7 @@ function TestDataTabLink({
 					inactiveProps={BASE_INACTIVE_LINK_PROPS}
 					activeProps={BASE_ACTIVE_LINK_PROPS}
 				>
-					<Icon name="material-auto-fix-high" size={32} />
+					<Icon name="material-auto-fix-high" size={24} />
 				</IconButtonLink>
 			</Tooltip>
 		</ListItem>
@@ -409,17 +810,27 @@ function TestDataTabLink({
 }
 
 const BASE_INACTIVE_LINK_PROPS = {
-	sx: { padding: 2, aspectRatio: 1, borderRadius: 2, color: DARK_GREY },
+	sx: {
+		aspectRatio: 1,
+		borderRadius: 2,
+		color: LIGHT_GREY,
+		padding: 2,
+		'&:hover': {
+			color: WHITE,
+			background: (theme) => theme.lighten(DARK_BLUE, 0.2),
+		},
+	},
 } satisfies IconButtonLinkProps['inactiveProps']
 
 const BASE_ACTIVE_LINK_PROPS = {
 	sx: {
 		aspectRatio: 1,
-		background: (theme) => theme.lighten(theme.palette.primary.light, 0.5),
+		background: (theme) => theme.palette.primary.main,
 		borderRadius: 2,
-		color: COMAPEO_BLUE,
-		'&:hover, &:focus-within': {
-			background: (theme) => theme.palette.primary.light,
+		color: WHITE,
+		padding: 2,
+		'&:hover': {
+			background: (theme) => theme.darken(theme.palette.primary.main, 0.1),
 		},
 	},
 } satisfies IconButtonLinkProps['activeProps']
@@ -454,5 +865,58 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId.route.testDataTabLabel',
 		defaultMessage: 'Test Data',
 		description: 'Label for project test data tab link in navigation.',
+	},
+	backgroundMapTabLabel: {
+		id: 'routes.app.projects.$projectId.route.backgroundMapTabLabel',
+		defaultMessage: 'Background Map',
+		description: 'Label for background map tab link in navigation.',
+	},
+	settingsTabLabel: {
+		id: 'routes.app.projects.$projectId.route.settingsTabLabel',
+		defaultMessage: 'Settings',
+		description: 'Label for app settings tab link in navigation.',
+	},
+	fallbackCategoriesSetName: {
+		id: 'routes.app.projects.$projectId.route.fallbackCategoriesSetName',
+		defaultMessage: 'CoMapeo Categories',
+		description:
+			'Text shown when project does not use a categories set in project info dialog.',
+	},
+	projectInfoRoleCoordinator: {
+		id: '$1.routes.app.projects.$projectId.route.projectInfoRoleCoordinator',
+		defaultMessage: 'Coordinator',
+		description: 'Indicates that user is a coordinator in project info dialog.',
+	},
+	projectInfoRoleParticipant: {
+		id: '$1.routes.app.projects.$projectId.route.projectInfoRoleParticipant',
+		defaultMessage: 'Participant',
+		description: 'Indicates that user is a participant in project info dialog.',
+	},
+	projectInfoCategoriesCreated: {
+		id: '$1.routes.app.projects.$projectId.route.projectInfoCategoriesCreated',
+		defaultMessage: 'Created {date}',
+		description:
+			'Text indicating creation date of categories set in project info dialog.',
+	},
+	projectInfoEditInfo: {
+		id: '$1.routes.app.projects.$projectId.route.projectInfoEditInfo',
+		defaultMessage: 'Edit Info',
+		description: 'Text for link to edit project info in project info dialog.',
+	},
+	projectInfoViewTeam: {
+		id: '$1.routes.app.projects.$projectId.route.projectInfoViewTeam',
+		defaultMessage: 'View Team',
+		description: 'Text for link to view team in project info dialog.',
+	},
+	projectInfoUpdateCategories: {
+		id: '$1.routes.app.projects.$projectId.route.projectInfoUpdateCategories',
+		defaultMessage: 'Update',
+		description:
+			'Text for button to update categories set in project info dialog.',
+	},
+	projectInfoClose: {
+		id: '$1.routes.app.projects.$projectId.route.projectInfoClose',
+		defaultMessage: 'Close',
+		description: 'Text for button to close project info dialog.',
 	},
 })
