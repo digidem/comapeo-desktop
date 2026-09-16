@@ -7,7 +7,6 @@ import {
 	useOwnRoleInProject,
 	useProjectSettings,
 } from '@comapeo/core-react'
-import type { Role } from '@comapeo/core/schema.js'
 import { Button, Divider, IconButton, Typography } from '@mui/material'
 import Box from '@mui/material/Box'
 import List from '@mui/material/List'
@@ -204,7 +203,7 @@ function RouteComponent() {
 							disablePadding
 							sx={{ justifyContent: 'center' }}
 						>
-							<CurrentProjectTabButton projectId={projectId} role={role} />
+							<ProjectInfoTabButton projectId={projectId} />
 						</ListItem>
 
 						<ListItem
@@ -454,13 +453,7 @@ const SELECT_AND_IMPORT_CATEGORY_MUTATION_KEY = createGlobalMutationsKey([
 	'select-and-import',
 ])
 
-function CurrentProjectTabButton({
-	projectId,
-	role,
-}: {
-	projectId: string
-	role: Role
-}) {
+function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 	const [showProjectInfoDialog, setShowProjectInfoDialog] = useState<
 		true | null
 	>(null)
@@ -468,6 +461,8 @@ function CurrentProjectTabButton({
 	const intl = useIntl()
 
 	const { data: projectSettings } = useProjectSettings({ projectId })
+
+	const { data: role } = useOwnRoleInProject({ projectId })
 
 	const projectSettingsItemIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
@@ -492,7 +487,8 @@ function CurrentProjectTabButton({
 		},
 	})
 
-	const displayedProjectName = projectSettings.name || 'unnamed'
+	const displayedProjectName =
+		projectSettings.name || intl.formatMessage(m.unnamedProject)
 
 	const accentColor = projectSettings.projectColor || WHITE
 
@@ -501,20 +497,38 @@ function CurrentProjectTabButton({
 
 	return (
 		<>
-			<IconButton
-				onClick={() => {
-					setShowProjectInfoDialog(true)
-				}}
-				sx={{ display: 'flex', flex: 1, color: BLACK }}
-			>
-				<Box
-					sx={{ backgroundColor: accentColor, borderRadius: '50%', flex: 1 }}
-				>
-					<Typography sx={{ fontWeight: 500 }}>
-						{displayedProjectName[0]}
+			<Tooltip
+				title={
+					<Typography
+						variant="inherit"
+						sx={{
+							textOverflow: 'ellipsis',
+							whiteSpace: 'nowrap',
+							overflow: 'hidden',
+						}}
+					>
+						{displayedProjectName}
 					</Typography>
-				</Box>
-			</IconButton>
+				}
+				disableFocusListener
+				placement="right"
+				slotProps={{ popper: { sx: { maxWidth: '20ch' } } }}
+			>
+				<IconButton
+					onClick={() => {
+						setShowProjectInfoDialog(true)
+					}}
+					sx={{ display: 'flex', flex: 1, color: BLACK }}
+				>
+					<Box
+						sx={{ backgroundColor: accentColor, borderRadius: '50%', flex: 1 }}
+					>
+						<Typography sx={{ fontWeight: 500 }}>
+							{displayedProjectName[0]}
+						</Typography>
+					</Box>
+				</IconButton>
+			</Tooltip>
 
 			<DecentDialog fullWidth maxWidth="sm" value={showProjectInfoDialog}>
 				{() => (
@@ -585,7 +599,12 @@ function CurrentProjectTabButton({
 							<ListItem disableGutters disablePadding sx={{ gap: 4 }}>
 								<Stack
 									direction="row"
-									sx={{ flex: 1, gap: 4, overflow: 'hidden' }}
+									sx={{
+										alignItems: 'flex-start',
+										flex: 1,
+										gap: 4,
+										overflow: 'hidden',
+									}}
 								>
 									{isAtLeastCoordinator ? (
 										<>
@@ -635,7 +654,7 @@ function CurrentProjectTabButton({
 
 										setShowProjectInfoDialog(null)
 									}}
-									sx={{ marginInlineEnd: 3 }}
+									sx={{ marginInlineEnd: -3 }}
 									variant="text"
 								>
 									{intl.formatMessage(m.projectInfoViewTeam)}
@@ -644,12 +663,11 @@ function CurrentProjectTabButton({
 
 							<Divider variant="fullWidth" />
 
-							<ListItem
-								disableGutters
-								disablePadding
-								sx={{ gap: 4, alignItems: 'flex-start' }}
-							>
-								<Stack direction="row" sx={{ flex: 1, gap: 4 }}>
+							<ListItem disableGutters disablePadding sx={{ gap: 4 }}>
+								<Stack
+									direction="row"
+									sx={{ alignItems: 'flex-start', flex: 1, gap: 4 }}
+								>
 									<Icon
 										name="material-symbols-apps"
 										size={projectSettingsItemIconSize}
@@ -694,6 +712,28 @@ function CurrentProjectTabButton({
 													),
 												})}
 											</Typography>
+
+											<Typography color="textSecondary">
+												{intl.formatMessage(m.projectInfoCategoriesAdded, {
+													date: (
+														<time
+															key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
+															dateTime={
+																projectSettings.configMetadata.importDate
+															}
+														>
+															{intl.formatDate(
+																projectSettings.configMetadata.importDate,
+																{
+																	year: 'numeric',
+																	month: 'long',
+																	day: 'numeric',
+																},
+															)}
+														</time>
+													),
+												})}
+											</Typography>
 										</Box>
 									) : (
 										<Typography sx={{ fontWeight: 500 }}>
@@ -712,7 +752,7 @@ function CurrentProjectTabButton({
 										})
 									}}
 									variant="text"
-									sx={{ marginInlineEnd: 3 }}
+									sx={{ marginInlineEnd: -3 }}
 								>
 									{intl.formatMessage(m.projectInfoUpdateCategories)}
 								</Button>
@@ -729,12 +769,17 @@ function CurrentProjectTabButton({
 							}}
 						>
 							<Button
+								aria-disabled={selectAndImportMutation.status === 'pending'}
 								fullWidth
-								variant="outlined"
 								onClick={() => {
+									if (selectAndImportMutation.status === 'pending') {
+										return
+									}
+
 									setShowProjectInfoDialog(null)
 								}}
 								sx={{ maxWidth: 400 }}
+								variant="outlined"
 							>
 								{intl.formatMessage(m.projectInfoClose)}
 							</Button>
@@ -876,6 +921,11 @@ const m = defineMessages({
 		defaultMessage: 'Settings',
 		description: 'Label for app settings tab link in navigation.',
 	},
+	unnamedProject: {
+		id: '$1.routes.app.projects.$projectId.route.unnamedProject',
+		defaultMessage: 'Unnamed Project',
+		description: 'Fallback for when project is missing a name.',
+	},
 	fallbackCategoriesSetName: {
 		id: 'routes.app.projects.$projectId.route.fallbackCategoriesSetName',
 		defaultMessage: 'CoMapeo Categories',
@@ -897,6 +947,12 @@ const m = defineMessages({
 		defaultMessage: 'Created {date}',
 		description:
 			'Text indicating creation date of categories set in project info dialog.',
+	},
+	projectInfoCategoriesAdded: {
+		id: '$1.routes.app.projects.$projectId.route.projectInfoCategoriesAdded',
+		defaultMessage: 'Added {date}',
+		description:
+			'Text indicating added date of categories set in project info dialog.',
 	},
 	projectInfoEditInfo: {
 		id: '$1.routes.app.projects.$projectId.route.projectInfoEditInfo',

@@ -655,6 +655,10 @@
     "description": "Label for project list tab link in navigation.",
     "message": "List"
   },
+  "$1.routes.app.projects.$projectId.route.projectInfoCategoriesAdded": {
+    "description": "Text indicating added date of categories set in project info dialog.",
+    "message": "Added {date}"
+  },
   "$1.routes.app.projects.$projectId.route.projectInfoCategoriesCreated": {
     "description": "Text indicating creation date of categories set in project info dialog.",
     "message": "Created {date}"
@@ -690,6 +694,10 @@
   "$1.routes.app.projects.$projectId.route.toolsTabLabel": {
     "description": "Label for project tools tab link in navigation.",
     "message": "Tools"
+  },
+  "$1.routes.app.projects.$projectId.route.unnamedProject": {
+    "description": "Fallback for when project is missing a name.",
+    "message": "Unnamed Project"
   },
   "$1.routes.app.projects.$projectId.settings.categories.customCategoriesExplainer": {
     "description": "Explanation for custom categories",
