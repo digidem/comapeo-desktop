@@ -1,4 +1,4 @@
-import { Suspense, useState, type MouseEventHandler } from 'react'
+import { Suspense, useId, useState, type MouseEventHandler } from 'react'
 import {
 	useImportProjectCategories,
 	useManyMembers,
@@ -6,11 +6,14 @@ import {
 	useOwnDeviceInfo,
 	useOwnRoleInProject,
 	useProjectSettings,
+	useSingleProject,
 } from '@comapeo/core-react'
 import {
 	Button,
+	ClickAwayListener,
 	Divider,
 	IconButton,
+	Popper,
 	Typography,
 	iconButtonClasses,
 } from '@mui/material'
@@ -30,11 +33,19 @@ import {
 import { defineMessages, useIntl } from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 
-import { BLACK, DARK_BLUE, LIGHT_GREY, WHITE } from '../../../../colors.ts'
+import {
+	BLACK,
+	BLUE_GREY,
+	COMAPEO_BLUE,
+	DARK_BLUE,
+	LIGHT_GREY,
+	WHITE,
+} from '../../../../colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../components/icon.tsx'
 import {
+	ButtonBaseLink,
 	ButtonLink,
 	IconButtonLink,
 	type IconButtonLinkProps,
@@ -46,6 +57,7 @@ import {
 	CREATOR_ROLE_ID,
 	MEMBER_ROLE_ID,
 } from '../../../../lib/comapeo.ts'
+import { TITLE_BAR_HEIGHT } from '../../../../lib/constants.ts'
 import { removeItem, setItem } from '../../../../lib/local-storage.ts'
 import { selectFileMutationOptions } from '../../../../lib/queries/file-system.ts'
 import {
@@ -437,6 +449,18 @@ function RouteComponent() {
 								</IconButtonLink>
 							</Tooltip>
 						</ListItem>
+
+						<ListItem
+							dense
+							disableGutters
+							disablePadding
+							sx={{ justifyContent: 'center' }}
+						>
+							<ProjectSwitcherButton
+								currentProjectId={projectId}
+								deviceName={ownDeviceInfo.name}
+							/>
+						</ListItem>
 					</Stack>
 				</List>
 			</Box>
@@ -453,6 +477,171 @@ function RouteComponent() {
 				<Outlet />
 			</Box>
 		</Box>
+	)
+}
+
+function ProjectSwitcherButton({
+	currentProjectId,
+	deviceName,
+}: {
+	currentProjectId: string
+	deviceName?: string
+}) {
+	const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null)
+
+	const popupDescribedById = useId()
+
+	const intl = useIntl()
+
+	const { data: allProjects } = useManyProjects()
+
+	const sortedProjects = allProjects
+		.filter((p) => p.status === 'joined')
+		.sort((p1, p2) => {
+			if (p1.projectId === currentProjectId) {
+				return -1
+			}
+			if (p2.projectId === currentProjectId) {
+				return 1
+			}
+
+			return p1.createdAt < p2.createdAt ? -1 : 1
+		})
+
+	return (
+		<ClickAwayListener
+			onClickAway={() => {
+				setAnchorElement(null)
+			}}
+		>
+			<Box
+				onKeyDown={(event) => {
+					if (event.key === 'Tab' || event.key === 'Escape') {
+						setAnchorElement(null)
+					}
+				}}
+			>
+				<Tooltip
+					id={popupDescribedById}
+					title={intl.formatMessage(m.switchProjectTabLabel)}
+					disableFocusListener
+					disableInteractive={!!anchorElement}
+					placement="right"
+				>
+					<IconButton
+						onClick={(event) => {
+							setAnchorElement((prev) => (prev ? null : event.currentTarget))
+						}}
+						sx={
+							anchorElement
+								? BASE_ACTIVE_LINK_PROPS.sx
+								: BASE_INACTIVE_LINK_PROPS.sx
+						}
+					>
+						<Icon name="material-symbols-shuffle" />
+					</IconButton>
+				</Tooltip>
+
+				<Popper
+					id={popupDescribedById}
+					role="dialog"
+					placement="right-start"
+					sx={{
+						backgroundColor: WHITE,
+						borderRadius: 2,
+						boxShadow: (theme) => theme.shadows[5],
+						display: 'flex',
+						maxHeight: (theme) =>
+							`calc(100% - ${TITLE_BAR_HEIGHT} - ${theme.spacing(10)})`,
+						overflow: 'auto',
+						zIndex: (theme) => theme.zIndex.modal - 1,
+					}}
+					modifiers={[
+						{ name: 'offset', options: { offset: [0, 20] } },
+						{ name: 'eventListeners', enabled: true },
+					]}
+					anchorEl={anchorElement}
+					open={!!anchorElement}
+				>
+					<Stack direction="column" sx={{ overflow: 'auto' }}>
+						<Stack
+							direction="column"
+							sx={{ flex: 1, gap: 4, overflow: 'auto', padding: 4 }}
+						>
+							<Typography sx={{ fontWeight: 500 }}>{deviceName}</Typography>
+
+							{sortedProjects.map((p) => {
+								const isCurrentProject = p.projectId === currentProjectId
+								const displayedName =
+									p.name || intl.formatMessage(m.unnamedProject)
+
+								return (
+									<ButtonBaseLink
+										key={p.projectId}
+										to="/app/projects/$projectId"
+										params={{ projectId: p.projectId }}
+										aria-label={intl.formatMessage(
+											m.projectSwitcherCardLinkAccessibleLabel,
+											{ name: displayedName },
+										)}
+										onClick={() => {
+											setAnchorElement(null)
+										}}
+										sx={{
+											alignItems: 'center',
+											backgroundColor: p.projectColor,
+											border: `2px solid ${isCurrentProject ? COMAPEO_BLUE : LIGHT_GREY}`,
+											borderRadius: 2,
+											gap: 2,
+											justifyContent: 'flex-start',
+											outlineOffset: -1,
+											padding: 4,
+											'&:hover, &:focus-within': {
+												outline: `2px solid ${isCurrentProject ? COMAPEO_BLUE : BLUE_GREY}`,
+											},
+										}}
+									>
+										<Typography
+											sx={{
+												flex: 1,
+												fontWeight: 500,
+												overflow: 'hidden',
+												textOverflow: 'ellipsis',
+												whiteSpace: 'nowrap',
+												width: '20ch',
+											}}
+										>
+											{displayedName}
+										</Typography>
+
+										{isCurrentProject ? (
+											<Icon
+												name="material-check-circle-rounded"
+												color="primary"
+											/>
+										) : null}
+									</ButtonBaseLink>
+								)
+							})}
+						</Stack>
+
+						<Box sx={{ paddingBlock: 4, paddingInline: 6 }}>
+							<ButtonLink
+								to="/app"
+								color="inherit"
+								startIcon={<Icon name="material-symbols-view-agenda" />}
+								sx={{ marginInlineStart: -4 }}
+								variant="text"
+							>
+								<Typography>
+									{intl.formatMessage(m.projectSwitcherViewAllProjects)}
+								</Typography>
+							</ButtonLink>
+						</Box>
+					</Stack>
+				</Popper>
+			</Box>
+		</ClickAwayListener>
 	)
 }
 
@@ -936,6 +1125,11 @@ const m = defineMessages({
 		defaultMessage: 'Settings',
 		description: 'Label for app settings tab link in navigation.',
 	},
+	switchProjectTabLabel: {
+		id: '$1.routes.app.projects.$projectId.route.switchProjectTabLabel',
+		defaultMessage: 'Switch Project',
+		description: 'Label for project switcher tab button in navigation.',
+	},
 	unnamedProject: {
 		id: '$1.routes.app.projects.$projectId.route.unnamedProject',
 		defaultMessage: 'Unnamed Project',
@@ -989,5 +1183,17 @@ const m = defineMessages({
 		id: '$1.routes.app.projects.$projectId.route.projectInfoClose',
 		defaultMessage: 'Close',
 		description: 'Text for button to close project info dialog.',
+	},
+	projectSwitcherCardLinkAccessibleLabel: {
+		id: 'routes.app.projects.$projectId.route.projectSwitcherCardLinkAccessibleLabel',
+		defaultMessage: 'Go to project {name}.',
+		description:
+			'Accessible label for link in project switcher that navigates to project when clicked.',
+	},
+	projectSwitcherViewAllProjects: {
+		id: '$1.routes.app.projects.$projectId.route.projectSwitcherViewAllProjects',
+		defaultMessage: 'View All Projects',
+		description:
+			'Text for button in project switcher to navigate to all projects page.',
 	},
 })

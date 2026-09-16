@@ -60,6 +60,7 @@ export const iconNames = [
 	'material-symbols-location-filled',
 	'material-symbols-replay',
 	'material-symbols-schedule',
+	'material-symbols-shuffle',
 	'material-symbols-speed',
 	'material-symbols-square-foot',
 	'material-symbols-view-agenda',

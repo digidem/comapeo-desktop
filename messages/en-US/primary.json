@@ -687,6 +687,14 @@
     "description": "Text for link to view team in project info dialog.",
     "message": "View Team"
   },
+  "$1.routes.app.projects.$projectId.route.projectSwitcherViewAllProjects": {
+    "description": "Text for button in project switcher to navigate to all projects page.",
+    "message": "View All Projects"
+  },
+  "$1.routes.app.projects.$projectId.route.switchProjectTabLabel": {
+    "description": "Label for project switcher tab button in navigation.",
+    "message": "Switch Project"
+  },
   "$1.routes.app.projects.$projectId.route.teamTabLabel": {
     "description": "Label for project team tab link in navigation.",
     "message": "Team"

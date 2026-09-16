@@ -231,6 +231,10 @@
     "description": "Accessible label for project-specific navigation bar.",
     "message": "Project navigation"
   },
+  "routes.app.projects.$projectId.route.projectSwitcherCardLinkAccessibleLabel": {
+    "description": "Accessible label for link in project switcher that navigates to project when clicked.",
+    "message": "Go to project {name}."
+  },
   "routes.app.projects.$projectId.route.settingsTabLabel": {
     "description": "Label for app settings tab link in navigation.",
     "message": "Settings"
