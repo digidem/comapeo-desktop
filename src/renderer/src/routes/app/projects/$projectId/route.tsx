@@ -7,7 +7,13 @@ import {
 	useOwnRoleInProject,
 	useProjectSettings,
 } from '@comapeo/core-react'
-import { Button, Divider, IconButton, Typography } from '@mui/material'
+import {
+	Button,
+	Divider,
+	IconButton,
+	Typography,
+	iconButtonClasses,
+} from '@mui/material'
 import Box from '@mui/material/Box'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -864,6 +870,9 @@ const BASE_INACTIVE_LINK_PROPS = {
 			color: WHITE,
 			background: (theme) => theme.lighten(DARK_BLUE, 0.2),
 		},
+		[`&.${iconButtonClasses.disabled}`]: {
+			color: (theme) => theme.darken(LIGHT_GREY, 0.4),
+		},
 	},
 } satisfies IconButtonLinkProps['inactiveProps']
 
@@ -875,6 +884,10 @@ const BASE_ACTIVE_LINK_PROPS = {
 		color: WHITE,
 		padding: 2,
 		'&:hover': {
+			background: (theme) => theme.darken(theme.palette.primary.main, 0.1),
+		},
+		[`&.${iconButtonClasses.disabled}`]: {
+			color: (theme) => theme.darken(LIGHT_GREY, 0.4),
 			background: (theme) => theme.darken(theme.palette.primary.main, 0.1),
 		},
 	},
