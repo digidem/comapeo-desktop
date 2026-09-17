@@ -538,7 +538,7 @@ function ProjectSwitcherButton({
 		>
 			<Box
 				onKeyDown={(event) => {
-					if (event.key === 'Escape') {
+					if (event.key === 'Tab' || event.key === 'Escape') {
 						setAnchorElement(null)
 					}
 				}}
@@ -551,6 +551,8 @@ function ProjectSwitcherButton({
 					placement="right"
 				>
 					<IconButton
+						aria-haspopup="menu"
+						aria-expanded={!!anchorElement}
 						onClick={(event) => {
 							setAnchorElement((prev) => (prev ? null : event.currentTarget))
 						}}
@@ -564,10 +566,22 @@ function ProjectSwitcherButton({
 					</IconButton>
 				</Tooltip>
 
+				{/* TODO: Improve tabbing accessibility here */}
 				<Popper
+					anchorEl={anchorElement}
 					id={popupDescribedById}
-					role="dialog"
+					modifiers={[
+						{ name: 'offset', options: { offset: [0, 20] } },
+						{ name: 'eventListeners', enabled: true },
+					]}
+					onKeyDown={(event) => {
+						if (event.key === 'Tab') {
+							event.stopPropagation()
+						}
+					}}
+					open={!!anchorElement}
 					placement="right-start"
+					role="menu"
 					sx={{
 						backgroundColor: WHITE,
 						borderRadius: 2,
@@ -578,12 +592,6 @@ function ProjectSwitcherButton({
 						overflow: 'auto',
 						zIndex: (theme) => theme.zIndex.modal - 1,
 					}}
-					modifiers={[
-						{ name: 'offset', options: { offset: [0, 20] } },
-						{ name: 'eventListeners', enabled: true },
-					]}
-					anchorEl={anchorElement}
-					open={!!anchorElement}
 				>
 					<Stack direction="column" sx={{ overflow: 'auto' }}>
 						<Stack
@@ -592,7 +600,7 @@ function ProjectSwitcherButton({
 						>
 							<Typography sx={{ fontWeight: 500 }}>{deviceName}</Typography>
 
-							{sortedProjects.map((p) => {
+							{sortedProjects.map((p, index) => {
 								const isCurrentProject = p.projectId === currentProjectId
 								const displayedName =
 									p.name || intl.formatMessage(m.unnamedProject)
@@ -600,6 +608,13 @@ function ProjectSwitcherButton({
 								return (
 									<ButtonBaseLink
 										key={p.projectId}
+										ref={
+											index === 0
+												? (node) => {
+														node?.focus()
+													}
+												: undefined
+										}
 										to="/app/projects/$projectId"
 										params={{ projectId: p.projectId }}
 										aria-label={intl.formatMessage(
