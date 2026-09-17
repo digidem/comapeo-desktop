@@ -173,11 +173,6 @@ function RouteComponent() {
 
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
-	const { data: role } = useOwnRoleInProject({ projectId })
-
-	const isCoordinator =
-		role.roleId === CREATOR_ROLE_ID || role.roleId === COORDINATOR_ROLE_ID
-
 	const selfIsOnlyProjectMemberEver =
 		members.length === 1 && members[0]?.deviceId === ownDeviceInfo.deviceId
 
@@ -325,41 +320,6 @@ function RouteComponent() {
 									</IconButtonLink>
 								</Tooltip>
 							</ListItem>
-
-							{isCoordinator ? (
-								<ListItem
-									dense
-									disableGutters
-									disablePadding
-									sx={{ justifyContent: 'center' }}
-								>
-									<Tooltip
-										title={t(m.toolsTabLabel)}
-										disableFocusListener
-										placement="right"
-									>
-										<IconButtonLink
-											to="/app/projects/$projectId/settings"
-											params={{ projectId }}
-											disabled={
-												globalMutationsAreVisiblyPending &&
-												!currentRoute.fullPath.startsWith(
-													'/app/projects/$projectId/settings',
-												)
-											}
-											onClick={(event) => {
-												if (someGlobalMutationIsPending) {
-													event.preventDefault()
-												}
-											}}
-											inactiveProps={BASE_INACTIVE_LINK_PROPS}
-											activeProps={BASE_ACTIVE_LINK_PROPS}
-										>
-											<Icon name="material-manage-accounts-filled" size={24} />
-										</IconButtonLink>
-									</Tooltip>
-								</ListItem>
-							) : null}
 
 							{selfIsOnlyProjectMemberEver ? null : (
 								<ListItem
@@ -1153,11 +1113,6 @@ const m = defineMessages({
 		id: '$1.routes.app.projects.$projectId.route.teamTabLabel',
 		defaultMessage: 'Team',
 		description: 'Label for project team tab link in navigation.',
-	},
-	toolsTabLabel: {
-		id: '$1.routes.app.projects.$projectId.route.toolsTabLabel',
-		defaultMessage: 'Tools',
-		description: 'Label for project tools tab link in navigation.',
 	},
 	testDataTabLabel: {
 		id: 'routes.app.projects.$projectId.route.testDataTabLabel',

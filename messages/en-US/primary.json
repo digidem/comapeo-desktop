@@ -699,10 +699,6 @@
     "description": "Label for project team tab link in navigation.",
     "message": "Team"
   },
-  "$1.routes.app.projects.$projectId.route.toolsTabLabel": {
-    "description": "Label for project tools tab link in navigation.",
-    "message": "Tools"
-  },
   "$1.routes.app.projects.$projectId.route.unnamedProject": {
     "description": "Fallback for when project is missing a name.",
     "message": "Unnamed Project"
