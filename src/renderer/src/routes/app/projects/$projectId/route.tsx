@@ -765,32 +765,36 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 									</Typography>
 								) : null}
 
-								<Box>
-									<ButtonLink
-										to="/app/projects/$projectId/settings/info"
-										params={{ projectId }}
-										aria-disabled={selectAndImportMutation.status === 'pending'}
-										endIcon={
-											<Icon
-												aria-hidden
-												name="material-arrow-back"
-												sx={{ transform: 'rotate(180deg)' }}
-											/>
-										}
-										onClick={(event) => {
-											if (selectAndImportMutation.status === 'pending') {
-												event.preventDefault()
-												return
+								{isAtLeastCoordinator ? (
+									<Box>
+										<ButtonLink
+											to="/app/projects/$projectId/settings/info"
+											params={{ projectId }}
+											aria-disabled={
+												selectAndImportMutation.status === 'pending'
 											}
+											endIcon={
+												<Icon
+													aria-hidden
+													name="material-arrow-back"
+													sx={{ transform: 'rotate(180deg)' }}
+												/>
+											}
+											onClick={(event) => {
+												if (selectAndImportMutation.status === 'pending') {
+													event.preventDefault()
+													return
+												}
 
-											setShowProjectInfoDialog(null)
-										}}
-										variant="text"
-										sx={{ marginInlineStart: -3 }}
-									>
-										{intl.formatMessage(m.projectInfoEditInfo)}
-									</ButtonLink>
-								</Box>
+												setShowProjectInfoDialog(null)
+											}}
+											variant="text"
+											sx={{ marginInlineStart: -3 }}
+										>
+											{intl.formatMessage(m.projectInfoEditInfo)}
+										</ButtonLink>
+									</Box>
+								) : null}
 							</Stack>
 
 							<List
@@ -948,20 +952,22 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 										)}
 									</Stack>
 
-									<Button
-										loading={selectAndImportMutation.status === 'pending'}
-										onClick={() => {
-											selectAndImportMutation.mutate(undefined, {
-												onError: (err) => {
-													captureException(err)
-												},
-											})
-										}}
-										variant="text"
-										sx={{ marginInlineEnd: -3 }}
-									>
-										{intl.formatMessage(m.projectInfoUpdateCategories)}
-									</Button>
+									{isAtLeastCoordinator ? (
+										<Button
+											loading={selectAndImportMutation.status === 'pending'}
+											onClick={() => {
+												selectAndImportMutation.mutate(undefined, {
+													onError: (err) => {
+														captureException(err)
+													},
+												})
+											}}
+											variant="text"
+											sx={{ marginInlineEnd: -3 }}
+										>
+											{intl.formatMessage(m.projectInfoUpdateCategories)}
+										</Button>
+									) : null}
 								</ListItem>
 							</List>
 						</Stack>
