@@ -20,8 +20,8 @@ import type {
 } from '@electron-forge/shared-types'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
 import { MakerAppImage } from '@reforged/maker-appimage'
-import semver from 'semver'
 import * as v from 'valibot'
+import { parse as parseVersion } from 'verkit'
 import { build, createServer, type ViteDevServer } from 'vite'
 
 import packageJSON from './package.json' with { type: 'json' }
@@ -753,13 +753,7 @@ function getAppVersion(options: {
 		process.env.BUILD_SHA || execSync('git rev-parse HEAD').toString().trim()
 	).slice(0, 7)
 
-	const parsedVersion = semver.parse(options.version)
-
-	if (!parsedVersion) {
-		throw new Error(`Unable to parse version: ${options.version}`)
-	}
-
-	const { major, minor, patch } = parsedVersion
+	const { major, minor, patch } = parseVersion(options.version)
 
 	if (options.appType === 'development') {
 		return options.appTypeSuffix
