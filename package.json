@@ -24,7 +24,7 @@
 	"devEngines": {
 		"runtime": {
 			"name": "node",
-			"version": "~24.20.0",
+			"version": "~24.21.0",
 			"onFail": "warn"
 		},
 		"packageManager": {
@@ -136,7 +136,7 @@
 		"@vis.gl/react-maplibre": "8.1.3",
 		"@vitejs/plugin-react": "6.1.1",
 		"date-fns": "4.4.0",
-		"electron": "44.3.0",
+		"electron": "44.4.1",
 		"electron-playwright-helpers": "3.1.2",
 		"eslint": "10.10.0",
 		"eslint-plugin-formatjs": "7.0.0",
