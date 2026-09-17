@@ -40,7 +40,7 @@ import {
 } from './contexts/local-peers-store-context.ts'
 import { routeTree } from './generated/routeTree.gen.ts'
 import { useNetworkConnectionChangeListener } from './hooks/network.ts'
-import { DIALOG_CONTAINER_ID, TITLE_BAR_HEIGHT } from './lib/constants.ts'
+import { PORTAL_CONTAINER_ID, TITLE_BAR_HEIGHT } from './lib/constants.ts'
 import { getLocaleStateQueryOptions } from './lib/queries/app-settings.ts'
 import { initRpcClients } from './rpc-clients.ts'
 import { createTheme } from './theme.ts'
@@ -170,7 +170,7 @@ export function App() {
 								) : null}
 
 								<Box
-									id={DIALOG_CONTAINER_ID}
+									id={PORTAL_CONTAINER_ID}
 									sx={{ height: MAIN_CONTENT_HEIGHT }}
 								>
 									<Suspense

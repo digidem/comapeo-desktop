@@ -2,6 +2,7 @@ import {
 	Suspense,
 	useEffect,
 	useId,
+	useRef,
 	useState,
 	type MouseEventHandler,
 } from 'react'
@@ -469,6 +470,8 @@ function ProjectSwitcherButton({
 	currentProjectId: string
 	deviceName?: string
 }) {
+	const popperRef = useRef<HTMLDivElement>(null)
+
 	const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null)
 
 	const popupDescribedById = useId()
@@ -491,66 +494,73 @@ function ProjectSwitcherButton({
 		})
 
 	return (
-		<ClickAwayListener
-			onClickAway={() => {
-				setAnchorElement(null)
+		<Box
+			onKeyDown={(event) => {
+				if (event.key === 'Tab' || event.key === 'Escape') {
+					setAnchorElement(null)
+				}
 			}}
 		>
-			<Box
+			<Tooltip
+				id={popupDescribedById}
+				title={intl.formatMessage(m.switchProjectTabLabel)}
+				disableFocusListener
+				disableInteractive={!!anchorElement}
+				placement="right"
+			>
+				<IconButton
+					aria-haspopup="menu"
+					aria-expanded={!!anchorElement}
+					onClick={(event) => {
+						setAnchorElement((prev) => (prev ? null : event.currentTarget))
+					}}
+					sx={
+						anchorElement
+							? BASE_ACTIVE_LINK_PROPS.sx
+							: BASE_INACTIVE_LINK_PROPS.sx
+					}
+				>
+					<Icon name="material-symbols-shuffle" />
+				</IconButton>
+			</Tooltip>
+
+			{/* TODO: Improve tabbing accessibility here */}
+			<Popper
+				ref={popperRef}
+				anchorEl={anchorElement}
+				id={popupDescribedById}
+				modifiers={[
+					{ name: 'offset', options: { offset: [0, 20] } },
+					{ name: 'eventListeners', enabled: true },
+				]}
 				onKeyDown={(event) => {
-					if (event.key === 'Tab' || event.key === 'Escape') {
-						setAnchorElement(null)
+					if (event.key === 'Tab') {
+						event.stopPropagation()
 					}
 				}}
+				open={!!anchorElement}
+				placement="right-start"
+				role="menu"
+				sx={{
+					backgroundColor: WHITE,
+					borderRadius: 2,
+					boxShadow: (theme) => theme.shadows[5],
+					display: 'flex',
+					maxHeight: (theme) =>
+						`calc(100% - ${TITLE_BAR_HEIGHT} - ${theme.spacing(10)})`,
+					overflow: 'auto',
+					zIndex: (theme) => theme.zIndex.modal - 1,
+				}}
 			>
-				<Tooltip
-					id={popupDescribedById}
-					title={intl.formatMessage(m.switchProjectTabLabel)}
-					disableFocusListener
-					disableInteractive={!!anchorElement}
-					placement="right"
-				>
-					<IconButton
-						aria-haspopup="menu"
-						aria-expanded={!!anchorElement}
-						onClick={(event) => {
-							setAnchorElement((prev) => (prev ? null : event.currentTarget))
-						}}
-						sx={
-							anchorElement
-								? BASE_ACTIVE_LINK_PROPS.sx
-								: BASE_INACTIVE_LINK_PROPS.sx
+				<ClickAwayListener
+					onClickAway={() => {
+						// TODO: Hacky workaround due to usage of portals.
+						// Ideally MUI dialog sets `inert` attribute on siblings instead of just `aria-hidden`.
+						if (popperRef.current?.getAttribute('aria-hidden') === 'true') {
+							return
 						}
-					>
-						<Icon name="material-symbols-shuffle" />
-					</IconButton>
-				</Tooltip>
 
-				{/* TODO: Improve tabbing accessibility here */}
-				<Popper
-					anchorEl={anchorElement}
-					id={popupDescribedById}
-					modifiers={[
-						{ name: 'offset', options: { offset: [0, 20] } },
-						{ name: 'eventListeners', enabled: true },
-					]}
-					onKeyDown={(event) => {
-						if (event.key === 'Tab') {
-							event.stopPropagation()
-						}
-					}}
-					open={!!anchorElement}
-					placement="right-start"
-					role="menu"
-					sx={{
-						backgroundColor: WHITE,
-						borderRadius: 2,
-						boxShadow: (theme) => theme.shadows[5],
-						display: 'flex',
-						maxHeight: (theme) =>
-							`calc(100% - ${TITLE_BAR_HEIGHT} - ${theme.spacing(10)})`,
-						overflow: 'auto',
-						zIndex: (theme) => theme.zIndex.modal - 1,
+						setAnchorElement(null)
 					}}
 				>
 					<Stack direction="column" sx={{ overflow: 'auto' }}>
@@ -636,9 +646,9 @@ function ProjectSwitcherButton({
 							</ButtonLink>
 						</Box>
 					</Stack>
-				</Popper>
-			</Box>
-		</ClickAwayListener>
+				</ClickAwayListener>
+			</Popper>
+		</Box>
 	)
 }
 
