@@ -684,8 +684,6 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 	const displayedProjectName =
 		projectSettings.name || intl.formatMessage(m.unnamedProject)
 
-	const accentColor = projectSettings.projectColor || WHITE
-
 	const isAtLeastCoordinator =
 		role.roleId === CREATOR_ROLE_ID || role.roleId === COORDINATOR_ROLE_ID
 
@@ -718,7 +716,7 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 						sx={{
 							alignItems: 'center',
 							aspectRatio: 1,
-							backgroundColor: accentColor,
+							backgroundColor: projectSettings.projectColor || WHITE,
 							borderRadius: '50%',
 							display: 'flex',
 							flex: 1,
@@ -743,7 +741,8 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 								direction="column"
 								sx={{
 									alignItems: 'flex-start',
-									backgroundColor: accentColor,
+									backgroundColor: projectSettings.projectColor,
+									border: `2px solid ${projectSettings.projectColor || BLUE_GREY}`,
 									borderRadius: 2,
 									gap: 4,
 									padding: 6,
