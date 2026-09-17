@@ -152,7 +152,7 @@
 		"oxc-transform-react": "0.145.0",
 		"patch-package": "8.0.1",
 		"playwright": "1.63.0",
-		"prettier": "3.9.6",
+		"prettier": "3.9.7",
 		"prettier-plugin-jsdoc": "1.8.1",
 		"react": "19.3.0",
 		"react-dom": "19.3.0",
