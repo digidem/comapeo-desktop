@@ -153,6 +153,7 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 		removeItem('use_active_project_id_for_initial_route')
 	},
 	// NOTE: Prevents an OOM issue in the renderer when switching between projects.
+	// https://awana-digital.sentry.io/issues/7738470652/
 	remountDeps: ({ params }) => params,
 	component: RouteComponent,
 })
