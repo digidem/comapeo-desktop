@@ -543,7 +543,7 @@ function ProjectSwitcherButton({
 					<Typography
 						component="p"
 						variant="h3"
-						sx={{ fontWeight: 500, paddingInli: 4 }}
+						sx={{ fontWeight: 500, maxWidth: '25ch', textWrap: 'balance' }}
 					>
 						{deviceName}
 					</Typography>
@@ -579,6 +579,7 @@ function ProjectSwitcherButton({
 									backgroundColor: p.projectColor,
 									borderRadius: 2,
 									gap: 2,
+									justifyContent: 'space-between',
 									outline: `2px solid ${LIGHT_GREY}`,
 									outlineOffset: -1,
 									padding: 4,
