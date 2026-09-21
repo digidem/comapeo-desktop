@@ -1,5 +1,5 @@
 import { useOwnDeviceInfo } from '@comapeo/core-react'
-import { Box } from '@mui/material'
+import Box from '@mui/material/Box'
 
 import { COMAPEO_BLUE } from '../../../../colors'
 
