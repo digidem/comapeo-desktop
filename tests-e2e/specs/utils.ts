@@ -95,7 +95,19 @@ export async function simulateCreateProject({
 	page: Page
 	projectName: string
 }) {
-	await page.getByRole('link', { name: 'Home', exact: true }).click()
+	const projectSwitcherTrigger = page.getByRole('button', {
+		name: 'Switch Project',
+		exact: true,
+	})
+
+	if (await projectSwitcherTrigger.isVisible()) {
+		await projectSwitcherTrigger.click()
+
+		await page
+			.getByRole('menu')
+			.getByRole('menuitem', { name: 'View All Projects', exact: true })
+			.click()
+	}
 
 	await page
 		.getByRole('link', { name: 'Start New Project', exact: true })
@@ -107,5 +119,10 @@ export async function simulateCreateProject({
 
 	await page.getByRole('button', { name: 'Create', exact: true }).click()
 
-	await page.getByRole('link', { name: 'Home', exact: true }).click()
+	// NOTE: Navigate back to home page after project creation
+	await projectSwitcherTrigger.click()
+	await page
+		.getByRole('menu')
+		.getByRole('menuitem', { name: 'View All Projects', exact: true })
+		.click()
 }

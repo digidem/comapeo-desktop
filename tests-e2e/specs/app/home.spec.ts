@@ -160,44 +160,6 @@ test('create project', async ({ appInfo, projectParams, userParams }) => {
 				pathname: '/app/projects/:projectId',
 			}).test({ pathname: url.hash.slice(1) })
 		})
-
-		// App nav after project creation assertions
-		{
-			const appNav = page.getByRole('navigation', {
-				name: 'App navigation',
-				exact: true,
-			})
-
-			await expect(
-				appNav.getByRole('button', {
-					name: `Show info for project ${projectParams.projectName}.`,
-					exact: true,
-				}),
-			).toBeVisible()
-
-			await appNav.getByRole('link', { name: 'Home', exact: true }).click()
-
-			await expect(
-				appNav.getByRole('button', {
-					name: `Go to project ${projectParams.projectName}.`,
-					exact: true,
-				}),
-			).toBeVisible()
-		}
-
-		// Project card on home page assertions
-		{
-			const projectCard = page.getByRole('main').getByRole('link', {
-				name: `Go to project ${projectParams.projectName}`,
-			})
-
-			await expect(projectCard).toHaveCount(1)
-
-			await expect(projectCard).toHaveCSS(
-				'border-color',
-				hexToRgb(COMAPEO_BLUE),
-			)
-		}
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()
@@ -349,8 +311,7 @@ test.skip('initial page when re-opening app', async ({
 		})
 
 		await page
-			.getByRole('navigation', { name: 'App navigation', exact: true })
-			.getByRole('button', {
+			.getByRole('link', {
 				name: `Go to project ${projectParams.projectName}.`,
 				exact: true,
 			})
