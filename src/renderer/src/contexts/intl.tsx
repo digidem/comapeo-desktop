@@ -6,11 +6,9 @@ import {
 	type PropsWithChildren,
 	type ReactNode,
 } from 'react'
-import {
-	LocalizationProvider,
-	type PickersLocaleText,
-} from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import type { PickersLocaleText } from '@mui/x-date-pickers/locales'
 import {
 	queryOptions,
 	useSuspenseQueries,
