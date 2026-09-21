@@ -647,6 +647,10 @@
     "description": "Text displayed when observation cannot be found.",
     "message": "Could not find observation with ID {docId}"
   },
+  "$1.routes.app.projects.$projectId.route.backgroundMapTabLabel": {
+    "description": "Label for background map tab link in navigation.",
+    "message": "Background Map"
+  },
   "$1.routes.app.projects.$projectId.route.exchangeTabLabel": {
     "description": "Label for project exchange tab link in navigation.",
     "message": "Exchange"
@@ -690,6 +694,10 @@
   "$1.routes.app.projects.$projectId.route.projectSwitcherViewAllProjects": {
     "description": "Text for button in project switcher to navigate to all projects page.",
     "message": "View All Projects"
+  },
+  "$1.routes.app.projects.$projectId.route.settingsTabLabel": {
+    "description": "Label for app settings tab link in navigation.",
+    "message": "Settings"
   },
   "$1.routes.app.projects.$projectId.route.switchProjectTabLabel": {
     "description": "Label for project switcher tab button in navigation.",

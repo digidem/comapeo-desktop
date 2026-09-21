@@ -219,10 +219,6 @@
     "description": "Displayed speed for observation in meters per second.",
     "message": "{value} m/s"
   },
-  "routes.app.projects.$projectId.route.backgroundMapTabLabel": {
-    "description": "Label for background map tab link in navigation.",
-    "message": "Background Map"
-  },
   "routes.app.projects.$projectId.route.fallbackCategoriesSetName": {
     "description": "Text shown when project does not use a categories set in project info dialog.",
     "message": "CoMapeo Categories"
@@ -234,10 +230,6 @@
   "routes.app.projects.$projectId.route.projectSwitcherCardLinkAccessibleLabel": {
     "description": "Accessible label for link in project switcher that navigates to project when clicked.",
     "message": "Go to project {name}."
-  },
-  "routes.app.projects.$projectId.route.settingsTabLabel": {
-    "description": "Label for app settings tab link in navigation.",
-    "message": "Settings"
   },
   "routes.app.projects.$projectId.route.testDataTabLabel": {
     "description": "Label for project test data tab link in navigation.",

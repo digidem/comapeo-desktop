@@ -1119,12 +1119,12 @@ const m = defineMessages({
 		description: 'Label for project test data tab link in navigation.',
 	},
 	backgroundMapTabLabel: {
-		id: 'routes.app.projects.$projectId.route.backgroundMapTabLabel',
+		id: '$1.routes.app.projects.$projectId.route.backgroundMapTabLabel',
 		defaultMessage: 'Background Map',
 		description: 'Label for background map tab link in navigation.',
 	},
 	settingsTabLabel: {
-		id: 'routes.app.projects.$projectId.route.settingsTabLabel',
+		id: '$1.routes.app.projects.$projectId.route.settingsTabLabel',
 		defaultMessage: 'Settings',
 		description: 'Label for app settings tab link in navigation.',
 	},
