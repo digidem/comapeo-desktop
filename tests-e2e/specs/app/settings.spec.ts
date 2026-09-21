@@ -1,9 +1,7 @@
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { hexToRgb } from '@mui/material/styles'
 import { expect } from '@playwright/test'
 
-import { DARK_COMAPEO_BLUE } from '../../../src/renderer/src/colors.ts'
 import { setup, simulateOnboarding, test } from '../utils.ts'
 
 const ASSETS_DIR = fileURLToPath(new URL('../../assets', import.meta.url))
@@ -27,9 +25,10 @@ test('index', async ({ appInfo, userParams }) => {
 
 		/// Navigation
 		{
-			const settingsNavLink = page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('link', { name: 'Settings', exact: true })
+			const settingsNavLink = page.getByRole('link', {
+				name: 'CoMapeo Settings',
+				exact: true,
+			})
 
 			await settingsNavLink.click()
 		}
@@ -285,9 +284,10 @@ test.describe('device name', () => {
 			/// Navigation
 			{
 				// Navigate to device name settings page
-				const settingsNavLink = page
-					.getByRole('navigation', { name: 'App navigation', exact: true })
-					.getByRole('link', { name: 'Settings', exact: true })
+				const settingsNavLink = main.getByRole('link', {
+					name: 'CoMapeo Settings',
+					exact: true,
+				})
 
 				await settingsNavLink.click()
 
@@ -301,12 +301,6 @@ test.describe('device name', () => {
 				).toBeVisible()
 
 				await deviceNameSettingsLink.click()
-
-				// Assert app nav bar state
-				await expect(settingsNavLink).toHaveCSS(
-					'background-color',
-					hexToRgb(DARK_COMAPEO_BLUE),
-				)
 			}
 
 			/// Main
@@ -373,9 +367,11 @@ test.describe('device name', () => {
 
 			const main = page.getByRole('main')
 
-			await page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('link', { name: 'Settings', exact: true })
+			await main
+				.getByRole('link', {
+					name: 'CoMapeo Settings',
+					exact: true,
+				})
 				.click()
 
 			await main
@@ -530,9 +526,10 @@ test('language', async ({ appInfo, userParams }) => {
 		/// Navigation
 		{
 			// Navigate to language settings page
-			const settingsNavLink = page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('link', { name: 'Settings', exact: true })
+			const settingsNavLink = main.getByRole('link', {
+				name: 'CoMapeo Settings',
+				exact: true,
+			})
 
 			await settingsNavLink.click()
 
@@ -549,12 +546,6 @@ test('language', async ({ appInfo, userParams }) => {
 			).toBeVisible()
 
 			await languageSettingsLink.click()
-
-			// Assert app nav bar state
-			await expect(settingsNavLink).toHaveCSS(
-				'background-color',
-				hexToRgb(DARK_COMAPEO_BLUE),
-			)
 		}
 
 		/// Main
@@ -730,9 +721,10 @@ test('coordinate system', async ({ appInfo, userParams }) => {
 		/// Navigation
 		{
 			// Navigate to coordinate system settings page
-			const settingsNavLink = page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('link', { name: 'Settings', exact: true })
+			const settingsNavLink = main.getByRole('link', {
+				name: 'CoMapeo Settings',
+				exact: true,
+			})
 
 			await settingsNavLink.click()
 
@@ -748,12 +740,6 @@ test('coordinate system', async ({ appInfo, userParams }) => {
 			).toBeVisible()
 
 			await coordinateSystemSettingsLink.click()
-
-			// Assert app nav bar state
-			await expect(settingsNavLink).toHaveCSS(
-				'background-color',
-				hexToRgb(DARK_COMAPEO_BLUE),
-			)
 		}
 
 		/// Main
@@ -884,9 +870,10 @@ test('unit system', async ({ appInfo, userParams }) => {
 		/// Navigation
 		{
 			// Navigate to coordinate system settings page
-			const settingsNavLink = page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('link', { name: 'Settings', exact: true })
+			const settingsNavLink = main.getByRole('link', {
+				name: 'CoMapeo Settings',
+				exact: true,
+			})
 
 			await settingsNavLink.click()
 
@@ -902,12 +889,6 @@ test('unit system', async ({ appInfo, userParams }) => {
 			).toBeVisible()
 
 			await unitSystemSettingsLink.click()
-
-			// Assert app nav bar state
-			await expect(settingsNavLink).toHaveCSS(
-				'background-color',
-				hexToRgb(DARK_COMAPEO_BLUE),
-			)
 		}
 
 		/// Main
@@ -1034,9 +1015,10 @@ test('background map', async ({ appInfo, userParams }) => {
 		/// Navigation
 		{
 			// Navigate to background map settings page
-			const settingsNavLink = page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('link', { name: 'Settings', exact: true })
+			const settingsNavLink = main.getByRole('link', {
+				name: 'CoMapeo Settings',
+				exact: true,
+			})
 
 			await settingsNavLink.click()
 
@@ -1052,12 +1034,6 @@ test('background map', async ({ appInfo, userParams }) => {
 			).toBeVisible()
 
 			await backgroundMapSettingsLink.click()
-
-			// Assert app nav bar state
-			await expect(settingsNavLink).toHaveCSS(
-				'background-color',
-				hexToRgb(DARK_COMAPEO_BLUE),
-			)
 		}
 
 		/// Main
