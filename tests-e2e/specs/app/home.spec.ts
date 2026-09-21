@@ -36,6 +36,10 @@ test('initial page after onboarding', async ({ appInfo, userParams }) => {
 			await expect(
 				page.getByRole('link', { name: 'Start New Project', exact: true }),
 			).toBeVisible()
+
+			await expect(
+				page.getByRole('link', { name: 'CoMapeo Settings', exact: true }),
+			).toBeVisible()
 		}
 
 		// Main panel section
