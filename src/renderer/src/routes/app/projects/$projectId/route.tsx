@@ -2,7 +2,6 @@ import {
 	Suspense,
 	useEffect,
 	useId,
-	useRef,
 	useState,
 	type MouseEventHandler,
 } from 'react'
@@ -15,20 +14,17 @@ import {
 	useProjectSettings,
 	useSingleProject,
 } from '@comapeo/core-react'
-import {
-	Button,
-	ClickAwayListener,
-	Divider,
-	IconButton,
-	Popper,
-	Typography,
-	iconButtonClasses,
-} from '@mui/material'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Divider from '@mui/material/Divider'
+import IconButton, { iconButtonClasses } from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
+import Menu from '@mui/material/Menu'
+import MenuItem, { menuItemClasses } from '@mui/material/MenuItem'
 import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useIsMutating, useMutation } from '@tanstack/react-query'
 import {
@@ -470,11 +466,9 @@ function ProjectSwitcherButton({
 	currentProjectId: string
 	deviceName?: string
 }) {
-	const popperRef = useRef<HTMLDivElement>(null)
-
 	const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null)
 
-	const popupDescribedById = useId()
+	const menuId = useId()
 
 	const intl = useIntl()
 
@@ -494,22 +488,16 @@ function ProjectSwitcherButton({
 		})
 
 	return (
-		<Box
-			onKeyDown={(event) => {
-				if (event.key === 'Tab' || event.key === 'Escape') {
-					setAnchorElement(null)
-				}
-			}}
-		>
+		<>
 			<Tooltip
-				id={popupDescribedById}
-				title={intl.formatMessage(m.switchProjectTabLabel)}
 				disableFocusListener
 				disableInteractive={!!anchorElement}
 				placement="right"
+				title={intl.formatMessage(m.switchProjectTabLabel)}
 			>
 				<IconButton
 					aria-haspopup="menu"
+					aria-controls={anchorElement ? menuId : undefined}
 					aria-expanded={!!anchorElement}
 					onClick={(event) => {
 						setAnchorElement((prev) => (prev ? null : event.currentTarget))
@@ -524,131 +512,127 @@ function ProjectSwitcherButton({
 				</IconButton>
 			</Tooltip>
 
-			{/* TODO: Improve tabbing accessibility here */}
-			<Popper
-				ref={popperRef}
+			<Menu
+				id={menuId}
 				anchorEl={anchorElement}
-				id={popupDescribedById}
-				modifiers={[
-					{ name: 'offset', options: { offset: [0, 20] } },
-					{ name: 'eventListeners', enabled: true },
-				]}
-				onKeyDown={(event) => {
-					if (event.key === 'Tab') {
-						event.stopPropagation()
-					}
+				anchorOrigin={{ horizontal: 'right', vertical: 8 }}
+				onClose={() => {
+					setAnchorElement(null)
 				}}
 				open={!!anchorElement}
-				placement="right-start"
-				role="menu"
-				sx={{
-					backgroundColor: WHITE,
-					borderRadius: 2,
-					boxShadow: (theme) => theme.shadows[5],
-					display: 'flex',
-					maxHeight: (theme) =>
-						`calc(100% - ${TITLE_BAR_HEIGHT} - ${theme.spacing(10)})`,
-					overflow: 'auto',
-					zIndex: (theme) => theme.zIndex.modal - 1,
+				slotProps={{
+					list: {
+						disablePadding: true,
+						sx: { display: 'flex', flexDirection: 'column', overflow: 'auto' },
+					},
+					paper: {
+						sx: {
+							display: 'flex',
+							flexDirection: 'column',
+							maxHeight: (theme) =>
+								`calc(100% - ${TITLE_BAR_HEIGHT} - ${theme.spacing(4)})`,
+							overflow: 'auto',
+						},
+					},
 				}}
+				sx={{ overflow: 'auto', zIndex: (theme) => theme.zIndex.modal - 1 }}
+				transformOrigin={{ horizontal: -20, vertical: 'bottom' }}
+				transitionDuration={0}
 			>
-				<ClickAwayListener
-					onClickAway={() => {
-						// TODO: Hacky workaround due to usage of portals.
-						// Ideally MUI dialog sets `inert` attribute on siblings instead of just `aria-hidden`.
-						if (popperRef.current?.getAttribute('aria-hidden') === 'true') {
-							return
-						}
+				<Box sx={{ padding: 4 }}>
+					<Typography
+						component="p"
+						variant="h3"
+						sx={{ fontWeight: 500, paddingInli: 4 }}
+					>
+						{deviceName}
+					</Typography>
+				</Box>
 
-						setAnchorElement(null)
+				<Stack
+					direction="column"
+					sx={{
+						flex: 1,
+						gap: 2,
+						overflow: 'auto',
+						paddingInline: 4,
+						paddingBlock: 2,
 					}}
 				>
-					<Stack direction="column" sx={{ overflow: 'auto' }}>
-						<Stack
-							direction="column"
-							sx={{ flex: 1, gap: 4, overflow: 'auto', padding: 4 }}
-						>
-							<Typography sx={{ fontWeight: 500 }}>{deviceName}</Typography>
+					{sortedProjects.map((p) => {
+						const isCurrentProject = p.projectId === currentProjectId
+						const displayedName = p.name || intl.formatMessage(m.unnamedProject)
 
-							{sortedProjects.map((p, index) => {
-								const isCurrentProject = p.projectId === currentProjectId
-								const displayedName =
-									p.name || intl.formatMessage(m.unnamedProject)
+						const selectedClass = `&.${menuItemClasses.selected}`
+						const interactedClass = `&:hover, &.${menuItemClasses.focusVisible}, &.${menuItemClasses.selected}:hover, &.${menuItemClasses.selected}.${menuItemClasses.focusVisible}`
 
-								return (
-									<ButtonBaseLink
-										key={p.projectId}
-										ref={
-											index === 0
-												? (node) => {
-														node?.focus()
-													}
-												: undefined
-										}
-										to="/app/projects/$projectId"
-										params={{ projectId: p.projectId }}
-										aria-label={intl.formatMessage(
-											m.projectSwitcherCardLinkAccessibleLabel,
-											{ name: displayedName },
-										)}
-										onClick={() => {
-											setAnchorElement(null)
-										}}
-										sx={{
-											alignItems: 'center',
-											backgroundColor: p.projectColor,
-											border: `2px solid ${isCurrentProject ? COMAPEO_BLUE : LIGHT_GREY}`,
-											borderRadius: 2,
-											gap: 2,
-											justifyContent: 'flex-start',
-											outlineOffset: -1,
-											padding: 4,
-											'&:hover, &:focus-within': {
-												outline: `2px solid ${isCurrentProject ? COMAPEO_BLUE : BLUE_GREY}`,
-											},
-										}}
-									>
-										<Typography
-											sx={{
-												flex: 1,
-												fontWeight: 500,
-												overflow: 'hidden',
-												textOverflow: 'ellipsis',
-												whiteSpace: 'nowrap',
-												width: '20ch',
-											}}
-										>
-											{displayedName}
-										</Typography>
-
-										{isCurrentProject ? (
-											<Icon
-												name="material-check-circle-rounded"
-												color="primary"
-											/>
-										) : null}
-									</ButtonBaseLink>
-								)
-							})}
-						</Stack>
-
-						<Box sx={{ paddingBlock: 4, paddingInline: 6 }}>
-							<ButtonLink
-								to="/app"
-								color="inherit"
-								startIcon={<Icon name="material-symbols-view-agenda" />}
-								sx={{ marginInlineStart: -4 }}
-								variant="text"
+						return (
+							<MenuItem
+								key={p.projectId}
+								component={ButtonBaseLink}
+								to="/app/projects/$projectId"
+								params={{ projectId: p.projectId }}
+								disableGutters
+								disableRipple
+								selected={isCurrentProject}
+								sx={{
+									backgroundColor: p.projectColor,
+									borderRadius: 2,
+									gap: 2,
+									outline: `2px solid ${LIGHT_GREY}`,
+									outlineOffset: -1,
+									padding: 4,
+									[selectedClass]: {
+										backgroundColor: p.projectColor,
+										outlineColor: COMAPEO_BLUE,
+									},
+									[interactedClass]: {
+										backgroundColor: (theme) =>
+											theme.darken(p.projectColor || WHITE, 0.05),
+										outlineColor: (theme) =>
+											theme.darken(
+												isCurrentProject ? COMAPEO_BLUE : LIGHT_GREY,
+												0.2,
+											),
+									},
+								}}
 							>
-								<Typography>
-									{intl.formatMessage(m.projectSwitcherViewAllProjects)}
+								<Typography
+									sx={{
+										flex: 1,
+										fontWeight: 500,
+										overflow: 'hidden',
+										textOverflow: 'ellipsis',
+										whiteSpace: 'nowrap',
+										maxWidth: '25ch',
+									}}
+								>
+									{displayedName}
 								</Typography>
-							</ButtonLink>
-						</Box>
-					</Stack>
-				</ClickAwayListener>
-			</Popper>
-		</Box>
+
+								{isCurrentProject ? (
+									<Icon name="material-check-circle-rounded" color="primary" />
+								) : null}
+							</MenuItem>
+						)
+					})}
+				</Stack>
+
+				<MenuItem
+					component={ButtonBaseLink}
+					to="/app"
+					disableGutters
+					disableRipple
+					sx={{ display: 'flex', flexDirection: 'row', gap: 2, padding: 4 }}
+				>
+					<Icon name="material-symbols-view-agenda" color="inherit" />
+
+					<Typography>
+						{intl.formatMessage(m.projectSwitcherViewAllProjects)}
+					</Typography>
+				</MenuItem>
+			</Menu>
+		</>
 	)
 }
 
