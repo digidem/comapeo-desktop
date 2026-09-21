@@ -147,6 +147,10 @@
     "description": "Title text for success state of app usage consent dialog.",
     "message": "Success!"
   },
+  "$1.routes.app.index.comapeoSettings": {
+    "description": "Title for button to navigate to CoMapeo settings.",
+    "message": "CoMapeo Settings"
+  },
   "$1.routes.app.index.createProjectButton": {
     "description": "Text for button to create project.",
     "message": "Create"
