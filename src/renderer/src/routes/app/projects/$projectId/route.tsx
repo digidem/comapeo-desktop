@@ -576,7 +576,7 @@ function ProjectSwitcherButton({
 								disableRipple
 								selected={isCurrentProject}
 								sx={{
-									backgroundColor: p.projectColor,
+									backgroundColor: p.projectColor || WHITE,
 									borderRadius: 2,
 									gap: 2,
 									justifyContent: 'space-between',
@@ -584,7 +584,7 @@ function ProjectSwitcherButton({
 									outlineOffset: -1,
 									padding: 4,
 									[selectedClass]: {
-										backgroundColor: p.projectColor,
+										backgroundColor: 'initial',
 										outlineColor: COMAPEO_BLUE,
 									},
 									[interactedClass]: {
