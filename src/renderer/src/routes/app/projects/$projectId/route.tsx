@@ -37,7 +37,6 @@ import { defineMessages, useIntl } from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 
 import {
-	BLACK,
 	BLUE_GREY,
 	COMAPEO_BLUE,
 	DARK_BLUE,
@@ -233,7 +232,7 @@ function RouteComponent() {
 							gap: 5,
 							justifyContent: 'space-between',
 							overflow: 'auto',
-							paddingBlock: 5,
+							paddingBlock: 4,
 							scrollbarGutter: 'stable both-edges',
 							scrollbarWidth: 'thin',
 						}}
@@ -684,46 +683,47 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 
 	return (
 		<>
-			<Tooltip
-				title={
-					<Typography
-						variant="inherit"
-						sx={{
-							textOverflow: 'ellipsis',
-							whiteSpace: 'nowrap',
-							overflow: 'hidden',
-						}}
-					>
-						{displayedProjectName}
-					</Typography>
-				}
-				disableFocusListener
-				placement="right"
-				slotProps={{ popper: { sx: { maxWidth: '20ch' } } }}
-			>
-				<IconButton
-					onClick={() => {
-						setShowProjectInfoDialog(true)
-					}}
-					sx={{ display: 'flex', flex: 1, color: BLACK, padding: 3 }}
+			<Box sx={{ aspectRatio: 1, display: 'flex', flex: 1, padding: 3 }}>
+				<Tooltip
+					title={
+						<Typography
+							variant="inherit"
+							sx={{
+								overflow: 'hidden',
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+							}}
+						>
+							{displayedProjectName}
+						</Typography>
+					}
+					disableFocusListener
+					placement="right"
+					slotProps={{ popper: { sx: { maxWidth: '20ch' } } }}
 				>
-					<Box
+					<IconButton
+						aria-haspopup="dialog"
+						aria-label={intl.formatMessage(m.projectInfoTabAccessibleLabel, {
+							name: displayedProjectName,
+						})}
+						onClick={() => {
+							setShowProjectInfoDialog(true)
+						}}
 						sx={{
-							alignItems: 'center',
-							aspectRatio: 1,
 							backgroundColor: projectSettings.projectColor || WHITE,
-							borderRadius: '50%',
-							display: 'flex',
 							flex: 1,
-							justifyContent: 'center',
+							'&:hover': {
+								backgroundColor: (theme) =>
+									theme.darken(projectSettings.projectColor || WHITE, 0.1),
+							},
 						}}
 					>
-						<Typography sx={{ fontWeight: 500 }}>
+						<Typography color="textPrimary" sx={{ fontWeight: 500 }}>
 							{displayedProjectName[0]}
 						</Typography>
-					</Box>
-				</IconButton>
-			</Tooltip>
+					</IconButton>
+				</Tooltip>
+			</Box>
 
 			<DecentDialog fullWidth maxWidth="sm" value={showProjectInfoDialog}>
 				{() => (
@@ -1098,6 +1098,11 @@ const m = defineMessages({
 		id: 'routes.app.projects.$projectId.route.projectNavigationAccessibleLabel',
 		defaultMessage: 'Project navigation',
 		description: 'Accessible label for project-specific navigation bar.',
+	},
+	projectInfoTabAccessibleLabel: {
+		id: 'routes.app.projects.$projectId.route.listTabLabel',
+		defaultMessage: 'Project info for {name}',
+		description: 'Accessible label for project info tab button in navigation.',
 	},
 	listTabLabel: {
 		id: '$1.routes.app.projects.$projectId.route.listTabLabel',
