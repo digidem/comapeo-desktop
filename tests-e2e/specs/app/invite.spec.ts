@@ -1,7 +1,5 @@
-import { hexToRgb } from '@mui/material/styles'
 import { expect } from 'playwright/test'
 
-import { COMAPEO_BLUE } from '../../../src/renderer/src/colors.ts'
 import {
 	setup,
 	simulateCreateProject,
@@ -35,8 +33,7 @@ test.describe('Invite device flow', () => {
 			})
 
 			await page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('button', {
+				.getByRole('link', {
 					name: `Go to project ${projectParams.projectName}.`,
 					exact: true,
 				})
@@ -67,7 +64,7 @@ test.describe('Invite device flow', () => {
 					.click()
 
 				// Assert nav rail state
-				await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+				await expect(teamNavLink).toHaveAttribute('aria-current', 'page')
 			}
 
 			/// Main

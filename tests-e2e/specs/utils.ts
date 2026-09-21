@@ -95,8 +95,6 @@ export async function simulateCreateProject({
 	page: Page
 	projectName: string
 }) {
-	await page.getByRole('link', { name: 'Home', exact: true }).click()
-
 	await page
 		.getByRole('link', { name: 'Start New Project', exact: true })
 		.click()
@@ -107,5 +105,15 @@ export async function simulateCreateProject({
 
 	await page.getByRole('button', { name: 'Create', exact: true }).click()
 
-	await page.getByRole('link', { name: 'Home', exact: true }).click()
+	await page
+		.getByRole('button', {
+			name: 'Switch Project',
+			exact: true,
+		})
+		.click()
+
+	await page
+		.getByRole('menu')
+		.getByRole('menuitem', { name: 'View All Projects', exact: true })
+		.click()
 }

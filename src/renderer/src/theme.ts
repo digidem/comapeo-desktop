@@ -17,7 +17,7 @@ import {
 	RED,
 	WHITE,
 } from './colors.ts'
-import { DIALOG_CONTAINER_ID, TITLE_BAR_HEIGHT } from './lib/constants.ts'
+import { PORTAL_CONTAINER_ID, TITLE_BAR_HEIGHT } from './lib/constants.ts'
 
 declare module '@mui/material/styles' {
 	interface TypographyVariants {
@@ -191,7 +191,7 @@ function createTheme({ platform }: { platform: NodeJS.Platform }) {
 			MuiModal: {
 				defaultProps: {
 					container: () => {
-						return document.getElementById(DIALOG_CONTAINER_ID)
+						return document.getElementById(PORTAL_CONTAINER_ID)
 					},
 				},
 				styleOverrides:
@@ -245,6 +245,13 @@ function createTheme({ platform }: { platform: NodeJS.Platform }) {
 							{
 								marginRight: '4px',
 							},
+					},
+				},
+			},
+			MuiPopper: {
+				defaultProps: {
+					container: () => {
+						return document.getElementById(PORTAL_CONTAINER_ID)
 					},
 				},
 			},

@@ -1,7 +1,5 @@
-import { hexToRgb } from '@mui/material/styles'
 import { expect } from '@playwright/test'
 
-import { COMAPEO_BLUE } from '../../../../src/renderer/src/colors.ts'
 import {
 	setup,
 	simulateCreateProject,
@@ -30,7 +28,7 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 		})
 
 		await page
-			.getByRole('button', {
+			.getByRole('link', {
 				name: `Go to project ${projectParams.projectName}.`,
 				exact: true,
 			})
@@ -49,7 +47,7 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 			await teamNavLink.click()
 
 			// Assert nav rail state
-			await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+			await expect(teamNavLink).toHaveAttribute('aria-current', 'page')
 		}
 
 		/// Main
@@ -142,7 +140,7 @@ test.describe('collaborator info', () => {
 			})
 
 			await page
-				.getByRole('button', {
+				.getByRole('link', {
 					name: `Go to project ${projectParams.projectName}.`,
 					exact: true,
 				})
@@ -168,7 +166,7 @@ test.describe('collaborator info', () => {
 					.click()
 
 				// Assert nav rail state
-				await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+				await expect(teamNavLink).toHaveAttribute('aria-current', 'page')
 			}
 
 			/// Main
@@ -225,8 +223,7 @@ test.describe('leave project', () => {
 			})
 
 			await page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('button', {
+				.getByRole('link', {
 					name: `Go to project ${projectParams.projectName}.`,
 					exact: true,
 				})
@@ -252,7 +249,7 @@ test.describe('leave project', () => {
 					.click()
 
 				// Assert nav rail state
-				await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+				await expect(teamNavLink).toHaveAttribute('aria-current', 'page')
 
 				await main
 					.getByRole('button', { name: 'Leave Project', exact: true })
@@ -357,23 +354,12 @@ test.describe('leave project', () => {
 			}
 
 			// Assert left project is no longer referenced on home page
-			{
-				await expect(
-					page
-						.getByRole('navigation', { name: 'App navigation', exact: true })
-						.getByRole('button', {
-							name: `Go to project ${projectParams.projectName}.`,
-							exact: true,
-						}),
-				).not.toBeVisible()
-
-				await expect(
-					main.getByRole('link', {
-						name: `Go to project ${projectParams.projectName}.`,
-						exact: true,
-					}),
-				).not.toBeVisible()
-			}
+			await expect(
+				main.getByRole('link', {
+					name: `Go to project ${projectParams.projectName}.`,
+					exact: true,
+				}),
+			).not.toBeVisible()
 		} finally {
 			// 3. Cleanup
 			await electronApp.close()

@@ -647,6 +647,10 @@
     "description": "Text displayed when observation cannot be found.",
     "message": "Could not find observation with ID {docId}"
   },
+  "$1.routes.app.projects.$projectId.route.backgroundMapTabLabel": {
+    "description": "Label for background map tab link in navigation.",
+    "message": "Background Map"
+  },
   "$1.routes.app.projects.$projectId.route.exchangeTabLabel": {
     "description": "Label for project exchange tab link in navigation.",
     "message": "Exchange"
@@ -655,13 +659,57 @@
     "description": "Label for project list tab link in navigation.",
     "message": "List"
   },
+  "$1.routes.app.projects.$projectId.route.projectInfoCategoriesAdded": {
+    "description": "Text indicating added date of categories set in project info dialog.",
+    "message": "Added {date}"
+  },
+  "$1.routes.app.projects.$projectId.route.projectInfoCategoriesCreated": {
+    "description": "Text indicating creation date of categories set in project info dialog.",
+    "message": "Created {date}"
+  },
+  "$1.routes.app.projects.$projectId.route.projectInfoClose": {
+    "description": "Text for button to close project info dialog.",
+    "message": "Close"
+  },
+  "$1.routes.app.projects.$projectId.route.projectInfoEditInfo": {
+    "description": "Text for link to edit project info in project info dialog.",
+    "message": "Edit Info"
+  },
+  "$1.routes.app.projects.$projectId.route.projectInfoRoleCoordinator": {
+    "description": "Indicates that user is a coordinator in project info dialog.",
+    "message": "Coordinator"
+  },
+  "$1.routes.app.projects.$projectId.route.projectInfoRoleParticipant": {
+    "description": "Indicates that user is a participant in project info dialog.",
+    "message": "Participant"
+  },
+  "$1.routes.app.projects.$projectId.route.projectInfoUpdateCategories": {
+    "description": "Text for button to update categories set in project info dialog.",
+    "message": "Update"
+  },
+  "$1.routes.app.projects.$projectId.route.projectInfoViewTeam": {
+    "description": "Text for link to view team in project info dialog.",
+    "message": "View Team"
+  },
+  "$1.routes.app.projects.$projectId.route.projectSwitcherViewAllProjects": {
+    "description": "Text for button in project switcher to navigate to all projects page.",
+    "message": "View All Projects"
+  },
+  "$1.routes.app.projects.$projectId.route.settingsTabLabel": {
+    "description": "Label for app settings tab link in navigation.",
+    "message": "Settings"
+  },
+  "$1.routes.app.projects.$projectId.route.switchProjectTabLabel": {
+    "description": "Label for project switcher tab button in navigation.",
+    "message": "Switch Project"
+  },
   "$1.routes.app.projects.$projectId.route.teamTabLabel": {
     "description": "Label for project team tab link in navigation.",
     "message": "Team"
   },
-  "$1.routes.app.projects.$projectId.route.toolsTabLabel": {
-    "description": "Label for project tools tab link in navigation.",
-    "message": "Tools"
+  "$1.routes.app.projects.$projectId.route.unnamedProject": {
+    "description": "Fallback for when project is missing a name.",
+    "message": "Unnamed Project"
   },
   "$1.routes.app.projects.$projectId.settings.categories.customCategoriesExplainer": {
     "description": "Explanation for custom categories",
@@ -1039,14 +1087,6 @@
     "description": "Text displayed when Wi-Fi info is unavailable.",
     "message": "Wi-Fi info unavailable."
   },
-  "$1.routes.app.route.appSettingsTabLabel": {
-    "description": "Label for app settings tab link in navigation.",
-    "message": "Settings"
-  },
-  "$1.routes.app.route.homeTabTitle": {
-    "description": "Label for home tab link in navigation.",
-    "message": "Home"
-  },
   "$1.routes.app.route.projectInviteAccept": {
     "description": "Button text for accepting project invite.",
     "message": "Join"
@@ -1102,10 +1142,6 @@
   "$1.routes.app.route.projectJoinedViewProject": {
     "description": "Text for button to navigate to joined project in project joined dialog.",
     "message": "View Project"
-  },
-  "$1.routes.app.route.unnamedProject": {
-    "description": "Fallback for when project is missing a name.",
-    "message": "Unnamed Project"
   },
   "$1.routes.app.settings.-data-and-privacy-section.appUsageDescription": {
     "description": "Description of app usage metrics settings section.",
