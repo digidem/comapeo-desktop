@@ -1,7 +1,5 @@
-import { hexToRgb } from '@mui/material/styles'
 import { expect } from 'playwright/test'
 
-import { COMAPEO_BLUE } from '../../../src/renderer/src/colors.ts'
 import {
 	setup,
 	simulateCreateProject,
@@ -66,10 +64,7 @@ test.describe('Invite device flow', () => {
 					.click()
 
 				// Assert nav rail state
-				await expect(teamNavLink).toHaveCSS(
-					'background-color',
-					hexToRgb(COMAPEO_BLUE),
-				)
+				await expect(teamNavLink).toHaveAttribute('aria-current', 'page')
 			}
 
 			/// Main
