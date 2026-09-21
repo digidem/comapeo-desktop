@@ -4,15 +4,13 @@ import {
 	useOwnDeviceInfo,
 	useOwnRoleInProject,
 } from '@comapeo/core-react'
-import {
-	CircularProgress,
-	Container,
-	List,
-	ListItem,
-	ListItemText,
-} from '@mui/material'
 import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
+import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -131,6 +129,8 @@ function RouteComponent() {
 					sx={{
 						alignItems: 'center',
 						borderBottom: `1px solid ${BLUE_GREY}`,
+						flexWrap: 'wrap',
+						gap: 6,
 						padding: 4,
 					}}
 				>
@@ -146,22 +146,36 @@ function RouteComponent() {
 								padding: 1,
 							}}
 						>
-							<Typography variant="body2" color="textSecondary">
+							<Typography
+								variant="body2"
+								color="textSecondary"
+								sx={{ whiteSpace: 'nowrap' }}
+							>
 								{intl.formatMessage(m.mostRecent)}
 							</Typography>
 						</Box>
 					</Stack>
 
-					<ButtonLink
-						variant="outlined"
-						to="."
-						search={(prev) => {
-							return { ...prev, projectAction: 'create' }
-						}}
-						startIcon={<Icon name="material-symbols-add-circle-outline" />}
-					>
-						{intl.formatMessage(m.startNewProject)}
-					</ButtonLink>
+					<Stack direction="row" sx={{ flexWrap: 'wrap', gap: 2 }}>
+						<ButtonLink
+							variant="outlined"
+							to="."
+							search={(prev) => {
+								return { ...prev, projectAction: 'create' }
+							}}
+							startIcon={<Icon name="material-symbols-add-circle-outline" />}
+						>
+							{intl.formatMessage(m.startNewProject)}
+						</ButtonLink>
+
+						<ButtonLink
+							variant="outlined"
+							to="/app/settings"
+							startIcon={<Icon name="material-settings" />}
+						>
+							{intl.formatMessage(m.comapeoSettings)}
+						</ButtonLink>
+					</Stack>
 				</Stack>
 
 				<Suspense
@@ -573,6 +587,11 @@ const m = defineMessages({
 		id: '$1.routes.app.index.startNewProject',
 		defaultMessage: 'Start New Project',
 		description: 'Title for button to start a new project.',
+	},
+	comapeoSettings: {
+		id: '$1.routes.app.index.comapeoSettings',
+		defaultMessage: 'CoMapeo Settings',
+		description: 'Title for button to navigate to CoMapeo settings.',
 	},
 	unnamedProject: {
 		id: '$1.routes.app.index.unnamedProject',
