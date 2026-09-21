@@ -1,12 +1,10 @@
 import { createRequire } from 'node:module'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { hexToRgb } from '@mui/material/styles'
 import { expect } from '@playwright/test'
 import { stubDialog } from 'electron-playwright-helpers'
 
 import {
-	COMAPEO_BLUE,
 	PROJECT_BLUE,
 	PROJECT_GREEN,
 	PROJECT_GREY,
@@ -24,7 +22,7 @@ const ASSETS_DIR = fileURLToPath(new URL('../../../assets', import.meta.url))
 
 test.describe.configure({ mode: 'parallel' })
 
-test('index', async ({ appInfo, projectParams, userParams }) => {
+test('project info modal', async ({ appInfo, projectParams, userParams }) => {
 	const { launchApp, cleanup } = await setup()
 	const electronApp = await launchApp({ appInfo })
 
@@ -43,80 +41,83 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 		})
 
 		await page
-			.getByRole('navigation', { name: 'App navigation', exact: true })
-			.getByRole('button', {
+			.getByRole('link', {
 				name: `Go to project ${projectParams.projectName}.`,
 				exact: true,
 			})
 			.click()
 
 		// 2. Main tests
+		const projectInfoTrigger = page
+			.getByRole('navigation', { name: 'Project navigation', exact: true })
+			.getByRole('button', {
+				name: `Project info for ${projectParams.projectName}`,
+				exact: true,
+			})
 
-		/// Navigation
+		await projectInfoTrigger.click()
+
+		const projectInfoDialog = page.getByRole('dialog')
+
+		/// Project info section
 		{
-			// Navigate to coordinator tools page
-			const toolsNavLink = page
-				.getByRole('navigation', { name: 'Project navigation', exact: true })
-				.getByRole('link', { name: 'Tools', exact: true })
+			await expect(
+				projectInfoDialog.getByText(projectParams.projectName, {
+					exact: true,
+				}),
+			).toBeVisible()
 
-			await toolsNavLink.click()
-
-			// Assert nav rail state
-			await expect(toolsNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+			await expect(
+				projectInfoDialog.getByRole('link', {
+					name: 'Edit Info',
+					exact: true,
+				}),
+			).toBeVisible()
 		}
 
-		/// Main
-		const main = page.getByRole('main')
+		const listItems = projectInfoDialog.getByRole('list').getByRole('listitem')
 
+		await expect(listItems).toHaveCount(2)
+
+		/// Team role list item
 		{
+			const teamListItem = listItems.nth(0)
+
 			await expect(
-				main.getByRole('heading', { name: 'Coordinator Tools', exact: true }),
+				teamListItem.getByText('Coordinator', { exact: true }),
 			).toBeVisible()
 
-			const settingsItems = main
-				.getByRole('listitem')
-				.filter({ has: page.getByRole('link') })
+			await expect(
+				teamListItem.getByRole('link', { name: 'View Team', exact: true }),
+			).toBeVisible()
+		}
 
-			await expect(settingsItems).toHaveCount(2)
-
-			//// Project info settings item
-			const projectInfoItem = settingsItems.first()
+		/// Categories list item
+		{
+			const categoriesListItem = listItems.nth(1)
 
 			await expect(
-				projectInfoItem.getByRole('link', {
-					name: 'Go to project info settings.',
+				categoriesListItem.getByText('CoMapeo Default Categories', {
 					exact: true,
 				}),
 			).toBeVisible()
 
-			await expect(
-				projectInfoItem.getByText(projectParams.projectName, {
-					exact: true,
-				}),
-			).toBeVisible()
+			// TODO: Ideally check for the actual values
+			const dateCreated = categoriesListItem.getByText(/^Created .+/)
+			await expect(dateCreated).toBeVisible()
+			const dateCreatedTime = dateCreated.getByRole('time')
+			await expect(dateCreatedTime).not.toBeEmpty()
+			await expect(dateCreatedTime).toHaveAttribute('datetime')
+
+			// TODO: Ideally check for the actual values
+			const dateAdded = categoriesListItem.getByText(/^Added .+/)
+			await expect(dateAdded).toBeVisible()
+			const dateAddedTime = dateAdded.getByRole('time')
+			await expect(dateAddedTime).not.toBeEmpty()
+			await expect(dateAddedTime).toHaveAttribute('datetime')
 
 			await expect(
-				projectInfoItem.getByText('Edit', { exact: true }),
-			).toBeVisible()
-
-			//// Categories set settings item
-			const categoriesSetItem = settingsItems.last()
-
-			await expect(
-				categoriesSetItem.getByRole('link', {
-					name: 'Go to categories settings.',
-					exact: true,
-				}),
-			).toBeVisible()
-
-			await expect(
-				categoriesSetItem.getByText('Update', { exact: true }),
-			).toBeVisible()
-
-			await expect(
-				categoriesSetItem.getByText('CoMapeo Default Categories', {
-					exact: true,
-				}),
+				categoriesListItem.getByRole('button', { name: 'Update', exact: true }),
 			).toBeVisible()
 		}
 	} finally {
@@ -126,7 +127,7 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 	}
 })
 
-test.describe('project info', () => {
+test.describe('project info settings', () => {
 	test('basic UI checks', async ({ appInfo, projectParams, userParams }) => {
 		const { launchApp, cleanup } = await setup()
 		const electronApp = await launchApp({ appInfo })
@@ -146,8 +147,7 @@ test.describe('project info', () => {
 			})
 
 			await page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('button', {
+				.getByRole('link', {
 					name: `Go to project ${projectParams.projectName}.`,
 					exact: true,
 				})
@@ -159,21 +159,19 @@ test.describe('project info', () => {
 			/// Navigation
 			{
 				// Navigate to project info settings page
-				const toolsNavLink = page
+				const projectInfoTrigger = page
 					.getByRole('navigation', { name: 'Project navigation', exact: true })
-					.getByRole('link', { name: 'Tools', exact: true })
-
-				await toolsNavLink.click()
-
-				await main
-					.getByRole('link', {
-						name: 'Go to project info settings.',
+					.getByRole('button', {
+						name: `Project info for ${projectParams.projectName}`,
 						exact: true,
 					})
-					.click()
 
-				// Assert nav rail state
-				await expect(toolsNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+				await projectInfoTrigger.click()
+
+				await page
+					.getByRole('dialog')
+					.getByRole('link', { name: 'Edit Info', exact: true })
+					.click()
 			}
 
 			/// Main
@@ -267,30 +265,31 @@ test.describe('project info', () => {
 			})
 
 			await page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('button', {
+				.getByRole('link', {
 					name: `Go to project ${projectParams.projectName}.`,
 					exact: true,
 				})
 				.click()
 
-			await page
+			const projectInfoTrigger = page
 				.getByRole('navigation', { name: 'Project navigation', exact: true })
-				.getByRole('link', { name: 'Tools', exact: true })
-				.click()
-
-			const main = page.getByRole('main')
-
-			await main
-				.getByRole('link', {
-					name: 'Go to project info settings.',
+				.getByRole('button', {
+					name: `Project info for ${projectParams.projectName}`,
 					exact: true,
 				})
+
+			await projectInfoTrigger.click()
+
+			const projectInfoDialog = page.getByRole('dialog')
+
+			projectInfoDialog
+				.getByRole('link', { name: 'Edit Info', exact: true })
 				.click()
 
 			// 2. Main tests
 
 			/// Main
+			const main = page.getByRole('main')
 
 			//// Initial state
 			{
@@ -319,11 +318,10 @@ test.describe('project info', () => {
 
 			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
 
-			await main
-				.getByRole('link', {
-					name: 'Go to project info settings.',
-					exact: true,
-				})
+			await projectInfoTrigger.click()
+
+			await projectInfoDialog
+				.getByRole('link', { name: 'Edit Info', exact: true })
 				.click()
 
 			//// Cancel changes (back button)
@@ -368,17 +366,13 @@ test.describe('project info', () => {
 				).toBeVisible()
 
 				await discardEditsDialog
-					.getByRole('button', {
-						name: 'Yes, Discard',
-						exact: true,
-					})
+					.getByRole('button', { name: 'Yes, Discard', exact: true })
 					.click()
 
-				await main
-					.getByRole('link', {
-						name: 'Go to project info settings.',
-						exact: true,
-					})
+				await projectInfoTrigger.click()
+
+				await projectInfoDialog
+					.getByRole('link', { name: 'Edit Info', exact: true })
 					.click()
 
 				// Assert inputs state
@@ -430,11 +424,11 @@ test.describe('project info', () => {
 
 				// Leave using cancel button and re-enter
 				await main.getByRole('button', { name: 'Cancel', exact: true }).click()
-				await main
-					.getByRole('link', {
-						name: 'Go to project info settings.',
-						exact: true,
-					})
+
+				await projectInfoTrigger.click()
+
+				await projectInfoDialog
+					.getByRole('link', { name: 'Edit Info', exact: true })
 					.click()
 
 				// Assert inputs state
@@ -563,11 +557,10 @@ test.describe('project info', () => {
 				.getByRole('button', { name: 'Yes, Discard', exact: true })
 				.click()
 
-			await main
-				.getByRole('link', {
-					name: 'Go to project info settings.',
-					exact: true,
-				})
+			await projectInfoTrigger.click()
+
+			await projectInfoDialog
+				.getByRole('link', { name: 'Edit Info', exact: true })
 				.click()
 
 			//// Updating and saving project info
@@ -596,23 +589,27 @@ test.describe('project info', () => {
 					.getByRole('checkbox', { checked: true })
 					.click()
 
-				main.getByRole('button', { name: 'Save', exact: true }).click()
+				await main.getByRole('button', { name: 'Save', exact: true }).click()
 
-				// Check relevant changes are reflected in project settings index page
+				// Check relevant changes are reflected in project info modal
 				{
-					const projectInfoItem = main.getByRole('listitem').first()
+					await projectInfoTrigger.click()
 
 					await expect(
-						projectInfoItem.getByText(updatedProjectParams.projectName, {
+						projectInfoDialog.getByText(updatedProjectParams.projectName, {
 							exact: true,
 						}),
 					).toBeVisible()
 
-					await projectInfoItem
-						.getByRole('link', {
-							name: 'Go to project info settings.',
-							exact: true,
-						})
+					await expect(
+						projectInfoDialog.getByText(
+							updatedProjectParams.projectDescription,
+							{ exact: true },
+						),
+					).toBeVisible()
+
+					await projectInfoDialog
+						.getByRole('link', { name: 'Edit Info', exact: true })
 						.click()
 				}
 
@@ -670,71 +667,54 @@ test('categories', async ({ appInfo, projectParams, userParams }) => {
 		})
 
 		await page
-			.getByRole('navigation', { name: 'App navigation', exact: true })
-			.getByRole('button', {
+			.getByRole('link', {
 				name: `Go to project ${projectParams.projectName}.`,
 				exact: true,
 			})
 			.click()
 
+		const projectInfoTrigger = page
+			.getByRole('navigation', { name: 'Project navigation', exact: true })
+			.getByRole('button', {
+				name: `Project info for ${projectParams.projectName}`,
+				exact: true,
+			})
+
+		await projectInfoTrigger.click()
+
+		const projectInfoDialog = page.getByRole('dialog')
+
 		// 2. Main tests
-		const main = page.getByRole('main')
 
-		/// Navigation
-		{
-			// Navigate to categories settings page
-			const toolsNavLink = page
-				.getByRole('navigation', { name: 'Project navigation', exact: true })
-				.getByRole('link', { name: 'Tools', exact: true })
-
-			await toolsNavLink.click()
-
-			await main
-				.getByRole('link', { name: 'Go to categories settings.', exact: true })
-				.click()
-
-			// Assert nav rail state
-			const enabledNavLinks = page
-				.getByRole('navigation', { name: 'Project navigation', exact: true })
-				.getByRole('link', { disabled: false })
-
-			await expect(enabledNavLinks.first()).toHaveAccessibleName('List')
-
-			await expect(enabledNavLinks.nth(1)).toHaveAccessibleName('Team')
-
-			await expect(enabledNavLinks.nth(2)).toHaveAccessibleName('Tools')
-		}
-
-		/// Main
-		await expect(
-			main.getByRole('heading', { name: 'Categories Set', exact: true }),
-		).toBeVisible()
+		const categoriesListItem = projectInfoDialog
+			.getByRole('list')
+			.getByRole('listitem')
+			.nth(1)
 
 		//// Initial state
 		{
 			await expect(
-				main.getByRole('heading', {
-					name: 'CoMapeo Default Categories',
+				categoriesListItem.getByText('CoMapeo Default Categories', {
 					exact: true,
 				}),
 			).toBeVisible()
 
 			// TODO: Ideally check for the actual values
-			const dateCreated = main.getByText(/^Created .+/)
+			const dateCreated = categoriesListItem.getByText(/^Created .+/)
 			await expect(dateCreated).toBeVisible()
 			const dateCreatedTime = dateCreated.getByRole('time')
 			await expect(dateCreatedTime).not.toBeEmpty()
 			await expect(dateCreatedTime).toHaveAttribute('datetime')
 
 			// TODO: Ideally check for the actual values
-			const dateAdded = main.getByText(/^Added .+/)
+			const dateAdded = categoriesListItem.getByText(/^Added .+/)
 			await expect(dateAdded).toBeVisible()
 			const dateAddedTime = dateAdded.getByRole('time')
 			await expect(dateAddedTime).not.toBeEmpty()
 			await expect(dateAddedTime).toHaveAttribute('datetime')
 
 			await expect(
-				main.getByRole('button', { name: 'Upload New Set', exact: true }),
+				categoriesListItem.getByRole('button', { name: 'Update', exact: true }),
 			).toBeVisible()
 		}
 
@@ -745,11 +725,18 @@ test('categories', async ({ appInfo, projectParams, userParams }) => {
 				filePaths: [],
 			})
 
-			await main
-				.getByRole('button', { name: 'Upload New Set', exact: true })
+			await categoriesListItem
+				.getByRole('button', { name: 'Update', exact: true })
 				.click()
 
-			await expect(page.getByRole('dialog')).not.toBeVisible()
+			const errorDialog = page.getByRole('dialog').filter({
+				has: page.getByRole('heading', {
+					name: 'Something Went Wrong',
+					exact: true,
+				}),
+			})
+
+			await expect(errorDialog).not.toBeVisible()
 		}
 
 		//// Choose file (bad file)
@@ -759,26 +746,28 @@ test('categories', async ({ appInfo, projectParams, userParams }) => {
 				filePaths: [join(ASSETS_DIR, 'bad-categories-archive.comapeocat')],
 			})
 
-			await main
-				.getByRole('button', { name: 'Upload New Set', exact: true })
+			await categoriesListItem
+				.getByRole('button', { name: 'Update', exact: true })
 				.click()
 
-			const dialog = page.getByRole('dialog')
-
-			await expect(
-				dialog.getByRole('heading', {
+			const errorDialog = page.getByRole('dialog').filter({
+				has: page.getByRole('heading', {
 					name: 'Something Went Wrong',
 					exact: true,
 				}),
-			).toBeVisible()
+			})
+
+			await expect(errorDialog).toBeVisible()
 
 			await expect(
-				dialog.getByRole('button', { name: 'Advanced', exact: true }),
+				errorDialog.getByRole('button', { name: 'Advanced', exact: true }),
 			).toBeVisible()
 
-			await dialog.getByRole('button', { name: 'Close', exact: true }).click()
+			await errorDialog
+				.getByRole('button', { name: 'Close', exact: true })
+				.click()
 
-			await expect(dialog).not.toBeVisible()
+			await expect(errorDialog).not.toBeVisible()
 		}
 
 		//// Choose file (good file)
@@ -789,49 +778,27 @@ test('categories', async ({ appInfo, projectParams, userParams }) => {
 				filePaths: [join(ASSETS_DIR, 'good-categories-archive.comapeocat')],
 			})
 
-			await main
-				.getByRole('button', { name: 'Upload New Set', exact: true })
+			await categoriesListItem
+				.getByRole('button', { name: 'Update', exact: true })
 				.click()
 
 			await expect(
-				main.getByRole('heading', { name: 'Test Categories', exact: true }),
+				categoriesListItem.getByText('Test Categories', { exact: true }),
 			).toBeVisible()
 
-			await expect(main.getByText(/^Added .+/)).toBeVisible()
-
 			// TODO: Ideally check for the actual values
-			const dateCreated = main.getByText(/^Added .+/)
+			const dateCreated = categoriesListItem.getByText(/^Added .+/)
 			await expect(dateCreated).toBeVisible()
 			const dateCreatedTime = dateCreated.getByRole('time')
 			await expect(dateCreatedTime).not.toBeEmpty()
 			await expect(dateCreatedTime).toHaveAttribute('datetime')
 
 			// TODO: Ideally check for the actual values
-			const dateAdded = main.getByText(/^Added .+/)
+			const dateAdded = categoriesListItem.getByText(/^Added .+/)
 			await expect(dateAdded).toBeVisible()
 			const dateAddedTime = dateAdded.getByRole('time')
 			await expect(dateAddedTime).not.toBeEmpty()
 			await expect(dateAddedTime).toHaveAttribute('datetime')
-
-			// Check relevant changes are reflected in project settings index page
-			{
-				await main
-					.getByRole('button', { name: 'Go back.', exact: true })
-					.click()
-
-				const categoriesSetItem = main.getByRole('listitem').last()
-
-				await expect(
-					categoriesSetItem.getByText('Test Categories', { exact: true }),
-				).toBeVisible()
-
-				await categoriesSetItem
-					.getByRole('link', {
-						name: 'Go to categories settings.',
-						exact: true,
-					})
-					.click()
-			}
 		}
 
 		//// Update file (restore default categories)
@@ -844,45 +811,29 @@ test('categories', async ({ appInfo, projectParams, userParams }) => {
 				],
 			})
 
-			await main
-				.getByRole('button', { name: 'Upload New Set', exact: true })
+			await categoriesListItem
+				.getByRole('button', { name: 'Update', exact: true })
 				.click()
 
 			await expect(
-				main.getByRole('heading', {
-					name: 'CoMapeo Default Categories',
+				categoriesListItem.getByText('CoMapeo Default Categories', {
 					exact: true,
 				}),
 			).toBeVisible()
 
 			// TODO: Ideally check for the actual values
-			const dateCreated = main.getByText(/^Added .+/)
+			const dateCreated = categoriesListItem.getByText(/^Added .+/)
 			await expect(dateCreated).toBeVisible()
 			const dateCreatedTime = dateCreated.getByRole('time')
 			await expect(dateCreatedTime).not.toBeEmpty()
 			await expect(dateCreatedTime).toHaveAttribute('datetime')
 
 			// TODO: Ideally check for the actual values
-			const dateAdded = main.getByText(/^Added .+/)
+			const dateAdded = categoriesListItem.getByText(/^Added .+/)
 			await expect(dateAdded).toBeVisible()
 			const dateAddedTime = dateAdded.getByRole('time')
 			await expect(dateAddedTime).not.toBeEmpty()
 			await expect(dateAddedTime).toHaveAttribute('datetime')
-
-			// Check relevant changes are reflected in project settings index page
-			{
-				await main
-					.getByRole('button', { name: 'Go back.', exact: true })
-					.click()
-
-				const categoriesSetItem = main.getByRole('listitem').last()
-
-				await expect(
-					categoriesSetItem.getByText('CoMapeo Default Categories', {
-						exact: true,
-					}),
-				).toBeVisible()
-			}
 		}
 	} finally {
 		// 3. Cleanup
