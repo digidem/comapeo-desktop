@@ -4,11 +4,11 @@ import {
 	useGetCustomMapInfo,
 	useOwnDeviceInfo,
 } from '@comapeo/core-react'
-import { IconButton } from '@mui/material'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
+import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
