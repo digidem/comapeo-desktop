@@ -28,8 +28,7 @@ test('solo', async ({ appInfo, projectParams, userParams }) => {
 		})
 
 		await page
-			.getByRole('navigation', { name: 'App navigation', exact: true })
-			.getByRole('button', {
+			.getByRole('link', {
 				name: `Go to project ${projectParams.projectName}.`,
 				exact: true,
 			})
@@ -45,14 +44,6 @@ test('solo', async ({ appInfo, projectParams, userParams }) => {
 			url.hash = url.hash + '/exchange'
 
 			page.goto(url.href)
-
-			// Navigate to exchange page
-			// const exchangeNavLink = page
-			// 	.getByRole('navigation', { name: 'Project navigation', exact: true })
-			// 	.getByRole('link', { name: 'View exchange.', exact: true })
-			// await exchangeNavLink.click()
-			// Assert nav rail state
-			// await expect(exchangeNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
 		}
 
 		/// Main
