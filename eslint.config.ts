@@ -97,6 +97,12 @@ export default defineConfig(
 					},
 				},
 			],
+			// NOTE: Disallow barrel imports for @material/ui
+			// https://mui.com/material-ui/guides/minimizing-bundle-size/#enforce-best-practices-with-eslint
+			'no-restricted-imports': [
+				'error',
+				{ patterns: [{ regex: '^@mui/[^/]+$' }] },
+			],
 			'react-hooks/incompatible-library': 'error',
 		},
 		languageOptions: {

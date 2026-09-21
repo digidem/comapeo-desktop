@@ -8,7 +8,7 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
-import { DesktopDatePicker } from '@mui/x-date-pickers'
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
