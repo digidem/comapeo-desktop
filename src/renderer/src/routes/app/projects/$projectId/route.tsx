@@ -560,7 +560,9 @@ function ProjectSwitcherButton({
 				>
 					{sortedProjects.map((p) => {
 						const isCurrentProject = p.projectId === currentProjectId
+
 						const displayedName = p.name || intl.formatMessage(m.unnamedProject)
+						const displayedProjectColor = p.projectColor || WHITE
 
 						const selectedClass = `&.${menuItemClasses.selected}`
 						const interactedClass = `&:hover, &.${menuItemClasses.focusVisible}, &.${menuItemClasses.selected}:hover, &.${menuItemClasses.selected}.${menuItemClasses.focusVisible}`
@@ -575,7 +577,7 @@ function ProjectSwitcherButton({
 								disableRipple
 								selected={isCurrentProject}
 								sx={{
-									backgroundColor: p.projectColor || WHITE,
+									backgroundColor: displayedProjectColor,
 									borderRadius: 2,
 									gap: 2,
 									justifyContent: 'space-between',
@@ -583,12 +585,12 @@ function ProjectSwitcherButton({
 									outlineOffset: -1,
 									padding: 4,
 									[selectedClass]: {
-										backgroundColor: 'initial',
+										backgroundColor: displayedProjectColor,
 										outlineColor: COMAPEO_BLUE,
 									},
 									[interactedClass]: {
 										backgroundColor: (theme) =>
-											theme.darken(p.projectColor || WHITE, 0.05),
+											theme.darken(displayedProjectColor, 0.05),
 										outlineColor: (theme) =>
 											theme.darken(
 												isCurrentProject ? COMAPEO_BLUE : LIGHT_GREY,
