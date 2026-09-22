@@ -747,10 +747,6 @@
     "description": "Fallback for when current project is missing a name.",
     "message": "Unnamed Project"
   },
-  "$1.routes.app.projects.$projectId.settings.info.cancel": {
-    "description": "Label for cancel button.",
-    "message": "Cancel"
-  },
   "$1.routes.app.projects.$projectId.settings.info.maxProjectDescriptionLengthError": {
     "description": "Error message for project description that is too long.",
     "message": "Too long, try a shorter description."
@@ -773,7 +769,7 @@
   },
   "$1.routes.app.projects.$projectId.settings.info.projectDescriptionInputLabel": {
     "description": "Label for the project description input.",
-    "message": "Project Description"
+    "message": "Short Description"
   },
   "$1.routes.app.projects.$projectId.settings.info.projectNameInputLabel": {
     "description": "Label for the project name input.",
