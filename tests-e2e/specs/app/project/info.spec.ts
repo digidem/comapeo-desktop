@@ -194,10 +194,7 @@ test.describe('project info settings', () => {
 				).toBeVisible()
 
 				await expect(
-					main.getByRole('textbox', {
-						name: 'Project Description',
-						exact: true,
-					}),
+					main.getByRole('textbox', { name: 'Short Description', exact: true }),
 				).toBeVisible()
 
 				const projectColorInput = main.getByLabel('Project Card Color', {
@@ -230,10 +227,6 @@ test.describe('project info settings', () => {
 						`option-${name.toLowerCase()}`,
 					)
 				}
-
-				await expect(
-					main.getByRole('button', { name: 'Cancel', exact: true }),
-				).toBeVisible()
 
 				await expect(
 					main.getByRole('button', { name: 'Save', exact: true }),
@@ -301,7 +294,7 @@ test.describe('project info settings', () => {
 				await expect(projectNameInput).toHaveValue(projectParams.projectName)
 
 				const projectDescriptionInput = main.getByRole('textbox', {
-					name: 'Project Description',
+					name: 'Short Description',
 					exact: true,
 				})
 
@@ -335,10 +328,7 @@ test.describe('project info settings', () => {
 					.fill('Name in back button test')
 
 				await main
-					.getByRole('textbox', {
-						name: 'Project Description',
-						exact: true,
-					})
+					.getByRole('textbox', { name: 'Short Description', exact: true })
 					.fill('Description in back button test')
 
 				await main
@@ -385,64 +375,7 @@ test.describe('project info settings', () => {
 
 				await expect(
 					main.getByRole('textbox', {
-						name: 'Project Description',
-						exact: true,
-					}),
-				).toHaveValue('')
-
-				await expect(
-					main
-						.getByLabel('Project Card Color', {
-							exact: true,
-						})
-						.getByRole('checkbox', { checked: true }),
-				).toHaveCount(1)
-			}
-
-			//// Cancel changes (cancel button)
-			{
-				// Update inputs
-				await main
-					.getByRole('textbox', {
-						name: 'Project Name',
-						exact: true,
-					})
-					.fill('Name in cancel button test')
-
-				await main
-					.getByRole('textbox', {
-						name: 'Project Description',
-						exact: true,
-					})
-					.fill('Description in cancel button test')
-
-				await main
-					.getByLabel('Project Card Color', { exact: true })
-					.getByRole('checkbox')
-					.first()
-					.click()
-
-				// Leave using cancel button and re-enter
-				await main.getByRole('button', { name: 'Cancel', exact: true }).click()
-
-				await projectInfoTrigger.click()
-
-				await projectInfoDialog
-					.getByRole('link', { name: 'Edit Info', exact: true })
-					.click()
-
-				// Assert inputs state
-
-				await expect(
-					main.getByRole('textbox', {
-						name: 'Project Name',
-						exact: true,
-					}),
-				).toHaveValue(projectParams.projectName)
-
-				await expect(
-					main.getByRole('textbox', {
-						name: 'Project Description',
+						name: 'Short Description',
 						exact: true,
 					}),
 				).toHaveValue('')
@@ -457,6 +390,13 @@ test.describe('project info settings', () => {
 			}
 
 			//// Input validation
+
+			const characterCountOutputLocator = main.locator(
+				'output[name="character-count"]',
+			)
+			const projectNameCharacterCount = characterCountOutputLocator.nth(0)
+			const projectDescriptionCharacterCount =
+				characterCountOutputLocator.nth(1)
 
 			//// Project name
 			{
@@ -474,9 +414,9 @@ test.describe('project info settings', () => {
 					main.getByText('Too long, try a shorter name.', { exact: true }),
 				).toBeVisible()
 
-				await expect(
-					main.locator('output[for="projectName"][name="character-count"]'),
-				).toHaveText(`${invalidProjectName.length}/100`)
+				await expect(projectNameCharacterCount).toHaveText(
+					`${invalidProjectName.length}/100`,
+				)
 
 				{
 					// Save button does nothing
@@ -496,9 +436,7 @@ test.describe('project info settings', () => {
 					main.getByText('Enter a Project Name', { exact: true }),
 				).toBeVisible()
 
-				await expect(
-					main.locator('output[for="projectName"][name="character-count"]'),
-				).toHaveText('0/100')
+				await expect(projectNameCharacterCount).toHaveText('0/100')
 
 				await main
 					.getByRole('button', { name: 'Save', exact: true })
@@ -519,7 +457,7 @@ test.describe('project info settings', () => {
 			//// Project description
 			{
 				const projectDescriptionInput = main.getByRole('textbox', {
-					name: 'Project Description',
+					name: 'Short Description',
 					exact: true,
 				})
 
@@ -534,11 +472,9 @@ test.describe('project info settings', () => {
 					}),
 				).toBeVisible()
 
-				await expect(
-					main.locator(
-						'output[for="projectDescription"][name="character-count"]',
-					),
-				).toHaveText(`${invalidProjectName.length}/60`)
+				await expect(projectDescriptionCharacterCount).toHaveText(
+					`${invalidProjectName.length}/60`,
+				)
 
 				// Save button does nothing
 				const currentUrl = page.url()
@@ -578,10 +514,7 @@ test.describe('project info settings', () => {
 					.fill(updatedProjectParams.projectName)
 
 				main
-					.getByRole('textbox', {
-						name: 'Project Description',
-						exact: true,
-					})
+					.getByRole('textbox', { name: 'Short Description', exact: true })
 					.fill(updatedProjectParams.projectDescription)
 
 				await main
@@ -625,7 +558,7 @@ test.describe('project info settings', () => {
 					)
 
 					const projectDescriptionInput = main.getByRole('textbox', {
-						name: 'Project Description',
+						name: 'Short Description',
 						exact: true,
 					})
 
