@@ -27,7 +27,7 @@ import { draw } from 'radashi'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { TwoPanelLayout } from '../../-components/two-panel-layout.tsx'
+import { TwoPanelLayout } from '../-shared/two-panel-layout.tsx'
 import { BLACK, BLUE_GREY } from '../../../../colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
