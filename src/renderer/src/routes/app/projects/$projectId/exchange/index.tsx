@@ -11,21 +11,26 @@ import {
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
+import Container from '@mui/material/Container'
 import LinearProgress, {
 	type LinearProgressProps,
 } from '@mui/material/LinearProgress'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import { captureException } from '@sentry/react'
+import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { NetworkConnectionInfo } from '../../-shared/network-connection-info.tsx'
 import {
+	BLACK,
 	BLUE_GREY,
 	COMAPEO_BLUE,
-	DARKER_ORANGE,
+	DARK_ORANGE,
 	GREEN,
+	LIGHT_COMAPEO_BLUE,
+	WHITE,
 } from '../../../../../colors.ts'
 import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../components/error-dialog.tsx'
@@ -41,6 +46,7 @@ import {
 	memberIsRemoteArchive,
 } from '../../../../../lib/comapeo.ts'
 import { ExhaustivenessError } from '../../../../../lib/exhaustiveness-error.ts'
+import { getWifiConnectionsOptions } from '../../../../../lib/queries/system.ts'
 import {
 	deriveSyncStage,
 	getConnectedPeersCount,
@@ -95,7 +101,7 @@ export const Route = createFileRoute('/app/projects/$projectId/exchange/')({
 })
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { projectId } = Route.useParams()
 
@@ -129,7 +135,7 @@ function RouteComponent() {
 				variant="h1"
 				sx={{ fontWeight: 500, textAlign: 'center' }}
 			>
-				{t(m.noOtherDevicesOnProject)}
+				{intl.formatMessage(m.noOtherDevicesOnProject)}
 			</Typography>
 
 			<ButtonLink
@@ -137,7 +143,7 @@ function RouteComponent() {
 				to="/app/projects/$projectId/team/invite"
 				params={{ projectId }}
 			>
-				{t(m.inviteDevices)}
+				{intl.formatMessage(m.inviteDevices)}
 			</ButtonLink>
 		</Stack>
 	) : (
@@ -159,129 +165,135 @@ function RouteComponent() {
 
 	return (
 		<>
-			<Stack
-				direction="column"
-				sx={{
-					flex: 1,
-					overflow: 'auto',
-					justifyContent: 'space-between',
-					padding: 6,
-					gap: 6,
-				}}
-			>
-				<Box sx={{ flexDirection: 'row', alignItems: 'center' }}>
-					<Box
-						data-testid="exchange-network-connection-info"
-						sx={{
-							display: 'flex',
-							flex: 1,
-							flexDirection: 'row',
-							justifyContent: 'center',
-							alignItems: 'center',
-							borderRadius: 2,
-							border: `1px solid ${BLUE_GREY}`,
-							padding: 4,
-							overflow: 'auto',
-						}}
-					>
-						<Suspense
-							fallback={
-								<Typography sx={{ fontWeight: 500 }}>
-									{t(m.gettingWifiInfo)}
-								</Typography>
-							}
-						>
-							<NetworkConnectionInfo waitingText={t(m.gettingWifiInfo)} />
-						</Suspense>
-					</Box>
-				</Box>
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+				<Stack
+					direction="row"
+					sx={{
+						alignItems: 'center',
+						borderBottom: `1px solid ${BLUE_GREY}`,
+						gap: 4,
+						padding: 4,
+					}}
+				>
+					<Typography variant="h1" sx={{ fontWeight: 500 }}>
+						{intl.formatMessage(m.pageTitle)}
+					</Typography>
 
-				<Stack direction="column" sx={{ gap: 5, flex: 1, paddingBlock: 10 }}>
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'center',
-							justifyContent: 'center',
-							flex: 0,
-							position: 'relative',
-						}}
-					>
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'column',
-								padding: 2,
-								borderRadius: '50%',
-								border: `12px solid ${connectedPeersCount > 0 ? DARKER_ORANGE : BLUE_GREY}`,
-							}}
-						>
-							<Icon
-								name="material-bolt-sharp"
-								htmlColor={connectedPeersCount > 0 ? DARKER_ORANGE : BLUE_GREY}
-								size={128}
-							/>
-						</Box>
-					</Box>
-
-					{displayedExchangeStateContent}
+					<NetworkConnectionPill />
 				</Stack>
 
-				{
-					// NOTE: We do not want to show the exchange button if we are the only member that the project has ever had (e.g. we freshly created a project).
-					// Once some other device has joined the project, then we should always show the button, regardless of who's active or not.
-					selfIsOnlyProjectMemberEver ? null : (
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'row',
-								alignItems: 'center',
-								justifyContent: 'center',
-							}}
-						>
-							<Button
-								fullWidth
-								variant={
-									syncState?.data.isSyncEnabled ? 'outlined' : 'contained'
-								}
-								sx={{ maxWidth: 400 }}
-								startIcon={
+				<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+					<Container maxWidth="sm" sx={{ flex: 1, paddingBlock: 20 }}>
+						<Stack direction="column" sx={{ gap: 5 }}>
+							<Box sx={{ alignSelf: 'center', position: 'relative' }}>
+								<Box
+									sx={{
+										alignItems: 'center',
+										border: `8px solid ${connectedPeersCount > 0 ? DARK_ORANGE : BLUE_GREY}`,
+										borderRadius: '50%',
+										display: 'flex',
+										flexDirection: 'row',
+										justifyContent: 'center',
+										padding: 6,
+									}}
+								>
 									<Icon
-										name={
-											syncState?.data.isSyncEnabled
-												? 'material-square-filled'
-												: 'material-bolt-sharp'
+										name="material-symbols-devices"
+										htmlColor={
+											connectedPeersCount > 0 ? DARK_ORANGE : BLUE_GREY
 										}
+										size={80}
 									/>
-								}
-								onClick={() => {
-									if (
-										stopSync.status === 'pending' ||
-										startSync.status === 'pending'
-									) {
-										return
-									}
+								</Box>
 
-									if (syncState?.data.isSyncEnabled) {
-										stopSync.mutate(undefined, {
-											onError: (err) => {
-												captureException(err)
-											},
-										})
-									} else {
-										startSync.mutate(undefined, {
-											onError: (err) => {
-												captureException(err)
-											},
-										})
-									}
+								{connectedPeersCount > 0 ? (
+									<Box
+										sx={{
+											alignItems: 'center',
+											backgroundColor: DARK_ORANGE,
+											borderRadius: '50%',
+											bottom: -8,
+											display: 'flex',
+											flexDirection: 'row',
+											justifyContent: 'center',
+											position: 'absolute',
+											right: -8,
+											padding: 2,
+											boxShadow: `0px 2px 20px 0px ${alpha(BLACK, 0.4)}`,
+										}}
+									>
+										<Icon
+											name="material-symbols-stars-2"
+											htmlColor={WHITE}
+											size={32}
+										/>
+									</Box>
+								) : null}
+							</Box>
+
+							{displayedExchangeStateContent}
+						</Stack>
+					</Container>
+
+					{
+						// NOTE: We do not want to show the exchange button if we are the only member that the project has ever had (e.g. we freshly created a project).
+						// Once some other device has joined the project, then we should always show the button, regardless of who's active or not.
+						selfIsOnlyProjectMemberEver ? null : (
+							<Box
+								sx={{
+									alignItems: 'center',
+									display: 'flex',
+									flexDirection: 'row',
+									justifyContent: 'center',
+									padding: 6,
 								}}
 							>
-								{t(syncState?.data.isSyncEnabled ? m.stop : m.start)}
-							</Button>
-						</Box>
-					)
-				}
+								<Button
+									fullWidth
+									variant={
+										syncState?.data.isSyncEnabled ? 'outlined' : 'contained'
+									}
+									sx={{ maxWidth: 400 }}
+									startIcon={
+										<Icon
+											name={
+												syncState?.data.isSyncEnabled
+													? 'material-square-filled'
+													: 'material-bolt-sharp'
+											}
+										/>
+									}
+									onClick={() => {
+										if (
+											stopSync.status === 'pending' ||
+											startSync.status === 'pending'
+										) {
+											return
+										}
+
+										if (syncState?.data.isSyncEnabled) {
+											stopSync.mutate(undefined, {
+												onError: (err) => {
+													captureException(err)
+												},
+											})
+										} else {
+											startSync.mutate(undefined, {
+												onError: (err) => {
+													captureException(err)
+												},
+											})
+										}
+									}}
+								>
+									{intl.formatMessage(
+										syncState?.data.isSyncEnabled ? m.stop : m.start,
+									)}
+								</Button>
+							</Box>
+						)
+					}
+				</Stack>
 			</Stack>
 
 			<DecentDialog
@@ -379,6 +391,7 @@ function DisplayedSyncState({
 			>
 				{t(title)}
 			</Typography>
+
 			{syncStage.name === 'idle' ? null : <SyncProgress stage={syncStage} />}
 		</Stack>
 	)
@@ -449,7 +462,64 @@ function SyncProgress({
 	)
 }
 
+function NetworkConnectionPill() {
+	const intl = useIntl()
+
+	const wifiConnectionQuery = useQuery({
+		...getWifiConnectionsOptions(),
+		select: (connections) => {
+			return connections[0]
+		},
+		refetchOnWindowFocus: false,
+	})
+
+	const browserNetInfo = useBrowserNetInfo()
+
+	let displayedText: string
+
+	if (
+		wifiConnectionQuery.status === 'pending' ||
+		wifiConnectionQuery.isRefetching
+	) {
+		displayedText = intl.formatMessage(m.gettingWifiInfo)
+	} else if (
+		wifiConnectionQuery.data &&
+		// NOTE: Issue with systeminformation module on macOS >=15.6 (https://github.com/digidem/comapeo-desktop/issues/378)
+		wifiConnectionQuery.data.ssid !== '&lt;redacted&gt;' &&
+		wifiConnectionQuery.data.ssid !== '<redacted>'
+	) {
+		displayedText = `${wifiConnectionQuery.data.ssid}${
+			browserNetInfo.effectiveType
+				? // TODO: Should the effectiveType be translatable?
+					` - ${browserNetInfo.effectiveType}`
+				: undefined
+		}`
+	} else {
+		displayedText = intl.formatMessage(m.wifiInfoUnavailable)
+	}
+
+	return (
+		<Box
+			sx={{ backgroundColor: LIGHT_COMAPEO_BLUE, borderRadius: 2, padding: 1 }}
+		>
+			<Typography
+				data-testid="exchange-network-connection-info"
+				variant="body2"
+				color="textSecondary"
+				sx={{ whiteSpace: 'nowrap' }}
+			>
+				{displayedText}
+			</Typography>
+		</Box>
+	)
+}
+
 const m = defineMessages({
+	pageTitle: {
+		id: '$1.routes.app.projects.$projectId.exchange.index.pageTitle',
+		defaultMessage: 'Exchange',
+		description: 'Title of exchange page.',
+	},
 	gettingWifiInfo: {
 		id: '$1.routes.app.projects.$projectId.exchange.index.gettingWifiInfo',
 		defaultMessage: 'Getting Wi-Fi information…',
@@ -459,6 +529,11 @@ const m = defineMessages({
 		id: '$1.routes.app.projects.$projectId.exchange.index.waitingForDevices',
 		defaultMessage: 'Waiting for Devices',
 		description: 'Text displayed when waiting for other devices to be found.',
+	},
+	wifiInfoUnavailable: {
+		id: '$1.routes.app.projects.$projectId.exchange.index.wifiInfoUnavailable',
+		defaultMessage: 'Wi-Fi info unavailable',
+		description: 'Text displayed when Wi-Fi info is unavailable.',
 	},
 	lookingForDevices: {
 		id: '$1.routes.app.projects.$projectId.exchange.index.lookingForDevices',
