@@ -437,7 +437,7 @@
   },
   "$1.routes.app.projects.$projectId.exchange.index.devicesFound": {
     "description": "Text displayed when other devices have been found.",
-    "message": "Devices found."
+    "message": "Devices Found"
   },
   "$1.routes.app.projects.$projectId.exchange.index.exchanging": {
     "description": "Text displayed when exchanging with other devices.",

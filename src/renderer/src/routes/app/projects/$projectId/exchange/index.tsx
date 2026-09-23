@@ -542,7 +542,7 @@ const m = defineMessages({
 	},
 	devicesFound: {
 		id: '$1.routes.app.projects.$projectId.exchange.index.devicesFound',
-		defaultMessage: 'Devices found.',
+		defaultMessage: 'Devices Found',
 		description: 'Text displayed when other devices have been found.',
 	},
 	exchanging: {
