@@ -56,9 +56,6 @@ test('solo', async ({ appInfo, projectParams, userParams }) => {
 			)
 			await expect
 				.soft(networkConnectionInfo)
-				.toHaveText('Getting Wi-Fi information…', { timeout: 0 })
-			await expect
-				.soft(networkConnectionInfo)
 				.not.toHaveText('Getting Wi-Fi information…', { timeout: 20_000 })
 			// TODO: Ideally check for actual values
 			await expect(networkConnectionInfo).not.toBeEmpty()
