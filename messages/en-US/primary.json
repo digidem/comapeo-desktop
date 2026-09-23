@@ -437,7 +437,7 @@
   },
   "$1.routes.app.projects.$projectId.exchange.index.devicesFound": {
     "description": "Text displayed when other devices have been found.",
-    "message": "Devices found."
+    "message": "Devices Found"
   },
   "$1.routes.app.projects.$projectId.exchange.index.exchanging": {
     "description": "Text displayed when exchanging with other devices.",
@@ -459,6 +459,10 @@
     "description": "Text indicating no other active devices are on the project.",
     "message": "No other devices are on this project."
   },
+  "$1.routes.app.projects.$projectId.exchange.index.pageTitle": {
+    "description": "Title of exchange page.",
+    "message": "Exchange"
+  },
   "$1.routes.app.projects.$projectId.exchange.index.remoteArchiveConnected": {
     "description": "Text indicating that some remote archive is connected.",
     "message": "Remote Archive connected"
@@ -478,6 +482,10 @@
   "$1.routes.app.projects.$projectId.exchange.index.waitingForDevices": {
     "description": "Text displayed when waiting for other devices to be found.",
     "message": "Waiting for Devices"
+  },
+  "$1.routes.app.projects.$projectId.exchange.index.wifiInfoUnavailable": {
+    "description": "Text displayed when Wi-Fi info is unavailable.",
+    "message": "Wi-Fi info unavailable"
   },
   "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionDeselectAll": {
     "description": "Text for button to deselect all in categories filter section in advanced filters dialog.",
@@ -1003,6 +1011,10 @@
     "description": "Title of the device selection for invite page.",
     "message": "Select a Device"
   },
+  "$1.routes.app.projects.$projectId.team.invite.devices.index.wifiInfoUnavailable": {
+    "description": "Text displayed when Wi-Fi info is unavailable.",
+    "message": "Wi-Fi info unavailable"
+  },
   "$1.routes.app.projects.$projectId.team.invite.index.controlSharing": {
     "description": "Detail about how to control data sharing.",
     "message": "Control sharing in Project Settings."
@@ -1078,10 +1090,6 @@
   "$1.routes.app.projects.-shared.device-icon.deviceTypeUnspecified": {
     "description": "Text indicating that the member device type is unspecified (displays when hovering over the icon).",
     "message": "Unspecified device type"
-  },
-  "$1.routes.app.projects.-shared.network-connection-info.wifiInfoUnavailable": {
-    "description": "Text displayed when Wi-Fi info is unavailable.",
-    "message": "Wi-Fi info unavailable."
   },
   "$1.routes.app.route.projectInviteAccept": {
     "description": "Button text for accepting project invite.",
