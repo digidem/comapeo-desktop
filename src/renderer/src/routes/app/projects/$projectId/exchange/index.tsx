@@ -183,7 +183,11 @@ function RouteComponent() {
 				</Stack>
 
 				<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-					<Container maxWidth="sm" sx={{ flex: 1, paddingBlock: 20 }}>
+					<Container
+						disableGutters
+						maxWidth="sm"
+						sx={{ flex: 1, paddingBlock: 20 }}
+					>
 						<Stack direction="column" sx={{ gap: 5 }}>
 							<Box sx={{ alignSelf: 'center', position: 'relative' }}>
 								<Box

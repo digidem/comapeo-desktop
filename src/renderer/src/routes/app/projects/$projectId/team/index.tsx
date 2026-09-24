@@ -7,6 +7,7 @@ import {
 } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
+import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -17,7 +18,12 @@ import { defineMessages, useIntl } from 'react-intl'
 
 import { DeviceIcon } from '../../-shared/device-icon.tsx'
 import { ListRowLink } from '../../../-components/list-row-link.tsx'
-import { DARKER_ORANGE, DARK_GREY, LIGHT_GREY } from '../../../../../colors.ts'
+import {
+	BLUE_GREY,
+	DARK_GREY,
+	LIGHT_COMAPEO_BLUE,
+	LIGHT_GREY,
+} from '../../../../../colors.ts'
 import { Icon } from '../../../../../components/icon.tsx'
 import { ButtonLink } from '../../../../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
@@ -76,65 +82,83 @@ export const Route = createFileRoute('/app/projects/$projectId/team/')({
 })
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { projectId } = Route.useParams()
 
 	return (
-		<Stack
-			direction="column"
-			sx={{ flex: 1, overflow: 'auto', gap: 10, padding: 6 }}
-		>
-			<Stack direction="column" sx={{ gap: 4, alignItems: 'center' }}>
-				<Icon
-					name="material-people-filled"
-					size={120}
-					htmlColor={DARKER_ORANGE}
-				/>
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack
+				direction="row"
+				sx={{
+					alignItems: 'center',
+					borderBottom: `1px solid ${BLUE_GREY}`,
+					gap: 4,
+					flexWrap: 'wrap',
+					padding: 4,
+				}}
+			>
+				<Stack direction="row" sx={{ alignItems: 'center', flex: 1, gap: 4 }}>
+					<Typography variant="h1" sx={{ fontWeight: 500 }}>
+						{intl.formatMessage(m.navTitle)}
+					</Typography>
 
-				<Typography variant="h1" sx={{ fontWeight: 500, textAlign: 'center' }}>
-					{t(m.navTitle)}
-				</Typography>
+					<Suspense>
+						<MembersCountPill projectId={projectId} />
+					</Suspense>
+				</Stack>
+
+				<InviteButton projectId={projectId} />
 			</Stack>
 
-			<Suspense
-				fallback={
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'row',
-							justifyContent: 'center',
-						}}
-					>
-						<CircularProgress disableShrink />
-					</Box>
-				}
-			>
-				<Stack direction="column">
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'row',
-							justifyContent: 'center',
-						}}
-					>
-						<InviteButtonSection projectId={projectId} />
-					</Box>
-
-					<Stack
-						direction="column"
-						sx={{ flex: 1, justifyContent: 'space-between', paddingBlock: 10 }}
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+				<Container
+					disableGutters
+					maxWidth="sm"
+					sx={{ flex: 1, paddingBlock: 6, paddingInline: 4 }}
+				>
+					<Suspense
+						fallback={
+							<Box
+								sx={{ display: 'grid', height: '100%', placeItems: 'center' }}
+							>
+								<CircularProgress disableShrink />
+							</Box>
+						}
 					>
 						<MembersSections projectId={projectId} />
-					</Stack>
-				</Stack>
-			</Suspense>
+					</Suspense>
+				</Container>
+			</Stack>
 		</Stack>
 	)
 }
 
-function InviteButtonSection({ projectId }: { projectId: string }) {
-	const { formatMessage: t } = useIntl()
+function MembersCountPill({ projectId }: { projectId: string }) {
+	const intl = useIntl()
+
+	const { data: members } = useManyMembers({ projectId })
+
+	return (
+		<Box
+			sx={{ backgroundColor: LIGHT_COMAPEO_BLUE, borderRadius: 2, padding: 1 }}
+		>
+			<Typography
+				data-testid="exchange-network-connection-info"
+				variant="body2"
+				color="textSecondary"
+				sx={{ whiteSpace: 'nowrap' }}
+			>
+				{intl.formatMessage(m.membersCount, {
+					count: members.length,
+				})}
+			</Typography>
+		</Box>
+	)
+}
+
+function InviteButton({ projectId }: { projectId: string }) {
+	const intl = useIntl()
 
 	const { data: role } = useOwnRoleInProject({ projectId })
 
@@ -147,20 +171,18 @@ function InviteButtonSection({ projectId }: { projectId: string }) {
 
 	return (
 		<ButtonLink
-			fullWidth
 			variant="outlined"
-			sx={{ maxWidth: 400 }}
 			to="/app/projects/$projectId/team/invite"
 			params={{ projectId }}
-			startIcon={<Icon name="material-person-add" />}
+			startIcon={<Icon name="material-symbols-add-circle-outline" />}
 		>
-			{t(m.inviteDevice)}
+			{intl.formatMessage(m.inviteDevice)}
 		</ButtonLink>
 	)
 }
 
 function MembersSections({ projectId }: { projectId: string }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: members } = useManyMembers({ projectId, includeLeft: true })
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
@@ -169,22 +191,24 @@ function MembersSections({ projectId }: { projectId: string }) {
 		getDisplayableMembers(members)
 
 	const sectionIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h2',
-		multiplier: 1.5,
+		typographyVariant: 'body1',
+		multiplier: 1,
 	})
 
 	return (
 		<Stack direction="column" sx={{ gap: 6 }}>
 			<Stack direction="column" sx={{ gap: 2 }}>
-				<Stack direction="row" sx={{ gap: 4, alignItems: 'center' }}>
+				<Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
 					<Icon name="material-manage-accounts-filled" size={sectionIconSize} />
 
-					<Typography variant="h2" sx={{ fontWeight: 500 }}>
-						{t(m.coordinatorsSectionTitle)}
+					<Typography component="h2" sx={{ textTransform: 'uppercase' }}>
+						{intl.formatMessage(m.coordinatorsSectionTitle)}
 					</Typography>
 				</Stack>
 
-				<Typography>{t(m.coordinatorsSectionDescription)}</Typography>
+				<Typography color="textSecondary">
+					{intl.formatMessage(m.coordinatorsSectionDescription)}
+				</Typography>
 			</Stack>
 
 			<ActiveCollaboratorsList
@@ -196,15 +220,17 @@ function MembersSections({ projectId }: { projectId: string }) {
 			<Divider variant="fullWidth" sx={{ bgcolor: LIGHT_GREY }} />
 
 			<Stack direction="column" sx={{ gap: 2 }}>
-				<Stack direction="row" sx={{ gap: 4, alignItems: 'center' }}>
+				<Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
 					<Icon name="material-people-filled" size={sectionIconSize} />
 
-					<Typography variant="h2" sx={{ fontWeight: 500 }}>
-						{t(m.participantsSectionTitle)}
+					<Typography component="h2" sx={{ textTransform: 'uppercase' }}>
+						{intl.formatMessage(m.participantsSectionTitle)}
 					</Typography>
 				</Stack>
 
-				<Typography>{t(m.participantsSectionDescription)}</Typography>
+				<Typography color="textSecondary">
+					{intl.formatMessage(m.participantsSectionDescription)}
+				</Typography>
 			</Stack>
 
 			{participants.length > 0 ? (
@@ -214,7 +240,9 @@ function MembersSections({ projectId }: { projectId: string }) {
 					projectId={projectId}
 				/>
 			) : (
-				<Typography color="textSecondary">{t(m.noParticipants)}</Typography>
+				<Typography color="textSecondary">
+					{intl.formatMessage(m.noParticipants)}
+				</Typography>
 			)}
 
 			{remoteArchives.length > 0 ? (
@@ -228,12 +256,14 @@ function MembersSections({ projectId }: { projectId: string }) {
 								size={sectionIconSize}
 							/>
 
-							<Typography variant="h2" sx={{ fontWeight: 500 }}>
-								{t(m.remoteArchivesSectionTitle)}
+							<Typography variant="h2" sx={{ textTransform: 'uppercase' }}>
+								{intl.formatMessage(m.remoteArchivesSectionTitle)}
 							</Typography>
 						</Stack>
 
-						<Typography>{t(m.remoteArchivesSectionDescription)}</Typography>
+						<Typography color="textSecondary">
+							{intl.formatMessage(m.remoteArchivesSectionDescription)}
+						</Typography>
 					</Stack>
 
 					<ActiveCollaboratorsList
@@ -252,12 +282,14 @@ function MembersSections({ projectId }: { projectId: string }) {
 						<Stack direction="row" sx={{ gap: 4, alignItems: 'center' }}>
 							<Icon name="material-group-off" size={sectionIconSize} />
 
-							<Typography variant="h2" sx={{ fontWeight: 500 }}>
-								{t(m.pastCollaboratorsSectionTitle)}
+							<Typography component="h2" sx={{ textTransform: 'uppercase' }}>
+								{intl.formatMessage(m.pastCollaboratorsSectionTitle)}
 							</Typography>
 						</Stack>
 
-						<Typography>{t(m.pastCollaboratorsSectionDescription)}</Typography>
+						<Typography color="textSecondary">
+							{intl.formatMessage(m.pastCollaboratorsSectionDescription)}
+						</Typography>
 					</Stack>
 
 					<PastCollaboratorsList
@@ -281,7 +313,7 @@ function ActiveCollaboratorsList({
 	ownDeviceId: string
 	projectId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
@@ -290,7 +322,7 @@ function ActiveCollaboratorsList({
 
 	const actionIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
-		multiplier: 1.75,
+		multiplier: 2,
 	})
 
 	return (
@@ -308,7 +340,7 @@ function ActiveCollaboratorsList({
 						<ListRowLink
 							to="/app/projects/$projectId/team/$deviceId"
 							params={{ projectId, deviceId: device.deviceId }}
-							aria-label={t(m.memberLinkAccessibleLabel, {
+							aria-label={intl.formatMessage(m.memberLinkAccessibleLabel, {
 								name: displayedName,
 							})}
 							label={
@@ -321,7 +353,7 @@ function ActiveCollaboratorsList({
 											color="textSecondary"
 											sx={{ marginInlineStart: 4 }}
 										>
-											{t(m.thisDevice)}
+											{intl.formatMessage(m.thisDevice)}
 										</Typography>
 									</>
 								) : (
@@ -329,10 +361,12 @@ function ActiveCollaboratorsList({
 								)
 							}
 							start={
-								<DeviceIcon
-									deviceType={device.deviceType}
-									size={deviceIconSize}
-								/>
+								<Box sx={{ display: 'grid', padding: 2, placeItems: 'center' }}>
+									<DeviceIcon
+										deviceType={device.deviceType}
+										size={deviceIconSize}
+									/>
+								</Box>
 							}
 							end={
 								<Icon
@@ -358,7 +392,7 @@ function PastCollaboratorsList({
 	>
 	ownDeviceId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
@@ -390,7 +424,14 @@ function PastCollaboratorsList({
 								direction="row"
 								sx={{ alignItems: 'center', gap: 3, overflow: 'auto' }}
 							>
-								<Box sx={{ opacity: 0.5 }}>
+								<Box
+									sx={{
+										display: 'grid',
+										opacity: 0.5,
+										padding: 2,
+										placeItems: 'center',
+									}}
+								>
 									<DeviceIcon
 										deviceType={device.deviceType}
 										size={deviceIconSize}
@@ -415,7 +456,7 @@ function PastCollaboratorsList({
 												color="textSecondary"
 												sx={{ marginInlineStart: 4 }}
 											>
-												{t(m.thisDevice)}
+												{intl.formatMessage(m.thisDevice)}
 											</Typography>
 										</>
 									) : (
@@ -478,6 +519,12 @@ const m = defineMessages({
 	navTitle: {
 		id: '$1.routes.app.projects.$projectId.team.index.navTitle',
 		defaultMessage: 'Team',
+		description: 'Title of the team page.',
+	},
+	membersCount: {
+		id: '$1.routes.app.projects.$projectId.team.index.membersCount',
+		defaultMessage:
+			'{count, plural, =0 {No members} one {# member} other {# members}}',
 		description: 'Title of the team page.',
 	},
 	inviteDevice: {
