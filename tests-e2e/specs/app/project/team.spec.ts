@@ -51,16 +51,24 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 		}
 
 		/// Main
+
+		/// Header
 		{
-			await expect(
-				main.getByRole('heading', { name: 'Team', exact: true }),
-			).toBeVisible()
+			const header = main.locator('header')
 
 			await expect(
-				main.getByRole('link', { name: 'Invite Device', exact: true }),
+				header.getByRole('heading', { name: 'Team', exact: true }),
 			).toBeVisible()
 
-			/// Coordinators list
+			await expect(header.getByText(/[\d | No]+ member[s]*/)).toBeVisible()
+
+			await expect(
+				header.getByRole('link', { name: 'Invite Device', exact: true }),
+			).toBeVisible()
+		}
+
+		/// Coordinators list
+		{
 			await expect(
 				main.getByRole('heading', { name: 'Coordinators', exact: true }),
 			).toBeVisible()
@@ -84,8 +92,10 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 			await expect(
 				ownDeviceListItem.getByText('This device', { exact: true }),
 			).toBeVisible()
+		}
 
-			/// Participants list
+		/// Participants list
+		{
 			await expect(
 				main.getByRole('heading', { name: 'Participants', exact: true }),
 			).toBeVisible()
@@ -102,13 +112,17 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 					exact: true,
 				}),
 			).toBeVisible()
+		}
 
-			/// Remote archives list
+		/// Remote archives list
+		{
 			await expect(
 				main.getByRole('heading', { name: 'Remote Archives', exact: true }),
 			).not.toBeVisible()
+		}
 
-			/// Past collaborators list
+		/// Past collaborators list
+		{
 			await expect(
 				main.getByRole('heading', { name: 'Past Collaborators', exact: true }),
 			).not.toBeVisible()
@@ -171,30 +185,49 @@ test.describe('collaborator info', () => {
 
 			/// Main
 
-			await expect(
-				main.getByRole('heading', { name: 'This Device', exact: true }),
-			).toBeVisible()
+			/// Header
+			{
+				const header = main.locator('header')
 
-			await expect(
-				main.getByRole('heading', { name: userParams.deviceName, exact: true }),
-			).toBeVisible()
+				await expect(
+					header.getByRole('heading', { name: 'This Device', exact: true }),
+				).toBeVisible()
 
-			await expect(main.getByText('Coordinator', { exact: true })).toBeVisible()
+				await expect(
+					header.getByRole('button', { name: 'Go back.', exact: true }),
+				).toBeVisible()
+			}
 
-			//// Other displayed collaborator info
-			// TODO: Check for displayed device ID
+			/// Info
+			{
+				await expect(
+					main.getByRole('heading', {
+						name: userParams.deviceName,
+						exact: true,
+					}),
+				).toBeVisible()
 
-			// TODO: Ideally check for the actual values
-			const dateAdded = main.getByText(/^Added on .+/)
-			await expect(dateAdded).toBeVisible()
-			const dateAddedTime = dateAdded.getByRole('time')
-			await expect(dateAddedTime).not.toBeEmpty()
-			await expect(dateAddedTime).toHaveAttribute('datetime')
+				await expect(
+					main.getByText('Coordinator', { exact: true }),
+				).toBeVisible()
+
+				//// Other displayed collaborator info
+				// TODO: Check for displayed device ID
+
+				// TODO: Ideally check for the actual values
+				const dateAdded = main.getByText(/^Added on .+/)
+				await expect(dateAdded).toBeVisible()
+				const dateAddedTime = dateAdded.getByRole('time')
+				await expect(dateAddedTime).not.toBeEmpty()
+				await expect(dateAddedTime).toHaveAttribute('datetime')
+			}
 
 			/// Actions
-			await expect(
-				main.getByRole('button', { name: 'Leave Project', exact: true }),
-			).toBeVisible()
+			{
+				await expect(
+					main.getByRole('button', { name: 'Leave Project', exact: true }),
+				).toBeVisible()
+			}
 		} finally {
 			// 3. Cleanup
 			await electronApp.close()
