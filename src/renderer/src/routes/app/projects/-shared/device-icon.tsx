@@ -1,39 +1,25 @@
+import type { ComponentProps } from 'react'
 import type { MemberApi } from '@comapeo/core'
-import Box from '@mui/material/Box'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { LIGHT_GREY } from '../../../../colors'
-import { Icon } from '../../../../components/icon'
-import type { IconName } from '../../../../generated/icons.generated'
-import type { DeviceType } from '../../../../lib/comapeo'
+import { Icon } from '../../../../components/icon.tsx'
+import type { IconName } from '../../../../generated/icons.generated.ts'
+import type { DeviceType } from '../../../../lib/comapeo.ts'
 
 export function DeviceIcon({
 	deviceType,
-	size,
+	...iconProps
 }: {
 	deviceType: DeviceType | undefined
-	size: string
-}) {
-	const { formatMessage: t } = useIntl()
+} & Pick<ComponentProps<typeof Icon>, 'color' | 'htmlColor' | 'size'>) {
+	const intl = useIntl()
 
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center',
-				borderRadius: `calc(${size} * 1.5)`,
-				bgcolor: LIGHT_GREY,
-				height: `calc(${size} * 1.5)`,
-				width: `calc(${size} * 1.5)`,
-			}}
-		>
-			<Icon
-				titleAccess={t(getDeviceIconTitleMessage(deviceType))}
-				name={getIconNameForDeviceType(deviceType)}
-				size={size}
-			/>
-		</Box>
+		<Icon
+			{...iconProps}
+			titleAccess={intl.formatMessage(getDeviceIconTitleMessage(deviceType))}
+			name={getIconNameForDeviceType(deviceType)}
+		/>
 	)
 }
 

@@ -1,6 +1,7 @@
 import { Suspense, type ReactNode } from 'react'
 import { useManyMembers } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
@@ -13,6 +14,7 @@ import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import {
+	BLACK,
 	BLUE_GREY,
 	LIGHT_COMAPEO_BLUE,
 	LIGHT_GREY,
@@ -36,24 +38,31 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
+
 	const router = useRouter()
+
 	const { projectId } = Route.useParams()
+
+	const backIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+		multiplier: 1.25,
+	})
 
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
+				component="header"
 				direction="row"
-				component="nav"
 				sx={{
 					alignItems: 'center',
+					borderBottom: `1px solid ${BLUE_GREY}`,
 					gap: 4,
 					padding: 4,
-					borderBottom: `1px solid ${BLUE_GREY}`,
 				}}
 			>
 				<IconButton
-					aria-label={t(m.goBackAccessibleLabel)}
+					aria-label={intl.formatMessage(m.goBackAccessibleLabel)}
 					onClick={() => {
 						if (router.history.canGoBack()) {
 							router.history.back()
@@ -67,56 +76,70 @@ function RouteComponent() {
 						})
 					}}
 				>
-					<Icon name="material-arrow-back" size={30} />
+					<Icon
+						name="material-arrow-back"
+						htmlColor={BLACK}
+						size={backIconSize}
+					/>
 				</IconButton>
 
 				<Typography variant="h1" sx={{ fontWeight: 500 }}>
-					{t(m.navTitle)}
+					{intl.formatMessage(m.navTitle)}
 				</Typography>
 			</Stack>
 
-			<Stack
-				direction="column"
-				sx={{
-					flex: 1,
-					justifyContent: 'space-between',
-					overflow: 'auto',
-					padding: 6,
-					gap: 6,
-				}}
-			>
-				<Stack
-					direction="column"
-					sx={{ borderRadius: 2, border: `1px solid ${BLUE_GREY}` }}
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+				<Container
+					maxWidth="sm"
+					sx={{
+						display: 'flex',
+						flex: 1,
+						flexDirection: 'column',
+						paddingBlock: 6,
+						paddingInline: 4,
+					}}
 				>
-					<NetworkConnectionInfo />
+					<Stack direction="column" sx={{ flex: 1, gap: 10 }}>
+						<Stack
+							direction="column"
+							sx={{ borderRadius: 2, border: `1px solid ${BLUE_GREY}` }}
+						>
+							<NetworkConnectionInfo />
 
-					<Divider sx={{ bgcolor: LIGHT_GREY }} />
+							<Divider sx={{ bgcolor: LIGHT_GREY }} />
 
-					<Stack direction="column" sx={{ padding: 6 }}>
-						<Typography>{t(m.discoveryTroubleshootingTitle)}</Typography>
-
-						<List sx={{ listStyleType: 'disc', paddingInline: 8 }}>
-							<ListItem disablePadding sx={{ display: 'list-item' }}>
-								<Typography color="textPrimary" variant="body2">
-									{t(m.discoveryTroubleshootingSameNetwork)}
+							<Stack direction="column" sx={{ padding: 6 }}>
+								<Typography>
+									{intl.formatMessage(m.discoveryTroubleshootingTitle)}
 								</Typography>
-							</ListItem>
 
-							<ListItem disablePadding sx={{ display: 'list-item' }}>
-								<Typography variant="body2" color="textPrimary">
-									{t(m.discoveryTroubleshootingSameVersion)}
-								</Typography>
-							</ListItem>
-						</List>
+								<List sx={{ listStyleType: 'disc', paddingInline: 8 }}>
+									<ListItem disablePadding sx={{ display: 'list-item' }}>
+										<Typography color="textPrimary" variant="body2">
+											{intl.formatMessage(
+												m.discoveryTroubleshootingSameNetwork,
+											)}
+										</Typography>
+									</ListItem>
+
+									<ListItem disablePadding sx={{ display: 'list-item' }}>
+										<Typography variant="body2" color="textPrimary">
+											{intl.formatMessage(
+												m.discoveryTroubleshootingSameVersion,
+											)}
+										</Typography>
+									</ListItem>
+								</List>
+							</Stack>
+						</Stack>
+
+						<Stack direction="column" sx={{ flex: 1 }}>
+							<Suspense>
+								<InvitablePeersList projectId={projectId} />
+							</Suspense>
+						</Stack>
 					</Stack>
-				</Stack>
-
-				<Stack direction="column" sx={{ flex: 1 }}>
-					<Suspense>
-						<InvitablePeersList projectId={projectId} />
-					</Suspense>
-				</Stack>
+				</Container>
 			</Stack>
 		</Stack>
 	)

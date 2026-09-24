@@ -9,6 +9,7 @@ import {
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
+import Container from '@mui/material/Container'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -19,7 +20,13 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { DeviceIcon } from '../../-shared/device-icon.tsx'
-import { BLUE_GREY, PROJECT_ORANGE } from '../../../../../colors.ts'
+import {
+	BLACK,
+	BLUE_GREY,
+	DARK_GREY,
+	PROJECT_ORANGE,
+	WHITE,
+} from '../../../../../colors.ts'
 import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
@@ -73,7 +80,7 @@ export const Route = createFileRoute('/app/projects/$projectId/team/$deviceId')(
 function RouteComponent() {
 	const [showLeaveProjectDialog, setShowLeaveProjectDialog] = useState(false)
 
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const router = useRouter()
 
@@ -85,21 +92,26 @@ function RouteComponent() {
 
 	const isSelf = member.deviceId === ownDeviceInfo.deviceId
 
+	const backIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+		multiplier: 1.25,
+	})
+
 	return (
 		<>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Stack
+					component="header"
 					direction="row"
-					component="nav"
 					sx={{
 						alignItems: 'center',
+						borderBottom: `1px solid ${BLUE_GREY}`,
 						gap: 4,
 						padding: 4,
-						borderBottom: `1px solid ${BLUE_GREY}`,
 					}}
 				>
 					<IconButton
-						aria-label={t(m.goBackAccessibleLabel)}
+						aria-label={intl.formatMessage(m.goBackAccessibleLabel)}
 						onClick={() => {
 							if (router.history.canGoBack()) {
 								router.history.back()
@@ -113,46 +125,66 @@ function RouteComponent() {
 							})
 						}}
 					>
-						<Icon name="material-arrow-back" size={30} />
+						<Icon
+							name="material-arrow-back"
+							htmlColor={BLACK}
+							size={backIconSize}
+						/>
 					</IconButton>
 
 					<Typography variant="h1" sx={{ fontWeight: 500 }}>
-						{t(isSelf ? m.thisDevice : m.collaboratorNavTitle)}
+						{intl.formatMessage(isSelf ? m.thisDevice : m.collaboratorNavTitle)}
 					</Typography>
 				</Stack>
 
-				<Suspense
-					fallback={
-						<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
-							<CircularProgress disableShrink size={30} />
-						</Box>
-					}
-				>
-					<CollaboratorInfoContent
-						projectId={projectId}
-						deviceId={deviceId}
-						onLeaveProject={() => {
-							setShowLeaveProjectDialog(true)
+				<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+					<Container
+						disableGutters
+						maxWidth="sm"
+						sx={{
+							display: 'flex',
+							flex: 1,
+							flexDirection: 'column',
+							paddingBlock: 6,
+							paddingInline: 4,
 						}}
-					/>
-				</Suspense>
+					>
+						<Suspense
+							fallback={
+								<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
+									<CircularProgress disableShrink size={30} />
+								</Box>
+							}
+						>
+							<CollaboratorInfoContent
+								projectId={projectId}
+								deviceId={deviceId}
+								onLeaveProject={() => {
+									setShowLeaveProjectDialog(true)
+								}}
+							/>
+						</Suspense>
+					</Container>
+				</Stack>
 			</Stack>
 
-			<DecentDialog
-				fullWidth
-				maxWidth="sm"
-				value={showLeaveProjectDialog || null}
-			>
-				{() => (
-					<LeaveProjectDialogContent
-						deviceId={deviceId}
-						projectId={projectId}
-						onClose={() => {
-							setShowLeaveProjectDialog(false)
-						}}
-					/>
-				)}
-			</DecentDialog>
+			<Suspense>
+				<DecentDialog
+					fullWidth
+					maxWidth="sm"
+					value={showLeaveProjectDialog || null}
+				>
+					{() => (
+						<LeaveProjectDialogContent
+							deviceId={deviceId}
+							projectId={projectId}
+							onClose={() => {
+								setShowLeaveProjectDialog(false)
+							}}
+						/>
+					)}
+				</DecentDialog>
+			</Suspense>
 		</>
 	)
 }
@@ -166,7 +198,7 @@ function CollaboratorInfoContent({
 	deviceId: string
 	onLeaveProject: () => void
 }) {
-	const { formatMessage: t, formatDate } = useIntl()
+	const intl = useIntl()
 
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
@@ -175,6 +207,11 @@ function CollaboratorInfoContent({
 	const isSelf = member.deviceId === ownDeviceInfo.deviceId
 
 	const truncatedDeviceId = member.deviceId.slice(0, 12)
+
+	const deviceIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+		multiplier: 5,
+	})
 
 	const roleIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'h3',
@@ -187,7 +224,7 @@ function CollaboratorInfoContent({
 	const isRemoteArchive = memberIsRemoteArchive(member)
 
 	if (isRemoteArchive) {
-		title = member.name || t(m.remoteArchive)
+		title = member.name || intl.formatMessage(m.remoteArchive)
 		description = (
 			<Typography
 				component="p"
@@ -219,7 +256,9 @@ function CollaboratorInfoContent({
 					variant="h3"
 					sx={{ fontWeight: 500, textAlign: 'center' }}
 				>
-					{t(isAtLeastCoordinator ? m.coordinator : m.participant)}
+					{intl.formatMessage(
+						isAtLeastCoordinator ? m.coordinator : m.participant,
+					)}
 				</Typography>
 			</>
 		)
@@ -228,28 +267,27 @@ function CollaboratorInfoContent({
 	return (
 		<Stack
 			direction="column"
-			sx={{
-				flex: 1,
-				justifyContent: 'space-between',
-				overflow: 'auto',
-				padding: 6,
-				gap: 6,
-			}}
+			sx={{ flex: 1, gap: 10, justifyContent: 'space-between' }}
 		>
 			<Stack
 				direction="column"
 				sx={{
-					flex: 1,
 					border: `1px solid ${BLUE_GREY}`,
 					borderRadius: 2,
-					padding: 10,
-					justifyContent: 'center',
+					flex: 1,
 					gap: 20,
+					justifyContent: 'center',
 					overflowWrap: 'break-word',
+					paddingBlock: 20,
+					paddingInline: 6,
 				}}
 			>
 				<Stack direction="column" sx={{ gap: 4, alignItems: 'center' }}>
-					<DeviceIcon deviceType={member.deviceType} size="60px" />
+					<DeviceIcon
+						deviceType={member.deviceType}
+						htmlColor={DARK_GREY}
+						size={deviceIconSize}
+					/>
 
 					<Typography
 						variant="h1"
@@ -273,10 +311,10 @@ function CollaboratorInfoContent({
 
 					{member.joinedAt ? (
 						<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
-							{t(m.addedOn, {
+							{intl.formatMessage(m.addedOn, {
 								value: (
 									<time key={member.deviceId} dateTime={member.joinedAt}>
-										{formatDate(member.joinedAt, {
+										{intl.formatDate(member.joinedAt, {
 											year: 'numeric',
 											month: 'long',
 											day: '2-digit',
@@ -309,7 +347,7 @@ function CollaboratorInfoContent({
 							onLeaveProject()
 						}}
 					>
-						{t(m.leaveProjectButton)}
+						{intl.formatMessage(m.leaveProjectButton)}
 					</Button>
 				</Box>
 			) : null}
@@ -326,7 +364,8 @@ function LeaveProjectDialogContent({
 	onClose: () => void
 	projectId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
+
 	const { data: projectSettings } = useProjectSettings({ projectId })
 
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
@@ -366,16 +405,45 @@ function LeaveProjectDialogContent({
 		typographyVariant: 'body2',
 	})
 
+	const deviceIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+		multiplier: 3,
+	})
+
+	const errorIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+		multiplier: 1,
+	})
+
 	if (warningToShow) {
 		return (
-			<Stack direction="column">
-				<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+			<Stack direction="column" sx={{ gap: 10, padding: 6 }}>
+				<Stack direction="column" sx={{ gap: 10, flex: 1 }}>
 					<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
 						<Box sx={{ position: 'relative' }}>
-							<DeviceIcon deviceType={member.deviceType} size="60px" />
+							<DeviceIcon
+								deviceType={member.deviceType}
+								size={deviceIconSize}
+								htmlColor={DARK_GREY}
+							/>
 
-							<Box sx={{ position: 'absolute', right: -8, bottom: -16 }}>
-								<Icon name="material-error" color="error" size={36} />
+							<Box
+								sx={{
+									position: 'absolute',
+									right: -12,
+									bottom: 0,
+									display: 'grid',
+									placeItems: 'center',
+									borderRadius: '50%',
+									padding: 1,
+									backgroundColor: (theme) => theme.palette.error.main,
+								}}
+							>
+								<Icon
+									name="material-symbols-exclamation"
+									htmlColor={WHITE}
+									size={errorIconSize}
+								/>
 							</Box>
 						</Box>
 
@@ -383,7 +451,7 @@ function LeaveProjectDialogContent({
 							variant="h1"
 							sx={{ fontWeight: 500, textAlign: 'center' }}
 						>
-							{t(
+							{intl.formatMessage(
 								warningToShow === 'last_device'
 									? m.lastDeviceWarningTitle
 									: m.lastCoordinatorWarningTitle,
@@ -391,7 +459,7 @@ function LeaveProjectDialogContent({
 						</Typography>
 
 						<Typography sx={{ textAlign: 'center' }}>
-							{t(
+							{intl.formatMessage(
 								warningToShow === 'last_device'
 									? m.lastDeviceWarningDescription
 									: m.lastCoordinatorWarningDescription,
@@ -419,7 +487,7 @@ function LeaveProjectDialogContent({
 												/>
 
 												<Typography variant="body2" color="textSecondary">
-													{t(m.suggestionInviteCoordinator)}
+													{intl.formatMessage(m.suggestionInviteCoordinator)}
 												</Typography>
 											</Stack>
 										</ListItem>
@@ -434,7 +502,7 @@ function LeaveProjectDialogContent({
 											/>
 
 											<Typography variant="body2" color="textSecondary">
-												{t(m.suggestionExportData)}
+												{intl.formatMessage(m.suggestionExportData)}
 											</Typography>
 										</Stack>
 									</ListItem>
@@ -444,16 +512,7 @@ function LeaveProjectDialogContent({
 					</Stack>
 				</Stack>
 
-				<Stack
-					direction="row"
-					sx={{
-						alignItems: 'center',
-						position: 'sticky',
-						bottom: 0,
-						gap: 4,
-						padding: 6,
-					}}
-				>
+				<Stack direction="row" sx={{ alignItems: 'center', gap: 4 }}>
 					<Button
 						fullWidth
 						variant="outlined"
@@ -462,7 +521,7 @@ function LeaveProjectDialogContent({
 						}}
 						sx={{ maxWidth: 400, alignSelf: 'center' }}
 					>
-						{t(m.cancelButton)}
+						{intl.formatMessage(m.cancelButton)}
 					</Button>
 
 					<Button
@@ -475,7 +534,7 @@ function LeaveProjectDialogContent({
 						}}
 						sx={{ maxWidth: 400, alignSelf: 'center' }}
 					>
-						{t(m.continueButton)}
+						{intl.formatMessage(m.continueButton)}
 					</Button>
 				</Stack>
 			</Stack>
@@ -504,7 +563,7 @@ function LeaveProjectConfirmation({
 	projectId: string
 	projectName?: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const router = useRouter()
 
@@ -520,8 +579,8 @@ function LeaveProjectConfirmation({
 
 	return (
 		<>
-			<Stack direction="column">
-				<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+			<Stack direction="column" sx={{ gap: 10, padding: 6 }}>
+				<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 10 }}>
 					<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
 						<Icon name="material-logout" htmlColor={BLUE_GREY} size={72} />
 
@@ -529,27 +588,18 @@ function LeaveProjectConfirmation({
 							variant="h1"
 							sx={{ fontWeight: 500, textAlign: 'center' }}
 						>
-							{t(m.leaveProjectConfirmationTitle)}
+							{intl.formatMessage(m.leaveProjectConfirmationTitle)}
 						</Typography>
 
 						<Typography sx={{ textAlign: 'center' }}>
-							{t(m.leaveProjectConfirmationDescription, {
+							{intl.formatMessage(m.leaveProjectConfirmationDescription, {
 								name: projectName || '',
 							})}
 						</Typography>
 					</Stack>
 				</Stack>
 
-				<Stack
-					direction="row"
-					sx={{
-						alignItems: 'center',
-						position: 'sticky',
-						bottom: 0,
-						gap: 4,
-						padding: 6,
-					}}
-				>
+				<Stack direction="row" sx={{ alignItems: 'center', gap: 4 }}>
 					<Button
 						fullWidth
 						variant="outlined"
@@ -563,7 +613,7 @@ function LeaveProjectConfirmation({
 						}}
 						sx={{ maxWidth: 400, alignSelf: 'center' }}
 					>
-						{t(m.cancelButton)}
+						{intl.formatMessage(m.cancelButton)}
 					</Button>
 
 					<Button
@@ -599,7 +649,7 @@ function LeaveProjectConfirmation({
 						}}
 						sx={{ maxWidth: 400, alignSelf: 'center' }}
 					>
-						{t(m.confirmButton)}
+						{intl.formatMessage(m.confirmButton)}
 					</Button>
 				</Stack>
 			</Stack>

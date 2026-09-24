@@ -183,7 +183,11 @@ function RouteComponent() {
 				</Stack>
 
 				<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-					<Container maxWidth="sm" sx={{ flex: 1, paddingBlock: 20 }}>
+					<Container
+						disableGutters
+						maxWidth="sm"
+						sx={{ flex: 1, paddingBlock: 20 }}
+					>
 						<Stack direction="column" sx={{ gap: 5 }}>
 							<Box sx={{ alignSelf: 'center', position: 'relative' }}>
 								<Box
@@ -327,7 +331,8 @@ function RouteComponent() {
 }
 
 function RemoteArchiveIndicator({ projectId }: { projectId: string }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
+
 	const { data: members } = useManyMembers({ projectId, includeLeft: false })
 
 	const activeRemoteArchives = members.filter((m) => memberIsRemoteArchive(m))
@@ -346,10 +351,13 @@ function RemoteArchiveIndicator({ projectId }: { projectId: string }) {
 	return (
 		<Stack
 			direction="row"
-			sx={{ justifyContent: 'center', alignItems: 'center', gap: 2 }}
+			sx={{ alignItems: 'center', gap: 2, justifyContent: 'center' }}
 		>
 			<Icon name="material-circle-filled" size={iconSize} />
-			<Typography variant="body2">{t(m.remoteArchiveConnected)}</Typography>
+
+			<Typography variant="body2">
+				{intl.formatMessage(m.remoteArchiveConnected)}
+			</Typography>
 		</Stack>
 	)
 }

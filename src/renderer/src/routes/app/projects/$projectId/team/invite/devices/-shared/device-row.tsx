@@ -34,6 +34,7 @@ export function DeviceRow({
 			}}
 		>
 			<DeviceIcon deviceType={deviceType} size={deviceIconSize} />
+
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Typography
 					sx={{

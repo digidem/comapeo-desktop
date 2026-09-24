@@ -871,6 +871,10 @@
     "description": "Text for button that initiates steps for inviting device to project.",
     "message": "Invite Device"
   },
+  "$1.routes.app.projects.$projectId.team.index.membersCount": {
+    "description": "Title of the team page.",
+    "message": "{count, plural, =0 {No members} one {# member} other {# members}}"
+  },
   "$1.routes.app.projects.$projectId.team.index.navTitle": {
     "description": "Title of the team page.",
     "message": "Team"
