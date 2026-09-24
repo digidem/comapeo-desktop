@@ -301,7 +301,7 @@
   },
   "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addedOn": {
     "description": "Text showing when device was added to project.",
-    "message": "Added on {date, date, long}"
+    "message": "Added on {value}"
   },
   "routes.app.projects.$projectId.team.invite.devices.index.goBackAccessibleLabel": {
     "description": "Accessible label for back button",

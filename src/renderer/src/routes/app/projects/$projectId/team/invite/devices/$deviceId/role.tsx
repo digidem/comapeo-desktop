@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -20,7 +21,7 @@ export const Route = createFileRoute(
 )({ pendingComponent: GenericRoutePendingComponent, component: RouteComponent })
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const router = useRouter()
 	const navigate = useNavigate()
@@ -37,13 +38,13 @@ function RouteComponent() {
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
+				component="header"
 				direction="row"
-				component="nav"
 				sx={{
 					alignItems: 'center',
+					borderBottom: `1px solid ${BLUE_GREY}`,
 					gap: 4,
 					padding: 4,
-					borderBottom: `1px solid ${BLUE_GREY}`,
 				}}
 			>
 				<IconButton
@@ -59,59 +60,68 @@ function RouteComponent() {
 				</IconButton>
 
 				<Typography variant="h1" sx={{ fontWeight: 500 }}>
-					{t(m.navTitle)}
+					{intl.formatMessage(m.navTitle)}
 				</Typography>
 			</Stack>
 
-			<Stack
-				direction="column"
-				sx={{ flex: 1, overflow: 'auto', padding: 6, gap: 6 }}
-			>
-				<Box sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}>
-					<DeviceRow
-						deviceId={peer.deviceId}
-						deviceType={peer.deviceType}
-						name={peer.name}
-						disconnected={peer.status === 'disconnected'}
-					/>
-				</Box>
-
-				<Typography variant="h2" sx={{ fontWeight: 500 }}>
-					{t(m.selectingRole)}
-				</Typography>
-
-				<List
-					disablePadding
-					sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+				<Container
+					maxWidth="sm"
+					sx={{
+						display: 'flex',
+						flex: 1,
+						flexDirection: 'column',
+						gap: 6,
+						paddingBlock: 6,
+						paddingInline: 4,
+					}}
 				>
-					<RoleOption
-						name={t(m.participantTitle)}
-						description={t(m.participantDescription)}
-						icon={<Icon name="material-people-filled" />}
-						onClick={() => {
-							navigate({
-								to: '/app/projects/$projectId/team/invite/devices/$deviceId/send',
-								params: { projectId, deviceId: peer.deviceId },
-								search: { role: 'participant' },
-								replace: true,
-							})
-						}}
-					/>
+					<Box sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}>
+						<DeviceRow
+							deviceId={peer.deviceId}
+							deviceType={peer.deviceType}
+							name={peer.name}
+							disconnected={peer.status === 'disconnected'}
+						/>
+					</Box>
 
-					<RoleOption
-						name={t(m.coordinatorTitle)}
-						description={t(m.coordinatorDescription)}
-						icon={<Icon name="material-manage-accounts-filled" />}
-						onClick={() => {
-							navigate({
-								to: '/app/projects/$projectId/team/invite/devices/$deviceId/send',
-								params: { projectId, deviceId: peer.deviceId },
-								search: { role: 'coordinator' },
-								replace: true,
-							})
-						}}
-					/>
-				</List>
+					<Typography variant="h2" sx={{ fontWeight: 500 }}>
+						{intl.formatMessage(m.selectingRole)}
+					</Typography>
+
+					<List
+						disablePadding
+						sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}
+					>
+						<RoleOption
+							name={intl.formatMessage(m.participantTitle)}
+							description={intl.formatMessage(m.participantDescription)}
+							icon={<Icon name="material-people-filled" />}
+							onClick={() => {
+								navigate({
+									to: '/app/projects/$projectId/team/invite/devices/$deviceId/send',
+									params: { projectId, deviceId: peer.deviceId },
+									search: { role: 'participant' },
+									replace: true,
+								})
+							}}
+						/>
+
+						<RoleOption
+							name={intl.formatMessage(m.coordinatorTitle)}
+							description={intl.formatMessage(m.coordinatorDescription)}
+							icon={<Icon name="material-manage-accounts-filled" />}
+							onClick={() => {
+								navigate({
+									to: '/app/projects/$projectId/team/invite/devices/$deviceId/send',
+									params: { projectId, deviceId: peer.deviceId },
+									search: { role: 'coordinator' },
+									replace: true,
+								})
+							}}
+						/>
+					</List>
+				</Container>
 			</Stack>
 		</Stack>
 	)
