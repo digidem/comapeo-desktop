@@ -8,7 +8,12 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY, DARK_ORANGE } from '../../../../../../colors.ts'
+import {
+	BLACK,
+	BLUE_GREY,
+	DARK_GREY,
+	DARK_ORANGE,
+} from '../../../../../../colors.ts'
 import { GenericRoutePendingComponent } from '../../../../../../components/generic-route-pending-component.tsx'
 import { Icon } from '../../../../../../components/icon.tsx'
 import { ButtonLink } from '../../../../../../components/link.tsx'
@@ -52,9 +57,14 @@ function RouteComponent() {
 
 	const { projectId } = Route.useParams()
 
-	const iconSize = useIconSizeBasedOnTypography({
+	const addIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'h1',
 		multiplier: 4,
+	})
+
+	const backIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+		multiplier: 1.25,
 	})
 
 	return (
@@ -84,7 +94,11 @@ function RouteComponent() {
 						})
 					}}
 				>
-					<Icon name="material-arrow-back" size={30} />
+					<Icon
+						name="material-arrow-back"
+						htmlColor={BLACK}
+						size={backIconSize}
+					/>
 				</IconButton>
 
 				<Typography variant="h1" sx={{ fontWeight: 500 }}>
@@ -123,7 +137,7 @@ function RouteComponent() {
 								<Icon
 									name="material-person-add"
 									htmlColor={DARK_ORANGE}
-									size={iconSize}
+									size={addIconSize}
 								/>
 							</Box>
 

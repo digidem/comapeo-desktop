@@ -14,6 +14,7 @@ import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import {
+	BLACK,
 	BLUE_GREY,
 	LIGHT_COMAPEO_BLUE,
 	LIGHT_GREY,
@@ -43,6 +44,11 @@ function RouteComponent() {
 
 	const { projectId } = Route.useParams()
 
+	const backIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+		multiplier: 1.25,
+	})
+
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
@@ -70,7 +76,11 @@ function RouteComponent() {
 						})
 					}}
 				>
-					<Icon name="material-arrow-back" size={30} />
+					<Icon
+						name="material-arrow-back"
+						htmlColor={BLACK}
+						size={backIconSize}
+					/>
 				</IconButton>
 
 				<Typography variant="h1" sx={{ fontWeight: 500 }}>

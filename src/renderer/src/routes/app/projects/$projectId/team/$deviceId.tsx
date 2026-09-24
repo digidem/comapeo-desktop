@@ -21,6 +21,7 @@ import { defineMessages, useIntl } from 'react-intl'
 
 import { DeviceIcon } from '../../-shared/device-icon.tsx'
 import {
+	BLACK,
 	BLUE_GREY,
 	DARK_GREY,
 	PROJECT_ORANGE,
@@ -91,6 +92,11 @@ function RouteComponent() {
 
 	const isSelf = member.deviceId === ownDeviceInfo.deviceId
 
+	const backIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+		multiplier: 1.25,
+	})
+
 	return (
 		<>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
@@ -119,7 +125,11 @@ function RouteComponent() {
 							})
 						}}
 					>
-						<Icon name="material-arrow-back" size={30} />
+						<Icon
+							name="material-arrow-back"
+							htmlColor={BLACK}
+							size={backIconSize}
+						/>
 					</IconButton>
 
 					<Typography variant="h1" sx={{ fontWeight: 500 }}>

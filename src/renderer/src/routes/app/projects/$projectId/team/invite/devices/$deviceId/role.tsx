@@ -11,10 +11,11 @@ import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { DeviceRow } from '../-shared/device-row.tsx'
-import { BLUE_GREY } from '../../../../../../../../colors.ts'
+import { BLACK, BLUE_GREY } from '../../../../../../../../colors.ts'
 import { GenericRoutePendingComponent } from '../../../../../../../../components/generic-route-pending-component.tsx'
 import { Icon } from '../../../../../../../../components/icon.tsx'
 import { useLocalPeersState } from '../../../../../../../../contexts/local-peers-store-context.ts'
+import { useIconSizeBasedOnTypography } from '../../../../../../../../hooks/icon.ts'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/team/invite/devices/$deviceId/role',
@@ -34,6 +35,11 @@ function RouteComponent() {
 	})
 
 	const peer = updatedPeer || peerOnLoad
+
+	const backIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+		multiplier: 1.25,
+	})
 
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
@@ -56,7 +62,11 @@ function RouteComponent() {
 						})
 					}}
 				>
-					<Icon name="material-arrow-back" size={30} />
+					<Icon
+						name="material-arrow-back"
+						htmlColor={BLACK}
+						size={backIconSize}
+					/>
 				</IconButton>
 
 				<Typography variant="h1" sx={{ fontWeight: 500 }}>
