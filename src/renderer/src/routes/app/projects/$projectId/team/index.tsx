@@ -89,6 +89,7 @@ function RouteComponent() {
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
+				component="header"
 				direction="row"
 				sx={{
 					alignItems: 'center',
