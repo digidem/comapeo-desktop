@@ -616,7 +616,7 @@ function InviteAccepted({
 							<Typography
 								component="p"
 								variant="h2"
-								sx={{ textAlign: 'center' }}
+								sx={{ fontWeight: 400, textAlign: 'center' }}
 							>
 								{intl.formatMessage(
 									member.role.roleId === COORDINATOR_ROLE_ID
