@@ -13,7 +13,12 @@ import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 
 import { BLUE_GREY, DARK_GREY, GREEN } from '../../colors.ts'
@@ -181,7 +186,7 @@ export function ProjectInviteDialog() {
 }
 
 function ProjectInviteDialogContent(props: DialogContentProps) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const inviteDetailsIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'h3',
@@ -231,7 +236,7 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 									sx={{ flex: 1, maxWidth: 400 }}
 									variant="contained"
 								>
-									{t(m.projectInviteAccept)}
+									{intl.formatMessage(m.projectInviteAccept)}
 								</Button>
 							}
 							secondary={
@@ -247,7 +252,7 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 									sx={{ flex: 1, maxWidth: 400 }}
 									variant="outlined"
 								>
-									{t(m.projectInviteDecline)}
+									{intl.formatMessage(m.projectInviteDecline)}
 								</Button>
 							}
 						/>
@@ -256,8 +261,8 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 						<InviteDetails
 							color={invite.projectColor}
 							title={invite.projectName}
-							description={t(m.projectInviteDescription, {
-								role: invite.roleName?.toLowerCase(),
+							description={intl.formatMessage(m.projectInviteDescription, {
+								role: invite.roleName?.toLowerCase() || 'participant',
 							})}
 							icon={
 								<Icon
@@ -272,7 +277,7 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 							}
 						/>
 					}
-					title={t(m.projectInviteTitle)}
+					title={intl.formatMessage(m.projectInviteTitle)}
 				/>
 			)
 		}
@@ -297,7 +302,7 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 									sx={{ flex: 1, maxWidth: 400 }}
 									variant="contained"
 								>
-									{t(m.projectJoinedNextInvite)}
+									{intl.formatMessage(m.projectJoinedNextInvite)}
 								</Button>
 							),
 							secondary: (
@@ -315,7 +320,7 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 										variant="body2"
 										sx={{ fontWeight: 500, textTransform: 'uppercase' }}
 									>
-										{t(m.projectInviteAdditionalInvitesCount, {
+										{intl.formatMessage(m.projectInviteAdditionalInvitesCount, {
 											inviteCount: remainingInvites.length,
 										})}
 									</Typography>
@@ -332,7 +337,7 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 									sx={{ flex: 1, maxWidth: 400 }}
 									variant="contained"
 								>
-									{t(m.projectJoinedViewProject)}
+									{intl.formatMessage(m.projectJoinedViewProject)}
 								</Button>
 							),
 							secondary: (
@@ -344,7 +349,7 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 									sx={{ flex: 1, maxWidth: 400 }}
 									variant="outlined"
 								>
-									{t(m.projectJoinedCloseDialog)}
+									{intl.formatMessage(m.projectJoinedCloseDialog)}
 								</Button>
 							),
 						}
@@ -355,9 +360,12 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 					details={
 						<InviteDetails
 							color={invite.projectColor}
-							description={t(m.projectJoinedDetailsDescription, {
-								projectName: invite.projectName,
-							})}
+							description={intl.formatMessage(
+								m.projectJoinedDetailsDescription,
+								{
+									projectName: invite.projectName,
+								},
+							)}
 							icon={
 								<Icon
 									name="material-check-circle-rounded"
@@ -365,12 +373,12 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 									size={inviteDetailsIconSize}
 								/>
 							}
-							title={t(m.projectJoinedDetailsTitle)}
+							title={intl.formatMessage(m.projectJoinedDetailsTitle)}
 						/>
 					}
 					title={
 						<>
-							{t(m.projectJoinedTitle)}
+							{intl.formatMessage(m.projectJoinedTitle)}
 							{
 								/* // eslint-disable-next-line formatjs/no-literal-string-in-jsx */
 								' — '
@@ -381,7 +389,7 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 								color="textSecondary"
 								sx={{ fontWeight: 'normal' }}
 							>
-								{t(
+								{intl.formatMessage(
 									remainingInvites.length > 0
 										? m.projectJoinedAdditionalInvitesWaiting
 										: m.projectJoinedNoAdditionalInvitesWaiting,
@@ -509,7 +517,28 @@ function InviteActions({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly projectInviteTitle: NoMessageValues
+	readonly projectInviteDescription: { readonly role: string }
+	readonly projectInviteDecline: NoMessageValues
+	readonly projectInviteAccept: NoMessageValues
+	readonly projectJoinedTitle: NoMessageValues
+	readonly projectJoinedAdditionalInvitesWaiting: NoMessageValues
+	readonly projectJoinedNoAdditionalInvitesWaiting: NoMessageValues
+	readonly projectJoinedDetailsTitle: NoMessageValues
+	readonly projectJoinedDetailsDescription: {
+		readonly projectName: MessageValue
+	}
+	readonly projectJoinedAdditionalInvitesCount: {
+		readonly inviteCount: number | bigint
+	}
+	readonly projectJoinedNextInvite: NoMessageValues
+	readonly projectJoinedCloseDialog: NoMessageValues
+	readonly projectJoinedViewProject: NoMessageValues
+	readonly projectInviteAdditionalInvitesCount: {
+		readonly inviteCount: number | bigint
+	}
+}>({
 	projectInviteTitle: {
 		id: '$1.routes.app.route.projectInviteTitle',
 		defaultMessage: "You've been invited to…",

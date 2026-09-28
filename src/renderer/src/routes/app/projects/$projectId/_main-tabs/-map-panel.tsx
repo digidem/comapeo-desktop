@@ -42,7 +42,12 @@ import type {
 	LineLayerSpecification,
 	MapLibreEvent,
 } from 'maplibre-gl'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import * as v from 'valibot'
 
 import { BLACK, WHITE } from '../../../../../colors.ts'
@@ -167,7 +172,7 @@ export function MapPanel({
 }) {
 	const router = useRouter()
 
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const [mapLoaded, setMapLoaded] = useState(false)
 
@@ -717,7 +722,7 @@ export function MapPanel({
 
 				{observations.length + tracks.length > 0 ? (
 					<ZoomToDataMapControl
-						buttonTitle={t(m.zoomToData)}
+						buttonTitle={intl.formatMessage(m.zoomToData)}
 						fitBoundsOptions={BASE_FIT_BOUNDS_OPTIONS}
 						sourceIds={[OBSERVATIONS_SOURCE_ID, TRACKS_SOURCE_ID]}
 					/>
@@ -727,7 +732,7 @@ export function MapPanel({
 					<ZoomToSelectedDocumentMapControl
 						// NOTE: Important to remount or else it uses stale document reference
 						key={documentToHighlight.docId}
-						buttonTitle={t(m.zoomToSelected)}
+						buttonTitle={intl.formatMessage(m.zoomToSelected)}
 						document={documentToHighlight}
 						fitBoundsOptions={BASE_FIT_BOUNDS_OPTIONS}
 						sourceIds={[
@@ -758,7 +763,7 @@ export function MapPanel({
 								return updatedValue
 							})
 						}}
-						buttonTitle={t(m.toggleOmittedVisibility)}
+						buttonTitle={intl.formatMessage(m.toggleOmittedVisibility)}
 					/>
 				) : null}
 
@@ -861,7 +866,7 @@ export function MapPanel({
 						}}
 					>
 						<Typography color="textInverted">
-							{t(m.cannotDisplayFeature)}
+							{intl.formatMessage(m.cannotDisplayFeature)}
 						</Typography>
 					</Box>
 				) : null}
@@ -916,7 +921,7 @@ function CategoryIconMarker({
 	lang: string
 	projectId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: category } = useSingleDocByDocId({
 		projectId,
@@ -935,7 +940,9 @@ function CategoryIconMarker({
 						projectId={projectId}
 						iconDocumentId={category.iconRef.docId}
 						imageStyle={{ height: CATEGORY_ICON_SIZE_PX, aspectRatio: 1 }}
-						altText={t(m.categoryIconAlt, { name: category.name })}
+						altText={intl.formatMessage(m.categoryIconAlt, {
+							name: category.name,
+						})}
 					/>
 				) : (
 					<Icon
@@ -1116,7 +1123,13 @@ function createObservationLayerPaintProperty(
 	}
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly categoryIconAlt: { readonly name: MessageValue }
+	readonly zoomToData: NoMessageValues
+	readonly zoomToSelected: NoMessageValues
+	readonly cannotDisplayFeature: NoMessageValues
+	readonly toggleOmittedVisibility: NoMessageValues
+}>({
 	categoryIconAlt: {
 		id: 'routes.app.projects.$projectId.-map-panel.categoryIconAlt',
 		defaultMessage: 'Icon for {name} category',

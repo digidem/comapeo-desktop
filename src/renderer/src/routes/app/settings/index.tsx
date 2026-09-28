@@ -14,7 +14,12 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 
 import { ListRowLink } from '../-components/list-row-link.tsx'
 import type { SupportedLanguageTag } from '../../../../../shared/intl.ts'
@@ -34,7 +39,7 @@ export const Route = createFileRoute('/app/settings/')({
 })
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const headerIconHeight = useIconSizeBasedOnTypography({
 		typographyVariant: 'h1',
@@ -55,7 +60,7 @@ function RouteComponent() {
 						variant="h1"
 						sx={{ fontWeight: 500, textAlign: 'center' }}
 					>
-						{t(m.title)}
+						{intl.formatMessage(m.title)}
 					</Typography>
 				</Stack>
 			</Stack>
@@ -103,7 +108,7 @@ function RouteComponent() {
 }
 
 function SettingsList() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: deviceInfo } = useOwnDeviceInfo()
 
@@ -124,7 +129,9 @@ function SettingsList() {
 			const match = getLanguageInfo(baseTag as SupportedLanguageTag)
 
 			if (source === 'system') {
-				return t(m.languageFromSystemPreference, { name: match.nativeName })
+				return intl.formatMessage(m.languageFromSystemPreference, {
+					name: match.nativeName,
+				})
 			}
 
 			return match.nativeName
@@ -148,7 +155,7 @@ function SettingsList() {
 				variant="body2"
 				sx={{ textTransform: 'uppercase' }}
 			>
-				{t(m.sectionTitleGeneral)}
+				{intl.formatMessage(m.sectionTitleGeneral)}
 			</Typography>
 
 			<List disablePadding>
@@ -176,9 +183,13 @@ function SettingsList() {
 								/>
 							}
 							end={
-								<Typography color="primary">{t(m.editDeviceName)}</Typography>
+								<Typography color="primary">
+									{intl.formatMessage(m.editDeviceName)}
+								</Typography>
 							}
-							aria-label={t(m.deviceNameSettingsAccessibleLabel)}
+							aria-label={intl.formatMessage(
+								m.deviceNameSettingsAccessibleLabel,
+							)}
 							// TODO: What to do when this is undefined?
 							label={deviceInfo.name || ''}
 						/>
@@ -205,7 +216,7 @@ function SettingsList() {
 									size={actionIconSize}
 								/>
 							}
-							aria-label={t(m.languageSettingsAccessibleLabel)}
+							aria-label={intl.formatMessage(m.languageSettingsAccessibleLabel)}
 							label={selectedLanguageName}
 						/>
 					</ListItem>
@@ -231,8 +242,10 @@ function SettingsList() {
 									size={actionIconSize}
 								/>
 							}
-							aria-label={t(m.coordinateSystemSettingsAccessibleLabel)}
-							label={t(
+							aria-label={intl.formatMessage(
+								m.coordinateSystemSettingsAccessibleLabel,
+							)}
+							label={intl.formatMessage(
 								coordinateFormat === 'utm'
 									? m.utmCoordinates
 									: coordinateFormat === 'dd'
@@ -263,8 +276,10 @@ function SettingsList() {
 									size={actionIconSize}
 								/>
 							}
-							aria-label={t(m.unitSystemSettingsAccessibleLabel)}
-							label={t(
+							aria-label={intl.formatMessage(
+								m.unitSystemSettingsAccessibleLabel,
+							)}
+							label={intl.formatMessage(
 								unitSystem === 'imperial'
 									? m.unitSystemImperial
 									: m.unitSystemMetric,
@@ -293,7 +308,9 @@ function SettingsList() {
 									size={actionIconSize}
 								/>
 							}
-							aria-label={t(m.backgroundMapSettingsAccessibleLabel)}
+							aria-label={intl.formatMessage(
+								m.backgroundMapSettingsAccessibleLabel,
+							)}
 							label={<BackgroundMapLabel />}
 						/>
 					</ListItem>
@@ -304,7 +321,7 @@ function SettingsList() {
 }
 
 function BackgroundMapLabel() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const customMapInfo = useGetCustomMapInfo()
 
@@ -314,7 +331,7 @@ function BackgroundMapLabel() {
 	}
 
 	if (customMapInfo.status === 'error') {
-		return t(
+		return intl.formatMessage(
 			getErrorCode(customMapInfo.error) === 'MAP_NOT_FOUND'
 				? m.defaultBackground
 				: m.customBackground,
@@ -325,7 +342,7 @@ function BackgroundMapLabel() {
 }
 
 function AboutCoMapeoSection() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	return (
 		<Stack direction="column" sx={{ gap: 4 }}>
@@ -335,7 +352,7 @@ function AboutCoMapeoSection() {
 					variant="body2"
 					sx={{ textTransform: 'uppercase' }}
 				>
-					{t(m.sectionTitleAboutCoMapeo)}
+					{intl.formatMessage(m.sectionTitleAboutCoMapeo)}
 				</Typography>
 
 				<Stack
@@ -355,7 +372,7 @@ function AboutCoMapeoSection() {
 									variant="body1"
 									sx={{ fontWeight: 500 }}
 								>
-									{t(m.aboutCoMapeoVersionLabel)}
+									{intl.formatMessage(m.aboutCoMapeoVersionLabel)}
 								</Typography>
 
 								<Typography>
@@ -370,7 +387,26 @@ function AboutCoMapeoSection() {
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly title: NoMessageValues
+	readonly editDeviceName: NoMessageValues
+	readonly defaultBackground: NoMessageValues
+	readonly customBackground: NoMessageValues
+	readonly ddCoordinates: NoMessageValues
+	readonly utmCoordinates: NoMessageValues
+	readonly dmsCoordinates: NoMessageValues
+	readonly languageFromSystemPreference: { readonly name: MessageValue }
+	readonly deviceNameSettingsAccessibleLabel: NoMessageValues
+	readonly languageSettingsAccessibleLabel: NoMessageValues
+	readonly coordinateSystemSettingsAccessibleLabel: NoMessageValues
+	readonly unitSystemSettingsAccessibleLabel: NoMessageValues
+	readonly backgroundMapSettingsAccessibleLabel: NoMessageValues
+	readonly sectionTitleGeneral: NoMessageValues
+	readonly sectionTitleAboutCoMapeo: NoMessageValues
+	readonly aboutCoMapeoVersionLabel: NoMessageValues
+	readonly unitSystemImperial: NoMessageValues
+	readonly unitSystemMetric: NoMessageValues
+}>({
 	title: {
 		id: '$1.routes.app.settings.index.title',
 		defaultMessage: 'CoMapeo Settings',

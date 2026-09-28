@@ -13,14 +13,23 @@ import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { createFileRoute } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 
-import { DeviceIcon } from '../../../-shared/device-icon'
-import { ListRowLink } from '../../../../-components/list-row-link'
-import { DARKER_ORANGE, DARK_GREY, LIGHT_GREY } from '../../../../../../colors'
-import { Icon } from '../../../../../../components/icon'
-import { ButtonLink } from '../../../../../../components/link'
-import { useIconSizeBasedOnTypography } from '../../../../../../hooks/icon'
+import { DeviceIcon } from '../../../-shared/device-icon.tsx'
+import { ListRowLink } from '../../../../-components/list-row-link.tsx'
+import {
+	DARKER_ORANGE,
+	DARK_GREY,
+	LIGHT_GREY,
+} from '../../../../../../colors.ts'
+import { Icon } from '../../../../../../components/icon.tsx'
+import { ButtonLink } from '../../../../../../components/link.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../../../hooks/icon.ts'
 import {
 	BLOCKED_ROLE_ID,
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -30,7 +39,7 @@ import {
 	MEMBER_ROLE_ID,
 	memberIsRemoteArchive,
 	type RemoteArchiveMemberInfo,
-} from '../../../../../../lib/comapeo'
+} from '../../../../../../lib/comapeo.ts'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/_main-tabs/team/',
@@ -78,7 +87,7 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { projectId } = Route.useParams()
 
@@ -95,7 +104,7 @@ function RouteComponent() {
 				/>
 
 				<Typography variant="h1" sx={{ fontWeight: 500, textAlign: 'center' }}>
-					{t(m.navTitle)}
+					{intl.formatMessage(m.navTitle)}
 				</Typography>
 			</Stack>
 
@@ -136,7 +145,7 @@ function RouteComponent() {
 }
 
 function InviteButtonSection({ projectId }: { projectId: string }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: role } = useOwnRoleInProject({ projectId })
 
@@ -156,13 +165,13 @@ function InviteButtonSection({ projectId }: { projectId: string }) {
 			params={{ projectId }}
 			startIcon={<Icon name="material-person-add" />}
 		>
-			{t(m.inviteDevice)}
+			{intl.formatMessage(m.inviteDevice)}
 		</ButtonLink>
 	)
 }
 
 function MembersSections({ projectId }: { projectId: string }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: members } = useManyMembers({ projectId, includeLeft: true })
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
@@ -182,11 +191,13 @@ function MembersSections({ projectId }: { projectId: string }) {
 					<Icon name="material-manage-accounts-filled" size={sectionIconSize} />
 
 					<Typography variant="h2" sx={{ fontWeight: 500 }}>
-						{t(m.coordinatorsSectionTitle)}
+						{intl.formatMessage(m.coordinatorsSectionTitle)}
 					</Typography>
 				</Stack>
 
-				<Typography>{t(m.coordinatorsSectionDescription)}</Typography>
+				<Typography>
+					{intl.formatMessage(m.coordinatorsSectionDescription)}
+				</Typography>
 			</Stack>
 
 			<ActiveCollaboratorsList
@@ -202,11 +213,13 @@ function MembersSections({ projectId }: { projectId: string }) {
 					<Icon name="material-people-filled" size={sectionIconSize} />
 
 					<Typography variant="h2" sx={{ fontWeight: 500 }}>
-						{t(m.participantsSectionTitle)}
+						{intl.formatMessage(m.participantsSectionTitle)}
 					</Typography>
 				</Stack>
 
-				<Typography>{t(m.participantsSectionDescription)}</Typography>
+				<Typography>
+					{intl.formatMessage(m.participantsSectionDescription)}
+				</Typography>
 			</Stack>
 
 			{participants.length > 0 ? (
@@ -216,7 +229,9 @@ function MembersSections({ projectId }: { projectId: string }) {
 					projectId={projectId}
 				/>
 			) : (
-				<Typography color="textSecondary">{t(m.noParticipants)}</Typography>
+				<Typography color="textSecondary">
+					{intl.formatMessage(m.noParticipants)}
+				</Typography>
 			)}
 
 			{remoteArchives.length > 0 ? (
@@ -231,11 +246,13 @@ function MembersSections({ projectId }: { projectId: string }) {
 							/>
 
 							<Typography variant="h2" sx={{ fontWeight: 500 }}>
-								{t(m.remoteArchivesSectionTitle)}
+								{intl.formatMessage(m.remoteArchivesSectionTitle)}
 							</Typography>
 						</Stack>
 
-						<Typography>{t(m.remoteArchivesSectionDescription)}</Typography>
+						<Typography>
+							{intl.formatMessage(m.remoteArchivesSectionDescription)}
+						</Typography>
 					</Stack>
 
 					<ActiveCollaboratorsList
@@ -255,11 +272,13 @@ function MembersSections({ projectId }: { projectId: string }) {
 							<Icon name="material-group-off" size={sectionIconSize} />
 
 							<Typography variant="h2" sx={{ fontWeight: 500 }}>
-								{t(m.pastCollaboratorsSectionTitle)}
+								{intl.formatMessage(m.pastCollaboratorsSectionTitle)}
 							</Typography>
 						</Stack>
 
-						<Typography>{t(m.pastCollaboratorsSectionDescription)}</Typography>
+						<Typography>
+							{intl.formatMessage(m.pastCollaboratorsSectionDescription)}
+						</Typography>
 					</Stack>
 
 					<PastCollaboratorsList
@@ -283,7 +302,7 @@ function ActiveCollaboratorsList({
 	ownDeviceId: string
 	projectId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
@@ -310,7 +329,7 @@ function ActiveCollaboratorsList({
 						<ListRowLink
 							to="/app/projects/$projectId/team/$deviceId"
 							params={{ projectId, deviceId: device.deviceId }}
-							aria-label={t(m.memberLinkAccessibleLabel, {
+							aria-label={intl.formatMessage(m.memberLinkAccessibleLabel, {
 								name: displayedName,
 							})}
 							label={
@@ -323,7 +342,7 @@ function ActiveCollaboratorsList({
 											color="textSecondary"
 											sx={{ marginInlineStart: 4 }}
 										>
-											{t(m.thisDevice)}
+											{intl.formatMessage(m.thisDevice)}
 										</Typography>
 									</>
 								) : (
@@ -360,7 +379,7 @@ function PastCollaboratorsList({
 	>
 	ownDeviceId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
@@ -417,7 +436,7 @@ function PastCollaboratorsList({
 												color="textSecondary"
 												sx={{ marginInlineStart: 4 }}
 											>
-												{t(m.thisDevice)}
+												{intl.formatMessage(m.thisDevice)}
 											</Typography>
 										</>
 									) : (
@@ -476,7 +495,21 @@ function getDisplayableMembers(members: Array<MemberApi.MemberInfo>) {
 	return { coordinators, participants, pastCollaborators, remoteArchives }
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly navTitle: NoMessageValues
+	readonly inviteDevice: NoMessageValues
+	readonly coordinatorsSectionTitle: NoMessageValues
+	readonly coordinatorsSectionDescription: NoMessageValues
+	readonly participantsSectionTitle: NoMessageValues
+	readonly participantsSectionDescription: NoMessageValues
+	readonly noParticipants: NoMessageValues
+	readonly remoteArchivesSectionTitle: NoMessageValues
+	readonly remoteArchivesSectionDescription: NoMessageValues
+	readonly pastCollaboratorsSectionTitle: NoMessageValues
+	readonly pastCollaboratorsSectionDescription: NoMessageValues
+	readonly thisDevice: NoMessageValues
+	readonly memberLinkAccessibleLabel: { readonly name: MessageValue }
+}>({
 	navTitle: {
 		id: '$1.routes.app.projects.$projectId.team.index.navTitle',
 		defaultMessage: 'Team',

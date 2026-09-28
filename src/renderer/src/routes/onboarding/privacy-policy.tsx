@@ -14,12 +14,18 @@ import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageTag,
+	type NoMessageValues,
+} from 'react-intl'
 
 import { BLUE_GREY, DARK_GREY, LIGHT_GREY } from '../../colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
+import { Bold, Break } from '../../components/intl-rich-text.tsx'
 import {
 	getDiagnosticsEnabledQueryOptions,
 	setDiagnosticsEnabledMutationOptions,
@@ -39,7 +45,7 @@ export const Route = createFileRoute('/onboarding/privacy-policy')({
 })
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const setDiagnosticsEnabledMutation = useMutation(
 		setDiagnosticsEnabledMutationOptions(),
@@ -74,7 +80,7 @@ function RouteComponent() {
 						variant="h1"
 						sx={{ fontWeight: 500, textAlign: 'center' }}
 					>
-						{t(m.title)}
+						{intl.formatMessage(m.title)}
 					</Typography>
 
 					<Stack direction="column" sx={{ gap: 3 }}>
@@ -87,54 +93,64 @@ function RouteComponent() {
 							}}
 						>
 							<Typography variant="body1" sx={{ fontWeight: 400 }}>
-								{t(m.description)}
+								{intl.formatMessage(m.description)}
 							</Typography>
 						</Box>
 
 						<CustomAccordion
-							label={t(m.aboutAwanaDigital)}
-							description={t(m.aboutAwanaDigitalDescription)}
+							label={intl.formatMessage(m.aboutAwanaDigital)}
+							description={intl.formatMessage(m.aboutAwanaDigitalDescription)}
 						/>
 
 						<CustomAccordion
-							label={t(m.openSource)}
-							description={t(m.openSourceDescription)}
+							label={intl.formatMessage(m.openSource)}
+							description={intl.formatMessage(m.openSourceDescription, {
+								br: Break,
+							})}
 						/>
 					</Stack>
 
 					<Stack direction="column" sx={{ gap: 10 }}>
 						<Typography variant="h2" sx={{ fontWeight: 500 }}>
-							{t(m.comapeoDataPrivacy)}
+							{intl.formatMessage(m.comapeoDataPrivacy)}
 						</Typography>
 
 						<QuestionAnswerItem
 							icon={<Icon name="openmoji-red-circle" />}
-							title={t(m.privateByDefault)}
-							description={t(m.privateByDefaultDescription)}
+							title={intl.formatMessage(m.privateByDefault)}
+							description={intl.formatMessage(m.privateByDefaultDescription, {
+								br: Break,
+							})}
 						/>
 
 						<QuestionAnswerItem
 							icon={<Icon name="openmoji-bust-in-silhouette" />}
-							title={t(m.noPII)}
-							description={t(m.noPIIDescription)}
+							title={intl.formatMessage(m.noPII)}
+							description={intl.formatMessage(m.noPIIDescription, {
+								br: Break,
+							})}
 						/>
 
 						<QuestionAnswerItem
 							icon={<Icon name="openmoji-locked-with-key" />}
-							title={t(m.control)}
-							description={t(m.controlDescription)}
+							title={intl.formatMessage(m.control)}
+							description={intl.formatMessage(m.controlDescription, {
+								br: Break,
+							})}
 						/>
 
 						<Divider sx={{ backgroundColor: BLUE_GREY }} />
 
 						<Typography variant="h2" sx={{ fontWeight: 500 }}>
-							{t(m.dataCollection)}
+							{intl.formatMessage(m.dataCollection)}
 						</Typography>
 
 						<QuestionAnswerItem
 							icon={<Icon name="openmoji-bar-chart" />}
-							title={t(m.whatIsCollected)}
-							description={t(m.whatIsCollectedDescription)}
+							title={intl.formatMessage(m.whatIsCollected)}
+							description={intl.formatMessage(m.whatIsCollectedDescription, {
+								br: Break,
+							})}
 						>
 							<Stack
 								direction="column"
@@ -150,7 +166,9 @@ function RouteComponent() {
 									direction="column"
 									sx={{ paddingX: 5, gap: 3 }}
 								>
-									<Typography variant="h3">{t(m.diagnostics)}</Typography>
+									<Typography variant="h3">
+										{intl.formatMessage(m.diagnostics)}
+									</Typography>
 
 									<List
 										sx={{
@@ -160,23 +178,23 @@ function RouteComponent() {
 										}}
 									>
 										<ListItem sx={{ display: 'list-item' }} disablePadding>
-											{t(m.crashData)}
+											{intl.formatMessage(m.crashData, { b: Bold })}
 										</ListItem>
 
 										<ListItem sx={{ display: 'list-item' }} disablePadding>
-											{t(m.appErrors)}
+											{intl.formatMessage(m.appErrors, { b: Bold })}
 										</ListItem>
 
 										<ListItem sx={{ display: 'list-item' }} disablePadding>
-											{t(m.performanceData)}
+											{intl.formatMessage(m.performanceData, { b: Bold })}
 										</ListItem>
 
 										<ListItem sx={{ display: 'list-item' }} disablePadding>
-											{t(m.deviceInfo)}
+											{intl.formatMessage(m.deviceInfo, { b: Bold })}
 										</ListItem>
 
 										<ListItem sx={{ display: 'list-item' }} disablePadding>
-											{t(m.appInfo)}
+											{intl.formatMessage(m.appInfo, { b: Bold })}
 										</ListItem>
 									</List>
 								</Stack>
@@ -188,7 +206,9 @@ function RouteComponent() {
 									direction="column"
 									sx={{ paddingX: 5, gap: 3 }}
 								>
-									<Typography variant="h3">{t(m.appUsage)}</Typography>
+									<Typography variant="h3">
+										{intl.formatMessage(m.appUsage)}
+									</Typography>
 
 									<List
 										sx={{
@@ -198,7 +218,7 @@ function RouteComponent() {
 										}}
 									>
 										<ListItem sx={{ display: 'list-item' }} disablePadding>
-											{t(m.country)}
+											{intl.formatMessage(m.country, { b: Bold })}
 										</ListItem>
 									</List>
 								</Stack>
@@ -207,20 +227,23 @@ function RouteComponent() {
 
 						<QuestionAnswerItem
 							icon={<Icon name="openmoji-wrench" />}
-							title={t(m.whyIsThisDataCollected)}
-							description={t(m.whyIsThisDataCollectedDescription)}
+							title={intl.formatMessage(m.whyIsThisDataCollected)}
+							description={intl.formatMessage(
+								m.whyIsThisDataCollectedDescription,
+								{ br: Break },
+							)}
 						/>
 
 						<QuestionAnswerItem
 							icon={<Icon name="openmoji-raised-hand-medium-skin-tone" />}
-							title={t(m.whatIsNotCollected)}
-							description={t(m.whatIsNotCollectedDescription)}
+							title={intl.formatMessage(m.whatIsNotCollected)}
+							description={intl.formatMessage(m.whatIsNotCollectedDescription)}
 						/>
 
 						<Divider sx={{ backgroundColor: BLUE_GREY }} />
 
 						<Typography variant="h2" sx={{ fontWeight: 500 }}>
-							{t(m.dataCollection)}
+							{intl.formatMessage(m.dataCollection)}
 						</Typography>
 
 						<Stack
@@ -242,7 +265,7 @@ function RouteComponent() {
 											},
 										})
 									}}
-									label={t(m.shareDiagnosticInformation)}
+									label={intl.formatMessage(m.shareDiagnosticInformation)}
 									labelPlacement="start"
 									sx={{ margin: 0, justifyContent: 'space-between' }}
 								/>
@@ -279,7 +302,11 @@ function QuestionAnswerItem({
 	description,
 	icon,
 	title,
-}: PropsWithChildren<{ description: string; icon: ReactNode; title: string }>) {
+}: PropsWithChildren<{
+	description: ReactNode
+	icon: ReactNode
+	title: string
+}>) {
 	return (
 		<Stack component="section" direction="column" sx={{ gap: 10 }}>
 			<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
@@ -299,7 +326,7 @@ function CustomAccordion({
 	description,
 }: {
 	label: string
-	description: string
+	description: ReactNode
 }) {
 	const [expanded, setExpanded] = useState(false)
 
@@ -343,7 +370,37 @@ function CustomAccordion({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly title: NoMessageValues
+	readonly description: NoMessageValues
+	readonly aboutAwanaDigital: NoMessageValues
+	readonly aboutAwanaDigitalDescription: NoMessageValues
+	readonly openSource: NoMessageValues
+	readonly openSourceDescription: { readonly br: MessageTag }
+	readonly comapeoDataPrivacy: NoMessageValues
+	readonly privateByDefault: NoMessageValues
+	readonly privateByDefaultDescription: { readonly br: MessageTag }
+	readonly noPII: NoMessageValues
+	readonly noPIIDescription: { readonly br: MessageTag }
+	readonly control: NoMessageValues
+	readonly controlDescription: { readonly br: MessageTag }
+	readonly dataCollection: NoMessageValues
+	readonly whatIsCollected: NoMessageValues
+	readonly whatIsCollectedDescription: { readonly br: MessageTag }
+	readonly diagnostics: NoMessageValues
+	readonly crashData: { readonly b: MessageTag }
+	readonly appErrors: { readonly b: MessageTag }
+	readonly performanceData: { readonly b: MessageTag }
+	readonly deviceInfo: { readonly b: MessageTag }
+	readonly appInfo: { readonly b: MessageTag }
+	readonly appUsage: NoMessageValues
+	readonly country: { readonly b: MessageTag }
+	readonly whyIsThisDataCollected: NoMessageValues
+	readonly whyIsThisDataCollectedDescription: { readonly br: MessageTag }
+	readonly whatIsNotCollected: NoMessageValues
+	readonly whatIsNotCollectedDescription: NoMessageValues
+	readonly shareDiagnosticInformation: NoMessageValues
+}>({
 	title: {
 		id: '$1.routes.onboarding.privacy-policy.title',
 		defaultMessage: 'Privacy Policy',
