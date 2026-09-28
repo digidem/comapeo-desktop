@@ -51,6 +51,7 @@ export const iconNames = [
 	'material-symbols-delete',
 	'material-symbols-devices',
 	'material-symbols-encrypted-weight200',
+	'material-symbols-exclamation',
 	'material-symbols-grid-view',
 	'material-symbols-home',
 	'material-symbols-indeterminate-question-box',
