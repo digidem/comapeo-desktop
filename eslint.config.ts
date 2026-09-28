@@ -26,6 +26,8 @@ export default defineConfig(
 			// Configuration of this depends on translation platform being used.
 			// In this case, Crowdin has comprehensive support (https://support.crowdin.com/icu-message-syntax/).
 			'formatjs/blocklist-elements': ['error', []],
+			// TODO: Look into eventually enabling (https://formatjs.github.io/docs/react-intl/upgrade-guide-12.x)
+			'formatjs/enforce-message-types': ['error', { generateTypes: true }],
 		},
 	},
 	{
