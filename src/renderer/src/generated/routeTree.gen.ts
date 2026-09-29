@@ -20,15 +20,11 @@ import { Route as OnboardingDeviceNameRouteImport } from './../routes/onboarding
 import { Route as OnboardingPrivacyPolicyRouteImport } from './../routes/onboarding/privacy-policy'
 import { Route as AppProjectsProjectIdRouteRouteImport } from './../routes/app/projects/$projectId/route'
 import { Route as AppSettingsIndexRouteImport } from './../routes/app/settings/index'
-import { Route as AppSettingsNestedRouteRouteImport } from './../routes/app/settings/_nested/route'
+import { Route as AppSettingsBackgroundMapRouteImport } from './../routes/app/settings/background-map'
+import { Route as AppSettingsDeviceNameRouteImport } from './../routes/app/settings/device-name'
 import { Route as AppProjectsProjectIdWithMapPanelRouteRouteImport } from './../routes/app/projects/$projectId/_with-map-panel/route'
 import { Route as AppProjectsProjectIdSettingsRouteRouteImport } from './../routes/app/projects/$projectId/settings/route'
 import { Route as AppProjectsProjectIdTestDataRouteImport } from './../routes/app/projects/$projectId/test-data'
-import { Route as AppSettingsNestedBackgroundMapRouteImport } from './../routes/app/settings/_nested/background-map'
-import { Route as AppSettingsNestedCoordinateSystemRouteImport } from './../routes/app/settings/_nested/coordinate-system'
-import { Route as AppSettingsNestedDeviceNameRouteImport } from './../routes/app/settings/_nested/device-name'
-import { Route as AppSettingsNestedLanguageRouteImport } from './../routes/app/settings/_nested/language'
-import { Route as AppSettingsNestedUnitSystemRouteImport } from './../routes/app/settings/_nested/unit-system'
 import { Route as AppProjectsProjectIdWithMapPanelIndexRouteImport } from './../routes/app/projects/$projectId/_with-map-panel/index'
 import { Route as AppProjectsProjectIdWithMapPanelDownloadRouteImport } from './../routes/app/projects/$projectId/_with-map-panel/download'
 import { Route as AppProjectsProjectIdExchangeIndexRouteImport } from './../routes/app/projects/$projectId/exchange/index'
@@ -104,8 +100,15 @@ const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppSettingsRouteRoute,
 } as any)
-const AppSettingsNestedRouteRoute = AppSettingsNestedRouteRouteImport.update({
-  id: '/_nested',
+const AppSettingsBackgroundMapRoute =
+  AppSettingsBackgroundMapRouteImport.update({
+    id: '/background-map',
+    path: '/background-map',
+    getParentRoute: () => AppSettingsRouteRoute,
+  } as any)
+const AppSettingsDeviceNameRoute = AppSettingsDeviceNameRouteImport.update({
+  id: '/device-name',
+  path: '/device-name',
   getParentRoute: () => AppSettingsRouteRoute,
 } as any)
 const AppProjectsProjectIdWithMapPanelRouteRoute =
@@ -124,36 +127,6 @@ const AppProjectsProjectIdTestDataRoute =
     id: '/test-data',
     path: '/test-data',
     getParentRoute: () => AppProjectsProjectIdRouteRoute,
-  } as any)
-const AppSettingsNestedBackgroundMapRoute =
-  AppSettingsNestedBackgroundMapRouteImport.update({
-    id: '/background-map',
-    path: '/background-map',
-    getParentRoute: () => AppSettingsNestedRouteRoute,
-  } as any)
-const AppSettingsNestedCoordinateSystemRoute =
-  AppSettingsNestedCoordinateSystemRouteImport.update({
-    id: '/coordinate-system',
-    path: '/coordinate-system',
-    getParentRoute: () => AppSettingsNestedRouteRoute,
-  } as any)
-const AppSettingsNestedDeviceNameRoute =
-  AppSettingsNestedDeviceNameRouteImport.update({
-    id: '/device-name',
-    path: '/device-name',
-    getParentRoute: () => AppSettingsNestedRouteRoute,
-  } as any)
-const AppSettingsNestedLanguageRoute =
-  AppSettingsNestedLanguageRouteImport.update({
-    id: '/language',
-    path: '/language',
-    getParentRoute: () => AppSettingsNestedRouteRoute,
-  } as any)
-const AppSettingsNestedUnitSystemRoute =
-  AppSettingsNestedUnitSystemRouteImport.update({
-    id: '/unit-system',
-    path: '/unit-system',
-    getParentRoute: () => AppSettingsNestedRouteRoute,
   } as any)
 const AppProjectsProjectIdWithMapPanelIndexRoute =
   AppProjectsProjectIdWithMapPanelIndexRouteImport.update({
@@ -275,14 +248,11 @@ export interface FileRoutesByFullPath {
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
   '/app/': typeof AppIndexRoute
   '/app/projects/$projectId': typeof AppProjectsProjectIdRouteRouteWithChildren
+  '/app/settings/background-map': typeof AppSettingsBackgroundMapRoute
+  '/app/settings/device-name': typeof AppSettingsDeviceNameRoute
   '/app/settings/': typeof AppSettingsIndexRoute
   '/app/projects/$projectId/settings': typeof AppProjectsProjectIdSettingsRouteRouteWithChildren
   '/app/projects/$projectId/test-data': typeof AppProjectsProjectIdTestDataRoute
-  '/app/settings/background-map': typeof AppSettingsNestedBackgroundMapRoute
-  '/app/settings/coordinate-system': typeof AppSettingsNestedCoordinateSystemRoute
-  '/app/settings/device-name': typeof AppSettingsNestedDeviceNameRoute
-  '/app/settings/language': typeof AppSettingsNestedLanguageRoute
-  '/app/settings/unit-system': typeof AppSettingsNestedUnitSystemRoute
   '/app/projects/$projectId/team/invite': typeof AppProjectsProjectIdTeamInviteRouteRouteWithChildren
   '/app/projects/$projectId/download': typeof AppProjectsProjectIdWithMapPanelDownloadRoute
   '/app/projects/$projectId/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
@@ -310,13 +280,10 @@ export interface FileRoutesByTo {
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
   '/app': typeof AppIndexRoute
   '/app/projects/$projectId': typeof AppProjectsProjectIdWithMapPanelIndexRoute
+  '/app/settings/background-map': typeof AppSettingsBackgroundMapRoute
+  '/app/settings/device-name': typeof AppSettingsDeviceNameRoute
   '/app/settings': typeof AppSettingsIndexRoute
   '/app/projects/$projectId/test-data': typeof AppProjectsProjectIdTestDataRoute
-  '/app/settings/background-map': typeof AppSettingsNestedBackgroundMapRoute
-  '/app/settings/coordinate-system': typeof AppSettingsNestedCoordinateSystemRoute
-  '/app/settings/device-name': typeof AppSettingsNestedDeviceNameRoute
-  '/app/settings/language': typeof AppSettingsNestedLanguageRoute
-  '/app/settings/unit-system': typeof AppSettingsNestedUnitSystemRoute
   '/app/projects/$projectId/download': typeof AppProjectsProjectIdWithMapPanelDownloadRoute
   '/app/projects/$projectId/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
   '/app/projects/$projectId/settings/info': typeof AppProjectsProjectIdSettingsInfoRoute
@@ -345,16 +312,12 @@ export interface FileRoutesById {
   '/onboarding/privacy-policy': typeof OnboardingPrivacyPolicyRoute
   '/app/': typeof AppIndexRoute
   '/app/projects/$projectId': typeof AppProjectsProjectIdRouteRouteWithChildren
-  '/app/settings/_nested': typeof AppSettingsNestedRouteRouteWithChildren
+  '/app/settings/background-map': typeof AppSettingsBackgroundMapRoute
+  '/app/settings/device-name': typeof AppSettingsDeviceNameRoute
   '/app/settings/': typeof AppSettingsIndexRoute
   '/app/projects/$projectId/_with-map-panel': typeof AppProjectsProjectIdWithMapPanelRouteRouteWithChildren
   '/app/projects/$projectId/settings': typeof AppProjectsProjectIdSettingsRouteRouteWithChildren
   '/app/projects/$projectId/test-data': typeof AppProjectsProjectIdTestDataRoute
-  '/app/settings/_nested/background-map': typeof AppSettingsNestedBackgroundMapRoute
-  '/app/settings/_nested/coordinate-system': typeof AppSettingsNestedCoordinateSystemRoute
-  '/app/settings/_nested/device-name': typeof AppSettingsNestedDeviceNameRoute
-  '/app/settings/_nested/language': typeof AppSettingsNestedLanguageRoute
-  '/app/settings/_nested/unit-system': typeof AppSettingsNestedUnitSystemRoute
   '/app/projects/$projectId/team/invite': typeof AppProjectsProjectIdTeamInviteRouteRouteWithChildren
   '/app/projects/$projectId/_with-map-panel/download': typeof AppProjectsProjectIdWithMapPanelDownloadRoute
   '/app/projects/$projectId/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
@@ -386,14 +349,11 @@ export interface FileRouteTypes {
     | '/onboarding/privacy-policy'
     | '/app/'
     | '/app/projects/$projectId'
+    | '/app/settings/background-map'
+    | '/app/settings/device-name'
     | '/app/settings/'
     | '/app/projects/$projectId/settings'
     | '/app/projects/$projectId/test-data'
-    | '/app/settings/background-map'
-    | '/app/settings/coordinate-system'
-    | '/app/settings/device-name'
-    | '/app/settings/language'
-    | '/app/settings/unit-system'
     | '/app/projects/$projectId/team/invite'
     | '/app/projects/$projectId/download'
     | '/app/projects/$projectId/settings/categories'
@@ -421,13 +381,10 @@ export interface FileRouteTypes {
     | '/onboarding/privacy-policy'
     | '/app'
     | '/app/projects/$projectId'
+    | '/app/settings/background-map'
+    | '/app/settings/device-name'
     | '/app/settings'
     | '/app/projects/$projectId/test-data'
-    | '/app/settings/background-map'
-    | '/app/settings/coordinate-system'
-    | '/app/settings/device-name'
-    | '/app/settings/language'
-    | '/app/settings/unit-system'
     | '/app/projects/$projectId/download'
     | '/app/projects/$projectId/settings/categories'
     | '/app/projects/$projectId/settings/info'
@@ -455,16 +412,12 @@ export interface FileRouteTypes {
     | '/onboarding/privacy-policy'
     | '/app/'
     | '/app/projects/$projectId'
-    | '/app/settings/_nested'
+    | '/app/settings/background-map'
+    | '/app/settings/device-name'
     | '/app/settings/'
     | '/app/projects/$projectId/_with-map-panel'
     | '/app/projects/$projectId/settings'
     | '/app/projects/$projectId/test-data'
-    | '/app/settings/_nested/background-map'
-    | '/app/settings/_nested/coordinate-system'
-    | '/app/settings/_nested/device-name'
-    | '/app/settings/_nested/language'
-    | '/app/settings/_nested/unit-system'
     | '/app/projects/$projectId/team/invite'
     | '/app/projects/$projectId/_with-map-panel/download'
     | '/app/projects/$projectId/settings/categories'
@@ -570,11 +523,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsIndexRouteImport
       parentRoute: typeof AppSettingsRouteRoute
     }
-    '/app/settings/_nested': {
-      id: '/app/settings/_nested'
-      path: ''
-      fullPath: '/app/settings'
-      preLoaderRoute: typeof AppSettingsNestedRouteRouteImport
+    '/app/settings/background-map': {
+      id: '/app/settings/background-map'
+      path: '/background-map'
+      fullPath: '/app/settings/background-map'
+      preLoaderRoute: typeof AppSettingsBackgroundMapRouteImport
+      parentRoute: typeof AppSettingsRouteRoute
+    }
+    '/app/settings/device-name': {
+      id: '/app/settings/device-name'
+      path: '/device-name'
+      fullPath: '/app/settings/device-name'
+      preLoaderRoute: typeof AppSettingsDeviceNameRouteImport
       parentRoute: typeof AppSettingsRouteRoute
     }
     '/app/projects/$projectId/_with-map-panel': {
@@ -597,41 +557,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/projects/$projectId/test-data'
       preLoaderRoute: typeof AppProjectsProjectIdTestDataRouteImport
       parentRoute: typeof AppProjectsProjectIdRouteRoute
-    }
-    '/app/settings/_nested/background-map': {
-      id: '/app/settings/_nested/background-map'
-      path: '/background-map'
-      fullPath: '/app/settings/background-map'
-      preLoaderRoute: typeof AppSettingsNestedBackgroundMapRouteImport
-      parentRoute: typeof AppSettingsNestedRouteRoute
-    }
-    '/app/settings/_nested/coordinate-system': {
-      id: '/app/settings/_nested/coordinate-system'
-      path: '/coordinate-system'
-      fullPath: '/app/settings/coordinate-system'
-      preLoaderRoute: typeof AppSettingsNestedCoordinateSystemRouteImport
-      parentRoute: typeof AppSettingsNestedRouteRoute
-    }
-    '/app/settings/_nested/device-name': {
-      id: '/app/settings/_nested/device-name'
-      path: '/device-name'
-      fullPath: '/app/settings/device-name'
-      preLoaderRoute: typeof AppSettingsNestedDeviceNameRouteImport
-      parentRoute: typeof AppSettingsNestedRouteRoute
-    }
-    '/app/settings/_nested/language': {
-      id: '/app/settings/_nested/language'
-      path: '/language'
-      fullPath: '/app/settings/language'
-      preLoaderRoute: typeof AppSettingsNestedLanguageRouteImport
-      parentRoute: typeof AppSettingsNestedRouteRoute
-    }
-    '/app/settings/_nested/unit-system': {
-      id: '/app/settings/_nested/unit-system'
-      path: '/unit-system'
-      fullPath: '/app/settings/unit-system'
-      preLoaderRoute: typeof AppSettingsNestedUnitSystemRouteImport
-      parentRoute: typeof AppSettingsNestedRouteRoute
     }
     '/app/projects/$projectId/_with-map-panel/': {
       id: '/app/projects/$projectId/_with-map-panel/'
@@ -755,36 +680,15 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AppSettingsNestedRouteRouteChildren {
-  AppSettingsNestedBackgroundMapRoute: typeof AppSettingsNestedBackgroundMapRoute
-  AppSettingsNestedCoordinateSystemRoute: typeof AppSettingsNestedCoordinateSystemRoute
-  AppSettingsNestedDeviceNameRoute: typeof AppSettingsNestedDeviceNameRoute
-  AppSettingsNestedLanguageRoute: typeof AppSettingsNestedLanguageRoute
-  AppSettingsNestedUnitSystemRoute: typeof AppSettingsNestedUnitSystemRoute
-}
-
-const AppSettingsNestedRouteRouteChildren: AppSettingsNestedRouteRouteChildren =
-  {
-    AppSettingsNestedBackgroundMapRoute: AppSettingsNestedBackgroundMapRoute,
-    AppSettingsNestedCoordinateSystemRoute:
-      AppSettingsNestedCoordinateSystemRoute,
-    AppSettingsNestedDeviceNameRoute: AppSettingsNestedDeviceNameRoute,
-    AppSettingsNestedLanguageRoute: AppSettingsNestedLanguageRoute,
-    AppSettingsNestedUnitSystemRoute: AppSettingsNestedUnitSystemRoute,
-  }
-
-const AppSettingsNestedRouteRouteWithChildren =
-  AppSettingsNestedRouteRoute._addFileChildren(
-    AppSettingsNestedRouteRouteChildren,
-  )
-
 interface AppSettingsRouteRouteChildren {
-  AppSettingsNestedRouteRoute: typeof AppSettingsNestedRouteRouteWithChildren
+  AppSettingsBackgroundMapRoute: typeof AppSettingsBackgroundMapRoute
+  AppSettingsDeviceNameRoute: typeof AppSettingsDeviceNameRoute
   AppSettingsIndexRoute: typeof AppSettingsIndexRoute
 }
 
 const AppSettingsRouteRouteChildren: AppSettingsRouteRouteChildren = {
-  AppSettingsNestedRouteRoute: AppSettingsNestedRouteRouteWithChildren,
+  AppSettingsBackgroundMapRoute: AppSettingsBackgroundMapRoute,
+  AppSettingsDeviceNameRoute: AppSettingsDeviceNameRoute,
   AppSettingsIndexRoute: AppSettingsIndexRoute,
 }
 

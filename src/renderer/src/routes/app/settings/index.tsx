@@ -1,39 +1,23 @@
 import { Suspense } from 'react'
-import {
-	getErrorCode,
-	useGetCustomMapInfo,
-	useOwnDeviceInfo,
-} from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import {
-	defineMessages,
-	useIntl,
-	type MessageValue,
-	type NoMessageValues,
-} from 'react-intl'
+import { defineMessages, useIntl } from 'react-intl'
 
-import { ListRowLink } from '../-components/list-row-link.tsx'
-import type { SupportedLanguageTag } from '../../../../../shared/intl.ts'
-import { BLUE_GREY, DARK_GREY } from '../../../colors.ts'
+import { BLUE_GREY } from '../../../colors.ts'
 import { Icon } from '../../../components/icon.tsx'
 import { useIconSizeBasedOnTypography } from '../../../hooks/icon.ts'
-import { getLanguageInfo } from '../../../lib/intl.ts'
-import {
-	getCoordinateFormatQueryOptions,
-	getLocaleStateQueryOptions,
-	getUnitSystemQueryOptions,
-} from '../../../lib/queries/app-settings.ts'
-import { DataAndPrivacySection } from './-data-and-privacy-section.tsx'
+import { AboutCoMapeoSection } from './-sections/about-comapeo-section.tsx'
+import { CoordinateSystemSection } from './-sections/coordinate-system-section.tsx'
+import { DataAndPrivacySection } from './-sections/data-and-privacy-section.tsx'
+import { DeviceNameSection } from './-sections/device-name-section.tsx'
+import { LanguageSection } from './-sections/language-section.tsx'
+import { UnitSystemSection } from './-sections/unit-system-section.tsx'
 
 export const Route = createFileRoute('/app/settings/')({
 	component: RouteComponent,
@@ -44,50 +28,50 @@ function RouteComponent() {
 
 	const router = useRouter()
 
-	const headerIconHeight = useIconSizeBasedOnTypography({
+	const headerIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'h1',
+		multiplier: 1.5,
+	})
+
+	const sectionHeadingIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body2',
 		multiplier: 1.5,
 	})
 
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-			<Stack direction="column" sx={{ gap: 6, padding: 6 }}>
-				<Stack direction="row" sx={{ gap: 4, alignItems: 'center', flex: 1 }}>
-					<IconButton
-						aria-label={intl.formatMessage(m.goBackAccessibleLabel)}
-						color="inherit"
-						onClick={() => {
-							if (router.history.canGoBack()) {
-								router.history.back()
-								return
-							}
+			<Stack
+				component="header"
+				direction="row"
+				sx={{
+					alignItems: 'center',
+					borderBottom: `1px solid ${BLUE_GREY}`,
+					gap: 2,
+					padding: 4,
+				}}
+			>
+				<IconButton
+					aria-label={intl.formatMessage(m.goBackAccessibleLabel)}
+					color="inherit"
+					onClick={() => {
+						if (router.history.canGoBack()) {
+							router.history.back()
+							return
+						}
 
-							router.navigate({ to: '/app', replace: true })
-						}}
-					>
-						<Icon name="material-arrow-back" size={headerIconHeight} />
-					</IconButton>
+						router.navigate({ to: '/app', replace: true })
+					}}
+				>
+					<Icon name="material-arrow-back" size={headerIconSize} />
+				</IconButton>
 
-					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center' }}
-					>
-						{intl.formatMessage(m.title)}
-					</Typography>
-				</Stack>
+				<Typography variant="h1" sx={{ fontWeight: 500, textAlign: 'center' }}>
+					{intl.formatMessage(m.title)}
+				</Typography>
 			</Stack>
 
-			<Box sx={{ paddingInline: 6 }}>
-				<Divider variant="fullWidth" sx={{ borderColor: BLUE_GREY }} />
-			</Box>
-
-			<Box
-				sx={{
-					display: 'flex',
-					flex: 1,
-					overflow: 'auto',
-					scrollbarGutter: 'stable both-edges',
-				}}
+			<Stack
+				sx={{ flex: 1, overflow: 'auto', scrollbarGutter: 'stable both-edges' }}
 			>
 				<Suspense
 					fallback={
@@ -106,419 +90,48 @@ function RouteComponent() {
 				>
 					<Container maxWidth="md" disableGutters>
 						<Stack direction="column" sx={{ gap: 6, padding: 6 }}>
-							<SettingsList />
+							<Stack direction="column" sx={{ gap: 8 }}>
+								<DeviceNameSection headingIconSize={sectionHeadingIconSize} />
+
+								<LanguageSection headingIconSize={sectionHeadingIconSize} />
+
+								<CoordinateSystemSection
+									headingIconSize={sectionHeadingIconSize}
+								/>
+
+								<UnitSystemSection headingIconSize={sectionHeadingIconSize} />
+							</Stack>
+
+							<Divider
+								variant="fullWidth"
+								sx={{ borderColor: (theme) => theme.darken(BLUE_GREY, 0.2) }}
+							/>
 
 							<DataAndPrivacySection />
+
+							<Divider
+								variant="fullWidth"
+								sx={{ borderColor: (theme) => theme.darken(BLUE_GREY, 0.2) }}
+							/>
 
 							<AboutCoMapeoSection />
 						</Stack>
 					</Container>
 				</Suspense>
-			</Box>
-		</Stack>
-	)
-}
-
-function SettingsList() {
-	const intl = useIntl()
-
-	const { data: deviceInfo } = useOwnDeviceInfo()
-
-	const { data: coordinateFormat } = useSuspenseQuery(
-		getCoordinateFormatQueryOptions(),
-	)
-
-	const { data: unitSystem } = useSuspenseQuery(getUnitSystemQueryOptions())
-
-	const { data: selectedLanguageName } = useSuspenseQuery({
-		...getLocaleStateQueryOptions(),
-		select: ({ source, value }) => {
-			const baseTag = value.split('-')[0]!
-
-			// NOTE: We intentionally do not show the regional variant for now.
-			// This will change in the future once we have
-			// multiple language variants that we actually support.
-			const match = getLanguageInfo(baseTag as SupportedLanguageTag)
-
-			if (source === 'system') {
-				return intl.formatMessage(m.languageFromSystemPreference, {
-					name: match.nativeName,
-				})
-			}
-
-			return match.nativeName
-		},
-	})
-
-	const startIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
-		multiplier: 1.25,
-	})
-
-	const actionIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
-		multiplier: 1.75,
-	})
-
-	return (
-		<Stack direction="column" sx={{ gap: 4 }}>
-			<Typography
-				component="h2"
-				variant="body2"
-				sx={{ textTransform: 'uppercase' }}
-			>
-				{intl.formatMessage(m.sectionTitleGeneral)}
-			</Typography>
-
-			<List disablePadding>
-				<Box
-					sx={{
-						flex: 1,
-						display: 'grid',
-						gridTemplateColumns: `1fr 1fr`,
-						rowGap: 6,
-						columnGap: 6,
-					}}
-				>
-					<ListItem
-						disableGutters
-						disablePadding
-						sx={{ display: 'flex', alignItems: 'stretch' }}
-					>
-						<ListRowLink
-							to="/app/settings/device-name"
-							start={
-								<Icon
-									name="material-symbols-computer"
-									htmlColor={DARK_GREY}
-									size={startIconSize}
-								/>
-							}
-							end={
-								<Typography color="primary">
-									{intl.formatMessage(m.editDeviceName)}
-								</Typography>
-							}
-							aria-label={intl.formatMessage(
-								m.deviceNameSettingsAccessibleLabel,
-							)}
-							// TODO: What to do when this is undefined?
-							label={deviceInfo.name || ''}
-						/>
-					</ListItem>
-
-					<ListItem
-						disableGutters
-						disablePadding
-						sx={{ display: 'flex', alignItems: 'stretch' }}
-					>
-						<ListRowLink
-							to="/app/settings/language"
-							start={
-								<Icon
-									name="material-language"
-									htmlColor={DARK_GREY}
-									size={startIconSize}
-								/>
-							}
-							end={
-								<Icon
-									name="material-chevron-right-rounded"
-									htmlColor={DARK_GREY}
-									size={actionIconSize}
-								/>
-							}
-							aria-label={intl.formatMessage(m.languageSettingsAccessibleLabel)}
-							label={selectedLanguageName}
-						/>
-					</ListItem>
-
-					<ListItem
-						disableGutters
-						disablePadding
-						sx={{ display: 'flex', alignItems: 'stretch' }}
-					>
-						<ListRowLink
-							to="/app/settings/coordinate-system"
-							start={
-								<Icon
-									name="material-explore-filled"
-									htmlColor={DARK_GREY}
-									size={startIconSize}
-								/>
-							}
-							end={
-								<Icon
-									name="material-chevron-right-rounded"
-									htmlColor={DARK_GREY}
-									size={actionIconSize}
-								/>
-							}
-							aria-label={intl.formatMessage(
-								m.coordinateSystemSettingsAccessibleLabel,
-							)}
-							label={intl.formatMessage(
-								coordinateFormat === 'utm'
-									? m.utmCoordinates
-									: coordinateFormat === 'dd'
-										? m.ddCoordinates
-										: m.dmsCoordinates,
-							)}
-						/>
-					</ListItem>
-
-					<ListItem
-						disableGutters
-						disablePadding
-						sx={{ display: 'flex', alignItems: 'stretch' }}
-					>
-						<ListRowLink
-							to="/app/settings/unit-system"
-							start={
-								<Icon
-									name="material-symbols-square-foot"
-									htmlColor={DARK_GREY}
-									size={startIconSize}
-								/>
-							}
-							end={
-								<Icon
-									name="material-chevron-right-rounded"
-									htmlColor={DARK_GREY}
-									size={actionIconSize}
-								/>
-							}
-							aria-label={intl.formatMessage(
-								m.unitSystemSettingsAccessibleLabel,
-							)}
-							label={intl.formatMessage(
-								unitSystem === 'imperial'
-									? m.unitSystemImperial
-									: m.unitSystemMetric,
-							)}
-						/>
-					</ListItem>
-
-					<ListItem
-						disableGutters
-						disablePadding
-						sx={{ display: 'flex', alignItems: 'stretch' }}
-					>
-						<ListRowLink
-							to="/app/settings/background-map"
-							start={
-								<Icon
-									name="material-layers-outlined"
-									htmlColor={DARK_GREY}
-									size={startIconSize}
-								/>
-							}
-							end={
-								<Icon
-									name="material-chevron-right-rounded"
-									htmlColor={DARK_GREY}
-									size={actionIconSize}
-								/>
-							}
-							aria-label={intl.formatMessage(
-								m.backgroundMapSettingsAccessibleLabel,
-							)}
-							label={<BackgroundMapLabel />}
-						/>
-					</ListItem>
-				</Box>
-			</List>
-		</Stack>
-	)
-}
-
-function BackgroundMapLabel() {
-	const intl = useIntl()
-
-	const customMapInfo = useGetCustomMapInfo()
-
-	if (customMapInfo.status === 'pending') {
-		// TODO: Maybe use a skeleton here?
-		return null
-	}
-
-	if (customMapInfo.status === 'error') {
-		return intl.formatMessage(
-			getErrorCode(customMapInfo.error) === 'MAP_NOT_FOUND'
-				? m.defaultBackground
-				: m.customBackground,
-		)
-	}
-
-	return customMapInfo.data.name
-}
-
-function AboutCoMapeoSection() {
-	const intl = useIntl()
-
-	return (
-		<Stack direction="column" sx={{ gap: 4 }}>
-			<Stack direction="column" sx={{ gap: 4 }}>
-				<Typography
-					component="h2"
-					variant="body2"
-					sx={{ textTransform: 'uppercase' }}
-				>
-					{intl.formatMessage(m.sectionTitleAboutCoMapeo)}
-				</Typography>
-
-				<Stack
-					direction="column"
-					sx={{
-						border: `1px solid ${BLUE_GREY}`,
-						borderRadius: 2,
-						gap: 4,
-						flex: 1,
-					}}
-				>
-					<List>
-						<ListItem>
-							<Stack direction="column" sx={{ gap: 3 }}>
-								<Typography
-									component="h3"
-									variant="body1"
-									sx={{ fontWeight: 500 }}
-								>
-									{intl.formatMessage(m.aboutCoMapeoVersionLabel)}
-								</Typography>
-
-								<Typography>
-									{window.runtime.getAppInfo().appVersion}
-								</Typography>
-							</Stack>
-						</ListItem>
-					</List>
-				</Stack>
 			</Stack>
 		</Stack>
 	)
 }
 
-const m = defineMessages<{
-	readonly goBackAccessibleLabel: NoMessageValues
-	readonly title: NoMessageValues
-	readonly editDeviceName: NoMessageValues
-	readonly defaultBackground: NoMessageValues
-	readonly customBackground: NoMessageValues
-	readonly ddCoordinates: NoMessageValues
-	readonly utmCoordinates: NoMessageValues
-	readonly dmsCoordinates: NoMessageValues
-	readonly languageFromSystemPreference: { readonly name: MessageValue }
-	readonly deviceNameSettingsAccessibleLabel: NoMessageValues
-	readonly languageSettingsAccessibleLabel: NoMessageValues
-	readonly coordinateSystemSettingsAccessibleLabel: NoMessageValues
-	readonly unitSystemSettingsAccessibleLabel: NoMessageValues
-	readonly backgroundMapSettingsAccessibleLabel: NoMessageValues
-	readonly sectionTitleGeneral: NoMessageValues
-	readonly sectionTitleAboutCoMapeo: NoMessageValues
-	readonly aboutCoMapeoVersionLabel: NoMessageValues
-	readonly unitSystemImperial: NoMessageValues
-	readonly unitSystemMetric: NoMessageValues
-}>({
+const m = defineMessages({
 	goBackAccessibleLabel: {
 		id: 'routes.app.settings.index.goBackAccessibleLabel',
 		defaultMessage: 'Go back.',
-		description: 'Accessible label for back button',
+		description: 'Accessible label for back button.',
 	},
 	title: {
 		id: '$1.routes.app.settings.index.title',
 		defaultMessage: 'CoMapeo Settings',
 		description: 'Title of the settings page.',
-	},
-	editDeviceName: {
-		id: '$1.routes.app.settings.index.editDeviceName',
-		defaultMessage: 'Edit',
-		description: 'Button text for navigating to page to edit device name.',
-	},
-	defaultBackground: {
-		id: '$1.routes.app.settings.index.defaultBackground',
-		defaultMessage: 'Default Background',
-		description: 'Name of the background map used if a custom one is not set.',
-	},
-	customBackground: {
-		id: '$1.routes.app.settings.index.customBackground',
-		defaultMessage: 'Custom Background',
-		description:
-			'Placeholder name of custom background map if name cannot be retrieved.',
-	},
-	ddCoordinates: {
-		id: 'routes.app.settings.index.decimalDegrees',
-		defaultMessage: 'DD Coordinates',
-		description: 'Label for Decimal Degrees coordinate system.',
-	},
-	utmCoordinates: {
-		id: 'routes.app.settings.index.utmCoordinates',
-		defaultMessage: 'UTM Coordinates',
-		description: 'Label for Universal Transverse Mercator coordinate system.',
-	},
-	dmsCoordinates: {
-		id: 'routes.app.settings.index.dmsCoordinates',
-		defaultMessage: 'DMS Coordinates',
-		description: 'Label for Degrees/Minutes/Seconds coordinate system.',
-	},
-	languageFromSystemPreference: {
-		id: '$1.routes.app.settings.index.languageFromSystemPreference',
-		defaultMessage: '{name} (System Preference)',
-		description: 'Label for selected language based on the system preferences.',
-	},
-	deviceNameSettingsAccessibleLabel: {
-		id: 'routes.app.settings.index.deviceNameSettingsAccessibleLabel',
-		defaultMessage: 'Go to device name settings.',
-		description:
-			'Accessible label for link item that navigates to device name settings page.',
-	},
-	languageSettingsAccessibleLabel: {
-		id: 'routes.app.settings.index.languageSettingsAccessibleLabel',
-		defaultMessage: 'Go to language settings.',
-		description:
-			'Accessible label for link item that navigates to language settings page.',
-	},
-	coordinateSystemSettingsAccessibleLabel: {
-		id: 'routes.app.settings.index.coordinateSystemSettingsAccessibleLabel',
-		defaultMessage: 'Go to coordinate system settings.',
-		description:
-			'Accessible label for link item that navigates to coordinate system settings page.',
-	},
-	unitSystemSettingsAccessibleLabel: {
-		id: 'routes.app.settings.index.unitSystemSettingsAccessibleLabel',
-		defaultMessage: 'Go to unit system settings.',
-		description:
-			'Accessible label for link item that navigates to unit system settings page.',
-	},
-	backgroundMapSettingsAccessibleLabel: {
-		id: 'routes.app.settings.index.backgroundMapSettingsAccessibleLabel',
-		defaultMessage: 'Go to background map settings.',
-		description:
-			'Accessible label for link item that navigates to background map settings page.',
-	},
-	sectionTitleGeneral: {
-		id: '$1.routes.app.settings.index.sectionTitleGeneral',
-		defaultMessage: 'General',
-		description: 'Text for general settings section title',
-	},
-	sectionTitleAboutCoMapeo: {
-		id: '$1.routes.app.settings.index.sectionTitleAboutCoMapeo',
-		defaultMessage: 'About CoMapeo',
-		description: 'Text for data and privacy section title',
-	},
-	aboutCoMapeoVersionLabel: {
-		id: '$1.routes.app.settings.index.aboutCoMapeoVersionLabel',
-		defaultMessage: 'CoMapeo Version',
-		description: 'Label for CoMapeo version',
-	},
-	unitSystemImperial: {
-		id: '$1.routes.app.settings.index.unitSystemImperial',
-		defaultMessage: 'Imperial System',
-		description: 'Label for imperial unit system',
-	},
-	unitSystemMetric: {
-		id: '$1.routes.app.settings.index.unitSystemMetric',
-		defaultMessage: 'Metric System',
-		description: 'Label for metric unit system',
 	},
 })

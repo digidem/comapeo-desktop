@@ -1151,58 +1151,6 @@
     "description": "Text for button to navigate to joined project in project joined dialog.",
     "message": "View Project"
   },
-  "$1.routes.app.settings.-data-and-privacy-section.appUsageDescription": {
-    "description": "Description of app usage metrics settings section.",
-    "message": "Share how you use CoMapeo with Awana Digital — no information you share can be used to track you."
-  },
-  "$1.routes.app.settings.-data-and-privacy-section.appUsageDetailsIdNumbers": {
-    "description": "Text describing how IDs used for app usage metrics are used and generated.",
-    "message": "ID numbers are scrambled randomly and changed every month. ID numbers are scrambled randomly and changed every month."
-  },
-  "$1.routes.app.settings.-data-and-privacy-section.appUsageDetailsIpAddresses": {
-    "description": "Text describing how IP addresses are never stored.",
-    "message": "CoMapeo never stores IP addresses."
-  },
-  "$1.routes.app.settings.-data-and-privacy-section.appUsageTitle": {
-    "description": "Title of app usage metrics settings section.",
-    "message": "App Usage"
-  },
-  "$1.routes.app.settings.-data-and-privacy-section.description": {
-    "description": "Description for data and privacy section in settings page.",
-    "message": "CoMapeo respects your privacy and autonomy"
-  },
-  "$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationDescription": {
-    "description": "Description for diagnostic information section in settings page.",
-    "message": "Anonymized information about your device, app crashes, errors and performance helps Awana Digital improve the app and fix errors."
-  },
-  "$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationOptOut": {
-    "description": "Details about opting out in diagnostic information section in settings page.",
-    "message": "You can opt-out of sharing diagnostic information at any time."
-  },
-  "$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationPersonalInfo": {
-    "description": "Details about personal info in diagnostic information section in settings page.",
-    "message": "This never includes any of your data or personal information."
-  },
-  "$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationTitle": {
-    "description": "Title for diagnostic information section in settings page.",
-    "message": "Diagnostic Information"
-  },
-  "$1.routes.app.settings.-data-and-privacy-section.learnMore": {
-    "description": "Text for link that navigates to external URL for additional information info about data and privacy.",
-    "message": "Learn More"
-  },
-  "$1.routes.app.settings.-data-and-privacy-section.shareAppUsage": {
-    "description": "Text label for checkbox to toggle app usage sharing setting.",
-    "message": "Share App Usage"
-  },
-  "$1.routes.app.settings.-data-and-privacy-section.shareDiagnosticInformation": {
-    "description": "Label for checkbox to toggle sharing of diagnostic information.",
-    "message": "Share Diagnostic Information"
-  },
-  "$1.routes.app.settings.-data-and-privacy-section.title": {
-    "description": "Title for data and privacy section in settings page.",
-    "message": "Data & Privacy"
-  },
   "$1.routes.app.settings.background-map.acceptedFileTypes": {
     "description": "Text describing what kind of files are usable for background maps.",
     "message": "Accepted file types are .smp"
@@ -1251,14 +1199,6 @@
     "description": "Text describing what kind of files are usable for background maps.",
     "message": "{value} MB"
   },
-  "$1.routes.app.settings.comapeoSettingsBreadCrumbLink": {
-    "description": "Text for breadcrumb link to go to main CoMapeo settings page when viewing nested settings page.",
-    "message": "CoMapeo Settings"
-  },
-  "$1.routes.app.settings.coordinate-system.title": {
-    "description": "Title of the coordinate system settings page.",
-    "message": "Coordinate System"
-  },
   "$1.routes.app.settings.device-name.cancel": {
     "description": "Label for cancel button.",
     "message": "Cancel"
@@ -1283,72 +1223,120 @@
     "description": "Label for save button.",
     "message": "Save"
   },
-  "$1.routes.app.settings.index.aboutCoMapeoVersionLabel": {
-    "description": "Label for CoMapeo version",
+  "$1.routes.app.settings.index.aboutComapeoSectionTitle": {
+    "description": "Text for data and privacy section title.",
+    "message": "About CoMapeo"
+  },
+  "$1.routes.app.settings.index.aboutComapeoVersionLabel": {
+    "description": "Label for CoMapeo version.",
     "message": "CoMapeo Version"
   },
-  "$1.routes.app.settings.index.customBackground": {
-    "description": "Placeholder name of custom background map if name cannot be retrieved.",
-    "message": "Custom Background"
+  "$1.routes.app.settings.index.coordinateSystemDdCoordinates": {
+    "description": "Label for Decimal Degrees coordinate system option.",
+    "message": "DD Coordinates (Decimal Degrees)"
   },
-  "$1.routes.app.settings.index.defaultBackground": {
-    "description": "Name of the background map used if a custom one is not set.",
-    "message": "Default Background"
+  "$1.routes.app.settings.index.coordinateSystemDmsCoordinates": {
+    "description": "Label for Degrees/Minutes/Seconds coordinate system option.",
+    "message": "DMS Coordinates (Decimal/Minutes/Seconds)"
   },
-  "$1.routes.app.settings.index.editDeviceName": {
+  "$1.routes.app.settings.index.coordinateSystemSectionTitle": {
+    "description": "Section title for coordinate system settings.",
+    "message": "Coordinate System"
+  },
+  "$1.routes.app.settings.index.coordinateSystemUtmCoordinates": {
+    "description": "Label for Universal Transverse Mercator coordinate system option.",
+    "message": "UTM Coordinates (Universal Transverse Mercator)"
+  },
+  "$1.routes.app.settings.index.dataAndPrivacyAppUsageDescription": {
+    "description": "Description of app usage metrics settings section.",
+    "message": "Share how you use CoMapeo with Awana Digital — no information you share can be used to track you."
+  },
+  "$1.routes.app.settings.index.dataAndPrivacyAppUsageDetailsIdNumbers": {
+    "description": "Text describing how IDs used for app usage metrics are used and generated.",
+    "message": "ID numbers are scrambled randomly and changed every month. ID numbers are scrambled randomly and changed every month."
+  },
+  "$1.routes.app.settings.index.dataAndPrivacyAppUsageDetailsIpAddresses": {
+    "description": "Text describing how IP addresses are never stored.",
+    "message": "CoMapeo never stores IP addresses."
+  },
+  "$1.routes.app.settings.index.dataAndPrivacyAppUsageTitle": {
+    "description": "Title of app usage metrics settings section.",
+    "message": "App Usage"
+  },
+  "$1.routes.app.settings.index.dataAndPrivacyDescription": {
+    "description": "Description for data and privacy section in settings page.",
+    "message": "CoMapeo respects your privacy and autonomy"
+  },
+  "$1.routes.app.settings.index.dataAndPrivacyDiagnosticInformationDescription": {
+    "description": "Description for diagnostic information section in settings page.",
+    "message": "Anonymized information about your device, app crashes, errors and performance helps Awana Digital improve the app and fix errors."
+  },
+  "$1.routes.app.settings.index.dataAndPrivacyDiagnosticInformationOptOut": {
+    "description": "Details about opting out in diagnostic information section in settings page.",
+    "message": "You can opt-out of sharing diagnostic information at any time."
+  },
+  "$1.routes.app.settings.index.dataAndPrivacyDiagnosticInformationPersonalInfo": {
+    "description": "Details about personal info in diagnostic information section in settings page.",
+    "message": "This never includes any of your data or personal information."
+  },
+  "$1.routes.app.settings.index.dataAndPrivacyDiagnosticInformationTitle": {
+    "description": "Title for diagnostic information section in settings page.",
+    "message": "Diagnostic Information"
+  },
+  "$1.routes.app.settings.index.dataAndPrivacyLearnMore": {
+    "description": "Text for link that navigates to external URL for additional information info about data and privacy.",
+    "message": "Learn More"
+  },
+  "$1.routes.app.settings.index.dataAndPrivacyShareAppUsage": {
+    "description": "Text label for checkbox to toggle app usage sharing setting.",
+    "message": "Share App Usage"
+  },
+  "$1.routes.app.settings.index.dataAndPrivacyShareDiagnosticInformation": {
+    "description": "Label for checkbox to toggle sharing of diagnostic information.",
+    "message": "Share Diagnostic Information"
+  },
+  "$1.routes.app.settings.index.deviceNameEdit": {
     "description": "Button text for navigating to page to edit device name.",
     "message": "Edit"
+  },
+  "$1.routes.app.settings.index.deviceNameSectionTitle": {
+    "description": "Section title for device name settings.",
+    "message": "Device Name"
+  },
+  "$1.routes.app.settings.index.languageFollowSystemOptionLabel": {
+    "description": "Option label for following system preference for language.",
+    "message": "Follow system preferences"
   },
   "$1.routes.app.settings.index.languageFromSystemPreference": {
     "description": "Label for selected language based on the system preferences.",
     "message": "{name} (System Preference)"
   },
-  "$1.routes.app.settings.index.sectionTitleAboutCoMapeo": {
-    "description": "Text for data and privacy section title",
-    "message": "About CoMapeo"
-  },
-  "$1.routes.app.settings.index.sectionTitleGeneral": {
-    "description": "Text for general settings section title",
-    "message": "General"
+  "$1.routes.app.settings.index.languageSectionTitle": {
+    "description": "Section title for language settings.",
+    "message": "Language"
   },
   "$1.routes.app.settings.index.title": {
     "description": "Title of the settings page.",
     "message": "CoMapeo Settings"
   },
   "$1.routes.app.settings.index.unitSystemImperial": {
-    "description": "Label for imperial unit system",
+    "description": "Label for imperial unit system option.",
     "message": "Imperial System"
   },
-  "$1.routes.app.settings.index.unitSystemMetric": {
-    "description": "Label for metric unit system",
-    "message": "Metric System"
-  },
-  "$1.routes.app.settings.language.followSystemOptionLabel": {
-    "description": "Option label for following system preference for language.",
-    "message": "Follow system preferences"
-  },
-  "$1.routes.app.settings.language.title": {
-    "description": "Title of the language settings page.",
-    "message": "Language"
-  },
-  "$1.routes.app.settings.unit-system.imperialOptionExample": {
+  "$1.routes.app.settings.index.unitSystemImperialExamples": {
     "description": "Displayed examples for the imperial option.",
     "message": "Inches, feet, miles"
   },
-  "$1.routes.app.settings.unit-system.imperialOptionLabel": {
-    "description": "Label for the imperial option.",
-    "message": "Imperial System"
+  "$1.routes.app.settings.index.unitSystemMetric": {
+    "description": "Label for metric unit system option.",
+    "message": "Metric System"
   },
-  "$1.routes.app.settings.unit-system.metricOptionExample": {
+  "$1.routes.app.settings.index.unitSystemMetricExamples": {
     "description": "Displayed examples for the metric option.",
     "message": "Kilometers, meters"
   },
-  "$1.routes.app.settings.unit-system.metricOptionLabel": {
-    "description": "Label for the metric option.",
-    "message": "Metric System"
-  },
-  "$1.routes.app.settings.unit-system.navTitle": {
-    "description": "Title of the unit system settings page.",
+  "$1.routes.app.settings.index.unitSystemSectionTitle": {
+    "description": "Section title for unit system settings.",
     "message": "Unit System"
   },
   "$1.routes.onboarding.data-and-privacy.dataEncrypted": {
