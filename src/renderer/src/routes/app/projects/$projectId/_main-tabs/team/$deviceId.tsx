@@ -16,13 +16,20 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageTag,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 
 import { DeviceIcon } from '../../../-shared/device-icon.tsx'
 import { BLUE_GREY, PROJECT_ORANGE } from '../../../../../../colors.ts'
 import { DecentDialog } from '../../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../../components/icon.tsx'
+import { Bold } from '../../../../../../components/intl-rich-text.tsx'
 import { useActiveProjectIdActions } from '../../../../../../contexts/active-project-id-store-context.ts'
 import { useIconSizeBasedOnTypography } from '../../../../../../hooks/icon.ts'
 import {
@@ -69,7 +76,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
 	const [showLeaveProjectDialog, setShowLeaveProjectDialog] = useState(false)
 
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const router = useRouter()
 
@@ -95,7 +102,7 @@ function RouteComponent() {
 					}}
 				>
 					<IconButton
-						aria-label={t(m.goBackAccessibleLabel)}
+						aria-label={intl.formatMessage(m.goBackAccessibleLabel)}
 						onClick={() => {
 							if (router.history.canGoBack()) {
 								router.history.back()
@@ -113,7 +120,7 @@ function RouteComponent() {
 					</IconButton>
 
 					<Typography variant="h1" sx={{ fontWeight: 500 }}>
-						{t(isSelf ? m.thisDevice : m.collaboratorNavTitle)}
+						{intl.formatMessage(isSelf ? m.thisDevice : m.collaboratorNavTitle)}
 					</Typography>
 				</Stack>
 
@@ -162,7 +169,7 @@ function CollaboratorInfoContent({
 	deviceId: string
 	onLeaveProject: () => void
 }) {
-	const { formatMessage: t, formatDate } = useIntl()
+	const intl = useIntl()
 
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
@@ -183,7 +190,7 @@ function CollaboratorInfoContent({
 	const isRemoteArchive = memberIsRemoteArchive(member)
 
 	if (isRemoteArchive) {
-		title = member.name || t(m.remoteArchive)
+		title = member.name || intl.formatMessage(m.remoteArchive)
 		description = (
 			<Typography
 				component="p"
@@ -215,7 +222,9 @@ function CollaboratorInfoContent({
 					variant="h3"
 					sx={{ fontWeight: 500, textAlign: 'center' }}
 				>
-					{t(isAtLeastCoordinator ? m.coordinator : m.participant)}
+					{intl.formatMessage(
+						isAtLeastCoordinator ? m.coordinator : m.participant,
+					)}
 				</Typography>
 			</>
 		)
@@ -269,10 +278,10 @@ function CollaboratorInfoContent({
 
 					{member.joinedAt ? (
 						<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
-							{t(m.addedOn, {
+							{intl.formatMessage(m.addedOn, {
 								value: (
 									<time key={member.deviceId} dateTime={member.joinedAt}>
-										{formatDate(member.joinedAt, {
+										{intl.formatDate(member.joinedAt, {
 											year: 'numeric',
 											month: 'long',
 											day: '2-digit',
@@ -305,7 +314,7 @@ function CollaboratorInfoContent({
 							onLeaveProject()
 						}}
 					>
-						{t(m.leaveProjectButton)}
+						{intl.formatMessage(m.leaveProjectButton)}
 					</Button>
 				</Box>
 			) : null}
@@ -322,7 +331,8 @@ function LeaveProjectDialogContent({
 	onClose: () => void
 	projectId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
+
 	const { data: projectSettings } = useProjectSettings({ projectId })
 
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
@@ -379,7 +389,7 @@ function LeaveProjectDialogContent({
 							variant="h1"
 							sx={{ fontWeight: 500, textAlign: 'center' }}
 						>
-							{t(
+							{intl.formatMessage(
 								warningToShow === 'last_device'
 									? m.lastDeviceWarningTitle
 									: m.lastCoordinatorWarningTitle,
@@ -387,7 +397,7 @@ function LeaveProjectDialogContent({
 						</Typography>
 
 						<Typography sx={{ textAlign: 'center' }}>
-							{t(
+							{intl.formatMessage(
 								warningToShow === 'last_device'
 									? m.lastDeviceWarningDescription
 									: m.lastCoordinatorWarningDescription,
@@ -415,7 +425,7 @@ function LeaveProjectDialogContent({
 												/>
 
 												<Typography variant="body2" color="textSecondary">
-													{t(m.suggestionInviteCoordinator)}
+													{intl.formatMessage(m.suggestionInviteCoordinator)}
 												</Typography>
 											</Stack>
 										</ListItem>
@@ -430,7 +440,7 @@ function LeaveProjectDialogContent({
 											/>
 
 											<Typography variant="body2" color="textSecondary">
-												{t(m.suggestionExportData)}
+												{intl.formatMessage(m.suggestionExportData)}
 											</Typography>
 										</Stack>
 									</ListItem>
@@ -458,7 +468,7 @@ function LeaveProjectDialogContent({
 						}}
 						sx={{ maxWidth: 400, alignSelf: 'center' }}
 					>
-						{t(m.cancelButton)}
+						{intl.formatMessage(m.cancelButton)}
 					</Button>
 
 					<Button
@@ -471,7 +481,7 @@ function LeaveProjectDialogContent({
 						}}
 						sx={{ maxWidth: 400, alignSelf: 'center' }}
 					>
-						{t(m.continueButton)}
+						{intl.formatMessage(m.continueButton)}
 					</Button>
 				</Stack>
 			</Stack>
@@ -500,7 +510,7 @@ function LeaveProjectConfirmation({
 	projectId: string
 	projectName?: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const router = useRouter()
 
@@ -525,11 +535,12 @@ function LeaveProjectConfirmation({
 							variant="h1"
 							sx={{ fontWeight: 500, textAlign: 'center' }}
 						>
-							{t(m.leaveProjectConfirmationTitle)}
+							{intl.formatMessage(m.leaveProjectConfirmationTitle)}
 						</Typography>
 
 						<Typography sx={{ textAlign: 'center' }}>
-							{t(m.leaveProjectConfirmationDescription, {
+							{intl.formatMessage(m.leaveProjectConfirmationDescription, {
+								b: Bold,
 								name: projectName || '',
 							})}
 						</Typography>
@@ -559,7 +570,7 @@ function LeaveProjectConfirmation({
 						}}
 						sx={{ maxWidth: 400, alignSelf: 'center' }}
 					>
-						{t(m.cancelButton)}
+						{intl.formatMessage(m.cancelButton)}
 					</Button>
 
 					<Button
@@ -595,7 +606,7 @@ function LeaveProjectConfirmation({
 						}}
 						sx={{ maxWidth: 400, alignSelf: 'center' }}
 					>
-						{t(m.confirmButton)}
+						{intl.formatMessage(m.confirmButton)}
 					</Button>
 				</Stack>
 			</Stack>
@@ -618,7 +629,31 @@ function LeaveProjectConfirmation({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly collaboratorNavTitle: NoMessageValues
+	readonly leaveProjectNavTitle: NoMessageValues
+	readonly thisDevice: NoMessageValues
+	readonly coordinator: NoMessageValues
+	readonly participant: NoMessageValues
+	readonly remoteArchive: NoMessageValues
+	readonly addedOn: { readonly value: MessageValue }
+	readonly leaveProjectButton: NoMessageValues
+	readonly lastCoordinatorWarningTitle: NoMessageValues
+	readonly lastCoordinatorWarningDescription: NoMessageValues
+	readonly lastDeviceWarningTitle: NoMessageValues
+	readonly lastDeviceWarningDescription: NoMessageValues
+	readonly suggestionExportData: NoMessageValues
+	readonly suggestionInviteCoordinator: NoMessageValues
+	readonly leaveProjectConfirmationTitle: NoMessageValues
+	readonly leaveProjectConfirmationDescription: {
+		readonly b: MessageTag
+		readonly name: MessageValue
+	}
+	readonly cancelButton: NoMessageValues
+	readonly continueButton: NoMessageValues
+	readonly confirmButton: NoMessageValues
+	readonly goBackAccessibleLabel: NoMessageValues
+}>({
 	collaboratorNavTitle: {
 		id: '$1.routes.app.projects.$projectId.team.$deviceId.collaboratorNavTitle',
 		defaultMessage: 'Collaborator Info',

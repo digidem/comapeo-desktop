@@ -15,7 +15,12 @@ import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { Block, createFileRoute, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import * as v from 'valibot'
 
 import {
@@ -69,7 +74,8 @@ export const Route = createFileRoute(
 const FORM_ID = 'project-settings-form'
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
+
 	const router = useRouter()
 
 	const { projectId } = Route.useParams()
@@ -81,10 +87,14 @@ function RouteComponent() {
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
 	const onChangeSchema = useMemo(() => {
-		const maxProjectNameLengthError = t(m.maxProjectNameLengthError)
-		const minProjectNameLengthError = t(m.minProjectNameLengthError)
+		const maxProjectNameLengthError = intl.formatMessage(
+			m.maxProjectNameLengthError,
+		)
+		const minProjectNameLengthError = intl.formatMessage(
+			m.minProjectNameLengthError,
+		)
 
-		const maxProjectDescriptionLengthError = t(
+		const maxProjectDescriptionLengthError = intl.formatMessage(
 			m.maxProjectDescriptionLengthError,
 		)
 
@@ -112,7 +122,7 @@ function RouteComponent() {
 				v.null(),
 			]),
 		})
-	}, [t])
+	}, [intl])
 
 	const form = useAppForm({
 		defaultValues: {
@@ -163,7 +173,7 @@ function RouteComponent() {
 					}}
 				>
 					<IconButton
-						aria-label={t(m.goBackAccessibleLabel)}
+						aria-label={intl.formatMessage(m.goBackAccessibleLabel)}
 						onClick={() => {
 							if (router.history.canGoBack()) {
 								router.history.back()
@@ -181,7 +191,7 @@ function RouteComponent() {
 					</IconButton>
 
 					<Typography variant="h1" sx={{ fontWeight: 500 }}>
-						{t(m.navTitle)}
+						{intl.formatMessage(m.navTitle)}
 					</Typography>
 				</Stack>
 
@@ -208,7 +218,7 @@ function RouteComponent() {
 											<TextField
 												required
 												fullWidth
-												label={t(m.projectNameInputLabel)}
+												label={intl.formatMessage(m.projectNameInputLabel)}
 												value={field.state.value}
 												error={!field.state.meta.isValid}
 												name={field.name}
@@ -240,7 +250,7 @@ function RouteComponent() {
 																}
 															>
 																{(count) =>
-																	t(m.characterCount, {
+																	intl.formatMessage(m.characterCount, {
 																		count,
 																		max: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
 																	})
@@ -262,7 +272,9 @@ function RouteComponent() {
 												multiline
 												rows={3}
 												enterKeyHint="done"
-												label={t(m.projectDescriptionInputLabel)}
+												label={intl.formatMessage(
+													m.projectDescriptionInputLabel,
+												)}
 												value={field.state.value}
 												error={!field.state.meta.isValid}
 												name={field.name}
@@ -294,7 +306,7 @@ function RouteComponent() {
 																}
 															>
 																{(count) =>
-																	t(m.characterCount, {
+																	intl.formatMessage(m.characterCount, {
 																		count,
 																		max: PROJECT_DESCRIPTION_MAX_LENGTH_GRAPHEMES,
 																	})
@@ -312,7 +324,7 @@ function RouteComponent() {
 									<Stack direction="column" sx={{ gap: 4 }}>
 										<Box sx={{ paddingInline: 6 }}>
 											<FormLabel id="project-color-selector-label">
-												{t(m.projectCardColorLabel)}
+												{intl.formatMessage(m.projectCardColorLabel)}
 											</FormLabel>
 										</Box>
 
@@ -331,7 +343,9 @@ function RouteComponent() {
 												>
 													<FormControlLabel
 														name="option-orange"
-														label={t(m.projectColorOptionOrange)}
+														label={intl.formatMessage(
+															m.projectColorOptionOrange,
+														)}
 														checked={field.state.value === PROJECT_ORANGE}
 														onChange={(_event, checked) => {
 															field.handleChange(
@@ -349,7 +363,7 @@ function RouteComponent() {
 
 													<FormControlLabel
 														name="option-blue"
-														label={t(m.projectColorOptionBlue)}
+														label={intl.formatMessage(m.projectColorOptionBlue)}
 														checked={field.state.value === PROJECT_BLUE}
 														onChange={(_event, checked) => {
 															field.handleChange(checked ? PROJECT_BLUE : null)
@@ -365,7 +379,9 @@ function RouteComponent() {
 
 													<FormControlLabel
 														name="option-green"
-														label={t(m.projectColorOptionGreen)}
+														label={intl.formatMessage(
+															m.projectColorOptionGreen,
+														)}
 														checked={field.state.value === PROJECT_GREEN}
 														onChange={(_event, checked) => {
 															field.handleChange(checked ? PROJECT_GREEN : null)
@@ -381,7 +397,7 @@ function RouteComponent() {
 
 													<FormControlLabel
 														name="option-red"
-														label={t(m.projectColorOptionRed)}
+														label={intl.formatMessage(m.projectColorOptionRed)}
 														checked={field.state.value === PROJECT_RED}
 														onChange={(_event, checked) => {
 															field.handleChange(checked ? PROJECT_RED : null)
@@ -397,7 +413,7 @@ function RouteComponent() {
 
 													<FormControlLabel
 														name="option-grey"
-														label={t(m.projectColorOptionGrey)}
+														label={intl.formatMessage(m.projectColorOptionGrey)}
 														checked={field.state.value === PROJECT_GREY}
 														onChange={(_event, checked) => {
 															field.handleChange(checked ? PROJECT_GREY : null)
@@ -458,7 +474,7 @@ function RouteComponent() {
 										}}
 										sx={{ maxWidth: 400 }}
 									>
-										{t(m.cancel)}
+										{intl.formatMessage(m.cancel)}
 									</Button>
 
 									<Button
@@ -471,7 +487,7 @@ function RouteComponent() {
 										aria-disabled={!canSubmit}
 										sx={{ maxWidth: 400 }}
 									>
-										{t(m.save)}
+										{intl.formatMessage(m.save)}
 									</Button>
 								</>
 							)}
@@ -567,7 +583,27 @@ function ProjectColorCheckboxControl({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly navTitle: NoMessageValues
+	readonly projectNameInputLabel: NoMessageValues
+	readonly projectDescriptionInputLabel: NoMessageValues
+	readonly projectCardColorLabel: NoMessageValues
+	readonly characterCount: {
+		readonly count: MessageValue
+		readonly max: MessageValue
+	}
+	readonly minProjectNameLengthError: NoMessageValues
+	readonly maxProjectNameLengthError: NoMessageValues
+	readonly maxProjectDescriptionLengthError: NoMessageValues
+	readonly projectColorOptionBlue: NoMessageValues
+	readonly projectColorOptionGreen: NoMessageValues
+	readonly projectColorOptionGrey: NoMessageValues
+	readonly projectColorOptionOrange: NoMessageValues
+	readonly projectColorOptionRed: NoMessageValues
+	readonly save: NoMessageValues
+	readonly cancel: NoMessageValues
+	readonly goBackAccessibleLabel: NoMessageValues
+}>({
 	navTitle: {
 		id: '$1.routes.app.projects.$projectId.settings.info.navTitle',
 		defaultMessage: 'Edit Info',

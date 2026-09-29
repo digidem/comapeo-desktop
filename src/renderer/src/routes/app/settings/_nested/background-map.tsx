@@ -13,7 +13,12 @@ import Divider from '@mui/material/Divider'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { createFileRoute } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 
 import { BLUE_GREY, LIGHT_GREY } from '../../../../colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
@@ -31,7 +36,7 @@ export const Route = createFileRoute('/app/settings/_nested/background-map')({
 })
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	return (
 		<Container maxWidth="md" disableGutters>
@@ -47,7 +52,7 @@ function RouteComponent() {
 							}}
 						>
 							<Typography sx={{ textAlign: 'center' }}>
-								{t(m.description)}
+								{intl.formatMessage(m.description)}
 							</Typography>
 						</Box>
 
@@ -70,7 +75,7 @@ function RouteComponent() {
 }
 
 function CustomMap() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const importCustomMapFile = useImportCustomMapFile()
 	const removeCustomMapFile = useRemoveCustomMapFile()
@@ -126,10 +131,12 @@ function CustomMap() {
 									variant="h1"
 									sx={{ fontWeight: 500, textAlign: 'center' }}
 								>
-									{t(m.mapUpdateSuccessTitle)}
+									{intl.formatMessage(m.mapUpdateSuccessTitle)}
 								</Typography>
 
-								<Typography>{t(m.mapUpdateSuccessDescription)}</Typography>
+								<Typography>
+									{intl.formatMessage(m.mapUpdateSuccessDescription)}
+								</Typography>
 							</Stack>
 						</Stack>
 
@@ -150,7 +157,7 @@ function CustomMap() {
 								}}
 								sx={{ maxWidth: 400, alignSelf: 'center' }}
 							>
-								{t(m.close)}
+								{intl.formatMessage(m.close)}
 							</Button>
 						</Box>
 					</Stack>
@@ -173,7 +180,7 @@ function CustomMapInfo({
 	onRemoveMap,
 	removeIsPending,
 }: MapFileProps) {
-	const { formatMessage: t, formatDate } = useIntl()
+	const intl = useIntl()
 
 	const customMapInfo = useGetCustomMapInfo()
 
@@ -196,13 +203,13 @@ function CustomMapInfo({
 						tabIndex={-1}
 						role={undefined}
 					>
-						{t(m.chooseFile)}
+						{intl.formatMessage(m.chooseFile)}
 
 						<HiddenSelectFileInput onClick={onChooseMap} />
 					</Button>
 
 					<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
-						{t(m.acceptedFileTypes)}
+						{intl.formatMessage(m.acceptedFileTypes)}
 					</Typography>
 				</Stack>
 			)
@@ -211,7 +218,7 @@ function CustomMapInfo({
 		return (
 			<Stack direction="column" sx={{ gap: 4 }}>
 				<Typography sx={{ textAlign: 'center' }}>
-					{t(m.customMapInfoError)}
+					{intl.formatMessage(m.customMapInfoError)}
 				</Typography>
 				<Button
 					component="label"
@@ -224,7 +231,7 @@ function CustomMapInfo({
 					tabIndex={-1}
 					role={undefined}
 				>
-					{t(m.chooseFile)}
+					{intl.formatMessage(m.chooseFile)}
 
 					<HiddenSelectFileInput onClick={onChooseMap} />
 				</Button>
@@ -240,7 +247,7 @@ function CustomMapInfo({
 						onRemoveMap()
 					}}
 				>
-					{t(m.removeMap)}
+					{intl.formatMessage(m.removeMap)}
 				</Button>
 			</Stack>
 		)
@@ -252,10 +259,12 @@ function CustomMapInfo({
 	return (
 		<Stack direction="column" sx={{ gap: 4 }}>
 			<Stack direction="row" sx={{ justifyContent: 'space-between' }}>
-				<Typography color="textSecondary">{t(m.mapNameColumnLabel)}</Typography>
+				<Typography color="textSecondary">
+					{intl.formatMessage(m.mapNameColumnLabel)}
+				</Typography>
 
 				<Typography color="textSecondary">
-					{t(m.dateAddedColumnColumnLabel)}
+					{intl.formatMessage(m.dateAddedColumnColumnLabel)}
 				</Typography>
 			</Stack>
 
@@ -282,13 +291,13 @@ function CustomMapInfo({
 						</Typography>
 
 						<Typography variant="body2" color="textSecondary">
-							{t(m.sizeInMegabytes, { value: displayedSize })}
+							{intl.formatMessage(m.sizeInMegabytes, { value: displayedSize })}
 						</Typography>
 					</Stack>
 
 					<Typography variant="body2" color="textSecondary">
 						<time dateTime={new Date(customMapInfo.data.created).toISOString()}>
-							{formatDate(customMapInfo.data.created, {
+							{intl.formatDate(customMapInfo.data.created, {
 								year: 'numeric',
 								month: 'long',
 								day: 'numeric',
@@ -306,7 +315,7 @@ function CustomMapInfo({
 							onRemoveMap()
 						}}
 					>
-						{t(m.removeMap)}
+						{intl.formatMessage(m.removeMap)}
 					</Button>
 				</Box>
 			</Stack>
@@ -345,7 +354,20 @@ function HiddenSelectFileInput({ onClick }: { onClick: (file: File) => void }) {
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly navTitle: NoMessageValues
+	readonly description: NoMessageValues
+	readonly chooseFile: NoMessageValues
+	readonly acceptedFileTypes: NoMessageValues
+	readonly mapNameColumnLabel: NoMessageValues
+	readonly dateAddedColumnColumnLabel: NoMessageValues
+	readonly sizeInMegabytes: { readonly value: MessageValue }
+	readonly removeMap: NoMessageValues
+	readonly customMapInfoError: NoMessageValues
+	readonly mapUpdateSuccessTitle: NoMessageValues
+	readonly mapUpdateSuccessDescription: NoMessageValues
+	readonly close: NoMessageValues
+}>({
 	navTitle: {
 		id: '$1.routes.app.settings.background-map.navTitle',
 		defaultMessage: 'Background Map',

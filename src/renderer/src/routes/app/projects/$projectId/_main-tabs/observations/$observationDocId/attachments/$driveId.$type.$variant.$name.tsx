@@ -20,7 +20,7 @@ import { captureMessage } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { MediaProvider } from 'media-chrome/react/media-store'
-import { defineMessages, useIntl } from 'react-intl'
+import { defineMessages, useIntl, type NoMessageValues } from 'react-intl'
 import * as v from 'valibot'
 
 import { PhotoAttachmentImage } from '../-components/photo-attachment-image.tsx'
@@ -171,7 +171,7 @@ function DeleteSuccessPanel({
 	observationDocId: string
 	type: BlobId['type']
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const router = useRouter()
 
@@ -197,7 +197,7 @@ function DeleteSuccessPanel({
 						variant="h1"
 						sx={{ fontWeight: 500, textAlign: 'center' }}
 					>
-						{t(m.deleteSuccessPanelTitle, { type })}
+						{intl.formatMessage(m.deleteSuccessPanelTitle, { type })}
 					</Typography>
 				</Stack>
 			</Container>
@@ -232,7 +232,7 @@ function DeleteSuccessPanel({
 					variant="outlined"
 					sx={{ maxWidth: 400 }}
 				>
-					{t(m.returnToObservation)}
+					{intl.formatMessage(m.returnToObservation)}
 				</Button>
 			</Box>
 		</Stack>
@@ -522,7 +522,7 @@ function DeleteButton({
 }) {
 	const [showConfirmation, setShowConfirmation] = useState(false)
 
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const updateObservation = useUpdateDocument({
 		projectId,
@@ -563,7 +563,9 @@ function DeleteButton({
 					<Icon name="material-symbols-delete" />
 				</IconButton>
 
-				<Typography id="delete-button-label">{t(m.delete)}</Typography>
+				<Typography id="delete-button-label">
+					{intl.formatMessage(m.delete)}
+				</Typography>
 			</Stack>
 
 			<DeleteAttachmentConfirmationDialog
@@ -618,7 +620,7 @@ function DeleteAttachmentConfirmationDialog({
 	onConfirm: () => void
 	onCancel: () => void
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	return (
 		<Dialog open={open} fullWidth maxWidth="sm">
@@ -631,7 +633,7 @@ function DeleteAttachmentConfirmationDialog({
 							variant="h1"
 							sx={{ fontWeight: 500, textAlign: 'center' }}
 						>
-							{t(m.deleteAttachmentDialogTitle, { type })}
+							{intl.formatMessage(m.deleteAttachmentDialogTitle, { type })}
 						</Typography>
 					</Stack>
 				</Stack>
@@ -655,7 +657,7 @@ function DeleteAttachmentConfirmationDialog({
 						}}
 						sx={{ maxWidth: 400 }}
 					>
-						{t(m.deleteAttachmentDialogCancel)}
+						{intl.formatMessage(m.deleteAttachmentDialogCancel)}
 					</Button>
 
 					<Button
@@ -667,7 +669,7 @@ function DeleteAttachmentConfirmationDialog({
 						startIcon={<Icon name="material-symbols-delete" />}
 						sx={{ maxWidth: 400 }}
 					>
-						{t(m.deleteAttachmentDialogConfirm)}
+						{intl.formatMessage(m.deleteAttachmentDialogConfirm)}
 					</Button>
 				</Box>
 			</Stack>
@@ -684,7 +686,7 @@ function DownloadButton({
 	projectId: string
 	blobId: BlobId
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: attachmentUrl } = useAttachmentUrl({ projectId, blobId })
 
@@ -713,7 +715,9 @@ function DownloadButton({
 					<Icon name="material-file-download" />
 				</IconButton>
 
-				<Typography id="download-button-label">{t(m.download)}</Typography>
+				<Typography id="download-button-label">
+					{intl.formatMessage(m.download)}
+				</Typography>
 			</Stack>
 
 			<DecentDialog
@@ -734,7 +738,17 @@ function DownloadButton({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly photoNavTitle: NoMessageValues
+	readonly audioNavTitle: NoMessageValues
+	readonly download: NoMessageValues
+	readonly delete: NoMessageValues
+	readonly deleteAttachmentDialogTitle: { readonly type: string }
+	readonly deleteAttachmentDialogCancel: NoMessageValues
+	readonly deleteAttachmentDialogConfirm: NoMessageValues
+	readonly deleteSuccessPanelTitle: { readonly type: string }
+	readonly returnToObservation: NoMessageValues
+}>({
 	photoNavTitle: {
 		id: 'routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.photoNavTitle',
 		defaultMessage: 'Photo Info',
