@@ -38,7 +38,13 @@ import {
 	subDays,
 } from 'date-fns'
 import { counting, isEqual } from 'radashi'
-import { defineMessages, useIntl, type IntlShape } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type IntlShape,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 
 import { SyncedIndicatorLine } from '../../-shared/synced-indicator-line.tsx'
 import {
@@ -100,7 +106,7 @@ export function DataList({
 }) {
 	const router = useRouter()
 
-	const { formatMessage: t, formatDate } = useIntl()
+	const intl = useIntl()
 
 	const { data: lang } = useSuspenseQuery({
 		...getLocaleStateQueryOptions(),
@@ -147,7 +153,7 @@ export function DataList({
 			{
 				id: NOT_CATEGORY_FILTER_ID,
 				color: BLACK,
-				name: t(m.categoriesFilterNotCategorized),
+				name: intl.formatMessage(m.categoriesFilterNotCategorized),
 				matchCount: groupedByFilterIdCount[NOT_CATEGORY_FILTER_ID] || 0,
 			},
 			...categories.map((category) => ({
@@ -158,7 +164,7 @@ export function DataList({
 				matchCount: groupedByFilterIdCount[category.docId] || 0,
 			})),
 		]
-	}, [categories, observationsWithCategory, tracksWithCategory, t])
+	}, [categories, observationsWithCategory, tracksWithCategory, intl])
 
 	const allCategoriesFilterOptionsIds = categoryFilterOptions.map((o) => o.id)
 
@@ -374,7 +380,7 @@ export function DataList({
 								sx={{ alignItems: 'center', gap: 4, flexWrap: 'wrap' }}
 							>
 								<Typography variant="h1" sx={{ fontWeight: 500 }}>
-									{t(m.listTitle)}
+									{intl.formatMessage(m.listTitle)}
 								</Typography>
 
 								<Box
@@ -393,15 +399,20 @@ export function DataList({
 										}
 										sx={{ fontWeight: 500 }}
 									>
-										{t(m.resultsCount, { count: sortedListData.length })}
+										{intl.formatMessage(m.resultsCount, {
+											count: sortedListData.length,
+										})}
 									</Typography>
 								</Box>
 							</Stack>
 
-							<Tooltip title={t(m.downloadObservations)} placement="right">
+							<Tooltip
+								title={intl.formatMessage(m.downloadObservations)}
+								placement="right"
+							>
 								<IconButtonLink
 									to="/app/projects/$projectId/download"
-									aria-label={t(m.downloadObservations)}
+									aria-label={intl.formatMessage(m.downloadObservations)}
 								>
 									<Icon
 										name="material-file-download"
@@ -484,18 +495,21 @@ export function DataList({
 									unsetDateFilter()
 								}}
 							>
-								{t(m.clearFilters)}
+								{intl.formatMessage(m.clearFilters)}
 							</Button>
 
 							{dateFilter ? (
 								<FilterPill
 									label={
 										dateFilter.type === 'range'
-											? t(m.dateFilterOptionCustom, {
+											? intl.formatMessage(m.dateFilterOptionCustom, {
 													start: new Date(dateFilter.start),
 													end: new Date(dateFilter.end),
 												})
-											: getDateFilterOptionDisplayedValue(dateFilter, t)
+											: getDateFilterOptionDisplayedValue(
+													dateFilter,
+													intl.formatMessage,
+												)
 									}
 									color={LIGHT_GREY}
 									onRemove={() => {
@@ -619,7 +633,7 @@ export function DataList({
 
 										const title: string = category
 											? category.name
-											: t(
+											: intl.formatMessage(
 													type === 'track'
 														? m.trackItemTitle
 														: m.observationCategoryNameFallback,
@@ -636,7 +650,7 @@ export function DataList({
 														<CategoryIconImage
 															projectId={projectId}
 															iconDocumentId={category.iconRef.docId}
-															altText={t(m.categoryIconAlt, {
+															altText={intl.formatMessage(m.categoryIconAlt, {
 																name: category.name,
 															})}
 															imageStyle={{ aspectRatio: 1, width: '100%' }}
@@ -671,7 +685,7 @@ export function DataList({
 															<CategoryIconImage
 																projectId={projectId}
 																iconDocumentId={category.iconRef.docId}
-																altText={t(m.categoryIconAlt, {
+																altText={intl.formatMessage(m.categoryIconAlt, {
 																	name: category.name,
 																})}
 																imageStyle={{ aspectRatio: 1, width: '100%' }}
@@ -784,7 +798,7 @@ export function DataList({
 																	overflow: 'hidden',
 																}}
 															>
-																{formatDate(createdAt, {
+																{intl.formatDate(createdAt, {
 																	year: 'numeric',
 																	month: 'short',
 																	day: '2-digit',
@@ -866,7 +880,7 @@ export function DataList({
 										variant="h1"
 										sx={{ fontWeight: 500, textAlign: 'center' }}
 									>
-										{t(m.noResultsTitle)}
+										{intl.formatMessage(m.noResultsTitle)}
 									</Typography>
 
 									<Button
@@ -876,7 +890,7 @@ export function DataList({
 											unsetDateFilter()
 										}}
 									>
-										{t(m.noResultsResetFilters)}
+										{intl.formatMessage(m.noResultsResetFilters)}
 									</Button>
 								</Stack>
 							</Stack>
@@ -967,7 +981,7 @@ function FilterPill({
 	onRemove: () => void
 	outdated?: boolean
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const removeFilterButtonSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'body1',
@@ -996,7 +1010,10 @@ function FilterPill({
 
 	if (outdated) {
 		return (
-			<Tooltip title={t(m.categoryUnavailable)} placement="bottom-start">
+			<Tooltip
+				title={intl.formatMessage(m.categoryUnavailable)}
+				placement="bottom-start"
+			>
 				<Stack
 					direction="row"
 					sx={{
@@ -1060,7 +1077,7 @@ function ObservationCategoryWithAttachmentsPreview({
 	category?: Preset
 	projectId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const shouldStack = attachments.length > 1
 
@@ -1068,7 +1085,7 @@ function ObservationCategoryWithAttachmentsPreview({
 		<CategoryIconImage
 			projectId={projectId}
 			iconDocumentId={category.iconRef.docId}
-			altText={t(m.categoryIconAlt, { name: category.name })}
+			altText={intl.formatMessage(m.categoryIconAlt, { name: category.name })}
 			imageStyle={{ aspectRatio: 1, height: 12, objectFit: 'contain' }}
 		/>
 	) : (
@@ -1226,7 +1243,7 @@ function CategoriesFilterSelect({
 	onChange: (action: 'select' | 'deselect', value: string) => void
 	projectId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const dataOptionPrefixId = useId()
 
@@ -1252,8 +1269,10 @@ function CategoriesFilterSelect({
 					/>
 
 					{allSelected
-						? t(m.categoriesFilterAll)
-						: t(m.categoriesFilterValue, { count: selected.length })}
+						? intl.formatMessage(m.categoriesFilterAll)
+						: intl.formatMessage(m.categoriesFilterValue, {
+								count: selected.length,
+							})}
 				</Stack>
 			}
 			hiddenInput={
@@ -1283,7 +1302,7 @@ function CategoriesFilterSelect({
 						}
 					}}
 				>
-					{t(
+					{intl.formatMessage(
 						selected.length === 0
 							? m.categoriesFilterSelectAll
 							: m.categoriesFilterDeselectAll,
@@ -1297,7 +1316,7 @@ function CategoriesFilterSelect({
 					sx={{ maxWidth: 400 }}
 					onClick={onAdvancedClick}
 				>
-					{t(m.categoriesFilterAdvanced)}
+					{intl.formatMessage(m.categoriesFilterAdvanced)}
 				</Button>
 			}
 		>
@@ -1358,9 +1377,12 @@ function CategoriesFilterSelect({
 												}
 											>
 												<CategoryIconImage
-													altText={t(m.categoriesFilterCategoryIconAlt, {
-														name: o.name,
-													})}
+													altText={intl.formatMessage(
+														m.categoriesFilterCategoryIconAlt,
+														{
+															name: o.name,
+														},
+													)}
 													iconDocumentId={o.iconId}
 													projectId={projectId}
 													imageStyle={{
@@ -1452,7 +1474,7 @@ function DateFilterSelect({
 	onChange: (value: DateFilter | null) => void
 	value: DateFilter | undefined
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const dataItemPrefixId = useId()
 
@@ -1473,7 +1495,7 @@ function DateFilterSelect({
 		if (!value) {
 			return {
 				id: 'from-start' as const,
-				displayedValue: t(m.dateFilterOptionFromStart),
+				displayedValue: intl.formatMessage(m.dateFilterOptionFromStart),
 				inputValues: {
 					start: '',
 					end: formatISO(addDays(todayDate, 1), { representation: 'date' }),
@@ -1481,7 +1503,10 @@ function DateFilterSelect({
 			}
 		}
 
-		const displayedValue = getDateFilterOptionDisplayedValue(value, t)
+		const displayedValue = getDateFilterOptionDisplayedValue(
+			value,
+			intl.formatMessage,
+		)
 
 		switch (value.type) {
 			case 'range': {
@@ -1526,7 +1551,7 @@ function DateFilterSelect({
 				}
 			}
 		}
-	}, [value, todayDate, t])
+	}, [value, todayDate, intl])
 
 	return (
 		<FilterSelect
@@ -1581,7 +1606,7 @@ function DateFilterSelect({
 					sx={{ maxWidth: 400 }}
 					onClick={onAdvancedClick}
 				>
-					{t(m.categoriesFilterAdvanced)}
+					{intl.formatMessage(m.categoriesFilterAdvanced)}
 				</Button>
 			}
 			onClose={() => {
@@ -1630,7 +1655,7 @@ function DateFilterSelect({
 							textOverflow: 'ellipsis',
 						}}
 					>
-						{t(m.dateFilterOptionFromStart)}
+						{intl.formatMessage(m.dateFilterOptionFromStart)}
 					</Typography>
 				</Stack>
 			</ListItemButton>
@@ -1671,7 +1696,7 @@ function DateFilterSelect({
 								textOverflow: 'ellipsis',
 							}}
 						>
-							{t(m.dateFilterOptionCustom, {
+							{intl.formatMessage(m.dateFilterOptionCustom, {
 								start: new Date(customRangeOption.start),
 								end: new Date(customRangeOption.end),
 							})}
@@ -1719,7 +1744,7 @@ function DateFilterSelect({
 							textOverflow: 'ellipsis',
 						}}
 					>
-						{t(m.dateFilterOptionLastNDays, { count: 7 })}
+						{intl.formatMessage(m.dateFilterOptionLastNDays, { count: 7 })}
 					</Typography>
 				</Stack>
 			</ListItemButton>
@@ -1763,7 +1788,7 @@ function DateFilterSelect({
 							textOverflow: 'ellipsis',
 						}}
 					>
-						{t(m.dateFilterOptionLastNDays, { count: 30 })}
+						{intl.formatMessage(m.dateFilterOptionLastNDays, { count: 30 })}
 					</Typography>
 				</Stack>
 			</ListItemButton>
@@ -1806,7 +1831,7 @@ function DateFilterSelect({
 							textOverflow: 'ellipsis',
 						}}
 					>
-						{t(m.dateFilterOptionSameMonth)}
+						{intl.formatMessage(m.dateFilterOptionSameMonth)}
 					</Typography>
 				</Stack>
 			</ListItemButton>
@@ -1849,7 +1874,7 @@ function DateFilterSelect({
 							textOverflow: 'ellipsis',
 						}}
 					>
-						{t(m.dateFilterOptionSameYear)}
+						{intl.formatMessage(m.dateFilterOptionSameYear)}
 					</Typography>
 				</Stack>
 			</ListItemButton>
@@ -1857,7 +1882,34 @@ function DateFilterSelect({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly observationCategoryNameFallback: NoMessageValues
+	readonly trackItemTitle: NoMessageValues
+	readonly categoryIconAlt: { readonly name: MessageValue }
+	readonly downloadObservations: NoMessageValues
+	readonly listTitle: NoMessageValues
+	readonly resultsCount: { readonly count: number | bigint }
+	readonly clearFilters: NoMessageValues
+	readonly categoriesFilterValue: { readonly count: number | bigint }
+	readonly categoriesFilterAll: NoMessageValues
+	readonly categoriesFilterDeselectAll: NoMessageValues
+	readonly categoriesFilterSelectAll: NoMessageValues
+	readonly categoriesFilterNotCategorized: NoMessageValues
+	readonly categoriesFilterCategoryIconAlt: { readonly name: MessageValue }
+	readonly categoriesFilterAdvanced: NoMessageValues
+	readonly dateFilterOptionFromStart: NoMessageValues
+	readonly dateFilterOptionCustom: {
+		readonly end: number | Date
+		readonly start: number | Date
+	}
+	readonly dateFilterValueCustom: NoMessageValues
+	readonly dateFilterOptionLastNDays: { readonly count: number | bigint }
+	readonly dateFilterOptionSameMonth: NoMessageValues
+	readonly dateFilterOptionSameYear: NoMessageValues
+	readonly noResultsTitle: NoMessageValues
+	readonly noResultsResetFilters: NoMessageValues
+	readonly categoryUnavailable: NoMessageValues
+}>({
 	observationCategoryNameFallback: {
 		id: '$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback',
 		defaultMessage: 'Not categorized',

@@ -9,7 +9,12 @@ import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import * as v from 'valibot'
 
 import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../colors.ts'
@@ -39,9 +44,9 @@ export const Route = createFileRoute('/onboarding/device-name')({
 })
 
 function RouteComponent() {
-	const router = useRouter()
+	const intl = useIntl()
 
-	const { formatMessage: t } = useIntl()
+	const router = useRouter()
 
 	const { data: deviceInfo } = useOwnDeviceInfo()
 	const setOwnDeviceInfo = useSetOwnDeviceInfo()
@@ -51,15 +56,15 @@ function RouteComponent() {
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
 	const deviceNameSchema = useMemo(() => {
-		const maxLengthError = t(m.maxLengthError)
-		const minLengthError = t(m.minLengthError)
+		const maxLengthError = intl.formatMessage(m.maxLengthError)
+		const minLengthError = intl.formatMessage(m.minLengthError)
 
 		return createDeviceNameSchema({
 			maxBytesError: maxLengthError,
 			maxLengthError,
 			minLengthError,
 		})
-	}, [t])
+	}, [intl])
 
 	const form = useAppForm({
 		defaultValues: { deviceName: deviceInfo.name ? deviceInfo.name : '' },
@@ -116,7 +121,7 @@ function RouteComponent() {
 							variant="h1"
 							sx={{ fontWeight: 500, textAlign: 'center' }}
 						>
-							{t(m.title)}
+							{intl.formatMessage(m.title)}
 						</Typography>
 					</Stack>
 
@@ -124,7 +129,7 @@ function RouteComponent() {
 						variant="h2"
 						sx={{ fontWeight: 400, textAlign: 'center' }}
 					>
-						{t(m.description)}
+						{intl.formatMessage(m.description)}
 					</Typography>
 
 					<Box
@@ -149,7 +154,7 @@ function RouteComponent() {
 									required
 									fullWidth
 									autoFocus
-									label={t(m.deviceName)}
+									label={intl.formatMessage(m.deviceName)}
 									value={field.state.value}
 									error={!field.state.meta.isValid}
 									onChange={(event) => {
@@ -177,7 +182,7 @@ function RouteComponent() {
 													}
 												>
 													{(count) =>
-														t(m.characterCount, {
+														intl.formatMessage(m.characterCount, {
 															count,
 															max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
 														})
@@ -203,7 +208,7 @@ function RouteComponent() {
 								aria-disabled={!canSubmit}
 								sx={{ maxWidth: 400 }}
 							>
-								{t(m.addName)}
+								{intl.formatMessage(m.addName)}
 							</Button>
 						)}
 					</form.Subscribe>
@@ -230,7 +235,18 @@ function RouteComponent() {
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly title: NoMessageValues
+	readonly description: NoMessageValues
+	readonly deviceName: NoMessageValues
+	readonly minLengthError: NoMessageValues
+	readonly maxLengthError: NoMessageValues
+	readonly addName: NoMessageValues
+	readonly characterCount: {
+		readonly count: MessageValue
+		readonly max: MessageValue
+	}
+}>({
 	title: {
 		id: '$1.routes.onboarding.device-name.title',
 		defaultMessage: 'Name Your Device',

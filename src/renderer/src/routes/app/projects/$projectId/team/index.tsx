@@ -14,7 +14,12 @@ import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { createFileRoute } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 
 import { DeviceIcon } from '../../-shared/device-icon.tsx'
 import { ListRowLink } from '../../../-components/list-row-link.tsx'
@@ -516,7 +521,22 @@ function getDisplayableMembers(members: Array<MemberApi.MemberInfo>) {
 	return { coordinators, participants, pastCollaborators, remoteArchives }
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly navTitle: NoMessageValues
+	readonly membersCount: { readonly count: number | bigint }
+	readonly inviteDevice: NoMessageValues
+	readonly coordinatorsSectionTitle: NoMessageValues
+	readonly coordinatorsSectionDescription: NoMessageValues
+	readonly participantsSectionTitle: NoMessageValues
+	readonly participantsSectionDescription: NoMessageValues
+	readonly noParticipants: NoMessageValues
+	readonly remoteArchivesSectionTitle: NoMessageValues
+	readonly remoteArchivesSectionDescription: NoMessageValues
+	readonly pastCollaboratorsSectionTitle: NoMessageValues
+	readonly pastCollaboratorsSectionDescription: NoMessageValues
+	readonly thisDevice: NoMessageValues
+	readonly memberLinkAccessibleLabel: { readonly name: MessageValue }
+}>({
 	navTitle: {
 		id: '$1.routes.app.projects.$projectId.team.index.navTitle',
 		defaultMessage: 'Team',

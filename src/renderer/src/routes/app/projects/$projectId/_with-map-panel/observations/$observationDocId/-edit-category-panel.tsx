@@ -18,7 +18,12 @@ import {
 	useMutation,
 	useSuspenseQuery,
 } from '@tanstack/react-query'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 
 import { BLACK, BLUE_GREY } from '../../../../../../../colors.ts'
 import {
@@ -46,7 +51,7 @@ export function EditCategoryPanel({
 	observationDocId: string
 	onClose: (success: boolean) => void
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const isCategoryUpdatePending =
 		useIsMutating({
@@ -68,7 +73,7 @@ export function EditCategoryPanel({
 			>
 				<IconButton
 					aria-disabled={isCategoryUpdatePending}
-					aria-label={t(m.closePanelAccessibleLabel)}
+					aria-label={intl.formatMessage(m.closePanelAccessibleLabel)}
 					onClick={() => {
 						if (isCategoryUpdatePending) {
 							return
@@ -81,7 +86,7 @@ export function EditCategoryPanel({
 				</IconButton>
 
 				<Typography variant="h1" sx={{ fontWeight: 500 }}>
-					{t(m.editCategoryPanelTitle)}
+					{intl.formatMessage(m.editCategoryPanelTitle)}
 				</Typography>
 			</Stack>
 
@@ -122,7 +127,7 @@ function CategoriesList({
 	observationDocId: string
 	onSuccess: () => void
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: lang } = useSuspenseQuery({
 		...getLocaleStateQueryOptions(),
@@ -244,7 +249,9 @@ function CategoriesList({
 								>
 									{category.iconRef?.docId ? (
 										<CategoryIconImage
-											altText={t(m.categoryIconAlt, { name: category.name })}
+											altText={intl.formatMessage(m.categoryIconAlt, {
+												name: category.name,
+											})}
 											iconDocumentId={category.iconRef.docId}
 											projectId={projectId}
 											imageStyle={{ width: 48, aspectRatio: 1 }}
@@ -288,7 +295,11 @@ function CategoriesList({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly closePanelAccessibleLabel: NoMessageValues
+	readonly editCategoryPanelTitle: NoMessageValues
+	readonly categoryIconAlt: { readonly name: MessageValue }
+}>({
 	closePanelAccessibleLabel: {
 		id: 'routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel',
 		defaultMessage: 'Close.',

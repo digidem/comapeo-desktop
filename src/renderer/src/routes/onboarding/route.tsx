@@ -10,11 +10,16 @@ import {
 	useChildMatches,
 	useRouter,
 } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 
-import { COMAPEO_BLUE, DARK_COMAPEO_BLUE, WHITE } from '../../colors'
-import { Icon } from '../../components/icon'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo'
+import { COMAPEO_BLUE, DARK_COMAPEO_BLUE, WHITE } from '../../colors.ts'
+import { Icon } from '../../components/icon.tsx'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo.ts'
 
 export const Route = createFileRoute('/onboarding')({
 	beforeLoad: async ({ context }) => {
@@ -36,9 +41,9 @@ export const Route = createFileRoute('/onboarding')({
 })
 
 function RouteComponent() {
-	const router = useRouter()
+	const intl = useIntl()
 
-	const { formatMessage: t } = useIntl()
+	const router = useRouter()
 
 	const currentRoute = useChildMatches({
 		select: (matches) => {
@@ -94,14 +99,14 @@ function RouteComponent() {
 							// TODO: Ideally update the theme appropriately instead
 							sx={{ color: WHITE }}
 						>
-							{t(m.goBack)}
+							{intl.formatMessage(m.goBack)}
 						</Button>
 					</Box>
 
 					<Stack direction="row" sx={{ alignItems: 'center', gap: 4 }}>
 						<StepIndicator
 							isActive={stepNumber === 1}
-							label={t(m.step, { value: 1 })}
+							label={intl.formatMessage(m.step, { value: 1 })}
 						/>
 
 						<Divider
@@ -111,7 +116,7 @@ function RouteComponent() {
 
 						<StepIndicator
 							isActive={stepNumber === 2}
-							label={t(m.step, { value: 2 })}
+							label={intl.formatMessage(m.step, { value: 2 })}
 						/>
 					</Stack>
 				</Stack>
@@ -154,7 +159,10 @@ function StepIndicator({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly goBack: NoMessageValues
+	readonly step: { readonly value: MessageValue }
+}>({
 	goBack: {
 		id: '$1.routes.onboarding.route.goBack',
 		defaultMessage: 'Go back',

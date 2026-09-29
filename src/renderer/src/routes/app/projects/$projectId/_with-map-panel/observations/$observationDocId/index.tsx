@@ -20,7 +20,12 @@ import Typography from '@mui/material/Typography'
 import { captureException, captureMessage } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { Block, createFileRoute, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import * as v from 'valibot'
 
 import type { CoordinateFormat } from '../../../../../../../../../shared/coordinate-format.ts'
@@ -282,8 +287,9 @@ function DeleteObservationSuccessPanel({
 	projectId: string
 	fromTrackDocId?: string
 }) {
+	const intl = useIntl()
+
 	const router = useRouter()
-	const { formatMessage: t } = useIntl()
 
 	return (
 		<Stack
@@ -307,7 +313,7 @@ function DeleteObservationSuccessPanel({
 						variant="h1"
 						sx={{ fontWeight: 500, textAlign: 'center' }}
 					>
-						{t(m.deleteObservationSuccessPanelTitle)}
+						{intl.formatMessage(m.deleteObservationSuccessPanelTitle)}
 					</Typography>
 				</Stack>
 			</Container>
@@ -350,7 +356,7 @@ function DeleteObservationSuccessPanel({
 					variant="outlined"
 					sx={{ maxWidth: 400 }}
 				>
-					{t(
+					{intl.formatMessage(
 						fromTrackDocId
 							? m.deleteObservationSuccessPanelReturnToTrack
 							: m.deleteObservationSuccessPanelReturnToObservations,
@@ -1149,7 +1155,7 @@ function ObservationMetadataPanel({
 	observation: Observation
 	unitSystem: UnitSystem
 }) {
-	const { formatMessage: t, formatDate } = useIntl()
+	const intl = useIntl()
 
 	const metadataRows = useMemo(() => {
 		const accuracy = observation.metadata?.position?.coords.accuracy
@@ -1171,8 +1177,8 @@ function ObservationMetadataPanel({
 			result.push({
 				id: 'latitude',
 				icon: <Icon name="comapeo-latitude" htmlColor={DARK_GREY} />,
-				label: t(m.observationMetadataLatitudeLabel),
-				value: t(m.observationMetadataCoordinate, {
+				label: intl.formatMessage(m.observationMetadataLatitudeLabel),
+				value: intl.formatMessage(m.observationMetadataCoordinate, {
 					value: latitude.toFixed(5),
 				}),
 			})
@@ -1182,8 +1188,8 @@ function ObservationMetadataPanel({
 			result.push({
 				id: 'longitude',
 				icon: <Icon name="comapeo-longitude" htmlColor={DARK_GREY} />,
-				label: t(m.observationMetadataLongitudeLabel),
-				value: t(m.observationMetadataCoordinate, {
+				label: intl.formatMessage(m.observationMetadataLongitudeLabel),
+				value: intl.formatMessage(m.observationMetadataCoordinate, {
 					value: longitude.toFixed(5),
 				}),
 			})
@@ -1192,17 +1198,17 @@ function ObservationMetadataPanel({
 		if (accuracy !== undefined) {
 			const value =
 				unitSystem === 'imperial'
-					? t(m.observationMetadataLocationAccuracyFeet, {
+					? intl.formatMessage(m.observationMetadataLocationAccuracyFeet, {
 							value: (Math.abs(accuracy) * FOOT_TO_METER_RATIO).toFixed(0),
 						})
-					: t(m.observationMetadataLocationAccuracyMeters, {
+					: intl.formatMessage(m.observationMetadataLocationAccuracyMeters, {
 							value: Math.abs(accuracy).toFixed(0),
 						})
 
 			result.push({
 				id: 'accuracy',
 				icon: <Icon name="comapeo-accuracy" htmlColor={DARK_GREY} />,
-				label: t(m.observationMetadataLocationAccuracyLabel),
+				label: intl.formatMessage(m.observationMetadataLocationAccuracyLabel),
 				value,
 			})
 		}
@@ -1210,17 +1216,17 @@ function ObservationMetadataPanel({
 		if (altitude !== undefined) {
 			const value =
 				unitSystem === 'imperial'
-					? t(m.observationMetadataAltitudeFeet, {
+					? intl.formatMessage(m.observationMetadataAltitudeFeet, {
 							value: (altitude * FOOT_TO_METER_RATIO).toFixed(0),
 						})
-					: t(m.observationMetadataAltitudeMeters, {
+					: intl.formatMessage(m.observationMetadataAltitudeMeters, {
 							value: altitude.toFixed(0),
 						})
 
 			result.push({
 				id: 'altitude',
 				icon: <Icon name="material-symbols-landscape" htmlColor={DARK_GREY} />,
-				label: t(m.observationMetadataAltitudeLabel),
+				label: intl.formatMessage(m.observationMetadataAltitudeLabel),
 				value,
 			})
 		}
@@ -1228,12 +1234,12 @@ function ObservationMetadataPanel({
 		if (altitudeAccuracy !== undefined) {
 			const value =
 				unitSystem === 'imperial'
-					? t(m.observationMetadataAltitudeAccuracyFeet, {
+					? intl.formatMessage(m.observationMetadataAltitudeAccuracyFeet, {
 							value: (Math.abs(altitudeAccuracy) * FOOT_TO_METER_RATIO).toFixed(
 								0,
 							),
 						})
-					: t(m.observationMetadataAltitudeAccuracyMeters, {
+					: intl.formatMessage(m.observationMetadataAltitudeAccuracyMeters, {
 							value: Math.abs(altitudeAccuracy).toFixed(0),
 						})
 
@@ -1245,7 +1251,7 @@ function ObservationMetadataPanel({
 						htmlColor={DARK_GREY}
 					/>
 				),
-				label: t(m.observationMetadataAltitudeAccuracyLabel),
+				label: intl.formatMessage(m.observationMetadataAltitudeAccuracyLabel),
 				value,
 			})
 		}
@@ -1254,8 +1260,8 @@ function ObservationMetadataPanel({
 			result.push({
 				id: 'speed',
 				icon: <Icon name="material-symbols-speed" htmlColor={DARK_GREY} />,
-				label: t(m.observationMetadataSpeedLabel),
-				value: t(
+				label: intl.formatMessage(m.observationMetadataSpeedLabel),
+				value: intl.formatMessage(
 					unitSystem === 'imperial'
 						? m.observationMetadataSpeedFeet
 						: m.observationMetadataSpeedMeters,
@@ -1265,7 +1271,7 @@ function ObservationMetadataPanel({
 		}
 
 		return result
-	}, [observation, t, unitSystem])
+	}, [observation, intl, unitSystem])
 
 	return (
 		<Stack direction="column">
@@ -1307,7 +1313,7 @@ function ObservationMetadataPanel({
 
 						<Typography>
 							<time dateTime={observation.createdAt}>
-								{formatDate(observation.createdAt, {
+								{intl.formatDate(observation.createdAt, {
 									year: 'numeric',
 									month: 'short',
 									day: '2-digit',
@@ -1553,7 +1559,47 @@ function getFieldsToDisplay(category: Preset, fields: Array<Field>) {
 	return result
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly navTitle: NoMessageValues
+	readonly categoryIconAlt: { readonly name: MessageValue }
+	readonly observationCategoryNameFallback: NoMessageValues
+	readonly noLocation: NoMessageValues
+	readonly detailsSectionTitle: NoMessageValues
+	readonly observationNotFound: { readonly docId: MessageValue }
+	readonly changeCategory: NoMessageValues
+	readonly deleteObservationButtonText: NoMessageValues
+	readonly deleteObservationConfirmationDialogTitle: NoMessageValues
+	readonly deleteObservationConfirmationDialogConfirm: NoMessageValues
+	readonly deleteObservationConfirmationDialogCancel: NoMessageValues
+	readonly deleteObservationSuccessPanelTitle: NoMessageValues
+	readonly deleteObservationSuccessPanelReturnToObservations: NoMessageValues
+	readonly deleteObservationSuccessPanelReturnToTrack: NoMessageValues
+	readonly locationAccuracyMeters: { readonly value: MessageValue }
+	readonly locationAccuracyFeet: { readonly value: MessageValue }
+	readonly observationMetadataLatitudeLabel: NoMessageValues
+	readonly observationMetadataLongitudeLabel: NoMessageValues
+	readonly observationMetadataCoordinate: { readonly value: MessageValue }
+	readonly observationMetadataLocationAccuracyLabel: NoMessageValues
+	readonly observationMetadataLocationAccuracyMeters: {
+		readonly value: MessageValue
+	}
+	readonly observationMetadataLocationAccuracyFeet: {
+		readonly value: MessageValue
+	}
+	readonly observationMetadataAltitudeLabel: NoMessageValues
+	readonly observationMetadataAltitudeMeters: { readonly value: MessageValue }
+	readonly observationMetadataAltitudeFeet: { readonly value: MessageValue }
+	readonly observationMetadataAltitudeAccuracyLabel: NoMessageValues
+	readonly observationMetadataAltitudeAccuracyMeters: {
+		readonly value: MessageValue
+	}
+	readonly observationMetadataAltitudeAccuracyFeet: {
+		readonly value: MessageValue
+	}
+	readonly observationMetadataSpeedLabel: NoMessageValues
+	readonly observationMetadataSpeedMeters: { readonly value: MessageValue }
+	readonly observationMetadataSpeedFeet: { readonly value: MessageValue }
+}>({
 	navTitle: {
 		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.navTitle',
 		defaultMessage: 'Observation',

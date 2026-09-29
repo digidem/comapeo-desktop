@@ -13,7 +13,13 @@ import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { useMutation } from '@tanstack/react-query'
 import { Navigate, createFileRoute, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageTag,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import * as v from 'valibot'
 
 import { DeviceRow } from '../-shared/device-row.tsx'
@@ -30,6 +36,7 @@ import { DecentDialog } from '../../../../../../../../components/decent-dialog.t
 import { ErrorDialogContent } from '../../../../../../../../components/error-dialog.tsx'
 import { GenericRoutePendingComponent } from '../../../../../../../../components/generic-route-pending-component.tsx'
 import { Icon } from '../../../../../../../../components/icon.tsx'
+import { Break } from '../../../../../../../../components/intl-rich-text.tsx'
 import { ButtonLink } from '../../../../../../../../components/link.tsx'
 import { useLocalPeersState } from '../../../../../../../../contexts/local-peers-store-context.ts'
 import { useIconSizeBasedOnTypography } from '../../../../../../../../hooks/icon.ts'
@@ -296,6 +303,7 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 
 								<Typography sx={{ textAlign: 'center' }}>
 									{intl.formatMessage(m.deviceBeingInvited, {
+										br: Break,
 										name: (
 											<Typography
 												variant="inherit"
@@ -679,7 +687,27 @@ function InviteAccepted({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly navTitle: NoMessageValues
+	readonly participant: NoMessageValues
+	readonly coordinator: NoMessageValues
+	readonly sendInvite: NoMessageValues
+	readonly deviceBeingInvited: {
+		readonly br: MessageTag
+		readonly name: MessageValue
+		readonly role: MessageValue
+	}
+	readonly waiting: NoMessageValues
+	readonly inviteAccepted: NoMessageValues
+	readonly timeSinceSent: { readonly time: MessageValue }
+	readonly cancelInvite: NoMessageValues
+	readonly accepted: NoMessageValues
+	readonly addedOn: { readonly value: MessageValue }
+	readonly addAnotherDevice: NoMessageValues
+	readonly close: NoMessageValues
+	readonly invitationDeclinedTitle: NoMessageValues
+	readonly invitationDeclinedDescription: NoMessageValues
+}>({
 	navTitle: {
 		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.navTitle',
 		defaultMessage: 'Review Invitation',

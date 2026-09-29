@@ -14,7 +14,12 @@ import { alpha } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
 import { endOfDay, isAfter, isBefore, isEqual, min, startOfDay } from 'date-fns'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import * as v from 'valibot'
 
 import { BLACK, BLUE_GREY, WHITE } from '../../../../../colors.ts'
@@ -55,7 +60,8 @@ export function AdvancedFiltersDialogContent({
 	projectId: string
 	tracksWithCategory: Array<{ document: Track; category?: Preset }>
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
+
 	const formId = useId()
 
 	const [initialDateRange] = useState(() => {
@@ -79,9 +85,9 @@ export function AdvancedFiltersDialogContent({
 				}
 
 				return true
-			}, t(m.invalidStartDateError)),
+			}, intl.formatMessage(m.invalidStartDateError)),
 		)
-	}, [t])
+	}, [intl])
 
 	const form = useAppForm({
 		defaultValues: {
@@ -150,7 +156,7 @@ export function AdvancedFiltersDialogContent({
 				</IconButton>
 
 				<Typography variant="h1" sx={{ fontWeight: 500 }}>
-					{t(m.advancedFiltersTitle)}
+					{intl.formatMessage(m.advancedFiltersTitle)}
 				</Typography>
 			</Stack>
 
@@ -180,7 +186,7 @@ export function AdvancedFiltersDialogContent({
 								<Icon name="material-symbols-schedule" htmlColor={BLUE_GREY} />
 
 								<Typography sx={{ fontWeight: 500 }}>
-									{t(m.advancedFiltersDateSectionTitle)}
+									{intl.formatMessage(m.advancedFiltersDateSectionTitle)}
 								</Typography>
 							</Stack>
 
@@ -201,7 +207,9 @@ export function AdvancedFiltersDialogContent({
 											}
 
 											if (!isValidStartDate(value, endDate)) {
-												return new Error(t(m.invalidStartDateError))
+												return new Error(
+													intl.formatMessage(m.invalidStartDateError),
+												)
 											}
 										},
 									}}
@@ -226,7 +234,9 @@ export function AdvancedFiltersDialogContent({
 													return isAfter(day, endDate)
 												}}
 												value={formField.state.value}
-												label={t(m.advancedFiltersDateStartLabel)}
+												label={intl.formatMessage(
+													m.advancedFiltersDateStartLabel,
+												)}
 												onChange={(value) => {
 													formField.handleChange(
 														value ? startOfDay(value) : null,
@@ -263,7 +273,9 @@ export function AdvancedFiltersDialogContent({
 											}
 
 											if (!isValidStartDate(startDate, value)) {
-												return new Error(t(m.invalidEndDateError))
+												return new Error(
+													intl.formatMessage(m.invalidEndDateError),
+												)
 											}
 										},
 									}}
@@ -273,7 +285,9 @@ export function AdvancedFiltersDialogContent({
 
 										return (
 											<DesktopDatePicker
-												label={t(m.advancedFiltersDateEndLabel)}
+												label={intl.formatMessage(
+													m.advancedFiltersDateEndLabel,
+												)}
 												disableFuture
 												shouldDisableDate={(day) => {
 													if (isBefore(day, oldestSelectableDate)) {
@@ -331,7 +345,9 @@ export function AdvancedFiltersDialogContent({
 												/>
 
 												<Typography sx={{ fontWeight: 500 }}>
-													{t(m.advancedFiltersCategoriesSectionTitle)}
+													{intl.formatMessage(
+														m.advancedFiltersCategoriesSectionTitle,
+													)}
 												</Typography>
 											</Stack>
 
@@ -349,7 +365,7 @@ export function AdvancedFiltersDialogContent({
 													}
 												}}
 											>
-												{t(
+												{intl.formatMessage(
 													formField.state.value === undefined ||
 														formField.state.value.length > 0
 														? m.advancedFiltersCategoriesSectionDeselectAll
@@ -402,7 +418,7 @@ export function AdvancedFiltersDialogContent({
 																		>
 																			{option.iconId ? (
 																				<CategoryIconImage
-																					altText={t(
+																					altText={intl.formatMessage(
 																						m.advancedFiltersCategoryIconAlt,
 																						{ name: option.name },
 																					)}
@@ -566,7 +582,7 @@ export function AdvancedFiltersDialogContent({
 									}}
 								>
 									{(filteredDocumentsCount) => {
-										return t(m.advancedFiltersShowResults, {
+										return intl.formatMessage(m.advancedFiltersShowResults, {
 											count: filteredDocumentsCount,
 										})
 									}}
@@ -584,7 +600,21 @@ function isValidStartDate(start: Date, end: Date) {
 	return isEqual(start, end) || isBefore(start, end)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly advancedFiltersCloseAccessibleLabel: NoMessageValues
+	readonly advancedFiltersTitle: NoMessageValues
+	readonly advancedFiltersDateSectionTitle: NoMessageValues
+	readonly advancedFiltersDateStartLabel: NoMessageValues
+	readonly advancedFiltersDateEndLabel: NoMessageValues
+	readonly advancedFiltersCategoriesSectionTitle: NoMessageValues
+	readonly advancedFiltersCategoriesSectionDeselectAll: NoMessageValues
+	readonly advancedFiltersCategoriesSectionSelectAll: NoMessageValues
+	readonly advancedFiltersCategoriesSectionNotCategorizedOption: NoMessageValues
+	readonly advancedFiltersCategoryIconAlt: { readonly name: MessageValue }
+	readonly advancedFiltersShowResults: { readonly count: number | bigint }
+	readonly invalidStartDateError: NoMessageValues
+	readonly invalidEndDateError: NoMessageValues
+}>({
 	advancedFiltersCloseAccessibleLabel: {
 		id: 'routes.app.projects.$projectId.index.advancedFiltersCloseAccessibleLabel',
 		defaultMessage: 'Close',

@@ -17,7 +17,13 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageTag,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 
 import { DeviceIcon } from '../../-shared/device-icon.tsx'
 import {
@@ -30,6 +36,7 @@ import {
 import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
+import { Bold } from '../../../../../components/intl-rich-text.tsx'
 import { useActiveProjectIdActions } from '../../../../../contexts/active-project-id-store-context.ts'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
 import {
@@ -593,6 +600,7 @@ function LeaveProjectConfirmation({
 
 						<Typography sx={{ textAlign: 'center' }}>
 							{intl.formatMessage(m.leaveProjectConfirmationDescription, {
+								b: Bold,
 								name: projectName || '',
 							})}
 						</Typography>
@@ -672,7 +680,31 @@ function LeaveProjectConfirmation({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly collaboratorNavTitle: NoMessageValues
+	readonly leaveProjectNavTitle: NoMessageValues
+	readonly thisDevice: NoMessageValues
+	readonly coordinator: NoMessageValues
+	readonly participant: NoMessageValues
+	readonly remoteArchive: NoMessageValues
+	readonly addedOn: { readonly value: MessageValue }
+	readonly leaveProjectButton: NoMessageValues
+	readonly lastCoordinatorWarningTitle: NoMessageValues
+	readonly lastCoordinatorWarningDescription: NoMessageValues
+	readonly lastDeviceWarningTitle: NoMessageValues
+	readonly lastDeviceWarningDescription: NoMessageValues
+	readonly suggestionExportData: NoMessageValues
+	readonly suggestionInviteCoordinator: NoMessageValues
+	readonly leaveProjectConfirmationTitle: NoMessageValues
+	readonly leaveProjectConfirmationDescription: {
+		readonly b: MessageTag
+		readonly name: MessageValue
+	}
+	readonly cancelButton: NoMessageValues
+	readonly continueButton: NoMessageValues
+	readonly confirmButton: NoMessageValues
+	readonly goBackAccessibleLabel: NoMessageValues
+}>({
 	collaboratorNavTitle: {
 		id: '$1.routes.app.projects.$projectId.team.$deviceId.collaboratorNavTitle',
 		defaultMessage: 'Collaborator Info',

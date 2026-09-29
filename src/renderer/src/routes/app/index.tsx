@@ -15,7 +15,12 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import * as v from 'valibot'
 
 import {
@@ -577,7 +582,23 @@ function ListedProjectCard({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly pageTitle: NoMessageValues
+	readonly startNewProject: NoMessageValues
+	readonly comapeoSettings: NoMessageValues
+	readonly unnamedProject: NoMessageValues
+	readonly projectCardLinkAccessibleLabel: { readonly name: MessageValue }
+	readonly projectCardRoleCoordinator: NoMessageValues
+	readonly projectCardRoleParticipant: NoMessageValues
+	readonly mostRecent: NoMessageValues
+	readonly getStartedTitle: { readonly name: MessageValue }
+	readonly getStartedDescription: NoMessageValues
+	readonly getStartedMapAnywhereDetail: NoMessageValues
+	readonly getStartedShareDetail: NoMessageValues
+	readonly getStartedOwnDataDetail: NoMessageValues
+	readonly projectsListSectionTitleCurrent: NoMessageValues
+	readonly projectsListSectionTitleOthers: NoMessageValues
+}>({
 	pageTitle: {
 		id: '$1.routes.app.index.pageTitle',
 		defaultMessage: 'All Projects',

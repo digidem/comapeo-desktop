@@ -33,7 +33,12 @@ import {
 	notFound,
 	useChildMatches,
 } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 
 import {
@@ -1095,7 +1100,31 @@ const BASE_ACTIVE_LINK_PROPS = {
 	},
 } satisfies IconButtonLinkProps['activeProps']
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly projectNavigationAccessibleLabel: NoMessageValues
+	readonly projectInfoTabAccessibleLabel: { readonly name: MessageValue }
+	readonly listTabLabel: NoMessageValues
+	readonly exchangeTabLabel: NoMessageValues
+	readonly teamTabLabel: NoMessageValues
+	readonly testDataTabLabel: NoMessageValues
+	readonly backgroundMapTabLabel: NoMessageValues
+	readonly settingsTabLabel: NoMessageValues
+	readonly switchProjectTabLabel: NoMessageValues
+	readonly unnamedProject: NoMessageValues
+	readonly fallbackCategoriesSetName: NoMessageValues
+	readonly projectInfoRoleCoordinator: NoMessageValues
+	readonly projectInfoRoleParticipant: NoMessageValues
+	readonly projectInfoCategoriesCreated: { readonly date: MessageValue }
+	readonly projectInfoCategoriesAdded: { readonly date: MessageValue }
+	readonly projectInfoEditInfo: NoMessageValues
+	readonly projectInfoViewTeam: NoMessageValues
+	readonly projectInfoUpdateCategories: NoMessageValues
+	readonly projectInfoClose: NoMessageValues
+	readonly projectSwitcherCardLinkAccessibleLabel: {
+		readonly name: MessageValue
+	}
+	readonly projectSwitcherViewAllProjects: NoMessageValues
+}>({
 	projectNavigationAccessibleLabel: {
 		id: 'routes.app.projects.$projectId.route.projectNavigationAccessibleLabel',
 		defaultMessage: 'Project navigation',

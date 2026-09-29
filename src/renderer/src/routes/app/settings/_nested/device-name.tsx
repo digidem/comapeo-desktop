@@ -6,7 +6,12 @@ import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import { Block, createFileRoute, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import * as v from 'valibot'
 
 import { WHITE } from '../../../../colors.ts'
@@ -39,7 +44,8 @@ export const Route = createFileRoute('/app/settings/_nested/device-name')({
 })
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
+
 	const router = useRouter()
 
 	const { data: deviceInfo } = useOwnDeviceInfo()
@@ -48,8 +54,8 @@ function RouteComponent() {
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
 	const onChangeSchema = useMemo(() => {
-		const maxLengthError = t(m.maxLengthError)
-		const minLengthError = t(m.minLengthError)
+		const maxLengthError = intl.formatMessage(m.maxLengthError)
+		const minLengthError = intl.formatMessage(m.minLengthError)
 
 		return v.object({
 			deviceName: createDeviceNameSchema({
@@ -58,7 +64,7 @@ function RouteComponent() {
 				minLengthError,
 			}),
 		})
-	}, [t])
+	}, [intl])
 
 	const form = useAppForm({
 		defaultValues: { deviceName: deviceInfo.name ? deviceInfo.name : '' },
@@ -107,7 +113,7 @@ function RouteComponent() {
 								<TextField
 									required
 									fullWidth
-									label={t(m.inputLabel)}
+									label={intl.formatMessage(m.inputLabel)}
 									value={field.state.value}
 									error={!field.state.meta.isValid}
 									name={field.name}
@@ -136,7 +142,7 @@ function RouteComponent() {
 													}
 												>
 													{(count) =>
-														t(m.characterCount, {
+														intl.formatMessage(m.characterCount, {
 															count,
 															max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
 														})
@@ -177,7 +183,7 @@ function RouteComponent() {
 										}}
 										sx={{ maxWidth: 400 }}
 									>
-										{t(m.cancel)}
+										{intl.formatMessage(m.cancel)}
 									</Button>
 
 									<Button
@@ -190,7 +196,7 @@ function RouteComponent() {
 										aria-disabled={!canSubmit}
 										sx={{ maxWidth: 400 }}
 									>
-										{t(m.save)}
+										{intl.formatMessage(m.save)}
 									</Button>
 								</>
 							)}
@@ -248,7 +254,18 @@ function RouteComponent() {
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly navTitle: NoMessageValues
+	readonly inputLabel: NoMessageValues
+	readonly characterCount: {
+		readonly count: MessageValue
+		readonly max: MessageValue
+	}
+	readonly save: NoMessageValues
+	readonly cancel: NoMessageValues
+	readonly minLengthError: NoMessageValues
+	readonly maxLengthError: NoMessageValues
+}>({
 	navTitle: {
 		id: '$1.routes.app.settings.device-name.navTitle',
 		defaultMessage: 'Device Name',

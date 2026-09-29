@@ -10,22 +10,27 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 
-import { SyncedIndicatorLine } from '../../../../-shared/synced-indicator-line'
-import { BLACK, BLUE_GREY } from '../../../../../../../colors'
+import { SyncedIndicatorLine } from '../../../../-shared/synced-indicator-line.tsx'
+import { BLACK, BLUE_GREY } from '../../../../../../../colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
-} from '../../../../../../../components/category-icon'
-import { GenericRouteNotFoundComponent } from '../../../../../../../components/generic-route-not-found-component'
-import { Icon } from '../../../../../../../components/icon'
+} from '../../../../../../../components/category-icon.tsx'
+import { GenericRouteNotFoundComponent } from '../../../../../../../components/generic-route-not-found-component.tsx'
+import { Icon } from '../../../../../../../components/icon.tsx'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	getMatchingCategoryForDocument,
-} from '../../../../../../../lib/comapeo'
-import { customNotFound } from '../../../../../../../lib/navigation'
-import { getLocaleStateQueryOptions } from '../../../../../../../lib/queries/app-settings'
+} from '../../../../../../../lib/comapeo.ts'
+import { customNotFound } from '../../../../../../../lib/navigation.ts'
+import { getLocaleStateQueryOptions } from '../../../../../../../lib/queries/app-settings.ts'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/_with-map-panel/tracks/$trackDocId/',
@@ -86,7 +91,7 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-	const { formatMessage: t, formatDate } = useIntl()
+	const intl = useIntl()
 
 	const router = useRouter()
 
@@ -142,7 +147,7 @@ function RouteComponent() {
 				</IconButton>
 
 				<Typography variant="h1" sx={{ fontWeight: 500 }}>
-					{t(m.navTitle)}
+					{intl.formatMessage(m.navTitle)}
 				</Typography>
 			</Stack>
 
@@ -150,7 +155,7 @@ function RouteComponent() {
 				<Stack direction="column" sx={{ paddingBlock: 6, gap: 6 }}>
 					<Box sx={{ paddingInline: 6 }}>
 						<Typography>
-							{formatDate(track.createdAt, {
+							{intl.formatDate(track.createdAt, {
 								year: 'numeric',
 								month: 'short',
 								day: '2-digit',
@@ -173,8 +178,8 @@ function RouteComponent() {
 									>
 										{category.iconRef?.docId ? (
 											<CategoryIconImage
-												altText={t(m.categoryIconAlt, {
-													name: category.name || t(m.tracks),
+												altText={intl.formatMessage(m.categoryIconAlt, {
+													name: category.name || intl.formatMessage(m.tracks),
 												})}
 												iconDocumentId={category.iconRef.docId}
 												projectId={projectId}
@@ -191,7 +196,7 @@ function RouteComponent() {
 								)}
 
 								<Typography variant="h2" sx={{ fontWeight: 500 }}>
-									{t(m.tracks)}
+									{intl.formatMessage(m.tracks)}
 								</Typography>
 							</Stack>
 						</Box>
@@ -202,7 +207,7 @@ function RouteComponent() {
 							variant="body1"
 							sx={{ textTransform: 'uppercase' }}
 						>
-							{t(m.descriptionSectionTitle)}
+							{intl.formatMessage(m.descriptionSectionTitle)}
 						</Typography>
 
 						<Typography>{track.tags.notes}</Typography>
@@ -256,7 +261,8 @@ function TrackObservationsSection({
 	trackObservationDocIds: Array<string>
 	lang: string
 }) {
-	const { formatMessage: t, formatDate } = useIntl()
+	const intl = useIntl()
+
 	const navigate = Route.useNavigate()
 
 	const { data: allObservations } = useManyDocs({
@@ -295,7 +301,7 @@ function TrackObservationsSection({
 					variant="body1"
 					sx={{ textTransform: 'uppercase' }}
 				>
-					{t(m.observationsSectionTitle, {
+					{intl.formatMessage(m.observationsSectionTitle, {
 						count: displayedTrackObservations.length,
 					})}
 				</Typography>
@@ -307,7 +313,7 @@ function TrackObservationsSection({
 
 					const title = category
 						? category.name
-						: t(m.observationCategoryNameFallback)
+						: intl.formatMessage(m.observationCategoryNameFallback)
 
 					const renderedCategory = category ? (
 						<CategoryIconContainer color={category.color || BLACK}>
@@ -315,7 +321,9 @@ function TrackObservationsSection({
 								<CategoryIconImage
 									projectId={projectId}
 									iconDocumentId={category.iconRef.docId}
-									altText={t(m.categoryIconAlt, { name: category.name })}
+									altText={intl.formatMessage(m.categoryIconAlt, {
+										name: category.name,
+									})}
 									imageStyle={{ width: '100%', aspectRatio: 1 }}
 								/>
 							) : (
@@ -374,7 +382,7 @@ function TrackObservationsSection({
 											overflow: 'hidden',
 										}}
 									>
-										{formatDate(createdAt, {
+										{intl.formatDate(createdAt, {
 											year: 'numeric',
 											month: 'short',
 											day: '2-digit',
@@ -421,7 +429,15 @@ function TrackObservationsSection({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly navTitle: NoMessageValues
+	readonly descriptionSectionTitle: NoMessageValues
+	readonly tracks: NoMessageValues
+	readonly observationsSectionTitle: { readonly count: number | bigint }
+	readonly observationCategoryNameFallback: NoMessageValues
+	readonly categoryIconAlt: { readonly name: MessageValue }
+	readonly trackNotFound: { readonly docId: MessageValue }
+}>({
 	navTitle: {
 		id: '$1.routes.app.projects.$projectId.tracks.$trackDocId.index.navTitle',
 		defaultMessage: 'Track',

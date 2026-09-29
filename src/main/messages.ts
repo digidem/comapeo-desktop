@@ -1,6 +1,25 @@
-import { defineMessages } from '@formatjs/intl'
+import {
+	defineMessages,
+	type MessageValue,
+	type NoMessageValues,
+} from '@formatjs/intl'
 
-export const messages = defineMessages({
+export const messages = defineMessages<{
+	readonly contextMenuCopy: NoMessageValues
+	readonly contextMenuCopyImage: NoMessageValues
+	readonly contextMenuCopyImageAddress: NoMessageValues
+	readonly contextMenuCopyLink: NoMessageValues
+	readonly contextMenuCut: NoMessageValues
+	readonly contextMenuInspectElement: NoMessageValues
+	readonly contextMenuLearnSpelling: { readonly placeholder: MessageValue }
+	readonly contextMenuLookUpSelection: { readonly placeholder: MessageValue }
+	readonly contextMenuPaste: NoMessageValues
+	readonly contextMenuSaveImageAs: NoMessageValues
+	readonly contextMenuSelectAll: NoMessageValues
+	readonly fatalErrorTitle: NoMessageValues
+	readonly fatalErrorDescriptionGeneric: NoMessageValues
+	readonly fatalErrorDescriptionCoreService: NoMessageValues
+}>({
 	contextMenuCopy: {
 		id: '$1.main.app.contextMenuCopy',
 		defaultMessage: 'Copy',

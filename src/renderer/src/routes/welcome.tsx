@@ -9,11 +9,17 @@ import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { createFileRoute } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageTag,
+	type NoMessageValues,
+} from 'react-intl'
 
-import { BLACK, BLUE_GREY, DARK_COMAPEO_BLUE } from '../colors'
-import { Icon } from '../components/icon'
-import { ButtonLink } from '../components/link'
+import { BLACK, BLUE_GREY, DARK_COMAPEO_BLUE } from '../colors.ts'
+import { Icon } from '../components/icon.tsx'
+import { Blue, Bold, Orange } from '../components/intl-rich-text.tsx'
+import { ButtonLink } from '../components/link.tsx'
 import topographicPrintURL from '../images/topographic-print.svg'
 
 export const Route = createFileRoute('/welcome')({
@@ -23,7 +29,8 @@ export const Route = createFileRoute('/welcome')({
 const LIST_BACKGROUND_COLOR = alpha(BLACK, 0.4)
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
+
 	const theme = useTheme()
 
 	const viewportIsNarrow = useMediaQuery(theme.breakpoints.down('md'))
@@ -61,7 +68,11 @@ function RouteComponent() {
 									color="textInverted"
 									sx={{ fontWeight: 'inherit' }}
 								>
-									{t(m.comapeoDesktop)}
+									{intl.formatMessage(m.comapeoDesktop, {
+										b: Bold,
+										blue: Blue,
+										orange: Orange,
+									})}
 								</Typography>
 
 								<Typography
@@ -69,7 +80,7 @@ function RouteComponent() {
 									variant="bannerSubtitle"
 									color="textInverted"
 								>
-									{t(m.appDescription)}
+									{intl.formatMessage(m.appDescription)}
 								</Typography>
 							</Stack>
 						</Grid>
@@ -93,7 +104,7 @@ function RouteComponent() {
 										<ListItemText
 											slotProps={{ primary: { color: 'textInverted' } }}
 										>
-											{t(m.mapAnywhere)}
+											{intl.formatMessage(m.mapAnywhere)}
 										</ListItemText>
 									</ListItem>
 									<ListItem sx={{ gap: 5 }}>
@@ -101,7 +112,7 @@ function RouteComponent() {
 										<ListItemText
 											slotProps={{ primary: { color: 'textInverted' } }}
 										>
-											{t(m.collaborate)}
+											{intl.formatMessage(m.collaborate)}
 										</ListItemText>
 									</ListItem>
 									<ListItem sx={{ gap: 5 }}>
@@ -109,7 +120,7 @@ function RouteComponent() {
 										<ListItemText
 											slotProps={{ primary: { color: 'textInverted' } }}
 										>
-											{t(m.ownData)}
+											{intl.formatMessage(m.ownData)}
 										</ListItemText>
 									</ListItem>
 									<ListItem sx={{ gap: 5 }}>
@@ -117,7 +128,7 @@ function RouteComponent() {
 										<ListItemText
 											slotProps={{ primary: { color: 'textInverted' } }}
 										>
-											{t(m.designedFor)}
+											{intl.formatMessage(m.designedFor)}
 										</ListItemText>
 									</ListItem>
 								</List>
@@ -131,7 +142,7 @@ function RouteComponent() {
 						variant="contained"
 						sx={{ maxWidth: 400 }}
 					>
-						{t(m.getStarted)}
+						{intl.formatMessage(m.getStarted)}
 					</ButtonLink>
 				</Stack>
 			</Container>
@@ -139,7 +150,19 @@ function RouteComponent() {
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly getStarted: NoMessageValues
+	readonly appDescription: NoMessageValues
+	readonly mapAnywhere: NoMessageValues
+	readonly collaborate: NoMessageValues
+	readonly ownData: NoMessageValues
+	readonly designedFor: NoMessageValues
+	readonly comapeoDesktop: {
+		readonly b: MessageTag
+		readonly blue: MessageTag
+		readonly orange: MessageTag
+	}
+}>({
 	getStarted: {
 		id: '$1.routes.welcome.getStarted',
 		defaultMessage: 'Get Started',

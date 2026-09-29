@@ -12,7 +12,13 @@ import { captureException } from '@sentry/react'
 import { useSelector } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
 import { draw } from 'radashi'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageTag,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 import * as v from 'valibot'
 
@@ -29,6 +35,7 @@ import {
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
+import { Bold } from '../../components/intl-rich-text.tsx'
 import { useAppForm } from '../../hooks/forms.ts'
 import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
 import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../lib/constants.ts'
@@ -42,7 +49,7 @@ export function StartProjectDialogContent({
 	onProjectCreated: (projectId: string) => void
 	onBack: () => void
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const formId = `project-name-${useId()}`
 
@@ -51,8 +58,8 @@ export function StartProjectDialogContent({
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
 	const onChangeSchema = useMemo(() => {
-		const maxLengthError = t(m.projectNameMaxLengthError)
-		const minLengthError = t(m.projectNameMinLengthError)
+		const maxLengthError = intl.formatMessage(m.projectNameMaxLengthError)
+		const minLengthError = intl.formatMessage(m.projectNameMinLengthError)
 
 		return v.object({
 			projectName: createProjectNameSchema({
@@ -61,7 +68,7 @@ export function StartProjectDialogContent({
 				maxLengthError,
 			}),
 		})
-	}, [t])
+	}, [intl])
 
 	const form = useAppForm({
 		defaultValues: { projectName: '' },
@@ -101,7 +108,7 @@ export function StartProjectDialogContent({
 					aria-disabled={!onBack}
 					onClick={onBack}
 				>
-					{t(m.projectActionDialogGoBack)}
+					{intl.formatMessage(m.projectActionDialogGoBack)}
 				</Button>
 			</Box>
 
@@ -130,11 +137,13 @@ export function StartProjectDialogContent({
 						</Box>
 
 						<Typography variant="h1" sx={{ fontWeight: 500 }}>
-							{t(m.startProjectDialogTitle)}
+							{intl.formatMessage(m.startProjectDialogTitle)}
 						</Typography>
 					</Box>
 
-					<Typography>{t(m.startProjectDialogDescription)}</Typography>
+					<Typography>
+						{intl.formatMessage(m.startProjectDialogDescription)}
+					</Typography>
 
 					<Box
 						component="form"
@@ -154,7 +163,7 @@ export function StartProjectDialogContent({
 									required
 									fullWidth
 									autoFocus
-									label={t(m.projectNameInputLabel)}
+									label={intl.formatMessage(m.projectNameInputLabel)}
 									value={field.state.value}
 									error={!field.state.meta.isValid}
 									onChange={(event) => {
@@ -183,7 +192,7 @@ export function StartProjectDialogContent({
 													}
 												>
 													{(count) =>
-														t(m.characterCount, {
+														intl.formatMessage(m.characterCount, {
 															count,
 															max: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
 														})
@@ -215,7 +224,7 @@ export function StartProjectDialogContent({
 									<Icon name="material-check-circle-outline-rounded" />
 								}
 							>
-								{t(m.createProjectButton)}
+								{intl.formatMessage(m.createProjectButton)}
 							</Button>
 						)}
 					</form.Subscribe>
@@ -249,7 +258,7 @@ export function LeftProjectDialogContent({
 	onClose: () => void
 	projectName?: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	return (
 		<Stack direction="column">
@@ -267,7 +276,9 @@ export function LeftProjectDialogContent({
 						variant="h1"
 						sx={{ fontWeight: 500, textAlign: 'center' }}
 					>
-						{t(m.leftProjectDialogTitle, { name: projectName || '' })}
+						{intl.formatMessage(m.leftProjectDialogTitle, {
+							name: projectName || '',
+						})}
 					</Typography>
 				</Stack>
 			</Stack>
@@ -293,7 +304,7 @@ export function LeftProjectDialogContent({
 					}}
 					sx={{ maxWidth: 400 }}
 				>
-					{t(m.leftProjectDialogCloseButton)}
+					{intl.formatMessage(m.leftProjectDialogCloseButton)}
 				</Button>
 			</Box>
 		</Stack>
@@ -307,7 +318,7 @@ export function AppUsageConsentDialogContent({
 	deviceName?: string
 	onClose: () => void
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const [contentToDisplay, setContentToDisplay] = useState<
 		'interstitial' | 'success'
@@ -340,20 +351,25 @@ export function AppUsageConsentDialogContent({
 						variant="h1"
 						sx={{ fontWeight: 500, textAlign: 'center', textWrap: 'balance' }}
 					>
-						{t(m.appUsageConsentSuccessTitle)}
+						{intl.formatMessage(m.appUsageConsentSuccessTitle)}
 					</Typography>
 
 					<Typography sx={{ textAlign: 'center', textWrap: 'balance' }}>
 						{deviceName
-							? t(m.appUsageConsentSuccessDescription, { deviceName })
-							: t(m.appUsageConsentSuccessDescriptionNoDeviceName)}
+							? intl.formatMessage(m.appUsageConsentSuccessDescription, {
+									b: Bold,
+									deviceName,
+								})
+							: intl.formatMessage(
+									m.appUsageConsentSuccessDescriptionNoDeviceName,
+								)}
 					</Typography>
 
 					<Typography
 						variant="body2"
 						sx={{ textAlign: 'center', textWrap: 'balance' }}
 					>
-						{t(m.appUsageConsentSuccessDetailsChangeSetting)}
+						{intl.formatMessage(m.appUsageConsentSuccessDetailsChangeSetting)}
 					</Typography>
 				</Stack>
 			</Stack>
@@ -379,7 +395,7 @@ export function AppUsageConsentDialogContent({
 					}}
 					sx={{ maxWidth: 400 }}
 				>
-					{t(m.appUsageConsentSuccessCloseButton)}
+					{intl.formatMessage(m.appUsageConsentSuccessCloseButton)}
 				</Button>
 			</Box>
 		</Stack>
@@ -393,7 +409,7 @@ function AppUsageInterstitial({
 	onClose: () => void
 	onProceed: () => void
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const iconSize = useIconSizeBasedOnTypography({ typographyVariant: 'body1' })
 
@@ -421,12 +437,12 @@ function AppUsageInterstitial({
 							variant="h1"
 							sx={{ fontWeight: 500, textAlign: 'center', textWrap: 'balance' }}
 						>
-							{t(m.appUsageConsentInterstitialTitle)}
+							{intl.formatMessage(m.appUsageConsentInterstitialTitle)}
 						</Typography>
 					</Stack>
 
 					<Typography sx={{ textAlign: 'center', textWrap: 'balance' }}>
-						{t(m.appUsageConsentInterstitialDescription)}
+						{intl.formatMessage(m.appUsageConsentInterstitialDescription)}
 					</Typography>
 
 					<List disablePadding sx={{ paddingInline: 10 }}>
@@ -443,7 +459,9 @@ function AppUsageInterstitial({
 								/>
 
 								<Typography color="textSecondary">
-									{t(m.appUsageConsentInterstitialDetailsIdNumbers)}
+									{intl.formatMessage(
+										m.appUsageConsentInterstitialDetailsIdNumbers,
+									)}
 								</Typography>
 							</ListItem>
 
@@ -459,7 +477,9 @@ function AppUsageInterstitial({
 								/>
 
 								<Typography color="textSecondary">
-									{t(m.appUsageConsentInterstitialDetailsIpAddresses)}
+									{intl.formatMessage(
+										m.appUsageConsentInterstitialDetailsIpAddresses,
+									)}
 								</Typography>
 							</ListItem>
 
@@ -475,7 +495,9 @@ function AppUsageInterstitial({
 								/>
 
 								<Typography color="textSecondary">
-									{t(m.appUsageConsentInterstitialDetailsTurnOffAnytime)}
+									{intl.formatMessage(
+										m.appUsageConsentInterstitialDetailsTurnOffAnytime,
+									)}
 								</Typography>
 							</ListItem>
 						</Stack>
@@ -514,7 +536,7 @@ function AppUsageInterstitial({
 					}}
 					sx={{ maxWidth: 400 }}
 				>
-					{t(m.appUsageConsentInterstitialDenyButton)}
+					{intl.formatMessage(m.appUsageConsentInterstitialDenyButton)}
 				</Button>
 
 				<Button
@@ -539,14 +561,43 @@ function AppUsageInterstitial({
 					}}
 					sx={{ maxWidth: 400 }}
 				>
-					{t(m.appUsageConsentInterstitialAllowButton)}
+					{intl.formatMessage(m.appUsageConsentInterstitialAllowButton)}
 				</Button>
 			</Box>
 		</Stack>
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly projectActionDialogGoBack: NoMessageValues
+	readonly startProjectDialogTitle: NoMessageValues
+	readonly startProjectDialogDescription: NoMessageValues
+	readonly projectNameInputLabel: NoMessageValues
+	readonly projectNameMinLengthError: NoMessageValues
+	readonly projectNameMaxLengthError: NoMessageValues
+	readonly createProjectButton: NoMessageValues
+	readonly characterCount: {
+		readonly count: MessageValue
+		readonly max: MessageValue
+	}
+	readonly leftProjectDialogTitle: { readonly name: MessageValue }
+	readonly leftProjectDialogCloseButton: NoMessageValues
+	readonly appUsageConsentInterstitialTitle: NoMessageValues
+	readonly appUsageConsentInterstitialDescription: NoMessageValues
+	readonly appUsageConsentInterstitialDetailsIdNumbers: NoMessageValues
+	readonly appUsageConsentInterstitialDetailsIpAddresses: NoMessageValues
+	readonly appUsageConsentInterstitialDetailsTurnOffAnytime: NoMessageValues
+	readonly appUsageConsentInterstitialDenyButton: NoMessageValues
+	readonly appUsageConsentInterstitialAllowButton: NoMessageValues
+	readonly appUsageConsentSuccessTitle: NoMessageValues
+	readonly appUsageConsentSuccessDescription: {
+		readonly b: MessageTag
+		readonly deviceName: MessageValue
+	}
+	readonly appUsageConsentSuccessDescriptionNoDeviceName: NoMessageValues
+	readonly appUsageConsentSuccessDetailsChangeSetting: NoMessageValues
+	readonly appUsageConsentSuccessCloseButton: NoMessageValues
+}>({
 	projectActionDialogGoBack: {
 		id: '$1.routes.app.index.projectActionDialogGoBack',
 		defaultMessage: 'Go back',

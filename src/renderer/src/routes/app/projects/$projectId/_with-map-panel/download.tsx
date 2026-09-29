@@ -13,13 +13,19 @@ import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageTag,
+	type NoMessageValues,
+} from 'react-intl'
 import * as v from 'valibot'
 
 import { BLUE_GREY, DARK_GREY, GREEN } from '../../../../../colors.ts'
 import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
+import { Bold, Break } from '../../../../../components/intl-rich-text.tsx'
 import { useAppForm } from '../../../../../hooks/forms.ts'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings.ts'
 import { selectDirectoryMutationOptions } from '../../../../../lib/queries/file-system.ts'
@@ -93,7 +99,7 @@ function SuccessPanel({
 	onDone: () => void
 	savedToPath: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const showItemInFolder = useMutation(showItemInFolderMutationOptions())
 
@@ -119,16 +125,17 @@ function SuccessPanel({
 						variant="h1"
 						sx={{ fontWeight: 500, textAlign: 'center' }}
 					>
-						{t(m.successPanelTitle)}
+						{intl.formatMessage(m.successPanelTitle)}
 					</Typography>
 
 					<Typography component="p" variant="h2" sx={{ textAlign: 'center' }}>
-						{t(
+						{intl.formatMessage(
 							dataDownloaded === 'observations'
 								? m.successPanelDescriptionObservations
 								: dataDownloaded === 'observations-with-media'
 									? m.successPanelDescriptionObservationsWithMedia
 									: m.successPanelDescriptionTracks,
+							{ b: Bold, br: Break },
 						)}
 					</Typography>
 
@@ -139,7 +146,7 @@ function SuccessPanel({
 							showItemInFolder.mutate(savedToPath)
 						}}
 					>
-						{t(m.successPanelViewInFileManager)}
+						{intl.formatMessage(m.successPanelViewInFileManager)}
 					</Button>
 				</Stack>
 			</Container>
@@ -164,7 +171,7 @@ function SuccessPanel({
 						onDone()
 					}}
 				>
-					{t(m.successPanelDone)}
+					{intl.formatMessage(m.successPanelDone)}
 				</Button>
 			</Box>
 		</Stack>
@@ -185,7 +192,7 @@ function DownloadForm({
 	}) => void
 	projectId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: localeState } = useSuspenseQuery(getLocaleStateQueryOptions())
 
@@ -201,7 +208,7 @@ function DownloadForm({
 			dataToDownload: DataToDownload
 		}) => {
 			const selectDirectoryResult = await selectDirectory.mutateAsync({
-				actionLabel: t(m.selectDirectoryDialogActionLabel),
+				actionLabel: intl.formatMessage(m.selectDirectoryDialogActionLabel),
 			})
 
 			if (!selectDirectoryResult) {
@@ -281,7 +288,7 @@ function DownloadForm({
 					</form.Subscribe>
 
 					<Typography variant="h1" sx={{ fontWeight: 500 }}>
-						{t(m.navTitle)}
+						{intl.formatMessage(m.navTitle)}
 					</Typography>
 				</Stack>
 
@@ -311,32 +318,40 @@ function DownloadForm({
 												onChange={(_event, value) => {
 													field.handleChange(value)
 												}}
-												aria-label={t(m.downloadOptionsAccessibleLabel)}
+												aria-label={intl.formatMessage(
+													m.downloadOptionsAccessibleLabel,
+												)}
 												onBlur={field.handleBlur}
 											>
 												<Stack direction="column" sx={{ gap: 6 }}>
 													<DownloadOption
 														value="observations"
-														primaryText={t(m.allObservationsOptionTitle)}
-														secondaryText={t(
+														primaryText={intl.formatMessage(
+															m.allObservationsOptionTitle,
+														)}
+														secondaryText={intl.formatMessage(
 															m.allObservationsOptionDescription,
 														)}
 													/>
 
 													<DownloadOption
 														value="observations-with-media"
-														primaryText={t(
+														primaryText={intl.formatMessage(
 															m.allObservationsWithMediaOptionTitle,
 														)}
-														secondaryText={t(
+														secondaryText={intl.formatMessage(
 															m.allObservationsWithMediaOptionDescription,
 														)}
 													/>
 
 													<DownloadOption
 														value="tracks"
-														primaryText={t(m.tracksOptionTitle)}
-														secondaryText={t(m.tracksOptionDescription)}
+														primaryText={intl.formatMessage(
+															m.tracksOptionTitle,
+														)}
+														secondaryText={intl.formatMessage(
+															m.tracksOptionDescription,
+														)}
 													/>
 												</Stack>
 											</RadioGroup>
@@ -377,7 +392,7 @@ function DownloadForm({
 									aria-disabled={!canSubmit}
 									sx={{ maxWidth: 400 }}
 								>
-									{t(m.download)}
+									{intl.formatMessage(m.download)}
 								</Button>
 							)}
 						</form.Subscribe>
@@ -430,7 +445,33 @@ function DownloadOption({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly navTitle: NoMessageValues
+	readonly download: NoMessageValues
+	readonly allObservationsOptionTitle: NoMessageValues
+	readonly allObservationsOptionDescription: NoMessageValues
+	readonly allObservationsWithMediaOptionTitle: NoMessageValues
+	readonly downloadOptionsAccessibleLabel: NoMessageValues
+	readonly allObservationsWithMediaOptionDescription: NoMessageValues
+	readonly tracksOptionTitle: NoMessageValues
+	readonly tracksOptionDescription: NoMessageValues
+	readonly selectDirectoryDialogActionLabel: NoMessageValues
+	readonly successPanelTitle: NoMessageValues
+	readonly successPanelDescriptionObservations: {
+		readonly b: MessageTag
+		readonly br: MessageTag
+	}
+	readonly successPanelDescriptionObservationsWithMedia: {
+		readonly b: MessageTag
+		readonly br: MessageTag
+	}
+	readonly successPanelDescriptionTracks: {
+		readonly b: MessageTag
+		readonly br: MessageTag
+	}
+	readonly successPanelViewInFileManager: NoMessageValues
+	readonly successPanelDone: NoMessageValues
+}>({
 	navTitle: {
 		id: '$1.routes.app.projects.$projectId.download.navTitle',
 		defaultMessage: 'Download Observations',

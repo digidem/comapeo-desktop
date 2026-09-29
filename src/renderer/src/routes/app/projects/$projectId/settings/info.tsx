@@ -14,7 +14,12 @@ import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { Block, createFileRoute, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import * as v from 'valibot'
 
 import {
@@ -69,6 +74,7 @@ const FORM_ID = 'project-settings-form'
 
 function RouteComponent() {
 	const intl = useIntl()
+
 	const router = useRouter()
 
 	const { projectId } = Route.useParams()
@@ -588,7 +594,26 @@ function ProjectColorCheckboxControl({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly navTitle: NoMessageValues
+	readonly projectNameInputLabel: NoMessageValues
+	readonly projectDescriptionInputLabel: NoMessageValues
+	readonly projectCardColorLabel: NoMessageValues
+	readonly characterCount: {
+		readonly count: MessageValue
+		readonly max: MessageValue
+	}
+	readonly minProjectNameLengthError: NoMessageValues
+	readonly maxProjectNameLengthError: NoMessageValues
+	readonly maxProjectDescriptionLengthError: NoMessageValues
+	readonly projectColorOptionBlue: NoMessageValues
+	readonly projectColorOptionGreen: NoMessageValues
+	readonly projectColorOptionGrey: NoMessageValues
+	readonly projectColorOptionOrange: NoMessageValues
+	readonly projectColorOptionRed: NoMessageValues
+	readonly save: NoMessageValues
+	readonly goBackAccessibleLabel: NoMessageValues
+}>({
 	navTitle: {
 		id: '$1.routes.app.projects.$projectId.settings.info.navTitle',
 		defaultMessage: 'Edit Info',

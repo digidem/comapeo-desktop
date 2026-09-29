@@ -24,7 +24,12 @@ import { randomPosition } from '@turf/random'
 import { Layer, Marker, Source } from '@vis.gl/react-maplibre'
 import type { BBox } from 'geojson'
 import { draw } from 'radashi'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import * as v from 'valibot'
 
 import { TwoPanelLayout } from '../-shared/two-panel-layout.tsx'
@@ -85,7 +90,7 @@ const DEFAULT_BOUNDED_DISTANCE_KM = 50
 const MIN_BOUNDED_DISTANCE_KM = 0.1
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const router = useRouter()
 
@@ -98,40 +103,46 @@ function RouteComponent() {
 	} | null>(null)
 
 	const onChangeSchema = useMemo(() => {
-		const requiredError = t(m.requiredError)
+		const requiredError = intl.formatMessage(m.requiredError)
 
 		return v.object({
 			observationCount: v.pipe(
 				v.string(),
 				v.minLength(1, requiredError),
 				v.trim(),
-				v.digits(t(m.invalidObservationCountFormat)),
+				v.digits(intl.formatMessage(m.invalidObservationCountFormat)),
 				v.toNumber(),
 				v.minValue(
 					MIN_OBSERVATION_COUNT,
-					t(m.minObservationCountError, { value: MIN_OBSERVATION_COUNT }),
+					intl.formatMessage(m.minObservationCountError, {
+						value: MIN_OBSERVATION_COUNT,
+					}),
 				),
 				v.maxValue(
 					MAX_OBSERVATION_COUNT,
-					t(m.maxObservationCountError, { value: MAX_OBSERVATION_COUNT }),
+					intl.formatMessage(m.maxObservationCountError, {
+						value: MAX_OBSERVATION_COUNT,
+					}),
 				),
 			),
 			boundedDistance: v.pipe(
 				v.string(),
 				v.minLength(1, requiredError),
 				v.trim(),
-				v.decimal(t(m.invalidBoundedDistanceFormat)),
+				v.decimal(intl.formatMessage(m.invalidBoundedDistanceFormat)),
 				v.toNumber(),
 				v.minValue(
 					MIN_BOUNDED_DISTANCE_KM,
-					t(m.minBoundedDistanceError, { value: MIN_BOUNDED_DISTANCE_KM }),
+					intl.formatMessage(m.minBoundedDistanceError, {
+						value: MIN_BOUNDED_DISTANCE_KM,
+					}),
 				),
 			),
 			latitude: v.pipe(v.number(), v.minValue(-90), v.maxValue(90)),
 			longitude: v.pipe(v.number(), v.minValue(-180), v.maxValue(180)),
 			createTrack: v.boolean(),
 		})
-	}, [t])
+	}, [intl])
 
 	const form = useAppForm({
 		defaultValues: {
@@ -161,9 +172,9 @@ function RouteComponent() {
 			setNotification({
 				type: 'success',
 				id: `id_${Date.now()}`,
-				message: `${t(m.observationCreateSuccess, {
+				message: `${intl.formatMessage(m.observationCreateSuccess, {
 					count: parsedValue.observationCount,
-				})} ${t(m.trackCreateSuccess, { count: parsedValue.createTrack ? 1 : 0 })}`,
+				})} ${intl.formatMessage(m.trackCreateSuccess, { count: parsedValue.createTrack ? 1 : 0 })}`,
 			})
 		},
 	})
@@ -226,7 +237,7 @@ function RouteComponent() {
 								variant="h1"
 								sx={{ fontWeight: 500, textAlign: 'center' }}
 							>
-								{t(m.navTitle)}
+								{intl.formatMessage(m.navTitle)}
 							</Typography>
 						</Stack>
 
@@ -256,7 +267,7 @@ function RouteComponent() {
 												<TextField
 													required
 													fullWidth
-													label={t(m.observationCountLabel)}
+													label={intl.formatMessage(m.observationCountLabel)}
 													value={field.state.value}
 													error={!field.state.meta.isValid}
 													name={field.name}
@@ -278,10 +289,13 @@ function RouteComponent() {
 														<Box component="span">
 															{field.state.meta.errors.length > 0
 																? field.state.meta.errors[0]?.message
-																: t(m.observationCountHelperText, {
-																		min: MIN_OBSERVATION_COUNT,
-																		max: MAX_OBSERVATION_COUNT,
-																	})}
+																: intl.formatMessage(
+																		m.observationCountHelperText,
+																		{
+																			min: MIN_OBSERVATION_COUNT,
+																			max: MAX_OBSERVATION_COUNT,
+																		},
+																	)}
 														</Box>
 													}
 												/>
@@ -299,7 +313,9 @@ function RouteComponent() {
 											}}
 										>
 											<Stack direction="column" sx={{ gap: 5 }}>
-												<Typography>{t(m.coordinatesSelectionHint)}</Typography>
+												<Typography>
+													{intl.formatMessage(m.coordinatesSelectionHint)}
+												</Typography>
 												<Stack
 													direction="row"
 													sx={{ gap: 4, justifyContent: 'space-between' }}
@@ -353,7 +369,7 @@ function RouteComponent() {
 													<TextField
 														required
 														fullWidth
-														label={t(m.boundedDistanceLabel)}
+														label={intl.formatMessage(m.boundedDistanceLabel)}
 														value={field.state.value}
 														error={!field.state.meta.isValid}
 														name={field.name}
@@ -383,7 +399,7 @@ function RouteComponent() {
 														field.handleChange(checked)
 													}}
 													onBlur={field.handleBlur}
-													label={t(m.createTrack)}
+													label={intl.formatMessage(m.createTrack)}
 												/>
 											)}
 										</form.AppField>
@@ -430,7 +446,7 @@ function RouteComponent() {
 												}}
 												sx={{ maxWidth: 400 }}
 											>
-												{t(m.cancel)}
+												{intl.formatMessage(m.cancel)}
 											</Button>
 
 											<Button
@@ -443,7 +459,7 @@ function RouteComponent() {
 												aria-disabled={!canSubmit}
 												sx={{ maxWidth: 400 }}
 											>
-												{t(m.create)}
+												{intl.formatMessage(m.create)}
 											</Button>
 										</>
 									)}
@@ -798,7 +814,27 @@ function getBoundingBoxUsingDistance({
 	]
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly navTitle: NoMessageValues
+	readonly requiredError: NoMessageValues
+	readonly observationCountLabel: NoMessageValues
+	readonly boundedDistanceLabel: NoMessageValues
+	readonly invalidObservationCountFormat: NoMessageValues
+	readonly invalidBoundedDistanceFormat: NoMessageValues
+	readonly minObservationCountError: { readonly value: MessageValue }
+	readonly maxObservationCountError: { readonly value: MessageValue }
+	readonly observationCountHelperText: {
+		readonly max: MessageValue
+		readonly min: MessageValue
+	}
+	readonly minBoundedDistanceError: { readonly value: MessageValue }
+	readonly cancel: NoMessageValues
+	readonly create: NoMessageValues
+	readonly coordinatesSelectionHint: NoMessageValues
+	readonly createTrack: NoMessageValues
+	readonly observationCreateSuccess: { readonly count: number | bigint }
+	readonly trackCreateSuccess: { readonly count: number | bigint }
+}>({
 	navTitle: {
 		id: 'routes.app.settings_.test-data.navTitle',
 		defaultMessage: 'Create Test Data',
