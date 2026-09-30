@@ -10,9 +10,10 @@ import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
+import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import {
 	defineMessages,
 	useIntl,
@@ -20,13 +21,14 @@ import {
 	type NoMessageValues,
 } from 'react-intl'
 
-import { BLUE_GREY, LIGHT_GREY } from '../../../../colors.ts'
-import { DecentDialog } from '../../../../components/decent-dialog.tsx'
-import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
-import { Icon } from '../../../../components/icon.tsx'
-import { bytesToMegabytes } from '../../../../lib/bytes-to-megabytes.ts'
+import { BLUE_GREY, LIGHT_GREY } from '../../../colors.ts'
+import { DecentDialog } from '../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../components/error-dialog.tsx'
+import { Icon } from '../../../components/icon.tsx'
+import { useIconSizeBasedOnTypography } from '../../../hooks/icon.ts'
+import { bytesToMegabytes } from '../../../lib/bytes-to-megabytes.ts'
 
-export const Route = createFileRoute('/app/settings/_nested/background-map')({
+export const Route = createFileRoute('/app/settings/background-map')({
 	staticData: {
 		getNavTitle: () => {
 			return m.navTitle
@@ -38,39 +40,82 @@ export const Route = createFileRoute('/app/settings/_nested/background-map')({
 function RouteComponent() {
 	const intl = useIntl()
 
+	const router = useRouter()
+
+	const headerIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+		multiplier: 1.5,
+	})
+
 	return (
-		<Container maxWidth="md" disableGutters>
-			<Stack direction="column" sx={{ flex: 1 }}>
-				<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-					<Stack direction="column" sx={{ padding: 6, gap: 6 }}>
-						<Box
-							sx={{
-								bgcolor: LIGHT_GREY,
-								border: `1px solid ${BLUE_GREY}`,
-								borderRadius: 2,
-								padding: 4,
-							}}
-						>
-							<Typography sx={{ textAlign: 'center' }}>
-								{intl.formatMessage(m.description)}
-							</Typography>
-						</Box>
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack
+				component="header"
+				direction="row"
+				sx={{
+					alignItems: 'center',
+					borderBottom: `1px solid ${BLUE_GREY}`,
+					gap: 2,
+					padding: 4,
+				}}
+			>
+				<IconButton
+					aria-label={intl.formatMessage(m.goBackAccessibleLabel)}
+					color="inherit"
+					onClick={() => {
+						if (router.history.canGoBack()) {
+							router.history.back()
+							return
+						}
 
-						<Divider />
+						router.navigate({ to: '/app', replace: true })
+					}}
+				>
+					<Icon name="material-arrow-back" size={headerIconSize} />
+				</IconButton>
 
-						<Suspense
-							fallback={
-								<Box sx={{ display: 'grid', placeItems: 'center' }}>
-									<CircularProgress disableShrink />
-								</Box>
-							}
-						>
-							<CustomMap />
-						</Suspense>
-					</Stack>
-				</Stack>
+				<Typography variant="h1" sx={{ fontWeight: 500, textAlign: 'center' }}>
+					{intl.formatMessage(m.navTitle)}
+				</Typography>
 			</Stack>
-		</Container>
+
+			<Stack
+				sx={{ flex: 1, overflow: 'auto', scrollbarGutter: 'stable both-edges' }}
+			>
+				<Container disableGutters maxWidth="sm">
+					<Stack direction="column" sx={{ flex: 1 }}>
+						<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+							<Stack direction="column" sx={{ padding: 6, gap: 6 }}>
+								<Box
+									sx={{
+										bgcolor: LIGHT_GREY,
+										border: `1px solid ${BLUE_GREY}`,
+										borderRadius: 2,
+										padding: 4,
+									}}
+								>
+									<Typography sx={{ textAlign: 'center' }}>
+										{intl.formatMessage(m.description)}
+									</Typography>
+								</Box>
+
+								<Divider />
+
+								<Suspense
+									fallback={
+										<Box sx={{ display: 'grid', placeItems: 'center' }}>
+											<CircularProgress disableShrink />
+										</Box>
+									}
+								>
+									<CustomMap />
+								</Suspense>
+							</Stack>
+						</Stack>
+					</Stack>
+				</Container>
+			</Stack>
+		</Stack>
 	)
 }
 
@@ -355,6 +400,7 @@ function HiddenSelectFileInput({ onClick }: { onClick: (file: File) => void }) {
 }
 
 const m = defineMessages<{
+	readonly goBackAccessibleLabel: NoMessageValues
 	readonly navTitle: NoMessageValues
 	readonly description: NoMessageValues
 	readonly chooseFile: NoMessageValues
@@ -368,6 +414,12 @@ const m = defineMessages<{
 	readonly mapUpdateSuccessDescription: NoMessageValues
 	readonly close: NoMessageValues
 }>({
+	goBackAccessibleLabel: {
+		id: 'routes.app.settings.background-map.goBackAccessibleLabel',
+		defaultMessage: 'Go back.',
+		description: 'Accessible label for back button.',
+	},
+
 	navTitle: {
 		id: '$1.routes.app.settings.background-map.navTitle',
 		defaultMessage: 'Background Map',

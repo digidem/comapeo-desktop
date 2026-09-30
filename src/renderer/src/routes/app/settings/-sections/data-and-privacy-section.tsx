@@ -11,22 +11,25 @@ import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../colors.ts'
-import { DecentDialog } from '../../../components/decent-dialog.tsx'
-import { ErrorDialogContent } from '../../../components/error-dialog.tsx'
-import { Icon } from '../../../components/icon.tsx'
-import { TextLink } from '../../../components/link.tsx'
-import { useIconSizeBasedOnTypography } from '../../../hooks/icon.ts'
+import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../../colors.ts'
+import { DecentDialog } from '../../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
+import { Icon } from '../../../../components/icon.tsx'
+import { TextLink } from '../../../../components/link.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../hooks/icon.ts'
 import {
 	getAppUsageMetricsQueryOptions,
 	getDiagnosticsEnabledQueryOptions,
 	setAppUsageMetricsMutationOptions,
 	setDiagnosticsEnabledMutationOptions,
-} from '../../../lib/queries/app-settings.ts'
-import { openExternalURLMutationOptions } from '../../../lib/queries/system.ts'
+} from '../../../../lib/queries/app-settings.ts'
+import { openExternalURLMutationOptions } from '../../../../lib/queries/system.ts'
+
+const PRIVACY_POLICY_URL =
+	'https://digidem.notion.site/CoMapeo-Data-Privacy-d8f413bbbf374a2092655b89b9ceb2b0'
 
 export function DataAndPrivacySection() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: diagnosticsEnabled } = useSuspenseQuery(
 		getDiagnosticsEnabledQueryOptions(),
@@ -51,15 +54,7 @@ export function DataAndPrivacySection() {
 
 	return (
 		<>
-			<Stack direction="column" sx={{ gap: 4 }}>
-				<Typography
-					component="h2"
-					variant="body2"
-					sx={{ textTransform: 'uppercase' }}
-				>
-					{t(m.title)}
-				</Typography>
-
+			<Stack component="section" direction="column" sx={{ gap: 4 }}>
 				<Stack
 					direction="row"
 					sx={{
@@ -75,9 +70,9 @@ export function DataAndPrivacySection() {
 						htmlColor={DARKER_ORANGE}
 					/>
 
-					<Stack direction="column" sx={{ gap: 2 }}>
-						<Typography component="h3" variant="body1" sx={{ fontWeight: 500 }}>
-							{t(m.description)}
+					<Stack direction="column" sx={{ alignItems: 'flex-start', gap: 4 }}>
+						<Typography component="h2" variant="h3" sx={{ fontWeight: 500 }}>
+							{intl.formatMessage(m.dataAndPrivacyDescription)}
 						</Typography>
 
 						<TextLink
@@ -94,28 +89,31 @@ export function DataAndPrivacySection() {
 							}}
 							sx={{ textDecoration: 'none' }}
 						>
-							{t(m.learnMore)}
+							{intl.formatMessage(m.dataAndPrivacyLearnMore)}
 						</TextLink>
 					</Stack>
 				</Stack>
 
 				<Stack direction="row" sx={{ gap: 6 }}>
 					<Stack
+						component="section"
 						direction="column"
-						sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
+						sx={{ flex: 1, border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
 					>
-						<Stack direction="column" sx={{ padding: 6, gap: 4, flex: 1 }}>
+						<Stack direction="column" sx={{ padding: 6, gap: 2, flex: 1 }}>
 							<Typography
 								component="h3"
 								variant="body1"
-								sx={{ fontWeight: 500 }}
+								sx={{ fontWeight: 500, textTransform: 'uppercase' }}
 							>
-								{t(m.diagnosticInformationTitle)}
+								{intl.formatMessage(m.dataAndPrivacyDiagnosticInformationTitle)}
 							</Typography>
 
 							<Box>
 								<Typography color="textSecondary">
-									{t(m.diagnosticInformationDescription)}
+									{intl.formatMessage(
+										m.dataAndPrivacyDiagnosticInformationDescription,
+									)}
 								</Typography>
 
 								<List
@@ -124,13 +122,17 @@ export function DataAndPrivacySection() {
 								>
 									<ListItem disablePadding sx={{ display: 'list-item' }}>
 										<Typography color="textSecondary">
-											{t(m.diagnosticInformationPersonalInfo)}
+											{intl.formatMessage(
+												m.dataAndPrivacyDiagnosticInformationPersonalInfo,
+											)}
 										</Typography>
 									</ListItem>
 
 									<ListItem disablePadding sx={{ display: 'list-item' }}>
 										<Typography color="textSecondary">
-											{t(m.diagnosticInformationOptOut)}
+											{intl.formatMessage(
+												m.dataAndPrivacyDiagnosticInformationOptOut,
+											)}
 										</Typography>
 									</ListItem>
 								</List>
@@ -150,8 +152,9 @@ export function DataAndPrivacySection() {
 											},
 										})
 									}}
-									slotProps={{ typography: { sx: { fontWeight: 500 } } }}
-									label={t(m.shareDiagnosticInformation)}
+									label={intl.formatMessage(
+										m.dataAndPrivacyShareDiagnosticInformation,
+									)}
 									labelPlacement="start"
 									sx={{ margin: 0, justifyContent: 'space-between' }}
 								/>
@@ -160,21 +163,22 @@ export function DataAndPrivacySection() {
 					</Stack>
 
 					<Stack
+						component="section"
 						direction="column"
-						sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
+						sx={{ flex: 1, border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
 					>
-						<Stack direction="column" sx={{ padding: 6, gap: 4, flex: 1 }}>
+						<Stack direction="column" sx={{ padding: 6, gap: 2, flex: 1 }}>
 							<Typography
 								component="h3"
 								variant="body1"
-								sx={{ fontWeight: 500 }}
+								sx={{ fontWeight: 500, textTransform: 'uppercase' }}
 							>
-								{t(m.appUsageTitle)}
+								{intl.formatMessage(m.dataAndPrivacyAppUsageTitle)}
 							</Typography>
 
 							<Box>
 								<Typography color="textSecondary">
-									{t(m.appUsageDescription)}
+									{intl.formatMessage(m.dataAndPrivacyAppUsageDescription)}
 								</Typography>
 
 								<List
@@ -183,13 +187,17 @@ export function DataAndPrivacySection() {
 								>
 									<ListItem disablePadding sx={{ display: 'list-item' }}>
 										<Typography color="textSecondary">
-											{t(m.appUsageDetailsIdNumbers)}
+											{intl.formatMessage(
+												m.dataAndPrivacyAppUsageDetailsIdNumbers,
+											)}
 										</Typography>
 									</ListItem>
 
 									<ListItem disablePadding sx={{ display: 'list-item' }}>
 										<Typography color="textSecondary">
-											{t(m.appUsageDetailsIpAddresses)}
+											{intl.formatMessage(
+												m.dataAndPrivacyAppUsageDetailsIpAddresses,
+											)}
 										</Typography>
 									</ListItem>
 								</List>
@@ -217,8 +225,7 @@ export function DataAndPrivacySection() {
 											},
 										)
 									}}
-									slotProps={{ typography: { sx: { fontWeight: 500 } } }}
-									label={t(m.shareAppUsage)}
+									label={intl.formatMessage(m.dataAndPrivacyShareAppUsage)}
 									labelPlacement="start"
 									sx={{ margin: 0, justifyContent: 'space-between' }}
 								/>
@@ -264,83 +271,75 @@ export function DataAndPrivacySection() {
 	)
 }
 
-const PRIVACY_POLICY_URL =
-	'https://digidem.notion.site/CoMapeo-Data-Privacy-d8f413bbbf374a2092655b89b9ceb2b0'
-
 const m = defineMessages({
-	title: {
-		id: '$1.routes.app.settings.-data-and-privacy-section.title',
-		defaultMessage: 'Data & Privacy',
-		description: 'Title for data and privacy section in settings page.',
-	},
-	description: {
-		id: '$1.routes.app.settings.-data-and-privacy-section.description',
+	dataAndPrivacyDescription: {
+		id: '$1.routes.app.settings.index.dataAndPrivacyDescription',
 		defaultMessage: 'CoMapeo respects your privacy and autonomy',
 		description: 'Description for data and privacy section in settings page.',
 	},
-	learnMore: {
-		id: '$1.routes.app.settings.-data-and-privacy-section.learnMore',
+	dataAndPrivacyLearnMore: {
+		id: '$1.routes.app.settings.index.dataAndPrivacyLearnMore',
 		defaultMessage: 'Learn More',
 		description:
 			'Text for link that navigates to external URL for additional information info about data and privacy.',
 	},
-	diagnosticInformationTitle: {
-		id: '$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationTitle',
+	dataAndPrivacyDiagnosticInformationTitle: {
+		id: '$1.routes.app.settings.index.dataAndPrivacyDiagnosticInformationTitle',
 		defaultMessage: 'Diagnostic Information',
 		description: 'Title for diagnostic information section in settings page.',
 	},
-	diagnosticInformationDescription: {
-		id: '$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationDescription',
+	dataAndPrivacyDiagnosticInformationDescription: {
+		id: '$1.routes.app.settings.index.dataAndPrivacyDiagnosticInformationDescription',
 		defaultMessage:
 			'Anonymized information about your device, app crashes, errors and performance helps Awana Digital improve the app and fix errors.',
 		description:
 			'Description for diagnostic information section in settings page.',
 	},
-	diagnosticInformationPersonalInfo: {
-		id: '$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationPersonalInfo',
+	dataAndPrivacyDiagnosticInformationPersonalInfo: {
+		id: '$1.routes.app.settings.index.dataAndPrivacyDiagnosticInformationPersonalInfo',
 		defaultMessage:
 			'This never includes any of your data or personal information.',
 		description:
 			'Details about personal info in diagnostic information section in settings page.',
 	},
-	diagnosticInformationOptOut: {
-		id: '$1.routes.app.settings.-data-and-privacy-section.diagnosticInformationOptOut',
+	dataAndPrivacyDiagnosticInformationOptOut: {
+		id: '$1.routes.app.settings.index.dataAndPrivacyDiagnosticInformationOptOut',
 		defaultMessage:
 			'You can opt-out of sharing diagnostic information at any time.',
 		description:
 			'Details about opting out in diagnostic information section in settings page.',
 	},
-	shareDiagnosticInformation: {
-		id: '$1.routes.app.settings.-data-and-privacy-section.shareDiagnosticInformation',
+	dataAndPrivacyShareDiagnosticInformation: {
+		id: '$1.routes.app.settings.index.dataAndPrivacyShareDiagnosticInformation',
 		defaultMessage: 'Share Diagnostic Information',
 		description:
 			'Label for checkbox to toggle sharing of diagnostic information.',
 	},
-	appUsageTitle: {
-		id: '$1.routes.app.settings.-data-and-privacy-section.appUsageTitle',
+	dataAndPrivacyAppUsageTitle: {
+		id: '$1.routes.app.settings.index.dataAndPrivacyAppUsageTitle',
 		defaultMessage: 'App Usage',
 		description: 'Title of app usage metrics settings section.',
 	},
-	appUsageDescription: {
-		id: '$1.routes.app.settings.-data-and-privacy-section.appUsageDescription',
+	dataAndPrivacyAppUsageDescription: {
+		id: '$1.routes.app.settings.index.dataAndPrivacyAppUsageDescription',
 		defaultMessage:
 			'Share how you use CoMapeo with Awana Digital — no information you share can be used to track you.',
 		description: 'Description of app usage metrics settings section.',
 	},
-	appUsageDetailsIdNumbers: {
-		id: '$1.routes.app.settings.-data-and-privacy-section.appUsageDetailsIdNumbers',
+	dataAndPrivacyAppUsageDetailsIdNumbers: {
+		id: '$1.routes.app.settings.index.dataAndPrivacyAppUsageDetailsIdNumbers',
 		defaultMessage:
-			'ID numbers are scrambled randomly and changed every month. ID numbers are scrambled randomly and changed every month.',
+			'ID numbers are scrambled randomly and changed every month.',
 		description:
 			'Text describing how IDs used for app usage metrics are used and generated.',
 	},
-	appUsageDetailsIpAddresses: {
-		id: '$1.routes.app.settings.-data-and-privacy-section.appUsageDetailsIpAddresses',
+	dataAndPrivacyAppUsageDetailsIpAddresses: {
+		id: '$1.routes.app.settings.index.dataAndPrivacyAppUsageDetailsIpAddresses',
 		defaultMessage: 'CoMapeo never stores IP addresses.',
 		description: 'Text describing how IP addresses are never stored.',
 	},
-	shareAppUsage: {
-		id: '$1.routes.app.settings.-data-and-privacy-section.shareAppUsage',
+	dataAndPrivacyShareAppUsage: {
+		id: '$1.routes.app.settings.index.dataAndPrivacyShareAppUsage',
 		defaultMessage: 'Share App Usage',
 		description: 'Text label for checkbox to toggle app usage sharing setting.',
 	},

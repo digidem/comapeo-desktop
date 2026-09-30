@@ -319,52 +319,24 @@
     "description": "Accessible label for link that navigates to project when clicked.",
     "message": "Go to project {name}."
   },
-  "routes.app.settings.breadCrumbAccessibleLabel": {
-    "description": "Accessible label for breadcrumb navigation when viewing nested settings page.",
-    "message": "breadcrumb"
-  },
-  "routes.app.settings.coordinate-system.ddOptionLabel": {
-    "description": "Label for the decimal degrees option.",
-    "message": "DD (Decimal Degrees)"
-  },
-  "routes.app.settings.coordinate-system.dmsOptionLabel": {
-    "description": "Label for the degrees/minutes/seconds option.",
-    "message": "DMS (Decimal/Minutes/Seconds)"
-  },
-  "routes.app.settings.coordinate-system.utmOptionLabel": {
-    "description": "Label for the universal transverse mercator option.",
-    "message": "UTM (Universal Transverse Mercator)"
+  "routes.app.settings.background-map.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Go back."
   },
   "routes.app.settings.device-name.characterCount": {
     "description": "Displays number of characters in input out of the maximum allowed characters.",
     "message": "{count}/{max}"
   },
-  "routes.app.settings.goBackAccessibleLabel": {
-    "description": "Accessible label for back button",
+  "routes.app.settings.device-name.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
     "message": "Go back."
-  },
-  "routes.app.settings.index.backgroundMapSettingsAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to background map settings page.",
-    "message": "Go to background map settings."
-  },
-  "routes.app.settings.index.coordinateSystemSettingsAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to coordinate system settings page.",
-    "message": "Go to coordinate system settings."
-  },
-  "routes.app.settings.index.decimalDegrees": {
-    "description": "Label for Decimal Degrees coordinate system.",
-    "message": "DD Coordinates"
   },
   "routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to device name settings page.",
     "message": "Go to device name settings."
   },
-  "routes.app.settings.index.dmsCoordinates": {
-    "description": "Label for Degrees/Minutes/Seconds coordinate system.",
-    "message": "DMS Coordinates"
-  },
   "routes.app.settings.index.goBackAccessibleLabel": {
-    "description": "Accessible label for back button",
+    "description": "Accessible label for back button.",
     "message": "Go back."
   },
   "routes.app.settings.index.languageSettingsAccessibleLabel": {
@@ -374,10 +346,6 @@
   "routes.app.settings.index.unitSystemSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to unit system settings page.",
     "message": "Go to unit system settings."
-  },
-  "routes.app.settings.index.utmCoordinates": {
-    "description": "Label for Universal Transverse Mercator coordinate system.",
-    "message": "UTM Coordinates"
   },
   "routes.app.settings_.test-data.boundedDistanceLabel": {
     "description": "Label for the bounded distance input.",
