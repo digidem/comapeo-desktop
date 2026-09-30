@@ -97,7 +97,7 @@ export function DataAndPrivacySection() {
 				<Stack direction="row" sx={{ gap: 6 }}>
 					<Stack
 						direction="column"
-						sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
+						sx={{ flex: 1, border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
 					>
 						<Stack direction="column" sx={{ padding: 6, gap: 2, flex: 1 }}>
 							<Typography
@@ -163,7 +163,7 @@ export function DataAndPrivacySection() {
 
 					<Stack
 						direction="column"
-						sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
+						sx={{ flex: 1, border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
 					>
 						<Stack direction="column" sx={{ padding: 6, gap: 2, flex: 1 }}>
 							<Typography
