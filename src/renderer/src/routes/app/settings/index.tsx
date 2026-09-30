@@ -88,7 +88,7 @@ function RouteComponent() {
 						</Box>
 					}
 				>
-					<Container maxWidth="md" disableGutters>
+					<Container maxWidth="sm" disableGutters>
 						<Stack direction="column" sx={{ gap: 6, padding: 6 }}>
 							<Stack direction="column" sx={{ gap: 8 }}>
 								<DeviceNameSection headingIconSize={sectionHeadingIconSize} />

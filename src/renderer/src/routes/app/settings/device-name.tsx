@@ -145,7 +145,7 @@ function RouteComponent() {
 						scrollbarGutter: 'stable both-edges',
 					}}
 				>
-					<Container maxWidth="md" disableGutters>
+					<Container disableGutters maxWidth="sm">
 						<Stack direction="column" sx={{ flex: 1, padding: 6, gap: 10 }}>
 							<Box
 								component="form"

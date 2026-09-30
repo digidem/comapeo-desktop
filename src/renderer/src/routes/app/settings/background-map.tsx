@@ -82,7 +82,7 @@ function RouteComponent() {
 			<Stack
 				sx={{ flex: 1, overflow: 'auto', scrollbarGutter: 'stable both-edges' }}
 			>
-				<Container maxWidth="md" disableGutters>
+				<Container disableGutters maxWidth="sm">
 					<Stack direction="column" sx={{ flex: 1 }}>
 						<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 							<Stack direction="column" sx={{ padding: 6, gap: 6 }}>
