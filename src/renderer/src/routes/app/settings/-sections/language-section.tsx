@@ -1,4 +1,5 @@
 import { useId } from 'react'
+import Fade from '@mui/material/Fade'
 import MenuItem from '@mui/material/MenuItem'
 import Select, { selectClasses } from '@mui/material/Select'
 import Stack from '@mui/material/Stack'
@@ -81,8 +82,8 @@ export function LanguageSection({
 					}}
 					MenuProps={{
 						anchorOrigin: { horizontal: 'center', vertical: 'bottom' },
-						transitionDuration: 0,
 						transformOrigin: { horizontal: 'center', vertical: 'top' },
+						slots: { transition: Fade },
 						slotProps: {
 							list: { disablePadding: true },
 							paper: {
