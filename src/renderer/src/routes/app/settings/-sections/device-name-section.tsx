@@ -43,7 +43,6 @@ export function DeviceNameSection({
 				sx={{
 					border: `1px solid ${BLUE_GREY}`,
 					borderRadius: 2,
-					width: '50%',
 					':hover': {
 						backgroundColor: (theme) => theme.palette.action.hover,
 						transition: (theme) => theme.transitions.create('background-color'),
