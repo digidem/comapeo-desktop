@@ -29,7 +29,7 @@ const PRIVACY_POLICY_URL =
 	'https://digidem.notion.site/CoMapeo-Data-Privacy-d8f413bbbf374a2092655b89b9ceb2b0'
 
 export function DataAndPrivacySection() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: diagnosticsEnabled } = useSuspenseQuery(
 		getDiagnosticsEnabledQueryOptions(),
@@ -70,9 +70,9 @@ export function DataAndPrivacySection() {
 						htmlColor={DARKER_ORANGE}
 					/>
 
-					<Stack direction="column" sx={{ gap: 2 }}>
-						<Typography component="h3" variant="body1" sx={{ fontWeight: 500 }}>
-							{t(m.dataAndPrivacyDescription)}
+					<Stack direction="column" sx={{ alignItems: 'flex-start', gap: 4 }}>
+						<Typography component="p" variant="h3" sx={{ fontWeight: 500 }}>
+							{intl.formatMessage(m.dataAndPrivacyDescription)}
 						</Typography>
 
 						<TextLink
@@ -89,7 +89,7 @@ export function DataAndPrivacySection() {
 							}}
 							sx={{ textDecoration: 'none' }}
 						>
-							{t(m.dataAndPrivacyLearnMore)}
+							{intl.formatMessage(m.dataAndPrivacyLearnMore)}
 						</TextLink>
 					</Stack>
 				</Stack>
@@ -105,12 +105,14 @@ export function DataAndPrivacySection() {
 								variant="body1"
 								sx={{ fontWeight: 500, textTransform: 'uppercase' }}
 							>
-								{t(m.dataAndPrivacyDiagnosticInformationTitle)}
+								{intl.formatMessage(m.dataAndPrivacyDiagnosticInformationTitle)}
 							</Typography>
 
 							<Box>
 								<Typography color="textSecondary">
-									{t(m.dataAndPrivacyDiagnosticInformationDescription)}
+									{intl.formatMessage(
+										m.dataAndPrivacyDiagnosticInformationDescription,
+									)}
 								</Typography>
 
 								<List
@@ -119,13 +121,17 @@ export function DataAndPrivacySection() {
 								>
 									<ListItem disablePadding sx={{ display: 'list-item' }}>
 										<Typography color="textSecondary">
-											{t(m.dataAndPrivacyDiagnosticInformationPersonalInfo)}
+											{intl.formatMessage(
+												m.dataAndPrivacyDiagnosticInformationPersonalInfo,
+											)}
 										</Typography>
 									</ListItem>
 
 									<ListItem disablePadding sx={{ display: 'list-item' }}>
 										<Typography color="textSecondary">
-											{t(m.dataAndPrivacyDiagnosticInformationOptOut)}
+											{intl.formatMessage(
+												m.dataAndPrivacyDiagnosticInformationOptOut,
+											)}
 										</Typography>
 									</ListItem>
 								</List>
@@ -145,7 +151,9 @@ export function DataAndPrivacySection() {
 											},
 										})
 									}}
-									label={t(m.dataAndPrivacyShareDiagnosticInformation)}
+									label={intl.formatMessage(
+										m.dataAndPrivacyShareDiagnosticInformation,
+									)}
 									labelPlacement="start"
 									sx={{ margin: 0, justifyContent: 'space-between' }}
 								/>
@@ -163,12 +171,12 @@ export function DataAndPrivacySection() {
 								variant="body1"
 								sx={{ fontWeight: 500, textTransform: 'uppercase' }}
 							>
-								{t(m.dataAndPrivacyAppUsageTitle)}
+								{intl.formatMessage(m.dataAndPrivacyAppUsageTitle)}
 							</Typography>
 
 							<Box>
 								<Typography color="textSecondary">
-									{t(m.dataAndPrivacyAppUsageDescription)}
+									{intl.formatMessage(m.dataAndPrivacyAppUsageDescription)}
 								</Typography>
 
 								<List
@@ -177,13 +185,17 @@ export function DataAndPrivacySection() {
 								>
 									<ListItem disablePadding sx={{ display: 'list-item' }}>
 										<Typography color="textSecondary">
-											{t(m.dataAndPrivacyAppUsageDetailsIdNumbers)}
+											{intl.formatMessage(
+												m.dataAndPrivacyAppUsageDetailsIdNumbers,
+											)}
 										</Typography>
 									</ListItem>
 
 									<ListItem disablePadding sx={{ display: 'list-item' }}>
 										<Typography color="textSecondary">
-											{t(m.dataAndPrivacyAppUsageDetailsIpAddresses)}
+											{intl.formatMessage(
+												m.dataAndPrivacyAppUsageDetailsIpAddresses,
+											)}
 										</Typography>
 									</ListItem>
 								</List>
@@ -211,7 +223,7 @@ export function DataAndPrivacySection() {
 											},
 										)
 									}}
-									label={t(m.dataAndPrivacyShareAppUsage)}
+									label={intl.formatMessage(m.dataAndPrivacyShareAppUsage)}
 									labelPlacement="start"
 									sx={{ margin: 0, justifyContent: 'space-between' }}
 								/>
