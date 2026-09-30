@@ -224,7 +224,7 @@ test('index', async ({ appInfo, userParams }) => {
 				main
 					.getByRole('listitem')
 					.getByText(
-						'ID numbers are scrambled randomly and changed every month. ID numbers are scrambled randomly and changed every month.',
+						'ID numbers are scrambled randomly and changed every month.',
 						{ exact: true },
 					),
 			).toBeVisible()

@@ -1253,7 +1253,7 @@
   },
   "$1.routes.app.settings.index.dataAndPrivacyAppUsageDetailsIdNumbers": {
     "description": "Text describing how IDs used for app usage metrics are used and generated.",
-    "message": "ID numbers are scrambled randomly and changed every month. ID numbers are scrambled randomly and changed every month."
+    "message": "ID numbers are scrambled randomly and changed every month."
   },
   "$1.routes.app.settings.index.dataAndPrivacyAppUsageDetailsIpAddresses": {
     "description": "Text describing how IP addresses are never stored.",

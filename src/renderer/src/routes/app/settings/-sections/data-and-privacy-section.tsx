@@ -327,7 +327,7 @@ const m = defineMessages({
 	dataAndPrivacyAppUsageDetailsIdNumbers: {
 		id: '$1.routes.app.settings.index.dataAndPrivacyAppUsageDetailsIdNumbers',
 		defaultMessage:
-			'ID numbers are scrambled randomly and changed every month. ID numbers are scrambled randomly and changed every month.',
+			'ID numbers are scrambled randomly and changed every month.',
 		description:
 			'Text describing how IDs used for app usage metrics are used and generated.',
 	},
