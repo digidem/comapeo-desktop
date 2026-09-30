@@ -367,10 +367,12 @@ test('language', async ({ appInfo, userParams }) => {
 
 		/// Initial state
 		{
-			await expect(selectTrigger).toHaveText(
-				// TODO: The result of this will vary based on system language preferences.
-				/\(System Preference\)$/,
-			)
+			// TODO: The result of this will vary based on system language preferences.
+			await expect(
+				selectTrigger
+					.getByText(/\(System Preference\)$/)
+					.or(selectTrigger.getByText(/^English/)),
+			).toBeVisible()
 
 			await selectTrigger.click()
 
@@ -471,10 +473,12 @@ test('language', async ({ appInfo, userParams }) => {
 				/^(en$|en-)/,
 			)
 
-			await expect(selectTrigger).toHaveText(
-				// TODO: The result of this will vary based on system language preferences.
-				/\(System Preference\)$/,
-			)
+			// TODO: The result of this will vary based on system language preferences.
+			await expect(
+				selectTrigger
+					.getByText(/\(System Preference\)$/)
+					.or(selectTrigger.getByText(/^English/)),
+			).toBeVisible()
 		}
 	} finally {
 		// 3. Cleanup
