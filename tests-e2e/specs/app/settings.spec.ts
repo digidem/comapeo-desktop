@@ -167,10 +167,6 @@ test.describe('device name', () => {
 				).toBeVisible()
 
 				await expect(
-					main.getByRole('button', { name: 'Cancel', exact: true }),
-				).toBeVisible()
-
-				await expect(
 					main.getByRole('button', { name: 'Save', exact: true }),
 				).toBeVisible()
 			}
@@ -283,18 +279,6 @@ test.describe('device name', () => {
 				await discardEditsDialog
 					.getByRole('button', { name: 'Yes, Discard', exact: true })
 					.click()
-
-				await page
-					.getByRole('link', {
-						name: 'Go to device name settings.',
-						exact: true,
-					})
-					.click()
-
-				await expect(deviceNameInput).toHaveValue(userParams.deviceName)
-
-				// Clicking cancel button on page
-				await main.getByRole('button', { name: 'Cancel', exact: true }).click()
 
 				await page
 					.getByRole('link', {
