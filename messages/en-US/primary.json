@@ -1233,11 +1233,11 @@
   },
   "$1.routes.app.settings.index.coordinateSystemDdCoordinates": {
     "description": "Label for Decimal Degrees coordinate system option.",
-    "message": "DD Coordinates (Decimal Degrees)"
+    "message": "DD (Decimal Degrees)"
   },
   "$1.routes.app.settings.index.coordinateSystemDmsCoordinates": {
     "description": "Label for Degrees/Minutes/Seconds coordinate system option.",
-    "message": "DMS Coordinates (Decimal/Minutes/Seconds)"
+    "message": "DMS (Decimal/Minutes/Seconds)"
   },
   "$1.routes.app.settings.index.coordinateSystemSectionTitle": {
     "description": "Section title for coordinate system settings.",
@@ -1245,7 +1245,7 @@
   },
   "$1.routes.app.settings.index.coordinateSystemUtmCoordinates": {
     "description": "Label for Universal Transverse Mercator coordinate system option.",
-    "message": "UTM Coordinates (Universal Transverse Mercator)"
+    "message": "UTM (Universal Transverse Mercator)"
   },
   "$1.routes.app.settings.index.dataAndPrivacyAppUsageDescription": {
     "description": "Description of app usage metrics settings section.",

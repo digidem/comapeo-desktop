@@ -154,17 +154,17 @@ const m = defineMessages({
 	},
 	coordinateSystemDdCoordinates: {
 		id: '$1.routes.app.settings.index.coordinateSystemDdCoordinates',
-		defaultMessage: 'DD Coordinates (Decimal Degrees)',
+		defaultMessage: 'DD (Decimal Degrees)',
 		description: 'Label for Decimal Degrees coordinate system option.',
 	},
 	coordinateSystemDmsCoordinates: {
 		id: '$1.routes.app.settings.index.coordinateSystemDmsCoordinates',
-		defaultMessage: 'DMS Coordinates (Decimal/Minutes/Seconds)',
+		defaultMessage: 'DMS (Decimal/Minutes/Seconds)',
 		description: 'Label for Degrees/Minutes/Seconds coordinate system option.',
 	},
 	coordinateSystemUtmCoordinates: {
 		id: '$1.routes.app.settings.index.coordinateSystemUtmCoordinates',
-		defaultMessage: 'UTM Coordinates (Universal Transverse Mercator)',
+		defaultMessage: 'UTM (Universal Transverse Mercator)',
 		description:
 			'Label for Universal Transverse Mercator coordinate system option.',
 	},
