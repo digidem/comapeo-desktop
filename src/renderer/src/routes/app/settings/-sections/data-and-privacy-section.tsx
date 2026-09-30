@@ -54,7 +54,7 @@ export function DataAndPrivacySection() {
 
 	return (
 		<>
-			<Stack direction="column" sx={{ gap: 4 }}>
+			<Stack component="section" direction="column" sx={{ gap: 4 }}>
 				<Stack
 					direction="row"
 					sx={{
@@ -71,7 +71,7 @@ export function DataAndPrivacySection() {
 					/>
 
 					<Stack direction="column" sx={{ alignItems: 'flex-start', gap: 4 }}>
-						<Typography component="p" variant="h3" sx={{ fontWeight: 500 }}>
+						<Typography component="h2" variant="h3" sx={{ fontWeight: 500 }}>
 							{intl.formatMessage(m.dataAndPrivacyDescription)}
 						</Typography>
 
@@ -96,6 +96,7 @@ export function DataAndPrivacySection() {
 
 				<Stack direction="row" sx={{ gap: 6 }}>
 					<Stack
+						component="section"
 						direction="column"
 						sx={{ flex: 1, border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
 					>
@@ -162,6 +163,7 @@ export function DataAndPrivacySection() {
 					</Stack>
 
 					<Stack
+						component="section"
 						direction="column"
 						sx={{ flex: 1, border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
 					>

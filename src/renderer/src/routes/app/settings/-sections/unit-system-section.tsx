@@ -36,7 +36,7 @@ export function UnitSystemSection({
 
 	return (
 		<>
-			<Stack direction="column" sx={{ gap: 4 }}>
+			<Stack component="section" direction="column" sx={{ gap: 4 }}>
 				<Stack
 					component="h2"
 					direction="row"

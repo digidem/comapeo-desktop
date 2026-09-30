@@ -10,7 +10,7 @@ export function AboutCoMapeoSection() {
 	const intl = useIntl()
 
 	return (
-		<Stack direction="column" sx={{ gap: 4 }}>
+		<Stack component="section" direction="column" sx={{ gap: 4 }}>
 			<Stack direction="column" sx={{ gap: 4 }}>
 				<Typography
 					component="h2"

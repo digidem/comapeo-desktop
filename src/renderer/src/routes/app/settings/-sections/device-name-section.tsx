@@ -17,7 +17,7 @@ export function DeviceNameSection({
 	const { data: deviceInfo } = useOwnDeviceInfo()
 
 	return (
-		<Stack direction="column" sx={{ gap: 4 }}>
+		<Stack component="section" direction="column" sx={{ gap: 4 }}>
 			<Stack
 				component="h2"
 				direction="row"
