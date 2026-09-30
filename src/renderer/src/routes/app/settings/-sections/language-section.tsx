@@ -32,7 +32,6 @@ const SORTED_USABLE_LANGUAGES = usableLanguages.sort((a, b) => {
 })
 
 const SELECT_SX = {
-	width: '50%',
 	[`& .${selectClasses.icon}`]: {
 		transform: 'rotate(90deg)',
 	},
