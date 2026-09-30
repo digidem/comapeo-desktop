@@ -5,7 +5,6 @@ import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
-import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { Block, createFileRoute, useRouter } from '@tanstack/react-router'
 import {
@@ -16,8 +15,9 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLUE_GREY, WHITE } from '../../../colors.ts'
+import { BLUE_GREY } from '../../../colors.ts'
 import { DecentDialog } from '../../../components/decent-dialog.tsx'
+import { DecentTextField } from '../../../components/decent-text-field.tsx'
 import { DiscardEditsDialogContent } from '../../../components/discard-edits-dialog.tsx'
 import { ErrorDialogContent } from '../../../components/error-dialog.tsx'
 import { Icon } from '../../../components/icon.tsx'
@@ -100,7 +100,9 @@ function RouteComponent() {
 		},
 	})
 
-	const formId = `device-name-form-${useId()}`
+	const componentId = useId()
+
+	const formId = `${componentId}-device-name-form`
 
 	return (
 		<>
@@ -140,13 +142,14 @@ function RouteComponent() {
 				</Stack>
 
 				<Stack
+					direction="column"
 					sx={{
 						flex: 1,
 						overflow: 'auto',
 						scrollbarGutter: 'stable both-edges',
 					}}
 				>
-					<Container disableGutters maxWidth="sm">
+					<Container disableGutters maxWidth="sm" sx={{ flex: 1 }}>
 						<Stack direction="column" sx={{ flex: 1, padding: 6, gap: 10 }}>
 							<Box
 								component="form"
@@ -160,104 +163,110 @@ function RouteComponent() {
 								}}
 							>
 								<form.AppField name="deviceName">
-									{(field) => (
-										<TextField
-											required
-											fullWidth
-											label={intl.formatMessage(m.inputLabel)}
-											value={field.state.value}
-											error={!field.state.meta.isValid}
-											name={field.name}
-											onChange={(event) => {
-												field.handleChange(event.target.value)
-											}}
-											slotProps={{
-												input: { style: { backgroundColor: WHITE } },
-											}}
-											onBlur={field.handleBlur}
-											helperText={
-												<Stack
-													component="span"
-													direction="row"
-													sx={{ justifyContent: 'space-between' }}
-												>
-													<Box component="span">
-														{field.state.meta.errors[0]?.message}
-													</Box>
-													<Box
-														component="output"
-														htmlFor={field.name}
-														name="character-count"
+									{(field) => {
+										const inputId = `${componentId}-input`
+										const errorTextId = `${componentId}-error-text`
+
+										return (
+											<DecentTextField
+												fullWidth
+												required
+												aria-describedby={
+													field.state.meta.isValid ? undefined : errorTextId
+												}
+												error={!field.state.meta.isValid}
+												helperText={
+													<Stack
+														direction="row"
+														sx={{
+															color: field.state.meta.isValid
+																? undefined
+																: (theme) => theme.palette.error.main,
+															justifyContent: 'space-between',
+														}}
 													>
-														<form.Subscribe
-															selector={(state) =>
-																v._getGraphemeCount(state.values.deviceName)
-															}
+														<Typography
+															id={errorTextId}
+															component="span"
+															variant="body2"
 														>
-															{(count) =>
-																intl.formatMessage(m.characterCount, {
-																	count,
-																	max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
-																})
-															}
-														</form.Subscribe>
-													</Box>
-												</Stack>
-											}
-										/>
-									)}
+															{field.state.meta.errors[0]?.message}
+														</Typography>
+
+														<Typography
+															component="output"
+															htmlFor={inputId}
+															name="character-count"
+															variant="body2"
+														>
+															<form.Subscribe
+																selector={(state) =>
+																	state.values.deviceName
+																		? v._getGraphemeCount(
+																				state.values.deviceName,
+																			)
+																		: 0
+																}
+															>
+																{(count) =>
+																	intl.formatMessage(m.characterCount, {
+																		count,
+																		max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
+																	})
+																}
+															</form.Subscribe>
+														</Typography>
+													</Stack>
+												}
+												id={inputId}
+												label={intl.formatMessage(m.inputLabel)}
+												name={field.name}
+												onBlur={field.handleBlur}
+												onChange={(event) => {
+													field.handleChange(event.target.value)
+												}}
+												value={field.state.value}
+											/>
+										)
+									}}
 								</form.AppField>
 							</Box>
-
-							<Stack direction="row" sx={{ gap: 4, justifyContent: 'center' }}>
-								<form.Subscribe
-									selector={(state) => [state.canSubmit, state.isSubmitting]}
-								>
-									{([canSubmit, isSubmitting]) => (
-										<>
-											<Button
-												type="button"
-												variant="outlined"
-												fullWidth
-												aria-disabled={isSubmitting}
-												onClick={() => {
-													if (isSubmitting) return
-
-													if (router.history.canGoBack()) {
-														router.history.back({ ignoreBlocker: true })
-														return
-													}
-
-													router.navigate({
-														to: '/app/settings',
-														replace: true,
-														ignoreBlocker: true,
-													})
-												}}
-												sx={{ maxWidth: 400 }}
-											>
-												{intl.formatMessage(m.cancel)}
-											</Button>
-
-											<Button
-												type="submit"
-												form={formId}
-												fullWidth
-												variant="contained"
-												loading={isSubmitting}
-												loadingPosition="start"
-												aria-disabled={!canSubmit}
-												sx={{ maxWidth: 400 }}
-											>
-												{intl.formatMessage(m.save)}
-											</Button>
-										</>
-									)}
-								</form.Subscribe>
-							</Stack>
 						</Stack>
 					</Container>
 				</Stack>
+
+				<Box
+					sx={{
+						alignItems: 'center',
+						borderTop: `1px solid ${BLUE_GREY}`,
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'center',
+						padding: 6,
+					}}
+				>
+					<form.Subscribe
+						selector={(state) => [state.canSubmit, state.isSubmitting]}
+					>
+						{([canSubmit, isSubmitting]) => (
+							<Button
+								aria-disabled={!canSubmit}
+								form={formId}
+								fullWidth
+								loading={isSubmitting}
+								loadingPosition="start"
+								startIcon={
+									<Icon name="material-check-circle-outline-rounded" />
+								}
+								sx={{ maxWidth: 400 }}
+								type="submit"
+								variant="contained"
+							>
+								{intl.formatMessage(m.save)}
+							</Button>
+						)}
+					</form.Subscribe>
+				</Box>
 			</Stack>
 
 			<DecentDialog
@@ -318,7 +327,6 @@ const m = defineMessages<{
 		readonly max: MessageValue
 	}
 	readonly save: NoMessageValues
-	readonly cancel: NoMessageValues
 	readonly minLengthError: NoMessageValues
 	readonly maxLengthError: NoMessageValues
 }>({
@@ -347,11 +355,6 @@ const m = defineMessages<{
 		id: '$1.routes.app.settings.device-name.save',
 		defaultMessage: 'Save',
 		description: 'Label for save button.',
-	},
-	cancel: {
-		id: '$1.routes.app.settings.device-name.cancel',
-		defaultMessage: 'Cancel',
-		description: 'Label for cancel button.',
 	},
 	minLengthError: {
 		id: '$1.routes.app.settings.device-name.minLengthError',
