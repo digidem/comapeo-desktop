@@ -136,6 +136,7 @@ export function LanguageSection({
 				>
 					<MenuItem disableGutters value="system" sx={{ padding: 4 }}>
 						<Typography
+							component="span"
 							variant="inherit"
 							sx={{
 								overflow: 'hidden',
@@ -167,6 +168,7 @@ export function LanguageSection({
 									value={languageTag}
 								>
 									<Typography
+										component="span"
 										variant="inherit"
 										sx={{
 											flex: 1,
@@ -179,6 +181,7 @@ export function LanguageSection({
 									</Typography>
 
 									<Typography
+										component="span"
 										variant="inherit"
 										color="textSecondary"
 										sx={{ fontStyle: 'italic' }}
