@@ -102,6 +102,7 @@ function RouteComponent() {
 
 	const componentId = useId()
 
+	const inputLabelId = `${componentId}-input-label`
 	const formId = `${componentId}-device-name-form`
 
 	return (
@@ -134,6 +135,7 @@ function RouteComponent() {
 					</IconButton>
 
 					<Typography
+						id={inputLabelId}
 						variant="h1"
 						sx={{ fontWeight: 500, textAlign: 'center' }}
 					>
@@ -219,11 +221,15 @@ function RouteComponent() {
 													</Stack>
 												}
 												id={inputId}
-												label={intl.formatMessage(m.inputLabel)}
+												// label={intl.formatMessage(m.inputLabel)}
+
 												name={field.name}
 												onBlur={field.handleBlur}
 												onChange={(event) => {
 													field.handleChange(event.target.value)
+												}}
+												slotProps={{
+													input: { 'aria-labelledby': inputLabelId },
 												}}
 												value={field.state.value}
 											/>
@@ -321,7 +327,6 @@ function RouteComponent() {
 const m = defineMessages<{
 	readonly goBackAccessibleLabel: NoMessageValues
 	readonly navTitle: NoMessageValues
-	readonly inputLabel: NoMessageValues
 	readonly characterCount: {
 		readonly count: MessageValue
 		readonly max: MessageValue
@@ -339,11 +344,6 @@ const m = defineMessages<{
 		id: '$1.routes.app.settings.device-name.navTitle',
 		defaultMessage: 'Device Name',
 		description: 'Title of the device name settings page.',
-	},
-	inputLabel: {
-		id: '$1.routes.app.settings.device-name.inputLabel',
-		defaultMessage: 'Device Name',
-		description: 'Label for the device name input.',
 	},
 	characterCount: {
 		id: 'routes.app.settings.device-name.characterCount',

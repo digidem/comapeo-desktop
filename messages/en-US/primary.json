@@ -1199,10 +1199,6 @@
     "description": "Text describing what kind of files are usable for background maps.",
     "message": "{value} MB"
   },
-  "$1.routes.app.settings.device-name.inputLabel": {
-    "description": "Label for the device name input.",
-    "message": "Device Name"
-  },
   "$1.routes.app.settings.device-name.maxLengthError": {
     "description": "Error message for device name that is too long.",
     "message": "Too long, try a shorter name."
