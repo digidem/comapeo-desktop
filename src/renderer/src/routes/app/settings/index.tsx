@@ -47,7 +47,8 @@ function RouteComponent() {
 					alignItems: 'center',
 					borderBottom: `1px solid ${BLUE_GREY}`,
 					gap: 2,
-					padding: 4,
+					paddingBlock: 4,
+					paddingInline: 6,
 				}}
 			>
 				<IconButton

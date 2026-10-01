@@ -25,18 +25,22 @@ test('initial page after onboarding', async ({ appInfo, userParams }) => {
 
 		// Header section
 		{
-			await expect(
-				main.getByRole('heading', { name: 'All Projects', exact: true }),
-			).toBeVisible()
-
-			await expect(main.getByText('Most Recent', { exact: true })).toBeVisible()
+			const header = main.locator('header')
 
 			await expect(
-				page.getByRole('link', { name: 'Start New Project', exact: true }),
+				header.getByRole('heading', { name: 'All Projects', exact: true }),
 			).toBeVisible()
 
 			await expect(
-				page.getByRole('link', { name: 'CoMapeo Settings', exact: true }),
+				header.getByText('Most Recent', { exact: true }),
+			).toBeVisible()
+
+			await expect(
+				header.getByRole('link', { name: 'Start New Project', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				header.getByRole('link', { name: 'CoMapeo Settings', exact: true }),
 			).toBeVisible()
 		}
 

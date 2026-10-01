@@ -101,7 +101,8 @@ function RouteComponent() {
 					borderBottom: `1px solid ${BLUE_GREY}`,
 					gap: 4,
 					flexWrap: 'wrap',
-					padding: 4,
+					paddingBlock: 4,
+					paddingInline: 6,
 				}}
 			>
 				<Stack direction="row" sx={{ alignItems: 'center', flex: 1, gap: 4 }}>

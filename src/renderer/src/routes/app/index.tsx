@@ -130,13 +130,15 @@ function RouteComponent() {
 				sx={{ flex: 1, overflow: 'auto' }}
 			>
 				<Stack
+					component="header"
 					direction="row"
 					sx={{
 						alignItems: 'center',
 						borderBottom: `1px solid ${BLUE_GREY}`,
 						flexWrap: 'wrap',
 						gap: 6,
-						padding: 4,
+						paddingBlock: 4,
+						paddingInline: 6,
 					}}
 				>
 					<Stack direction="row" sx={{ alignItems: 'center', flex: 1, gap: 4 }}>
