@@ -1199,30 +1199,6 @@
     "description": "Text describing what kind of files are usable for background maps.",
     "message": "{value} MB"
   },
-  "$1.routes.app.settings.device-name.cancel": {
-    "description": "Label for cancel button.",
-    "message": "Cancel"
-  },
-  "$1.routes.app.settings.device-name.inputLabel": {
-    "description": "Label for the device name input.",
-    "message": "Device Name"
-  },
-  "$1.routes.app.settings.device-name.maxLengthError": {
-    "description": "Error message for device name that is too long.",
-    "message": "Too long, try a shorter name."
-  },
-  "$1.routes.app.settings.device-name.minLengthError": {
-    "description": "Error message for device name that is too short.",
-    "message": "Enter a Device Name"
-  },
-  "$1.routes.app.settings.device-name.navTitle": {
-    "description": "Title of the device name settings page.",
-    "message": "Device Name"
-  },
-  "$1.routes.app.settings.device-name.save": {
-    "description": "Label for save button.",
-    "message": "Save"
-  },
   "$1.routes.app.settings.index.aboutComapeoSectionTitle": {
     "description": "Text for data and privacy section title.",
     "message": "About CoMapeo"
@@ -1295,9 +1271,25 @@
     "description": "Label for checkbox to toggle sharing of diagnostic information.",
     "message": "Share Diagnostic Information"
   },
+  "$1.routes.app.settings.index.deviceNameCancel": {
+    "description": "Label for cancel button for device name input.",
+    "message": "Cancel"
+  },
   "$1.routes.app.settings.index.deviceNameEdit": {
     "description": "Button text for navigating to page to edit device name.",
     "message": "Edit"
+  },
+  "$1.routes.app.settings.index.deviceNameMaxLengthError": {
+    "description": "Error message for device name that is too long.",
+    "message": "Too long, try a shorter name."
+  },
+  "$1.routes.app.settings.index.deviceNameMinLengthError": {
+    "description": "Error message for device name that is too short.",
+    "message": "Enter a Device Name"
+  },
+  "$1.routes.app.settings.index.deviceNameSave": {
+    "description": "Label for save button for device name input.",
+    "message": "Save"
   },
   "$1.routes.app.settings.index.deviceNameSectionTitle": {
     "description": "Section title for device name settings.",
