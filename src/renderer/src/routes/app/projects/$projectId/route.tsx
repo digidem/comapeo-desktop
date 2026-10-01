@@ -594,13 +594,13 @@ function ProjectSwitcherButton({
 										outlineColor: COMAPEO_BLUE,
 									},
 									[interactedClass]: {
-										backgroundColor: (theme) =>
-											theme.darken(displayedProjectColor, 0.05),
+										backgroundColor: displayedProjectColor,
 										outlineColor: (theme) =>
 											theme.darken(
 												isCurrentProject ? COMAPEO_BLUE : LIGHT_GREY,
-												0.2,
+												0.1,
 											),
+										outlineWidth: 3,
 									},
 								}}
 							>

@@ -1,7 +1,5 @@
-import { hexToRgb } from '@mui/material/styles'
 import { expect } from '@playwright/test'
 
-import { COMAPEO_BLUE } from '../../../src/renderer/src/colors.ts'
 import {
 	setup,
 	simulateCreateProject,
@@ -213,10 +211,7 @@ test('listed project sections', async ({
 
 			await expect(projectCard01).toBeVisible()
 
-			await expect(projectCard01).toHaveCSS(
-				'border-color',
-				hexToRgb(COMAPEO_BLUE),
-			)
+			await expect(projectCard01).toHaveAttribute('data-current', 'true')
 		}
 
 		const projectName02 = `${projectParams.projectName} 02`
@@ -254,10 +249,7 @@ test('listed project sections', async ({
 
 			await expect(projectCard02).toBeVisible()
 
-			await expect(projectCard02).toHaveCSS(
-				'border-color',
-				hexToRgb(COMAPEO_BLUE),
-			)
+			await expect(projectCard02).toHaveAttribute('data-current', 'true')
 
 			const projectCard01 = otherProjectsSection.getByRole('link', {
 				name: `Go to project ${projectName01}.`,
@@ -266,10 +258,7 @@ test('listed project sections', async ({
 
 			await expect(projectCard01).toBeVisible()
 
-			await expect(projectCard01).not.toHaveCSS(
-				'border-color',
-				hexToRgb(COMAPEO_BLUE),
-			)
+			await expect(projectCard01).not.toHaveAttribute('data-current')
 		}
 	} finally {
 		// 3. Cleanup

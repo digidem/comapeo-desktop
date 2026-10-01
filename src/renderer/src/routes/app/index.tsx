@@ -415,6 +415,7 @@ function ListedProjectsPanel({ projects }: { projects: Array<ListedProject> }) {
 
 						<ListedProjectCard
 							key={activeProject.projectId}
+							data-current
 							highlight
 							to="/app/projects/$projectId"
 							params={{ projectId: activeProject.projectId }}
@@ -509,12 +510,15 @@ function ListedProjectCard({
 			sx={{
 				backgroundColor: project.projectColor,
 				borderRadius: 2,
-				border: `1px solid ${highlight ? COMAPEO_BLUE : LIGHT_GREY}`,
 				color: (theme) => theme.palette.text.secondary,
+				outline: `2px solid ${highlight ? COMAPEO_BLUE : LIGHT_GREY}`,
+				outlineOffset: -1,
 				overflow: 'auto',
 				'&:hover, &:focus-within': {
 					color: (theme) => theme.palette.text.primary,
-					outline: `2px solid ${highlight ? COMAPEO_BLUE : BLUE_GREY}`,
+					outlineColor: (theme) =>
+						theme.darken(highlight ? COMAPEO_BLUE : LIGHT_GREY, 0.1),
+					outlineWidth: 3,
 				},
 			}}
 		>
