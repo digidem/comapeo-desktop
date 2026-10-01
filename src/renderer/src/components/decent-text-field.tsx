@@ -10,7 +10,7 @@ export function DecentTextField({
 	label,
 	...muiOutlinedInputProps
 }: {
-	helperText: ReactNode
+	helperText?: ReactNode
 	label?: string
 } & Omit<OutlinedInputProps, 'label' | 'helperText'>) {
 	return (

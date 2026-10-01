@@ -21,7 +21,6 @@ import { Route as OnboardingPrivacyPolicyRouteImport } from './../routes/onboard
 import { Route as AppProjectsProjectIdRouteRouteImport } from './../routes/app/projects/$projectId/route'
 import { Route as AppSettingsIndexRouteImport } from './../routes/app/settings/index'
 import { Route as AppSettingsBackgroundMapRouteImport } from './../routes/app/settings/background-map'
-import { Route as AppSettingsDeviceNameRouteImport } from './../routes/app/settings/device-name'
 import { Route as AppProjectsProjectIdWithMapPanelRouteRouteImport } from './../routes/app/projects/$projectId/_with-map-panel/route'
 import { Route as AppProjectsProjectIdSettingsRouteRouteImport } from './../routes/app/projects/$projectId/settings/route'
 import { Route as AppProjectsProjectIdTestDataRouteImport } from './../routes/app/projects/$projectId/test-data'
@@ -106,11 +105,6 @@ const AppSettingsBackgroundMapRoute =
     path: '/background-map',
     getParentRoute: () => AppSettingsRouteRoute,
   } as any)
-const AppSettingsDeviceNameRoute = AppSettingsDeviceNameRouteImport.update({
-  id: '/device-name',
-  path: '/device-name',
-  getParentRoute: () => AppSettingsRouteRoute,
-} as any)
 const AppProjectsProjectIdWithMapPanelRouteRoute =
   AppProjectsProjectIdWithMapPanelRouteRouteImport.update({
     id: '/_with-map-panel',
@@ -249,7 +243,6 @@ export interface FileRoutesByFullPath {
   '/app/': typeof AppIndexRoute
   '/app/projects/$projectId': typeof AppProjectsProjectIdRouteRouteWithChildren
   '/app/settings/background-map': typeof AppSettingsBackgroundMapRoute
-  '/app/settings/device-name': typeof AppSettingsDeviceNameRoute
   '/app/settings/': typeof AppSettingsIndexRoute
   '/app/projects/$projectId/settings': typeof AppProjectsProjectIdSettingsRouteRouteWithChildren
   '/app/projects/$projectId/test-data': typeof AppProjectsProjectIdTestDataRoute
@@ -281,7 +274,6 @@ export interface FileRoutesByTo {
   '/app': typeof AppIndexRoute
   '/app/projects/$projectId': typeof AppProjectsProjectIdWithMapPanelIndexRoute
   '/app/settings/background-map': typeof AppSettingsBackgroundMapRoute
-  '/app/settings/device-name': typeof AppSettingsDeviceNameRoute
   '/app/settings': typeof AppSettingsIndexRoute
   '/app/projects/$projectId/test-data': typeof AppProjectsProjectIdTestDataRoute
   '/app/projects/$projectId/download': typeof AppProjectsProjectIdWithMapPanelDownloadRoute
@@ -313,7 +305,6 @@ export interface FileRoutesById {
   '/app/': typeof AppIndexRoute
   '/app/projects/$projectId': typeof AppProjectsProjectIdRouteRouteWithChildren
   '/app/settings/background-map': typeof AppSettingsBackgroundMapRoute
-  '/app/settings/device-name': typeof AppSettingsDeviceNameRoute
   '/app/settings/': typeof AppSettingsIndexRoute
   '/app/projects/$projectId/_with-map-panel': typeof AppProjectsProjectIdWithMapPanelRouteRouteWithChildren
   '/app/projects/$projectId/settings': typeof AppProjectsProjectIdSettingsRouteRouteWithChildren
@@ -350,7 +341,6 @@ export interface FileRouteTypes {
     | '/app/'
     | '/app/projects/$projectId'
     | '/app/settings/background-map'
-    | '/app/settings/device-name'
     | '/app/settings/'
     | '/app/projects/$projectId/settings'
     | '/app/projects/$projectId/test-data'
@@ -382,7 +372,6 @@ export interface FileRouteTypes {
     | '/app'
     | '/app/projects/$projectId'
     | '/app/settings/background-map'
-    | '/app/settings/device-name'
     | '/app/settings'
     | '/app/projects/$projectId/test-data'
     | '/app/projects/$projectId/download'
@@ -413,7 +402,6 @@ export interface FileRouteTypes {
     | '/app/'
     | '/app/projects/$projectId'
     | '/app/settings/background-map'
-    | '/app/settings/device-name'
     | '/app/settings/'
     | '/app/projects/$projectId/_with-map-panel'
     | '/app/projects/$projectId/settings'
@@ -528,13 +516,6 @@ declare module '@tanstack/react-router' {
       path: '/background-map'
       fullPath: '/app/settings/background-map'
       preLoaderRoute: typeof AppSettingsBackgroundMapRouteImport
-      parentRoute: typeof AppSettingsRouteRoute
-    }
-    '/app/settings/device-name': {
-      id: '/app/settings/device-name'
-      path: '/device-name'
-      fullPath: '/app/settings/device-name'
-      preLoaderRoute: typeof AppSettingsDeviceNameRouteImport
       parentRoute: typeof AppSettingsRouteRoute
     }
     '/app/projects/$projectId/_with-map-panel': {
@@ -682,13 +663,11 @@ declare module '@tanstack/react-router' {
 
 interface AppSettingsRouteRouteChildren {
   AppSettingsBackgroundMapRoute: typeof AppSettingsBackgroundMapRoute
-  AppSettingsDeviceNameRoute: typeof AppSettingsDeviceNameRoute
   AppSettingsIndexRoute: typeof AppSettingsIndexRoute
 }
 
 const AppSettingsRouteRouteChildren: AppSettingsRouteRouteChildren = {
   AppSettingsBackgroundMapRoute: AppSettingsBackgroundMapRoute,
-  AppSettingsDeviceNameRoute: AppSettingsDeviceNameRoute,
   AppSettingsIndexRoute: AppSettingsIndexRoute,
 }
 
