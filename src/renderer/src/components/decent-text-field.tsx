@@ -14,7 +14,7 @@ export function DecentTextField({
 	label: string
 } & Omit<OutlinedInputProps, 'label' | 'helperText'>) {
 	return (
-		<Stack direction="column" sx={{ gap: 2 }}>
+		<Stack direction="column" sx={{ flex: 1, gap: 2 }}>
 			<Typography
 				component="label"
 				color={muiOutlinedInputProps.error ? 'error' : 'textPrimary'}
