@@ -526,6 +526,7 @@ function ListedProjectCard({
 					direction="row"
 					sx={{
 						alignItems: 'center',
+						gap: 4,
 						justifyContent: 'space-between',
 						flex: 1,
 					}}
