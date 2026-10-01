@@ -112,209 +112,162 @@ test('index', async ({ appInfo, userParams }) => {
 	}
 })
 
-test.describe('device name', () => {
-	test('base UI checks', async ({ appInfo, userParams }) => {
-		const { launchApp, cleanup } = await setup()
-		const electronApp = await launchApp({ appInfo })
+test('device name', async ({ appInfo, userParams }) => {
+	const { launchApp, cleanup } = await setup()
+	const electronApp = await launchApp({ appInfo })
 
-		try {
-			const page = await electronApp.firstWindow()
+	try {
+		const page = await electronApp.firstWindow()
 
-			// 1. Setup
-			await simulateOnboarding({
-				page,
-				deviceName: userParams.deviceName,
-			})
+		// 1. Setup
+		await simulateOnboarding({
+			page,
+			deviceName: userParams.deviceName,
+		})
+
+		await page
+			.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+			.click()
+
+		// 2. Main tests
+		const main = page.getByRole('main')
+
+		const deviceNameSection = main.locator('section').filter({
+			has: page.getByRole('heading', { name: 'Device Name', exact: true }),
+		})
+
+		const deviceNameInput = deviceNameSection.getByRole('textbox', {
+			name: 'Device Name',
+			exact: true,
+		})
+
+		/// Input (initial state)
+		{
+			await expect(deviceNameInput).toHaveAttribute('readonly')
+
+			await expect(
+				deviceNameSection.getByText('Edit', { exact: true }),
+			).toBeVisible()
+
+			await expect(deviceNameInput).toHaveValue(userParams.deviceName)
+		}
+
+		// Start editing via mouse interaction
+		await deviceNameInput.click()
+
+		/// Input (initial edit state)
+		{
+			await expect(deviceNameInput).not.toHaveAttribute('readonly')
+
+			await expect(deviceNameInput).toHaveValue(userParams.deviceName)
+
+			await expect(
+				deviceNameSection.getByText('Edit', { exact: true }),
+			).not.toBeVisible()
+
+			await expect(
+				deviceNameSection.locator('output[name="character-count"]'),
+			).toHaveText(`${userParams.deviceName.length}/60`)
+
+			await expect(
+				deviceNameSection.getByRole('button', { name: 'Save', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				deviceNameSection.getByRole('button', { name: 'Cancel', exact: true }),
+			).toBeVisible()
+		}
+
+		/// Input (invalid state, too long)
+		{
+			const invalidDeviceName = Array(100).fill('a').join('')
+
+			await deviceNameInput.fill(invalidDeviceName)
+
+			await expect(
+				deviceNameSection.getByText('Too long, try a shorter name.', {
+					exact: true,
+				}),
+			).toBeVisible()
+
+			await expect(
+				deviceNameSection.locator('output[name="character-count"]'),
+			).toHaveText(`${invalidDeviceName.length}/60`)
+
+			await main
+				.getByRole('button', { name: 'Save', exact: true })
+				.click({ force: true })
+		}
+
+		/// Input (invalid state, empty)
+		{
+			await deviceNameInput.fill('')
+
+			await expect(
+				deviceNameSection.getByText('Enter a Device Name', { exact: true }),
+			).toBeVisible()
+
+			await expect(
+				deviceNameSection.locator('output[name="character-count"]'),
+			).toHaveText('0/60')
+		}
+
+		/// Restoration of input initial state when navigating away without saving
+		{
+			//  Clicking external navigation control
+			await main
+				.locator('header')
+				.getByRole('button', { name: 'Go back.', exact: true })
+				.click()
+
+			const discardEditsDialog = page.getByRole('dialog')
+
+			await expect(
+				discardEditsDialog.getByRole('heading', {
+					name: 'Discard Edits?',
+					exact: true,
+				}),
+			).toBeVisible()
+
+			await expect(
+				discardEditsDialog.getByRole('button', {
+					name: 'Cancel',
+					exact: true,
+				}),
+			).toBeVisible()
+
+			await discardEditsDialog
+				.getByRole('button', { name: 'Yes, Discard', exact: true })
+				.click()
 
 			await page
 				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
 				.click()
 
-			// 2. Main tests
-			const main = page.getByRole('main')
-
-			/// Navigation
-			{
-				const deviceNameSettingsLink = main.getByRole('link', {
-					name: 'Go to device name settings.',
-					exact: true,
-				})
-
-				await expect(
-					deviceNameSettingsLink.getByText(userParams.deviceName),
-				).toBeVisible()
-
-				await deviceNameSettingsLink.click()
-			}
-
-			/// Header
-			{
-				const header = main.locator('header')
-
-				await expect(
-					header.getByRole('button', { name: 'Go back.', exact: true }),
-				).toBeVisible()
-
-				await expect(
-					header.getByRole('heading', { name: 'Device Name', exact: true }),
-				).toBeVisible()
-			}
-
-			/// Interactive elements
-			{
-				await expect(
-					main.getByRole('textbox', { name: 'Device Name', exact: true }),
-				).toBeVisible()
-
-				await expect(
-					main.getByRole('button', { name: 'Save', exact: true }),
-				).toBeVisible()
-			}
-		} finally {
-			// 3. Cleanup
-			await electronApp.close()
-			cleanup()
+			await expect(deviceNameInput).toHaveValue(userParams.deviceName)
 		}
-	})
 
-	test('form behavior', async ({ appInfo, userParams }) => {
-		const { launchApp, cleanup } = await setup()
-		const electronApp = await launchApp({ appInfo })
+		// Start editing via keyboard interaction
+		await deviceNameInput.focus()
+		await page.keyboard.press('Enter')
 
-		try {
-			const page = await electronApp.firstWindow()
+		/// Saving updated device name
+		{
+			const updatedUserParams = { deviceName: 'Desktop e2e Updated' }
 
-			// 1. Setup
-			await simulateOnboarding({
-				page,
-				deviceName: userParams.deviceName,
-			})
+			await deviceNameInput.fill(updatedUserParams.deviceName)
 
-			await page
-				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+			await deviceNameSection
+				.getByRole('button', { name: 'Save', exact: true })
 				.click()
 
-			await page
-				.getByRole('link', {
-					name: 'Go to device name settings.',
-					exact: true,
-				})
-				.click()
-
-			// 2. Main tests
-			const main = page.getByRole('main')
-
-			const deviceNameInput = main.getByRole('textbox', {
-				name: 'Device Name',
-				exact: true,
-			})
-
-			/// Input (initial state)
-			{
-				await expect(deviceNameInput).toHaveValue(userParams.deviceName)
-
-				await expect(main.locator('output[name="character-count"]')).toHaveText(
-					`${userParams.deviceName.length}/60`,
-				)
-			}
-
-			/// Input (invalid state, too long)
-			{
-				const invalidDeviceName = Array(100).fill('a').join('')
-
-				await deviceNameInput.fill(invalidDeviceName)
-
-				await expect(
-					page.getByText('Too long, try a shorter name.', { exact: true }),
-				).toBeVisible()
-
-				await expect(page.locator('output[name="character-count"]')).toHaveText(
-					`${invalidDeviceName.length}/60`,
-				)
-
-				const currentUrl = page.url()
-
-				await main
-					.getByRole('button', { name: 'Save', exact: true })
-					.click({ force: true })
-
-				expect(page.url()).toStrictEqual(currentUrl)
-
-				// Input (invalid state, empty)
-				await deviceNameInput.fill('')
-
-				await expect(
-					page.getByText('Enter a Device Name', { exact: true }),
-				).toBeVisible()
-
-				await expect(page.locator('output[name="character-count"]')).toHaveText(
-					'0/60',
-				)
-			}
-
-			/// Restoration of input initial state when navigating away without saving
-			{
-				//  Clicking external navigation control
-				await main
-					.locator('header')
-					.getByRole('button', { name: 'Go back.', exact: true })
-					.click()
-
-				const discardEditsDialog = page.getByRole('dialog')
-
-				await expect(
-					discardEditsDialog.getByRole('heading', {
-						name: 'Discard Edits?',
-						exact: true,
-					}),
-				).toBeVisible()
-
-				await expect(
-					discardEditsDialog.getByRole('button', {
-						name: 'Cancel',
-						exact: true,
-					}),
-				).toBeVisible()
-
-				await discardEditsDialog
-					.getByRole('button', { name: 'Yes, Discard', exact: true })
-					.click()
-
-				await page
-					.getByRole('link', {
-						name: 'Go to device name settings.',
-						exact: true,
-					})
-					.click()
-
-				await expect(deviceNameInput).toHaveValue(userParams.deviceName)
-			}
-
-			/// Saving updated device name
-			{
-				const updatedUserParams = {
-					deviceName: 'Desktop e2e Updated',
-				}
-
-				await deviceNameInput.fill(updatedUserParams.deviceName)
-
-				await main.getByRole('button', { name: 'Save', exact: true }).click()
-
-				await expect(
-					main
-						.getByRole('link', {
-							name: 'Go to device name settings.',
-							exact: true,
-						})
-						.getByText(updatedUserParams.deviceName),
-				).toBeVisible()
-			}
-		} finally {
-			// 3. Cleanup
-			await electronApp.close()
-			cleanup()
+			await expect(deviceNameInput).toHaveValue(updatedUserParams.deviceName)
 		}
-	})
+	} finally {
+		// 3. Cleanup
+		await electronApp.close()
+		cleanup()
+	}
 })
 
 test('language', async ({ appInfo, userParams }) => {
