@@ -75,7 +75,7 @@
 		"@homebridge/ciao": "1.3.12",
 		"@sentry/electron": "7.19.0",
 		"atomically": "2.1.1",
-		"electron-context-menu": "5.0.0",
+		"electron-context-menu": "5.1.0",
 		"electron-dl": "4.0.0",
 		"electron-squirrel-startup": "1.0.1",
 		"fastify": "4.29.1",
