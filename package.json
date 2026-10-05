@@ -160,7 +160,7 @@
 		"react-resizable-panels": "4.12.4",
 		"spin-delay": "2.0.1",
 		"typescript": "npm:@typescript/typescript6@6.0.3",
-		"typescript-eslint": "8.70.0",
+		"typescript-eslint": "8.71.0",
 		"utm": "1.1.1",
 		"verkit": "0.4.0",
 		"vite": "8.3.0",
