@@ -201,10 +201,7 @@ test.describe('collaborator info', () => {
 			/// Info
 			{
 				await expect(
-					main.getByRole('heading', {
-						name: userParams.deviceName,
-						exact: true,
-					}),
+					main.getByText(userParams.deviceName, { exact: true }),
 				).toBeVisible()
 
 				await expect(

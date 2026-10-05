@@ -30,6 +30,7 @@ import {
 	BLACK,
 	BLUE_GREY,
 	DARK_GREY,
+	LIGHT_GREY,
 	PROJECT_ORANGE,
 	WHITE,
 } from '../../../../../colors.ts'
@@ -146,33 +147,21 @@ function RouteComponent() {
 				</Stack>
 
 				<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-					<Container
-						disableGutters
-						maxWidth="sm"
-						sx={{
-							display: 'flex',
-							flex: 1,
-							flexDirection: 'column',
-							paddingBlock: 6,
-							paddingInline: 4,
-						}}
+					<Suspense
+						fallback={
+							<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
+								<CircularProgress disableShrink size={30} />
+							</Box>
+						}
 					>
-						<Suspense
-							fallback={
-								<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
-									<CircularProgress disableShrink size={30} />
-								</Box>
-							}
-						>
-							<CollaboratorInfoContent
-								projectId={projectId}
-								deviceId={deviceId}
-								onLeaveProject={() => {
-									setShowLeaveProjectDialog(true)
-								}}
-							/>
-						</Suspense>
-					</Container>
+						<CollaboratorInfoContent
+							projectId={projectId}
+							deviceId={deviceId}
+							onLeaveProject={() => {
+								setShowLeaveProjectDialog(true)
+							}}
+						/>
+					</Suspense>
 				</Stack>
 			</Stack>
 
@@ -218,7 +207,7 @@ function CollaboratorInfoContent({
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'h1',
-		multiplier: 5,
+		multiplier: 3,
 	})
 
 	const roleIconSize = useIconSizeBasedOnTypography({
@@ -233,6 +222,7 @@ function CollaboratorInfoContent({
 
 	if (isRemoteArchive) {
 		title = member.name || intl.formatMessage(m.remoteArchive)
+
 		description = (
 			<Typography
 				component="p"
@@ -248,6 +238,7 @@ function CollaboratorInfoContent({
 			member.role.roleId === COORDINATOR_ROLE_ID
 
 		title = member.name || truncatedDeviceId
+
 		description = (
 			<>
 				<Icon
@@ -273,91 +264,118 @@ function CollaboratorInfoContent({
 	}
 
 	return (
-		<Stack
-			direction="column"
-			sx={{ flex: 1, gap: 10, justifyContent: 'space-between' }}
-		>
-			<Stack
-				direction="column"
-				sx={{
-					border: `1px solid ${BLUE_GREY}`,
-					borderRadius: 2,
-					flex: 1,
-					gap: 20,
-					justifyContent: 'center',
-					overflowWrap: 'break-word',
-					paddingBlock: 20,
-					paddingInline: 6,
-				}}
-			>
-				<Stack direction="column" sx={{ gap: 4, alignItems: 'center' }}>
-					<DeviceIcon
-						deviceType={member.deviceType}
-						htmlColor={DARK_GREY}
-						size={deviceIconSize}
-					/>
-
-					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center' }}
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+				<Container
+					disableGutters
+					maxWidth="sm"
+					sx={{
+						display: 'flex',
+						flex: 1,
+						flexDirection: 'column',
+						paddingBlock: 6,
+						paddingInline: 4,
+					}}
+				>
+					<Stack
+						direction="column"
+						sx={{
+							border: `1px solid ${BLUE_GREY}`,
+							borderRadius: 2,
+							flex: 1,
+							gap: 20,
+							justifyContent: 'center',
+							overflow: 'auto',
+							overflowWrap: 'break-word',
+							paddingBlock: 20,
+							paddingInline: 6,
+						}}
 					>
-						{title}
-					</Typography>
+						<Stack direction="column" sx={{ gap: 10, alignItems: 'center' }}>
+							<Box
+								sx={{
+									backgroundColor: LIGHT_GREY,
+									borderRadius: '50%',
+									display: 'grid',
+									padding: 6,
+									placeItems: 'center',
+								}}
+							>
+								<DeviceIcon
+									deviceType={member.deviceType}
+									size={deviceIconSize}
+								/>
+							</Box>
 
-					<Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
-						{description}
+							<Typography
+								component="p"
+								variant="h1"
+								sx={{
+									fontWeight: 500,
+									textAlign: 'center',
+									textWrap: 'balance',
+								}}
+							>
+								{title}
+							</Typography>
+						</Stack>
+
+						<Stack direction="column" sx={{ gap: 2, alignItems: 'center' }}>
+							<Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
+								{description}
+							</Stack>
+
+							<Typography
+								color="textSecondary"
+								sx={{ textAlign: 'center', overflowWrap: 'anywhere' }}
+							>
+								{truncatedDeviceId}
+							</Typography>
+
+							{member.joinedAt ? (
+								<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
+									{intl.formatMessage(m.addedOn, {
+										value: (
+											<time key={member.deviceId} dateTime={member.joinedAt}>
+												{intl.formatDate(member.joinedAt, {
+													year: 'numeric',
+													month: 'long',
+													day: '2-digit',
+												})}
+											</time>
+										),
+									})}
+								</Typography>
+							) : null}
+						</Stack>
 					</Stack>
-				</Stack>
-
-				<Stack direction="column" sx={{ gap: 4, alignItems: 'center' }}>
-					<Typography
-						color="textSecondary"
-						sx={{ textAlign: 'center', overflowWrap: 'anywhere' }}
-					>
-						{truncatedDeviceId}
-					</Typography>
-
-					{member.joinedAt ? (
-						<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
-							{intl.formatMessage(m.addedOn, {
-								value: (
-									<time key={member.deviceId} dateTime={member.joinedAt}>
-										{intl.formatDate(member.joinedAt, {
-											year: 'numeric',
-											month: 'long',
-											day: '2-digit',
-										})}
-									</time>
-								),
-							})}
-						</Typography>
-					) : null}
-				</Stack>
+				</Container>
 			</Stack>
 
 			{isSelf &&
 			// NOTE: Remote archives go through different flow
 			!isRemoteArchive ? (
-				<Box
+				<Stack
+					direction="row"
 					sx={{
-						display: 'flex',
-						flexDirection: 'row',
+						borderTop: `1px solid ${BLUE_GREY}`,
 						justifyContent: 'center',
+						padding: 6,
 					}}
 				>
 					<Button
-						variant="outlined"
 						fullWidth
 						color="error"
-						startIcon={<Icon name="material-logout" />}
-						sx={{ maxWidth: 400 }}
 						onClick={() => {
 							onLeaveProject()
 						}}
+						startIcon={<Icon name="material-logout" />}
+						sx={{ maxWidth: 400 }}
+						variant="outlined"
 					>
 						{intl.formatMessage(m.leaveProjectButton)}
 					</Button>
-				</Box>
+				</Stack>
 			) : null}
 		</Stack>
 	)
