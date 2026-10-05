@@ -80,42 +80,15 @@ function RouteComponent() {
 				</Typography>
 			</Stack>
 
-			<Stack
-				sx={{ flex: 1, overflow: 'auto', scrollbarGutter: 'stable both-edges' }}
+			<Suspense
+				fallback={
+					<Box sx={{ display: 'grid', placeItems: 'center' }}>
+						<CircularProgress disableShrink />
+					</Box>
+				}
 			>
-				<Container disableGutters maxWidth="sm">
-					<Stack direction="column" sx={{ flex: 1 }}>
-						<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-							<Stack direction="column" sx={{ padding: 6, gap: 6 }}>
-								<Box
-									sx={{
-										bgcolor: LIGHT_GREY,
-										border: `1px solid ${BLUE_GREY}`,
-										borderRadius: 2,
-										padding: 4,
-									}}
-								>
-									<Typography sx={{ textAlign: 'center' }}>
-										{intl.formatMessage(m.description)}
-									</Typography>
-								</Box>
-
-								<Divider />
-
-								<Suspense
-									fallback={
-										<Box sx={{ display: 'grid', placeItems: 'center' }}>
-											<CircularProgress disableShrink />
-										</Box>
-									}
-								>
-									<CustomMap />
-								</Suspense>
-							</Stack>
-						</Stack>
-					</Stack>
-				</Container>
-			</Stack>
+				<CustomMap />
+			</Suspense>
 		</Stack>
 	)
 }
@@ -235,19 +208,68 @@ function CustomMapInfo({
 	}
 
 	if (customMapInfo.status === 'error') {
-		if (getErrorCode(customMapInfo.error) === 'MAP_NOT_FOUND') {
-			return (
-				<Stack direction="column" sx={{ gap: 5 }}>
+		return (
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+				<Box sx={{ flex: 1, overflow: 'auto' }}>
+					<Container disableGutters maxWidth="sm" sx={{ flex: 1, padding: 6 }}>
+						<Stack
+							direction="column"
+							sx={{ gap: 6, paddingBlock: 6, paddingInline: 4 }}
+						>
+							{getErrorCode(customMapInfo.error) === 'MAP_NOT_FOUND' ? (
+								<Box
+									sx={{
+										bgcolor: LIGHT_GREY,
+										border: `1px solid ${BLUE_GREY}`,
+										borderRadius: 2,
+										padding: 4,
+									}}
+								>
+									<Typography>{intl.formatMessage(m.description)}</Typography>
+								</Box>
+							) : (
+								<>
+									<Typography sx={{ textAlign: 'center' }}>
+										{intl.formatMessage(m.customMapInfoError)}
+									</Typography>
+
+									<Button
+										variant="outlined"
+										color="error"
+										fullWidth
+										loading={removeIsPending}
+										loadingPosition="start"
+										sx={{ maxWidth: 400, alignSelf: 'center' }}
+										onClick={() => {
+											onRemoveMap()
+										}}
+									>
+										{intl.formatMessage(m.removeMap)}
+									</Button>
+								</>
+							)}
+						</Stack>
+					</Container>
+				</Box>
+
+				<Stack
+					direction="column"
+					sx={{
+						borderTop: `1px solid ${BLUE_GREY}`,
+						gap: 4,
+						padding: 6,
+					}}
+				>
 					<Button
 						component="label"
-						variant="outlined"
 						fullWidth
-						sx={{ maxWidth: 400, alignSelf: 'center' }}
-						startIcon={<Icon name="material-file-download" />}
 						loading={chooseIsPending}
 						loadingPosition="start"
-						tabIndex={-1}
 						role={undefined}
+						startIcon={<Icon name="material-file-download" />}
+						sx={{ maxWidth: 400, alignSelf: 'center' }}
+						tabIndex={-1}
+						variant="outlined"
 					>
 						{intl.formatMessage(m.chooseFile)}
 
@@ -258,43 +280,6 @@ function CustomMapInfo({
 						{intl.formatMessage(m.acceptedFileTypes)}
 					</Typography>
 				</Stack>
-			)
-		}
-
-		return (
-			<Stack direction="column" sx={{ gap: 4 }}>
-				<Typography sx={{ textAlign: 'center' }}>
-					{intl.formatMessage(m.customMapInfoError)}
-				</Typography>
-				<Button
-					component="label"
-					variant="outlined"
-					fullWidth
-					loading={chooseIsPending}
-					loadingPosition="start"
-					sx={{ maxWidth: 400, alignSelf: 'center' }}
-					startIcon={<Icon name="material-file-download" />}
-					tabIndex={-1}
-					role={undefined}
-				>
-					{intl.formatMessage(m.chooseFile)}
-
-					<HiddenSelectFileInput onClick={onChooseMap} />
-				</Button>
-
-				<Button
-					variant="outlined"
-					color="error"
-					fullWidth
-					loading={removeIsPending}
-					loadingPosition="start"
-					sx={{ maxWidth: 400, alignSelf: 'center' }}
-					onClick={() => {
-						onRemoveMap()
-					}}
-				>
-					{intl.formatMessage(m.removeMap)}
-				</Button>
 			</Stack>
 		)
 	}
