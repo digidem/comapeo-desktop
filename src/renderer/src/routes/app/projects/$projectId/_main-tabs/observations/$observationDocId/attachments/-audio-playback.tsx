@@ -1,4 +1,3 @@
-import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import { styled } from '@mui/material/styles'
 import {
@@ -8,11 +7,7 @@ import {
 	MediaTimeDisplay,
 	MediaTimeRange,
 } from 'media-chrome/react'
-import {
-	MediaActionTypes,
-	useMediaDispatch,
-	useMediaRef,
-} from 'media-chrome/react/media-store'
+import { useMediaRef } from 'media-chrome/react/media-store'
 
 import {
 	BLACK,
@@ -20,7 +15,6 @@ import {
 	COMAPEO_BLUE,
 	WHITE,
 } from '../../../../../../../../colors.ts'
-import { Icon } from '../../../../../../../../components/icon.tsx'
 
 const StyledMediaController = styled(MediaController)(({ theme }) => ({
 	'--media-background-color': WHITE,
@@ -51,7 +45,6 @@ const StyledMediaTimeDisplay = styled(MediaTimeDisplay)(() => ({
 
 export function AudioPlayback({ src, lang }: { src: string; lang: string }) {
 	const mediaRef = useMediaRef()
-	const mediaDispatch = useMediaDispatch()
 
 	return (
 		<StyledMediaController audio lang={lang}>
@@ -64,25 +57,6 @@ export function AudioPlayback({ src, lang }: { src: string; lang: string }) {
 					<StyledMediaTimeRange>
 						<span slot="preview" />
 					</StyledMediaTimeRange>
-
-					<IconButton
-						disableFocusRipple
-						disableTouchRipple
-						onClick={() => {
-							mediaDispatch({
-								type: MediaActionTypes.MEDIA_SEEK_REQUEST,
-								detail: 0,
-							})
-						}}
-						sx={{
-							borderRadius: 0,
-							['&:focus-visible']: {
-								boxShadow: 'var(--media-focus-box-shadow)',
-							},
-						}}
-					>
-						<Icon name="material-symbols-replay" htmlColor={BLACK} />
-					</IconButton>
 				</MediaControlBar>
 
 				<StyledMediaTimeDisplay noToggle showDuration />
