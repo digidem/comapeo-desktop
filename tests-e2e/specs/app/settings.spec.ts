@@ -307,7 +307,7 @@ test('language', async ({ appInfo, userParams }) => {
 			// TODO: The result of this will vary based on system language preferences.
 			await expect(
 				selectTrigger
-					.getByText(/\(System Preference\)$/)
+					.getByText(/^Follow System Preference/)
 					.or(selectTrigger.getByText(/^English/)),
 			).toBeVisible()
 
@@ -315,8 +315,8 @@ test('language', async ({ appInfo, userParams }) => {
 
 			await expect(languagesMenu).toBeVisible()
 
-			await expect(languagesMenuOptions.nth(0)).toHaveText(
-				'Follow system preferences',
+			await expect(languagesMenuOptions.nth(0)).toHaveAccessibleName(
+				'Follow system preference',
 			)
 			await expect(languagesMenuOptions.nth(0)).toHaveAttribute(
 				'aria-selected',
@@ -346,14 +346,15 @@ test('language', async ({ appInfo, userParams }) => {
 				// multiple language variants that we actually support.
 				const baseTag = languageCode.split('-')[0]!
 
-				const { nativeName, englishName } =
+				const { nativeName } =
 					allLanguages[baseTag as keyof typeof allLanguages]!
 
-				const option = languagesMenuOptions.filter({ hasText: nativeName })
+				const option = languagesMenuOptions.filter({
+					hasNotText: 'Follow system preference',
+					hasText: nativeName,
+				})
 
-				await expect(option).toHaveAccessibleName(
-					`${nativeName} ${englishName}`,
-				)
+				await expect(option).toHaveAccessibleName(nativeName)
 				await expect(option).toHaveAttribute('data-value', languageCode)
 				await expect(option).toHaveAttribute('aria-selected', 'false')
 			}
@@ -413,7 +414,7 @@ test('language', async ({ appInfo, userParams }) => {
 			// TODO: The result of this will vary based on system language preferences.
 			await expect(
 				selectTrigger
-					.getByText(/\(System Preference\)$/)
+					.getByText(/^Follow System Preference/)
 					.or(selectTrigger.getByText(/^English/)),
 			).toBeVisible()
 		}
