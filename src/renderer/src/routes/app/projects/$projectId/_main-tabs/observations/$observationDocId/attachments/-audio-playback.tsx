@@ -61,12 +61,7 @@ export function AudioPlayback({ src, lang }: { src: string; lang: string }) {
 				<StyledMediaPlayButton noTooltip />
 
 				<MediaControlBar>
-					{/* TODO: Re-enable when audio scrubbing/seeking is supported by the blobs server */}
-					<StyledMediaTimeRange
-						aria-disabled
-						// @ts-expect-error Incorrect types from media-chrome
-						disabled
-					>
+					<StyledMediaTimeRange>
 						<span slot="preview" />
 					</StyledMediaTimeRange>
 
