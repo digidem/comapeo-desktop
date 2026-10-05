@@ -625,19 +625,18 @@ function ProjectSwitcherButton({
 					})}
 				</Stack>
 
-				<MenuItem
-					component={ButtonBaseLink}
-					to="/app"
-					disableGutters
-					disableRipple
-					sx={{ display: 'flex', flexDirection: 'row', gap: 2, padding: 4 }}
-				>
-					<Icon name="material-symbols-view-agenda" color="inherit" />
-
-					<Typography>
+				<Box sx={{ padding: 4 }}>
+					<ButtonLink
+						component={MenuItem}
+						fullWidth
+						startIcon={<Icon name="material-symbols-view-agenda" />}
+						sx={{ ':hover, :focus-within': { backgroundColor: 'initial' } }}
+						to="/app"
+						variant="outlined"
+					>
 						{intl.formatMessage(m.projectSwitcherViewAllProjects)}
-					</Typography>
-				</MenuItem>
+					</ButtonLink>
+				</Box>
 			</Menu>
 		</>
 	)
