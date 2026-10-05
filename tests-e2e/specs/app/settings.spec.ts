@@ -711,16 +711,15 @@ test('background map', async ({ appInfo, userParams, projectParams }) => {
 				main.getByRole('button', { name: 'Choose File', exact: true }),
 			).not.toBeVisible()
 
-			await expect(main.getByText('Map Name')).toBeVisible()
-			await expect(main.getByText('Date Added')).toBeVisible()
-
 			await expect(main.getByText('MapLibre')).toBeVisible()
 			await expect(main.getByText(/^\d MB$/)).toBeVisible()
 
 			// TODO: Ideally check for the actual values
-			const addedAt = main.getByRole('time')
-			await expect(addedAt).not.toBeEmpty()
-			await expect(addedAt).toHaveAttribute('datetime')
+			const dateAdded = main.getByText(/^Added on .+/)
+			await expect(dateAdded).toBeVisible()
+			const dateAddedTime = dateAdded.getByRole('time')
+			await expect(dateAddedTime).not.toBeEmpty()
+			await expect(dateAddedTime).toHaveAttribute('datetime')
 
 			await expect(
 				main.getByRole('button', { name: 'Remove Map', exact: true }),
