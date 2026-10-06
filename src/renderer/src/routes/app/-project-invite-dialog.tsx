@@ -21,7 +21,7 @@ import {
 } from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 
-import { BLUE_GREY, DARK_GREY, GREEN } from '../../colors.ts'
+import { BLUE_GREY, GREEN } from '../../colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
@@ -189,12 +189,12 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 	const intl = useIntl()
 
 	const inviteDetailsIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h3',
+		typographyVariant: 'cardHeader',
 		multiplier: 2,
 	})
 
 	const additionalProjectsIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body2',
+		typographyVariant: 'detailCopy',
 		multiplier: 1.5,
 	})
 
@@ -233,7 +233,6 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 
 										onAccept()
 									}}
-									sx={{ flex: 1, maxWidth: 400 }}
 									variant="contained"
 								>
 									{intl.formatMessage(m.projectInviteAccept)}
@@ -242,6 +241,7 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 							secondary={
 								<Button
 									aria-disabled={isActionPending}
+									fullWidth
 									onClick={() => {
 										if (isActionPending) {
 											return
@@ -249,7 +249,6 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 
 										onReject()
 									}}
-									sx={{ flex: 1, maxWidth: 400 }}
 									variant="outlined"
 								>
 									{intl.formatMessage(m.projectInviteDecline)}
@@ -258,7 +257,7 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 						/>
 					}
 					details={
-						<InviteDetails
+						<InviteDetailsCard
 							color={invite.projectColor}
 							title={invite.projectName}
 							description={intl.formatMessage(m.projectInviteDescription, {
@@ -271,7 +270,6 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 											? 'material-manage-accounts-filled'
 											: 'material-people-filled'
 									}
-									htmlColor={DARK_GREY}
 									size={inviteDetailsIconSize}
 								/>
 							}
@@ -299,7 +297,6 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 									onClick={() => {
 										onCloseAcceptedInvite()
 									}}
-									sx={{ flex: 1, maxWidth: 400 }}
 									variant="contained"
 								>
 									{intl.formatMessage(m.projectJoinedNextInvite)}
@@ -316,10 +313,7 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 										size={additionalProjectsIconSize}
 									/>
 
-									<Typography
-										variant="body2"
-										sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-									>
+									<Typography variant="sectionLabel">
 										{intl.formatMessage(m.projectInviteAdditionalInvitesCount, {
 											inviteCount: remainingInvites.length,
 										})}
@@ -334,7 +328,6 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 									onClick={() => {
 										onViewProject({ projectId, remainingInvites })
 									}}
-									sx={{ flex: 1, maxWidth: 400 }}
 									variant="contained"
 								>
 									{intl.formatMessage(m.projectJoinedViewProject)}
@@ -346,7 +339,6 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 									onClick={() => {
 										onCloseAcceptedInvite()
 									}}
-									sx={{ flex: 1, maxWidth: 400 }}
 									variant="outlined"
 								>
 									{intl.formatMessage(m.projectJoinedCloseDialog)}
@@ -358,13 +350,11 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 				<InviteContainer
 					actions={<InviteActions {...dynamicActionsProps} />}
 					details={
-						<InviteDetails
+						<InviteDetailsCard
 							color={invite.projectColor}
 							description={intl.formatMessage(
 								m.projectJoinedDetailsDescription,
-								{
-									projectName: invite.projectName,
-								},
+								{ projectName: invite.projectName },
 							)}
 							icon={
 								<Icon
@@ -418,12 +408,7 @@ function InviteContainer({
 	return (
 		<Stack direction="column" sx={{ flex: 1, gap: 6, padding: 6 }}>
 			<Stack direction="column" sx={{ gap: 2 }}>
-				<Typography
-					variant="body2"
-					sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-				>
-					{title}
-				</Typography>
+				<Typography variant="sectionLabel">{title}</Typography>
 
 				{details}
 			</Stack>
@@ -433,7 +418,7 @@ function InviteContainer({
 	)
 }
 
-function InviteDetails({
+function InviteDetailsCard({
 	color,
 	description,
 	icon,
@@ -458,14 +443,14 @@ function InviteDetails({
 			}}
 		>
 			<Stack direction="row" sx={{ gap: 6, alignItems: 'center' }}>
-				{icon}
+				<Box sx={{ color: (theme) => theme.palette.text.tertiary }}>{icon}</Box>
 
-				<Stack direction="column" sx={{ gap: 1 }}>
-					<Typography component="p" variant="h1" sx={{ fontWeight: 500 }}>
+				<Stack direction="column" sx={{ gap: 2 }}>
+					<Typography component="p" variant="cardHeader">
 						{title}
 					</Typography>
 
-					<Typography color="textSecondary">{description}</Typography>
+					<Typography color="textTertiary">{description}</Typography>
 				</Stack>
 			</Stack>
 		</Stack>

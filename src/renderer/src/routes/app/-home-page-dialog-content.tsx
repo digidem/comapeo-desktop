@@ -2,14 +2,13 @@ import { useId, useMemo, useState } from 'react'
 import { useCreateProject } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
-import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
-import { useSelector } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
 import { draw } from 'radashi'
 import {
@@ -24,6 +23,7 @@ import * as v from 'valibot'
 
 import {
 	DARKER_ORANGE,
+	DARK_ORANGE,
 	GREEN,
 	PROJECT_BLUE,
 	PROJECT_GREEN,
@@ -33,6 +33,7 @@ import {
 	WHITE,
 } from '../../colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
+import { DecentTextField } from '../../components/decent-text-field.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
 import { Bold } from '../../components/intl-rich-text.tsx'
@@ -51,7 +52,9 @@ export function StartProjectDialogContent({
 }) {
 	const intl = useIntl()
 
-	const formId = `project-name-${useId()}`
+	const componentId = useId()
+	const formId = `${componentId}-project-name-form`
+	const labelId = `${componentId}-label`
 
 	const createProject = useCreateProject()
 
@@ -97,7 +100,10 @@ export function StartProjectDialogContent({
 		},
 	})
 
-	const isSubmitting = useSelector(form.store, (state) => state.isSubmitting)
+	const iconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'heroHeader',
+		multiplier: 4,
+	})
 
 	return (
 		<Stack direction="column" sx={{ flex: 1 }}>
@@ -118,30 +124,31 @@ export function StartProjectDialogContent({
 				direction="column"
 				sx={{ flex: 1, padding: 6, gap: 10, overflow: 'auto' }}
 			>
-				<Stack
+				<Container
+					component={Stack}
+					maxWidth="sm"
 					direction="column"
-					sx={{
-						gap: 10,
-						justifyContent: 'center',
-						textAlign: 'center',
-						flex: 1,
-					}}
+					sx={{ flex: 1, gap: 10 }}
 				>
-					<Box>
+					<Stack direction="column" sx={{ alignItems: 'center' }}>
 						<Box>
 							<Icon
 								name="material-manage-accounts-filled"
 								htmlColor={DARKER_ORANGE}
-								size={120}
+								size={iconSize}
 							/>
 						</Box>
 
-						<Typography variant="h1" sx={{ fontWeight: 500 }}>
+						<Typography component="h1" variant="heroHeader">
 							{intl.formatMessage(m.startProjectDialogTitle)}
 						</Typography>
-					</Box>
+					</Stack>
 
-					<Typography>
+					<Typography
+						variant="heroSubheading"
+						color="textSecondary"
+						sx={{ textAlign: 'center' }}
+					>
 						{intl.formatMessage(m.startProjectDialogDescription)}
 					</Typography>
 
@@ -157,72 +164,99 @@ export function StartProjectDialogContent({
 						}}
 					>
 						<form.AppField name="projectName">
-							{(field) => (
-								<TextField
-									id={field.name}
-									required
-									fullWidth
-									autoFocus
-									label={intl.formatMessage(m.projectNameInputLabel)}
-									value={field.state.value}
-									error={!field.state.meta.isValid}
-									onChange={(event) => {
-										field.handleChange(event.target.value)
-									}}
-									slotProps={{ input: { style: { backgroundColor: WHITE } } }}
-									sx={{ maxWidth: (theme) => theme.breakpoints.values.sm }}
-									onBlur={field.handleBlur}
-									helperText={
-										<Stack
-											component="span"
-											direction="row"
-											sx={{ justifyContent: 'space-between' }}
-										>
-											<Box component="span">
-												{field.state.meta.errors[0]?.message}
-											</Box>
-											<Box
-												component="output"
-												htmlFor={field.name}
-												name="character-count"
+							{(field) => {
+								const inputId = `${componentId}-input`
+								const errorTextId = `${componentId}-error-text`
+
+								return (
+									<DecentTextField
+										aria-describedby={
+											field.state.meta.isValid ? undefined : errorTextId
+										}
+										error={!field.state.meta.isValid}
+										fullWidth
+										helperText={
+											<Stack
+												component="span"
+												direction="row"
+												sx={{
+													color: (theme) =>
+														field.state.meta.isValid
+															? theme.palette.text.secondary
+															: theme.palette.error.main,
+													justifyContent: 'space-between',
+												}}
 											>
-												<form.Subscribe
-													selector={(state) =>
-														v._getGraphemeCount(state.values.projectName)
-													}
+												<Typography
+													id={errorTextId}
+													color="inherit"
+													component="span"
+													variant="detailCopy"
 												>
-													{(count) =>
-														intl.formatMessage(m.characterCount, {
-															count,
-															max: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
-														})
-													}
-												</form.Subscribe>
-											</Box>
-										</Stack>
-									}
-								/>
-							)}
+													{field.state.meta.errors[0]?.message}
+												</Typography>
+
+												<Typography
+													color="inherit"
+													component="output"
+													htmlFor={inputId}
+													name="character-count"
+													variant="detailCopy"
+												>
+													<form.Subscribe
+														selector={(state) =>
+															v._getGraphemeCount(state.values.projectName)
+														}
+													>
+														{(count) =>
+															intl.formatMessage(m.characterCount, {
+																count,
+																max: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
+															})
+														}
+													</form.Subscribe>
+												</Typography>
+											</Stack>
+										}
+										id={inputId}
+										label={intl.formatMessage(m.projectNameInputLabel)}
+
+										onBlur={field.handleBlur}
+										onChange={(event) => {
+											field.handleChange(event.target.value)
+										}}
+										required
+										slotProps={{
+											input: {
+												'aria-labelledby': labelId,
+												style: { background: WHITE },
+											},
+										}}
+										value={field.state.value}
+									/>
+								)
+							}}
 						</form.AppField>
 					</Box>
-				</Stack>
+				</Container>
 
 				<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-					<form.Subscribe selector={(state) => [state.canSubmit]}>
-						{([canSubmit]) => (
+					<form.Subscribe
+						selector={(state) => [state.canSubmit, state.isSubmitting]}
+					>
+						{([canSubmit, isSubmitting]) => (
 							<Button
-								fullWidth
-								form={formId}
-								variant="contained"
-								type="submit"
 								aria-disabled={!canSubmit || isSubmitting}
+								form={formId}
+								fullWidth
 								// TODO: Maybe use spin-delay?
 								loading={isSubmitting}
 								loadingPosition="start"
-								sx={{ maxWidth: 400 }}
 								startIcon={
 									<Icon name="material-check-circle-outline-rounded" />
 								}
+								type="submit"
+								variant="contained"
 							>
 								{intl.formatMessage(m.createProjectButton)}
 							</Button>
@@ -260,6 +294,11 @@ export function LeftProjectDialogContent({
 }) {
 	const intl = useIntl()
 
+	const iconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'heroHeader',
+		multiplier: 4,
+	})
+
 	return (
 		<Stack direction="column">
 			<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
@@ -267,14 +306,15 @@ export function LeftProjectDialogContent({
 					<Box>
 						<Icon
 							name="material-symbols-waving-hand"
-							htmlColor={DARKER_ORANGE}
-							size="96px"
+							htmlColor={DARK_ORANGE}
+							size={iconSize}
 						/>
 					</Box>
 
 					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center' }}
+						component="h1"
+						variant="heroHeader"
+						sx={{ textAlign: 'center' }}
 					>
 						{intl.formatMessage(m.leftProjectDialogTitle, {
 							name: projectName || '',
@@ -285,15 +325,15 @@ export function LeftProjectDialogContent({
 
 			<Box
 				sx={{
-					position: 'sticky',
-					right: 0,
-					left: 0,
-					top: 0,
 					bottom: 0,
 					display: 'flex',
 					flexDirection: 'row',
 					justifyContent: 'center',
+					left: 0,
 					padding: 6,
+					position: 'sticky',
+					right: 0,
+					top: 0,
 				}}
 			>
 				<Button
@@ -302,7 +342,6 @@ export function LeftProjectDialogContent({
 					onClick={() => {
 						onClose()
 					}}
-					sx={{ maxWidth: 400 }}
 				>
 					{intl.formatMessage(m.leftProjectDialogCloseButton)}
 				</Button>
@@ -348,13 +387,18 @@ export function AppUsageConsentDialogContent({
 					</Box>
 
 					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center', textWrap: 'balance' }}
+						component="h1"
+						variant="heroHeader"
+						sx={{ textAlign: 'center', textWrap: 'balance' }}
 					>
 						{intl.formatMessage(m.appUsageConsentSuccessTitle)}
 					</Typography>
 
-					<Typography sx={{ textAlign: 'center', textWrap: 'balance' }}>
+					<Typography
+						variant="heroSubheading"
+						color="textSecondary"
+						sx={{ textAlign: 'center', textWrap: 'balance' }}
+					>
 						{deviceName
 							? intl.formatMessage(m.appUsageConsentSuccessDescription, {
 									b: Bold,
@@ -365,10 +409,7 @@ export function AppUsageConsentDialogContent({
 								)}
 					</Typography>
 
-					<Typography
-						variant="body2"
-						sx={{ textAlign: 'center', textWrap: 'balance' }}
-					>
+					<Typography sx={{ textAlign: 'center', textWrap: 'balance' }}>
 						{intl.formatMessage(m.appUsageConsentSuccessDetailsChangeSetting)}
 					</Typography>
 				</Stack>
@@ -411,7 +452,9 @@ function AppUsageInterstitial({
 }) {
 	const intl = useIntl()
 
-	const iconSize = useIconSizeBasedOnTypography({ typographyVariant: 'body1' })
+	const iconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'bodyCopy',
+	})
 
 	const setAppUsageMetrics = useMutation(setAppUsageMetricsMutationOptions())
 
@@ -434,8 +477,9 @@ function AppUsageInterstitial({
 						</Box>
 
 						<Typography
-							variant="h1"
-							sx={{ fontWeight: 500, textAlign: 'center', textWrap: 'balance' }}
+							component="h1"
+							variant="heroHeader"
+							sx={{ textAlign: 'center', textWrap: 'balance' }}
 						>
 							{intl.formatMessage(m.appUsageConsentInterstitialTitle)}
 						</Typography>
@@ -458,7 +502,7 @@ function AppUsageInterstitial({
 									sx={{ alignSelf: 'baseline' }}
 								/>
 
-								<Typography color="textSecondary">
+								<Typography color="textTertiary">
 									{intl.formatMessage(
 										m.appUsageConsentInterstitialDetailsIdNumbers,
 									)}
@@ -476,7 +520,7 @@ function AppUsageInterstitial({
 									sx={{ alignSelf: 'baseline' }}
 								/>
 
-								<Typography color="textSecondary">
+								<Typography color="textTertiary">
 									{intl.formatMessage(
 										m.appUsageConsentInterstitialDetailsIpAddresses,
 									)}
@@ -494,7 +538,7 @@ function AppUsageInterstitial({
 									sx={{ alignSelf: 'baseline' }}
 								/>
 
-								<Typography color="textSecondary">
+								<Typography color="textTertiary">
 									{intl.formatMessage(
 										m.appUsageConsentInterstitialDetailsTurnOffAnytime,
 									)}

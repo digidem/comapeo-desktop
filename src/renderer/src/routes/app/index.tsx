@@ -142,20 +142,20 @@ function RouteComponent() {
 					}}
 				>
 					<Stack direction="row" sx={{ alignItems: 'center', flex: 1, gap: 4 }}>
-						<Typography component="h1" variant="h2" sx={{ fontWeight: 500 }}>
+						<Typography variant="pageTitle">
 							{intl.formatMessage(m.pageTitle)}
 						</Typography>
 
 						<Box
 							sx={{
-								backgroundColor: LIGHT_COMAPEO_BLUE,
+								background: LIGHT_COMAPEO_BLUE,
 								borderRadius: 2,
 								padding: 1,
 							}}
 						>
 							<Typography
-								variant="body2"
-								color="textSecondary"
+								color="textTertiary"
+								variant="detailCopy"
 								sx={{ whiteSpace: 'nowrap' }}
 							>
 								{intl.formatMessage(m.mostRecent)}
@@ -292,12 +292,12 @@ function GetStartedPanel() {
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
 	const desktopIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'heroHeader',
 		multiplier: 4,
 	})
 
 	const checkIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'heroHeader',
 	})
 
 	return (
@@ -319,13 +319,13 @@ function GetStartedPanel() {
 
 						<Box
 							sx={{
-								bgcolor: GREEN,
+								background: GREEN,
 								borderRadius: '50%',
-								bottom: (theme) => theme.spacing(4),
+								bottom: (theme) => theme.spacing(2),
 								display: 'flex',
 								padding: 1,
 								position: 'absolute',
-								right: (theme) => theme.spacing(-1),
+								right: (theme) => theme.spacing(-2),
 							}}
 						>
 							<Icon
@@ -337,9 +337,8 @@ function GetStartedPanel() {
 					</Box>
 
 					<Typography
-						component="p"
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center', textWrap: 'balance' }}
+						variant="heroHeader"
+						sx={{ textAlign: 'center', textWrap: 'balance' }}
 					>
 						{intl.formatMessage(m.getStartedTitle, {
 							name: ownDeviceInfo.name,
@@ -348,8 +347,8 @@ function GetStartedPanel() {
 				</Stack>
 
 				<Typography
-					component="p"
-					variant="h3"
+					color="textSecondary"
+					variant="heroSubheading"
 					sx={{ textAlign: 'center', textWrap: 'balance' }}
 				>
 					{intl.formatMessage(m.getStartedDescription)}
@@ -399,18 +398,23 @@ function ListedProjectsPanel({ projects }: { projects: Array<ListedProject> }) {
 		? projects.filter((p) => p.projectId !== activeProject.projectId)
 		: projects
 
+	const sectionIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'sectionLabel',
+		multiplier: 1.5,
+	})
+
 	return (
 		<Container maxWidth="sm" sx={{ display: 'flex', flex: 1, padding: 6 }}>
 			{activeProject ? (
 				<Stack direction="column" sx={{ flex: 1, gap: 10 }}>
 					<Stack component="section" direction="column" sx={{ gap: 4 }}>
 						<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
-							<Icon name="material-check-circle-rounded" />
+							<Icon
+								name="material-check-circle-rounded"
+								size={sectionIconSize}
+							/>
 
-							<Typography
-								component="h2"
-								sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-							>
+							<Typography component="h2" variant="sectionLabel">
 								{intl.formatMessage(m.projectsListSectionTitleCurrent)}
 							</Typography>
 						</Stack>
@@ -427,16 +431,16 @@ function ListedProjectsPanel({ projects }: { projects: Array<ListedProject> }) {
 
 					{otherProjects.length > 0 ? (
 						<>
-							<Divider variant="fullWidth" sx={{ color: BLUE_GREY }} />
+							<Divider sx={{ borderColor: BLUE_GREY }} />
 
 							<Stack component="section" direction="column" sx={{ gap: 4 }}>
 								<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
-									<Icon name="material-symbols-view-agenda" />
+									<Icon
+										name="material-symbols-view-agenda"
+										size={sectionIconSize}
+									/>
 
-									<Typography
-										component="h2"
-										sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-									>
+									<Typography component="h2" variant="sectionLabel">
 										{intl.formatMessage(m.projectsListSectionTitleOthers)}
 									</Typography>
 								</Stack>
@@ -496,11 +500,12 @@ function ListedProjectCard({
 	const displayedName = project.name || intl.formatMessage(m.unnamedProject)
 
 	const activeProjectIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'cardHeader',
+		multiplier: 1.25,
 	})
 
 	const roleIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
+		typographyVariant: 'bodyCopy',
 	})
 
 	return (
@@ -510,7 +515,7 @@ function ListedProjectCard({
 				name: displayedName,
 			})}
 			sx={{
-				backgroundColor: project.projectColor,
+				background: project.projectColor,
 				borderRadius: 2,
 				color: (theme) => theme.palette.text.secondary,
 				outline: `2px solid ${highlight ? COMAPEO_BLUE : LIGHT_GREY}`,
@@ -538,11 +543,8 @@ function ListedProjectCard({
 					}}
 				>
 					<Typography
-						component="p"
-						variant="h1"
-						color="textPrimary"
+						variant="cardHeader"
 						sx={{
-							fontWeight: 500,
 							textOverflow: 'ellipsis',
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
@@ -560,7 +562,14 @@ function ListedProjectCard({
 					) : null}
 				</Stack>
 
-				<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
+				<Stack
+					direction="row"
+					sx={{
+						alignItems: 'center',
+						gap: 2,
+						color: (theme) => theme.palette.text.tertiary,
+					}}
+				>
 					<Icon
 						name={
 							isAtLeastCoordinator
@@ -571,6 +580,7 @@ function ListedProjectCard({
 					/>
 
 					<Typography
+						color="textTertiary"
 						sx={{
 							textOverflow: 'ellipsis',
 							whiteSpace: 'nowrap',
