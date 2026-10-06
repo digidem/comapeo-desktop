@@ -21,11 +21,12 @@ import {
 	type NoMessageValues,
 } from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY, LIGHT_GREY } from '../../colors.ts'
+import { BLUE_GREY, LIGHT_GREY } from '../../colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
 import { Bold, Break } from '../../components/intl-rich-text.tsx'
+import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
 import {
 	getDiagnosticsEnabledQueryOptions,
 	setDiagnosticsEnabledMutationOptions,
@@ -60,14 +61,14 @@ function RouteComponent() {
 			<Stack
 				direction="column"
 				sx={{
+					background: LIGHT_GREY,
+					borderRadius: 2,
 					display: 'flex',
-					justifyContent: 'space-between',
 					flex: 1,
 					gap: 10,
-					bgcolor: LIGHT_GREY,
-					padding: 10,
-					borderRadius: 2,
+					justifyContent: 'space-between',
 					overflow: 'auto',
+					padding: 10,
 				}}
 			>
 				<Container
@@ -76,23 +77,20 @@ function RouteComponent() {
 					direction="column"
 					sx={{ gap: 10 }}
 				>
-					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center' }}
-					>
+					<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
 						{intl.formatMessage(m.title)}
 					</Typography>
 
 					<Stack direction="column" sx={{ gap: 3 }}>
 						<Box
 							sx={{
+								background: LIGHT_GREY,
 								border: `1px solid ${BLUE_GREY}`,
-								bgcolor: LIGHT_GREY,
 								borderRadius: 2,
 								padding: 5,
 							}}
 						>
-							<Typography variant="body1" sx={{ fontWeight: 400 }}>
+							<Typography variant="heroSubheading">
 								{intl.formatMessage(m.description)}
 							</Typography>
 						</Box>
@@ -111,7 +109,7 @@ function RouteComponent() {
 					</Stack>
 
 					<Stack direction="column" sx={{ gap: 10 }}>
-						<Typography variant="h2" sx={{ fontWeight: 500 }}>
+						<Typography component="h2" variant="sectionLabel">
 							{intl.formatMessage(m.comapeoDataPrivacy)}
 						</Typography>
 
@@ -139,9 +137,9 @@ function RouteComponent() {
 							})}
 						/>
 
-						<Divider sx={{ backgroundColor: BLUE_GREY }} />
+						<Divider sx={{ borderColor: BLUE_GREY }} />
 
-						<Typography variant="h2" sx={{ fontWeight: 500 }}>
+						<Typography component="h2" variant="sectionLabel">
 							{intl.formatMessage(m.dataCollection)}
 						</Typography>
 
@@ -166,61 +164,79 @@ function RouteComponent() {
 									direction="column"
 									sx={{ paddingX: 5, gap: 3 }}
 								>
-									<Typography variant="h3">
+									<Typography
+										component="h3"
+										color="textSecondary"
+										sx={{
+											fontWeight: (theme) => theme.typography.fontWeightMedium,
+										}}
+									>
 										{intl.formatMessage(m.diagnostics)}
 									</Typography>
 
-									<List
+									<Stack
+										component={List}
+										direction="column"
 										sx={{
+											color: (theme) => theme.palette.text.tertiary,
+											gap: 4,
 											listStyleType: 'disc',
-											paddingX: 8,
-											color: DARK_GREY,
+											paddingInline: 8,
 										}}
 									>
-										<ListItem sx={{ display: 'list-item' }} disablePadding>
+										<ListItem sx={{ display: 'list-item' }}>
 											{intl.formatMessage(m.crashData, { b: Bold })}
 										</ListItem>
 
-										<ListItem sx={{ display: 'list-item' }} disablePadding>
+										<ListItem sx={{ display: 'list-item' }}>
 											{intl.formatMessage(m.appErrors, { b: Bold })}
 										</ListItem>
 
-										<ListItem sx={{ display: 'list-item' }} disablePadding>
+										<ListItem sx={{ display: 'list-item' }}>
 											{intl.formatMessage(m.performanceData, { b: Bold })}
 										</ListItem>
 
-										<ListItem sx={{ display: 'list-item' }} disablePadding>
+										<ListItem sx={{ display: 'list-item' }}>
 											{intl.formatMessage(m.deviceInfo, { b: Bold })}
 										</ListItem>
 
-										<ListItem sx={{ display: 'list-item' }} disablePadding>
+										<ListItem sx={{ display: 'list-item' }}>
 											{intl.formatMessage(m.appInfo, { b: Bold })}
 										</ListItem>
-									</List>
+									</Stack>
 								</Stack>
 
-								<Divider sx={{ backgroundColor: BLUE_GREY }} />
+								<Divider sx={{ borderColor: BLUE_GREY }} />
 
 								<Stack
 									component="section"
 									direction="column"
 									sx={{ paddingX: 5, gap: 3 }}
 								>
-									<Typography variant="h3">
+									<Typography
+										component="h3"
+										color="textSecondary"
+										sx={{
+											fontWeight: (theme) => theme.typography.fontWeightMedium,
+										}}
+									>
 										{intl.formatMessage(m.appUsage)}
 									</Typography>
 
-									<List
+									<Stack
+										component={List}
+										direction="column"
 										sx={{
+											color: (theme) => theme.palette.text.tertiary,
+											gap: 4,
 											listStyleType: 'disc',
-											paddingX: 8,
-											color: DARK_GREY,
+											paddingInline: 8,
 										}}
 									>
-										<ListItem sx={{ display: 'list-item' }} disablePadding>
+										<ListItem sx={{ display: 'list-item' }}>
 											{intl.formatMessage(m.country, { b: Bold })}
 										</ListItem>
-									</List>
+									</Stack>
 								</Stack>
 							</Stack>
 						</QuestionAnswerItem>
@@ -240,11 +256,7 @@ function RouteComponent() {
 							description={intl.formatMessage(m.whatIsNotCollectedDescription)}
 						/>
 
-						<Divider sx={{ backgroundColor: BLUE_GREY }} />
-
-						<Typography variant="h2" sx={{ fontWeight: 500 }}>
-							{intl.formatMessage(m.dataCollection)}
-						</Typography>
+						<Divider sx={{ borderColor: BLUE_GREY }} />
 
 						<Stack
 							direction="column"
@@ -308,13 +320,20 @@ function QuestionAnswerItem({
 	title: string
 }>) {
 	return (
-		<Stack component="section" direction="column" sx={{ gap: 10 }}>
+		<Stack component="section" direction="column" sx={{ gap: 6 }}>
 			<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
 				{icon}
-				<Typography variant="h3">{title}</Typography>
+
+				<Typography
+					component="h3"
+					color="textSecondary"
+					sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
+				>
+					{title}
+				</Typography>
 			</Stack>
 
-			<Typography sx={{ color: DARK_GREY }}>{description}</Typography>
+			<Typography color="textTertiary">{description}</Typography>
 
 			{children}
 		</Stack>
@@ -330,21 +349,26 @@ function CustomAccordion({
 }) {
 	const [expanded, setExpanded] = useState(false)
 
+	const iconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'bodyCopy',
+		multiplier: 2,
+	})
+
 	return (
 		<Stack
 			sx={{
-				borderRadius: 2,
 				border: `1px solid ${BLUE_GREY}`,
-				paddingX: 5,
-				paddingY: 2,
+				borderRadius: 2,
+				paddingInline: 5,
+				paddingBlock: 2,
 			}}
 		>
 			<Stack
 				direction="row"
 				sx={{
+					alignItems: 'center',
 					display: 'flex',
 					justifyContent: 'space-between',
-					alignItems: 'center',
 				}}
 			>
 				<Typography>{label}</Typography>
@@ -357,13 +381,14 @@ function CustomAccordion({
 				>
 					<Icon
 						name={expanded ? 'material-expand-less' : 'material-expand-more'}
-						sx={{ color: BLUE_GREY, fontSize: `4rem` }}
+						size={iconSize}
 					/>
 				</IconButton>
 			</Stack>
+
 			<Collapse in={expanded}>
 				<Box sx={{ paddingBottom: 5 }}>
-					<Typography sx={{ color: DARK_GREY }}>{description}</Typography>
+					<Typography color="textTertiary">{description}</Typography>
 				</Box>
 			</Collapse>
 		</Stack>
