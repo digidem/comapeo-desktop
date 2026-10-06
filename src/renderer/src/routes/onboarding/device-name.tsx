@@ -165,13 +165,6 @@ function RouteComponent() {
 										aria-describedby={
 											field.state.meta.isValid ? undefined : errorTextId
 										}
-										slotProps={{
-											input: {
-												'aria-labelledby': labelId,
-												sx: { background: WHITE },
-											},
-										}}
-										autoFocus
 										error={!field.state.meta.isValid}
 										fullWidth
 										helperText={
@@ -179,18 +172,23 @@ function RouteComponent() {
 												component="span"
 												direction="row"
 												sx={{
-													color: field.state.meta.isValid
-														? undefined
-														: (theme) => theme.palette.error.main,
+													color: (theme) =>
+														field.state.meta.isValid
+															? theme.palette.text.secondary
+															: theme.palette.error.main,
 													justifyContent: 'space-between',
 												}}
 											>
-												<Typography id={errorTextId}>
+												<Typography
+													id={errorTextId}
+													color="inherit"
+													variant="detailCopy"
+												>
 													{field.state.meta.errors[0]?.message}
 												</Typography>
 
 												<Typography
-													color="textSecondary"
+													color="inherit"
 													component="output"
 													htmlFor={inputId}
 													name="character-count"
@@ -219,6 +217,12 @@ function RouteComponent() {
 											field.handleChange(event.target.value)
 										}}
 										required
+										slotProps={{
+											input: {
+												'aria-labelledby': labelId,
+												sx: { background: WHITE },
+											},
+										}}
 										value={field.state.value}
 									/>
 								)
