@@ -719,26 +719,6 @@
     "description": "Fallback for when project is missing a name.",
     "message": "Unnamed Project"
   },
-  "$1.routes.app.projects.$projectId.settings.categories.customCategoriesExplainer": {
-    "description": "Explanation for custom categories",
-    "message": "Use custom categories by importing new categories set files below."
-  },
-  "$1.routes.app.projects.$projectId.settings.categories.defaultCategoriesExplainer": {
-    "description": "Explanation for default categories",
-    "message": "Default categories help you start organizing your observations instantly."
-  },
-  "$1.routes.app.projects.$projectId.settings.categories.fallbackCategoriesName": {
-    "description": "Fallback displayed name when project has no category set.",
-    "message": "CoMapeo Categories"
-  },
-  "$1.routes.app.projects.$projectId.settings.categories.navTitle": {
-    "description": "Title of the categories set page.",
-    "message": "Categories Set"
-  },
-  "$1.routes.app.projects.$projectId.settings.categories.uploadNewSet": {
-    "description": "Label for button to upload new categories set.",
-    "message": "Upload New Set"
-  },
   "$1.routes.app.projects.$projectId.settings.index.categoriesActionLabel": {
     "description": "Text for action to update categories set.",
     "message": "Update"

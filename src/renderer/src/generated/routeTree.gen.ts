@@ -28,7 +28,6 @@ import { Route as AppProjectsProjectIdWithMapPanelIndexRouteImport } from './../
 import { Route as AppProjectsProjectIdWithMapPanelDownloadRouteImport } from './../routes/app/projects/$projectId/_with-map-panel/download'
 import { Route as AppProjectsProjectIdExchangeIndexRouteImport } from './../routes/app/projects/$projectId/exchange/index'
 import { Route as AppProjectsProjectIdSettingsIndexRouteImport } from './../routes/app/projects/$projectId/settings/index'
-import { Route as AppProjectsProjectIdSettingsCategoriesRouteImport } from './../routes/app/projects/$projectId/settings/categories'
 import { Route as AppProjectsProjectIdSettingsInfoRouteImport } from './../routes/app/projects/$projectId/settings/info'
 import { Route as AppProjectsProjectIdTeamIndexRouteImport } from './../routes/app/projects/$projectId/team/index'
 import { Route as AppProjectsProjectIdTeamDeviceIdRouteImport } from './../routes/app/projects/$projectId/team/$deviceId'
@@ -146,12 +145,6 @@ const AppProjectsProjectIdSettingsIndexRoute =
     path: '/',
     getParentRoute: () => AppProjectsProjectIdSettingsRouteRoute,
   } as any)
-const AppProjectsProjectIdSettingsCategoriesRoute =
-  AppProjectsProjectIdSettingsCategoriesRouteImport.update({
-    id: '/categories',
-    path: '/categories',
-    getParentRoute: () => AppProjectsProjectIdSettingsRouteRoute,
-  } as any)
 const AppProjectsProjectIdSettingsInfoRoute =
   AppProjectsProjectIdSettingsInfoRouteImport.update({
     id: '/info',
@@ -248,7 +241,6 @@ export interface FileRoutesByFullPath {
   '/app/projects/$projectId/test-data': typeof AppProjectsProjectIdTestDataRoute
   '/app/projects/$projectId/team/invite': typeof AppProjectsProjectIdTeamInviteRouteRouteWithChildren
   '/app/projects/$projectId/download': typeof AppProjectsProjectIdWithMapPanelDownloadRoute
-  '/app/projects/$projectId/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
   '/app/projects/$projectId/settings/info': typeof AppProjectsProjectIdSettingsInfoRoute
   '/app/projects/$projectId/team/$deviceId': typeof AppProjectsProjectIdTeamDeviceIdRoute
   '/app/projects/$projectId/': typeof AppProjectsProjectIdWithMapPanelIndexRoute
@@ -277,7 +269,6 @@ export interface FileRoutesByTo {
   '/app/settings': typeof AppSettingsIndexRoute
   '/app/projects/$projectId/test-data': typeof AppProjectsProjectIdTestDataRoute
   '/app/projects/$projectId/download': typeof AppProjectsProjectIdWithMapPanelDownloadRoute
-  '/app/projects/$projectId/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
   '/app/projects/$projectId/settings/info': typeof AppProjectsProjectIdSettingsInfoRoute
   '/app/projects/$projectId/team/$deviceId': typeof AppProjectsProjectIdTeamDeviceIdRoute
   '/app/projects/$projectId/exchange': typeof AppProjectsProjectIdExchangeIndexRoute
@@ -311,7 +302,6 @@ export interface FileRoutesById {
   '/app/projects/$projectId/test-data': typeof AppProjectsProjectIdTestDataRoute
   '/app/projects/$projectId/team/invite': typeof AppProjectsProjectIdTeamInviteRouteRouteWithChildren
   '/app/projects/$projectId/_with-map-panel/download': typeof AppProjectsProjectIdWithMapPanelDownloadRoute
-  '/app/projects/$projectId/settings/categories': typeof AppProjectsProjectIdSettingsCategoriesRoute
   '/app/projects/$projectId/settings/info': typeof AppProjectsProjectIdSettingsInfoRoute
   '/app/projects/$projectId/team/$deviceId': typeof AppProjectsProjectIdTeamDeviceIdRoute
   '/app/projects/$projectId/_with-map-panel/': typeof AppProjectsProjectIdWithMapPanelIndexRoute
@@ -346,7 +336,6 @@ export interface FileRouteTypes {
     | '/app/projects/$projectId/test-data'
     | '/app/projects/$projectId/team/invite'
     | '/app/projects/$projectId/download'
-    | '/app/projects/$projectId/settings/categories'
     | '/app/projects/$projectId/settings/info'
     | '/app/projects/$projectId/team/$deviceId'
     | '/app/projects/$projectId/'
@@ -375,7 +364,6 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/projects/$projectId/test-data'
     | '/app/projects/$projectId/download'
-    | '/app/projects/$projectId/settings/categories'
     | '/app/projects/$projectId/settings/info'
     | '/app/projects/$projectId/team/$deviceId'
     | '/app/projects/$projectId/exchange'
@@ -408,7 +396,6 @@ export interface FileRouteTypes {
     | '/app/projects/$projectId/test-data'
     | '/app/projects/$projectId/team/invite'
     | '/app/projects/$projectId/_with-map-panel/download'
-    | '/app/projects/$projectId/settings/categories'
     | '/app/projects/$projectId/settings/info'
     | '/app/projects/$projectId/team/$deviceId'
     | '/app/projects/$projectId/_with-map-panel/'
@@ -567,13 +554,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsProjectIdSettingsIndexRouteImport
       parentRoute: typeof AppProjectsProjectIdSettingsRouteRoute
     }
-    '/app/projects/$projectId/settings/categories': {
-      id: '/app/projects/$projectId/settings/categories'
-      path: '/categories'
-      fullPath: '/app/projects/$projectId/settings/categories'
-      preLoaderRoute: typeof AppProjectsProjectIdSettingsCategoriesRouteImport
-      parentRoute: typeof AppProjectsProjectIdSettingsRouteRoute
-    }
     '/app/projects/$projectId/settings/info': {
       id: '/app/projects/$projectId/settings/info'
       path: '/info'
@@ -702,15 +682,12 @@ const AppProjectsProjectIdWithMapPanelRouteRouteWithChildren =
   )
 
 interface AppProjectsProjectIdSettingsRouteRouteChildren {
-  AppProjectsProjectIdSettingsCategoriesRoute: typeof AppProjectsProjectIdSettingsCategoriesRoute
   AppProjectsProjectIdSettingsInfoRoute: typeof AppProjectsProjectIdSettingsInfoRoute
   AppProjectsProjectIdSettingsIndexRoute: typeof AppProjectsProjectIdSettingsIndexRoute
 }
 
 const AppProjectsProjectIdSettingsRouteRouteChildren: AppProjectsProjectIdSettingsRouteRouteChildren =
   {
-    AppProjectsProjectIdSettingsCategoriesRoute:
-      AppProjectsProjectIdSettingsCategoriesRoute,
     AppProjectsProjectIdSettingsInfoRoute:
       AppProjectsProjectIdSettingsInfoRoute,
     AppProjectsProjectIdSettingsIndexRoute:

@@ -239,18 +239,6 @@
     "description": "Label for project test data tab link in navigation.",
     "message": "Test Data"
   },
-  "routes.app.projects.$projectId.settings.categories.dateAdded": {
-    "description": "Text indicating the date the categories set was added.",
-    "message": "Added {date}"
-  },
-  "routes.app.projects.$projectId.settings.categories.dateCreated": {
-    "description": "Text indicating the date the categories set was created.",
-    "message": "Created {date}"
-  },
-  "routes.app.projects.$projectId.settings.categories.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "Go back."
-  },
   "routes.app.projects.$projectId.settings.index.categoriesLinkAccessibleLabel": {
     "description": "Accessible label for link item that navigates to project info settings page.",
     "message": "Go to categories settings."
