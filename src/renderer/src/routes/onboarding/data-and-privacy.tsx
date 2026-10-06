@@ -7,9 +7,10 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { DARKER_ORANGE, DARK_GREY, LIGHT_GREY } from '../../colors'
-import { Icon } from '../../components/icon'
-import { ButtonLink } from '../../components/link'
+import { DARKER_ORANGE, LIGHT_GREY } from '../../colors.ts'
+import { Icon } from '../../components/icon.tsx'
+import { ButtonLink } from '../../components/link.tsx'
+import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
 
 export const Route = createFileRoute('/onboarding/data-and-privacy')({
 	staticData: { onboardingStepNumber: 1 },
@@ -17,20 +18,25 @@ export const Route = createFileRoute('/onboarding/data-and-privacy')({
 })
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
+
+	const iconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'heroHeader',
+		multiplier: 4,
+	})
 
 	return (
 		<Stack
 			direction="column"
 			sx={{
+				background: LIGHT_GREY,
+				borderRadius: 2,
 				display: 'flex',
-				justifyContent: 'space-between',
 				flex: 1,
 				gap: 10,
-				bgcolor: LIGHT_GREY,
-				padding: 10,
-				borderRadius: 2,
+				justifyContent: 'space-between',
 				overflow: 'auto',
+				padding: 10,
 			}}
 		>
 			<Container
@@ -42,51 +48,73 @@ function RouteComponent() {
 				<Box sx={{ alignSelf: 'center' }}>
 					<Icon
 						name="material-symbols-encrypted-weight200"
-						size={80}
 						htmlColor={DARKER_ORANGE}
+						size={iconSize}
 					/>
 				</Box>
 
-				<Typography variant="h1" sx={{ fontWeight: 500, textAlign: 'center' }}>
-					{t(m.title)}
+				<Typography
+					component="h1"
+					variant="heroHeader"
+					sx={{ textAlign: 'center' }}
+				>
+					{intl.formatMessage(m.title)}
 				</Typography>
 
-				<Typography variant="h2" sx={{ fontWeight: 400, textAlign: 'center' }}>
-					{t(m.description)}
+				<Typography
+					color="textSecondary"
+					component="h2"
+					variant="heroSubheading"
+					sx={{ textAlign: 'center' }}
+				>
+					{intl.formatMessage(m.description)}
 				</Typography>
 
-				<List sx={{ color: DARK_GREY, listStyleType: 'disc' }}>
-					<ListItem disablePadding sx={{ display: 'list-item', paddingY: 1 }}>
-						{t(m.dataEncrypted)}
+				<Stack
+					component={List}
+					direction="column"
+					sx={{
+						color: (theme) => theme.palette.text.tertiary,
+						gap: 4,
+						listStyleType: 'disc',
+					}}
+				>
+					<ListItem sx={{ display: 'list-item' }}>
+						{intl.formatMessage(m.dataEncrypted)}
 					</ListItem>
-					<ListItem disablePadding sx={{ display: 'list-item', paddingY: 1 }}>
-						{t(m.dataStays)}
+
+					<ListItem sx={{ display: 'list-item' }}>
+						{intl.formatMessage(m.dataStays)}
 					</ListItem>
-					<ListItem disablePadding sx={{ display: 'list-item', paddingY: 1 }}>
-						{t(m.sharingAndCollaboration)}
+
+					<ListItem sx={{ display: 'list-item' }}>
+						{intl.formatMessage(m.sharingAndCollaboration)}
 					</ListItem>
-					<ListItem disablePadding sx={{ display: 'list-item', paddingY: 1 }}>
-						{t(m.privateByDefault)}
+
+					<ListItem sx={{ display: 'list-item' }}>
+						{intl.formatMessage(m.privateByDefault)}
 					</ListItem>
-				</List>
+				</Stack>
 			</Container>
 
-			<Stack direction="row" sx={{ justifyContent: 'center', gap: 5 }}>
+			<Stack
+				direction="row"
+				sx={{ flexWrap: 'wrap', gap: 5, justifyContent: 'center' }}
+			>
 				<ButtonLink
 					to="/onboarding/privacy-policy"
 					variant="outlined"
-					fullWidth
-					sx={{ maxWidth: 400 }}
+					sx={{ flex: 1 }}
 				>
-					{t(m.learnMore)}
+					{intl.formatMessage(m.learnMore)}
 				</ButtonLink>
+
 				<ButtonLink
 					to="/onboarding/device-name"
 					variant="contained"
-					fullWidth
-					sx={{ maxWidth: 400 }}
+					sx={{ flex: 1 }}
 				>
-					{t(m.next)}
+					{intl.formatMessage(m.next)}
 				</ButtonLink>
 			</Stack>
 		</Stack>
