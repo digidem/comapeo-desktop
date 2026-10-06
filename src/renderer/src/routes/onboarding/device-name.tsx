@@ -1,10 +1,9 @@
-import { useMemo } from 'react'
+import { useId, useMemo } from 'react'
 import { useOwnDeviceInfo, useSetOwnDeviceInfo } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
-import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useMutation } from '@tanstack/react-query'
@@ -19,9 +18,11 @@ import * as v from 'valibot'
 
 import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
+import { DecentTextField } from '../../components/decent-text-field.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
 import { useAppForm } from '../../hooks/forms.ts'
+import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo.ts'
 import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../lib/constants.ts'
 import { setOnboardedAtMutationOptions } from '../../lib/queries/user.ts'
@@ -87,19 +88,28 @@ function RouteComponent() {
 		},
 	})
 
+	const iconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'heroHeader',
+		multiplier: 4,
+	})
+
+	const componentId = useId()
+	const formId = `${componentId}-device-name-form`
+	const labelId = `${componentId}-label`
+
 	return (
 		<>
 			<Stack
 				direction="column"
 				sx={{
+					background: LIGHT_GREY,
+					borderRadius: 2,
 					display: 'flex',
-					justifyContent: 'space-between',
 					flex: 1,
 					gap: 10,
-					bgcolor: LIGHT_GREY,
-					padding: 10,
-					borderRadius: 2,
+					justifyContent: 'space-between',
 					overflow: 'auto',
+					padding: 10,
 				}}
 			>
 				<Container
@@ -113,28 +123,26 @@ function RouteComponent() {
 							<Icon
 								name="material-symbols-computer"
 								htmlColor={DARKER_ORANGE}
-								size={80}
+								size={iconSize}
 							/>
 						</Box>
 
 						<Typography
-							variant="h1"
-							sx={{ fontWeight: 500, textAlign: 'center' }}
+							component="h1"
+							variant="heroHeader"
+							sx={{ textAlign: 'center' }}
 						>
 							{intl.formatMessage(m.title)}
 						</Typography>
 					</Stack>
 
-					<Typography
-						variant="h2"
-						sx={{ fontWeight: 400, textAlign: 'center' }}
-					>
+					<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
 						{intl.formatMessage(m.description)}
 					</Typography>
 
 					<Box
 						component="form"
-						id="device-name-form"
+						id={formId}
 						noValidate
 						autoComplete="off"
 						onSubmit={(event) => {
@@ -148,51 +156,73 @@ function RouteComponent() {
 						}}
 					>
 						<form.AppField name="deviceName">
-							{(field) => (
-								<TextField
-									id={field.name}
-									required
-									fullWidth
-									autoFocus
-									label={intl.formatMessage(m.deviceName)}
-									value={field.state.value}
-									error={!field.state.meta.isValid}
-									onChange={(event) => {
-										field.handleChange(event.target.value)
-									}}
-									slotProps={{ input: { style: { backgroundColor: WHITE } } }}
-									onBlur={field.handleBlur}
-									helperText={
-										<Stack
-											component="span"
-											direction="row"
-											sx={{ justifyContent: 'space-between' }}
-										>
-											<Box component="span">
-												{field.state.meta.errors[0]?.message}
-											</Box>
-											<Box
-												component="output"
-												htmlFor={field.name}
-												name="character-count"
+							{(field) => {
+								const inputId = `${componentId}-input`
+								const errorTextId = `${componentId}-error-text`
+
+								return (
+									<DecentTextField
+										aria-describedby={
+											field.state.meta.isValid ? undefined : errorTextId
+										}
+										slotProps={{
+											input: {
+												'aria-labelledby': labelId,
+												sx: { background: WHITE },
+											},
+										}}
+										autoFocus
+										error={!field.state.meta.isValid}
+										fullWidth
+										helperText={
+											<Stack
+												component="span"
+												direction="row"
+												sx={{
+													color: field.state.meta.isValid
+														? undefined
+														: (theme) => theme.palette.error.main,
+													justifyContent: 'space-between',
+												}}
 											>
-												<form.Subscribe
-													selector={(state) =>
-														v._getGraphemeCount(state.values.deviceName)
-													}
+												<Typography id={errorTextId}>
+													{field.state.meta.errors[0]?.message}
+												</Typography>
+
+												<Typography
+													color="textSecondary"
+													component="output"
+													htmlFor={inputId}
+													name="character-count"
+													variant="detailCopy"
 												>
-													{(count) =>
-														intl.formatMessage(m.characterCount, {
-															count,
-															max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
-														})
-													}
-												</form.Subscribe>
-											</Box>
-										</Stack>
-									}
-								/>
-							)}
+													<form.Subscribe
+														selector={(state) =>
+															v._getGraphemeCount(state.values.deviceName)
+														}
+													>
+														{(count) =>
+															intl.formatMessage(m.characterCount, {
+																count,
+																max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
+															})
+														}
+													</form.Subscribe>
+												</Typography>
+											</Stack>
+										}
+										id={inputId}
+										label={intl.formatMessage(m.deviceName)}
+										name={field.name}
+										onBlur={field.handleBlur}
+										onChange={(event) => {
+											field.handleChange(event.target.value)
+										}}
+										required
+										value={field.state.value}
+									/>
+								)
+							}}
 						</form.AppField>
 					</Box>
 				</Container>
@@ -202,11 +232,10 @@ function RouteComponent() {
 						{(canSubmit) => (
 							<Button
 								fullWidth
-								form="device-name-form"
+								form={formId}
 								variant="contained"
 								type="submit"
 								aria-disabled={!canSubmit}
-								sx={{ maxWidth: 400 }}
 							>
 								{intl.formatMessage(m.addName)}
 							</Button>
