@@ -1135,6 +1135,10 @@
     "description": "Text describing what kind of files are usable for background maps.",
     "message": "Accepted file types are .smp"
   },
+  "$1.routes.app.settings.background-map.addedOn": {
+    "description": "Text describing what kind of files are usable for background maps.",
+    "message": "Added on {value}"
+  },
   "$1.routes.app.settings.background-map.chooseFile": {
     "description": "Text for button to choose file.",
     "message": "Choose File"
@@ -1147,17 +1151,9 @@
     "description": "Text displayed when info about a custom map cannot be retrieved.",
     "message": "Could not get custom map information from file. Please remove it or choose a different file."
   },
-  "$1.routes.app.settings.background-map.dateAdded": {
-    "description": "Column label text for date added.",
-    "message": "Date Added"
-  },
   "$1.routes.app.settings.background-map.description": {
     "description": "Description of how custom background maps work.",
     "message": "Custom background maps are viewable offline and only on this device."
-  },
-  "$1.routes.app.settings.background-map.mapNameColumnLabel": {
-    "description": "Column label text for map name.",
-    "message": "Map Name"
   },
   "$1.routes.app.settings.background-map.mapUpdateSuccessDescription": {
     "description": "Description text for dialog when updating map successfully.",

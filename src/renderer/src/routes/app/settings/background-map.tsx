@@ -9,7 +9,6 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import Container from '@mui/material/Container'
-import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
@@ -20,6 +19,7 @@ import {
 	type MessageValue,
 	type NoMessageValues,
 } from 'react-intl'
+import { useSpinDelay } from 'spin-delay'
 
 import { BLUE_GREY, LIGHT_GREY } from '../../../colors.ts'
 import { DecentDialog } from '../../../components/decent-dialog.tsx'
@@ -29,11 +29,6 @@ import { useIconSizeBasedOnTypography } from '../../../hooks/icon.ts'
 import { bytesToMegabytes } from '../../../lib/bytes-to-megabytes.ts'
 
 export const Route = createFileRoute('/app/settings/background-map')({
-	staticData: {
-		getNavTitle: () => {
-			return m.navTitle
-		},
-	},
 	component: RouteComponent,
 })
 
@@ -80,64 +75,73 @@ function RouteComponent() {
 				</Typography>
 			</Stack>
 
-			<Stack
-				sx={{ flex: 1, overflow: 'auto', scrollbarGutter: 'stable both-edges' }}
+			<Suspense
+				fallback={
+					<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
+						<CircularProgress disableShrink />
+					</Box>
+				}
 			>
-				<Container disableGutters maxWidth="sm">
-					<Stack direction="column" sx={{ flex: 1 }}>
-						<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-							<Stack direction="column" sx={{ padding: 6, gap: 6 }}>
-								<Box
-									sx={{
-										bgcolor: LIGHT_GREY,
-										border: `1px solid ${BLUE_GREY}`,
-										borderRadius: 2,
-										padding: 4,
-									}}
-								>
-									<Typography sx={{ textAlign: 'center' }}>
-										{intl.formatMessage(m.description)}
-									</Typography>
-								</Box>
-
-								<Divider />
-
-								<Suspense
-									fallback={
-										<Box sx={{ display: 'grid', placeItems: 'center' }}>
-											<CircularProgress disableShrink />
-										</Box>
-									}
-								>
-									<CustomMap />
-								</Suspense>
-							</Stack>
-						</Stack>
-					</Stack>
-				</Container>
-			</Stack>
+				<MainContent />
+			</Suspense>
 		</Stack>
 	)
 }
 
-function CustomMap() {
+function MainContent() {
 	const intl = useIntl()
 
 	const importCustomMapFile = useImportCustomMapFile()
 	const removeCustomMapFile = useRemoveCustomMapFile()
 
-	return (
-		<>
-			<CustomMapInfo
+	const isChooseVisiblyPending = useSpinDelay(
+		importCustomMapFile.status === 'pending',
+		{ delay: 100 },
+	)
+
+	const isRemoveVisiblyPending = useSpinDelay(
+		removeCustomMapFile.status === 'pending',
+		{ delay: 100 },
+	)
+
+	// NOTE: Hook is not suspense-based.
+	const customMapInfo = useGetCustomMapInfo()
+
+	let content: React.ReactNode
+
+	if (customMapInfo.status === 'pending') {
+		content = (
+			<Box sx={{ flex: 1, display: 'grid', placeItems: 'center' }}>
+				<CircularProgress disableShrink />
+			</Box>
+		)
+	} else if (customMapInfo.status === 'error') {
+		content = (
+			<NoCustomMap
+				chooseIsPending={isChooseVisiblyPending}
+				error={customMapInfo.error}
 				onChooseMap={(file) => {
 					importCustomMapFile.mutate({ file })
 				}}
-				removeIsPending={removeCustomMapFile.status === 'pending'}
-				chooseIsPending={importCustomMapFile.status === 'pending'}
-				onRemoveMap={() => {
-					removeCustomMapFile.mutate(undefined)
-				}}
+				onRemoveMap={() => removeCustomMapFile.mutate(undefined)}
+				removeIsPending={isRemoveVisiblyPending}
 			/>
+		)
+	} else {
+		content = (
+			<CustomMapDetails
+				created={customMapInfo.data.created}
+				name={customMapInfo.data.name}
+				onRemoveMap={() => removeCustomMapFile.mutate(undefined)}
+				removeIsPending={isRemoveVisiblyPending}
+				size={customMapInfo.data.size}
+			/>
+		)
+	}
+
+	return (
+		<>
+			{content}
 
 			<DecentDialog
 				fullWidth
@@ -213,157 +217,250 @@ function CustomMap() {
 	)
 }
 
-type MapFileProps = {
-	chooseIsPending: boolean
-	onChooseMap: (file: File) => void
-	onRemoveMap: () => void
-	removeIsPending: boolean
-}
-
-function CustomMapInfo({
+function NoCustomMap({
 	chooseIsPending,
+	error,
 	onChooseMap,
 	onRemoveMap,
 	removeIsPending,
-}: MapFileProps) {
+}: {
+	chooseIsPending: boolean
+	error: Error
+	onChooseMap: (file: File) => void
+	onRemoveMap: () => void
+	removeIsPending: boolean
+}) {
 	const intl = useIntl()
 
-	const customMapInfo = useGetCustomMapInfo()
-
-	if (customMapInfo.status === 'pending') {
-		return null
-	}
-
-	if (customMapInfo.status === 'error') {
-		if (getErrorCode(customMapInfo.error) === 'MAP_NOT_FOUND') {
-			return (
-				<Stack direction="column" sx={{ gap: 5 }}>
-					<Button
-						component="label"
-						variant="outlined"
-						fullWidth
-						sx={{ maxWidth: 400, alignSelf: 'center' }}
-						startIcon={<Icon name="material-file-download" />}
-						loading={chooseIsPending}
-						loadingPosition="start"
-						tabIndex={-1}
-						role={undefined}
-					>
-						{intl.formatMessage(m.chooseFile)}
-
-						<HiddenSelectFileInput onClick={onChooseMap} />
-					</Button>
-
-					<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
-						{intl.formatMessage(m.acceptedFileTypes)}
-					</Typography>
-				</Stack>
-			)
-		}
-
-		return (
-			<Stack direction="column" sx={{ gap: 4 }}>
-				<Typography sx={{ textAlign: 'center' }}>
-					{intl.formatMessage(m.customMapInfoError)}
-				</Typography>
-				<Button
-					component="label"
-					variant="outlined"
-					fullWidth
-					loading={chooseIsPending}
-					loadingPosition="start"
-					sx={{ maxWidth: 400, alignSelf: 'center' }}
-					startIcon={<Icon name="material-file-download" />}
-					tabIndex={-1}
-					role={undefined}
-				>
-					{intl.formatMessage(m.chooseFile)}
-
-					<HiddenSelectFileInput onClick={onChooseMap} />
-				</Button>
-
-				<Button
-					variant="outlined"
-					color="error"
-					fullWidth
-					loading={removeIsPending}
-					loadingPosition="start"
-					sx={{ maxWidth: 400, alignSelf: 'center' }}
-					onClick={() => {
-						onRemoveMap()
+	return (
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+				<Container
+					disableGutters
+					maxWidth="sm"
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						flex: 1,
+						padding: 6,
 					}}
 				>
-					{intl.formatMessage(m.removeMap)}
-				</Button>
-			</Stack>
-		)
-	}
+					<Stack
+						direction="column"
+						sx={{ gap: 6, paddingBlock: 6, paddingInline: 4 }}
+					>
+						{getErrorCode(error) === 'MAP_NOT_FOUND' ? (
+							<Box
+								sx={{
+									bgcolor: LIGHT_GREY,
+									border: `1px solid ${BLUE_GREY}`,
+									borderRadius: 2,
+									padding: 4,
+								}}
+							>
+								<Typography>{intl.formatMessage(m.description)}</Typography>
+							</Box>
+						) : (
+							<>
+								<Typography sx={{ textAlign: 'center' }}>
+									{intl.formatMessage(m.customMapInfoError)}
+								</Typography>
 
-	const calculatedSize = bytesToMegabytes(customMapInfo.data.size).toFixed(0)
-	const displayedSize = parseInt(calculatedSize, 10) < 1 ? '<1' : calculatedSize
-
-	return (
-		<Stack direction="column" sx={{ gap: 4 }}>
-			<Stack direction="row" sx={{ justifyContent: 'space-between' }}>
-				<Typography color="textSecondary">
-					{intl.formatMessage(m.mapNameColumnLabel)}
-				</Typography>
-
-				<Typography color="textSecondary">
-					{intl.formatMessage(m.dateAddedColumnColumnLabel)}
-				</Typography>
+								<Button
+									variant="outlined"
+									color="error"
+									fullWidth
+									loading={removeIsPending}
+									loadingPosition="start"
+									sx={{ maxWidth: 400, alignSelf: 'center' }}
+									onClick={() => {
+										onRemoveMap()
+									}}
+								>
+									{intl.formatMessage(m.removeMap)}
+								</Button>
+							</>
+						)}
+					</Stack>
+				</Container>
 			</Stack>
 
 			<Stack
 				direction="column"
 				sx={{
-					border: `1px solid ${BLUE_GREY}`,
-					borderRadius: 2,
-					padding: 5,
-					gap: 5,
+					borderTop: `1px solid ${BLUE_GREY}`,
+					gap: 4,
+					padding: 6,
 				}}
 			>
-				<Stack direction="row" sx={{ gap: 2 }}>
-					<Stack direction="column" sx={{ flex: 1, overflow: 'hidden' }}>
-						<Typography
+				<Button
+					component="label"
+					fullWidth
+					loading={chooseIsPending}
+					loadingPosition="start"
+					role={undefined}
+					startIcon={<Icon name="material-file-download" />}
+					sx={{ maxWidth: 400, alignSelf: 'center' }}
+					tabIndex={-1}
+					variant="outlined"
+				>
+					{intl.formatMessage(m.chooseFile)}
+
+					<HiddenSelectFileInput
+						onClick={(file) => {
+							onChooseMap(file)
+						}}
+					/>
+				</Button>
+
+				<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
+					{intl.formatMessage(m.acceptedFileTypes)}
+				</Typography>
+			</Stack>
+		</Stack>
+	)
+}
+
+function CustomMapDetails({
+	created,
+	name,
+	onRemoveMap,
+	removeIsPending,
+	size,
+}: {
+	created: number
+	name: string
+	onRemoveMap: () => void
+	removeIsPending: boolean
+	size: number
+}) {
+	const intl = useIntl()
+
+	const headingIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'h1',
+		multiplier: 3,
+	})
+
+	const sizeIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'body1',
+		multiplier: 1,
+	})
+
+	const calculatedSize = bytesToMegabytes(size).toFixed(0)
+
+	const displayedSize = parseInt(calculatedSize, 10) < 1 ? '<1' : calculatedSize
+
+	return (
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+				<Container
+					disableGutters
+					maxWidth="sm"
+					sx={{
+						display: 'flex',
+						flex: 1,
+						flexDirection: 'column',
+						padding: 6,
+					}}
+				>
+					<Stack
+						direction="column"
+						sx={{ flex: 1, gap: 10, justifyContent: 'space-between' }}
+					>
+						<Stack
+							direction="column"
 							sx={{
-								textOverflow: 'ellipsis',
-								whiteSpace: 'nowrap',
-								overflow: 'hidden',
-								fontWeight: 500,
+								border: `1px solid ${BLUE_GREY}`,
+								borderRadius: 2,
+								flex: 1,
+								gap: 20,
+								justifyContent: 'center',
+								overflowWrap: 'break-word',
+								paddingBlock: 20,
+								paddingInline: 6,
 							}}
 						>
-							{customMapInfo.data.name}
-						</Typography>
+							<Stack direction="column" sx={{ gap: 10, alignItems: 'center' }}>
+								<Box
+									sx={{
+										display: 'flex',
+										justifyContent: 'center',
+										borderRadius: '50%',
+										padding: 4,
+										backgroundColor: LIGHT_GREY,
+									}}
+								>
+									<Icon
+										name="material-layers-outlined"
+										size={headingIconSize}
+									/>
+								</Box>
 
-						<Typography variant="body2" color="textSecondary">
-							{intl.formatMessage(m.sizeInMegabytes, { value: displayedSize })}
-						</Typography>
+								<Typography
+									component="p"
+									variant="h1"
+									sx={{
+										fontWeight: 500,
+										textAlign: 'center',
+										textWrap: 'balance',
+									}}
+								>
+									{name}
+								</Typography>
+							</Stack>
+
+							<Stack direction="column" sx={{ gap: 4, alignItems: 'center' }}>
+								<Stack direction="row" sx={{ gap: 2 }}>
+									<Icon name="material-layers-outlined" size={sizeIconSize} />
+
+									<Typography sx={{ fontWeight: 500 }}>
+										{intl.formatMessage(m.sizeInMegabytes, {
+											value: displayedSize,
+										})}
+									</Typography>
+								</Stack>
+
+								<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
+									{intl.formatMessage(m.addedOn, {
+										value: (
+											<time dateTime={new Date(created).toISOString()}>
+												{intl.formatDate(created, {
+													year: 'numeric',
+													month: 'long',
+													day: 'numeric',
+												})}
+											</time>
+										),
+									})}
+								</Typography>
+							</Stack>
+						</Stack>
 					</Stack>
+				</Container>
+			</Stack>
 
-					<Typography variant="body2" color="textSecondary">
-						<time dateTime={new Date(customMapInfo.data.created).toISOString()}>
-							{intl.formatDate(customMapInfo.data.created, {
-								year: 'numeric',
-								month: 'long',
-								day: 'numeric',
-							})}
-						</time>
-					</Typography>
-				</Stack>
-
-				<Box>
-					<Button
-						size="small"
-						variant="text"
-						color="error"
-						onClick={() => {
-							onRemoveMap()
-						}}
-					>
-						{intl.formatMessage(m.removeMap)}
-					</Button>
-				</Box>
+			<Stack
+				direction="column"
+				sx={{
+					borderTop: `1px solid ${BLUE_GREY}`,
+					gap: 4,
+					padding: 6,
+				}}
+			>
+				<Button
+					color="error"
+					fullWidth
+					loading={removeIsPending}
+					loadingPosition="start"
+					onClick={() => {
+						onRemoveMap()
+					}}
+					startIcon={<Icon name="material-symbols-delete" />}
+					sx={{ alignSelf: 'center', maxWidth: 400 }}
+					variant="contained"
+				>
+					{intl.formatMessage(m.removeMap)}
+				</Button>
 			</Stack>
 		</Stack>
 	)
@@ -406,9 +503,8 @@ const m = defineMessages<{
 	readonly description: NoMessageValues
 	readonly chooseFile: NoMessageValues
 	readonly acceptedFileTypes: NoMessageValues
-	readonly mapNameColumnLabel: NoMessageValues
-	readonly dateAddedColumnColumnLabel: NoMessageValues
 	readonly sizeInMegabytes: { readonly value: MessageValue }
+	readonly addedOn: { readonly value: MessageValue }
 	readonly removeMap: NoMessageValues
 	readonly customMapInfoError: NoMessageValues
 	readonly mapUpdateSuccessTitle: NoMessageValues
@@ -420,7 +516,6 @@ const m = defineMessages<{
 		defaultMessage: 'Go back.',
 		description: 'Accessible label for back button.',
 	},
-
 	navTitle: {
 		id: '$1.routes.app.settings.background-map.navTitle',
 		defaultMessage: 'Background Map',
@@ -443,19 +538,15 @@ const m = defineMessages<{
 		description:
 			'Text describing what kind of files are usable for background maps.',
 	},
-	mapNameColumnLabel: {
-		id: '$1.routes.app.settings.background-map.mapNameColumnLabel',
-		defaultMessage: 'Map Name',
-		description: 'Column label text for map name.',
-	},
-	dateAddedColumnColumnLabel: {
-		id: '$1.routes.app.settings.background-map.dateAdded',
-		defaultMessage: 'Date Added',
-		description: 'Column label text for date added.',
-	},
 	sizeInMegabytes: {
 		id: '$1.routes.app.settings.background-map.sizeInMegabytes',
 		defaultMessage: '{value} MB',
+		description:
+			'Text describing what kind of files are usable for background maps.',
+	},
+	addedOn: {
+		id: '$1.routes.app.settings.background-map.addedOn',
+		defaultMessage: 'Added on {value}',
 		description:
 			'Text describing what kind of files are usable for background maps.',
 	},
