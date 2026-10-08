@@ -47,15 +47,11 @@ export function CoordinateSystemSection({
 				<Stack
 					component="h2"
 					direction="row"
-					sx={{ alignItems: 'center', gap: 4, margin: 0 }}
+					sx={{ alignItems: 'center', gap: 2, margin: 0 }}
 				>
 					<Icon name="material-explore-filled" size={headingIconSize} />
 
-					<Typography
-						id={labelId}
-						variant="body2"
-						sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-					>
+					<Typography id={labelId} variant="sectionLabel">
 						{intl.formatMessage(m.coordinateSystemSectionTitle)}
 					</Typography>
 				</Stack>
@@ -92,6 +88,7 @@ export function CoordinateSystemSection({
 										secondaryText={EXAMPLE_DD}
 									/>
 								}
+								sx={{ gap: 2 }}
 							/>
 
 							<FormControlLabel
@@ -105,6 +102,7 @@ export function CoordinateSystemSection({
 										secondaryText={EXAMPLE_DMS}
 									/>
 								}
+								sx={{ gap: 2 }}
 							/>
 
 							<FormControlLabel
@@ -118,6 +116,7 @@ export function CoordinateSystemSection({
 										secondaryText={EXAMPLE_UTM}
 									/>
 								}
+								sx={{ gap: 2 }}
 							/>
 						</Stack>
 					</RadioGroup>

@@ -40,15 +40,11 @@ export function UnitSystemSection({
 				<Stack
 					component="h2"
 					direction="row"
-					sx={{ alignItems: 'center', gap: 4, margin: 0 }}
+					sx={{ alignItems: 'center', gap: 2, margin: 0 }}
 				>
 					<Icon name="material-symbols-square-foot" size={headingIconSize} />
 
-					<Typography
-						id={labelId}
-						variant="body2"
-						sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-					>
+					<Typography id={labelId} variant="sectionLabel">
 						{intl.formatMessage(m.unitSystemSectionTitle)}
 					</Typography>
 				</Stack>
@@ -85,6 +81,7 @@ export function UnitSystemSection({
 										)}
 									/>
 								}
+								sx={{ gap: 2 }}
 							/>
 
 							<FormControlLabel
@@ -98,6 +95,7 @@ export function UnitSystemSection({
 										)}
 									/>
 								}
+								sx={{ gap: 2 }}
 							/>
 						</Stack>
 					</RadioGroup>

@@ -1257,7 +1257,7 @@
   },
   "$1.routes.app.settings.index.languageFollowSystemOptionLabel": {
     "description": "Option label for following system preference for language.",
-    "message": "Follow system preference"
+    "message": "Follow System Preference"
   },
   "$1.routes.app.settings.index.languageFromSystemPreference": {
     "description": "Label for selected language based on the system preferences.",

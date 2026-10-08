@@ -101,7 +101,7 @@ export function DeviceNameSection({
 	})
 
 	const successIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body2',
+		typographyVariant: 'bodyCopy',
 		multiplier: 0.5,
 	})
 
@@ -111,7 +111,7 @@ export function DeviceNameSection({
 				<Stack
 					component="h2"
 					direction="row"
-					sx={{ alignItems: 'center', gap: 4, margin: 0 }}
+					sx={{ alignItems: 'center', gap: 2, margin: 0 }}
 				>
 					<DeviceIcon
 						aria-hidden
@@ -119,11 +119,7 @@ export function DeviceNameSection({
 						size={headingIconSize}
 					/>
 
-					<Typography
-						id={labelId}
-						variant="body2"
-						sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-					>
+					<Typography id={labelId} variant="sectionLabel">
 						{intl.formatMessage(m.deviceNameSectionTitle)}
 					</Typography>
 
@@ -186,25 +182,28 @@ export function DeviceNameSection({
 															<Stack
 																direction="row"
 																sx={{
-																	color: field.state.meta.isValid
-																		? undefined
-																		: (theme) => theme.palette.error.main,
+																	color: (theme) =>
+																		field.state.meta.isValid
+																			? theme.palette.text.secondary
+																			: theme.palette.error.main,
 																	justifyContent: 'space-between',
 																}}
 															>
 																<Typography
-																	id={errorTextId}
+																	color="inherit"
 																	component="span"
-																	variant="body2"
+																	id={errorTextId}
+																	variant="detailCopy"
 																>
 																	{field.state.meta.errors[0]?.message}
 																</Typography>
 
 																<Typography
+																	color="inherit"
 																	component="output"
 																	htmlFor={inputId}
 																	name="character-count"
-																	variant="body2"
+																	variant="detailCopy"
 																>
 																	<form.Subscribe
 																		selector={(state) =>

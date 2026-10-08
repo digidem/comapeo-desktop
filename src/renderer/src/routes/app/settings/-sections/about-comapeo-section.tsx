@@ -12,11 +12,7 @@ export function AboutCoMapeoSection() {
 	return (
 		<Stack component="section" direction="column" sx={{ gap: 4 }}>
 			<Stack direction="column" sx={{ gap: 4 }}>
-				<Typography
-					component="h2"
-					variant="body2"
-					sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-				>
+				<Typography component="h2" variant="sectionLabel">
 					{intl.formatMessage(m.aboutComapeoSectionTitle)}
 				</Typography>
 
@@ -25,26 +21,27 @@ export function AboutCoMapeoSection() {
 					sx={{
 						border: `1px solid ${BLUE_GREY}`,
 						borderRadius: 2,
-						gap: 4,
 						flex: 1,
+						gap: 4,
 					}}
 				>
-					<List>
-						<ListItem>
-							<Stack direction="column" sx={{ gap: 3 }}>
-								<Typography
-									component="h3"
-									variant="body1"
-									sx={{ fontWeight: 500 }}
-								>
-									{intl.formatMessage(m.aboutComapeoVersionLabel)}
-								</Typography>
+					<List sx={{ padding: 6 }}>
+						<Stack
+							component={ListItem}
+							direction="column"
+							sx={{ alignItems: 'flex-start', gap: 3 }}
+						>
+							<Typography
+								component="h3"
+								sx={{
+									fontWeight: (theme) => theme.typography.fontWeightMedium,
+								}}
+							>
+								{intl.formatMessage(m.aboutComapeoVersionLabel)}
+							</Typography>
 
-								<Typography>
-									{window.runtime.getAppInfo().appVersion}
-								</Typography>
-							</Stack>
-						</ListItem>
+							<Typography>{window.runtime.getAppInfo().appVersion}</Typography>
+						</Stack>
 					</List>
 				</Stack>
 			</Stack>

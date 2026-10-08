@@ -29,12 +29,12 @@ function RouteComponent() {
 	const router = useRouter()
 
 	const headerIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'pageTitle',
 		multiplier: 1.5,
 	})
 
 	const sectionHeadingIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body2',
+		typographyVariant: 'sectionLabel',
 		multiplier: 1.5,
 	})
 
@@ -66,7 +66,7 @@ function RouteComponent() {
 					<Icon name="material-arrow-back" size={headerIconSize} />
 				</IconButton>
 
-				<Typography variant="h1" sx={{ fontWeight: 500, textAlign: 'center' }}>
+				<Typography variant="pageTitle" sx={{ textAlign: 'center' }}>
 					{intl.formatMessage(m.title)}
 				</Typography>
 			</Stack>
@@ -103,17 +103,11 @@ function RouteComponent() {
 								<UnitSystemSection headingIconSize={sectionHeadingIconSize} />
 							</Stack>
 
-							<Divider
-								variant="fullWidth"
-								sx={{ borderColor: (theme) => theme.darken(BLUE_GREY, 0.2) }}
-							/>
+							<Divider sx={{ borderColor: BLUE_GREY }} />
 
 							<DataAndPrivacySection />
 
-							<Divider
-								variant="fullWidth"
-								sx={{ borderColor: (theme) => theme.darken(BLUE_GREY, 0.2) }}
-							/>
+							<Divider sx={{ borderColor: BLUE_GREY }} />
 
 							<AboutCoMapeoSection />
 						</Stack>
