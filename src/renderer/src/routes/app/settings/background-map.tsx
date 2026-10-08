@@ -38,7 +38,7 @@ function RouteComponent() {
 	const router = useRouter()
 
 	const headerIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'pageTitle',
 		multiplier: 1.5,
 	})
 
@@ -70,7 +70,7 @@ function RouteComponent() {
 					<Icon name="material-arrow-back" size={headerIconSize} />
 				</IconButton>
 
-				<Typography variant="h1" sx={{ fontWeight: 500, textAlign: 'center' }}>
+				<Typography variant="pageTitle" sx={{ textAlign: 'center' }}>
 					{intl.formatMessage(m.navTitle)}
 				</Typography>
 			</Stack>
@@ -177,10 +177,7 @@ function MainContent() {
 					<Stack direction="column">
 						<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
 							<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
-								<Typography
-									variant="h1"
-									sx={{ fontWeight: 500, textAlign: 'center' }}
-								>
+								<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
 									{intl.formatMessage(m.mapUpdateSuccessTitle)}
 								</Typography>
 
@@ -205,7 +202,7 @@ function MainContent() {
 								onClick={() => {
 									importCustomMapFile.reset()
 								}}
-								sx={{ maxWidth: 400, alignSelf: 'center' }}
+								sx={{ alignSelf: 'center' }}
 							>
 								{intl.formatMessage(m.close)}
 							</Button>
@@ -272,7 +269,7 @@ function NoCustomMap({
 									fullWidth
 									loading={removeIsPending}
 									loadingPosition="start"
-									sx={{ maxWidth: 400, alignSelf: 'center' }}
+									sx={{ alignSelf: 'center' }}
 									onClick={() => {
 										onRemoveMap()
 									}}
@@ -300,7 +297,7 @@ function NoCustomMap({
 					loadingPosition="start"
 					role={undefined}
 					startIcon={<Icon name="material-file-download" />}
-					sx={{ maxWidth: 400, alignSelf: 'center' }}
+					sx={{ alignSelf: 'center' }}
 					tabIndex={-1}
 					variant="outlined"
 				>
@@ -337,12 +334,12 @@ function CustomMapDetails({
 	const intl = useIntl()
 
 	const headingIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'heroHeader',
 		multiplier: 3,
 	})
 
 	const sizeIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
+		typographyVariant: 'bodyCopy',
 		multiplier: 1,
 	})
 
@@ -397,30 +394,36 @@ function CustomMapDetails({
 								</Box>
 
 								<Typography
-									component="p"
-									variant="h1"
-									sx={{
-										fontWeight: 500,
-										textAlign: 'center',
-										textWrap: 'balance',
-									}}
+									variant="heroHeader"
+									sx={{ textAlign: 'center', textWrap: 'balance' }}
 								>
 									{name}
 								</Typography>
 							</Stack>
 
 							<Stack direction="column" sx={{ gap: 4, alignItems: 'center' }}>
-								<Stack direction="row" sx={{ gap: 2 }}>
+								<Stack
+									direction="row"
+									sx={{
+										color: (theme) => theme.palette.text.secondary,
+										gap: 2,
+									}}
+								>
 									<Icon name="material-layers-outlined" size={sizeIconSize} />
 
-									<Typography sx={{ fontWeight: 500 }}>
+									<Typography
+										color="inherit"
+										sx={{
+											fontWeight: (theme) => theme.typography.fontWeightMedium,
+										}}
+									>
 										{intl.formatMessage(m.sizeInMegabytes, {
 											value: displayedSize,
 										})}
 									</Typography>
 								</Stack>
 
-								<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
+								<Typography color="textTertiary" sx={{ textAlign: 'center' }}>
 									{intl.formatMessage(m.addedOn, {
 										value: (
 											<time dateTime={new Date(created).toISOString()}>
@@ -456,7 +459,7 @@ function CustomMapDetails({
 						onRemoveMap()
 					}}
 					startIcon={<Icon name="material-symbols-delete" />}
-					sx={{ alignSelf: 'center', maxWidth: 400 }}
+					sx={{ alignSelf: 'center' }}
 					variant="contained"
 				>
 					{intl.formatMessage(m.removeMap)}
