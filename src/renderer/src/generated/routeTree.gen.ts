@@ -27,7 +27,6 @@ import { Route as AppProjectsProjectIdTestDataRouteImport } from './../routes/ap
 import { Route as AppProjectsProjectIdWithMapPanelIndexRouteImport } from './../routes/app/projects/$projectId/_with-map-panel/index'
 import { Route as AppProjectsProjectIdWithMapPanelDownloadRouteImport } from './../routes/app/projects/$projectId/_with-map-panel/download'
 import { Route as AppProjectsProjectIdExchangeIndexRouteImport } from './../routes/app/projects/$projectId/exchange/index'
-import { Route as AppProjectsProjectIdSettingsIndexRouteImport } from './../routes/app/projects/$projectId/settings/index'
 import { Route as AppProjectsProjectIdSettingsInfoRouteImport } from './../routes/app/projects/$projectId/settings/info'
 import { Route as AppProjectsProjectIdTeamIndexRouteImport } from './../routes/app/projects/$projectId/team/index'
 import { Route as AppProjectsProjectIdTeamDeviceIdRouteImport } from './../routes/app/projects/$projectId/team/$deviceId'
@@ -139,12 +138,6 @@ const AppProjectsProjectIdExchangeIndexRoute =
     path: '/exchange/',
     getParentRoute: () => AppProjectsProjectIdRouteRoute,
   } as any)
-const AppProjectsProjectIdSettingsIndexRoute =
-  AppProjectsProjectIdSettingsIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AppProjectsProjectIdSettingsRouteRoute,
-  } as any)
 const AppProjectsProjectIdSettingsInfoRoute =
   AppProjectsProjectIdSettingsInfoRouteImport.update({
     id: '/info',
@@ -245,7 +238,6 @@ export interface FileRoutesByFullPath {
   '/app/projects/$projectId/team/$deviceId': typeof AppProjectsProjectIdTeamDeviceIdRoute
   '/app/projects/$projectId/': typeof AppProjectsProjectIdWithMapPanelIndexRoute
   '/app/projects/$projectId/exchange/': typeof AppProjectsProjectIdExchangeIndexRoute
-  '/app/projects/$projectId/settings/': typeof AppProjectsProjectIdSettingsIndexRoute
   '/app/projects/$projectId/team/': typeof AppProjectsProjectIdTeamIndexRoute
   '/app/projects/$projectId/team/invite/': typeof AppProjectsProjectIdTeamInviteIndexRoute
   '/app/projects/$projectId/team/invite/devices/$deviceId': typeof AppProjectsProjectIdTeamInviteDevicesDeviceIdRouteRouteWithChildren
@@ -267,12 +259,12 @@ export interface FileRoutesByTo {
   '/app/projects/$projectId': typeof AppProjectsProjectIdWithMapPanelIndexRoute
   '/app/settings/background-map': typeof AppSettingsBackgroundMapRoute
   '/app/settings': typeof AppSettingsIndexRoute
+  '/app/projects/$projectId/settings': typeof AppProjectsProjectIdSettingsRouteRouteWithChildren
   '/app/projects/$projectId/test-data': typeof AppProjectsProjectIdTestDataRoute
   '/app/projects/$projectId/download': typeof AppProjectsProjectIdWithMapPanelDownloadRoute
   '/app/projects/$projectId/settings/info': typeof AppProjectsProjectIdSettingsInfoRoute
   '/app/projects/$projectId/team/$deviceId': typeof AppProjectsProjectIdTeamDeviceIdRoute
   '/app/projects/$projectId/exchange': typeof AppProjectsProjectIdExchangeIndexRoute
-  '/app/projects/$projectId/settings': typeof AppProjectsProjectIdSettingsIndexRoute
   '/app/projects/$projectId/team': typeof AppProjectsProjectIdTeamIndexRoute
   '/app/projects/$projectId/team/invite': typeof AppProjectsProjectIdTeamInviteIndexRoute
   '/app/projects/$projectId/team/invite/devices/$deviceId': typeof AppProjectsProjectIdTeamInviteDevicesDeviceIdRouteRouteWithChildren
@@ -306,7 +298,6 @@ export interface FileRoutesById {
   '/app/projects/$projectId/team/$deviceId': typeof AppProjectsProjectIdTeamDeviceIdRoute
   '/app/projects/$projectId/_with-map-panel/': typeof AppProjectsProjectIdWithMapPanelIndexRoute
   '/app/projects/$projectId/exchange/': typeof AppProjectsProjectIdExchangeIndexRoute
-  '/app/projects/$projectId/settings/': typeof AppProjectsProjectIdSettingsIndexRoute
   '/app/projects/$projectId/team/': typeof AppProjectsProjectIdTeamIndexRoute
   '/app/projects/$projectId/team/invite/': typeof AppProjectsProjectIdTeamInviteIndexRoute
   '/app/projects/$projectId/team/invite/devices/$deviceId': typeof AppProjectsProjectIdTeamInviteDevicesDeviceIdRouteRouteWithChildren
@@ -340,7 +331,6 @@ export interface FileRouteTypes {
     | '/app/projects/$projectId/team/$deviceId'
     | '/app/projects/$projectId/'
     | '/app/projects/$projectId/exchange/'
-    | '/app/projects/$projectId/settings/'
     | '/app/projects/$projectId/team/'
     | '/app/projects/$projectId/team/invite/'
     | '/app/projects/$projectId/team/invite/devices/$deviceId'
@@ -362,12 +352,12 @@ export interface FileRouteTypes {
     | '/app/projects/$projectId'
     | '/app/settings/background-map'
     | '/app/settings'
+    | '/app/projects/$projectId/settings'
     | '/app/projects/$projectId/test-data'
     | '/app/projects/$projectId/download'
     | '/app/projects/$projectId/settings/info'
     | '/app/projects/$projectId/team/$deviceId'
     | '/app/projects/$projectId/exchange'
-    | '/app/projects/$projectId/settings'
     | '/app/projects/$projectId/team'
     | '/app/projects/$projectId/team/invite'
     | '/app/projects/$projectId/team/invite/devices/$deviceId'
@@ -400,7 +390,6 @@ export interface FileRouteTypes {
     | '/app/projects/$projectId/team/$deviceId'
     | '/app/projects/$projectId/_with-map-panel/'
     | '/app/projects/$projectId/exchange/'
-    | '/app/projects/$projectId/settings/'
     | '/app/projects/$projectId/team/'
     | '/app/projects/$projectId/team/invite/'
     | '/app/projects/$projectId/team/invite/devices/$deviceId'
@@ -547,13 +536,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsProjectIdExchangeIndexRouteImport
       parentRoute: typeof AppProjectsProjectIdRouteRoute
     }
-    '/app/projects/$projectId/settings/': {
-      id: '/app/projects/$projectId/settings/'
-      path: '/'
-      fullPath: '/app/projects/$projectId/settings/'
-      preLoaderRoute: typeof AppProjectsProjectIdSettingsIndexRouteImport
-      parentRoute: typeof AppProjectsProjectIdSettingsRouteRoute
-    }
     '/app/projects/$projectId/settings/info': {
       id: '/app/projects/$projectId/settings/info'
       path: '/info'
@@ -683,15 +665,12 @@ const AppProjectsProjectIdWithMapPanelRouteRouteWithChildren =
 
 interface AppProjectsProjectIdSettingsRouteRouteChildren {
   AppProjectsProjectIdSettingsInfoRoute: typeof AppProjectsProjectIdSettingsInfoRoute
-  AppProjectsProjectIdSettingsIndexRoute: typeof AppProjectsProjectIdSettingsIndexRoute
 }
 
 const AppProjectsProjectIdSettingsRouteRouteChildren: AppProjectsProjectIdSettingsRouteRouteChildren =
   {
     AppProjectsProjectIdSettingsInfoRoute:
       AppProjectsProjectIdSettingsInfoRoute,
-    AppProjectsProjectIdSettingsIndexRoute:
-      AppProjectsProjectIdSettingsIndexRoute,
   }
 
 const AppProjectsProjectIdSettingsRouteRouteWithChildren =

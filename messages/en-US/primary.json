@@ -719,22 +719,6 @@
     "description": "Fallback for when project is missing a name.",
     "message": "Unnamed Project"
   },
-  "$1.routes.app.projects.$projectId.settings.index.categoriesActionLabel": {
-    "description": "Text for action to update categories set.",
-    "message": "Update"
-  },
-  "$1.routes.app.projects.$projectId.settings.index.navTitle": {
-    "description": "Title of the coordinator tools page.",
-    "message": "Coordinator Tools"
-  },
-  "$1.routes.app.projects.$projectId.settings.index.projectInfoActionLabel": {
-    "description": "Text for action to update project info.",
-    "message": "Edit"
-  },
-  "$1.routes.app.projects.$projectId.settings.index.unnamedProject": {
-    "description": "Fallback for when current project is missing a name.",
-    "message": "Unnamed Project"
-  },
   "$1.routes.app.projects.$projectId.settings.info.maxProjectDescriptionLengthError": {
     "description": "Error message for project description that is too long.",
     "message": "Too long, try a shorter description."
