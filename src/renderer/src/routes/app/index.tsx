@@ -150,7 +150,8 @@ function RouteComponent() {
 							sx={{
 								background: LIGHT_COMAPEO_BLUE,
 								borderRadius: 2,
-								padding: 1,
+								paddingBlock: 1,
+								paddingInline: 2,
 							}}
 						>
 							<Typography
