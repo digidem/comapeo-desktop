@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { useExportGeoJSON, useExportZipFile } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -21,12 +21,13 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLUE_GREY, DARK_GREY, GREEN } from '../../../../../colors.ts'
+import { BLUE_GREY, GREEN } from '../../../../../colors.ts'
 import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
 import { Bold, Break } from '../../../../../components/intl-rich-text.tsx'
 import { useAppForm } from '../../../../../hooks/forms.ts'
+import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings.ts'
 import { selectDirectoryMutationOptions } from '../../../../../lib/queries/file-system.ts'
 import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations.ts'
@@ -37,8 +38,6 @@ export const Route = createFileRoute(
 )({
 	component: RouteComponent,
 })
-
-const FORM_ID = 'download-data-form'
 
 const DOWNLOAD_DATA_MUTATION_KEY = createGlobalMutationsKey(['download-data'])
 
@@ -103,6 +102,11 @@ function SuccessPanel({
 
 	const showItemInFolder = useMutation(showItemInFolderMutationOptions())
 
+	const iconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'heroHeader',
+		multiplier: 4,
+	})
+
 	return (
 		<Stack
 			direction="column"
@@ -117,18 +121,19 @@ function SuccessPanel({
 						<Icon
 							name="material-check-circle-rounded"
 							htmlColor={GREEN}
-							size={160}
+							size={iconSize}
 						/>
 					</Box>
 
 					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center' }}
+						component="h1"
+						variant="heroHeader"
+						sx={{ textAlign: 'center' }}
 					>
 						{intl.formatMessage(m.successPanelTitle)}
 					</Typography>
 
-					<Typography component="p" variant="h2" sx={{ textAlign: 'center' }}>
+					<Typography sx={{ textAlign: 'center' }}>
 						{intl.formatMessage(
 							dataDownloaded === 'observations'
 								? m.successPanelDescriptionObservations
@@ -259,6 +264,13 @@ function DownloadForm({
 		},
 	})
 
+	const backIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'pageTitle',
+		multiplier: 1.25,
+	})
+
+	const formId = useId()
+
 	return (
 		<>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
@@ -282,12 +294,12 @@ function DownloadForm({
 									onBack()
 								}}
 							>
-								<Icon name="material-arrow-back" size={30} />
+								<Icon name="material-arrow-back" size={backIconSize} />
 							</IconButton>
 						)}
 					</form.Subscribe>
 
-					<Typography variant="h1" sx={{ fontWeight: 500 }}>
+					<Typography variant="pageTitle">
 						{intl.formatMessage(m.navTitle)}
 					</Typography>
 				</Stack>
@@ -299,7 +311,7 @@ function DownloadForm({
 					<Box sx={{ padding: 6 }}>
 						<Box
 							component="form"
-							id={FORM_ID}
+							id={formId}
 							noValidate
 							autoComplete="off"
 							onSubmit={(event) => {
@@ -383,7 +395,7 @@ function DownloadForm({
 							{([canSubmit, isSubmitting]) => (
 								<Button
 									type="submit"
-									form={FORM_ID}
+									form={formId}
 									fullWidth
 									variant="contained"
 									loading={isSubmitting}
@@ -433,13 +445,22 @@ function DownloadOption({
 				value={value}
 				control={<Radio />}
 				label={
-					<Stack direction="column">
-						<Typography sx={{ fontWeight: 500 }}>{primaryText}</Typography>
-						<Typography color={DARK_GREY} aria-hidden>
+					<Stack direction="column" sx={{ gap: 1 }}>
+						<Typography
+							variant="cardHeader"
+							sx={{
+								fontWeight: (theme) => theme.typography.fontWeightMedium,
+							}}
+						>
+							{primaryText}
+						</Typography>
+
+						<Typography color="textTertiary" aria-hidden>
 							{secondaryText}
 						</Typography>
 					</Stack>
 				}
+				sx={{ gap: 2 }}
 			/>
 		</Box>
 	)
