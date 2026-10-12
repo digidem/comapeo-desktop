@@ -269,7 +269,7 @@ export function DataList({
 	)
 
 	const downloadButtonSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'pageTitle',
 		multiplier: 1.25,
 	})
 
@@ -354,6 +354,16 @@ export function DataList({
 			).size === 0
 		: true
 
+	const categoryIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'cardHeader',
+		multiplier: 2,
+	})
+
+	const noResultsIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'heroHeader',
+		multiplier: 4,
+	})
+
 	return (
 		<>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
@@ -379,26 +389,22 @@ export function DataList({
 								direction="row"
 								sx={{ alignItems: 'center', gap: 4, flexWrap: 'wrap' }}
 							>
-								<Typography variant="h1" sx={{ fontWeight: 500 }}>
+								<Typography component="h1" variant="pageTitle">
 									{intl.formatMessage(m.listTitle)}
 								</Typography>
 
 								<Box
 									sx={{
-										borderRadius: 2,
-										backgroundColor:
+										background:
 											sortedListData.length === 0
 												? LIGHT_GREY
 												: LIGHT_COMAPEO_BLUE,
-										padding: 2,
+										borderRadius: 2,
+										paddingBlock: 1,
+										paddingInline: 2,
 									}}
 								>
-									<Typography
-										color={
-											sortedListData.length === 0 ? 'textDisabled' : 'primary'
-										}
-										sx={{ fontWeight: 500 }}
-									>
+									<Typography variant="detailCopy" color="textTertiary">
 										{intl.formatMessage(m.resultsCount, {
 											count: sortedListData.length,
 										})}
@@ -413,6 +419,7 @@ export function DataList({
 								<IconButtonLink
 									to="/app/projects/$projectId/download"
 									aria-label={intl.formatMessage(m.downloadObservations)}
+									sx={{ color: (theme) => theme.palette.text.tertiary }}
 								>
 									<Icon
 										name="material-file-download"
@@ -489,7 +496,7 @@ export function DataList({
 						>
 							<Button
 								variant="outlined"
-								sx={{ flexShrink: 0, fontWeight: 'normal' }}
+								sx={{ flexShrink: 0 }}
 								onClick={() => {
 									unsetCategoriesFilter()
 									unsetDateFilter()
@@ -608,11 +615,11 @@ export function DataList({
 					{sortedListData.length > 0 ? (
 						<Box
 							sx={{
-								overflow: 'auto',
+								background: LIGHT_GREY,
 								display: 'flex',
-								flexDirection: 'column',
 								flex: 1,
-								backgroundColor: LIGHT_GREY,
+								flexDirection: 'column',
+								overflow: 'auto',
 							}}
 						>
 							<List
@@ -656,12 +663,18 @@ export function DataList({
 															imageStyle={{ aspectRatio: 1, width: '100%' }}
 														/>
 													) : (
-														<Icon name="material-hiking" size={40} />
+														<Icon
+															name="material-hiking"
+															size={categoryIconSize}
+														/>
 													)}
 												</CategoryIconContainer>
 											) : (
 												<CategoryIconContainer color={BLACK}>
-													<Icon name="material-hiking" size={40} />
+													<Icon
+														name="material-hiking"
+														size={categoryIconSize}
+													/>
 												</CategoryIconContainer>
 											)
 										} else {
@@ -693,7 +706,7 @@ export function DataList({
 														) : (
 															<Icon
 																name="material-symbols-indeterminate-question-box"
-																size={40}
+																size={categoryIconSize}
 															/>
 														)}
 													</CategoryIconContainer>
@@ -701,7 +714,7 @@ export function DataList({
 													<CategoryIconContainer color={BLACK}>
 														<Icon
 															name="material-symbols-indeterminate-question-box"
-															size={40}
+															size={categoryIconSize}
 														/>
 													</CategoryIconContainer>
 												)
@@ -712,13 +725,13 @@ export function DataList({
 											<Box
 												key={row.key}
 												sx={{
+													background: WHITE,
+													height: `${row.size}px`,
+													left: 0,
 													position: 'absolute',
 													top: 0,
-													left: 0,
-													width: '100%',
-													height: `${row.size}px`,
 													transform: `translateY(${row.start}px)`,
-													backgroundColor: WHITE,
+													width: '100%',
 												}}
 											>
 												<ListItemButton
@@ -776,26 +789,28 @@ export function DataList({
 															direction="column"
 															sx={{
 																flex: 1,
+																gap: 1,
 																justifyContent: 'center',
 																overflow: 'hidden',
 															}}
 														>
 															<Typography
+																variant="cardHeader"
 																sx={{
-																	fontWeight: 500,
+																	overflow: 'hidden',
 																	textOverflow: 'ellipsis',
 																	whiteSpace: 'nowrap',
-																	overflow: 'hidden',
 																}}
 															>
 																{title}
 															</Typography>
 
 															<Typography
+																color="textTertiary"
 																sx={{
+																	overflow: 'hidden',
 																	textOverflow: 'ellipsis',
 																	whiteSpace: 'nowrap',
-																	overflow: 'hidden',
 																}}
 															>
 																{intl.formatDate(createdAt, {
@@ -811,33 +826,22 @@ export function DataList({
 
 														<Box
 															sx={{
-																display: 'flex',
-																justifyContent: 'center',
-																alignItems: 'center',
-																width: CATEGORY_CONTAINER_SIZE_PX,
 																aspectRatio: 1,
+																display: 'grid',
+																placeItems: 'center',
+																width: CATEGORY_CONTAINER_SIZE_PX,
 															}}
 														>
-															<Box sx={{ flex: 1 }}>
-																<Suspense
-																	fallback={
-																		<Box
-																			sx={{
-																				display: 'flex',
-																				justifyContent: 'center',
-																				alignItems: 'center',
-																			}}
-																		>
-																			<CircularProgress
-																				disableShrink
-																				size={30}
-																			/>
-																		</Box>
-																	}
-																>
-																	{categorySlot}
-																</Suspense>
-															</Box>
+															<Suspense
+																fallback={
+																	<CircularProgress
+																		disableShrink
+																		size={categoryIconSize}
+																	/>
+																}
+															>
+																{categorySlot}
+															</Suspense>
 														</Box>
 													</Stack>
 												</ListItemButton>
@@ -862,24 +866,20 @@ export function DataList({
 								>
 									<Box
 										sx={{
-											display: 'flex',
-
 											border: `4px solid ${LIGHT_GREY}`,
 											borderRadius: '50%',
+											display: 'flex',
 											padding: 10,
 										}}
 									>
 										<Icon
 											name="noun-project-notebook"
-											size={64}
+											size={noResultsIconSize}
 											htmlColor={BLUE_GREY}
 										/>
 									</Box>
 
-									<Typography
-										variant="h1"
-										sx={{ fontWeight: 500, textAlign: 'center' }}
-									>
+									<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
 										{intl.formatMessage(m.noResultsTitle)}
 									</Typography>
 
@@ -984,8 +984,8 @@ function FilterPill({
 	const intl = useIntl()
 
 	const removeFilterButtonSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
-		multiplier: 0.75,
+		typographyVariant: 'bodyCopy',
+		multiplier: 1,
 	})
 
 	const removeButton = (
@@ -1026,7 +1026,11 @@ function FilterPill({
 				>
 					<Typography
 						color="textSecondary"
-						sx={{ fontWeight: 500, whiteSpace: 'nowrap', fontStyle: 'italic' }}
+						sx={{
+							fontStyle: 'italic',
+							fontWeight: (theme) => theme.typography.fontWeightMedium,
+							whiteSpace: 'nowrap',
+						}}
 					>
 						{label}
 					</Typography>
@@ -1042,16 +1046,19 @@ function FilterPill({
 			direction="row"
 			sx={{
 				alignItems: 'center',
+				background: outdated ? undefined : color,
 				border: `1px solid ${BLUE_GREY}`,
 				borderRadius: 2,
 				paddingInline: 4,
 				gap: 4,
-				backgroundColor: outdated ? undefined : color,
 			}}
 		>
 			<Typography
-				color="textPrimary"
-				sx={{ fontWeight: 500, whiteSpace: 'nowrap' }}
+				color="textSecondary"
+				sx={{
+					fontWeight: (theme) => theme.typography.fontWeightMedium,
+					whiteSpace: 'nowrap',
+				}}
 			>
 				{label}
 			</Typography>
@@ -1226,6 +1233,7 @@ function ObservationCategoryWithAttachmentsPreview({
 	)
 }
 
+// TODO: Refactor to use Menu like project switcher
 function CategoriesFilterSelect({
 	selected,
 	options,
@@ -1248,7 +1256,7 @@ function CategoriesFilterSelect({
 	const dataOptionPrefixId = useId()
 
 	const categoryIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
+		typographyVariant: 'bodyCopy',
 		multiplier: 0.75,
 	})
 
@@ -1268,11 +1276,15 @@ function CategoriesFilterSelect({
 						htmlColor={BLUE_GREY}
 					/>
 
-					{allSelected
-						? intl.formatMessage(m.categoriesFilterAll)
-						: intl.formatMessage(m.categoriesFilterValue, {
-								count: selected.length,
-							})}
+					<Typography
+						sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
+					>
+						{allSelected
+							? intl.formatMessage(m.categoriesFilterAll)
+							: intl.formatMessage(m.categoriesFilterValue, {
+									count: selected.length,
+								})}
+					</Typography>
 				</Stack>
 			}
 			hiddenInput={
@@ -1293,7 +1305,6 @@ function CategoriesFilterSelect({
 				<Button
 					variant="text"
 					size="small"
-					sx={{ maxWidth: 400 }}
 					onClick={() => {
 						if (selected.length === 0) {
 							onSelectAll()
@@ -1310,14 +1321,17 @@ function CategoriesFilterSelect({
 				</Button>
 			}
 			footer={
-				<Button
-					fullWidth
-					variant="outlined"
-					sx={{ maxWidth: 400 }}
-					onClick={onAdvancedClick}
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'center',
+					}}
 				>
-					{intl.formatMessage(m.categoriesFilterAdvanced)}
-				</Button>
+					<Button fullWidth variant="outlined" onClick={onAdvancedClick}>
+						{intl.formatMessage(m.categoriesFilterAdvanced)}
+					</Button>
+				</Box>
 			}
 		>
 			{options.map((o) => {
@@ -1563,7 +1577,11 @@ function DateFilterSelect({
 						htmlColor={BLUE_GREY}
 					/>
 
-					{selectedOption.displayedValue}
+					<Typography
+						sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
+					>
+						{selectedOption.displayedValue}
+					</Typography>
 				</Stack>
 			}
 			hiddenInput={
@@ -1600,14 +1618,17 @@ function DateFilterSelect({
 				</>
 			}
 			footer={
-				<Button
-					fullWidth
-					variant="outlined"
-					sx={{ maxWidth: 400 }}
-					onClick={onAdvancedClick}
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'center',
+					}}
 				>
-					{intl.formatMessage(m.categoriesFilterAdvanced)}
-				</Button>
+					<Button fullWidth variant="outlined" onClick={onAdvancedClick}>
+						{intl.formatMessage(m.categoriesFilterAdvanced)}
+					</Button>
+				</Box>
 			}
 			onClose={() => {
 				if (value?.type !== 'range') {
