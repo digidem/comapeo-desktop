@@ -575,9 +575,9 @@ function ProjectSwitcherButton({
 								}}
 							>
 								<Typography
-									variant="cardHeader"
 									sx={{
 										flex: 1,
+										fontWeight: (theme) => theme.typography.fontWeightMedium,
 										maxWidth: '25ch',
 										overflow: 'hidden',
 										textOverflow: 'ellipsis',
