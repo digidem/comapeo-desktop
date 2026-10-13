@@ -22,9 +22,7 @@ import { useSpinDelay } from 'spin-delay'
 import * as v from 'valibot'
 
 import {
-	DARKER_ORANGE,
 	DARK_ORANGE,
-	GREEN,
 	PROJECT_BLUE,
 	PROJECT_GREEN,
 	PROJECT_GREY,
@@ -100,14 +98,14 @@ export function StartProjectDialogContent({
 		},
 	})
 
-	const iconSize = useIconSizeBasedOnTypography({
+	const heroIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'heroHeader',
 		multiplier: 4,
 	})
 
 	return (
 		<Stack direction="column" sx={{ flex: 1 }}>
-			<Box sx={{ padding: 2 }}>
+			<Box sx={{ padding: 4 }}>
 				<Button
 					variant="text"
 					startIcon={<Icon name="material-arrow-back" />}
@@ -134,21 +132,17 @@ export function StartProjectDialogContent({
 						<Box>
 							<Icon
 								name="material-manage-accounts-filled"
-								htmlColor={DARKER_ORANGE}
-								size={iconSize}
+								htmlColor={DARK_ORANGE}
+								size={heroIconSize}
 							/>
 						</Box>
 
-						<Typography component="h1" variant="heroHeader">
+						<Typography sx={{ textAlign: 'center' }} variant="heroHeader">
 							{intl.formatMessage(m.startProjectDialogTitle)}
 						</Typography>
 					</Stack>
 
-					<Typography
-						variant="heroSubheading"
-						color="textSecondary"
-						sx={{ textAlign: 'center' }}
-					>
+					<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
 						{intl.formatMessage(m.startProjectDialogDescription)}
 					</Typography>
 
@@ -357,8 +351,6 @@ export function AppUsageConsentDialogContent({
 	deviceName?: string
 	onClose: () => void
 }) {
-	const intl = useIntl()
-
 	const [contentToDisplay, setContentToDisplay] = useState<
 		'interstitial' | 'success'
 	>('interstitial')
@@ -374,73 +366,7 @@ export function AppUsageConsentDialogContent({
 		)
 	}
 
-	return (
-		<Stack direction="column">
-			<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
-				<Stack direction="column" sx={{ gap: 6, alignItems: 'center' }}>
-					<Box>
-						<Icon
-							name="material-check-circle-rounded"
-							htmlColor={GREEN}
-							size="96px"
-						/>
-					</Box>
-
-					<Typography
-						component="h1"
-						variant="heroHeader"
-						sx={{ textAlign: 'center', textWrap: 'balance' }}
-					>
-						{intl.formatMessage(m.appUsageConsentSuccessTitle)}
-					</Typography>
-
-					<Typography
-						variant="heroSubheading"
-						color="textSecondary"
-						sx={{ textAlign: 'center', textWrap: 'balance' }}
-					>
-						{deviceName
-							? intl.formatMessage(m.appUsageConsentSuccessDescription, {
-									b: Bold,
-									deviceName,
-								})
-							: intl.formatMessage(
-									m.appUsageConsentSuccessDescriptionNoDeviceName,
-								)}
-					</Typography>
-
-					<Typography sx={{ textAlign: 'center', textWrap: 'balance' }}>
-						{intl.formatMessage(m.appUsageConsentSuccessDetailsChangeSetting)}
-					</Typography>
-				</Stack>
-			</Stack>
-
-			<Box
-				sx={{
-					position: 'sticky',
-					right: 0,
-					left: 0,
-					top: 0,
-					bottom: 0,
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'center',
-					padding: 6,
-				}}
-			>
-				<Button
-					fullWidth
-					variant="outlined"
-					onClick={() => {
-						onClose()
-					}}
-					sx={{ maxWidth: 400 }}
-				>
-					{intl.formatMessage(m.appUsageConsentSuccessCloseButton)}
-				</Button>
-			</Box>
-		</Stack>
-	)
+	return <AppUsageSuccess deviceName={deviceName} onClose={onClose} />
 }
 
 function AppUsageInterstitial({
@@ -452,16 +378,22 @@ function AppUsageInterstitial({
 }) {
 	const intl = useIntl()
 
-	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
-	})
-
 	const setAppUsageMetrics = useMutation(setAppUsageMetricsMutationOptions())
 
 	const isActionVisiblyPending = useSpinDelay(
 		setAppUsageMetrics.status === 'pending',
 		{ delay: 100 },
 	)
+
+	const heroIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'heroHeader',
+		multiplier: 4,
+	})
+
+	const listItemIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'bodyCopy',
+		multiplier: 1,
+	})
 
 	return (
 		<Stack direction="column">
@@ -471,13 +403,12 @@ function AppUsageInterstitial({
 						<Box>
 							<Icon
 								name="noun-project-checklist"
-								htmlColor={DARKER_ORANGE}
-								size="96px"
+								htmlColor={DARK_ORANGE}
+								size={heroIconSize}
 							/>
 						</Box>
 
 						<Typography
-							component="h1"
 							variant="heroHeader"
 							sx={{ textAlign: 'center', textWrap: 'balance' }}
 						>
@@ -485,83 +416,70 @@ function AppUsageInterstitial({
 						</Typography>
 					</Stack>
 
-					<Typography sx={{ textAlign: 'center', textWrap: 'balance' }}>
+					<Typography
+						variant="heroSubheading"
+						sx={{ textAlign: 'center', textWrap: 'balance' }}
+					>
 						{intl.formatMessage(m.appUsageConsentInterstitialDescription)}
 					</Typography>
 
-					<List disablePadding sx={{ paddingInline: 10 }}>
-						<Stack direction="column" sx={{ gap: 4 }}>
-							<ListItem
-								sx={{ gap: 2, alignItems: 'stretch' }}
-								disableGutters
-								disablePadding
-							>
-								<Icon
-									name="openmoji-puzzle-piece"
-									size={iconSize}
-									sx={{ alignSelf: 'baseline' }}
-								/>
+					<Stack
+						component={List}
+						direction="column"
+						sx={{ paddingInline: 10, gap: 4 }}
+					>
+						<ListItem sx={{ gap: 2, alignItems: 'stretch' }}>
+							<Icon
+								name="openmoji-puzzle-piece"
+								size={listItemIconSize}
+								sx={{ alignSelf: 'baseline' }}
+							/>
 
-								<Typography color="textTertiary">
-									{intl.formatMessage(
-										m.appUsageConsentInterstitialDetailsIdNumbers,
-									)}
-								</Typography>
-							</ListItem>
+							<Typography color="textTertiary">
+								{intl.formatMessage(
+									m.appUsageConsentInterstitialDetailsIdNumbers,
+								)}
+							</Typography>
+						</ListItem>
 
-							<ListItem
-								sx={{ gap: 2, alignItems: 'stretch' }}
-								disableGutters
-								disablePadding
-							>
-								<Icon
-									name="openmoji-cross-mark"
-									size={iconSize}
-									sx={{ alignSelf: 'baseline' }}
-								/>
+						<ListItem sx={{ gap: 2, alignItems: 'stretch' }}>
+							<Icon
+								name="openmoji-cross-mark"
+								size={listItemIconSize}
+								sx={{ alignSelf: 'baseline' }}
+							/>
 
-								<Typography color="textTertiary">
-									{intl.formatMessage(
-										m.appUsageConsentInterstitialDetailsIpAddresses,
-									)}
-								</Typography>
-							</ListItem>
+							<Typography color="textTertiary">
+								{intl.formatMessage(
+									m.appUsageConsentInterstitialDetailsIpAddresses,
+								)}
+							</Typography>
+						</ListItem>
 
-							<ListItem
-								sx={{ gap: 2, alignItems: 'stretch' }}
-								disableGutters
-								disablePadding
-							>
-								<Icon
-									name="openmoji-switch"
-									size={iconSize}
-									sx={{ alignSelf: 'baseline' }}
-								/>
+						<ListItem
+							sx={{ gap: 2, alignItems: 'stretch' }}
+							disableGutters
+							disablePadding
+						>
+							<Icon
+								name="openmoji-switch"
+								size={listItemIconSize}
+								sx={{ alignSelf: 'baseline' }}
+							/>
 
-								<Typography color="textTertiary">
-									{intl.formatMessage(
-										m.appUsageConsentInterstitialDetailsTurnOffAnytime,
-									)}
-								</Typography>
-							</ListItem>
-						</Stack>
-					</List>
+							<Typography color="textTertiary">
+								{intl.formatMessage(
+									m.appUsageConsentInterstitialDetailsTurnOffAnytime,
+								)}
+							</Typography>
+						</ListItem>
+					</Stack>
 				</Stack>
 			</Stack>
 
-			<Box
-				sx={{
-					position: 'sticky',
-					right: 0,
-					left: 0,
-					top: 0,
-					bottom: 0,
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'center',
-					padding: 6,
-					gap: 4,
-				}}
+			<Stack
+				direction="row"
+				sx={{ flexWrap: 'wrap', gap: 4, justifyContent: 'center', padding: 6 }}
 			>
 				<Button
 					fullWidth
@@ -578,7 +496,6 @@ function AppUsageInterstitial({
 						})
 						onClose()
 					}}
-					sx={{ maxWidth: 400 }}
 				>
 					{intl.formatMessage(m.appUsageConsentInterstitialDenyButton)}
 				</Button>
@@ -603,9 +520,83 @@ function AppUsageInterstitial({
 							},
 						)
 					}}
-					sx={{ maxWidth: 400 }}
 				>
 					{intl.formatMessage(m.appUsageConsentInterstitialAllowButton)}
+				</Button>
+			</Stack>
+		</Stack>
+	)
+}
+
+function AppUsageSuccess({
+	deviceName,
+	onClose,
+}: {
+	deviceName: string | undefined
+	onClose: () => void
+}) {
+	const intl = useIntl()
+
+	const heroIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'heroHeader',
+		multiplier: 4,
+	})
+
+	return (
+		<Stack direction="column">
+			<Stack direction="column" sx={{ flex: 1, gap: 10, padding: 20 }}>
+				<Stack direction="column" sx={{ gap: 20 }}>
+					<Stack direction="column" sx={{ alignItems: 'center', gap: 6 }}>
+						<Icon
+							name="material-check-circle-rounded"
+							color="success"
+							size={heroIconSize}
+						/>
+
+						<Typography
+							variant="heroHeader"
+							sx={{ textAlign: 'center', textWrap: 'balance' }}
+						>
+							{intl.formatMessage(m.appUsageConsentSuccessTitle)}
+						</Typography>
+
+						<Typography
+							variant="heroSubheading"
+							sx={{ textAlign: 'center', textWrap: 'balance' }}
+						>
+							{deviceName
+								? intl.formatMessage(m.appUsageConsentSuccessDescription, {
+										b: Bold,
+										deviceName,
+									})
+								: intl.formatMessage(
+										m.appUsageConsentSuccessDescriptionNoDeviceName,
+									)}
+						</Typography>
+					</Stack>
+
+					<Typography sx={{ textAlign: 'center', textWrap: 'balance' }}>
+						{intl.formatMessage(m.appUsageConsentSuccessDetailsChangeSetting)}
+					</Typography>
+				</Stack>
+			</Stack>
+
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'center',
+					padding: 6,
+				}}
+			>
+				<Button
+					fullWidth
+					variant="outlined"
+					onClick={() => {
+						onClose()
+					}}
+				>
+					{intl.formatMessage(m.appUsageConsentSuccessCloseButton)}
 				</Button>
 			</Box>
 		</Stack>
