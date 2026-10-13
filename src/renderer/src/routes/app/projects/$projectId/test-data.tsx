@@ -83,7 +83,6 @@ export const Route = createFileRoute('/app/projects/$projectId/test-data')({
 	component: RouteComponent,
 })
 
-const FORM_ID = 'create-test-data-form'
 const MIN_OBSERVATION_COUNT = 1
 const MAX_OBSERVATION_COUNT = 1000
 const DEFAULT_BOUNDED_DISTANCE_KM = 50
@@ -218,6 +217,7 @@ function RouteComponent() {
 
 	const componentId = useId()
 
+	const formId = `${componentId}-form`
 	const observationCountFieldBaseId = `${componentId}-observation-count`
 	const longitudeFieldBaseId = `${componentId}-longitude`
 	const latitudeFieldBaseId = `${componentId}-latitude`
@@ -238,10 +238,7 @@ function RouteComponent() {
 								borderBottom: `1px solid ${BLUE_GREY}`,
 							}}
 						>
-							<Typography
-								variant="h1"
-								sx={{ fontWeight: 500, textAlign: 'center' }}
-							>
+							<Typography variant="pageTitle" sx={{ textAlign: 'center' }}>
 								{intl.formatMessage(m.navTitle)}
 							</Typography>
 						</Stack>
@@ -257,7 +254,7 @@ function RouteComponent() {
 							<Box sx={{ padding: 6, overflow: 'auto' }}>
 								<Box
 									component="form"
-									id={FORM_ID}
+									id={formId}
 									noValidate
 									autoComplete="off"
 									onSubmit={(event) => {
@@ -286,7 +283,6 @@ function RouteComponent() {
 																	field.state.meta.isValid ? undefined : 'error'
 																}
 																component="span"
-																variant="body2"
 															>
 																{field.state.meta.errors.length > 0
 																	? field.state.meta.errors[0]?.message
@@ -362,7 +358,6 @@ function RouteComponent() {
 																					: 'error'
 																			}
 																			component="span"
-																			variant="body2"
 																		>
 																			{field.state.meta.errors.length > 0
 																				? field.state.meta.errors[0]?.message
@@ -403,7 +398,6 @@ function RouteComponent() {
 																					: 'error'
 																			}
 																			component="span"
-																			variant="body2"
 																		>
 																			{field.state.meta.errors.length > 0
 																				? field.state.meta.errors[0]?.message
@@ -445,7 +439,6 @@ function RouteComponent() {
 																			: 'error'
 																	}
 																	component="span"
-																	variant="body2"
 																>
 																	{field.state.meta.errors.length > 0
 																		? field.state.meta.errors[0]?.message
@@ -502,13 +495,12 @@ function RouteComponent() {
 									{([canSubmit, isSubmitting]) => (
 										<Button
 											type="submit"
-											form={FORM_ID}
+											form={formId}
 											fullWidth
 											variant="contained"
 											loading={isSubmitting}
 											loadingPosition="start"
 											aria-disabled={!canSubmit}
-											sx={{ maxWidth: 400 }}
 										>
 											{intl.formatMessage(m.create)}
 										</Button>
