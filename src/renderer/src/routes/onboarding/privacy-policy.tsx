@@ -156,7 +156,7 @@ function RouteComponent() {
 									border: `1px solid ${BLUE_05}`,
 									borderRadius: 2,
 									gap: 5,
-									paddingY: 5,
+									paddingBlock: 5,
 								}}
 							>
 								<Stack
