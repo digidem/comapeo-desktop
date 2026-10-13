@@ -159,7 +159,7 @@ function RouteComponent() {
 
 	const backIconSize = useIconSizeBasedOnTypography({
 		variant: 'pageTitle',
-		multiplier: 1.25,
+		multiplier: 1.5,
 	})
 
 	return (
@@ -171,7 +171,7 @@ function RouteComponent() {
 					sx={{
 						alignItems: 'center',
 						borderBottom: `1px solid ${BLUE_05}`,
-						gap: 4,
+						gap: 2,
 						padding: 4,
 					}}
 				>
@@ -189,6 +189,7 @@ function RouteComponent() {
 								replace: true,
 							})
 						}}
+						sx={{ color: (theme) => theme.palette.text.secondary }}
 					>
 						<Icon name="material-arrow-back" size={backIconSize} />
 					</IconButton>

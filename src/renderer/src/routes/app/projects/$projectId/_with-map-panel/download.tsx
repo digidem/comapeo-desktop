@@ -259,7 +259,7 @@ function DownloadForm({
 
 	const backIconSize = useIconSizeBasedOnTypography({
 		variant: 'pageTitle',
-		multiplier: 1.25,
+		multiplier: 1.5,
 	})
 
 	const formId = useId()
@@ -272,7 +272,7 @@ function DownloadForm({
 					direction="row"
 					sx={{
 						alignItems: 'center',
-						gap: 4,
+						gap: 2,
 						padding: 4,
 						borderBottom: `1px solid ${BLUE_05}`,
 					}}
@@ -286,6 +286,7 @@ function DownloadForm({
 									}
 									onBack()
 								}}
+								sx={{ color: (theme) => theme.palette.text.secondary }}
 							>
 								<Icon name="material-arrow-back" size={backIconSize} />
 							</IconButton>

@@ -217,7 +217,7 @@ function AttachmentPanel({
 
 	const backIconSize = useIconSizeBasedOnTypography({
 		variant: 'pageTitle',
-		multiplier: 1.25,
+		multiplier: 1.5,
 	})
 
 	return (
@@ -227,7 +227,7 @@ function AttachmentPanel({
 				sx={{
 					alignItems: 'center',
 					borderBottom: `1px solid ${BLUE_05}`,
-					gap: 4,
+					gap: 2,
 					padding: 4,
 				}}
 			>
@@ -244,6 +244,7 @@ function AttachmentPanel({
 							replace: true,
 						})
 					}}
+					sx={{ color: (theme) => theme.palette.text.secondary }}
 				>
 					<Icon name="material-arrow-back" size={backIconSize} />
 				</IconButton>

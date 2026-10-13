@@ -37,7 +37,7 @@ function RouteComponent() {
 
 	const router = useRouter()
 
-	const headerIconSize = useIconSizeBasedOnTypography({
+	const backIconSize = useIconSizeBasedOnTypography({
 		variant: 'pageTitle',
 		multiplier: 1.5,
 	})
@@ -51,8 +51,7 @@ function RouteComponent() {
 					alignItems: 'center',
 					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 2,
-					paddingBlock: 4,
-					paddingInline: 6,
+					padding: 4,
 				}}
 			>
 				<IconButton
@@ -66,8 +65,9 @@ function RouteComponent() {
 
 						router.navigate({ to: '/app', replace: true })
 					}}
+					sx={{ color: (theme) => theme.palette.text.secondary }}
 				>
-					<Icon name="material-arrow-back" size={headerIconSize} />
+					<Icon name="material-arrow-back" size={backIconSize} />
 				</IconButton>
 
 				<Typography variant="pageTitle" sx={{ textAlign: 'center' }}>
