@@ -394,10 +394,10 @@ function initMainWindow({
 				? join(app.getAppPath(), 'assets', 'icon.png')
 				: undefined,
 		show: false,
-		backgroundColor: BLUE_02,
+		backgroundColor: BLUE_01,
 		titleBarStyle: 'hiddenInset',
 		titleBarOverlay: true,
-		accentColor: BLUE_01,
+		accentColor: BLUE_02,
 		webPreferences: {
 			preload: MAIN_WINDOW_PRELOAD_PATH,
 			additionalArguments: [
