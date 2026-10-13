@@ -25,7 +25,6 @@ import { DeviceIcon } from '../../-shared/device-icon.tsx'
 import { ListRowLink } from '../../../-components/list-row-link.tsx'
 import {
 	BLUE_GREY,
-	DARK_GREY,
 	LIGHT_COMAPEO_BLUE,
 	LIGHT_GREY,
 } from '../../../../../colors.ts'
@@ -106,7 +105,7 @@ function RouteComponent() {
 				}}
 			>
 				<Stack direction="row" sx={{ alignItems: 'center', flex: 1, gap: 4 }}>
-					<Typography variant="h1" sx={{ fontWeight: 500 }}>
+					<Typography variant="pageTitle">
 						{intl.formatMessage(m.navTitle)}
 					</Typography>
 
@@ -152,8 +151,8 @@ function MembersCountPill({ projectId }: { projectId: string }) {
 		>
 			<Typography
 				data-testid="exchange-network-connection-info"
-				variant="body2"
-				color="textSecondary"
+				variant="detailCopy"
+				color="textTertiary"
 				sx={{ whiteSpace: 'nowrap' }}
 			>
 				{intl.formatMessage(m.membersCount, {
@@ -198,8 +197,8 @@ function MembersSections({ projectId }: { projectId: string }) {
 		getDisplayableMembers(members)
 
 	const sectionIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
-		multiplier: 1,
+		typographyVariant: 'sectionLabel',
+		multiplier: 1.25,
 	})
 
 	return (
@@ -208,12 +207,12 @@ function MembersSections({ projectId }: { projectId: string }) {
 				<Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
 					<Icon name="material-manage-accounts-filled" size={sectionIconSize} />
 
-					<Typography component="h2" sx={{ textTransform: 'uppercase' }}>
+					<Typography component="h2" variant="sectionLabel">
 						{intl.formatMessage(m.coordinatorsSectionTitle)}
 					</Typography>
 				</Stack>
 
-				<Typography color="textSecondary">
+				<Typography>
 					{intl.formatMessage(m.coordinatorsSectionDescription)}
 				</Typography>
 			</Stack>
@@ -230,12 +229,12 @@ function MembersSections({ projectId }: { projectId: string }) {
 				<Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
 					<Icon name="material-people-filled" size={sectionIconSize} />
 
-					<Typography component="h2" sx={{ textTransform: 'uppercase' }}>
+					<Typography component="h2" variant="sectionLabel">
 						{intl.formatMessage(m.participantsSectionTitle)}
 					</Typography>
 				</Stack>
 
-				<Typography color="textSecondary">
+				<Typography>
 					{intl.formatMessage(m.participantsSectionDescription)}
 				</Typography>
 			</Stack>
@@ -247,9 +246,7 @@ function MembersSections({ projectId }: { projectId: string }) {
 					projectId={projectId}
 				/>
 			) : (
-				<Typography color="textSecondary">
-					{intl.formatMessage(m.noParticipants)}
-				</Typography>
+				<Typography>{intl.formatMessage(m.noParticipants)}</Typography>
 			)}
 
 			{remoteArchives.length > 0 ? (
@@ -263,7 +260,7 @@ function MembersSections({ projectId }: { projectId: string }) {
 								size={sectionIconSize}
 							/>
 
-							<Typography variant="h2" sx={{ textTransform: 'uppercase' }}>
+							<Typography component="h2" variant="sectionLabel">
 								{intl.formatMessage(m.remoteArchivesSectionTitle)}
 							</Typography>
 						</Stack>
@@ -323,27 +320,24 @@ function ActiveCollaboratorsList({
 	const intl = useIntl()
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
+		typographyVariant: 'bodyCopy',
 		multiplier: 1.25,
 	})
 
 	const actionIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
+		typographyVariant: 'bodyCopy',
 		multiplier: 2,
 	})
 
 	return (
-		<List
-			disablePadding
-			sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
-		>
+		<List sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
 			{devices.map((device) => {
 				const isSelf = device.deviceId === ownDeviceId
 
 				const displayedName = device.name || device.deviceId.slice(0, 12)
 
 				return (
-					<ListItem key={device.deviceId} disablePadding disableGutters>
+					<ListItem key={device.deviceId}>
 						<ListRowLink
 							to="/app/projects/$projectId/team/$deviceId"
 							params={{ projectId, deviceId: device.deviceId }}
@@ -356,9 +350,14 @@ function ActiveCollaboratorsList({
 										<Box component="span">{displayedName}</Box>
 
 										<Typography
+											color="textTertiary"
 											component="span"
-											color="textSecondary"
-											sx={{ marginInlineStart: 4 }}
+											variant="inherit"
+											sx={{
+												fontWeight: (theme) =>
+													theme.typography.fontWeightRegular,
+												marginInlineStart: 4,
+											}}
 										>
 											{intl.formatMessage(m.thisDevice)}
 										</Typography>
@@ -376,11 +375,12 @@ function ActiveCollaboratorsList({
 								</Box>
 							}
 							end={
-								<Icon
-									name="material-chevron-right-rounded"
-									htmlColor={DARK_GREY}
-									size={actionIconSize}
-								/>
+								<Box sx={{ color: (theme) => theme.palette.text.tertiary }}>
+									<Icon
+										name="material-chevron-right-rounded"
+										size={actionIconSize}
+									/>
+								</Box>
 							}
 						/>
 					</ListItem>
@@ -402,28 +402,25 @@ function PastCollaboratorsList({
 	const intl = useIntl()
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
+		typographyVariant: 'bodyCopy',
 		multiplier: 1.25,
 	})
 
 	return (
-		<List
-			disablePadding
-			sx={{ display: 'flex', flexDirection: 'column', gap: 10 }}
-		>
+		<List sx={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
 			{devices.map((device) => {
 				const isSelf = device.deviceId === ownDeviceId
 
 				const displayedName = device.name || device.deviceId.slice(0, 12)
 
 				return (
-					<ListItem key={device.deviceId} disablePadding disableGutters>
+					<ListItem key={device.deviceId}>
 						<Stack
 							direction="row"
 							sx={{
+								alignItems: 'center',
 								flex: 1,
 								justifyContent: 'space-between',
-								alignItems: 'center',
 								overflow: 'auto',
 							}}
 						>
@@ -447,11 +444,11 @@ function PastCollaboratorsList({
 
 								<Typography
 									sx={{
+										flex: 1,
+										fontWeight: (theme) => theme.typography.fontWeightMedium,
+										overflow: 'hidden',
 										textOverflow: 'ellipsis',
 										whiteSpace: 'nowrap',
-										overflow: 'hidden',
-										flex: 1,
-										fontWeight: 500,
 									}}
 								>
 									{isSelf ? (
