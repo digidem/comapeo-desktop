@@ -155,7 +155,7 @@ export function AdvancedFiltersDialogContent({
 					<Icon name="material-close" size={closeIconSize} />
 				</IconButton>
 
-				<Typography component="h1" variant="pageTitle">
+				<Typography variant="pageTitle">
 					{intl.formatMessage(m.advancedFiltersTitle)}
 				</Typography>
 			</Stack>

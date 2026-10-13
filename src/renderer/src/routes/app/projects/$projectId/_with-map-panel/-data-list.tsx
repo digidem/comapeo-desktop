@@ -375,6 +375,7 @@ export function DataList({
 					}}
 				>
 					<Stack
+						component="header"
 						direction="column"
 						sx={{
 							borderBottom: `1px solid ${BLUE_05}`,
@@ -388,7 +389,7 @@ export function DataList({
 								direction="row"
 								sx={{ alignItems: 'center', gap: 4, flexWrap: 'wrap' }}
 							>
-								<Typography component="h1" variant="pageTitle">
+								<Typography variant="pageTitle">
 									{intl.formatMessage(m.listTitle)}
 								</Typography>
 
