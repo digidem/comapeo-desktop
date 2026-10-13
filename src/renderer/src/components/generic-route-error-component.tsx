@@ -5,13 +5,13 @@ import Typography from '@mui/material/Typography'
 import { useRouter, type ErrorComponentProps } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, LIGHT_GREY, WHITE } from '../colors'
+import { BLUE_GREY, LIGHT_GREY, WHITE } from '../colors.ts'
 import { buildDocumentReloadURL } from '../lib/navigation.ts'
 
 export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 	const router = useRouter()
 
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const displayedError =
 		error instanceof Error
@@ -25,41 +25,37 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 		>
 			<Stack direction="column" sx={{ flex: 1, gap: 6, padding: 6 }}>
 				<Typography
-					variant="h1"
 					color="error"
-					sx={{ fontWeight: 500, textAlign: 'center' }}
+					variant="heroHeader"
+					sx={{ textAlign: 'center' }}
 				>
-					{t(m.somethingWentWrong)}
+					{intl.formatMessage(m.somethingWentWrong)}
 				</Typography>
 
-				<Typography variant="h2" sx={{ fontWeight: 500 }}>
-					{t(m.error)}
+				<Typography variant="heroSubheading">
+					{intl.formatMessage(m.error)}
 				</Typography>
 
 				<Box
 					sx={{
-						bgcolor: LIGHT_GREY,
-						padding: 4,
+						background: LIGHT_GREY,
 						border: `1px solid ${BLUE_GREY}`,
-						overflow: 'auto',
 						borderRadius: 2,
+						overflow: 'auto',
+						padding: 4,
 					}}
 				>
 					<Typography
 						component="pre"
-						variant="body2"
-						sx={{
-							fontFamily: 'monospace',
-							whiteSpace: 'pre-wrap',
-							overflowWrap: 'break-word',
-						}}
+						variant="detailCopy"
+						sx={{ overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}
 					>
 						{displayedError.toString()}
 					</Typography>
 				</Box>
 
-				<Typography variant="h2" sx={{ fontWeight: 500 }}>
-					{t(m.stackTrace)}
+				<Typography component="h2" variant="heroSubheading">
+					{intl.formatMessage(m.stackTrace)}
 				</Typography>
 
 				<Box
@@ -73,7 +69,7 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 				>
 					<Typography
 						component="pre"
-						variant="body2"
+						variant="detailCopy"
 						sx={{
 							fontFamily: 'monospace',
 							whiteSpace: 'pre-wrap',
@@ -85,15 +81,14 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 				</Box>
 			</Stack>
 
-			<Box
+			<Stack
+				direction="column"
 				sx={{
-					position: 'sticky',
-					bottom: 0,
-					padding: 6,
-					display: 'flex',
-					flexDirection: 'column',
 					alignItems: 'center',
+					bottom: 0,
 					gap: 4,
+					padding: 6,
+					position: 'sticky',
 				}}
 			>
 				<Button
@@ -104,9 +99,8 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 							reloadDocument: true,
 						})
 					}}
-					sx={{ maxWidth: 400 }}
 				>
-					{t(m.reload)}
+					{intl.formatMessage(m.reload)}
 				</Button>
 
 				<Button
@@ -120,9 +114,9 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 					}}
 					sx={{ maxWidth: 400 }}
 				>
-					{t(m.restart)}
+					{intl.formatMessage(m.restart)}
 				</Button>
-			</Box>
+			</Stack>
 		</Stack>
 	)
 }

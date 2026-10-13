@@ -1,5 +1,4 @@
 import type { CSSProperties } from 'react'
-import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
@@ -10,7 +9,7 @@ import * as v from 'valibot'
 import {
 	CustomNotFoundDataSchema,
 	buildDocumentReloadURL,
-} from '../lib/navigation'
+} from '../lib/navigation.ts'
 
 const CustomNotFoundDataPropSchema = v.looseObject({
 	data: CustomNotFoundDataSchema,
@@ -24,13 +23,13 @@ export function GenericRouteNotFoundComponent({
 }) {
 	const router = useRouter()
 
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	return (
 		<Stack
 			direction="column"
 			sx={{
-				bgcolor: backgroundColor,
+				background: backgroundColor,
 				flex: 1,
 				gap: 6,
 				height: '100%',
@@ -39,23 +38,22 @@ export function GenericRouteNotFoundComponent({
 		>
 			<Stack direction="column" sx={{ flex: 1, gap: 6, padding: 6 }}>
 				<Typography
-					variant="h1"
+					variant="heroHeader"
 					sx={{
-						fontWeight: 500,
+						overflowWrap: 'break-word',
 						textAlign: 'center',
 						whiteSpace: 'pre-wrap',
-						overflowWrap: 'break-word',
 					}}
 				>
-					{t(m.title)}
+					{intl.formatMessage(m.title)}
 				</Typography>
 
 				{v.is(CustomNotFoundDataPropSchema, data) ? (
 					<Typography
 						sx={{
+							overflowWrap: 'break-word',
 							textAlign: 'center',
 							whiteSpace: 'pre-wrap',
-							overflowWrap: 'break-word',
 						}}
 					>
 						{data.data.message}
@@ -63,46 +61,53 @@ export function GenericRouteNotFoundComponent({
 				) : null}
 			</Stack>
 
-			<Box sx={{ position: 'sticky', bottom: 0, padding: 6, display: 'flex' }}>
-				<Stack direction="column" sx={{ gap: 4, flex: 1 }}>
+			<Stack
+				direction="column"
+				sx={{
+					alignItems: 'center',
+					bottom: 0,
+					gap: 4,
+					padding: 6,
+					position: 'sticky',
+				}}
+			>
+				<Button
+					fullWidth
+					onClick={() => {
+						router.invalidate()
+					}}
+					sx={{ alignSelf: 'center' }}
+				>
+					{intl.formatMessage(m.tryAgain)}
+				</Button>
+
+				{router.history.canGoBack() ? (
 					<Button
 						fullWidth
+						variant="outlined"
 						onClick={() => {
-							router.invalidate()
+							router.history.back()
 						}}
-						sx={{ maxWidth: 400, alignSelf: 'center' }}
+						sx={{ alignSelf: 'center' }}
 					>
-						{t(m.tryAgain)}
+						{intl.formatMessage(m.goBack)}
 					</Button>
-
-					{router.history.canGoBack() ? (
-						<Button
-							fullWidth
-							variant="outlined"
-							onClick={() => {
-								router.history.back()
-							}}
-							sx={{ maxWidth: 400, alignSelf: 'center' }}
-						>
-							{t(m.goBack)}
-						</Button>
-					) : (
-						<Button
-							fullWidth
-							variant="outlined"
-							onClick={() => {
-								router.navigate({
-									href: buildDocumentReloadURL(router, '/'),
-									reloadDocument: true,
-								})
-							}}
-							sx={{ maxWidth: 400, alignSelf: 'center' }}
-						>
-							{t(m.reloadApp)}
-						</Button>
-					)}
-				</Stack>
-			</Box>
+				) : (
+					<Button
+						fullWidth
+						variant="outlined"
+						onClick={() => {
+							router.navigate({
+								href: buildDocumentReloadURL(router, '/'),
+								reloadDocument: true,
+							})
+						}}
+						sx={{ alignSelf: 'center' }}
+					>
+						{intl.formatMessage(m.reloadApp)}
+					</Button>
+				)}
+			</Stack>
 		</Stack>
 	)
 }
