@@ -21,7 +21,7 @@ import {
 } from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 
-import { BLUE_05, GREEN_00 } from '../../../../shared/colors.ts'
+import { BLUE_05 } from '../../../../shared/colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
@@ -358,8 +358,8 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 							)}
 							icon={
 								<Icon
+									color="success"
 									name="material-check-circle-rounded"
-									htmlColor={GREEN_00}
 									size={inviteDetailsIconSize}
 								/>
 							}

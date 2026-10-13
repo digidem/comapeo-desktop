@@ -551,9 +551,9 @@ function ListedProjectCard({
 
 					{highlight ? (
 						<Icon
+							color="primary"
 							name="material-check-circle-rounded"
 							size={activeProjectIconSize}
-							htmlColor={BLUE_03}
 						/>
 					) : null}
 				</Stack>

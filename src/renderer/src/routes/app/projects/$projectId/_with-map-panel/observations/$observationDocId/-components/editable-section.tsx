@@ -8,12 +8,7 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 
-import {
-	BLUE_03,
-	BLUE_05,
-	BLUE_06,
-	GREEN_00,
-} from '../../../../../../../../../../shared/colors.ts'
+import { BLUE_06 } from '../../../../../../../../../../shared/colors.ts'
 import { Icon } from '../../../../../../../../components/icon.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../../../../hooks/icon.ts'
 
@@ -107,21 +102,21 @@ export function EditableSection({
 						<CircularProgress disableShrink size={editIconSize} />
 					) : editState === 'success' ? (
 						<Icon
+							color="success"
 							name="material-check-circle-rounded"
-							sx={{ height: editIconSize, width: editIconSize }}
-							htmlColor={GREEN_00}
+							size={editIconSize}
 						/>
 					) : (
 						<Icon
-							name="material-edit-filled"
-							sx={{ height: editIconSize, width: editIconSize }}
-							htmlColor={
+							color={
 								editState === 'active'
-									? BLUE_03
+									? 'primary'
 									: disabled
-										? BLUE_05
+										? 'disabled'
 										: undefined
 							}
+							name="material-edit-filled"
+							size={editIconSize}
 						/>
 					)}
 				</Box>

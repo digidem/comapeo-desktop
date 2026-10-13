@@ -25,10 +25,8 @@ import { defineMessages, useIntl } from 'react-intl'
 
 import {
 	BLACK_00,
-	BLUE_03,
 	BLUE_05,
 	BLUE_06,
-	GREEN_00,
 	ORANGE_00,
 	WHITE_00,
 } from '../../../../../../../shared/colors.ts'
@@ -450,9 +448,9 @@ function SyncProgress({
 	return (
 		<Stack direction="column" sx={{ gap: 3, padding: 6 }}>
 			{stage.name === 'complete-full' ? (
-				<Icon name="material-check" htmlColor={GREEN_00} />
+				<Icon name="material-check" color="success" />
 			) : stage.name !== 'waiting' ? (
-				<Icon name="material-bolt-sharp" htmlColor={BLUE_03} />
+				<Icon name="material-bolt-sharp" color="primary" />
 			) : null}
 
 			<LinearProgress {...progressProps} />

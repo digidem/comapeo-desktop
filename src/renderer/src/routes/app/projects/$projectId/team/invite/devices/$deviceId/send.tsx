@@ -27,7 +27,6 @@ import { DisconnectedIndicator } from '../-shared/disconnected-indicator.tsx'
 import { DeviceIcon } from '../../../../../-shared/device-icon.tsx'
 import {
 	BLACK_00,
-	BLUE_03,
 	BLUE_05,
 	GREEN_00,
 	WHITE_00,
@@ -397,7 +396,7 @@ function InvitePending({
 					sx={{ alignItems: 'center', gap: 20, padding: 6 }}
 				>
 					<Stack direction="column" sx={{ alignItems: 'center' }}>
-						<Icon name="comapeo-send" htmlColor={BLUE_03} size={sendIconSize} />
+						<Icon name="comapeo-send" color="primary" size={sendIconSize} />
 
 						<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
 							{intl.formatMessage(m.waiting)}
