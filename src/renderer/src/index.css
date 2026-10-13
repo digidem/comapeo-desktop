@@ -1,10 +1,11 @@
-@import '@fontsource-variable/rubik';
+@import '../../../node_modules/@fontsource-variable/rubik/index.css';
 
 :root {
 	scrollbar-color: #ccccd6 transparent;
 }
 
 body {
+	font-family: 'Rubik Variable', sans-serif;
 	/* NOTE: Prevents scroll bars showing when overflow occurs due to usage of MUI Tooltip */
 	overflow: hidden;
 }
