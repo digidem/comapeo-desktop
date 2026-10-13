@@ -118,7 +118,7 @@ export function TwoPanelLayout({
 						gridTemplateColumns: 'repeat(2, 1fr)',
 						gridTemplateRows: 'repeat(3, auto)',
 						paddingBlock: 6,
-						paddingX: 1,
+						paddingInline: 1,
 						placeItems: 'center',
 						rowGap: 1,
 					}}

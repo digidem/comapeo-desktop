@@ -158,14 +158,14 @@ function SuccessPanel({
 
 			<Box
 				sx={{
+					alignItems: 'center',
+					bottom: 0,
 					display: 'flex',
 					flexDirection: 'column',
 					gap: 4,
-					paddingX: 6,
 					paddingBottom: 6,
+					paddingInline: 6,
 					position: 'sticky',
-					bottom: 0,
-					alignItems: 'center',
 					zIndex: 1,
 				}}
 			>
@@ -376,14 +376,14 @@ function DownloadForm({
 
 					<Box
 						sx={{
+							alignItems: 'center',
+							bottom: 0,
 							display: 'flex',
 							flexDirection: 'column',
 							gap: 4,
-							paddingX: 6,
 							paddingBottom: 6,
+							paddingInline: 6,
 							position: 'sticky',
-							bottom: 0,
-							alignItems: 'center',
 							zIndex: 1,
 						}}
 					>

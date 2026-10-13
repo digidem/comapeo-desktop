@@ -162,7 +162,7 @@ function RouteComponent() {
 								<Stack
 									component="section"
 									direction="column"
-									sx={{ paddingX: 5, gap: 3 }}
+									sx={{ paddingInline: 5, gap: 3 }}
 								>
 									<Typography
 										component="h3"
@@ -210,7 +210,7 @@ function RouteComponent() {
 								<Stack
 									component="section"
 									direction="column"
-									sx={{ paddingX: 5, gap: 3 }}
+									sx={{ paddingInline: 5, gap: 3 }}
 								>
 									<Typography
 										component="h3"
