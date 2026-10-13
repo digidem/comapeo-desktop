@@ -11,7 +11,7 @@ import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARKER_ORANGE } from '../../../../colors.ts'
+import { BLUE_GREY, DARK_ORANGE } from '../../../../colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../components/icon.tsx'
@@ -66,7 +66,7 @@ export function DataAndPrivacySection() {
 				>
 					<Icon
 						name="material-symbols-encrypted-weight200"
-						htmlColor={DARKER_ORANGE}
+						htmlColor={DARK_ORANGE}
 						size={iconSize}
 					/>
 

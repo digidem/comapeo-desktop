@@ -31,7 +31,7 @@ import type { UnitSystem } from '../../../../../../../../../shared/unit-system.t
 import {
 	BLACK,
 	BLUE_GREY,
-	DARKER_ORANGE,
+	DARK_ORANGE,
 	GREEN,
 	LIGHT_GREY,
 	WHITE,
@@ -641,7 +641,7 @@ function ObservationDetailsPanel({
 								>
 									<Icon
 										name="material-symbols-location-filled"
-										htmlColor={DARKER_ORANGE}
+										htmlColor={DARK_ORANGE}
 									/>
 
 									{typeof observation.lon === 'number' &&

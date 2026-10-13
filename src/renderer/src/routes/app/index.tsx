@@ -26,7 +26,7 @@ import * as v from 'valibot'
 import {
 	BLUE_GREY,
 	COMAPEO_BLUE,
-	DARKER_ORANGE,
+	DARK_ORANGE,
 	GREEN,
 	LIGHT_COMAPEO_BLUE,
 	LIGHT_GREY,
@@ -314,7 +314,7 @@ function GetStartedPanel() {
 					<Box sx={{ position: 'relative' }}>
 						<Icon
 							name="material-symbols-computer"
-							htmlColor={DARKER_ORANGE}
+							htmlColor={DARK_ORANGE}
 							size={desktopIconSize}
 						/>
 

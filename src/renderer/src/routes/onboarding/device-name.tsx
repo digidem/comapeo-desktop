@@ -16,7 +16,7 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../colors.ts'
+import { DARK_ORANGE, LIGHT_GREY, WHITE } from '../../colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { DecentTextField } from '../../components/decent-text-field.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
@@ -122,7 +122,7 @@ function RouteComponent() {
 						<Box sx={{ alignSelf: 'center' }}>
 							<Icon
 								name="material-symbols-computer"
-								htmlColor={DARKER_ORANGE}
+								htmlColor={DARK_ORANGE}
 								size={iconSize}
 							/>
 						</Box>
