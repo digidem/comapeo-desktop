@@ -27,8 +27,8 @@ import {
 
 import { DeviceIcon } from '../../-shared/device-icon.tsx'
 import {
+	BLACK_02,
 	BLUE_GREY,
-	DARK_GREY,
 	LIGHT_GREY,
 	PROJECT_ORANGE,
 	WHITE,
@@ -443,7 +443,7 @@ function LeaveProjectDialogContent({
 								<DeviceIcon
 									deviceType={member.deviceType}
 									size={deviceIconSize}
-									htmlColor={DARK_GREY}
+									htmlColor={BLACK_02}
 								/>
 
 								<Box

@@ -50,7 +50,6 @@ import { SyncedIndicatorLine } from '../../-shared/synced-indicator-line.tsx'
 import {
 	BLACK_00,
 	BLUE_GREY,
-	DARK_GREY,
 	LIGHT_COMAPEO_BLUE,
 	LIGHT_GREY,
 	WHITE,
@@ -986,7 +985,6 @@ function FilterPill({
 
 	const removeFilterButtonSize = useIconSizeBasedOnTypography({
 		variant: 'bodyCopy',
-		multiplier: 1,
 	})
 
 	const removeButton = (
@@ -995,17 +993,13 @@ function FilterPill({
 				onRemove()
 			}}
 			sx={{
+				border: (theme) => `1px solid ${theme.palette.text.tertiary}`,
+				borderRadius: '50%',
 				flex: 0,
 				padding: 0,
-				borderRadius: '50%',
-				border: `1px solid ${DARK_GREY}`,
 			}}
 		>
-			<Icon
-				name="material-close"
-				htmlColor={DARK_GREY}
-				size={removeFilterButtonSize}
-			/>
+			<Icon name="material-close" size={removeFilterButtonSize} />
 		</IconButton>
 	)
 

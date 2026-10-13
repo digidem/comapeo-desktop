@@ -8,7 +8,7 @@ import Popper from '@mui/material/Popper'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 
-import { BLUE_GREY, DARK_GREY, WHITE } from '../../../../../colors.ts'
+import { BLACK_02, BLUE_GREY, WHITE } from '../../../../../colors.ts'
 import { Icon } from '../../../../../components/icon.tsx'
 
 export function FilterSelect({
@@ -126,7 +126,7 @@ export function FilterSelect({
 						<Icon
 							name="material-expand-more-rounded"
 							sx={{ transform: anchorElement ? 'rotate(180deg)' : undefined }}
-							htmlColor={DARK_GREY}
+							htmlColor={BLACK_02}
 						/>
 					</Stack>
 

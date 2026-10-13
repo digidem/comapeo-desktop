@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY, LIGHT_GREY } from '../colors.ts'
+import { BLACK_02, BLUE_GREY, LIGHT_GREY } from '../colors.ts'
 import { useIconSizeBasedOnTypography } from '../hooks/icon.ts'
 import { Icon } from './icon.tsx'
 
@@ -79,7 +79,7 @@ export function ErrorDialogContent({
 										? 'material-expand-less'
 										: 'material-expand-more'
 								}
-								htmlColor={DARK_GREY}
+								htmlColor={BLACK_02}
 							/>
 						</Stack>
 					</ButtonBase>

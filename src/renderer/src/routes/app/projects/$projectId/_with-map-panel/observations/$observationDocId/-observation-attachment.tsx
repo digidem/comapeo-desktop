@@ -7,9 +7,10 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import type { SxProps } from '@mui/material/styles'
 
-import { BLUE_GREY, DARK_GREY } from '../../../../../../../colors.ts'
+import { BLACK_02, BLUE_GREY } from '../../../../../../../colors.ts'
 import { Icon } from '../../../../../../../components/icon.tsx'
 import { IconButtonLink } from '../../../../../../../components/link.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../../../../hooks/icon.ts'
 import type {
 	AudioAttachment,
 	AudioAttachmentVariant,
@@ -89,9 +90,14 @@ export function ObservationAudioAttachmentPreview({
 		>
 			<Stack
 				direction="column"
-				sx={{ gap: 2, justifyContent: 'center', alignItems: 'center' }}
+				sx={{
+					alignItems: 'center',
+					color: (theme) => theme.palette.text.secondary,
+					gap: 2,
+					justifyContent: 'center',
+				}}
 			>
-				<Icon name="material-volume-up" htmlColor={DARK_GREY} />
+				<Icon name="material-volume-up" />
 
 				<AudioDurationText
 					projectId={projectId}
@@ -127,24 +133,34 @@ export function ObservationUnsupportedAttachmentPreview({
 					overflow: 'auto',
 				}}
 			>
-				<Icon name="material-attachment" htmlColor={DARK_GREY} />
+				<Icon name="material-attachment" htmlColor={BLACK_02} />
 			</Stack>
 		</IconButton>
 	)
 }
 
 export function ObservationAttachmentError() {
+	const iconSize = useIconSizeBasedOnTypography({
+		variant: 'bodyCopy',
+		multiplier: 2,
+	})
+
 	return (
 		<Box sx={BASE_ATTACHMENT_CONTAINER_STYLE}>
-			<Icon name="material-error" color="error" size={30} />
+			<Icon name="material-error" color="error" size={iconSize} />
 		</Box>
 	)
 }
 
 export function ObservationAttachmentPending() {
+	const iconSize = useIconSizeBasedOnTypography({
+		variant: 'bodyCopy',
+		multiplier: 2,
+	})
+
 	return (
 		<Box sx={BASE_ATTACHMENT_CONTAINER_STYLE}>
-			<CircularProgress disableShrink size={30} />
+			<CircularProgress disableShrink size={iconSize} />
 		</Box>
 	)
 }
@@ -173,7 +189,9 @@ function AudioDurationText({
 	const audioInfo = use(audioInfoResource(url))
 
 	return (
-		<Typography sx={{ fontWeight: 500 }}>
+		<Typography
+			sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
+		>
 			{getFormattedDuration(audioInfo.duration)}
 		</Typography>
 	)
