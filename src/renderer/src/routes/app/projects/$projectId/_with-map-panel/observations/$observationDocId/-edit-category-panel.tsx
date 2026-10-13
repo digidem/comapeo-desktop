@@ -33,6 +33,7 @@ import {
 import { DecentDialog } from '../../../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../../../components/icon.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../../../../hooks/icon.ts'
 import { getLocaleStateQueryOptions } from '../../../../../../../lib/queries/app-settings.ts'
 import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations.ts'
 
@@ -53,6 +54,11 @@ export function EditCategoryPanel({
 }) {
 	const intl = useIntl()
 
+	const iconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'pageTitle',
+		multiplier: 1.25,
+	})
+
 	const isCategoryUpdatePending =
 		useIsMutating({
 			mutationKey: UPDATE_OBSERVATION_CATEGORY_MUTATION_KEY,
@@ -66,14 +72,16 @@ export function EditCategoryPanel({
 				component="nav"
 				sx={{
 					alignItems: 'center',
+					borderBottom: `1px solid ${BLUE_GREY}`,
 					gap: 4,
 					padding: 4,
-					borderBottom: `1px solid ${BLUE_GREY}`,
 				}}
 			>
 				<IconButton
 					aria-disabled={isCategoryUpdatePending}
-					aria-label={intl.formatMessage(m.closePanelAccessibleLabel)}
+					aria-label={intl.formatMessage(
+						m.editCategoryPanelCloseAccessibleLabel,
+					)}
 					onClick={() => {
 						if (isCategoryUpdatePending) {
 							return
@@ -82,22 +90,29 @@ export function EditCategoryPanel({
 						onClose(false)
 					}}
 				>
-					<Icon name="material-close" size={30} />
+					<Icon name="material-close" size={iconSize} />
 				</IconButton>
 
-				<Typography variant="h1" sx={{ fontWeight: 500 }}>
+				<Typography component="h1" variant="pageTitle">
 					{intl.formatMessage(m.editCategoryPanelTitle)}
 				</Typography>
 			</Stack>
 
-			<Box sx={{ overflow: 'auto' }}>
+			<Box
+				sx={{
+					display: 'flex',
+					flex: 1,
+					flexDirection: 'column',
+					overflow: 'auto',
+				}}
+			>
 				<Suspense
 					fallback={
 						<Box
 							sx={{
-								display: 'flex',
-								flexDirection: 'column',
-								alignItems: 'center',
+								flex: 1,
+								display: 'grid',
+								placeItems: 'center',
 								padding: 10,
 							}}
 						>
@@ -200,16 +215,21 @@ function CategoriesList({
 		},
 	})
 
+	const categoryIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'bodyCopy',
+		multiplier: 2.5,
+	})
+
 	return (
 		<>
 			<Box
 				sx={{
-					padding: 6,
+					alignItems: 'self-start',
 					display: 'grid',
 					gridTemplateColumns: `repeat(auto-fill, minmax(120px, 33%))`,
-					justifyItems: 'center',
-					alignItems: 'self-start',
 					justifyContent: 'space-around',
+					justifyItems: 'center',
+					padding: 6,
 				}}
 			>
 				{selectableCategories.map((category) => {
@@ -231,12 +251,12 @@ function CategoriesList({
 								)
 							}}
 							sx={{
+								borderRadius: 2,
 								':hover, :focus': {
 									backgroundColor: alpha(BLUE_GREY, 0.2),
 									transition: (theme) =>
 										theme.transitions.create('background-color'),
 								},
-								borderRadius: 2,
 							}}
 						>
 							<Stack
@@ -249,22 +269,31 @@ function CategoriesList({
 								>
 									{category.iconRef?.docId ? (
 										<CategoryIconImage
-											altText={intl.formatMessage(m.categoryIconAlt, {
-												name: category.name,
-											})}
+											altText={intl.formatMessage(
+												m.editCategoryPanelCategoryIconAltText,
+												{
+													name: category.name,
+												},
+											)}
 											iconDocumentId={category.iconRef.docId}
 											projectId={projectId}
-											imageStyle={{ width: 48, aspectRatio: 1 }}
+											imageStyle={{ width: categoryIconSize, aspectRatio: 1 }}
 										/>
 									) : (
 										<Icon
 											name="material-symbols-indeterminate-question-box"
-											size={40}
+											size={categoryIconSize}
 										/>
 									)}
 								</CategoryIconContainer>
 
-								<Typography sx={{ fontWeight: 450, textAlign: 'center' }}>
+								<Typography
+									color="textSecondary"
+									sx={{
+										fontWeight: (theme) => theme.typography.fontWeightMedium,
+										textAlign: 'center',
+									}}
+								>
 									{category.name}
 								</Typography>
 							</Stack>
@@ -296,24 +325,24 @@ function CategoriesList({
 }
 
 const m = defineMessages<{
-	readonly closePanelAccessibleLabel: NoMessageValues
+	readonly editCategoryPanelCloseAccessibleLabel: NoMessageValues
 	readonly editCategoryPanelTitle: NoMessageValues
-	readonly categoryIconAlt: { readonly name: MessageValue }
+	readonly editCategoryPanelCategoryIconAltText: { readonly name: MessageValue }
 }>({
-	closePanelAccessibleLabel: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel',
+	editCategoryPanelCloseAccessibleLabel: {
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.editCategoryPanelCloseAccessibleLabel',
 		defaultMessage: 'Close.',
-		description: 'Accessible label for button to close panel.',
+		description: 'Accessible label for button to close edit category panel.',
 	},
 	editCategoryPanelTitle: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle',
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.editCategoryPanelTitle',
 		defaultMessage: 'Change Category',
 		description: 'Title for edit category panel.',
 	},
-	categoryIconAlt: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt',
+	editCategoryPanelCategoryIconAltText: {
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.editCategoryPanelCategoryIconAltText',
 		defaultMessage: 'Icon for {name} category',
 		description:
-			'Alt text for icon image displayed for category (used for accessibility tools).',
+			'Accessible text for icon image displayed for category (used for accessibility tools).',
 	},
 })
