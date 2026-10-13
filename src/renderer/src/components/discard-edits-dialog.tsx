@@ -3,6 +3,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { defineMessages, useIntl } from 'react-intl'
 
+import { useIconSizeBasedOnTypography } from '../hooks/icon.ts'
 import { Icon } from './icon.tsx'
 
 export function DiscardEditsDialogContent({
@@ -12,33 +13,31 @@ export function DiscardEditsDialogContent({
 	onCancel: () => void
 	onConfirm: () => void
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
+
+	const heroIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'heroHeader',
+		multiplier: 3,
+	})
 
 	return (
-		<Stack direction="column">
-			<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+		<Stack direction="column" sx={{ overflow: 'auto' }}>
+			<Stack
+				direction="column"
+				sx={{ gap: 10, flex: 1, overflow: 'auto', padding: 20 }}
+			>
 				<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
-					<Icon name="material-error" color="error" size={72} />
+					<Icon name="material-error" color="error" size={heroIconSize} />
 
-					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center' }}
-					>
-						{t(m.title)}
+					<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
+						{intl.formatMessage(m.title)}
 					</Typography>
 				</Stack>
 			</Stack>
 
 			<Stack
 				direction="row"
-				sx={{
-					position: 'sticky',
-					bottom: 0,
-					display: 'flex',
-					justifyContent: 'center',
-					gap: 4,
-					padding: 6,
-				}}
+				sx={{ flexWrap: 'wrap', gap: 4, justifyContent: 'center', padding: 6 }}
 			>
 				<Button
 					fullWidth
@@ -46,9 +45,8 @@ export function DiscardEditsDialogContent({
 					onClick={() => {
 						onCancel()
 					}}
-					sx={{ maxWidth: 400 }}
 				>
-					{t(m.cancelButton)}
+					{intl.formatMessage(m.cancelButton)}
 				</Button>
 
 				<Button
@@ -59,9 +57,8 @@ export function DiscardEditsDialogContent({
 					onClick={() => {
 						onConfirm()
 					}}
-					sx={{ maxWidth: 400 }}
 				>
-					{t(m.confirmButton)}
+					{intl.formatMessage(m.confirmButton)}
 				</Button>
 			</Stack>
 		</Stack>
