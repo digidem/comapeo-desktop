@@ -1018,7 +1018,7 @@ function FilterPill({
 					}}
 				>
 					<Typography
-						color="textSecondary"
+						color="textTertiary"
 						sx={{
 							fontStyle: 'italic',
 							fontWeight: (theme) => theme.typography.fontWeightMedium,
@@ -1426,9 +1426,9 @@ function CategoriesFilterSelect({
 									</Typography>
 
 									<Typography
+										color="textTertiary"
 										component="span"
 										variant="inherit"
-										color="textSecondary"
 										sx={{ fontVariantNumeric: 'tabular-nums' }}
 									>
 										{o.matchCount}

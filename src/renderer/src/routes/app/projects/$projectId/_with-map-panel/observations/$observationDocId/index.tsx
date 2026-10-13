@@ -494,7 +494,6 @@ function ObservationDetailsPanel({
 							>
 								<Stack direction="row" sx={{ gap: 4 }}>
 									<Typography
-										color="textSecondary"
 										tabIndex={0}
 										sx={{
 											textAlign: 'center',

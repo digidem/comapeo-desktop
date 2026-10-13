@@ -259,7 +259,7 @@ function MembersSections({ projectId }: { projectId: string }) {
 							</Typography>
 						</Stack>
 
-						<Typography color="textSecondary">
+						<Typography>
 							{intl.formatMessage(m.remoteArchivesSectionDescription)}
 						</Typography>
 					</Stack>
@@ -285,7 +285,7 @@ function MembersSections({ projectId }: { projectId: string }) {
 							</Typography>
 						</Stack>
 
-						<Typography color="textSecondary">
+						<Typography>
 							{intl.formatMessage(m.pastCollaboratorsSectionDescription)}
 						</Typography>
 					</Stack>

@@ -347,7 +347,6 @@ function GetStartedPanel() {
 				</Stack>
 
 				<Typography
-					color="textSecondary"
 					variant="heroSubheading"
 					sx={{ textAlign: 'center', textWrap: 'balance' }}
 				>

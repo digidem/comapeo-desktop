@@ -310,7 +310,7 @@ function NoCustomMap({
 					/>
 				</Button>
 
-				<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
+				<Typography sx={{ textAlign: 'center' }}>
 					{intl.formatMessage(m.acceptedFileTypes)}
 				</Typography>
 			</Stack>

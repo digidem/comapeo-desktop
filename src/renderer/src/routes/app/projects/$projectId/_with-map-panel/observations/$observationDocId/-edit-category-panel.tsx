@@ -288,7 +288,6 @@ function CategoriesList({
 								</CategoryIconContainer>
 
 								<Typography
-									color="textSecondary"
 									sx={{
 										fontWeight: (theme) => theme.typography.fontWeightMedium,
 										textAlign: 'center',

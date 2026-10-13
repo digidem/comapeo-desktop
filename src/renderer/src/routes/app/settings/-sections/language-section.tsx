@@ -161,9 +161,9 @@ export function LanguageSection({
 							{systemPreferredLanguageInfo?.baseLanguageInfo ? (
 								<Typography
 									aria-hidden
+									color="textTertiary"
 									component="span"
 									variant="inherit"
-									color="textSecondary"
 									sx={{ fontStyle: 'italic' }}
 								>
 									<bdi lang={localeState.value}>
@@ -217,9 +217,9 @@ export function LanguageSection({
 
 									<Typography
 										aria-hidden
+										color="textTertiary"
 										component="span"
 										variant="inherit"
-										color="textSecondary"
 										sx={{ fontStyle: 'italic' }}
 									>
 										{labelText.secondary}

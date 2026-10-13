@@ -166,7 +166,6 @@ function RouteComponent() {
 								>
 									<Typography
 										component="h3"
-										color="textSecondary"
 										sx={{
 											fontWeight: (theme) => theme.typography.fontWeightMedium,
 										}}
@@ -215,7 +214,6 @@ function RouteComponent() {
 								>
 									<Typography
 										component="h3"
-										color="textSecondary"
 										sx={{
 											fontWeight: (theme) => theme.typography.fontWeightMedium,
 										}}
@@ -326,7 +324,6 @@ function QuestionAnswerItem({
 
 				<Typography
 					component="h3"
-					color="textSecondary"
 					sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
 				>
 					{title}

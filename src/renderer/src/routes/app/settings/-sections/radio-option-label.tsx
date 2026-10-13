@@ -11,7 +11,6 @@ export function RadioOptionLabel({
 	return (
 		<Stack direction="column" sx={{ gap: 1 }}>
 			<Typography
-				color="textSecondary"
 				sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
 			>
 				{primaryText}

@@ -473,9 +473,10 @@ export function AdvancedFiltersDialogContent({
 																		</Typography>
 
 																		<Typography
+																			color="textTertiary"
 																			component="span"
 																			variant="inherit"
-																			color="textSecondary"
+
 																			sx={{
 																				fontVariantNumeric: 'tabular-nums',
 																			}}

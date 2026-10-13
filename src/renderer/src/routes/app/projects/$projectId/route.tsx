@@ -726,10 +726,7 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 								</Typography>
 
 								{projectSettings.projectDescription ? (
-									<Typography
-										color="textSecondary"
-										sx={{ overflowWrap: 'break-word' }}
-									>
+									<Typography sx={{ overflowWrap: 'break-word' }}>
 										{projectSettings.projectDescription}
 									</Typography>
 								) : null}

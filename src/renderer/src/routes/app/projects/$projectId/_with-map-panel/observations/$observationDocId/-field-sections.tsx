@@ -39,22 +39,22 @@ export function ReadOnlyFieldSection({
 }) {
 	const intl = useIntl()
 
-	const displayedValue = value || intl.formatMessage(m.fieldSectionNoAnswer)
-	const fontStyle = value ? 'italic' : undefined
-
 	return (
 		<Stack direction="column" sx={{ gap: 2 }}>
 			<Typography
-				color="textSecondary"
 				sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
 			>
 				{label}
 			</Typography>
 
 			<Box sx={{ padding: 2 }}>
-				<Typography color="textSecondary" sx={{ fontStyle }}>
-					{displayedValue}
-				</Typography>
+				{value ? (
+					<Typography>{value}</Typography>
+				) : (
+					<Typography color="textTertiary" sx={{ fontStyle: 'italic' }}>
+						{intl.formatMessage(m.fieldSectionNoAnswer)}
+					</Typography>
+				)}
 			</Box>
 		</Stack>
 	)
@@ -311,7 +311,6 @@ export function EditableFieldSection({
 				}}
 				sectionTitle={
 					<Typography
-						color="textSecondary"
 						sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
 					>
 						{field.label}
@@ -345,9 +344,7 @@ export function EditableFieldSection({
 						}
 
 						return displayedVariableValue ? (
-							<Typography color="textSecondary">
-								{displayedVariableValue}
-							</Typography>
+							<Typography>{displayedVariableValue}</Typography>
 						) : (
 							<Typography color="textTertiary" sx={{ fontStyle: 'italic' }}>
 								{intl.formatMessage(m.fieldSectionNoAnswer)}
@@ -380,7 +377,7 @@ export function EditableFieldSection({
 					}
 
 					return displayedTagValue ? (
-						<Typography color="textSecondary">{displayedTagValue}</Typography>
+						<Typography>{displayedTagValue}</Typography>
 					) : (
 						<Typography color="textTertiary" sx={{ fontStyle: 'italic' }}>
 							{intl.formatMessage(m.fieldSectionNoAnswer)}

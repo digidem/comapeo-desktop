@@ -147,9 +147,7 @@ export function EditableNotesSection({
 								{intl.formatMessage(m.notesSectionNoNotes)}
 							</Typography>
 						) : (
-							<Typography color="textSecondary">
-								{observation.tags.notes}
-							</Typography>
+							<Typography>{observation.tags.notes}</Typography>
 						)
 					}
 				/>
