@@ -1466,6 +1466,7 @@ function getDateFilterOptionDisplayedValue(
 	}
 }
 
+// TODO: Refactor to use Menu like project switcher
 function DateFilterSelect({
 	todayDate,
 	onAdvancedClick,
