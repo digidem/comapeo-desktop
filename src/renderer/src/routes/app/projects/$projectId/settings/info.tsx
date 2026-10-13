@@ -23,7 +23,6 @@ import {
 import * as v from 'valibot'
 
 import {
-	BLACK,
 	BLUE_GREY,
 	COMAPEO_BLUE,
 	PROJECT_BLUE,
@@ -38,6 +37,7 @@ import { DiscardEditsDialogContent } from '../../../../../components/discard-edi
 import { ErrorDialogContent } from '../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
 import { useAppForm } from '../../../../../hooks/forms.ts'
+import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo.ts'
 import {
 	PROJECT_DESCRIPTION_MAX_LENGTH_GRAPHEMES,
@@ -69,8 +69,6 @@ export const Route = createFileRoute('/app/projects/$projectId/settings/info')({
 	},
 	component: RouteComponent,
 })
-
-const FORM_ID = 'project-settings-form'
 
 function RouteComponent() {
 	const intl = useIntl()
@@ -158,20 +156,27 @@ function RouteComponent() {
 		},
 	})
 
+	const formId = useId()
 	const projectNameFieldBaseId = useId()
 	const projectDescriptionFieldBaseId = useId()
+	const projectColorLabelId = useId()
+
+	const backIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'pageTitle',
+		multiplier: 1.25,
+	})
 
 	return (
 		<>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Stack
+					component="header"
 					direction="row"
-					component="nav"
 					sx={{
 						alignItems: 'center',
+						borderBottom: `1px solid ${BLUE_GREY}`,
 						gap: 4,
 						padding: 4,
-						borderBottom: `1px solid ${BLUE_GREY}`,
 					}}
 				>
 					<IconButton
@@ -189,10 +194,10 @@ function RouteComponent() {
 							})
 						}}
 					>
-						<Icon name="material-arrow-back" htmlColor={BLACK} size={30} />
+						<Icon name="material-arrow-back" size={backIconSize} />
 					</IconButton>
 
-					<Typography variant="h1" sx={{ fontWeight: 500 }}>
+					<Typography variant="pageTitle">
 						{intl.formatMessage(m.navTitle)}
 					</Typography>
 				</Stack>
@@ -208,7 +213,7 @@ function RouteComponent() {
 					<Container maxWidth="sm">
 						<Box
 							component="form"
-							id={FORM_ID}
+							id={formId}
 							noValidate
 							autoComplete="off"
 							onSubmit={(event) => {
@@ -241,11 +246,7 @@ function RouteComponent() {
 															justifyContent: 'space-between',
 														}}
 													>
-														<Typography
-															id={errorTextId}
-															component="span"
-															variant="body2"
-														>
+														<Typography id={errorTextId} component="span">
 															{field.state.meta.errors[0]?.message}
 														</Typography>
 
@@ -253,7 +254,6 @@ function RouteComponent() {
 															component="output"
 															htmlFor={inputId}
 															name="character-count"
-															variant="body2"
 														>
 															<form.Subscribe
 																selector={(state) =>
@@ -311,11 +311,7 @@ function RouteComponent() {
 															justifyContent: 'space-between',
 														}}
 													>
-														<Typography
-															id={errorTextId}
-															component="span"
-															variant="body2"
-														>
+														<Typography id={errorTextId} component="span">
 															{field.state.meta.errors[0]?.message}
 														</Typography>
 
@@ -323,7 +319,6 @@ function RouteComponent() {
 															component="output"
 															htmlFor={field.name}
 															name="character-count"
-															variant="body2"
 														>
 															<form.Subscribe
 																selector={(state) =>
@@ -366,8 +361,8 @@ function RouteComponent() {
 									<Box>
 										<Typography
 											component="label"
-											id="project-color-selector-label"
-											sx={{ fontWeight: 500, textTransform: 'uppercase' }}
+											id={projectColorLabelId}
+											variant="sectionLabel"
 										>
 											{intl.formatMessage(m.projectCardColorLabel)}
 										</Typography>
@@ -377,7 +372,7 @@ function RouteComponent() {
 										{(field) => (
 											<FormGroup
 												row
-												aria-labelledby="project-color-selector-label"
+												aria-labelledby={projectColorLabelId}
 												sx={{
 													flexWrap: 'nowrap',
 													gap: 10,
@@ -489,7 +484,7 @@ function RouteComponent() {
 						{([canSubmit, isSubmitting]) => (
 							<Button
 								aria-disabled={!canSubmit}
-								form={FORM_ID}
+								form={formId}
 								fullWidth
 								loading={isSubmitting}
 								loadingPosition="start"
@@ -575,7 +570,7 @@ function ProjectColorCheckboxControl({
 						height: 100,
 						bgcolor: projectColor,
 						borderRadius: 2,
-						outline: `8px solid ${COMAPEO_BLUE}`,
+						outline: `4px solid ${COMAPEO_BLUE}`,
 					}}
 				/>
 			}
