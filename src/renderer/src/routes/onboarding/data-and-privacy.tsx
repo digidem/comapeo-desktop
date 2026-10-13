@@ -60,12 +60,7 @@ function RouteComponent() {
 					{intl.formatMessage(m.title)}
 				</Typography>
 
-				<Typography
-					color="textSecondary"
-					component="h2"
-					variant="heroSubheading"
-					sx={{ textAlign: 'center' }}
-				>
+				<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
 					{intl.formatMessage(m.description)}
 				</Typography>
 
@@ -73,7 +68,7 @@ function RouteComponent() {
 					component={List}
 					direction="column"
 					sx={{
-						color: (theme) => theme.palette.text.tertiary,
+						color: (theme) => theme.palette.text.secondary,
 						gap: 4,
 						listStyleType: 'disc',
 					}}
