@@ -18,7 +18,7 @@ export function DeviceRow({
 	name: string | undefined
 }) {
 	const deviceIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
+		typographyVariant: 'cardHeader',
 		multiplier: 1.5,
 	})
 
@@ -26,33 +26,32 @@ export function DeviceRow({
 		<Stack
 			direction="row"
 			sx={{
+				alignItems: 'center',
 				flex: 1,
 				gap: 4,
 				overflow: 'auto',
-				alignItems: 'center',
-				padding: 5,
+				padding: 6,
 			}}
 		>
 			<DeviceIcon deviceType={deviceType} size={deviceIconSize} />
 
-			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack direction="column" sx={{ flex: 1, gap: 1, overflow: 'auto' }}>
 				<Typography
+					variant="cardHeader"
 					sx={{
-						fontWeight: 500,
+						overflow: 'hidden',
 						textOverflow: 'ellipsis',
 						whiteSpace: 'nowrap',
-						overflow: 'hidden',
 					}}
 				>
 					{name}
 				</Typography>
 
 				<Typography
-					color="textSecondary"
 					sx={{
+						overflow: 'hidden',
 						textOverflow: 'ellipsis',
 						whiteSpace: 'nowrap',
-						overflow: 'hidden',
 					}}
 				>
 					{deviceId.slice(0, 12)}

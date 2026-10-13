@@ -222,12 +222,12 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 	const peer = updatedPeer || peerOnLoad
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'pageTitle',
 		multiplier: 1.25,
 	})
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'heroHeader',
 		multiplier: 2,
 	})
 
@@ -239,7 +239,7 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 				sx={{
 					alignItems: 'center',
 					borderBottom: `1px solid ${BLUE_GREY}`,
-					gap: 4,
+					gap: 2,
 					paddingBlock: 4,
 					paddingInline: 6,
 				}}
@@ -253,14 +253,10 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 						})
 					}}
 				>
-					<Icon
-						name="material-arrow-back"
-						size={backIconSize}
-						htmlColor={BLACK}
-					/>
+					<Icon name="material-arrow-back" size={backIconSize} />
 				</IconButton>
 
-				<Typography variant="h1" sx={{ fontWeight: 500 }}>
+				<Typography variant="pageTitle">
 					{intl.formatMessage(m.navTitle)}
 				</Typography>
 			</Stack>
@@ -302,16 +298,19 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 									<DisconnectedIndicator />
 								) : null}
 
-								<Typography sx={{ textAlign: 'center' }}>
+								<Typography
+									variant="heroSubheading"
+									sx={{ textAlign: 'center' }}
+								>
 									{intl.formatMessage(m.deviceBeingInvited, {
 										br: Break,
 										name: (
 											<Typography
-												variant="inherit"
 												component="span"
+												variant="heroHeader"
 												sx={{
-													fontSize: (theme) => theme.typography.h1.fontSize,
-													fontWeight: 500,
+													fontWeight: (theme) =>
+														theme.typography.fontWeightMedium,
 												}}
 											>
 												{peer.name}
@@ -319,11 +318,11 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 										),
 										role: (
 											<Typography
-												variant="inherit"
 												component="span"
+												variant="heroSubheading"
 												sx={{
-													fontSize: (theme) => theme.typography.h2.fontSize,
-													fontWeight: 500,
+													fontWeight: (theme) =>
+														theme.typography.fontWeightMedium,
 												}}
 											>
 												{role === 'coordinator'
@@ -347,7 +346,6 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 								fullWidth
 								variant="contained"
 								startIcon={<Icon name="material-send-filled" />}
-								sx={{ maxWidth: 400 }}
 								onClick={() => {
 									onSendInvite()
 								}}
@@ -384,7 +382,7 @@ function InvitePending({
 	}, [setCurrentTimestamp])
 
 	const sendIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'heroHeader',
 		multiplier: 8,
 	})
 
@@ -396,28 +394,20 @@ function InvitePending({
 			>
 				<Stack
 					direction="column"
-					sx={{ alignItems: 'center', gap: 3, padding: 6 }}
+					sx={{ alignItems: 'center', gap: 20, padding: 6 }}
 				>
-					<Icon
-						name="comapeo-send"
-						htmlColor={COMAPEO_BLUE}
-						size={sendIconSize}
-					/>
+					<Stack direction="column" sx={{ alignItems: 'center' }}>
+						<Icon
+							name="comapeo-send"
+							htmlColor={COMAPEO_BLUE}
+							size={sendIconSize}
+						/>
 
-					<Container maxWidth="xs">
-						<Typography
-							variant="h1"
-							sx={{ fontWeight: 500, textAlign: 'center' }}
-						>
+						<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
 							{intl.formatMessage(m.waiting)}
 						</Typography>
-					</Container>
-				</Stack>
+					</Stack>
 
-				<Stack
-					direction="column"
-					sx={{ alignItems: 'center', gap: 3, padding: 6 }}
-				>
 					<Typography>
 						{intl.formatMessage(m.timeSinceSent, {
 							time: getFormattedDuration(
@@ -425,9 +415,15 @@ function InvitePending({
 							),
 						})}
 					</Typography>
+				</Stack>
 
+				<Stack
+					direction="column"
+					sx={{ alignItems: 'center', gap: 3, padding: 6 }}
+				>
 					<Button
-						variant="text"
+						fullWidth
+						variant="outlined"
 						onClick={() => {
 							onCancelInvite()
 						}}
@@ -458,7 +454,7 @@ function InviteRejected({
 	const peer = updatedPeer || peerOnLoad
 
 	const errorIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'heroHeader',
 		multiplier: 4,
 	})
 
@@ -484,18 +480,16 @@ function InviteRejected({
 							borderRadius: 2,
 							gap: 4,
 							justifyContent: 'center',
+							paddingBlock: 10,
 						}}
 					>
 						<Icon name="material-error" color="error" size={errorIconSize} />
 
-						<Typography
-							variant="h1"
-							sx={{ fontWeight: 500, textAlign: 'center' }}
-						>
+						<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
 							{intl.formatMessage(m.invitationDeclinedTitle)}
 						</Typography>
 
-						<Typography sx={{ textAlign: 'center' }}>
+						<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
 							{intl.formatMessage(m.invitationDeclinedDescription)}
 						</Typography>
 
@@ -518,8 +512,8 @@ function InviteRejected({
 							params={{ projectId }}
 							replace
 							fullWidth
-							variant="contained"
-							sx={{ maxWidth: 400, alignSelf: 'center' }}
+							variant="outlined"
+							sx={{ alignSelf: 'center' }}
 						>
 							{intl.formatMessage(m.close)}
 						</ButtonLink>
@@ -544,12 +538,12 @@ function InviteAccepted({
 	const { data: member } = useSingleMember({ projectId, deviceId })
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'heroHeader',
 		multiplier: 3,
 	})
 
 	const successIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
+		typographyVariant: 'bodyCopy',
 	})
 
 	return (
@@ -594,7 +588,7 @@ function InviteAccepted({
 										flexDirection: 'column',
 										padding: 2,
 										borderRadius: '50%',
-										bgcolor: GREEN,
+										background: GREEN,
 										boxShadow: ICON_BOX_SHADOW,
 									}}
 								>
@@ -606,27 +600,15 @@ function InviteAccepted({
 								</Box>
 							</Box>
 
-							<Typography
-								component="p"
-								variant="h1"
-								sx={{ fontWeight: 500, textAlign: 'center' }}
-							>
+							<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
 								{member.name}
 							</Typography>
 
-							<Typography
-								component="p"
-								variant="h2"
-								sx={{ fontWeight: 500, textAlign: 'center' }}
-							>
+							<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
 								{intl.formatMessage(m.accepted)}
 							</Typography>
 
-							<Typography
-								component="p"
-								variant="h2"
-								sx={{ fontWeight: 400, textAlign: 'center' }}
-							>
+							<Typography sx={{ textAlign: 'center' }}>
 								{intl.formatMessage(
 									member.role.roleId === COORDINATOR_ROLE_ID
 										? m.coordinator
@@ -635,7 +617,7 @@ function InviteAccepted({
 							</Typography>
 
 							{member.joinedAt !== undefined ? (
-								<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
+								<Typography sx={{ textAlign: 'center' }}>
 									{intl.formatMessage(m.addedOn, {
 										value: (
 											<time key={member.deviceId} dateTime={member.joinedAt}>
@@ -651,36 +633,29 @@ function InviteAccepted({
 							) : null}
 						</Stack>
 
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'column',
-								gap: 4,
-								justifyContent: 'center',
-							}}
-						>
+						<Stack direction="column" sx={{ gap: 4, justifyContent: 'center' }}>
 							<ButtonLink
+								fullWidth
 								to="/app/projects/$projectId/team/invite/devices"
 								params={{ projectId }}
 								replace
-								fullWidth
+								sx={{ alignSelf: 'center' }}
 								variant="outlined"
-								sx={{ maxWidth: 400, alignSelf: 'center' }}
 							>
 								{intl.formatMessage(m.addAnotherDevice)}
 							</ButtonLink>
 
 							<ButtonLink
+								fullWidth
 								to="/app/projects/$projectId/team"
 								params={{ projectId }}
 								replace
-								fullWidth
+								sx={{ alignSelf: 'center' }}
 								variant="contained"
-								sx={{ maxWidth: 400, alignSelf: 'center' }}
 							>
 								{intl.formatMessage(m.close)}
 							</ButtonLink>
-						</Box>
+						</Stack>
 					</Stack>
 				</Container>
 			</Stack>

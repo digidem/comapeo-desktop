@@ -8,12 +8,7 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import {
-	BLACK,
-	BLUE_GREY,
-	DARK_GREY,
-	DARK_ORANGE,
-} from '../../../../../../colors.ts'
+import { BLUE_GREY, DARK_ORANGE } from '../../../../../../colors.ts'
 import { GenericRoutePendingComponent } from '../../../../../../components/generic-route-pending-component.tsx'
 import { Icon } from '../../../../../../components/icon.tsx'
 import { ButtonLink } from '../../../../../../components/link.tsx'
@@ -58,12 +53,12 @@ function RouteComponent() {
 	const { projectId } = Route.useParams()
 
 	const addIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'heroHeader',
 		multiplier: 4,
 	})
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'pageTitle',
 		multiplier: 1.25,
 	})
 
@@ -75,7 +70,7 @@ function RouteComponent() {
 				sx={{
 					alignItems: 'center',
 					borderBottom: `1px solid ${BLUE_GREY}`,
-					gap: 4,
+					gap: 2,
 					paddingBlock: 4,
 					paddingInline: 6,
 				}}
@@ -95,14 +90,10 @@ function RouteComponent() {
 						})
 					}}
 				>
-					<Icon
-						name="material-arrow-back"
-						htmlColor={BLACK}
-						size={backIconSize}
-					/>
+					<Icon name="material-arrow-back" size={backIconSize} />
 				</IconButton>
 
-				<Typography variant="h1" sx={{ fontWeight: 500 }}>
+				<Typography variant="pageTitle">
 					{intl.formatMessage(m.navTitle)}
 				</Typography>
 			</Stack>
@@ -125,63 +116,64 @@ function RouteComponent() {
 						<Stack
 							direction="column"
 							sx={{
-								borderRadius: 2,
 								border: `1px solid ${BLUE_GREY}`,
+								borderRadius: 2,
 								flex: 1,
 								justifyContent: 'center',
-								gap: 5,
+								gap: 20,
 								overflowWrap: 'break-word',
 								padding: 6,
 							}}
 						>
-							<Box sx={{ alignSelf: 'center' }}>
-								<Icon
-									name="material-person-add"
-									htmlColor={DARK_ORANGE}
-									size={addIconSize}
-								/>
-							</Box>
+							<Stack direction="column" sx={{ gap: 6 }}>
+								<Box sx={{ alignSelf: 'center' }}>
+									<Icon
+										name="material-person-add"
+										htmlColor={DARK_ORANGE}
+										size={addIconSize}
+									/>
+								</Box>
 
-							<Typography
-								variant="h1"
-								sx={{ fontWeight: 500, textAlign: 'center' }}
-							>
-								{intl.formatMessage(m.inviteCollaborators)}
-							</Typography>
+								<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
+									{intl.formatMessage(m.inviteCollaborators)}
+								</Typography>
 
-							<Typography
-								color="textSecondary"
-								sx={{ textAlign: 'center', fontWeight: 500 }}
-							>
-								{intl.formatMessage(m.primaryDescription)}
-							</Typography>
+								<Typography
+									variant="heroSubheading"
+									sx={{ textAlign: 'center' }}
+								>
+									{intl.formatMessage(m.primaryDescription)}
+								</Typography>
+							</Stack>
 
-							<List
+							<Stack
+								component={List}
+								direction="column"
 								sx={{
 									alignSelf: 'center',
+									gap: 2,
 									listStyleType: 'disc',
 									paddingInline: 8,
-									color: DARK_GREY,
 								}}
 							>
-								<ListItem disablePadding sx={{ display: 'list-item' }}>
-									<Typography color="textSecondary">
+								<ListItem sx={{ display: 'list-item' }}>
+									<Typography>
 										{intl.formatMessage(m.onlyInvitedDevices)}
 									</Typography>
 								</ListItem>
 
-								<ListItem disablePadding sx={{ display: 'list-item' }}>
-									<Typography color="textSecondary">
+								<ListItem sx={{ display: 'list-item' }}>
+									<Typography>
 										{intl.formatMessage(m.shareUsingExchange)}
 									</Typography>
 								</ListItem>
 
-								<ListItem disablePadding sx={{ display: 'list-item' }}>
-									<Typography color="textSecondary">
+								<ListItem sx={{ display: 'list-item' }}>
+									<Typography>
 										{intl.formatMessage(m.controlSharing)}
 									</Typography>
 								</ListItem>
-							</List>
+							</Stack>
 						</Stack>
 
 						<Box
@@ -192,12 +184,11 @@ function RouteComponent() {
 							}}
 						>
 							<ButtonLink
+								fullWidth
 								to="/app/projects/$projectId/team/invite/devices"
 								params={{ projectId }}
 								replace
 								type="button"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 							>
 								{intl.formatMessage(m.selectDevice)}
 							</ButtonLink>
