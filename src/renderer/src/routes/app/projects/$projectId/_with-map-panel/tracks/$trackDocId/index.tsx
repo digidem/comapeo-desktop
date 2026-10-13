@@ -25,6 +25,7 @@ import {
 } from '../../../../../../../components/category-icon.tsx'
 import { GenericRouteNotFoundComponent } from '../../../../../../../components/generic-route-not-found-component.tsx'
 import { Icon } from '../../../../../../../components/icon.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../../../../hooks/icon.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	getMatchingCategoryForDocument,
@@ -115,18 +116,23 @@ function RouteComponent() {
 		lang,
 	})
 
+	const backIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'pageTitle',
+		multiplier: 1.25,
+	})
+
 	const category = getMatchingCategoryForDocument(track, categories)
 
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
+				component="header"
 				direction="row"
-				component="nav"
 				sx={{
 					alignItems: 'center',
+					borderBottom: `1px solid ${BLUE_GREY}`,
 					gap: 4,
 					padding: 4,
-					borderBottom: `1px solid ${BLUE_GREY}`,
 				}}
 			>
 				<IconButton
@@ -143,10 +149,10 @@ function RouteComponent() {
 						})
 					}}
 				>
-					<Icon name="material-arrow-back" size={30} />
+					<Icon name="material-arrow-back" size={backIconSize} />
 				</IconButton>
 
-				<Typography variant="h1" sx={{ fontWeight: 500 }}>
+				<Typography variant="pageTitle">
 					{intl.formatMessage(m.navTitle)}
 				</Typography>
 			</Stack>
@@ -195,25 +201,24 @@ function RouteComponent() {
 									</CategoryIconContainer>
 								)}
 
-								<Typography variant="h2" sx={{ fontWeight: 500 }}>
+								<Typography
+									sx={{
+										fontWeight: (theme) => theme.typography.fontWeightMedium,
+									}}
+								>
 									{intl.formatMessage(m.tracks)}
 								</Typography>
 							</Stack>
 						</Box>
 					</Stack>
+
 					<Stack direction="column" sx={{ paddingInline: 6, gap: 4 }}>
-						<Typography
-							component="h2"
-							variant="body1"
-							sx={{ textTransform: 'uppercase' }}
-						>
+						<Typography component="h2" variant="sectionLabel">
 							{intl.formatMessage(m.descriptionSectionTitle)}
 						</Typography>
 
 						<Typography>{track.tags.notes}</Typography>
 					</Stack>
-
-					<Stack direction="column" sx={{ gap: 2, overflow: 'auto' }}></Stack>
 				</Stack>
 
 				<Divider />
@@ -296,18 +301,14 @@ function TrackObservationsSection({
 	return (
 		<Stack direction="column" sx={{ flex: 1 }}>
 			<Box sx={{ padding: 6 }}>
-				<Typography
-					component="h2"
-					variant="body1"
-					sx={{ textTransform: 'uppercase' }}
-				>
+				<Typography component="h2" variant="sectionLabel">
 					{intl.formatMessage(m.observationsSectionTitle, {
 						count: displayedTrackObservations.length,
 					})}
 				</Typography>
 			</Box>
 
-			<List component="ul" disablePadding>
+			<List component="ul">
 				{displayedTrackObservations.map(({ document, category }) => {
 					const { createdAt, docId, createdBy } = document
 
@@ -362,14 +363,19 @@ function TrackObservationsSection({
 							<Stack direction="row" sx={{ flex: 1, gap: 2, overflow: 'auto' }}>
 								<Stack
 									direction="column"
-									sx={{ flex: 1, justifyContent: 'center', overflow: 'hidden' }}
+									sx={{
+										flex: 1,
+										gap: 1,
+										justifyContent: 'center',
+										overflow: 'hidden',
+									}}
 								>
 									<Typography
+										variant="cardHeader"
 										sx={{
-											fontWeight: 500,
+											overflow: 'hidden',
 											textOverflow: 'ellipsis',
 											whiteSpace: 'nowrap',
-											overflow: 'hidden',
 										}}
 									>
 										{title}
