@@ -148,7 +148,7 @@ function StepIndicator({
 		>
 			<Typography
 				color={isActive ? 'textPrimary' : 'textInverted'}
-				sx={{ fontWeight: 'bold' }}
+				sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
 			>
 				{label}
 			</Typography>
