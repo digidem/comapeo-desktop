@@ -806,7 +806,6 @@ export function DataList({
 															</Typography>
 
 															<Typography
-																color="textTertiary"
 																sx={{
 																	overflow: 'hidden',
 																	textOverflow: 'ellipsis',

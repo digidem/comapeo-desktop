@@ -376,7 +376,6 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 							<Typography
 								component="span"
 								variant="inherit"
-								color="textSecondary"
 								sx={{ fontWeight: 'normal' }}
 							>
 								{intl.formatMessage(
@@ -442,15 +441,15 @@ function InviteDetailsCard({
 				border: `1px solid ${BLUE_GREY}`,
 			}}
 		>
-			<Stack direction="row" sx={{ gap: 6, alignItems: 'center' }}>
-				<Box sx={{ color: (theme) => theme.palette.text.tertiary }}>{icon}</Box>
+			<Stack direction="row" sx={{ alignItems: 'center', gap: 6 }}>
+				<Box sx={{ color: (theme) => theme.palette.text.secondary }}>
+					{icon}
+				</Box>
 
 				<Stack direction="column" sx={{ gap: 2 }}>
-					<Typography component="p" variant="cardHeader">
-						{title}
-					</Typography>
+					<Typography variant="cardHeader">{title}</Typography>
 
-					<Typography color="textTertiary">{description}</Typography>
+					<Typography>{description}</Typography>
 				</Stack>
 			</Stack>
 		</Stack>

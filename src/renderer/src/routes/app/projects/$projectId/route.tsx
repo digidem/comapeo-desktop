@@ -783,7 +783,7 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 									<Stack
 										direction="row"
 										sx={{
-											alignItems: 'flex-start',
+											alignItems: 'center',
 											flex: 1,
 											gap: 4,
 											overflow: 'hidden',
@@ -797,13 +797,12 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 												/>
 
 												<Typography
-													color="textSecondary"
 													sx={{
 														fontWeight: (theme) =>
 															theme.typography.fontWeightMedium,
+														overflow: 'hidden',
 														textOverflow: 'ellipsis',
 														whiteSpace: 'nowrap',
-														overflow: 'hidden',
 													}}
 												>
 													{intl.formatMessage(m.projectInfoRoleCoordinator)}
@@ -814,7 +813,6 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 												<Icon name="material-people-filled" />
 
 												<Typography
-													color="textSecondary"
 													sx={{
 														fontWeight: (theme) =>
 															theme.typography.fontWeightMedium,
@@ -889,15 +887,9 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 										>
 											{projectSettings.configMetadata ? (
 												<Typography
-													color="textTertiary"
-													sx={{
-														display: 'flex',
-														gap: 2,
-														overflow: 'auto',
-													}}
+													sx={{ display: 'flex', gap: 2, overflow: 'auto' }}
 												>
 													<Typography
-														color="textSecondary"
 														component="span"
 														sx={{
 															flex: 1,
@@ -916,7 +908,6 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 												</Typography>
 											) : (
 												<Typography
-													color="textSecondary"
 													sx={{
 														fontWeight: (theme) =>
 															theme.typography.fontWeightMedium,
@@ -957,13 +948,8 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 
 										{projectSettings.configMetadata ? (
 											<>
-												<Box
-													sx={{
-														// gridArea: '2 / 2 / 3 / 3'
-														gridArea: 'created',
-													}}
-												>
-													<Typography color="textTertiary">
+												<Box sx={{ gridArea: 'created' }}>
+													<Typography>
 														{intl.formatMessage(
 															m.projectInfoCategoriesCreated,
 															{
@@ -989,13 +975,8 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 													</Typography>
 												</Box>
 
-												<Box
-													sx={{
-														// gridArea: '3 / 2 / 4 / 3'
-														gridArea: 'added',
-													}}
-												>
-													<Typography color="textTertiary">
+												<Box sx={{ gridArea: 'added' }}>
+													<Typography>
 														{intl.formatMessage(m.projectInfoCategoriesAdded, {
 															date: (
 																<time

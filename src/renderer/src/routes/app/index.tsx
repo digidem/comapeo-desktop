@@ -518,7 +518,6 @@ function ListedProjectCard({
 			sx={{
 				background: project.projectColor,
 				borderRadius: 2,
-				color: (theme) => theme.palette.text.secondary,
 				outline: `2px solid ${highlight ? COMAPEO_BLUE : LIGHT_GREY}`,
 				outlineOffset: -1,
 				overflow: 'auto',
@@ -567,8 +566,8 @@ function ListedProjectCard({
 					direction="row"
 					sx={{
 						alignItems: 'center',
+						color: (theme) => theme.palette.text.secondary,
 						gap: 2,
-						color: (theme) => theme.palette.text.tertiary,
 					}}
 				>
 					<Icon
@@ -581,11 +580,11 @@ function ListedProjectCard({
 					/>
 
 					<Typography
-						color="textTertiary"
+						color="inherit"
 						sx={{
+							overflow: 'hidden',
 							textOverflow: 'ellipsis',
 							whiteSpace: 'nowrap',
-							overflow: 'hidden',
 						}}
 					>
 						{intl.formatMessage(
