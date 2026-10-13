@@ -128,20 +128,16 @@ function RouteComponent() {
 	const displayedExchangeStateContent = selfIsOnlyActiveProjectMember ? (
 		<Stack
 			direction="column"
-			sx={{ flex: 1, gap: 5, padding: 6, alignItems: 'center' }}
+			sx={{ alignItems: 'center', flex: 1, gap: 5, padding: 6 }}
 		>
-			<Typography
-				component="p"
-				variant="h1"
-				sx={{ fontWeight: 500, textAlign: 'center' }}
-			>
+			<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
 				{intl.formatMessage(m.noOtherDevicesOnProject)}
 			</Typography>
 
 			<ButtonLink
-				variant="text"
 				to="/app/projects/$projectId/team/invite"
 				params={{ projectId }}
+				variant="text"
 			>
 				{intl.formatMessage(m.inviteDevices)}
 			</ButtonLink>
@@ -163,19 +159,26 @@ function RouteComponent() {
 	const selfIsOnlyProjectMemberEver =
 		members.length === 1 && members[0]?.deviceId === ownDeviceInfo.deviceId
 
+	const devicesIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'heroHeader',
+		multiplier: 3,
+	})
+
 	return (
 		<>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Stack
+					component="header"
 					direction="row"
 					sx={{
 						alignItems: 'center',
 						borderBottom: `1px solid ${BLUE_GREY}`,
 						gap: 4,
-						padding: 4,
+						paddingBlock: 4,
+						paddingInline: 6,
 					}}
 				>
-					<Typography variant="h1" sx={{ fontWeight: 500 }}>
+					<Typography variant="pageTitle">
 						{intl.formatMessage(m.pageTitle)}
 					</Typography>
 
@@ -206,7 +209,7 @@ function RouteComponent() {
 										htmlColor={
 											connectedPeersCount > 0 ? DARK_ORANGE : BLUE_GREY
 										}
-										size={80}
+										size={devicesIconSize}
 									/>
 								</Box>
 
@@ -229,7 +232,7 @@ function RouteComponent() {
 										<Icon
 											name="material-symbols-stars-2"
 											htmlColor={WHITE}
-											size={32}
+											size={`calc(${devicesIconSize} / 2)`}
 										/>
 									</Box>
 								) : null}
@@ -257,7 +260,6 @@ function RouteComponent() {
 									variant={
 										syncState?.data.isSyncEnabled ? 'outlined' : 'contained'
 									}
-									sx={{ maxWidth: 400 }}
 									startIcon={
 										<Icon
 											name={
@@ -340,7 +342,7 @@ function RemoteArchiveIndicator({ projectId }: { projectId: string }) {
 	const { online } = useBrowserNetInfo()
 
 	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body2',
+		typographyVariant: 'detailCopy',
 		multiplier: 0.6,
 	})
 
@@ -355,7 +357,7 @@ function RemoteArchiveIndicator({ projectId }: { projectId: string }) {
 		>
 			<Icon name="material-circle-filled" size={iconSize} />
 
-			<Typography variant="body2">
+			<Typography variant="detailCopy">
 				{intl.formatMessage(m.remoteArchiveConnected)}
 			</Typography>
 		</Stack>
@@ -369,7 +371,7 @@ function DisplayedSyncState({
 	projectId: string
 	syncState: SyncState
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const connectedPeersCount = getConnectedPeersCount(
 		syncState.remoteDeviceSyncState,
@@ -392,12 +394,8 @@ function DisplayedSyncState({
 
 	return (
 		<Stack direction="column" sx={{ flex: 1, gap: 5, padding: 6 }}>
-			<Typography
-				component="p"
-				variant="h1"
-				sx={{ fontWeight: 500, textAlign: 'center' }}
-			>
-				{t(title)}
+			<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
+				{intl.formatMessage(title)}
 			</Typography>
 
 			{syncStage.name === 'idle' ? null : <SyncProgress stage={syncStage} />}
@@ -461,7 +459,7 @@ function SyncProgress({
 
 			<LinearProgress {...progressProps} />
 
-			<Typography color="textSecondary" sx={{ textAlign: 'end' }}>
+			<Typography sx={{ textAlign: 'end' }}>
 				{formatNumber(stage.name === 'waiting' ? 0 : stage.progress, {
 					style: 'percent',
 				})}
@@ -511,10 +509,10 @@ function NetworkConnectionPill() {
 			sx={{ backgroundColor: LIGHT_COMAPEO_BLUE, borderRadius: 2, padding: 1 }}
 		>
 			<Typography
+				color="textTertiary"
 				data-testid="exchange-network-connection-info"
-				variant="body2"
-				color="textSecondary"
 				sx={{ whiteSpace: 'nowrap' }}
+				variant="detailCopy"
 			>
 				{displayedText}
 			</Typography>
