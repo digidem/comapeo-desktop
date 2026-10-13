@@ -27,7 +27,6 @@ import {
 
 import { DeviceIcon } from '../../-shared/device-icon.tsx'
 import {
-	BLACK,
 	BLUE_GREY,
 	DARK_GREY,
 	LIGHT_GREY,
@@ -101,7 +100,7 @@ function RouteComponent() {
 	const isSelf = member.deviceId === ownDeviceInfo.deviceId
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'pageTitle',
 		multiplier: 1.25,
 	})
 
@@ -134,14 +133,10 @@ function RouteComponent() {
 							})
 						}}
 					>
-						<Icon
-							name="material-arrow-back"
-							htmlColor={BLACK}
-							size={backIconSize}
-						/>
+						<Icon name="material-arrow-back" size={backIconSize} />
 					</IconButton>
 
-					<Typography variant="h1" sx={{ fontWeight: 500 }}>
+					<Typography variant="pageTitle">
 						{intl.formatMessage(isSelf ? m.thisDevice : m.collaboratorNavTitle)}
 					</Typography>
 				</Stack>
@@ -150,7 +145,7 @@ function RouteComponent() {
 					<Suspense
 						fallback={
 							<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
-								<CircularProgress disableShrink size={30} />
+								<CircularProgress disableShrink />
 							</Box>
 						}
 					>
@@ -206,12 +201,12 @@ function CollaboratorInfoContent({
 	const truncatedDeviceId = member.deviceId.slice(0, 12)
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'heroHeader',
 		multiplier: 3,
 	})
 
 	const roleIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h3',
+		typographyVariant: 'cardHeader',
 		multiplier: 1.5,
 	})
 
@@ -225,9 +220,11 @@ function CollaboratorInfoContent({
 
 		description = (
 			<Typography
-				component="p"
-				variant="h3"
-				sx={{ fontWeight: 500, textAlign: 'center', overflowWrap: 'anywhere' }}
+				sx={{
+					fontWeight: (theme) => theme.typography.fontWeightMedium,
+					textAlign: 'center',
+					overflowWrap: 'anywhere',
+				}}
 			>
 				{member.selfHostedServerDetails.baseUrl}
 			</Typography>
@@ -251,9 +248,10 @@ function CollaboratorInfoContent({
 				/>
 
 				<Typography
-					component="p"
-					variant="h3"
-					sx={{ fontWeight: 500, textAlign: 'center' }}
+					sx={{
+						fontWeight: (theme) => theme.typography.fontWeightMedium,
+						textAlign: 'center',
+					}}
 				>
 					{intl.formatMessage(
 						isAtLeastCoordinator ? m.coordinator : m.participant,
@@ -294,7 +292,7 @@ function CollaboratorInfoContent({
 						<Stack direction="column" sx={{ gap: 10, alignItems: 'center' }}>
 							<Box
 								sx={{
-									backgroundColor: LIGHT_GREY,
+									background: LIGHT_GREY,
 									borderRadius: '50%',
 									display: 'grid',
 									padding: 6,
@@ -308,13 +306,8 @@ function CollaboratorInfoContent({
 							</Box>
 
 							<Typography
-								component="p"
-								variant="h1"
-								sx={{
-									fontWeight: 500,
-									textAlign: 'center',
-									textWrap: 'balance',
-								}}
+								variant="heroHeader"
+								sx={{ textAlign: 'center', textWrap: 'balance' }}
 							>
 								{title}
 							</Typography>
@@ -326,14 +319,13 @@ function CollaboratorInfoContent({
 							</Stack>
 
 							<Typography
-								color="textSecondary"
 								sx={{ textAlign: 'center', overflowWrap: 'anywhere' }}
 							>
 								{truncatedDeviceId}
 							</Typography>
 
 							{member.joinedAt ? (
-								<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
+								<Typography sx={{ textAlign: 'center' }}>
 									{intl.formatMessage(m.addedOn, {
 										value: (
 											<time key={member.deviceId} dateTime={member.joinedAt}>
@@ -370,7 +362,6 @@ function CollaboratorInfoContent({
 							onLeaveProject()
 						}}
 						startIcon={<Icon name="material-logout" />}
-						sx={{ maxWidth: 400 }}
 						variant="outlined"
 					>
 						{intl.formatMessage(m.leaveProjectButton)}
@@ -428,124 +419,124 @@ function LeaveProjectDialogContent({
 	})
 
 	const suggestionIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body2',
+		typographyVariant: 'bodyCopy',
+		multiplier: 1.25,
 	})
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'heroHeader',
 		multiplier: 3,
 	})
 
 	const errorIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		typographyVariant: 'heroHeader',
 		multiplier: 1,
 	})
 
 	if (warningToShow) {
 		return (
 			<Stack direction="column" sx={{ gap: 10, padding: 6 }}>
-				<Stack direction="column" sx={{ gap: 10, flex: 1 }}>
-					<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
-						<Box sx={{ position: 'relative' }}>
-							<DeviceIcon
-								deviceType={member.deviceType}
-								size={deviceIconSize}
-								htmlColor={DARK_GREY}
-							/>
-
-							<Box
-								sx={{
-									position: 'absolute',
-									right: -12,
-									bottom: 0,
-									display: 'grid',
-									placeItems: 'center',
-									borderRadius: '50%',
-									padding: 1,
-									backgroundColor: (theme) => theme.palette.error.main,
-								}}
-							>
-								<Icon
-									name="material-symbols-exclamation"
-									htmlColor={WHITE}
-									size={errorIconSize}
+				<Stack direction="column" sx={{ flex: 1, gap: 10 }}>
+					<Stack direction="column" sx={{ gap: 10 }}>
+						<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
+							<Box sx={{ position: 'relative' }}>
+								<DeviceIcon
+									deviceType={member.deviceType}
+									size={deviceIconSize}
+									htmlColor={DARK_GREY}
 								/>
+
+								<Box
+									sx={{
+										background: (theme) => theme.palette.error.main,
+										borderRadius: '50%',
+										bottom: 0,
+										display: 'grid',
+										padding: 1,
+										placeItems: 'center',
+										position: 'absolute',
+										right: -12,
+									}}
+								>
+									<Icon
+										name="material-symbols-exclamation"
+										htmlColor={WHITE}
+										size={errorIconSize}
+									/>
+								</Box>
 							</Box>
-						</Box>
 
-						<Typography
-							variant="h1"
-							sx={{ fontWeight: 500, textAlign: 'center' }}
-						>
-							{intl.formatMessage(
-								warningToShow === 'last_device'
-									? m.lastDeviceWarningTitle
-									: m.lastCoordinatorWarningTitle,
-							)}
-						</Typography>
+							<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
+								{intl.formatMessage(
+									warningToShow === 'last_device'
+										? m.lastDeviceWarningTitle
+										: m.lastCoordinatorWarningTitle,
+								)}
+							</Typography>
 
-						<Typography sx={{ textAlign: 'center' }}>
-							{intl.formatMessage(
-								warningToShow === 'last_device'
-									? m.lastDeviceWarningDescription
-									: m.lastCoordinatorWarningDescription,
-							)}
-						</Typography>
+							<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
+								{intl.formatMessage(
+									warningToShow === 'last_device'
+										? m.lastDeviceWarningDescription
+										: m.lastCoordinatorWarningDescription,
+								)}
+							</Typography>
+						</Stack>
 
 						<Box
 							sx={{
 								alignSelf: 'stretch',
-								padding: 6,
-								borderRadius: 2,
+								background: PROJECT_ORANGE,
 								border: `1px solid ${BLUE_GREY}`,
-								backgroundColor: PROJECT_ORANGE,
+								borderRadius: 2,
+								padding: 6,
 							}}
 						>
-							<List disablePadding>
-								<Stack direction="column" sx={{ gap: 2 }}>
-									{warningToShow === 'last_coordinator' ? (
-										<ListItem disableGutters disablePadding>
-											<Stack direction="row" sx={{ gap: 2 }}>
-												<Icon
-													name="openmoji-mobile-phone-with-arrow"
-													size={suggestionIconSize}
-													sx={{ alignSelf: 'flex-start' }}
-												/>
-
-												<Typography variant="body2" color="textSecondary">
-													{intl.formatMessage(m.suggestionInviteCoordinator)}
-												</Typography>
-											</Stack>
-										</ListItem>
-									) : null}
-
-									<ListItem disableGutters disablePadding>
+							<Stack component={List} direction="column" sx={{ gap: 4 }}>
+								{warningToShow !== 'last_coordinator' ? (
+									<ListItem>
 										<Stack direction="row" sx={{ gap: 2 }}>
 											<Icon
-												name="openmoji-download"
+												name="openmoji-mobile-phone-with-arrow"
 												size={suggestionIconSize}
 												sx={{ alignSelf: 'flex-start' }}
 											/>
 
-											<Typography variant="body2" color="textSecondary">
-												{intl.formatMessage(m.suggestionExportData)}
+											<Typography>
+												{intl.formatMessage(m.suggestionInviteCoordinator)}
 											</Typography>
 										</Stack>
 									</ListItem>
-								</Stack>
-							</List>
+								) : null}
+
+								<ListItem>
+									<Stack direction="row" sx={{ gap: 2 }}>
+										<Icon
+											name="openmoji-download"
+											size={suggestionIconSize}
+											sx={{ alignSelf: 'flex-start' }}
+										/>
+
+										<Typography>
+											{intl.formatMessage(m.suggestionExportData)}
+										</Typography>
+									</Stack>
+								</ListItem>
+							</Stack>
 						</Box>
 					</Stack>
 				</Stack>
 
-				<Stack direction="row" sx={{ alignItems: 'center', gap: 4 }}>
+				<Stack
+					direction="row"
+					sx={{ alignItems: 'center', gap: 4, justifyContent: 'center' }}
+				>
 					<Button
 						fullWidth
 						variant="outlined"
 						onClick={() => {
 							onClose()
 						}}
-						sx={{ maxWidth: 400, alignSelf: 'center' }}
 					>
 						{intl.formatMessage(m.cancelButton)}
 					</Button>
@@ -558,7 +549,6 @@ function LeaveProjectDialogContent({
 						onClick={() => {
 							setWarningToShow(undefined)
 						}}
-						sx={{ maxWidth: 400, alignSelf: 'center' }}
 					>
 						{intl.formatMessage(m.continueButton)}
 					</Button>
@@ -610,14 +600,11 @@ function LeaveProjectConfirmation({
 					<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
 						<Icon name="material-logout" htmlColor={BLUE_GREY} size={72} />
 
-						<Typography
-							variant="h1"
-							sx={{ fontWeight: 500, textAlign: 'center' }}
-						>
+						<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
 							{intl.formatMessage(m.leaveProjectConfirmationTitle)}
 						</Typography>
 
-						<Typography sx={{ textAlign: 'center' }}>
+						<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
 							{intl.formatMessage(m.leaveProjectConfirmationDescription, {
 								b: Bold,
 								name: projectName || '',
@@ -626,7 +613,10 @@ function LeaveProjectConfirmation({
 					</Stack>
 				</Stack>
 
-				<Stack direction="row" sx={{ alignItems: 'center', gap: 4 }}>
+				<Stack
+					direction="row"
+					sx={{ alignItems: 'center', gap: 4, justifyContent: 'center' }}
+				>
 					<Button
 						fullWidth
 						variant="outlined"
@@ -638,7 +628,6 @@ function LeaveProjectConfirmation({
 
 							onClose()
 						}}
-						sx={{ maxWidth: 400, alignSelf: 'center' }}
 					>
 						{intl.formatMessage(m.cancelButton)}
 					</Button>
@@ -674,7 +663,6 @@ function LeaveProjectConfirmation({
 								},
 							)
 						}}
-						sx={{ maxWidth: 400, alignSelf: 'center' }}
 					>
 						{intl.formatMessage(m.confirmButton)}
 					</Button>
