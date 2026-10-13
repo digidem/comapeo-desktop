@@ -18,7 +18,7 @@ export function DeviceRow({
 	name: string | undefined
 }) {
 	const deviceIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'cardHeader',
+		variant: 'cardHeader',
 		multiplier: 1.5,
 	})
 

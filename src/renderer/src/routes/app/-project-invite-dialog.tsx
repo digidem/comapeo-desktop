@@ -189,12 +189,12 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 	const intl = useIntl()
 
 	const inviteDetailsIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'cardHeader',
+		variant: 'cardHeader',
 		multiplier: 2,
 	})
 
 	const additionalProjectsIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'detailCopy',
+		variant: 'detailCopy',
 		multiplier: 1.5,
 	})
 

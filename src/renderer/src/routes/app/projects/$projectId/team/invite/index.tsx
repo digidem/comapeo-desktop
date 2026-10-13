@@ -53,12 +53,12 @@ function RouteComponent() {
 	const { projectId } = Route.useParams()
 
 	const addIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 4,
 	})
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'pageTitle',
+		variant: 'pageTitle',
 		multiplier: 1.25,
 	})
 

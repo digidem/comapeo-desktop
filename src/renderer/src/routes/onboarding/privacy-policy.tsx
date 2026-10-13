@@ -350,7 +350,7 @@ function CustomAccordion({
 	const [expanded, setExpanded] = useState(false)
 
 	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 		multiplier: 2,
 	})
 

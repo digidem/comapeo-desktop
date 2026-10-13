@@ -89,7 +89,7 @@ function RouteComponent() {
 	})
 
 	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 4,
 	})
 

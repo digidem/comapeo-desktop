@@ -162,7 +162,7 @@ function RouteComponent() {
 	const projectColorLabelId = useId()
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'pageTitle',
+		variant: 'pageTitle',
 		multiplier: 1.25,
 	})
 

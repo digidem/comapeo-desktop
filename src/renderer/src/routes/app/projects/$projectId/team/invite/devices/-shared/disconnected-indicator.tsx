@@ -9,7 +9,7 @@ export function DisconnectedIndicator() {
 	const intl = useIntl()
 
 	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'detailCopy',
+		variant: 'detailCopy',
 		multiplier: 1,
 	})
 

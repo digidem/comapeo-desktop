@@ -40,7 +40,7 @@ function RouteComponent() {
 	const { projectId } = Route.useParams()
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'pageTitle',
+		variant: 'pageTitle',
 		multiplier: 1.25,
 	})
 
@@ -222,7 +222,7 @@ function NetworkConnectionInfo() {
 	let displayedContent: ReactNode
 
 	const wifiIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 		multiplier: 0.8,
 	})
 

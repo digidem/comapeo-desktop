@@ -197,7 +197,7 @@ function MembersSections({ projectId }: { projectId: string }) {
 		getDisplayableMembers(members)
 
 	const sectionIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'sectionLabel',
+		variant: 'sectionLabel',
 		multiplier: 1.25,
 	})
 
@@ -320,12 +320,12 @@ function ActiveCollaboratorsList({
 	const intl = useIntl()
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 		multiplier: 1.25,
 	})
 
 	const actionIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 		multiplier: 2,
 	})
 
@@ -402,7 +402,7 @@ function PastCollaboratorsList({
 	const intl = useIntl()
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 		multiplier: 1.25,
 	})
 

@@ -37,12 +37,12 @@ function RouteComponent() {
 	const peer = updatedPeer || peerOnLoad
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'pageTitle',
+		variant: 'pageTitle',
 		multiplier: 1.25,
 	})
 
 	const roleIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'cardHeader',
+		variant: 'cardHeader',
 		multiplier: 1.5,
 	})
 

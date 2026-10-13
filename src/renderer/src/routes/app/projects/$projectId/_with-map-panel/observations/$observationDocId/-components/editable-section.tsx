@@ -39,7 +39,7 @@ export function EditableSection({
 	tooltipText: string
 }) {
 	const editIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'sectionLabel',
+		variant: 'sectionLabel',
 	})
 
 	const [editState, setEditState] = useState<EditState>('idle')

@@ -160,7 +160,7 @@ function RouteComponent() {
 		members.length === 1 && members[0]?.deviceId === ownDeviceInfo.deviceId
 
 	const devicesIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 3,
 	})
 
@@ -342,7 +342,7 @@ function RemoteArchiveIndicator({ projectId }: { projectId: string }) {
 	const { online } = useBrowserNetInfo()
 
 	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'detailCopy',
+		variant: 'detailCopy',
 		multiplier: 0.6,
 	})
 

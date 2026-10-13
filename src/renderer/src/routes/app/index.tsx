@@ -293,12 +293,12 @@ function GetStartedPanel() {
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
 	const desktopIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 4,
 	})
 
 	const checkIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 	})
 
 	return (
@@ -400,7 +400,7 @@ function ListedProjectsPanel({ projects }: { projects: Array<ListedProject> }) {
 		: projects
 
 	const sectionIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'sectionLabel',
+		variant: 'sectionLabel',
 		multiplier: 1.5,
 	})
 
@@ -501,12 +501,12 @@ function ListedProjectCard({
 	const displayedName = project.name || intl.formatMessage(m.unnamedProject)
 
 	const activeProjectIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'cardHeader',
+		variant: 'cardHeader',
 		multiplier: 1.25,
 	})
 
 	const roleIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 	})
 
 	return (

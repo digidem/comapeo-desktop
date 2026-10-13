@@ -117,7 +117,7 @@ function RouteComponent() {
 	})
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'pageTitle',
+		variant: 'pageTitle',
 		multiplier: 1.25,
 	})
 

@@ -222,12 +222,12 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 	const peer = updatedPeer || peerOnLoad
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'pageTitle',
+		variant: 'pageTitle',
 		multiplier: 1.25,
 	})
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 2,
 	})
 
@@ -382,7 +382,7 @@ function InvitePending({
 	}, [setCurrentTimestamp])
 
 	const sendIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 8,
 	})
 
@@ -454,7 +454,7 @@ function InviteRejected({
 	const peer = updatedPeer || peerOnLoad
 
 	const errorIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 4,
 	})
 
@@ -538,12 +538,12 @@ function InviteAccepted({
 	const { data: member } = useSingleMember({ projectId, deviceId })
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 3,
 	})
 
 	const successIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 	})
 
 	return (

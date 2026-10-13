@@ -13,7 +13,7 @@ export function DeleteConfirmationDialogContentLayout({
 	title: string
 }) {
 	const errorIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 3,
 	})
 

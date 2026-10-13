@@ -216,7 +216,7 @@ function AttachmentPanel({
 	const router = useRouter()
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'pageTitle',
+		variant: 'pageTitle',
 		multiplier: 1.25,
 	})
 
@@ -302,7 +302,7 @@ function LoadedAttachmentSection({
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
 	const errorIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 4,
 	})
 

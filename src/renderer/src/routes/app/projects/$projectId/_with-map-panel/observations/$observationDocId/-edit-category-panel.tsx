@@ -55,7 +55,7 @@ export function EditCategoryPanel({
 	const intl = useIntl()
 
 	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'pageTitle',
+		variant: 'pageTitle',
 		multiplier: 1.25,
 	})
 
@@ -216,7 +216,7 @@ function CategoriesList({
 	})
 
 	const categoryIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 		multiplier: 2.5,
 	})
 

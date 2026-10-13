@@ -100,7 +100,7 @@ function RouteComponent() {
 	const isSelf = member.deviceId === ownDeviceInfo.deviceId
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'pageTitle',
+		variant: 'pageTitle',
 		multiplier: 1.25,
 	})
 
@@ -201,12 +201,12 @@ function CollaboratorInfoContent({
 	const truncatedDeviceId = member.deviceId.slice(0, 12)
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 3,
 	})
 
 	const roleIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'cardHeader',
+		variant: 'cardHeader',
 		multiplier: 1.5,
 	})
 
@@ -419,17 +419,17 @@ function LeaveProjectDialogContent({
 	})
 
 	const suggestionIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 		multiplier: 1.25,
 	})
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 3,
 	})
 
 	const errorIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 1,
 	})
 

@@ -629,7 +629,7 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 	const { data: role } = useOwnRoleInProject({ projectId })
 
 	const projectSettingsItemIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 		multiplier: 1.2,
 	})
 

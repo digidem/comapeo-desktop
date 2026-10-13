@@ -101,7 +101,7 @@ export function DeviceNameSection({
 	})
 
 	const successIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 		multiplier: 0.5,
 	})
 

@@ -16,7 +16,7 @@ export function DiscardEditsDialogContent({
 	const intl = useIntl()
 
 	const heroIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 3,
 	})
 

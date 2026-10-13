@@ -99,7 +99,7 @@ export function StartProjectDialogContent({
 	})
 
 	const heroIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 4,
 	})
 
@@ -289,7 +289,7 @@ export function LeftProjectDialogContent({
 	const intl = useIntl()
 
 	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 4,
 	})
 
@@ -386,12 +386,12 @@ function AppUsageInterstitial({
 	)
 
 	const heroIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 4,
 	})
 
 	const listItemIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 		multiplier: 1,
 	})
 
@@ -538,7 +538,7 @@ function AppUsageSuccess({
 	const intl = useIntl()
 
 	const heroIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 4,
 	})
 

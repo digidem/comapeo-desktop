@@ -114,12 +114,12 @@ export function AdvancedFiltersDialogContent({
 	})
 
 	const closeIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'pageTitle',
+		variant: 'pageTitle',
 		multiplier: 1.25,
 	})
 
 	const categoryIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 		multiplier: 0.75,
 	})
 

@@ -48,7 +48,7 @@ export function DataAndPrivacySection() {
 	const openExternalURL = useMutation(openExternalURLMutationOptions())
 
 	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'cardHeader',
+		variant: 'cardHeader',
 		multiplier: 3,
 	})
 

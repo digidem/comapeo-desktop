@@ -389,22 +389,22 @@ function ObservationDetailsPanel({
 	})
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'pageTitle',
+		variant: 'pageTitle',
 		multiplier: 1.25,
 	})
 
 	const metadataIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 		multiplier: 1.5,
 	})
 
 	const categoryIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'cardHeader',
+		variant: 'cardHeader',
 		multiplier: 2,
 	})
 
 	const categoryEditSuccessIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'cardHeader',
+		variant: 'cardHeader',
 	})
 
 	// NOTE: We only allow editing one thing at a time.
@@ -1227,7 +1227,7 @@ function ObservationMetadataPanel({
 	}, [observation, intl, unitSystem])
 
 	const validatedIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 2.5,
 	})
 

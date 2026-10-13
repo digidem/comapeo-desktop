@@ -269,7 +269,7 @@ export function DataList({
 	)
 
 	const downloadButtonSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'pageTitle',
+		variant: 'pageTitle',
 		multiplier: 1.25,
 	})
 
@@ -355,12 +355,12 @@ export function DataList({
 		: true
 
 	const categoryIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'cardHeader',
+		variant: 'cardHeader',
 		multiplier: 2,
 	})
 
 	const noResultsIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 4,
 	})
 
@@ -983,7 +983,7 @@ function FilterPill({
 	const intl = useIntl()
 
 	const removeFilterButtonSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 		multiplier: 1,
 	})
 
@@ -1255,7 +1255,7 @@ function CategoriesFilterSelect({
 	const dataOptionPrefixId = useId()
 
 	const categoryIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 		multiplier: 0.75,
 	})
 

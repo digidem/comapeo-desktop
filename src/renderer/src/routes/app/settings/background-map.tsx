@@ -38,7 +38,7 @@ function RouteComponent() {
 	const router = useRouter()
 
 	const headerIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'pageTitle',
+		variant: 'pageTitle',
 		multiplier: 1.5,
 	})
 
@@ -334,12 +334,12 @@ function CustomMapDetails({
 	const intl = useIntl()
 
 	const headingIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 3,
 	})
 
 	const sizeIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'bodyCopy',
+		variant: 'bodyCopy',
 		multiplier: 1,
 	})
 

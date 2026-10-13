@@ -24,7 +24,7 @@ export function ErrorDialogContent({
 	const [advancedExpanded, setAdvancedExpanded] = useState(false)
 
 	const errorIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 3,
 	})
 

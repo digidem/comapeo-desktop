@@ -14,7 +14,7 @@ export function DeleteSuccessPanelLayout({
 	title: string
 }) {
 	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 4,
 	})
 

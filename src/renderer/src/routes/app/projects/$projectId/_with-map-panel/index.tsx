@@ -201,7 +201,7 @@ function RouteComponent() {
 	const hasDataToShow = observations.length + tracks.length > 0
 
 	const introPanelIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 4,
 	})
 

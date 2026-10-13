@@ -103,7 +103,7 @@ function SuccessPanel({
 	const showItemInFolder = useMutation(showItemInFolderMutationOptions())
 
 	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'heroHeader',
+		variant: 'heroHeader',
 		multiplier: 4,
 	})
 
@@ -265,7 +265,7 @@ function DownloadForm({
 	})
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'pageTitle',
+		variant: 'pageTitle',
 		multiplier: 1.25,
 	})
 

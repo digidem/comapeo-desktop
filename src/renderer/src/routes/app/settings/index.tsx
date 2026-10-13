@@ -29,12 +29,12 @@ function RouteComponent() {
 	const router = useRouter()
 
 	const headerIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'pageTitle',
+		variant: 'pageTitle',
 		multiplier: 1.5,
 	})
 
 	const sectionHeadingIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'sectionLabel',
+		variant: 'sectionLabel',
 		multiplier: 1.5,
 	})
 
