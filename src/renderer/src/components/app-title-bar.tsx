@@ -20,14 +20,15 @@ export function AppTitleBar({
 		<Box
 			data-testid={testId}
 			sx={{
-				// NOTE: macOS has the window controls on the left side by default.
 				alignItems: 'center',
 				appRegion: 'drag',
-				bgcolor: TITLE_BAR_COLOR,
+				background: TITLE_BAR_COLOR,
 				display: 'flex',
+				flexDirection: 'row',
 				height: TITLE_BAR_HEIGHT,
+				// NOTE: macOS has the window controls on the left side by default.
 				justifyContent: platform === 'darwin' ? 'flex-end' : undefined,
-				paddingX: 6,
+				paddingInline: 6,
 				position: 'relative',
 				WebkitAppRegion: 'drag',
 				zIndex: (theme) => theme.zIndex.tooltip + 1,
