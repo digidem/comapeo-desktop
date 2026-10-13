@@ -418,8 +418,8 @@ function ObservationDetailsPanel({
 		<>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Stack
+					component="header"
 					direction="row"
-					component="nav"
 					sx={{
 						alignItems: 'center',
 						borderBottom: `1px solid ${BLUE_GREY}`,
@@ -449,7 +449,7 @@ function ObservationDetailsPanel({
 						<Icon name="material-arrow-back" size={backIconSize} />
 					</IconButton>
 
-					<Typography component="h1" variant="pageTitle">
+					<Typography variant="pageTitle">
 						{intl.formatMessage(m.navTitle)}
 					</Typography>
 				</Stack>

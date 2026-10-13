@@ -275,8 +275,8 @@ function DownloadForm({
 		<>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Stack
+					component="header"
 					direction="row"
-					component="nav"
 					sx={{
 						alignItems: 'center',
 						gap: 4,

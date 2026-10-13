@@ -68,8 +68,8 @@ export function EditCategoryPanel({
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
+				component="header"
 				direction="row"
-				component="nav"
 				sx={{
 					alignItems: 'center',
 					borderBottom: `1px solid ${BLUE_GREY}`,
@@ -93,7 +93,7 @@ export function EditCategoryPanel({
 					<Icon name="material-close" size={iconSize} />
 				</IconButton>
 
-				<Typography component="h1" variant="pageTitle">
+				<Typography variant="pageTitle">
 					{intl.formatMessage(m.editCategoryPanelTitle)}
 				</Typography>
 			</Stack>
