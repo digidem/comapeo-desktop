@@ -593,12 +593,21 @@ function LeaveProjectConfirmation({
 		},
 	})
 
+	const heroIconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 3,
+	})
+
 	return (
 		<>
 			<Stack direction="column" sx={{ gap: 10, padding: 6 }}>
 				<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 10 }}>
 					<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
-						<Icon name="material-logout" htmlColor={BLUE_05} size={72} />
+						<Icon
+							name="material-logout"
+							htmlColor={BLUE_05}
+							size={heroIconSize}
+						/>
 
 						<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
 							{intl.formatMessage(m.leaveProjectConfirmationTitle)}

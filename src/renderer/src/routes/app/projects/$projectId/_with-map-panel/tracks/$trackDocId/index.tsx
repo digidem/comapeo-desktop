@@ -121,6 +121,11 @@ function RouteComponent() {
 		multiplier: 1.25,
 	})
 
+	const categoryIconSize = useIconSizeBasedOnTypography({
+		variant: 'cardHeader',
+		multiplier: 2,
+	})
+
 	const category = getMatchingCategoryForDocument(track, categories)
 
 	return (
@@ -189,15 +194,15 @@ function RouteComponent() {
 												})}
 												iconDocumentId={category.iconRef.docId}
 												projectId={projectId}
-												imageStyle={{ width: 48, aspectRatio: 1 }}
+												imageStyle={{ aspectRatio: 1, width: categoryIconSize }}
 											/>
 										) : (
-											<Icon name="material-hiking" size={40} />
+											<Icon name="material-hiking" size={categoryIconSize} />
 										)}
 									</CategoryIconContainer>
 								) : (
-									<CategoryIconContainer color={BLACK_00} applyBoxShadow>
-										<Icon name="material-hiking" size={40} />
+									<CategoryIconContainer applyBoxShadow color={BLACK_00}>
+										<Icon name="material-hiking" size={categoryIconSize} />
 									</CategoryIconContainer>
 								)}
 
