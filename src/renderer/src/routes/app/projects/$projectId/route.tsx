@@ -43,9 +43,9 @@ import { useSpinDelay } from 'spin-delay'
 
 import {
 	BLACK_03,
+	BLUE_00,
 	BLUE_GREY,
 	COMAPEO_BLUE,
-	DARK_BLUE,
 	WHITE,
 } from '../../../../colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
@@ -202,9 +202,9 @@ function RouteComponent() {
 	return (
 		<Box
 			sx={{
-				backgroundColor: DARK_BLUE,
-				flex: 1,
+				background: BLUE_00,
 				display: 'grid',
+				flex: 1,
 				gridTemplateColumns: 'min-content 1fr',
 			}}
 		>
@@ -1101,7 +1101,7 @@ const BASE_INACTIVE_LINK_PROPS = {
 		padding: 2,
 		'&:hover': {
 			color: WHITE,
-			background: (theme) => theme.lighten(DARK_BLUE, 0.2),
+			background: (theme) => theme.lighten(BLUE_00, 0.2),
 		},
 		[`&.${iconButtonClasses.disabled}`]: {
 			color: (theme) => theme.darken(BLACK_03, 0.4),
