@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_ORANGE } from '../../../../../../colors.ts'
+import { BLUE_05, ORANGE_00 } from '../../../../../../../../shared/colors.ts'
 import { GenericRoutePendingComponent } from '../../../../../../components/generic-route-pending-component.tsx'
 import { Icon } from '../../../../../../components/icon.tsx'
 import { ButtonLink } from '../../../../../../components/link.tsx'
@@ -69,7 +69,7 @@ function RouteComponent() {
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_GREY}`,
+					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 2,
 					paddingBlock: 4,
 					paddingInline: 6,
@@ -116,7 +116,7 @@ function RouteComponent() {
 						<Stack
 							direction="column"
 							sx={{
-								border: `1px solid ${BLUE_GREY}`,
+								border: `1px solid ${BLUE_05}`,
 								borderRadius: 2,
 								flex: 1,
 								justifyContent: 'center',
@@ -129,7 +129,7 @@ function RouteComponent() {
 								<Box sx={{ alignSelf: 'center' }}>
 									<Icon
 										name="material-person-add"
-										htmlColor={DARK_ORANGE}
+										htmlColor={ORANGE_00}
 										size={addIconSize}
 									/>
 								</Box>

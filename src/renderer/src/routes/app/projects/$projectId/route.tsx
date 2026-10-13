@@ -44,10 +44,10 @@ import { useSpinDelay } from 'spin-delay'
 import {
 	BLACK_03,
 	BLUE_00,
-	BLUE_GREY,
-	COMAPEO_BLUE,
-	WHITE,
-} from '../../../../colors.ts'
+	BLUE_03,
+	BLUE_05,
+	WHITE_00,
+} from '../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../components/icon.tsx'
@@ -422,7 +422,7 @@ function RouteComponent() {
 			<Box
 				component="main"
 				sx={{
-					backgroundColor: WHITE,
+					backgroundColor: WHITE_00,
 					borderStartStartRadius: 10,
 					display: 'flex',
 					overflow: 'auto',
@@ -537,7 +537,7 @@ function ProjectSwitcherButton({
 						const isCurrentProject = p.projectId === currentProjectId
 
 						const displayedName = p.name || intl.formatMessage(m.unnamedProject)
-						const displayedProjectColor = p.projectColor || WHITE
+						const displayedProjectColor = p.projectColor || WHITE_00
 
 						const selectedClass = `&.${menuItemClasses.selected}`
 						const interactedClass = `&:hover, &.${menuItemClasses.focusVisible}, &.${menuItemClasses.selected}:hover, &.${menuItemClasses.selected}.${menuItemClasses.focusVisible}`
@@ -561,15 +561,12 @@ function ProjectSwitcherButton({
 									padding: 4,
 									[selectedClass]: {
 										backgroundColor: displayedProjectColor,
-										outlineColor: COMAPEO_BLUE,
+										outlineColor: BLUE_03,
 									},
 									[interactedClass]: {
 										backgroundColor: displayedProjectColor,
 										outlineColor: (theme) =>
-											theme.darken(
-												isCurrentProject ? COMAPEO_BLUE : BLACK_03,
-												0.1,
-											),
+											theme.darken(isCurrentProject ? BLUE_03 : BLACK_03, 0.1),
 										outlineWidth: 3,
 									},
 								}}
@@ -687,11 +684,11 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 							setShowProjectInfoDialog(true)
 						}}
 						sx={{
-							backgroundColor: projectSettings.projectColor || WHITE,
+							backgroundColor: projectSettings.projectColor || WHITE_00,
 							flex: 1,
 							'&:hover': {
 								backgroundColor: (theme) =>
-									theme.darken(projectSettings.projectColor || WHITE, 0.1),
+									theme.darken(projectSettings.projectColor || WHITE_00, 0.1),
 							},
 						}}
 					>
@@ -717,7 +714,7 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 								sx={{
 									alignItems: 'flex-start',
 									backgroundColor: projectSettings.projectColor,
-									border: `2px solid ${projectSettings.projectColor || BLUE_GREY}`,
+									border: `2px solid ${projectSettings.projectColor || BLUE_05}`,
 									borderRadius: 2,
 									gap: 4,
 									padding: 6,
@@ -845,7 +842,7 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 									</ButtonLink>
 								</ListItem>
 
-								<Divider sx={{ borderColor: BLUE_GREY }} />
+								<Divider sx={{ borderColor: BLUE_05 }} />
 
 								<ListItem sx={{ gap: 4 }}>
 									<Box
@@ -1100,7 +1097,7 @@ const BASE_INACTIVE_LINK_PROPS = {
 		color: BLACK_03,
 		padding: 2,
 		'&:hover': {
-			color: WHITE,
+			color: WHITE_00,
 			background: (theme) => theme.lighten(BLUE_00, 0.2),
 		},
 		[`&.${iconButtonClasses.disabled}`]: {
@@ -1114,7 +1111,7 @@ const BASE_ACTIVE_LINK_PROPS = {
 		aspectRatio: 1,
 		background: (theme) => theme.palette.primary.main,
 		borderRadius: 2,
-		color: WHITE,
+		color: WHITE_00,
 		padding: 2,
 		'&:hover': {
 			background: (theme) => theme.darken(theme.palette.primary.main, 0.1),

@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK_02, BLACK_03, BLUE_GREY } from '../colors.ts'
+import { BLACK_02, BLACK_03, BLUE_05 } from '../../../shared/colors.ts'
 import { useIconSizeBasedOnTypography } from '../hooks/icon.ts'
 import { Icon } from './icon.tsx'
 
@@ -54,7 +54,7 @@ export function ErrorDialogContent({
 						}}
 						sx={{
 							':hover, :focus': {
-								backgroundColor: alpha(BLUE_GREY, 0.2),
+								background: alpha(BLUE_05, 0.2),
 								transition: (theme) =>
 									theme.transitions.create('background-color'),
 							},
@@ -88,7 +88,7 @@ export function ErrorDialogContent({
 						<Box
 							sx={{
 								background: BLACK_03,
-								border: `1px solid ${BLUE_GREY}`,
+								border: `1px solid ${BLUE_05}`,
 								borderRadius: 2,
 								maxHeight: 300,
 								overflow: 'auto',

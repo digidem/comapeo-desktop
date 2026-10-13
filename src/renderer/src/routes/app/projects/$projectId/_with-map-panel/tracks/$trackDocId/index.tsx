@@ -18,7 +18,7 @@ import {
 } from 'react-intl'
 
 import { SyncedIndicatorLine } from '../../../../-shared/synced-indicator-line.tsx'
-import { BLACK_00, BLUE_GREY } from '../../../../../../../colors.ts'
+import { BLACK_00, BLUE_05 } from '../../../../../../../../../shared/colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -130,7 +130,7 @@ function RouteComponent() {
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_GREY}`,
+					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 4,
 					padding: 4,
 				}}
@@ -172,7 +172,7 @@ function RouteComponent() {
 						</Typography>
 					</Box>
 					<Stack direction="column" sx={{ paddingInline: 6 }}>
-						<Box sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}>
+						<Box sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2 }}>
 							<Stack
 								direction="row"
 								sx={{ alignItems: 'center', gap: 4, padding: 4 }}

@@ -24,7 +24,7 @@ import * as v from 'valibot'
 import { DeleteConfirmationDialogContentLayout } from '../-components/delete-confirmation-dialog-content-layout.tsx'
 import { DeleteSuccessPanelLayout } from '../-components/delete-success-panel-layout.tsx'
 import { PhotoAttachmentImage } from '../-components/photo-attachment-image.tsx'
-import { BLUE_GREY } from '../../../../../../../../colors.ts'
+import { BLUE_05 } from '../../../../../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../../../../../components/decent-dialog.tsx'
 import { ErrorBoundary } from '../../../../../../../../components/error-boundary.tsx'
 import { ErrorDialogContent } from '../../../../../../../../components/error-dialog.tsx'
@@ -190,7 +190,7 @@ function RouteComponent() {
 
 const BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE: SxProps<Theme> = {
 	alignItems: 'center',
-	border: `1px solid ${BLUE_GREY}`,
+	border: `1px solid ${BLUE_05}`,
 	borderRadius: 4,
 	display: 'flex',
 	flexDirection: 'row',
@@ -226,7 +226,7 @@ function AttachmentPanel({
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_GREY}`,
+					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 4,
 					padding: 4,
 				}}
@@ -365,7 +365,7 @@ function LoadedAttachmentSection({
 								attachmentVariant={blobId.variant}
 								projectId={projectId}
 								style={{
-									border: `1px solid ${BLUE_GREY}`,
+									border: `1px solid ${BLUE_05}`,
 									borderRadius: 4,
 									margin: 'auto',
 									width: 'min(100%, 400px)',
@@ -387,7 +387,7 @@ function LoadedAttachmentSection({
 				<Stack
 					direction="row"
 					sx={{
-						borderTop: `1px solid ${BLUE_GREY}`,
+						borderTop: `1px solid ${BLUE_05}`,
 						flexWrap: 'wrap',
 						gap: 6,
 						justifyContent: 'space-around',
@@ -504,7 +504,7 @@ function DeleteButton({
 			>
 				<IconButton
 					aria-labelledby={labelId}
-					sx={{ border: `1px solid ${BLUE_GREY}` }}
+					sx={{ border: `1px solid ${BLUE_05}` }}
 					onClick={() => {
 						setShowConfirmation(true)
 					}}
@@ -630,7 +630,7 @@ function DownloadButton({
 			>
 				<IconButton
 					aria-labelledby={labelId}
-					sx={{ border: `1px solid ${BLUE_GREY}` }}
+					sx={{ border: `1px solid ${BLUE_05}` }}
 					onClick={() => {
 						if (downloadUrl.status === 'pending') {
 							return

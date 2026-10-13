@@ -1,7 +1,7 @@
 import { useOwnDeviceInfo } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 
-import { COMAPEO_BLUE } from '../../../../colors'
+import { BLUE_03 } from '../../../../../../shared/colors.ts'
 
 export function SyncedIndicatorLine({
 	createdByDeviceId,
@@ -13,12 +13,12 @@ export function SyncedIndicatorLine({
 	return ownDeviceInfo.deviceId !== createdByDeviceId ? (
 		<Box
 			sx={{
-				position: 'absolute',
-				width: 8,
-				left: 0,
+				background: BLUE_03,
 				bottom: 0,
+				left: 0,
+				position: 'absolute',
 				top: 0,
-				bgcolor: COMAPEO_BLUE,
+				width: 8,
 			}}
 		/>
 	) : null

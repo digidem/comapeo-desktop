@@ -9,11 +9,11 @@ import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 
 import {
-	BLUE_GREY,
-	COMAPEO_BLUE,
-	GREEN,
-	LIGHT_COMAPEO_BLUE,
-} from '../../../../../../../../colors.ts'
+	BLUE_03,
+	BLUE_05,
+	BLUE_06,
+	GREEN_00,
+} from '../../../../../../../../../../shared/colors.ts'
 import { Icon } from '../../../../../../../../components/icon.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../../../../hooks/icon.ts'
 
@@ -77,7 +77,7 @@ export function EditableSection({
 				textAlign: 'start',
 				':disabled': { color: (theme) => theme.palette.text.disabled },
 				':hover, :focus': {
-					background: alpha(LIGHT_COMAPEO_BLUE, 0.5),
+					background: alpha(BLUE_06, 0.5),
 					transition: (theme) => theme.transitions.create('background-color'),
 				},
 			}}
@@ -109,7 +109,7 @@ export function EditableSection({
 						<Icon
 							name="material-check-circle-rounded"
 							sx={{ height: editIconSize, width: editIconSize }}
-							htmlColor={GREEN}
+							htmlColor={GREEN_00}
 						/>
 					) : (
 						<Icon
@@ -117,9 +117,9 @@ export function EditableSection({
 							sx={{ height: editIconSize, width: editIconSize }}
 							htmlColor={
 								editState === 'active'
-									? COMAPEO_BLUE
+									? BLUE_03
 									: disabled
-										? BLUE_GREY
+										? BLUE_05
 										: undefined
 							}
 						/>

@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY } from '../../../colors.ts'
+import { BLUE_05 } from '../../../../../shared/colors.ts'
 import { Icon } from '../../../components/icon.tsx'
 import { useIconSizeBasedOnTypography } from '../../../hooks/icon.ts'
 import { AboutCoMapeoSection } from './-sections/about-comapeo-section.tsx'
@@ -45,7 +45,7 @@ function RouteComponent() {
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_GREY}`,
+					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 2,
 					paddingBlock: 4,
 					paddingInline: 6,
@@ -103,11 +103,11 @@ function RouteComponent() {
 								<UnitSystemSection headingIconSize={sectionHeadingIconSize} />
 							</Stack>
 
-							<Divider sx={{ borderColor: BLUE_GREY }} />
+							<Divider sx={{ borderColor: BLUE_05 }} />
 
 							<DataAndPrivacySection />
 
-							<Divider sx={{ borderColor: BLUE_GREY }} />
+							<Divider sx={{ borderColor: BLUE_05 }} />
 
 							<AboutCoMapeoSection />
 						</Stack>

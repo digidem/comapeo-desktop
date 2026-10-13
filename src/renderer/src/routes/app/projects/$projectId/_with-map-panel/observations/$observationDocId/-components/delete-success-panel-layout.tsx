@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 
-import { GREEN } from '../../../../../../../../colors.ts'
+import { GREEN_00 } from '../../../../../../../../../../shared/colors.ts'
 import { Icon } from '../../../../../../../../components/icon.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../../../../hooks/icon.ts'
 
@@ -32,7 +32,7 @@ export function DeleteSuccessPanelLayout({
 			<Stack direction="column" sx={{ alignItems: 'center', gap: 6 }}>
 				<Icon
 					name="material-check-circle-rounded"
-					htmlColor={GREEN}
+					htmlColor={GREEN_00}
 					size={iconSize}
 				/>
 

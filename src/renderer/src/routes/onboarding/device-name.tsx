@@ -16,7 +16,7 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLACK_03, DARK_ORANGE, WHITE } from '../../colors.ts'
+import { BLACK_03, ORANGE_00, WHITE_00 } from '../../../../shared/colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { DecentTextField } from '../../components/decent-text-field.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
@@ -122,7 +122,7 @@ function RouteComponent() {
 						<Box sx={{ alignSelf: 'center' }}>
 							<Icon
 								name="material-symbols-computer"
-								htmlColor={DARK_ORANGE}
+								htmlColor={ORANGE_00}
 								size={iconSize}
 							/>
 						</Box>
@@ -220,7 +220,7 @@ function RouteComponent() {
 										slotProps={{
 											input: {
 												'aria-labelledby': labelId,
-												sx: { background: WHITE },
+												sx: { background: WHITE_00 },
 											},
 										}}
 										value={field.state.value}

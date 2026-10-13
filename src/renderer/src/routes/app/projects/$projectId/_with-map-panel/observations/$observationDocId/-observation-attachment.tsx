@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import type { SxProps } from '@mui/material/styles'
 
-import { BLACK_02, BLUE_GREY } from '../../../../../../../colors.ts'
+import { BLACK_02, BLUE_05 } from '../../../../../../../../../shared/colors.ts'
 import { Icon } from '../../../../../../../components/icon.tsx'
 import { IconButtonLink } from '../../../../../../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../../../hooks/icon.ts'
@@ -28,7 +28,7 @@ const BASE_ATTACHMENT_CONTAINER_STYLE: SxProps = {
 	display: 'flex',
 	flexDirection: 'column',
 	borderRadius: 2,
-	border: `1px solid ${BLUE_GREY}`,
+	border: `1px solid ${BLUE_05}`,
 	justifyContent: 'center',
 	alignItems: 'center',
 	height: ATTACHMENT_CONTAINER_HEIGHT_PX,
@@ -47,7 +47,7 @@ export function ObservationPhotoAttachmentPreview({
 	return (
 		<ImageButtonLink
 			height={128}
-			borderColor={BLUE_GREY}
+			borderColor={BLUE_05}
 			to="/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name"
 			params={(prev) => ({
 				...prev,

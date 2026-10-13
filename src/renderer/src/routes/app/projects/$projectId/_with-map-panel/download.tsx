@@ -21,7 +21,7 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLUE_GREY, GREEN } from '../../../../../colors.ts'
+import { BLUE_05, GREEN_00 } from '../../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
@@ -120,7 +120,7 @@ function SuccessPanel({
 					<Box sx={{ padding: 6 }}>
 						<Icon
 							name="material-check-circle-rounded"
-							htmlColor={GREEN}
+							htmlColor={GREEN_00}
 							size={iconSize}
 						/>
 					</Box>
@@ -281,7 +281,7 @@ function DownloadForm({
 						alignItems: 'center',
 						gap: 4,
 						padding: 4,
-						borderBottom: `1px solid ${BLUE_GREY}`,
+						borderBottom: `1px solid ${BLUE_05}`,
 					}}
 				>
 					<form.Subscribe selector={(state) => state.isSubmitting}>
@@ -440,7 +440,7 @@ function DownloadOption({
 	secondaryText: string
 }) {
 	return (
-		<Box sx={{ padding: 6, border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}>
+		<Box sx={{ padding: 6, border: `1px solid ${BLUE_05}`, borderRadius: 2 }}>
 			<FormControlLabel
 				value={value}
 				control={<Radio />}

@@ -25,13 +25,13 @@ import { defineMessages, useIntl } from 'react-intl'
 
 import {
 	BLACK_00,
-	BLUE_GREY,
-	COMAPEO_BLUE,
-	DARK_ORANGE,
-	GREEN,
-	LIGHT_COMAPEO_BLUE,
-	WHITE,
-} from '../../../../../colors.ts'
+	BLUE_03,
+	BLUE_05,
+	BLUE_06,
+	GREEN_00,
+	ORANGE_00,
+	WHITE_00,
+} from '../../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
@@ -172,7 +172,7 @@ function RouteComponent() {
 					direction="row"
 					sx={{
 						alignItems: 'center',
-						borderBottom: `1px solid ${BLUE_GREY}`,
+						borderBottom: `1px solid ${BLUE_05}`,
 						gap: 4,
 						paddingBlock: 4,
 						paddingInline: 6,
@@ -196,7 +196,7 @@ function RouteComponent() {
 								<Box
 									sx={{
 										alignItems: 'center',
-										border: `8px solid ${connectedPeersCount > 0 ? DARK_ORANGE : BLUE_GREY}`,
+										border: `8px solid ${connectedPeersCount > 0 ? ORANGE_00 : BLUE_05}`,
 										borderRadius: '50%',
 										display: 'flex',
 										flexDirection: 'row',
@@ -206,9 +206,7 @@ function RouteComponent() {
 								>
 									<Icon
 										name="material-symbols-devices"
-										htmlColor={
-											connectedPeersCount > 0 ? DARK_ORANGE : BLUE_GREY
-										}
+										htmlColor={connectedPeersCount > 0 ? ORANGE_00 : BLUE_05}
 										size={devicesIconSize}
 									/>
 								</Box>
@@ -217,7 +215,7 @@ function RouteComponent() {
 									<Box
 										sx={{
 											alignItems: 'center',
-											backgroundColor: DARK_ORANGE,
+											backgroundColor: ORANGE_00,
 											borderRadius: '50%',
 											bottom: -8,
 											display: 'flex',
@@ -231,7 +229,7 @@ function RouteComponent() {
 									>
 										<Icon
 											name="material-symbols-stars-2"
-											htmlColor={WHITE}
+											htmlColor={WHITE_00}
 											size={`calc(${devicesIconSize} / 2)`}
 										/>
 									</Box>
@@ -452,9 +450,9 @@ function SyncProgress({
 	return (
 		<Stack direction="column" sx={{ gap: 3, padding: 6 }}>
 			{stage.name === 'complete-full' ? (
-				<Icon name="material-check" htmlColor={GREEN} />
+				<Icon name="material-check" htmlColor={GREEN_00} />
 			) : stage.name !== 'waiting' ? (
-				<Icon name="material-bolt-sharp" htmlColor={COMAPEO_BLUE} />
+				<Icon name="material-bolt-sharp" htmlColor={BLUE_03} />
 			) : null}
 
 			<LinearProgress {...progressProps} />
@@ -505,9 +503,7 @@ function NetworkConnectionPill() {
 	}
 
 	return (
-		<Box
-			sx={{ backgroundColor: LIGHT_COMAPEO_BLUE, borderRadius: 2, padding: 1 }}
-		>
+		<Box sx={{ backgroundColor: BLUE_06, borderRadius: 2, padding: 1 }}>
 			<Typography
 				color="textTertiary"
 				data-testid="exchange-network-connection-info"

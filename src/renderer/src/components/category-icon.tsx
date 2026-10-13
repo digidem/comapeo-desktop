@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import { alpha } from '@mui/material/styles'
 
-import { WHITE } from '../colors.ts'
+import { WHITE_00 } from '../../../shared/colors.ts'
 import { ErrorBoundary } from './error-boundary.tsx'
 import { Icon } from './icon.tsx'
 import { SuspenseImage } from './suspense-image.tsx'
@@ -27,7 +27,7 @@ export function CategoryIconContainer({
 				flexDirection: 'column',
 				justifyContent: 'center',
 				alignItems: 'center',
-				bgcolor: WHITE,
+				background: WHITE_00,
 				borderRadius: '50%',
 				padding: padding,
 				border: `3px solid ${color}`,

@@ -2,10 +2,9 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { defineMessages, useIntl, type MessageTag } from 'react-intl'
 
+import { BLUE_02 } from '../../../shared/colors.ts'
 import { TITLE_BAR_HEIGHT } from '../lib/constants.ts'
 import { Blue, Bold, Orange } from './intl-rich-text.tsx'
-
-const TITLE_BAR_COLOR = '#2348B2'
 
 export function AppTitleBar({
 	platform,
@@ -22,7 +21,7 @@ export function AppTitleBar({
 			sx={{
 				alignItems: 'center',
 				appRegion: 'drag',
-				background: TITLE_BAR_COLOR,
+				background: BLUE_02,
 				display: 'flex',
 				flexDirection: 'row',
 				height: TITLE_BAR_HEIGHT,

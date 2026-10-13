@@ -14,7 +14,7 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { GREEN, WHITE } from '../../../../colors.ts'
+import { GREEN_00, WHITE_00 } from '../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { DecentTextField } from '../../../../components/decent-text-field.tsx'
 import { DiscardEditsDialogContent } from '../../../../components/discard-edits-dialog.tsx'
@@ -126,7 +126,7 @@ export function DeviceNameSection({
 					{editState === 'success' ? (
 						<Box
 							sx={{
-								bgcolor: GREEN,
+								background: GREEN_00,
 								borderRadius: '50%',
 								display: 'flex',
 								padding: 1,
@@ -134,7 +134,7 @@ export function DeviceNameSection({
 						>
 							<Icon
 								name="material-check"
-								htmlColor={WHITE}
+								htmlColor={WHITE_00}
 								size={successIconSize}
 							/>
 						</Box>

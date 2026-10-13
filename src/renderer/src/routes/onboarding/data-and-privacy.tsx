@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK_03, DARK_ORANGE } from '../../colors.ts'
+import { BLACK_03, ORANGE_00 } from '../../../../shared/colors.ts'
 import { Icon } from '../../components/icon.tsx'
 import { ButtonLink } from '../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
@@ -47,7 +47,7 @@ function RouteComponent() {
 				<Box sx={{ alignSelf: 'center' }}>
 					<Icon
 						name="material-symbols-encrypted-weight200"
-						htmlColor={DARK_ORANGE}
+						htmlColor={ORANGE_00}
 						size={iconSize}
 					/>
 				</Box>

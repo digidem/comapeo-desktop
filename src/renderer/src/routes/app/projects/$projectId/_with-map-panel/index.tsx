@@ -13,7 +13,7 @@ import { endOfToday } from 'date-fns'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { DARK_ORANGE } from '../../../../../colors.ts'
+import { ORANGE_00 } from '../../../../../../../shared/colors.ts'
 import { Icon } from '../../../../../components/icon.tsx'
 import { ButtonLink } from '../../../../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
@@ -214,7 +214,7 @@ function RouteComponent() {
 					<Icon
 						name="material-person-add"
 						size={introPanelIconSize}
-						htmlColor={DARK_ORANGE}
+						htmlColor={ORANGE_00}
 					/>
 				}
 				link={
@@ -239,7 +239,7 @@ function RouteComponent() {
 					<Icon
 						name="material-offline-bolt-outlined"
 						size={introPanelIconSize}
-						htmlColor={DARK_ORANGE}
+						htmlColor={ORANGE_00}
 					/>
 				}
 				link={

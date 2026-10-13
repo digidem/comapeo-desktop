@@ -10,8 +10,8 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
+import { BLUE_05 } from '../../../../../../shared/colors.ts'
 import { CoordinateFormatSchema } from '../../../../../../shared/coordinate-format.ts'
-import { BLUE_GREY } from '../../../../colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../components/icon.tsx'
@@ -57,7 +57,7 @@ export function CoordinateSystemSection({
 				</Stack>
 
 				<FormControl
-					sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2, padding: 6 }}
+					sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2, padding: 6 }}
 				>
 					<RadioGroup
 						aria-labelledby={labelId}

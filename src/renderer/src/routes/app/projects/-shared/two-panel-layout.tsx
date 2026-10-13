@@ -9,7 +9,12 @@ import {
 	usePanelRef,
 } from 'react-resizable-panels'
 
-import { BLACK_00, BLACK_03, BLUE_GREY, WHITE } from '../../../../colors.ts'
+import {
+	BLACK_00,
+	BLACK_03,
+	BLUE_05,
+	WHITE_00,
+} from '../../../../../../shared/colors.ts'
 
 const BOX_SHADOW = `10px 0px 10px -10px ${alpha(BLACK_00, 0.1)}`
 
@@ -57,7 +62,7 @@ export function TwoPanelLayout({
 				defaultSize="30%"
 				maxSize="75%"
 				style={{
-					borderRight: `1px solid ${BLUE_GREY}`,
+					borderRight: `1px solid ${BLUE_05}`,
 					boxShadow: BOX_SHADOW,
 					display: 'flex',
 					zIndex: 2,
@@ -90,10 +95,10 @@ export function TwoPanelLayout({
 				}}
 				style={{
 					alignSelf: 'center',
-					background: WHITE,
+					background: WHITE_00,
 					borderBottomRightRadius: 4,
 					borderBottomWidth: 1,
-					borderColor: BLUE_GREY,
+					borderColor: BLUE_05,
 					borderLeftWidth: 0,
 					borderRightWidth: 1,
 					borderStyle: 'solid',

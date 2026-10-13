@@ -21,7 +21,7 @@ import {
 } from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 
-import { BLACK_03, BLUE_GREY } from '../../../colors.ts'
+import { BLACK_03, BLUE_05 } from '../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../components/error-dialog.tsx'
 import { Icon } from '../../../components/icon.tsx'
@@ -49,7 +49,7 @@ function RouteComponent() {
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_GREY}`,
+					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 2,
 					paddingBlock: 4,
 					paddingInline: 6,
@@ -250,7 +250,7 @@ function NoCustomMap({
 							<Box
 								sx={{
 									background: BLACK_03,
-									border: `1px solid ${BLUE_GREY}`,
+									border: `1px solid ${BLUE_05}`,
 									borderRadius: 2,
 									padding: 4,
 								}}
@@ -285,7 +285,7 @@ function NoCustomMap({
 			<Stack
 				direction="column"
 				sx={{
-					borderTop: `1px solid ${BLUE_GREY}`,
+					borderTop: `1px solid ${BLUE_05}`,
 					gap: 4,
 					padding: 6,
 				}}
@@ -367,7 +367,7 @@ function CustomMapDetails({
 						<Stack
 							direction="column"
 							sx={{
-								border: `1px solid ${BLUE_GREY}`,
+								border: `1px solid ${BLUE_05}`,
 								borderRadius: 2,
 								flex: 1,
 								gap: 20,
@@ -445,7 +445,7 @@ function CustomMapDetails({
 			<Stack
 				direction="column"
 				sx={{
-					borderTop: `1px solid ${BLUE_GREY}`,
+					borderTop: `1px solid ${BLUE_05}`,
 					gap: 4,
 					padding: 6,
 				}}

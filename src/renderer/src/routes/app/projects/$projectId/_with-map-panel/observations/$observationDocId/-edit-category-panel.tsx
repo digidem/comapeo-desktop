@@ -25,7 +25,7 @@ import {
 	type NoMessageValues,
 } from 'react-intl'
 
-import { BLACK_00, BLUE_GREY } from '../../../../../../../colors.ts'
+import { BLACK_00, BLUE_05 } from '../../../../../../../../../shared/colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -72,7 +72,7 @@ export function EditCategoryPanel({
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_GREY}`,
+					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 4,
 					padding: 4,
 				}}
@@ -253,7 +253,7 @@ function CategoriesList({
 							sx={{
 								borderRadius: 2,
 								':hover, :focus': {
-									backgroundColor: alpha(BLUE_GREY, 0.2),
+									backgroundColor: alpha(BLUE_05, 0.2),
 									transition: (theme) =>
 										theme.transitions.create('background-color'),
 								},

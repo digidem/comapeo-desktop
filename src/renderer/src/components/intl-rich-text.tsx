@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react'
 import type { IntlProvider } from 'react-intl'
 
-import { CORNFLOWER_BLUE, ORANGE } from '../colors.ts'
+import { BLUE_04, ORANGE_01 } from '../../../shared/colors.ts'
 
 type FormatXMLElementFn = NonNullable<
 	ComponentProps<typeof IntlProvider>['defaultRichTextElements']
@@ -12,11 +12,11 @@ export const Bold: FormatXMLElementFn = (parts) => {
 }
 
 export const Orange: FormatXMLElementFn = (parts) => {
-	return <span style={{ color: ORANGE }}>{parts}</span>
+	return <span style={{ color: ORANGE_01 }}>{parts}</span>
 }
 
 export const Blue: FormatXMLElementFn = (parts) => {
-	return <span style={{ color: CORNFLOWER_BLUE }}>{parts}</span>
+	return <span style={{ color: BLUE_04 }}>{parts}</span>
 }
 
 export const Break: FormatXMLElementFn = (_parts) => {

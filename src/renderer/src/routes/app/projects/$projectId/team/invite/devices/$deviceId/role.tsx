@@ -11,7 +11,7 @@ import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { DeviceRow } from '../-shared/device-row.tsx'
-import { BLUE_GREY } from '../../../../../../../../colors.ts'
+import { BLUE_05 } from '../../../../../../../../../../shared/colors.ts'
 import { GenericRoutePendingComponent } from '../../../../../../../../components/generic-route-pending-component.tsx'
 import { Icon } from '../../../../../../../../components/icon.tsx'
 import { useLocalPeersState } from '../../../../../../../../contexts/local-peers-store-context.ts'
@@ -53,7 +53,7 @@ function RouteComponent() {
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_GREY}`,
+					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 2,
 					paddingBlock: 4,
 					paddingInline: 6,
@@ -93,7 +93,7 @@ function RouteComponent() {
 						paddingInline: 4,
 					}}
 				>
-					<Box sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}>
+					<Box sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2 }}>
 						<DeviceRow
 							deviceId={peer.deviceId}
 							deviceType={peer.deviceType}
@@ -161,7 +161,7 @@ function RoleOption({
 	onClick?: () => void
 }) {
 	return (
-		<ListItem sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}>
+		<ListItem sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2 }}>
 			<ListItemButton
 				disableGutters
 				disableTouchRipple

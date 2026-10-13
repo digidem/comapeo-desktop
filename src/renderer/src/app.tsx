@@ -23,8 +23,8 @@ import {
 } from '@tanstack/react-router'
 import { useIntl, type IntlShape } from 'react-intl'
 
+import { WHITE_00 } from '../../shared/colors.ts'
 import type { LocaleState } from '../../shared/intl.ts'
-import { WHITE } from './colors.ts'
 import { AppTitleBar } from './components/app-title-bar.tsx'
 import { GenericRouteErrorComponent } from './components/generic-route-error-component.tsx'
 import { GenericRouteNotFoundComponent } from './components/generic-route-not-found-component.tsx'
@@ -94,7 +94,7 @@ const router = createRouter({
 	defaultErrorComponent: GenericRouteErrorComponent,
 	defaultPendingComponent: GenericRoutePendingComponent,
 	defaultNotFoundComponent: ({ data }) => (
-		<GenericRouteNotFoundComponent data={data} backgroundColor={WHITE} />
+		<GenericRouteNotFoundComponent data={data} backgroundColor={WHITE_00} />
 	),
 	notFoundMode: 'fuzzy',
 	protocolAllowlist: [

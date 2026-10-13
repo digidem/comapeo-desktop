@@ -50,10 +50,10 @@ import { SyncedIndicatorLine } from '../../-shared/synced-indicator-line.tsx'
 import {
 	BLACK_00,
 	BLACK_03,
-	BLUE_GREY,
-	LIGHT_COMAPEO_BLUE,
-	WHITE,
-} from '../../../../../colors.ts'
+	BLUE_05,
+	BLUE_06,
+	WHITE_00,
+} from '../../../../../../../shared/colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -377,7 +377,7 @@ export function DataList({
 					<Stack
 						direction="column"
 						sx={{
-							borderBottom: `1px solid ${BLUE_GREY}`,
+							borderBottom: `1px solid ${BLUE_05}`,
 							gap: 4,
 							paddingBlock: 4,
 							paddingInline: 6,
@@ -395,9 +395,7 @@ export function DataList({
 								<Box
 									sx={{
 										background:
-											sortedListData.length === 0
-												? BLACK_03
-												: LIGHT_COMAPEO_BLUE,
+											sortedListData.length === 0 ? BLACK_03 : BLUE_06,
 										borderRadius: 2,
 										paddingBlock: 1,
 										paddingInline: 2,
@@ -490,7 +488,7 @@ export function DataList({
 								gap: 2,
 								paddingInline: 6,
 								paddingBlock: 4,
-								borderBottom: `1px solid ${BLUE_GREY}`,
+								borderBottom: `1px solid ${BLUE_05}`,
 							}}
 						>
 							<Button
@@ -590,7 +588,7 @@ export function DataList({
 												color={
 													matchingFilterOption.color
 														? alpha(matchingFilterOption.color, 0.1)
-														: WHITE
+														: WHITE_00
 												}
 												label={matchingFilterOption.name}
 												onRemove={() => {
@@ -726,7 +724,7 @@ export function DataList({
 											<Box
 												key={row.key}
 												sx={{
-													background: WHITE,
+													background: WHITE_00,
 													height: `${row.size}px`,
 													left: 0,
 													position: 'absolute',
@@ -875,7 +873,7 @@ export function DataList({
 										<Icon
 											name="noun-project-notebook"
 											size={noResultsIconSize}
-											htmlColor={BLUE_GREY}
+											htmlColor={BLUE_05}
 										/>
 									</Box>
 
@@ -963,7 +961,7 @@ function OutdatedFilterPill({
 	return (
 		<FilterPill
 			outdated
-			color={category.color ? alpha(category.color, 0.1) : WHITE}
+			color={category.color ? alpha(category.color, 0.1) : WHITE_00}
 			label={category.name}
 			onRemove={onRemove}
 		/>
@@ -1013,7 +1011,7 @@ function FilterPill({
 					direction="row"
 					sx={{
 						alignItems: 'center',
-						border: `1px solid ${BLUE_GREY}`,
+						border: `1px solid ${BLUE_05}`,
 						borderRadius: 2,
 						paddingInline: 4,
 						gap: 4,
@@ -1042,7 +1040,7 @@ function FilterPill({
 			sx={{
 				alignItems: 'center',
 				background: outdated ? undefined : color,
-				border: `1px solid ${BLUE_GREY}`,
+				border: `1px solid ${BLUE_05}`,
 				borderRadius: 2,
 				paddingInline: 4,
 				gap: 4,
@@ -1136,13 +1134,13 @@ function ObservationCategoryWithAttachmentsPreview({
 									shouldStack
 										? {
 												aspectRatio: 1,
-												border: `1px solid ${BLUE_GREY}`,
+												border: `1px solid ${BLUE_05}`,
 												width: '80%',
 												top: index * 5,
 												left: index * 5,
 											}
 										: {
-												border: `1px solid ${BLUE_GREY}`,
+												border: `1px solid ${BLUE_05}`,
 												top: 0,
 												right: 0,
 												left: 0,
@@ -1171,7 +1169,7 @@ function ObservationCategoryWithAttachmentsPreview({
 												alignItems: 'center',
 												height: '100%',
 												width: '100%',
-												bgcolor: WHITE,
+												background: WHITE_00,
 											}}
 										>
 											<Icon name="material-error" color="error" />
@@ -1265,11 +1263,7 @@ function CategoriesFilterSelect({
 			multiSelect
 			displayedValue={
 				<Stack direction="row" sx={{ gap: 2 }}>
-					<Icon
-						aria-hidden
-						name="material-symbols-apps"
-						htmlColor={BLUE_GREY}
-					/>
+					<Icon aria-hidden name="material-symbols-apps" htmlColor={BLUE_05} />
 
 					<Typography
 						sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
@@ -1569,7 +1563,7 @@ function DateFilterSelect({
 					<Icon
 						aria-hidden
 						name="material-symbols-schedule"
-						htmlColor={BLUE_GREY}
+						htmlColor={BLUE_05}
 					/>
 
 					<Typography
@@ -1643,7 +1637,7 @@ function DateFilterSelect({
 				selected={selectedOption.id === 'from-start'}
 				aria-selected={value === undefined}
 				tabIndex={-1}
-				sx={{ padding: 4, borderBottom: `1px solid ${BLUE_GREY}` }}
+				sx={{ padding: 4, borderBottom: `1px solid ${BLUE_05}` }}
 				data-option-id={`${dataItemPrefixId}-from-start`}
 				onClick={() => {
 					if (selectedOption.id === 'from-start') {
@@ -1684,7 +1678,7 @@ function DateFilterSelect({
 					tabIndex={-1}
 					selected={selectedOption.id === 'custom'}
 					aria-selected={selectedOption.id === 'custom'}
-					sx={{ padding: 4, borderBottom: `1px solid ${BLUE_GREY}` }}
+					sx={{ padding: 4, borderBottom: `1px solid ${BLUE_05}` }}
 					data-option-id={`${dataItemPrefixId}-custom`}
 					onClick={() => {
 						if (selectedOption.id === 'custom') {

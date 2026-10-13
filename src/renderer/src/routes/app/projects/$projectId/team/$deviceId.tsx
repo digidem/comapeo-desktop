@@ -15,6 +15,7 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import {
@@ -29,10 +30,9 @@ import { DeviceIcon } from '../../-shared/device-icon.tsx'
 import {
 	BLACK_02,
 	BLACK_03,
-	BLUE_GREY,
-	PROJECT_ORANGE,
-	WHITE,
-} from '../../../../../colors.ts'
+	BLUE_05,
+	WHITE_00,
+} from '../../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
@@ -112,7 +112,7 @@ function RouteComponent() {
 					direction="row"
 					sx={{
 						alignItems: 'center',
-						borderBottom: `1px solid ${BLUE_GREY}`,
+						borderBottom: `1px solid ${BLUE_05}`,
 						gap: 4,
 						paddingBlock: 4,
 						paddingInline: 6,
@@ -278,7 +278,7 @@ function CollaboratorInfoContent({
 					<Stack
 						direction="column"
 						sx={{
-							border: `1px solid ${BLUE_GREY}`,
+							border: `1px solid ${BLUE_05}`,
 							borderRadius: 2,
 							flex: 1,
 							gap: 20,
@@ -350,7 +350,7 @@ function CollaboratorInfoContent({
 				<Stack
 					direction="row"
 					sx={{
-						borderTop: `1px solid ${BLUE_GREY}`,
+						borderTop: `1px solid ${BLUE_05}`,
 						justifyContent: 'center',
 						padding: 6,
 					}}
@@ -460,7 +460,7 @@ function LeaveProjectDialogContent({
 								>
 									<Icon
 										name="material-symbols-exclamation"
-										htmlColor={WHITE}
+										htmlColor={WHITE_00}
 										size={errorIconSize}
 									/>
 								</Box>
@@ -486,8 +486,8 @@ function LeaveProjectDialogContent({
 						<Box
 							sx={{
 								alignSelf: 'stretch',
-								background: PROJECT_ORANGE,
-								border: `1px solid ${BLUE_GREY}`,
+								background: (theme) => alpha(theme.palette.warning.main, 0.1),
+								border: `1px solid ${BLUE_05}`,
 								borderRadius: 2,
 								padding: 6,
 							}}
@@ -598,7 +598,7 @@ function LeaveProjectConfirmation({
 			<Stack direction="column" sx={{ gap: 10, padding: 6 }}>
 				<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 10 }}>
 					<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
-						<Icon name="material-logout" htmlColor={BLUE_GREY} size={72} />
+						<Icon name="material-logout" htmlColor={BLUE_05} size={72} />
 
 						<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
 							{intl.formatMessage(m.leaveProjectConfirmationTitle)}

@@ -17,7 +17,7 @@ import {
 	type NoMessageValues,
 } from 'react-intl'
 
-import { COMAPEO_BLUE, DARK_COMAPEO_BLUE, WHITE } from '../../colors.ts'
+import { BLUE_01, BLUE_03, WHITE_00 } from '../../../../shared/colors.ts'
 import { Icon } from '../../components/icon.tsx'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo.ts'
 
@@ -54,7 +54,7 @@ function RouteComponent() {
 	const stepNumber = currentRoute.staticData?.onboardingStepNumber
 
 	return (
-		<Box sx={{ bgcolor: DARK_COMAPEO_BLUE, padding: 5, height: '100%' }}>
+		<Box sx={{ background: BLUE_01, padding: 5, height: '100%' }}>
 			<Container
 				maxWidth="md"
 				component={Box}
@@ -97,7 +97,7 @@ function RouteComponent() {
 								}
 							}}
 							// TODO: Ideally update the theme appropriately instead
-							sx={{ color: WHITE }}
+							sx={{ color: WHITE_00 }}
 						>
 							{intl.formatMessage(m.goBack)}
 						</Button>
@@ -111,7 +111,7 @@ function RouteComponent() {
 
 						<Divider
 							aria-hidden="true"
-							sx={{ minWidth: 20, maxWidth: 40, backgroundColor: COMAPEO_BLUE }}
+							sx={{ borderColor: BLUE_03, minWidth: 20, maxWidth: 40 }}
 						/>
 
 						<StepIndicator
@@ -139,14 +139,14 @@ function StepIndicator({
 	return (
 		<Box
 			sx={{
+				alignItems: 'center',
+				alignSelf: 'stretch',
+				background: isActive ? WHITE_00 : undefined,
+				borderRadius: 6,
 				display: 'flex',
 				flexDirection: 'row',
-				alignItems: 'center',
 				justifyContent: 'center',
-				alignSelf: 'stretch',
-				bgcolor: isActive ? WHITE : undefined,
-				borderRadius: 6,
-				paddingX: 10,
+				paddingInline: 10,
 			}}
 		>
 			<Typography

@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography'
 import { useRouter, type ErrorComponentProps } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK_03, BLUE_GREY, WHITE } from '../colors.ts'
+import { BLACK_03, BLUE_05, WHITE_00 } from '../../../shared/colors.ts'
 import { buildDocumentReloadURL } from '../lib/navigation.ts'
 
 export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
@@ -21,7 +21,13 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 	return (
 		<Stack
 			direction="column"
-			sx={{ bgcolor: WHITE, flex: 1, gap: 6, height: '100%', overflow: 'auto' }}
+			sx={{
+				background: WHITE_00,
+				flex: 1,
+				gap: 6,
+				height: '100%',
+				overflow: 'auto',
+			}}
 		>
 			<Stack direction="column" sx={{ flex: 1, gap: 6, padding: 6 }}>
 				<Typography
@@ -39,7 +45,7 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 				<Box
 					sx={{
 						background: BLACK_03,
-						border: `1px solid ${BLUE_GREY}`,
+						border: `1px solid ${BLUE_05}`,
 						borderRadius: 2,
 						overflow: 'auto',
 						padding: 4,
@@ -60,9 +66,9 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 
 				<Box
 					sx={{
-						bgcolor: BLACK_03,
+						background: BLACK_03,
 						padding: 4,
-						border: `1px solid ${BLUE_GREY}`,
+						border: `1px solid ${BLUE_05}`,
 						overflow: 'auto',
 						borderRadius: 2,
 					}}

@@ -22,6 +22,7 @@ import * as v from 'valibot'
 
 import type { NewClientMessage } from '../services/core.ts'
 import type { AppConfig, AppType, SentryEnvironment } from '../shared/app.ts'
+import { BLUE_01, BLUE_02 } from '../shared/colors.ts'
 import {
 	DownloadURLParamsSchema,
 	FilesSelectDirectoryParamsSchema,
@@ -393,10 +394,10 @@ function initMainWindow({
 				? join(app.getAppPath(), 'assets', 'icon.png')
 				: undefined,
 		show: false,
-		backgroundColor: '#050F77',
+		backgroundColor: BLUE_02,
 		titleBarStyle: 'hiddenInset',
 		titleBarOverlay: true,
-		accentColor: '#2348B2',
+		accentColor: BLUE_01,
 		webPreferences: {
 			preload: MAIN_WINDOW_PRELOAD_PATH,
 			additionalArguments: [

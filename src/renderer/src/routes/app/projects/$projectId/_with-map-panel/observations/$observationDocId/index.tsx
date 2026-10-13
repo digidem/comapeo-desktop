@@ -26,16 +26,16 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import type { CoordinateFormat } from '../../../../../../../../../shared/coordinate-format.ts'
-import type { UnitSystem } from '../../../../../../../../../shared/unit-system.ts'
 import {
 	BLACK_00,
 	BLACK_03,
-	BLUE_GREY,
-	DARK_ORANGE,
-	GREEN,
-	WHITE,
-} from '../../../../../../../colors.ts'
+	BLUE_05,
+	GREEN_00,
+	ORANGE_00,
+	WHITE_00,
+} from '../../../../../../../../../shared/colors.ts'
+import type { CoordinateFormat } from '../../../../../../../../../shared/coordinate-format.ts'
+import type { UnitSystem } from '../../../../../../../../../shared/unit-system.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -422,7 +422,7 @@ function ObservationDetailsPanel({
 					direction="row"
 					sx={{
 						alignItems: 'center',
-						borderBottom: `1px solid ${BLUE_GREY}`,
+						borderBottom: `1px solid ${BLUE_05}`,
 						gap: 4,
 						padding: 4,
 					}}
@@ -524,7 +524,7 @@ function ObservationDetailsPanel({
 						</Box>
 
 						<Stack direction="column" sx={{ paddingInline: 6 }}>
-							<Box sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}>
+							<Box sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2 }}>
 								<Stack
 									direction="row"
 									sx={{
@@ -579,7 +579,7 @@ function ObservationDetailsPanel({
 											{showCategoryUpdatedIndicator ? (
 												<Box
 													sx={{
-														background: GREEN,
+														background: GREEN_00,
 														borderRadius: '50%',
 														bottom: (theme) => theme.spacing(-1),
 														display: 'flex',
@@ -590,7 +590,7 @@ function ObservationDetailsPanel({
 												>
 													<Icon
 														name="material-check"
-														htmlColor={WHITE}
+														htmlColor={WHITE_00}
 														size={categoryEditSuccessIconSize}
 													/>
 												</Box>
@@ -633,7 +633,7 @@ function ObservationDetailsPanel({
 									) : null}
 								</Stack>
 
-								<Divider variant="fullWidth" sx={{ color: BLUE_GREY }} />
+								<Divider variant="fullWidth" sx={{ color: BLUE_05 }} />
 
 								<Stack
 									direction="row"
@@ -641,7 +641,7 @@ function ObservationDetailsPanel({
 								>
 									<Icon
 										name="material-symbols-location-filled"
-										htmlColor={DARK_ORANGE}
+										htmlColor={ORANGE_00}
 									/>
 
 									{typeof observation.lon === 'number' &&
@@ -790,7 +790,7 @@ function ObservationDetailsPanel({
 
 						<Divider
 							variant="fullWidth"
-							sx={{ bgcolor: BLUE_GREY, marginInline: 6 }}
+							sx={{ background: BLUE_05, marginInline: 6 }}
 						/>
 
 						{canEdit ? (
@@ -813,7 +813,7 @@ function ObservationDetailsPanel({
 
 						<Divider
 							variant="fullWidth"
-							sx={{ bgcolor: BLUE_GREY, marginInline: 6 }}
+							sx={{ background: BLUE_05, marginInline: 6 }}
 						/>
 
 						{fieldsToDisplay.length > 0 ? (
@@ -951,7 +951,7 @@ function ObservationDetailsPanel({
 							direction="column"
 							sx={{
 								alignItems: 'center',
-								borderTop: `1px solid ${BLUE_GREY}`,
+								borderTop: `1px solid ${BLUE_05}`,
 								gap: 2,
 								justifyContent: 'center',
 								padding: 6,
@@ -960,7 +960,7 @@ function ObservationDetailsPanel({
 							<IconButton
 								disabled={!!activeEditId}
 								aria-labelledby="delete-observation-button-label"
-								sx={{ border: `1px solid ${BLUE_GREY}` }}
+								sx={{ border: `1px solid ${BLUE_05}` }}
 								onClick={() => {
 									setShowDeleteObservationConfirmation(true)
 								}}
@@ -1246,7 +1246,7 @@ function ObservationMetadataPanel({
 
 					<Box
 						sx={{
-							background: GREEN,
+							background: GREEN_00,
 							borderRadius: '50%',
 							bottom: 0,
 							display: 'flex',
@@ -1257,7 +1257,7 @@ function ObservationMetadataPanel({
 					>
 						<Icon
 							name="material-check"
-							htmlColor={WHITE}
+							htmlColor={WHITE_00}
 							size={`calc(${validatedIconSize} / 3)`}
 						/>
 					</Box>
@@ -1323,7 +1323,7 @@ function ObservationMetadataPanel({
 								direction="row"
 								sx={{
 									alignItems: 'center',
-									background: index % 2 === 0 ? BLACK_03 : WHITE,
+									background: index % 2 === 0 ? BLACK_03 : WHITE_00,
 									gap: 2,
 									justifyContent: 'space-between',
 									paddingBlock: 4,

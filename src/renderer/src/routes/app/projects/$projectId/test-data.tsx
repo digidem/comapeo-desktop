@@ -32,7 +32,7 @@ import {
 import * as v from 'valibot'
 
 import { TwoPanelLayout } from '../-shared/two-panel-layout.tsx'
-import { BLACK_00, BLUE_GREY } from '../../../../colors.ts'
+import { BLACK_00, BLUE_05 } from '../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { DecentTextField } from '../../../../components/decent-text-field.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
@@ -234,7 +234,7 @@ function RouteComponent() {
 								alignItems: 'center',
 								paddingBlock: 4,
 								paddingInline: 6,
-								borderBottom: `1px solid ${BLUE_GREY}`,
+								borderBottom: `1px solid ${BLUE_05}`,
 							}}
 						>
 							<Typography variant="pageTitle" sx={{ textAlign: 'center' }}>
@@ -481,7 +481,7 @@ function RouteComponent() {
 								direction="column"
 								sx={{
 									alignItems: 'center',
-									borderTop: `1px solid ${BLUE_GREY}`,
+									borderTop: `1px solid ${BLUE_05}`,
 									gap: 4,
 									padding: 6,
 								}}
@@ -518,7 +518,7 @@ function RouteComponent() {
 									flex: 1,
 									justifyContent: 'center',
 									alignItems: 'center',
-									bgcolor: BLACK_00,
+									background: BLACK_00,
 									opacity: 0.5,
 								}}
 							>

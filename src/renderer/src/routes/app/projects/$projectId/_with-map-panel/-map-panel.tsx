@@ -50,7 +50,7 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLACK_00, WHITE } from '../../../../../colors.ts'
+import { BLACK_00, WHITE_00 } from '../../../../../../../shared/colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -119,7 +119,7 @@ const TRACKS_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] = {
 }
 const TRACKS_HOVER_OUTLINE_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] =
 	{
-		'line-color': WHITE,
+		'line-color': WHITE_00,
 		'line-width': 12,
 		'line-opacity': [
 			'case',
@@ -689,7 +689,7 @@ export function MapPanel({
 						right: 0,
 						top: 0,
 						bottom: 0,
-						bgcolor: BLACK_00,
+						background: BLACK_00,
 						opacity: 0.5,
 					}}
 				>
@@ -863,7 +863,7 @@ export function MapPanel({
 							top: 0,
 							right: 0,
 							left: 0,
-							bgcolor: BLACK_00,
+							background: BLACK_00,
 							display: 'grid',
 							placeItems: 'center',
 							backgroundColor: alpha(BLACK_00, 0.5),
@@ -1122,7 +1122,7 @@ function createObservationLayerPaintProperty(
 			9,
 			6,
 		],
-		'circle-stroke-color': WHITE,
+		'circle-stroke-color': WHITE_00,
 		'circle-stroke-width': 3,
 	}
 }

@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY } from '../../../../colors.ts'
+import { BLUE_05 } from '../../../../../../shared/colors.ts'
 
 export function AboutCoMapeoSection() {
 	const intl = useIntl()
@@ -19,7 +19,7 @@ export function AboutCoMapeoSection() {
 				<Stack
 					direction="column"
 					sx={{
-						border: `1px solid ${BLUE_GREY}`,
+						border: `1px solid ${BLUE_05}`,
 						borderRadius: 2,
 						flex: 1,
 						gap: 4,

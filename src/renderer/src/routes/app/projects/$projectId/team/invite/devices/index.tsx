@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, LIGHT_COMAPEO_BLUE } from '../../../../../../../colors.ts'
+import { BLUE_05, BLUE_06 } from '../../../../../../../../../shared/colors.ts'
 import { Icon } from '../../../../../../../components/icon.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../../../hooks/icon.ts'
 import { useBrowserNetInfo } from '../../../../../../../hooks/network.ts'
@@ -51,7 +51,7 @@ function RouteComponent() {
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_GREY}`,
+					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 2,
 					paddingBlock: 4,
 					paddingInline: 6,
@@ -94,11 +94,11 @@ function RouteComponent() {
 					<Stack direction="column" sx={{ flex: 1, gap: 10 }}>
 						<Stack
 							direction="column"
-							sx={{ borderRadius: 2, border: `1px solid ${BLUE_GREY}` }}
+							sx={{ borderRadius: 2, border: `1px solid ${BLUE_05}` }}
 						>
 							<NetworkConnectionInfo />
 
-							<Divider sx={{ borderColor: BLUE_GREY }} />
+							<Divider sx={{ borderColor: BLUE_05 }} />
 
 							<Stack direction="column" sx={{ gap: 4, padding: 6 }}>
 								<Typography>
@@ -174,7 +174,7 @@ function InvitablePeersList({ projectId }: { projectId: string }) {
 			{invitablePeers.map((peer) => (
 				<ListItem
 					key={peer.deviceId}
-					sx={{ borderRadius: 2, border: `1px solid ${BLUE_GREY}` }}
+					sx={{ borderRadius: 2, border: `1px solid ${BLUE_05}` }}
 				>
 					<ListItemButton
 						disableGutters
@@ -308,7 +308,7 @@ function WifiIcon({
 				alignItems: 'center',
 				borderRadius: '50%',
 				padding: 1,
-				bgcolor: LIGHT_COMAPEO_BLUE,
+				background: BLUE_06,
 			}}
 		>
 			<Icon

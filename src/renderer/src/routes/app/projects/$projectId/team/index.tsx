@@ -25,9 +25,9 @@ import { DeviceIcon } from '../../-shared/device-icon.tsx'
 import { ListRowLink } from '../../../-components/list-row-link.tsx'
 import {
 	BLACK_03,
-	BLUE_GREY,
-	LIGHT_COMAPEO_BLUE,
-} from '../../../../../colors.ts'
+	BLUE_05,
+	BLUE_06,
+} from '../../../../../../../shared/colors.ts'
 import { Icon } from '../../../../../components/icon.tsx'
 import { ButtonLink } from '../../../../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
@@ -97,7 +97,7 @@ function RouteComponent() {
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_GREY}`,
+					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 4,
 					flexWrap: 'wrap',
 					paddingBlock: 4,
@@ -146,9 +146,7 @@ function MembersCountPill({ projectId }: { projectId: string }) {
 	const { data: members } = useManyMembers({ projectId })
 
 	return (
-		<Box
-			sx={{ backgroundColor: LIGHT_COMAPEO_BLUE, borderRadius: 2, padding: 1 }}
-		>
+		<Box sx={{ backgroundColor: BLUE_06, borderRadius: 2, padding: 1 }}>
 			<Typography
 				data-testid="exchange-network-connection-info"
 				variant="detailCopy"
@@ -223,7 +221,7 @@ function MembersSections({ projectId }: { projectId: string }) {
 				projectId={projectId}
 			/>
 
-			<Divider variant="fullWidth" sx={{ borderColor: BLUE_GREY }} />
+			<Divider variant="fullWidth" sx={{ borderColor: BLUE_05 }} />
 
 			<Stack direction="column" sx={{ gap: 2 }}>
 				<Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
@@ -251,7 +249,7 @@ function MembersSections({ projectId }: { projectId: string }) {
 
 			{remoteArchives.length > 0 ? (
 				<>
-					<Divider variant="fullWidth" sx={{ bgcolor: BLACK_03 }} />
+					<Divider variant="fullWidth" sx={{ background: BLACK_03 }} />
 
 					<Stack direction="column" sx={{ gap: 2 }}>
 						<Stack direction="row" sx={{ gap: 4, alignItems: 'center' }}>
@@ -280,7 +278,7 @@ function MembersSections({ projectId }: { projectId: string }) {
 
 			{pastCollaborators.length > 0 ? (
 				<>
-					<Divider variant="fullWidth" sx={{ bgcolor: BLACK_03 }} />
+					<Divider variant="fullWidth" sx={{ background: BLACK_03 }} />
 
 					<Stack direction="column" sx={{ gap: 2 }}>
 						<Stack direction="row" sx={{ gap: 4, alignItems: 'center' }}>

@@ -11,7 +11,7 @@ import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_ORANGE } from '../../../../colors.ts'
+import { BLUE_05, ORANGE_00 } from '../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../components/icon.tsx'
@@ -58,7 +58,7 @@ export function DataAndPrivacySection() {
 				<Stack
 					direction="row"
 					sx={{
-						border: `1px solid ${BLUE_GREY}`,
+						border: `1px solid ${BLUE_05}`,
 						borderRadius: 2,
 						gap: 4,
 						padding: 6,
@@ -66,7 +66,7 @@ export function DataAndPrivacySection() {
 				>
 					<Icon
 						name="material-symbols-encrypted-weight200"
-						htmlColor={DARK_ORANGE}
+						htmlColor={ORANGE_00}
 						size={iconSize}
 					/>
 
@@ -98,7 +98,7 @@ export function DataAndPrivacySection() {
 					<Stack
 						component="section"
 						direction="column"
-						sx={{ flex: 1, border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
+						sx={{ flex: 1, border: `1px solid ${BLUE_05}`, borderRadius: 2 }}
 					>
 						<Stack direction="column" sx={{ padding: 6, gap: 4, flex: 1 }}>
 							<Typography component="h3" variant="cardHeader">
@@ -106,7 +106,7 @@ export function DataAndPrivacySection() {
 							</Typography>
 
 							<Stack direction="column" sx={{ gap: 4 }}>
-								<Typography color="textTertiary">
+								<Typography>
 									{intl.formatMessage(
 										m.dataAndPrivacyDiagnosticInformationDescription,
 									)}
@@ -115,23 +115,18 @@ export function DataAndPrivacySection() {
 								<Stack
 									component={List}
 									direction="column"
-									sx={{
-										color: (theme) => theme.palette.text.tertiary,
-										gap: 4,
-										listStyleType: 'disc',
-										paddingInline: 8,
-									}}
+									sx={{ gap: 4, listStyleType: 'disc', paddingInline: 8 }}
 								>
 									<ListItem sx={{ display: 'list-item' }}>
-										<Typography color="inherit">
+										<Typography>
 											{intl.formatMessage(
 												m.dataAndPrivacyDiagnosticInformationPersonalInfo,
 											)}
 										</Typography>
 									</ListItem>
 
-									<ListItem disablePadding sx={{ display: 'list-item' }}>
-										<Typography color="inherit">
+									<ListItem sx={{ display: 'list-item' }}>
+										<Typography>
 											{intl.formatMessage(
 												m.dataAndPrivacyDiagnosticInformationOptOut,
 											)}
@@ -141,7 +136,7 @@ export function DataAndPrivacySection() {
 							</Stack>
 						</Stack>
 
-						<Divider variant="fullWidth" sx={{ backgroundColor: BLUE_GREY }} />
+						<Divider />
 
 						<Box sx={{ paddingBlock: 4, paddingInline: 6 }}>
 							<FormGroup>
@@ -167,7 +162,7 @@ export function DataAndPrivacySection() {
 					<Stack
 						component="section"
 						direction="column"
-						sx={{ flex: 1, border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
+						sx={{ flex: 1, border: `1px solid ${BLUE_05}`, borderRadius: 2 }}
 					>
 						<Stack direction="column" sx={{ padding: 6, gap: 4, flex: 1 }}>
 							<Typography component="h3" variant="cardHeader">
@@ -175,7 +170,7 @@ export function DataAndPrivacySection() {
 							</Typography>
 
 							<Stack direction="column" sx={{ gap: 4 }}>
-								<Typography color="textTertiary">
+								<Typography>
 									{intl.formatMessage(m.dataAndPrivacyAppUsageDescription)}
 								</Typography>
 
@@ -183,22 +178,21 @@ export function DataAndPrivacySection() {
 									component={List}
 									direction="column"
 									sx={{
-										color: (theme) => theme.palette.text.tertiary,
 										gap: 4,
 										listStyleType: 'disc',
 										paddingInline: 8,
 									}}
 								>
 									<ListItem sx={{ display: 'list-item' }}>
-										<Typography color="inherit">
+										<Typography>
 											{intl.formatMessage(
 												m.dataAndPrivacyAppUsageDetailsIdNumbers,
 											)}
 										</Typography>
 									</ListItem>
 
-									<ListItem disablePadding sx={{ display: 'list-item' }}>
-										<Typography color="inherit">
+									<ListItem sx={{ display: 'list-item' }}>
+										<Typography>
 											{intl.formatMessage(
 												m.dataAndPrivacyAppUsageDetailsIpAddresses,
 											)}
@@ -208,9 +202,9 @@ export function DataAndPrivacySection() {
 							</Stack>
 						</Stack>
 
-						<Divider variant="fullWidth" sx={{ backgroundColor: BLUE_GREY }} />
+						<Divider variant="fullWidth" sx={{ backgroundColor: BLUE_05 }} />
 
-						<Box sx={{ paddingX: 6, paddingY: 4 }}>
+						<Box sx={{ paddingBlock: 4, paddingInline: 6 }}>
 							<FormGroup>
 								<FormControlLabel
 									control={

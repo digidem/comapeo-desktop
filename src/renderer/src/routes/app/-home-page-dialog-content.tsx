@@ -22,14 +22,10 @@ import { useSpinDelay } from 'spin-delay'
 import * as v from 'valibot'
 
 import {
-	DARK_ORANGE,
-	PROJECT_BLUE,
-	PROJECT_GREEN,
-	PROJECT_GREY,
-	PROJECT_ORANGE,
-	PROJECT_RED,
-	WHITE,
-} from '../../colors.ts'
+	ORANGE_00,
+	PROJECT_COLORS,
+	WHITE_00,
+} from '../../../../shared/colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { DecentTextField } from '../../components/decent-text-field.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
@@ -82,11 +78,11 @@ export function StartProjectDialogContent({
 				projectId = await createProject.mutateAsync({
 					name: projectName,
 					projectColor: draw([
-						PROJECT_BLUE,
-						PROJECT_GREEN,
-						PROJECT_GREY,
-						PROJECT_ORANGE,
-						PROJECT_RED,
+						PROJECT_COLORS.BLUE,
+						PROJECT_COLORS.GREEN,
+						PROJECT_COLORS.GREY,
+						PROJECT_COLORS.ORANGE,
+						PROJECT_COLORS.RED,
 					]),
 				})
 			} catch (err) {
@@ -132,7 +128,7 @@ export function StartProjectDialogContent({
 						<Box>
 							<Icon
 								name="material-manage-accounts-filled"
-								htmlColor={DARK_ORANGE}
+								htmlColor={ORANGE_00}
 								size={heroIconSize}
 							/>
 						</Box>
@@ -223,7 +219,7 @@ export function StartProjectDialogContent({
 										slotProps={{
 											input: {
 												'aria-labelledby': labelId,
-												style: { background: WHITE },
+												style: { background: WHITE_00 },
 											},
 										}}
 										value={field.state.value}
@@ -300,7 +296,7 @@ export function LeftProjectDialogContent({
 					<Box>
 						<Icon
 							name="material-symbols-waving-hand"
-							htmlColor={DARK_ORANGE}
+							htmlColor={ORANGE_00}
 							size={iconSize}
 						/>
 					</Box>
@@ -403,7 +399,7 @@ function AppUsageInterstitial({
 						<Box>
 							<Icon
 								name="noun-project-checklist"
-								htmlColor={DARK_ORANGE}
+								htmlColor={ORANGE_00}
 								size={heroIconSize}
 							/>
 						</Box>

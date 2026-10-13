@@ -14,7 +14,7 @@ import {
 	type NoMessageValues,
 } from 'react-intl'
 
-import { BLACK_00, BLUE_GREY, DARK_COMAPEO_BLUE } from '../colors.ts'
+import { BLACK_00, BLUE_01, BLUE_05 } from '../../../shared/colors.ts'
 import { Icon } from '../components/icon.tsx'
 import { Blue, Bold, Orange } from '../components/intl-rich-text.tsx'
 import { ButtonLink } from '../components/link.tsx'
@@ -33,7 +33,7 @@ function RouteComponent() {
 		<Box
 			sx={{
 				alignItems: 'center',
-				background: DARK_COMAPEO_BLUE,
+				background: BLUE_01,
 				backgroundImage: `url("${topographicPrintURL}")`,
 				backgroundPosition: 'center',
 				backgroundRepeat: 'no-repeat',
@@ -92,7 +92,7 @@ function RouteComponent() {
 							direction="column"
 							sx={{
 								background: LIST_BACKGROUND_COLOR,
-								border: `1px solid ${BLUE_GREY}`,
+								border: `1px solid ${BLUE_05}`,
 								borderRadius: 2,
 								color: (theme) => theme.palette.text.inverted,
 								flex: 1,

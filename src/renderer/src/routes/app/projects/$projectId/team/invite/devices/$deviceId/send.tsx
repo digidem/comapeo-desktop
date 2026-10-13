@@ -27,11 +27,11 @@ import { DisconnectedIndicator } from '../-shared/disconnected-indicator.tsx'
 import { DeviceIcon } from '../../../../../-shared/device-icon.tsx'
 import {
 	BLACK_00,
-	BLUE_GREY,
-	COMAPEO_BLUE,
-	GREEN,
-	WHITE,
-} from '../../../../../../../../colors.ts'
+	BLUE_03,
+	BLUE_05,
+	GREEN_00,
+	WHITE_00,
+} from '../../../../../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../../../../components/error-dialog.tsx'
 import { GenericRoutePendingComponent } from '../../../../../../../../components/generic-route-pending-component.tsx'
@@ -238,7 +238,7 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_GREY}`,
+					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 2,
 					paddingBlock: 4,
 					paddingInline: 6,
@@ -281,7 +281,7 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 								direction="column"
 								sx={{
 									alignItems: 'center',
-									border: `1px solid ${BLUE_GREY}`,
+									border: `1px solid ${BLUE_05}`,
 									borderRadius: 2,
 									gap: 4,
 									justifyContent: 'center',
@@ -397,11 +397,7 @@ function InvitePending({
 					sx={{ alignItems: 'center', gap: 20, padding: 6 }}
 				>
 					<Stack direction="column" sx={{ alignItems: 'center' }}>
-						<Icon
-							name="comapeo-send"
-							htmlColor={COMAPEO_BLUE}
-							size={sendIconSize}
-						/>
+						<Icon name="comapeo-send" htmlColor={BLUE_03} size={sendIconSize} />
 
 						<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
 							{intl.formatMessage(m.waiting)}
@@ -564,7 +560,7 @@ function InviteAccepted({
 							direction="column"
 							sx={{
 								alignItems: 'center',
-								border: `1px solid ${BLUE_GREY}`,
+								border: `1px solid ${BLUE_05}`,
 								borderRadius: 2,
 								gap: 6,
 								justifyContent: 'center',
@@ -588,13 +584,13 @@ function InviteAccepted({
 										flexDirection: 'column',
 										padding: 2,
 										borderRadius: '50%',
-										background: GREEN,
+										background: GREEN_00,
 										boxShadow: ICON_BOX_SHADOW,
 									}}
 								>
 									<Icon
 										name="material-check"
-										htmlColor={WHITE}
+										htmlColor={WHITE_00}
 										size={successIconSize}
 									/>
 								</Box>

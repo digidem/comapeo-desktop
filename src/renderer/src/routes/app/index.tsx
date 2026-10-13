@@ -25,13 +25,13 @@ import * as v from 'valibot'
 
 import {
 	BLACK_03,
-	BLUE_GREY,
-	COMAPEO_BLUE,
-	DARK_ORANGE,
-	GREEN,
-	LIGHT_COMAPEO_BLUE,
-	WHITE,
-} from '../../colors.ts'
+	BLUE_03,
+	BLUE_05,
+	BLUE_06,
+	GREEN_00,
+	ORANGE_00,
+	WHITE_00,
+} from '../../../../shared/colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
 import {
@@ -134,7 +134,7 @@ function RouteComponent() {
 					direction="row"
 					sx={{
 						alignItems: 'center',
-						borderBottom: `1px solid ${BLUE_GREY}`,
+						borderBottom: `1px solid ${BLUE_05}`,
 						flexWrap: 'wrap',
 						gap: 6,
 						paddingBlock: 4,
@@ -148,7 +148,7 @@ function RouteComponent() {
 
 						<Box
 							sx={{
-								background: LIGHT_COMAPEO_BLUE,
+								background: BLUE_06,
 								borderRadius: 2,
 								paddingBlock: 1,
 								paddingInline: 2,
@@ -314,13 +314,13 @@ function GetStartedPanel() {
 					<Box sx={{ position: 'relative' }}>
 						<Icon
 							name="material-symbols-computer"
-							htmlColor={DARK_ORANGE}
+							htmlColor={ORANGE_00}
 							size={desktopIconSize}
 						/>
 
 						<Box
 							sx={{
-								background: GREEN,
+								background: GREEN_00,
 								borderRadius: '50%',
 								bottom: (theme) => theme.spacing(2),
 								display: 'flex',
@@ -331,7 +331,7 @@ function GetStartedPanel() {
 						>
 							<Icon
 								name="material-check"
-								htmlColor={WHITE}
+								htmlColor={WHITE_00}
 								size={checkIconSize}
 							/>
 						</Box>
@@ -432,7 +432,7 @@ function ListedProjectsPanel({ projects }: { projects: Array<ListedProject> }) {
 
 					{otherProjects.length > 0 ? (
 						<>
-							<Divider sx={{ borderColor: BLUE_GREY }} />
+							<Divider sx={{ borderColor: BLUE_05 }} />
 
 							<Stack component="section" direction="column" sx={{ gap: 4 }}>
 								<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
@@ -518,13 +518,13 @@ function ListedProjectCard({
 			sx={{
 				background: project.projectColor,
 				borderRadius: 2,
-				outline: `2px solid ${highlight ? COMAPEO_BLUE : BLACK_03}`,
+				outline: `2px solid ${highlight ? BLUE_03 : BLACK_03}`,
 				outlineOffset: -1,
 				overflow: 'auto',
 				'&:hover, &:focus-within': {
 					color: (theme) => theme.palette.text.primary,
 					outlineColor: (theme) =>
-						theme.darken(highlight ? COMAPEO_BLUE : BLACK_03, 0.1),
+						theme.darken(highlight ? BLUE_03 : BLACK_03, 0.1),
 					outlineWidth: 3,
 				},
 			}}
@@ -557,7 +557,7 @@ function ListedProjectCard({
 						<Icon
 							name="material-check-circle-rounded"
 							size={activeProjectIconSize}
-							htmlColor={COMAPEO_BLUE}
+							htmlColor={BLUE_03}
 						/>
 					) : null}
 				</Stack>

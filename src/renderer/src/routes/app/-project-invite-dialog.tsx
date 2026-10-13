@@ -21,7 +21,7 @@ import {
 } from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 
-import { BLUE_GREY, GREEN } from '../../colors.ts'
+import { BLUE_05, GREEN_00 } from '../../../../shared/colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
@@ -359,7 +359,7 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 							icon={
 								<Icon
 									name="material-check-circle-rounded"
-									htmlColor={GREEN}
+									htmlColor={GREEN_00}
 									size={inviteDetailsIconSize}
 								/>
 							}
@@ -432,13 +432,13 @@ function InviteDetailsCard({
 		<Stack
 			direction="column"
 			sx={{
+				background: color,
+				border: `1px solid ${BLUE_05}`,
+				borderRadius: 2,
+				boxShadow: (theme) => theme.shadows[2],
 				flex: 1,
 				gap: 6,
-				borderRadius: 2,
 				padding: 6,
-				bgcolor: color,
-				boxShadow: (theme) => theme.shadows[2],
-				border: `1px solid ${BLUE_GREY}`,
 			}}
 		>
 			<Stack direction="row" sx={{ alignItems: 'center', gap: 6 }}>

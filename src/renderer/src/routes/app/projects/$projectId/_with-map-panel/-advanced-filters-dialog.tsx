@@ -22,7 +22,11 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLACK_00, BLUE_GREY, WHITE } from '../../../../../colors.ts'
+import {
+	BLACK_00,
+	BLUE_05,
+	WHITE_00,
+} from '../../../../../../../shared/colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -141,8 +145,8 @@ export function AdvancedFiltersDialogContent({
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					backgroundColor: WHITE,
-					borderBottom: `1px solid ${BLUE_GREY}`,
+					backgroundColor: WHITE_00,
+					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 2,
 					padding: 4,
 				}}
@@ -174,12 +178,12 @@ export function AdvancedFiltersDialogContent({
 								direction="row"
 								sx={{
 									alignItems: 'center',
-									borderBottom: `1px solid ${BLUE_GREY}`,
+									borderBottom: `1px solid ${BLUE_05}`,
 									gap: 2,
 									padding: 2,
 								}}
 							>
-								<Icon name="material-symbols-schedule" htmlColor={BLUE_GREY} />
+								<Icon name="material-symbols-schedule" htmlColor={BLUE_05} />
 
 								<Typography
 									component="h2"
@@ -331,7 +335,7 @@ export function AdvancedFiltersDialogContent({
 										<Stack
 											direction="row"
 											sx={{
-												borderBottom: `1px solid ${BLUE_GREY}`,
+												borderBottom: `1px solid ${BLUE_05}`,
 												gap: 6,
 												justifyContent: 'space-between',
 												padding: 2,
@@ -343,7 +347,7 @@ export function AdvancedFiltersDialogContent({
 											>
 												<Icon
 													name="material-symbols-apps"
-													htmlColor={BLUE_GREY}
+													htmlColor={BLUE_05}
 												/>
 
 												<Typography
@@ -544,8 +548,8 @@ export function AdvancedFiltersDialogContent({
 
 			<Box
 				sx={{
-					backgroundColor: WHITE,
-					borderTop: `1px solid ${BLUE_GREY}`,
+					backgroundColor: WHITE_00,
+					borderTop: `1px solid ${BLUE_05}`,
 					bottom: 0,
 					display: 'flex',
 					flexDirection: 'row',

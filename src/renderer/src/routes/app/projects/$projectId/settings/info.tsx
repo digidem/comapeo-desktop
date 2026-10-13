@@ -23,14 +23,10 @@ import {
 import * as v from 'valibot'
 
 import {
-	BLUE_GREY,
-	COMAPEO_BLUE,
-	PROJECT_BLUE,
-	PROJECT_GREEN,
-	PROJECT_GREY,
-	PROJECT_ORANGE,
-	PROJECT_RED,
-} from '../../../../../colors.ts'
+	BLUE_03,
+	BLUE_05,
+	PROJECT_COLORS,
+} from '../../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
 import { DecentTextField } from '../../../../../components/decent-text-field.tsx'
 import { DiscardEditsDialogContent } from '../../../../../components/discard-edits-dialog.tsx'
@@ -109,11 +105,11 @@ function RouteComponent() {
 				v.pipe(
 					createProjectColorSchema(),
 					v.union([
-						v.literal(PROJECT_BLUE),
-						v.literal(PROJECT_GREEN),
-						v.literal(PROJECT_GREY),
-						v.literal(PROJECT_ORANGE),
-						v.literal(PROJECT_RED),
+						v.literal(PROJECT_COLORS.BLUE),
+						v.literal(PROJECT_COLORS.GREEN),
+						v.literal(PROJECT_COLORS.GREY),
+						v.literal(PROJECT_COLORS.ORANGE),
+						v.literal(PROJECT_COLORS.RED),
 					]),
 				),
 				v.null(),
@@ -174,7 +170,7 @@ function RouteComponent() {
 					direction="row"
 					sx={{
 						alignItems: 'center',
-						borderBottom: `1px solid ${BLUE_GREY}`,
+						borderBottom: `1px solid ${BLUE_05}`,
 						gap: 4,
 						padding: 4,
 					}}
@@ -355,7 +351,7 @@ function RouteComponent() {
 									}}
 								</form.AppField>
 
-								<Divider variant="fullWidth" sx={{ color: BLUE_GREY }} />
+								<Divider variant="fullWidth" sx={{ color: BLUE_05 }} />
 
 								<Stack direction="column" sx={{ gap: 4 }}>
 									<Box>
@@ -383,14 +379,16 @@ function RouteComponent() {
 												<FormControlLabel
 													name="option-orange"
 													label={intl.formatMessage(m.projectColorOptionOrange)}
-													checked={field.state.value === PROJECT_ORANGE}
+													checked={field.state.value === PROJECT_COLORS.ORANGE}
 													onChange={(_event, checked) => {
-														field.handleChange(checked ? PROJECT_ORANGE : null)
+														field.handleChange(
+															checked ? PROJECT_COLORS.ORANGE : null,
+														)
 													}}
 													labelPlacement="bottom"
 													control={
 														<ProjectColorCheckboxControl
-															projectColor={PROJECT_ORANGE}
+															projectColor={PROJECT_COLORS.ORANGE}
 														/>
 													}
 													sx={{ margin: 0, gap: 4 }}
@@ -399,14 +397,16 @@ function RouteComponent() {
 												<FormControlLabel
 													name="option-blue"
 													label={intl.formatMessage(m.projectColorOptionBlue)}
-													checked={field.state.value === PROJECT_BLUE}
+													checked={field.state.value === PROJECT_COLORS.BLUE}
 													onChange={(_event, checked) => {
-														field.handleChange(checked ? PROJECT_BLUE : null)
+														field.handleChange(
+															checked ? PROJECT_COLORS.BLUE : null,
+														)
 													}}
 													labelPlacement="bottom"
 													control={
 														<ProjectColorCheckboxControl
-															projectColor={PROJECT_BLUE}
+															projectColor={PROJECT_COLORS.BLUE}
 														/>
 													}
 													sx={{ margin: 0, gap: 4 }}
@@ -415,14 +415,16 @@ function RouteComponent() {
 												<FormControlLabel
 													name="option-green"
 													label={intl.formatMessage(m.projectColorOptionGreen)}
-													checked={field.state.value === PROJECT_GREEN}
+													checked={field.state.value === PROJECT_COLORS.GREEN}
 													onChange={(_event, checked) => {
-														field.handleChange(checked ? PROJECT_GREEN : null)
+														field.handleChange(
+															checked ? PROJECT_COLORS.GREEN : null,
+														)
 													}}
 													labelPlacement="bottom"
 													control={
 														<ProjectColorCheckboxControl
-															projectColor={PROJECT_GREEN}
+															projectColor={PROJECT_COLORS.GREEN}
 														/>
 													}
 													sx={{ margin: 0, gap: 4 }}
@@ -431,14 +433,16 @@ function RouteComponent() {
 												<FormControlLabel
 													name="option-red"
 													label={intl.formatMessage(m.projectColorOptionRed)}
-													checked={field.state.value === PROJECT_RED}
+													checked={field.state.value === PROJECT_COLORS.RED}
 													onChange={(_event, checked) => {
-														field.handleChange(checked ? PROJECT_RED : null)
+														field.handleChange(
+															checked ? PROJECT_COLORS.RED : null,
+														)
 													}}
 													labelPlacement="bottom"
 													control={
 														<ProjectColorCheckboxControl
-															projectColor={PROJECT_RED}
+															projectColor={PROJECT_COLORS.RED}
 														/>
 													}
 													sx={{ margin: 0, gap: 4 }}
@@ -447,14 +451,16 @@ function RouteComponent() {
 												<FormControlLabel
 													name="option-grey"
 													label={intl.formatMessage(m.projectColorOptionGrey)}
-													checked={field.state.value === PROJECT_GREY}
+													checked={field.state.value === PROJECT_COLORS.GREY}
 													onChange={(_event, checked) => {
-														field.handleChange(checked ? PROJECT_GREY : null)
+														field.handleChange(
+															checked ? PROJECT_COLORS.GREY : null,
+														)
 													}}
 													labelPlacement="bottom"
 													control={
 														<ProjectColorCheckboxControl
-															projectColor={PROJECT_GREY}
+															projectColor={PROJECT_COLORS.GREY}
 														/>
 													}
 													sx={{ margin: 0, gap: 4 }}
@@ -475,7 +481,7 @@ function RouteComponent() {
 						justifyContent: 'center',
 						alignItems: 'center',
 						padding: 6,
-						borderTop: `1px solid ${BLUE_GREY}`,
+						borderTop: `1px solid ${BLUE_05}`,
 					}}
 				>
 					<form.Subscribe
@@ -568,9 +574,9 @@ function ProjectColorCheckboxControl({
 					sx={{
 						width: 100,
 						height: 100,
-						bgcolor: projectColor,
+						background: projectColor,
 						borderRadius: 2,
-						outline: `4px solid ${COMAPEO_BLUE}`,
+						outline: `4px solid ${BLUE_03}`,
 					}}
 				/>
 			}
@@ -579,9 +585,9 @@ function ProjectColorCheckboxControl({
 					sx={{
 						width: 100,
 						height: 100,
-						bgcolor: projectColor,
+						background: projectColor,
 						borderRadius: 2,
-						outline: `1px solid ${BLUE_GREY}`,
+						outline: `1px solid ${BLUE_05}`,
 					}}
 				/>
 			}

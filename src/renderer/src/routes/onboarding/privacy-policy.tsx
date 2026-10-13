@@ -21,7 +21,7 @@ import {
 	type NoMessageValues,
 } from 'react-intl'
 
-import { BLACK_03, BLUE_GREY } from '../../colors.ts'
+import { BLACK_03, BLUE_05 } from '../../../../shared/colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
@@ -85,7 +85,7 @@ function RouteComponent() {
 						<Box
 							sx={{
 								background: BLACK_03,
-								border: `1px solid ${BLUE_GREY}`,
+								border: `1px solid ${BLUE_05}`,
 								borderRadius: 2,
 								padding: 5,
 							}}
@@ -137,7 +137,7 @@ function RouteComponent() {
 							})}
 						/>
 
-						<Divider sx={{ borderColor: BLUE_GREY }} />
+						<Divider sx={{ borderColor: BLUE_05 }} />
 
 						<Typography component="h2" variant="sectionLabel">
 							{intl.formatMessage(m.dataCollection)}
@@ -153,7 +153,7 @@ function RouteComponent() {
 							<Stack
 								direction="column"
 								sx={{
-									border: `1px solid ${BLUE_GREY}`,
+									border: `1px solid ${BLUE_05}`,
 									borderRadius: 2,
 									gap: 5,
 									paddingY: 5,
@@ -206,7 +206,7 @@ function RouteComponent() {
 									</Stack>
 								</Stack>
 
-								<Divider sx={{ borderColor: BLUE_GREY }} />
+								<Divider sx={{ borderColor: BLUE_05 }} />
 
 								<Stack
 									component="section"
@@ -256,12 +256,12 @@ function RouteComponent() {
 							description={intl.formatMessage(m.whatIsNotCollectedDescription)}
 						/>
 
-						<Divider sx={{ borderColor: BLUE_GREY }} />
+						<Divider sx={{ borderColor: BLUE_05 }} />
 
 						<Stack
 							direction="column"
 							sx={{
-								border: `1px solid ${BLUE_GREY}`,
+								border: `1px solid ${BLUE_05}`,
 								borderRadius: 2,
 								gap: 5,
 								padding: 5,
@@ -357,7 +357,7 @@ function CustomAccordion({
 	return (
 		<Stack
 			sx={{
-				border: `1px solid ${BLUE_GREY}`,
+				border: `1px solid ${BLUE_05}`,
 				borderRadius: 2,
 				paddingInline: 5,
 				paddingBlock: 2,
