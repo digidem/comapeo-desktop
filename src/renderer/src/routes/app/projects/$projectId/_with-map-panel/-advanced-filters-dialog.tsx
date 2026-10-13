@@ -22,7 +22,7 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLACK, BLUE_GREY, WHITE } from '../../../../../colors.ts'
+import { BLACK_00, BLUE_GREY, WHITE } from '../../../../../colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -422,7 +422,7 @@ export function AdvancedFiltersDialogContent({
 																>
 																	<Box aria-hidden>
 																		<CategoryIconContainer
-																			color={option.color || BLACK}
+																			color={option.color || BLACK_00}
 																		>
 																			{option.iconId ? (
 																				<CategoryIconImage

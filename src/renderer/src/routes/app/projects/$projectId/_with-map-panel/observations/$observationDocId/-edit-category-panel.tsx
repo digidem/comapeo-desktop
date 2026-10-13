@@ -25,7 +25,7 @@ import {
 	type NoMessageValues,
 } from 'react-intl'
 
-import { BLACK, BLUE_GREY } from '../../../../../../../colors.ts'
+import { BLACK_00, BLUE_GREY } from '../../../../../../../colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -264,8 +264,8 @@ function CategoriesList({
 								sx={{ alignItems: 'center', gap: 2, padding: 4 }}
 							>
 								<CategoryIconContainer
-									color={category.color || BLACK}
 									applyBoxShadow
+									color={category.color || BLACK_00}
 								>
 									{category.iconRef?.docId ? (
 										<CategoryIconImage

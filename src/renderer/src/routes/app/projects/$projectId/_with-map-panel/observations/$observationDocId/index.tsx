@@ -29,7 +29,7 @@ import * as v from 'valibot'
 import type { CoordinateFormat } from '../../../../../../../../../shared/coordinate-format.ts'
 import type { UnitSystem } from '../../../../../../../../../shared/unit-system.ts'
 import {
-	BLACK,
+	BLACK_00,
 	BLUE_GREY,
 	DARK_ORANGE,
 	GREEN,
@@ -545,7 +545,7 @@ function ObservationDetailsPanel({
 										<Box sx={{ position: 'relative' }}>
 											{category ? (
 												<CategoryIconContainer
-													color={category.color || BLACK}
+													color={category.color || BLACK_00}
 													applyBoxShadow
 												>
 													{category.iconRef?.docId ? (
@@ -568,7 +568,7 @@ function ObservationDetailsPanel({
 													)}
 												</CategoryIconContainer>
 											) : (
-												<CategoryIconContainer color={BLACK} applyBoxShadow>
+												<CategoryIconContainer applyBoxShadow color={BLACK_00}>
 													<Icon
 														name="material-symbols-indeterminate-question-box"
 														size={categoryIconSize}

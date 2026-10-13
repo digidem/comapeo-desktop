@@ -26,7 +26,7 @@ import { DeviceRow } from '../-shared/device-row.tsx'
 import { DisconnectedIndicator } from '../-shared/disconnected-indicator.tsx'
 import { DeviceIcon } from '../../../../../-shared/device-icon.tsx'
 import {
-	BLACK,
+	BLACK_00,
 	BLUE_GREY,
 	COMAPEO_BLUE,
 	GREEN,
@@ -524,7 +524,7 @@ function InviteRejected({
 	)
 }
 
-const ICON_BOX_SHADOW = `0px 2px 20px 0px ${alpha(BLACK, 0.4)}`
+const ICON_BOX_SHADOW = `0px 2px 20px 0px ${alpha(BLACK_00, 0.4)}`
 
 function InviteAccepted({
 	deviceId,

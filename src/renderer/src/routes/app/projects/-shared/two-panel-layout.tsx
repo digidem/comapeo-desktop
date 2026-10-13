@@ -9,9 +9,9 @@ import {
 	usePanelRef,
 } from 'react-resizable-panels'
 
-import { BLACK, BLUE_GREY, LIGHT_GREY, WHITE } from '../../../../colors.ts'
+import { BLACK_00, BLUE_GREY, LIGHT_GREY, WHITE } from '../../../../colors.ts'
 
-const BOX_SHADOW = `10px 0px 10px -10px ${alpha(BLACK, 0.1)}`
+const BOX_SHADOW = `10px 0px 10px -10px ${alpha(BLACK_00, 0.1)}`
 
 const PULL_TAB_DOT_STYLE = {
 	backgroundColor: LIGHT_GREY,

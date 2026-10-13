@@ -10,7 +10,7 @@ import {
 import { useMediaRef } from 'media-chrome/react/media-store'
 
 import {
-	BLACK,
+	BLACK_00,
 	BLUE_GREY,
 	COMAPEO_BLUE,
 	WHITE,
@@ -21,7 +21,7 @@ const StyledMediaController = styled(MediaController)(({ theme }) => ({
 	'--media-control-hover-background': theme.palette.action.hover,
 	'--media-focus-box-shadow': `inset 0 0 0 2px ${COMAPEO_BLUE}`,
 	'--media-font-family': 'Rubik Variable, sans-serif',
-	'--media-primary-color': BLACK,
+	'--media-primary-color': BLACK_00,
 	'--media-secondary-color': WHITE,
 	padding: theme.spacing(2),
 }))

@@ -18,7 +18,7 @@ import {
 } from 'react-intl'
 
 import { SyncedIndicatorLine } from '../../../../-shared/synced-indicator-line.tsx'
-import { BLACK, BLUE_GREY } from '../../../../../../../colors.ts'
+import { BLACK_00, BLUE_GREY } from '../../../../../../../colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -179,7 +179,7 @@ function RouteComponent() {
 							>
 								{category ? (
 									<CategoryIconContainer
-										color={category.color || BLACK}
+										color={category.color || BLACK_00}
 										applyBoxShadow
 									>
 										{category.iconRef?.docId ? (
@@ -196,7 +196,7 @@ function RouteComponent() {
 										)}
 									</CategoryIconContainer>
 								) : (
-									<CategoryIconContainer color={BLACK} applyBoxShadow>
+									<CategoryIconContainer color={BLACK_00} applyBoxShadow>
 										<Icon name="material-hiking" size={40} />
 									</CategoryIconContainer>
 								)}
@@ -317,7 +317,7 @@ function TrackObservationsSection({
 						: intl.formatMessage(m.observationCategoryNameFallback)
 
 					const renderedCategory = category ? (
-						<CategoryIconContainer color={category.color || BLACK}>
+						<CategoryIconContainer color={category.color || BLACK_00}>
 							{category.iconRef?.docId ? (
 								<CategoryIconImage
 									projectId={projectId}
@@ -335,7 +335,7 @@ function TrackObservationsSection({
 							)}
 						</CategoryIconContainer>
 					) : (
-						<CategoryIconContainer color={BLACK}>
+						<CategoryIconContainer color={BLACK_00}>
 							<Icon
 								name="material-symbols-indeterminate-question-box"
 								size={40}
@@ -383,9 +383,9 @@ function TrackObservationsSection({
 
 									<Typography
 										sx={{
+											overflow: 'hidden',
 											textOverflow: 'ellipsis',
 											whiteSpace: 'nowrap',
-											overflow: 'hidden',
 										}}
 									>
 										{intl.formatDate(createdAt, {
@@ -401,30 +401,15 @@ function TrackObservationsSection({
 
 								<Box
 									sx={{
-										display: 'flex',
-										justifyContent: 'center',
-										alignItems: 'center',
-										width: CATEGORY_CONTAINER_SIZE_PX,
 										aspectRatio: 1,
+										display: 'grid',
+										placeItems: 'center',
+										width: CATEGORY_CONTAINER_SIZE_PX,
 									}}
 								>
-									<Box sx={{ flex: 1 }}>
-										<Suspense
-											fallback={
-												<Box
-													sx={{
-														display: 'flex',
-														justifyContent: 'center',
-														alignItems: 'center',
-													}}
-												>
-													<CircularProgress disableShrink size={30} />
-												</Box>
-											}
-										>
-											{renderedCategory}
-										</Suspense>
-									</Box>
+									<Suspense fallback={<CircularProgress disableShrink />}>
+										{renderedCategory}
+									</Suspense>
 								</Box>
 							</Stack>
 						</ListItemButton>

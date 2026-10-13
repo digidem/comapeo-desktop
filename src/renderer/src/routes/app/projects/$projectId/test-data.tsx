@@ -32,7 +32,7 @@ import {
 import * as v from 'valibot'
 
 import { TwoPanelLayout } from '../-shared/two-panel-layout.tsx'
-import { BLACK, BLUE_GREY } from '../../../../colors.ts'
+import { BLACK_00, BLUE_GREY } from '../../../../colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { DecentTextField } from '../../../../components/decent-text-field.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
@@ -66,12 +66,11 @@ export const Route = createFileRoute('/app/projects/$projectId/test-data')({
 				end={
 					<Box
 						sx={{
-							display: 'flex',
+							background: BLACK_00,
+							display: 'grid',
 							flex: 1,
-							justifyContent: 'center',
-							alignItems: 'center',
-							bgcolor: BLACK,
 							opacity: 0.5,
+							placeItems: 'center',
 						}}
 					>
 						<CircularProgress />
@@ -519,7 +518,7 @@ function RouteComponent() {
 									flex: 1,
 									justifyContent: 'center',
 									alignItems: 'center',
-									bgcolor: BLACK,
+									bgcolor: BLACK_00,
 									opacity: 0.5,
 								}}
 							>
@@ -636,15 +635,15 @@ function DisplayedMap({
 					type="fill"
 					id="radius"
 					paint={{
-						'fill-color': BLACK,
+						'fill-color': BLACK_00,
 						'fill-opacity': 0.2,
-						'fill-outline-color': BLACK,
+						'fill-outline-color': BLACK_00,
 					}}
 				/>
 				<Layer
 					type="line"
 					id="border"
-					paint={{ 'line-width': 1, 'line-color': BLACK }}
+					paint={{ 'line-width': 1, 'line-color': BLACK_00 }}
 				/>
 			</Source>
 

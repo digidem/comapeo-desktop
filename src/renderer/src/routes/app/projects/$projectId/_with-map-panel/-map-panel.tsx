@@ -50,7 +50,7 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLACK, WHITE } from '../../../../../colors.ts'
+import { BLACK_00, WHITE } from '../../../../../colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -104,7 +104,7 @@ const TRACKS_LAYER_LAYOUT: LineLayerSpecification['layout'] = {
 	'line-sort-key': ['case', ['boolean', ['get', 'visible'], true], 1, 0],
 }
 const TRACKS_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] = {
-	'line-color': BLACK,
+	'line-color': BLACK_00,
 	'line-width': 4,
 	'line-opacity': [
 		'case',
@@ -689,7 +689,7 @@ export function MapPanel({
 						right: 0,
 						top: 0,
 						bottom: 0,
-						bgcolor: BLACK,
+						bgcolor: BLACK_00,
 						opacity: 0.5,
 					}}
 				>
@@ -839,8 +839,12 @@ export function MapPanel({
 								/>
 							</Suspense>
 						) : (
-							<IconMarkerContainer color={BLACK} markerSize={MARKER_SIZE_PX}>
-								<CategoryIconContainer color={BLACK} applyBoxShadow padding={2}>
+							<IconMarkerContainer color={BLACK_00} markerSize={MARKER_SIZE_PX}>
+								<CategoryIconContainer
+									color={BLACK_00}
+									applyBoxShadow
+									padding={2}
+								>
 									<Icon
 										name="material-symbols-indeterminate-question-box"
 										size={CATEGORY_ICON_SIZE_PX}
@@ -859,10 +863,10 @@ export function MapPanel({
 							top: 0,
 							right: 0,
 							left: 0,
-							bgcolor: BLACK,
+							bgcolor: BLACK_00,
 							display: 'grid',
 							placeItems: 'center',
-							backgroundColor: alpha(BLACK, 0.5),
+							backgroundColor: alpha(BLACK_00, 0.5),
 						}}
 					>
 						<Typography color="textInverted">
@@ -930,7 +934,7 @@ function CategoryIconMarker({
 		lang,
 	})
 
-	const color = category.color || BLACK
+	const color = category.color || BLACK_00
 
 	return (
 		<IconMarkerContainer color={color} markerSize={MARKER_SIZE_PX}>
@@ -1100,8 +1104,8 @@ function createObservationLayerPaintProperty(
 		// @ts-expect-error Type def doesn't like the spread of the pairs
 		'circle-color':
 			categoryColorPairs.length > 0
-				? ['match', ['get', 'categoryDocId'], ...categoryColorPairs, BLACK]
-				: BLACK,
+				? ['match', ['get', 'categoryDocId'], ...categoryColorPairs, BLACK_00]
+				: BLACK_00,
 		'circle-opacity': [
 			'case',
 			[

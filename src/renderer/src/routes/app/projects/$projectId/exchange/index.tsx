@@ -24,7 +24,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import {
-	BLACK,
+	BLACK_00,
 	BLUE_GREY,
 	COMAPEO_BLUE,
 	DARK_ORANGE,
@@ -226,7 +226,7 @@ function RouteComponent() {
 											position: 'absolute',
 											right: -8,
 											padding: 2,
-											boxShadow: `0px 2px 20px 0px ${alpha(BLACK, 0.4)}`,
+											boxShadow: `0px 2px 20px 0px ${alpha(BLACK_00, 0.4)}`,
 										}}
 									>
 										<Icon

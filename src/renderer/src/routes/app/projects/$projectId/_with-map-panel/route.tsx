@@ -11,7 +11,7 @@ import {
 import { endOfToday } from 'date-fns'
 
 import { TwoPanelLayout } from '../../-shared/two-panel-layout.tsx'
-import { BLACK } from '../../../../../colors.ts'
+import { BLACK_00 } from '../../../../../colors.ts'
 import { GenericRouteErrorComponent } from '../../../../../components/generic-route-error-component.tsx'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo.ts'
 import { MapPanel } from './-map-panel.tsx'
@@ -105,11 +105,10 @@ function RouteComponent() {
 						fallback={
 							<Box
 								sx={{
-									display: 'flex',
+									background: BLACK_00,
+									display: 'grid',
 									flex: 1,
-									justifyContent: 'center',
-									alignItems: 'center',
-									bgcolor: BLACK,
+									placeItems: 'center',
 									opacity: 0.5,
 								}}
 							>

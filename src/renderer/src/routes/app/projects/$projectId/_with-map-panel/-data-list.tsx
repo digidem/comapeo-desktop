@@ -48,7 +48,7 @@ import {
 
 import { SyncedIndicatorLine } from '../../-shared/synced-indicator-line.tsx'
 import {
-	BLACK,
+	BLACK_00,
 	BLUE_GREY,
 	DARK_GREY,
 	LIGHT_COMAPEO_BLUE,
@@ -152,7 +152,7 @@ export function DataList({
 		return [
 			{
 				id: NOT_CATEGORY_FILTER_ID,
-				color: BLACK,
+				color: BLACK_00,
 				name: intl.formatMessage(m.categoriesFilterNotCategorized),
 				matchCount: groupedByFilterIdCount[NOT_CATEGORY_FILTER_ID] || 0,
 			},
@@ -652,7 +652,9 @@ export function DataList({
 
 										if (type === 'track') {
 											categorySlot = category ? (
-												<CategoryIconContainer color={category.color || BLACK}>
+												<CategoryIconContainer
+													color={category.color || BLACK_00}
+												>
 													{category.iconRef?.docId ? (
 														<CategoryIconImage
 															projectId={projectId}
@@ -670,7 +672,7 @@ export function DataList({
 													)}
 												</CategoryIconContainer>
 											) : (
-												<CategoryIconContainer color={BLACK}>
+												<CategoryIconContainer color={BLACK_00}>
 													<Icon
 														name="material-hiking"
 														size={categoryIconSize}
@@ -692,7 +694,7 @@ export function DataList({
 											} else {
 												categorySlot = category ? (
 													<CategoryIconContainer
-														color={category.color || BLACK}
+														color={category.color || BLACK_00}
 													>
 														{category.iconRef?.docId ? (
 															<CategoryIconImage
@@ -711,7 +713,7 @@ export function DataList({
 														)}
 													</CategoryIconContainer>
 												) : (
-													<CategoryIconContainer color={BLACK}>
+													<CategoryIconContainer color={BLACK_00}>
 														<Icon
 															name="material-symbols-indeterminate-question-box"
 															size={categoryIconSize}
@@ -1109,7 +1111,7 @@ function ObservationCategoryWithAttachmentsPreview({
 	)
 
 	const categoryIcon = (
-		<CategoryIconContainer color={category?.color || BLACK}>
+		<CategoryIconContainer color={category?.color || BLACK_00}>
 			{iconImage}
 		</CategoryIconContainer>
 	)
@@ -1371,7 +1373,7 @@ function CategoriesFilterSelect({
 								}}
 							>
 								<Box aria-hidden>
-									<CategoryIconContainer color={o.color || BLACK}>
+									<CategoryIconContainer color={o.color || BLACK_00}>
 										{o.iconId ? (
 											<Suspense
 												fallback={

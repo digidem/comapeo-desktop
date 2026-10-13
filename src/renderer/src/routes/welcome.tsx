@@ -14,7 +14,7 @@ import {
 	type NoMessageValues,
 } from 'react-intl'
 
-import { BLACK, BLUE_GREY, DARK_COMAPEO_BLUE } from '../colors.ts'
+import { BLACK_00, BLUE_GREY, DARK_COMAPEO_BLUE } from '../colors.ts'
 import { Icon } from '../components/icon.tsx'
 import { Blue, Bold, Orange } from '../components/intl-rich-text.tsx'
 import { ButtonLink } from '../components/link.tsx'
@@ -24,7 +24,7 @@ export const Route = createFileRoute('/welcome')({
 	component: RouteComponent,
 })
 
-const LIST_BACKGROUND_COLOR = alpha(BLACK, 0.4)
+const LIST_BACKGROUND_COLOR = alpha(BLACK_00, 0.4)
 
 function RouteComponent() {
 	const intl = useIntl()
