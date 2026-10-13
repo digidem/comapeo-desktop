@@ -30,10 +30,10 @@ import type { CoordinateFormat } from '../../../../../../../../../shared/coordin
 import type { UnitSystem } from '../../../../../../../../../shared/unit-system.ts'
 import {
 	BLACK_00,
+	BLACK_03,
 	BLUE_GREY,
 	DARK_ORANGE,
 	GREEN,
-	LIGHT_GREY,
 	WHITE,
 } from '../../../../../../../colors.ts'
 import {
@@ -1323,7 +1323,7 @@ function ObservationMetadataPanel({
 								direction="row"
 								sx={{
 									alignItems: 'center',
-									background: index % 2 === 0 ? LIGHT_GREY : WHITE,
+									background: index % 2 === 0 ? BLACK_03 : WHITE,
 									gap: 2,
 									justifyContent: 'space-between',
 									paddingBlock: 4,

@@ -24,12 +24,12 @@ import {
 import * as v from 'valibot'
 
 import {
+	BLACK_03,
 	BLUE_GREY,
 	COMAPEO_BLUE,
 	DARK_ORANGE,
 	GREEN,
 	LIGHT_COMAPEO_BLUE,
-	LIGHT_GREY,
 	WHITE,
 } from '../../colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
@@ -518,13 +518,13 @@ function ListedProjectCard({
 			sx={{
 				background: project.projectColor,
 				borderRadius: 2,
-				outline: `2px solid ${highlight ? COMAPEO_BLUE : LIGHT_GREY}`,
+				outline: `2px solid ${highlight ? COMAPEO_BLUE : BLACK_03}`,
 				outlineOffset: -1,
 				overflow: 'auto',
 				'&:hover, &:focus-within': {
 					color: (theme) => theme.palette.text.primary,
 					outlineColor: (theme) =>
-						theme.darken(highlight ? COMAPEO_BLUE : LIGHT_GREY, 0.1),
+						theme.darken(highlight ? COMAPEO_BLUE : BLACK_03, 0.1),
 					outlineWidth: 3,
 				},
 			}}

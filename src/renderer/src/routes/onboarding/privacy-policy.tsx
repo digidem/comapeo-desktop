@@ -21,7 +21,7 @@ import {
 	type NoMessageValues,
 } from 'react-intl'
 
-import { BLUE_GREY, LIGHT_GREY } from '../../colors.ts'
+import { BLACK_03, BLUE_GREY } from '../../colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
@@ -61,7 +61,7 @@ function RouteComponent() {
 			<Stack
 				direction="column"
 				sx={{
-					background: LIGHT_GREY,
+					background: BLACK_03,
 					borderRadius: 2,
 					display: 'flex',
 					flex: 1,
@@ -84,7 +84,7 @@ function RouteComponent() {
 					<Stack direction="column" sx={{ gap: 3 }}>
 						<Box
 							sx={{
-								background: LIGHT_GREY,
+								background: BLACK_03,
 								border: `1px solid ${BLUE_GREY}`,
 								borderRadius: 2,
 								padding: 5,

@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { DARK_ORANGE, LIGHT_GREY } from '../../colors.ts'
+import { BLACK_03, DARK_ORANGE } from '../../colors.ts'
 import { Icon } from '../../components/icon.tsx'
 import { ButtonLink } from '../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
@@ -29,7 +29,7 @@ function RouteComponent() {
 		<Stack
 			direction="column"
 			sx={{
-				background: LIGHT_GREY,
+				background: BLACK_03,
 				borderRadius: 2,
 				flex: 1,
 				gap: 10,

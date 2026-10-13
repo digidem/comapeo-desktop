@@ -21,7 +21,7 @@ import {
 } from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 
-import { BLUE_GREY, LIGHT_GREY } from '../../../colors.ts'
+import { BLACK_03, BLUE_GREY } from '../../../colors.ts'
 import { DecentDialog } from '../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../components/error-dialog.tsx'
 import { Icon } from '../../../components/icon.tsx'
@@ -249,7 +249,7 @@ function NoCustomMap({
 						{getErrorCode(error) === 'MAP_NOT_FOUND' ? (
 							<Box
 								sx={{
-									bgcolor: LIGHT_GREY,
+									background: BLACK_03,
 									border: `1px solid ${BLUE_GREY}`,
 									borderRadius: 2,
 									padding: 4,
@@ -377,14 +377,14 @@ function CustomMapDetails({
 								paddingInline: 6,
 							}}
 						>
-							<Stack direction="column" sx={{ gap: 10, alignItems: 'center' }}>
+							<Stack direction="column" sx={{ alignItems: 'center', gap: 10 }}>
 								<Box
 									sx={{
+										background: BLACK_03,
+										borderRadius: '50%',
 										display: 'flex',
 										justifyContent: 'center',
-										borderRadius: '50%',
 										padding: 4,
-										backgroundColor: LIGHT_GREY,
 									}}
 								>
 									<Icon
@@ -401,7 +401,7 @@ function CustomMapDetails({
 								</Typography>
 							</Stack>
 
-							<Stack direction="column" sx={{ gap: 4, alignItems: 'center' }}>
+							<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
 								<Stack
 									direction="row"
 									sx={{

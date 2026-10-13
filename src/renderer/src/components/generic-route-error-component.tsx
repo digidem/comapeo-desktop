@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography'
 import { useRouter, type ErrorComponentProps } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, LIGHT_GREY, WHITE } from '../colors.ts'
+import { BLACK_03, BLUE_GREY, WHITE } from '../colors.ts'
 import { buildDocumentReloadURL } from '../lib/navigation.ts'
 
 export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
@@ -38,7 +38,7 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 
 				<Box
 					sx={{
-						background: LIGHT_GREY,
+						background: BLACK_03,
 						border: `1px solid ${BLUE_GREY}`,
 						borderRadius: 2,
 						overflow: 'auto',
@@ -60,7 +60,7 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 
 				<Box
 					sx={{
-						bgcolor: LIGHT_GREY,
+						bgcolor: BLACK_03,
 						padding: 4,
 						border: `1px solid ${BLUE_GREY}`,
 						overflow: 'auto',

@@ -16,7 +16,7 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { DARK_ORANGE, LIGHT_GREY, WHITE } from '../../colors.ts'
+import { BLACK_03, DARK_ORANGE, WHITE } from '../../colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { DecentTextField } from '../../components/decent-text-field.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
@@ -102,7 +102,7 @@ function RouteComponent() {
 			<Stack
 				direction="column"
 				sx={{
-					background: LIGHT_GREY,
+					background: BLACK_03,
 					borderRadius: 2,
 					display: 'flex',
 					flex: 1,

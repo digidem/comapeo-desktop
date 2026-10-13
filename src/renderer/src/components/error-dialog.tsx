@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLACK_02, BLUE_GREY, LIGHT_GREY } from '../colors.ts'
+import { BLACK_02, BLACK_03, BLUE_GREY } from '../colors.ts'
 import { useIconSizeBasedOnTypography } from '../hooks/icon.ts'
 import { Icon } from './icon.tsx'
 
@@ -87,7 +87,7 @@ export function ErrorDialogContent({
 					<Collapse in={advancedExpanded}>
 						<Box
 							sx={{
-								background: LIGHT_GREY,
+								background: BLACK_03,
 								border: `1px solid ${BLUE_GREY}`,
 								borderRadius: 2,
 								maxHeight: 300,

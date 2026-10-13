@@ -9,12 +9,12 @@ import {
 	usePanelRef,
 } from 'react-resizable-panels'
 
-import { BLACK_00, BLUE_GREY, LIGHT_GREY, WHITE } from '../../../../colors.ts'
+import { BLACK_00, BLACK_03, BLUE_GREY, WHITE } from '../../../../colors.ts'
 
 const BOX_SHADOW = `10px 0px 10px -10px ${alpha(BLACK_00, 0.1)}`
 
 const PULL_TAB_DOT_STYLE = {
-	backgroundColor: LIGHT_GREY,
+	background: BLACK_03,
 	borderRadius: '50%',
 	height: 8,
 	width: 8,
@@ -90,7 +90,7 @@ export function TwoPanelLayout({
 				}}
 				style={{
 					alignSelf: 'center',
-					backgroundColor: WHITE,
+					background: WHITE,
 					borderBottomRightRadius: 4,
 					borderBottomWidth: 1,
 					borderColor: BLUE_GREY,

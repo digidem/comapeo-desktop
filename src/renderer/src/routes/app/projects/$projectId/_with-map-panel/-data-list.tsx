@@ -49,9 +49,9 @@ import {
 import { SyncedIndicatorLine } from '../../-shared/synced-indicator-line.tsx'
 import {
 	BLACK_00,
+	BLACK_03,
 	BLUE_GREY,
 	LIGHT_COMAPEO_BLUE,
-	LIGHT_GREY,
 	WHITE,
 } from '../../../../../colors.ts'
 import {
@@ -396,7 +396,7 @@ export function DataList({
 									sx={{
 										background:
 											sortedListData.length === 0
-												? LIGHT_GREY
+												? BLACK_03
 												: LIGHT_COMAPEO_BLUE,
 										borderRadius: 2,
 										paddingBlock: 1,
@@ -517,7 +517,7 @@ export function DataList({
 													intl.formatMessage,
 												)
 									}
-									color={LIGHT_GREY}
+									color={BLACK_03}
 									onRemove={() => {
 										unsetDateFilter()
 									}}
@@ -614,7 +614,7 @@ export function DataList({
 					{sortedListData.length > 0 ? (
 						<Box
 							sx={{
-								background: LIGHT_GREY,
+								background: BLACK_03,
 								display: 'flex',
 								flex: 1,
 								flexDirection: 'column',
@@ -772,7 +772,7 @@ export function DataList({
 														}
 													}}
 													sx={{
-														borderBottom: `1px solid ${LIGHT_GREY}`,
+														borderBottom: `1px solid ${BLACK_03}`,
 														padding: 4,
 													}}
 												>
@@ -866,7 +866,7 @@ export function DataList({
 								>
 									<Box
 										sx={{
-											border: `4px solid ${LIGHT_GREY}`,
+											border: `4px solid ${BLACK_03}`,
 											borderRadius: '50%',
 											display: 'flex',
 											padding: 10,

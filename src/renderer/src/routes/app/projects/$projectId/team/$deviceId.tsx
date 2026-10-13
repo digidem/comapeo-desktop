@@ -28,8 +28,8 @@ import {
 import { DeviceIcon } from '../../-shared/device-icon.tsx'
 import {
 	BLACK_02,
+	BLACK_03,
 	BLUE_GREY,
-	LIGHT_GREY,
 	PROJECT_ORANGE,
 	WHITE,
 } from '../../../../../colors.ts'
@@ -292,7 +292,7 @@ function CollaboratorInfoContent({
 						<Stack direction="column" sx={{ gap: 10, alignItems: 'center' }}>
 							<Box
 								sx={{
-									background: LIGHT_GREY,
+									background: BLACK_03,
 									borderRadius: '50%',
 									display: 'grid',
 									padding: 6,

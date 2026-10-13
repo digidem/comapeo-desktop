@@ -42,10 +42,10 @@ import {
 import { useSpinDelay } from 'spin-delay'
 
 import {
+	BLACK_03,
 	BLUE_GREY,
 	COMAPEO_BLUE,
 	DARK_BLUE,
-	LIGHT_GREY,
 	WHITE,
 } from '../../../../colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
@@ -556,7 +556,7 @@ function ProjectSwitcherButton({
 									borderRadius: 2,
 									gap: 2,
 									justifyContent: 'space-between',
-									outline: `2px solid ${LIGHT_GREY}`,
+									outline: `2px solid ${BLACK_03}`,
 									outlineOffset: -1,
 									padding: 4,
 									[selectedClass]: {
@@ -567,7 +567,7 @@ function ProjectSwitcherButton({
 										backgroundColor: displayedProjectColor,
 										outlineColor: (theme) =>
 											theme.darken(
-												isCurrentProject ? COMAPEO_BLUE : LIGHT_GREY,
+												isCurrentProject ? COMAPEO_BLUE : BLACK_03,
 												0.1,
 											),
 										outlineWidth: 3,
@@ -1097,14 +1097,14 @@ const BASE_INACTIVE_LINK_PROPS = {
 	sx: {
 		aspectRatio: 1,
 		borderRadius: 2,
-		color: LIGHT_GREY,
+		color: BLACK_03,
 		padding: 2,
 		'&:hover': {
 			color: WHITE,
 			background: (theme) => theme.lighten(DARK_BLUE, 0.2),
 		},
 		[`&.${iconButtonClasses.disabled}`]: {
-			color: (theme) => theme.darken(LIGHT_GREY, 0.4),
+			color: (theme) => theme.darken(BLACK_03, 0.4),
 		},
 	},
 } satisfies IconButtonLinkProps['inactiveProps']
@@ -1120,7 +1120,7 @@ const BASE_ACTIVE_LINK_PROPS = {
 			background: (theme) => theme.darken(theme.palette.primary.main, 0.1),
 		},
 		[`&.${iconButtonClasses.disabled}`]: {
-			color: (theme) => theme.darken(LIGHT_GREY, 0.4),
+			color: (theme) => theme.darken(BLACK_03, 0.4),
 			background: (theme) => theme.darken(theme.palette.primary.main, 0.1),
 		},
 	},
