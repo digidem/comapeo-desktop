@@ -202,7 +202,7 @@ export function DataAndPrivacySection() {
 							</Stack>
 						</Stack>
 
-						<Divider variant="fullWidth" sx={{ backgroundColor: BLUE_05 }} />
+						<Divider />
 
 						<Box sx={{ paddingBlock: 4, paddingInline: 6 }}>
 							<FormGroup>

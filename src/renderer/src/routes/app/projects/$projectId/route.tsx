@@ -842,7 +842,7 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 									</ButtonLink>
 								</ListItem>
 
-								<Divider sx={{ borderColor: BLUE_05 }} />
+								<Divider />
 
 								<ListItem sx={{ gap: 4 }}>
 									<Box

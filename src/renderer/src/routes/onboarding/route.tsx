@@ -17,7 +17,7 @@ import {
 	type NoMessageValues,
 } from 'react-intl'
 
-import { BLUE_01, BLUE_03, WHITE_00 } from '../../../../shared/colors.ts'
+import { BLUE_01, WHITE_00 } from '../../../../shared/colors.ts'
 import { Icon } from '../../components/icon.tsx'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo.ts'
 
@@ -109,10 +109,7 @@ function RouteComponent() {
 							label={intl.formatMessage(m.step, { value: 1 })}
 						/>
 
-						<Divider
-							aria-hidden="true"
-							sx={{ borderColor: BLUE_03, minWidth: 20, maxWidth: 40 }}
-						/>
+						<Divider aria-hidden="true" sx={{ minWidth: 20, maxWidth: 40 }} />
 
 						<StepIndicator
 							isActive={stepNumber === 2}

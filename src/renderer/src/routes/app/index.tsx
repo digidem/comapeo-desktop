@@ -432,7 +432,7 @@ function ListedProjectsPanel({ projects }: { projects: Array<ListedProject> }) {
 
 					{otherProjects.length > 0 ? (
 						<>
-							<Divider sx={{ borderColor: BLUE_05 }} />
+							<Divider />
 
 							<Stack component="section" direction="column" sx={{ gap: 4 }}>
 								<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>

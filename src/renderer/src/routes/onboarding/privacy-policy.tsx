@@ -137,7 +137,7 @@ function RouteComponent() {
 							})}
 						/>
 
-						<Divider sx={{ borderColor: BLUE_05 }} />
+						<Divider />
 
 						<Typography component="h2" variant="sectionLabel">
 							{intl.formatMessage(m.dataCollection)}
@@ -206,7 +206,7 @@ function RouteComponent() {
 									</Stack>
 								</Stack>
 
-								<Divider sx={{ borderColor: BLUE_05 }} />
+								<Divider />
 
 								<Stack
 									component="section"
@@ -256,7 +256,7 @@ function RouteComponent() {
 							description={intl.formatMessage(m.whatIsNotCollectedDescription)}
 						/>
 
-						<Divider sx={{ borderColor: BLUE_05 }} />
+						<Divider />
 
 						<Stack
 							direction="column"

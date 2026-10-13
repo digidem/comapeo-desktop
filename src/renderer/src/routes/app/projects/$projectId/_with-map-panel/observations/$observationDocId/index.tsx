@@ -633,7 +633,7 @@ function ObservationDetailsPanel({
 									) : null}
 								</Stack>
 
-								<Divider variant="fullWidth" sx={{ color: BLUE_05 }} />
+								<Divider />
 
 								<Stack
 									direction="row"
@@ -788,10 +788,7 @@ function ObservationDetailsPanel({
 							</Box>
 						</Stack>
 
-						<Divider
-							variant="fullWidth"
-							sx={{ background: BLUE_05, marginInline: 6 }}
-						/>
+						<Divider sx={{ marginInline: 6 }} />
 
 						{canEdit ? (
 							<EditableNotesSection
@@ -811,10 +808,7 @@ function ObservationDetailsPanel({
 							/>
 						)}
 
-						<Divider
-							variant="fullWidth"
-							sx={{ background: BLUE_05, marginInline: 6 }}
-						/>
+						<Divider sx={{ marginInline: 6 }} />
 
 						{fieldsToDisplay.length > 0 ? (
 							<Stack direction="column" sx={{ paddingInline: 6, gap: 4 }}>

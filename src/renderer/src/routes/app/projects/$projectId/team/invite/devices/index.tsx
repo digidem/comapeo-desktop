@@ -98,7 +98,7 @@ function RouteComponent() {
 						>
 							<NetworkConnectionInfo />
 
-							<Divider sx={{ borderColor: BLUE_05 }} />
+							<Divider />
 
 							<Stack direction="column" sx={{ gap: 4, padding: 6 }}>
 								<Typography>

@@ -351,7 +351,7 @@ function RouteComponent() {
 									}}
 								</form.AppField>
 
-								<Divider variant="fullWidth" sx={{ color: BLUE_05 }} />
+								<Divider />
 
 								<Stack direction="column" sx={{ gap: 4 }}>
 									<Box>

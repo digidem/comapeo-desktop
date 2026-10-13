@@ -112,7 +112,7 @@ export function StartProjectDialogContent({
 				</Button>
 			</Box>
 
-			<Divider variant="fullWidth" />
+			<Divider />
 
 			<Stack
 				direction="column"

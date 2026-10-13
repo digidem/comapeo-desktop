@@ -23,11 +23,7 @@ import {
 
 import { DeviceIcon } from '../../-shared/device-icon.tsx'
 import { ListRowLink } from '../../../-components/list-row-link.tsx'
-import {
-	BLACK_03,
-	BLUE_05,
-	BLUE_06,
-} from '../../../../../../../shared/colors.ts'
+import { BLUE_05, BLUE_06 } from '../../../../../../../shared/colors.ts'
 import { Icon } from '../../../../../components/icon.tsx'
 import { ButtonLink } from '../../../../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
@@ -221,7 +217,7 @@ function MembersSections({ projectId }: { projectId: string }) {
 				projectId={projectId}
 			/>
 
-			<Divider variant="fullWidth" sx={{ borderColor: BLUE_05 }} />
+			<Divider />
 
 			<Stack direction="column" sx={{ gap: 2 }}>
 				<Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
@@ -249,7 +245,7 @@ function MembersSections({ projectId }: { projectId: string }) {
 
 			{remoteArchives.length > 0 ? (
 				<>
-					<Divider variant="fullWidth" sx={{ background: BLACK_03 }} />
+					<Divider />
 
 					<Stack direction="column" sx={{ gap: 2 }}>
 						<Stack direction="row" sx={{ gap: 4, alignItems: 'center' }}>
@@ -278,7 +274,7 @@ function MembersSections({ projectId }: { projectId: string }) {
 
 			{pastCollaborators.length > 0 ? (
 				<>
-					<Divider variant="fullWidth" sx={{ background: BLACK_03 }} />
+					<Divider />
 
 					<Stack direction="column" sx={{ gap: 2 }}>
 						<Stack direction="row" sx={{ gap: 4, alignItems: 'center' }}>

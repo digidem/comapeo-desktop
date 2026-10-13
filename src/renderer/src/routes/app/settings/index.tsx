@@ -103,11 +103,11 @@ function RouteComponent() {
 								<UnitSystemSection headingIconSize={sectionHeadingIconSize} />
 							</Stack>
 
-							<Divider sx={{ borderColor: BLUE_05 }} />
+							<Divider />
 
 							<DataAndPrivacySection />
 
-							<Divider sx={{ borderColor: BLUE_05 }} />
+							<Divider />
 
 							<AboutCoMapeoSection />
 						</Stack>
