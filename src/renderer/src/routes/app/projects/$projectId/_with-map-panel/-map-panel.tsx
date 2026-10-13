@@ -858,15 +858,14 @@ export function MapPanel({
 				{isDocumentRoute && !highlightedFeature ? (
 					<Box
 						sx={{
-							position: 'absolute',
-							bottom: 0,
-							top: 0,
-							right: 0,
-							left: 0,
-							background: BLACK_00,
-							display: 'grid',
-							placeItems: 'center',
 							background: alpha(BLACK_00, 0.5),
+							bottom: 0,
+							display: 'grid',
+							left: 0,
+							placeItems: 'center',
+							position: 'absolute',
+							right: 0,
+							top: 0,
 						}}
 					>
 						<Typography color="textInverted">
