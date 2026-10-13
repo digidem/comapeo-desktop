@@ -277,10 +277,10 @@ function MembersSections({ projectId }: { projectId: string }) {
 					<Divider />
 
 					<Stack direction="column" sx={{ gap: 2 }}>
-						<Stack direction="row" sx={{ gap: 4, alignItems: 'center' }}>
+						<Stack direction="row" sx={{ alignItems: 'center', gap: 4 }}>
 							<Icon name="material-group-off" size={sectionIconSize} />
 
-							<Typography component="h2" sx={{ textTransform: 'uppercase' }}>
+							<Typography component="h2" variant="sectionLabel">
 								{intl.formatMessage(m.pastCollaboratorsSectionTitle)}
 							</Typography>
 						</Stack>
