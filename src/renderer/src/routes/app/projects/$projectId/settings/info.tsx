@@ -497,7 +497,6 @@ function RouteComponent() {
 								startIcon={
 									<Icon name="material-check-circle-outline-rounded" />
 								}
-								sx={{ maxWidth: 400 }}
 								type="submit"
 								variant="contained"
 							>

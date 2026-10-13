@@ -572,7 +572,6 @@ export function AdvancedFiltersDialogContent({
 								type="submit"
 								aria-disabled={!canSubmit || isSubmitting}
 								form={formId}
-								sx={{ maxWidth: 400 }}
 							>
 								<form.Subscribe
 									selector={(state) => {

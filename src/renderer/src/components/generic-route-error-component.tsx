@@ -118,7 +118,6 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 							reloadDocument: true,
 						})
 					}}
-					sx={{ maxWidth: 400 }}
 				>
 					{intl.formatMessage(m.restart)}
 				</Button>

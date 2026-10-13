@@ -282,7 +282,6 @@ export function DeviceNameSection({
 											startIcon={
 												<Icon name="material-check-circle-outline-rounded" />
 											}
-											sx={{ flex: 1, maxWidth: 400 }}
 											type="submit"
 											variant="contained"
 										>
@@ -296,7 +295,6 @@ export function DeviceNameSection({
 												form.resetField('deviceName')
 												setEditState('idle')
 											}}
-											sx={{ flex: 1, maxWidth: 400 }}
 											type="button"
 											variant="outlined"
 										>
