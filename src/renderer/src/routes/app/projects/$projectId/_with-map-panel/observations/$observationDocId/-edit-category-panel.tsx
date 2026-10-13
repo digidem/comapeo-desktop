@@ -253,7 +253,7 @@ function CategoriesList({
 							sx={{
 								borderRadius: 2,
 								':hover, :focus': {
-									backgroundColor: alpha(BLUE_05, 0.2),
+									background: alpha(BLUE_05, 0.2),
 									transition: (theme) =>
 										theme.transitions.create('background-color'),
 								},

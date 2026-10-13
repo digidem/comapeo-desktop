@@ -142,7 +142,7 @@ function MembersCountPill({ projectId }: { projectId: string }) {
 	const { data: members } = useManyMembers({ projectId })
 
 	return (
-		<Box sx={{ backgroundColor: BLUE_06, borderRadius: 2, padding: 1 }}>
+		<Box sx={{ background: BLUE_06, borderRadius: 2, padding: 1 }}>
 			<Typography
 				data-testid="exchange-network-connection-info"
 				variant="detailCopy"

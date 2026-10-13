@@ -422,7 +422,7 @@ function RouteComponent() {
 			<Box
 				component="main"
 				sx={{
-					backgroundColor: WHITE_00,
+					background: WHITE_00,
 					borderStartStartRadius: 10,
 					display: 'flex',
 					overflow: 'auto',
@@ -550,7 +550,7 @@ function ProjectSwitcherButton({
 								params={{ projectId: p.projectId }}
 								selected={isCurrentProject}
 								sx={{
-									backgroundColor: displayedProjectColor,
+									background: displayedProjectColor,
 									borderRadius: 2,
 									gap: 2,
 									justifyContent: 'space-between',
@@ -558,11 +558,11 @@ function ProjectSwitcherButton({
 									outlineOffset: -1,
 									padding: 4,
 									[selectedClass]: {
-										backgroundColor: displayedProjectColor,
+										background: displayedProjectColor,
 										outlineColor: BLUE_03,
 									},
 									[interactedClass]: {
-										backgroundColor: displayedProjectColor,
+										background: displayedProjectColor,
 										outlineColor: (theme) =>
 											theme.darken(isCurrentProject ? BLUE_03 : BLACK_03, 0.1),
 										outlineWidth: 3,
@@ -595,7 +595,7 @@ function ProjectSwitcherButton({
 						component={MenuItem}
 						fullWidth
 						startIcon={<Icon name="material-symbols-view-agenda" />}
-						sx={{ ':hover, :focus-within': { backgroundColor: 'initial' } }}
+						sx={{ ':hover, :focus-within': { background: 'initial' } }}
 						to="/app"
 						variant="outlined"
 					>
@@ -682,10 +682,10 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 							setShowProjectInfoDialog(true)
 						}}
 						sx={{
-							backgroundColor: projectSettings.projectColor || WHITE_00,
+							background: projectSettings.projectColor || WHITE_00,
 							flex: 1,
 							'&:hover': {
-								backgroundColor: (theme) =>
+								background: (theme) =>
 									theme.darken(projectSettings.projectColor || WHITE_00, 0.1),
 							},
 						}}
@@ -711,7 +711,7 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 								direction="column"
 								sx={{
 									alignItems: 'flex-start',
-									backgroundColor: projectSettings.projectColor,
+									background: projectSettings.projectColor,
 									border: `2px solid ${projectSettings.projectColor || BLUE_05}`,
 									borderRadius: 2,
 									gap: 4,

@@ -503,7 +503,7 @@ function NetworkConnectionPill() {
 	}
 
 	return (
-		<Box sx={{ backgroundColor: BLUE_06, borderRadius: 2, padding: 1 }}>
+		<Box sx={{ background: BLUE_06, borderRadius: 2, padding: 1 }}>
 			<Typography
 				color="textTertiary"
 				data-testid="exchange-network-connection-info"

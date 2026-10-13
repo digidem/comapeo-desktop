@@ -866,7 +866,7 @@ export function MapPanel({
 							background: BLACK_00,
 							display: 'grid',
 							placeItems: 'center',
-							backgroundColor: alpha(BLACK_00, 0.5),
+							background: alpha(BLACK_00, 0.5),
 						}}
 					>
 						<Typography color="textInverted">

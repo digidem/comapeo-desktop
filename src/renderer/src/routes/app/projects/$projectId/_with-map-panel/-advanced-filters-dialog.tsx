@@ -145,7 +145,7 @@ export function AdvancedFiltersDialogContent({
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					backgroundColor: WHITE_00,
+					background: WHITE_00,
 					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 2,
 					padding: 4,
@@ -501,7 +501,7 @@ export function AdvancedFiltersDialogContent({
 																})
 															}}
 															sx={{
-																backgroundColor: isSelected
+																background: isSelected
 																	? (theme) =>
 																			alpha(
 																				theme.palette.primary.main,
@@ -516,7 +516,7 @@ export function AdvancedFiltersDialogContent({
 																transition: (theme) =>
 																	theme.transitions.create('background-color'),
 																':hover': {
-																	backgroundColor: (theme) =>
+																	background: (theme) =>
 																		isSelected
 																			? alpha(
 																					theme.palette.primary.main,
@@ -525,7 +525,7 @@ export function AdvancedFiltersDialogContent({
 																			: theme.palette.action.hover,
 																},
 																':focus, :focus-within': {
-																	backgroundColor: (theme) =>
+																	background: (theme) =>
 																		isSelected
 																			? alpha(
 																					theme.palette.primary.main,
@@ -549,7 +549,7 @@ export function AdvancedFiltersDialogContent({
 
 			<Box
 				sx={{
-					backgroundColor: WHITE_00,
+					background: WHITE_00,
 					borderTop: `1px solid ${BLUE_05}`,
 					bottom: 0,
 					display: 'flex',

@@ -59,7 +59,7 @@ export const Route = createFileRoute('/app')({
 
 function RouteComponent() {
 	return (
-		<Box sx={{ backgroundColor: WHITE_00, height: '100%' }}>
+		<Box sx={{ background: WHITE_00, height: '100%' }}>
 			<Box sx={{ display: 'flex', height: '100%', overflow: 'auto' }}>
 				<Outlet />
 

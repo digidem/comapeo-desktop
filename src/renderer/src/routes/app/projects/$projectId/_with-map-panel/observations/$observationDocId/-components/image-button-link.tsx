@@ -38,14 +38,14 @@ export function ImageButtonLink({
 					className="MuiImageBackdrop-root"
 					aria-hidden
 					sx={{
+						background: (theme) => theme.palette.common.black,
+						bottom: 0,
+						left: 0,
+						opacity: 0,
 						pointerEvents: 'none',
 						position: 'absolute',
-						left: 0,
 						right: 0,
 						top: 0,
-						bottom: 0,
-						opacity: 0,
-						backgroundColor: (theme) => theme.palette.common.black,
 						transition: (theme) => theme.transitions.create('opacity'),
 					}}
 				/>
