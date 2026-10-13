@@ -622,7 +622,6 @@ export function DataList({
 							<List
 								component="ul"
 								ref={listRef}
-								disablePadding
 								sx={{ flex: 1, overflow: 'auto', scrollbarColor: 'initial' }}
 							>
 								<Box

@@ -237,7 +237,7 @@ function NotesEditor({
 					)}
 				</form.AppField>
 
-				<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
+				<Stack direction="row" sx={{ gap: 2, justifyContent: 'center' }}>
 					<form.Subscribe selector={(state) => state.isSubmitting}>
 						{(isSubmitting) => (
 							<>

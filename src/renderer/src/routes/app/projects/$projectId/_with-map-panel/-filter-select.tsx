@@ -225,7 +225,7 @@ export function FilterSelect({
 
 										<Stack
 											component={List}
-											disablePadding
+											direction="column"
 											role="listbox"
 											aria-multiselectable={multiSelect}
 											ref={optionsListRef}

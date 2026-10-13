@@ -96,18 +96,14 @@ function RouteComponent() {
 				sx={{ flexWrap: 'wrap', gap: 5, justifyContent: 'center' }}
 			>
 				<ButtonLink
+					fullWidth
 					to="/onboarding/privacy-policy"
 					variant="outlined"
-					sx={{ flex: 1 }}
 				>
 					{intl.formatMessage(m.learnMore)}
 				</ButtonLink>
 
-				<ButtonLink
-					to="/onboarding/device-name"
-					variant="contained"
-					sx={{ flex: 1 }}
-				>
+				<ButtonLink fullWidth to="/onboarding/device-name" variant="contained">
 					{intl.formatMessage(m.next)}
 				</ButtonLink>
 			</Stack>

@@ -497,7 +497,6 @@ function ProjectSwitcherButton({
 				open={!!anchorElement}
 				slotProps={{
 					list: {
-						disablePadding: true,
 						sx: { display: 'flex', flexDirection: 'column', overflow: 'auto' },
 					},
 					paper: {
@@ -546,10 +545,9 @@ function ProjectSwitcherButton({
 							<MenuItem
 								key={p.projectId}
 								component={ButtonBaseLink}
+								disableRipple
 								to="/app/projects/$projectId"
 								params={{ projectId: p.projectId }}
-								disableGutters
-								disableRipple
 								selected={isCurrentProject}
 								sx={{
 									backgroundColor: displayedProjectColor,
@@ -768,13 +766,10 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 								) : null}
 							</Stack>
 
-							<List
-								sx={{
-									display: 'flex',
-									flexDirection: 'column',
-									gap: 4,
-									padding: 4,
-								}}
+							<Stack
+								component={List}
+								direction="column"
+								sx={{ gap: 4, padding: 4 }}
 							>
 								<ListItem sx={{ gap: 4 }}>
 									<Stack
@@ -999,7 +994,7 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 										) : null}
 									</Box>
 								</ListItem>
-							</List>
+							</Stack>
 						</Stack>
 
 						<Box

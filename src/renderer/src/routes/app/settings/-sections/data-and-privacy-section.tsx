@@ -115,22 +115,23 @@ export function DataAndPrivacySection() {
 								<Stack
 									component={List}
 									direction="column"
-									sx={{ gap: 4, listStyleType: 'disc', paddingInline: 8 }}
+									sx={{
+										color: (theme) => theme.palette.text.secondary,
+										gap: 4,
+										listStyleType: 'disc',
+										paddingInline: 8,
+									}}
 								>
 									<ListItem sx={{ display: 'list-item' }}>
-										<Typography>
-											{intl.formatMessage(
-												m.dataAndPrivacyDiagnosticInformationPersonalInfo,
-											)}
-										</Typography>
+										{intl.formatMessage(
+											m.dataAndPrivacyDiagnosticInformationPersonalInfo,
+										)}
 									</ListItem>
 
 									<ListItem sx={{ display: 'list-item' }}>
-										<Typography>
-											{intl.formatMessage(
-												m.dataAndPrivacyDiagnosticInformationOptOut,
-											)}
-										</Typography>
+										{intl.formatMessage(
+											m.dataAndPrivacyDiagnosticInformationOptOut,
+										)}
 									</ListItem>
 								</Stack>
 							</Stack>

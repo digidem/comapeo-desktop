@@ -422,7 +422,11 @@ function AppUsageInterstitial({
 					<Stack
 						component={List}
 						direction="column"
-						sx={{ paddingInline: 10, gap: 4 }}
+						sx={{
+							color: (theme) => theme.palette.text.secondary,
+							gap: 4,
+							paddingInline: 10,
+						}}
 					>
 						<ListItem sx={{ gap: 2, alignItems: 'stretch' }}>
 							<Icon
@@ -431,11 +435,9 @@ function AppUsageInterstitial({
 								sx={{ alignSelf: 'baseline' }}
 							/>
 
-							<Typography color="textTertiary">
-								{intl.formatMessage(
-									m.appUsageConsentInterstitialDetailsIdNumbers,
-								)}
-							</Typography>
+							{intl.formatMessage(
+								m.appUsageConsentInterstitialDetailsIdNumbers,
+							)}
 						</ListItem>
 
 						<ListItem sx={{ gap: 2, alignItems: 'stretch' }}>
@@ -445,29 +447,21 @@ function AppUsageInterstitial({
 								sx={{ alignSelf: 'baseline' }}
 							/>
 
-							<Typography color="textTertiary">
-								{intl.formatMessage(
-									m.appUsageConsentInterstitialDetailsIpAddresses,
-								)}
-							</Typography>
+							{intl.formatMessage(
+								m.appUsageConsentInterstitialDetailsIpAddresses,
+							)}
 						</ListItem>
 
-						<ListItem
-							sx={{ gap: 2, alignItems: 'stretch' }}
-							disableGutters
-							disablePadding
-						>
+						<ListItem sx={{ gap: 2, alignItems: 'stretch' }}>
 							<Icon
 								name="openmoji-switch"
 								size={listItemIconSize}
 								sx={{ alignSelf: 'baseline' }}
 							/>
 
-							<Typography color="textTertiary">
-								{intl.formatMessage(
-									m.appUsageConsentInterstitialDetailsTurnOffAnytime,
-								)}
-							</Typography>
+							{intl.formatMessage(
+								m.appUsageConsentInterstitialDetailsTurnOffAnytime,
+							)}
 						</ListItem>
 					</Stack>
 				</Stack>

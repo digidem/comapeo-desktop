@@ -108,22 +108,19 @@ function RouteComponent() {
 								<Stack
 									component={List}
 									direction="column"
-									sx={{ gap: 2, listStyleType: 'disc', paddingInline: 8 }}
+									sx={{
+										color: (theme) => theme.palette.text.secondary,
+										gap: 2,
+										listStyleType: 'disc',
+										paddingInline: 8,
+									}}
 								>
 									<ListItem sx={{ display: 'list-item' }}>
-										<Typography>
-											{intl.formatMessage(
-												m.discoveryTroubleshootingSameNetwork,
-											)}
-										</Typography>
+										{intl.formatMessage(m.discoveryTroubleshootingSameNetwork)}
 									</ListItem>
 
 									<ListItem sx={{ display: 'list-item' }}>
-										<Typography>
-											{intl.formatMessage(
-												m.discoveryTroubleshootingSameVersion,
-											)}
-										</Typography>
+										{intl.formatMessage(m.discoveryTroubleshootingSameVersion)}
 									</ListItem>
 								</Stack>
 							</Stack>

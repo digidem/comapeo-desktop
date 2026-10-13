@@ -178,7 +178,7 @@ function RouteComponent() {
 										component={List}
 										direction="column"
 										sx={{
-											color: (theme) => theme.palette.text.tertiary,
+											color: (theme) => theme.palette.text.secondary,
 											gap: 4,
 											listStyleType: 'disc',
 											paddingInline: 8,

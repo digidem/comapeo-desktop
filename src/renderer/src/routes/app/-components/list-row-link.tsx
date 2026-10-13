@@ -21,7 +21,6 @@ export function ListRowLink({
 	return (
 		<ListItemButtonLink
 			{...linkProps}
-			disableGutters
 			disableTouchRipple
 			sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2 }}
 		>

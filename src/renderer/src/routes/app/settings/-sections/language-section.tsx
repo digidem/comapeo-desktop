@@ -187,7 +187,6 @@ export function LanguageSection({
 
 							return (
 								<MenuItem
-									disableGutters
 									key={languageTag}
 									selected={isSelected}
 									sx={{ gap: 4, padding: 2 }}

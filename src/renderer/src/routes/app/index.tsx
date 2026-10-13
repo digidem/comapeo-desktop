@@ -10,7 +10,6 @@ import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -355,34 +354,32 @@ function GetStartedPanel() {
 					{intl.formatMessage(m.getStartedDescription)}
 				</Typography>
 
-				<List
-					disablePadding
-					sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+				<Stack
+					component={List}
+					direction="column"
+					sx={{
+						color: (theme) => theme.palette.text.secondary,
+						gap: 4,
+					}}
 				>
-					<ListItem disableGutters disablePadding sx={{ gap: 5 }}>
+					<ListItem sx={{ gap: 5 }}>
 						<Icon name="openmoji-world-map" />
 
-						<ListItemText>
-							{intl.formatMessage(m.getStartedMapAnywhereDetail)}
-						</ListItemText>
+						{intl.formatMessage(m.getStartedMapAnywhereDetail)}
 					</ListItem>
 
-					<ListItem disableGutters disablePadding sx={{ gap: 5 }}>
+					<ListItem sx={{ gap: 5 }}>
 						<Icon name="openmoji-handshake-medium-skin-tone" />
 
-						<ListItemText>
-							{intl.formatMessage(m.getStartedShareDetail)}
-						</ListItemText>
+						{intl.formatMessage(m.getStartedShareDetail)}
 					</ListItem>
 
-					<ListItem disableGutters disablePadding sx={{ gap: 5 }}>
+					<ListItem sx={{ gap: 5 }}>
 						<Icon name="openmoji-locked-with-key" />
 
-						<ListItemText>
-							{intl.formatMessage(m.getStartedOwnDataDetail)}
-						</ListItemText>
+						{intl.formatMessage(m.getStartedOwnDataDetail)}
 					</ListItem>
-				</List>
+				</Stack>
 			</Stack>
 		</Container>
 	)

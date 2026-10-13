@@ -151,27 +151,22 @@ function RouteComponent() {
 								direction="column"
 								sx={{
 									alignSelf: 'center',
+									color: (theme) => theme.palette.text.secondary,
 									gap: 2,
 									listStyleType: 'disc',
 									paddingInline: 8,
 								}}
 							>
 								<ListItem sx={{ display: 'list-item' }}>
-									<Typography>
-										{intl.formatMessage(m.onlyInvitedDevices)}
-									</Typography>
+									{intl.formatMessage(m.onlyInvitedDevices)}
 								</ListItem>
 
 								<ListItem sx={{ display: 'list-item' }}>
-									<Typography>
-										{intl.formatMessage(m.shareUsingExchange)}
-									</Typography>
+									{intl.formatMessage(m.shareUsingExchange)}
 								</ListItem>
 
 								<ListItem sx={{ display: 'list-item' }}>
-									<Typography>
-										{intl.formatMessage(m.controlSharing)}
-									</Typography>
+									{intl.formatMessage(m.controlSharing)}
 								</ListItem>
 							</Stack>
 						</Stack>

@@ -2,7 +2,6 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
@@ -44,11 +43,7 @@ function RouteComponent() {
 				justifyContent: 'center',
 			}}
 		>
-			<Container
-				disableGutters
-				maxWidth="md"
-				sx={{ overflow: 'auto', padding: 6 }}
-			>
+			<Container maxWidth="md" sx={{ overflow: 'auto', padding: 6 }}>
 				<Stack
 					direction="column"
 					sx={{
@@ -105,25 +100,25 @@ function RouteComponent() {
 							<ListItem sx={{ gap: 5 }}>
 								<Icon name="openmoji-world-map" />
 
-								<ListItemText>{intl.formatMessage(m.mapAnywhere)}</ListItemText>
+								{intl.formatMessage(m.mapAnywhere)}
 							</ListItem>
 
 							<ListItem sx={{ gap: 5 }}>
 								<Icon name="openmoji-handshake-medium-skin-tone" />
 
-								<ListItemText>{intl.formatMessage(m.collaborate)}</ListItemText>
+								{intl.formatMessage(m.collaborate)}
 							</ListItem>
 
 							<ListItem sx={{ gap: 5 }}>
 								<Icon name="openmoji-locked-with-key" />
 
-								<ListItemText>{intl.formatMessage(m.ownData)}</ListItemText>
+								{intl.formatMessage(m.ownData)}
 							</ListItem>
 
 							<ListItem sx={{ gap: 5 }}>
 								<Icon name="openmoji-raised-fist-medium-skin-tone" />
 
-								<ListItemText>{intl.formatMessage(m.designedFor)}</ListItemText>
+								{intl.formatMessage(m.designedFor)}
 							</ListItem>
 						</Stack>
 					</Stack>

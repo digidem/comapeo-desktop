@@ -324,7 +324,7 @@ function ActiveCollaboratorsList({
 	})
 
 	return (
-		<List sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+		<Stack component={List} direction="column" sx={{ gap: 4 }}>
 			{devices.map((device) => {
 				const isSelf = device.deviceId === ownDeviceId
 
@@ -380,7 +380,7 @@ function ActiveCollaboratorsList({
 					</ListItem>
 				)
 			})}
-		</List>
+		</Stack>
 	)
 }
 
@@ -401,7 +401,7 @@ function PastCollaboratorsList({
 	})
 
 	return (
-		<List sx={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+		<Stack component={List} direction="column" sx={{ gap: 10 }}>
 			{devices.map((device) => {
 				const isSelf = device.deviceId === ownDeviceId
 
@@ -466,7 +466,7 @@ function PastCollaboratorsList({
 					</ListItem>
 				)
 			})}
-		</List>
+		</Stack>
 	)
 }
 
