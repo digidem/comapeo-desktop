@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react'
+import { Suspense, useId, useState } from 'react'
 import {
 	useAttachmentUrl,
 	useOwnDeviceInfo,
@@ -10,8 +10,6 @@ import type { Observation } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
-import Container from '@mui/material/Container'
-import Dialog from '@mui/material/Dialog'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
@@ -23,12 +21,15 @@ import { MediaProvider } from 'media-chrome/react/media-store'
 import { defineMessages, useIntl, type NoMessageValues } from 'react-intl'
 import * as v from 'valibot'
 
+import { DeleteConfirmationDialogContentLayout } from '../-components/delete-confirmation-dialog-content-layout.tsx'
+import { DeleteSuccessPanelLayout } from '../-components/delete-success-panel-layout.tsx'
 import { PhotoAttachmentImage } from '../-components/photo-attachment-image.tsx'
-import { BLUE_GREY, GREEN } from '../../../../../../../../colors.ts'
+import { BLUE_GREY } from '../../../../../../../../colors.ts'
 import { DecentDialog } from '../../../../../../../../components/decent-dialog.tsx'
 import { ErrorBoundary } from '../../../../../../../../components/error-boundary.tsx'
 import { ErrorDialogContent } from '../../../../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../../../../components/icon.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../../../../../hooks/icon.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -140,82 +141,19 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+	const intl = useIntl()
+
+	const router = useRouter()
+
 	const [showDeleteSuccess, setShowDeleteSuccess] = useState(false)
 
 	const { projectId, observationDocId, ...blobId } = Route.useParams()
 
 	return showDeleteSuccess ? (
-		<DeleteSuccessPanel
-			projectId={projectId}
-			observationDocId={observationDocId}
-			type={blobId.type}
-		/>
-	) : (
-		<AttachmentPanel
-			blobId={blobId}
-			observationDocId={observationDocId}
-			onDeleteSuccess={() => {
-				setShowDeleteSuccess(true)
-			}}
-			projectId={projectId}
-		/>
-	)
-}
-
-function DeleteSuccessPanel({
-	projectId,
-	observationDocId,
-	type,
-}: {
-	projectId: string
-	observationDocId: string
-	type: BlobId['type']
-}) {
-	const intl = useIntl()
-
-	const router = useRouter()
-
-	return (
-		<Stack
-			direction="column"
-			sx={{ flex: 1, overflow: 'auto', justifyContent: 'space-between' }}
-		>
-			<Container maxWidth="xs">
-				<Stack
-					direction="column"
-					sx={{ padding: 6, alignItems: 'center', flex: 1, gap: 6 }}
-				>
-					<Box sx={{ padding: 6 }}>
-						<Icon
-							name="material-check-circle-rounded"
-							htmlColor={GREEN}
-							size={160}
-						/>
-					</Box>
-
-					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center' }}
-					>
-						{intl.formatMessage(m.deleteSuccessPanelTitle, { type })}
-					</Typography>
-				</Stack>
-			</Container>
-
-			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'column',
-					gap: 4,
-					paddingX: 6,
-					paddingBottom: 6,
-					position: 'sticky',
-					bottom: 0,
-					alignItems: 'center',
-					zIndex: 1,
-				}}
-			>
+		<DeleteSuccessPanelLayout
+			action={
 				<Button
+					fullWidth
 					onClick={() => {
 						if (router.history.canGoBack()) {
 							router.history.back()
@@ -228,14 +166,25 @@ function DeleteSuccessPanel({
 							replace: true,
 						})
 					}}
-					fullWidth
-					variant="outlined"
-					sx={{ maxWidth: 400 }}
+					sx={{ alignSelf: 'center' }}
+					variant="text"
 				>
 					{intl.formatMessage(m.returnToObservation)}
 				</Button>
-			</Box>
-		</Stack>
+			}
+			title={intl.formatMessage(m.deleteSuccessPanelTitle, {
+				type: blobId.type,
+			})}
+		/>
+	) : (
+		<AttachmentPanel
+			blobId={blobId}
+			observationDocId={observationDocId}
+			onDeleteSuccess={() => {
+				setShowDeleteSuccess(true)
+			}}
+			projectId={projectId}
+		/>
 	)
 }
 
@@ -266,16 +215,20 @@ function AttachmentPanel({
 
 	const router = useRouter()
 
+	const backIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'pageTitle',
+		multiplier: 1.25,
+	})
+
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
 				direction="row"
-				component="nav"
 				sx={{
 					alignItems: 'center',
+					borderBottom: `1px solid ${BLUE_GREY}`,
 					gap: 4,
 					padding: 4,
-					borderBottom: `1px solid ${BLUE_GREY}`,
 				}}
 			>
 				<IconButton
@@ -292,10 +245,10 @@ function AttachmentPanel({
 						})
 					}}
 				>
-					<Icon name="material-arrow-back" size={30} />
+					<Icon name="material-arrow-back" size={backIconSize} />
 				</IconButton>
 
-				<Typography variant="h1" sx={{ fontWeight: 500 }}>
+				<Typography variant="pageTitle">
 					{intl.formatMessage(
 						blobId.type === 'photo' ? m.photoNavTitle : m.audioNavTitle,
 					)}
@@ -304,15 +257,8 @@ function AttachmentPanel({
 
 			<Suspense
 				fallback={
-					<Box
-						sx={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
-							flex: 1,
-						}}
-					>
-						<CircularProgress disableShrink size={30} />
+					<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
+						<CircularProgress disableShrink />
 					</Box>
 				}
 			>
@@ -355,6 +301,11 @@ function LoadedAttachmentSection({
 	const { data: ownRole } = useOwnRoleInProject({ projectId })
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
+	const errorIconSize = useIconSizeBasedOnTypography({
+		typographyVariant: 'heroHeader',
+		multiplier: 4,
+	})
+
 	const errorResetKey = `${blobId.driveId}/${blobId.type}/${blobId.variant}/${blobId.name}`
 
 	const canEdit =
@@ -396,14 +347,14 @@ function LoadedAttachmentSection({
 					// TODO: Consider redirecting to other variants recursively for image blobs
 					fallback={() => (
 						<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
-							<Icon name="material-error" size={80} color="error" />
+							<Icon name="material-error" size={errorIconSize} color="error" />
 						</Box>
 					)}
 				>
 					<Suspense
 						fallback={
 							<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
-								<CircularProgress disableShrink size={30} />
+								<CircularProgress disableShrink />
 							</Box>
 						}
 					>
@@ -482,11 +433,7 @@ function AudioRecordingCard({
 				</MediaProvider>
 
 				{createdAt ? (
-					<Typography
-						color="textSecondary"
-						variant="body2"
-						sx={{ textAlign: 'center', textWrap: 'balance' }}
-					>
+					<Typography sx={{ textAlign: 'center', textWrap: 'balance' }}>
 						<time dateTime={createdAt}>
 							{intl.formatDate(createdAt, {
 								year: 'numeric',
@@ -547,14 +494,16 @@ function DeleteButton({
 		},
 	})
 
+	const labelId = useId()
+
 	return (
 		<>
 			<Stack
 				direction="column"
-				sx={{ gap: 2, justifyContent: 'center', alignItems: 'center' }}
+				sx={{ alignItems: 'center', gap: 2, justifyContent: 'center' }}
 			>
 				<IconButton
-					aria-labelledby="delete-button-label"
+					aria-labelledby={labelId}
 					sx={{ border: `1px solid ${BLUE_GREY}` }}
 					onClick={() => {
 						setShowConfirmation(true)
@@ -563,31 +512,75 @@ function DeleteButton({
 					<Icon name="material-symbols-delete" />
 				</IconButton>
 
-				<Typography id="delete-button-label">
-					{intl.formatMessage(m.delete)}
-				</Typography>
+				<Typography id={labelId}>{intl.formatMessage(m.delete)}</Typography>
 			</Stack>
 
-			<DeleteAttachmentConfirmationDialog
-				open={showConfirmation}
-				onCancel={() => {
-					setShowConfirmation(false)
-				}}
-				onConfirm={() => {
-					deleteAttachment.mutate(
-						{ blobId },
-						{
-							onSuccess: () => {
-								onSuccess()
-							},
-							onSettled: () => {
-								setShowConfirmation(false)
-							},
-						},
+			<DecentDialog fullWidth maxWidth="sm" value={showConfirmation || null}>
+				{() => {
+					const actionIsPending = deleteAttachment.status === 'pending'
+
+					return (
+						<DeleteConfirmationDialogContentLayout
+							actions={
+								<Box
+									sx={{
+										display: 'flex',
+										flexDirection: 'row',
+										gap: 4,
+										justifyContent: 'center',
+										padding: 6,
+									}}
+								>
+									<Button
+										fullWidth
+										onClick={
+											actionIsPending
+												? undefined
+												: () => {
+														setShowConfirmation(false)
+													}
+										}
+										variant="outlined"
+									>
+										{intl.formatMessage(m.deleteAttachmentDialogCancel)}
+									</Button>
+
+									<Button
+										color="error"
+										fullWidth
+										loading={actionIsPending}
+										loadingPosition="start"
+										onClick={
+											actionIsPending
+												? undefined
+												: () => {
+														deleteAttachment.mutate(
+															{ blobId },
+															{
+																onSuccess: () => {
+																	onSuccess()
+																},
+																onSettled: () => {
+																	setShowConfirmation(false)
+																},
+															},
+														)
+													}
+										}
+
+										startIcon={<Icon name="material-symbols-delete" />}
+									>
+										{intl.formatMessage(m.deleteAttachmentDialogConfirm)}
+									</Button>
+								</Box>
+							}
+							title={intl.formatMessage(m.deleteAttachmentDialogTitle, {
+								type: blobId.type,
+							})}
+						/>
 					)
 				}}
-				type={blobId.type}
-			/>
+			</DecentDialog>
 
 			<DecentDialog
 				fullWidth
@@ -609,74 +602,6 @@ function DeleteButton({
 	)
 }
 
-function DeleteAttachmentConfirmationDialog({
-	open,
-	type,
-	onCancel,
-	onConfirm,
-}: {
-	open: boolean
-	type: BlobId['type']
-	onConfirm: () => void
-	onCancel: () => void
-}) {
-	const intl = useIntl()
-
-	return (
-		<Dialog open={open} fullWidth maxWidth="sm">
-			<Stack direction="column">
-				<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
-					<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
-						<Icon name="material-error" color="error" size={72} />
-
-						<Typography
-							variant="h1"
-							sx={{ fontWeight: 500, textAlign: 'center' }}
-						>
-							{intl.formatMessage(m.deleteAttachmentDialogTitle, { type })}
-						</Typography>
-					</Stack>
-				</Stack>
-
-				<Box
-					sx={{
-						position: 'sticky',
-						bottom: 0,
-						display: 'flex',
-						flexDirection: 'row',
-						justifyContent: 'space-between',
-						gap: 6,
-						padding: 6,
-					}}
-				>
-					<Button
-						fullWidth
-						variant="outlined"
-						onClick={() => {
-							onCancel()
-						}}
-						sx={{ maxWidth: 400 }}
-					>
-						{intl.formatMessage(m.deleteAttachmentDialogCancel)}
-					</Button>
-
-					<Button
-						fullWidth
-						color="error"
-						onClick={() => {
-							onConfirm()
-						}}
-						startIcon={<Icon name="material-symbols-delete" />}
-						sx={{ maxWidth: 400 }}
-					>
-						{intl.formatMessage(m.deleteAttachmentDialogConfirm)}
-					</Button>
-				</Box>
-			</Stack>
-		</Dialog>
-	)
-}
-
 const DOWNLOAD_MUTATION_KEY = createGlobalMutationsKey(['download', 'url'])
 
 function DownloadButton({
@@ -695,14 +620,16 @@ function DownloadButton({
 		mutationKey: DOWNLOAD_MUTATION_KEY,
 	})
 
+	const labelId = useId()
+
 	return (
 		<>
 			<Stack
 				direction="column"
-				sx={{ gap: 2, justifyContent: 'center', alignItems: 'center' }}
+				sx={{ alignItems: 'center', gap: 2, justifyContent: 'center' }}
 			>
 				<IconButton
-					aria-labelledby="download-button-label"
+					aria-labelledby={labelId}
 					sx={{ border: `1px solid ${BLUE_GREY}` }}
 					onClick={() => {
 						if (downloadUrl.status === 'pending') {
@@ -715,9 +642,7 @@ function DownloadButton({
 					<Icon name="material-file-download" />
 				</IconButton>
 
-				<Typography id="download-button-label">
-					{intl.formatMessage(m.download)}
-				</Typography>
+				<Typography id={labelId}>{intl.formatMessage(m.download)}</Typography>
 			</Stack>
 
 			<DecentDialog
