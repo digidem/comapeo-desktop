@@ -427,7 +427,10 @@ export function DataList({
 							</Tooltip>
 						</Stack>
 
-						<Stack direction="row" sx={{ gap: 4, flex: 1, flexWrap: 'wrap' }}>
+						<Stack
+							direction="row"
+							sx={{ alignItems: 'center', gap: 4, flex: 1, flexWrap: 'wrap' }}
+						>
 							<CategoriesFilterSelect
 								projectId={projectId}
 								selected={selectedCategoryFilterOptions}
@@ -493,12 +496,12 @@ export function DataList({
 							}}
 						>
 							<Button
-								variant="outlined"
-								sx={{ flexShrink: 0 }}
 								onClick={() => {
 									unsetCategoriesFilter()
 									unsetDateFilter()
 								}}
+								sx={{ flexShrink: 0 }}
+								variant="outlined"
 							>
 								{intl.formatMessage(m.clearFilters)}
 							</Button>
@@ -878,11 +881,11 @@ export function DataList({
 									</Typography>
 
 									<Button
-										variant="text"
 										onClick={() => {
 											unsetCategoriesFilter()
 											unsetDateFilter()
 										}}
+										variant="text"
 									>
 										{intl.formatMessage(m.noResultsResetFilters)}
 									</Button>
@@ -1288,8 +1291,6 @@ function CategoriesFilterSelect({
 			}
 			header={
 				<Button
-					variant="text"
-					size="small"
 					onClick={() => {
 						if (selected.length === 0) {
 							onSelectAll()
@@ -1297,6 +1298,8 @@ function CategoriesFilterSelect({
 							onDeselectAll()
 						}
 					}}
+					size="small"
+					variant="text"
 				>
 					{intl.formatMessage(
 						selected.length === 0
@@ -1306,17 +1309,18 @@ function CategoriesFilterSelect({
 				</Button>
 			}
 			footer={
-				<Box
+				<Stack
+					direction="row"
 					sx={{
+						alignItems: 'center',
 						display: 'flex',
-						flexDirection: 'row',
 						justifyContent: 'center',
 					}}
 				>
-					<Button fullWidth variant="outlined" onClick={onAdvancedClick}>
+					<Button fullWidth onClick={onAdvancedClick} variant="outlined">
 						{intl.formatMessage(m.categoriesFilterAdvanced)}
 					</Button>
-				</Box>
+				</Stack>
 			}
 		>
 			{options.map((o) => {
@@ -1607,7 +1611,7 @@ function DateFilterSelect({
 						justifyContent: 'center',
 					}}
 				>
-					<Button fullWidth variant="outlined" onClick={onAdvancedClick}>
+					<Button fullWidth onClick={onAdvancedClick} variant="outlined">
 						{intl.formatMessage(m.categoriesFilterAdvanced)}
 					</Button>
 				</Box>

@@ -263,7 +263,6 @@ function RouteComponent() {
 				<DeleteSuccessPanelLayout
 					action={
 						<Button
-							fullWidth
 							onClick={() => {
 								if (router.history.canGoBack()) {
 									router.history.back()
@@ -622,10 +621,10 @@ function ObservationDetailsPanel({
 										>
 											<Button
 												disabled={!!activeEditId}
-												variant="text"
 												onClick={() => {
 													onEditCategory()
 												}}
+												variant="text"
 											>
 												{intl.formatMessage(m.changeCategory)}
 											</Button>
@@ -981,10 +980,10 @@ function ObservationDetailsPanel({
 								return (
 									<DeleteConfirmationDialogContentLayout
 										actions={
-											<Box
+											<Stack
+												direction="row"
 												sx={{
-													display: 'flex',
-													flexDirection: 'row',
+													flexWrap: 'wrap',
 													gap: 4,
 													justifyContent: 'center',
 													padding: 6,
@@ -999,6 +998,7 @@ function ObservationDetailsPanel({
 																	setShowDeleteObservationConfirmation(false)
 																}
 													}
+													startIcon={<Icon name="material-symbols-cancel" />}
 													variant="outlined"
 												>
 													{intl.formatMessage(
@@ -1033,14 +1033,14 @@ function ObservationDetailsPanel({
 																	)
 																}
 													}
-
 													startIcon={<Icon name="material-symbols-delete" />}
+													variant="contained"
 												>
 													{intl.formatMessage(
 														m.deleteObservationConfirmationDialogConfirm,
 													)}
 												</Button>
-											</Box>
+											</Stack>
 										}
 										title={intl.formatMessage(
 											m.deleteObservationConfirmationDialogTitle,

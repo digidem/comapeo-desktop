@@ -124,8 +124,8 @@ function RouteComponent() {
 					</Stack>
 
 					<ButtonLink
-						fullWidth
 						to="/onboarding/data-and-privacy"
+						fullWidth
 						variant="contained"
 					>
 						{intl.formatMessage(m.getStarted)}

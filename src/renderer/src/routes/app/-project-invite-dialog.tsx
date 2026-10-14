@@ -339,6 +339,7 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 									onClick={() => {
 										onCloseAcceptedInvite()
 									}}
+									startIcon={<Icon name="material-symbols-cancel" />}
 									variant="outlined"
 								>
 									{intl.formatMessage(m.projectJoinedCloseDialog)}

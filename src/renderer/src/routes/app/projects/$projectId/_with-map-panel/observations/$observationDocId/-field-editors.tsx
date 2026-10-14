@@ -96,20 +96,18 @@ export function TextFieldEditor({
 					{(isSubmitting) => (
 						<>
 							<Button
-								type="submit"
 								loadingPosition="start"
 								loading={isSubmitting}
 								startIcon={
 									<Icon name="material-check-circle-outline-rounded" />
 								}
 								sx={{ flex: 1 }}
+								type="submit"
 							>
 								{intl.formatMessage(m.saveButtonText)}
 							</Button>
 
 							<Button
-								type="button"
-								variant="outlined"
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -117,7 +115,10 @@ export function TextFieldEditor({
 
 									onCancel()
 								}}
+								startIcon={<Icon name="material-symbols-cancel" />}
 								sx={{ flex: 1 }}
+								type="button"
+								variant="outlined"
 							>
 								{intl.formatMessage(m.cancelButtonText)}
 							</Button>
@@ -209,20 +210,18 @@ export function NumberFieldEditor({
 					{(isSubmitting) => (
 						<>
 							<Button
-								type="submit"
 								loadingPosition="start"
 								loading={isSubmitting}
 								startIcon={
 									<Icon name="material-check-circle-outline-rounded" />
 								}
 								sx={{ flex: 1 }}
+								type="submit"
 							>
 								{intl.formatMessage(m.saveButtonText)}
 							</Button>
 
 							<Button
-								type="button"
-								variant="outlined"
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -230,7 +229,10 @@ export function NumberFieldEditor({
 
 									onCancel()
 								}}
+								startIcon={<Icon name="material-symbols-cancel" />}
 								sx={{ flex: 1 }}
+								type="button"
+								variant="outlined"
 							>
 								{intl.formatMessage(m.cancelButtonText)}
 							</Button>
@@ -334,20 +336,18 @@ export function SingleSelectFieldEditor({
 					{(isSubmitting) => (
 						<>
 							<Button
-								type="submit"
 								loadingPosition="start"
 								loading={isSubmitting}
 								startIcon={
 									<Icon name="material-check-circle-outline-rounded" />
 								}
 								sx={{ flex: 1 }}
+								type="submit"
 							>
 								{intl.formatMessage(m.saveButtonText)}
 							</Button>
 
 							<Button
-								type="button"
-								variant="outlined"
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -355,7 +355,10 @@ export function SingleSelectFieldEditor({
 
 									onCancel()
 								}}
+								startIcon={<Icon name="material-symbols-cancel" />}
 								sx={{ flex: 1 }}
+								type="button"
+								variant="outlined"
 							>
 								{intl.formatMessage(m.cancelButtonText)}
 							</Button>
@@ -442,20 +445,18 @@ export function MultiSelectFieldEditor({
 					{(isSubmitting) => (
 						<>
 							<Button
-								type="submit"
 								loadingPosition="start"
 								loading={isSubmitting}
 								startIcon={
 									<Icon name="material-check-circle-outline-rounded" />
 								}
 								sx={{ flex: 1 }}
+								type="submit"
 							>
 								{intl.formatMessage(m.saveButtonText)}
 							</Button>
 
 							<Button
-								type="button"
-								variant="outlined"
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -463,7 +464,10 @@ export function MultiSelectFieldEditor({
 
 									onCancel()
 								}}
+								startIcon={<Icon name="material-symbols-cancel" />}
 								sx={{ flex: 1 }}
+								type="button"
+								variant="outlined"
 							>
 								{intl.formatMessage(m.cancelButtonText)}
 							</Button>
@@ -571,20 +575,18 @@ export function DateFieldEditor({
 					{(isSubmitting) => (
 						<>
 							<Button
-								type="submit"
 								loadingPosition="start"
 								loading={isSubmitting}
 								startIcon={
 									<Icon name="material-check-circle-outline-rounded" />
 								}
 								sx={{ flex: 1 }}
+								type="submit"
 							>
 								{intl.formatMessage(m.saveButtonText)}
 							</Button>
 
 							<Button
-								type="button"
-								variant="outlined"
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -592,6 +594,9 @@ export function DateFieldEditor({
 
 									onCancel()
 								}}
+								startIcon={<Icon name="material-symbols-cancel" />}
+								type="button"
+								variant="outlined"
 								sx={{ flex: 1 }}
 							>
 								{intl.formatMessage(m.cancelButtonText)}

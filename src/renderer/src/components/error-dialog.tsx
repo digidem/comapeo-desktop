@@ -117,10 +117,11 @@ export function ErrorDialogContent({
 			>
 				<Button
 					fullWidth
-					variant="outlined"
 					onClick={() => {
 						onClose()
 					}}
+					startIcon={<Icon name="material-symbols-cancel" />}
+					variant="outlined"
 				>
 					{intl.formatMessage(m.close)}
 				</Button>

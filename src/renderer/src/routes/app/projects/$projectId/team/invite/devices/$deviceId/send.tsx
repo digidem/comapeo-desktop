@@ -418,10 +418,11 @@ function InvitePending({
 				>
 					<Button
 						fullWidth
-						variant="outlined"
 						onClick={() => {
 							onCancelInvite()
 						}}
+						startIcon={<Icon name="material-symbols-cancel" />}
+						variant="outlined"
 					>
 						{intl.formatMessage(m.cancelInvite)}
 					</Button>
@@ -507,8 +508,9 @@ function InviteRejected({
 							params={{ projectId }}
 							replace
 							fullWidth
-							variant="outlined"
+							startIcon={<Icon name="material-symbols-cancel" />}
 							sx={{ alignSelf: 'center' }}
+							variant="outlined"
 						>
 							{intl.formatMessage(m.close)}
 						</ButtonLink>
@@ -630,10 +632,10 @@ function InviteAccepted({
 
 						<Stack direction="column" sx={{ gap: 4, justifyContent: 'center' }}>
 							<ButtonLink
-								fullWidth
 								to="/app/projects/$projectId/team/invite/devices"
 								params={{ projectId }}
 								replace
+								fullWidth
 								sx={{ alignSelf: 'center' }}
 								variant="outlined"
 							>
@@ -641,10 +643,11 @@ function InviteAccepted({
 							</ButtonLink>
 
 							<ButtonLink
-								fullWidth
 								to="/app/projects/$projectId/team"
 								params={{ projectId }}
 								replace
+								fullWidth
+								startIcon={<Icon name="material-symbols-cancel" />}
 								sx={{ alignSelf: 'center' }}
 								variant="contained"
 							>

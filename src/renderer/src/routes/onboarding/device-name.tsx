@@ -235,11 +235,11 @@ function RouteComponent() {
 					<form.Subscribe selector={(state) => state.canSubmit}>
 						{(canSubmit) => (
 							<Button
-								fullWidth
-								form={formId}
-								variant="contained"
-								type="submit"
 								aria-disabled={!canSubmit}
+								form={formId}
+								fullWidth
+								type="submit"
+								variant="contained"
 							>
 								{intl.formatMessage(m.addName)}
 							</Button>

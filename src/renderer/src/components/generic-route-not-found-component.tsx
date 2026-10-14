@@ -63,51 +63,49 @@ export function GenericRouteNotFoundComponent({
 			</Stack>
 
 			<Stack
-				direction="column"
+				direction="row"
 				sx={{
 					alignItems: 'center',
-					bottom: 0,
+					flexWrap: 'wrap',
 					gap: 4,
+					justifyContent: 'center',
 					padding: 6,
-					position: 'sticky',
 				}}
 			>
-				<Button
-					fullWidth
-					onClick={() => {
-						router.invalidate()
-					}}
-					sx={{ alignSelf: 'center' }}
-				>
-					{intl.formatMessage(m.tryAgain)}
-				</Button>
-
 				{router.history.canGoBack() ? (
 					<Button
 						fullWidth
-						variant="outlined"
 						onClick={() => {
 							router.history.back()
 						}}
-						sx={{ alignSelf: 'center' }}
+						variant="outlined"
 					>
 						{intl.formatMessage(m.goBack)}
 					</Button>
 				) : (
 					<Button
 						fullWidth
-						variant="outlined"
 						onClick={() => {
 							router.navigate({
 								href: buildDocumentReloadURL(router, '/'),
 								reloadDocument: true,
 							})
 						}}
-						sx={{ alignSelf: 'center' }}
+						variant="outlined"
 					>
 						{intl.formatMessage(m.reloadApp)}
 					</Button>
 				)}
+
+				<Button
+					fullWidth
+					onClick={() => {
+						router.invalidate()
+					}}
+					variant="contained"
+				>
+					{intl.formatMessage(m.tryAgain)}
+				</Button>
 			</Stack>
 		</Stack>
 	)

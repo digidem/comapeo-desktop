@@ -214,7 +214,6 @@ export function StartProjectDialogContent({
 										}
 										id={inputId}
 										label={intl.formatMessage(m.projectNameInputLabel)}
-
 										onBlur={field.handleBlur}
 										onChange={(event) => {
 											field.handleChange(event.target.value)
@@ -234,7 +233,7 @@ export function StartProjectDialogContent({
 					</Box>
 				</Container>
 
-				<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+				<Stack direction="row" sx={{ justifyContent: 'center' }}>
 					<form.Subscribe
 						selector={(state) => [state.canSubmit, state.isSubmitting]}
 					>
@@ -256,7 +255,7 @@ export function StartProjectDialogContent({
 							</Button>
 						)}
 					</form.Subscribe>
-				</Box>
+				</Stack>
 			</Stack>
 
 			<DecentDialog
@@ -332,10 +331,11 @@ export function LeftProjectDialogContent({
 			>
 				<Button
 					fullWidth
-					variant="outlined"
 					onClick={() => {
 						onClose()
 					}}
+					startIcon={<Icon name="material-symbols-cancel" />}
+					variant="outlined"
 				>
 					{intl.formatMessage(m.leftProjectDialogCloseButton)}
 				</Button>
@@ -474,12 +474,17 @@ function AppUsageInterstitial({
 
 			<Stack
 				direction="row"
-				sx={{ flexWrap: 'wrap', gap: 4, justifyContent: 'center', padding: 6 }}
+				sx={{
+					alignItems: 'center',
+					flexWrap: 'wrap',
+					gap: 4,
+					justifyContent: 'center',
+					padding: 6,
+				}}
 			>
 				<Button
-					fullWidth
-					variant="outlined"
 					aria-disabled={setAppUsageMetrics.status === 'pending'}
+					fullWidth
 					onClick={() => {
 						if (setAppUsageMetrics.status === 'pending') {
 							return
@@ -491,14 +496,14 @@ function AppUsageInterstitial({
 						})
 						onClose()
 					}}
+					variant="outlined"
 				>
 					{intl.formatMessage(m.appUsageConsentInterstitialDenyButton)}
 				</Button>
 
 				<Button
-					fullWidth
-					variant="contained"
 					aria-disabled={setAppUsageMetrics.status === 'pending'}
+					fullWidth
 					loading={isActionVisiblyPending}
 					loadingPosition="start"
 					onClick={() => {
@@ -515,6 +520,7 @@ function AppUsageInterstitial({
 							},
 						)
 					}}
+					variant="contained"
 				>
 					{intl.formatMessage(m.appUsageConsentInterstitialAllowButton)}
 				</Button>
@@ -576,24 +582,17 @@ function AppUsageSuccess({
 				</Stack>
 			</Stack>
 
-			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'center',
-					padding: 6,
-				}}
-			>
+			<Stack direction="row" sx={{ justifyContent: 'center', padding: 6 }}>
 				<Button
 					fullWidth
-					variant="outlined"
 					onClick={() => {
 						onClose()
 					}}
+					variant="outlined"
 				>
 					{intl.formatMessage(m.appUsageConsentSuccessCloseButton)}
 				</Button>
-			</Box>
+			</Stack>
 		</Stack>
 	)
 }

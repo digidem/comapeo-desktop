@@ -89,13 +89,13 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 			</Stack>
 
 			<Stack
-				direction="column"
+				direction="row"
 				sx={{
 					alignItems: 'center',
-					bottom: 0,
+					flexWrap: 'wrap',
 					gap: 4,
+					justifyContent: 'center',
 					padding: 6,
-					position: 'sticky',
 				}}
 			>
 				<Button
@@ -106,19 +106,20 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 							reloadDocument: true,
 						})
 					}}
+					variant="contained"
 				>
 					{intl.formatMessage(m.reload)}
 				</Button>
 
 				<Button
 					fullWidth
-					variant="outlined"
 					onClick={() => {
 						router.navigate({
 							href: buildDocumentReloadURL(router, '/'),
 							reloadDocument: true,
 						})
 					}}
+					variant="outlined"
 				>
 					{intl.formatMessage(m.restart)}
 				</Button>

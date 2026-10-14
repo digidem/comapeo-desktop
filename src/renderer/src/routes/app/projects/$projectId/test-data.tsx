@@ -329,9 +329,10 @@ function RouteComponent() {
 												<Stack
 													direction="row"
 													sx={{
+														alignItems: 'center',
+														flexWrap: 'wrap',
 														gap: 4,
 														justifyContent: 'space-between',
-														flexWrap: 'wrap',
 													}}
 												>
 													<form.AppField name="longitude">
@@ -493,13 +494,13 @@ function RouteComponent() {
 								>
 									{([canSubmit, isSubmitting]) => (
 										<Button
-											type="submit"
+											aria-disabled={!canSubmit}
 											form={formId}
 											fullWidth
-											variant="contained"
 											loading={isSubmitting}
 											loadingPosition="start"
-											aria-disabled={!canSubmit}
+											type="submit"
+											variant="contained"
 										>
 											{intl.formatMessage(m.create)}
 										</Button>

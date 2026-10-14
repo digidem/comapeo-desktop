@@ -202,11 +202,12 @@ function MainContent() {
 						>
 							<Button
 								fullWidth
-								variant="outlined"
 								onClick={() => {
 									importCustomMapFile.reset()
 								}}
+								startIcon={<Icon name="material-symbols-cancel" />}
 								sx={{ alignSelf: 'center' }}
+								variant="outlined"
 							>
 								{intl.formatMessage(m.close)}
 							</Button>
@@ -267,15 +268,15 @@ function NoCustomMap({
 								</Typography>
 
 								<Button
-									variant="outlined"
 									color="error"
 									fullWidth
 									loading={removeIsPending}
 									loadingPosition="start"
-									sx={{ alignSelf: 'center' }}
 									onClick={() => {
 										onRemoveMap()
 									}}
+									sx={{ alignSelf: 'center' }}
+									variant="outlined"
 								>
 									{intl.formatMessage(m.removeMap)}
 								</Button>

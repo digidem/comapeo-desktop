@@ -523,10 +523,10 @@ function DeleteButton({
 					return (
 						<DeleteConfirmationDialogContentLayout
 							actions={
-								<Box
+								<Stack
+									direction="row"
 									sx={{
-										display: 'flex',
-										flexDirection: 'row',
+										flexWrap: 'wrap',
 										gap: 4,
 										justifyContent: 'center',
 										padding: 6,
@@ -541,6 +541,7 @@ function DeleteButton({
 														setShowConfirmation(false)
 													}
 										}
+										startIcon={<Icon name="material-symbols-cancel" />}
 										variant="outlined"
 									>
 										{intl.formatMessage(m.deleteAttachmentDialogCancel)}
@@ -568,12 +569,12 @@ function DeleteButton({
 														)
 													}
 										}
-
 										startIcon={<Icon name="material-symbols-delete" />}
+										variant="contained"
 									>
 										{intl.formatMessage(m.deleteAttachmentDialogConfirm)}
 									</Button>
-								</Box>
+								</Stack>
 							}
 							title={intl.formatMessage(m.deleteAttachmentDialogTitle, {
 								type: blobId.type,

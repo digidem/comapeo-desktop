@@ -161,11 +161,7 @@ function RouteComponent() {
 			</Stack>
 
 			<Suspense>
-				<DecentDialog
-					fullWidth
-					maxWidth="sm"
-					value={showLeaveProjectDialog || null}
-				>
+				<DecentDialog value={showLeaveProjectDialog || null}>
 					{() => (
 						<LeaveProjectDialogContent
 							deviceId={deviceId}
@@ -355,12 +351,12 @@ function CollaboratorInfoContent({
 					}}
 				>
 					<Button
-						fullWidth
 						color="error"
 						onClick={() => {
 							onLeaveProject()
 						}}
 						startIcon={<Icon name="material-logout" />}
+						sx={{ flex: 1 }}
 						variant="outlined"
 					>
 						{intl.formatMessage(m.leaveProjectButton)}
@@ -532,26 +528,32 @@ function LeaveProjectDialogContent({
 
 				<Stack
 					direction="row"
-					sx={{ alignItems: 'center', gap: 4, justifyContent: 'center' }}
+					sx={{
+						alignItems: 'center',
+						flexWrap: 'wrap',
+						gap: 4,
+						justifyContent: 'center',
+					}}
 				>
 					<Button
 						fullWidth
-						variant="outlined"
 						onClick={() => {
 							onClose()
 						}}
+						startIcon={<Icon name="material-symbols-cancel" />}
+						variant="outlined"
 					>
 						{intl.formatMessage(m.cancelButton)}
 					</Button>
 
 					<Button
-						fullWidth
-						variant="contained"
 						color="error"
 						endIcon={<Icon name="material-symbols-arrow-circle-right" />}
+						fullWidth
 						onClick={() => {
 							setWarningToShow(undefined)
 						}}
+						variant="contained"
 					>
 						{intl.formatMessage(m.continueButton)}
 					</Button>
@@ -634,8 +636,6 @@ function LeaveProjectConfirmation({
 					sx={{ alignItems: 'center', gap: 4, justifyContent: 'center' }}
 				>
 					<Button
-						fullWidth
-						variant="outlined"
 						aria-disabled={leaveProject.status === 'pending'}
 						onClick={() => {
 							if (leaveProject.status === 'pending') {
@@ -644,15 +644,15 @@ function LeaveProjectConfirmation({
 
 							onClose()
 						}}
+						startIcon={<Icon name="material-symbols-cancel" />}
+						sx={{ flex: 1 }}
+						variant="outlined"
 					>
 						{intl.formatMessage(m.cancelButton)}
 					</Button>
 
 					<Button
-						fullWidth
-						variant="contained"
 						color="error"
-						startIcon={<Icon name="material-logout" />}
 						loading={leaveProject.status === 'pending'}
 						loadingPosition="start"
 						onClick={() => {
@@ -679,6 +679,9 @@ function LeaveProjectConfirmation({
 								},
 							)
 						}}
+						startIcon={<Icon name="material-logout" />}
+						sx={{ flex: 1 }}
+						variant="contained"
 					>
 						{intl.formatMessage(m.confirmButton)}
 					</Button>
@@ -686,8 +689,6 @@ function LeaveProjectConfirmation({
 			</Stack>
 
 			<DecentDialog
-				fullWidth
-				maxWidth="sm"
 				value={leaveProject.status === 'error' ? leaveProject.error : null}
 			>
 				{(error) => (

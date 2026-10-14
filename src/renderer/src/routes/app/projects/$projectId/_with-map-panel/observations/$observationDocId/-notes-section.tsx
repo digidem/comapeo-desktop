@@ -240,21 +240,18 @@ function NotesEditor({
 						{(isSubmitting) => (
 							<>
 								<Button
-									type="submit"
-									fullWidth
 									loadingPosition="start"
 									loading={isSubmitting}
 									startIcon={
 										<Icon name="material-check-circle-outline-rounded" />
 									}
+									sx={{ flex: 1 }}
+									type="submit"
 								>
 									{intl.formatMessage(m.notesSectionSave)}
 								</Button>
 
 								<Button
-									type="button"
-									variant="outlined"
-									fullWidth
 									onClick={() => {
 										if (isSubmitting) {
 											return
@@ -262,6 +259,10 @@ function NotesEditor({
 
 										onCancel()
 									}}
+									startIcon={<Icon name="material-symbols-cancel" />}
+									sx={{ flex: 1 }}
+									type="button"
+									variant="outlined"
 								>
 									{intl.formatMessage(m.notesSectionCancel)}
 								</Button>

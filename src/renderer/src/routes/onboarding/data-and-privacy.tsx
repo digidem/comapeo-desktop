@@ -93,7 +93,12 @@ function RouteComponent() {
 
 			<Stack
 				direction="row"
-				sx={{ flexWrap: 'wrap', gap: 5, justifyContent: 'center' }}
+				sx={{
+					alignItems: 'center',
+					flexWrap: 'wrap',
+					gap: 5,
+					justifyContent: 'center',
+				}}
 			>
 				<ButtonLink
 					fullWidth

@@ -593,10 +593,10 @@ function ProjectSwitcherButton({
 				<Box sx={{ padding: 4 }}>
 					<ButtonLink
 						component={MenuItem}
+						to="/app"
 						fullWidth
 						startIcon={<Icon name="material-symbols-view-agenda" />}
 						sx={{ ':hover, :focus-within': { background: 'initial' } }}
-						to="/app"
 						variant="outlined"
 					>
 						{intl.formatMessage(m.projectSwitcherViewAllProjects)}
@@ -994,10 +994,10 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 							</Stack>
 						</Stack>
 
-						<Box
+						<Stack
+							direction="row"
 							sx={{
-								display: 'flex',
-								flexDirection: 'center',
+								alignItems: 'center',
 								justifyContent: 'center',
 								padding: 4,
 							}}
@@ -1012,11 +1012,12 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 
 									setShowProjectInfoDialog(null)
 								}}
+								startIcon={<Icon name="material-symbols-cancel" />}
 								variant="outlined"
 							>
 								{intl.formatMessage(m.projectInfoClose)}
 							</Button>
-						</Box>
+						</Stack>
 					</Stack>
 				)}
 			</DecentDialog>

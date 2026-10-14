@@ -201,6 +201,12 @@ export function createTheme({ platform }: { platform: NodeJS.Platform }) {
 						}
 					},
 				},
+				variants: [
+					{
+						props: { fullWidth: true },
+						style: { flex: 'auto', whiteSpace: 'nowrap' },
+					},
+				],
 			},
 			MuiButtonBase: {
 				styleOverrides: {

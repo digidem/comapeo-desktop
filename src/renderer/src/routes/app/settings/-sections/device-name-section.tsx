@@ -295,6 +295,7 @@ export function DeviceNameSection({
 												form.resetField('deviceName')
 												setEditState('idle')
 											}}
+											startIcon={<Icon name="material-symbols-cancel" />}
 											type="button"
 											variant="outlined"
 										>

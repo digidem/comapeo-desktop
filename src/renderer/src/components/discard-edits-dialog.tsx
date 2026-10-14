@@ -41,26 +41,33 @@ export function DiscardEditsDialogContent({
 
 			<Stack
 				direction="row"
-				sx={{ flexWrap: 'wrap', gap: 4, justifyContent: 'center', padding: 6 }}
+				sx={{
+					alignItems: 'center',
+					flexWrap: 'wrap',
+					gap: 4,
+					justifyContent: 'center',
+					padding: 6,
+				}}
 			>
 				<Button
 					fullWidth
-					variant="outlined"
 					onClick={() => {
 						onCancel()
 					}}
+					startIcon={<Icon name="material-symbols-cancel" />}
+					variant="outlined"
 				>
 					{intl.formatMessage(m.cancelButton)}
 				</Button>
 
 				<Button
-					fullWidth
-					variant="contained"
 					color="error"
-					startIcon={<Icon name="material-symbols-delete" />}
+					fullWidth
 					onClick={() => {
 						onConfirm()
 					}}
+					startIcon={<Icon name="material-symbols-delete" />}
+					variant="contained"
 				>
 					{intl.formatMessage(m.confirmButton)}
 				</Button>

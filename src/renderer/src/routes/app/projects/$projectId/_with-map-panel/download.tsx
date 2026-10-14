@@ -146,32 +146,26 @@ function SuccessPanel({
 				</Stack>
 
 				<Button
-					variant="text"
 					onClick={() => {
 						showItemInFolder.mutate(savedToPath)
 					}}
+					variant="text"
 				>
 					{intl.formatMessage(m.successPanelViewInFileManager)}
 				</Button>
 			</Stack>
 
-			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'center',
-					padding: 6,
-				}}
-			>
+			<Stack direction="row" sx={{ justifyContent: 'center', padding: 6 }}>
 				<Button
 					fullWidth
 					onClick={() => {
 						onDone()
 					}}
+					variant="contained"
 				>
 					{intl.formatMessage(m.successPanelDone)}
 				</Button>
-			</Box>
+			</Stack>
 		</Stack>
 	)
 }
@@ -378,14 +372,13 @@ function DownloadForm({
 						>
 							{([canSubmit, isSubmitting]) => (
 								<Button
-									type="submit"
+									aria-disabled={!canSubmit}
 									form={formId}
-									fullWidth
-									variant="contained"
 									loading={isSubmitting}
 									loadingPosition="start"
 									startIcon={<Icon name="material-file-download" />}
-									aria-disabled={!canSubmit}
+									type="submit"
+									variant="contained"
 								>
 									{intl.formatMessage(m.download)}
 								</Button>
