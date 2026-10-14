@@ -15,7 +15,10 @@ import {
 } from '@comapeo/core-react'
 import type { Observation, Preset, Track } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
+import Checkbox from '@mui/material/Checkbox'
 import CircularProgress from '@mui/material/CircularProgress'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { captureMessage } from '@sentry/react'
@@ -50,24 +53,26 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLACK_00, WHITE_00 } from '../../../../../../../shared/colors.ts'
+import {
+	BLACK_00,
+	BLUE_05,
+	WHITE_00,
+} from '../../../../../../../shared/colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
 } from '../../../../../components/category-icon.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
 import {
-	ToggleOmittedVisibilityMapControl,
 	ZoomToDataMapControl,
 	ZoomToSelectedDocumentMapControl,
-	type OmittedVisibility,
 } from '../../../../../components/map-controls.tsx'
 import { Map } from '../../../../../components/map.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
 import { useNetworkAwareMapStyleUrl } from '../../../../../hooks/maps.ts'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo.ts'
 import {
 	getItem,
-	removeItem,
 	setItem,
 	type DateFilter,
 } from '../../../../../lib/local-storage.ts'
@@ -661,12 +666,17 @@ export function MapPanel({
 		[documentToHighlight],
 	)
 
-	const [omittedVisibility, setOmittedVisibility] = useState<OmittedVisibility>(
-		() => {
-			const stored = getItem('map/show_omitted', projectId)
-			return stored ? 'visible' : 'hidden'
-		},
-	)
+	const [omittedVisibility, setOmittedVisibility] = useState<
+		'hidden' | 'visible'
+	>(() => {
+		const stored = getItem('map/show_omitted', projectId)
+
+		if (stored === null) {
+			return 'visible'
+		}
+
+		return stored === true ? 'visible' : 'hidden'
+	})
 
 	const layerFilter: FilterSpecification = [
 		'case',
@@ -674,6 +684,11 @@ export function MapPanel({
 		true,
 		['boolean', ['get', 'visible'], true],
 	]
+
+	const omittedVisibilityToggleIconSize = useIconSizeBasedOnTypography({
+		variant: 'bodyCopy',
+		multiplier: 1.5,
+	})
 
 	return (
 		<Box sx={{ position: 'relative', display: 'flex', flex: 1 }}>
@@ -715,6 +730,7 @@ export function MapPanel({
 				dragRotate={false}
 				pitchWithRotate={false}
 				touchZoomRotate={false}
+				style={{ fontFamily: 'inherit' }}
 			>
 				<ScaleControl unit={unitSystem} />
 
@@ -744,26 +760,57 @@ export function MapPanel({
 				) : null}
 
 				{categoriesFilter || dateFilter ? (
-					<ToggleOmittedVisibilityMapControl
-						initialValue={omittedVisibility}
-						onToggle={() => {
-							setOmittedVisibility((prev) => {
-								const updatedValue = prev === 'hidden' ? 'visible' : 'hidden'
+					<FormControlLabel
+						control={
+							<Checkbox
+								disableTouchRipple
+								size="small"
+								sx={{ color: (theme) => theme.palette.text.secondary }}
+							/>
+						}
+						disableTypography
+						label={
+							<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
+								<Icon
+									aria-hidden
+									name={
+										omittedVisibility === 'visible'
+											? 'material-symbols-visibility'
+											: 'material-symbols-visibility-off'
+									}
+									size={omittedVisibilityToggleIconSize}
+								/>
 
-								if (updatedValue === 'hidden') {
-									removeItem('map/show_omitted', projectId)
-								} else {
-									setItem(
-										'map/show_omitted',
-										updatedValue === 'visible',
-										projectId,
-									)
-								}
+								<Typography
+									sx={{
+										fontWeight: (theme) => theme.typography.fontWeightMedium,
+									}}
+								>
+									{intl.formatMessage(m.hideOthers)}
+								</Typography>
+							</Stack>
+						}
+						labelPlacement="start"
+						onChange={(_event, shouldHide) => {
+							const updatedValue = shouldHide ? 'hidden' : 'visible'
 
-								return updatedValue
-							})
+							setItem('map/show_omitted', updatedValue === 'visible', projectId)
+
+							setOmittedVisibility(updatedValue)
 						}}
-						buttonTitle={intl.formatMessage(m.toggleOmittedVisibility)}
+						sx={{
+							alignItems: 'center',
+							background: WHITE_00,
+							border: `1px solid ${BLUE_05}`,
+							borderRadius: 2,
+							color: (theme) => theme.palette.text.secondary,
+							left: (theme) => theme.spacing(2),
+							margin: 0,
+							paddingInline: 2,
+							position: 'absolute',
+							top: (theme) => theme.spacing(2),
+						}}
+						checked={omittedVisibility === 'hidden'}
 					/>
 				) : null}
 
@@ -1131,7 +1178,7 @@ const m = defineMessages<{
 	readonly zoomToData: NoMessageValues
 	readonly zoomToSelected: NoMessageValues
 	readonly cannotDisplayFeature: NoMessageValues
-	readonly toggleOmittedVisibility: NoMessageValues
+	readonly hideOthers: NoMessageValues
 }>({
 	categoryIconAlt: {
 		id: 'routes.app.projects.$projectId.-map-panel.categoryIconAlt',
@@ -1157,10 +1204,10 @@ const m = defineMessages<{
 		description:
 			'Text displayed when map feature for selected data cannot be displayed',
 	},
-	toggleOmittedVisibility: {
-		id: '$1.routes.app.projects.$projectId.-map-panel.toggleOmittedVisibility',
-		defaultMessage: 'Toggle omitted visibility',
+	hideOthers: {
+		id: '$1.routes.app.projects.$projectId.-map-panel.hideOthers',
+		defaultMessage: 'Hide Others',
 		description:
-			'Text displayed when hovering over map control for toggling visibility of features omitted by filters.',
+			'Text for map control that toggles visibility of map features that are not included by filters.',
 	},
 })
