@@ -735,7 +735,6 @@ export function DataList({
 											>
 												<ListItemButton
 													data-docid={docId}
-													disableGutters
 													disableTouchRipple
 													selected={isHighlighted}
 													autoFocus={isHighlighted}
@@ -832,10 +831,7 @@ export function DataList({
 														>
 															<Suspense
 																fallback={
-																	<CircularProgress
-																		disableShrink
-																		size={categoryIconSize}
-																	/>
+																	<CircularProgress size={categoryIconSize} />
 																}
 															>
 																{categorySlot}
@@ -1330,7 +1326,6 @@ function CategoriesFilterSelect({
 					<ListItemButton
 						key={o.id}
 						role="option"
-						disableGutters
 						disableRipple
 						tabIndex={-1}
 						selected={isSelected}
@@ -1372,10 +1367,7 @@ function CategoriesFilterSelect({
 															alignItems: 'center',
 														}}
 													>
-														<CircularProgress
-															disableShrink
-															size={categoryIconSize}
-														/>
+														<CircularProgress size={categoryIconSize} />
 													</Box>
 												}
 											>
@@ -1633,7 +1625,6 @@ function DateFilterSelect({
 		>
 			<ListItemButton
 				role="option"
-				disableGutters
 				disableRipple
 				selected={selectedOption.id === 'from-start'}
 				aria-selected={value === undefined}
@@ -1674,7 +1665,6 @@ function DateFilterSelect({
 			{customRangeOption ? (
 				<ListItemButton
 					role="option"
-					disableGutters
 					disableRipple
 					tabIndex={-1}
 					selected={selectedOption.id === 'custom'}
@@ -1718,7 +1708,6 @@ function DateFilterSelect({
 
 			<ListItemButton
 				role="option"
-				disableGutters
 				disableRipple
 				tabIndex={-1}
 				selected={selectedOption.id === 'last-7-days'}
@@ -1762,7 +1751,6 @@ function DateFilterSelect({
 
 			<ListItemButton
 				role="option"
-				disableGutters
 				disableRipple
 				tabIndex={-1}
 				sx={{ padding: 4 }}
@@ -1806,7 +1794,6 @@ function DateFilterSelect({
 
 			<ListItemButton
 				role="option"
-				disableGutters
 				disableRipple
 				selected={selectedOption.id === 'same-month'}
 				aria-selected={selectedOption.id === 'same-month'}
@@ -1849,7 +1836,6 @@ function DateFilterSelect({
 
 			<ListItemButton
 				role="option"
-				disableGutters
 				disableRipple
 				tabIndex={-1}
 				sx={{ padding: 4 }}

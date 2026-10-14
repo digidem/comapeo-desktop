@@ -76,20 +76,12 @@ function RouteComponent() {
 			>
 				<Suspense
 					fallback={
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'column',
-								alignItems: 'center',
-								justifyContent: 'center',
-								flex: 1,
-							}}
-						>
-							<CircularProgress disableShrink />
+						<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
+							<CircularProgress />
 						</Box>
 					}
 				>
-					<Container maxWidth="sm" disableGutters>
+					<Container maxWidth="sm">
 						<Stack direction="column" sx={{ gap: 6, padding: 6 }}>
 							<Stack direction="column" sx={{ gap: 8 }}>
 								<DeviceNameSection headingIconSize={sectionHeadingIconSize} />

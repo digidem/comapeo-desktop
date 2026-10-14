@@ -195,7 +195,7 @@ function RouteComponent() {
 								height: '100%',
 							}}
 						>
-							<CircularProgress disableShrink />
+							<CircularProgress />
 						</Box>
 					}
 				>

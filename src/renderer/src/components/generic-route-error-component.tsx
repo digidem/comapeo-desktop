@@ -32,6 +32,7 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 			<Stack direction="column" sx={{ flex: 1, gap: 6, padding: 6 }}>
 				<Typography
 					color="error"
+					component="h1"
 					variant="heroHeader"
 					sx={{ textAlign: 'center' }}
 				>

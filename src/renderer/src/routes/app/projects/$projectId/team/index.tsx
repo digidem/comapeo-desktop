@@ -115,7 +115,6 @@ function RouteComponent() {
 
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Container
-					disableGutters
 					maxWidth="sm"
 					sx={{ flex: 1, paddingBlock: 6, paddingInline: 4 }}
 				>
@@ -124,7 +123,7 @@ function RouteComponent() {
 							<Box
 								sx={{ display: 'grid', height: '100%', placeItems: 'center' }}
 							>
-								<CircularProgress disableShrink />
+								<CircularProgress />
 							</Box>
 						}
 					>

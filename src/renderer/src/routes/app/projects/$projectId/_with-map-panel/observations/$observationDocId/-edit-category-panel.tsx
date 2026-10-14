@@ -110,13 +110,13 @@ export function EditCategoryPanel({
 					fallback={
 						<Box
 							sx={{
-								flex: 1,
 								display: 'grid',
+								flex: 1,
 								placeItems: 'center',
 								padding: 10,
 							}}
 						>
-							<CircularProgress disableShrink />
+							<CircularProgress />
 						</Box>
 					}
 				>

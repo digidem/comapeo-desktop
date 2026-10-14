@@ -212,6 +212,11 @@ export function createTheme({ platform }: { platform: NodeJS.Platform }) {
 					},
 				},
 			},
+			MuiCircularProgress: {
+				defaultProps: {
+					disableShrink: true,
+				},
+			},
 			MuiContainer: {
 				defaultProps: {
 					disableGutters: true,

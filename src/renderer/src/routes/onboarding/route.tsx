@@ -57,10 +57,9 @@ function RouteComponent() {
 		<Box sx={{ background: BLUE_01, padding: 5, height: '100%' }}>
 			<Container
 				maxWidth="md"
-				component={Box}
 				sx={{
-					height: '100%',
 					display: 'grid',
+					height: '100%',
 					gridTemplateRows: 'auto minmax(0, 1fr)',
 					rowGap: 5,
 				}}

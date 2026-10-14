@@ -145,7 +145,7 @@ function RouteComponent() {
 					<Suspense
 						fallback={
 							<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
-								<CircularProgress disableShrink />
+								<CircularProgress />
 							</Box>
 						}
 					>
@@ -265,7 +265,6 @@ function CollaboratorInfoContent({
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Container
-					disableGutters
 					maxWidth="sm"
 					sx={{
 						display: 'flex',

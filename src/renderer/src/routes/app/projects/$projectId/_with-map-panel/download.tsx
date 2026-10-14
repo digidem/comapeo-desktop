@@ -429,12 +429,7 @@ function DownloadOption({
 				control={<Radio />}
 				label={
 					<Stack direction="column" sx={{ gap: 1 }}>
-						<Typography
-							variant="cardHeader"
-							sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
-						>
-							{primaryText}
-						</Typography>
+						<Typography variant="cardHeader">{primaryText}</Typography>
 
 						<Typography aria-hidden>{secondaryText}</Typography>
 					</Stack>

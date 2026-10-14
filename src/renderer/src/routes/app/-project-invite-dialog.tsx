@@ -479,7 +479,7 @@ function InviteActions({
 					top: 0,
 				}}
 			>
-				<CircularProgress disableShrink size={24} />
+				<CircularProgress />
 			</Box>
 
 			<Stack

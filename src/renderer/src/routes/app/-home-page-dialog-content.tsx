@@ -409,6 +409,7 @@ function AppUsageInterstitial({
 						</Box>
 
 						<Typography
+							component="h1"
 							variant="heroHeader"
 							sx={{ textAlign: 'center', textWrap: 'balance' }}
 						>

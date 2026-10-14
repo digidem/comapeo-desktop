@@ -160,7 +160,7 @@ export function ObservationAttachmentPending() {
 
 	return (
 		<Box sx={BASE_ATTACHMENT_CONTAINER_STYLE}>
-			<CircularProgress disableShrink size={iconSize} />
+			<CircularProgress size={iconSize} />
 		</Box>
 	)
 }

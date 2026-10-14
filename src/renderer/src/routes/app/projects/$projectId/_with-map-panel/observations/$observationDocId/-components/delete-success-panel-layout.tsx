@@ -35,7 +35,11 @@ export function DeleteSuccessPanelLayout({
 					size={iconSize}
 				/>
 
-				<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
+				<Typography
+					component="h1"
+					variant="heroHeader"
+					sx={{ textAlign: 'center' }}
+				>
 					{title}
 				</Typography>
 			</Stack>

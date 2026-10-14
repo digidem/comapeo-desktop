@@ -78,7 +78,7 @@ function RouteComponent() {
 			<Suspense
 				fallback={
 					<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
-						<CircularProgress disableShrink />
+						<CircularProgress />
 					</Box>
 				}
 			>
@@ -111,8 +111,8 @@ function MainContent() {
 
 	if (customMapInfo.status === 'pending') {
 		content = (
-			<Box sx={{ flex: 1, display: 'grid', placeItems: 'center' }}>
-				<CircularProgress disableShrink />
+			<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
+				<CircularProgress />
 			</Box>
 		)
 	} else if (customMapInfo.status === 'error') {
@@ -237,7 +237,6 @@ function NoCustomMap({
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Container
-					disableGutters
 					maxWidth="sm"
 					sx={{
 						display: 'flex',
@@ -355,7 +354,6 @@ function CustomMapDetails({
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Container
-					disableGutters
 					maxWidth="sm"
 					sx={{
 						display: 'flex',

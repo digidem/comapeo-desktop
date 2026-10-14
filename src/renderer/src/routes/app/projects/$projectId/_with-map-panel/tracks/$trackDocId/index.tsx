@@ -163,7 +163,7 @@ function RouteComponent() {
 				</Typography>
 			</Stack>
 
-			<Box sx={{ overflow: 'auto', flex: 1 }}>
+			<Stack direction="column" sx={{ overflow: 'auto', flex: 1 }}>
 				<Stack direction="column" sx={{ paddingBlock: 6, gap: 6 }}>
 					<Box sx={{ paddingInline: 6 }}>
 						<Typography>
@@ -177,6 +177,7 @@ function RouteComponent() {
 							})}
 						</Typography>
 					</Box>
+
 					<Stack direction="column" sx={{ paddingInline: 6 }}>
 						<Box sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2 }}>
 							<Stack
@@ -233,15 +234,13 @@ function RouteComponent() {
 					fallback={
 						<Box
 							sx={{
-								display: 'flex',
-								flexDirection: 'column',
-								justifyContent: 'center',
-								alignItems: 'center',
+								display: 'grid',
 								flex: 1,
-								padding: 6,
+								padding: 10,
+								placeItems: 'center',
 							}}
 						>
-							<CircularProgress disableShrink size={40} />
+							<CircularProgress />
 						</Box>
 					}
 				>
@@ -254,7 +253,7 @@ function RouteComponent() {
 						lang={lang}
 					/>
 				</Suspense>
-			</Box>
+			</Stack>
 		</Stack>
 	)
 }
@@ -351,7 +350,6 @@ function TrackObservationsSection({
 					return (
 						<ListItemButton
 							key={docId}
-							disableGutters
 							disableTouchRipple
 							onClick={() => {
 								navigate({
@@ -413,7 +411,7 @@ function TrackObservationsSection({
 										width: CATEGORY_CONTAINER_SIZE_PX,
 									}}
 								>
-									<Suspense fallback={<CircularProgress disableShrink />}>
+									<Suspense fallback={<CircularProgress />}>
 										{renderedCategory}
 									</Suspense>
 								</Box>

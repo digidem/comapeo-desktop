@@ -38,6 +38,7 @@ export function GenericRouteNotFoundComponent({
 		>
 			<Stack direction="column" sx={{ flex: 1, gap: 6, padding: 6 }}>
 				<Typography
+					component="h1"
 					variant="heroHeader"
 					sx={{
 						overflowWrap: 'break-word',

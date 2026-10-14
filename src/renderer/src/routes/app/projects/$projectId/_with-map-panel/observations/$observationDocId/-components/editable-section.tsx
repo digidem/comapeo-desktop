@@ -99,7 +99,7 @@ export function EditableSection({
 					}}
 				>
 					{editIsPending ? (
-						<CircularProgress disableShrink size={editIconSize} />
+						<CircularProgress size={editIconSize} />
 					) : editState === 'success' ? (
 						<Icon
 							color="success"

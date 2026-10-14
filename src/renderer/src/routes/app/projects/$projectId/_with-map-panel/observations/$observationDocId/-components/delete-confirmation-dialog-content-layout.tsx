@@ -33,7 +33,11 @@ export function DeleteConfirmationDialogContentLayout({
 				<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
 					<Icon name="material-error" color="error" size={errorIconSize} />
 
-					<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
+					<Typography
+						component="h1"
+						variant="heroHeader"
+						sx={{ textAlign: 'center' }}
+					>
 						{title}
 					</Typography>
 				</Stack>

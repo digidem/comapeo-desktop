@@ -73,10 +73,7 @@ export function CategoryIconImage({
 		>
 			<Suspense
 				fallback={
-					<CircularProgress
-						disableShrink
-						size={imageStyle?.width || imageStyle?.height}
-					/>
+					<CircularProgress size={imageStyle?.width || imageStyle?.height} />
 				}
 			>
 				<SuspenseImage src={iconUrl} alt={altText} style={imageStyle} />
@@ -125,10 +122,7 @@ function LegacyCategoryIconImage({
 		>
 			<Suspense
 				fallback={
-					<CircularProgress
-						disableShrink
-						size={imageStyle?.width || imageStyle?.height}
-					/>
+					<CircularProgress size={imageStyle?.width || imageStyle?.height} />
 				}
 			>
 				<SuspenseImage src={iconUrl} alt={altText} style={imageStyle} />

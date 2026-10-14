@@ -162,12 +162,7 @@ function RoleOption({
 }) {
 	return (
 		<ListItem sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2 }}>
-			<ListItemButton
-				disableGutters
-				disableTouchRipple
-				sx={{ padding: 0 }}
-				onClick={onClick}
-			>
+			<ListItemButton disableTouchRipple sx={{ padding: 0 }} onClick={onClick}>
 				<Stack direction="column" sx={{ gap: 4, padding: 6 }}>
 					<Stack direction="row" sx={{ alignItems: 'center', gap: 3 }}>
 						{icon}

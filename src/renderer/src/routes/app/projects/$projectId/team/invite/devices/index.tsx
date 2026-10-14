@@ -174,7 +174,6 @@ function InvitablePeersList({ projectId }: { projectId: string }) {
 					sx={{ borderRadius: 2, border: `1px solid ${BLUE_05}` }}
 				>
 					<ListItemButton
-						disableGutters
 						disableTouchRipple
 						aria-disabled={peer.status === 'disconnected' ? true : undefined}
 						onClick={

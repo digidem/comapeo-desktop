@@ -259,7 +259,7 @@ function AttachmentPanel({
 			<Suspense
 				fallback={
 					<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
-						<CircularProgress disableShrink />
+						<CircularProgress />
 					</Box>
 				}
 			>
@@ -355,7 +355,7 @@ function LoadedAttachmentSection({
 					<Suspense
 						fallback={
 							<Box sx={BASE_SQUARE_ATTACHMENT_CONTAINER_STYLE}>
-								<CircularProgress disableShrink />
+								<CircularProgress />
 							</Box>
 						}
 					>
