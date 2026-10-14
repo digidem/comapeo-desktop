@@ -133,7 +133,11 @@ export function StartProjectDialogContent({
 							/>
 						</Box>
 
-						<Typography sx={{ textAlign: 'center' }} variant="heroHeader">
+						<Typography
+							component="h1"
+							variant="heroHeader"
+							sx={{ textAlign: 'center' }}
+						>
 							{intl.formatMessage(m.startProjectDialogTitle)}
 						</Typography>
 					</Stack>
