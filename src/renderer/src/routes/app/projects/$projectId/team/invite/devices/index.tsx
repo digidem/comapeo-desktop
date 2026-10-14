@@ -23,6 +23,7 @@ import {
 	CREATOR_ROLE_ID,
 	MEMBER_ROLE_ID,
 } from '../../../../../../../lib/comapeo.ts'
+import { getDisplayableWifiName } from '../../../../../../../lib/network.ts'
 import { getWifiConnectionsOptions } from '../../../../../../../lib/queries/system.ts'
 import { DeviceRow } from './-shared/device-row.tsx'
 
@@ -234,6 +235,18 @@ function NetworkConnectionInfo() {
 			</Typography>
 		)
 	} else {
+		let displayedWifiName
+
+		if (wifiConnectionQuery.data) {
+			displayedWifiName =
+				getDisplayableWifiName({
+					browserNetInfo,
+					wifiConnection: wifiConnectionQuery.data,
+				}) || intl.formatMessage(m.wifiConnected)
+		} else {
+			displayedWifiName = '--'
+		}
+
 		displayedContent = (
 			<>
 				<WifiIcon
@@ -244,18 +257,7 @@ function NetworkConnectionInfo() {
 				<Typography
 					sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
 				>
-					{wifiConnectionQuery.data &&
-					// NOTE: Issue with systeminformation module on macOS >=15.6 (https://github.com/digidem/comapeo-desktop/issues/378)
-					wifiConnectionQuery.data.ssid !== '&lt;redacted&gt;' &&
-					wifiConnectionQuery.data.ssid !== '<redacted>'
-						? // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-							`${wifiConnectionQuery.data.ssid}${
-								browserNetInfo.effectiveType
-									? // TODO: Should the effectiveType be translatable?
-										` - ${browserNetInfo.effectiveType}`
-									: undefined
-							}`
-						: intl.formatMessage(m.wifiInfoUnavailable)}
+					{displayedWifiName}
 				</Typography>
 			</>
 		)
@@ -326,10 +328,11 @@ const m = defineMessages({
 		defaultMessage: 'Getting Wi-Fi information…',
 		description: 'Text displayed when waiting for Wi-Fi information.',
 	},
-	wifiInfoUnavailable: {
-		id: '$1.routes.app.projects.$projectId.team.invite.devices.index.wifiInfoUnavailable',
-		defaultMessage: 'Wi-Fi info unavailable',
-		description: 'Text displayed when Wi-Fi info is unavailable.',
+	wifiConnected: {
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.index.wifiConnected',
+		defaultMessage: 'Wi-Fi Connected',
+		description:
+			'Text displayed when Wi-Fi is connected but additional details are not available.',
 	},
 	discoveryTroubleshootingTitle: {
 		id: '$1.routes.app.projects.$projectId.team.invite.devices.index.discoveryTroubleshootingTitle',

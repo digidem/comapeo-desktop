@@ -44,6 +44,7 @@ import {
 	memberIsRemoteArchive,
 } from '../../../../../lib/comapeo.ts'
 import { ExhaustivenessError } from '../../../../../lib/exhaustiveness-error.ts'
+import { getDisplayableWifiName } from '../../../../../lib/network.ts'
 import { getWifiConnectionsOptions } from '../../../../../lib/queries/system.ts'
 import {
 	deriveSyncStage,
@@ -480,20 +481,14 @@ function NetworkConnectionPill() {
 		wifiConnectionQuery.isRefetching
 	) {
 		displayedText = intl.formatMessage(m.gettingWifiInfo)
-	} else if (
-		wifiConnectionQuery.data &&
-		// NOTE: Issue with systeminformation module on macOS >=15.6 (https://github.com/digidem/comapeo-desktop/issues/378)
-		wifiConnectionQuery.data.ssid !== '&lt;redacted&gt;' &&
-		wifiConnectionQuery.data.ssid !== '<redacted>'
-	) {
-		displayedText = `${wifiConnectionQuery.data.ssid}${
-			browserNetInfo.effectiveType
-				? // TODO: Should the effectiveType be translatable?
-					` - ${browserNetInfo.effectiveType}`
-				: undefined
-		}`
+	} else if (wifiConnectionQuery.data) {
+		displayedText =
+			getDisplayableWifiName({
+				browserNetInfo,
+				wifiConnection: wifiConnectionQuery.data,
+			}) || intl.formatMessage(m.wifiConnected)
 	} else {
-		displayedText = intl.formatMessage(m.wifiInfoUnavailable)
+		displayedText = '--'
 	}
 
 	return (
@@ -526,10 +521,11 @@ const m = defineMessages({
 		defaultMessage: 'Waiting for Devices',
 		description: 'Text displayed when waiting for other devices to be found.',
 	},
-	wifiInfoUnavailable: {
-		id: '$1.routes.app.projects.$projectId.exchange.index.wifiInfoUnavailable',
-		defaultMessage: 'Wi-Fi info unavailable',
-		description: 'Text displayed when Wi-Fi info is unavailable.',
+	wifiConnected: {
+		id: '$1.routes.app.projects.$projectId.exchange.index.wifiConnected',
+		defaultMessage: 'Wi-Fi Connected',
+		description:
+			'Text displayed when Wi-Fi is connected but additional details are not available.',
 	},
 	lookingForDevices: {
 		id: '$1.routes.app.projects.$projectId.exchange.index.lookingForDevices',
