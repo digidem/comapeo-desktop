@@ -134,7 +134,11 @@ function RouteComponent() {
 									/>
 								</Box>
 
-								<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
+								<Typography
+									component="h1"
+									variant="heroHeader"
+									sx={{ textAlign: 'center' }}
+								>
 									{intl.formatMessage(m.inviteCollaborators)}
 								</Typography>
 

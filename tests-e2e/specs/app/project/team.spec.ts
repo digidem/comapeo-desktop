@@ -63,7 +63,7 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 			await expect(header.getByText(/[\d | No]+ member[s]*/)).toBeVisible()
 
 			await expect(
-				header.getByRole('link', { name: 'Invite Device', exact: true }),
+				header.getByRole('link', { name: 'Invite Devices', exact: true }),
 			).toBeVisible()
 		}
 

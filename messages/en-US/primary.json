@@ -831,9 +831,9 @@
     "description": "Title of the coordinators section in the team page.",
     "message": "Coordinators"
   },
-  "$1.routes.app.projects.$projectId.team.index.inviteDevice": {
-    "description": "Text for button that initiates steps for inviting device to project.",
-    "message": "Invite Device"
+  "$1.routes.app.projects.$projectId.team.index.inviteDevices": {
+    "description": "Text for button that initiates steps for inviting devices to project.",
+    "message": "Invite Devices"
   },
   "$1.routes.app.projects.$projectId.team.index.membersCount": {
     "description": "Title of the team page.",

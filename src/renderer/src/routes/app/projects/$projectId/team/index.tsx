@@ -176,7 +176,7 @@ function InviteButton({ projectId }: { projectId: string }) {
 			params={{ projectId }}
 			startIcon={<Icon name="material-symbols-add-circle-outline" />}
 		>
-			{intl.formatMessage(m.inviteDevice)}
+			{intl.formatMessage(m.inviteDevices)}
 		</ButtonLink>
 	)
 }
@@ -516,7 +516,7 @@ function getDisplayableMembers(members: Array<MemberApi.MemberInfo>) {
 const m = defineMessages<{
 	readonly navTitle: NoMessageValues
 	readonly membersCount: { readonly count: number | bigint }
-	readonly inviteDevice: NoMessageValues
+	readonly inviteDevices: NoMessageValues
 	readonly coordinatorsSectionTitle: NoMessageValues
 	readonly coordinatorsSectionDescription: NoMessageValues
 	readonly participantsSectionTitle: NoMessageValues
@@ -540,11 +540,11 @@ const m = defineMessages<{
 			'{count, plural, =0 {No members} one {# member} other {# members}}',
 		description: 'Title of the team page.',
 	},
-	inviteDevice: {
-		id: '$1.routes.app.projects.$projectId.team.index.inviteDevice',
-		defaultMessage: 'Invite Device',
+	inviteDevices: {
+		id: '$1.routes.app.projects.$projectId.team.index.inviteDevices',
+		defaultMessage: 'Invite Devices',
 		description:
-			'Text for button that initiates steps for inviting device to project.',
+			'Text for button that initiates steps for inviting devices to project.',
 	},
 	coordinatorsSectionTitle: {
 		id: '$1.routes.app.projects.$projectId.team.index.coordinatorsSectionTitle',

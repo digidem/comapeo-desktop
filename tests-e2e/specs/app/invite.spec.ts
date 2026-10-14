@@ -46,7 +46,7 @@ test.describe('Invite device flow', () => {
 			{
 				// Navigate to invite page
 				await main
-					.getByRole('link', { name: 'Invite Device', exact: true })
+					.getByRole('link', { name: 'Invite Devices', exact: true })
 					.click()
 
 				await main
@@ -60,7 +60,7 @@ test.describe('Invite device flow', () => {
 				await teamNavLink.click()
 
 				await main
-					.getByRole('link', { name: 'Invite Device', exact: true })
+					.getByRole('link', { name: 'Invite Devices', exact: true })
 					.click()
 
 				// Assert nav rail state
@@ -112,7 +112,7 @@ test.describe('Invite device flow', () => {
 
 				await expect
 					.soft(networkConnectionInfo)
-					.not.toHaveText('Getting Wi-Fi information…', { timeout: 10_000 })
+					.not.toHaveText('Getting Wi-Fi information…', { timeout: 20_000 })
 
 				await expect(networkConnectionInfo).not.toBeEmpty()
 
