@@ -257,16 +257,10 @@ export function MapPanel({
 
 	const moveMapToObservation = useCallback(
 		(
-			{
-				coordinates,
-				shouldZoomIn,
-			}: { coordinates: [lat: number, lon: number]; shouldZoomIn?: boolean },
+			{ coordinates }: { coordinates: [lat: number, lon: number] },
 			map: MapInstance | MapRef,
 		) => {
-			map.panTo(
-				{ lon: coordinates[0], lat: coordinates[1] },
-				{ zoom: shouldZoomIn ? 10 : undefined },
-			)
+			map.panTo({ lon: coordinates[0], lat: coordinates[1] })
 		},
 		[],
 	)
@@ -275,12 +269,10 @@ export function MapPanel({
 		(
 			{
 				trackFeature,
-				shouldZoomIn,
 			}: {
 				trackFeature: ReturnType<
 					typeof tracksToFeatureCollection
 				>['features'][number]
-				shouldZoomIn?: boolean
 			},
 			map: MapInstance | MapRef,
 		) => {
@@ -288,10 +280,10 @@ export function MapPanel({
 
 			const [minLon, minLat, maxLon, maxLat] = bbox(trackFeature)
 
-			map.panTo(
-				{ lon: c.geometry.coordinates[0]!, lat: c.geometry.coordinates[1]! },
-				{ zoom: shouldZoomIn ? 10 : undefined },
-			)
+			map.panTo({
+				lon: c.geometry.coordinates[0]!,
+				lat: c.geometry.coordinates[1]!,
+			})
 
 			map.fitBounds([minLon, minLat, maxLon, maxLat], BASE_FIT_BOUNDS_OPTIONS)
 		},
@@ -313,30 +305,10 @@ export function MapPanel({
 				return
 			}
 
-			const mapInstance = event.target
-			const shouldZoomIn = mapInstance.getZoom() < 10
-
 			if (
 				feature.layer.id === OBSERVATIONS_LAYER_ID &&
 				typeof feature.properties.docId === 'string'
 			) {
-				const observationMatch = observationsFeatureCollection.features.find(
-					({ properties }) => properties.docId === feature.properties.docId,
-				)
-
-				if (observationMatch) {
-					moveMapToObservation(
-						{
-							coordinates: [
-								observationMatch.geometry.coordinates[0]!,
-								observationMatch.geometry.coordinates[1]!,
-							],
-							shouldZoomIn,
-						},
-						mapInstance,
-					)
-				}
-
 				router.navigate({
 					to: '/app/projects/$projectId/observations/$observationDocId',
 					params: {
@@ -351,6 +323,9 @@ export function MapPanel({
 							highlightedDocument: undefined,
 						}),
 					},
+					// TODO: Consider pushing navigation when pressing observation
+					// that belongs to track that is being viewed?
+					replace: true,
 				})
 
 				return
@@ -360,17 +335,6 @@ export function MapPanel({
 				feature.layer.id === TRACKS_LAYER_ID &&
 				typeof feature.properties.docId === 'string'
 			) {
-				const tracksMatch = tracksFeatureCollection.features.find(
-					({ properties }) => properties.docId === feature.properties.docId,
-				)
-
-				if (tracksMatch) {
-					moveMapToTrack(
-						{ trackFeature: tracksMatch, shouldZoomIn },
-						mapInstance,
-					)
-				}
-
 				router.navigate({
 					to: '/app/projects/$projectId/tracks/$trackDocId',
 					params: { projectId, trackDocId: feature.properties.docId },
@@ -379,20 +343,13 @@ export function MapPanel({
 						params: { projectId, trackDocId: feature.properties.docId },
 						search: (prev) => ({ ...prev, highlightedDocument: undefined }),
 					},
+					replace: true,
 				})
 
 				return
 			}
 		},
-		[
-			documentToHighlight,
-			moveMapToObservation,
-			moveMapToTrack,
-			observationsFeatureCollection,
-			tracksFeatureCollection,
-			router,
-			projectId,
-		],
+		[documentToHighlight, router, projectId],
 	)
 
 	/**
@@ -518,8 +475,6 @@ export function MapPanel({
 
 			const { type, docId } = documentToHighlight
 
-			const shouldZoomIn = mapInstance.getZoom() < 10
-
 			if (type === 'observation') {
 				const observationMatch = observationsFeatureCollection.features.find(
 					({ properties }) => properties.docId === docId,
@@ -532,7 +487,6 @@ export function MapPanel({
 								observationMatch.geometry.coordinates[0]!,
 								observationMatch.geometry.coordinates[1]!,
 							],
-							shouldZoomIn,
 						},
 						mapInstance,
 					)
@@ -543,10 +497,7 @@ export function MapPanel({
 				)
 
 				if (tracksMatch) {
-					moveMapToTrack(
-						{ trackFeature: tracksMatch, shouldZoomIn },
-						mapInstance,
-					)
+					moveMapToTrack({ trackFeature: tracksMatch }, mapInstance)
 				}
 			}
 
@@ -591,8 +542,6 @@ export function MapPanel({
 			mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
 			mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
 
-			const shouldZoomIn = mapRef.current.getZoom() < 10
-
 			if (document.type === 'observation') {
 				let trackDocIdToHighlight: string | undefined
 
@@ -603,49 +552,18 @@ export function MapPanel({
 					}
 				}
 
-				// 1. Highlight the track that references the observation
+				// NOTE: Highlight the track that references the observation
 				if (trackDocIdToHighlight) {
 					mapRef.current.setFeatureState(
 						{ source: TRACKS_SOURCE_ID, id: trackDocIdToHighlight },
 						{ highlight: true },
 					)
 				}
-
-				const observationMatch = observationsFeatureCollection.features.find(
-					({ properties }) => properties.docId === document.docId,
-				)
-
-				// 2. Move to observation
-				if (observationMatch) {
-					moveMapToObservation(
-						{
-							coordinates: [
-								observationMatch.geometry.coordinates[0]!,
-								observationMatch.geometry.coordinates[1]!,
-							],
-							shouldZoomIn,
-						},
-						mapRef.current,
-					)
-				}
 			} else {
-				// 1. Highlight the track
 				mapRef.current.setFeatureState(
 					{ source: TRACKS_SOURCE_ID, id: document.docId },
 					{ highlight: true },
 				)
-
-				const tracksMatch = tracksFeatureCollection.features.find(
-					({ properties }) => properties.docId === document.docId,
-				)
-
-				// 2. Move to the track
-				if (tracksMatch) {
-					moveMapToTrack(
-						{ trackFeature: tracksMatch, shouldZoomIn },
-						mapRef.current,
-					)
-				}
 			}
 		},
 	)
