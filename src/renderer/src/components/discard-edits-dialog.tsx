@@ -29,7 +29,11 @@ export function DiscardEditsDialogContent({
 				<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
 					<Icon name="material-error" color="error" size={heroIconSize} />
 
-					<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
+					<Typography
+						component="h1"
+						variant="heroHeader"
+						sx={{ textAlign: 'center' }}
+					>
 						{intl.formatMessage(m.title)}
 					</Typography>
 				</Stack>

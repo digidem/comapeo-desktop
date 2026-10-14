@@ -177,7 +177,11 @@ function MainContent() {
 					<Stack direction="column">
 						<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
 							<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
-								<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
+								<Typography
+									component="h1"
+									variant="heroHeader"
+									sx={{ textAlign: 'center' }}
+								>
 									{intl.formatMessage(m.mapUpdateSuccessTitle)}
 								</Typography>
 

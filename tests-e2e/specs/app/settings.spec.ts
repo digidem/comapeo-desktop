@@ -316,7 +316,7 @@ test('language', async ({ appInfo, userParams }) => {
 			await expect(languagesMenu).toBeVisible()
 
 			await expect(languagesMenuOptions.nth(0)).toHaveAccessibleName(
-				'Follow system preference',
+				'Follow System Preference',
 			)
 			await expect(languagesMenuOptions.nth(0)).toHaveAttribute(
 				'aria-selected',
@@ -350,7 +350,7 @@ test('language', async ({ appInfo, userParams }) => {
 					allLanguages[baseTag as keyof typeof allLanguages]!
 
 				const option = languagesMenuOptions.filter({
-					hasNotText: 'Follow system preference',
+					hasNotText: 'Follow System Preference',
 					hasText: nativeName,
 				})
 
