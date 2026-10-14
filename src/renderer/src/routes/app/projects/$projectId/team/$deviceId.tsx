@@ -466,7 +466,11 @@ function LeaveProjectDialogContent({
 								</Box>
 							</Box>
 
-							<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
+							<Typography
+								component="h1"
+								variant="heroHeader"
+								sx={{ textAlign: 'center' }}
+							>
 								{intl.formatMessage(
 									warningToShow === 'last_device'
 										? m.lastDeviceWarningTitle
@@ -492,8 +496,12 @@ function LeaveProjectDialogContent({
 								padding: 6,
 							}}
 						>
-							<Stack component={List} direction="column" sx={{ gap: 4 }}>
-								{warningToShow !== 'last_coordinator' ? (
+							<Stack
+								component={List}
+								direction="column"
+								sx={{ color: (theme) => theme.palette.text.secondary, gap: 4 }}
+							>
+								{warningToShow === 'last_coordinator' ? (
 									<ListItem>
 										<Stack direction="row" sx={{ gap: 2 }}>
 											<Icon
@@ -502,9 +510,7 @@ function LeaveProjectDialogContent({
 												sx={{ alignSelf: 'flex-start' }}
 											/>
 
-											<Typography>
-												{intl.formatMessage(m.suggestionInviteCoordinator)}
-											</Typography>
+											{intl.formatMessage(m.suggestionInviteCoordinator)}
 										</Stack>
 									</ListItem>
 								) : null}
@@ -517,9 +523,7 @@ function LeaveProjectDialogContent({
 											sx={{ alignSelf: 'flex-start' }}
 										/>
 
-										<Typography>
-											{intl.formatMessage(m.suggestionExportData)}
-										</Typography>
+										{intl.formatMessage(m.suggestionExportData)}
 									</Stack>
 								</ListItem>
 							</Stack>
@@ -609,7 +613,11 @@ function LeaveProjectConfirmation({
 							size={heroIconSize}
 						/>
 
-						<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
+						<Typography
+							component="h1"
+							variant="heroHeader"
+							sx={{ textAlign: 'center' }}
+						>
 							{intl.formatMessage(m.leaveProjectConfirmationTitle)}
 						</Typography>
 

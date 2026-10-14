@@ -286,7 +286,11 @@ function IntroPanel({
 				>
 					<Box>{icon}</Box>
 
-					<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
+					<Typography
+						component="h1"
+						variant="heroHeader"
+						sx={{ textAlign: 'center' }}
+					>
 						{title}
 					</Typography>
 
