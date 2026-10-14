@@ -119,7 +119,7 @@ const TRACKS_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] = {
 			['boolean', ['feature-state', 'highlight'], false],
 		],
 		1,
-		0.1,
+		0.4,
 	],
 }
 const TRACKS_HOVER_OUTLINE_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] =
@@ -1160,7 +1160,7 @@ function createObservationLayerPaintProperty(
 				['boolean', ['feature-state', 'highlight'], false],
 			],
 			1,
-			0.1,
+			0.4,
 		],
 		'circle-radius': [
 			'case',
