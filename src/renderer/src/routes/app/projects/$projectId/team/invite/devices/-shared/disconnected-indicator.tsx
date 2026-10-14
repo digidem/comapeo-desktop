@@ -2,27 +2,23 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { ORANGE } from '../../../../../../../../colors.ts'
 import { Icon } from '../../../../../../../../components/icon.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../../../../hooks/icon.ts'
 
 export function DisconnectedIndicator() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body2',
-		multiplier: 0.6,
+		variant: 'detailCopy',
+		multiplier: 1,
 	})
 
 	return (
 		<Stack direction="row" sx={{ gap: 1 }}>
-			<Icon
-				name="material-warning-rounded"
-				htmlColor={ORANGE}
-				size={iconSize}
-			/>
-			<Typography variant="body2" color="warning">
-				{t(m.disconnected)}
+			<Icon name="material-warning-rounded" color="warning" size={iconSize} />
+
+			<Typography variant="detailCopy" color="warning">
+				{intl.formatMessage(m.disconnected)}
 			</Typography>
 		</Stack>
 	)
@@ -30,7 +26,7 @@ export function DisconnectedIndicator() {
 
 const m = defineMessages({
 	disconnected: {
-		id: '$1.routes.app.projects.$projectId.team.invite.devices.-shared.disconnected-indicator.disconnected',
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.disconnected',
 		defaultMessage: 'Disconnected',
 		description: 'Text displayed when external device is disconnected.',
 	},

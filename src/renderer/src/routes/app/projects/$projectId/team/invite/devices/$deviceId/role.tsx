@@ -11,7 +11,7 @@ import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { DeviceRow } from '../-shared/device-row.tsx'
-import { BLACK, BLUE_GREY } from '../../../../../../../../colors.ts'
+import { BLUE_05 } from '../../../../../../../../../../shared/colors.ts'
 import { GenericRoutePendingComponent } from '../../../../../../../../components/generic-route-pending-component.tsx'
 import { Icon } from '../../../../../../../../components/icon.tsx'
 import { useLocalPeersState } from '../../../../../../../../contexts/local-peers-store-context.ts'
@@ -37,8 +37,13 @@ function RouteComponent() {
 	const peer = updatedPeer || peerOnLoad
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
-		multiplier: 1.25,
+		variant: 'pageTitle',
+		multiplier: 1.5,
+	})
+
+	const roleIconSize = useIconSizeBasedOnTypography({
+		variant: 'cardHeader',
+		multiplier: 1.5,
 	})
 
 	return (
@@ -48,29 +53,30 @@ function RouteComponent() {
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_GREY}`,
-					gap: 4,
-					paddingBlock: 4,
-					paddingInline: 6,
+					borderBottom: `1px solid ${BLUE_05}`,
+					gap: 2,
+					padding: 4,
 				}}
 			>
 				<IconButton
 					onClick={() => {
+						if (router.history.canGoBack()) {
+							router.history.back()
+							return
+						}
+
 						router.navigate({
 							to: '/app/projects/$projectId/team/invite/devices',
 							params: { projectId },
 							replace: true,
 						})
 					}}
+					sx={{ color: (theme) => theme.palette.text.secondary }}
 				>
-					<Icon
-						name="material-arrow-back"
-						htmlColor={BLACK}
-						size={backIconSize}
-					/>
+					<Icon name="material-arrow-back" size={backIconSize} />
 				</IconButton>
 
-				<Typography variant="h1" sx={{ fontWeight: 500 }}>
+				<Typography variant="pageTitle">
 					{intl.formatMessage(m.navTitle)}
 				</Typography>
 			</Stack>
@@ -87,7 +93,7 @@ function RouteComponent() {
 						paddingInline: 4,
 					}}
 				>
-					<Box sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}>
+					<Box sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2 }}>
 						<DeviceRow
 							deviceId={peer.deviceId}
 							deviceType={peer.deviceType}
@@ -96,18 +102,18 @@ function RouteComponent() {
 						/>
 					</Box>
 
-					<Typography variant="h2" sx={{ fontWeight: 500 }}>
+					<Typography
+						component="h2"
+						sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
+					>
 						{intl.formatMessage(m.selectingRole)}
 					</Typography>
 
-					<List
-						disablePadding
-						sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}
-					>
+					<Stack component={List} direction="column" sx={{ gap: 5 }}>
 						<RoleOption
 							name={intl.formatMessage(m.participantTitle)}
 							description={intl.formatMessage(m.participantDescription)}
-							icon={<Icon name="material-people-filled" />}
+							icon={<Icon name="material-people-filled" size={roleIconSize} />}
 							onClick={() => {
 								navigate({
 									to: '/app/projects/$projectId/team/invite/devices/$deviceId/send',
@@ -121,7 +127,12 @@ function RouteComponent() {
 						<RoleOption
 							name={intl.formatMessage(m.coordinatorTitle)}
 							description={intl.formatMessage(m.coordinatorDescription)}
-							icon={<Icon name="material-manage-accounts-filled" />}
+							icon={
+								<Icon
+									name="material-manage-accounts-filled"
+									size={roleIconSize}
+								/>
+							}
 							onClick={() => {
 								navigate({
 									to: '/app/projects/$projectId/team/invite/devices/$deviceId/send',
@@ -131,7 +142,7 @@ function RouteComponent() {
 								})
 							}}
 						/>
-					</List>
+					</Stack>
 				</Container>
 			</Stack>
 		</Stack>
@@ -150,22 +161,13 @@ function RoleOption({
 	onClick?: () => void
 }) {
 	return (
-		<ListItem
-			disableGutters
-			disablePadding
-			sx={{ borderRadius: 2, border: `1px solid ${BLUE_GREY}` }}
-		>
-			<ListItemButton
-				disableGutters
-				disableTouchRipple
-				sx={{ padding: 0 }}
-				onClick={onClick}
-			>
-				<Stack direction="column" sx={{ padding: 6, gap: 4 }}>
+		<ListItem sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2 }}>
+			<ListItemButton disableTouchRipple sx={{ padding: 0 }} onClick={onClick}>
+				<Stack direction="column" sx={{ gap: 4, padding: 6 }}>
 					<Stack direction="row" sx={{ alignItems: 'center', gap: 3 }}>
 						{icon}
 
-						<Typography sx={{ fontWeight: 500 }}>{name}</Typography>
+						<Typography variant="cardHeader">{name}</Typography>
 					</Stack>
 
 					<Typography>{description}</Typography>

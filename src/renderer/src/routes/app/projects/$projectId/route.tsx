@@ -42,12 +42,12 @@ import {
 import { useSpinDelay } from 'spin-delay'
 
 import {
-	BLUE_GREY,
-	COMAPEO_BLUE,
-	DARK_BLUE,
-	LIGHT_GREY,
-	WHITE,
-} from '../../../../colors.ts'
+	BLACK_03,
+	BLUE_00,
+	BLUE_03,
+	BLUE_05,
+	WHITE_00,
+} from '../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../components/icon.tsx'
@@ -159,8 +159,10 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 	component: RouteComponent,
 })
 
+const NAV_ICON_SIZE = 24 as const
+
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { projectId } = Route.useParams()
 
@@ -200,20 +202,18 @@ function RouteComponent() {
 	return (
 		<Box
 			sx={{
-				backgroundColor: DARK_BLUE,
-				flex: 1,
+				background: BLUE_00,
 				display: 'grid',
+				flex: 1,
 				gridTemplateColumns: 'min-content 1fr',
 			}}
 		>
 			<Box
 				component="nav"
-				aria-label={t(m.projectNavigationAccessibleLabel)}
+				aria-label={intl.formatMessage(m.projectNavigationAccessibleLabel)}
 				sx={{ display: 'flex', overflow: 'auto' }}
 			>
 				<List
-					dense
-					disablePadding
 					sx={{
 						alignItems: 'stretch',
 						display: 'flex',
@@ -221,12 +221,7 @@ function RouteComponent() {
 						paddingBlock: 4,
 					}}
 				>
-					<ListItem
-						dense
-						disableGutters
-						disablePadding
-						sx={{ justifyContent: 'center' }}
-					>
+					<ListItem sx={{ justifyContent: 'center' }}>
 						<ProjectInfoTabButton projectId={projectId} />
 					</ListItem>
 
@@ -243,14 +238,9 @@ function RouteComponent() {
 						}}
 					>
 						<Stack sx={{ gap: 5 }}>
-							<ListItem
-								dense
-								disableGutters
-								disablePadding
-								sx={{ justifyContent: 'center' }}
-							>
+							<ListItem sx={{ justifyContent: 'center' }}>
 								<Tooltip
-									title={t(m.listTabLabel)}
+									title={intl.formatMessage(m.listTabLabel)}
 									disableFocusListener
 									placement="right"
 								>
@@ -284,19 +274,14 @@ function RouteComponent() {
 												: BASE_ACTIVE_LINK_PROPS
 										}
 									>
-										<Icon name="noun-project-notebook" size={24} />
+										<Icon name="noun-project-notebook" size={NAV_ICON_SIZE} />
 									</IconButtonLink>
 								</Tooltip>
 							</ListItem>
 
-							<ListItem
-								dense
-								disableGutters
-								disablePadding
-								sx={{ justifyContent: 'center' }}
-							>
+							<ListItem sx={{ justifyContent: 'center' }}>
 								<Tooltip
-									title={t(m.teamTabLabel)}
+									title={intl.formatMessage(m.teamTabLabel)}
 									disableFocusListener
 									placement="right"
 								>
@@ -317,20 +302,15 @@ function RouteComponent() {
 										inactiveProps={BASE_INACTIVE_LINK_PROPS}
 										activeProps={BASE_ACTIVE_LINK_PROPS}
 									>
-										<Icon name="material-people-filled" size={24} />
+										<Icon name="material-people-filled" size={NAV_ICON_SIZE} />
 									</IconButtonLink>
 								</Tooltip>
 							</ListItem>
 
 							{selfIsOnlyProjectMemberEver ? null : (
-								<ListItem
-									dense
-									disableGutters
-									disablePadding
-									sx={{ justifyContent: 'center' }}
-								>
+								<ListItem sx={{ justifyContent: 'center' }}>
 									<Tooltip
-										title={t(m.exchangeTabLabel)}
+										title={intl.formatMessage(m.exchangeTabLabel)}
 										disableFocusListener
 										placement="right"
 									>
@@ -351,7 +331,10 @@ function RouteComponent() {
 											inactiveProps={BASE_INACTIVE_LINK_PROPS}
 											activeProps={BASE_ACTIVE_LINK_PROPS}
 										>
-											<Icon name="material-offline-bolt-filled" size={24} />
+											<Icon
+												name="material-offline-bolt-filled"
+												size={NAV_ICON_SIZE}
+											/>
 										</IconButtonLink>
 									</Tooltip>
 								</ListItem>
@@ -378,14 +361,9 @@ function RouteComponent() {
 						</Stack>
 
 						<Stack direction="column" sx={{ gap: 5 }}>
-							<ListItem
-								dense
-								disableGutters
-								disablePadding
-								sx={{ justifyContent: 'center' }}
-							>
+							<ListItem sx={{ justifyContent: 'center' }}>
 								<Tooltip
-									title={t(m.backgroundMapTabLabel)}
+									title={intl.formatMessage(m.backgroundMapTabLabel)}
 									disableFocusListener
 									placement="right"
 								>
@@ -400,19 +378,17 @@ function RouteComponent() {
 										inactiveProps={BASE_INACTIVE_LINK_PROPS}
 										activeProps={BASE_ACTIVE_LINK_PROPS}
 									>
-										<Icon name="material-layers-outlined" size={24} />
+										<Icon
+											name="material-layers-outlined"
+											size={NAV_ICON_SIZE}
+										/>
 									</IconButtonLink>
 								</Tooltip>
 							</ListItem>
 
-							<ListItem
-								dense
-								disableGutters
-								disablePadding
-								sx={{ justifyContent: 'center' }}
-							>
+							<ListItem sx={{ justifyContent: 'center' }}>
 								<Tooltip
-									title={t(m.settingsTabLabel)}
+									title={intl.formatMessage(m.settingsTabLabel)}
 									disableFocusListener
 									placement="right"
 								>
@@ -427,19 +403,14 @@ function RouteComponent() {
 										inactiveProps={BASE_INACTIVE_LINK_PROPS}
 										activeProps={BASE_ACTIVE_LINK_PROPS}
 									>
-										<Icon name="material-settings" size={24} />
+										<Icon name="material-settings" size={NAV_ICON_SIZE} />
 									</IconButtonLink>
 								</Tooltip>
 							</ListItem>
 						</Stack>
 					</Stack>
 
-					<ListItem
-						dense
-						disableGutters
-						disablePadding
-						sx={{ justifyContent: 'center' }}
-					>
+					<ListItem sx={{ justifyContent: 'center' }}>
 						<ProjectSwitcherButton
 							currentProjectId={projectId}
 							deviceName={ownDeviceInfo.name}
@@ -451,7 +422,7 @@ function RouteComponent() {
 			<Box
 				component="main"
 				sx={{
-					backgroundColor: WHITE,
+					background: WHITE_00,
 					borderStartStartRadius: 10,
 					display: 'flex',
 					overflow: 'auto',
@@ -526,7 +497,6 @@ function ProjectSwitcherButton({
 				open={!!anchorElement}
 				slotProps={{
 					list: {
-						disablePadding: true,
 						sx: { display: 'flex', flexDirection: 'column', overflow: 'auto' },
 					},
 					paper: {
@@ -545,9 +515,8 @@ function ProjectSwitcherButton({
 			>
 				<Box sx={{ padding: 4 }}>
 					<Typography
-						component="p"
-						variant="h3"
-						sx={{ fontWeight: 500, maxWidth: '25ch', textWrap: 'balance' }}
+						variant="heroHeader"
+						sx={{ maxWidth: '25ch', textWrap: 'balance' }}
 					>
 						{deviceName}
 					</Typography>
@@ -567,7 +536,7 @@ function ProjectSwitcherButton({
 						const isCurrentProject = p.projectId === currentProjectId
 
 						const displayedName = p.name || intl.formatMessage(m.unnamedProject)
-						const displayedProjectColor = p.projectColor || WHITE
+						const displayedProjectColor = p.projectColor || WHITE_00
 
 						const selectedClass = `&.${menuItemClasses.selected}`
 						const interactedClass = `&:hover, &.${menuItemClasses.focusVisible}, &.${menuItemClasses.selected}:hover, &.${menuItemClasses.selected}.${menuItemClasses.focusVisible}`
@@ -576,30 +545,26 @@ function ProjectSwitcherButton({
 							<MenuItem
 								key={p.projectId}
 								component={ButtonBaseLink}
+								disableRipple
 								to="/app/projects/$projectId"
 								params={{ projectId: p.projectId }}
-								disableGutters
-								disableRipple
 								selected={isCurrentProject}
 								sx={{
-									backgroundColor: displayedProjectColor,
+									background: displayedProjectColor,
 									borderRadius: 2,
 									gap: 2,
 									justifyContent: 'space-between',
-									outline: `2px solid ${LIGHT_GREY}`,
+									outline: `2px solid ${BLACK_03}`,
 									outlineOffset: -1,
 									padding: 4,
 									[selectedClass]: {
-										backgroundColor: displayedProjectColor,
-										outlineColor: COMAPEO_BLUE,
+										background: displayedProjectColor,
+										outlineColor: BLUE_03,
 									},
 									[interactedClass]: {
-										backgroundColor: displayedProjectColor,
+										background: displayedProjectColor,
 										outlineColor: (theme) =>
-											theme.darken(
-												isCurrentProject ? COMAPEO_BLUE : LIGHT_GREY,
-												0.1,
-											),
+											theme.darken(isCurrentProject ? BLUE_03 : BLACK_03, 0.1),
 										outlineWidth: 3,
 									},
 								}}
@@ -607,11 +572,11 @@ function ProjectSwitcherButton({
 								<Typography
 									sx={{
 										flex: 1,
-										fontWeight: 500,
+										fontWeight: (theme) => theme.typography.fontWeightMedium,
+										maxWidth: '25ch',
 										overflow: 'hidden',
 										textOverflow: 'ellipsis',
 										whiteSpace: 'nowrap',
-										maxWidth: '25ch',
 									}}
 								>
 									{displayedName}
@@ -628,10 +593,10 @@ function ProjectSwitcherButton({
 				<Box sx={{ padding: 4 }}>
 					<ButtonLink
 						component={MenuItem}
+						to="/app"
 						fullWidth
 						startIcon={<Icon name="material-symbols-view-agenda" />}
-						sx={{ ':hover, :focus-within': { backgroundColor: 'initial' } }}
-						to="/app"
+						sx={{ ':hover, :focus-within': { background: 'initial' } }}
 						variant="outlined"
 					>
 						{intl.formatMessage(m.projectSwitcherViewAllProjects)}
@@ -659,7 +624,8 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 	const { data: role } = useOwnRoleInProject({ projectId })
 
 	const projectSettingsItemIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
+		variant: 'bodyCopy',
+		multiplier: 1.2,
 	})
 
 	const selectFile = useMutation(selectFileMutationOptions())
@@ -716,15 +682,18 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 							setShowProjectInfoDialog(true)
 						}}
 						sx={{
-							backgroundColor: projectSettings.projectColor || WHITE,
+							background: projectSettings.projectColor || WHITE_00,
 							flex: 1,
 							'&:hover': {
-								backgroundColor: (theme) =>
-									theme.darken(projectSettings.projectColor || WHITE, 0.1),
+								background: (theme) =>
+									theme.darken(projectSettings.projectColor || WHITE_00, 0.1),
 							},
 						}}
 					>
-						<Typography color="textPrimary" sx={{ fontWeight: 500 }}>
+						<Typography
+							color="textPrimary"
+							sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}
+						>
 							{displayedProjectName[0]}
 						</Typography>
 					</IconButton>
@@ -742,25 +711,22 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 								direction="column"
 								sx={{
 									alignItems: 'flex-start',
-									backgroundColor: projectSettings.projectColor,
-									border: `2px solid ${projectSettings.projectColor || BLUE_GREY}`,
+									background: projectSettings.projectColor,
+									border: `2px solid ${projectSettings.projectColor || BLUE_05}`,
 									borderRadius: 2,
 									gap: 4,
 									padding: 6,
 								}}
 							>
 								<Typography
-									variant="h1"
-									sx={{ fontWeight: 500, overflowWrap: 'break-word' }}
+									variant="heroHeader"
+									sx={{ overflowWrap: 'break-word' }}
 								>
 									{displayedProjectName}
 								</Typography>
 
 								{projectSettings.projectDescription ? (
-									<Typography
-										color="textSecondary"
-										sx={{ overflowWrap: 'break-word' }}
-									>
+									<Typography sx={{ overflowWrap: 'break-word' }}>
 										{projectSettings.projectDescription}
 									</Typography>
 								) : null}
@@ -797,20 +763,16 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 								) : null}
 							</Stack>
 
-							<List
-								disablePadding
-								sx={{
-									display: 'flex',
-									flexDirection: 'column',
-									gap: 4,
-									padding: 4,
-								}}
+							<Stack
+								component={List}
+								direction="column"
+								sx={{ gap: 4, padding: 4 }}
 							>
-								<ListItem disableGutters disablePadding sx={{ gap: 4 }}>
+								<ListItem sx={{ gap: 4 }}>
 									<Stack
 										direction="row"
 										sx={{
-											alignItems: 'flex-start',
+											alignItems: 'center',
 											flex: 1,
 											gap: 4,
 											overflow: 'hidden',
@@ -825,10 +787,11 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 
 												<Typography
 													sx={{
-														fontWeight: 500,
+														fontWeight: (theme) =>
+															theme.typography.fontWeightMedium,
+														overflow: 'hidden',
 														textOverflow: 'ellipsis',
 														whiteSpace: 'nowrap',
-														overflow: 'hidden',
 													}}
 												>
 													{intl.formatMessage(m.projectInfoRoleCoordinator)}
@@ -840,7 +803,8 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 
 												<Typography
 													sx={{
-														fontWeight: 500,
+														fontWeight: (theme) =>
+															theme.typography.fontWeightMedium,
 														textOverflow: 'ellipsis',
 														whiteSpace: 'nowrap',
 														overflow: 'hidden',
@@ -864,118 +828,176 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 
 											setShowProjectInfoDialog(null)
 										}}
-										sx={{ marginInlineEnd: -3 }}
 										variant="text"
 									>
 										{intl.formatMessage(m.projectInfoViewTeam)}
 									</ButtonLink>
 								</ListItem>
 
-								<Divider variant="fullWidth" />
+								<Divider />
 
-								<ListItem disableGutters disablePadding sx={{ gap: 4 }}>
-									<Stack
-										direction="row"
-										sx={{ alignItems: 'flex-start', flex: 1, gap: 4 }}
+								<ListItem sx={{ gap: 4 }}>
+									<Box
+										sx={{
+											display: 'grid',
+											flex: 1,
+											gap: 2,
+											gridTemplateAreas: `
+												"icon main action"
+												". created ." 
+												". added ."
+											`,
+											gridTemplateColumns: 'auto 1fr auto',
+											gridTemplateRows: 'repeat(3, auto)',
+										}}
 									>
-										<Icon
-											name="material-symbols-apps"
-											size={projectSettingsItemIconSize}
-										/>
+										<Box
+											sx={{
+												alignItems: 'center',
+												display: 'flex',
+												flexDirection: 'row',
+												gridArea: 'icon',
+											}}
+										>
+											<Icon
+												name="material-symbols-apps"
+												size={projectSettingsItemIconSize}
+											/>
+										</Box>
 
-										{projectSettings.configMetadata ? (
-											<Box>
-												<Typography color="textSecondary">
+										<Box
+											sx={{
+												alignItems: 'center',
+												display: 'flex',
+												flexDirection: 'row',
+												gridArea: 'main',
+												overflow: 'auto',
+											}}
+										>
+											{projectSettings.configMetadata ? (
+												<Typography
+													sx={{ display: 'flex', gap: 2, overflow: 'auto' }}
+												>
 													<Typography
 														component="span"
+														sx={{
+															flex: 1,
+															fontWeight: (theme) =>
+																theme.typography.fontWeightMedium,
+															overflow: 'hidden',
+															textOverflow: 'ellipsis',
+															whiteSpace: 'nowrap',
+														}}
 														variant="inherit"
-														color="textPrimary"
-														sx={{ fontWeight: 500 }}
 													>
 														{projectSettings.configMetadata.name}
 													</Typography>
-													{
-														// eslint-disable-next-line formatjs/no-literal-string-in-jsx
-														' '
-													}
+
 													{projectSettings.configMetadata.fileVersion}
 												</Typography>
-
-												<Typography color="textSecondary">
-													{intl.formatMessage(m.projectInfoCategoriesCreated, {
-														date: (
-															<time
-																key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
-																dateTime={
-																	projectSettings.configMetadata.buildDate
-																}
-															>
-																{intl.formatDate(
-																	projectSettings.configMetadata.buildDate,
-																	{
-																		year: 'numeric',
-																		month: 'long',
-																		day: 'numeric',
-																	},
-																)}
-															</time>
-														),
-													})}
+											) : (
+												<Typography
+													sx={{
+														fontWeight: (theme) =>
+															theme.typography.fontWeightMedium,
+														overflow: 'hidden',
+														textOverflow: 'ellipsis',
+														whiteSpace: 'nowrap',
+													}}
+												>
+													{intl.formatMessage(m.fallbackCategoriesSetName)}
 												</Typography>
+											)}
+										</Box>
 
-												<Typography color="textSecondary">
-													{intl.formatMessage(m.projectInfoCategoriesAdded, {
-														date: (
-															<time
-																key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
-																dateTime={
-																	projectSettings.configMetadata.importDate
-																}
-															>
-																{intl.formatDate(
-																	projectSettings.configMetadata.importDate,
-																	{
-																		year: 'numeric',
-																		month: 'long',
-																		day: 'numeric',
-																	},
-																)}
-															</time>
-														),
-													})}
-												</Typography>
+										{isAtLeastCoordinator ? (
+											<Box
+												sx={{
+													alignItems: 'center',
+													display: 'flex',
+													flexDirection: 'row',
+													gridArea: 'action',
+												}}
+											>
+												<Button
+													loading={selectAndImportMutation.status === 'pending'}
+													onClick={() => {
+														selectAndImportMutation.mutate(undefined, {
+															onError: (err) => {
+																captureException(err)
+															},
+														})
+													}}
+													variant="text"
+												>
+													{intl.formatMessage(m.projectInfoUpdateCategories)}
+												</Button>
 											</Box>
-										) : (
-											<Typography sx={{ fontWeight: 500 }}>
-												{intl.formatMessage(m.fallbackCategoriesSetName)}
-											</Typography>
-										)}
-									</Stack>
+										) : null}
 
-									{isAtLeastCoordinator ? (
-										<Button
-											loading={selectAndImportMutation.status === 'pending'}
-											onClick={() => {
-												selectAndImportMutation.mutate(undefined, {
-													onError: (err) => {
-														captureException(err)
-													},
-												})
-											}}
-											variant="text"
-											sx={{ marginInlineEnd: -3 }}
-										>
-											{intl.formatMessage(m.projectInfoUpdateCategories)}
-										</Button>
-									) : null}
+										{projectSettings.configMetadata ? (
+											<>
+												<Box sx={{ gridArea: 'created' }}>
+													<Typography>
+														{intl.formatMessage(
+															m.projectInfoCategoriesCreated,
+															{
+																date: (
+																	<time
+																		key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
+																		dateTime={
+																			projectSettings.configMetadata.buildDate
+																		}
+																	>
+																		{intl.formatDate(
+																			projectSettings.configMetadata.buildDate,
+																			{
+																				year: 'numeric',
+																				month: 'long',
+																				day: 'numeric',
+																			},
+																		)}
+																	</time>
+																),
+															},
+														)}
+													</Typography>
+												</Box>
+
+												<Box sx={{ gridArea: 'added' }}>
+													<Typography>
+														{intl.formatMessage(m.projectInfoCategoriesAdded, {
+															date: (
+																<time
+																	key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
+																	dateTime={
+																		projectSettings.configMetadata.importDate
+																	}
+																>
+																	{intl.formatDate(
+																		projectSettings.configMetadata.importDate,
+																		{
+																			year: 'numeric',
+																			month: 'long',
+																			day: 'numeric',
+																		},
+																	)}
+																</time>
+															),
+														})}
+													</Typography>
+												</Box>
+											</>
+										) : null}
+									</Box>
 								</ListItem>
-							</List>
+							</Stack>
 						</Stack>
 
-						<Box
+						<Stack
+							direction="row"
 							sx={{
-								display: 'flex',
-								flexDirection: 'center',
+								alignItems: 'center',
 								justifyContent: 'center',
 								padding: 4,
 							}}
@@ -990,12 +1012,12 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 
 									setShowProjectInfoDialog(null)
 								}}
-								sx={{ maxWidth: 400 }}
+								startIcon={<Icon name="material-symbols-cancel" />}
 								variant="outlined"
 							>
 								{intl.formatMessage(m.projectInfoClose)}
 							</Button>
-						</Box>
+						</Stack>
 					</Stack>
 				)}
 			</DecentDialog>
@@ -1031,7 +1053,7 @@ function TestDataTabLink({
 	onClick: MouseEventHandler<HTMLAnchorElement>
 	projectId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: projects } = useManyProjects()
 
@@ -1040,14 +1062,9 @@ function TestDataTabLink({
 	}
 
 	return (
-		<ListItem
-			dense
-			disableGutters
-			disablePadding
-			sx={{ justifyContent: 'center' }}
-		>
+		<ListItem sx={{ justifyContent: 'center' }}>
 			<Tooltip
-				title={t(m.testDataTabLabel)}
+				title={intl.formatMessage(m.testDataTabLabel)}
 				disableFocusListener
 				placement="right"
 			>
@@ -1059,7 +1076,7 @@ function TestDataTabLink({
 					inactiveProps={BASE_INACTIVE_LINK_PROPS}
 					activeProps={BASE_ACTIVE_LINK_PROPS}
 				>
-					<Icon name="material-auto-fix-high" size={24} />
+					<Icon name="material-auto-fix-high" size={NAV_ICON_SIZE} />
 				</IconButtonLink>
 			</Tooltip>
 		</ListItem>
@@ -1070,14 +1087,14 @@ const BASE_INACTIVE_LINK_PROPS = {
 	sx: {
 		aspectRatio: 1,
 		borderRadius: 2,
-		color: LIGHT_GREY,
+		color: BLACK_03,
 		padding: 2,
 		'&:hover': {
-			color: WHITE,
-			background: (theme) => theme.lighten(DARK_BLUE, 0.2),
+			color: WHITE_00,
+			background: (theme) => theme.lighten(BLUE_00, 0.2),
 		},
 		[`&.${iconButtonClasses.disabled}`]: {
-			color: (theme) => theme.darken(LIGHT_GREY, 0.4),
+			color: (theme) => theme.darken(BLACK_03, 0.4),
 		},
 	},
 } satisfies IconButtonLinkProps['inactiveProps']
@@ -1087,13 +1104,13 @@ const BASE_ACTIVE_LINK_PROPS = {
 		aspectRatio: 1,
 		background: (theme) => theme.palette.primary.main,
 		borderRadius: 2,
-		color: WHITE,
+		color: WHITE_00,
 		padding: 2,
 		'&:hover': {
 			background: (theme) => theme.darken(theme.palette.primary.main, 0.1),
 		},
 		[`&.${iconButtonClasses.disabled}`]: {
-			color: (theme) => theme.darken(LIGHT_GREY, 0.4),
+			color: (theme) => theme.darken(BLACK_03, 0.4),
 			background: (theme) => theme.darken(theme.palette.primary.main, 0.1),
 		},
 	},

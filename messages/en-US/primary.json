@@ -529,7 +529,7 @@
   },
   "$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelInviteLink": {
     "description": "Text for link that navigates to invite page.",
-    "message": "Invite Device"
+    "message": "Invite Devices"
   },
   "$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelTitle": {
     "description": "Text for title of panel shown when no active collaborators or data exist on project.",
@@ -541,15 +541,11 @@
   },
   "$1.routes.app.projects.$projectId.index.openExchangePanelLink": {
     "description": "Text for link that navigates to exchange page.",
-    "message": "Open Exchange"
+    "message": "Go to Exchange"
   },
   "$1.routes.app.projects.$projectId.index.openExchangePanelTitle": {
     "description": "Text for title of panel shown when project has collaborators but no data.",
     "message": "Exchange to Gather Observations"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.editCategoryPanelTitle": {
-    "description": "Title for edit category panel.",
-    "message": "Change Category"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
     "description": "Text for cancel button.",
@@ -563,34 +559,6 @@
     "description": "Text for save button.",
     "message": "Save"
   },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-sections.editNotesTooltip": {
-    "description": "Text for tooltip when hovering over notes.",
-    "message": "Click to Edit"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer": {
-    "description": "Fallback text displayed if field has no meaningful value.",
-    "message": "No answer"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText": {
-    "description": "Text for cancel button.",
-    "message": "Cancel"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.editNotesTooltip": {
-    "description": "Text for tooltip when hovering over notes.",
-    "message": "Click to Edit"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.noNotes": {
-    "description": "Text for when notes are empty.",
-    "message": "No notes."
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText": {
-    "description": "Text for save button.",
-    "message": "Save"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.title": {
-    "description": "Title for notes section.",
-    "message": "Notes"
-  },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerFalse": {
     "description": "Text displayed if a boolean field is answered with \"false\"",
     "message": "FALSE"
@@ -602,6 +570,18 @@
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerTrue": {
     "description": "Text displayed if a boolean field is answered with \"true\"",
     "message": "TRUE"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.editCategoryPanelTitle": {
+    "description": "Title for edit category panel.",
+    "message": "Change Category"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.fieldSectionClickToEdit": {
+    "description": "Text for tooltip when hovering over notes.",
+    "message": "Click to Edit"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.fieldSectionNoAnswer": {
+    "description": "Fallback text displayed if field has no meaningful value.",
+    "message": "No answer"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
     "description": "Text for button to change category.",
@@ -654,6 +634,26 @@
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound": {
     "description": "Text displayed when observation cannot be found.",
     "message": "Could not find observation with ID {docId}"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.notesSectionCancel": {
+    "description": "Text for cancel button.",
+    "message": "Cancel"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.notesSectionEditNotes": {
+    "description": "Text for tooltip when hovering over notes.",
+    "message": "Click to Edit"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.notesSectionNoNotes": {
+    "description": "Text for when notes are empty.",
+    "message": "No notes."
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.notesSectionSave": {
+    "description": "Text for save button.",
+    "message": "Save"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.notesSectionTitle": {
+    "description": "Title for notes section.",
+    "message": "Notes"
   },
   "$1.routes.app.projects.$projectId.route.backgroundMapTabLabel": {
     "description": "Label for background map tab link in navigation.",
@@ -831,9 +831,9 @@
     "description": "Title of the coordinators section in the team page.",
     "message": "Coordinators"
   },
-  "$1.routes.app.projects.$projectId.team.index.inviteDevice": {
-    "description": "Text for button that initiates steps for inviting device to project.",
-    "message": "Invite Device"
+  "$1.routes.app.projects.$projectId.team.index.inviteDevices": {
+    "description": "Text for button that initiates steps for inviting devices to project.",
+    "message": "Invite Devices"
   },
   "$1.routes.app.projects.$projectId.team.index.membersCount": {
     "description": "Title of the team page.",
@@ -955,7 +955,7 @@
     "description": "Text displayed while waiting for invite response.",
     "message": "Waiting for Device to Accept Invite"
   },
-  "$1.routes.app.projects.$projectId.team.invite.devices.-shared.disconnected-indicator.disconnected": {
+  "$1.routes.app.projects.$projectId.team.invite.devices.disconnected": {
     "description": "Text displayed when external device is disconnected.",
     "message": "Disconnected"
   },
@@ -1257,7 +1257,7 @@
   },
   "$1.routes.app.settings.index.languageFollowSystemOptionLabel": {
     "description": "Option label for following system preference for language.",
-    "message": "Follow system preference"
+    "message": "Follow System Preference"
   },
   "$1.routes.app.settings.index.languageFromSystemPreference": {
     "description": "Label for selected language based on the system preferences.",

@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY } from '../../../colors.ts'
+import { BLUE_05 } from '../../../../../shared/colors.ts'
 import { Icon } from '../../../components/icon.tsx'
 import { useIconSizeBasedOnTypography } from '../../../hooks/icon.ts'
 import { AboutCoMapeoSection } from './-sections/about-comapeo-section.tsx'
@@ -28,13 +28,13 @@ function RouteComponent() {
 
 	const router = useRouter()
 
-	const headerIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+	const backIconSize = useIconSizeBasedOnTypography({
+		variant: 'pageTitle',
 		multiplier: 1.5,
 	})
 
 	const sectionHeadingIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body2',
+		variant: 'sectionLabel',
 		multiplier: 1.5,
 	})
 
@@ -45,10 +45,9 @@ function RouteComponent() {
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_GREY}`,
+					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 2,
-					paddingBlock: 4,
-					paddingInline: 6,
+					padding: 4,
 				}}
 			>
 				<IconButton
@@ -62,11 +61,12 @@ function RouteComponent() {
 
 						router.navigate({ to: '/app', replace: true })
 					}}
+					sx={{ color: (theme) => theme.palette.text.secondary }}
 				>
-					<Icon name="material-arrow-back" size={headerIconSize} />
+					<Icon name="material-arrow-back" size={backIconSize} />
 				</IconButton>
 
-				<Typography variant="h1" sx={{ fontWeight: 500, textAlign: 'center' }}>
+				<Typography variant="pageTitle" sx={{ textAlign: 'center' }}>
 					{intl.formatMessage(m.title)}
 				</Typography>
 			</Stack>
@@ -76,20 +76,12 @@ function RouteComponent() {
 			>
 				<Suspense
 					fallback={
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'column',
-								alignItems: 'center',
-								justifyContent: 'center',
-								flex: 1,
-							}}
-						>
-							<CircularProgress disableShrink />
+						<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
+							<CircularProgress />
 						</Box>
 					}
 				>
-					<Container maxWidth="sm" disableGutters>
+					<Container maxWidth="sm">
 						<Stack direction="column" sx={{ gap: 6, padding: 6 }}>
 							<Stack direction="column" sx={{ gap: 8 }}>
 								<DeviceNameSection headingIconSize={sectionHeadingIconSize} />
@@ -103,17 +95,11 @@ function RouteComponent() {
 								<UnitSystemSection headingIconSize={sectionHeadingIconSize} />
 							</Stack>
 
-							<Divider
-								variant="fullWidth"
-								sx={{ borderColor: (theme) => theme.darken(BLUE_GREY, 0.2) }}
-							/>
+							<Divider />
 
 							<DataAndPrivacySection />
 
-							<Divider
-								variant="fullWidth"
-								sx={{ borderColor: (theme) => theme.darken(BLUE_GREY, 0.2) }}
-							/>
+							<Divider />
 
 							<AboutCoMapeoSection />
 						</Stack>

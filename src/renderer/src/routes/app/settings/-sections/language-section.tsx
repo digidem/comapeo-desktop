@@ -69,15 +69,11 @@ export function LanguageSection({
 				<Stack
 					component="h2"
 					direction="row"
-					sx={{ alignItems: 'center', gap: 4, margin: 0 }}
+					sx={{ alignItems: 'center', gap: 2, margin: 0 }}
 				>
 					<Icon name="material-language" size={headingIconSize} />
 
-					<Typography
-						id={labelId}
-						variant="body2"
-						sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-					>
+					<Typography id={labelId} variant="sectionLabel">
 						{intl.formatMessage(m.languageSectionTitle)}
 					</Typography>
 				</Stack>
@@ -91,7 +87,6 @@ export function LanguageSection({
 						transformOrigin: { horizontal: 'center', vertical: 'top' },
 						slots: { transition: Fade },
 						slotProps: {
-							list: { disablePadding: true },
 							paper: {
 								style: {
 									// NOTE: Kind of hacky but prevents last item from getting cutoff by
@@ -141,7 +136,7 @@ export function LanguageSection({
 					sx={SELECT_SX}
 					value={currentValue}
 				>
-					<MenuItem disableGutters value="system" sx={{ padding: 2 }}>
+					<MenuItem value="system" sx={{ padding: 2 }}>
 						<Stack
 							direction="row"
 							sx={{ alignItems: 'center', flex: 1, gap: 2 }}
@@ -166,9 +161,9 @@ export function LanguageSection({
 							{systemPreferredLanguageInfo?.baseLanguageInfo ? (
 								<Typography
 									aria-hidden
+									color="textTertiary"
 									component="span"
 									variant="inherit"
-									color="textSecondary"
 									sx={{ fontStyle: 'italic' }}
 								>
 									<bdi lang={localeState.value}>
@@ -192,7 +187,6 @@ export function LanguageSection({
 
 							return (
 								<MenuItem
-									disableGutters
 									key={languageTag}
 									selected={isSelected}
 									sx={{ gap: 4, padding: 2 }}
@@ -223,9 +217,9 @@ export function LanguageSection({
 
 									<Typography
 										aria-hidden
+										color="textTertiary"
 										component="span"
 										variant="inherit"
-										color="textSecondary"
 										sx={{ fontStyle: 'italic' }}
 									>
 										{labelText.secondary}
@@ -279,7 +273,7 @@ const m = defineMessages<{
 	},
 	languageFollowSystemOptionLabel: {
 		id: '$1.routes.app.settings.index.languageFollowSystemOptionLabel',
-		defaultMessage: 'Follow system preference',
+		defaultMessage: 'Follow System Preference',
 		description: 'Option label for following system preference for language.',
 	},
 })

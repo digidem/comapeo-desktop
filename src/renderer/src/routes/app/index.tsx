@@ -10,7 +10,6 @@ import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -24,14 +23,14 @@ import {
 import * as v from 'valibot'
 
 import {
-	BLUE_GREY,
-	COMAPEO_BLUE,
-	DARKER_ORANGE,
-	GREEN,
-	LIGHT_COMAPEO_BLUE,
-	LIGHT_GREY,
-	WHITE,
-} from '../../colors.ts'
+	BLACK_03,
+	BLUE_03,
+	BLUE_05,
+	BLUE_06,
+	GREEN_00,
+	ORANGE_00,
+	WHITE_00,
+} from '../../../../shared/colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
 import {
@@ -134,7 +133,7 @@ function RouteComponent() {
 					direction="row"
 					sx={{
 						alignItems: 'center',
-						borderBottom: `1px solid ${BLUE_GREY}`,
+						borderBottom: `1px solid ${BLUE_05}`,
 						flexWrap: 'wrap',
 						gap: 6,
 						paddingBlock: 4,
@@ -142,20 +141,21 @@ function RouteComponent() {
 					}}
 				>
 					<Stack direction="row" sx={{ alignItems: 'center', flex: 1, gap: 4 }}>
-						<Typography component="h1" variant="h2" sx={{ fontWeight: 500 }}>
+						<Typography variant="pageTitle">
 							{intl.formatMessage(m.pageTitle)}
 						</Typography>
 
 						<Box
 							sx={{
-								backgroundColor: LIGHT_COMAPEO_BLUE,
+								background: BLUE_06,
 								borderRadius: 2,
-								padding: 1,
+								paddingBlock: 1,
+								paddingInline: 2,
 							}}
 						>
 							<Typography
-								variant="body2"
-								color="textSecondary"
+								color="textTertiary"
+								variant="detailCopy"
 								sx={{ whiteSpace: 'nowrap' }}
 							>
 								{intl.formatMessage(m.mostRecent)}
@@ -195,7 +195,7 @@ function RouteComponent() {
 								height: '100%',
 							}}
 						>
-							<CircularProgress disableShrink />
+							<CircularProgress />
 						</Box>
 					}
 				>
@@ -292,12 +292,12 @@ function GetStartedPanel() {
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
 	const desktopIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		variant: 'heroHeader',
 		multiplier: 4,
 	})
 
 	const checkIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		variant: 'heroHeader',
 	})
 
 	return (
@@ -313,33 +313,32 @@ function GetStartedPanel() {
 					<Box sx={{ position: 'relative' }}>
 						<Icon
 							name="material-symbols-computer"
-							htmlColor={DARKER_ORANGE}
+							htmlColor={ORANGE_00}
 							size={desktopIconSize}
 						/>
 
 						<Box
 							sx={{
-								bgcolor: GREEN,
+								background: GREEN_00,
 								borderRadius: '50%',
-								bottom: (theme) => theme.spacing(4),
+								bottom: (theme) => theme.spacing(2),
 								display: 'flex',
 								padding: 1,
 								position: 'absolute',
-								right: (theme) => theme.spacing(-1),
+								right: (theme) => theme.spacing(-2),
 							}}
 						>
 							<Icon
 								name="material-check"
-								htmlColor={WHITE}
+								htmlColor={WHITE_00}
 								size={checkIconSize}
 							/>
 						</Box>
 					</Box>
 
 					<Typography
-						component="p"
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center', textWrap: 'balance' }}
+						variant="heroHeader"
+						sx={{ textAlign: 'center', textWrap: 'balance' }}
 					>
 						{intl.formatMessage(m.getStartedTitle, {
 							name: ownDeviceInfo.name,
@@ -348,41 +347,38 @@ function GetStartedPanel() {
 				</Stack>
 
 				<Typography
-					component="p"
-					variant="h3"
+					variant="heroSubheading"
 					sx={{ textAlign: 'center', textWrap: 'balance' }}
 				>
 					{intl.formatMessage(m.getStartedDescription)}
 				</Typography>
 
-				<List
-					disablePadding
-					sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+				<Stack
+					component={List}
+					direction="column"
+					sx={{
+						color: (theme) => theme.palette.text.secondary,
+						gap: 4,
+					}}
 				>
-					<ListItem disableGutters disablePadding sx={{ gap: 5 }}>
+					<ListItem sx={{ gap: 5 }}>
 						<Icon name="openmoji-world-map" />
 
-						<ListItemText>
-							{intl.formatMessage(m.getStartedMapAnywhereDetail)}
-						</ListItemText>
+						{intl.formatMessage(m.getStartedMapAnywhereDetail)}
 					</ListItem>
 
-					<ListItem disableGutters disablePadding sx={{ gap: 5 }}>
+					<ListItem sx={{ gap: 5 }}>
 						<Icon name="openmoji-handshake-medium-skin-tone" />
 
-						<ListItemText>
-							{intl.formatMessage(m.getStartedShareDetail)}
-						</ListItemText>
+						{intl.formatMessage(m.getStartedShareDetail)}
 					</ListItem>
 
-					<ListItem disableGutters disablePadding sx={{ gap: 5 }}>
+					<ListItem sx={{ gap: 5 }}>
 						<Icon name="openmoji-locked-with-key" />
 
-						<ListItemText>
-							{intl.formatMessage(m.getStartedOwnDataDetail)}
-						</ListItemText>
+						{intl.formatMessage(m.getStartedOwnDataDetail)}
 					</ListItem>
-				</List>
+				</Stack>
 			</Stack>
 		</Container>
 	)
@@ -399,18 +395,23 @@ function ListedProjectsPanel({ projects }: { projects: Array<ListedProject> }) {
 		? projects.filter((p) => p.projectId !== activeProject.projectId)
 		: projects
 
+	const sectionIconSize = useIconSizeBasedOnTypography({
+		variant: 'sectionLabel',
+		multiplier: 1.5,
+	})
+
 	return (
 		<Container maxWidth="sm" sx={{ display: 'flex', flex: 1, padding: 6 }}>
 			{activeProject ? (
 				<Stack direction="column" sx={{ flex: 1, gap: 10 }}>
 					<Stack component="section" direction="column" sx={{ gap: 4 }}>
 						<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
-							<Icon name="material-check-circle-rounded" />
+							<Icon
+								name="material-check-circle-rounded"
+								size={sectionIconSize}
+							/>
 
-							<Typography
-								component="h2"
-								sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-							>
+							<Typography component="h2" variant="sectionLabel">
 								{intl.formatMessage(m.projectsListSectionTitleCurrent)}
 							</Typography>
 						</Stack>
@@ -427,16 +428,16 @@ function ListedProjectsPanel({ projects }: { projects: Array<ListedProject> }) {
 
 					{otherProjects.length > 0 ? (
 						<>
-							<Divider variant="fullWidth" sx={{ color: BLUE_GREY }} />
+							<Divider />
 
 							<Stack component="section" direction="column" sx={{ gap: 4 }}>
 								<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
-									<Icon name="material-symbols-view-agenda" />
+									<Icon
+										name="material-symbols-view-agenda"
+										size={sectionIconSize}
+									/>
 
-									<Typography
-										component="h2"
-										sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-									>
+									<Typography component="h2" variant="sectionLabel">
 										{intl.formatMessage(m.projectsListSectionTitleOthers)}
 									</Typography>
 								</Stack>
@@ -496,11 +497,12 @@ function ListedProjectCard({
 	const displayedName = project.name || intl.formatMessage(m.unnamedProject)
 
 	const activeProjectIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		variant: 'cardHeader',
+		multiplier: 1.25,
 	})
 
 	const roleIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
+		variant: 'bodyCopy',
 	})
 
 	return (
@@ -510,16 +512,15 @@ function ListedProjectCard({
 				name: displayedName,
 			})}
 			sx={{
-				backgroundColor: project.projectColor,
+				background: project.projectColor,
 				borderRadius: 2,
-				color: (theme) => theme.palette.text.secondary,
-				outline: `2px solid ${highlight ? COMAPEO_BLUE : LIGHT_GREY}`,
+				outline: `2px solid ${highlight ? BLUE_03 : BLACK_03}`,
 				outlineOffset: -1,
 				overflow: 'auto',
 				'&:hover, &:focus-within': {
 					color: (theme) => theme.palette.text.primary,
 					outlineColor: (theme) =>
-						theme.darken(highlight ? COMAPEO_BLUE : LIGHT_GREY, 0.1),
+						theme.darken(highlight ? BLUE_03 : BLACK_03, 0.1),
 					outlineWidth: 3,
 				},
 			}}
@@ -538,11 +539,8 @@ function ListedProjectCard({
 					}}
 				>
 					<Typography
-						component="p"
-						variant="h1"
-						color="textPrimary"
+						variant="cardHeader"
 						sx={{
-							fontWeight: 500,
 							textOverflow: 'ellipsis',
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
@@ -553,14 +551,21 @@ function ListedProjectCard({
 
 					{highlight ? (
 						<Icon
+							color="primary"
 							name="material-check-circle-rounded"
 							size={activeProjectIconSize}
-							htmlColor={COMAPEO_BLUE}
 						/>
 					) : null}
 				</Stack>
 
-				<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
+				<Stack
+					direction="row"
+					sx={{
+						alignItems: 'center',
+						color: (theme) => theme.palette.text.secondary,
+						gap: 2,
+					}}
+				>
 					<Icon
 						name={
 							isAtLeastCoordinator
@@ -571,10 +576,11 @@ function ListedProjectCard({
 					/>
 
 					<Typography
+						color="inherit"
 						sx={{
+							overflow: 'hidden',
 							textOverflow: 'ellipsis',
 							whiteSpace: 'nowrap',
-							overflow: 'hidden',
 						}}
 					>
 						{intl.formatMessage(

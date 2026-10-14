@@ -14,7 +14,7 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { GREEN, WHITE } from '../../../../colors.ts'
+import { GREEN_00, WHITE_00 } from '../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { DecentTextField } from '../../../../components/decent-text-field.tsx'
 import { DiscardEditsDialogContent } from '../../../../components/discard-edits-dialog.tsx'
@@ -101,7 +101,7 @@ export function DeviceNameSection({
 	})
 
 	const successIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body2',
+		variant: 'bodyCopy',
 		multiplier: 0.5,
 	})
 
@@ -111,7 +111,7 @@ export function DeviceNameSection({
 				<Stack
 					component="h2"
 					direction="row"
-					sx={{ alignItems: 'center', gap: 4, margin: 0 }}
+					sx={{ alignItems: 'center', gap: 2, margin: 0 }}
 				>
 					<DeviceIcon
 						aria-hidden
@@ -119,18 +119,14 @@ export function DeviceNameSection({
 						size={headingIconSize}
 					/>
 
-					<Typography
-						id={labelId}
-						variant="body2"
-						sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-					>
+					<Typography id={labelId} variant="sectionLabel">
 						{intl.formatMessage(m.deviceNameSectionTitle)}
 					</Typography>
 
 					{editState === 'success' ? (
 						<Box
 							sx={{
-								bgcolor: GREEN,
+								background: GREEN_00,
 								borderRadius: '50%',
 								display: 'flex',
 								padding: 1,
@@ -138,7 +134,7 @@ export function DeviceNameSection({
 						>
 							<Icon
 								name="material-check"
-								htmlColor={WHITE}
+								htmlColor={WHITE_00}
 								size={successIconSize}
 							/>
 						</Box>
@@ -186,25 +182,28 @@ export function DeviceNameSection({
 															<Stack
 																direction="row"
 																sx={{
-																	color: field.state.meta.isValid
-																		? undefined
-																		: (theme) => theme.palette.error.main,
+																	color: (theme) =>
+																		field.state.meta.isValid
+																			? theme.palette.text.secondary
+																			: theme.palette.error.main,
 																	justifyContent: 'space-between',
 																}}
 															>
 																<Typography
-																	id={errorTextId}
+																	color="inherit"
 																	component="span"
-																	variant="body2"
+																	id={errorTextId}
+																	variant="detailCopy"
 																>
 																	{field.state.meta.errors[0]?.message}
 																</Typography>
 
 																<Typography
+																	color="inherit"
 																	component="output"
 																	htmlFor={inputId}
 																	name="character-count"
-																	variant="body2"
+																	variant="detailCopy"
 																>
 																	<form.Subscribe
 																		selector={(state) =>
@@ -283,7 +282,6 @@ export function DeviceNameSection({
 											startIcon={
 												<Icon name="material-check-circle-outline-rounded" />
 											}
-											sx={{ flex: 1, maxWidth: 400 }}
 											type="submit"
 											variant="contained"
 										>
@@ -297,7 +295,7 @@ export function DeviceNameSection({
 												form.resetField('deviceName')
 												setEditState('idle')
 											}}
-											sx={{ flex: 1, maxWidth: 400 }}
+											startIcon={<Icon name="material-symbols-cancel" />}
 											type="button"
 											variant="outlined"
 										>

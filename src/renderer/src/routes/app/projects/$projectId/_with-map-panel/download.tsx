@@ -1,8 +1,7 @@
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { useExportGeoJSON, useExportZipFile } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Container from '@mui/material/Container'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import IconButton from '@mui/material/IconButton'
@@ -21,12 +20,13 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLUE_GREY, DARK_GREY, GREEN } from '../../../../../colors.ts'
+import { BLUE_05 } from '../../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
 import { Bold, Break } from '../../../../../components/intl-rich-text.tsx'
 import { useAppForm } from '../../../../../hooks/forms.ts'
+import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings.ts'
 import { selectDirectoryMutationOptions } from '../../../../../lib/queries/file-system.ts'
 import { createGlobalMutationsKey } from '../../../../../lib/queries/global-mutations.ts'
@@ -37,8 +37,6 @@ export const Route = createFileRoute(
 )({
 	component: RouteComponent,
 })
-
-const FORM_ID = 'download-data-form'
 
 const DOWNLOAD_DATA_MUTATION_KEY = createGlobalMutationsKey(['download-data'])
 
@@ -103,32 +101,39 @@ function SuccessPanel({
 
 	const showItemInFolder = useMutation(showItemInFolderMutationOptions())
 
+	const iconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 4,
+	})
+
 	return (
-		<Stack
-			direction="column"
-			sx={{ flex: 1, overflow: 'auto', justifyContent: 'space-between' }}
-		>
-			<Container maxWidth="xs">
-				<Stack
-					direction="column"
-					sx={{ padding: 6, alignItems: 'center', flex: 1, gap: 6 }}
-				>
-					<Box sx={{ padding: 6 }}>
-						<Icon
-							name="material-check-circle-rounded"
-							htmlColor={GREEN}
-							size={160}
-						/>
-					</Box>
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto', gap: 10 }}>
+			<Stack
+				direction="column"
+				sx={{
+					alignItems: 'center',
+					flex: 1,
+					gap: 10,
+					paddingBlock: 20,
+					paddingInline: 6,
+				}}
+			>
+				<Stack direction="column" sx={{ alignItems: 'center', gap: 6 }}>
+					<Icon
+						color="success"
+						name="material-check-circle-rounded"
+						size={iconSize}
+					/>
 
 					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center' }}
+						component="h1"
+						variant="heroHeader"
+						sx={{ textAlign: 'center' }}
 					>
 						{intl.formatMessage(m.successPanelTitle)}
 					</Typography>
 
-					<Typography component="p" variant="h2" sx={{ textAlign: 'center' }}>
+					<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
 						{intl.formatMessage(
 							dataDownloaded === 'observations'
 								? m.successPanelDescriptionObservations
@@ -138,42 +143,29 @@ function SuccessPanel({
 							{ b: Bold, br: Break },
 						)}
 					</Typography>
-
-					<Button
-						variant="text"
-						sx={{ maxWidth: 400 }}
-						onClick={() => {
-							showItemInFolder.mutate(savedToPath)
-						}}
-					>
-						{intl.formatMessage(m.successPanelViewInFileManager)}
-					</Button>
 				</Stack>
-			</Container>
 
-			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'column',
-					gap: 4,
-					paddingX: 6,
-					paddingBottom: 6,
-					position: 'sticky',
-					bottom: 0,
-					alignItems: 'center',
-					zIndex: 1,
-				}}
-			>
+				<Button
+					onClick={() => {
+						showItemInFolder.mutate(savedToPath)
+					}}
+					variant="text"
+				>
+					{intl.formatMessage(m.successPanelViewInFileManager)}
+				</Button>
+			</Stack>
+
+			<Stack direction="row" sx={{ justifyContent: 'center', padding: 6 }}>
 				<Button
 					fullWidth
-					sx={{ maxWidth: 400 }}
 					onClick={() => {
 						onDone()
 					}}
+					variant="contained"
 				>
 					{intl.formatMessage(m.successPanelDone)}
 				</Button>
-			</Box>
+			</Stack>
 		</Stack>
 	)
 }
@@ -259,17 +251,24 @@ function DownloadForm({
 		},
 	})
 
+	const backIconSize = useIconSizeBasedOnTypography({
+		variant: 'pageTitle',
+		multiplier: 1.5,
+	})
+
+	const formId = useId()
+
 	return (
 		<>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Stack
+					component="header"
 					direction="row"
-					component="nav"
 					sx={{
 						alignItems: 'center',
-						gap: 4,
+						gap: 2,
 						padding: 4,
-						borderBottom: `1px solid ${BLUE_GREY}`,
+						borderBottom: `1px solid ${BLUE_05}`,
 					}}
 				>
 					<form.Subscribe selector={(state) => state.isSubmitting}>
@@ -281,98 +280,89 @@ function DownloadForm({
 									}
 									onBack()
 								}}
+								sx={{ color: (theme) => theme.palette.text.secondary }}
 							>
-								<Icon name="material-arrow-back" size={30} />
+								<Icon name="material-arrow-back" size={backIconSize} />
 							</IconButton>
 						)}
 					</form.Subscribe>
 
-					<Typography variant="h1" sx={{ fontWeight: 500 }}>
+					<Typography variant="pageTitle">
 						{intl.formatMessage(m.navTitle)}
 					</Typography>
 				</Stack>
 
-				<Stack
-					direction="column"
-					sx={{ flex: 1, justifyContent: 'space-between', overflow: 'auto' }}
-				>
-					<Box sx={{ padding: 6 }}>
-						<Box
-							component="form"
-							id={FORM_ID}
-							noValidate
-							autoComplete="off"
-							onSubmit={(event) => {
-								event.preventDefault()
-								if (form.state.isSubmitting) return
-								form.handleSubmit()
-							}}
-						>
-							<Stack direction="column" sx={{ gap: 10 }}>
-								<form.AppField name="dataToDownload">
-									{(field) => (
-										<FormControl required>
-											<RadioGroup
-												name={field.name}
-												value={field.state.value}
-												onChange={(_event, value) => {
-													field.handleChange(value)
-												}}
-												aria-label={intl.formatMessage(
-													m.downloadOptionsAccessibleLabel,
-												)}
-												onBlur={field.handleBlur}
-											>
-												<Stack direction="column" sx={{ gap: 6 }}>
-													<DownloadOption
-														value="observations"
-														primaryText={intl.formatMessage(
-															m.allObservationsOptionTitle,
-														)}
-														secondaryText={intl.formatMessage(
-															m.allObservationsOptionDescription,
-														)}
-													/>
+				<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+					<Box
+						component="form"
+						id={formId}
+						noValidate
+						autoComplete="off"
+						onSubmit={(event) => {
+							event.preventDefault()
+							if (form.state.isSubmitting) return
+							form.handleSubmit()
+						}}
+						sx={{ flex: 1, overflow: 'auto', padding: 6 }}
+					>
+						<Stack direction="column" sx={{ gap: 10 }}>
+							<form.AppField name="dataToDownload">
+								{(field) => (
+									<FormControl required>
+										<RadioGroup
+											name={field.name}
+											value={field.state.value}
+											onChange={(_event, value) => {
+												field.handleChange(value)
+											}}
+											aria-label={intl.formatMessage(
+												m.downloadOptionsAccessibleLabel,
+											)}
+											onBlur={field.handleBlur}
+										>
+											<Stack direction="column" sx={{ gap: 6 }}>
+												<DownloadOption
+													value="observations"
+													primaryText={intl.formatMessage(
+														m.allObservationsOptionTitle,
+													)}
+													secondaryText={intl.formatMessage(
+														m.allObservationsOptionDescription,
+													)}
+												/>
 
-													<DownloadOption
-														value="observations-with-media"
-														primaryText={intl.formatMessage(
-															m.allObservationsWithMediaOptionTitle,
-														)}
-														secondaryText={intl.formatMessage(
-															m.allObservationsWithMediaOptionDescription,
-														)}
-													/>
+												<DownloadOption
+													value="observations-with-media"
+													primaryText={intl.formatMessage(
+														m.allObservationsWithMediaOptionTitle,
+													)}
+													secondaryText={intl.formatMessage(
+														m.allObservationsWithMediaOptionDescription,
+													)}
+												/>
 
-													<DownloadOption
-														value="tracks"
-														primaryText={intl.formatMessage(
-															m.tracksOptionTitle,
-														)}
-														secondaryText={intl.formatMessage(
-															m.tracksOptionDescription,
-														)}
-													/>
-												</Stack>
-											</RadioGroup>
-										</FormControl>
-									)}
-								</form.AppField>
-							</Stack>
-						</Box>
+												<DownloadOption
+													value="tracks"
+													primaryText={intl.formatMessage(m.tracksOptionTitle)}
+													secondaryText={intl.formatMessage(
+														m.tracksOptionDescription,
+													)}
+												/>
+											</Stack>
+										</RadioGroup>
+									</FormControl>
+								)}
+							</form.AppField>
+						</Stack>
 					</Box>
 
 					<Box
 						sx={{
+							border: `1px solid ${BLUE_05}`,
 							display: 'flex',
-							flexDirection: 'column',
-							gap: 4,
-							paddingX: 6,
-							paddingBottom: 6,
-							position: 'sticky',
-							bottom: 0,
-							alignItems: 'center',
-							zIndex: 1,
+							flexDirection: 'row',
+							justifyContent: 'center',
+							padding: 6,
 						}}
 					>
 						<form.Subscribe
@@ -382,15 +372,13 @@ function DownloadForm({
 						>
 							{([canSubmit, isSubmitting]) => (
 								<Button
-									type="submit"
-									form={FORM_ID}
-									fullWidth
-									variant="contained"
+									aria-disabled={!canSubmit}
+									form={formId}
 									loading={isSubmitting}
 									loadingPosition="start"
 									startIcon={<Icon name="material-file-download" />}
-									aria-disabled={!canSubmit}
-									sx={{ maxWidth: 400 }}
+									type="submit"
+									variant="contained"
 								>
 									{intl.formatMessage(m.download)}
 								</Button>
@@ -428,18 +416,18 @@ function DownloadOption({
 	secondaryText: string
 }) {
 	return (
-		<Box sx={{ padding: 6, border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}>
+		<Box sx={{ padding: 6, border: `1px solid ${BLUE_05}`, borderRadius: 2 }}>
 			<FormControlLabel
 				value={value}
 				control={<Radio />}
 				label={
-					<Stack direction="column">
-						<Typography sx={{ fontWeight: 500 }}>{primaryText}</Typography>
-						<Typography color={DARK_GREY} aria-hidden>
-							{secondaryText}
-						</Typography>
+					<Stack direction="column" sx={{ gap: 1 }}>
+						<Typography variant="cardHeader">{primaryText}</Typography>
+
+						<Typography aria-hidden>{secondaryText}</Typography>
 					</Stack>
 				}
+				sx={{ gap: 2 }}
 			/>
 		</Box>
 	)

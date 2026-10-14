@@ -11,7 +11,7 @@ import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARKER_ORANGE, DARK_GREY } from '../../../../colors.ts'
+import { BLUE_05, ORANGE_00 } from '../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../components/icon.tsx'
@@ -48,8 +48,8 @@ export function DataAndPrivacySection() {
 	const openExternalURL = useMutation(openExternalURLMutationOptions())
 
 	const iconSize = useIconSizeBasedOnTypography({
-		multiplier: 2,
-		typographyVariant: 'body1',
+		variant: 'cardHeader',
+		multiplier: 3,
 	})
 
 	return (
@@ -58,7 +58,7 @@ export function DataAndPrivacySection() {
 				<Stack
 					direction="row"
 					sx={{
-						border: `1px solid ${BLUE_GREY}`,
+						border: `1px solid ${BLUE_05}`,
 						borderRadius: 2,
 						gap: 4,
 						padding: 6,
@@ -66,12 +66,12 @@ export function DataAndPrivacySection() {
 				>
 					<Icon
 						name="material-symbols-encrypted-weight200"
-						sx={{ height: iconSize, width: iconSize }}
-						htmlColor={DARKER_ORANGE}
+						htmlColor={ORANGE_00}
+						size={iconSize}
 					/>
 
 					<Stack direction="column" sx={{ alignItems: 'flex-start', gap: 4 }}>
-						<Typography component="h2" variant="h3" sx={{ fontWeight: 500 }}>
+						<Typography component="h2" variant="cardHeader">
 							{intl.formatMessage(m.dataAndPrivacyDescription)}
 						</Typography>
 
@@ -98,50 +98,48 @@ export function DataAndPrivacySection() {
 					<Stack
 						component="section"
 						direction="column"
-						sx={{ flex: 1, border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
+						sx={{ flex: 1, border: `1px solid ${BLUE_05}`, borderRadius: 2 }}
 					>
-						<Stack direction="column" sx={{ padding: 6, gap: 2, flex: 1 }}>
-							<Typography
-								component="h3"
-								variant="body1"
-								sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-							>
+						<Stack direction="column" sx={{ padding: 6, gap: 4, flex: 1 }}>
+							<Typography component="h3" variant="cardHeader">
 								{intl.formatMessage(m.dataAndPrivacyDiagnosticInformationTitle)}
 							</Typography>
 
-							<Box>
-								<Typography color="textSecondary">
+							<Stack direction="column" sx={{ gap: 4 }}>
+								<Typography>
 									{intl.formatMessage(
 										m.dataAndPrivacyDiagnosticInformationDescription,
 									)}
 								</Typography>
 
-								<List
-									disablePadding
-									sx={{ listStyleType: 'disc', paddingX: 8, color: DARK_GREY }}
+								<Stack
+									component={List}
+									direction="column"
+									sx={{
+										color: (theme) => theme.palette.text.secondary,
+										gap: 4,
+										listStyleType: 'disc',
+										paddingInline: 8,
+									}}
 								>
-									<ListItem disablePadding sx={{ display: 'list-item' }}>
-										<Typography color="textSecondary">
-											{intl.formatMessage(
-												m.dataAndPrivacyDiagnosticInformationPersonalInfo,
-											)}
-										</Typography>
+									<ListItem sx={{ display: 'list-item' }}>
+										{intl.formatMessage(
+											m.dataAndPrivacyDiagnosticInformationPersonalInfo,
+										)}
 									</ListItem>
 
-									<ListItem disablePadding sx={{ display: 'list-item' }}>
-										<Typography color="textSecondary">
-											{intl.formatMessage(
-												m.dataAndPrivacyDiagnosticInformationOptOut,
-											)}
-										</Typography>
+									<ListItem sx={{ display: 'list-item' }}>
+										{intl.formatMessage(
+											m.dataAndPrivacyDiagnosticInformationOptOut,
+										)}
 									</ListItem>
-								</List>
-							</Box>
+								</Stack>
+							</Stack>
 						</Stack>
 
-						<Divider variant="fullWidth" sx={{ backgroundColor: BLUE_GREY }} />
+						<Divider />
 
-						<Box sx={{ paddingX: 6, paddingY: 4 }}>
+						<Box sx={{ paddingBlock: 4, paddingInline: 6 }}>
 							<FormGroup>
 								<FormControlLabel
 									control={<Checkbox checked={diagnosticsEnabled} />}
@@ -165,48 +163,49 @@ export function DataAndPrivacySection() {
 					<Stack
 						component="section"
 						direction="column"
-						sx={{ flex: 1, border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
+						sx={{ flex: 1, border: `1px solid ${BLUE_05}`, borderRadius: 2 }}
 					>
-						<Stack direction="column" sx={{ padding: 6, gap: 2, flex: 1 }}>
-							<Typography
-								component="h3"
-								variant="body1"
-								sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-							>
+						<Stack direction="column" sx={{ padding: 6, gap: 4, flex: 1 }}>
+							<Typography component="h3" variant="cardHeader">
 								{intl.formatMessage(m.dataAndPrivacyAppUsageTitle)}
 							</Typography>
 
-							<Box>
-								<Typography color="textSecondary">
+							<Stack direction="column" sx={{ gap: 4 }}>
+								<Typography>
 									{intl.formatMessage(m.dataAndPrivacyAppUsageDescription)}
 								</Typography>
 
-								<List
-									disablePadding
-									sx={{ listStyleType: 'disc', paddingX: 8, color: DARK_GREY }}
+								<Stack
+									component={List}
+									direction="column"
+									sx={{
+										gap: 4,
+										listStyleType: 'disc',
+										paddingInline: 8,
+									}}
 								>
-									<ListItem disablePadding sx={{ display: 'list-item' }}>
-										<Typography color="textSecondary">
+									<ListItem sx={{ display: 'list-item' }}>
+										<Typography>
 											{intl.formatMessage(
 												m.dataAndPrivacyAppUsageDetailsIdNumbers,
 											)}
 										</Typography>
 									</ListItem>
 
-									<ListItem disablePadding sx={{ display: 'list-item' }}>
-										<Typography color="textSecondary">
+									<ListItem sx={{ display: 'list-item' }}>
+										<Typography>
 											{intl.formatMessage(
 												m.dataAndPrivacyAppUsageDetailsIpAddresses,
 											)}
 										</Typography>
 									</ListItem>
-								</List>
-							</Box>
+								</Stack>
+							</Stack>
 						</Stack>
 
-						<Divider variant="fullWidth" sx={{ backgroundColor: BLUE_GREY }} />
+						<Divider />
 
-						<Box sx={{ paddingX: 6, paddingY: 4 }}>
+						<Box sx={{ paddingBlock: 4, paddingInline: 6 }}>
 							<FormGroup>
 								<FormControlLabel
 									control={

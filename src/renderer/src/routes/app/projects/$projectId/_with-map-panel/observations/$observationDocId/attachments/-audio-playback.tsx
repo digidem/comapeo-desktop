@@ -10,19 +10,19 @@ import {
 import { useMediaRef } from 'media-chrome/react/media-store'
 
 import {
-	BLACK,
-	BLUE_GREY,
-	COMAPEO_BLUE,
-	WHITE,
-} from '../../../../../../../../colors.ts'
+	BLACK_00,
+	BLUE_03,
+	BLUE_05,
+	WHITE_00,
+} from '../../../../../../../../../../shared/colors.ts'
 
 const StyledMediaController = styled(MediaController)(({ theme }) => ({
-	'--media-background-color': WHITE,
+	'--media-background-color': WHITE_00,
 	'--media-control-hover-background': theme.palette.action.hover,
-	'--media-focus-box-shadow': `inset 0 0 0 2px ${COMAPEO_BLUE}`,
+	'--media-focus-box-shadow': `inset 0 0 0 2px ${BLUE_03}`,
 	'--media-font-family': 'Rubik Variable, sans-serif',
-	'--media-primary-color': BLACK,
-	'--media-secondary-color': WHITE,
+	'--media-primary-color': BLACK_00,
+	'--media-secondary-color': WHITE_00,
 	padding: theme.spacing(2),
 }))
 
@@ -32,10 +32,10 @@ const StyledMediaPlayButton = styled(MediaPlayButton)(() => ({
 }))
 
 const StyledMediaTimeRange = styled(MediaTimeRange)(() => ({
-	'--media-range-bar-color': COMAPEO_BLUE,
-	'--media-range-thumb-background': COMAPEO_BLUE,
-	'--media-range-thumb': COMAPEO_BLUE,
-	'--media-range-track-background': BLUE_GREY,
+	'--media-range-bar-color': BLUE_03,
+	'--media-range-thumb-background': BLUE_03,
+	'--media-range-thumb': BLUE_03,
+	'--media-range-track-background': BLUE_05,
 	'--media-range-track-border-radius': '8px',
 }))
 

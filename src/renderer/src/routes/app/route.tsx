@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 import { captureException } from '@sentry/react'
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
-import { WHITE } from '../../colors.ts'
+import { WHITE_00 } from '../../../../shared/colors.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo.ts'
 import { getOnboardedAtQueryOptions } from '../../lib/queries/user.ts'
 import { ProjectInviteDialog } from './-project-invite-dialog.tsx'
@@ -59,7 +59,7 @@ export const Route = createFileRoute('/app')({
 
 function RouteComponent() {
 	return (
-		<Box sx={{ backgroundColor: WHITE, height: '100%' }}>
+		<Box sx={{ background: WHITE_00, height: '100%' }}>
 			<Box sx={{ display: 'flex', height: '100%', overflow: 'auto' }}>
 				<Outlet />
 

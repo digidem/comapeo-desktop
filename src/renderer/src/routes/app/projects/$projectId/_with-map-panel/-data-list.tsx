@@ -48,13 +48,12 @@ import {
 
 import { SyncedIndicatorLine } from '../../-shared/synced-indicator-line.tsx'
 import {
-	BLACK,
-	BLUE_GREY,
-	DARK_GREY,
-	LIGHT_COMAPEO_BLUE,
-	LIGHT_GREY,
-	WHITE,
-} from '../../../../../colors.ts'
+	BLACK_00,
+	BLACK_03,
+	BLUE_05,
+	BLUE_06,
+	WHITE_00,
+} from '../../../../../../../shared/colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -152,7 +151,7 @@ export function DataList({
 		return [
 			{
 				id: NOT_CATEGORY_FILTER_ID,
-				color: BLACK,
+				color: BLACK_00,
 				name: intl.formatMessage(m.categoriesFilterNotCategorized),
 				matchCount: groupedByFilterIdCount[NOT_CATEGORY_FILTER_ID] || 0,
 			},
@@ -269,7 +268,7 @@ export function DataList({
 	)
 
 	const downloadButtonSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		variant: 'pageTitle',
 		multiplier: 1.25,
 	})
 
@@ -354,6 +353,16 @@ export function DataList({
 			).size === 0
 		: true
 
+	const categoryIconSize = useIconSizeBasedOnTypography({
+		variant: 'cardHeader',
+		multiplier: 2,
+	})
+
+	const noResultsIconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 4,
+	})
+
 	return (
 		<>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
@@ -366,9 +375,10 @@ export function DataList({
 					}}
 				>
 					<Stack
+						component="header"
 						direction="column"
 						sx={{
-							borderBottom: `1px solid ${BLUE_GREY}`,
+							borderBottom: `1px solid ${BLUE_05}`,
 							gap: 4,
 							paddingBlock: 4,
 							paddingInline: 6,
@@ -379,26 +389,20 @@ export function DataList({
 								direction="row"
 								sx={{ alignItems: 'center', gap: 4, flexWrap: 'wrap' }}
 							>
-								<Typography variant="h1" sx={{ fontWeight: 500 }}>
+								<Typography variant="pageTitle">
 									{intl.formatMessage(m.listTitle)}
 								</Typography>
 
 								<Box
 									sx={{
+										background:
+											sortedListData.length === 0 ? BLACK_03 : BLUE_06,
 										borderRadius: 2,
-										backgroundColor:
-											sortedListData.length === 0
-												? LIGHT_GREY
-												: LIGHT_COMAPEO_BLUE,
-										padding: 2,
+										paddingBlock: 1,
+										paddingInline: 2,
 									}}
 								>
-									<Typography
-										color={
-											sortedListData.length === 0 ? 'textDisabled' : 'primary'
-										}
-										sx={{ fontWeight: 500 }}
-									>
+									<Typography variant="detailCopy" color="textTertiary">
 										{intl.formatMessage(m.resultsCount, {
 											count: sortedListData.length,
 										})}
@@ -413,6 +417,7 @@ export function DataList({
 								<IconButtonLink
 									to="/app/projects/$projectId/download"
 									aria-label={intl.formatMessage(m.downloadObservations)}
+									sx={{ color: (theme) => theme.palette.text.tertiary }}
 								>
 									<Icon
 										name="material-file-download"
@@ -422,7 +427,10 @@ export function DataList({
 							</Tooltip>
 						</Stack>
 
-						<Stack direction="row" sx={{ gap: 4, flex: 1, flexWrap: 'wrap' }}>
+						<Stack
+							direction="row"
+							sx={{ alignItems: 'center', gap: 4, flex: 1, flexWrap: 'wrap' }}
+						>
 							<CategoriesFilterSelect
 								projectId={projectId}
 								selected={selectedCategoryFilterOptions}
@@ -484,16 +492,16 @@ export function DataList({
 								gap: 2,
 								paddingInline: 6,
 								paddingBlock: 4,
-								borderBottom: `1px solid ${BLUE_GREY}`,
+								borderBottom: `1px solid ${BLUE_05}`,
 							}}
 						>
 							<Button
-								variant="outlined"
-								sx={{ flexShrink: 0, fontWeight: 'normal' }}
 								onClick={() => {
 									unsetCategoriesFilter()
 									unsetDateFilter()
 								}}
+								sx={{ flexShrink: 0 }}
+								variant="outlined"
 							>
 								{intl.formatMessage(m.clearFilters)}
 							</Button>
@@ -511,7 +519,7 @@ export function DataList({
 													intl.formatMessage,
 												)
 									}
-									color={LIGHT_GREY}
+									color={BLACK_03}
 									onRemove={() => {
 										unsetDateFilter()
 									}}
@@ -584,7 +592,7 @@ export function DataList({
 												color={
 													matchingFilterOption.color
 														? alpha(matchingFilterOption.color, 0.1)
-														: WHITE
+														: WHITE_00
 												}
 												label={matchingFilterOption.name}
 												onRemove={() => {
@@ -608,17 +616,16 @@ export function DataList({
 					{sortedListData.length > 0 ? (
 						<Box
 							sx={{
-								overflow: 'auto',
+								background: BLACK_03,
 								display: 'flex',
-								flexDirection: 'column',
 								flex: 1,
-								backgroundColor: LIGHT_GREY,
+								flexDirection: 'column',
+								overflow: 'auto',
 							}}
 						>
 							<List
 								component="ul"
 								ref={listRef}
-								disablePadding
 								sx={{ flex: 1, overflow: 'auto', scrollbarColor: 'initial' }}
 							>
 								<Box
@@ -645,7 +652,9 @@ export function DataList({
 
 										if (type === 'track') {
 											categorySlot = category ? (
-												<CategoryIconContainer color={category.color || BLACK}>
+												<CategoryIconContainer
+													color={category.color || BLACK_00}
+												>
 													{category.iconRef?.docId ? (
 														<CategoryIconImage
 															projectId={projectId}
@@ -656,12 +665,18 @@ export function DataList({
 															imageStyle={{ aspectRatio: 1, width: '100%' }}
 														/>
 													) : (
-														<Icon name="material-hiking" size={40} />
+														<Icon
+															name="material-hiking"
+															size={categoryIconSize}
+														/>
 													)}
 												</CategoryIconContainer>
 											) : (
-												<CategoryIconContainer color={BLACK}>
-													<Icon name="material-hiking" size={40} />
+												<CategoryIconContainer color={BLACK_00}>
+													<Icon
+														name="material-hiking"
+														size={categoryIconSize}
+													/>
 												</CategoryIconContainer>
 											)
 										} else {
@@ -679,7 +694,7 @@ export function DataList({
 											} else {
 												categorySlot = category ? (
 													<CategoryIconContainer
-														color={category.color || BLACK}
+														color={category.color || BLACK_00}
 													>
 														{category.iconRef?.docId ? (
 															<CategoryIconImage
@@ -693,15 +708,15 @@ export function DataList({
 														) : (
 															<Icon
 																name="material-symbols-indeterminate-question-box"
-																size={40}
+																size={categoryIconSize}
 															/>
 														)}
 													</CategoryIconContainer>
 												) : (
-													<CategoryIconContainer color={BLACK}>
+													<CategoryIconContainer color={BLACK_00}>
 														<Icon
 															name="material-symbols-indeterminate-question-box"
-															size={40}
+															size={categoryIconSize}
 														/>
 													</CategoryIconContainer>
 												)
@@ -712,18 +727,17 @@ export function DataList({
 											<Box
 												key={row.key}
 												sx={{
+													background: WHITE_00,
+													height: `${row.size}px`,
+													left: 0,
 													position: 'absolute',
 													top: 0,
-													left: 0,
-													width: '100%',
-													height: `${row.size}px`,
 													transform: `translateY(${row.start}px)`,
-													backgroundColor: WHITE,
+													width: '100%',
 												}}
 											>
 												<ListItemButton
 													data-docid={docId}
-													disableGutters
 													disableTouchRipple
 													selected={isHighlighted}
 													autoFocus={isHighlighted}
@@ -758,7 +772,7 @@ export function DataList({
 														}
 													}}
 													sx={{
-														borderBottom: `1px solid ${LIGHT_GREY}`,
+														borderBottom: `1px solid ${BLACK_03}`,
 														padding: 4,
 													}}
 												>
@@ -776,16 +790,17 @@ export function DataList({
 															direction="column"
 															sx={{
 																flex: 1,
+																gap: 1,
 																justifyContent: 'center',
 																overflow: 'hidden',
 															}}
 														>
 															<Typography
+																variant="cardHeader"
 																sx={{
-																	fontWeight: 500,
+																	overflow: 'hidden',
 																	textOverflow: 'ellipsis',
 																	whiteSpace: 'nowrap',
-																	overflow: 'hidden',
 																}}
 															>
 																{title}
@@ -793,9 +808,9 @@ export function DataList({
 
 															<Typography
 																sx={{
+																	overflow: 'hidden',
 																	textOverflow: 'ellipsis',
 																	whiteSpace: 'nowrap',
-																	overflow: 'hidden',
 																}}
 															>
 																{intl.formatDate(createdAt, {
@@ -811,33 +826,19 @@ export function DataList({
 
 														<Box
 															sx={{
-																display: 'flex',
-																justifyContent: 'center',
-																alignItems: 'center',
-																width: CATEGORY_CONTAINER_SIZE_PX,
 																aspectRatio: 1,
+																display: 'grid',
+																placeItems: 'center',
+																width: CATEGORY_CONTAINER_SIZE_PX,
 															}}
 														>
-															<Box sx={{ flex: 1 }}>
-																<Suspense
-																	fallback={
-																		<Box
-																			sx={{
-																				display: 'flex',
-																				justifyContent: 'center',
-																				alignItems: 'center',
-																			}}
-																		>
-																			<CircularProgress
-																				disableShrink
-																				size={30}
-																			/>
-																		</Box>
-																	}
-																>
-																	{categorySlot}
-																</Suspense>
-															</Box>
+															<Suspense
+																fallback={
+																	<CircularProgress size={categoryIconSize} />
+																}
+															>
+																{categorySlot}
+															</Suspense>
 														</Box>
 													</Stack>
 												</ListItemButton>
@@ -862,33 +863,29 @@ export function DataList({
 								>
 									<Box
 										sx={{
-											display: 'flex',
-
-											border: `4px solid ${LIGHT_GREY}`,
+											border: `4px solid ${BLACK_03}`,
 											borderRadius: '50%',
+											display: 'flex',
 											padding: 10,
 										}}
 									>
 										<Icon
 											name="noun-project-notebook"
-											size={64}
-											htmlColor={BLUE_GREY}
+											size={noResultsIconSize}
+											htmlColor={BLUE_05}
 										/>
 									</Box>
 
-									<Typography
-										variant="h1"
-										sx={{ fontWeight: 500, textAlign: 'center' }}
-									>
+									<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
 										{intl.formatMessage(m.noResultsTitle)}
 									</Typography>
 
 									<Button
-										variant="text"
 										onClick={() => {
 											unsetCategoriesFilter()
 											unsetDateFilter()
 										}}
+										variant="text"
 									>
 										{intl.formatMessage(m.noResultsResetFilters)}
 									</Button>
@@ -963,7 +960,7 @@ function OutdatedFilterPill({
 	return (
 		<FilterPill
 			outdated
-			color={category.color ? alpha(category.color, 0.1) : WHITE}
+			color={category.color ? alpha(category.color, 0.1) : WHITE_00}
 			label={category.name}
 			onRemove={onRemove}
 		/>
@@ -984,8 +981,7 @@ function FilterPill({
 	const intl = useIntl()
 
 	const removeFilterButtonSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
-		multiplier: 0.75,
+		variant: 'bodyCopy',
 	})
 
 	const removeButton = (
@@ -994,17 +990,13 @@ function FilterPill({
 				onRemove()
 			}}
 			sx={{
+				border: (theme) => `1px solid ${theme.palette.text.tertiary}`,
+				borderRadius: '50%',
 				flex: 0,
 				padding: 0,
-				borderRadius: '50%',
-				border: `1px solid ${DARK_GREY}`,
 			}}
 		>
-			<Icon
-				name="material-close"
-				htmlColor={DARK_GREY}
-				size={removeFilterButtonSize}
-			/>
+			<Icon name="material-close" size={removeFilterButtonSize} />
 		</IconButton>
 	)
 
@@ -1018,15 +1010,19 @@ function FilterPill({
 					direction="row"
 					sx={{
 						alignItems: 'center',
-						border: `1px solid ${BLUE_GREY}`,
+						border: `1px solid ${BLUE_05}`,
 						borderRadius: 2,
 						paddingInline: 4,
 						gap: 4,
 					}}
 				>
 					<Typography
-						color="textSecondary"
-						sx={{ fontWeight: 500, whiteSpace: 'nowrap', fontStyle: 'italic' }}
+						color="textTertiary"
+						sx={{
+							fontStyle: 'italic',
+							fontWeight: (theme) => theme.typography.fontWeightMedium,
+							whiteSpace: 'nowrap',
+						}}
 					>
 						{label}
 					</Typography>
@@ -1042,16 +1038,19 @@ function FilterPill({
 			direction="row"
 			sx={{
 				alignItems: 'center',
-				border: `1px solid ${BLUE_GREY}`,
+				background: outdated ? undefined : color,
+				border: `1px solid ${BLUE_05}`,
 				borderRadius: 2,
 				paddingInline: 4,
 				gap: 4,
-				backgroundColor: outdated ? undefined : color,
 			}}
 		>
 			<Typography
-				color="textPrimary"
-				sx={{ fontWeight: 500, whiteSpace: 'nowrap' }}
+				color="textSecondary"
+				sx={{
+					fontWeight: (theme) => theme.typography.fontWeightMedium,
+					whiteSpace: 'nowrap',
+				}}
 			>
 				{label}
 			</Typography>
@@ -1103,7 +1102,7 @@ function ObservationCategoryWithAttachmentsPreview({
 	)
 
 	const categoryIcon = (
-		<CategoryIconContainer color={category?.color || BLACK}>
+		<CategoryIconContainer color={category?.color || BLACK_00}>
 			{iconImage}
 		</CategoryIconContainer>
 	)
@@ -1134,13 +1133,13 @@ function ObservationCategoryWithAttachmentsPreview({
 									shouldStack
 										? {
 												aspectRatio: 1,
-												border: `1px solid ${BLUE_GREY}`,
+												border: `1px solid ${BLUE_05}`,
 												width: '80%',
 												top: index * 5,
 												left: index * 5,
 											}
 										: {
-												border: `1px solid ${BLUE_GREY}`,
+												border: `1px solid ${BLUE_05}`,
 												top: 0,
 												right: 0,
 												left: 0,
@@ -1169,7 +1168,7 @@ function ObservationCategoryWithAttachmentsPreview({
 												alignItems: 'center',
 												height: '100%',
 												width: '100%',
-												bgcolor: WHITE,
+												background: WHITE_00,
 											}}
 										>
 											<Icon name="material-error" color="error" />
@@ -1226,6 +1225,7 @@ function ObservationCategoryWithAttachmentsPreview({
 	)
 }
 
+// TODO: Refactor to use Menu like project switcher
 function CategoriesFilterSelect({
 	selected,
 	options,
@@ -1248,7 +1248,7 @@ function CategoriesFilterSelect({
 	const dataOptionPrefixId = useId()
 
 	const categoryIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
+		variant: 'bodyCopy',
 		multiplier: 0.75,
 	})
 
@@ -1262,17 +1262,17 @@ function CategoriesFilterSelect({
 			multiSelect
 			displayedValue={
 				<Stack direction="row" sx={{ gap: 2 }}>
-					<Icon
-						aria-hidden
-						name="material-symbols-apps"
-						htmlColor={BLUE_GREY}
-					/>
+					<Icon aria-hidden name="material-symbols-apps" htmlColor={BLUE_05} />
 
-					{allSelected
-						? intl.formatMessage(m.categoriesFilterAll)
-						: intl.formatMessage(m.categoriesFilterValue, {
-								count: selected.length,
-							})}
+					<Typography
+						sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
+					>
+						{allSelected
+							? intl.formatMessage(m.categoriesFilterAll)
+							: intl.formatMessage(m.categoriesFilterValue, {
+									count: selected.length,
+								})}
+					</Typography>
 				</Stack>
 			}
 			hiddenInput={
@@ -1291,9 +1291,6 @@ function CategoriesFilterSelect({
 			}
 			header={
 				<Button
-					variant="text"
-					size="small"
-					sx={{ maxWidth: 400 }}
 					onClick={() => {
 						if (selected.length === 0) {
 							onSelectAll()
@@ -1301,6 +1298,8 @@ function CategoriesFilterSelect({
 							onDeselectAll()
 						}
 					}}
+					size="small"
+					variant="text"
 				>
 					{intl.formatMessage(
 						selected.length === 0
@@ -1310,14 +1309,18 @@ function CategoriesFilterSelect({
 				</Button>
 			}
 			footer={
-				<Button
-					fullWidth
-					variant="outlined"
-					sx={{ maxWidth: 400 }}
-					onClick={onAdvancedClick}
+				<Stack
+					direction="row"
+					sx={{
+						alignItems: 'center',
+						display: 'flex',
+						justifyContent: 'center',
+					}}
 				>
-					{intl.formatMessage(m.categoriesFilterAdvanced)}
-				</Button>
+					<Button fullWidth onClick={onAdvancedClick} variant="outlined">
+						{intl.formatMessage(m.categoriesFilterAdvanced)}
+					</Button>
+				</Stack>
 			}
 		>
 			{options.map((o) => {
@@ -1327,7 +1330,6 @@ function CategoriesFilterSelect({
 					<ListItemButton
 						key={o.id}
 						role="option"
-						disableGutters
 						disableRipple
 						tabIndex={-1}
 						selected={isSelected}
@@ -1358,7 +1360,7 @@ function CategoriesFilterSelect({
 								}}
 							>
 								<Box aria-hidden>
-									<CategoryIconContainer color={o.color || BLACK}>
+									<CategoryIconContainer color={o.color || BLACK_00}>
 										{o.iconId ? (
 											<Suspense
 												fallback={
@@ -1369,10 +1371,7 @@ function CategoriesFilterSelect({
 															alignItems: 'center',
 														}}
 													>
-														<CircularProgress
-															disableShrink
-															size={categoryIconSize}
-														/>
+														<CircularProgress size={categoryIconSize} />
 													</Box>
 												}
 											>
@@ -1423,9 +1422,9 @@ function CategoriesFilterSelect({
 									</Typography>
 
 									<Typography
+										color="textTertiary"
 										component="span"
 										variant="inherit"
-										color="textSecondary"
 										sx={{ fontVariantNumeric: 'tabular-nums' }}
 									>
 										{o.matchCount}
@@ -1463,6 +1462,7 @@ function getDateFilterOptionDisplayedValue(
 	}
 }
 
+// TODO: Refactor to use Menu like project switcher
 function DateFilterSelect({
 	todayDate,
 	onAdvancedClick,
@@ -1560,10 +1560,14 @@ function DateFilterSelect({
 					<Icon
 						aria-hidden
 						name="material-symbols-schedule"
-						htmlColor={BLUE_GREY}
+						htmlColor={BLUE_05}
 					/>
 
-					{selectedOption.displayedValue}
+					<Typography
+						sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
+					>
+						{selectedOption.displayedValue}
+					</Typography>
 				</Stack>
 			}
 			hiddenInput={
@@ -1600,14 +1604,17 @@ function DateFilterSelect({
 				</>
 			}
 			footer={
-				<Button
-					fullWidth
-					variant="outlined"
-					sx={{ maxWidth: 400 }}
-					onClick={onAdvancedClick}
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'center',
+					}}
 				>
-					{intl.formatMessage(m.categoriesFilterAdvanced)}
-				</Button>
+					<Button fullWidth onClick={onAdvancedClick} variant="outlined">
+						{intl.formatMessage(m.categoriesFilterAdvanced)}
+					</Button>
+				</Box>
 			}
 			onClose={() => {
 				if (value?.type !== 'range') {
@@ -1622,12 +1629,11 @@ function DateFilterSelect({
 		>
 			<ListItemButton
 				role="option"
-				disableGutters
 				disableRipple
 				selected={selectedOption.id === 'from-start'}
 				aria-selected={value === undefined}
 				tabIndex={-1}
-				sx={{ padding: 4, borderBottom: `1px solid ${BLUE_GREY}` }}
+				sx={{ padding: 4, borderBottom: `1px solid ${BLUE_05}` }}
 				data-option-id={`${dataItemPrefixId}-from-start`}
 				onClick={() => {
 					if (selectedOption.id === 'from-start') {
@@ -1663,12 +1669,11 @@ function DateFilterSelect({
 			{customRangeOption ? (
 				<ListItemButton
 					role="option"
-					disableGutters
 					disableRipple
 					tabIndex={-1}
 					selected={selectedOption.id === 'custom'}
 					aria-selected={selectedOption.id === 'custom'}
-					sx={{ padding: 4, borderBottom: `1px solid ${BLUE_GREY}` }}
+					sx={{ padding: 4, borderBottom: `1px solid ${BLUE_05}` }}
 					data-option-id={`${dataItemPrefixId}-custom`}
 					onClick={() => {
 						if (selectedOption.id === 'custom') {
@@ -1707,7 +1712,6 @@ function DateFilterSelect({
 
 			<ListItemButton
 				role="option"
-				disableGutters
 				disableRipple
 				tabIndex={-1}
 				selected={selectedOption.id === 'last-7-days'}
@@ -1751,7 +1755,6 @@ function DateFilterSelect({
 
 			<ListItemButton
 				role="option"
-				disableGutters
 				disableRipple
 				tabIndex={-1}
 				sx={{ padding: 4 }}
@@ -1795,7 +1798,6 @@ function DateFilterSelect({
 
 			<ListItemButton
 				role="option"
-				disableGutters
 				disableRipple
 				selected={selectedOption.id === 'same-month'}
 				aria-selected={selectedOption.id === 'same-month'}
@@ -1838,7 +1840,6 @@ function DateFilterSelect({
 
 			<ListItemButton
 				role="option"
-				disableGutters
 				disableRipple
 				tabIndex={-1}
 				sx={{ padding: 4 }}

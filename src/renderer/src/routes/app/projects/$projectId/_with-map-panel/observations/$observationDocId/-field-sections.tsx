@@ -37,18 +37,24 @@ export function ReadOnlyFieldSection({
 	label: string
 	value: string | undefined
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	return (
 		<Stack direction="column" sx={{ gap: 2 }}>
-			<Typography component="h3" variant="body1" sx={{ fontWeight: 450 }}>
+			<Typography
+				sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
+			>
 				{label}
 			</Typography>
 
 			<Box sx={{ padding: 2 }}>
-				<Typography sx={{ fontStyle: value ? undefined : 'italic' }}>
-					{value || t(m.fieldAnswerNoAnswer)}
-				</Typography>
+				{value ? (
+					<Typography>{value}</Typography>
+				) : (
+					<Typography color="textTertiary" sx={{ fontStyle: 'italic' }}>
+						{intl.formatMessage(m.fieldSectionNoAnswer)}
+					</Typography>
+				)}
 			</Box>
 		</Stack>
 	)
@@ -305,14 +311,12 @@ export function EditableFieldSection({
 				}}
 				sectionTitle={
 					<Typography
-						component="span"
-						variant="inherit"
-						sx={{ fontWeight: 450 }}
+						sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
 					>
 						{field.label}
 					</Typography>
 				}
-				tooltipText={intl.formatMessage(m.editNotesTooltip)}
+				tooltipText={intl.formatMessage(m.fieldSectionClickToEdit)}
 				renderWhenIdle={() => {
 					if (
 						updateObservationField.status === 'pending' ||
@@ -339,14 +343,11 @@ export function EditableFieldSection({
 							})
 						}
 
-						return (
-							<Typography
-								sx={{
-									fontStyle: displayedVariableValue ? undefined : 'italic',
-								}}
-							>
-								{displayedVariableValue ||
-									intl.formatMessage(m.fieldAnswerNoAnswer)}
+						return displayedVariableValue ? (
+							<Typography>{displayedVariableValue}</Typography>
+						) : (
+							<Typography color="textTertiary" sx={{ fontStyle: 'italic' }}>
+								{intl.formatMessage(m.fieldSectionNoAnswer)}
 							</Typography>
 						)
 					}
@@ -375,13 +376,11 @@ export function EditableFieldSection({
 						})
 					}
 
-					return (
-						<Typography
-							sx={{
-								fontStyle: displayedTagValue ? undefined : 'italic',
-							}}
-						>
-							{displayedTagValue || intl.formatMessage(m.fieldAnswerNoAnswer)}
+					return displayedTagValue ? (
+						<Typography>{displayedTagValue}</Typography>
+					) : (
+						<Typography color="textTertiary" sx={{ fontStyle: 'italic' }}>
+							{intl.formatMessage(m.fieldSectionNoAnswer)}
 						</Typography>
 					)
 				}}
@@ -410,13 +409,13 @@ export function EditableFieldSection({
 }
 
 const m = defineMessages({
-	fieldAnswerNoAnswer: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-field-sections.fieldAnswerNoAnswer',
+	fieldSectionNoAnswer: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.fieldSectionNoAnswer',
 		defaultMessage: 'No answer',
 		description: 'Fallback text displayed if field has no meaningful value.',
 	},
-	editNotesTooltip: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-field-sections.editNotesTooltip',
+	fieldSectionClickToEdit: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.fieldSectionClickToEdit',
 		defaultMessage: 'Click to Edit',
 		description: 'Text for tooltip when hovering over notes.',
 	},

@@ -13,12 +13,7 @@ import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import {
-	BLACK,
-	BLUE_GREY,
-	LIGHT_COMAPEO_BLUE,
-	LIGHT_GREY,
-} from '../../../../../../../colors.ts'
+import { BLUE_05, BLUE_06 } from '../../../../../../../../../shared/colors.ts'
 import { Icon } from '../../../../../../../components/icon.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../../../hooks/icon.ts'
 import { useBrowserNetInfo } from '../../../../../../../hooks/network.ts'
@@ -45,8 +40,8 @@ function RouteComponent() {
 	const { projectId } = Route.useParams()
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
-		multiplier: 1.25,
+		variant: 'pageTitle',
+		multiplier: 1.5,
 	})
 
 	return (
@@ -56,10 +51,9 @@ function RouteComponent() {
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_GREY}`,
-					gap: 4,
-					paddingBlock: 4,
-					paddingInline: 6,
+					borderBottom: `1px solid ${BLUE_05}`,
+					gap: 2,
+					padding: 4,
 				}}
 			>
 				<IconButton
@@ -76,15 +70,12 @@ function RouteComponent() {
 							replace: true,
 						})
 					}}
+					sx={{ color: (theme) => theme.palette.text.secondary }}
 				>
-					<Icon
-						name="material-arrow-back"
-						htmlColor={BLACK}
-						size={backIconSize}
-					/>
+					<Icon name="material-arrow-back" size={backIconSize} />
 				</IconButton>
 
-				<Typography variant="h1" sx={{ fontWeight: 500 }}>
+				<Typography variant="pageTitle">
 					{intl.formatMessage(m.navTitle)}
 				</Typography>
 			</Stack>
@@ -103,34 +94,35 @@ function RouteComponent() {
 					<Stack direction="column" sx={{ flex: 1, gap: 10 }}>
 						<Stack
 							direction="column"
-							sx={{ borderRadius: 2, border: `1px solid ${BLUE_GREY}` }}
+							sx={{ borderRadius: 2, border: `1px solid ${BLUE_05}` }}
 						>
 							<NetworkConnectionInfo />
 
-							<Divider sx={{ bgcolor: LIGHT_GREY }} />
+							<Divider />
 
-							<Stack direction="column" sx={{ padding: 6 }}>
+							<Stack direction="column" sx={{ gap: 4, padding: 6 }}>
 								<Typography>
 									{intl.formatMessage(m.discoveryTroubleshootingTitle)}
 								</Typography>
 
-								<List sx={{ listStyleType: 'disc', paddingInline: 8 }}>
-									<ListItem disablePadding sx={{ display: 'list-item' }}>
-										<Typography color="textPrimary" variant="body2">
-											{intl.formatMessage(
-												m.discoveryTroubleshootingSameNetwork,
-											)}
-										</Typography>
+								<Stack
+									component={List}
+									direction="column"
+									sx={{
+										color: (theme) => theme.palette.text.secondary,
+										gap: 2,
+										listStyleType: 'disc',
+										paddingInline: 8,
+									}}
+								>
+									<ListItem sx={{ display: 'list-item' }}>
+										{intl.formatMessage(m.discoveryTroubleshootingSameNetwork)}
 									</ListItem>
 
-									<ListItem disablePadding sx={{ display: 'list-item' }}>
-										<Typography variant="body2" color="textPrimary">
-											{intl.formatMessage(
-												m.discoveryTroubleshootingSameVersion,
-											)}
-										</Typography>
+									<ListItem sx={{ display: 'list-item' }}>
+										{intl.formatMessage(m.discoveryTroubleshootingSameVersion)}
 									</ListItem>
-								</List>
+								</Stack>
 							</Stack>
 						</Stack>
 
@@ -175,19 +167,13 @@ function InvitablePeersList({ projectId }: { projectId: string }) {
 	})
 
 	return (
-		<List
-			disablePadding
-			sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}
-		>
+		<List sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
 			{invitablePeers.map((peer) => (
 				<ListItem
 					key={peer.deviceId}
-					disableGutters
-					disablePadding
-					sx={{ borderRadius: 2, border: `1px solid ${BLUE_GREY}` }}
+					sx={{ borderRadius: 2, border: `1px solid ${BLUE_05}` }}
 				>
 					<ListItemButton
-						disableGutters
 						disableTouchRipple
 						aria-disabled={peer.status === 'disconnected' ? true : undefined}
 						onClick={
@@ -206,8 +192,8 @@ function InvitablePeersList({ projectId }: { projectId: string }) {
 						<DeviceRow
 							deviceId={peer.deviceId}
 							deviceType={peer.deviceType}
-							name={peer.name}
 							disconnected={peer.status === 'disconnected'}
+							name={peer.name}
 						/>
 					</ListItemButton>
 				</ListItem>
@@ -232,7 +218,7 @@ function NetworkConnectionInfo() {
 	let displayedContent: ReactNode
 
 	const wifiIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
+		variant: 'bodyCopy',
 		multiplier: 0.8,
 	})
 
@@ -241,7 +227,9 @@ function NetworkConnectionInfo() {
 		wifiConnectionQuery.isRefetching
 	) {
 		displayedContent = (
-			<Typography sx={{ fontWeight: 500 }}>
+			<Typography
+				sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
+			>
 				{intl.formatMessage(m.gettingWifiInfo)}
 			</Typography>
 		)
@@ -253,7 +241,9 @@ function NetworkConnectionInfo() {
 					size={wifiIconSize}
 				/>
 
-				<Typography sx={{ fontWeight: 500 }}>
+				<Typography
+					sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
+				>
 					{wifiConnectionQuery.data &&
 					// NOTE: Issue with systeminformation module on macOS >=15.6 (https://github.com/digidem/comapeo-desktop/issues/378)
 					wifiConnectionQuery.data.ssid !== '&lt;redacted&gt;' &&
@@ -314,7 +304,7 @@ function WifiIcon({
 				alignItems: 'center',
 				borderRadius: '50%',
 				padding: 1,
-				bgcolor: LIGHT_COMAPEO_BLUE,
+				background: BLUE_06,
 			}}
 		>
 			<Icon

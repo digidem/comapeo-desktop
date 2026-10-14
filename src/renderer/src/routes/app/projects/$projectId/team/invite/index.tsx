@@ -8,12 +8,7 @@ import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
-import {
-	BLACK,
-	BLUE_GREY,
-	DARK_GREY,
-	DARK_ORANGE,
-} from '../../../../../../colors.ts'
+import { BLUE_05, ORANGE_00 } from '../../../../../../../../shared/colors.ts'
 import { GenericRoutePendingComponent } from '../../../../../../components/generic-route-pending-component.tsx'
 import { Icon } from '../../../../../../components/icon.tsx'
 import { ButtonLink } from '../../../../../../components/link.tsx'
@@ -58,13 +53,13 @@ function RouteComponent() {
 	const { projectId } = Route.useParams()
 
 	const addIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		variant: 'heroHeader',
 		multiplier: 4,
 	})
 
 	const backIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
-		multiplier: 1.25,
+		variant: 'pageTitle',
+		multiplier: 1.5,
 	})
 
 	return (
@@ -74,10 +69,9 @@ function RouteComponent() {
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_GREY}`,
-					gap: 4,
-					paddingBlock: 4,
-					paddingInline: 6,
+					borderBottom: `1px solid ${BLUE_05}`,
+					gap: 2,
+					padding: 4,
 				}}
 			>
 				<IconButton
@@ -94,15 +88,12 @@ function RouteComponent() {
 							replace: true,
 						})
 					}}
+					sx={{ color: (theme) => theme.palette.text.secondary }}
 				>
-					<Icon
-						name="material-arrow-back"
-						htmlColor={BLACK}
-						size={backIconSize}
-					/>
+					<Icon name="material-arrow-back" size={backIconSize} />
 				</IconButton>
 
-				<Typography variant="h1" sx={{ fontWeight: 500 }}>
+				<Typography variant="pageTitle">
 					{intl.formatMessage(m.navTitle)}
 				</Typography>
 			</Stack>
@@ -125,63 +116,63 @@ function RouteComponent() {
 						<Stack
 							direction="column"
 							sx={{
+								border: `1px solid ${BLUE_05}`,
 								borderRadius: 2,
-								border: `1px solid ${BLUE_GREY}`,
 								flex: 1,
 								justifyContent: 'center',
-								gap: 5,
+								gap: 20,
 								overflowWrap: 'break-word',
 								padding: 6,
 							}}
 						>
-							<Box sx={{ alignSelf: 'center' }}>
-								<Icon
-									name="material-person-add"
-									htmlColor={DARK_ORANGE}
-									size={addIconSize}
-								/>
-							</Box>
+							<Stack direction="column" sx={{ gap: 6 }}>
+								<Box sx={{ alignSelf: 'center' }}>
+									<Icon
+										name="material-person-add"
+										htmlColor={ORANGE_00}
+										size={addIconSize}
+									/>
+								</Box>
 
-							<Typography
-								variant="h1"
-								sx={{ fontWeight: 500, textAlign: 'center' }}
-							>
-								{intl.formatMessage(m.inviteCollaborators)}
-							</Typography>
+								<Typography
+									component="h1"
+									variant="heroHeader"
+									sx={{ textAlign: 'center' }}
+								>
+									{intl.formatMessage(m.inviteCollaborators)}
+								</Typography>
 
-							<Typography
-								color="textSecondary"
-								sx={{ textAlign: 'center', fontWeight: 500 }}
-							>
-								{intl.formatMessage(m.primaryDescription)}
-							</Typography>
+								<Typography
+									variant="heroSubheading"
+									sx={{ textAlign: 'center' }}
+								>
+									{intl.formatMessage(m.primaryDescription)}
+								</Typography>
+							</Stack>
 
-							<List
+							<Stack
+								component={List}
+								direction="column"
 								sx={{
 									alignSelf: 'center',
+									color: (theme) => theme.palette.text.secondary,
+									gap: 2,
 									listStyleType: 'disc',
 									paddingInline: 8,
-									color: DARK_GREY,
 								}}
 							>
-								<ListItem disablePadding sx={{ display: 'list-item' }}>
-									<Typography color="textSecondary">
-										{intl.formatMessage(m.onlyInvitedDevices)}
-									</Typography>
+								<ListItem sx={{ display: 'list-item' }}>
+									{intl.formatMessage(m.onlyInvitedDevices)}
 								</ListItem>
 
-								<ListItem disablePadding sx={{ display: 'list-item' }}>
-									<Typography color="textSecondary">
-										{intl.formatMessage(m.shareUsingExchange)}
-									</Typography>
+								<ListItem sx={{ display: 'list-item' }}>
+									{intl.formatMessage(m.shareUsingExchange)}
 								</ListItem>
 
-								<ListItem disablePadding sx={{ display: 'list-item' }}>
-									<Typography color="textSecondary">
-										{intl.formatMessage(m.controlSharing)}
-									</Typography>
+								<ListItem sx={{ display: 'list-item' }}>
+									{intl.formatMessage(m.controlSharing)}
 								</ListItem>
-							</List>
+							</Stack>
 						</Stack>
 
 						<Box
@@ -192,12 +183,11 @@ function RouteComponent() {
 							}}
 						>
 							<ButtonLink
+								fullWidth
 								to="/app/projects/$projectId/team/invite/devices"
 								params={{ projectId }}
 								replace
 								type="button"
-								fullWidth
-								sx={{ maxWidth: 400 }}
 							>
 								{intl.formatMessage(m.selectDevice)}
 							</ButtonLink>

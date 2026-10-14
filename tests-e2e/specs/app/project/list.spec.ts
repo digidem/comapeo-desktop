@@ -63,7 +63,7 @@ test.describe('Main panel (coordinator)', () => {
 				),
 			).toBeVisible()
 			await expect(
-				main.getByRole('link', { name: 'Invite Device', exact: true }),
+				main.getByRole('link', { name: 'Invite Devices', exact: true }),
 			).toBeVisible()
 		} finally {
 			// 3. Cleanup

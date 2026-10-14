@@ -135,17 +135,13 @@
     "description": "Label for start date input in advanced filters dialog.",
     "message": "Start Date"
   },
-  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
-    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+  "routes.app.projects.$projectId.observations.$observationDocId.editCategoryPanelCategoryIconAltText": {
+    "description": "Accessible text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
   },
-  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
-    "description": "Accessible label for button to close panel.",
+  "routes.app.projects.$projectId.observations.$observationDocId.editCategoryPanelCloseAccessibleLabel": {
+    "description": "Accessible label for button to close edit category panel.",
     "message": "Close."
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.accessibleNotesInputLabel": {
-    "description": "Accessible label for notes input field.",
-    "message": "Notes"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
@@ -218,6 +214,10 @@
   "routes.app.projects.$projectId.observations.$observationDocId.index.observationMetadataSpeedMeters": {
     "description": "Displayed speed for observation in meters per second.",
     "message": "{value} m/s"
+  },
+  "routes.app.projects.$projectId.observations.$observationDocId.notesSectionAccessibleNotesInputLabel": {
+    "description": "Accessible label for notes input field.",
+    "message": "Notes"
   },
   "routes.app.projects.$projectId.route.fallbackCategoriesSetName": {
     "description": "Text shown when project does not use a categories set in project info dialog.",

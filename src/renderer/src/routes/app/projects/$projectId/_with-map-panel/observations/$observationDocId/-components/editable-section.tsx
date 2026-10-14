@@ -8,14 +8,9 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 
-import {
-	BLUE_GREY,
-	COMAPEO_BLUE,
-	GREEN,
-	LIGHT_COMAPEO_BLUE,
-} from '../../../../../../../../colors'
-import { Icon } from '../../../../../../../../components/icon'
-import { useIconSizeBasedOnTypography } from '../../../../../../../../hooks/icon'
+import { BLUE_06 } from '../../../../../../../../../../shared/colors.ts'
+import { Icon } from '../../../../../../../../components/icon.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../../../../../hooks/icon.ts'
 
 type EditState = 'idle' | 'active' | 'success'
 
@@ -38,9 +33,8 @@ export function EditableSection({
 	sectionTitle: ReactNode
 	tooltipText: string
 }) {
-	const iconSize = useIconSizeBasedOnTypography({
-		multiplier: 0.7,
-		typographyVariant: 'body1',
+	const editIconSize = useIconSizeBasedOnTypography({
+		variant: 'sectionLabel',
 	})
 
 	const [editState, setEditState] = useState<EditState>('idle')
@@ -69,18 +63,18 @@ export function EditableSection({
 				onStartEditMode()
 			}}
 			sx={{
+				borderRadius: 1,
+				display: 'inline-flex',
+				flex: 1,
+				justifyContent: 'flex-start',
+				overflowWrap: 'anywhere',
+				padding: 2,
+				textAlign: 'start',
+				':disabled': { color: (theme) => theme.palette.text.disabled },
 				':hover, :focus': {
-					backgroundColor: alpha(LIGHT_COMAPEO_BLUE, 0.5),
+					background: alpha(BLUE_06, 0.5),
 					transition: (theme) => theme.transitions.create('background-color'),
 				},
-				':disabled': { color: (theme) => theme.palette.text.disabled },
-				padding: 2,
-				display: 'inline-flex',
-				justifyContent: 'flex-start',
-				textAlign: 'start',
-				borderRadius: 1,
-				overflowWrap: 'anywhere',
-				flex: 1,
 			}}
 		>
 			{typeof renderWhenIdle === 'function' ? renderWhenIdle() : renderWhenIdle}
@@ -91,43 +85,43 @@ export function EditableSection({
 		<Stack direction="column" sx={{ gap: 4, flex: 1, flexWrap: 'wrap' }}>
 			<Stack direction="row" sx={{ gap: 2 }}>
 				<Typography
-					component="h2"
-					variant="body1"
 					color={disabled ? 'textDisabled' : undefined}
+					component="span"
 				>
 					{sectionTitle}
 				</Typography>
 
 				<Box
 					sx={{
+						alignItems: 'center',
 						display: 'flex',
 						justifyContent: 'center',
-						alignItems: 'center',
 					}}
 				>
 					{editIsPending ? (
-						<CircularProgress disableShrink size={iconSize} />
+						<CircularProgress size={editIconSize} />
 					) : editState === 'success' ? (
 						<Icon
+							color="success"
 							name="material-check-circle-rounded"
-							sx={{ height: iconSize, width: iconSize }}
-							htmlColor={GREEN}
+							size={editIconSize}
 						/>
 					) : (
 						<Icon
-							name="material-edit-filled"
-							sx={{ height: iconSize, width: iconSize }}
-							htmlColor={
+							color={
 								editState === 'active'
-									? COMAPEO_BLUE
+									? 'primary'
 									: disabled
-										? BLUE_GREY
+										? 'disabled'
 										: undefined
 							}
+							name="material-edit-filled"
+							size={editIconSize}
 						/>
 					)}
 				</Box>
 			</Stack>
+
 			{editState === 'active' ? (
 				renderWhenEditing({
 					updateEditState: (state) => {

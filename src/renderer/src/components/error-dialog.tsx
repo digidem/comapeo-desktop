@@ -8,7 +8,8 @@ import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY, LIGHT_GREY } from '../colors.ts'
+import { BLACK_02, BLACK_03, BLUE_05 } from '../../../shared/colors.ts'
+import { useIconSizeBasedOnTypography } from '../hooks/icon.ts'
 import { Icon } from './icon.tsx'
 
 export function ErrorDialogContent({
@@ -18,21 +19,30 @@ export function ErrorDialogContent({
 	errorMessage: string
 	onClose: () => void
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const [advancedExpanded, setAdvancedExpanded] = useState(false)
 
+	const errorIconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 3,
+	})
+
 	return (
-		<Stack direction="column">
-			<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+		<Stack direction="column" sx={{ overflow: 'auto' }}>
+			<Stack
+				direction="column"
+				sx={{ flex: 1, gap: 10, overflow: 'auto', padding: 20 }}
+			>
 				<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
-					<Icon name="material-error" color="error" size={72} />
+					<Icon name="material-error" color="error" size={errorIconSize} />
 
 					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center' }}
+						component="h1"
+						variant="heroHeader"
+						sx={{ textAlign: 'center' }}
 					>
-						{t(m.somethingWentWrong)}
+						{intl.formatMessage(m.somethingWentWrong)}
 					</Typography>
 				</Stack>
 
@@ -44,7 +54,7 @@ export function ErrorDialogContent({
 						}}
 						sx={{
 							':hover, :focus': {
-								backgroundColor: alpha(BLUE_GREY, 0.2),
+								background: alpha(BLUE_05, 0.2),
 								transition: (theme) =>
 									theme.transitions.create('background-color'),
 							},
@@ -55,12 +65,13 @@ export function ErrorDialogContent({
 						<Stack
 							direction="row"
 							sx={{
+								alignItems: 'center',
 								flex: 1,
 								justifyContent: 'space-between',
 								'&::marker': { content: 'none' },
 							}}
 						>
-							<Typography color="textSecondary">{t(m.advanced)}</Typography>
+							<Typography>{intl.formatMessage(m.advanced)}</Typography>
 
 							<Icon
 								name={
@@ -68,7 +79,7 @@ export function ErrorDialogContent({
 										? 'material-expand-less'
 										: 'material-expand-more'
 								}
-								htmlColor={DARK_GREY}
+								htmlColor={BLACK_02}
 							/>
 						</Stack>
 					</ButtonBase>
@@ -76,22 +87,18 @@ export function ErrorDialogContent({
 					<Collapse in={advancedExpanded}>
 						<Box
 							sx={{
-								bgcolor: LIGHT_GREY,
-								padding: 4,
-								border: `1px solid ${BLUE_GREY}`,
+								background: BLACK_03,
+								border: `1px solid ${BLUE_05}`,
+								borderRadius: 2,
 								maxHeight: 300,
 								overflow: 'auto',
-								borderRadius: 2,
+								padding: 4,
 							}}
 						>
 							<Typography
 								component="pre"
-								variant="body2"
-								sx={{
-									fontFamily: 'monospace',
-									whiteSpace: 'pre-wrap',
-									overflowWrap: 'break-word',
-								}}
+								variant="detailCopy"
+								sx={{ overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}
 							>
 								{errorMessage}
 							</Typography>
@@ -99,24 +106,24 @@ export function ErrorDialogContent({
 					</Collapse>
 				</Stack>
 			</Stack>
+
 			<Box
 				sx={{
-					position: 'sticky',
-					bottom: 0,
 					display: 'flex',
+					flexDirection: 'row',
 					justifyContent: 'center',
 					padding: 6,
 				}}
 			>
 				<Button
 					fullWidth
-					variant="outlined"
 					onClick={() => {
 						onClose()
 					}}
-					sx={{ maxWidth: 400, alignSelf: 'center' }}
+					startIcon={<Icon name="material-symbols-cancel" />}
+					variant="outlined"
 				>
-					{t(m.close)}
+					{intl.formatMessage(m.close)}
 				</Button>
 			</Box>
 		</Stack>

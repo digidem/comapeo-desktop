@@ -22,7 +22,11 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLACK, BLUE_GREY, WHITE } from '../../../../../colors.ts'
+import {
+	BLACK_00,
+	BLUE_05,
+	WHITE_00,
+} from '../../../../../../../shared/colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -114,12 +118,12 @@ export function AdvancedFiltersDialogContent({
 	})
 
 	const closeIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		variant: 'pageTitle',
 		multiplier: 1.25,
 	})
 
 	const categoryIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
+		variant: 'bodyCopy',
 		multiplier: 0.75,
 	})
 
@@ -141,21 +145,20 @@ export function AdvancedFiltersDialogContent({
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					backgroundColor: WHITE,
-					borderBottom: `1px solid ${BLUE_GREY}`,
+					background: WHITE_00,
+					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 2,
-					left: 0,
 					padding: 4,
-					position: 'sticky',
-					right: 0,
-					top: 0,
 				}}
 			>
-				<IconButton onClick={onCancel}>
+				<IconButton
+					aria-label={intl.formatMessage(m.advancedFiltersCloseAccessibleLabel)}
+					onClick={onCancel}
+				>
 					<Icon name="material-close" size={closeIconSize} />
 				</IconButton>
 
-				<Typography variant="h1" sx={{ fontWeight: 500 }}>
+				<Typography variant="pageTitle">
 					{intl.formatMessage(m.advancedFiltersTitle)}
 				</Typography>
 			</Stack>
@@ -178,14 +181,19 @@ export function AdvancedFiltersDialogContent({
 								direction="row"
 								sx={{
 									alignItems: 'center',
-									borderBottom: `1px solid ${BLUE_GREY}`,
+									borderBottom: `1px solid ${BLUE_05}`,
 									gap: 2,
 									padding: 2,
 								}}
 							>
-								<Icon name="material-symbols-schedule" htmlColor={BLUE_GREY} />
+								<Icon name="material-symbols-schedule" htmlColor={BLUE_05} />
 
-								<Typography sx={{ fontWeight: 500 }}>
+								<Typography
+									component="h2"
+									sx={{
+										fontWeight: (theme) => theme.typography.fontWeightMedium,
+									}}
+								>
 									{intl.formatMessage(m.advancedFiltersDateSectionTitle)}
 								</Typography>
 							</Stack>
@@ -330,21 +338,28 @@ export function AdvancedFiltersDialogContent({
 										<Stack
 											direction="row"
 											sx={{
-												borderBottom: `1px solid ${BLUE_GREY}`,
+												borderBottom: `1px solid ${BLUE_05}`,
 												gap: 6,
 												justifyContent: 'space-between',
+												padding: 2,
 											}}
 										>
 											<Stack
 												direction="row"
-												sx={{ alignItems: 'center', gap: 2, padding: 2 }}
+												sx={{ alignItems: 'center', gap: 2 }}
 											>
 												<Icon
 													name="material-symbols-apps"
-													htmlColor={BLUE_GREY}
+													htmlColor={BLUE_05}
 												/>
 
-												<Typography sx={{ fontWeight: 500 }}>
+												<Typography
+													component="h2"
+													sx={{
+														fontWeight: (theme) =>
+															theme.typography.fontWeightMedium,
+													}}
+												>
 													{intl.formatMessage(
 														m.advancedFiltersCategoriesSectionTitle,
 													)}
@@ -414,7 +429,7 @@ export function AdvancedFiltersDialogContent({
 																>
 																	<Box aria-hidden>
 																		<CategoryIconContainer
-																			color={option.color || BLACK}
+																			color={option.color || BLACK_00}
 																		>
 																			{option.iconId ? (
 																				<CategoryIconImage
@@ -425,8 +440,8 @@ export function AdvancedFiltersDialogContent({
 																					iconDocumentId={option.iconId}
 																					projectId={projectId}
 																					imageStyle={{
-																						width: categoryIconSize,
 																						aspectRatio: 1,
+																						width: categoryIconSize,
 																					}}
 																				/>
 																			) : (
@@ -461,9 +476,10 @@ export function AdvancedFiltersDialogContent({
 																		</Typography>
 
 																		<Typography
+																			color="textTertiary"
 																			component="span"
 																			variant="inherit"
-																			color="textSecondary"
+
 																			sx={{
 																				fontVariantNumeric: 'tabular-nums',
 																			}}
@@ -488,7 +504,7 @@ export function AdvancedFiltersDialogContent({
 																})
 															}}
 															sx={{
-																backgroundColor: isSelected
+																background: isSelected
 																	? (theme) =>
 																			alpha(
 																				theme.palette.primary.main,
@@ -503,7 +519,7 @@ export function AdvancedFiltersDialogContent({
 																transition: (theme) =>
 																	theme.transitions.create('background-color'),
 																':hover': {
-																	backgroundColor: (theme) =>
+																	background: (theme) =>
 																		isSelected
 																			? alpha(
 																					theme.palette.primary.main,
@@ -512,7 +528,7 @@ export function AdvancedFiltersDialogContent({
 																			: theme.palette.action.hover,
 																},
 																':focus, :focus-within': {
-																	backgroundColor: (theme) =>
+																	background: (theme) =>
 																		isSelected
 																			? alpha(
 																					theme.palette.primary.main,
@@ -536,8 +552,8 @@ export function AdvancedFiltersDialogContent({
 
 			<Box
 				sx={{
-					backgroundColor: WHITE,
-					borderTop: `1px solid ${BLUE_GREY}`,
+					background: WHITE_00,
+					borderTop: `1px solid ${BLUE_05}`,
 					bottom: 0,
 					display: 'flex',
 					flexDirection: 'row',
@@ -559,7 +575,6 @@ export function AdvancedFiltersDialogContent({
 								type="submit"
 								aria-disabled={!canSubmit || isSubmitting}
 								form={formId}
-								sx={{ maxWidth: 400 }}
 							>
 								<form.Subscribe
 									selector={(state) => {

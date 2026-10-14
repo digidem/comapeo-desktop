@@ -10,8 +10,8 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
+import { BLUE_05 } from '../../../../../../shared/colors.ts'
 import { CoordinateFormatSchema } from '../../../../../../shared/coordinate-format.ts'
-import { BLUE_GREY } from '../../../../colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../components/icon.tsx'
@@ -47,21 +47,17 @@ export function CoordinateSystemSection({
 				<Stack
 					component="h2"
 					direction="row"
-					sx={{ alignItems: 'center', gap: 4, margin: 0 }}
+					sx={{ alignItems: 'center', gap: 2, margin: 0 }}
 				>
 					<Icon name="material-explore-filled" size={headingIconSize} />
 
-					<Typography
-						id={labelId}
-						variant="body2"
-						sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-					>
+					<Typography id={labelId} variant="sectionLabel">
 						{intl.formatMessage(m.coordinateSystemSectionTitle)}
 					</Typography>
 				</Stack>
 
 				<FormControl
-					sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2, padding: 6 }}
+					sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2, padding: 6 }}
 				>
 					<RadioGroup
 						aria-labelledby={labelId}
@@ -92,6 +88,7 @@ export function CoordinateSystemSection({
 										secondaryText={EXAMPLE_DD}
 									/>
 								}
+								sx={{ gap: 2 }}
 							/>
 
 							<FormControlLabel
@@ -105,6 +102,7 @@ export function CoordinateSystemSection({
 										secondaryText={EXAMPLE_DMS}
 									/>
 								}
+								sx={{ gap: 2 }}
 							/>
 
 							<FormControlLabel
@@ -118,6 +116,7 @@ export function CoordinateSystemSection({
 										secondaryText={EXAMPLE_UTM}
 									/>
 								}
+								sx={{ gap: 2 }}
 							/>
 						</Stack>
 					</RadioGroup>

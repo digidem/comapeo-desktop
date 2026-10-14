@@ -32,7 +32,7 @@ import {
 import * as v from 'valibot'
 
 import { TwoPanelLayout } from '../-shared/two-panel-layout.tsx'
-import { BLACK, BLUE_GREY } from '../../../../colors.ts'
+import { BLACK_00, BLUE_05 } from '../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { DecentTextField } from '../../../../components/decent-text-field.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
@@ -66,12 +66,11 @@ export const Route = createFileRoute('/app/projects/$projectId/test-data')({
 				end={
 					<Box
 						sx={{
-							display: 'flex',
+							background: BLACK_00,
+							display: 'grid',
 							flex: 1,
-							justifyContent: 'center',
-							alignItems: 'center',
-							bgcolor: BLACK,
 							opacity: 0.5,
+							placeItems: 'center',
 						}}
 					>
 						<CircularProgress />
@@ -83,7 +82,6 @@ export const Route = createFileRoute('/app/projects/$projectId/test-data')({
 	component: RouteComponent,
 })
 
-const FORM_ID = 'create-test-data-form'
 const MIN_OBSERVATION_COUNT = 1
 const MAX_OBSERVATION_COUNT = 1000
 const DEFAULT_BOUNDED_DISTANCE_KM = 50
@@ -218,6 +216,7 @@ function RouteComponent() {
 
 	const componentId = useId()
 
+	const formId = `${componentId}-form`
 	const observationCountFieldBaseId = `${componentId}-observation-count`
 	const longitudeFieldBaseId = `${componentId}-longitude`
 	const latitudeFieldBaseId = `${componentId}-latitude`
@@ -235,13 +234,10 @@ function RouteComponent() {
 								alignItems: 'center',
 								paddingBlock: 4,
 								paddingInline: 6,
-								borderBottom: `1px solid ${BLUE_GREY}`,
+								borderBottom: `1px solid ${BLUE_05}`,
 							}}
 						>
-							<Typography
-								variant="h1"
-								sx={{ fontWeight: 500, textAlign: 'center' }}
-							>
+							<Typography variant="pageTitle" sx={{ textAlign: 'center' }}>
 								{intl.formatMessage(m.navTitle)}
 							</Typography>
 						</Stack>
@@ -257,7 +253,7 @@ function RouteComponent() {
 							<Box sx={{ padding: 6, overflow: 'auto' }}>
 								<Box
 									component="form"
-									id={FORM_ID}
+									id={formId}
 									noValidate
 									autoComplete="off"
 									onSubmit={(event) => {
@@ -286,7 +282,6 @@ function RouteComponent() {
 																	field.state.meta.isValid ? undefined : 'error'
 																}
 																component="span"
-																variant="body2"
 															>
 																{field.state.meta.errors.length > 0
 																	? field.state.meta.errors[0]?.message
@@ -334,9 +329,10 @@ function RouteComponent() {
 												<Stack
 													direction="row"
 													sx={{
+														alignItems: 'center',
+														flexWrap: 'wrap',
 														gap: 4,
 														justifyContent: 'space-between',
-														flexWrap: 'wrap',
 													}}
 												>
 													<form.AppField name="longitude">
@@ -362,7 +358,6 @@ function RouteComponent() {
 																					: 'error'
 																			}
 																			component="span"
-																			variant="body2"
 																		>
 																			{field.state.meta.errors.length > 0
 																				? field.state.meta.errors[0]?.message
@@ -403,7 +398,6 @@ function RouteComponent() {
 																					: 'error'
 																			}
 																			component="span"
-																			variant="body2"
 																		>
 																			{field.state.meta.errors.length > 0
 																				? field.state.meta.errors[0]?.message
@@ -445,7 +439,6 @@ function RouteComponent() {
 																			: 'error'
 																	}
 																	component="span"
-																	variant="body2"
 																>
 																	{field.state.meta.errors.length > 0
 																		? field.state.meta.errors[0]?.message
@@ -489,7 +482,7 @@ function RouteComponent() {
 								direction="column"
 								sx={{
 									alignItems: 'center',
-									borderTop: `1px solid ${BLUE_GREY}`,
+									borderTop: `1px solid ${BLUE_05}`,
 									gap: 4,
 									padding: 6,
 								}}
@@ -501,14 +494,13 @@ function RouteComponent() {
 								>
 									{([canSubmit, isSubmitting]) => (
 										<Button
-											type="submit"
-											form={FORM_ID}
+											aria-disabled={!canSubmit}
+											form={formId}
 											fullWidth
-											variant="contained"
 											loading={isSubmitting}
 											loadingPosition="start"
-											aria-disabled={!canSubmit}
-											sx={{ maxWidth: 400 }}
+											type="submit"
+											variant="contained"
 										>
 											{intl.formatMessage(m.create)}
 										</Button>
@@ -527,7 +519,7 @@ function RouteComponent() {
 									flex: 1,
 									justifyContent: 'center',
 									alignItems: 'center',
-									bgcolor: BLACK,
+									background: BLACK_00,
 									opacity: 0.5,
 								}}
 							>
@@ -644,15 +636,15 @@ function DisplayedMap({
 					type="fill"
 					id="radius"
 					paint={{
-						'fill-color': BLACK,
+						'fill-color': BLACK_00,
 						'fill-opacity': 0.2,
-						'fill-outline-color': BLACK,
+						'fill-outline-color': BLACK_00,
 					}}
 				/>
 				<Layer
 					type="line"
 					id="border"
-					paint={{ 'line-width': 1, 'line-color': BLACK }}
+					paint={{ 'line-width': 1, 'line-color': BLACK_00 }}
 				/>
 			</Source>
 

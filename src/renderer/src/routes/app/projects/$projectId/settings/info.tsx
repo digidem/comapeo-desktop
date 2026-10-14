@@ -23,21 +23,17 @@ import {
 import * as v from 'valibot'
 
 import {
-	BLACK,
-	BLUE_GREY,
-	COMAPEO_BLUE,
-	PROJECT_BLUE,
-	PROJECT_GREEN,
-	PROJECT_GREY,
-	PROJECT_ORANGE,
-	PROJECT_RED,
-} from '../../../../../colors.ts'
+	BLUE_03,
+	BLUE_05,
+	PROJECT_COLORS,
+} from '../../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
 import { DecentTextField } from '../../../../../components/decent-text-field.tsx'
 import { DiscardEditsDialogContent } from '../../../../../components/discard-edits-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
 import { useAppForm } from '../../../../../hooks/forms.ts'
+import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo.ts'
 import {
 	PROJECT_DESCRIPTION_MAX_LENGTH_GRAPHEMES,
@@ -69,8 +65,6 @@ export const Route = createFileRoute('/app/projects/$projectId/settings/info')({
 	},
 	component: RouteComponent,
 })
-
-const FORM_ID = 'project-settings-form'
 
 function RouteComponent() {
 	const intl = useIntl()
@@ -111,11 +105,11 @@ function RouteComponent() {
 				v.pipe(
 					createProjectColorSchema(),
 					v.union([
-						v.literal(PROJECT_BLUE),
-						v.literal(PROJECT_GREEN),
-						v.literal(PROJECT_GREY),
-						v.literal(PROJECT_ORANGE),
-						v.literal(PROJECT_RED),
+						v.literal(PROJECT_COLORS.BLUE),
+						v.literal(PROJECT_COLORS.GREEN),
+						v.literal(PROJECT_COLORS.GREY),
+						v.literal(PROJECT_COLORS.ORANGE),
+						v.literal(PROJECT_COLORS.RED),
 					]),
 				),
 				v.null(),
@@ -158,20 +152,27 @@ function RouteComponent() {
 		},
 	})
 
+	const formId = useId()
 	const projectNameFieldBaseId = useId()
 	const projectDescriptionFieldBaseId = useId()
+	const projectColorLabelId = useId()
+
+	const backIconSize = useIconSizeBasedOnTypography({
+		variant: 'pageTitle',
+		multiplier: 1.5,
+	})
 
 	return (
 		<>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Stack
+					component="header"
 					direction="row"
-					component="nav"
 					sx={{
 						alignItems: 'center',
-						gap: 4,
+						borderBottom: `1px solid ${BLUE_05}`,
+						gap: 2,
 						padding: 4,
-						borderBottom: `1px solid ${BLUE_GREY}`,
 					}}
 				>
 					<IconButton
@@ -188,11 +189,12 @@ function RouteComponent() {
 								replace: true,
 							})
 						}}
+						sx={{ color: (theme) => theme.palette.text.secondary }}
 					>
-						<Icon name="material-arrow-back" htmlColor={BLACK} size={30} />
+						<Icon name="material-arrow-back" size={backIconSize} />
 					</IconButton>
 
-					<Typography variant="h1" sx={{ fontWeight: 500 }}>
+					<Typography variant="pageTitle">
 						{intl.formatMessage(m.navTitle)}
 					</Typography>
 				</Stack>
@@ -208,7 +210,7 @@ function RouteComponent() {
 					<Container maxWidth="sm">
 						<Box
 							component="form"
-							id={FORM_ID}
+							id={formId}
 							noValidate
 							autoComplete="off"
 							onSubmit={(event) => {
@@ -241,11 +243,7 @@ function RouteComponent() {
 															justifyContent: 'space-between',
 														}}
 													>
-														<Typography
-															id={errorTextId}
-															component="span"
-															variant="body2"
-														>
+														<Typography id={errorTextId} component="span">
 															{field.state.meta.errors[0]?.message}
 														</Typography>
 
@@ -253,7 +251,6 @@ function RouteComponent() {
 															component="output"
 															htmlFor={inputId}
 															name="character-count"
-															variant="body2"
 														>
 															<form.Subscribe
 																selector={(state) =>
@@ -311,11 +308,7 @@ function RouteComponent() {
 															justifyContent: 'space-between',
 														}}
 													>
-														<Typography
-															id={errorTextId}
-															component="span"
-															variant="body2"
-														>
+														<Typography id={errorTextId} component="span">
 															{field.state.meta.errors[0]?.message}
 														</Typography>
 
@@ -323,7 +316,6 @@ function RouteComponent() {
 															component="output"
 															htmlFor={field.name}
 															name="character-count"
-															variant="body2"
 														>
 															<form.Subscribe
 																selector={(state) =>
@@ -360,14 +352,14 @@ function RouteComponent() {
 									}}
 								</form.AppField>
 
-								<Divider variant="fullWidth" sx={{ color: BLUE_GREY }} />
+								<Divider />
 
 								<Stack direction="column" sx={{ gap: 4 }}>
 									<Box>
 										<Typography
 											component="label"
-											id="project-color-selector-label"
-											sx={{ fontWeight: 500, textTransform: 'uppercase' }}
+											id={projectColorLabelId}
+											variant="sectionLabel"
 										>
 											{intl.formatMessage(m.projectCardColorLabel)}
 										</Typography>
@@ -377,7 +369,7 @@ function RouteComponent() {
 										{(field) => (
 											<FormGroup
 												row
-												aria-labelledby="project-color-selector-label"
+												aria-labelledby={projectColorLabelId}
 												sx={{
 													flexWrap: 'nowrap',
 													gap: 10,
@@ -388,14 +380,16 @@ function RouteComponent() {
 												<FormControlLabel
 													name="option-orange"
 													label={intl.formatMessage(m.projectColorOptionOrange)}
-													checked={field.state.value === PROJECT_ORANGE}
+													checked={field.state.value === PROJECT_COLORS.ORANGE}
 													onChange={(_event, checked) => {
-														field.handleChange(checked ? PROJECT_ORANGE : null)
+														field.handleChange(
+															checked ? PROJECT_COLORS.ORANGE : null,
+														)
 													}}
 													labelPlacement="bottom"
 													control={
 														<ProjectColorCheckboxControl
-															projectColor={PROJECT_ORANGE}
+															projectColor={PROJECT_COLORS.ORANGE}
 														/>
 													}
 													sx={{ margin: 0, gap: 4 }}
@@ -404,14 +398,16 @@ function RouteComponent() {
 												<FormControlLabel
 													name="option-blue"
 													label={intl.formatMessage(m.projectColorOptionBlue)}
-													checked={field.state.value === PROJECT_BLUE}
+													checked={field.state.value === PROJECT_COLORS.BLUE}
 													onChange={(_event, checked) => {
-														field.handleChange(checked ? PROJECT_BLUE : null)
+														field.handleChange(
+															checked ? PROJECT_COLORS.BLUE : null,
+														)
 													}}
 													labelPlacement="bottom"
 													control={
 														<ProjectColorCheckboxControl
-															projectColor={PROJECT_BLUE}
+															projectColor={PROJECT_COLORS.BLUE}
 														/>
 													}
 													sx={{ margin: 0, gap: 4 }}
@@ -420,14 +416,16 @@ function RouteComponent() {
 												<FormControlLabel
 													name="option-green"
 													label={intl.formatMessage(m.projectColorOptionGreen)}
-													checked={field.state.value === PROJECT_GREEN}
+													checked={field.state.value === PROJECT_COLORS.GREEN}
 													onChange={(_event, checked) => {
-														field.handleChange(checked ? PROJECT_GREEN : null)
+														field.handleChange(
+															checked ? PROJECT_COLORS.GREEN : null,
+														)
 													}}
 													labelPlacement="bottom"
 													control={
 														<ProjectColorCheckboxControl
-															projectColor={PROJECT_GREEN}
+															projectColor={PROJECT_COLORS.GREEN}
 														/>
 													}
 													sx={{ margin: 0, gap: 4 }}
@@ -436,14 +434,16 @@ function RouteComponent() {
 												<FormControlLabel
 													name="option-red"
 													label={intl.formatMessage(m.projectColorOptionRed)}
-													checked={field.state.value === PROJECT_RED}
+													checked={field.state.value === PROJECT_COLORS.RED}
 													onChange={(_event, checked) => {
-														field.handleChange(checked ? PROJECT_RED : null)
+														field.handleChange(
+															checked ? PROJECT_COLORS.RED : null,
+														)
 													}}
 													labelPlacement="bottom"
 													control={
 														<ProjectColorCheckboxControl
-															projectColor={PROJECT_RED}
+															projectColor={PROJECT_COLORS.RED}
 														/>
 													}
 													sx={{ margin: 0, gap: 4 }}
@@ -452,14 +452,16 @@ function RouteComponent() {
 												<FormControlLabel
 													name="option-grey"
 													label={intl.formatMessage(m.projectColorOptionGrey)}
-													checked={field.state.value === PROJECT_GREY}
+													checked={field.state.value === PROJECT_COLORS.GREY}
 													onChange={(_event, checked) => {
-														field.handleChange(checked ? PROJECT_GREY : null)
+														field.handleChange(
+															checked ? PROJECT_COLORS.GREY : null,
+														)
 													}}
 													labelPlacement="bottom"
 													control={
 														<ProjectColorCheckboxControl
-															projectColor={PROJECT_GREY}
+															projectColor={PROJECT_COLORS.GREY}
 														/>
 													}
 													sx={{ margin: 0, gap: 4 }}
@@ -480,7 +482,7 @@ function RouteComponent() {
 						justifyContent: 'center',
 						alignItems: 'center',
 						padding: 6,
-						borderTop: `1px solid ${BLUE_GREY}`,
+						borderTop: `1px solid ${BLUE_05}`,
 					}}
 				>
 					<form.Subscribe
@@ -489,14 +491,13 @@ function RouteComponent() {
 						{([canSubmit, isSubmitting]) => (
 							<Button
 								aria-disabled={!canSubmit}
-								form={FORM_ID}
+								form={formId}
 								fullWidth
 								loading={isSubmitting}
 								loadingPosition="start"
 								startIcon={
 									<Icon name="material-check-circle-outline-rounded" />
 								}
-								sx={{ maxWidth: 400 }}
 								type="submit"
 								variant="contained"
 							>
@@ -573,9 +574,9 @@ function ProjectColorCheckboxControl({
 					sx={{
 						width: 100,
 						height: 100,
-						bgcolor: projectColor,
+						background: projectColor,
 						borderRadius: 2,
-						outline: `8px solid ${COMAPEO_BLUE}`,
+						outline: `4px solid ${BLUE_03}`,
 					}}
 				/>
 			}
@@ -584,9 +585,9 @@ function ProjectColorCheckboxControl({
 					sx={{
 						width: 100,
 						height: 100,
-						bgcolor: projectColor,
+						background: projectColor,
 						borderRadius: 2,
-						outline: `1px solid ${BLUE_GREY}`,
+						outline: `1px solid ${BLUE_05}`,
 					}}
 				/>
 			}

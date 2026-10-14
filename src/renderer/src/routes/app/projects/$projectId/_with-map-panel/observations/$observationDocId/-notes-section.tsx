@@ -18,22 +18,19 @@ import { createGlobalMutationsKey } from '../../../../../../../lib/queries/globa
 import { EditableSection } from './-components/editable-section.tsx'
 
 export function ReadOnlyNotesSection({ notes }: { notes?: string }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	return (
 		<Stack direction="column" sx={{ paddingInline: 6, gap: 4 }}>
-			<Typography
-				id="notes-section-title"
-				component="h2"
-				variant="body1"
-				sx={{ textTransform: 'uppercase' }}
-			>
-				{t(m.title)}
+			<Typography component="h2" variant="sectionLabel">
+				{intl.formatMessage(m.notesSectionTitle)}
 			</Typography>
 
 			<Box sx={{ padding: 2 }}>
-				<Typography>
-					{notes === undefined || notes.length === 0 ? t(m.noNotes) : notes}
+				<Typography color="textTertiary">
+					{notes === undefined || notes.length === 0
+						? intl.formatMessage(m.notesSectionNoNotes)
+						: notes}
 				</Typography>
 			</Box>
 		</Stack>
@@ -53,7 +50,7 @@ export function EditableNotesSection({
 	onStopEditMode: () => void
 	projectId: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: lang } = useSuspenseQuery({
 		...getLocaleStateQueryOptions(),
@@ -96,11 +93,11 @@ export function EditableNotesSection({
 				<EditableSection
 					disabled={disabled}
 					sectionTitle={
-						<Typography variant="inherit" sx={{ textTransform: 'uppercase' }}>
-							{t(m.title)}
+						<Typography variant="sectionLabel">
+							{intl.formatMessage(m.notesSectionTitle)}
 						</Typography>
 					}
-					tooltipText={t(m.editNotesTooltip)}
+					tooltipText={intl.formatMessage(m.notesSectionEditNotes)}
 					editIsPending={updateObservationNotes.status === 'pending'}
 					onStartEditMode={onStartEditMode}
 					renderWhenEditing={({ updateEditState }) => (
@@ -129,20 +126,25 @@ export function EditableNotesSection({
 						(updateObservationNotes.status === 'success' &&
 							observationIsRefetching) ? (
 							<Typography
+								color={
+									updateObservationNotes.variables.notes
+										? 'textSecondary'
+										: 'textTertiary'
+								}
 								sx={{
-									fontStyle:
-										updateObservationNotes.variables.notes.length === 0
-											? 'italic'
-											: undefined,
+									fontStyle: updateObservationNotes.variables.notes
+										? 'italic'
+										: undefined,
 								}}
 							>
-								{updateObservationNotes.variables.notes || t(m.noNotes)}
+								{updateObservationNotes.variables.notes ||
+									intl.formatMessage(m.notesSectionNoNotes)}
 							</Typography>
 						) : observation.tags.notes === undefined ||
 						  observation.tags.notes === null ||
 						  observation.tags.notes.toString().length === 0 ? (
-							<Typography sx={{ fontStyle: 'italic' }}>
-								{t(m.noNotes)}
+							<Typography color="textTertiary" sx={{ fontStyle: 'italic' }}>
+								{intl.formatMessage(m.notesSectionNoNotes)}
 							</Typography>
 						) : (
 							<Typography>{observation.tags.notes}</Typography>
@@ -175,8 +177,6 @@ export function EditableNotesSection({
 
 const NotesEditorSchema = v.object({ notes: v.pipe(v.string(), v.trim()) })
 
-const FORM_ID = 'observation-notes-editor-form'
-
 function NotesEditor({
 	initialValue,
 	onCancel,
@@ -186,7 +186,7 @@ function NotesEditor({
 	onCancel: () => void
 	onSave: (notes: string) => Promise<void>
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const form = useAppForm({
 		defaultValues: { notes: initialValue?.toString() || '' },
@@ -200,7 +200,6 @@ function NotesEditor({
 	return (
 		<Box
 			component="form"
-			id={FORM_ID}
 			onSubmit={(event) => {
 				event.preventDefault()
 				if (form.state.isSubmitting) return
@@ -213,7 +212,9 @@ function NotesEditor({
 						<TextField
 							fullWidth
 							multiline
-							aria-label={t(m.accessibleNotesInputLabel)}
+							aria-label={intl.formatMessage(
+								m.notesSectionAccessibleNotesInputLabel,
+							)}
 							autoFocus
 							onFocus={(event) => {
 								if (field.state.value) {
@@ -234,28 +235,23 @@ function NotesEditor({
 					)}
 				</form.AppField>
 
-				<Stack direction="row" sx={{ justifyContent: 'space-between', gap: 2 }}>
+				<Stack direction="row" sx={{ gap: 2, justifyContent: 'center' }}>
 					<form.Subscribe selector={(state) => state.isSubmitting}>
 						{(isSubmitting) => (
 							<>
 								<Button
-									type="submit"
-									fullWidth
-									sx={{ maxWidth: 400 }}
 									loadingPosition="start"
 									loading={isSubmitting}
-									endIcon={
+									startIcon={
 										<Icon name="material-check-circle-outline-rounded" />
 									}
+									sx={{ flex: 1 }}
+									type="submit"
 								>
-									{t(m.saveButtonText)}
+									{intl.formatMessage(m.notesSectionSave)}
 								</Button>
 
 								<Button
-									type="button"
-									variant="outlined"
-									fullWidth
-									sx={{ maxWidth: 400 }}
 									onClick={() => {
 										if (isSubmitting) {
 											return
@@ -263,8 +259,12 @@ function NotesEditor({
 
 										onCancel()
 									}}
+									startIcon={<Icon name="material-symbols-cancel" />}
+									sx={{ flex: 1 }}
+									type="button"
+									variant="outlined"
 								>
-									{t(m.cancelButtonText)}
+									{intl.formatMessage(m.notesSectionCancel)}
 								</Button>
 							</>
 						)}
@@ -276,33 +276,33 @@ function NotesEditor({
 }
 
 const m = defineMessages({
-	title: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.title',
+	notesSectionTitle: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.notesSectionTitle',
 		defaultMessage: 'Notes',
 		description: 'Title for notes section.',
 	},
-	noNotes: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.noNotes',
+	notesSectionNoNotes: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.notesSectionNoNotes',
 		defaultMessage: 'No notes.',
 		description: 'Text for when notes are empty.',
 	},
-	accessibleNotesInputLabel: {
-		id: 'routes.app.projects.$projectId.observations.$observationDocId.-notes-section.accessibleNotesInputLabel',
+	notesSectionAccessibleNotesInputLabel: {
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.notesSectionAccessibleNotesInputLabel',
 		defaultMessage: 'Notes',
 		description: 'Accessible label for notes input field.',
 	},
-	saveButtonText: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.saveButtonText',
+	notesSectionSave: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.notesSectionSave',
 		defaultMessage: 'Save',
 		description: 'Text for save button.',
 	},
-	cancelButtonText: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.cancelButtonText',
+	notesSectionCancel: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.notesSectionCancel',
 		defaultMessage: 'Cancel',
 		description: 'Text for cancel button.',
 	},
-	editNotesTooltip: {
-		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.-notes-section.editNotesTooltip',
+	notesSectionEditNotes: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.notesSectionEditNotes',
 		defaultMessage: 'Click to Edit',
 		description: 'Text for tooltip when hovering over notes.',
 	},

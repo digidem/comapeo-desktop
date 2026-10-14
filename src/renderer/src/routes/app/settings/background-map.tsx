@@ -21,7 +21,7 @@ import {
 } from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 
-import { BLUE_GREY, LIGHT_GREY } from '../../../colors.ts'
+import { BLACK_03, BLUE_05 } from '../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../components/error-dialog.tsx'
 import { Icon } from '../../../components/icon.tsx'
@@ -37,8 +37,8 @@ function RouteComponent() {
 
 	const router = useRouter()
 
-	const headerIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+	const backIconSize = useIconSizeBasedOnTypography({
+		variant: 'pageTitle',
 		multiplier: 1.5,
 	})
 
@@ -49,10 +49,9 @@ function RouteComponent() {
 				direction="row"
 				sx={{
 					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_GREY}`,
+					borderBottom: `1px solid ${BLUE_05}`,
 					gap: 2,
-					paddingBlock: 4,
-					paddingInline: 6,
+					padding: 4,
 				}}
 			>
 				<IconButton
@@ -66,11 +65,12 @@ function RouteComponent() {
 
 						router.navigate({ to: '/app', replace: true })
 					}}
+					sx={{ color: (theme) => theme.palette.text.secondary }}
 				>
-					<Icon name="material-arrow-back" size={headerIconSize} />
+					<Icon name="material-arrow-back" size={backIconSize} />
 				</IconButton>
 
-				<Typography variant="h1" sx={{ fontWeight: 500, textAlign: 'center' }}>
+				<Typography variant="pageTitle" sx={{ textAlign: 'center' }}>
 					{intl.formatMessage(m.navTitle)}
 				</Typography>
 			</Stack>
@@ -78,7 +78,7 @@ function RouteComponent() {
 			<Suspense
 				fallback={
 					<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
-						<CircularProgress disableShrink />
+						<CircularProgress />
 					</Box>
 				}
 			>
@@ -111,8 +111,8 @@ function MainContent() {
 
 	if (customMapInfo.status === 'pending') {
 		content = (
-			<Box sx={{ flex: 1, display: 'grid', placeItems: 'center' }}>
-				<CircularProgress disableShrink />
+			<Box sx={{ display: 'grid', flex: 1, placeItems: 'center' }}>
+				<CircularProgress />
 			</Box>
 		)
 	} else if (customMapInfo.status === 'error') {
@@ -178,8 +178,9 @@ function MainContent() {
 						<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
 							<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
 								<Typography
-									variant="h1"
-									sx={{ fontWeight: 500, textAlign: 'center' }}
+									component="h1"
+									variant="heroHeader"
+									sx={{ textAlign: 'center' }}
 								>
 									{intl.formatMessage(m.mapUpdateSuccessTitle)}
 								</Typography>
@@ -201,11 +202,12 @@ function MainContent() {
 						>
 							<Button
 								fullWidth
-								variant="outlined"
 								onClick={() => {
 									importCustomMapFile.reset()
 								}}
-								sx={{ maxWidth: 400, alignSelf: 'center' }}
+								startIcon={<Icon name="material-symbols-cancel" />}
+								sx={{ alignSelf: 'center' }}
+								variant="outlined"
 							>
 								{intl.formatMessage(m.close)}
 							</Button>
@@ -236,7 +238,6 @@ function NoCustomMap({
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Container
-					disableGutters
 					maxWidth="sm"
 					sx={{
 						display: 'flex',
@@ -252,8 +253,8 @@ function NoCustomMap({
 						{getErrorCode(error) === 'MAP_NOT_FOUND' ? (
 							<Box
 								sx={{
-									bgcolor: LIGHT_GREY,
-									border: `1px solid ${BLUE_GREY}`,
+									background: BLACK_03,
+									border: `1px solid ${BLUE_05}`,
 									borderRadius: 2,
 									padding: 4,
 								}}
@@ -267,15 +268,15 @@ function NoCustomMap({
 								</Typography>
 
 								<Button
-									variant="outlined"
 									color="error"
 									fullWidth
 									loading={removeIsPending}
 									loadingPosition="start"
-									sx={{ maxWidth: 400, alignSelf: 'center' }}
 									onClick={() => {
 										onRemoveMap()
 									}}
+									sx={{ alignSelf: 'center' }}
+									variant="outlined"
 								>
 									{intl.formatMessage(m.removeMap)}
 								</Button>
@@ -288,7 +289,7 @@ function NoCustomMap({
 			<Stack
 				direction="column"
 				sx={{
-					borderTop: `1px solid ${BLUE_GREY}`,
+					borderTop: `1px solid ${BLUE_05}`,
 					gap: 4,
 					padding: 6,
 				}}
@@ -300,7 +301,7 @@ function NoCustomMap({
 					loadingPosition="start"
 					role={undefined}
 					startIcon={<Icon name="material-file-download" />}
-					sx={{ maxWidth: 400, alignSelf: 'center' }}
+					sx={{ alignSelf: 'center' }}
 					tabIndex={-1}
 					variant="outlined"
 				>
@@ -313,7 +314,7 @@ function NoCustomMap({
 					/>
 				</Button>
 
-				<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
+				<Typography sx={{ textAlign: 'center' }}>
 					{intl.formatMessage(m.acceptedFileTypes)}
 				</Typography>
 			</Stack>
@@ -337,12 +338,12 @@ function CustomMapDetails({
 	const intl = useIntl()
 
 	const headingIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
+		variant: 'heroHeader',
 		multiplier: 3,
 	})
 
 	const sizeIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
+		variant: 'bodyCopy',
 		multiplier: 1,
 	})
 
@@ -354,7 +355,6 @@ function CustomMapDetails({
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Container
-					disableGutters
 					maxWidth="sm"
 					sx={{
 						display: 'flex',
@@ -370,7 +370,7 @@ function CustomMapDetails({
 						<Stack
 							direction="column"
 							sx={{
-								border: `1px solid ${BLUE_GREY}`,
+								border: `1px solid ${BLUE_05}`,
 								borderRadius: 2,
 								flex: 1,
 								gap: 20,
@@ -380,14 +380,14 @@ function CustomMapDetails({
 								paddingInline: 6,
 							}}
 						>
-							<Stack direction="column" sx={{ gap: 10, alignItems: 'center' }}>
+							<Stack direction="column" sx={{ alignItems: 'center', gap: 10 }}>
 								<Box
 									sx={{
+										background: BLACK_03,
+										borderRadius: '50%',
 										display: 'flex',
 										justifyContent: 'center',
-										borderRadius: '50%',
 										padding: 4,
-										backgroundColor: LIGHT_GREY,
 									}}
 								>
 									<Icon
@@ -397,30 +397,36 @@ function CustomMapDetails({
 								</Box>
 
 								<Typography
-									component="p"
-									variant="h1"
-									sx={{
-										fontWeight: 500,
-										textAlign: 'center',
-										textWrap: 'balance',
-									}}
+									variant="heroHeader"
+									sx={{ textAlign: 'center', textWrap: 'balance' }}
 								>
 									{name}
 								</Typography>
 							</Stack>
 
-							<Stack direction="column" sx={{ gap: 4, alignItems: 'center' }}>
-								<Stack direction="row" sx={{ gap: 2 }}>
+							<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
+								<Stack
+									direction="row"
+									sx={{
+										color: (theme) => theme.palette.text.secondary,
+										gap: 2,
+									}}
+								>
 									<Icon name="material-layers-outlined" size={sizeIconSize} />
 
-									<Typography sx={{ fontWeight: 500 }}>
+									<Typography
+										color="inherit"
+										sx={{
+											fontWeight: (theme) => theme.typography.fontWeightMedium,
+										}}
+									>
 										{intl.formatMessage(m.sizeInMegabytes, {
 											value: displayedSize,
 										})}
 									</Typography>
 								</Stack>
 
-								<Typography color="textSecondary" sx={{ textAlign: 'center' }}>
+								<Typography color="textTertiary" sx={{ textAlign: 'center' }}>
 									{intl.formatMessage(m.addedOn, {
 										value: (
 											<time dateTime={new Date(created).toISOString()}>
@@ -442,7 +448,7 @@ function CustomMapDetails({
 			<Stack
 				direction="column"
 				sx={{
-					borderTop: `1px solid ${BLUE_GREY}`,
+					borderTop: `1px solid ${BLUE_05}`,
 					gap: 4,
 					padding: 6,
 				}}
@@ -456,7 +462,7 @@ function CustomMapDetails({
 						onRemoveMap()
 					}}
 					startIcon={<Icon name="material-symbols-delete" />}
-					sx={{ alignSelf: 'center', maxWidth: 400 }}
+					sx={{ alignSelf: 'center' }}
 					variant="contained"
 				>
 					{intl.formatMessage(m.removeMap)}

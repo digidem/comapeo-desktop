@@ -9,8 +9,6 @@ import {
 import type { Field, Observation, Preset } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Container from '@mui/material/Container'
-import Dialog from '@mui/material/Dialog'
 import Divider from '@mui/material/Divider'
 import Fade from '@mui/material/Fade'
 import IconButton from '@mui/material/IconButton'
@@ -28,17 +26,16 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
+import {
+	BLACK_00,
+	BLACK_03,
+	BLUE_05,
+	GREEN_00,
+	ORANGE_00,
+	WHITE_00,
+} from '../../../../../../../../../shared/colors.ts'
 import type { CoordinateFormat } from '../../../../../../../../../shared/coordinate-format.ts'
 import type { UnitSystem } from '../../../../../../../../../shared/unit-system.ts'
-import {
-	BLACK,
-	BLUE_GREY,
-	DARKER_ORANGE,
-	DARK_GREY,
-	GREEN,
-	LIGHT_GREY,
-	WHITE,
-} from '../../../../../../../colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
@@ -49,6 +46,7 @@ import { ErrorBoundary } from '../../../../../../../components/error-boundary.ts
 import { ErrorDialogContent } from '../../../../../../../components/error-dialog.tsx'
 import { GenericRouteNotFoundComponent } from '../../../../../../../components/generic-route-not-found-component.tsx'
 import { Icon } from '../../../../../../../components/icon.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../../../../hooks/icon.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -67,6 +65,8 @@ import {
 	getUnitSystemQueryOptions,
 } from '../../../../../../../lib/queries/app-settings.ts'
 import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations.ts'
+import { DeleteConfirmationDialogContentLayout } from './-components/delete-confirmation-dialog-content-layout.tsx'
+import { DeleteSuccessPanelLayout } from './-components/delete-success-panel-layout.tsx'
 import { EditCategoryPanel } from './-edit-category-panel.tsx'
 import {
 	EditableFieldSection,
@@ -208,6 +208,10 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+	const intl = useIntl()
+
+	const router = useRouter()
+
 	const [pageState, setPageState] = useState<
 		| { name: 'observation-details'; showCategoryEditSuccess: boolean }
 		| { name: 'edit-category' }
@@ -256,9 +260,40 @@ function RouteComponent() {
 		}
 		case 'delete-observation-success': {
 			return (
-				<DeleteObservationSuccessPanel
-					projectId={projectId}
-					fromTrackDocId={fromTrackDocId}
+				<DeleteSuccessPanelLayout
+					action={
+						<Button
+							onClick={() => {
+								if (router.history.canGoBack()) {
+									router.history.back()
+									return
+								}
+
+								if (fromTrackDocId) {
+									router.navigate({
+										to: '/app/projects/$projectId/tracks/$trackDocId',
+										params: { projectId, trackDocId: fromTrackDocId },
+										replace: true,
+									})
+								} else {
+									router.navigate({
+										to: '/app/projects/$projectId',
+										params: { projectId },
+										replace: true,
+									})
+								}
+							}}
+							sx={{ alignSelf: 'center' }}
+							variant="text"
+						>
+							{intl.formatMessage(
+								fromTrackDocId
+									? m.deleteObservationSuccessPanelReturnToTrack
+									: m.deleteObservationSuccessPanelReturnToObservations,
+							)}
+						</Button>
+					}
+					title={intl.formatMessage(m.deleteObservationSuccessPanelTitle)}
 				/>
 			)
 		}
@@ -278,93 +313,6 @@ function RouteComponent() {
 			)
 		}
 	}
-}
-
-function DeleteObservationSuccessPanel({
-	projectId,
-	fromTrackDocId,
-}: {
-	projectId: string
-	fromTrackDocId?: string
-}) {
-	const intl = useIntl()
-
-	const router = useRouter()
-
-	return (
-		<Stack
-			direction="column"
-			sx={{ flex: 1, overflow: 'auto', justifyContent: 'space-between' }}
-		>
-			<Container maxWidth="xs">
-				<Stack
-					direction="column"
-					sx={{ padding: 6, alignItems: 'center', flex: 1, gap: 6 }}
-				>
-					<Box sx={{ padding: 6 }}>
-						<Icon
-							name="material-check-circle-rounded"
-							htmlColor={GREEN}
-							size={160}
-						/>
-					</Box>
-
-					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center' }}
-					>
-						{intl.formatMessage(m.deleteObservationSuccessPanelTitle)}
-					</Typography>
-				</Stack>
-			</Container>
-
-			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'column',
-					gap: 4,
-					paddingX: 6,
-					paddingBottom: 6,
-					position: 'sticky',
-					bottom: 0,
-					alignItems: 'center',
-					zIndex: 1,
-				}}
-			>
-				<Button
-					onClick={() => {
-						if (router.history.canGoBack()) {
-							router.history.back()
-							return
-						}
-
-						if (fromTrackDocId) {
-							router.navigate({
-								to: '/app/projects/$projectId/tracks/$trackDocId',
-								params: { projectId, trackDocId: fromTrackDocId },
-								replace: true,
-							})
-						} else {
-							router.navigate({
-								to: '/app/projects/$projectId',
-								params: { projectId },
-								replace: true,
-							})
-						}
-					}}
-					fullWidth
-					variant="outlined"
-					sx={{ maxWidth: 400 }}
-				>
-					{intl.formatMessage(
-						fromTrackDocId
-							? m.deleteObservationSuccessPanelReturnToTrack
-							: m.deleteObservationSuccessPanelReturnToObservations,
-					)}
-				</Button>
-			</Box>
-		</Stack>
-	)
 }
 
 const DELETE_OBSERVATION_MUTATION_KEY = createGlobalMutationsKey([
@@ -439,24 +387,43 @@ function ObservationDetailsPanel({
 		},
 	})
 
+	const backIconSize = useIconSizeBasedOnTypography({
+		variant: 'pageTitle',
+		multiplier: 1.5,
+	})
+
+	const metadataIconSize = useIconSizeBasedOnTypography({
+		variant: 'bodyCopy',
+		multiplier: 1.5,
+	})
+
+	const categoryIconSize = useIconSizeBasedOnTypography({
+		variant: 'cardHeader',
+		multiplier: 2,
+	})
+
+	const categoryEditSuccessIconSize = useIconSizeBasedOnTypography({
+		variant: 'cardHeader',
+	})
+
 	// NOTE: We only allow editing one thing at a time.
 	// Otherwise we could represent as a list of IDs.
 	const [activeEditId, setActiveEditId] = useState<string | null>(null)
 
 	const editPrefixId = useId()
-	const notesEditId = `${editPrefixId}/notes`
+	const notesEditId = `${editPrefixId}-notes`
 
 	return (
 		<>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Stack
+					component="header"
 					direction="row"
-					component="nav"
 					sx={{
 						alignItems: 'center',
-						gap: 4,
+						borderBottom: `1px solid ${BLUE_05}`,
+						gap: 2,
 						padding: 4,
-						borderBottom: `1px solid ${BLUE_GREY}`,
 					}}
 				>
 					<IconButton
@@ -477,11 +444,12 @@ function ObservationDetailsPanel({
 								replace: true,
 							})
 						}}
+						sx={{ color: (theme) => theme.palette.text.secondary }}
 					>
-						<Icon name="material-arrow-back" size={30} />
+						<Icon name="material-arrow-back" size={backIconSize} />
 					</IconButton>
 
-					<Typography variant="h1" sx={{ fontWeight: 500 }}>
+					<Typography variant="pageTitle">
 						{intl.formatMessage(m.navTitle)}
 					</Typography>
 				</Stack>
@@ -504,6 +472,7 @@ function ObservationDetailsPanel({
 								slotProps={{
 									tooltip: {
 										style: {
+											fontWeight: 'unset',
 											maxWidth: 'unset',
 											overflow: 'hidden',
 											padding: 0,
@@ -511,7 +480,7 @@ function ObservationDetailsPanel({
 									},
 									popper: {
 										modifiers: [
-											{ name: 'offset', options: { offset: [0, 8] } },
+											{ name: 'offset', options: { offset: [-4, 8] } },
 										],
 									},
 								}}
@@ -544,18 +513,17 @@ function ObservationDetailsPanel({
 										</time>
 									</Typography>
 
-									<Icon name="comapeo-validated-badge" aria-hidden />
+									<Icon
+										name="comapeo-validated-badge"
+										aria-hidden
+										size={metadataIconSize}
+									/>
 								</Stack>
 							</Tooltip>
 						</Box>
 
 						<Stack direction="column" sx={{ paddingInline: 6 }}>
-							<Box
-								sx={{
-									border: `1px solid ${BLUE_GREY}`,
-									borderRadius: 2,
-								}}
-							>
+							<Box sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2 }}>
 								<Stack
 									direction="row"
 									sx={{
@@ -576,7 +544,7 @@ function ObservationDetailsPanel({
 										<Box sx={{ position: 'relative' }}>
 											{category ? (
 												<CategoryIconContainer
-													color={category.color || BLACK}
+													color={category.color || BLACK_00}
 													applyBoxShadow
 												>
 													{category.iconRef?.docId ? (
@@ -586,20 +554,23 @@ function ObservationDetailsPanel({
 															})}
 															iconDocumentId={category.iconRef.docId}
 															projectId={projectId}
-															imageStyle={{ width: 48, aspectRatio: 1 }}
+															imageStyle={{
+																aspectRatio: 1,
+																width: categoryIconSize,
+															}}
 														/>
 													) : (
 														<Icon
 															name="material-symbols-indeterminate-question-box"
-															size={40}
+															size={categoryIconSize}
 														/>
 													)}
 												</CategoryIconContainer>
 											) : (
-												<CategoryIconContainer color={BLACK} applyBoxShadow>
+												<CategoryIconContainer applyBoxShadow color={BLACK_00}>
 													<Icon
 														name="material-symbols-indeterminate-question-box"
-														size={40}
+														size={categoryIconSize}
 													/>
 												</CategoryIconContainer>
 											)}
@@ -607,31 +578,30 @@ function ObservationDetailsPanel({
 											{showCategoryUpdatedIndicator ? (
 												<Box
 													sx={{
-														bgcolor: GREEN,
-														right: (theme) => theme.spacing(-1),
-														bottom: (theme) => theme.spacing(-1),
-														position: 'absolute',
+														background: GREEN_00,
 														borderRadius: '50%',
-														padding: 1,
+														bottom: (theme) => theme.spacing(-1),
 														display: 'flex',
+														padding: 1,
+														position: 'absolute',
+														right: (theme) => theme.spacing(-1),
 													}}
 												>
 													<Icon
 														name="material-check"
-														htmlColor={WHITE}
-														size={20}
+														htmlColor={WHITE_00}
+														size={categoryEditSuccessIconSize}
 													/>
 												</Box>
 											) : null}
 										</Box>
 
 										<Typography
-											variant="h2"
+											variant="cardHeader"
 											sx={{
-												fontWeight: 500,
+												overflow: 'hidden',
 												textOverflow: 'ellipsis',
 												whiteSpace: 'nowrap',
-												overflow: 'hidden',
 											}}
 										>
 											{category
@@ -651,10 +621,10 @@ function ObservationDetailsPanel({
 										>
 											<Button
 												disabled={!!activeEditId}
-												variant="text"
 												onClick={() => {
 													onEditCategory()
 												}}
+												variant="text"
 											>
 												{intl.formatMessage(m.changeCategory)}
 											</Button>
@@ -662,7 +632,7 @@ function ObservationDetailsPanel({
 									) : null}
 								</Stack>
 
-								<Divider variant="fullWidth" sx={{ color: BLUE_GREY }} />
+								<Divider />
 
 								<Stack
 									direction="row"
@@ -670,7 +640,7 @@ function ObservationDetailsPanel({
 								>
 									<Icon
 										name="material-symbols-location-filled"
-										htmlColor={DARKER_ORANGE}
+										htmlColor={ORANGE_00}
 									/>
 
 									{typeof observation.lon === 'number' &&
@@ -817,10 +787,7 @@ function ObservationDetailsPanel({
 							</Box>
 						</Stack>
 
-						<Divider
-							variant="fullWidth"
-							sx={{ bgcolor: BLUE_GREY, marginInline: 6 }}
-						/>
+						<Divider sx={{ marginInline: 6 }} />
 
 						{canEdit ? (
 							<EditableNotesSection
@@ -840,18 +807,11 @@ function ObservationDetailsPanel({
 							/>
 						)}
 
-						<Divider
-							variant="fullWidth"
-							sx={{ bgcolor: BLUE_GREY, marginInline: 6 }}
-						/>
+						<Divider sx={{ marginInline: 6 }} />
 
 						{fieldsToDisplay.length > 0 ? (
 							<Stack direction="column" sx={{ paddingInline: 6, gap: 4 }}>
-								<Typography
-									component="h2"
-									variant="body1"
-									sx={{ textTransform: 'uppercase' }}
-								>
+								<Typography component="h2" variant="sectionLabel">
 									{intl.formatMessage(m.detailsSectionTitle)}
 								</Typography>
 
@@ -983,17 +943,17 @@ function ObservationDetailsPanel({
 						<Stack
 							direction="column"
 							sx={{
+								alignItems: 'center',
+								borderTop: `1px solid ${BLUE_05}`,
 								gap: 2,
 								justifyContent: 'center',
-								alignItems: 'center',
-								borderTop: `1px solid ${BLUE_GREY}`,
 								padding: 6,
 							}}
 						>
 							<IconButton
 								disabled={!!activeEditId}
 								aria-labelledby="delete-observation-button-label"
-								sx={{ border: `1px solid ${BLUE_GREY}` }}
+								sx={{ border: `1px solid ${BLUE_05}` }}
 								onClick={() => {
 									setShowDeleteObservationConfirmation(true)
 								}}
@@ -1009,94 +969,86 @@ function ObservationDetailsPanel({
 							</Typography>
 						</Stack>
 
-						<Dialog
-							open={showDeleteObservationConfirmation}
+						<DecentDialog
 							fullWidth
 							maxWidth="sm"
+							value={showDeleteObservationConfirmation || null}
 						>
-							<Stack direction="column">
-								<Stack
-									direction="column"
-									sx={{ gap: 10, flex: 1, padding: 20 }}
-								>
-									<Stack
-										direction="column"
-										sx={{ alignItems: 'center', gap: 4 }}
-									>
-										<Icon name="material-error" color="error" size={72} />
+							{() => {
+								const actionIsPending = deleteObservation.status === 'pending'
 
-										<Typography
-											variant="h1"
-											sx={{ fontWeight: 500, textAlign: 'center' }}
-										>
-											{intl.formatMessage(
-												m.deleteObservationConfirmationDialogTitle,
-											)}
-										</Typography>
-									</Stack>
-								</Stack>
-
-								<Box
-									sx={{
-										position: 'sticky',
-										bottom: 0,
-										display: 'flex',
-										flexDirection: 'row',
-										justifyContent: 'space-between',
-										gap: 6,
-										padding: 6,
-									}}
-								>
-									<Button
-										fullWidth
-										variant="outlined"
-										onClick={
-											deleteObservation.status === 'pending'
-												? undefined
-												: () => {
-														setShowDeleteObservationConfirmation(false)
-													}
-										}
-										sx={{ maxWidth: 400 }}
-									>
-										{intl.formatMessage(
-											m.deleteObservationConfirmationDialogCancel,
-										)}
-									</Button>
-
-									<Button
-										fullWidth
-										color="error"
-										onClick={
-											deleteObservation.status === 'pending'
-												? undefined
-												: () => {
-														deleteObservation.mutate(
-															{ docId: observationDocId },
-															{
-																onError: () => {
+								return (
+									<DeleteConfirmationDialogContentLayout
+										actions={
+											<Stack
+												direction="row"
+												sx={{
+													flexWrap: 'wrap',
+													gap: 4,
+													justifyContent: 'center',
+													padding: 6,
+												}}
+											>
+												<Button
+													fullWidth
+													onClick={
+														actionIsPending
+															? undefined
+															: () => {
 																	setShowDeleteObservationConfirmation(false)
-																},
-																onSuccess: () => {
-																	setShowDeleteObservationConfirmation(false)
-																	onDeleteObservation()
-																},
-															},
-														)
+																}
 													}
+													startIcon={<Icon name="material-symbols-cancel" />}
+													variant="outlined"
+												>
+													{intl.formatMessage(
+														m.deleteObservationConfirmationDialogCancel,
+													)}
+												</Button>
+
+												<Button
+													color="error"
+													fullWidth
+													loading={actionIsPending}
+													loadingPosition="start"
+													onClick={
+														actionIsPending
+															? undefined
+															: () => {
+																	deleteObservation.mutate(
+																		{ docId: observationDocId },
+																		{
+																			onError: () => {
+																				setShowDeleteObservationConfirmation(
+																					false,
+																				)
+																			},
+																			onSuccess: () => {
+																				setShowDeleteObservationConfirmation(
+																					false,
+																				)
+																				onDeleteObservation()
+																			},
+																		},
+																	)
+																}
+													}
+													startIcon={<Icon name="material-symbols-delete" />}
+													variant="contained"
+												>
+													{intl.formatMessage(
+														m.deleteObservationConfirmationDialogConfirm,
+													)}
+												</Button>
+											</Stack>
 										}
-										loading={deleteObservation.status === 'pending'}
-										loadingPosition="start"
-										startIcon={<Icon name="material-symbols-delete" />}
-										sx={{ maxWidth: 400 }}
-									>
-										{intl.formatMessage(
-											m.deleteObservationConfirmationDialogConfirm,
+										title={intl.formatMessage(
+											m.deleteObservationConfirmationDialogTitle,
 										)}
-									</Button>
-								</Box>
-							</Stack>
-						</Dialog>
+									/>
+								)
+							}}
+						</DecentDialog>
 					</>
 				) : null}
 			</Stack>
@@ -1176,7 +1128,7 @@ function ObservationMetadataPanel({
 		if (latitude !== undefined) {
 			result.push({
 				id: 'latitude',
-				icon: <Icon name="comapeo-latitude" htmlColor={DARK_GREY} />,
+				icon: <Icon name="comapeo-latitude" />,
 				label: intl.formatMessage(m.observationMetadataLatitudeLabel),
 				value: intl.formatMessage(m.observationMetadataCoordinate, {
 					value: latitude.toFixed(5),
@@ -1187,7 +1139,7 @@ function ObservationMetadataPanel({
 		if (longitude !== undefined) {
 			result.push({
 				id: 'longitude',
-				icon: <Icon name="comapeo-longitude" htmlColor={DARK_GREY} />,
+				icon: <Icon name="comapeo-longitude" />,
 				label: intl.formatMessage(m.observationMetadataLongitudeLabel),
 				value: intl.formatMessage(m.observationMetadataCoordinate, {
 					value: longitude.toFixed(5),
@@ -1207,7 +1159,7 @@ function ObservationMetadataPanel({
 
 			result.push({
 				id: 'accuracy',
-				icon: <Icon name="comapeo-accuracy" htmlColor={DARK_GREY} />,
+				icon: <Icon name="comapeo-accuracy" />,
 				label: intl.formatMessage(m.observationMetadataLocationAccuracyLabel),
 				value,
 			})
@@ -1225,7 +1177,7 @@ function ObservationMetadataPanel({
 
 			result.push({
 				id: 'altitude',
-				icon: <Icon name="material-symbols-landscape" htmlColor={DARK_GREY} />,
+				icon: <Icon name="material-symbols-landscape" />,
 				label: intl.formatMessage(m.observationMetadataAltitudeLabel),
 				value,
 			})
@@ -1245,12 +1197,7 @@ function ObservationMetadataPanel({
 
 			result.push({
 				id: 'altitude-accuracy',
-				icon: (
-					<Icon
-						name="material-symbols-keyboard-double-arrow-up"
-						htmlColor={DARK_GREY}
-					/>
-				),
+				icon: <Icon name="material-symbols-keyboard-double-arrow-up" />,
 				label: intl.formatMessage(m.observationMetadataAltitudeAccuracyLabel),
 				value,
 			})
@@ -1259,7 +1206,7 @@ function ObservationMetadataPanel({
 		if (speed !== undefined) {
 			result.push({
 				id: 'speed',
-				icon: <Icon name="material-symbols-speed" htmlColor={DARK_GREY} />,
+				icon: <Icon name="material-symbols-speed" />,
 				label: intl.formatMessage(m.observationMetadataSpeedLabel),
 				value: intl.formatMessage(
 					unitSystem === 'imperial'
@@ -1273,6 +1220,11 @@ function ObservationMetadataPanel({
 		return result
 	}, [observation, intl, unitSystem])
 
+	const validatedIconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 2.5,
+	})
+
 	return (
 		<Stack direction="column">
 			<Box
@@ -1284,11 +1236,11 @@ function ObservationMetadataPanel({
 				}}
 			>
 				<Box sx={{ position: 'relative' }}>
-					<Icon name="comapeo-validated-badge" size={64} />
+					<Icon name="comapeo-validated-badge" size={validatedIconSize} />
 
 					<Box
 						sx={{
-							bgcolor: GREEN,
+							background: GREEN_00,
 							borderRadius: '50%',
 							bottom: 0,
 							display: 'flex',
@@ -1297,17 +1249,27 @@ function ObservationMetadataPanel({
 							right: (theme) => theme.spacing(-1),
 						}}
 					>
-						<Icon name="material-check" htmlColor={WHITE} size={20} />
+						<Icon
+							name="material-check"
+							htmlColor={WHITE_00}
+							size={`calc(${validatedIconSize} / 3)`}
+						/>
 					</Box>
 				</Box>
 			</Box>
 
 			<Stack direction="column" sx={{ gap: 6 }}>
-				<Stack direction="column" sx={{ gap: 2, paddingInline: 6 }}>
+				<Stack
+					direction="column"
+					sx={{
+						color: (theme) => theme.palette.text.secondary,
+						gap: 2,
+						paddingInline: 6,
+					}}
+				>
 					<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
 						<Icon
 							name="material-symbols-calendar-today"
-							htmlColor={DARK_GREY}
 							sx={{ alignSelf: 'center' }}
 						/>
 
@@ -1328,7 +1290,6 @@ function ObservationMetadataPanel({
 					<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
 						<Icon
 							name="material-symbols-location-filled"
-							htmlColor={DARK_GREY}
 							sx={{ alignSelf: 'center' }}
 						/>
 
@@ -1346,14 +1307,17 @@ function ObservationMetadataPanel({
 				</Stack>
 
 				{metadataRows.length > 0 ? (
-					<Stack direction="column">
+					<Stack
+						direction="column"
+						sx={{ color: (theme) => theme.palette.text.secondary }}
+					>
 						{metadataRows.map((metadata, index) => (
 							<Stack
 								key={metadata.id}
 								direction="row"
 								sx={{
 									alignItems: 'center',
-									backgroundColor: index % 2 === 0 ? LIGHT_GREY : WHITE,
+									background: index % 2 === 0 ? BLACK_03 : WHITE_00,
 									gap: 2,
 									justifyContent: 'space-between',
 									paddingBlock: 4,
@@ -1374,7 +1338,7 @@ function ObservationMetadataPanel({
 								>
 									<Typography
 										sx={{
-											fontWeight: 500,
+											fontWeight: (theme) => theme.typography.fontWeightMedium,
 											overflow: 'hidden',
 											textOverflow: 'ellipsis',
 											whiteSpace: 'nowrap',

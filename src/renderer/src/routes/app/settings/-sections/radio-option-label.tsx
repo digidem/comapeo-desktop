@@ -9,10 +9,14 @@ export function RadioOptionLabel({
 	secondaryText: string
 }) {
 	return (
-		<Stack direction="column">
-			<Typography sx={{ fontWeight: 500 }}>{primaryText}</Typography>
+		<Stack direction="column" sx={{ gap: 1 }}>
+			<Typography
+				sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
+			>
+				{primaryText}
+			</Typography>
 
-			<Typography color="textSecondary" aria-hidden>
+			<Typography color="textTertiary" aria-hidden>
 				{secondaryText}
 			</Typography>
 		</Stack>

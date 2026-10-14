@@ -13,9 +13,10 @@ import { endOfToday } from 'date-fns'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLUE_GREY, DARKER_ORANGE } from '../../../../../colors.ts'
+import { ORANGE_00 } from '../../../../../../../shared/colors.ts'
 import { Icon } from '../../../../../components/icon.tsx'
 import { ButtonLink } from '../../../../../components/link.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	COORDINATOR_ROLE_ID,
@@ -172,7 +173,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
 	const { projectId } = Route.useParams()
 
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: lang } = useSuspenseQuery({
 		...getLocaleStateQueryOptions(),
@@ -199,28 +200,30 @@ function RouteComponent() {
 
 	const hasDataToShow = observations.length + tracks.length > 0
 
+	const introPanelIconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 4,
+	})
+
 	if (selfIsAtLeastCoordinator && activeMembers.length < 2 && !hasDataToShow) {
 		return (
 			<IntroPanel
-				title={t(m.inviteCollaboratorsPanelTitle)}
-				description={t(m.inviteCollaboratorsPanelDescription)}
+				title={intl.formatMessage(m.inviteCollaboratorsPanelTitle)}
+				description={intl.formatMessage(m.inviteCollaboratorsPanelDescription)}
 				icon={
 					<Icon
 						name="material-person-add"
-						size={120}
-						htmlColor={DARKER_ORANGE}
+						size={introPanelIconSize}
+						htmlColor={ORANGE_00}
 					/>
 				}
 				link={
 					<ButtonLink
 						to="/app/projects/$projectId/team/invite"
 						params={{ projectId }}
-						startIcon={<Icon name="material-person-add" />}
-						sx={{ maxWidth: 400 }}
-						variant="contained"
-						fullWidth
+						variant="text"
 					>
-						{t(m.inviteCollaboratorsPanelInviteLink)}
+						{intl.formatMessage(m.inviteCollaboratorsPanelInviteLink)}
 					</ButtonLink>
 				}
 			/>
@@ -230,25 +233,22 @@ function RouteComponent() {
 	if (!hasDataToShow) {
 		return (
 			<IntroPanel
-				title={t(m.openExchangePanelTitle)}
-				description={t(m.openExchangePanelDescription)}
+				title={intl.formatMessage(m.openExchangePanelTitle)}
+				description={intl.formatMessage(m.openExchangePanelDescription)}
 				icon={
 					<Icon
 						name="material-offline-bolt-outlined"
-						size={150}
-						htmlColor={BLUE_GREY}
+						size={introPanelIconSize}
+						htmlColor={ORANGE_00}
 					/>
 				}
 				link={
 					<ButtonLink
 						to="/app/projects/$projectId/exchange"
 						params={{ projectId }}
-						startIcon={<Icon name="material-offline-bolt-outlined" />}
-						sx={{ maxWidth: 400 }}
-						variant="contained"
-						fullWidth
+						variant="text"
 					>
-						{t(m.openExchangePanelLink)}
+						{intl.formatMessage(m.openExchangePanelLink)}
 					</ButtonLink>
 				}
 			/>
@@ -271,13 +271,15 @@ function IntroPanel({
 }) {
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-			<Stack direction="column" sx={{ flex: 1, padding: 6, gap: 10 }}>
+			<Stack
+				direction="column"
+				sx={{ flex: 1, padding: 6, gap: 20, justifyContent: 'center' }}
+			>
 				<Stack
 					direction="column"
 					sx={{
-						flex: 1,
-						gap: 4,
 						alignItems: 'center',
+						gap: 4,
 						justifyContent: 'center',
 						padding: 4,
 					}}
@@ -285,20 +287,23 @@ function IntroPanel({
 					<Box>{icon}</Box>
 
 					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center' }}
+						component="h1"
+						variant="heroHeader"
+						sx={{ textAlign: 'center' }}
 					>
 						{title}
 					</Typography>
 
-					<Typography sx={{ textAlign: 'center' }}>{description}</Typography>
+					<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
+						{description}
+					</Typography>
 				</Stack>
 
 				<Box
 					sx={{
 						display: 'flex',
+						flexDirection: 'row',
 						justifyContent: 'center',
-						alignItems: 'center',
 					}}
 				>
 					{link}
@@ -360,7 +365,7 @@ const m = defineMessages({
 	},
 	inviteCollaboratorsPanelInviteLink: {
 		id: '$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelInviteLink',
-		defaultMessage: 'Invite Device',
+		defaultMessage: 'Invite Devices',
 		description: 'Text for link that navigates to invite page.',
 	},
 	openExchangePanelTitle: {
@@ -377,7 +382,7 @@ const m = defineMessages({
 	},
 	openExchangePanelLink: {
 		id: '$1.routes.app.projects.$projectId.index.openExchangePanelLink',
-		defaultMessage: 'Open Exchange',
+		defaultMessage: 'Go to Exchange',
 		description: 'Text for link that navigates to exchange page.',
 	},
 })

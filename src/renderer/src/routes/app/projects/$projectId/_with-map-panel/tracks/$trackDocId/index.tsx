@@ -18,13 +18,14 @@ import {
 } from 'react-intl'
 
 import { SyncedIndicatorLine } from '../../../../-shared/synced-indicator-line.tsx'
-import { BLACK, BLUE_GREY } from '../../../../../../../colors.ts'
+import { BLACK_00, BLUE_05 } from '../../../../../../../../../shared/colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
 } from '../../../../../../../components/category-icon.tsx'
 import { GenericRouteNotFoundComponent } from '../../../../../../../components/generic-route-not-found-component.tsx'
 import { Icon } from '../../../../../../../components/icon.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../../../../hooks/icon.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 	getMatchingCategoryForDocument,
@@ -115,18 +116,28 @@ function RouteComponent() {
 		lang,
 	})
 
+	const backIconSize = useIconSizeBasedOnTypography({
+		variant: 'pageTitle',
+		multiplier: 1.5,
+	})
+
+	const categoryIconSize = useIconSizeBasedOnTypography({
+		variant: 'cardHeader',
+		multiplier: 2,
+	})
+
 	const category = getMatchingCategoryForDocument(track, categories)
 
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 			<Stack
+				component="header"
 				direction="row"
-				component="nav"
 				sx={{
 					alignItems: 'center',
-					gap: 4,
+					borderBottom: `1px solid ${BLUE_05}`,
+					gap: 2,
 					padding: 4,
-					borderBottom: `1px solid ${BLUE_GREY}`,
 				}}
 			>
 				<IconButton
@@ -142,16 +153,17 @@ function RouteComponent() {
 							replace: true,
 						})
 					}}
+					sx={{ color: (theme) => theme.palette.text.secondary }}
 				>
-					<Icon name="material-arrow-back" size={30} />
+					<Icon name="material-arrow-back" size={backIconSize} />
 				</IconButton>
 
-				<Typography variant="h1" sx={{ fontWeight: 500 }}>
+				<Typography variant="pageTitle">
 					{intl.formatMessage(m.navTitle)}
 				</Typography>
 			</Stack>
 
-			<Box sx={{ overflow: 'auto', flex: 1 }}>
+			<Stack direction="column" sx={{ overflow: 'auto', flex: 1 }}>
 				<Stack direction="column" sx={{ paddingBlock: 6, gap: 6 }}>
 					<Box sx={{ paddingInline: 6 }}>
 						<Typography>
@@ -165,15 +177,16 @@ function RouteComponent() {
 							})}
 						</Typography>
 					</Box>
+
 					<Stack direction="column" sx={{ paddingInline: 6 }}>
-						<Box sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}>
+						<Box sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2 }}>
 							<Stack
 								direction="row"
 								sx={{ alignItems: 'center', gap: 4, padding: 4 }}
 							>
 								{category ? (
 									<CategoryIconContainer
-										color={category.color || BLACK}
+										color={category.color || BLACK_00}
 										applyBoxShadow
 									>
 										{category.iconRef?.docId ? (
@@ -183,37 +196,36 @@ function RouteComponent() {
 												})}
 												iconDocumentId={category.iconRef.docId}
 												projectId={projectId}
-												imageStyle={{ width: 48, aspectRatio: 1 }}
+												imageStyle={{ aspectRatio: 1, width: categoryIconSize }}
 											/>
 										) : (
-											<Icon name="material-hiking" size={40} />
+											<Icon name="material-hiking" size={categoryIconSize} />
 										)}
 									</CategoryIconContainer>
 								) : (
-									<CategoryIconContainer color={BLACK} applyBoxShadow>
-										<Icon name="material-hiking" size={40} />
+									<CategoryIconContainer applyBoxShadow color={BLACK_00}>
+										<Icon name="material-hiking" size={categoryIconSize} />
 									</CategoryIconContainer>
 								)}
 
-								<Typography variant="h2" sx={{ fontWeight: 500 }}>
+								<Typography
+									sx={{
+										fontWeight: (theme) => theme.typography.fontWeightMedium,
+									}}
+								>
 									{intl.formatMessage(m.tracks)}
 								</Typography>
 							</Stack>
 						</Box>
 					</Stack>
+
 					<Stack direction="column" sx={{ paddingInline: 6, gap: 4 }}>
-						<Typography
-							component="h2"
-							variant="body1"
-							sx={{ textTransform: 'uppercase' }}
-						>
+						<Typography component="h2" variant="sectionLabel">
 							{intl.formatMessage(m.descriptionSectionTitle)}
 						</Typography>
 
 						<Typography>{track.tags.notes}</Typography>
 					</Stack>
-
-					<Stack direction="column" sx={{ gap: 2, overflow: 'auto' }}></Stack>
 				</Stack>
 
 				<Divider />
@@ -222,15 +234,13 @@ function RouteComponent() {
 					fallback={
 						<Box
 							sx={{
-								display: 'flex',
-								flexDirection: 'column',
-								justifyContent: 'center',
-								alignItems: 'center',
+								display: 'grid',
 								flex: 1,
-								padding: 6,
+								padding: 10,
+								placeItems: 'center',
 							}}
 						>
-							<CircularProgress disableShrink size={40} />
+							<CircularProgress />
 						</Box>
 					}
 				>
@@ -243,7 +253,7 @@ function RouteComponent() {
 						lang={lang}
 					/>
 				</Suspense>
-			</Box>
+			</Stack>
 		</Stack>
 	)
 }
@@ -296,18 +306,14 @@ function TrackObservationsSection({
 	return (
 		<Stack direction="column" sx={{ flex: 1 }}>
 			<Box sx={{ padding: 6 }}>
-				<Typography
-					component="h2"
-					variant="body1"
-					sx={{ textTransform: 'uppercase' }}
-				>
+				<Typography component="h2" variant="sectionLabel">
 					{intl.formatMessage(m.observationsSectionTitle, {
 						count: displayedTrackObservations.length,
 					})}
 				</Typography>
 			</Box>
 
-			<List component="ul" disablePadding>
+			<List component="ul">
 				{displayedTrackObservations.map(({ document, category }) => {
 					const { createdAt, docId, createdBy } = document
 
@@ -316,7 +322,7 @@ function TrackObservationsSection({
 						: intl.formatMessage(m.observationCategoryNameFallback)
 
 					const renderedCategory = category ? (
-						<CategoryIconContainer color={category.color || BLACK}>
+						<CategoryIconContainer color={category.color || BLACK_00}>
 							{category.iconRef?.docId ? (
 								<CategoryIconImage
 									projectId={projectId}
@@ -334,7 +340,7 @@ function TrackObservationsSection({
 							)}
 						</CategoryIconContainer>
 					) : (
-						<CategoryIconContainer color={BLACK}>
+						<CategoryIconContainer color={BLACK_00}>
 							<Icon
 								name="material-symbols-indeterminate-question-box"
 								size={40}
@@ -344,7 +350,6 @@ function TrackObservationsSection({
 					return (
 						<ListItemButton
 							key={docId}
-							disableGutters
 							disableTouchRipple
 							onClick={() => {
 								navigate({
@@ -362,14 +367,19 @@ function TrackObservationsSection({
 							<Stack direction="row" sx={{ flex: 1, gap: 2, overflow: 'auto' }}>
 								<Stack
 									direction="column"
-									sx={{ flex: 1, justifyContent: 'center', overflow: 'hidden' }}
+									sx={{
+										flex: 1,
+										gap: 1,
+										justifyContent: 'center',
+										overflow: 'hidden',
+									}}
 								>
 									<Typography
+										variant="cardHeader"
 										sx={{
-											fontWeight: 500,
+											overflow: 'hidden',
 											textOverflow: 'ellipsis',
 											whiteSpace: 'nowrap',
-											overflow: 'hidden',
 										}}
 									>
 										{title}
@@ -377,9 +387,9 @@ function TrackObservationsSection({
 
 									<Typography
 										sx={{
+											overflow: 'hidden',
 											textOverflow: 'ellipsis',
 											whiteSpace: 'nowrap',
-											overflow: 'hidden',
 										}}
 									>
 										{intl.formatDate(createdAt, {
@@ -395,30 +405,15 @@ function TrackObservationsSection({
 
 								<Box
 									sx={{
-										display: 'flex',
-										justifyContent: 'center',
-										alignItems: 'center',
-										width: CATEGORY_CONTAINER_SIZE_PX,
 										aspectRatio: 1,
+										display: 'grid',
+										placeItems: 'center',
+										width: CATEGORY_CONTAINER_SIZE_PX,
 									}}
 								>
-									<Box sx={{ flex: 1 }}>
-										<Suspense
-											fallback={
-												<Box
-													sx={{
-														display: 'flex',
-														justifyContent: 'center',
-														alignItems: 'center',
-													}}
-												>
-													<CircularProgress disableShrink size={30} />
-												</Box>
-											}
-										>
-											{renderedCategory}
-										</Suspense>
-									</Box>
+									<Suspense fallback={<CircularProgress />}>
+										{renderedCategory}
+									</Suspense>
 								</Box>
 							</Stack>
 						</ListItemButton>

@@ -4,13 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { expect } from '@playwright/test'
 import { stubDialog } from 'electron-playwright-helpers'
 
-import {
-	PROJECT_BLUE,
-	PROJECT_GREEN,
-	PROJECT_GREY,
-	PROJECT_ORANGE,
-	PROJECT_RED,
-} from '../../../../src/renderer/src/colors.ts'
+import { PROJECT_COLORS } from '../../../../src/shared/colors.ts'
 import {
 	setup,
 	simulateCreateProject,
@@ -206,11 +200,11 @@ test.describe('project info settings', () => {
 				const colorCheckboxes = projectColorInput.getByRole('checkbox')
 
 				const expectedColorOptions = [
-					{ name: 'Orange', hexCode: PROJECT_ORANGE },
-					{ name: 'Blue', hexCode: PROJECT_BLUE },
-					{ name: 'Green', hexCode: PROJECT_GREEN },
-					{ name: 'Red', hexCode: PROJECT_RED },
-					{ name: 'Grey', hexCode: PROJECT_GREY },
+					{ name: 'Orange', hexCode: PROJECT_COLORS.ORANGE },
+					{ name: 'Blue', hexCode: PROJECT_COLORS.BLUE },
+					{ name: 'Green', hexCode: PROJECT_COLORS.GREEN },
+					{ name: 'Red', hexCode: PROJECT_COLORS.RED },
+					{ name: 'Grey', hexCode: PROJECT_COLORS.GREY },
 				]
 
 				await expect(colorCheckboxes).toHaveCount(expectedColorOptions.length)

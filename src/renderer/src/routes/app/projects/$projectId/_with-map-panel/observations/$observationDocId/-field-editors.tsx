@@ -38,7 +38,7 @@ export function TextFieldEditor({
 	onCancel: () => void
 	onSave: (value: string | undefined) => Promise<void>
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const form = useAppForm({
 		defaultValues: { answer: initialValue },
@@ -96,18 +96,18 @@ export function TextFieldEditor({
 					{(isSubmitting) => (
 						<>
 							<Button
-								type="submit"
 								loadingPosition="start"
 								loading={isSubmitting}
-								endIcon={<Icon name="material-check-circle-outline-rounded" />}
-								sx={{ flex: 1, minwidth: 200, maxWidth: 400 }}
+								startIcon={
+									<Icon name="material-check-circle-outline-rounded" />
+								}
+								sx={{ flex: 1 }}
+								type="submit"
 							>
-								{t(m.saveButtonText)}
+								{intl.formatMessage(m.saveButtonText)}
 							</Button>
 
 							<Button
-								type="button"
-								variant="outlined"
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -115,9 +115,12 @@ export function TextFieldEditor({
 
 									onCancel()
 								}}
-								sx={{ flex: 1, minwidth: 200, maxWidth: 400 }}
+								startIcon={<Icon name="material-symbols-cancel" />}
+								sx={{ flex: 1 }}
+								type="button"
+								variant="outlined"
 							>
-								{t(m.cancelButtonText)}
+								{intl.formatMessage(m.cancelButtonText)}
 							</Button>
 						</>
 					)}
@@ -145,7 +148,7 @@ export function NumberFieldEditor({
 	onCancel: () => void
 	onSave: (value: number | undefined) => Promise<void>
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const form = useAppForm({
 		defaultValues: { answer: initialValue?.toString() },
@@ -207,18 +210,18 @@ export function NumberFieldEditor({
 					{(isSubmitting) => (
 						<>
 							<Button
-								type="submit"
 								loadingPosition="start"
 								loading={isSubmitting}
-								endIcon={<Icon name="material-check-circle-outline-rounded" />}
-								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
+								startIcon={
+									<Icon name="material-check-circle-outline-rounded" />
+								}
+								sx={{ flex: 1 }}
+								type="submit"
 							>
-								{t(m.saveButtonText)}
+								{intl.formatMessage(m.saveButtonText)}
 							</Button>
 
 							<Button
-								type="button"
-								variant="outlined"
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -226,9 +229,12 @@ export function NumberFieldEditor({
 
 									onCancel()
 								}}
-								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
+								startIcon={<Icon name="material-symbols-cancel" />}
+								sx={{ flex: 1 }}
+								type="button"
+								variant="outlined"
 							>
-								{t(m.cancelButtonText)}
+								{intl.formatMessage(m.cancelButtonText)}
 							</Button>
 						</>
 					)}
@@ -330,18 +336,18 @@ export function SingleSelectFieldEditor({
 					{(isSubmitting) => (
 						<>
 							<Button
-								type="submit"
 								loadingPosition="start"
 								loading={isSubmitting}
-								endIcon={<Icon name="material-check-circle-outline-rounded" />}
-								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
+								startIcon={
+									<Icon name="material-check-circle-outline-rounded" />
+								}
+								sx={{ flex: 1 }}
+								type="submit"
 							>
 								{intl.formatMessage(m.saveButtonText)}
 							</Button>
 
 							<Button
-								type="button"
-								variant="outlined"
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -349,7 +355,10 @@ export function SingleSelectFieldEditor({
 
 									onCancel()
 								}}
-								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
+								startIcon={<Icon name="material-symbols-cancel" />}
+								sx={{ flex: 1 }}
+								type="button"
+								variant="outlined"
 							>
 								{intl.formatMessage(m.cancelButtonText)}
 							</Button>
@@ -372,7 +381,7 @@ export function MultiSelectFieldEditor({
 	onCancel: () => void
 	onSave: (value: Array<string | boolean | number | null>) => Promise<void>
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const defaultValues: Record<string, boolean> = {}
 
@@ -436,18 +445,18 @@ export function MultiSelectFieldEditor({
 					{(isSubmitting) => (
 						<>
 							<Button
-								type="submit"
 								loadingPosition="start"
 								loading={isSubmitting}
-								endIcon={<Icon name="material-check-circle-outline-rounded" />}
-								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
+								startIcon={
+									<Icon name="material-check-circle-outline-rounded" />
+								}
+								sx={{ flex: 1 }}
+								type="submit"
 							>
-								{t(m.saveButtonText)}
+								{intl.formatMessage(m.saveButtonText)}
 							</Button>
 
 							<Button
-								type="button"
-								variant="outlined"
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -455,9 +464,12 @@ export function MultiSelectFieldEditor({
 
 									onCancel()
 								}}
-								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
+								startIcon={<Icon name="material-symbols-cancel" />}
+								sx={{ flex: 1 }}
+								type="button"
+								variant="outlined"
 							>
-								{t(m.cancelButtonText)}
+								{intl.formatMessage(m.cancelButtonText)}
 							</Button>
 						</>
 					)}
@@ -478,7 +490,7 @@ export function DateFieldEditor({
 	onCancel: () => void
 	onSave: (value: string | undefined) => Promise<void>
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const dateFieldEditorSchema = useMemo(() => {
 		return v.object({
@@ -489,10 +501,10 @@ export function DateFieldEditor({
 						return input.toISOString()
 					}),
 				),
-				t(m.invalidDateError),
+				intl.formatMessage(m.invalidDateError),
 			),
 		})
-	}, [t])
+	}, [intl])
 
 	const form = useAppForm({
 		defaultValues: {
@@ -563,18 +575,18 @@ export function DateFieldEditor({
 					{(isSubmitting) => (
 						<>
 							<Button
-								type="submit"
 								loadingPosition="start"
 								loading={isSubmitting}
-								endIcon={<Icon name="material-check-circle-outline-rounded" />}
-								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
+								startIcon={
+									<Icon name="material-check-circle-outline-rounded" />
+								}
+								sx={{ flex: 1 }}
+								type="submit"
 							>
-								{t(m.saveButtonText)}
+								{intl.formatMessage(m.saveButtonText)}
 							</Button>
 
 							<Button
-								type="button"
-								variant="outlined"
 								onClick={() => {
 									if (isSubmitting) {
 										return
@@ -582,9 +594,12 @@ export function DateFieldEditor({
 
 									onCancel()
 								}}
-								sx={{ flex: 1, maxWidth: 400, minWidth: 200 }}
+								startIcon={<Icon name="material-symbols-cancel" />}
+								type="button"
+								variant="outlined"
+								sx={{ flex: 1 }}
 							>
-								{t(m.cancelButtonText)}
+								{intl.formatMessage(m.cancelButtonText)}
 							</Button>
 						</>
 					)}

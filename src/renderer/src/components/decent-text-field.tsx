@@ -20,7 +20,7 @@ export function DecentTextField({
 					component="label"
 					color={muiOutlinedInputProps.error ? 'error' : 'textPrimary'}
 					htmlFor={muiOutlinedInputProps.id}
-					sx={{ fontWeight: 500, textTransform: 'uppercase' }}
+					variant="sectionLabel"
 				>
 					{label}
 				</Typography>

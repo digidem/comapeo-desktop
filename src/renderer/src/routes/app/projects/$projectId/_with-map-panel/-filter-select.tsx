@@ -8,7 +8,11 @@ import Popper from '@mui/material/Popper'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 
-import { BLUE_GREY, DARK_GREY, WHITE } from '../../../../../colors.ts'
+import {
+	BLACK_02,
+	BLUE_05,
+	WHITE_00,
+} from '../../../../../../../shared/colors.ts'
 import { Icon } from '../../../../../components/icon.tsx'
 
 export function FilterSelect({
@@ -126,7 +130,7 @@ export function FilterSelect({
 						<Icon
 							name="material-expand-more-rounded"
 							sx={{ transform: anchorElement ? 'rotate(180deg)' : undefined }}
-							htmlColor={DARK_GREY}
+							htmlColor={BLACK_02}
 						/>
 					</Stack>
 
@@ -190,7 +194,7 @@ export function FilterSelect({
 								<Box
 									sx={{
 										overflow: 'hidden',
-										bgcolor: WHITE,
+										background: WHITE_00,
 										boxShadow: (theme) => theme.shadows[5],
 										borderRadius: 2,
 										scrollbarColor: 'initial',
@@ -211,7 +215,7 @@ export function FilterSelect({
 													}
 												}}
 												sx={{
-													borderBottom: `1px solid ${BLUE_GREY}`,
+													borderBottom: `1px solid ${BLUE_05}`,
 													padding: 2,
 												}}
 											>
@@ -221,7 +225,7 @@ export function FilterSelect({
 
 										<Stack
 											component={List}
-											disablePadding
+											direction="column"
 											role="listbox"
 											aria-multiselectable={multiSelect}
 											ref={optionsListRef}
@@ -304,7 +308,7 @@ export function FilterSelect({
 														triggerRef.current?.focus()
 													}
 												}}
-												sx={{ borderTop: `1px solid ${BLUE_GREY}`, padding: 2 }}
+												sx={{ borderTop: `1px solid ${BLUE_05}`, padding: 2 }}
 											>
 												{footer}
 											</Box>

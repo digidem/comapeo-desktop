@@ -46,6 +46,7 @@ export const iconNames = [
 	'material-symbols-apps',
 	'material-symbols-arrow-circle-right',
 	'material-symbols-calendar-today',
+	'material-symbols-cancel',
 	'material-symbols-center-focus-weak',
 	'material-symbols-computer',
 	'material-symbols-delete',

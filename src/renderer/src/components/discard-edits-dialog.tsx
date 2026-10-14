@@ -3,6 +3,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { defineMessages, useIntl } from 'react-intl'
 
+import { useIconSizeBasedOnTypography } from '../hooks/icon.ts'
 import { Icon } from './icon.tsx'
 
 export function DiscardEditsDialogContent({
@@ -12,19 +13,28 @@ export function DiscardEditsDialogContent({
 	onCancel: () => void
 	onConfirm: () => void
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
+
+	const heroIconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 3,
+	})
 
 	return (
-		<Stack direction="column">
-			<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+		<Stack direction="column" sx={{ overflow: 'auto' }}>
+			<Stack
+				direction="column"
+				sx={{ gap: 10, flex: 1, overflow: 'auto', padding: 20 }}
+			>
 				<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
-					<Icon name="material-error" color="error" size={72} />
+					<Icon name="material-error" color="error" size={heroIconSize} />
 
 					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center' }}
+						component="h1"
+						variant="heroHeader"
+						sx={{ textAlign: 'center' }}
 					>
-						{t(m.title)}
+						{intl.formatMessage(m.title)}
 					</Typography>
 				</Stack>
 			</Stack>
@@ -32,36 +42,34 @@ export function DiscardEditsDialogContent({
 			<Stack
 				direction="row"
 				sx={{
-					position: 'sticky',
-					bottom: 0,
-					display: 'flex',
-					justifyContent: 'center',
+					alignItems: 'center',
+					flexWrap: 'wrap',
 					gap: 4,
+					justifyContent: 'center',
 					padding: 6,
 				}}
 			>
 				<Button
 					fullWidth
-					variant="outlined"
 					onClick={() => {
 						onCancel()
 					}}
-					sx={{ maxWidth: 400 }}
+					startIcon={<Icon name="material-symbols-cancel" />}
+					variant="outlined"
 				>
-					{t(m.cancelButton)}
+					{intl.formatMessage(m.cancelButton)}
 				</Button>
 
 				<Button
-					fullWidth
-					variant="contained"
 					color="error"
-					startIcon={<Icon name="material-symbols-delete" />}
+					fullWidth
 					onClick={() => {
 						onConfirm()
 					}}
-					sx={{ maxWidth: 400 }}
+					startIcon={<Icon name="material-symbols-delete" />}
+					variant="contained"
 				>
-					{t(m.confirmButton)}
+					{intl.formatMessage(m.confirmButton)}
 				</Button>
 			</Stack>
 		</Stack>

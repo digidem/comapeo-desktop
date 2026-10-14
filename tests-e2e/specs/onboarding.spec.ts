@@ -92,10 +92,10 @@ test('data and privacy step', async ({ appInfo }) => {
 		).toBeVisible()
 
 		await expect(
-			page.getByRole('heading', {
-				name: 'CoMapeo allows teams to map offline without needing internet servers.',
-				exact: true,
-			}),
+			page.getByText(
+				'CoMapeo allows teams to map offline without needing internet servers.',
+				{ exact: true },
+			),
 		).toBeVisible()
 
 		const featureList = page.getByRole('list')
@@ -187,10 +187,10 @@ test('device name step', async ({ appInfo, userParams }) => {
 		).toBeVisible()
 
 		await expect(
-			page.getByRole('heading', {
-				name: 'Distinct, memorable names help collaborators recognize you.',
-				exact: true,
-			}),
+			page.getByText(
+				'Distinct, memorable names help collaborators recognize you.',
+				{ exact: true },
+			),
 		).toBeVisible()
 
 		await expect(page.locator('output[name="character-count"]')).toHaveText(

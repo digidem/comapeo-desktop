@@ -24,14 +24,12 @@ import { createFileRoute } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 
 import {
-	BLACK,
-	BLUE_GREY,
-	COMAPEO_BLUE,
-	DARK_ORANGE,
-	GREEN,
-	LIGHT_COMAPEO_BLUE,
-	WHITE,
-} from '../../../../../colors.ts'
+	BLACK_00,
+	BLUE_05,
+	BLUE_06,
+	ORANGE_00,
+	WHITE_00,
+} from '../../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
@@ -128,20 +126,16 @@ function RouteComponent() {
 	const displayedExchangeStateContent = selfIsOnlyActiveProjectMember ? (
 		<Stack
 			direction="column"
-			sx={{ flex: 1, gap: 5, padding: 6, alignItems: 'center' }}
+			sx={{ alignItems: 'center', flex: 1, gap: 5, padding: 6 }}
 		>
-			<Typography
-				component="p"
-				variant="h1"
-				sx={{ fontWeight: 500, textAlign: 'center' }}
-			>
+			<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
 				{intl.formatMessage(m.noOtherDevicesOnProject)}
 			</Typography>
 
 			<ButtonLink
-				variant="text"
 				to="/app/projects/$projectId/team/invite"
 				params={{ projectId }}
+				variant="text"
 			>
 				{intl.formatMessage(m.inviteDevices)}
 			</ButtonLink>
@@ -163,19 +157,26 @@ function RouteComponent() {
 	const selfIsOnlyProjectMemberEver =
 		members.length === 1 && members[0]?.deviceId === ownDeviceInfo.deviceId
 
+	const devicesIconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 3,
+	})
+
 	return (
 		<>
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 				<Stack
+					component="header"
 					direction="row"
 					sx={{
 						alignItems: 'center',
-						borderBottom: `1px solid ${BLUE_GREY}`,
+						borderBottom: `1px solid ${BLUE_05}`,
 						gap: 4,
-						padding: 4,
+						paddingBlock: 4,
+						paddingInline: 6,
 					}}
 				>
-					<Typography variant="h1" sx={{ fontWeight: 500 }}>
+					<Typography variant="pageTitle">
 						{intl.formatMessage(m.pageTitle)}
 					</Typography>
 
@@ -183,17 +184,13 @@ function RouteComponent() {
 				</Stack>
 
 				<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-					<Container
-						disableGutters
-						maxWidth="sm"
-						sx={{ flex: 1, paddingBlock: 20 }}
-					>
+					<Container maxWidth="sm" sx={{ flex: 1, paddingBlock: 20 }}>
 						<Stack direction="column" sx={{ gap: 5 }}>
 							<Box sx={{ alignSelf: 'center', position: 'relative' }}>
 								<Box
 									sx={{
 										alignItems: 'center',
-										border: `8px solid ${connectedPeersCount > 0 ? DARK_ORANGE : BLUE_GREY}`,
+										border: `8px solid ${connectedPeersCount > 0 ? ORANGE_00 : BLUE_05}`,
 										borderRadius: '50%',
 										display: 'flex',
 										flexDirection: 'row',
@@ -203,10 +200,8 @@ function RouteComponent() {
 								>
 									<Icon
 										name="material-symbols-devices"
-										htmlColor={
-											connectedPeersCount > 0 ? DARK_ORANGE : BLUE_GREY
-										}
-										size={80}
+										htmlColor={connectedPeersCount > 0 ? ORANGE_00 : BLUE_05}
+										size={devicesIconSize}
 									/>
 								</Box>
 
@@ -214,7 +209,7 @@ function RouteComponent() {
 									<Box
 										sx={{
 											alignItems: 'center',
-											backgroundColor: DARK_ORANGE,
+											backgroundColor: ORANGE_00,
 											borderRadius: '50%',
 											bottom: -8,
 											display: 'flex',
@@ -223,13 +218,13 @@ function RouteComponent() {
 											position: 'absolute',
 											right: -8,
 											padding: 2,
-											boxShadow: `0px 2px 20px 0px ${alpha(BLACK, 0.4)}`,
+											boxShadow: `0px 2px 20px 0px ${alpha(BLACK_00, 0.4)}`,
 										}}
 									>
 										<Icon
 											name="material-symbols-stars-2"
-											htmlColor={WHITE}
-											size={32}
+											htmlColor={WHITE_00}
+											size={`calc(${devicesIconSize} / 2)`}
 										/>
 									</Box>
 								) : null}
@@ -257,7 +252,6 @@ function RouteComponent() {
 									variant={
 										syncState?.data.isSyncEnabled ? 'outlined' : 'contained'
 									}
-									sx={{ maxWidth: 400 }}
 									startIcon={
 										<Icon
 											name={
@@ -340,7 +334,7 @@ function RemoteArchiveIndicator({ projectId }: { projectId: string }) {
 	const { online } = useBrowserNetInfo()
 
 	const iconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body2',
+		variant: 'detailCopy',
 		multiplier: 0.6,
 	})
 
@@ -355,7 +349,7 @@ function RemoteArchiveIndicator({ projectId }: { projectId: string }) {
 		>
 			<Icon name="material-circle-filled" size={iconSize} />
 
-			<Typography variant="body2">
+			<Typography variant="detailCopy">
 				{intl.formatMessage(m.remoteArchiveConnected)}
 			</Typography>
 		</Stack>
@@ -369,7 +363,7 @@ function DisplayedSyncState({
 	projectId: string
 	syncState: SyncState
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const connectedPeersCount = getConnectedPeersCount(
 		syncState.remoteDeviceSyncState,
@@ -392,12 +386,8 @@ function DisplayedSyncState({
 
 	return (
 		<Stack direction="column" sx={{ flex: 1, gap: 5, padding: 6 }}>
-			<Typography
-				component="p"
-				variant="h1"
-				sx={{ fontWeight: 500, textAlign: 'center' }}
-			>
-				{t(title)}
+			<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
+				{intl.formatMessage(title)}
 			</Typography>
 
 			{syncStage.name === 'idle' ? null : <SyncProgress stage={syncStage} />}
@@ -454,14 +444,14 @@ function SyncProgress({
 	return (
 		<Stack direction="column" sx={{ gap: 3, padding: 6 }}>
 			{stage.name === 'complete-full' ? (
-				<Icon name="material-check" htmlColor={GREEN} />
+				<Icon name="material-check" color="success" />
 			) : stage.name !== 'waiting' ? (
-				<Icon name="material-bolt-sharp" htmlColor={COMAPEO_BLUE} />
+				<Icon name="material-bolt-sharp" color="primary" />
 			) : null}
 
 			<LinearProgress {...progressProps} />
 
-			<Typography color="textSecondary" sx={{ textAlign: 'end' }}>
+			<Typography sx={{ textAlign: 'end' }}>
 				{formatNumber(stage.name === 'waiting' ? 0 : stage.progress, {
 					style: 'percent',
 				})}
@@ -507,14 +497,12 @@ function NetworkConnectionPill() {
 	}
 
 	return (
-		<Box
-			sx={{ backgroundColor: LIGHT_COMAPEO_BLUE, borderRadius: 2, padding: 1 }}
-		>
+		<Box sx={{ background: BLUE_06, borderRadius: 2, padding: 1 }}>
 			<Typography
+				color="textTertiary"
 				data-testid="exchange-network-connection-info"
-				variant="body2"
-				color="textSecondary"
 				sx={{ whiteSpace: 'nowrap' }}
+				variant="detailCopy"
 			>
 				{displayedText}
 			</Typography>
