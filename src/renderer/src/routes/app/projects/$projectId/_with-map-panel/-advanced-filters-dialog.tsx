@@ -151,7 +151,10 @@ export function AdvancedFiltersDialogContent({
 					padding: 4,
 				}}
 			>
-				<IconButton onClick={onCancel}>
+				<IconButton
+					aria-label={intl.formatMessage(m.advancedFiltersCloseAccessibleLabel)}
+					onClick={onCancel}
+				>
 					<Icon name="material-close" size={closeIconSize} />
 				</IconButton>
 
