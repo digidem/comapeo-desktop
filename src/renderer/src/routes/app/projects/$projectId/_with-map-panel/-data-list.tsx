@@ -746,23 +746,6 @@ export function DataList({
 													selected={isHighlighted}
 													autoFocus={isHighlighted}
 													onClick={() => {
-														if (!isHighlighted) {
-															router.navigate({
-																to: '.',
-																replace: true,
-																search: (prev) => ({
-																	...prev,
-																	highlightedDocument: {
-																		type,
-																		docId,
-																		from: 'list',
-																	},
-																}),
-															})
-
-															return
-														}
-
 														if (type === 'observation') {
 															router.navigate({
 																to: '/app/projects/$projectId/observations/$observationDocId',
