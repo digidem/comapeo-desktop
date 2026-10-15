@@ -188,7 +188,6 @@ export function createTheme({ platform }: { platform: NodeJS.Platform }) {
 							borderRadius: theme.spacing(8),
 							fontSize: theme.typography.button.fontSize,
 							maxWidth: 250,
-							minWidth: 100,
 						}
 					},
 					outlined: ({ theme }) => {
