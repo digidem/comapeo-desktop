@@ -395,29 +395,29 @@
     "description": "Text used for action button in system dialog for selecting directory to use for download.",
     "message": "Select"
   },
-  "$1.routes.app.projects.$projectId.download.successPanelDescriptionObservations": {
+  "$1.routes.app.projects.$projectId.download.successDialogClose": {
+    "description": "Button text for closing the success dialog.",
+    "message": "Close"
+  },
+  "$1.routes.app.projects.$projectId.download.successDialogDescriptionObservations": {
     "description": "Description text for success panel when downloading observations.",
     "message": "<b>All observations</b><br></br> have been downloaded to your device."
   },
-  "$1.routes.app.projects.$projectId.download.successPanelDescriptionObservationsWithMedia": {
+  "$1.routes.app.projects.$projectId.download.successDialogDescriptionObservationsWithMedia": {
     "description": "Description text for success panel when downloading observations with media.",
     "message": "<b>All observations with media</b><br></br> have been downloaded to your device."
   },
-  "$1.routes.app.projects.$projectId.download.successPanelDescriptionTracks": {
+  "$1.routes.app.projects.$projectId.download.successDialogDescriptionTracks": {
     "description": "Description text for success panel when downloading tracks.",
     "message": "<b>All tracks</b><br></br> have been downloaded to your device."
   },
-  "$1.routes.app.projects.$projectId.download.successPanelDone": {
-    "description": "Button text for exiting success panel.",
-    "message": "Done"
-  },
-  "$1.routes.app.projects.$projectId.download.successPanelTitle": {
+  "$1.routes.app.projects.$projectId.download.successDialogTitle": {
     "description": "Title text for success panel.",
     "message": "Success!"
   },
-  "$1.routes.app.projects.$projectId.download.successPanelViewInFileManager": {
+  "$1.routes.app.projects.$projectId.download.successDialogViewFile": {
     "description": "Button text for viewing the downloaded file in the system file manager.",
-    "message": "View in file manager"
+    "message": "Open File Manager"
   },
   "$1.routes.app.projects.$projectId.download.tracksOptionDescription": {
     "description": "Description of tracks option.",
@@ -584,8 +584,8 @@
     "message": "No answer"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
-    "description": "Text for button to change category.",
-    "message": "Change"
+    "description": "Tooltip text for button to change category.",
+    "message": "Change Category"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText": {
     "description": "Text for delete observation button.",

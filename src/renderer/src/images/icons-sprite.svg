@@ -382,6 +382,15 @@
 		>
 			<path d="M440-400v-360h80v360zm0 200v-80h80v80z"></path>
 		</symbol>
+		<symbol
+			fill="currentColor"
+			viewBox="0 -960 960 960"
+			id="material-symbols-folder-open"
+		>
+			<path
+				d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640H447l-80-80H160v480l96-320h684L837-217q-8 26-29.5 41.5T760-160zm84-80h516l72-240H316zm0 0 72-240zm-84-400v-80z"
+			></path>
+		</symbol>
 		<symbol viewBox="0 -960 960 960" id="material-symbols-grid-view">
 			<path
 				d="M120-520v-320h320v320zm0 400v-320h320v320zm400-400v-320h320v320zm0 400v-320h320v320zM200-600h160v-160H200zm400 0h160v-160H600zm0 400h160v-160H600zm-400 0h160v-160H200zm160-400"

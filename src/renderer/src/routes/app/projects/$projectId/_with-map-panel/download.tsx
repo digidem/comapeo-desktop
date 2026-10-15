@@ -1,4 +1,4 @@
-import { useId, useState } from 'react'
+import { useId } from 'react'
 import { useExportGeoJSON, useExportZipFile } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -48,7 +48,11 @@ const DataToDownloadSchema = v.union([
 
 type DataToDownload = v.InferOutput<typeof DataToDownloadSchema>
 
+const onChangeSchema = v.object({ dataToDownload: DataToDownloadSchema })
+
 function RouteComponent() {
+	const intl = useIntl()
+
 	const { projectId } = Route.useParams()
 
 	const router = useRouter()
@@ -66,131 +70,17 @@ function RouteComponent() {
 		})
 	}
 
-	const [successState, setSuccessState] = useState<{
-		dataDownloaded: DataToDownload
-		savedToPath: string
-	} | null>(null)
-
-	return successState ? (
-		<SuccessPanel
-			dataDownloaded={successState.dataDownloaded}
-			onDone={navigateBack}
-			savedToPath={successState.savedToPath}
-		/>
-	) : (
-		<DownloadForm
-			onBack={navigateBack}
-			onSuccess={({ dataDownloaded, savedToPath }) => {
-				setSuccessState({ dataDownloaded, savedToPath })
-			}}
-			projectId={projectId}
-		/>
-	)
-}
-
-function SuccessPanel({
-	dataDownloaded,
-	onDone,
-	savedToPath,
-}: {
-	dataDownloaded: DataToDownload
-	onDone: () => void
-	savedToPath: string
-}) {
-	const intl = useIntl()
-
-	const showItemInFolder = useMutation(showItemInFolderMutationOptions())
-
-	const iconSize = useIconSizeBasedOnTypography({
-		variant: 'heroHeader',
-		multiplier: 4,
+	const { data: language } = useSuspenseQuery({
+		...getLocaleStateQueryOptions(),
+		select: (localeState) => {
+			return localeState.value
+		},
 	})
-
-	return (
-		<Stack direction="column" sx={{ flex: 1, overflow: 'auto', gap: 10 }}>
-			<Stack
-				direction="column"
-				sx={{
-					alignItems: 'center',
-					flex: 1,
-					gap: 10,
-					paddingBlock: 20,
-					paddingInline: 6,
-				}}
-			>
-				<Stack direction="column" sx={{ alignItems: 'center', gap: 6 }}>
-					<Icon
-						color="success"
-						name="material-check-circle-rounded"
-						size={iconSize}
-					/>
-
-					<Typography
-						component="h1"
-						variant="heroHeader"
-						sx={{ textAlign: 'center' }}
-					>
-						{intl.formatMessage(m.successPanelTitle)}
-					</Typography>
-
-					<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
-						{intl.formatMessage(
-							dataDownloaded === 'observations'
-								? m.successPanelDescriptionObservations
-								: dataDownloaded === 'observations-with-media'
-									? m.successPanelDescriptionObservationsWithMedia
-									: m.successPanelDescriptionTracks,
-							{ b: Bold, br: Break },
-						)}
-					</Typography>
-				</Stack>
-
-				<Button
-					onClick={() => {
-						showItemInFolder.mutate(savedToPath)
-					}}
-					variant="text"
-				>
-					{intl.formatMessage(m.successPanelViewInFileManager)}
-				</Button>
-			</Stack>
-
-			<Stack direction="row" sx={{ justifyContent: 'center', padding: 6 }}>
-				<Button
-					fullWidth
-					onClick={() => {
-						onDone()
-					}}
-					variant="contained"
-				>
-					{intl.formatMessage(m.successPanelDone)}
-				</Button>
-			</Stack>
-		</Stack>
-	)
-}
-
-const onChangeSchema = v.object({ dataToDownload: DataToDownloadSchema })
-
-function DownloadForm({
-	onBack,
-	onSuccess,
-	projectId,
-}: {
-	onBack: () => void
-	onSuccess: (opts: {
-		dataDownloaded: DataToDownload
-		savedToPath: string
-	}) => void
-	projectId: string
-}) {
-	const intl = useIntl()
-
-	const { data: localeState } = useSuspenseQuery(getLocaleStateQueryOptions())
 
 	const exportGeoJSON = useExportGeoJSON({ projectId })
 	const exportZipFile = useExportZipFile({ projectId })
 	const selectDirectory = useMutation(selectDirectoryMutationOptions())
+	const showItemInFolder = useMutation(showItemInFolderMutationOptions())
 
 	const downloadData = useMutation({
 		mutationKey: DOWNLOAD_DATA_MUTATION_KEY,
@@ -212,7 +102,7 @@ function DownloadForm({
 					path: selectDirectoryResult.path,
 					exportOptions: {
 						attachments: true,
-						lang: localeState.value,
+						lang: language,
 						observations: true,
 						tracks: false,
 					},
@@ -222,7 +112,7 @@ function DownloadForm({
 			return exportGeoJSON.mutateAsync({
 				path: selectDirectoryResult.path,
 				exportOptions: {
-					lang: localeState.value,
+					lang: language,
 					observations: dataToDownload === 'observations',
 					tracks: dataToDownload === 'tracks',
 				},
@@ -236,17 +126,12 @@ function DownloadForm({
 		onSubmit: async ({ value }) => {
 			const parsedValue = v.parse(onChangeSchema, value)
 
-			let savedToPath
 			try {
-				savedToPath = await downloadData.mutateAsync({
+				await downloadData.mutateAsync({
 					dataToDownload: parsedValue.dataToDownload,
 				})
 			} catch (err) {
 				captureException(err)
-			}
-
-			if (savedToPath) {
-				onSuccess({ dataDownloaded: parsedValue.dataToDownload, savedToPath })
 			}
 		},
 	})
@@ -254,6 +139,11 @@ function DownloadForm({
 	const backIconSize = useIconSizeBasedOnTypography({
 		variant: 'pageTitle',
 		multiplier: 1.5,
+	})
+
+	const successIconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 3,
 	})
 
 	const formId = useId()
@@ -278,7 +168,7 @@ function DownloadForm({
 									if (isSubmitting) {
 										return
 									}
-									onBack()
+									navigateBack()
 								}}
 								sx={{ color: (theme) => theme.palette.text.secondary }}
 							>
@@ -374,6 +264,7 @@ function DownloadForm({
 								<Button
 									aria-disabled={!canSubmit}
 									form={formId}
+									fullWidth
 									loading={isSubmitting}
 									loadingPosition="start"
 									startIcon={<Icon name="material-file-download" />}
@@ -401,6 +292,95 @@ function DownloadForm({
 						}}
 					/>
 				)}
+			</DecentDialog>
+
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					downloadData.status === 'success' && downloadData.data
+						? {
+								downloadedOption: downloadData.variables.dataToDownload,
+								savedToPath: downloadData.data,
+							}
+						: null
+				}
+			>
+				{({ downloadedOption, savedToPath }) => {
+					const descriptionText = intl.formatMessage(
+						downloadedOption === 'observations'
+							? m.successDialogDescriptionObservations
+							: downloadedOption === 'observations-with-media'
+								? m.successDialogDescriptionObservationsWithMedia
+								: m.successDialogDescriptionTracks,
+						{ b: Bold, br: Break },
+					)
+
+					return (
+						<Stack direction="column" sx={{ overflow: 'auto' }}>
+							<Stack
+								direction="column"
+								sx={{ gap: 10, flex: 1, overflow: 'auto', padding: 20 }}
+							>
+								<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
+									<Icon
+										color="success"
+										name="material-check-circle-rounded"
+										size={successIconSize}
+									/>
+
+									<Typography
+										component="h1"
+										variant="heroHeader"
+										sx={{ textAlign: 'center' }}
+									>
+										{intl.formatMessage(m.successDialogTitle)}
+									</Typography>
+								</Stack>
+
+								<Typography
+									variant="heroSubheading"
+									sx={{ textAlign: 'center' }}
+								>
+									{descriptionText}
+								</Typography>
+							</Stack>
+
+							<Stack
+								direction="row"
+								sx={{
+									alignItems: 'center',
+									flexWrap: 'wrap',
+									gap: 4,
+									justifyContent: 'center',
+									padding: 6,
+								}}
+							>
+								<Button
+									fullWidth
+									onClick={() => {
+										downloadData.reset()
+									}}
+									startIcon={<Icon name="material-symbols-cancel" />}
+									variant="outlined"
+								>
+									{intl.formatMessage(m.successDialogClose)}
+								</Button>
+
+								<Button
+									fullWidth
+									onClick={() => {
+										showItemInFolder.mutate(savedToPath)
+									}}
+									startIcon={<Icon name="material-symbols-folder-open" />}
+									variant="contained"
+								>
+									{intl.formatMessage(m.successDialogViewFile)}
+								</Button>
+							</Stack>
+						</Stack>
+					)
+				}}
 			</DecentDialog>
 		</>
 	)
@@ -444,21 +424,21 @@ const m = defineMessages<{
 	readonly tracksOptionTitle: NoMessageValues
 	readonly tracksOptionDescription: NoMessageValues
 	readonly selectDirectoryDialogActionLabel: NoMessageValues
-	readonly successPanelTitle: NoMessageValues
-	readonly successPanelDescriptionObservations: {
+	readonly successDialogTitle: NoMessageValues
+	readonly successDialogDescriptionObservations: {
 		readonly b: MessageTag
 		readonly br: MessageTag
 	}
-	readonly successPanelDescriptionObservationsWithMedia: {
+	readonly successDialogDescriptionObservationsWithMedia: {
 		readonly b: MessageTag
 		readonly br: MessageTag
 	}
-	readonly successPanelDescriptionTracks: {
+	readonly successDialogDescriptionTracks: {
 		readonly b: MessageTag
 		readonly br: MessageTag
 	}
-	readonly successPanelViewInFileManager: NoMessageValues
-	readonly successPanelDone: NoMessageValues
+	readonly successDialogViewFile: NoMessageValues
+	readonly successDialogClose: NoMessageValues
 }>({
 	navTitle: {
 		id: '$1.routes.app.projects.$projectId.download.navTitle',
@@ -512,40 +492,40 @@ const m = defineMessages<{
 		description:
 			'Text used for action button in system dialog for selecting directory to use for download.',
 	},
-	successPanelTitle: {
-		id: '$1.routes.app.projects.$projectId.download.successPanelTitle',
+	successDialogTitle: {
+		id: '$1.routes.app.projects.$projectId.download.successDialogTitle',
 		defaultMessage: 'Success!',
 		description: 'Title text for success panel.',
 	},
-	successPanelDescriptionObservations: {
-		id: '$1.routes.app.projects.$projectId.download.successPanelDescriptionObservations',
+	successDialogDescriptionObservations: {
+		id: '$1.routes.app.projects.$projectId.download.successDialogDescriptionObservations',
 		defaultMessage:
 			'<b>All observations</b><br></br> have been downloaded to your device.',
 		description:
 			'Description text for success panel when downloading observations.',
 	},
-	successPanelDescriptionObservationsWithMedia: {
-		id: '$1.routes.app.projects.$projectId.download.successPanelDescriptionObservationsWithMedia',
+	successDialogDescriptionObservationsWithMedia: {
+		id: '$1.routes.app.projects.$projectId.download.successDialogDescriptionObservationsWithMedia',
 		defaultMessage:
 			'<b>All observations with media</b><br></br> have been downloaded to your device.',
 		description:
 			'Description text for success panel when downloading observations with media.',
 	},
-	successPanelDescriptionTracks: {
-		id: '$1.routes.app.projects.$projectId.download.successPanelDescriptionTracks',
+	successDialogDescriptionTracks: {
+		id: '$1.routes.app.projects.$projectId.download.successDialogDescriptionTracks',
 		defaultMessage:
 			'<b>All tracks</b><br></br> have been downloaded to your device.',
 		description: 'Description text for success panel when downloading tracks.',
 	},
-	successPanelViewInFileManager: {
-		id: '$1.routes.app.projects.$projectId.download.successPanelViewInFileManager',
-		defaultMessage: 'View in file manager',
+	successDialogViewFile: {
+		id: '$1.routes.app.projects.$projectId.download.successDialogViewFile',
+		defaultMessage: 'Open File Manager',
 		description:
 			'Button text for viewing the downloaded file in the system file manager.',
 	},
-	successPanelDone: {
-		id: '$1.routes.app.projects.$projectId.download.successPanelDone',
-		defaultMessage: 'Done',
-		description: 'Button text for exiting success panel.',
+	successDialogClose: {
+		id: '$1.routes.app.projects.$projectId.download.successDialogClose',
+		defaultMessage: 'Close',
+		description: 'Button text for closing the success dialog.',
 	},
 })
