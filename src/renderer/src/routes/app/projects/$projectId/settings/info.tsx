@@ -341,7 +341,7 @@ function RouteComponent() {
 													m.projectDescriptionInputLabel,
 												)}
 												name={field.name}
-												rows={8}
+												minRows={2}
 												value={field.state.value}
 												onBlur={field.handleBlur}
 												onChange={(event) => {
