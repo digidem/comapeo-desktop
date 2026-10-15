@@ -515,8 +515,13 @@ function ProjectSwitcherButton({
 			>
 				<Box sx={{ padding: 4 }}>
 					<Typography
-						variant="heroHeader"
-						sx={{ maxWidth: '25ch', textWrap: 'balance' }}
+						variant="sectionLabel"
+						sx={{
+							maxWidth: '25ch',
+							// NOTE: Exception here section label variant. Usually all caps.
+							textTransform: 'none',
+							textWrap: 'balance',
+						}}
 					>
 						{deviceName}
 					</Typography>
