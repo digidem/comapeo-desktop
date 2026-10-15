@@ -371,9 +371,8 @@ function RouteComponent() {
 												row
 												aria-labelledby={projectColorLabelId}
 												sx={{
-													flexWrap: 'nowrap',
+													flexWrap: 'wrap',
 													gap: 10,
-													overflowX: 'auto',
 													padding: 2,
 												}}
 											>
