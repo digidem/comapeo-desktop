@@ -182,7 +182,11 @@ function RouteComponent() {
 						<Box sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2 }}>
 							<Stack
 								direction="row"
-								sx={{ alignItems: 'center', gap: 4, padding: 4 }}
+								sx={{
+									alignItems: 'center',
+									gap: 4,
+									padding: 4,
+								}}
 							>
 								{category ? (
 									<CategoryIconContainer
@@ -209,9 +213,8 @@ function RouteComponent() {
 								)}
 
 								<Typography
-									sx={{
-										fontWeight: (theme) => theme.typography.fontWeightMedium,
-									}}
+									sx={{ overflow: 'auto', overflowWrap: 'break-word' }}
+									variant="cardHeader"
 								>
 									{intl.formatMessage(m.tracks)}
 								</Typography>
