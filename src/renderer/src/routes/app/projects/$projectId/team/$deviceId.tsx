@@ -548,11 +548,11 @@ function LeaveProjectDialogContent({
 
 					<Button
 						color="error"
-						endIcon={<Icon name="material-symbols-arrow-circle-right" />}
 						fullWidth
 						onClick={() => {
 							setWarningToShow(undefined)
 						}}
+						startIcon={<Icon name="material-symbols-arrow-circle-right" />}
 						variant="contained"
 					>
 						{intl.formatMessage(m.continueButton)}
