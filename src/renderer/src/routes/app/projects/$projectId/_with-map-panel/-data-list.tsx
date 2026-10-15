@@ -402,7 +402,11 @@ export function DataList({
 										paddingInline: 2,
 									}}
 								>
-									<Typography variant="detailCopy" color="textTertiary">
+									<Typography
+										color="textSecondary"
+										variant="detailCopy"
+										sx={{ whiteSpace: 'nowrap' }}
+									>
 										{intl.formatMessage(m.resultsCount, {
 											count: sortedListData.length,
 										})}

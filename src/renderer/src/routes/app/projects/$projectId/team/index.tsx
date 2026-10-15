@@ -141,12 +141,19 @@ function MembersCountPill({ projectId }: { projectId: string }) {
 	const { data: members } = useManyMembers({ projectId })
 
 	return (
-		<Box sx={{ background: BLUE_06, borderRadius: 2, padding: 1 }}>
+		<Box
+			sx={{
+				background: BLUE_06,
+				borderRadius: 2,
+				paddingBlock: 1,
+				paddingInline: 2,
+			}}
+		>
 			<Typography
+				color="textSecondary"
 				data-testid="exchange-network-connection-info"
-				variant="detailCopy"
-				color="textTertiary"
 				sx={{ whiteSpace: 'nowrap' }}
+				variant="detailCopy"
 			>
 				{intl.formatMessage(m.membersCount, {
 					count: members.length,

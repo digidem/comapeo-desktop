@@ -492,9 +492,16 @@ function NetworkConnectionPill() {
 	}
 
 	return (
-		<Box sx={{ background: BLUE_06, borderRadius: 2, padding: 1 }}>
+		<Box
+			sx={{
+				background: BLUE_06,
+				borderRadius: 2,
+				paddingBlock: 1,
+				paddingInline: 2,
+			}}
+		>
 			<Typography
-				color="textTertiary"
+				color="textSecondary"
 				data-testid="exchange-network-connection-info"
 				sx={{ whiteSpace: 'nowrap' }}
 				variant="detailCopy"

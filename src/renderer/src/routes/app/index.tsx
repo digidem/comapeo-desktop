@@ -154,7 +154,7 @@ function RouteComponent() {
 							}}
 						>
 							<Typography
-								color="textTertiary"
+								color="textSecondary"
 								variant="detailCopy"
 								sx={{ whiteSpace: 'nowrap' }}
 							>
