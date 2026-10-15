@@ -60,7 +60,6 @@ function RouteComponent() {
 								sx={{
 									fontSize: '6rem',
 									fontWeight: (theme) => theme.typography.fontWeightRegular,
-									lineHeight: 1,
 								}}
 							>
 								{intl.formatMessage(m.comapeoDesktop, {
@@ -75,7 +74,6 @@ function RouteComponent() {
 								sx={{
 									fontSize: '1.5rem',
 									fontWeight: (theme) => theme.typography.fontWeightMedium,
-									lineHeight: 1.25,
 								}}
 							>
 								{intl.formatMessage(m.appDescription)}
@@ -183,7 +181,7 @@ const m = defineMessages<{
 	},
 	comapeoDesktop: {
 		id: '$1.routes.welcome.comapeoDesktop',
-		defaultMessage: '<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>',
+		defaultMessage: '<orange>Co</orange><b>Mapeo</b> <blue>Desktop</blue>',
 		description: 'Name of app displayed in welcome page.',
 	},
 })

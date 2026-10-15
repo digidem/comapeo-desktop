@@ -1481,7 +1481,7 @@
   },
   "$1.routes.welcome.comapeoDesktop": {
     "description": "Name of app displayed in welcome page.",
-    "message": "<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>"
+    "message": "<orange>Co</orange><b>Mapeo</b> <blue>Desktop</blue>"
   },
   "$1.routes.welcome.designedFor": {
     "description": "Detail about who app is designed for in welcome page.",

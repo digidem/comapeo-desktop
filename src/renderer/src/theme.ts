@@ -233,6 +233,9 @@ export function createTheme({ platform }: { platform: NodeJS.Platform }) {
 						fontWeight: theme.typography.fontWeightRegular,
 						margin: 0,
 					},
+					'b, strong': {
+						fontWeight: theme.typography.fontWeightMedium,
+					},
 				}),
 			},
 			MuiDialog: {
