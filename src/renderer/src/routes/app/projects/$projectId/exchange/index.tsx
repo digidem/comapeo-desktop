@@ -443,21 +443,33 @@ function SyncProgress({
 				}
 
 	return (
-		<Stack direction="column" sx={{ gap: 3, padding: 6 }}>
-			{stage.name === 'complete-full' ? (
-				<Icon name="material-check" color="success" />
-			) : stage.name !== 'waiting' ? (
-				<Icon name="material-bolt-sharp" color="primary" />
-			) : null}
+		<Box
+			sx={{
+				display: 'flex',
+				flex: 1,
+				flexDirection: 'row',
+				justifyContent: 'center',
+			}}
+		>
+			<Stack
+				direction="column"
+				sx={{ flex: 1, gap: 3, maxWidth: 300, padding: 6 }}
+			>
+				{stage.name === 'complete-full' ? (
+					<Icon name="material-check" color="success" />
+				) : stage.name !== 'waiting' ? (
+					<Icon name="material-bolt-sharp" color="primary" />
+				) : null}
 
-			<LinearProgress {...progressProps} />
+				<LinearProgress {...progressProps} />
 
-			<Typography sx={{ textAlign: 'end' }}>
-				{formatNumber(stage.name === 'waiting' ? 0 : stage.progress, {
-					style: 'percent',
-				})}
-			</Typography>
-		</Stack>
+				<Typography sx={{ textAlign: 'end' }}>
+					{formatNumber(stage.name === 'waiting' ? 0 : stage.progress, {
+						style: 'percent',
+					})}
+				</Typography>
+			</Stack>
+		</Box>
 	)
 }
 
