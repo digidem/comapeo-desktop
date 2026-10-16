@@ -9,12 +9,14 @@ import {
 import type { Field, Observation, Preset } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import ButtonBase from '@mui/material/ButtonBase'
 import Divider from '@mui/material/Divider'
 import Fade from '@mui/material/Fade'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import { captureException, captureMessage } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { Block, createFileRoute, useRouter } from '@tanstack/react-router'
@@ -30,6 +32,7 @@ import {
 	BLACK_00,
 	BLACK_03,
 	BLUE_05,
+	BLUE_06,
 	GREEN_00,
 	ORANGE_00,
 	WHITE_00,
@@ -397,15 +400,6 @@ function ObservationDetailsPanel({
 		multiplier: 1.5,
 	})
 
-	const categoryIconSize = useIconSizeBasedOnTypography({
-		variant: 'cardHeader',
-		multiplier: 2,
-	})
-
-	const categoryEditSuccessIconSize = useIconSizeBasedOnTypography({
-		variant: 'cardHeader',
-	})
-
 	// NOTE: We only allow editing one thing at a time.
 	// Otherwise we could represent as a list of IDs.
 	const [activeEditId, setActiveEditId] = useState<string | null>(null)
@@ -523,114 +517,47 @@ function ObservationDetailsPanel({
 						</Box>
 
 						<Stack direction="column" sx={{ paddingInline: 6 }}>
-							<Box sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2 }}>
-								<Stack
-									direction="row"
-									sx={{
-										alignItems: 'center',
-										justifyContent: 'space-between',
-										flexWrap: 'wrap',
-									}}
-								>
-									<Stack
-										direction="row"
-										sx={{
-											alignItems: 'center',
-											gap: 4,
-											overflow: 'auto',
-											padding: 4,
-										}}
+							<Stack
+								direction="column"
+								sx={{
+									border: `1px solid ${BLUE_05}`,
+									borderRadius: 2,
+									flex: 1,
+								}}
+							>
+								{canEdit ? (
+									<Tooltip
+										placement="bottom"
+										title={intl.formatMessage(m.changeCategory)}
 									>
-										<Box sx={{ position: 'relative' }}>
-											{category ? (
-												<CategoryIconContainer
-													color={category.color || BLACK_00}
-													applyBoxShadow
-												>
-													{category.iconRef?.docId ? (
-														<CategoryIconImage
-															altText={intl.formatMessage(m.categoryIconAlt, {
-																name: category.name,
-															})}
-															iconDocumentId={category.iconRef.docId}
-															projectId={projectId}
-															imageStyle={{
-																aspectRatio: 1,
-																width: categoryIconSize,
-															}}
-														/>
-													) : (
-														<Icon
-															name="material-symbols-indeterminate-question-box"
-															size={categoryIconSize}
-														/>
-													)}
-												</CategoryIconContainer>
-											) : (
-												<CategoryIconContainer applyBoxShadow color={BLACK_00}>
-													<Icon
-														name="material-symbols-indeterminate-question-box"
-														size={categoryIconSize}
-													/>
-												</CategoryIconContainer>
-											)}
-
-											{showCategoryUpdatedIndicator ? (
-												<Box
-													sx={{
-														background: GREEN_00,
-														borderRadius: '50%',
-														bottom: (theme) => theme.spacing(-1),
-														display: 'flex',
-														padding: 1,
-														position: 'absolute',
-														right: (theme) => theme.spacing(-1),
-													}}
-												>
-													<Icon
-														name="material-check"
-														htmlColor={WHITE_00}
-														size={categoryEditSuccessIconSize}
-													/>
-												</Box>
-											) : null}
-										</Box>
-
-										<Typography
-											variant="cardHeader"
+										<ButtonBase
+											disableTouchRipple
+											disabled={!!activeEditId}
+											onClick={() => {
+												onEditCategory()
+											}}
 											sx={{
-												overflow: 'hidden',
-												textOverflow: 'ellipsis',
-												whiteSpace: 'nowrap',
+												':disabled': {
+													color: (theme) => theme.palette.text.disabled,
+												},
+												':hover, :focus': {
+													background: alpha(BLUE_06, 0.5),
+													transition: (theme) =>
+														theme.transitions.create('background-color'),
+												},
 											}}
 										>
-											{category
-												? category.name
-												: intl.formatMessage(m.observationCategoryNameFallback)}
-										</Typography>
-									</Stack>
-
-									{canEdit ? (
-										<Box
-											sx={{
-												display: 'flex',
-												flex: 0,
-												justifyContent: 'center',
-												padding: 4,
-											}}
-										>
-											<Button
-												disabled={!!activeEditId}
-												onClick={() => {
-													onEditCategory()
-												}}
-												variant="text"
-											>
-												{intl.formatMessage(m.changeCategory)}
-											</Button>
-										</Box>
-									) : null}
-								</Stack>
+											<CategoryDetails
+												category={category}
+												projectId={projectId}
+												showEditIcon
+												showUpdatedIndicator={showCategoryUpdatedIndicator}
+											/>
+										</ButtonBase>
+									</Tooltip>
+								) : (
+									<CategoryDetails category={category} projectId={projectId} />
+								)}
 
 								<Divider />
 
@@ -675,7 +602,7 @@ function ObservationDetailsPanel({
 										<Typography>{intl.formatMessage(m.noLocation)}</Typography>
 									)}
 								</Stack>
-							</Box>
+							</Stack>
 						</Stack>
 
 						<Stack
@@ -1095,6 +1022,121 @@ function ObservationDetailsPanel({
 				)}
 			</Block>
 		</>
+	)
+}
+
+function CategoryDetails({
+	category,
+	projectId,
+	showEditIcon,
+	showUpdatedIndicator,
+}: {
+	category: Preset | undefined
+	projectId: string
+	showEditIcon?: boolean
+	showUpdatedIndicator?: boolean
+}) {
+	const intl = useIntl()
+
+	const categoryIconSize = useIconSizeBasedOnTypography({
+		variant: 'cardHeader',
+		multiplier: 2,
+	})
+
+	const categoryEditSuccessIconSize = useIconSizeBasedOnTypography({
+		variant: 'cardHeader',
+	})
+
+	const editIconSize = useIconSizeBasedOnTypography({
+		variant: 'cardHeader',
+	})
+
+	return (
+		<Stack
+			direction="row"
+			sx={{ alignItems: 'center', flex: 1, gap: 4, padding: 4 }}
+		>
+			<Box sx={{ position: 'relative' }}>
+				{category ? (
+					<CategoryIconContainer
+						color={category.color || BLACK_00}
+						applyBoxShadow
+					>
+						{category.iconRef?.docId ? (
+							<CategoryIconImage
+								altText={intl.formatMessage(m.categoryIconAlt, {
+									name: category.name,
+								})}
+								iconDocumentId={category.iconRef.docId}
+								projectId={projectId}
+								imageStyle={{
+									aspectRatio: 1,
+									width: categoryIconSize,
+								}}
+							/>
+						) : (
+							<Icon
+								name="material-symbols-indeterminate-question-box"
+								size={categoryIconSize}
+							/>
+						)}
+					</CategoryIconContainer>
+				) : (
+					<CategoryIconContainer applyBoxShadow color={BLACK_00}>
+						<Icon
+							name="material-symbols-indeterminate-question-box"
+							size={categoryIconSize}
+						/>
+					</CategoryIconContainer>
+				)}
+
+				{showUpdatedIndicator ? (
+					<Box
+						sx={{
+							background: GREEN_00,
+							borderRadius: '50%',
+							bottom: (theme) => theme.spacing(-1),
+							display: 'flex',
+							padding: 1,
+							position: 'absolute',
+							right: (theme) => theme.spacing(-1),
+						}}
+					>
+						<Icon
+							name="material-check"
+							htmlColor={WHITE_00}
+							size={categoryEditSuccessIconSize}
+						/>
+					</Box>
+				) : null}
+			</Box>
+
+			<Typography
+				variant="cardHeader"
+				sx={{
+					flex: 1,
+					overflow: 'auto',
+					overflowWrap: 'break-word',
+					textAlign: 'start',
+				}}
+			>
+				{category
+					? category.name
+					: intl.formatMessage(m.observationCategoryNameFallback)}
+			</Typography>
+
+			{showEditIcon ? (
+				<Box
+					sx={{
+						color: (theme) => theme.palette.text.secondary,
+						display: 'grid',
+						placeItems: 'center',
+					}}
+				>
+					<Icon name="material-edit-filled" size={editIconSize} />
+				</Box>
+			) : null}
+		</Stack>
 	)
 }
 
@@ -1598,8 +1640,8 @@ const m = defineMessages<{
 	},
 	changeCategory: {
 		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory',
-		defaultMessage: 'Change',
-		description: 'Text for button to change category.',
+		defaultMessage: 'Change Category',
+		description: 'Tooltip text for button to change category.',
 	},
 	deleteObservationButtonText: {
 		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.index.deleteObservationButtonText',
