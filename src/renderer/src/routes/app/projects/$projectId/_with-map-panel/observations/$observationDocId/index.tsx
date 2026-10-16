@@ -222,7 +222,12 @@ function RouteComponent() {
 	>({ name: 'observation-details', showCategoryEditSuccess: false })
 
 	const { projectId, observationDocId } = Route.useParams()
-	const { fromTrackDocId } = Route.useSearch()
+
+	const fromTrackDocId = Route.useSearch({
+		select: (state) => {
+			return state.fromTrackDocId
+		},
+	})
 
 	useEffect(() => {
 		let timeoutId: number | undefined
@@ -276,12 +281,20 @@ function RouteComponent() {
 									router.navigate({
 										to: '/app/projects/$projectId/tracks/$trackDocId',
 										params: { projectId, trackDocId: fromTrackDocId },
+										search: (prev) => {
+											return { ...prev, fromTrackId: undefined }
+										},
+										mask: {
+											to: '/app/projects/$projectId/tracks/$trackDocId',
+											params: { projectId, trackDocId: fromTrackDocId },
+										},
 										replace: true,
 									})
 								} else {
 									router.navigate({
 										to: '/app/projects/$projectId',
 										params: { projectId },
+										search: true,
 										replace: true,
 									})
 								}
@@ -435,6 +448,9 @@ function ObservationDetailsPanel({
 							router.navigate({
 								to: '/app/projects/$projectId',
 								params: { projectId },
+								search: (prev) => {
+									return { ...prev, fromTrackDocId: undefined }
+								},
 								replace: true,
 							})
 						}}

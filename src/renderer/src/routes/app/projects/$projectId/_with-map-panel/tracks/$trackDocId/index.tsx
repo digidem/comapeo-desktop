@@ -276,7 +276,7 @@ function TrackObservationsSection({
 }) {
 	const intl = useIntl()
 
-	const navigate = Route.useNavigate()
+	const router = useRouter()
 
 	const { data: allObservations } = useManyDocs({
 		projectId,
@@ -355,10 +355,16 @@ function TrackObservationsSection({
 							key={docId}
 							disableTouchRipple
 							onClick={() => {
-								navigate({
+								router.navigate({
 									to: '/app/projects/$projectId/observations/$observationDocId',
-									params: { observationDocId: docId },
-									search: { fromTrackDocId: trackDocId },
+									params: { projectId, observationDocId: docId },
+									search: (prev) => {
+										return { ...prev, fromTrackDocId: trackDocId }
+									},
+									mask: {
+										to: '/app/projects/$projectId/observations/$observationDocId',
+										params: { projectId, observationDocId: docId },
+									},
 								})
 							}}
 							sx={{ paddingInline: 6, paddingBlock: 4 }}

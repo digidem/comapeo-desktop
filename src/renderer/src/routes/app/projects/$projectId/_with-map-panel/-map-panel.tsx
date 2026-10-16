@@ -159,20 +159,18 @@ const BASE_FIT_BOUNDS_OPTIONS: FitBoundsOptions = {
 }
 
 export function MapPanel({
-	allowHighlightedDocumentMarker,
 	categoriesFilter,
 	dateFilter,
 	documentToHighlight,
 	filterReferenceDate,
-	isDocumentRoute,
+	isDocumentIndexRoute,
 	projectId,
 }: {
-	allowHighlightedDocumentMarker: boolean
 	categoriesFilter?: Array<string>
 	dateFilter?: DateFilter
 	documentToHighlight?: HighlightedDocument
 	filterReferenceDate?: Date
-	isDocumentRoute: boolean
+	isDocumentIndexRoute: boolean
 	projectId: string
 }) {
 	const router = useRouter()
@@ -212,6 +210,7 @@ export function MapPanel({
 			categories,
 			filters: { categories: categoriesFilter, date: dateFilter },
 			observations,
+			highlightedDocumentId: documentToHighlight?.docId,
 			referenceDate: filterReferenceDate || new Date(),
 		})
 	}, [
@@ -220,6 +219,7 @@ export function MapPanel({
 		categoriesFilter,
 		dateFilter,
 		filterReferenceDate,
+		documentToHighlight,
 	])
 
 	const tracksFeatureCollection = useMemo(() => {
@@ -295,15 +295,10 @@ export function MapPanel({
 			const feature = event.features?.[0]
 
 			if (!feature) {
-				if (documentToHighlight) {
-					router.navigate({
-						to: '.',
-						search: (prev) => ({ ...prev, highlightedDocument: undefined }),
-					})
-				}
-
 				return
 			}
+
+			const canGoBack = router.history.canGoBack()
 
 			if (
 				feature.layer.id === OBSERVATIONS_LAYER_ID &&
@@ -315,17 +310,14 @@ export function MapPanel({
 						projectId,
 						observationDocId: feature.properties.docId,
 					},
+					search: true,
 					mask: {
 						to: '/app/projects/$projectId/observations/$observationDocId',
 						params: { projectId, observationDocId: feature.properties.docId },
-						search: (prev) => ({
-							...prev,
-							highlightedDocument: undefined,
-						}),
 					},
 					// TODO: Consider pushing navigation when pressing observation
 					// that belongs to track that is being viewed?
-					replace: true,
+					replace: canGoBack,
 				})
 
 				return
@@ -338,18 +330,18 @@ export function MapPanel({
 				router.navigate({
 					to: '/app/projects/$projectId/tracks/$trackDocId',
 					params: { projectId, trackDocId: feature.properties.docId },
+					search: true,
 					mask: {
 						to: '/app/projects/$projectId/tracks/$trackDocId',
 						params: { projectId, trackDocId: feature.properties.docId },
-						search: (prev) => ({ ...prev, highlightedDocument: undefined }),
 					},
-					replace: true,
+					replace: canGoBack,
 				})
 
 				return
 			}
 		},
-		[documentToHighlight, router, projectId],
+		[router, projectId],
 	)
 
 	/**
@@ -780,8 +772,7 @@ export function MapPanel({
 					/>
 				</Source>
 
-				{allowHighlightedDocumentMarker &&
-				highlightedFeature &&
+				{highlightedFeature &&
 				highlightedFeature.geometry.type === 'Point' &&
 				highlightedFeature.properties.type === 'observation' ? (
 					<Marker
@@ -820,7 +811,7 @@ export function MapPanel({
 					</Marker>
 				) : null}
 
-				{isDocumentRoute && !highlightedFeature ? (
+				{isDocumentIndexRoute && !highlightedFeature ? (
 					<Box
 						sx={{
 							background: alpha(BLACK_00, 0.5),
@@ -928,11 +919,13 @@ function observationsToFeatureCollection({
 	filters,
 	observations,
 	referenceDate,
+	highlightedDocumentId,
 }: {
 	categories: Array<Preset>
 	observations: Array<Observation>
 	filters?: { categories?: Array<string>; date?: DateFilter }
 	referenceDate: Date
+	highlightedDocumentId: string | undefined
 }) {
 	const displayablePoints: Array<
 		Feature<
@@ -947,18 +940,21 @@ function observationsToFeatureCollection({
 
 			const categoriesFilter = filters?.categories
 
-			const isVisible = isDocumentIncludedByFilters(
-				{ document: obs, category },
-				{
-					categories: categoriesFilter || [
-						NOT_CATEGORY_FILTER_ID,
-						...categories.map((c) => c.docId),
-					],
-					date: filters?.date
-						? dateFilterToDateRange(filters.date, referenceDate)
-						: undefined,
-				},
-			)
+			const isVisible =
+				highlightedDocumentId === obs.docId
+					? true
+					: isDocumentIncludedByFilters(
+							{ document: obs, category },
+							{
+								categories: categoriesFilter || [
+									NOT_CATEGORY_FILTER_ID,
+									...categories.map((c) => c.docId),
+								],
+								date: filters?.date
+									? dateFilterToDateRange(filters.date, referenceDate)
+									: undefined,
+							},
+						)
 
 			displayablePoints.push(
 				point([obs.lon, obs.lat], {

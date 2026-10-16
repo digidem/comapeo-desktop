@@ -1,7 +1,5 @@
 import {
 	Suspense,
-	useEffect,
-	useEffectEvent,
 	useId,
 	useMemo,
 	useRef,
@@ -61,7 +59,10 @@ import {
 import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
 import { ErrorBoundary } from '../../../../../components/error-boundary.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
-import { IconButtonLink } from '../../../../../components/link.tsx'
+import {
+	IconButtonLink,
+	ListItemButtonLink,
+} from '../../../../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
 import {
 	getMatchingCategoryForDocument,
@@ -81,7 +82,6 @@ import {
 	dateFilterToSearchParams,
 	isDocumentIncludedByFilters,
 	type CategoriesFilterOption,
-	type HighlightedDocument,
 } from './-shared.ts'
 import { PhotoAttachmentImage } from './observations/$observationDocId/-components/photo-attachment-image.tsx'
 
@@ -94,13 +94,11 @@ export function DataList({
 	categoriesFilter,
 	dateFilter,
 	filterReferenceDate,
-	highlightedDocument,
 	projectId,
 }: {
 	categoriesFilter: Array<string> | undefined
 	dateFilter?: DateFilter
 	filterReferenceDate?: Date
-	highlightedDocument?: HighlightedDocument
 	projectId: string
 }) {
 	const router = useRouter()
@@ -231,41 +229,6 @@ export function DataList({
 		directDomUpdates: true,
 		directDomUpdatesMode: 'transform',
 	})
-
-	const scrollToHighlightedItem = useEffectEvent(
-		(document: HighlightedDocument) => {
-			const itemIndexToScrollTo = highlightedDocument?.docId
-				? sortedListData.findIndex(
-						(item) => item.document.docId === document.docId,
-					)
-				: undefined
-
-			if (itemIndexToScrollTo) {
-				rowVirtualizer.scrollToIndex(itemIndexToScrollTo, { align: 'center' })
-			}
-		},
-	)
-
-	const mountedRef = useRef<boolean>(false)
-
-	useEffect(
-		/**
-		 * Handles autoscrolling to selected item in list when initially loading the
-		 * page.
-		 */
-		function onInitialRender() {
-			if (mountedRef.current) {
-				return
-			}
-
-			if (highlightedDocument) {
-				scrollToHighlightedItem(highlightedDocument)
-			}
-
-			mountedRef.current = true
-		},
-		[highlightedDocument],
-	)
 
 	const downloadButtonSize = useIconSizeBasedOnTypography({
 		variant: 'pageTitle',
@@ -420,6 +383,8 @@ export function DataList({
 							>
 								<IconButtonLink
 									to="/app/projects/$projectId/download"
+									search
+									mask={{ to: '/app/projects/$projectId/download' }}
 									aria-label={intl.formatMessage(m.downloadObservations)}
 									sx={{ color: (theme) => theme.palette.text.tertiary }}
 								>
@@ -650,8 +615,6 @@ export function DataList({
 														: m.observationCategoryNameFallback,
 												)
 
-										const isHighlighted = docId === highlightedDocument?.docId
-
 										let categorySlot: JSX.Element
 
 										if (type === 'track') {
@@ -740,28 +703,35 @@ export function DataList({
 													width: '100%',
 												}}
 											>
-												<ListItemButton
+												<ListItemButtonLink
 													data-docid={docId}
 													disableTouchRipple
-													selected={isHighlighted}
-													autoFocus={isHighlighted}
-													onClick={() => {
-														if (type === 'observation') {
-															router.navigate({
-																to: '/app/projects/$projectId/observations/$observationDocId',
-																params: { projectId, observationDocId: docId },
-															})
-														} else {
-															router.navigate({
-																to: '/app/projects/$projectId/tracks/$trackDocId',
-																params: { projectId, trackDocId: docId },
-															})
-														}
-													}}
 													sx={{
 														borderBottom: `1px solid ${BLACK_03}`,
 														padding: 4,
 													}}
+													{...(type === 'observation'
+														? {
+																to: '/app/projects/$projectId/observations/$observationDocId',
+																params: { projectId, observationDocId: docId },
+																search: true,
+																mask: {
+																	to: '/app/projects/$projectId/observations/$observationDocId',
+																	params: {
+																		projectId,
+																		observationDocId: docId,
+																	},
+																},
+															}
+														: {
+																to: '/app/projects/$projectId/tracks/$trackDocId',
+																params: { projectId, trackDocId: docId },
+																search: true,
+																mask: {
+																	to: '/app/projects/$projectId/tracks/$trackDocId',
+																	params: { projectId, trackDocId: docId },
+																},
+															})}
 												>
 													<Suspense>
 														<SyncedIndicatorLine
@@ -828,7 +798,7 @@ export function DataList({
 															</Suspense>
 														</Box>
 													</Stack>
-												</ListItemButton>
+												</ListItemButtonLink>
 											</Box>
 										)
 									})}
