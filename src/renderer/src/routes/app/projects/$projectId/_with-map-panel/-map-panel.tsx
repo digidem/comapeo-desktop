@@ -163,14 +163,14 @@ export function MapPanel({
 	dateFilter,
 	documentToHighlight,
 	filterReferenceDate,
-	isDocumentIndexRoute,
+	isOnDocumentSpecificRoute,
 	projectId,
 }: {
 	categoriesFilter?: Array<string>
 	dateFilter?: DateFilter
 	documentToHighlight?: HighlightedDocument
 	filterReferenceDate?: Date
-	isDocumentIndexRoute: boolean
+	isOnDocumentSpecificRoute: boolean
 	projectId: string
 }) {
 	const router = useRouter()
@@ -298,18 +298,13 @@ export function MapPanel({
 				return
 			}
 
-			const canGoBack = router.history.canGoBack()
-
 			if (
 				feature.layer.id === OBSERVATIONS_LAYER_ID &&
 				typeof feature.properties.docId === 'string'
 			) {
 				router.navigate({
 					to: '/app/projects/$projectId/observations/$observationDocId',
-					params: {
-						projectId,
-						observationDocId: feature.properties.docId,
-					},
+					params: { projectId, observationDocId: feature.properties.docId },
 					search: true,
 					mask: {
 						to: '/app/projects/$projectId/observations/$observationDocId',
@@ -317,7 +312,7 @@ export function MapPanel({
 					},
 					// TODO: Consider pushing navigation when pressing observation
 					// that belongs to track that is being viewed?
-					replace: canGoBack,
+					replace: isOnDocumentSpecificRoute,
 				})
 
 				return
@@ -335,13 +330,13 @@ export function MapPanel({
 						to: '/app/projects/$projectId/tracks/$trackDocId',
 						params: { projectId, trackDocId: feature.properties.docId },
 					},
-					replace: canGoBack,
+					replace: isOnDocumentSpecificRoute,
 				})
 
 				return
 			}
 		},
-		[router, projectId],
+		[isOnDocumentSpecificRoute, projectId, router],
 	)
 
 	/**
@@ -811,7 +806,7 @@ export function MapPanel({
 					</Marker>
 				) : null}
 
-				{isDocumentIndexRoute && !highlightedFeature ? (
+				{isOnDocumentSpecificRoute && !highlightedFeature ? (
 					<Box
 						sx={{
 							background: alpha(BLACK_00, 0.5),

@@ -249,14 +249,17 @@ function RouteAwareMapPanel({ projectId }: { projectId: string }) {
 		},
 	})
 
-	const isDocumentIndexRoute = useChildMatches({
+	const isOnDocumentSpecificRoute = useChildMatches({
 		select: (matches) => {
 			const currentRoute = matches.at(-1)!
 
 			return (
-				currentRoute.fullPath ===
-					'/app/projects/$projectId/observations/$observationDocId/' ||
-				currentRoute.fullPath === '/app/projects/$projectId/tracks/$trackDocId/'
+				currentRoute.fullPath.startsWith(
+					'/app/projects/$projectId/observations/$observationDocId/',
+				) ||
+				currentRoute.fullPath.startsWith(
+					'/app/projects/$projectId/tracks/$trackDocId/',
+				)
 			)
 		},
 	})
@@ -267,7 +270,7 @@ function RouteAwareMapPanel({ projectId }: { projectId: string }) {
 			dateFilter={dateFilterFromSearch}
 			documentToHighlight={documentToHighlight}
 			filterReferenceDate={todayDate}
-			isDocumentIndexRoute={isDocumentIndexRoute}
+			isOnDocumentSpecificRoute={isOnDocumentSpecificRoute}
 			projectId={projectId}
 		/>
 	)
