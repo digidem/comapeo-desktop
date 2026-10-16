@@ -118,7 +118,10 @@ export const Route = createFileRoute('/app/projects/$projectId')({
 		const { clientApi, projectApi, queryClient } = context
 		const { projectId } = params
 
-		if (cause !== 'preload') {
+		if (
+			cause !== 'preload' &&
+			context.activeProjectIdStore.instance.getState() !== params.projectId
+		) {
 			// NOTE: Used by the initial route (`/`) to determine whether we should use
 			// the persisted active project ID for redirecting when opening the app.
 			setItem('use_active_project_id_for_initial_route', true)
