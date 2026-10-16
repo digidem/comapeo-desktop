@@ -139,6 +139,10 @@
     "description": "Accessible label for link item that navigates to language settings page.",
     "message": "Ir a la configuración de idioma."
   },
+  "routes.app.settings.index.unitSystemSettingsAccessibleLabel": {
+    "description": "Accessible label for link item that navigates to unit system settings page.",
+    "message": "Ir a la configuración del sistema de coordenadas."
+  },
   "routes.app.settings_.test-data.boundedDistanceLabel": {
     "description": "Label for the bounded distance input.",
     "message": "Distancia máxima límite (kilómetros)"
