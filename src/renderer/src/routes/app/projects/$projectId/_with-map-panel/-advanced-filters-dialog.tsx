@@ -10,7 +10,6 @@ import FormGroup from '@mui/material/FormGroup'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
 import { endOfDay, isAfter, isBefore, isEqual, min, startOfDay } from 'date-fns'
@@ -505,7 +504,7 @@ export function AdvancedFiltersDialogContent({
 															sx={{
 																background: isSelected
 																	? (theme) =>
-																			alpha(
+																			theme.alpha(
 																				theme.palette.primary.main,
 																				theme.palette.action.selectedOpacity,
 																			)
@@ -521,7 +520,7 @@ export function AdvancedFiltersDialogContent({
 																':hover': {
 																	background: (theme) =>
 																		isSelected
-																			? alpha(
+																			? theme.alpha(
 																					theme.palette.primary.main,
 																					theme.palette.action.activatedOpacity,
 																				)
@@ -530,7 +529,7 @@ export function AdvancedFiltersDialogContent({
 																':focus, :focus-within': {
 																	background: (theme) =>
 																		isSelected
-																			? alpha(
+																			? theme.alpha(
 																					theme.palette.primary.main,
 																					theme.palette.action.focusOpacity,
 																				)

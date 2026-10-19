@@ -15,7 +15,6 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
 import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import {
@@ -485,7 +484,8 @@ function LeaveProjectDialogContent({
 						<Box
 							sx={{
 								alignSelf: 'stretch',
-								background: (theme) => alpha(theme.palette.warning.main, 0.1),
+								background: (theme) =>
+									theme.alpha(theme.palette.warning.main, 0.1),
 								border: `1px solid ${BLUE_05}`,
 								borderRadius: 2,
 								padding: 6,

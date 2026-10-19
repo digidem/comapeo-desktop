@@ -5,7 +5,6 @@ import ButtonBase from '@mui/material/ButtonBase'
 import Collapse from '@mui/material/Collapse'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
 import { defineMessages, useIntl } from 'react-intl'
 
 import { BLACK_02, BLACK_03, BLUE_05 } from '../../../shared/colors.ts'
@@ -54,7 +53,7 @@ export function ErrorDialogContent({
 						}}
 						sx={{
 							':hover, :focus': {
-								background: alpha(BLUE_05, 0.2),
+								background: (theme) => theme.alpha(BLUE_05, 0.2),
 								transition: (theme) =>
 									theme.transitions.create('background-color'),
 							},

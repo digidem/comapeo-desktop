@@ -12,7 +12,6 @@ import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
 import {
 	useIsMutating,
 	useMutation,
@@ -253,7 +252,7 @@ function CategoriesList({
 							sx={{
 								borderRadius: 2,
 								':hover, :focus': {
-									background: alpha(BLUE_05, 0.2),
+									background: (theme) => theme.alpha(BLUE_05, 0.2),
 									transition: (theme) =>
 										theme.transitions.create('background-color'),
 								},

@@ -20,7 +20,6 @@ import CircularProgress from '@mui/material/CircularProgress'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
 import { captureMessage } from '@sentry/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
@@ -805,7 +804,7 @@ export function MapPanel({
 				{isOnDocumentSpecificRoute && !highlightedFeature ? (
 					<Box
 						sx={{
-							background: alpha(BLACK_00, 0.5),
+							background: (theme) => theme.alpha(BLACK_00, 0.5),
 							bottom: 0,
 							display: 'grid',
 							left: 0,

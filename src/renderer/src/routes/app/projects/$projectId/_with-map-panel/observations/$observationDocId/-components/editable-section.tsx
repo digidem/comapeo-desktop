@@ -6,7 +6,6 @@ import Fade from '@mui/material/Fade'
 import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
 
 import { BLUE_06 } from '../../../../../../../../../../shared/colors.ts'
 import { Icon } from '../../../../../../../../components/icon.tsx'
@@ -72,7 +71,7 @@ export function EditableSection({
 				textAlign: 'start',
 				':disabled': { color: (theme) => theme.palette.text.disabled },
 				':hover, :focus': {
-					background: alpha(BLUE_06, 0.5),
+					background: (theme) => theme.alpha(BLUE_06, 0.5),
 					transition: (theme) => theme.transitions.create('background-color'),
 				},
 			}}

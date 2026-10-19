@@ -17,7 +17,6 @@ import LinearProgress, {
 } from '@mui/material/LinearProgress'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
 import { captureException } from '@sentry/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
@@ -219,7 +218,8 @@ function RouteComponent() {
 											position: 'absolute',
 											right: -8,
 											padding: 2,
-											boxShadow: `0px 2px 20px 0px ${alpha(BLACK_00, 0.4)}`,
+											boxShadow: (theme) =>
+												`0px 2px 20px 0px ${theme.alpha(BLACK_00, 0.4)}`,
 										}}
 									>
 										<Icon

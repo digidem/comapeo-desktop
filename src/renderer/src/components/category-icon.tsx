@@ -2,7 +2,6 @@ import { Suspense, type CSSProperties, type ReactNode } from 'react'
 import { useIconUrl } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
-import { alpha } from '@mui/material/styles'
 
 import { WHITE_00 } from '../../../shared/colors.ts'
 import { ErrorBoundary } from './error-boundary.tsx'
@@ -32,7 +31,7 @@ export function CategoryIconContainer({
 				padding: padding,
 				border: `3px solid ${color}`,
 				boxShadow: applyBoxShadow
-					? `0px 0px 10px ${alpha(color, 0.25)}`
+					? (theme) => `0px 0px 10px ${theme.alpha(color, 0.25)}`
 					: undefined,
 			}}
 		>

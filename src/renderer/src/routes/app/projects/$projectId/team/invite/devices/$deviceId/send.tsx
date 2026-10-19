@@ -10,7 +10,6 @@ import Container from '@mui/material/Container'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
 import { useMutation } from '@tanstack/react-query'
 import { Navigate, createFileRoute, useRouter } from '@tanstack/react-router'
 import {
@@ -521,8 +520,6 @@ function InviteRejected({
 	)
 }
 
-const ICON_BOX_SHADOW = `0px 2px 20px 0px ${alpha(BLACK_00, 0.4)}`
-
 function InviteAccepted({
 	deviceId,
 	projectId,
@@ -586,7 +583,8 @@ function InviteAccepted({
 										padding: 2,
 										borderRadius: '50%',
 										background: GREEN_00,
-										boxShadow: ICON_BOX_SHADOW,
+										boxShadow: (theme) =>
+											`0px 2px 20px 0px ${theme.alpha(BLACK_00, 0.4)}`,
 									}}
 								>
 									<Icon

@@ -16,7 +16,6 @@ import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
 import { captureException, captureMessage } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { Block, createFileRoute, useRouter } from '@tanstack/react-router'
@@ -557,7 +556,7 @@ function ObservationDetailsPanel({
 													color: (theme) => theme.palette.text.disabled,
 												},
 												':hover, :focus': {
-													background: alpha(BLUE_06, 0.5),
+													background: (theme) => theme.alpha(BLUE_06, 0.5),
 													transition: (theme) =>
 														theme.transitions.create('background-color'),
 												},

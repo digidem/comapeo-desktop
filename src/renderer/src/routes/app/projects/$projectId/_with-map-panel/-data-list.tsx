@@ -21,7 +21,6 @@ import Radio from '@mui/material/Radio'
 import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
 import { captureException, captureMessage } from '@sentry/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
@@ -558,11 +557,7 @@ export function DataList({
 										return (
 											<FilterPill
 												key={filterId}
-												color={
-													matchingFilterOption.color
-														? alpha(matchingFilterOption.color, 0.1)
-														: WHITE_00
-												}
+												color={matchingFilterOption?.color}
 												label={matchingFilterOption.name}
 												onRemove={() => {
 													const updatedFilter = categoriesFilter.filter(
@@ -917,7 +912,7 @@ function OutdatedFilterPill({
 	return (
 		<FilterPill
 			outdated
-			color={category.color ? alpha(category.color, 0.1) : WHITE_00}
+			color={category?.color}
 			label={category.name}
 			onRemove={onRemove}
 		/>
@@ -995,7 +990,11 @@ function FilterPill({
 			direction="row"
 			sx={{
 				alignItems: 'center',
-				background: outdated ? undefined : color,
+				background: outdated
+					? undefined
+					: color
+						? (theme) => theme.lighten(color, 0.9)
+						: undefined,
 				border: `1px solid ${BLUE_05}`,
 				borderRadius: 2,
 				paddingInline: 4,

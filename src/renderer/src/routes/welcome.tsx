@@ -4,7 +4,6 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
 import { createFileRoute } from '@tanstack/react-router'
 import {
 	defineMessages,
@@ -22,8 +21,6 @@ import topographicPrintURL from '../images/topographic-print.svg'
 export const Route = createFileRoute('/welcome')({
 	component: RouteComponent,
 })
-
-const LIST_BACKGROUND_COLOR = alpha(BLACK_00, 0.4)
 
 function RouteComponent() {
 	const intl = useIntl()
@@ -84,7 +81,7 @@ function RouteComponent() {
 							component={List}
 							direction="column"
 							sx={{
-								background: LIST_BACKGROUND_COLOR,
+								background: (theme) => theme.alpha(BLACK_00, 0.4),
 								border: `1px solid ${BLUE_05}`,
 								borderRadius: 2,
 								color: (theme) => theme.palette.text.inverted,
