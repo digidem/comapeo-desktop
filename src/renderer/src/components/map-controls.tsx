@@ -216,23 +216,26 @@ class ZoomToDataControl implements IControl {
 							const data = await source.getData()
 
 							if (data.type === 'FeatureCollection') {
-								return bbox({
-									...data,
-									features: data.features.filter((f) => {
-										if (!f.properties) {
-											return true
-										}
+								return bbox(
+									{
+										...data,
+										features: data.features.filter((f) => {
+											if (!f.properties) {
+												return true
+											}
 
-										if (!('visible' in f.properties)) {
-											return true
-										}
+											if (!('visible' in f.properties)) {
+												return true
+											}
 
-										return !!f.properties.visible
-									}),
-								})
+											return !!f.properties.visible
+										}),
+									},
+									{ recompute: true },
+								)
 							}
 
-							return bbox(data)
+							return bbox(data, { recompute: true })
 						}),
 					)
 
