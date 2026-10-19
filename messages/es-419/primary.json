@@ -323,6 +323,14 @@
     "description": "Title of the download observations page.",
     "message": "Descargar observaciones"
   },
+  "$1.routes.app.projects.$projectId.download.successPanelDescriptionObservations": {
+    "description": "Description text for success panel when downloading observations.",
+    "message": "<b>Todas las observaciones</b><br></br> han sido descargadas a tu dispositivo."
+  },
+  "$1.routes.app.projects.$projectId.download.successPanelDescriptionObservationsWithMedia": {
+    "description": "Description text for success panel when downloading observations with media.",
+    "message": "<b>Todas las observaciones con contenido multimedia</b><br></br> se han descargado en tu dispositivo."
+  },
   "$1.routes.app.projects.$projectId.download.successPanelDescriptionTracks": {
     "description": "Description text for success panel when downloading tracks.",
     "message": "<b>Todas las pistas</b><br></br> han sido descargadas a tu dispositivo."
@@ -475,6 +483,10 @@
     "description": "Text displayed if a field is answered with \"null\"",
     "message": "NÚLL"
   },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-shared.fieldAnswerTrue": {
+    "description": "Text displayed if a boolean field is answered with \"true\"",
+    "message": "VERDADERO"
+  },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.changeCategory": {
     "description": "Text for button to change category.",
     "message": "Cambiar"
@@ -510,6 +522,14 @@
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.detailsSectionTitle": {
     "description": "Title for details section.",
     "message": "Detalles"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyFeet": {
+    "description": "Displayed accuracy for observation location in feet.",
+    "message": "± {value} ft"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyMeters": {
+    "description": "Displayed accuracy for observation location in meters.",
+    "message": "± {value} m"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
@@ -947,6 +967,10 @@
     "description": "Text indicating that the member is a remote archive (displays when hovering over the icon).",
     "message": "Archivo Remoto"
   },
+  "$1.routes.app.projects.-shared.device-icon.deviceTypeTablet": {
+    "description": "Text indicating that the member is a tablet device (displays when hovering over the icon).",
+    "message": "Tableta"
+  },
   "$1.routes.app.projects.-shared.device-icon.deviceTypeUnknown": {
     "description": "Text indicating that the member device type is unknown (displays when hovering over the icon).",
     "message": "Tipo de dispositivo desconocido"
@@ -1331,6 +1355,10 @@
     "description": "Details for country in app usage section in privacy policy page.",
     "message": "<b>País</b>: El país donde se está utilizando CoMapeo."
   },
+  "$1.routes.onboarding.privacy-policy.crashData": {
+    "description": "Details for crash data in diagnostics section in privacy policy page.",
+    "message": "<b>Datos de fallo</b>: Información sobre qué causó el cierre inesperado de la app."
+  },
   "$1.routes.onboarding.privacy-policy.dataCollection": {
     "description": "Title for data collection section in privacy policy page.",
     "message": "Recopilación de datos de CoMapeo"
@@ -1359,6 +1387,10 @@
     "description": "Title for open source section in privacy policy page.",
     "message": "Código abierto y la versión \"oficial\""
   },
+  "$1.routes.onboarding.privacy-policy.openSourceDescription": {
+    "description": "Description for open source section in privacy policy page.",
+    "message": "CoMapeo es una aplicación open source.<br></br><br></br>Esto significa que cualquiera puede ver el código que hace que la aplicación funcione y puede verificar las declaraciones de privacidad en este documento. Esto también significa que cualquiera puede adaptar la aplicación a sus propias necesidades y lanzar una versión alternativa.<br></br><br></br>Este documento hace referencia a los datos recogidos por las versiones oficiales de CoMapeo, firmada digitalmente por Awana Digital, disponible desde el sitio web de Google Play Store o Awana Digital.<br></br><br></br>lanzamientos no oficiales de CoMapeo obtenidos de otros canales están fuera de nuestro control y pueden compartir información adicional con otras organizaciones."
+  },
   "$1.routes.onboarding.privacy-policy.performanceData": {
     "description": "Details for performance data in diagnostics section in privacy policy page.",
     "message": "<b>Datos de rendimiento</b>: tales como tiempo de lanzamiento, uso de energía, congelación de aplicaciones y recepción."
@@ -1366,6 +1398,10 @@
   "$1.routes.onboarding.privacy-policy.privateByDefault": {
     "description": "Title for private by default section in privacy policy page.",
     "message": "Privado por defecto"
+  },
+  "$1.routes.onboarding.privacy-policy.privateByDefaultDescription": {
+    "description": "Description for private by default section in privacy policy page.",
+    "message": "Los datos que recopilas y creas con CoMapeo (ubicaciones, fotos, vídeo, audio, texto) solo se almacenan en tu dispositivo por defecto, y no se almacenan ni envían a ningún otro sitio.<br></br><br></br>Cuando compartes datos con colaboradores al unirte a un proyecto con ellos, se envían cifrados, directamente al dispositivo de tus colaboradores. Esto significa que los datos no se envían a través de Awana Digital ni de nadie más en su camino hacia tu colaborador.<br></br><br></br>Awana Digital nunca ve ni tiene acceso a ninguno de los datos que recopilas con CoMapeo a menos que nos los envíes explícitamente."
   },
   "$1.routes.onboarding.privacy-policy.shareDiagnosticInformation": {
     "description": "Label for checkbox to toggle sharing of diagnostic information.",
@@ -1379,6 +1415,10 @@
     "description": "Title for what is collected section in privacy policy page.",
     "message": "¿Qué no se recopila?"
   },
+  "$1.routes.onboarding.privacy-policy.whatIsCollectedDescription": {
+    "description": "Description for what is collected section in privacy policy page.",
+    "message": "De forma predeterminada, la información de diagnóstico anonimizada sobre su dispositivo, los bloqueos de la aplicación, los errores y el rendimiento se comparten con Awana Digital.<br></br><br></br>Puedes dejar de compartir esta información en cualquier momento. Esta información de diagnóstico es completamente anónima y nunca contiene ninguno de sus datos (los datos que ha recopilado con CoMapeople)."
+  },
   "$1.routes.onboarding.privacy-policy.whatIsNotCollected": {
     "description": "Title for what is not collected in app usage section in privacy policy page.",
     "message": "¿Qué no se recopila?"
@@ -1390,6 +1430,10 @@
   "$1.routes.onboarding.privacy-policy.whyIsThisDataCollected": {
     "description": "Title for why data is collected in app usage section in privacy policy page.",
     "message": "¿Por qué se recolectan estos datos?"
+  },
+  "$1.routes.onboarding.privacy-policy.whyIsThisDataCollectedDescription": {
+    "description": "Description for why data is collected in app usage section in privacy policy page.",
+    "message": "Los datos de fallos y errores de la app junto con la información del dispositivo y la app proporcionan a Awana Digital la información que necesitamos para corregir errores y fallos en la aplicación.<br></br><br></br>Los datos de rendimiento nos ayudan a mejorar la capacidad de respuesta de la app e identificar errores.<br></br><br></br>El país donde se usa CoMapeo y el lenguaje de la interfaz nos ayudan a entender información mínima sobre los usuarios de CoMapeo: \"¿Cuántos usuarios de CoMapeo hay en cada país?\""
   },
   "$1.routes.onboarding.route.goBack": {
     "description": "Button text for button to navigate back in onboarding steps.",
