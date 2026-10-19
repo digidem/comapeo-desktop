@@ -12,7 +12,12 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { darken, type SxProps, type Theme } from '@mui/material/styles'
 import { useMatch, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 
 import { LIGHT_GREY, WHITE } from '../../colors.ts'
 import { Icon } from '../../components/icon.tsx'
@@ -92,7 +97,7 @@ function ButtonTabContent({
 }) {
 	const popupDescribedById = useId()
 
-	const { formatMessage: t, formatDate } = useIntl()
+	const intl = useIntl()
 
 	const { data: projectSettings } = useProjectSettings({ projectId })
 	const { data: role } = useOwnRoleInProject({ projectId })
@@ -102,13 +107,14 @@ function ButtonTabContent({
 	const isAtLeastCoordinator =
 		role.roleId === CREATOR_ROLE_ID || role.roleId === COORDINATOR_ROLE_ID
 
-	const displayedProjectName = projectSettings.name || t(m.unnamedProject)
+	const displayedProjectName =
+		projectSettings.name || intl.formatMessage(m.unnamedProject)
 	const accentColor = projectSettings.projectColor || WHITE
 
 	return (
 		<>
 			<Button
-				aria-label={t(
+				aria-label={intl.formatMessage(
 					isOnProjectPage
 						? m.accessibleLabelShowProjectInfo
 						: m.accessibleLabelGoTo,
@@ -146,7 +152,10 @@ function ButtonTabContent({
 				role="dialog"
 				placement="right-start"
 				transition
-				sx={{ width: `clamp(250px, 25%, 350px)`, zIndex: 1 }}
+				sx={{
+					width: `clamp(250px, 25%, 350px)`,
+					zIndex: (theme) => theme.zIndex.modal - 1,
+				}}
 				modifiers={[
 					{ name: 'offset', options: { offset: [0, 2] } },
 					{ name: 'eventListeners', enabled: true },
@@ -195,7 +204,7 @@ function ButtonTabContent({
 													/>
 
 													<Typography sx={{ fontWeight: 500 }}>
-														{t(m.projectInfoRoleCoordinator)}
+														{intl.formatMessage(m.projectInfoRoleCoordinator)}
 													</Typography>
 												</>
 											) : (
@@ -203,7 +212,7 @@ function ButtonTabContent({
 													<Icon name="material-people-filled" />
 
 													<Typography sx={{ fontWeight: 500 }}>
-														{t(m.projectInfoRoleParticipant)}
+														{intl.formatMessage(m.projectInfoRoleParticipant)}
 													</Typography>
 												</>
 											)}
@@ -237,30 +246,33 @@ function ButtonTabContent({
 													</Typography>
 
 													<Typography color="textSecondary">
-														{t(m.projectInfoCategoriesCreated, {
-															date: (
-																<time
-																	key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
-																	dateTime={
-																		projectSettings.configMetadata.buildDate
-																	}
-																>
-																	{formatDate(
-																		projectSettings.configMetadata.buildDate,
-																		{
-																			year: 'numeric',
-																			month: 'long',
-																			day: 'numeric',
-																		},
-																	)}
-																</time>
-															),
-														})}
+														{intl.formatMessage(
+															m.projectInfoCategoriesCreated,
+															{
+																date: (
+																	<time
+																		key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
+																		dateTime={
+																			projectSettings.configMetadata.buildDate
+																		}
+																	>
+																		{intl.formatDate(
+																			projectSettings.configMetadata.buildDate,
+																			{
+																				year: 'numeric',
+																				month: 'long',
+																				day: 'numeric',
+																			},
+																		)}
+																	</time>
+																),
+															},
+														)}
 													</Typography>
 												</Box>
 											) : (
 												<Typography sx={{ fontWeight: 500 }}>
-													{t(m.fallbackCategoriesSetName)}
+													{intl.formatMessage(m.fallbackCategoriesSetName)}
 												</Typography>
 											)}
 										</Stack>
@@ -281,7 +293,15 @@ const BASE_TAB_CONTAINER_SX_PROPS = {
 	borderRadius: 2,
 } satisfies SxProps<Theme>
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly unnamedProject: NoMessageValues
+	readonly accessibleLabelGoTo: { readonly name: MessageValue }
+	readonly accessibleLabelShowProjectInfo: { readonly name: MessageValue }
+	readonly fallbackCategoriesSetName: NoMessageValues
+	readonly projectInfoRoleCoordinator: NoMessageValues
+	readonly projectInfoRoleParticipant: NoMessageValues
+	readonly projectInfoCategoriesCreated: { readonly date: MessageValue }
+}>({
 	unnamedProject: {
 		id: '$1.routes.app.route.unnamedProject',
 		defaultMessage: 'Unnamed Project',
@@ -300,22 +320,22 @@ const m = defineMessages({
 			'Accessible label for button that shows project info when clicked.',
 	},
 	fallbackCategoriesSetName: {
-		id: '$1.routes.app.route.fallbackCategoriesSetName',
+		id: 'routes.app.route.fallbackCategoriesSetName',
 		defaultMessage: 'CoMapeo Categories',
 		description: 'Text shown when project does not use a categories set.',
 	},
 	projectInfoRoleCoordinator: {
-		id: '$1.routes.app.route.projectInfoRoleCoordinator',
+		id: 'routes.app.route.projectInfoRoleCoordinator',
 		defaultMessage: 'Coordinator',
 		description: 'Indicates that user is a coordinator.',
 	},
 	projectInfoRoleParticipant: {
-		id: '$1.routes.app.route.projectInfoRoleParticipant',
+		id: 'routes.app.route.projectInfoRoleParticipant',
 		defaultMessage: 'Participant',
 		description: 'Indicates that user is a participant.',
 	},
 	projectInfoCategoriesCreated: {
-		id: '$1.routes.app.route.projectInfoCategoriesCreated',
+		id: 'routes.app.route.projectInfoCategoriesCreated',
 		defaultMessage: 'Created {date}',
 		description: 'Text indicating creation date of categories set.',
 	},

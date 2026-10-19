@@ -137,8 +137,19 @@ Sentry.init({
 	// NOTE: Only works on app startup. Any changes to `diagnosticsEnabled` while the app is running will not
 	// take effect here until the app is restarted.
 	enabled: persistedStoreState.diagnosticsEnabled,
-	enableMetrics: false,
-	dataCollection: { userInfo: false },
+	dataCollection: {
+		cookies: false,
+		databaseQueryData: false,
+		genAI: { inputs: false, outputs: false },
+		graphQL: { document: false, variables: false },
+		httpBodies: [],
+		httpHeaders: {
+			request: { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] },
+			response: { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] },
+		},
+		urlQueryParams: { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] },
+		userInfo: false,
+	},
 	// TODO: Enable tracing based on user consent in production
 	tracesSampleRate: sentryEnvironment === 'production' ? 0 : 1.0,
 	environment: sentryEnvironment,

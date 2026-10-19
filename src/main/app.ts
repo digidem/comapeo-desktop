@@ -11,10 +11,13 @@ import {
 	net,
 	protocol,
 	safeStorage,
+	screen,
 	utilityProcess,
+	type BaseWindow,
 	type UtilityProcess,
 } from 'electron/main'
 import { createDebug } from 'obug'
+import { debounce } from 'radashi'
 import * as v from 'valibot'
 
 import type { NewClientMessage } from '../services/core.ts'
@@ -207,8 +210,8 @@ export async function start({
 
 				appRunPromise.reject(
 					new AppRunError({
-						title: intlManager.formatMessage(messages.fatalErrorTitle),
-						description: intlManager.formatMessage(
+						title: intlManager.intl.formatMessage(messages.fatalErrorTitle),
+						description: intlManager.intl.formatMessage(
 							messages.fatalErrorDescriptionCoreService,
 						),
 					}),
@@ -347,11 +350,13 @@ export async function start({
 		}
 
 		throw new AppRunError({
-			title: intlManager.formatMessage(messages.fatalErrorTitle),
+			title: intlManager.intl.formatMessage(messages.fatalErrorTitle),
 			description:
 				reason instanceof Error
 					? `${reason.name}: ${reason.message}`
-					: intlManager.formatMessage(messages.fatalErrorDescriptionGeneric),
+					: intlManager.intl.formatMessage(
+							messages.fatalErrorDescriptionGeneric,
+						),
 			cause: reason,
 		})
 	}
@@ -377,10 +382,10 @@ function initMainWindow({
 	}
 }): BrowserWindow {
 	const mainWindow = new BrowserWindow({
-		width: 1200,
-		minWidth: 800,
-		height: 800,
 		minHeight: 500,
+		height: 800,
+		minWidth: 800,
+		width: 1200,
 		// NOTE: Needs to be explicitly set for Linux
 		// https://www.electronforge.io/guides/create-and-add-icons#linux
 		icon:
@@ -404,6 +409,8 @@ function initMainWindow({
 		},
 	})
 
+	updateWindowMinimumSize(mainWindow)
+
 	mainWindow.setAutoHideMenuBar(true)
 
 	if (isDevelopment) {
@@ -418,6 +425,15 @@ function initMainWindow({
 		// NOTE: host (`renderer`) needs to match whatever is matched against in the protocol handler
 		mainWindow.loadURL('comapeo://renderer/index.html')
 	}
+
+	const updateMainWindowMinimumSize = debounce({ delay: 500 }, () => {
+		updateWindowMinimumSize(mainWindow)
+	})
+
+	mainWindow.on('moved', updateMainWindowMinimumSize)
+	screen.on('display-added', updateMainWindowMinimumSize)
+	screen.on('display-metrics-changed', updateMainWindowMinimumSize)
+	screen.on('display-removed', updateMainWindowMinimumSize)
 
 	mainWindow.on('close', (event) => {
 		if (process.platform === 'darwin' && !APP_STATE.tryingToQuitApp) {
@@ -582,15 +598,17 @@ function createAppContextMenu({
 		showSaveImageAs: true,
 		showSearchWithGoogle: false,
 		labels: {
-			copy: intlManager.formatMessage(messages.contextMenuCopy),
-			copyImage: intlManager.formatMessage(messages.contextMenuCopyImage),
-			copyImageAddress: intlManager.formatMessage(
+			copy: intlManager.intl.formatMessage(messages.contextMenuCopy),
+			copyImage: intlManager.intl.formatMessage(messages.contextMenuCopyImage),
+			copyImageAddress: intlManager.intl.formatMessage(
 				messages.contextMenuCopyImageAddress,
 			),
-			copyLink: intlManager.formatMessage(messages.contextMenuCopyLink),
-			cut: intlManager.formatMessage(messages.contextMenuCut),
-			inspect: intlManager.formatMessage(messages.contextMenuInspectElement),
-			learnSpelling: intlManager.formatMessage(
+			copyLink: intlManager.intl.formatMessage(messages.contextMenuCopyLink),
+			cut: intlManager.intl.formatMessage(messages.contextMenuCut),
+			inspect: intlManager.intl.formatMessage(
+				messages.contextMenuInspectElement,
+			),
+			learnSpelling: intlManager.intl.formatMessage(
 				messages.contextMenuLearnSpelling,
 				{
 					// NOTE: Kind of awkward but need `{selection}` to be literally inlined for the replacement to work
@@ -598,7 +616,7 @@ function createAppContextMenu({
 					placeholder: '"{selection}"',
 				},
 			),
-			lookUpSelection: intlManager.formatMessage(
+			lookUpSelection: intlManager.intl.formatMessage(
 				messages.contextMenuLookUpSelection,
 				{
 					// NOTE: Kind of awkward but need `{selection}` to be literally inlined for the replacement to work
@@ -606,9 +624,59 @@ function createAppContextMenu({
 					placeholder: '"{selection}"',
 				},
 			),
-			paste: intlManager.formatMessage(messages.contextMenuPaste),
-			saveImageAs: intlManager.formatMessage(messages.contextMenuSaveImageAs),
-			selectAll: intlManager.formatMessage(messages.contextMenuSelectAll),
+			paste: intlManager.intl.formatMessage(messages.contextMenuPaste),
+			saveImageAs: intlManager.intl.formatMessage(
+				messages.contextMenuSaveImageAs,
+			),
+			selectAll: intlManager.intl.formatMessage(messages.contextMenuSelectAll),
 		},
 	})
+}
+
+function updateWindowMinimumSize(window: BaseWindow) {
+	let display: Electron.Display | undefined = undefined
+
+	try {
+		display = screen.getDisplayMatching(window.getBounds())
+	} catch (err) {
+		log('Unable to get display', err)
+	}
+
+	const [currentWidth, currentHeight] = window.getMinimumSize()
+
+	if (!display) {
+		log(
+			`Unable to update window ${window.id} minimum size. Current minimum size is ${{ width: currentWidth, height: currentHeight }}`,
+		)
+
+		return undefined
+	}
+
+	const updatedHeight = Math.floor(display.size.height * 0.5)
+	const updatedWidth = Math.floor(display.size.width * 0.4)
+
+	if (currentWidth === updatedWidth && currentHeight === updatedHeight) {
+		log(
+			`Calculated minimum size is same as existing minimum size for window ${window.id}.`,
+		)
+
+		return undefined
+	}
+
+	if (updatedWidth === 0 || updatedHeight === 0) {
+		log(
+			`Unable to update window ${window.id} minimum size due to invalid calculated size ${{ width: updatedWidth, height: updatedHeight }}`,
+		)
+
+		return undefined
+	}
+
+	log(`Updating minimum size of window ${window.id}`, {
+		width: updatedWidth,
+		height: updatedHeight,
+	})
+
+	window.setMinimumSize(updatedWidth, updatedHeight)
+
+	return { height: updatedHeight, width: updatedWidth }
 }

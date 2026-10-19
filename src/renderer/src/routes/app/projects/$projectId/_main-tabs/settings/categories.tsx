@@ -13,7 +13,12 @@ import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 
 import { BLUE_GREY, DARK_GREY, DARK_ORANGE } from '../../../../../../colors.ts'
 import { DecentDialog } from '../../../../../../components/decent-dialog.tsx'
@@ -30,8 +35,8 @@ export const Route = createFileRoute(
 		const { projectApi, queryClient } = context
 		const { projectId } = params
 
-		// TODO: Not ideal but requires changes in @comapeo/core-react
-		await queryClient.ensureQueryData({
+		await queryClient.query({
+			staleTime: 'static',
 			queryKey: [
 				COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 				'projects',
@@ -56,7 +61,8 @@ const SELECT_AND_IMPORT_CATEGORY_MUTATION_KEY = createGlobalMutationsKey([
 function RouteComponent() {
 	const accessibilityId = useId()
 
-	const { formatMessage: t, formatDate } = useIntl()
+	const intl = useIntl()
+
 	const router = useRouter()
 
 	const { projectId } = Route.useParams()
@@ -83,7 +89,8 @@ function RouteComponent() {
 	})
 
 	const displayedName =
-		projectSettings.configMetadata?.name || t(m.fallbackCategoriesName)
+		projectSettings.configMetadata?.name ||
+		intl.formatMessage(m.fallbackCategoriesName)
 
 	return (
 		<>
@@ -99,7 +106,7 @@ function RouteComponent() {
 					}}
 				>
 					<IconButton
-						aria-label={t(m.goBackAccessibleLabel)}
+						aria-label={intl.formatMessage(m.goBackAccessibleLabel)}
 						onClick={() => {
 							if (selectAndImportMutation.status === 'pending') {
 								return
@@ -121,7 +128,7 @@ function RouteComponent() {
 					</IconButton>
 
 					<Typography variant="h1" sx={{ fontWeight: 500 }}>
-						{t(m.navTitle)}
+						{intl.formatMessage(m.navTitle)}
 					</Typography>
 				</Stack>
 
@@ -172,13 +179,13 @@ function RouteComponent() {
 										component={'span'}
 										id={`date-created-${accessibilityId}`}
 									>
-										{t(m.dateCreated, {
+										{intl.formatMessage(m.dateCreated, {
 											date: (
 												<time
 													key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
 													dateTime={projectSettings.configMetadata.buildDate}
 												>
-													{formatDate(
+													{intl.formatDate(
 														projectSettings.configMetadata.buildDate,
 														{ year: 'numeric', month: 'long', day: 'numeric' },
 													)}
@@ -194,13 +201,13 @@ function RouteComponent() {
 									sx={{ textAlign: 'center', fontWeight: 500 }}
 								>
 									<Box component="span" id={`date-added-${accessibilityId}`}>
-										{t(m.dateAdded, {
+										{intl.formatMessage(m.dateAdded, {
 											date: (
 												<time
 													key={`${projectSettings.configMetadata.name}@${projectSettings.configMetadata.fileVersion}`}
 													dateTime={projectSettings.configMetadata.importDate}
 												>
-													{formatDate(
+													{intl.formatDate(
 														projectSettings.configMetadata.importDate,
 														{ year: 'numeric', month: 'long', day: 'numeric' },
 													)}
@@ -224,13 +231,13 @@ function RouteComponent() {
 							>
 								<ListItem disablePadding sx={{ display: 'list-item' }}>
 									<Typography color="textSecondary">
-										{t(m.defaultCategoriesExplainer)}
+										{intl.formatMessage(m.defaultCategoriesExplainer)}
 									</Typography>
 								</ListItem>
 
 								<ListItem disablePadding sx={{ display: 'list-item' }}>
 									<Typography color="textSecondary">
-										{t(m.customCategoriesExplainer)}
+										{intl.formatMessage(m.customCategoriesExplainer)}
 									</Typography>
 								</ListItem>
 							</List>
@@ -259,7 +266,7 @@ function RouteComponent() {
 							}}
 							sx={{ maxWidth: 400 }}
 						>
-							{t(m.uploadNewSet)}
+							{intl.formatMessage(m.uploadNewSet)}
 						</Button>
 					</Box>
 				</Stack>
@@ -287,7 +294,16 @@ function RouteComponent() {
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly navTitle: NoMessageValues
+	readonly uploadNewSet: NoMessageValues
+	readonly fallbackCategoriesName: NoMessageValues
+	readonly dateAdded: { readonly date: MessageValue }
+	readonly dateCreated: { readonly date: MessageValue }
+	readonly defaultCategoriesExplainer: NoMessageValues
+	readonly customCategoriesExplainer: NoMessageValues
+	readonly goBackAccessibleLabel: NoMessageValues
+}>({
 	navTitle: {
 		id: '$1.routes.app.projects.$projectId.settings.categories.navTitle',
 		defaultMessage: 'Categories Set',
@@ -304,12 +320,12 @@ const m = defineMessages({
 		description: 'Fallback displayed name when project has no category set.',
 	},
 	dateAdded: {
-		id: '$1.routes.app.projects.$projectId.settings.categories.dateAdded',
+		id: 'routes.app.projects.$projectId.settings.categories.dateAdded',
 		defaultMessage: 'Added {date}',
 		description: 'Text indicating the date the categories set was added.',
 	},
 	dateCreated: {
-		id: '$1.routes.app.projects.$projectId.settings.categories.dateCreated',
+		id: 'routes.app.projects.$projectId.settings.categories.dateCreated',
 		defaultMessage: 'Created {date}',
 		description: 'Text indicating the date the categories set was created.',
 	},

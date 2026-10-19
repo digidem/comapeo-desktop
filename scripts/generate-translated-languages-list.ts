@@ -22,7 +22,7 @@ const PROJECT_ROOT = fileURLToPath(new URL('..', import.meta.url))
 const MESSAGES_DIR = join(PROJECT_ROOT, 'messages')
 
 const unsupportedLanguages: Array<string> = []
-const languagesMissingTranslations: Array<SupportedLanguageTag> = []
+const languagesMissingRendererTranslations: Array<SupportedLanguageTag> = []
 const translatedLanguages: Array<SupportedLanguageTag> = []
 
 const directories = readdirSync(MESSAGES_DIR, { withFileTypes: true }).filter(
@@ -58,8 +58,7 @@ for (const d of directories) {
 	)
 
 	if (rendererPrimaryIds.length + rendererSecondaryIds.length === 0) {
-		languagesMissingTranslations.push(languageCode)
-		continue
+		languagesMissingRendererTranslations.push(languageCode)
 	}
 
 	translatedLanguages.push(languageCode)
@@ -71,9 +70,9 @@ if (unsupportedLanguages.length > 0) {
 	)
 }
 
-if (languagesMissingTranslations.length > 0) {
+if (languagesMissingRendererTranslations.length > 0) {
 	console.warn(
-		`⚠️ The following language tags do not have translations: ${styleText('bold', languagesMissingTranslations.join(', '))}.\nThese will not be available for the app to use.\n`,
+		`⚠️ The following language tags do not have renderer translations: ${styleText('bold', languagesMissingRendererTranslations.join(', '))}.`,
 	)
 }
 

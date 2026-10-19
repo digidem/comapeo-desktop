@@ -27,8 +27,7 @@ export const Route = createFileRoute(
 			})
 		}
 
-		// NOTE: This is intentionally a plain call instead of something that's wrapped in
-		// `queryClient.ensureQueryData()`, `queryClient.fetchQuery()`, etc.
+		// NOTE: This is intentionally a plain call instead of something that's wrapped in `queryClient.query()`.
 		// This prevents an issue with showing the success state when another device accepts an invite sent by us.
 		const member = await projectApi.$member.getById(deviceId).catch(() => {
 			return null

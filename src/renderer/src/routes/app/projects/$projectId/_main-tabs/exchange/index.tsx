@@ -40,7 +40,7 @@ import {
 	MEMBER_ROLE_ID,
 	memberIsRemoteArchive,
 } from '../../../../../../lib/comapeo.ts'
-import { ExhaustivenessError } from '../../../../../../lib/exchaustiveness-error.ts'
+import { ExhaustivenessError } from '../../../../../../lib/exhaustiveness-error.ts'
 import {
 	deriveSyncStage,
 	getConnectedPeersCount,
@@ -56,7 +56,8 @@ export const Route = createFileRoute(
 		const { projectId } = params
 
 		await Promise.all([
-			queryClient.ensureQueryData({
+			queryClient.query({
+				staleTime: 'static',
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',
@@ -67,7 +68,8 @@ export const Route = createFileRoute(
 					return projectApi.$getOwnRole()
 				},
 			}),
-			queryClient.ensureQueryData({
+			queryClient.query({
+				staleTime: 'static',
 				queryKey: [
 					COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 					'projects',
@@ -86,7 +88,7 @@ export const Route = createFileRoute(
 			.setAutostopDataSyncTimeout(null)
 			.catch(captureException)
 	},
-	onLeave: async ({ context }) => {
+	onLeave: ({ context }) => {
 		context.projectApi.$sync
 			.setAutostopDataSyncTimeout(30_000)
 			.catch(captureException)

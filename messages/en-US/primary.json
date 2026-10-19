@@ -235,13 +235,85 @@
     "description": "Fallback for when project is missing a name.",
     "message": "Unnamed Project"
   },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterAll": {
+    "description": "Text shown when all categories are being shown.",
+    "message": "All categories"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterDeselectAll": {
+    "description": "Text for button to deselect all categories.",
+    "message": "Deselect All"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterNotCategorized": {
+    "description": "Text for category filter option for data without a matching category.",
+    "message": "Not categorized"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterSelectAll": {
+    "description": "Text for button to select all categories.",
+    "message": "Select All"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFilterValue": {
+    "description": "Text displayed describing the selected category filters.",
+    "message": "{count, plural, =0 {0 Categories} one {# Category} other {# Categories}}"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoriesFiltersAdvanced": {
+    "description": "Text for button to clear all filters",
+    "message": "Advanced…"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.categoryUnavailable": {
+    "description": "Text for tooltip that appears when hovering over outdated active category filter.",
+    "message": "Category unavailable"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.clearFilters": {
+    "description": "Text for button to clear all filters",
+    "message": "Clear All"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionCustom": {
+    "description": "Text for label used for custom date range option.",
+    "message": "{start, date, long} to {end, date, long}"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionFromStart": {
+    "description": "Text for option to show data from earliest starting date.",
+    "message": "From Start"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionLastNDays": {
+    "description": "Text for option to show data from the last N days.",
+    "message": "Last {count, number} Days"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionSame": {
+    "description": "Text for option to show data from the same month.",
+    "message": "Same Month"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterOptionSameYear": {
+    "description": "Text for option to show data from the same year.",
+    "message": "Same Year"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.dateFilterValueCustom": {
+    "description": "Text for value displayed when custom date range is selected.",
+    "message": "Custom"
+  },
   "$1.routes.app.projects.$projectId.-data-list.downloadObservations": {
     "description": "Link text to navigate to download observations page.",
     "message": "Download Observations"
   },
+  "$1.routes.app.projects.$projectId.-data-list.listTitle": {
+    "description": "Title for listed data page.",
+    "message": "List"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.noResultsResetFilters": {
+    "description": "Text for button to reset filters when no results are available based on active filters.",
+    "message": "Reset Filters"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.noResultsTitle": {
+    "description": "Title for panel when no results are available based on active filters.",
+    "message": "No Results"
+  },
   "$1.routes.app.projects.$projectId.-data-list.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
+    "message": "Not categorized"
+  },
+  "$1.routes.app.projects.$projectId.-data-list.resultsCount": {
+    "description": "Number of items listed",
+    "message": "{count, plural, =0 {No results} one {# result} other {# results}}"
   },
   "$1.routes.app.projects.$projectId.-data-list.trackItemTitle": {
     "description": "Title for list item that is a track.",
@@ -251,6 +323,10 @@
     "description": "Text displayed when map feature for selected data cannot be displayed",
     "message": "Cannot display feature"
   },
+  "$1.routes.app.projects.$projectId.-map-panel.toggleOmittedVisibility": {
+    "description": "Text displayed when hovering over map control for toggling visibility of features omitted by filters.",
+    "message": "Toggle omitted visibility"
+  },
   "$1.routes.app.projects.$projectId.-map-panel.zoomToData": {
     "description": "Text displayed when hovering over map control for zooming to data.",
     "message": "Zoom to data"
@@ -258,10 +334,6 @@
   "$1.routes.app.projects.$projectId.-map-panel.zoomToSelected": {
     "description": "Text displayed when hovering over map control for zooming to selected.",
     "message": "Zoom to selected"
-  },
-  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.audioNavTitle": {
-    "description": "Title of the audio attachment page.",
-    "message": "Audio Recording"
   },
   "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.delete": {
     "description": "Label text for delete button",
@@ -286,14 +358,6 @@
   "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.download": {
     "description": "Label text for download button",
     "message": "Download"
-  },
-  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.photoNavTitle": {
-    "description": "Title of the photo attachment page.",
-    "message": "Photo Info"
-  },
-  "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.playerUnavailable": {
-    "description": "Alert text indicating inability to play audio attachment.",
-    "message": "Player unavailable. Download file to preview."
   },
   "$1.routes.app.projects.$projectId.attachments.$driveId.$type.$variant.$name.returnToObservation": {
     "description": "Button text for the successful deletion panel.",
@@ -411,6 +475,42 @@
     "description": "Text displayed when waiting for other devices to be found.",
     "message": "Waiting for Devices"
   },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionDeselectAll": {
+    "description": "Text for button to deselect all in categories filter section in advanced filters dialog.",
+    "message": "Deselect All"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionNotCategorizedOption": {
+    "description": "Text for category filter option for data without a matching category in advanced filters dialog.",
+    "message": "Not categorized"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionSelectAll": {
+    "description": "Text for button to select all in categories filter section in advanced filters dialog.",
+    "message": "Select All"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersCategoriesSectionTitle": {
+    "description": "Title for categories filter section in advanced filters dialog.",
+    "message": "Categories"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersDateSectionTitle": {
+    "description": "Title for date filter section in advanced filters dialog.",
+    "message": "Date"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersShowResults": {
+    "description": "Text for submit button to apply selected filters in advanced filters dialog.",
+    "message": "Show {count, number} Results"
+  },
+  "$1.routes.app.projects.$projectId.index.advancedFiltersTitle": {
+    "description": "Title for advanced filters dialog.",
+    "message": "Advanced Filters"
+  },
+  "$1.routes.app.projects.$projectId.index.invalidEndDateError": {
+    "description": "Text indicating invalid end date for custom date range filter.",
+    "message": "End date must be later than start date."
+  },
+  "$1.routes.app.projects.$projectId.index.invalidStartDateError": {
+    "description": "Text indicating invalid start date for custom date range filter.",
+    "message": "Start date must be earlier than end date."
+  },
   "$1.routes.app.projects.$projectId.index.inviteCollaboratorsPanelDescription": {
     "description": "Text for description of panel shown when no active collaborators or data exist on project.",
     "message": "Invite devices to start gathering observations and tracks."
@@ -439,13 +539,13 @@
     "description": "Title for edit category panel.",
     "message": "Change Category"
   },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.observationCategoryNameFallback": {
-    "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
-  },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.cancelButtonText": {
     "description": "Text for cancel button.",
     "message": "Cancel"
+  },
+  "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.invalidDateError": {
+    "description": "Validation error message when specifying an invalid value for date field.",
+    "message": "Invalid date"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.-field-editors.saveButtonText": {
     "description": "Text for save button.",
@@ -527,14 +627,6 @@
     "description": "Title for details section.",
     "message": "Details"
   },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyFeet": {
-    "description": "Displayed accuracy for observation location in feet.",
-    "message": "± {value} ft"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.locationAccuracyMeters": {
-    "description": "Displayed accuracy for observation location in meters.",
-    "message": "± {value} m"
-  },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.navTitle": {
     "description": "Title of the observation details page.",
     "message": "Observation"
@@ -545,15 +637,11 @@
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
+    "message": "Not categorized"
   },
   "$1.routes.app.projects.$projectId.observations.$observationDocId.index.observationNotFound": {
     "description": "Text displayed when observation cannot be found.",
     "message": "Could not find observation with ID {docId}"
-  },
-  "$1.routes.app.projects.$projectId.observations.$observationDocId.index.unableToGetDurationTime": {
-    "description": "Text displayed when the duration of an audio attachment cannot be determined.",
-    "message": "Unable to get duration time."
   },
   "$1.routes.app.projects.$projectId.route.exchangeTabLabel": {
     "description": "Label for project exchange tab link in navigation.",
@@ -575,14 +663,6 @@
     "description": "Explanation for custom categories",
     "message": "Use custom categories by importing new categories set files below."
   },
-  "$1.routes.app.projects.$projectId.settings.categories.dateAdded": {
-    "description": "Text indicating the date the categories set was added.",
-    "message": "Added {date}"
-  },
-  "$1.routes.app.projects.$projectId.settings.categories.dateCreated": {
-    "description": "Text indicating the date the categories set was created.",
-    "message": "Created {date}"
-  },
   "$1.routes.app.projects.$projectId.settings.categories.defaultCategoriesExplainer": {
     "description": "Explanation for default categories",
     "message": "Default categories help you start organizing your observations instantly."
@@ -602,10 +682,6 @@
   "$1.routes.app.projects.$projectId.settings.index.categoriesActionLabel": {
     "description": "Text for action to update categories set.",
     "message": "Update"
-  },
-  "$1.routes.app.projects.$projectId.settings.index.fallbackCategoriesSetName": {
-    "description": "Text shown when project does not use a categories set.",
-    "message": "CoMapeo Categories"
   },
   "$1.routes.app.projects.$projectId.settings.index.navTitle": {
     "description": "Title of the coordinator tools page.",
@@ -643,26 +719,6 @@
     "description": "Label for the project card color selector.",
     "message": "Project Card Color"
   },
-  "$1.routes.app.projects.$projectId.settings.info.projectColorOptionBlue": {
-    "description": "Label for blue option in project color selector.",
-    "message": "Blue"
-  },
-  "$1.routes.app.projects.$projectId.settings.info.projectColorOptionGreen": {
-    "description": "Label for green option in project color selector.",
-    "message": "Green"
-  },
-  "$1.routes.app.projects.$projectId.settings.info.projectColorOptionGrey": {
-    "description": "Label for grey option in project color selector.",
-    "message": "Grey"
-  },
-  "$1.routes.app.projects.$projectId.settings.info.projectColorOptionOrange": {
-    "description": "Label for orange option in project color selector.",
-    "message": "Orange"
-  },
-  "$1.routes.app.projects.$projectId.settings.info.projectColorOptionRed": {
-    "description": "Label for grey option in project color selector.",
-    "message": "Red"
-  },
   "$1.routes.app.projects.$projectId.settings.info.projectDescriptionInputLabel": {
     "description": "Label for the project description input.",
     "message": "Project Description"
@@ -674,10 +730,6 @@
   "$1.routes.app.projects.$projectId.settings.info.save": {
     "description": "Label for save button.",
     "message": "Save"
-  },
-  "$1.routes.app.projects.$projectId.team.$deviceId.addedOn": {
-    "description": "Text indicating date collaborator was added to the project.",
-    "message": "Added on {value}"
   },
   "$1.routes.app.projects.$projectId.team.$deviceId.cancelButton": {
     "description": "Button text to cancel leaving project.",
@@ -831,10 +883,6 @@
     "description": "Text for button to add another device.",
     "message": "Add Another Device"
   },
-  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addedOn": {
-    "description": "Text showing when device was added to project.",
-    "message": "Added on {date, date, long}"
-  },
   "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.cancelInvite": {
     "description": "Text for button to cancel invite.",
     "message": "Cancel Invite"
@@ -877,7 +925,7 @@
   },
   "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.timeSinceSent": {
     "description": "Text showing time elapsed since invite was sent",
-    "message": "Invite sent {time}s ago"
+    "message": "Invite sent {time} seconds ago"
   },
   "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.waiting": {
     "description": "Text displayed while waiting for invite response.",
@@ -945,7 +993,7 @@
   },
   "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationCategoryNameFallback": {
     "description": "Fallback name for observation without a matching category.",
-    "message": "Observation"
+    "message": "Not categorized"
   },
   "$1.routes.app.projects.$projectId.tracks.$trackDocId.index.observationsSectionTitle": {
     "description": "Title for the track observations section.",
@@ -991,29 +1039,17 @@
     "description": "Label for app settings tab link in navigation.",
     "message": "Settings"
   },
-  "$1.routes.app.route.fallbackCategoriesSetName": {
-    "description": "Text shown when project does not use a categories set.",
-    "message": "CoMapeo Categories"
-  },
   "$1.routes.app.route.homeTabTitle": {
     "description": "Label for home tab link in navigation.",
     "message": "Home"
   },
-  "$1.routes.app.route.projectInfoCategoriesCreated": {
-    "description": "Text indicating creation date of categories set.",
-    "message": "Created {date}"
-  },
-  "$1.routes.app.route.projectInfoRoleCoordinator": {
-    "description": "Indicates that user is a coordinator.",
-    "message": "Coordinator"
-  },
-  "$1.routes.app.route.projectInfoRoleParticipant": {
-    "description": "Indicates that user is a participant.",
-    "message": "Participant"
-  },
   "$1.routes.app.route.projectInviteAccept": {
     "description": "Button text for accepting project invite.",
-    "message": "Accept"
+    "message": "Join"
+  },
+  "$1.routes.app.route.projectInviteAdditionalInvitesCount": {
+    "description": "Text displaying how many additional invites there are to address.",
+    "message": "{inviteCount, plural, one {# additional invite} other {# additional invites}}…"
   },
   "$1.routes.app.route.projectInviteDecline": {
     "description": "Button text for declining project invite.",
@@ -1021,19 +1057,43 @@
   },
   "$1.routes.app.route.projectInviteDescription": {
     "description": "Description for invite containing role being invited as.",
-    "message": "Join as a <b>{role, select, coordinator {coordinator} other {participant}}</b>?"
+    "message": "Join as a {role, select, coordinator {coordinator} other {participant}}."
   },
   "$1.routes.app.route.projectInviteTitle": {
     "description": "Title of project invite.",
     "message": "You've been invited to…"
   },
+  "$1.routes.app.route.projectJoinedAdditionalInvitesCount": {
+    "description": "Text displaying how many additional invites there are to address.",
+    "message": "{inviteCount, plural, one {# additional invite} other {# additional invites}}…"
+  },
+  "$1.routes.app.route.projectJoinedAdditionalInvitesWaiting": {
+    "description": "Text indicating that there are additional invites waiting to be addressed after successfully joining a project.",
+    "message": "Additional invites waiting"
+  },
   "$1.routes.app.route.projectJoinedCloseDialog": {
     "description": "Text for button to close project joined dialog.",
     "message": "Close"
   },
+  "$1.routes.app.route.projectJoinedDetailsDescription": {
+    "description": "Description in invite details after successfully joining a project.",
+    "message": "{projectName} added."
+  },
+  "$1.routes.app.route.projectJoinedDetailsTitle": {
+    "description": "Title in invite details after successfully joining a project.",
+    "message": "Success!"
+  },
+  "$1.routes.app.route.projectJoinedNextInvite": {
+    "description": "Text for button to view next pending invite.",
+    "message": "View Next Invite"
+  },
+  "$1.routes.app.route.projectJoinedNoAdditionalInvitesWaiting": {
+    "description": "Text indicating that there are no additional invites waiting to be addressed after successfully joining a project.",
+    "message": "No additional invites waiting"
+  },
   "$1.routes.app.route.projectJoinedTitle": {
     "description": "Title of dialog displayed when joining a project successfully.",
-    "message": "Joined project {name} successfully."
+    "message": "Project added"
   },
   "$1.routes.app.route.projectJoinedViewProject": {
     "description": "Text for button to navigate to joined project in project joined dialog.",
@@ -1147,21 +1207,9 @@
     "description": "Text for breadcrumb link to go to main CoMapeo settings page when viewing nested settings page.",
     "message": "CoMapeo Settings"
   },
-  "$1.routes.app.settings.coordinate-system.ddOptionLabel": {
-    "description": "Label for the decimal degrees option.",
-    "message": "DD (Decimal Degrees)"
-  },
-  "$1.routes.app.settings.coordinate-system.dmsOptionLabel": {
-    "description": "Label for the degrees/minutes/seconds option.",
-    "message": "DMS (Decimal/Minutes/Seconds)"
-  },
   "$1.routes.app.settings.coordinate-system.title": {
     "description": "Title of the coordinate system settings page.",
     "message": "Coordinate System"
-  },
-  "$1.routes.app.settings.coordinate-system.utmOptionLabel": {
-    "description": "Label for the universal transverse mercator option.",
-    "message": "UTM (Universal Transverse Mercator)"
   },
   "$1.routes.app.settings.device-name.cancel": {
     "description": "Label for cancel button.",
@@ -1195,17 +1243,9 @@
     "description": "Placeholder name of custom background map if name cannot be retrieved.",
     "message": "Custom Background"
   },
-  "$1.routes.app.settings.index.decimalDegrees": {
-    "description": "Label for Decimal Degrees coordinate system.",
-    "message": "DD Coordinates"
-  },
   "$1.routes.app.settings.index.defaultBackground": {
     "description": "Name of the background map used if a custom one is not set.",
     "message": "Default Background"
-  },
-  "$1.routes.app.settings.index.dmsCoordinates": {
-    "description": "Label for Degrees/Minutes/Seconds coordinate system.",
-    "message": "DMS Coordinates"
   },
   "$1.routes.app.settings.index.editDeviceName": {
     "description": "Button text for navigating to page to edit device name.",
@@ -1234,10 +1274,6 @@
   "$1.routes.app.settings.index.unitSystemMetric": {
     "description": "Label for metric unit system",
     "message": "Metric System"
-  },
-  "$1.routes.app.settings.index.utmCoordinates": {
-    "description": "Label for Universal Transverse Mercator coordinate system.",
-    "message": "UTM Coordinates"
   },
   "$1.routes.app.settings.language.followSystemOptionLabel": {
     "description": "Option label for following system preference for language.",

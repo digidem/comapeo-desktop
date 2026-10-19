@@ -33,7 +33,11 @@ export const Route = createFileRoute('/app/settings/_nested/language')({
 	},
 	loader: async ({ context }) => {
 		const { queryClient } = context
-		await queryClient.ensureQueryData(getLocaleStateQueryOptions())
+
+		await queryClient.query({
+			...getLocaleStateQueryOptions(),
+			staleTime: 'static',
+		})
 	},
 	component: RouteComponent,
 })

@@ -15,7 +15,12 @@ import type { SxProps, Theme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import * as v from 'valibot'
 
 import { BLUE_GREY, COMAPEO_BLUE, LIGHT_GREY, WHITE } from '../../colors.ts'
@@ -65,14 +70,19 @@ export const Route = createFileRoute('/app/')({
 		const { clientApi, queryClient } = context
 
 		await Promise.all([
-			queryClient.ensureQueryData(getOnboardedAtQueryOptions()),
-			queryClient.ensureQueryData({
+			queryClient.query({
+				...getOnboardedAtQueryOptions(),
+				staleTime: 'static',
+			}),
+			queryClient.query({
+				staleTime: 'static',
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'client', 'device_info'],
 				queryFn: async () => {
 					return clientApi.getDeviceInfo()
 				},
 			}),
-			queryClient.ensureQueryData({
+			queryClient.query({
+				staleTime: 'static',
 				queryKey: [COMAPEO_CORE_REACT_ROOT_QUERY_KEY, 'projects'],
 				queryFn: async () => {
 					return clientApi.listProjects()
@@ -85,7 +95,8 @@ export const Route = createFileRoute('/app/')({
 })
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
+
 	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
@@ -155,7 +166,7 @@ function RouteComponent() {
 						/>
 
 						<Typography variant="h1" sx={{ fontWeight: 500 }}>
-							{t(
+							{intl.formatMessage(
 								fromFlow?.name === 'onboarding'
 									? m.postOnboardingPageTitle
 									: m.pageTitle,
@@ -204,7 +215,7 @@ function RouteComponent() {
 									<Icon name="material-people-filled" />
 
 									<Typography color="textPrimary">
-										{t(m.joinProjectCardTitle)}
+										{intl.formatMessage(m.joinProjectCardTitle)}
 									</Typography>
 								</Stack>
 							</ButtonBase>
@@ -231,7 +242,7 @@ function RouteComponent() {
 									<Icon name="material-manage-accounts-filled" />
 
 									<Typography color="textPrimary" sx={{ flex: 1 }}>
-										{t(m.startProjectCardTitle)}
+										{intl.formatMessage(m.startProjectCardTitle)}
 									</Typography>
 								</Stack>
 							</ButtonBase>
@@ -266,17 +277,19 @@ function RouteComponent() {
 									sx={{ alignItems: 'baseline', gap: 2, textAlign: 'center' }}
 								>
 									<Typography variant="h2" sx={{ fontWeight: 500 }}>
-										{t(m.additionalProjectsSectionTitle)}
+										{intl.formatMessage(m.additionalProjectsSectionTitle)}
 									</Typography>
 
 									<Typography color="textSecondary">
-										{t(m.additionalProjectsSectionDescription)}
+										{intl.formatMessage(m.additionalProjectsSectionDescription)}
 									</Typography>
 								</Stack>
 
 								<Stack direction="row">
 									<Tooltip
-										title={t(m.additionalProjectsSectionShowAsGrid)}
+										title={intl.formatMessage(
+											m.additionalProjectsSectionShowAsGrid,
+										)}
 										disableFocusListener
 										placement="bottom"
 									>
@@ -302,7 +315,9 @@ function RouteComponent() {
 									</Tooltip>
 
 									<Tooltip
-										title={t(m.additionalProjectsSectionShowAsList)}
+										title={intl.formatMessage(
+											m.additionalProjectsSectionShowAsList,
+										)}
 										disableFocusListener
 										placement="bottom"
 									>
@@ -516,7 +531,7 @@ function ListedProjectCard({
 		singleRow?: boolean
 	}
 >) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const { data: ownRole } = useOwnRoleInProject({
 		projectId: project.projectId,
@@ -525,12 +540,14 @@ function ListedProjectCard({
 	const isAtLeastCoordinator =
 		ownRole.roleId === COORDINATOR_ROLE_ID || ownRole.roleId === CREATOR_ROLE_ID
 
-	const displayedName = project.name || t(m.unnamedProject)
+	const displayedName = project.name || intl.formatMessage(m.unnamedProject)
 
 	return (
 		<ButtonBaseLink
 			{...buttonLinkProps}
-			aria-label={t(m.projectCardLinkAccessibleLabel, { name: displayedName })}
+			aria-label={intl.formatMessage(m.projectCardLinkAccessibleLabel, {
+				name: displayedName,
+			})}
 			sx={{
 				backgroundColor: project.projectColor,
 				borderRadius: 2,
@@ -569,7 +586,7 @@ function ProjectCardContentGridVariant({
 	projectName: string
 	role: 'coordinator' | 'participant'
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const activeProjectIconSize = useIconSizeBasedOnTypography({
 		typographyVariant: 'h1',
@@ -628,7 +645,7 @@ function ProjectCardContentGridVariant({
 						overflow: 'hidden',
 					}}
 				>
-					{t(
+					{intl.formatMessage(
 						role === 'coordinator'
 							? m.projectCardRoleCoordinator
 							: m.projectCardRoleParticipant,
@@ -648,7 +665,7 @@ function ProjectCardContentListVariant({
 	projectName: string
 	role: 'coordinator' | 'participant'
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const iconSize = useIconSizeBasedOnTypography({ typographyVariant: 'h1' })
 
@@ -702,7 +719,7 @@ function ProjectCardContentListVariant({
 
 			<Box>
 				<Typography>
-					{t(
+					{intl.formatMessage(
 						role === 'coordinator'
 							? m.projectCardRoleCoordinator
 							: m.projectCardRoleParticipant,
@@ -713,7 +730,20 @@ function ProjectCardContentListVariant({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly postOnboardingPageTitle: { readonly name: MessageValue }
+	readonly pageTitle: { readonly name: MessageValue }
+	readonly joinProjectCardTitle: NoMessageValues
+	readonly startProjectCardTitle: NoMessageValues
+	readonly additionalProjectsSectionTitle: NoMessageValues
+	readonly additionalProjectsSectionDescription: NoMessageValues
+	readonly additionalProjectsSectionShowAsGrid: NoMessageValues
+	readonly additionalProjectsSectionShowAsList: NoMessageValues
+	readonly unnamedProject: NoMessageValues
+	readonly projectCardLinkAccessibleLabel: { readonly name: MessageValue }
+	readonly projectCardRoleCoordinator: NoMessageValues
+	readonly projectCardRoleParticipant: NoMessageValues
+}>({
 	postOnboardingPageTitle: {
 		id: '$1.routes.app.index.postOnboardingPageTitle',
 		defaultMessage: '{name} is ready!',

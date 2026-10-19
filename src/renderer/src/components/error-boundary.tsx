@@ -11,7 +11,7 @@ export function ErrorBoundary({
 	children: ReactNode
 	getResetKey: () => number | string
 	fallback: (props: ErrorComponentProps) => ReactElement
-	onError?: (error: Error, errorInfo?: ErrorInfo) => void
+	onError?: (error: unknown, errorInfo?: ErrorInfo) => void
 }) {
 	return (
 		<CatchBoundary

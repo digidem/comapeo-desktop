@@ -13,6 +13,11 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 
 	const { formatMessage: t } = useIntl()
 
+	const displayedError =
+		error instanceof Error
+			? error
+			: new Error('Unknown Error', { cause: error })
+
 	return (
 		<Stack
 			direction="column"
@@ -49,7 +54,7 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 							overflowWrap: 'break-word',
 						}}
 					>
-						{error.toString()}
+						{displayedError.toString()}
 					</Typography>
 				</Box>
 
@@ -75,7 +80,7 @@ export function GenericRouteErrorComponent({ error }: ErrorComponentProps) {
 							overflowWrap: 'break-word',
 						}}
 					>
-						{error.stack}
+						{displayedError.stack}
 					</Typography>
 				</Box>
 			</Stack>

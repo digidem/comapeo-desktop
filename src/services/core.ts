@@ -3,13 +3,13 @@ import path, { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 import { FastifyController, MapeoManager } from '@comapeo/core'
+import { KeyManager } from '@comapeo/crypto'
 import {
 	createComapeoCoreServer,
 	createComapeoServicesServer,
 } from '@comapeo/ipc/server.js'
 import { createServer as createMapServer } from '@comapeo/map-server'
 import ciao, { type Protocol } from '@homebridge/ciao'
-import { KeyManager } from '@mapeo/crypto'
 import * as Sentry from '@sentry/electron/utility'
 import type { MessagePortMain } from 'electron'
 import Fastify from 'fastify'

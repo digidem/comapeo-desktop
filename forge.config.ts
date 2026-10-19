@@ -20,8 +20,8 @@ import type {
 } from '@electron-forge/shared-types'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
 import { MakerAppImage } from '@reforged/maker-appimage'
-import semver from 'semver'
 import * as v from 'valibot'
+import { parse as parseVersion } from 'verkit'
 import { build, createServer, type ViteDevServer } from 'vite'
 
 import packageJSON from './package.json' with { type: 'json' }
@@ -35,10 +35,6 @@ try {
 
 const {
 	APP_TYPE,
-	APPLE_API_KEY_ID,
-	APPLE_API_KEY_ISSUER,
-	APPLE_API_KEY_PATH,
-	APPLE_SIGN_IDENTITY,
 	ASAR,
 	COMAPEO_DIAGNOSTICS_METRICS_URL,
 	COMAPEO_METRICS_ACCESS_TOKEN,
@@ -60,10 +56,6 @@ const {
 			),
 			'development',
 		),
-		APPLE_API_KEY_ID: v.optional(v.string()),
-		APPLE_API_KEY_ISSUER: v.optional(v.string()),
-		APPLE_API_KEY_PATH: v.optional(v.string()),
-		APPLE_SIGN_IDENTITY: v.optional(v.string()),
 		ASAR: v.optional(
 			v.pipe(
 				v.union(
@@ -348,8 +340,14 @@ if (ASAR) {
 	plugins.push(new AutoUnpackNativesPlugin({}))
 }
 
+const SIGNING_REQUIRED =
+	APP_TYPE === 'release-candidate' || APP_TYPE === 'production'
+
 const osxPackagerConfig =
-	platform() === 'darwin' ? getOsxPackagerConfig(APP_TYPE) : undefined
+	platform() === 'darwin' ? getOsxPackagerConfig(SIGNING_REQUIRED) : undefined
+
+const windowsSign =
+	platform() === 'win32' ? getWindowsSignConfig(SIGNING_REQUIRED) : undefined
 
 export default {
 	packagerConfig: {
@@ -360,8 +358,15 @@ export default {
 		icon: './assets/icon',
 		name: properties.appNameExternal,
 		executableName: properties.executableName,
+		windowsSign,
 	},
-	rebuildConfig: {},
+	rebuildConfig: {
+		// NOTE: Fixes an issue where @electron/rebuild attempts to rebuild better-sqlite@13 instead of using the prebuilds on Windows
+		// (see https://github.com/WiseLibs/better-sqlite3/issues/1503#issuecomment-5134468366).
+		// Empty array disables rebuilding for all native modules. If building for a platform where prebuilds do not exist,
+		// will need to update this line with the relevant module(s).
+		onlyModules: [],
+	},
 	makers: [
 		new MakerSquirrel((arch) => ({
 			iconUrl:
@@ -373,6 +378,7 @@ export default {
 			exe: `${properties.executableName}.exe`,
 			setupExe: `${properties.executableName}-${packageJSON.version}-win32-${arch}-setup.exe`,
 			noMsi: true,
+			windowsSign,
 		})),
 		new MakerDMG({ icon: './assets/icon.icns' }),
 		new MakerZIP(undefined, ['darwin']),
@@ -461,7 +467,7 @@ export default {
 } satisfies ForgeConfig
 
 function getOsxPackagerConfig(
-	appType: AppType,
+	signingRequired: boolean,
 ):
 	| Required<
 			Pick<
@@ -470,11 +476,22 @@ function getOsxPackagerConfig(
 			>
 	  >
 	| undefined {
-	const mustSignAndNotarize =
-		appType === 'release-candidate' || appType === 'production'
+	const AppleNotarizeEnv = v.object({
+		APPLE_API_KEY_ID: v.optional(v.pipe(v.string(), v.minLength(1))),
+		APPLE_API_KEY_ISSUER: v.optional(v.pipe(v.string(), v.minLength(1))),
+		APPLE_API_KEY_PATH: v.optional(v.pipe(v.string(), v.minLength(1))),
+		APPLE_SIGN_IDENTITY: v.optional(v.pipe(v.string(), v.minLength(1))),
+	})
+
+	const {
+		APPLE_API_KEY_ID,
+		APPLE_API_KEY_ISSUER,
+		APPLE_API_KEY_PATH,
+		APPLE_SIGN_IDENTITY,
+	} = v.parse(AppleNotarizeEnv, process.env)
 
 	if (!APPLE_SIGN_IDENTITY) {
-		if (mustSignAndNotarize) {
+		if (signingRequired) {
 			throw new Error(
 				'App signing and notarization is required but APPLE_SIGN_IDENTITY env variable is not set.',
 			)
@@ -522,6 +539,61 @@ function getOsxPackagerConfig(
 			appleApiKey: APPLE_API_KEY_PATH,
 			appleApiKeyId: APPLE_API_KEY_ID,
 		},
+	}
+}
+
+function getWindowsSignConfig(signingRequired: boolean) {
+	const WindowsSignEnv = v.object({
+		AZURE_CLIENT_ID: v.optional(v.pipe(v.string(), v.minLength(1))),
+		AZURE_CLIENT_SECRET: v.optional(v.pipe(v.string(), v.minLength(1))),
+		AZURE_CODE_SIGNING_DLIB: v.optional(v.pipe(v.string(), v.minLength(1))),
+		AZURE_METADATA_JSON: v.optional(v.pipe(v.string(), v.minLength(1))),
+		AZURE_TENANT_ID: v.optional(v.pipe(v.string(), v.minLength(1))),
+		SIGNTOOL_PATH: v.optional(v.pipe(v.string(), v.minLength(1))),
+	})
+
+	const {
+		AZURE_CLIENT_ID,
+		AZURE_CLIENT_SECRET,
+		AZURE_CODE_SIGNING_DLIB,
+		AZURE_METADATA_JSON,
+		AZURE_TENANT_ID,
+		SIGNTOOL_PATH,
+	} = v.parse(
+		signingRequired ? v.required(WindowsSignEnv) : WindowsSignEnv,
+		process.env,
+	)
+
+	const missingEnvVariables: Array<string> = []
+
+	for (const [name, value] of Object.entries({
+		AZURE_CLIENT_ID,
+		AZURE_CLIENT_SECRET,
+		AZURE_CODE_SIGNING_DLIB,
+		AZURE_METADATA_JSON,
+		AZURE_TENANT_ID,
+		SIGNTOOL_PATH,
+	})) {
+		if (!value) {
+			missingEnvVariables.push(name)
+		}
+	}
+
+	if (missingEnvVariables.length > 0) {
+		console.log(
+			`⚠️ App will not be signed due to missing environment variables: ${missingEnvVariables.join(', ')}`,
+		)
+		return undefined
+	}
+
+	return {
+		signToolPath: SIGNTOOL_PATH,
+		signWithParams: `/v /debug /dlib ${AZURE_CODE_SIGNING_DLIB} /dmdf ${AZURE_METADATA_JSON}`,
+		timestampServer: 'http://timestamp.acs.microsoft.com',
+		hashes: [
+			// NOTE: Bypasses need to use enum type from @electron/windows-sign
+			'sha256' as never,
+		],
 	}
 }
 
@@ -681,13 +753,7 @@ function getAppVersion(options: {
 		process.env.BUILD_SHA || execSync('git rev-parse HEAD').toString().trim()
 	).slice(0, 7)
 
-	const parsedVersion = semver.parse(options.version)
-
-	if (!parsedVersion) {
-		throw new Error(`Unable to parse version: ${options.version}`)
-	}
-
-	const { major, minor, patch } = parsedVersion
+	const { major, minor, patch } = parseVersion(options.version)
 
 	if (options.appType === 'development') {
 		return options.appTypeSuffix

@@ -22,7 +22,8 @@ export const Route = createFileRoute(
 		const { projectApi, queryClient } = context
 		const { projectId } = params
 
-		await queryClient.ensureQueryData({
+		await queryClient.query({
+			staleTime: 'static',
 			queryKey: [
 				COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
 				'projects',
@@ -54,7 +55,7 @@ function RouteComponent() {
 					htmlColor={DARKER_ORANGE}
 				/>
 
-				<Typography variant="h1" sx={{ fontWeight: 500 }}>
+				<Typography variant="h1" sx={{ fontWeight: 500, textAlign: 'center' }}>
 					{t(m.navTitle)}
 				</Typography>
 			</Stack>
@@ -165,7 +166,7 @@ const m = defineMessages({
 			'Accessible label for link item that navigates to project info settings page.',
 	},
 	fallbackCategoriesSetName: {
-		id: '$1.routes.app.projects.$projectId.settings.index.fallbackCategoriesSetName',
+		id: 'routes.app.projects.$projectId.settings.index.fallbackCategoriesSetName',
 		defaultMessage: 'CoMapeo Categories',
 		description: 'Text shown when project does not use a categories set.',
 	},
