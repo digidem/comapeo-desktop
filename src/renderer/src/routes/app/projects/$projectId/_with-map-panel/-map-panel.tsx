@@ -678,11 +678,7 @@ export function MapPanel({
 							<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
 								<Icon
 									aria-hidden
-									name={
-										omittedVisibility === 'visible'
-											? 'material-symbols-visibility'
-											: 'material-symbols-visibility-off'
-									}
+									name={'material-symbols-visibility-off'}
 									size={omittedVisibilityToggleIconSize}
 								/>
 
