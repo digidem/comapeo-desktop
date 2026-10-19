@@ -108,7 +108,7 @@
 		"@formatjs/cli-lib": "10.0.8",
 		"@formatjs/unplugin": "1.2.12",
 		"@ianvs/prettier-plugin-sort-imports": "4.7.1",
-		"@mui/material": "9.4.0",
+		"@mui/material": "9.5.0",
 		"@mui/x-date-pickers": "9.14.0",
 		"@playwright/test": "1.63.0",
 		"@reforged/maker-appimage": "5.3.1",
