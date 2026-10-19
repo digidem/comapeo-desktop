@@ -55,7 +55,7 @@ jobs:
     name: Release Candidate
     needs: check_comment
     if: ${{ needs.check_comment.outputs.is_release_pr == 'true' && needs.check_comment.outputs.is_admin == 'true' }}
-    uses: ./.github/workflows/build-rc.yml
+    uses: $/.github/workflows/build-rc.yml
     with:
       pr_number: ${{ github.event.issue.number }}
       pr_head_sha: ${{ needs.check_comment.outputs.pr_head_sha }}
