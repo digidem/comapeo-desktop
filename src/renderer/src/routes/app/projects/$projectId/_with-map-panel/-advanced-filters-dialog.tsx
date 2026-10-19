@@ -416,7 +416,6 @@ export function AdvancedFiltersDialogContent({
 																	value={option.id}
 																/>
 															}
-
 															label={
 																<Stack
 																	direction="row"
@@ -513,6 +512,7 @@ export function AdvancedFiltersDialogContent({
 																	: undefined,
 																borderRadius: 2,
 																display: 'flex',
+																gap: 2,
 																margin: 0,
 																overflow: 'auto',
 																padding: 2,
