@@ -9,20 +9,88 @@ import {
 	useSearch,
 } from '@tanstack/react-router'
 import { endOfToday } from 'date-fns'
+import * as v from 'valibot'
 
 import { TwoPanelLayout } from '../../-shared/two-panel-layout.tsx'
 import { BLACK_00 } from '../../../../../../../shared/colors.ts'
 import { GenericRouteErrorComponent } from '../../../../../components/generic-route-error-component.tsx'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../lib/comapeo.ts'
+import {
+	getItem,
+	removeItem,
+	setItem,
+} from '../../../../../lib/local-storage.ts'
 import { MapPanel } from './-map-panel.tsx'
 import {
+	DateSearchParamsSchema,
+	dateFilterToSearchParams,
 	dateSearchParamsToFilter,
-	type HighlightedDocument,
 } from './-shared.ts'
+
+const SearchParamsSchema = v.fallback(
+	v.intersect([
+		v.object({ categories: v.optional(v.array(v.string())) }),
+		v.fallback(DateSearchParamsSchema, {}),
+	]),
+	{},
+)
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/_with-map-panel',
 )({
+	validateSearch: SearchParamsSchema,
+	beforeLoad: ({ cause, params, search }) => {
+		if (cause === 'enter') {
+			let routeHasNoSearchFilters = true
+
+			if (search?.categories) {
+				routeHasNoSearchFilters = false
+			} else if ('period' in search) {
+				routeHasNoSearchFilters = false
+			} else if ('start' in search) {
+				routeHasNoSearchFilters = false
+			}
+
+			if (routeHasNoSearchFilters) {
+				const categoriesFilter =
+					getItem('filters/categories', params.projectId) ?? undefined
+				const dateFilter =
+					getItem('filters/date', params.projectId) ?? undefined
+
+				if (categoriesFilter || dateFilter) {
+					throw Route.redirect({
+						replace: true,
+						search: (prev) => {
+							return {
+								...prev,
+								...(dateFilter
+									? dateFilterToSearchParams(dateFilter)
+									: undefined),
+								categories: categoriesFilter,
+							}
+						},
+					})
+				}
+			}
+
+			// NOTE: Update local storage using the values (or lack thereof from the route's search params)
+
+			// TODO: Filter out irrelevant categories first?
+			if (search.categories) {
+				setItem('filters/categories', search.categories, params.projectId)
+			} else {
+				removeItem('filters/categories', params.projectId)
+			}
+
+			const updatedDateFilter = dateSearchParamsToFilter(search)
+
+			if (updatedDateFilter) {
+				setItem('filters/date', updatedDateFilter, params.projectId)
+			} else {
+				removeItem('filters/date', params.projectId)
+			}
+		}
+	},
 	loader: async ({ context, params }) => {
 		const {
 			projectApi,
@@ -131,8 +199,8 @@ function RouteAwareMapPanel({ projectId }: { projectId: string }) {
 		},
 	})
 
-	const categoriesFilter = useSearch({
-		from: '/app/projects/$projectId/_with-map-panel/',
+	const categoriesFilterFromSearch = useSearch({
+		from: '/app/projects/$projectId/_with-map-panel',
 		select: (value) => {
 			// TODO: Filter out and warn about irrelevant categories?
 			return value?.categories
@@ -140,90 +208,69 @@ function RouteAwareMapPanel({ projectId }: { projectId: string }) {
 		shouldThrow: false,
 	})
 
-	const dateFilter = useSearch({
-		from: '/app/projects/$projectId/_with-map-panel/',
+	const dateFilterFromSearch = useSearch({
+		from: '/app/projects/$projectId/_with-map-panel',
 		select: (value) => {
 			return dateSearchParamsToFilter(value)
 		},
 		shouldThrow: false,
 	})
 
-	const documentFromRouteParams: HighlightedDocument | undefined =
-		useChildMatches({
-			select: (matches) => {
-				for (const m of matches) {
-					if (
-						m.fullPath ===
-							'/app/projects/$projectId/observations/$observationDocId/' ||
-						m.fullPath ===
-							'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name'
-					) {
-						return {
-							type: 'observation' as const,
-							docId: m.params.observationDocId,
-							from: 'list' as const,
-						}
-					}
-
-					if (m.fullPath === '/app/projects/$projectId/tracks/$trackDocId/') {
-						return {
-							type: 'track' as const,
-							docId: m.params.trackDocId,
-							from: 'list' as const,
-						}
-					}
-				}
-
-				return undefined
-			},
-		})
-
-	const documentFromSearchParams = useSearch({
-		from: '/app/projects/$projectId/_with-map-panel/',
-		select: (value) => {
-			return value?.highlightedDocument
-		},
-		shouldThrow: false,
-	})
-
 	// Highlighting should occur under the following scenarios:
-	// 1. A feature on the map while on the main project page is hovered over.
-	// 2. A feature on the map while on the main project page is clicked on.
-	// 3. An observation or track in the list on the main project page is hovered over.
-	// 4. An observation or track in the list on the main project page is clicked on.
-	// 5. A specific observation's page is being viewed.
-	// 6. A specific track's page is being viewed.
-	const documentToHighlight =
-		documentFromRouteParams || documentFromSearchParams
-
-	const { allowHighlightedDocumentMarker, isDocumentRoute } = useChildMatches({
+	// 1. A specific observation's page is being viewed.
+	// 2. A specific track's page is being viewed.
+	const documentToHighlight = useChildMatches({
 		select: (matches) => {
 			const currentRoute = matches.at(-1)!
 
-			return {
-				allowHighlightedDocumentMarker:
-					currentRoute.fullPath === '/app/projects/$projectId/' ||
-					currentRoute.fullPath ===
-						'/app/projects/$projectId/observations/$observationDocId/' ||
-					currentRoute.fullPath ===
-						'/app/projects/$projectId/observations/$observationDocId/attachments/$driveId/$type/$variant/$name',
-				isDocumentRoute:
-					currentRoute.fullPath ===
-						'/app/projects/$projectId/observations/$observationDocId/' ||
-					currentRoute.fullPath ===
-						'/app/projects/$projectId/tracks/$trackDocId/',
+			if (
+				'trackDocId' in currentRoute.params &&
+				typeof currentRoute.params.trackDocId === 'string'
+			) {
+				return {
+					type: 'track' as const,
+					docId: currentRoute.params.trackDocId,
+					from: 'list' as const,
+				}
 			}
+
+			if (
+				'observationDocId' in currentRoute.params &&
+				typeof currentRoute.params.observationDocId === 'string'
+			) {
+				return {
+					type: 'observation' as const,
+					docId: currentRoute.params.observationDocId,
+					from: 'list' as const,
+				}
+			}
+
+			return undefined
+		},
+	})
+
+	const isOnDocumentSpecificRoute = useChildMatches({
+		select: (matches) => {
+			const currentRoute = matches.at(-1)!
+
+			return (
+				currentRoute.fullPath.startsWith(
+					'/app/projects/$projectId/observations/$observationDocId/',
+				) ||
+				currentRoute.fullPath.startsWith(
+					'/app/projects/$projectId/tracks/$trackDocId/',
+				)
+			)
 		},
 	})
 
 	return (
 		<MapPanel
-			allowHighlightedDocumentMarker={allowHighlightedDocumentMarker}
-			categoriesFilter={categoriesFilter}
-			dateFilter={dateFilter}
+			categoriesFilter={categoriesFilterFromSearch}
+			dateFilter={dateFilterFromSearch}
 			documentToHighlight={documentToHighlight}
 			filterReferenceDate={todayDate}
-			isDocumentRoute={isDocumentRoute}
+			isOnDocumentSpecificRoute={isOnDocumentSpecificRoute}
 			projectId={projectId}
 		/>
 	)

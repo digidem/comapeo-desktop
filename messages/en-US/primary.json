@@ -327,9 +327,9 @@
     "description": "Text displayed when map feature for selected data cannot be displayed",
     "message": "Cannot display feature"
   },
-  "$1.routes.app.projects.$projectId.-map-panel.toggleOmittedVisibility": {
-    "description": "Text displayed when hovering over map control for toggling visibility of features omitted by filters.",
-    "message": "Toggle omitted visibility"
+  "$1.routes.app.projects.$projectId.-map-panel.hideOthers": {
+    "description": "Text for map control that toggles visibility of map features that are not included by filters.",
+    "message": "Hide Others"
   },
   "$1.routes.app.projects.$projectId.-map-panel.zoomToData": {
     "description": "Text displayed when hovering over map control for zooming to data.",

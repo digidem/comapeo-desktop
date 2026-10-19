@@ -11,7 +11,6 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { endOfToday } from 'date-fns'
 import { defineMessages, useIntl } from 'react-intl'
-import * as v from 'valibot'
 
 import { ORANGE_00 } from '../../../../../../../shared/colors.ts'
 import { Icon } from '../../../../../components/icon.tsx'
@@ -22,87 +21,13 @@ import {
 	COORDINATOR_ROLE_ID,
 	CREATOR_ROLE_ID,
 } from '../../../../../lib/comapeo.ts'
-import {
-	getItem,
-	removeItem,
-	setItem,
-} from '../../../../../lib/local-storage.ts'
 import { getLocaleStateQueryOptions } from '../../../../../lib/queries/app-settings.ts'
 import { DataList } from './-data-list.tsx'
-import {
-	DateSearchParamsSchema,
-	HighlightedDocumentSchema,
-	dateFilterToSearchParams,
-	dateSearchParamsToFilter,
-} from './-shared.ts'
-
-const SearchParamsSchema = v.fallback(
-	v.intersect([
-		v.object({
-			categories: v.optional(v.array(v.string())),
-			highlightedDocument: v.optional(HighlightedDocumentSchema),
-		}),
-		v.fallback(DateSearchParamsSchema, {}),
-	]),
-	{},
-)
+import { dateSearchParamsToFilter } from './-shared.ts'
 
 export const Route = createFileRoute(
 	'/app/projects/$projectId/_with-map-panel/',
 )({
-	validateSearch: SearchParamsSchema,
-	beforeLoad: ({ cause, params, search }) => {
-		if (cause === 'enter') {
-			let routeHasNoSearchFilters = true
-
-			if (search?.categories) {
-				routeHasNoSearchFilters = false
-			} else if ('period' in search) {
-				routeHasNoSearchFilters = false
-			} else if ('start' in search) {
-				routeHasNoSearchFilters = false
-			}
-
-			if (routeHasNoSearchFilters) {
-				const categoriesFilter =
-					getItem('filters/categories', params.projectId) ?? undefined
-				const dateFilter =
-					getItem('filters/date', params.projectId) ?? undefined
-
-				if (categoriesFilter || dateFilter) {
-					throw Route.redirect({
-						replace: true,
-						search: (prev) => {
-							return {
-								...prev,
-								...(dateFilter
-									? dateFilterToSearchParams(dateFilter)
-									: undefined),
-								categories: categoriesFilter,
-							}
-						},
-					})
-				}
-			}
-
-			// NOTE: Update local storage using the values (or lack thereof from the route's search params)
-
-			// TODO: Filter out irrelevant categories first?
-			if (search.categories) {
-				setItem('filters/categories', search.categories, params.projectId)
-			} else {
-				removeItem('filters/categories', params.projectId)
-			}
-
-			const updatedDateFilter = dateSearchParamsToFilter(search)
-
-			if (updatedDateFilter) {
-				setItem('filters/date', updatedDateFilter, params.projectId)
-			} else {
-				removeItem('filters/date', params.projectId)
-			}
-		}
-	},
 	loader: async ({ context, params }) => {
 		const {
 			projectApi,
@@ -332,18 +257,11 @@ function RouteAwareDataList({ projectId }: { projectId: string }) {
 		},
 	})
 
-	const highlightedDocument = Route.useSearch({
-		select: (value) => {
-			return value.highlightedDocument
-		},
-	})
-
 	return (
 		<DataList
 			categoriesFilter={categoriesFilter}
 			dateFilter={dateFilter}
 			filterReferenceDate={todayDate}
-			highlightedDocument={highlightedDocument}
 			projectId={projectId}
 		/>
 	)

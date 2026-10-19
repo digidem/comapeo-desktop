@@ -69,7 +69,6 @@ export const iconNames = [
 	'material-symbols-stars-2',
 	'material-symbols-view-agenda',
 	'material-symbols-visibility-off',
-	'material-symbols-visibility',
 	'material-symbols-waving-hand',
 	'material-tablet-android',
 	'material-volume-up',

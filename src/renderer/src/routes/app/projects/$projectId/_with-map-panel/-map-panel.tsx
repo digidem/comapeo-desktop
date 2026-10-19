@@ -15,7 +15,10 @@ import {
 } from '@comapeo/core-react'
 import type { Observation, Preset, Track } from '@comapeo/core/schema.js'
 import Box from '@mui/material/Box'
+import Checkbox from '@mui/material/Checkbox'
 import CircularProgress from '@mui/material/CircularProgress'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { captureMessage } from '@sentry/react'
@@ -50,24 +53,26 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLACK_00, WHITE_00 } from '../../../../../../../shared/colors.ts'
+import {
+	BLACK_00,
+	BLUE_05,
+	WHITE_00,
+} from '../../../../../../../shared/colors.ts'
 import {
 	CategoryIconContainer,
 	CategoryIconImage,
 } from '../../../../../components/category-icon.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
 import {
-	ToggleOmittedVisibilityMapControl,
 	ZoomToDataMapControl,
 	ZoomToSelectedDocumentMapControl,
-	type OmittedVisibility,
 } from '../../../../../components/map-controls.tsx'
 import { Map } from '../../../../../components/map.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
 import { useNetworkAwareMapStyleUrl } from '../../../../../hooks/maps.ts'
 import { getMatchingCategoryForDocument } from '../../../../../lib/comapeo.ts'
 import {
 	getItem,
-	removeItem,
 	setItem,
 	type DateFilter,
 } from '../../../../../lib/local-storage.ts'
@@ -114,7 +119,7 @@ const TRACKS_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] = {
 			['boolean', ['feature-state', 'highlight'], false],
 		],
 		1,
-		0.1,
+		0.25,
 	],
 }
 const TRACKS_HOVER_OUTLINE_LAYER_PAINT_PROPERTY: LineLayerSpecification['paint'] =
@@ -154,20 +159,18 @@ const BASE_FIT_BOUNDS_OPTIONS: FitBoundsOptions = {
 }
 
 export function MapPanel({
-	allowHighlightedDocumentMarker,
 	categoriesFilter,
 	dateFilter,
 	documentToHighlight,
 	filterReferenceDate,
-	isDocumentRoute,
+	isOnDocumentSpecificRoute,
 	projectId,
 }: {
-	allowHighlightedDocumentMarker: boolean
 	categoriesFilter?: Array<string>
 	dateFilter?: DateFilter
 	documentToHighlight?: HighlightedDocument
 	filterReferenceDate?: Date
-	isDocumentRoute: boolean
+	isOnDocumentSpecificRoute: boolean
 	projectId: string
 }) {
 	const router = useRouter()
@@ -207,6 +210,7 @@ export function MapPanel({
 			categories,
 			filters: { categories: categoriesFilter, date: dateFilter },
 			observations,
+			highlightedDocumentId: documentToHighlight?.docId,
 			referenceDate: filterReferenceDate || new Date(),
 		})
 	}, [
@@ -215,6 +219,7 @@ export function MapPanel({
 		categoriesFilter,
 		dateFilter,
 		filterReferenceDate,
+		documentToHighlight,
 	])
 
 	const tracksFeatureCollection = useMemo(() => {
@@ -252,16 +257,10 @@ export function MapPanel({
 
 	const moveMapToObservation = useCallback(
 		(
-			{
-				coordinates,
-				shouldZoomIn,
-			}: { coordinates: [lat: number, lon: number]; shouldZoomIn?: boolean },
+			{ coordinates }: { coordinates: [lat: number, lon: number] },
 			map: MapInstance | MapRef,
 		) => {
-			map.panTo(
-				{ lon: coordinates[0], lat: coordinates[1] },
-				{ zoom: shouldZoomIn ? 10 : undefined },
-			)
+			map.panTo({ lon: coordinates[0], lat: coordinates[1] })
 		},
 		[],
 	)
@@ -270,12 +269,10 @@ export function MapPanel({
 		(
 			{
 				trackFeature,
-				shouldZoomIn,
 			}: {
 				trackFeature: ReturnType<
 					typeof tracksToFeatureCollection
 				>['features'][number]
-				shouldZoomIn?: boolean
 			},
 			map: MapInstance | MapRef,
 		) => {
@@ -283,10 +280,10 @@ export function MapPanel({
 
 			const [minLon, minLat, maxLon, maxLat] = bbox(trackFeature)
 
-			map.panTo(
-				{ lon: c.geometry.coordinates[0]!, lat: c.geometry.coordinates[1]! },
-				{ zoom: shouldZoomIn ? 10 : undefined },
-			)
+			map.panTo({
+				lon: c.geometry.coordinates[0]!,
+				lat: c.geometry.coordinates[1]!,
+			})
 
 			map.fitBounds([minLon, minLat, maxLon, maxLat], BASE_FIT_BOUNDS_OPTIONS)
 		},
@@ -298,54 +295,24 @@ export function MapPanel({
 			const feature = event.features?.[0]
 
 			if (!feature) {
-				if (documentToHighlight) {
-					router.navigate({
-						to: '.',
-						search: (prev) => ({ ...prev, highlightedDocument: undefined }),
-					})
-				}
-
 				return
 			}
-
-			const mapInstance = event.target
-			const shouldZoomIn = mapInstance.getZoom() < 10
 
 			if (
 				feature.layer.id === OBSERVATIONS_LAYER_ID &&
 				typeof feature.properties.docId === 'string'
 			) {
-				const observationMatch = observationsFeatureCollection.features.find(
-					({ properties }) => properties.docId === feature.properties.docId,
-				)
-
-				if (observationMatch) {
-					moveMapToObservation(
-						{
-							coordinates: [
-								observationMatch.geometry.coordinates[0]!,
-								observationMatch.geometry.coordinates[1]!,
-							],
-							shouldZoomIn,
-						},
-						mapInstance,
-					)
-				}
-
 				router.navigate({
 					to: '/app/projects/$projectId/observations/$observationDocId',
-					params: {
-						projectId,
-						observationDocId: feature.properties.docId,
-					},
+					params: { projectId, observationDocId: feature.properties.docId },
+					search: true,
 					mask: {
 						to: '/app/projects/$projectId/observations/$observationDocId',
 						params: { projectId, observationDocId: feature.properties.docId },
-						search: (prev) => ({
-							...prev,
-							highlightedDocument: undefined,
-						}),
 					},
+					// TODO: Consider pushing navigation when pressing observation
+					// that belongs to track that is being viewed?
+					replace: isOnDocumentSpecificRoute,
 				})
 
 				return
@@ -355,39 +322,21 @@ export function MapPanel({
 				feature.layer.id === TRACKS_LAYER_ID &&
 				typeof feature.properties.docId === 'string'
 			) {
-				const tracksMatch = tracksFeatureCollection.features.find(
-					({ properties }) => properties.docId === feature.properties.docId,
-				)
-
-				if (tracksMatch) {
-					moveMapToTrack(
-						{ trackFeature: tracksMatch, shouldZoomIn },
-						mapInstance,
-					)
-				}
-
 				router.navigate({
 					to: '/app/projects/$projectId/tracks/$trackDocId',
 					params: { projectId, trackDocId: feature.properties.docId },
+					search: true,
 					mask: {
 						to: '/app/projects/$projectId/tracks/$trackDocId',
 						params: { projectId, trackDocId: feature.properties.docId },
-						search: (prev) => ({ ...prev, highlightedDocument: undefined }),
 					},
+					replace: isOnDocumentSpecificRoute,
 				})
 
 				return
 			}
 		},
-		[
-			documentToHighlight,
-			moveMapToObservation,
-			moveMapToTrack,
-			observationsFeatureCollection,
-			tracksFeatureCollection,
-			router,
-			projectId,
-		],
+		[isOnDocumentSpecificRoute, projectId, router],
 	)
 
 	/**
@@ -513,8 +462,6 @@ export function MapPanel({
 
 			const { type, docId } = documentToHighlight
 
-			const shouldZoomIn = mapInstance.getZoom() < 10
-
 			if (type === 'observation') {
 				const observationMatch = observationsFeatureCollection.features.find(
 					({ properties }) => properties.docId === docId,
@@ -527,7 +474,6 @@ export function MapPanel({
 								observationMatch.geometry.coordinates[0]!,
 								observationMatch.geometry.coordinates[1]!,
 							],
-							shouldZoomIn,
 						},
 						mapInstance,
 					)
@@ -538,10 +484,7 @@ export function MapPanel({
 				)
 
 				if (tracksMatch) {
-					moveMapToTrack(
-						{ trackFeature: tracksMatch, shouldZoomIn },
-						mapInstance,
-					)
+					moveMapToTrack({ trackFeature: tracksMatch }, mapInstance)
 				}
 			}
 
@@ -586,8 +529,6 @@ export function MapPanel({
 			mapRef.current.removeFeatureState({ source: OBSERVATIONS_SOURCE_ID })
 			mapRef.current.removeFeatureState({ source: TRACKS_SOURCE_ID })
 
-			const shouldZoomIn = mapRef.current.getZoom() < 10
-
 			if (document.type === 'observation') {
 				let trackDocIdToHighlight: string | undefined
 
@@ -598,49 +539,18 @@ export function MapPanel({
 					}
 				}
 
-				// 1. Highlight the track that references the observation
+				// NOTE: Highlight the track that references the observation
 				if (trackDocIdToHighlight) {
 					mapRef.current.setFeatureState(
 						{ source: TRACKS_SOURCE_ID, id: trackDocIdToHighlight },
 						{ highlight: true },
 					)
 				}
-
-				const observationMatch = observationsFeatureCollection.features.find(
-					({ properties }) => properties.docId === document.docId,
-				)
-
-				// 2. Move to observation
-				if (observationMatch) {
-					moveMapToObservation(
-						{
-							coordinates: [
-								observationMatch.geometry.coordinates[0]!,
-								observationMatch.geometry.coordinates[1]!,
-							],
-							shouldZoomIn,
-						},
-						mapRef.current,
-					)
-				}
 			} else {
-				// 1. Highlight the track
 				mapRef.current.setFeatureState(
 					{ source: TRACKS_SOURCE_ID, id: document.docId },
 					{ highlight: true },
 				)
-
-				const tracksMatch = tracksFeatureCollection.features.find(
-					({ properties }) => properties.docId === document.docId,
-				)
-
-				// 2. Move to the track
-				if (tracksMatch) {
-					moveMapToTrack(
-						{ trackFeature: tracksMatch, shouldZoomIn },
-						mapRef.current,
-					)
-				}
 			}
 		},
 	)
@@ -661,12 +571,17 @@ export function MapPanel({
 		[documentToHighlight],
 	)
 
-	const [omittedVisibility, setOmittedVisibility] = useState<OmittedVisibility>(
-		() => {
-			const stored = getItem('map/show_omitted', projectId)
-			return stored ? 'visible' : 'hidden'
-		},
-	)
+	const [omittedVisibility, setOmittedVisibility] = useState<
+		'hidden' | 'visible'
+	>(() => {
+		const stored = getItem('map/show_omitted', projectId)
+
+		if (stored === null) {
+			return 'visible'
+		}
+
+		return stored === true ? 'visible' : 'hidden'
+	})
 
 	const layerFilter: FilterSpecification = [
 		'case',
@@ -674,6 +589,11 @@ export function MapPanel({
 		true,
 		['boolean', ['get', 'visible'], true],
 	]
+
+	const omittedVisibilityToggleIconSize = useIconSizeBasedOnTypography({
+		variant: 'bodyCopy',
+		multiplier: 1.5,
+	})
 
 	return (
 		<Box sx={{ position: 'relative', display: 'flex', flex: 1 }}>
@@ -715,6 +635,7 @@ export function MapPanel({
 				dragRotate={false}
 				pitchWithRotate={false}
 				touchZoomRotate={false}
+				style={{ fontFamily: 'inherit' }}
 			>
 				<ScaleControl unit={unitSystem} />
 
@@ -744,26 +665,53 @@ export function MapPanel({
 				) : null}
 
 				{categoriesFilter || dateFilter ? (
-					<ToggleOmittedVisibilityMapControl
-						initialValue={omittedVisibility}
-						onToggle={() => {
-							setOmittedVisibility((prev) => {
-								const updatedValue = prev === 'hidden' ? 'visible' : 'hidden'
+					<FormControlLabel
+						control={
+							<Checkbox
+								disableTouchRipple
+								size="small"
+								sx={{ color: (theme) => theme.palette.text.secondary }}
+							/>
+						}
+						disableTypography
+						label={
+							<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
+								<Icon
+									aria-hidden
+									name={'material-symbols-visibility-off'}
+									size={omittedVisibilityToggleIconSize}
+								/>
 
-								if (updatedValue === 'hidden') {
-									removeItem('map/show_omitted', projectId)
-								} else {
-									setItem(
-										'map/show_omitted',
-										updatedValue === 'visible',
-										projectId,
-									)
-								}
+								<Typography
+									sx={{
+										fontWeight: (theme) => theme.typography.fontWeightMedium,
+									}}
+								>
+									{intl.formatMessage(m.hideOthers)}
+								</Typography>
+							</Stack>
+						}
+						labelPlacement="start"
+						onChange={(_event, shouldHide) => {
+							const updatedValue = shouldHide ? 'hidden' : 'visible'
 
-								return updatedValue
-							})
+							setItem('map/show_omitted', updatedValue === 'visible', projectId)
+
+							setOmittedVisibility(updatedValue)
 						}}
-						buttonTitle={intl.formatMessage(m.toggleOmittedVisibility)}
+						sx={{
+							alignItems: 'center',
+							background: WHITE_00,
+							border: `1px solid ${BLUE_05}`,
+							borderRadius: 2,
+							color: (theme) => theme.palette.text.secondary,
+							left: (theme) => theme.spacing(2),
+							margin: 0,
+							paddingInline: 2,
+							position: 'absolute',
+							top: (theme) => theme.spacing(2),
+						}}
+						checked={omittedVisibility === 'hidden'}
 					/>
 				) : null}
 
@@ -815,8 +763,7 @@ export function MapPanel({
 					/>
 				</Source>
 
-				{allowHighlightedDocumentMarker &&
-				highlightedFeature &&
+				{highlightedFeature &&
 				highlightedFeature.geometry.type === 'Point' &&
 				highlightedFeature.properties.type === 'observation' ? (
 					<Marker
@@ -855,7 +802,7 @@ export function MapPanel({
 					</Marker>
 				) : null}
 
-				{isDocumentRoute && !highlightedFeature ? (
+				{isOnDocumentSpecificRoute && !highlightedFeature ? (
 					<Box
 						sx={{
 							background: alpha(BLACK_00, 0.5),
@@ -963,11 +910,13 @@ function observationsToFeatureCollection({
 	filters,
 	observations,
 	referenceDate,
+	highlightedDocumentId,
 }: {
 	categories: Array<Preset>
 	observations: Array<Observation>
 	filters?: { categories?: Array<string>; date?: DateFilter }
 	referenceDate: Date
+	highlightedDocumentId: string | undefined
 }) {
 	const displayablePoints: Array<
 		Feature<
@@ -982,18 +931,21 @@ function observationsToFeatureCollection({
 
 			const categoriesFilter = filters?.categories
 
-			const isVisible = isDocumentIncludedByFilters(
-				{ document: obs, category },
-				{
-					categories: categoriesFilter || [
-						NOT_CATEGORY_FILTER_ID,
-						...categories.map((c) => c.docId),
-					],
-					date: filters?.date
-						? dateFilterToDateRange(filters.date, referenceDate)
-						: undefined,
-				},
-			)
+			const isVisible =
+				highlightedDocumentId === obs.docId
+					? true
+					: isDocumentIncludedByFilters(
+							{ document: obs, category },
+							{
+								categories: categoriesFilter || [
+									NOT_CATEGORY_FILTER_ID,
+									...categories.map((c) => c.docId),
+								],
+								date: filters?.date
+									? dateFilterToDateRange(filters.date, referenceDate)
+									: undefined,
+							},
+						)
 
 			displayablePoints.push(
 				point([obs.lon, obs.lat], {
@@ -1113,7 +1065,7 @@ function createObservationLayerPaintProperty(
 				['boolean', ['feature-state', 'highlight'], false],
 			],
 			1,
-			0.1,
+			0.25,
 		],
 		'circle-radius': [
 			'case',
@@ -1131,7 +1083,7 @@ const m = defineMessages<{
 	readonly zoomToData: NoMessageValues
 	readonly zoomToSelected: NoMessageValues
 	readonly cannotDisplayFeature: NoMessageValues
-	readonly toggleOmittedVisibility: NoMessageValues
+	readonly hideOthers: NoMessageValues
 }>({
 	categoryIconAlt: {
 		id: 'routes.app.projects.$projectId.-map-panel.categoryIconAlt',
@@ -1157,10 +1109,10 @@ const m = defineMessages<{
 		description:
 			'Text displayed when map feature for selected data cannot be displayed',
 	},
-	toggleOmittedVisibility: {
-		id: '$1.routes.app.projects.$projectId.-map-panel.toggleOmittedVisibility',
-		defaultMessage: 'Toggle omitted visibility',
+	hideOthers: {
+		id: '$1.routes.app.projects.$projectId.-map-panel.hideOthers',
+		defaultMessage: 'Hide Others',
 		description:
-			'Text displayed when hovering over map control for toggling visibility of features omitted by filters.',
+			'Text for map control that toggles visibility of map features that are not included by filters.',
 	},
 })
