@@ -55,7 +55,7 @@ jobs:
           package-manager-cache: false
 
       - name: Update npm version
-        uses: ./.github/update-npm-version
+        uses: $/.github/update-npm-version
 
       - run: npm install --no-save semver
         shell: bash
@@ -80,7 +80,7 @@ jobs:
   build:
     name: Create builds
     needs: create_release
-    uses: ./.github/workflows/create-builds.yml
+    uses: $/.github/workflows/create-builds.yml
     with:
       app_type: 'production'
       build_sha: ${{ github.sha }}

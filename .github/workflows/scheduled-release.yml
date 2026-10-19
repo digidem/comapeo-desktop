@@ -54,11 +54,11 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Update npm version
-        uses: ./.github/update-npm-version
+        uses: $/.github/update-npm-version
 
       - name: Parse version
         id: version
-        uses: ./.github/parse-version
+        uses: $/.github/parse-version
 
       - name: Get branch names
         id: branches

@@ -19,7 +19,7 @@ jobs:
     name: Compile translations
     permissions:
       contents: read
-    uses: ./.github/workflows/compile-translations.yml
+    uses: $/.github/workflows/compile-translations.yml
 
   checks:
     needs: compile_translations
@@ -39,7 +39,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Update npm version
-        uses: ./.github/update-npm-version
+        uses: $/.github/update-npm-version
 
       - name: Install deps
         run: npm ci
@@ -91,7 +91,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Update npm version
-        uses: ./.github/update-npm-version
+        uses: $/.github/update-npm-version
 
       - name: Install deps
         run: npm ci
@@ -135,7 +135,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Update npm version
-        uses: ./.github/update-npm-version
+        uses: $/.github/update-npm-version
 
       - name: Install deps
         run: npm ci

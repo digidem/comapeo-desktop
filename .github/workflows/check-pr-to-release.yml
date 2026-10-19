@@ -91,7 +91,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Update npm version
-        uses: ./.github/update-npm-version
+        uses: $/.github/update-npm-version
 
       - run: npm install --no-save semver
         shell: bash

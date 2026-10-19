@@ -37,7 +37,7 @@ on:
 jobs:
   build:
     name: Build
-    uses: ./.github/workflows/create-builds.yml
+    uses: $/.github/workflows/create-builds.yml
     with:
       app_type:
         release-candidate

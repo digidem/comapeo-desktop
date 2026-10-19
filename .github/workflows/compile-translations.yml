@@ -39,7 +39,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Update npm version
-        uses: ./.github/update-npm-version
+        uses: $/.github/update-npm-version
 
       - name: Install deps
         run: npm ci
