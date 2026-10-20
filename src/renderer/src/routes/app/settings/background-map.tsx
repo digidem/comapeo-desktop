@@ -16,6 +16,7 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import {
 	defineMessages,
 	useIntl,
+	type MessageTag,
 	type MessageValue,
 	type NoMessageValues,
 } from 'react-intl'
@@ -25,6 +26,7 @@ import { BLACK_03, BLUE_05 } from '../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../components/error-dialog.tsx'
 import { Icon } from '../../../components/icon.tsx'
+import { Mono } from '../../../components/intl-rich-text.tsx'
 import { useIconSizeBasedOnTypography } from '../../../hooks/icon.ts'
 import { bytesToMegabytes } from '../../../lib/bytes-to-megabytes.ts'
 
@@ -260,6 +262,12 @@ function NoCustomMap({
 								}}
 							>
 								<Typography>{intl.formatMessage(m.description)}</Typography>
+
+								<br />
+
+								<Typography>
+									{intl.formatMessage(m.acceptedFileTypes, { mono: Mono })}
+								</Typography>
 							</Box>
 						) : (
 							<>
@@ -275,6 +283,7 @@ function NoCustomMap({
 									onClick={() => {
 										onRemoveMap()
 									}}
+									startIcon={<Icon name="material-symbols-delete" />}
 									sx={{ alignSelf: 'center' }}
 									variant="outlined"
 								>
@@ -289,8 +298,8 @@ function NoCustomMap({
 			<Stack
 				direction="column"
 				sx={{
+					alignItems: 'center',
 					borderTop: `1px solid ${BLUE_05}`,
-					gap: 4,
 					padding: 6,
 				}}
 			>
@@ -301,7 +310,6 @@ function NoCustomMap({
 					loadingPosition="start"
 					role={undefined}
 					startIcon={<Icon name="material-file-download" />}
-					sx={{ alignSelf: 'center' }}
 					tabIndex={-1}
 					variant="outlined"
 				>
@@ -313,10 +321,6 @@ function NoCustomMap({
 						}}
 					/>
 				</Button>
-
-				<Typography sx={{ textAlign: 'center' }}>
-					{intl.formatMessage(m.acceptedFileTypes)}
-				</Typography>
 			</Stack>
 		</Stack>
 	)
@@ -448,8 +452,8 @@ function CustomMapDetails({
 			<Stack
 				direction="column"
 				sx={{
+					alignItems: 'center',
 					borderTop: `1px solid ${BLUE_05}`,
-					gap: 4,
 					padding: 6,
 				}}
 			>
@@ -462,7 +466,6 @@ function CustomMapDetails({
 						onRemoveMap()
 					}}
 					startIcon={<Icon name="material-symbols-delete" />}
-					sx={{ alignSelf: 'center' }}
 					variant="contained"
 				>
 					{intl.formatMessage(m.removeMap)}
@@ -508,7 +511,7 @@ const m = defineMessages<{
 	readonly navTitle: NoMessageValues
 	readonly description: NoMessageValues
 	readonly chooseFile: NoMessageValues
-	readonly acceptedFileTypes: NoMessageValues
+	readonly acceptedFileTypes: { readonly mono: MessageTag }
 	readonly sizeInMegabytes: { readonly value: MessageValue }
 	readonly addedOn: { readonly value: MessageValue }
 	readonly removeMap: NoMessageValues
@@ -540,7 +543,7 @@ const m = defineMessages<{
 	},
 	acceptedFileTypes: {
 		id: '$1.routes.app.settings.background-map.acceptedFileTypes',
-		defaultMessage: 'Accepted file types are .smp',
+		defaultMessage: 'Accepted file types are: <mono>.smp</mono>',
 		description:
 			'Text describing what kind of files are usable for background maps.',
 	},

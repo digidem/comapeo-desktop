@@ -22,3 +22,7 @@ export const Blue: FormatXMLElementFn = (parts) => {
 export const Break: FormatXMLElementFn = (_parts) => {
 	return <br />
 }
+
+export const Mono: FormatXMLElementFn = (parts) => {
+	return <pre style={{ display: 'inline' }}>{parts}</pre>
+}

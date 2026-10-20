@@ -658,7 +658,7 @@ test('background map', async ({ appInfo, userParams, projectParams }) => {
 		).toBeVisible()
 
 		await expect(
-			main.getByText('Accepted file types are .smp', { exact: true }),
+			main.getByText('Accepted file types are: .smp', { exact: true }),
 		).toBeVisible()
 
 		/// Choose file (cancelled)

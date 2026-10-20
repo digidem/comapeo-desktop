@@ -1129,7 +1129,7 @@
   },
   "$1.routes.app.settings.background-map.acceptedFileTypes": {
     "description": "Text describing what kind of files are usable for background maps.",
-    "message": "Accepted file types are .smp"
+    "message": "Accepted file types are: <mono>.smp</mono>"
   },
   "$1.routes.app.settings.background-map.addedOn": {
     "description": "Text describing what kind of files are usable for background maps.",
