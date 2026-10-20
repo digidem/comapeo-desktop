@@ -16,6 +16,7 @@ import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { captureException, captureMessage } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { Block, createFileRoute, useRouter } from '@tanstack/react-router'
@@ -412,6 +413,10 @@ function ObservationDetailsPanel({
 		multiplier: 1.5,
 	})
 
+	const viewportIsNarrow = useMediaQuery((theme) =>
+		theme.breakpoints.down('md'),
+	)
+
 	// NOTE: We only allow editing one thing at a time.
 	// Otherwise we could represent as a list of IDs.
 	const [activeEditId, setActiveEditId] = useState<string | null>(null)
@@ -476,7 +481,7 @@ function ObservationDetailsPanel({
 						<Box sx={{ display: 'flex', justifyContent: 'center' }}>
 							<Tooltip
 								describeChild={false}
-								placement="right-end"
+								placement={viewportIsNarrow ? 'auto-start' : 'right-start'}
 								slots={{ transition: Fade }}
 								slotProps={{
 									tooltip: {
