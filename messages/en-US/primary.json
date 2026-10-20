@@ -921,23 +921,35 @@
   },
   "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.deviceBeingInvited": {
     "description": "Text displaying the device and its role that it is being invited as.",
-    "message": "{name}<br></br><br></br> is being invited as <br></br><br></br>{role}"
+    "message": "Inviting as <br></br><br></br><b>{role}</b>"
   },
-  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedDescription": {
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteAcceptedHeading": {
+    "description": "Heading text when invite is accepted.",
+    "message": "{name} <br></br>Joined Project"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteAcceptedNavTitle": {
+    "description": "Navigation title text when invite is accepted.",
+    "message": "Invite Accepted"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteDeclinedDescription": {
     "description": "Description of a declined invite.",
     "message": "This device has declined your invitation. They have not joined the project."
   },
-  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedTitle": {
-    "description": "Title of page when invite is declined.",
-    "message": "Invitation Declined"
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteDeclinedHeading": {
+    "description": "Heading text when invite is declined.",
+    "message": "{name} <br></br>Declined Invite"
   },
-  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteAccepted": {
-    "description": "Text displayed when invite is accepted.",
-    "message": "Invite Accepted"
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteDeclinedNavTitle": {
+    "description": "Navigation title text when invite is declined.",
+    "message": "Invite Declined"
   },
-  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.navTitle": {
-    "description": "Title of the review invite page.",
-    "message": "Review Invitation"
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitePendingNavTitle": {
+    "description": "Navigation title text when invite is sent and pending.",
+    "message": "Waiting for Device"
+  },
+  "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteReviewNavTitle": {
+    "description": "Navigation title text when reviewing invite before sending.",
+    "message": "Review Invite"
   },
   "$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.participant": {
     "description": "Participant role name.",

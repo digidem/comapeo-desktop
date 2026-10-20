@@ -1,4 +1,10 @@
-import { Suspense, useDeferredValue, useEffect, useState } from 'react'
+import {
+	Suspense,
+	useDeferredValue,
+	useEffect,
+	useState,
+	type ReactNode,
+} from 'react'
 import {
 	useRequestCancelInvite,
 	useSendInvite,
@@ -25,16 +31,18 @@ import { DeviceRow } from '../-shared/device-row.tsx'
 import { DisconnectedIndicator } from '../-shared/disconnected-indicator.tsx'
 import { DeviceIcon } from '../../../../../-shared/device-icon.tsx'
 import {
-	BLACK_00,
+	BLACK_03,
 	BLUE_05,
-	GREEN_00,
 	WHITE_00,
 } from '../../../../../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../../../../components/error-dialog.tsx'
 import { GenericRoutePendingComponent } from '../../../../../../../../components/generic-route-pending-component.tsx'
 import { Icon } from '../../../../../../../../components/icon.tsx'
-import { Break } from '../../../../../../../../components/intl-rich-text.tsx'
+import {
+	Bold,
+	Break,
+} from '../../../../../../../../components/intl-rich-text.tsx'
 import { ButtonLink } from '../../../../../../../../components/link.tsx'
 import { useLocalPeersState } from '../../../../../../../../contexts/local-peers-store-context.ts'
 import { useIconSizeBasedOnTypography } from '../../../../../../../../hooks/icon.ts'
@@ -172,7 +180,7 @@ function RouteComponent() {
 	switch (sendInvite.data) {
 		case 'REJECT': {
 			return (
-				<InviteRejected
+				<InviteDeclined
 					deviceId={sendInvite.variables.deviceId}
 					projectId={projectId}
 				/>
@@ -230,131 +238,95 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 	})
 
 	return (
-		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-			<Stack
-				component="header"
-				direction="row"
-				sx={{
-					alignItems: 'center',
-					borderBottom: `1px solid ${BLUE_05}`,
-					gap: 2,
-					padding: 4,
-				}}
-			>
-				<IconButton
-					onClick={() => {
-						router.navigate({
-							to: '/app/projects/$projectId/team/invite/devices/$deviceId/role',
-							params: { projectId, deviceId },
-							replace: true,
-						})
-					}}
-					sx={{ color: (theme) => theme.palette.text.secondary }}
-				>
-					<Icon name="material-arrow-back" size={backIconSize} />
-				</IconButton>
-
-				<Typography variant="pageTitle">
-					{intl.formatMessage(m.navTitle)}
-				</Typography>
-			</Stack>
-
-			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-				<Container
-					maxWidth="sm"
+		<PageLayout
+			header={
+				<Stack
+					component="header"
+					direction="row"
 					sx={{
-						display: 'flex',
-						flex: 1,
-						flexDirection: 'column',
-						paddingBlock: 6,
-						paddingInline: 4,
+						alignItems: 'center',
+						borderBottom: `1px solid ${BLUE_05}`,
+						gap: 2,
+						padding: 4,
 					}}
 				>
-					<Stack
-						direction="column"
-						sx={{ flex: 1, gap: 6, justifyContent: 'space-between' }}
+					<IconButton
+						onClick={() => {
+							router.navigate({
+								to: '/app/projects/$projectId/team/invite/devices/$deviceId/role',
+								params: { projectId, deviceId },
+								replace: true,
+							})
+						}}
+						sx={{ color: (theme) => theme.palette.text.secondary }}
 					>
-						<Box sx={{ padding: 6 }}>
-							<Stack
-								direction="column"
-								sx={{
-									alignItems: 'center',
-									border: `1px solid ${BLUE_05}`,
-									borderRadius: 2,
-									gap: 4,
-									justifyContent: 'center',
-									paddingBlock: 20,
-									paddingInline: 6,
-								}}
-							>
-								<DeviceIcon
-									deviceType={peer.deviceType}
-									size={deviceIconSize}
-								/>
+						<Icon name="material-arrow-back" size={backIconSize} />
+					</IconButton>
 
-								{peer.status === 'disconnected' ? (
-									<DisconnectedIndicator />
-								) : null}
-
-								<Typography
-									variant="heroSubheading"
-									sx={{ textAlign: 'center' }}
-								>
-									{intl.formatMessage(m.deviceBeingInvited, {
-										br: Break,
-										name: (
-											<Typography
-												component="span"
-												variant="heroHeader"
-												sx={{
-													fontWeight: (theme) =>
-														theme.typography.fontWeightMedium,
-												}}
-											>
-												{peer.name}
-											</Typography>
-										),
-										role: (
-											<Typography
-												component="span"
-												variant="heroSubheading"
-												sx={{
-													fontWeight: (theme) =>
-														theme.typography.fontWeightMedium,
-												}}
-											>
-												{role === 'coordinator'
-													? intl.formatMessage(m.coordinator)
-													: intl.formatMessage(m.participant)}
-											</Typography>
-										),
-									})}
-								</Typography>
-							</Stack>
-						</Box>
-
+					<Typography variant="pageTitle">
+						{intl.formatMessage(m.inviteReviewNavTitle)}
+					</Typography>
+				</Stack>
+			}
+			bodyPrimary={
+				<Stack direction="column" sx={{ alignItems: 'center', gap: 6 }}>
+					<Stack direction="column" sx={{ gap: 2 }}>
 						<Box
 							sx={{
-								display: 'flex',
-								flexDirection: 'row',
-								justifyContent: 'center',
+								background: BLACK_03,
+								borderRadius: '50%',
+								display: 'grid',
+								padding: 6,
+								placeItems: 'center',
 							}}
 						>
-							<Button
-								fullWidth
-								variant="contained"
-								startIcon={<Icon name="material-send-filled" />}
-								onClick={() => {
-									onSendInvite()
-								}}
-							>
-								{intl.formatMessage(m.sendInvite)}
-							</Button>
+							<DeviceIcon deviceType={peer.deviceType} size={deviceIconSize} />
 						</Box>
+
+						{peer.status === 'disconnected' ? <DisconnectedIndicator /> : null}
 					</Stack>
-				</Container>
-			</Stack>
-		</Stack>
+
+					<Typography
+						variant="heroHeader"
+						sx={{ textAlign: 'center', textWrap: 'balance' }}
+					>
+						{peer.name || peer.deviceId}
+					</Typography>
+				</Stack>
+			}
+			bodySecondary={
+				<Typography sx={{ textAlign: 'center' }}>
+					{intl.formatMessage(m.deviceBeingInvited, {
+						b: Bold,
+						br: Break,
+						role: intl.formatMessage(
+							role === 'coordinator' ? m.coordinator : m.participant,
+						),
+					})}
+				</Typography>
+			}
+			footer={
+				<Stack
+					direction="row"
+					sx={{
+						borderTop: `1px solid ${BLUE_05}`,
+						justifyContent: 'center',
+						padding: 6,
+					}}
+				>
+					<Button
+						fullWidth
+						variant="contained"
+						startIcon={<Icon name="material-send-filled" />}
+						onClick={() => {
+							onSendInvite()
+						}}
+					>
+						{intl.formatMessage(m.sendInvite)}
+					</Button>
+				</Stack>
+			}
+		/>
 	)
 }
 
@@ -384,54 +356,72 @@ function InvitePending({
 		multiplier: 8,
 	})
 
+	const closeIconSize = useIconSizeBasedOnTypography({
+		variant: 'pageTitle',
+		multiplier: 1.5,
+	})
+
 	return (
-		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-			<Stack
-				direction="column"
-				sx={{ justifyContent: 'space-between', flex: 1, gap: 6 }}
-			>
+		<PageLayout
+			header={
 				<Stack
-					direction="column"
-					sx={{ alignItems: 'center', gap: 20, padding: 6 }}
+					component="header"
+					direction="row"
+					sx={{
+						alignItems: 'center',
+						borderBottom: `1px solid ${BLUE_05}`,
+						gap: 2,
+						padding: 4,
+					}}
 				>
-					<Stack direction="column" sx={{ alignItems: 'center' }}>
-						<Icon name="comapeo-send" color="primary" size={sendIconSize} />
+					<IconButton
+						onClick={() => {
+							onCancelInvite()
+						}}
+						sx={{ color: (theme) => theme.palette.text.secondary }}
+					>
+						<Icon name="material-close" size={closeIconSize} />
+					</IconButton>
 
-						<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
-							{intl.formatMessage(m.waiting)}
-						</Typography>
-					</Stack>
+					<Typography variant="pageTitle">
+						{intl.formatMessage(m.invitePendingNavTitle)}
+					</Typography>
+				</Stack>
+			}
+			bodyPrimary={
+				<Stack direction="column" sx={{ alignItems: 'center' }}>
+					<Icon name="comapeo-send" color="primary" size={sendIconSize} />
 
-					<Typography>
+					<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
+						{intl.formatMessage(m.waiting)}
+					</Typography>
+				</Stack>
+			}
+			bodySecondary={
+				<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
+					<Typography sx={{ textAlign: 'center' }}>
 						{intl.formatMessage(m.timeSinceSent, {
 							time: getFormattedDuration(
 								Math.round((currentTimestamp - sentAt) / 1000),
 							),
 						})}
 					</Typography>
-				</Stack>
 
-				<Stack
-					direction="column"
-					sx={{ alignItems: 'center', gap: 3, padding: 6 }}
-				>
 					<Button
-						fullWidth
 						onClick={() => {
 							onCancelInvite()
 						}}
-						startIcon={<Icon name="material-symbols-cancel" />}
-						variant="outlined"
+						variant="text"
 					>
 						{intl.formatMessage(m.cancelInvite)}
 					</Button>
 				</Stack>
-			</Stack>
-		</Stack>
+			}
+		/>
 	)
 }
 
-function InviteRejected({
+function InviteDeclined({
 	deviceId,
 	projectId,
 }: {
@@ -439,6 +429,8 @@ function InviteRejected({
 	projectId: string
 }) {
 	const intl = useIntl()
+
+	const router = useRouter()
 
 	const { peerOnLoad } = Route.useRouteContext()
 
@@ -453,70 +445,93 @@ function InviteRejected({
 		multiplier: 4,
 	})
 
+	const closeIconSize = useIconSizeBasedOnTypography({
+		variant: 'pageTitle',
+		multiplier: 1.5,
+	})
+
 	return (
-		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-			<Container
-				maxWidth="sm"
-				sx={{
-					display: 'flex',
-					flex: 1,
-					flexDirection: 'column',
-					padding: 6,
-				}}
-			>
+		<PageLayout
+			header={
+				<Stack
+					component="header"
+					direction="row"
+					sx={{
+						alignItems: 'center',
+						borderBottom: `1px solid ${BLUE_05}`,
+						gap: 2,
+						padding: 4,
+					}}
+				>
+					<IconButton
+						onClick={() => {
+							router.navigate({
+								to: '/app/projects/$projectId/team/invite',
+								params: { projectId },
+								replace: true,
+							})
+						}}
+						sx={{ color: (theme) => theme.palette.text.secondary }}
+					>
+						<Icon name="material-close" size={closeIconSize} />
+					</IconButton>
+
+					<Typography variant="pageTitle">
+						{intl.formatMessage(m.inviteDeclinedNavTitle)}
+					</Typography>
+				</Stack>
+			}
+			bodyPrimary={
+				<Stack direction="column" sx={{ alignItems: 'center', gap: 6 }}>
+					<Icon name="material-error" color="error" size={errorIconSize} />
+
+					<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
+						{intl.formatMessage(m.inviteDeclinedHeading, {
+							br: Break,
+							name: peer.name || '',
+						})}
+					</Typography>
+
+					<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
+						{intl.formatMessage(m.inviteDeclinedDescription)}
+					</Typography>
+				</Stack>
+			}
+			bodySecondary={
 				<Stack
 					direction="column"
-					sx={{ flex: 1, gap: 10, justifyContent: 'space-between' }}
+					sx={{ alignItems: 'center', justifyContent: 'center' }}
 				>
-					<Stack
-						direction="column"
-						sx={{
-							alignItems: 'center',
-							borderRadius: 2,
-							gap: 4,
-							justifyContent: 'center',
-							paddingBlock: 10,
-						}}
-					>
-						<Icon name="material-error" color="error" size={errorIconSize} />
-
-						<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
-							{intl.formatMessage(m.invitationDeclinedTitle)}
-						</Typography>
-
-						<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
-							{intl.formatMessage(m.invitationDeclinedDescription)}
-						</Typography>
-
-						<DeviceRow
-							deviceId={peer.deviceId}
-							deviceType={peer.deviceType}
-							name={peer.name}
-						/>
-					</Stack>
-
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'row',
-							justifyContent: 'center',
-						}}
-					>
-						<ButtonLink
-							to="/app/projects/$projectId/team/invite"
-							params={{ projectId }}
-							replace
-							fullWidth
-							startIcon={<Icon name="material-symbols-cancel" />}
-							sx={{ alignSelf: 'center' }}
-							variant="outlined"
-						>
-							{intl.formatMessage(m.close)}
-						</ButtonLink>
-					</Box>
+					<DeviceRow
+						deviceId={peer.deviceId}
+						deviceType={peer.deviceType}
+						name={peer.name}
+					/>
 				</Stack>
-			</Container>
-		</Stack>
+			}
+			footer={
+				<Stack
+					direction="row"
+					sx={{
+						borderTop: `1px solid ${BLUE_05}`,
+						justifyContent: 'center',
+						padding: 6,
+					}}
+				>
+					<ButtonLink
+						to="/app/projects/$projectId/team/invite"
+						params={{ projectId }}
+						replace
+						fullWidth
+						startIcon={<Icon name="material-symbols-cancel" />}
+						sx={{ alignSelf: 'center' }}
+						variant="outlined"
+					>
+						{intl.formatMessage(m.close)}
+					</ButtonLink>
+				</Stack>
+			}
+		/>
 	)
 }
 
@@ -529,6 +544,8 @@ function InviteAccepted({
 }) {
 	const intl = useIntl()
 
+	const router = useRouter()
+
 	const { data: member } = useSingleMember({ projectId, deviceId })
 
 	const deviceIconSize = useIconSizeBasedOnTypography({
@@ -536,155 +553,225 @@ function InviteAccepted({
 		multiplier: 3,
 	})
 
-	const successIconSize = useIconSizeBasedOnTypography({
-		variant: 'bodyCopy',
+	const backIconSize = useIconSizeBasedOnTypography({
+		variant: 'pageTitle',
+		multiplier: 1.5,
 	})
 
 	return (
-		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-			<Stack
-				direction="column"
-				sx={{ flex: 1, overflow: 'auto', justifyContent: 'space-between' }}
-			>
-				<Container
-					maxWidth="sm"
-					sx={{ display: 'flex', flex: 1, flexDirection: 'column', padding: 6 }}
+		<PageLayout
+			header={
+				<Stack
+					component="header"
+					direction="row"
+					sx={{
+						alignItems: 'center',
+						borderBottom: `1px solid ${BLUE_05}`,
+						gap: 2,
+						padding: 4,
+					}}
 				>
-					<Stack
-						direction="column"
-						sx={{ flex: 1, gap: 10, justifyContent: 'space-between' }}
+					<IconButton
+						onClick={() => {
+							router.navigate({
+								to: '/app/projects/$projectId/team/invite',
+								params: { projectId },
+								replace: true,
+							})
+						}}
+						sx={{ color: (theme) => theme.palette.text.secondary }}
+					>
+						<Icon name="material-arrow-back" size={backIconSize} />
+					</IconButton>
+
+					<Typography variant="pageTitle">
+						{intl.formatMessage(m.inviteAcceptedNavTitle)}
+					</Typography>
+				</Stack>
+			}
+			bodyPrimary={
+				<Stack direction="column" sx={{ alignItems: 'center', gap: 6 }}>
+					<Box
+						sx={{
+							background: BLACK_03,
+							borderRadius: '50%',
+							display: 'grid',
+							padding: 6,
+							placeItems: 'center',
+							position: 'relative',
+						}}
+					>
+						<DeviceIcon deviceType={member.deviceType} size={deviceIconSize} />
+
+						<Box
+							sx={{
+								background: (theme) => theme.palette.success.main,
+								borderRadius: '50%',
+								bottom: 0,
+								display: 'grid',
+								padding: 1,
+								placeItems: 'center',
+								position: 'absolute',
+								right: 0,
+							}}
+						>
+							<Icon
+								name="material-check"
+								htmlColor={WHITE_00}
+								size={`calc(${deviceIconSize} / 3)`}
+							/>
+						</Box>
+					</Box>
+
+					<Typography
+						variant="heroHeader"
+						sx={{ textAlign: 'center', textWrap: 'balance' }}
+					>
+						{intl.formatMessage(m.inviteAcceptedHeading, {
+							br: Break,
+							name: member.name,
+						})}
+					</Typography>
+				</Stack>
+			}
+			bodySecondary={
+				<Stack direction="column" sx={{ gap: 2 }}>
+					<Typography
+						sx={{
+							fontWeight: (theme) => theme.typography.fontWeightMedium,
+							textAlign: 'center',
+							textWrap: 'balance',
+						}}
+					>
+						{intl.formatMessage(
+							member.role.roleId === COORDINATOR_ROLE_ID
+								? m.coordinator
+								: m.participant,
+						)}
+					</Typography>
+
+					{member.joinedAt !== undefined ? (
+						<Typography sx={{ textAlign: 'center' }}>
+							{intl.formatMessage(m.addedOn, {
+								value: (
+									<time key={member.deviceId} dateTime={member.joinedAt}>
+										{intl.formatDate(member.joinedAt, {
+											year: 'numeric',
+											month: 'long',
+											day: '2-digit',
+										})}
+									</time>
+								),
+							})}
+						</Typography>
+					) : null}
+				</Stack>
+			}
+			footer={
+				<Stack
+					direction="row"
+					sx={{
+						borderTop: `1px solid ${BLUE_05}`,
+						justifyContent: 'center',
+						padding: 6,
+					}}
+				>
+					<ButtonLink
+						to="/app/projects/$projectId/team/invite/devices"
+						params={{ projectId }}
+						replace
+						fullWidth
+						startIcon={<Icon name="material-symbols-add-circle-outline" />}
+						variant="outlined"
+					>
+						{intl.formatMessage(m.addAnotherDevice)}
+					</ButtonLink>
+				</Stack>
+			}
+		/>
+	)
+}
+
+function PageLayout({
+	header,
+	bodyPrimary,
+	bodySecondary,
+	footer,
+}: {
+	header: ReactNode
+	bodyPrimary: ReactNode
+	bodySecondary: ReactNode
+	footer?: ReactNode
+}) {
+	return (
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			{header}
+
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+				<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+					<Container
+						maxWidth="sm"
+						sx={{
+							display: 'flex',
+							flex: 1,
+							flexDirection: 'column',
+							paddingBlock: 6,
+							paddingInline: 4,
+						}}
 					>
 						<Stack
 							direction="column"
 							sx={{
-								alignItems: 'center',
-								border: `1px solid ${BLUE_05}`,
-								borderRadius: 2,
-								gap: 6,
+								flex: 1,
+								gap: 12,
 								justifyContent: 'center',
-								paddingBlock: 20,
-								paddingInline: 6,
+								overflow: 'auto',
+								overflowWrap: 'break-word',
 							}}
 						>
-							<Box sx={{ position: 'relative' }}>
-								<DeviceIcon
-									deviceType={member.deviceType}
-									size={deviceIconSize}
-								/>
+							{bodyPrimary}
 
-								<Box
-									sx={{
-										position: 'absolute',
-										right: -4,
-										bottom: -4,
-										zIndex: 1,
-										display: 'flex',
-										flexDirection: 'column',
-										padding: 2,
-										borderRadius: '50%',
-										background: GREEN_00,
-										boxShadow: (theme) =>
-											`0px 2px 20px 0px ${theme.alpha(BLACK_00, 0.4)}`,
-									}}
-								>
-									<Icon
-										name="material-check"
-										htmlColor={WHITE_00}
-										size={successIconSize}
-									/>
-								</Box>
-							</Box>
-
-							<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
-								{member.name}
-							</Typography>
-
-							<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
-								{intl.formatMessage(m.accepted)}
-							</Typography>
-
-							<Typography sx={{ textAlign: 'center' }}>
-								{intl.formatMessage(
-									member.role.roleId === COORDINATOR_ROLE_ID
-										? m.coordinator
-										: m.participant,
-								)}
-							</Typography>
-
-							{member.joinedAt !== undefined ? (
-								<Typography sx={{ textAlign: 'center' }}>
-									{intl.formatMessage(m.addedOn, {
-										value: (
-											<time key={member.deviceId} dateTime={member.joinedAt}>
-												{intl.formatDate(member.joinedAt, {
-													year: 'numeric',
-													month: 'long',
-													day: '2-digit',
-												})}
-											</time>
-										),
-									})}
-								</Typography>
-							) : null}
+							{bodySecondary}
 						</Stack>
+					</Container>
+				</Stack>
 
-						<Stack direction="column" sx={{ gap: 4, justifyContent: 'center' }}>
-							<ButtonLink
-								to="/app/projects/$projectId/team/invite/devices"
-								params={{ projectId }}
-								replace
-								fullWidth
-								sx={{ alignSelf: 'center' }}
-								variant="outlined"
-							>
-								{intl.formatMessage(m.addAnotherDevice)}
-							</ButtonLink>
-
-							<ButtonLink
-								to="/app/projects/$projectId/team"
-								params={{ projectId }}
-								replace
-								fullWidth
-								startIcon={<Icon name="material-symbols-cancel" />}
-								sx={{ alignSelf: 'center' }}
-								variant="contained"
-							>
-								{intl.formatMessage(m.close)}
-							</ButtonLink>
-						</Stack>
-					</Stack>
-				</Container>
+				{footer}
 			</Stack>
 		</Stack>
 	)
 }
 
 const m = defineMessages<{
-	readonly navTitle: NoMessageValues
 	readonly participant: NoMessageValues
 	readonly coordinator: NoMessageValues
 	readonly sendInvite: NoMessageValues
 	readonly deviceBeingInvited: {
+		readonly b: MessageTag
 		readonly br: MessageTag
-		readonly name: MessageValue
 		readonly role: MessageValue
 	}
 	readonly waiting: NoMessageValues
-	readonly inviteAccepted: NoMessageValues
 	readonly timeSinceSent: { readonly time: MessageValue }
 	readonly cancelInvite: NoMessageValues
 	readonly accepted: NoMessageValues
 	readonly addedOn: { readonly value: MessageValue }
 	readonly addAnotherDevice: NoMessageValues
 	readonly close: NoMessageValues
-	readonly invitationDeclinedTitle: NoMessageValues
-	readonly invitationDeclinedDescription: NoMessageValues
+	readonly inviteReviewNavTitle: NoMessageValues
+	readonly invitePendingNavTitle: NoMessageValues
+	readonly inviteDeclinedNavTitle: NoMessageValues
+	readonly inviteDeclinedHeading: {
+		readonly br: MessageTag
+		readonly name: MessageValue
+	}
+	readonly inviteDeclinedDescription: NoMessageValues
+	readonly inviteAcceptedNavTitle: NoMessageValues
+	readonly inviteAcceptedHeading: {
+		readonly br: MessageTag
+		readonly name: MessageValue
+	}
 }>({
-	navTitle: {
-		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.navTitle',
-		defaultMessage: 'Review Invitation',
-		description: 'Title of the review invite page.',
-	},
 	participant: {
 		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.participant',
 		defaultMessage: 'Participant',
@@ -702,8 +789,7 @@ const m = defineMessages<{
 	},
 	deviceBeingInvited: {
 		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.deviceBeingInvited',
-		defaultMessage:
-			'{name}<br></br><br></br> is being invited as <br></br><br></br>{role}',
+		defaultMessage: 'Inviting as <br></br><br></br><b>{role}</b>',
 		description:
 			'Text displaying the device and its role that it is being invited as.',
 	},
@@ -711,11 +797,6 @@ const m = defineMessages<{
 		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.waiting',
 		defaultMessage: 'Waiting for Device to Accept Invite',
 		description: 'Text displayed while waiting for invite response.',
-	},
-	inviteAccepted: {
-		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteAccepted',
-		defaultMessage: 'Invite Accepted',
-		description: 'Text displayed when invite is accepted.',
 	},
 	timeSinceSent: {
 		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.timeSinceSent',
@@ -747,15 +828,40 @@ const m = defineMessages<{
 		defaultMessage: 'Close',
 		description: 'Text for button to leave invite flow.',
 	},
-	invitationDeclinedTitle: {
-		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedTitle',
-		defaultMessage: 'Invitation Declined',
-		description: 'Title of page when invite is declined.',
+	inviteReviewNavTitle: {
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteReviewNavTitle',
+		defaultMessage: 'Review Invite',
+		description: 'Navigation title text when reviewing invite before sending.',
 	},
-	invitationDeclinedDescription: {
-		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitationDeclinedDescription',
+	invitePendingNavTitle: {
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.invitePendingNavTitle',
+		defaultMessage: 'Waiting for Device',
+		description: 'Navigation title text when invite is sent and pending.',
+	},
+	inviteDeclinedNavTitle: {
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteDeclinedNavTitle',
+		defaultMessage: 'Invite Declined',
+		description: 'Navigation title text when invite is declined.',
+	},
+	inviteDeclinedHeading: {
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteDeclinedHeading',
+		defaultMessage: '{name} <br></br>Declined Invite',
+		description: 'Heading text when invite is declined.',
+	},
+	inviteDeclinedDescription: {
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteDeclinedDescription',
 		defaultMessage:
 			'This device has declined your invitation. They have not joined the project.',
 		description: 'Description of a declined invite.',
+	},
+	inviteAcceptedNavTitle: {
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteAcceptedNavTitle',
+		defaultMessage: 'Invite Accepted',
+		description: 'Navigation title text when invite is accepted.',
+	},
+	inviteAcceptedHeading: {
+		id: '$1.routes.app.projects.$projectId.team.invite.devices.$deviceId.send.inviteAcceptedHeading',
+		defaultMessage: '{name} <br></br>Joined Project',
+		description: 'Heading text when invite is accepted.',
 	},
 })
