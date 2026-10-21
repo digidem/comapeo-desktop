@@ -384,6 +384,16 @@
 		</symbol>
 		<symbol
 			fill="currentColor"
+			viewBox="0 0 24 24"
+			id="material-symbols-file-upload"
+		>
+			<path fill="none" d="M0 0h24v24H0z"></path>
+			<path
+				d="M18 15v3H6v-3H4v3c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-3zM7 9l1.41 1.41L11 7.83V16h2V7.83l2.59 2.58L17 9l-5-5z"
+			></path>
+		</symbol>
+		<symbol
+			fill="currentColor"
 			viewBox="0 -960 960 960"
 			id="material-symbols-folder-open"
 		>
@@ -446,6 +456,15 @@
 			<path
 				d="M536.5-503.5Q560-527 560-560t-23.5-56.5T480-640t-56.5 23.5T400-560t23.5 56.5T480-480t56.5-23.5M480-80Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880t223.5 89T800-552q0 100-79.5 217.5T480-80"
 			></path>
+		</symbol>
+		<symbol
+			fill="currentColor"
+			viewBox="0 0 24 24"
+			id="material-symbols-priority-high"
+		>
+			<path fill="none" d="M0 0h24v24H0z"></path>
+			<circle cx="12" cy="19" r="2"></circle>
+			<path d="M10 3h4v12h-4z"></path>
 		</symbol>
 		<symbol
 			fill="currentColor"
@@ -601,6 +620,25 @@
 				></path>
 				<path
 					d="M26 26c0 3.725.54 7.809 2 10 1.861 2.793 5.018 4 8 4 3.096 0 6.137-1.207 8-4 1.46-2.191 2-6.275 2-10 0-2.793-1-12-10-12s-10 7.344-10 12z"
+				></path>
+			</g>
+		</symbol>
+		<symbol id="openmoji-check-mark" viewBox="0 0 72 72">
+			<g id="color">
+				<path
+					fill="#b1cc33"
+					d="m61.5 23.3-8.013-8.013-25.71 25.71-9.26-9.26-8.013 8.013 17.42 17.44z"
+				></path>
+			</g>
+			<g id="line">
+				<path
+					fill="none"
+					stroke="#000"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-miterlimit="10"
+					stroke-width="2"
+					d="m10.5 39.76 17.42 17.44 33.58-33.89-8.013-8.013-25.71 25.71-9.26-9.26z"
 				></path>
 			</g>
 		</symbol>

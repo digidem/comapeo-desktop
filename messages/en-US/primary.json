@@ -1129,7 +1129,7 @@
   },
   "$1.routes.app.settings.background-map.acceptedFileTypes": {
     "description": "Text describing what kind of files are usable for background maps.",
-    "message": "Accepted file types are: <mono>.smp</mono>"
+    "message": "Accepted file type: <mono>.smp</mono>"
   },
   "$1.routes.app.settings.background-map.addedOn": {
     "description": "Text describing what kind of files are usable for background maps.",
@@ -1145,7 +1145,11 @@
   },
   "$1.routes.app.settings.background-map.customMapInfoError": {
     "description": "Text displayed when info about a custom map cannot be retrieved.",
-    "message": "Could not get custom map information from file. Please remove it or choose a different file."
+    "message": "Information from file not available.<br></br>Please remove it or choose another file."
+  },
+  "$1.routes.app.settings.background-map.customMapInfoErrorTitle": {
+    "description": "Title text displayed when info about a custom map cannot be retrieved.",
+    "message": "Map File Error"
   },
   "$1.routes.app.settings.background-map.description": {
     "description": "Description of how custom background maps work.",
@@ -1170,6 +1174,10 @@
   "$1.routes.app.settings.background-map.sizeInMegabytes": {
     "description": "Text describing what kind of files are usable for background maps.",
     "message": "{value} MB"
+  },
+  "$1.routes.app.settings.background-map.uploadCustomMapTitle": {
+    "description": "Title text displayed when no custom background map is being used.",
+    "message": "Upload a Custom Background Map"
   },
   "$1.routes.app.settings.index.aboutComapeoSectionTitle": {
     "description": "Text for data and privacy section title.",

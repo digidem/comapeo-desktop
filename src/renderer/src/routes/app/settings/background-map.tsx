@@ -10,6 +10,8 @@ import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import Container from '@mui/material/Container'
 import IconButton from '@mui/material/IconButton'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
@@ -22,11 +24,21 @@ import {
 } from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 
-import { BLACK_03, BLUE_05 } from '../../../../../shared/colors.ts'
+import {
+	BLACK_03,
+	BLUE_05,
+	ORANGE_00,
+	WHITE_00,
+} from '../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../components/error-dialog.tsx'
 import { Icon } from '../../../components/icon.tsx'
-import { Mono } from '../../../components/intl-rich-text.tsx'
+import { Break, Mono } from '../../../components/intl-rich-text.tsx'
+import {
+	PanelBody,
+	PanelHeader,
+	PanelLayout,
+} from '../../../components/panel-layout.tsx'
 import { useIconSizeBasedOnTypography } from '../../../hooks/icon.ts'
 import { bytesToMegabytes } from '../../../lib/bytes-to-megabytes.ts'
 
@@ -236,64 +248,100 @@ function NoCustomMap({
 }) {
 	const intl = useIntl()
 
+	const heroIconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 4,
+	})
+
+	const isMapNotFound = getErrorCode(error) === 'MAP_NOT_FOUND'
+
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-				<Container
-					maxWidth="sm"
-					sx={{
-						display: 'flex',
-						flexDirection: 'column',
-						flex: 1,
-						padding: 6,
-					}}
-				>
-					<Stack
-						direction="column"
-						sx={{ gap: 6, paddingBlock: 6, paddingInline: 4 }}
-					>
-						{getErrorCode(error) === 'MAP_NOT_FOUND' ? (
+			{isMapNotFound ? (
+				<PanelLayout>
+					<PanelHeader
+						icon={
+							<Icon
+								htmlColor={ORANGE_00}
+								name="material-layers-outlined"
+								size={heroIconSize}
+							/>
+						}
+						title={intl.formatMessage(m.uploadCustomMapTitle)}
+						description={intl.formatMessage(m.description)}
+					/>
+
+					<PanelBody>
+						<Stack component={List}>
+							<ListItem sx={{ gap: 2 }}>
+								<Icon name="openmoji-check-mark" />
+
+								<Typography component="span">
+									{intl.formatMessage(m.acceptedFileTypes, { mono: Mono })}
+								</Typography>
+							</ListItem>
+						</Stack>
+					</PanelBody>
+				</PanelLayout>
+			) : (
+				<PanelLayout>
+					<PanelHeader
+						icon={
 							<Box
 								sx={{
 									background: BLACK_03,
-									border: `1px solid ${BLUE_05}`,
-									borderRadius: 2,
+									borderRadius: '50%',
+									display: 'grid',
 									padding: 4,
+									placeItems: 'center',
+									position: 'relative',
 								}}
 							>
-								<Typography>{intl.formatMessage(m.description)}</Typography>
+								<Icon name="material-layers-outlined" size={heroIconSize} />
 
-								<br />
-
-								<Typography>
-									{intl.formatMessage(m.acceptedFileTypes, { mono: Mono })}
-								</Typography>
-							</Box>
-						) : (
-							<>
-								<Typography sx={{ textAlign: 'center' }}>
-									{intl.formatMessage(m.customMapInfoError)}
-								</Typography>
-
-								<Button
-									color="error"
-									fullWidth
-									loading={removeIsPending}
-									loadingPosition="start"
-									onClick={() => {
-										onRemoveMap()
+								<Box
+									sx={{
+										background: (theme) => theme.palette.error.main,
+										borderRadius: '50%',
+										bottom: (theme) => theme.spacing(-3),
+										boxShadow: (theme) => theme.shadows[4],
+										display: 'grid',
+										padding: 2,
+										placeItems: 'center',
+										position: 'absolute',
+										right: (theme) => theme.spacing(-3),
 									}}
-									startIcon={<Icon name="material-symbols-delete" />}
-									sx={{ alignSelf: 'center' }}
-									variant="outlined"
 								>
-									{intl.formatMessage(m.removeMap)}
-								</Button>
-							</>
-						)}
-					</Stack>
-				</Container>
-			</Stack>
+									<Icon
+										name="material-symbols-priority-high"
+										htmlColor={WHITE_00}
+										size={`calc(${heroIconSize} / 3)`}
+									/>
+								</Box>
+							</Box>
+						}
+						title={intl.formatMessage(m.customMapInfoErrorTitle)}
+						description={intl.formatMessage(m.customMapInfoError, {
+							br: Break,
+						})}
+					/>
+
+					<PanelBody>
+						<Button
+							color="error"
+							loading={removeIsPending}
+							loadingPosition="start"
+							onClick={() => {
+								onRemoveMap()
+							}}
+							startIcon={<Icon name="material-symbols-delete" />}
+							variant="text"
+						>
+							{intl.formatMessage(m.removeMap)}
+						</Button>
+					</PanelBody>
+				</PanelLayout>
+			)}
 
 			<Stack
 				direction="column"
@@ -309,7 +357,7 @@ function NoCustomMap({
 					loading={chooseIsPending}
 					loadingPosition="start"
 					role={undefined}
-					startIcon={<Icon name="material-file-download" />}
+					startIcon={<Icon name="material-symbols-file-upload" />}
 					tabIndex={-1}
 					variant="outlined"
 				>
@@ -509,13 +557,15 @@ function HiddenSelectFileInput({ onClick }: { onClick: (file: File) => void }) {
 const m = defineMessages<{
 	readonly goBackAccessibleLabel: NoMessageValues
 	readonly navTitle: NoMessageValues
+	readonly uploadCustomMapTitle: NoMessageValues
 	readonly description: NoMessageValues
 	readonly chooseFile: NoMessageValues
 	readonly acceptedFileTypes: { readonly mono: MessageTag }
 	readonly sizeInMegabytes: { readonly value: MessageValue }
 	readonly addedOn: { readonly value: MessageValue }
 	readonly removeMap: NoMessageValues
-	readonly customMapInfoError: NoMessageValues
+	readonly customMapInfoErrorTitle: NoMessageValues
+	readonly customMapInfoError: { readonly br: MessageTag }
 	readonly mapUpdateSuccessTitle: NoMessageValues
 	readonly mapUpdateSuccessDescription: NoMessageValues
 	readonly close: NoMessageValues
@@ -530,6 +580,12 @@ const m = defineMessages<{
 		defaultMessage: 'Background Map',
 		description: 'Title of the background map settings page.',
 	},
+	uploadCustomMapTitle: {
+		id: '$1.routes.app.settings.background-map.uploadCustomMapTitle',
+		defaultMessage: 'Upload a Custom Background Map',
+		description:
+			'Title text displayed when no custom background map is being used.',
+	},
 	description: {
 		id: '$1.routes.app.settings.background-map.description',
 		defaultMessage:
@@ -543,7 +599,7 @@ const m = defineMessages<{
 	},
 	acceptedFileTypes: {
 		id: '$1.routes.app.settings.background-map.acceptedFileTypes',
-		defaultMessage: 'Accepted file types are: <mono>.smp</mono>',
+		defaultMessage: 'Accepted file type: <mono>.smp</mono>',
 		description:
 			'Text describing what kind of files are usable for background maps.',
 	},
@@ -564,10 +620,16 @@ const m = defineMessages<{
 		defaultMessage: 'Remove Map',
 		description: 'Text for button to remove map',
 	},
+	customMapInfoErrorTitle: {
+		id: '$1.routes.app.settings.background-map.customMapInfoErrorTitle',
+		defaultMessage: 'Map File Error',
+		description:
+			'Title text displayed when info about a custom map cannot be retrieved.',
+	},
 	customMapInfoError: {
 		id: '$1.routes.app.settings.background-map.customMapInfoError',
 		defaultMessage:
-			'Could not get custom map information from file. Please remove it or choose a different file.',
+			'Information from file not available.<br></br>Please remove it or choose another file.',
 		description:
 			'Text displayed when info about a custom map cannot be retrieved.',
 	},
