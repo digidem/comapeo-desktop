@@ -239,29 +239,17 @@ function RouteComponent() {
 						// NOTE: We do not want to show the exchange button if we are the only member that the project has ever had (e.g. we freshly created a project).
 						// Once some other device has joined the project, then we should always show the button, regardless of who's active or not.
 						selfIsOnlyProjectMemberEver ? null : (
-							<Box
+							<Stack
+								direction="row"
 								sx={{
-									alignItems: 'center',
-									display: 'flex',
-									flexDirection: 'row',
+									borderTop: `1px solid ${BLUE_05}`,
 									justifyContent: 'center',
 									padding: 6,
 								}}
 							>
 								<Button
 									fullWidth
-									variant={
-										syncState?.data.isSyncEnabled ? 'outlined' : 'contained'
-									}
-									startIcon={
-										<Icon
-											name={
-												syncState?.data.isSyncEnabled
-													? 'material-square-filled'
-													: 'material-bolt-sharp'
-											}
-										/>
-									}
+
 									onClick={() => {
 										if (
 											stopSync.status === 'pending' ||
@@ -284,12 +272,24 @@ function RouteComponent() {
 											})
 										}
 									}}
+									variant={
+										syncState?.data.isSyncEnabled ? 'outlined' : 'contained'
+									}
+									startIcon={
+										<Icon
+											name={
+												syncState?.data.isSyncEnabled
+													? 'material-square-filled'
+													: 'material-bolt-sharp'
+											}
+										/>
+									}
 								>
 									{intl.formatMessage(
 										syncState?.data.isSyncEnabled ? m.stop : m.start,
 									)}
 								</Button>
-							</Box>
+							</Stack>
 						)
 					}
 				</Stack>
