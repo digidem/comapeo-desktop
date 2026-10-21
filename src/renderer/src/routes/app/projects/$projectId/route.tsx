@@ -52,9 +52,9 @@ import { DecentDialog } from '../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../components/icon.tsx'
 import {
-	ButtonBaseLink,
 	ButtonLink,
 	IconButtonLink,
+	ListItemButtonLink,
 	type IconButtonLinkProps,
 } from '../../../../components/link.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../hooks/icon.ts'
@@ -550,50 +550,60 @@ function ProjectSwitcherButton({
 						const interactedClass = `&:hover, &.${menuItemClasses.focusVisible}, &.${menuItemClasses.selected}:hover, &.${menuItemClasses.selected}.${menuItemClasses.focusVisible}`
 
 						return (
-							<MenuItem
-								key={p.projectId}
-								component={ButtonBaseLink}
-								disableRipple
-								to="/app/projects/$projectId"
-								params={{ projectId: p.projectId }}
-								selected={isCurrentProject}
-								sx={{
-									background: displayedProjectColor,
-									borderRadius: 2,
-									gap: 2,
-									justifyContent: 'space-between',
-									outline: `2px solid ${BLACK_03}`,
-									outlineOffset: -1,
-									padding: 4,
-									[selectedClass]: {
-										background: displayedProjectColor,
-										outlineColor: BLUE_03,
-									},
-									[interactedClass]: {
-										background: displayedProjectColor,
-										outlineColor: (theme) =>
-											theme.darken(isCurrentProject ? BLUE_03 : BLACK_03, 0.1),
-										outlineWidth: 3,
-									},
-								}}
-							>
-								<Typography
+							<ListItem key={p.projectId}>
+								<MenuItem
+									component={ListItemButtonLink}
+									to="/app/projects/$projectId"
+									params={{ projectId: p.projectId }}
+									aria-label={intl.formatMessage(
+										m.projectSwitcherCardLinkAccessibleLabel,
+										{ name: displayedName },
+									)}
+									selected={isCurrentProject}
 									sx={{
-										flex: 1,
-										fontWeight: (theme) => theme.typography.fontWeightMedium,
-										maxWidth: '25ch',
-										overflow: 'hidden',
-										textOverflow: 'ellipsis',
-										whiteSpace: 'nowrap',
+										background: displayedProjectColor,
+										borderRadius: 2,
+										gap: 2,
+										justifyContent: 'space-between',
+										outline: `2px solid ${BLACK_03}`,
+										outlineOffset: -1,
+										padding: 4,
+										[selectedClass]: {
+											background: displayedProjectColor,
+											outlineColor: BLUE_03,
+										},
+										[interactedClass]: {
+											background: displayedProjectColor,
+											outlineColor: (theme) =>
+												theme.darken(
+													isCurrentProject ? BLUE_03 : BLACK_03,
+													0.1,
+												),
+											outlineWidth: 3,
+										},
 									}}
 								>
-									{displayedName}
-								</Typography>
+									<Typography
+										sx={{
+											flex: 1,
+											fontWeight: (theme) => theme.typography.fontWeightMedium,
+											maxWidth: '25ch',
+											overflow: 'hidden',
+											textOverflow: 'ellipsis',
+											whiteSpace: 'nowrap',
+										}}
+									>
+										{displayedName}
+									</Typography>
 
-								{isCurrentProject ? (
-									<Icon name="material-check-circle-rounded" color="primary" />
-								) : null}
-							</MenuItem>
+									{isCurrentProject ? (
+										<Icon
+											name="material-check-circle-rounded"
+											color="primary"
+										/>
+									) : null}
+								</MenuItem>
+							</ListItem>
 						)
 					})}
 				</Stack>
@@ -601,8 +611,8 @@ function ProjectSwitcherButton({
 				<Box sx={{ padding: 4 }}>
 					<ButtonLink
 						component={MenuItem}
+						nativeButton={false}
 						to="/app"
-						fullWidth
 						startIcon={<Icon name="material-symbols-view-agenda" />}
 						sx={{ ':hover, :focus-within': { background: 'initial' } }}
 						variant="outlined"
@@ -1155,7 +1165,7 @@ const m = defineMessages<{
 		description: 'Accessible label for project-specific navigation bar.',
 	},
 	projectInfoTabAccessibleLabel: {
-		id: 'routes.app.projects.$projectId.route.listTabLabel',
+		id: 'routes.app.projects.$projectId.route.projectInfoTabAccessibleLabel',
 		defaultMessage: 'Project info for {name}',
 		description: 'Accessible label for project info tab button in navigation.',
 	},

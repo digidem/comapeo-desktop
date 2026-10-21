@@ -223,7 +223,7 @@
     "description": "Text shown when project does not use a categories set in project info dialog.",
     "message": "CoMapeo Categories"
   },
-  "routes.app.projects.$projectId.route.listTabLabel": {
+  "routes.app.projects.$projectId.route.projectInfoTabAccessibleLabel": {
     "description": "Accessible label for project info tab button in navigation.",
     "message": "Project info for {name}"
   },
