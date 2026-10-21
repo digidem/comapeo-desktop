@@ -1,12 +1,8 @@
-import type { ReactNode } from 'react'
 import {
 	useManyDocs,
 	useManyMembers,
 	useOwnRoleInProject,
 } from '@comapeo/core-react'
-import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { endOfToday } from 'date-fns'
@@ -15,6 +11,11 @@ import { defineMessages, useIntl } from 'react-intl'
 import { ORANGE_00 } from '../../../../../../../shared/colors.ts'
 import { Icon } from '../../../../../components/icon.tsx'
 import { ButtonLink } from '../../../../../components/link.tsx'
+import {
+	PanelBody,
+	PanelHeader,
+	PanelLayout,
+} from '../../../../../components/panel-layout.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
 import {
 	COMAPEO_CORE_REACT_ROOT_QUERY_KEY,
@@ -132,17 +133,22 @@ function RouteComponent() {
 
 	if (selfIsAtLeastCoordinator && activeMembers.length < 2 && !hasDataToShow) {
 		return (
-			<IntroPanel
-				title={intl.formatMessage(m.inviteCollaboratorsPanelTitle)}
-				description={intl.formatMessage(m.inviteCollaboratorsPanelDescription)}
-				icon={
-					<Icon
-						name="material-person-add"
-						size={introPanelIconSize}
-						htmlColor={ORANGE_00}
-					/>
-				}
-				link={
+			<PanelLayout>
+				<PanelHeader
+					icon={
+						<Icon
+							htmlColor={ORANGE_00}
+							name="material-person-add"
+							size={introPanelIconSize}
+						/>
+					}
+					title={intl.formatMessage(m.inviteCollaboratorsPanelTitle)}
+					description={intl.formatMessage(
+						m.inviteCollaboratorsPanelDescription,
+					)}
+				/>
+
+				<PanelBody>
 					<ButtonLink
 						to="/app/projects/$projectId/team/invite"
 						params={{ projectId }}
@@ -150,92 +156,40 @@ function RouteComponent() {
 					>
 						{intl.formatMessage(m.inviteCollaboratorsPanelInviteLink)}
 					</ButtonLink>
-				}
-			/>
+				</PanelBody>
+			</PanelLayout>
 		)
 	}
 
 	if (!hasDataToShow) {
 		return (
-			<IntroPanel
-				title={intl.formatMessage(m.openExchangePanelTitle)}
-				description={intl.formatMessage(m.openExchangePanelDescription)}
-				icon={
-					<Icon
-						name="material-offline-bolt-outlined"
-						size={introPanelIconSize}
-						htmlColor={ORANGE_00}
-					/>
-				}
-				link={
+			<PanelLayout>
+				<PanelHeader
+					icon={
+						<Icon
+							htmlColor={ORANGE_00}
+							name="material-offline-bolt-outlined"
+							size={introPanelIconSize}
+						/>
+					}
+					title={intl.formatMessage(m.openExchangePanelTitle)}
+					description={intl.formatMessage(m.openExchangePanelDescription)}
+				/>
+
+				<PanelBody>
 					<ButtonLink
-						to="/app/projects/$projectId/exchange"
+						to="/app/projects/$projectId/team/invite"
 						params={{ projectId }}
 						variant="text"
 					>
-						{intl.formatMessage(m.openExchangePanelLink)}
+						{intl.formatMessage(m.inviteCollaboratorsPanelInviteLink)}
 					</ButtonLink>
-				}
-			/>
+				</PanelBody>
+			</PanelLayout>
 		)
 	}
 
 	return <RouteAwareDataList projectId={projectId} />
-}
-
-function IntroPanel({
-	icon,
-	title,
-	description,
-	link,
-}: {
-	icon: ReactNode
-	title: string
-	description: string
-	link: ReactNode
-}) {
-	return (
-		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-			<Stack
-				direction="column"
-				sx={{ flex: 1, padding: 6, gap: 20, justifyContent: 'center' }}
-			>
-				<Stack
-					direction="column"
-					sx={{
-						alignItems: 'center',
-						gap: 4,
-						justifyContent: 'center',
-						padding: 4,
-					}}
-				>
-					<Box>{icon}</Box>
-
-					<Typography
-						component="h1"
-						variant="heroHeader"
-						sx={{ textAlign: 'center' }}
-					>
-						{title}
-					</Typography>
-
-					<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
-						{description}
-					</Typography>
-				</Stack>
-
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'row',
-						justifyContent: 'center',
-					}}
-				>
-					{link}
-				</Box>
-			</Stack>
-		</Stack>
-	)
 }
 
 function RouteAwareDataList({ projectId }: { projectId: string }) {
