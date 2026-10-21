@@ -6,14 +6,12 @@ import { useRouter, type NotFoundRouteProps } from '@tanstack/react-router'
 import { defineMessages, useIntl } from 'react-intl'
 import * as v from 'valibot'
 
+import { BLUE_05 } from '../../../shared/colors.ts'
 import {
 	CustomNotFoundDataSchema,
 	buildDocumentReloadURL,
 } from '../lib/navigation.ts'
-
-const CustomNotFoundDataPropSchema = v.looseObject({
-	data: CustomNotFoundDataSchema,
-})
+import { PanelBody, PanelHeader, PanelLayout } from './panel-layout.tsx'
 
 export function GenericRouteNotFoundComponent({
 	backgroundColor,
@@ -36,36 +34,29 @@ export function GenericRouteNotFoundComponent({
 				overflow: 'auto',
 			}}
 		>
-			<Stack direction="column" sx={{ flex: 1, gap: 6, padding: 6 }}>
-				<Typography
-					component="h1"
-					variant="heroHeader"
-					sx={{
-						overflowWrap: 'break-word',
-						textAlign: 'center',
-						whiteSpace: 'pre-wrap',
-					}}
-				>
-					{intl.formatMessage(m.title)}
-				</Typography>
+			<PanelLayout>
+				<PanelHeader title={intl.formatMessage(m.title)} />
 
-				{v.is(CustomNotFoundDataPropSchema, data) ? (
-					<Typography
-						sx={{
-							overflowWrap: 'break-word',
-							textAlign: 'center',
-							whiteSpace: 'pre-wrap',
-						}}
-					>
-						{data.data.message}
-					</Typography>
-				) : null}
-			</Stack>
+				<PanelBody>
+					{v.is(CustomNotFoundDataSchema, data) ? (
+						<Typography
+							sx={{
+								overflowWrap: 'break-word',
+								textAlign: 'center',
+								whiteSpace: 'pre-wrap',
+							}}
+						>
+							{data.message}
+						</Typography>
+					) : null}
+				</PanelBody>
+			</PanelLayout>
 
 			<Stack
 				direction="row"
 				sx={{
 					alignItems: 'center',
+					borderTop: `1px solid ${BLUE_05}`,
 					flexWrap: 'wrap',
 					gap: 4,
 					justifyContent: 'center',

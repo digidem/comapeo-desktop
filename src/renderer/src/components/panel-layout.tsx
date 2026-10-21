@@ -8,7 +8,7 @@ export function PanelHeader({
 	title,
 	description,
 }: {
-	icon: ReactNode
+	icon?: ReactNode
 	title: ReactNode
 	description?: ReactNode
 }) {
