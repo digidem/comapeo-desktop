@@ -1,5 +1,3 @@
-import Box from '@mui/material/Box'
-import Container from '@mui/material/Container'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -12,6 +10,11 @@ import { BLUE_05, ORANGE_00 } from '../../../../../../../../shared/colors.ts'
 import { GenericRoutePendingComponent } from '../../../../../../components/generic-route-pending-component.tsx'
 import { Icon } from '../../../../../../components/icon.tsx'
 import { ButtonLink } from '../../../../../../components/link.tsx'
+import {
+	PanelBody,
+	PanelHeader,
+	PanelLayout,
+} from '../../../../../../components/panel-layout.tsx'
 import { useIconSizeBasedOnTypography } from '../../../../../../hooks/icon.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../../../../../lib/comapeo.ts'
 
@@ -99,101 +102,63 @@ function RouteComponent() {
 			</Stack>
 
 			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-				<Container
-					maxWidth="sm"
-					sx={{
-						display: 'flex',
-						flex: 1,
-						flexDirection: 'column',
-						paddingBlock: 6,
-						paddingInline: 4,
-					}}
-				>
-					<Stack
-						direction="column"
-						sx={{ flex: 1, gap: 10, justifyContent: 'space-between' }}
-					>
+				<PanelLayout>
+					<PanelHeader
+						icon={
+							<Icon
+								name="material-person-add"
+								htmlColor={ORANGE_00}
+								size={addIconSize}
+							/>
+						}
+
+						title={intl.formatMessage(m.inviteCollaborators)}
+						description={intl.formatMessage(m.primaryDescription)}
+					/>
+
+					<PanelBody>
 						<Stack
+							component={List}
 							direction="column"
 							sx={{
-								border: `1px solid ${BLUE_05}`,
-								borderRadius: 2,
-								flex: 1,
-								justifyContent: 'center',
-								gap: 20,
-								overflowWrap: 'break-word',
-								padding: 6,
+								color: (theme) => theme.palette.text.secondary,
+								gap: 2,
+								listStyleType: 'disc',
 							}}
 						>
-							<Stack direction="column" sx={{ gap: 6 }}>
-								<Box sx={{ alignSelf: 'center' }}>
-									<Icon
-										name="material-person-add"
-										htmlColor={ORANGE_00}
-										size={addIconSize}
-									/>
-								</Box>
+							<ListItem sx={{ display: 'list-item' }}>
+								{intl.formatMessage(m.onlyInvitedDevices)}
+							</ListItem>
 
-								<Typography
-									component="h1"
-									variant="heroHeader"
-									sx={{ textAlign: 'center' }}
-								>
-									{intl.formatMessage(m.inviteCollaborators)}
-								</Typography>
+							<ListItem sx={{ display: 'list-item' }}>
+								{intl.formatMessage(m.shareUsingExchange)}
+							</ListItem>
 
-								<Typography
-									variant="heroSubheading"
-									sx={{ textAlign: 'center' }}
-								>
-									{intl.formatMessage(m.primaryDescription)}
-								</Typography>
-							</Stack>
-
-							<Stack
-								component={List}
-								direction="column"
-								sx={{
-									alignSelf: 'center',
-									color: (theme) => theme.palette.text.secondary,
-									gap: 2,
-									listStyleType: 'disc',
-									paddingInline: 8,
-								}}
-							>
-								<ListItem sx={{ display: 'list-item' }}>
-									{intl.formatMessage(m.onlyInvitedDevices)}
-								</ListItem>
-
-								<ListItem sx={{ display: 'list-item' }}>
-									{intl.formatMessage(m.shareUsingExchange)}
-								</ListItem>
-
-								<ListItem sx={{ display: 'list-item' }}>
-									{intl.formatMessage(m.controlSharing)}
-								</ListItem>
-							</Stack>
+							<ListItem sx={{ display: 'list-item' }}>
+								{intl.formatMessage(m.controlSharing)}
+							</ListItem>
 						</Stack>
+					</PanelBody>
+				</PanelLayout>
+			</Stack>
 
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'row',
-								justifyContent: 'center',
-							}}
-						>
-							<ButtonLink
-								fullWidth
-								to="/app/projects/$projectId/team/invite/devices"
-								params={{ projectId }}
-								replace
-								type="button"
-							>
-								{intl.formatMessage(m.selectDevice)}
-							</ButtonLink>
-						</Box>
-					</Stack>
-				</Container>
+			<Stack
+				direction="row"
+				sx={{
+					borderTop: `1px solid ${BLUE_05}`,
+					justifyContent: 'center',
+					padding: 6,
+				}}
+			>
+				<ButtonLink
+					fullWidth
+					to="/app/projects/$projectId/team/invite/devices"
+					params={{ projectId }}
+					replace
+					type="button"
+				>
+					{intl.formatMessage(m.selectDevice)}
+				</ButtonLink>
 			</Stack>
 		</Stack>
 	)

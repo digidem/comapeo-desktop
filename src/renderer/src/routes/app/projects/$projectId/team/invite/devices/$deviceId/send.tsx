@@ -1,10 +1,4 @@
-import {
-	Suspense,
-	useDeferredValue,
-	useEffect,
-	useState,
-	type ReactNode,
-} from 'react'
+import { Suspense, useDeferredValue, useEffect, useState } from 'react'
 import {
 	useRequestCancelInvite,
 	useSendInvite,
@@ -12,7 +6,6 @@ import {
 } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Container from '@mui/material/Container'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
@@ -27,7 +20,6 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { DeviceRow } from '../-shared/device-row.tsx'
 import { DisconnectedIndicator } from '../-shared/disconnected-indicator.tsx'
 import { DeviceIcon } from '../../../../../-shared/device-icon.tsx'
 import {
@@ -44,6 +36,11 @@ import {
 	Break,
 } from '../../../../../../../../components/intl-rich-text.tsx'
 import { ButtonLink } from '../../../../../../../../components/link.tsx'
+import {
+	PanelBody,
+	PanelHeader,
+	PanelLayout,
+} from '../../../../../../../../components/panel-layout.tsx'
 import { useLocalPeersState } from '../../../../../../../../contexts/local-peers-store-context.ts'
 import { useIconSizeBasedOnTypography } from '../../../../../../../../hooks/icon.ts'
 import {
@@ -238,74 +235,76 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 	})
 
 	return (
-		<PageLayout
-			header={
-				<Stack
-					component="header"
-					direction="row"
-					sx={{
-						alignItems: 'center',
-						borderBottom: `1px solid ${BLUE_05}`,
-						gap: 2,
-						padding: 4,
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack
+				component="header"
+				direction="row"
+				sx={{
+					alignItems: 'center',
+					borderBottom: `1px solid ${BLUE_05}`,
+					gap: 2,
+					padding: 4,
+				}}
+			>
+				<IconButton
+					onClick={() => {
+						router.navigate({
+							to: '/app/projects/$projectId/team/invite/devices/$deviceId/role',
+							params: { projectId, deviceId },
+							replace: true,
+						})
 					}}
+					sx={{ color: (theme) => theme.palette.text.secondary }}
 				>
-					<IconButton
-						onClick={() => {
-							router.navigate({
-								to: '/app/projects/$projectId/team/invite/devices/$deviceId/role',
-								params: { projectId, deviceId },
-								replace: true,
-							})
-						}}
-						sx={{ color: (theme) => theme.palette.text.secondary }}
-					>
-						<Icon name="material-arrow-back" size={backIconSize} />
-					</IconButton>
+					<Icon name="material-arrow-back" size={backIconSize} />
+				</IconButton>
 
-					<Typography variant="pageTitle">
-						{intl.formatMessage(m.inviteReviewNavTitle)}
-					</Typography>
-				</Stack>
-			}
-			bodyPrimary={
-				<Stack direction="column" sx={{ alignItems: 'center', gap: 6 }}>
-					<Stack direction="column" sx={{ gap: 2 }}>
-						<Box
-							sx={{
-								background: BLACK_03,
-								borderRadius: '50%',
-								display: 'grid',
-								padding: 6,
-								placeItems: 'center',
-							}}
-						>
-							<DeviceIcon deviceType={peer.deviceType} size={deviceIconSize} />
-						</Box>
-
-						{peer.status === 'disconnected' ? <DisconnectedIndicator /> : null}
-					</Stack>
-
-					<Typography
-						variant="heroHeader"
-						sx={{ textAlign: 'center', textWrap: 'balance' }}
-					>
-						{peer.name || peer.deviceId}
-					</Typography>
-				</Stack>
-			}
-			bodySecondary={
-				<Typography sx={{ textAlign: 'center' }}>
-					{intl.formatMessage(m.deviceBeingInvited, {
-						b: Bold,
-						br: Break,
-						role: intl.formatMessage(
-							role === 'coordinator' ? m.coordinator : m.participant,
-						),
-					})}
+				<Typography variant="pageTitle">
+					{intl.formatMessage(m.inviteReviewNavTitle)}
 				</Typography>
-			}
-			footer={
+			</Stack>
+
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+				<PanelLayout>
+					<PanelHeader
+						icon={
+							<Stack direction="column" sx={{ gap: 2 }}>
+								<Box
+									sx={{
+										background: BLACK_03,
+										borderRadius: '50%',
+										display: 'grid',
+										padding: 6,
+										placeItems: 'center',
+									}}
+								>
+									<DeviceIcon
+										deviceType={peer.deviceType}
+										size={deviceIconSize}
+									/>
+								</Box>
+
+								{peer.status === 'disconnected' ? (
+									<DisconnectedIndicator />
+								) : null}
+							</Stack>
+						}
+						title={peer.name || peer.deviceId}
+					/>
+
+					<PanelBody>
+						<Typography sx={{ textAlign: 'center' }}>
+							{intl.formatMessage(m.deviceBeingInvited, {
+								b: Bold,
+								br: Break,
+								role: intl.formatMessage(
+									role === 'coordinator' ? m.coordinator : m.participant,
+								),
+							})}
+						</Typography>
+					</PanelBody>
+				</PanelLayout>
+
 				<Stack
 					direction="row"
 					sx={{
@@ -325,8 +324,8 @@ function ReviewInvitation({ onSendInvite }: { onSendInvite: () => void }) {
 						{intl.formatMessage(m.sendInvite)}
 					</Button>
 				</Stack>
-			}
-		/>
+			</Stack>
+		</Stack>
 	)
 }
 
@@ -362,62 +361,66 @@ function InvitePending({
 	})
 
 	return (
-		<PageLayout
-			header={
-				<Stack
-					component="header"
-					direction="row"
-					sx={{
-						alignItems: 'center',
-						borderBottom: `1px solid ${BLUE_05}`,
-						gap: 2,
-						padding: 4,
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack
+				component="header"
+				direction="row"
+				sx={{
+					alignItems: 'center',
+					borderBottom: `1px solid ${BLUE_05}`,
+					gap: 2,
+					padding: 4,
+				}}
+			>
+				<IconButton
+					onClick={() => {
+						onCancelInvite()
 					}}
+					sx={{ color: (theme) => theme.palette.text.secondary }}
 				>
-					<IconButton
-						onClick={() => {
-							onCancelInvite()
-						}}
-						sx={{ color: (theme) => theme.palette.text.secondary }}
-					>
-						<Icon name="material-close" size={closeIconSize} />
-					</IconButton>
+					<Icon name="material-close" size={closeIconSize} />
+				</IconButton>
 
-					<Typography variant="pageTitle">
-						{intl.formatMessage(m.invitePendingNavTitle)}
-					</Typography>
-				</Stack>
-			}
-			bodyPrimary={
-				<Stack direction="column" sx={{ alignItems: 'center' }}>
-					<Icon name="comapeo-send" color="primary" size={sendIconSize} />
+				<Typography variant="pageTitle">
+					{intl.formatMessage(m.invitePendingNavTitle)}
+				</Typography>
+			</Stack>
 
-					<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
-						{intl.formatMessage(m.waiting)}
-					</Typography>
-				</Stack>
-			}
-			bodySecondary={
-				<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
-					<Typography sx={{ textAlign: 'center' }}>
-						{intl.formatMessage(m.timeSinceSent, {
-							time: getFormattedDuration(
-								Math.round((currentTimestamp - sentAt) / 1000),
-							),
-						})}
-					</Typography>
+			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+				<PanelLayout>
+					<PanelHeader
+						icon={
+							<Icon
+								name="comapeo-send"
+								color="primary"
+								size={sendIconSize}
+								sx={{ margin: -10 }}
+							/>
+						}
+						title={intl.formatMessage(m.waiting)}
+					/>
 
-					<Button
-						onClick={() => {
-							onCancelInvite()
-						}}
-						variant="text"
-					>
-						{intl.formatMessage(m.cancelInvite)}
-					</Button>
-				</Stack>
-			}
-		/>
+					<PanelBody>
+						<Typography sx={{ textAlign: 'center' }}>
+							{intl.formatMessage(m.timeSinceSent, {
+								time: getFormattedDuration(
+									Math.round((currentTimestamp - sentAt) / 1000),
+								),
+							})}
+						</Typography>
+
+						<Button
+							onClick={() => {
+								onCancelInvite()
+							}}
+							variant="text"
+						>
+							{intl.formatMessage(m.cancelInvite)}
+						</Button>
+					</PanelBody>
+				</PanelLayout>
+			</Stack>
+		</Stack>
 	)
 }
 
@@ -451,87 +454,69 @@ function InviteDeclined({
 	})
 
 	return (
-		<PageLayout
-			header={
-				<Stack
-					component="header"
-					direction="row"
-					sx={{
-						alignItems: 'center',
-						borderBottom: `1px solid ${BLUE_05}`,
-						gap: 2,
-						padding: 4,
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack
+				component="header"
+				direction="row"
+				sx={{
+					alignItems: 'center',
+					borderBottom: `1px solid ${BLUE_05}`,
+					gap: 2,
+					padding: 4,
+				}}
+			>
+				<IconButton
+					onClick={() => {
+						router.navigate({
+							to: '/app/projects/$projectId/team/invite',
+							params: { projectId },
+							replace: true,
+						})
 					}}
+					sx={{ color: (theme) => theme.palette.text.secondary }}
 				>
-					<IconButton
-						onClick={() => {
-							router.navigate({
-								to: '/app/projects/$projectId/team/invite',
-								params: { projectId },
-								replace: true,
-							})
-						}}
-						sx={{ color: (theme) => theme.palette.text.secondary }}
-					>
-						<Icon name="material-close" size={closeIconSize} />
-					</IconButton>
+					<Icon name="material-close" size={closeIconSize} />
+				</IconButton>
 
-					<Typography variant="pageTitle">
-						{intl.formatMessage(m.inviteDeclinedNavTitle)}
-					</Typography>
-				</Stack>
-			}
-			bodyPrimary={
-				<Stack direction="column" sx={{ alignItems: 'center', gap: 6 }}>
-					<Icon name="material-error" color="error" size={errorIconSize} />
+				<Typography variant="pageTitle">
+					{intl.formatMessage(m.inviteDeclinedNavTitle)}
+				</Typography>
+			</Stack>
 
-					<Typography variant="heroHeader" sx={{ textAlign: 'center' }}>
-						{intl.formatMessage(m.inviteDeclinedHeading, {
-							br: Break,
-							name: peer.name || '',
-						})}
-					</Typography>
+			<PanelLayout>
+				<PanelHeader
+					icon={
+						<Icon name="material-error" color="error" size={errorIconSize} />
+					}
+					title={intl.formatMessage(m.inviteDeclinedHeading, {
+						br: Break,
+						name: peer.name || '',
+					})}
+					description={intl.formatMessage(m.inviteDeclinedDescription)}
+				/>
+			</PanelLayout>
 
-					<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
-						{intl.formatMessage(m.inviteDeclinedDescription)}
-					</Typography>
-				</Stack>
-			}
-			bodySecondary={
-				<Stack
-					direction="column"
-					sx={{ alignItems: 'center', justifyContent: 'center' }}
+			<Stack
+				direction="row"
+				sx={{
+					borderTop: `1px solid ${BLUE_05}`,
+					justifyContent: 'center',
+					padding: 6,
+				}}
+			>
+				<ButtonLink
+					to="/app/projects/$projectId/team/invite"
+					params={{ projectId }}
+					replace
+					fullWidth
+					startIcon={<Icon name="material-symbols-cancel" />}
+					sx={{ alignSelf: 'center' }}
+					variant="outlined"
 				>
-					<DeviceRow
-						deviceId={peer.deviceId}
-						deviceType={peer.deviceType}
-						name={peer.name}
-					/>
-				</Stack>
-			}
-			footer={
-				<Stack
-					direction="row"
-					sx={{
-						borderTop: `1px solid ${BLUE_05}`,
-						justifyContent: 'center',
-						padding: 6,
-					}}
-				>
-					<ButtonLink
-						to="/app/projects/$projectId/team/invite"
-						params={{ projectId }}
-						replace
-						fullWidth
-						startIcon={<Icon name="material-symbols-cancel" />}
-						sx={{ alignSelf: 'center' }}
-						variant="outlined"
-					>
-						{intl.formatMessage(m.close)}
-					</ButtonLink>
-				</Stack>
-			}
-		/>
+					{intl.formatMessage(m.close)}
+				</ButtonLink>
+			</Stack>
+		</Stack>
 	)
 }
 
@@ -559,83 +544,81 @@ function InviteAccepted({
 	})
 
 	return (
-		<PageLayout
-			header={
-				<Stack
-					component="header"
-					direction="row"
-					sx={{
-						alignItems: 'center',
-						borderBottom: `1px solid ${BLUE_05}`,
-						gap: 2,
-						padding: 4,
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack
+				component="header"
+				direction="row"
+				sx={{
+					alignItems: 'center',
+					borderBottom: `1px solid ${BLUE_05}`,
+					gap: 2,
+					padding: 4,
+				}}
+			>
+				<IconButton
+					onClick={() => {
+						router.navigate({
+							to: '/app/projects/$projectId/team/invite',
+							params: { projectId },
+							replace: true,
+						})
 					}}
+					sx={{ color: (theme) => theme.palette.text.secondary }}
 				>
-					<IconButton
-						onClick={() => {
-							router.navigate({
-								to: '/app/projects/$projectId/team/invite',
-								params: { projectId },
-								replace: true,
-							})
-						}}
-						sx={{ color: (theme) => theme.palette.text.secondary }}
-					>
-						<Icon name="material-arrow-back" size={backIconSize} />
-					</IconButton>
+					<Icon name="material-arrow-back" size={backIconSize} />
+				</IconButton>
 
-					<Typography variant="pageTitle">
-						{intl.formatMessage(m.inviteAcceptedNavTitle)}
-					</Typography>
-				</Stack>
-			}
-			bodyPrimary={
-				<Stack direction="column" sx={{ alignItems: 'center', gap: 6 }}>
-					<Box
-						sx={{
-							background: BLACK_03,
-							borderRadius: '50%',
-							display: 'grid',
-							padding: 6,
-							placeItems: 'center',
-							position: 'relative',
-						}}
-					>
-						<DeviceIcon deviceType={member.deviceType} size={deviceIconSize} />
+				<Typography variant="pageTitle">
+					{intl.formatMessage(m.inviteAcceptedNavTitle)}
+				</Typography>
+			</Stack>
 
+			<PanelLayout>
+				<PanelHeader
+					icon={
 						<Box
 							sx={{
-								background: (theme) => theme.palette.success.main,
+								background: BLACK_03,
 								borderRadius: '50%',
-								bottom: 0,
 								display: 'grid',
-								padding: 1,
+								padding: 6,
 								placeItems: 'center',
-								position: 'absolute',
-								right: 0,
+								position: 'relative',
 							}}
 						>
-							<Icon
-								name="material-check"
-								htmlColor={WHITE_00}
-								size={`calc(${deviceIconSize} / 3)`}
+							<DeviceIcon
+								deviceType={member.deviceType}
+								size={deviceIconSize}
 							/>
-						</Box>
-					</Box>
 
-					<Typography
-						variant="heroHeader"
-						sx={{ textAlign: 'center', textWrap: 'balance' }}
-					>
-						{intl.formatMessage(m.inviteAcceptedHeading, {
-							br: Break,
-							name: member.name,
-						})}
-					</Typography>
-				</Stack>
-			}
-			bodySecondary={
-				<Stack direction="column" sx={{ gap: 2 }}>
+							<Box
+								sx={{
+									background: (theme) => theme.palette.success.main,
+									borderRadius: '50%',
+									bottom: (theme) => theme.spacing(-1),
+									boxShadow: (theme) => theme.shadows[4],
+									display: 'grid',
+									padding: 2,
+									placeItems: 'center',
+									position: 'absolute',
+									right: (theme) => theme.spacing(-1),
+								}}
+							>
+								<Icon
+									name="material-check"
+									htmlColor={WHITE_00}
+									size={`calc(${deviceIconSize} / 3)`}
+								/>
+							</Box>
+						</Box>
+					}
+					title={intl.formatMessage(m.inviteAcceptedHeading, {
+						br: Break,
+						name: member.name,
+					})}
+				/>
+
+				<PanelBody>
 					<Typography
 						sx={{
 							fontWeight: (theme) => theme.typography.fontWeightMedium,
@@ -665,78 +648,27 @@ function InviteAccepted({
 							})}
 						</Typography>
 					) : null}
-				</Stack>
-			}
-			footer={
-				<Stack
-					direction="row"
-					sx={{
-						borderTop: `1px solid ${BLUE_05}`,
-						justifyContent: 'center',
-						padding: 6,
-					}}
+				</PanelBody>
+			</PanelLayout>
+
+			<Stack
+				direction="row"
+				sx={{
+					borderTop: `1px solid ${BLUE_05}`,
+					justifyContent: 'center',
+					padding: 6,
+				}}
+			>
+				<ButtonLink
+					to="/app/projects/$projectId/team/invite/devices"
+					params={{ projectId }}
+					replace
+					fullWidth
+					startIcon={<Icon name="material-symbols-add-circle-outline" />}
+					variant="outlined"
 				>
-					<ButtonLink
-						to="/app/projects/$projectId/team/invite/devices"
-						params={{ projectId }}
-						replace
-						fullWidth
-						startIcon={<Icon name="material-symbols-add-circle-outline" />}
-						variant="outlined"
-					>
-						{intl.formatMessage(m.addAnotherDevice)}
-					</ButtonLink>
-				</Stack>
-			}
-		/>
-	)
-}
-
-function PageLayout({
-	header,
-	bodyPrimary,
-	bodySecondary,
-	footer,
-}: {
-	header: ReactNode
-	bodyPrimary: ReactNode
-	bodySecondary: ReactNode
-	footer?: ReactNode
-}) {
-	return (
-		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-			{header}
-
-			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-				<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-					<Container
-						maxWidth="sm"
-						sx={{
-							display: 'flex',
-							flex: 1,
-							flexDirection: 'column',
-							paddingBlock: 6,
-							paddingInline: 4,
-						}}
-					>
-						<Stack
-							direction="column"
-							sx={{
-								flex: 1,
-								gap: 12,
-								justifyContent: 'center',
-								overflow: 'auto',
-								overflowWrap: 'break-word',
-							}}
-						>
-							{bodyPrimary}
-
-							{bodySecondary}
-						</Stack>
-					</Container>
-				</Stack>
-
-				{footer}
+					{intl.formatMessage(m.addAnotherDevice)}
+				</ButtonLink>
 			</Stack>
 		</Stack>
 	)
