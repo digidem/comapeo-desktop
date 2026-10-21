@@ -51,10 +51,7 @@ test.describe('Main panel (coordinator)', () => {
 
 			//// Collaborators prompt
 			await expect(
-				main.getByRole('heading', {
-					name: 'Invite Collaborators',
-					exact: true,
-				}),
+				main.getByText('Invite Collaborators', { exact: true }),
 			).toBeVisible()
 			await expect(
 				main.getByText(

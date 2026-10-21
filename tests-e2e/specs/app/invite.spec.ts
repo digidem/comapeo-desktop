@@ -76,10 +76,7 @@ test.describe('Invite device flow', () => {
 				).toBeVisible()
 
 				await expect(
-					main.getByRole('heading', {
-						name: 'Invite Collaborators',
-						exact: true,
-					}),
+					main.getByText('Invite Collaborators', { exact: true }),
 				).toBeVisible()
 
 				await expect(
