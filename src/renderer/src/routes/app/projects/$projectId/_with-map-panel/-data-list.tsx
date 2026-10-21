@@ -16,7 +16,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
 import InputBase from '@mui/material/InputBase'
 import List from '@mui/material/List'
-import ListItemButton from '@mui/material/ListItemButton'
+import MenuItem from '@mui/material/MenuItem'
 import Radio from '@mui/material/Radio'
 import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
@@ -1181,7 +1181,6 @@ function ObservationCategoryWithAttachmentsPreview({
 	)
 }
 
-// TODO: Refactor to use Menu like project switcher
 function CategoriesFilterSelect({
 	selected,
 	options,
@@ -1246,31 +1245,42 @@ function CategoriesFilterSelect({
 				/>
 			}
 			header={
-				<Button
-					onClick={() => {
-						if (selected.length === 0) {
-							onSelectAll()
-						} else {
-							onDeselectAll()
-						}
+				<Box
+					sx={{
+						borderBottom: `1px solid ${BLUE_05}`,
+						paddingBlock: 2,
+						paddingInline: 4,
 					}}
-					size="small"
-					variant="text"
 				>
-					{intl.formatMessage(
-						selected.length === 0
-							? m.categoriesFilterSelectAll
-							: m.categoriesFilterDeselectAll,
-					)}
-				</Button>
+					<Button
+						disableTouchRipple
+						onClick={() => {
+							if (selected.length === 0) {
+								onSelectAll()
+							} else {
+								onDeselectAll()
+							}
+						}}
+						variant="text"
+					>
+						{intl.formatMessage(
+							selected.length === 0
+								? m.categoriesFilterSelectAll
+								: m.categoriesFilterDeselectAll,
+						)}
+					</Button>
+				</Box>
 			}
 			footer={
 				<Stack
 					direction="row"
 					sx={{
 						alignItems: 'center',
+						borderTop: `1px solid ${BLUE_05}`,
 						display: 'flex',
 						justifyContent: 'center',
+						paddingBlock: 2,
+						paddingInline: 4,
 					}}
 				>
 					<Button fullWidth onClick={onAdvancedClick} variant="outlined">
@@ -1283,11 +1293,10 @@ function CategoriesFilterSelect({
 				const isSelected = !!selected.find((s) => s.id === o.id)
 
 				return (
-					<ListItemButton
+					<MenuItem
 						key={o.id}
-						role="option"
+						disableTouchRipple
 						disableRipple
-						tabIndex={-1}
 						selected={isSelected}
 						aria-selected={isSelected}
 						data-option-id={`${dataOptionPrefixId}-${o.id}`}
@@ -1388,7 +1397,7 @@ function CategoriesFilterSelect({
 								</Typography>
 							</Stack>
 						</Stack>
-					</ListItemButton>
+					</MenuItem>
 				)
 			})}
 		</FilterSelect>
@@ -1418,7 +1427,6 @@ function getDateFilterOptionDisplayedValue(
 	}
 }
 
-// TODO: Refactor to use Menu like project switcher
 function DateFilterSelect({
 	todayDate,
 	onAdvancedClick,
@@ -1560,17 +1568,21 @@ function DateFilterSelect({
 				</>
 			}
 			footer={
-				<Box
+				<Stack
+					direction="row"
 					sx={{
+						alignItems: 'center',
+						borderTop: `1px solid ${BLUE_05}`,
 						display: 'flex',
-						flexDirection: 'row',
 						justifyContent: 'center',
+						paddingBlock: 2,
+						paddingInline: 4,
 					}}
 				>
 					<Button fullWidth onClick={onAdvancedClick} variant="outlined">
 						{intl.formatMessage(m.categoriesFilterAdvanced)}
 					</Button>
-				</Box>
+				</Stack>
 			}
 			onClose={() => {
 				if (value?.type !== 'range') {
@@ -1583,9 +1595,9 @@ function DateFilterSelect({
 				}
 			}}
 		>
-			<ListItemButton
-				role="option"
+			<MenuItem
 				disableRipple
+				disableTouchRipple
 				selected={selectedOption.id === 'from-start'}
 				aria-selected={value === undefined}
 				tabIndex={-1}
@@ -1620,12 +1632,12 @@ function DateFilterSelect({
 						{intl.formatMessage(m.dateFilterOptionFromStart)}
 					</Typography>
 				</Stack>
-			</ListItemButton>
+			</MenuItem>
 
 			{customRangeOption ? (
-				<ListItemButton
-					role="option"
+				<MenuItem
 					disableRipple
+					disableTouchRipple
 					tabIndex={-1}
 					selected={selectedOption.id === 'custom'}
 					aria-selected={selectedOption.id === 'custom'}
@@ -1663,12 +1675,12 @@ function DateFilterSelect({
 							})}
 						</Typography>
 					</Stack>
-				</ListItemButton>
+				</MenuItem>
 			) : null}
 
-			<ListItemButton
-				role="option"
+			<MenuItem
 				disableRipple
+				disableTouchRipple
 				tabIndex={-1}
 				selected={selectedOption.id === 'last-7-days'}
 				aria-selected={selectedOption.id === 'last-7-days'}
@@ -1707,11 +1719,11 @@ function DateFilterSelect({
 						{intl.formatMessage(m.dateFilterOptionLastNDays, { count: 7 })}
 					</Typography>
 				</Stack>
-			</ListItemButton>
+			</MenuItem>
 
-			<ListItemButton
-				role="option"
+			<MenuItem
 				disableRipple
+				disableTouchRipple
 				tabIndex={-1}
 				sx={{ padding: 4 }}
 				selected={selectedOption.id === 'last-30-days'}
@@ -1750,11 +1762,11 @@ function DateFilterSelect({
 						{intl.formatMessage(m.dateFilterOptionLastNDays, { count: 30 })}
 					</Typography>
 				</Stack>
-			</ListItemButton>
+			</MenuItem>
 
-			<ListItemButton
-				role="option"
+			<MenuItem
 				disableRipple
+				disableTouchRipple
 				selected={selectedOption.id === 'same-month'}
 				aria-selected={selectedOption.id === 'same-month'}
 				tabIndex={-1}
@@ -1792,11 +1804,11 @@ function DateFilterSelect({
 						{intl.formatMessage(m.dateFilterOptionSameMonth)}
 					</Typography>
 				</Stack>
-			</ListItemButton>
+			</MenuItem>
 
-			<ListItemButton
-				role="option"
+			<MenuItem
 				disableRipple
+				disableTouchRipple
 				tabIndex={-1}
 				sx={{ padding: 4 }}
 				selected={selectedOption.id === 'same-year'}
@@ -1834,7 +1846,7 @@ function DateFilterSelect({
 						{intl.formatMessage(m.dateFilterOptionSameYear)}
 					</Typography>
 				</Stack>
-			</ListItemButton>
+			</MenuItem>
 		</FilterSelect>
 	)
 }

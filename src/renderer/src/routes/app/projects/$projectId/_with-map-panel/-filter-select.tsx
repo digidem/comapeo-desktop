@@ -1,18 +1,20 @@
-import { useRef, useState, type PropsWithChildren, type ReactNode } from 'react'
+import {
+	useId,
+	useState,
+	type ComponentProps,
+	type PropsWithChildren,
+	type ReactNode,
+} from 'react'
 import Box from '@mui/material/Box'
 import ButtonBase from '@mui/material/ButtonBase'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
-import Fade from '@mui/material/Fade'
-import List from '@mui/material/List'
+import MenuList from '@mui/material/MenuList'
+import Paper from '@mui/material/Paper'
 import Popper from '@mui/material/Popper'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 
-import {
-	BLACK_02,
-	BLUE_05,
-	WHITE_00,
-} from '../../../../../../../shared/colors.ts'
+import { BLACK_02 } from '../../../../../../../shared/colors.ts'
 import { Icon } from '../../../../../components/icon.tsx'
 
 export function FilterSelect({
@@ -33,293 +35,224 @@ export function FilterSelect({
 	onClose?: () => void
 	onOpen?: () => void
 }>) {
-	const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null)
+	const [open, setOpen] = useState(false)
 
-	const [isFocusWithinList, setIsFocusWithinList] = useState(false)
-	const [lastFocusedItem, setLastFocusedItem] = useState<string | null>(null)
+	const [anchorElement, setAnchorElement] = useState<HTMLButtonElement | null>(
+		null,
+	)
 
-	const popperRef = useRef<HTMLDivElement | null>(null)
-	const triggerRef = useRef<HTMLButtonElement | null>(null)
-	const optionsListRef = useRef<HTMLUListElement>(null)
-
-	function focusLastFocusedItem() {
-		if (!optionsListRef.current) {
-			return
-		}
-
-		if (lastFocusedItem) {
-			const itemToFocus = optionsListRef.current.querySelector(
-				`[role="option"][data-option-id="${lastFocusedItem}"]`,
-			)
-
-			if (itemToFocus instanceof HTMLElement) {
-				itemToFocus.focus()
-			}
-		}
-	}
+	const triggerId = useId()
 
 	return (
-		<ClickAwayListener
-			mouseEvent="onPointerDown"
-			onClickAway={() => {
-				setAnchorElement(null)
-			}}
-		>
-			<Box
-				onKeyDown={(event) => {
-					if (event.key === 'Escape') {
-						setAnchorElement(null)
-						triggerRef.current?.focus()
+		<>
+			<ButtonBase
+				id={triggerId}
+				ref={(node) => {
+					setAnchorElement(node)
+				}}
+				type="button"
+				aria-expanded={open}
+				aria-haspopup="listbox"
+				disableRipple
+				disableTouchRipple
+				role="combobox"
+				onClick={() => {
+					setOpen((prevOpen) => !prevOpen)
+
+					if (open) {
+						onClose?.()
+						anchorElement?.focus()
+					} else {
+						onOpen?.()
 					}
 				}}
-				sx={{ display: 'flex', flex: 1 }}
+				sx={{
+					flex: 1,
+					borderRadius: 2,
+					justifyContent: 'flex-start',
+					outline: (theme) =>
+						open
+							? `2px solid ${theme.palette.primary.main}`
+							: `1px solid ${theme.palette.action.disabled}`,
+					'&:focus': {
+						outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+					},
+				}}
 			>
-				<ButtonBase
-					ref={triggerRef}
-					type="button"
-					aria-expanded={!!anchorElement}
-					aria-haspopup="listbox"
-					disableRipple
-					disableTouchRipple
-					role="combobox"
-					onClick={(event) => {
-						setAnchorElement((prev) => (prev ? null : event.currentTarget))
-					}}
-					onKeyDown={(event) => {
-						if (event.key === 'Enter' && !anchorElement) {
-							event.preventDefault()
-							setAnchorElement(event.currentTarget)
-							return
-						}
-					}}
+				<Stack
+					direction="row"
 					sx={{
 						flex: 1,
-						borderRadius: 2,
-						justifyContent: 'flex-start',
-						outline: (theme) =>
-							anchorElement
-								? `2px solid ${theme.palette.primary.main}`
-								: `1px solid ${theme.palette.action.disabled}`,
-						'&:focus': {
-							outline: (theme) => `2px solid ${theme.palette.primary.main}`,
-						},
+						overflow: 'hidden',
+						padding: 2,
+						position: 'relative',
 					}}
 				>
-					<Stack
-						direction="row"
+					<Typography
+						variant="button"
 						sx={{
 							flex: 1,
 							overflow: 'hidden',
-							padding: 2,
-							position: 'relative',
+							whiteSpace: 'nowrap',
+							textOverflow: 'ellipsis',
+							textAlign: 'start',
 						}}
 					>
-						<Typography
-							variant="button"
+						{displayedValue}
+					</Typography>
+
+					<Icon
+						name="material-expand-more-rounded"
+						sx={{ transform: open ? 'rotate(180deg)' : undefined }}
+						htmlColor={BLACK_02}
+					/>
+				</Stack>
+
+				{hiddenInput}
+			</ButtonBase>
+
+			<Popper
+				open={open}
+				anchorEl={anchorElement}
+				role="presentation"
+				placement="bottom-start"
+				modifiers={POPPER_MODIFIERS}
+				sx={{ zIndex: (theme) => theme.zIndex.modal - 1 }}
+			>
+				<Paper
+					elevation={4}
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						maxHeight: '50dvh',
+						overflow: 'auto',
+					}}
+				>
+					<ClickAwayListener
+						mouseEvent="onPointerDown"
+						onClickAway={(event) => {
+							if (
+								event.target instanceof HTMLElement &&
+								anchorElement?.contains(event.target)
+							) {
+								return
+							}
+
+							setOpen(false)
+							onClose?.()
+							anchorElement?.focus()
+						}}
+					>
+						<Stack
+							direction="column"
+							onKeyDown={(event) => {
+								if (event.key === 'Tab') {
+									event.preventDefault()
+									setOpen(false)
+									onClose?.()
+									anchorElement?.focus()
+								} else if (event.key === 'Escape') {
+									setOpen(false)
+									onClose?.()
+									anchorElement?.focus()
+								}
+							}}
 							sx={{
+								display: 'flex',
 								flex: 1,
-								overflow: 'hidden',
-								whiteSpace: 'nowrap',
-								textOverflow: 'ellipsis',
-								textAlign: 'start',
+								flexDirection: 'column',
+								overflow: 'auto',
 							}}
 						>
-							{displayedValue}
-						</Typography>
-
-						<Icon
-							name="material-expand-more-rounded"
-							sx={{ transform: anchorElement ? 'rotate(180deg)' : undefined }}
-							htmlColor={BLACK_02}
-						/>
-					</Stack>
-
-					{hiddenInput}
-				</ButtonBase>
-
-				<Popper
-					transition
-					ref={popperRef}
-					role="presentation"
-					placement="bottom-start"
-					sx={{ zIndex: (theme) => theme.zIndex.modal - 1 }}
-					modifiers={[
-						{ name: 'offset', options: { offset: [0, 8] } },
-						{ name: 'eventListeners', enabled: true },
-						{
-							name: 'focusOptionOnInit',
-							enabled: true,
-							phase: 'main',
-							effect: () => {
-								if (!optionsListRef.current) {
-									return
-								}
-
-								const firstSelectedOption =
-									optionsListRef.current.querySelector(
-										`[role="option"][data-option-id][aria-selected="true"]`,
-									)
-
-								if (firstSelectedOption instanceof HTMLElement) {
-									firstSelectedOption.focus()
-									return
-								}
-
-								const firstOption = optionsListRef.current?.querySelector(
-									`[role="option"][data-option-id]`,
-								)
-
-								if (firstOption instanceof HTMLElement) {
-									firstOption.focus()
-								}
-							},
-						},
-					]}
-					anchorEl={anchorElement}
-					open={!!anchorElement}
-				>
-					{({ TransitionProps }) => {
-						return (
-							<Fade
-								{...TransitionProps}
-								onEnter={() => {
-									TransitionProps?.onEnter()
-									onOpen?.()
-								}}
-								onExited={() => {
-									TransitionProps?.onExited()
-									onClose?.()
-								}}
-							>
+							{header ? (
 								<Box
-									sx={{
-										overflow: 'hidden',
-										background: WHITE_00,
-										boxShadow: (theme) => theme.shadows[5],
-										borderRadius: 2,
-										scrollbarColor: 'initial',
+									onKeyDown={(event) => {
+										// NOTE: Assumes only one focusable element
+										if (event.key === 'Tab' && !event.shiftKey) {
+											event.stopPropagation()
+										}
 									}}
 								>
-									<Stack
-										direction="column"
-										sx={{ maxHeight: '50dvh', position: 'relative' }}
-									>
-										{header ? (
-											<Box
-												onKeyDown={(event) => {
-													// TODO: Kind of hacky and assumes only one focusable element within
-													if (event.key === 'Tab' && event.shiftKey) {
-														event.preventDefault()
-														setAnchorElement(null)
-														triggerRef.current?.focus()
-													}
-												}}
-												sx={{
-													borderBottom: `1px solid ${BLUE_05}`,
-													padding: 2,
-												}}
-											>
-												{header}
-											</Box>
-										) : null}
-
-										<Stack
-											component={List}
-											direction="column"
-											role="listbox"
-											aria-multiselectable={multiSelect}
-											ref={optionsListRef}
-											sx={{ flex: 1, overflow: 'auto' }}
-											tabIndex={isFocusWithinList ? -1 : 0}
-											onKeyDown={(event) => {
-												if (!header) {
-													if (event.key === 'Tab' && event.shiftKey) {
-														event.preventDefault()
-														setAnchorElement(null)
-														triggerRef.current?.focus()
-														return
-													}
-												}
-
-												switch (event.key) {
-													case 'ArrowDown': {
-														if (
-															'nextElementSibling' in event.target &&
-															event.target.nextElementSibling instanceof
-																HTMLElement
-														) {
-															event.preventDefault()
-															event.target.nextElementSibling.focus()
-														}
-
-														return
-													}
-													case 'ArrowUp': {
-														if (
-															'previousElementSibling' in event.target &&
-															event.target.previousElementSibling instanceof
-																HTMLElement
-														) {
-															event.preventDefault()
-															event.target.previousElementSibling.focus()
-														}
-
-														return
-													}
-												}
-											}}
-											onBlur={() => {
-												setIsFocusWithinList(false)
-											}}
-											onFocus={(event) => {
-												const focusOnSelf = event.currentTarget === event.target
-
-												const enteredFromOutside =
-													!event.currentTarget.contains(event.relatedTarget)
-
-												if (focusOnSelf) {
-													if (enteredFromOutside) {
-														focusLastFocusedItem()
-													}
-												} else {
-													const isOption =
-														event.target.getAttribute('role') === 'option'
-													const itemId =
-														event.target.getAttribute('data-option-id')
-
-													if (isOption && itemId) {
-														setLastFocusedItem(itemId)
-													}
-												}
-
-												setIsFocusWithinList(true)
-											}}
-										>
-											{children}
-										</Stack>
-
-										{footer ? (
-											<Box
-												onKeyDown={(event) => {
-													// TODO: Kind of hacky and assumes only one focusable element within
-													if (event.key === 'Tab' && !event.shiftKey) {
-														event.preventDefault()
-														setAnchorElement(null)
-														triggerRef.current?.focus()
-													}
-												}}
-												sx={{ borderTop: `1px solid ${BLUE_05}`, padding: 2 }}
-											>
-												{footer}
-											</Box>
-										) : null}
-									</Stack>
+									{header}
 								</Box>
-							</Fade>
-						)
-					}}
-				</Popper>
-			</Box>
-		</ClickAwayListener>
+							) : null}
+
+							<MenuList
+								aria-multiselectable={!!multiSelect}
+								autoFocusItem={open}
+								onKeyDown={(event) => {
+									if (event.key === 'Tab') {
+										// NOTE: Assumes header has a focusable element
+										if (event.shiftKey && header) {
+											event.stopPropagation()
+											return
+										}
+
+										// NOTE: Assumes footer has a focusable element
+										if (!event.shiftKey && footer) {
+											event.stopPropagation()
+											return
+										}
+									}
+								}}
+								sx={{
+									display: 'flex',
+									flex: 1,
+									flexDirection: 'column',
+									overflow: 'auto',
+								}}
+							>
+								{children}
+							</MenuList>
+
+							{footer ? (
+								<Box
+									onKeyDown={(event) => {
+										// NOTE: Assumes only one focusable element
+										if (event.key === 'Tab' && event.shiftKey) {
+											event.stopPropagation()
+										}
+									}}
+								>
+									{footer}
+								</Box>
+							) : null}
+						</Stack>
+					</ClickAwayListener>
+				</Paper>
+			</Popper>
+		</>
 	)
 }
+
+const POPPER_MODIFIERS: ComponentProps<typeof Popper>['modifiers'] = [
+	{ name: 'offset', options: { offset: [0, 8] } },
+	// NOTE: Modifier for ensuring that the popper is at least the same width as the trigger
+	{
+		name: 'minWidth',
+		enabled: true,
+		phase: 'beforeWrite',
+		requires: ['computeStyles'],
+		fn: ({ state }) => {
+			if (!('popper' in state.styles)) {
+				console.warn('`popper` missing in state.styles')
+				return
+			}
+
+			state.styles.popper.minWidth = `${state.rects.reference.width}px`
+		},
+		effect: ({ state }) => {
+			if (!(state.elements.reference instanceof HTMLElement)) {
+				console.warn(
+					'Reference is not a HTMLElement: %o',
+					state.elements.reference,
+				)
+				return
+			}
+
+			state.elements.popper.style.minWidth = `${
+				state.elements.reference.offsetWidth
+			}px`
+		},
+	},
+]
