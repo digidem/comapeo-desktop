@@ -8,7 +8,6 @@ import {
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
-import Container from '@mui/material/Container'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -405,103 +404,67 @@ function CustomMapDetails({
 
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-				<Container
-					maxWidth="sm"
-					sx={{
-						display: 'flex',
-						flex: 1,
-						flexDirection: 'column',
-						padding: 6,
-					}}
-				>
-					<Stack
-						direction="column"
-						sx={{ flex: 1, gap: 10, justifyContent: 'space-between' }}
-					>
-						<Stack
-							direction="column"
+			<PanelLayout>
+				<PanelHeader
+					icon={
+						<Box
 							sx={{
-								border: `1px solid ${BLUE_05}`,
-								borderRadius: 2,
-								flex: 1,
-								gap: 20,
+								background: BLACK_03,
+								borderRadius: '50%',
+								display: 'flex',
 								justifyContent: 'center',
-								overflowWrap: 'break-word',
-								paddingBlock: 20,
-								paddingInline: 6,
+								padding: 4,
 							}}
 						>
-							<Stack direction="column" sx={{ alignItems: 'center', gap: 10 }}>
-								<Box
-									sx={{
-										background: BLACK_03,
-										borderRadius: '50%',
-										display: 'flex',
-										justifyContent: 'center',
-										padding: 4,
-									}}
-								>
-									<Icon
-										name="material-layers-outlined"
-										size={headingIconSize}
-									/>
-								</Box>
+							<Icon name="material-layers-outlined" size={headingIconSize} />
+						</Box>
+					}
+					title={name}
+				/>
 
-								<Typography
-									variant="heroHeader"
-									sx={{ textAlign: 'center', textWrap: 'balance' }}
-								>
-									{name}
-								</Typography>
-							</Stack>
+				<PanelBody>
+					<Stack
+						direction="row"
+						sx={{
+							color: (theme) => theme.palette.text.secondary,
+							gap: 2,
+						}}
+					>
+						<Icon name="material-layers-outlined" size={sizeIconSize} />
 
-							<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
-								<Stack
-									direction="row"
-									sx={{
-										color: (theme) => theme.palette.text.secondary,
-										gap: 2,
-									}}
-								>
-									<Icon name="material-layers-outlined" size={sizeIconSize} />
-
-									<Typography
-										color="inherit"
-										sx={{
-											fontWeight: (theme) => theme.typography.fontWeightMedium,
-										}}
-									>
-										{intl.formatMessage(m.sizeInMegabytes, {
-											value: displayedSize,
-										})}
-									</Typography>
-								</Stack>
-
-								<Typography color="textTertiary" sx={{ textAlign: 'center' }}>
-									{intl.formatMessage(m.addedOn, {
-										value: (
-											<time dateTime={new Date(created).toISOString()}>
-												{intl.formatDate(created, {
-													year: 'numeric',
-													month: 'long',
-													day: 'numeric',
-												})}
-											</time>
-										),
-									})}
-								</Typography>
-							</Stack>
-						</Stack>
+						<Typography
+							color="inherit"
+							sx={{
+								fontWeight: (theme) => theme.typography.fontWeightMedium,
+							}}
+						>
+							{intl.formatMessage(m.sizeInMegabytes, {
+								value: displayedSize,
+							})}
+						</Typography>
 					</Stack>
-				</Container>
-			</Stack>
+
+					<Typography color="textTertiary" sx={{ textAlign: 'center' }}>
+						{intl.formatMessage(m.addedOn, {
+							value: (
+								<time dateTime={new Date(created).toISOString()}>
+									{intl.formatDate(created, {
+										year: 'numeric',
+										month: 'long',
+										day: 'numeric',
+									})}
+								</time>
+							),
+						})}
+					</Typography>
+				</PanelBody>
+			</PanelLayout>
 
 			<Stack
-				direction="column"
+				direction="row"
 				sx={{
-					alignItems: 'center',
 					borderTop: `1px solid ${BLUE_05}`,
+					justifyContent: 'center',
 					padding: 6,
 				}}
 			>
