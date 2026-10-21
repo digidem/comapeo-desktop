@@ -9,7 +9,6 @@ import {
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
-import Container from '@mui/material/Container'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -36,6 +35,11 @@ import { DecentDialog } from '../../../../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../../../../components/error-dialog.tsx'
 import { Icon } from '../../../../../components/icon.tsx'
 import { Bold } from '../../../../../components/intl-rich-text.tsx'
+import {
+	PanelBody,
+	PanelHeader,
+	PanelLayout,
+} from '../../../../../components/panel-layout.tsx'
 import { useActiveProjectIdActions } from '../../../../../contexts/active-project-id-store-context.ts'
 import { useIconSizeBasedOnTypography } from '../../../../../hooks/icon.ts'
 import {
@@ -258,85 +262,53 @@ function CollaboratorInfoContent({
 
 	return (
 		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-			<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
-				<Container
-					maxWidth="sm"
-					sx={{
-						display: 'flex',
-						flex: 1,
-						flexDirection: 'column',
-						paddingBlock: 6,
-						paddingInline: 4,
-					}}
-				>
-					<Stack
-						direction="column"
-						sx={{
-							border: `1px solid ${BLUE_05}`,
-							borderRadius: 2,
-							flex: 1,
-							gap: 20,
-							justifyContent: 'center',
-							overflow: 'auto',
-							overflowWrap: 'break-word',
-							paddingBlock: 20,
-							paddingInline: 6,
-						}}
-					>
-						<Stack direction="column" sx={{ gap: 10, alignItems: 'center' }}>
-							<Box
-								sx={{
-									background: BLACK_03,
-									borderRadius: '50%',
-									display: 'grid',
-									padding: 6,
-									placeItems: 'center',
-								}}
-							>
-								<DeviceIcon
-									deviceType={member.deviceType}
-									size={deviceIconSize}
-								/>
-							</Box>
+			<PanelLayout>
+				<PanelHeader
+					icon={
+						<Box
+							sx={{
+								background: BLACK_03,
+								borderRadius: '50%',
+								display: 'grid',
+								padding: 6,
+								placeItems: 'center',
+							}}
+						>
+							<DeviceIcon
+								deviceType={member.deviceType}
+								size={deviceIconSize}
+							/>
+						</Box>
+					}
+					title={title}
+				/>
 
-							<Typography
-								variant="heroHeader"
-								sx={{ textAlign: 'center', textWrap: 'balance' }}
-							>
-								{title}
-							</Typography>
-						</Stack>
-
-						<Stack direction="column" sx={{ gap: 2, alignItems: 'center' }}>
-							<Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
-								{description}
-							</Stack>
-
-							<Typography
-								sx={{ textAlign: 'center', overflowWrap: 'anywhere' }}
-							>
-								{truncatedDeviceId}
-							</Typography>
-
-							{member.joinedAt ? (
-								<Typography sx={{ textAlign: 'center' }}>
-									{intl.formatMessage(m.addedOn, {
-										value: (
-											<time key={member.deviceId} dateTime={member.joinedAt}>
-												{intl.formatDate(member.joinedAt, {
-													year: 'numeric',
-													month: 'long',
-													day: '2-digit',
-												})}
-											</time>
-										),
-									})}
-								</Typography>
-							) : null}
-						</Stack>
+				<PanelBody>
+					<Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
+						{description}
 					</Stack>
-				</Container>
-			</Stack>
+
+					<Typography sx={{ textAlign: 'center', overflowWrap: 'anywhere' }}>
+						{truncatedDeviceId + truncatedDeviceId}
+					</Typography>
+
+					{member.joinedAt ? (
+						<Typography sx={{ textAlign: 'center' }}>
+							{intl.formatMessage(m.addedOn, {
+								value: (
+									<time key={member.deviceId} dateTime={member.joinedAt}>
+										{intl.formatDate(member.joinedAt, {
+											year: 'numeric',
+											month: 'long',
+											day: '2-digit',
+										})}
+									</time>
+								),
+							})}
+						</Typography>
+					) : null}
+				</PanelBody>
+			</PanelLayout>
 
 			{isSelf &&
 			// NOTE: Remote archives go through different flow
@@ -351,11 +323,11 @@ function CollaboratorInfoContent({
 				>
 					<Button
 						color="error"
+						fullWidth
 						onClick={() => {
 							onLeaveProject()
 						}}
 						startIcon={<Icon name="material-logout" />}
-						sx={{ flex: 1 }}
 						variant="outlined"
 					>
 						{intl.formatMessage(m.leaveProjectButton)}
