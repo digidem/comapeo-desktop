@@ -135,17 +135,13 @@
     "description": "Label for start date input in advanced filters dialog.",
     "message": "Start Date"
   },
-  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.categoryIconAlt": {
-    "description": "Alt text for icon image displayed for category (used for accessibility tools).",
+  "routes.app.projects.$projectId.observations.$observationDocId.editCategoryPanelCategoryIconAltText": {
+    "description": "Accessible text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
   },
-  "routes.app.projects.$projectId.observations.$observationDocId.-edit-category-panel.closePanelAccessibleLabel": {
-    "description": "Accessible label for button to close panel.",
+  "routes.app.projects.$projectId.observations.$observationDocId.editCategoryPanelCloseAccessibleLabel": {
+    "description": "Accessible label for button to close edit category panel.",
     "message": "Close."
-  },
-  "routes.app.projects.$projectId.observations.$observationDocId.-notes-section.accessibleNotesInputLabel": {
-    "description": "Accessible label for notes input field.",
-    "message": "Notes"
   },
   "routes.app.projects.$projectId.observations.$observationDocId.index.categoryIconAlt": {
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
@@ -219,41 +215,29 @@
     "description": "Displayed speed for observation in meters per second.",
     "message": "{value} m/s"
   },
-  "routes.app.projects.$projectId.route.appNavigationAccesibleLabel": {
-    "description": "Accessible label for app-wide navigation bar.",
-    "message": "App navigation"
+  "routes.app.projects.$projectId.observations.$observationDocId.notesSectionAccessibleNotesInputLabel": {
+    "description": "Accessible label for notes input field.",
+    "message": "Notes"
+  },
+  "routes.app.projects.$projectId.route.fallbackCategoriesSetName": {
+    "description": "Text shown when project does not use a categories set in project info dialog.",
+    "message": "CoMapeo Categories"
+  },
+  "routes.app.projects.$projectId.route.projectInfoTabAccessibleLabel": {
+    "description": "Accessible label for project info tab button in navigation.",
+    "message": "Project info for {name}"
   },
   "routes.app.projects.$projectId.route.projectNavigationAccessibleLabel": {
     "description": "Accessible label for project-specific navigation bar.",
     "message": "Project navigation"
   },
+  "routes.app.projects.$projectId.route.projectSwitcherCardLinkAccessibleLabel": {
+    "description": "Accessible label for link in project switcher that navigates to project when clicked.",
+    "message": "Go to project {name}."
+  },
   "routes.app.projects.$projectId.route.testDataTabLabel": {
     "description": "Label for project test data tab link in navigation.",
     "message": "Test Data"
-  },
-  "routes.app.projects.$projectId.settings.categories.dateAdded": {
-    "description": "Text indicating the date the categories set was added.",
-    "message": "Added {date}"
-  },
-  "routes.app.projects.$projectId.settings.categories.dateCreated": {
-    "description": "Text indicating the date the categories set was created.",
-    "message": "Created {date}"
-  },
-  "routes.app.projects.$projectId.settings.categories.goBackAccessibleLabel": {
-    "description": "Accessible label for back button.",
-    "message": "Go back."
-  },
-  "routes.app.projects.$projectId.settings.index.categoriesLinkAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to project info settings page.",
-    "message": "Go to categories settings."
-  },
-  "routes.app.projects.$projectId.settings.index.fallbackCategoriesSetName": {
-    "description": "Text shown when project does not use a categories set.",
-    "message": "CoMapeo Categories"
-  },
-  "routes.app.projects.$projectId.settings.index.projectSettingsLinkAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to project info settings page.",
-    "message": "Go to project info settings."
   },
   "routes.app.projects.$projectId.settings.info.goBackAccessibleLabel": {
     "description": "Accessible label for back button.",
@@ -293,7 +277,7 @@
   },
   "routes.app.projects.$projectId.team.invite.devices.$deviceId.send.addedOn": {
     "description": "Text showing when device was added to project.",
-    "message": "Added on {date, date, long}"
+    "message": "Added on {value}"
   },
   "routes.app.projects.$projectId.team.invite.devices.index.goBackAccessibleLabel": {
     "description": "Accessible label for back button",
@@ -307,77 +291,29 @@
     "description": "Alt text for icon image displayed for category (used for accessibility tools).",
     "message": "Icon for {name} category"
   },
-  "routes.app.route.accessibleLabelGoTo": {
-    "description": "Accessible label for button that navigates to project when clicked.",
-    "message": "Go to project {name}."
-  },
-  "routes.app.route.accessibleLabelShowProjectInfo": {
-    "description": "Accessible label for button that shows project info when clicked.",
-    "message": "Show info for project {name}."
-  },
-  "routes.app.route.fallbackCategoriesSetName": {
-    "description": "Text shown when project does not use a categories set.",
-    "message": "CoMapeo Categories"
-  },
   "routes.app.route.projectCardLinkAccessibleLabel": {
     "description": "Accessible label for link that navigates to project when clicked.",
     "message": "Go to project {name}."
   },
-  "routes.app.route.projectInfoCategoriesCreated": {
-    "description": "Text indicating creation date of categories set.",
-    "message": "Created {date}"
-  },
-  "routes.app.route.projectInfoRoleCoordinator": {
-    "description": "Indicates that user is a coordinator.",
-    "message": "Coordinator"
-  },
-  "routes.app.route.projectInfoRoleParticipant": {
-    "description": "Indicates that user is a participant.",
-    "message": "Participant"
-  },
-  "routes.app.settings.breadCrumbAccessibleLabel": {
-    "description": "Accessible label for breadcrumb navigation when viewing nested settings page.",
-    "message": "breadcrumb"
-  },
-  "routes.app.settings.coordinate-system.ddOptionLabel": {
-    "description": "Label for the decimal degrees option.",
-    "message": "DD (Decimal Degrees)"
-  },
-  "routes.app.settings.coordinate-system.dmsOptionLabel": {
-    "description": "Label for the degrees/minutes/seconds option.",
-    "message": "DMS (Decimal/Minutes/Seconds)"
-  },
-  "routes.app.settings.coordinate-system.utmOptionLabel": {
-    "description": "Label for the universal transverse mercator option.",
-    "message": "UTM (Universal Transverse Mercator)"
+  "routes.app.settings.background-map.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Go back."
   },
   "routes.app.settings.device-name.characterCount": {
     "description": "Displays number of characters in input out of the maximum allowed characters.",
     "message": "{count}/{max}"
   },
-  "routes.app.settings.goBackAccessibleLabel": {
-    "description": "Accessible label for back button",
-    "message": "Go back."
-  },
-  "routes.app.settings.index.backgroundMapSettingsAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to background map settings page.",
-    "message": "Go to background map settings."
-  },
-  "routes.app.settings.index.coordinateSystemSettingsAccessibleLabel": {
-    "description": "Accessible label for link item that navigates to coordinate system settings page.",
-    "message": "Go to coordinate system settings."
-  },
-  "routes.app.settings.index.decimalDegrees": {
-    "description": "Label for Decimal Degrees coordinate system.",
-    "message": "DD Coordinates"
+  "routes.app.settings.index.deviceNameCharacterCount": {
+    "description": "Displays number of characters in device name input out of the maximum allowed characters.",
+    "message": "{count}/{max}"
   },
   "routes.app.settings.index.deviceNameSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to device name settings page.",
     "message": "Go to device name settings."
   },
-  "routes.app.settings.index.dmsCoordinates": {
-    "description": "Label for Degrees/Minutes/Seconds coordinate system.",
-    "message": "DMS Coordinates"
+  "routes.app.settings.index.goBackAccessibleLabel": {
+    "description": "Accessible label for back button.",
+    "message": "Go back."
   },
   "routes.app.settings.index.languageSettingsAccessibleLabel": {
     "description": "Accessible label for link item that navigates to language settings page.",
@@ -387,71 +323,63 @@
     "description": "Accessible label for link item that navigates to unit system settings page.",
     "message": "Go to unit system settings."
   },
-  "routes.app.settings.index.utmCoordinates": {
-    "description": "Label for Universal Transverse Mercator coordinate system.",
-    "message": "UTM Coordinates"
-  },
-  "routes.app.settings_.test-data.boundedDistanceLabel": {
+  "routes.app.settings.test-data.boundedDistanceLabel": {
     "description": "Label for the bounded distance input.",
     "message": "Maximum bounded distance (kilometers)"
   },
-  "routes.app.settings_.test-data.cancel": {
-    "description": "Label for cancel button.",
-    "message": "Cancel"
-  },
-  "routes.app.settings_.test-data.coordinatesSelectionHint": {
+  "routes.app.settings.test-data.coordinatesSelectionHint": {
     "description": "Instructions displayed for coordinates selection inputs.",
     "message": "Set the coordinates by clicking on the map or dragging the location marker."
   },
-  "routes.app.settings_.test-data.create": {
+  "routes.app.settings.test-data.create": {
     "description": "Label for create button.",
     "message": "Create"
   },
-  "routes.app.settings_.test-data.createTrack": {
+  "routes.app.settings.test-data.createTrack": {
     "description": "Label for toggle to create track when creating test data.",
     "message": "Create track"
   },
-  "routes.app.settings_.test-data.invalidBoundedDistanceFormat": {
+  "routes.app.settings.test-data.invalidBoundedDistanceFormat": {
     "description": "Error message for when bounded distance is not an decimal.",
     "message": "Must be a decimal"
   },
-  "routes.app.settings_.test-data.invalidObservationCountFormat": {
+  "routes.app.settings.test-data.invalidObservationCountFormat": {
     "description": "Error message for when observation count is not an integer.",
     "message": "Must be an integer"
   },
-  "routes.app.settings_.test-data.maxObservationCountError": {
+  "routes.app.settings.test-data.maxObservationCountError": {
     "description": "Error message for when observation count is too large",
     "message": "Cannot be greater than {value}"
   },
-  "routes.app.settings_.test-data.minBoundedDistanceError": {
+  "routes.app.settings.test-data.minBoundedDistanceError": {
     "description": "Error message for when bounded distance is too small",
     "message": "Must be greater than {value} kilometers"
   },
-  "routes.app.settings_.test-data.minObservationCountError": {
+  "routes.app.settings.test-data.minObservationCountError": {
     "description": "Error message for when observation count is too small",
     "message": "Must be greater than {value}"
   },
-  "routes.app.settings_.test-data.navTitle": {
+  "routes.app.settings.test-data.navTitle": {
     "description": "Title of test data page.",
     "message": "Create Test Data"
   },
-  "routes.app.settings_.test-data.observationCountHelperText": {
+  "routes.app.settings.test-data.observationCountHelperText": {
     "description": "Helper text for observation count input.",
     "message": "Between {min} and {max}"
   },
-  "routes.app.settings_.test-data.observationCountLabel": {
+  "routes.app.settings.test-data.observationCountLabel": {
     "description": "Label for the observation count input.",
     "message": "Number of observations"
   },
-  "routes.app.settings_.test-data.observationCreateSuccess": {
+  "routes.app.settings.test-data.observationCreateSuccess": {
     "description": "Message displayed when observation creation succeeds.",
     "message": "Created {count, plural, one {# observation} other {# observations}}."
   },
-  "routes.app.settings_.test-data.requiredError": {
+  "routes.app.settings.test-data.requiredError": {
     "description": "Error message for when required input is empty.",
     "message": "Required"
   },
-  "routes.app.settings_.test-data.trackCreateSuccess": {
+  "routes.app.settings.test-data.trackCreateSuccess": {
     "description": "Message displayed when track creation succeeds.",
     "message": "Created {count, plural, one {# track} other {# tracks}}."
   },

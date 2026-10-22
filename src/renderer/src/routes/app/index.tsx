@@ -5,14 +5,13 @@ import {
 	useOwnRoleInProject,
 } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
-import ButtonBase from '@mui/material/ButtonBase'
+import CircularProgress from '@mui/material/CircularProgress'
+import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
-import Skeleton from '@mui/material/Skeleton'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
-import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import type { SxProps, Theme } from '@mui/material/styles'
-import useMediaQuery from '@mui/material/useMediaQuery'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import {
@@ -23,12 +22,20 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { BLUE_GREY, COMAPEO_BLUE, LIGHT_GREY, WHITE } from '../../colors.ts'
+import {
+	BLACK_03,
+	BLUE_03,
+	BLUE_05,
+	BLUE_06,
+	GREEN_00,
+	ORANGE_00,
+	WHITE_00,
+} from '../../../../shared/colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
 import {
 	ButtonBaseLink,
-	IconButtonLink,
+	ButtonLink,
 	type ButtonBaseLinkComponentProps,
 } from '../../components/link.tsx'
 import { useActiveProjectId } from '../../contexts/active-project-id-store-context.ts'
@@ -44,24 +51,20 @@ import { getAppUsageMetricsQueryOptions } from '../../lib/queries/app-settings.t
 import { getOnboardedAtQueryOptions } from '../../lib/queries/user.ts'
 import {
 	AppUsageConsentDialogContent,
-	JoinProjectDialogContent,
 	LeftProjectDialogContent,
 	StartProjectDialogContent,
 } from './-home-page-dialog-content.tsx'
-import { DeviceIcon } from './projects/-shared/device-icon.tsx'
 
 const SearchParamsSchema = v.object({
-	projectsLayout: v.optional(v.union([v.literal('grid'), v.literal('list')])),
 	fromFlow: v.optional(
 		v.variant('name', [
-			v.object({ name: v.literal('onboarding') }),
 			v.object({
 				name: v.literal('project_leave'),
 				projectName: v.optional(v.string()),
 			}),
 		]),
 	),
-	projectAction: v.optional(v.union([v.literal('join'), v.literal('create')])),
+	projectAction: v.optional(v.union([v.literal('create')])),
 })
 
 export const Route = createFileRoute('/app/')({
@@ -90,56 +93,23 @@ export const Route = createFileRoute('/app/')({
 			}),
 		])
 	},
-
 	component: RouteComponent,
 })
 
 function RouteComponent() {
 	const intl = useIntl()
 
-	const { data: ownDeviceInfo } = useOwnDeviceInfo()
-
-	const deviceIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
-	})
-
 	const router = useRouter()
 
-	const activeProjectId = useActiveProjectId()
-
-	// TODO: Persist?
-	const additionalProjectsLayout: NonNullable<
-		v.InferInput<typeof SearchParamsSchema>['projectsLayout']
-	> = Route.useSearch({ select: (values) => values.projectsLayout || 'grid' })
+	const { data: ownDeviceInfo } = useOwnDeviceInfo()
 
 	const { data: projects } = useManyProjects()
 
-	const activeProject = projects.find((p) => p.projectId === activeProjectId)
-
-	const viewportIsNarrow = useMediaQuery((theme) =>
-		theme.breakpoints.down('lg'),
-	)
-
-	const projectActionToShow = Route.useSearch({
-		select: (values) => values.projectAction,
+	const showCreateProjectDialog = Route.useSearch({
+		select: (values) => values.projectAction === 'create',
 	})
 
 	const fromFlow = Route.useSearch({ select: (values) => values.fromFlow })
-
-	function handleBack() {
-		if (router.history.canGoBack()) {
-			router.history.back()
-			return
-		}
-
-		router.navigate({
-			to: '.',
-			search: ({ projectAction: _, ...rest }) => {
-				return rest
-			},
-			replace: true,
-		})
-	}
 
 	const { data: onboardedAt } = useSuspenseQuery(getOnboardedAtQueryOptions())
 
@@ -158,312 +128,123 @@ function RouteComponent() {
 				direction="column"
 				sx={{ flex: 1, overflow: 'auto' }}
 			>
-				<Stack direction="column" sx={{ padding: 6, gap: 4 }}>
-					<Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
-						<DeviceIcon
-							deviceType={ownDeviceInfo.deviceType}
-							size={deviceIconSize}
-						/>
-
-						<Typography variant="h1" sx={{ fontWeight: 500 }}>
-							{intl.formatMessage(
-								fromFlow?.name === 'onboarding'
-									? m.postOnboardingPageTitle
-									: m.pageTitle,
-								{ name: ownDeviceInfo.name },
-							)}
+				<Stack
+					component="header"
+					direction="row"
+					sx={{
+						alignItems: 'center',
+						borderBottom: `1px solid ${BLUE_05}`,
+						flexWrap: 'wrap',
+						gap: 6,
+						paddingBlock: 4,
+						paddingInline: 6,
+					}}
+				>
+					<Stack direction="row" sx={{ alignItems: 'center', flex: 1, gap: 4 }}>
+						<Typography variant="pageTitle">
+							{intl.formatMessage(m.pageTitle)}
 						</Typography>
+
+						<Box
+							sx={{
+								background: BLUE_06,
+								borderRadius: 2,
+								paddingBlock: 1,
+								paddingInline: 2,
+							}}
+						>
+							<Typography
+								color="textSecondary"
+								variant="detailCopy"
+								sx={{ whiteSpace: 'nowrap' }}
+							>
+								{intl.formatMessage(m.mostRecent)}
+							</Typography>
+						</Box>
 					</Stack>
 
-					<Box
-						sx={{
-							display: 'grid',
-							gridTemplateColumns: `repeat(${viewportIsNarrow ? 2 : 3}, minmax(auto, 1fr))`,
-							columnGap: 5,
-							rowGap: 5,
-						}}
-					>
-						{activeProject ? (
-							<ListedProjectCard
-								highlight
-								to="/app/projects/$projectId"
-								params={{ projectId: activeProject.projectId }}
-								project={activeProject}
-							/>
-						) : null}
+					<Stack direction="row" sx={{ flexWrap: 'wrap', gap: 2 }}>
+						<ButtonLink
+							variant="outlined"
+							to="."
+							search={(prev) => {
+								return { ...prev, projectAction: 'create' }
+							}}
+							startIcon={<Icon name="material-symbols-add-circle-outline" />}
+						>
+							{intl.formatMessage(m.startNewProject)}
+						</ButtonLink>
 
-						<Stack direction="row" sx={{ gap: 4 }}>
-							<ButtonBase
-								sx={PROJECT_ACTION_CARD_SX}
-								onClick={() => {
-									router.navigate({
-										to: '.',
-										search: (prev) => {
-											return { ...prev, projectAction: 'join' }
-										},
-									})
-								}}
-							>
-								<Stack
-									direction="column"
-									sx={{
-										justifyContent: 'center',
-										alignItems: 'center',
-										gap: 4,
-									}}
-								>
-									<Icon name="material-people-filled" />
-
-									<Typography color="textPrimary">
-										{intl.formatMessage(m.joinProjectCardTitle)}
-									</Typography>
-								</Stack>
-							</ButtonBase>
-
-							<ButtonBase
-								sx={PROJECT_ACTION_CARD_SX}
-								onClick={() => {
-									router.navigate({
-										to: '.',
-										search: (prev) => {
-											return { ...prev, projectAction: 'create' }
-										},
-									})
-								}}
-							>
-								<Stack
-									direction="column"
-									sx={{
-										justifyContent: 'center',
-										alignItems: 'center',
-										gap: 4,
-									}}
-								>
-									<Icon name="material-manage-accounts-filled" />
-
-									<Typography color="textPrimary" sx={{ flex: 1 }}>
-										{intl.formatMessage(m.startProjectCardTitle)}
-									</Typography>
-								</Stack>
-							</ButtonBase>
-						</Stack>
-					</Box>
+						<ButtonLink
+							variant="outlined"
+							to="/app/settings"
+							startIcon={<Icon name="material-settings" />}
+						>
+							{intl.formatMessage(m.comapeoSettings)}
+						</ButtonLink>
+					</Stack>
 				</Stack>
 
-				{projects.length > 0 ? (
-					<>
-						<Box sx={{ paddingX: 6 }}>
-							<Divider variant="fullWidth" />
+				<Suspense
+					fallback={
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+								height: '100%',
+							}}
+						>
+							<CircularProgress />
 						</Box>
-
-						<Stack direction="column" sx={{ flex: 1, gap: 2 }}>
-							<Stack
-								direction="row"
-								sx={{
-									justifyContent: 'space-between',
-									alignItems: 'center',
-									paddingInline: 6,
-									paddingBlock: 4,
-									position: 'sticky',
-									top: 0,
-									left: 0,
-									right: 0,
-									zIndex: 1,
-									bgcolor: WHITE,
-								}}
-							>
-								<Stack
-									direction="row"
-									sx={{ alignItems: 'baseline', gap: 2, textAlign: 'center' }}
-								>
-									<Typography variant="h2" sx={{ fontWeight: 500 }}>
-										{intl.formatMessage(m.additionalProjectsSectionTitle)}
-									</Typography>
-
-									<Typography color="textSecondary">
-										{intl.formatMessage(m.additionalProjectsSectionDescription)}
-									</Typography>
-								</Stack>
-
-								<Stack direction="row">
-									<Tooltip
-										title={intl.formatMessage(
-											m.additionalProjectsSectionShowAsGrid,
-										)}
-										disableFocusListener
-										placement="bottom"
-									>
-										<IconButtonLink
-											to="."
-											search={{ projectsLayout: 'grid' }}
-											replace
-											activeOptions={{ includeSearch: true }}
-											inactiveProps={{
-												sx: {
-													color: (theme) =>
-														additionalProjectsLayout === 'grid'
-															? theme.palette.text.primary
-															: BLUE_GREY,
-												},
-											}}
-											activeProps={{
-												sx: { color: (theme) => theme.palette.text.primary },
-											}}
-										>
-											<Icon name="material-symbols-grid-view" />
-										</IconButtonLink>
-									</Tooltip>
-
-									<Tooltip
-										title={intl.formatMessage(
-											m.additionalProjectsSectionShowAsList,
-										)}
-										disableFocusListener
-										placement="bottom"
-									>
-										<IconButtonLink
-											to="."
-											search={{ projectsLayout: 'list' }}
-											replace
-											activeOptions={{ includeSearch: true }}
-											inactiveProps={{
-												sx: {
-													color: (theme) =>
-														additionalProjectsLayout === 'list'
-															? theme.palette.text.primary
-															: BLUE_GREY,
-												},
-											}}
-											activeProps={{
-												sx: { color: (theme) => theme.palette.text.primary },
-											}}
-										>
-											<Icon name="material-symbols-lists" />
-										</IconButtonLink>
-									</Tooltip>
-								</Stack>
-							</Stack>
-
-							<Box
-								sx={{
-									display: 'grid',
-									gridTemplateColumns:
-										additionalProjectsLayout === 'grid'
-											? `repeat(${viewportIsNarrow ? 2 : 3}, minmax(auto, 1fr))`
-											: '1fr',
-									rowGap: 5,
-									columnGap: 5,
-									paddingInline: 6,
-									paddingBlockEnd: 6,
-								}}
-							>
-								{projects
-									.filter((p) => p !== activeProject)
-									// NOTE: Projects are returned from oldest to newest
-									// but we want newest to oldest
-									.reverse()
-									.map((project) => (
-										<Suspense
-											key={project.projectId}
-											fallback={
-												additionalProjectsLayout === 'list' ? (
-													<Stack
-														direction="row"
-														sx={{
-															flex: 1,
-															alignItems: 'center',
-															gap: 2,
-															paddingInline: 6,
-															paddingBlock: 4,
-															border: `1px solid ${LIGHT_GREY}`,
-															borderRadius: 2,
-														}}
-													>
-														<Skeleton
-															variant="circular"
-															width={24}
-															height={24}
-														/>
-
-														<Skeleton
-															variant="text"
-															sx={{
-																flex: 1,
-																fontSize: (theme) =>
-																	theme.typography.h1.fontSize,
-															}}
-														/>
-													</Stack>
-												) : (
-													<Stack
-														direction="column"
-														sx={{
-															gap: 2,
-															padding: 6,
-															border: `1px solid ${LIGHT_GREY}`,
-															borderRadius: 2,
-														}}
-													>
-														<Skeleton
-															variant="text"
-															width="100%"
-															sx={{
-																fontSize: (theme) =>
-																	theme.typography.h1.fontSize,
-															}}
-														/>
-														<Stack
-															direction="row"
-															sx={{ gap: 2, alignItems: 'center' }}
-														>
-															<Skeleton
-																variant="circular"
-																width={24}
-																height={24}
-															/>
-															<Skeleton
-																variant="text"
-																width="25%"
-																sx={{
-																	fontSize: (theme) =>
-																		theme.typography.body1.fontSize,
-																}}
-															/>
-														</Stack>
-													</Stack>
-												)
-											}
-										>
-											<ListedProjectCard
-												to="/app/projects/$projectId"
-												params={{ projectId: project.projectId }}
-												project={project}
-												singleRow={additionalProjectsLayout === 'list'}
-											/>
-										</Suspense>
-									))}
-							</Box>
-						</Stack>
-					</>
-				) : null}
+					}
+				>
+					<Box
+						sx={{
+							display: 'flex',
+							flex: 1,
+							flexDirection: 'column',
+							overflow: 'auto',
+						}}
+					>
+						{projects.length === 0 ? (
+							<GetStartedPanel />
+						) : (
+							<ListedProjectsPanel projects={projects} />
+						)}
+					</Box>
+				</Suspense>
 			</Stack>
 
-			<DecentDialog value={projectActionToShow} fullScreen sx={{ padding: 10 }}>
-				{(projectAction) =>
-					projectAction === 'join' ? (
-						<JoinProjectDialogContent onBack={handleBack} />
-					) : (
-						<StartProjectDialogContent
-							onBack={handleBack}
-							onProjectCreated={(createdProjectId) => {
-								router.navigate({
-									to: '/app/projects/$projectId',
-									params: { projectId: createdProjectId },
-								})
-							}}
-						/>
-					)
-				}
+			<DecentDialog
+				value={showCreateProjectDialog ? true : null}
+				fullScreen
+				sx={{ padding: 10 }}
+			>
+				{() => (
+					<StartProjectDialogContent
+						onBack={() => {
+							if (router.history.canGoBack()) {
+								router.history.back()
+								return
+							}
+
+							router.navigate({
+								to: '.',
+								search: ({ projectAction: _, ...rest }) => {
+									return rest
+								},
+								replace: true,
+							})
+						}}
+						onProjectCreated={(createdProjectId) => {
+							router.navigate({
+								to: '/app/projects/$projectId',
+								params: { projectId: createdProjectId },
+							})
+						}}
+					/>
+				)}
 			</DecentDialog>
 
 			<DecentDialog
@@ -505,30 +286,203 @@ function RouteComponent() {
 	)
 }
 
-const PROJECT_ACTION_CARD_SX = {
-	flex: 1,
-	borderRadius: 2,
-	padding: 5,
-	border: `1px solid ${BLUE_GREY}`,
-	color: (theme) => theme.palette.text.secondary,
-	'&:hover, &:focus-within': {
-		color: (theme) => theme.palette.text.primary,
-		outline: `2px solid ${BLUE_GREY}`,
-	},
-	textAlign: 'center',
-} satisfies SxProps<Theme>
+function GetStartedPanel() {
+	const intl = useIntl()
+
+	const { data: ownDeviceInfo } = useOwnDeviceInfo()
+
+	const desktopIconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 4,
+	})
+
+	const checkIconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+	})
+
+	return (
+		<Container maxWidth="sm" sx={{ display: 'flex', flex: 1, padding: 6 }}>
+			<Stack
+				direction="column"
+				sx={{ alignItems: 'center', flex: 1, gap: 10, paddingTop: 20 }}
+			>
+				<Stack
+					direction="column"
+					sx={{ alignItems: 'center', gap: 2, justifyContent: 'center' }}
+				>
+					<Box sx={{ position: 'relative' }}>
+						<Icon
+							name="material-symbols-computer"
+							htmlColor={ORANGE_00}
+							size={desktopIconSize}
+						/>
+
+						<Box
+							sx={{
+								background: GREEN_00,
+								borderRadius: '50%',
+								bottom: (theme) => theme.spacing(2),
+								display: 'flex',
+								padding: 1,
+								position: 'absolute',
+								right: (theme) => theme.spacing(-2),
+							}}
+						>
+							<Icon
+								name="material-check"
+								htmlColor={WHITE_00}
+								size={checkIconSize}
+							/>
+						</Box>
+					</Box>
+
+					<Typography
+						variant="heroHeader"
+						sx={{ textAlign: 'center', textWrap: 'balance' }}
+					>
+						{intl.formatMessage(m.getStartedTitle, {
+							name: ownDeviceInfo.name,
+						})}
+					</Typography>
+				</Stack>
+
+				<Typography
+					variant="heroSubheading"
+					sx={{ textAlign: 'center', textWrap: 'balance' }}
+				>
+					{intl.formatMessage(m.getStartedDescription)}
+				</Typography>
+
+				<Stack
+					component={List}
+					direction="column"
+					sx={{
+						color: (theme) => theme.palette.text.secondary,
+						gap: 4,
+					}}
+				>
+					<ListItem sx={{ gap: 5 }}>
+						<Icon name="openmoji-world-map" />
+
+						{intl.formatMessage(m.getStartedMapAnywhereDetail)}
+					</ListItem>
+
+					<ListItem sx={{ gap: 5 }}>
+						<Icon name="openmoji-handshake-medium-skin-tone" />
+
+						{intl.formatMessage(m.getStartedShareDetail)}
+					</ListItem>
+
+					<ListItem sx={{ gap: 5 }}>
+						<Icon name="openmoji-locked-with-key" />
+
+						{intl.formatMessage(m.getStartedOwnDataDetail)}
+					</ListItem>
+				</Stack>
+			</Stack>
+		</Container>
+	)
+}
+
+function ListedProjectsPanel({ projects }: { projects: Array<ListedProject> }) {
+	const intl = useIntl()
+
+	const activeProjectId = useActiveProjectId()
+
+	const activeProject = projects.find((p) => p.projectId === activeProjectId)
+
+	const otherProjects = activeProject
+		? projects.filter((p) => p.projectId !== activeProject.projectId)
+		: projects
+
+	const sectionIconSize = useIconSizeBasedOnTypography({
+		variant: 'sectionLabel',
+		multiplier: 1.5,
+	})
+
+	return (
+		<Container maxWidth="sm" sx={{ display: 'flex', flex: 1, padding: 6 }}>
+			{activeProject ? (
+				<Stack direction="column" sx={{ flex: 1, gap: 10 }}>
+					<Stack component="section" direction="column" sx={{ gap: 4 }}>
+						<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
+							<Icon
+								name="material-check-circle-rounded"
+								size={sectionIconSize}
+							/>
+
+							<Typography component="h2" variant="sectionLabel">
+								{intl.formatMessage(m.projectsListSectionTitleCurrent)}
+							</Typography>
+						</Stack>
+
+						<ListedProjectCard
+							key={activeProject.projectId}
+							data-current
+							highlight
+							to="/app/projects/$projectId"
+							params={{ projectId: activeProject.projectId }}
+							project={activeProject}
+						/>
+					</Stack>
+
+					{otherProjects.length > 0 ? (
+						<>
+							<Divider />
+
+							<Stack component="section" direction="column" sx={{ gap: 4 }}>
+								<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
+									<Icon
+										name="material-symbols-view-agenda"
+										size={sectionIconSize}
+									/>
+
+									<Typography component="h2" variant="sectionLabel">
+										{intl.formatMessage(m.projectsListSectionTitleOthers)}
+									</Typography>
+								</Stack>
+
+								<Stack direction="column" sx={{ gap: 6 }}>
+									{projects
+										.filter((p) => p.projectId !== activeProject.projectId)
+										.map((project) => (
+											<ListedProjectCard
+												key={project.projectId}
+												to="/app/projects/$projectId"
+												params={{ projectId: project.projectId }}
+												project={project}
+											/>
+										))}
+								</Stack>
+							</Stack>
+						</>
+					) : null}
+				</Stack>
+			) : (
+				<Stack direction="column" sx={{ flex: 1, gap: 4 }}>
+					{projects.map((project) => (
+						<ListedProjectCard
+							key={project.projectId}
+							to="/app/projects/$projectId"
+							params={{ projectId: project.projectId }}
+							project={project}
+						/>
+					))}
+				</Stack>
+			)}
+		</Container>
+	)
+}
 
 function ListedProjectCard({
 	children,
 	highlight,
 	project,
-	singleRow,
 	...buttonLinkProps
 }: PropsWithChildren<
 	ButtonBaseLinkComponentProps & {
 		highlight?: boolean
 		project: ListedProject
-		singleRow?: boolean
 	}
 >) {
 	const intl = useIntl()
@@ -542,6 +496,15 @@ function ListedProjectCard({
 
 	const displayedName = project.name || intl.formatMessage(m.unnamedProject)
 
+	const activeProjectIconSize = useIconSizeBasedOnTypography({
+		variant: 'cardHeader',
+		multiplier: 1.25,
+	})
+
+	const roleIconSize = useIconSizeBasedOnTypography({
+		variant: 'bodyCopy',
+	})
+
 	return (
 		<ButtonBaseLink
 			{...buttonLinkProps}
@@ -549,243 +512,120 @@ function ListedProjectCard({
 				name: displayedName,
 			})}
 			sx={{
-				backgroundColor: project.projectColor,
+				background: project.projectColor,
 				borderRadius: 2,
-				border: `1px solid ${highlight ? COMAPEO_BLUE : LIGHT_GREY}`,
-				color: (theme) => theme.palette.text.secondary,
+				outline: `2px solid ${highlight ? BLUE_03 : BLACK_03}`,
+				outlineOffset: -1,
 				overflow: 'auto',
 				'&:hover, &:focus-within': {
 					color: (theme) => theme.palette.text.primary,
-					outline: `2px solid ${highlight ? COMAPEO_BLUE : BLUE_GREY}`,
+					outlineColor: (theme) =>
+						theme.darken(highlight ? BLUE_03 : BLACK_03, 0.1),
+					outlineWidth: 3,
 				},
 			}}
 		>
-			{singleRow ? (
-				<ProjectCardContentListVariant
-					highlight={highlight}
-					projectName={displayedName}
-					role={isAtLeastCoordinator ? 'coordinator' : 'participant'}
-				/>
-			) : (
-				<ProjectCardContentGridVariant
-					highlight={highlight}
-					projectName={displayedName}
-					role={isAtLeastCoordinator ? 'coordinator' : 'participant'}
-				/>
-			)}
-		</ButtonBaseLink>
-	)
-}
-
-function ProjectCardContentGridVariant({
-	highlight,
-	projectName,
-	role,
-}: {
-	highlight?: boolean
-	projectName: string
-	role: 'coordinator' | 'participant'
-}) {
-	const intl = useIntl()
-
-	const activeProjectIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h1',
-	})
-
-	const roleIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body1',
-	})
-
-	return (
-		<Stack
-			direction="column"
-			sx={{ gap: 2, flex: 1, padding: 6, overflow: 'auto' }}
-		>
 			<Stack
-				direction="row"
-				sx={{ alignItems: 'center', justifyContent: 'space-between', flex: 1 }}
+				direction="column"
+				sx={{ gap: 2, flex: 1, padding: 6, overflow: 'auto' }}
 			>
-				<Typography
-					component="p"
-					variant="h1"
-					color="textPrimary"
+				<Stack
+					direction="row"
 					sx={{
-						fontWeight: 500,
-						textOverflow: 'ellipsis',
-						whiteSpace: 'nowrap',
-						overflow: 'hidden',
+						alignItems: 'center',
+						gap: 4,
+						justifyContent: 'space-between',
+						flex: 1,
 					}}
 				>
-					{projectName}
-				</Typography>
-
-				{highlight ? (
-					<Icon
-						name="material-check-circle-rounded"
-						size={activeProjectIconSize}
-						htmlColor={COMAPEO_BLUE}
-					/>
-				) : null}
-			</Stack>
-
-			<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
-				<Icon
-					name={
-						role === 'coordinator'
-							? 'material-manage-accounts-filled'
-							: 'material-people-filled'
-					}
-					size={roleIconSize}
-				/>
-
-				<Typography
-					sx={{
-						textOverflow: 'ellipsis',
-						whiteSpace: 'nowrap',
-						overflow: 'hidden',
-					}}
-				>
-					{intl.formatMessage(
-						role === 'coordinator'
-							? m.projectCardRoleCoordinator
-							: m.projectCardRoleParticipant,
-					)}
-				</Typography>
-			</Stack>
-		</Stack>
-	)
-}
-
-function ProjectCardContentListVariant({
-	highlight,
-	projectName,
-	role,
-}: {
-	highlight?: boolean
-	projectName: string
-	role: 'coordinator' | 'participant'
-}) {
-	const intl = useIntl()
-
-	const iconSize = useIconSizeBasedOnTypography({ typographyVariant: 'h1' })
-
-	return (
-		<Stack
-			direction="row"
-			sx={{
-				gap: 2,
-				flex: 1,
-				justifyContent: 'space-between',
-				alignItems: 'center',
-				paddingInline: 6,
-				paddingBlock: 4,
-				overflow: 'auto',
-			}}
-		>
-			<Stack direction="row" sx={{ gap: 2, flex: 1, overflow: 'auto' }}>
-				<Icon
-					name={
-						role === 'coordinator'
-							? 'material-manage-accounts-filled'
-							: 'material-people-filled'
-					}
-					size={iconSize}
-				/>
-
-				<Box sx={{ overflow: 'auto' }}>
 					<Typography
-						component="p"
-						variant="h1"
-						color="textPrimary"
+						variant="cardHeader"
 						sx={{
-							fontWeight: 500,
 							textOverflow: 'ellipsis',
 							whiteSpace: 'nowrap',
 							overflow: 'hidden',
 						}}
 					>
-						{projectName}
+						{displayedName}
 					</Typography>
-				</Box>
 
-				{highlight ? (
+					{highlight ? (
+						<Icon
+							color="primary"
+							name="material-check-circle-rounded"
+							size={activeProjectIconSize}
+						/>
+					) : null}
+				</Stack>
+
+				<Stack
+					direction="row"
+					sx={{
+						alignItems: 'center',
+						color: (theme) => theme.palette.text.secondary,
+						gap: 2,
+					}}
+				>
 					<Icon
-						name="material-check-circle-rounded"
-						size={iconSize}
-						htmlColor={COMAPEO_BLUE}
+						name={
+							isAtLeastCoordinator
+								? 'material-manage-accounts-filled'
+								: 'material-people-filled'
+						}
+						size={roleIconSize}
 					/>
-				) : null}
-			</Stack>
 
-			<Box>
-				<Typography>
-					{intl.formatMessage(
-						role === 'coordinator'
-							? m.projectCardRoleCoordinator
-							: m.projectCardRoleParticipant,
-					)}
-				</Typography>
-			</Box>
-		</Stack>
+					<Typography
+						color="inherit"
+						sx={{
+							overflow: 'hidden',
+							textOverflow: 'ellipsis',
+							whiteSpace: 'nowrap',
+						}}
+					>
+						{intl.formatMessage(
+							isAtLeastCoordinator
+								? m.projectCardRoleCoordinator
+								: m.projectCardRoleParticipant,
+						)}
+					</Typography>
+				</Stack>
+			</Stack>
+		</ButtonBaseLink>
 	)
 }
 
 const m = defineMessages<{
-	readonly postOnboardingPageTitle: { readonly name: MessageValue }
-	readonly pageTitle: { readonly name: MessageValue }
-	readonly joinProjectCardTitle: NoMessageValues
-	readonly startProjectCardTitle: NoMessageValues
-	readonly additionalProjectsSectionTitle: NoMessageValues
-	readonly additionalProjectsSectionDescription: NoMessageValues
-	readonly additionalProjectsSectionShowAsGrid: NoMessageValues
-	readonly additionalProjectsSectionShowAsList: NoMessageValues
+	readonly pageTitle: NoMessageValues
+	readonly startNewProject: NoMessageValues
+	readonly comapeoSettings: NoMessageValues
 	readonly unnamedProject: NoMessageValues
 	readonly projectCardLinkAccessibleLabel: { readonly name: MessageValue }
 	readonly projectCardRoleCoordinator: NoMessageValues
 	readonly projectCardRoleParticipant: NoMessageValues
+	readonly mostRecent: NoMessageValues
+	readonly getStartedTitle: { readonly name: MessageValue }
+	readonly getStartedDescription: NoMessageValues
+	readonly getStartedMapAnywhereDetail: NoMessageValues
+	readonly getStartedShareDetail: NoMessageValues
+	readonly getStartedOwnDataDetail: NoMessageValues
+	readonly projectsListSectionTitleCurrent: NoMessageValues
+	readonly projectsListSectionTitleOthers: NoMessageValues
 }>({
-	postOnboardingPageTitle: {
-		id: '$1.routes.app.index.postOnboardingPageTitle',
-		defaultMessage: '{name} is ready!',
-		description: 'Title of home page after completing onboarding.',
-	},
 	pageTitle: {
 		id: '$1.routes.app.index.pageTitle',
-		defaultMessage: "{name}'s Projects",
+		defaultMessage: 'All Projects',
 		description: 'Title of home page.',
 	},
-	joinProjectCardTitle: {
-		id: '$1.routes.app.index.joinProjectCardTitle',
-		defaultMessage: 'Join a Project',
-		description: 'Title card for joining a project.',
-	},
-	startProjectCardTitle: {
-		id: '$1.routes.app.index.startProjectCardTitle',
+	startNewProject: {
+		id: '$1.routes.app.index.startNewProject',
 		defaultMessage: 'Start New Project',
-		description: 'Title card for starting a new project.',
+		description: 'Title for button to start a new project.',
 	},
-	additionalProjectsSectionTitle: {
-		id: '$1.routes.app.index.additionalProjectsSecitionTitle',
-		defaultMessage: 'Additional Projects',
-		description: 'Title text for the additional projects section.',
-	},
-	additionalProjectsSectionDescription: {
-		id: '$1.routes.app.index.additionalProjectsSectionDescription',
-		defaultMessage: 'Ordered by most recently created',
-		description:
-			'Text describing sorting order of the additional projects section.',
-	},
-	additionalProjectsSectionShowAsGrid: {
-		id: '$1.routes.app.index.additionalProjectsSectionShowAsGrid',
-		defaultMessage: 'Show as grid',
-		description:
-			'Tooltip text for button to display additional projects section as a grid.',
-	},
-	additionalProjectsSectionShowAsList: {
-		id: '$1.routes.app.index.additionalProjectsSectionShowAsList',
-		defaultMessage: 'Show as list',
-		description:
-			'Tooltip text for button to display additional projects section as a list.',
+	comapeoSettings: {
+		id: '$1.routes.app.index.comapeoSettings',
+		defaultMessage: 'CoMapeo Settings',
+		description: 'Title for button to navigate to CoMapeo settings.',
 	},
 	unnamedProject: {
 		id: '$1.routes.app.index.unnamedProject',
@@ -807,5 +647,47 @@ const m = defineMessages<{
 		id: '$1.routes.app.index.projectCardRoleParticipant',
 		defaultMessage: 'Participant',
 		description: 'Displayed name of participant role on project card.',
+	},
+	mostRecent: {
+		id: '$1.routes.app.index.mostRecent',
+		defaultMessage: 'Most Recent',
+		description:
+			'Text for describing order of listed projects in all projects page.',
+	},
+	getStartedTitle: {
+		id: '$1.routes.app.index.getStartedTitle',
+		defaultMessage: '{name} is ready!',
+		description: 'Title text for get started panel.',
+	},
+	getStartedDescription: {
+		id: '$1.routes.app.index.getStartedDescription',
+		defaultMessage:
+			'Coordinate with a team to join them or start a new project.',
+		description: 'Description text for get started panel.',
+	},
+	getStartedMapAnywhereDetail: {
+		id: '$1.routes.app.index.getStartedMapAnywhereDetail',
+		defaultMessage: 'Map anywhere and everywhere',
+		description: 'Detail about mapping in get started panel.',
+	},
+	getStartedShareDetail: {
+		id: '$1.routes.app.index.getStartedShareDetail',
+		defaultMessage: 'Securely share with others',
+		description: 'Detail about sharing in get started panel.',
+	},
+	getStartedOwnDataDetail: {
+		id: '$1.routes.app.index.getStartedOwnDataDetail',
+		defaultMessage: 'Own and control your data',
+		description: 'Detail about data ownership in get started panel.',
+	},
+	projectsListSectionTitleCurrent: {
+		id: '$1.routes.app.index.projectsListSectionTitleCurrent',
+		defaultMessage: 'Current Project',
+		description: 'Title for section displaying current project.',
+	},
+	projectsListSectionTitleOthers: {
+		id: '$1.routes.app.index.projectsListSectionTitleOthers',
+		defaultMessage: 'Other Projects',
+		description: 'Title for section displaying all other projects.',
 	},
 })

@@ -216,23 +216,26 @@ class ZoomToDataControl implements IControl {
 							const data = await source.getData()
 
 							if (data.type === 'FeatureCollection') {
-								return bbox({
-									...data,
-									features: data.features.filter((f) => {
-										if (!f.properties) {
-											return true
-										}
+								return bbox(
+									{
+										...data,
+										features: data.features.filter((f) => {
+											if (!f.properties) {
+												return true
+											}
 
-										if (!('visible' in f.properties)) {
-											return true
-										}
+											if (!('visible' in f.properties)) {
+												return true
+											}
 
-										return !!f.properties.visible
-									}),
-								})
+											return !!f.properties.visible
+										}),
+									},
+									{ recompute: true },
+								)
 							}
 
-							return bbox(data)
+							return bbox(data, { recompute: true })
 						}),
 					)
 
@@ -265,90 +268,6 @@ class ZoomToDataControl implements IControl {
 				<span style="display: flex; justify-content: center; align-items: center">
 					<svg focusable="false" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
 						<use href="${getIconURL('material-fit-screen')}"></use>
-					</svg>
-				</span>
-			`
-
-			this.#container.appendChild(button)
-		}
-
-		return this.#container
-	}
-
-	onRemove() {
-		if (this.#container.parentNode) {
-			this.#container.parentNode.removeChild(this.#container)
-		}
-	}
-}
-
-export type OmittedVisibility = 'visible' | 'hidden'
-
-type ToggleOmittedVisibilityControlOptions = BaseControlOptions & {
-	initialValue: OmittedVisibility
-	onToggle: () => void
-}
-
-export function ToggleOmittedVisibilityMapControl({
-	buttonTitle,
-	initialValue,
-	onToggle,
-	position,
-}: ToggleOmittedVisibilityControlOptions) {
-	useControl(
-		() =>
-			new ToggleOmittedVisibilityDataControl({
-				buttonTitle,
-				initialValue,
-				onToggle,
-			}),
-		{ position },
-	)
-
-	return null
-}
-
-const OMITTED_VISIBLE_ICON_URL = getIconURL('material-symbols-visibility')
-
-const OMITTED_HIDDEN_ICON_URL = getIconURL('material-symbols-visibility-off')
-
-class ToggleOmittedVisibilityDataControl implements IControl {
-	#container: HTMLElement
-	#options: ToggleOmittedVisibilityControlOptions
-
-	constructor(options: ToggleOmittedVisibilityControlOptions) {
-		this.#options = options
-		this.#container = document.createElement('div')
-		this.#container.className = 'maplibregl-ctrl maplibregl-ctrl-group'
-	}
-
-	onAdd() {
-		if (!this.#container.hasChildNodes()) {
-			const button = document.createElement('button')
-			button.type = 'button'
-			button.setAttribute('title', this.#options.buttonTitle)
-
-			button.addEventListener('click', () => {
-				this.#options.onToggle()
-
-				const useElement = this.#container.querySelector('use')!
-
-				useElement.setAttribute(
-					'href',
-					useElement.getAttribute('href')! === OMITTED_HIDDEN_ICON_URL
-						? OMITTED_VISIBLE_ICON_URL
-						: OMITTED_HIDDEN_ICON_URL,
-				)
-			})
-
-			button.innerHTML = `
-				<span style="display: flex; justify-content: center; align-items: center">
-					<svg focusable="false" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
-						<use href="${getIconURL(
-							this.#options.initialValue === 'visible'
-								? 'material-symbols-visibility'
-								: 'material-symbols-visibility-off',
-						)}"></use>
 					</svg>
 				</span>
 			`

@@ -23,8 +23,8 @@ import {
 } from '@tanstack/react-router'
 import { useIntl, type IntlShape } from 'react-intl'
 
+import { WHITE_00 } from '../../shared/colors.ts'
 import type { LocaleState } from '../../shared/intl.ts'
-import { WHITE } from './colors.ts'
 import { AppTitleBar } from './components/app-title-bar.tsx'
 import { GenericRouteErrorComponent } from './components/generic-route-error-component.tsx'
 import { GenericRouteNotFoundComponent } from './components/generic-route-not-found-component.tsx'
@@ -40,7 +40,7 @@ import {
 } from './contexts/local-peers-store-context.ts'
 import { routeTree } from './generated/routeTree.gen.ts'
 import { useNetworkConnectionChangeListener } from './hooks/network.ts'
-import { DIALOG_CONTAINER_ID, TITLE_BAR_HEIGHT } from './lib/constants.ts'
+import { PORTAL_CONTAINER_ID, TITLE_BAR_HEIGHT } from './lib/constants.ts'
 import { getLocaleStateQueryOptions } from './lib/queries/app-settings.ts'
 import { initRpcClients } from './rpc-clients.ts'
 import { createTheme } from './theme.ts'
@@ -94,7 +94,7 @@ const router = createRouter({
 	defaultErrorComponent: GenericRouteErrorComponent,
 	defaultPendingComponent: GenericRoutePendingComponent,
 	defaultNotFoundComponent: ({ data }) => (
-		<GenericRouteNotFoundComponent data={data} backgroundColor={WHITE} />
+		<GenericRouteNotFoundComponent data={data} backgroundColor={WHITE_00} />
 	),
 	notFoundMode: 'fuzzy',
 	protocolAllowlist: [
@@ -170,7 +170,7 @@ export function App() {
 								) : null}
 
 								<Box
-									id={DIALOG_CONTAINER_ID}
+									id={PORTAL_CONTAINER_ID}
 									sx={{ height: MAIN_CONTENT_HEIGHT }}
 								>
 									<Suspense

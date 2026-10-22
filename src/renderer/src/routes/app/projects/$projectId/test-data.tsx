@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useState } from 'react'
+import { Suspense, useId, useMemo, useState } from 'react'
 import {
 	useCreateDocument,
 	useMapStyleUrl,
@@ -13,11 +13,10 @@ import CircularProgress from '@mui/material/CircularProgress'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Snackbar from '@mui/material/Snackbar'
 import Stack from '@mui/material/Stack'
-import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useSelector } from '@tanstack/react-form'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { bboxPolygon } from '@turf/bbox-polygon'
 import { featureCollection, lengthToDegrees } from '@turf/helpers'
 import { randomPosition } from '@turf/random'
@@ -32,9 +31,10 @@ import {
 } from 'react-intl'
 import * as v from 'valibot'
 
-import { TwoPanelLayout } from '../../-components/two-panel-layout.tsx'
-import { BLACK, BLUE_GREY } from '../../../../colors.ts'
+import { TwoPanelLayout } from '../-shared/two-panel-layout.tsx'
+import { BLACK_00, BLUE_05 } from '../../../../../../shared/colors.ts'
 import { DecentDialog } from '../../../../components/decent-dialog.tsx'
+import { DecentTextField } from '../../../../components/decent-text-field.tsx'
 import { ErrorDialogContent } from '../../../../components/error-dialog.tsx'
 import { GenericRoutePendingComponent } from '../../../../components/generic-route-pending-component.tsx'
 import { Map } from '../../../../components/map.tsx'
@@ -66,12 +66,11 @@ export const Route = createFileRoute('/app/projects/$projectId/test-data')({
 				end={
 					<Box
 						sx={{
-							display: 'flex',
+							background: BLACK_00,
+							display: 'grid',
 							flex: 1,
-							justifyContent: 'center',
-							alignItems: 'center',
-							bgcolor: BLACK,
 							opacity: 0.5,
+							placeItems: 'center',
 						}}
 					>
 						<CircularProgress />
@@ -83,7 +82,6 @@ export const Route = createFileRoute('/app/projects/$projectId/test-data')({
 	component: RouteComponent,
 })
 
-const FORM_ID = 'create-test-data-form'
 const MIN_OBSERVATION_COUNT = 1
 const MAX_OBSERVATION_COUNT = 1000
 const DEFAULT_BOUNDED_DISTANCE_KM = 50
@@ -91,8 +89,6 @@ const MIN_BOUNDED_DISTANCE_KM = 0.1
 
 function RouteComponent() {
 	const intl = useIntl()
-
-	const router = useRouter()
 
 	const { projectId } = Route.useParams()
 
@@ -218,25 +214,30 @@ function RouteComponent() {
 		})
 	}, [boundedDistance, coordinates])
 
+	const componentId = useId()
+
+	const formId = `${componentId}-form`
+	const observationCountFieldBaseId = `${componentId}-observation-count`
+	const longitudeFieldBaseId = `${componentId}-longitude`
+	const latitudeFieldBaseId = `${componentId}-latitude`
+	const boundedDistanceBaseFieldId = `${componentId}-bounded-distance`
+
 	return (
 		<>
 			<TwoPanelLayout
 				start={
-					<Stack direction="column" sx={{ flex: 1, overflow: 'hidden' }}>
+					<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
 						<Stack
+							component="header"
 							direction="row"
-							component="nav"
 							sx={{
 								alignItems: 'center',
-								justifyContent: 'center',
-								padding: 4,
-								borderBottom: `1px solid ${BLUE_GREY}`,
+								paddingBlock: 4,
+								paddingInline: 6,
+								borderBottom: `1px solid ${BLUE_05}`,
 							}}
 						>
-							<Typography
-								variant="h1"
-								sx={{ fontWeight: 500, textAlign: 'center' }}
-							>
+							<Typography variant="pageTitle" sx={{ textAlign: 'center' }}>
 								{intl.formatMessage(m.navTitle)}
 							</Typography>
 						</Stack>
@@ -249,10 +250,10 @@ function RouteComponent() {
 								overflow: 'auto',
 							}}
 						>
-							<Box sx={{ padding: 6 }}>
+							<Box sx={{ padding: 6, overflow: 'auto' }}>
 								<Box
 									component="form"
-									id={FORM_ID}
+									id={formId}
 									noValidate
 									autoComplete="off"
 									onSubmit={(event) => {
@@ -263,132 +264,202 @@ function RouteComponent() {
 								>
 									<Stack direction="column" sx={{ gap: 10 }}>
 										<form.AppField name="observationCount">
-											{(field) => (
-												<TextField
-													required
-													fullWidth
-													label={intl.formatMessage(m.observationCountLabel)}
-													value={field.state.value}
-													error={!field.state.meta.isValid}
-													name={field.name}
-													onBlur={field.handleBlur}
-													inputMode="numeric"
-													onChange={(event) => {
-														if (
-															event.target.value === '' ||
-															v.is(
-																v.pipe(v.string(), v.digits()),
-																event.target.value,
-															)
-														) {
-															field.handleChange(event.target.value)
+											{(field) => {
+												const inputId = `${observationCountFieldBaseId}-input`
+												const errorTextId = `${observationCountFieldBaseId}-error-text`
+
+												return (
+													<DecentTextField
+														aria-describedby={
+															field.state.meta.isValid ? undefined : errorTextId
 														}
-													}}
-													slotProps={{ htmlInput: { maxLength: 4 } }}
-													helperText={
-														<Box component="span">
-															{field.state.meta.errors.length > 0
-																? field.state.meta.errors[0]?.message
-																: intl.formatMessage(
-																		m.observationCountHelperText,
-																		{
-																			min: MIN_OBSERVATION_COUNT,
-																			max: MAX_OBSERVATION_COUNT,
-																		},
-																	)}
-														</Box>
-													}
-												/>
-											)}
+														error={!field.state.meta.isValid}
+														fullWidth
+														helperText={
+															<Typography
+																id={errorTextId}
+																color={
+																	field.state.meta.isValid ? undefined : 'error'
+																}
+																component="span"
+															>
+																{field.state.meta.errors.length > 0
+																	? field.state.meta.errors[0]?.message
+																	: intl.formatMessage(
+																			m.observationCountHelperText,
+																			{
+																				min: MIN_OBSERVATION_COUNT,
+																				max: MAX_OBSERVATION_COUNT,
+																			},
+																		)}
+															</Typography>
+														}
+														id={inputId}
+														inputMode="numeric"
+														label={intl.formatMessage(m.observationCountLabel)}
+														name={field.name}
+														onBlur={field.handleBlur}
+														onChange={(event) => {
+															if (
+																event.target.value === '' ||
+																v.is(
+																	v.pipe(v.string(), v.digits()),
+																	event.target.value,
+																)
+															) {
+																field.handleChange(event.target.value)
+															}
+														}}
+														required
+														value={field.state.value}
+													/>
+												)
+											}}
 										</form.AppField>
 
-										<Box
+										<Stack
 											component="fieldset"
-											sx={{
-												display: 'flex',
-												flexDirection: 'column',
-												border: 'none',
-												padding: 0,
-												gap: 10,
-											}}
+											sx={{ border: 'none', gap: 10, padding: 0 }}
 										>
 											<Stack direction="column" sx={{ gap: 5 }}>
 												<Typography>
 													{intl.formatMessage(m.coordinatesSelectionHint)}
 												</Typography>
+
 												<Stack
 													direction="row"
-													sx={{ gap: 4, justifyContent: 'space-between' }}
+													sx={{
+														alignItems: 'center',
+														flexWrap: 'wrap',
+														gap: 4,
+														justifyContent: 'space-between',
+													}}
 												>
 													<form.AppField name="longitude">
-														{(field) => (
-															<TextField
-																fullWidth
-																aria-disabled
-																disabled
-																value={field.state.value}
-																// NOTE: Only surfaced for internal usage
-																// eslint-disable-next-line formatjs/no-literal-string-in-jsx
-																label="Longitude"
-																helperText={
-																	<Box component="span">
-																		{field.state.meta.errors.length > 0
-																			? field.state.meta.errors[0]?.message
-																			: null}
-																	</Box>
-																}
-															/>
-														)}
+														{(field) => {
+															const inputId = `${longitudeFieldBaseId}-input`
+															const errorTextId = `${longitudeFieldBaseId}-error-text`
+
+															return (
+																<DecentTextField
+																	aria-describedby={
+																		field.state.meta.isValid
+																			? undefined
+																			: errorTextId
+																	}
+																	aria-disabled
+																	disabled
+																	helperText={
+																		<Typography
+																			id={errorTextId}
+																			color={
+																				field.state.meta.isValid
+																					? undefined
+																					: 'error'
+																			}
+																			component="span"
+																		>
+																			{field.state.meta.errors.length > 0
+																				? field.state.meta.errors[0]?.message
+																				: null}
+																		</Typography>
+																	}
+																	id={inputId}
+																	// NOTE: Only surfaced for internal usage
+																	// eslint-disable-next-line formatjs/no-literal-string-in-jsx
+																	label="Longitude"
+																	sx={{ minWidth: 200 }}
+																	value={field.state.value}
+																/>
+															)
+														}}
 													</form.AppField>
 
 													<form.AppField name="latitude">
-														{(field) => (
-															<TextField
-																fullWidth
-																aria-disabled
-																disabled
-																value={field.state.value}
-																// NOTE: Only surfaced for internal usage
-																// eslint-disable-next-line formatjs/no-literal-string-in-jsx
-																label="Latitude"
-																helperText={
-																	<Box component="span">
-																		{field.state.meta.errors.length > 0
-																			? field.state.meta.errors[0]?.message
-																			: null}
-																	</Box>
-																}
-															/>
-														)}
+														{(field) => {
+															const inputId = `${latitudeFieldBaseId}-input`
+															const errorTextId = `${latitudeFieldBaseId}-error-text`
+
+															return (
+																<DecentTextField
+																	aria-describedby={
+																		field.state.meta.isValid
+																			? undefined
+																			: errorTextId
+																	}
+																	aria-disabled
+																	disabled
+																	helperText={
+																		<Typography
+																			id={errorTextId}
+																			color={
+																				field.state.meta.isValid
+																					? undefined
+																					: 'error'
+																			}
+																			component="span"
+																		>
+																			{field.state.meta.errors.length > 0
+																				? field.state.meta.errors[0]?.message
+																				: null}
+																		</Typography>
+																	}
+																	id={inputId}
+																	// NOTE: Only surfaced for internal usage
+																	// eslint-disable-next-line formatjs/no-literal-string-in-jsx
+																	label="Latitude"
+																	sx={{ minWidth: 200 }}
+																	value={field.state.value}
+																/>
+															)
+														}}
 													</form.AppField>
 												</Stack>
 											</Stack>
 
 											<form.AppField name="boundedDistance">
-												{(field) => (
-													<TextField
-														required
-														fullWidth
-														label={intl.formatMessage(m.boundedDistanceLabel)}
-														value={field.state.value}
-														error={!field.state.meta.isValid}
-														name={field.name}
-														onBlur={field.handleBlur}
-														inputMode="decimal"
-														onChange={(event) => {
-															field.handleChange(event.target.value)
-														}}
-														helperText={
-															<Box component="span">
-																{field.state.meta.errors.length > 0
-																	? field.state.meta.errors[0]?.message
-																	: null}
-															</Box>
-														}
-													/>
-												)}
+												{(field) => {
+													const inputId = `${boundedDistanceBaseFieldId}-input`
+													const errorTextId = `${boundedDistanceBaseFieldId}-error-text`
+
+													return (
+														<DecentTextField
+															aria-describedby={
+																field.state.meta.isValid
+																	? undefined
+																	: errorTextId
+															}
+															error={!field.state.meta.isValid}
+															helperText={
+																<Typography
+																	id={errorTextId}
+																	color={
+																		field.state.meta.isValid
+																			? undefined
+																			: 'error'
+																	}
+																	component="span"
+																>
+																	{field.state.meta.errors.length > 0
+																		? field.state.meta.errors[0]?.message
+																		: null}
+																</Typography>
+															}
+															id={inputId}
+															inputMode="decimal"
+															label={intl.formatMessage(m.boundedDistanceLabel)}
+															name={field.name}
+															onBlur={field.handleBlur}
+															onChange={(event) => {
+																field.handleChange(event.target.value)
+															}}
+															required
+															value={field.state.value}
+														/>
+													)
+												}}
 											</form.AppField>
-										</Box>
+										</Stack>
 
 										<form.AppField name="createTrack">
 											{(field) => (
@@ -410,13 +481,10 @@ function RouteComponent() {
 							<Stack
 								direction="column"
 								sx={{
-									gap: 4,
-									paddingX: 6,
-									paddingBottom: 6,
-									position: 'sticky',
-									bottom: 0,
 									alignItems: 'center',
-									zIndex: 1,
+									borderTop: `1px solid ${BLUE_05}`,
+									gap: 4,
+									padding: 6,
 								}}
 							>
 								<form.Subscribe
@@ -425,43 +493,17 @@ function RouteComponent() {
 									}
 								>
 									{([canSubmit, isSubmitting]) => (
-										<>
-											<Button
-												type="button"
-												variant="outlined"
-												fullWidth
-												aria-disabled={isSubmitting}
-												onClick={() => {
-													if (isSubmitting) return
-
-													if (router.history.canGoBack()) {
-														router.history.back()
-														return
-													}
-
-													router.navigate({
-														to: '/app/settings',
-														replace: true,
-													})
-												}}
-												sx={{ maxWidth: 400 }}
-											>
-												{intl.formatMessage(m.cancel)}
-											</Button>
-
-											<Button
-												type="submit"
-												form={FORM_ID}
-												fullWidth
-												variant="contained"
-												loading={isSubmitting}
-												loadingPosition="start"
-												aria-disabled={!canSubmit}
-												sx={{ maxWidth: 400 }}
-											>
-												{intl.formatMessage(m.create)}
-											</Button>
-										</>
+										<Button
+											aria-disabled={!canSubmit}
+											form={formId}
+											fullWidth
+											loading={isSubmitting}
+											loadingPosition="start"
+											type="submit"
+											variant="contained"
+										>
+											{intl.formatMessage(m.create)}
+										</Button>
 									)}
 								</form.Subscribe>
 							</Stack>
@@ -477,7 +519,7 @@ function RouteComponent() {
 									flex: 1,
 									justifyContent: 'center',
 									alignItems: 'center',
-									bgcolor: BLACK,
+									background: BLACK_00,
 									opacity: 0.5,
 								}}
 							>
@@ -594,15 +636,15 @@ function DisplayedMap({
 					type="fill"
 					id="radius"
 					paint={{
-						'fill-color': BLACK,
+						'fill-color': BLACK_00,
 						'fill-opacity': 0.2,
-						'fill-outline-color': BLACK,
+						'fill-outline-color': BLACK_00,
 					}}
 				/>
 				<Layer
 					type="line"
 					id="border"
-					paint={{ 'line-width': 1, 'line-color': BLACK }}
+					paint={{ 'line-width': 1, 'line-color': BLACK_00 }}
 				/>
 			</Source>
 
@@ -828,7 +870,6 @@ const m = defineMessages<{
 		readonly min: MessageValue
 	}
 	readonly minBoundedDistanceError: { readonly value: MessageValue }
-	readonly cancel: NoMessageValues
 	readonly create: NoMessageValues
 	readonly coordinatesSelectionHint: NoMessageValues
 	readonly createTrack: NoMessageValues
@@ -836,84 +877,79 @@ const m = defineMessages<{
 	readonly trackCreateSuccess: { readonly count: number | bigint }
 }>({
 	navTitle: {
-		id: 'routes.app.settings_.test-data.navTitle',
+		id: 'routes.app.settings.test-data.navTitle',
 		defaultMessage: 'Create Test Data',
 		description: 'Title of test data page.',
 	},
 	requiredError: {
-		id: 'routes.app.settings_.test-data.requiredError',
+		id: 'routes.app.settings.test-data.requiredError',
 		defaultMessage: 'Required',
 		description: 'Error message for when required input is empty.',
 	},
 	observationCountLabel: {
-		id: 'routes.app.settings_.test-data.observationCountLabel',
+		id: 'routes.app.settings.test-data.observationCountLabel',
 		defaultMessage: 'Number of observations',
 		description: 'Label for the observation count input.',
 	},
 	boundedDistanceLabel: {
-		id: 'routes.app.settings_.test-data.boundedDistanceLabel',
+		id: 'routes.app.settings.test-data.boundedDistanceLabel',
 		defaultMessage: 'Maximum bounded distance (kilometers)',
 		description: 'Label for the bounded distance input.',
 	},
 	invalidObservationCountFormat: {
-		id: 'routes.app.settings_.test-data.invalidObservationCountFormat',
+		id: 'routes.app.settings.test-data.invalidObservationCountFormat',
 		defaultMessage: 'Must be an integer',
 		description: 'Error message for when observation count is not an integer.',
 	},
 	invalidBoundedDistanceFormat: {
-		id: 'routes.app.settings_.test-data.invalidBoundedDistanceFormat',
+		id: 'routes.app.settings.test-data.invalidBoundedDistanceFormat',
 		defaultMessage: 'Must be a decimal',
 		description: 'Error message for when bounded distance is not an decimal.',
 	},
 	minObservationCountError: {
-		id: 'routes.app.settings_.test-data.minObservationCountError',
+		id: 'routes.app.settings.test-data.minObservationCountError',
 		defaultMessage: 'Must be greater than {value}',
 		description: 'Error message for when observation count is too small',
 	},
 	maxObservationCountError: {
-		id: 'routes.app.settings_.test-data.maxObservationCountError',
+		id: 'routes.app.settings.test-data.maxObservationCountError',
 		defaultMessage: 'Cannot be greater than {value}',
 		description: 'Error message for when observation count is too large',
 	},
 	observationCountHelperText: {
-		id: 'routes.app.settings_.test-data.observationCountHelperText',
+		id: 'routes.app.settings.test-data.observationCountHelperText',
 		defaultMessage: 'Between {min} and {max}',
 		description: 'Helper text for observation count input.',
 	},
 	minBoundedDistanceError: {
-		id: 'routes.app.settings_.test-data.minBoundedDistanceError',
+		id: 'routes.app.settings.test-data.minBoundedDistanceError',
 		defaultMessage: 'Must be greater than {value} kilometers',
 		description: 'Error message for when bounded distance is too small',
 	},
-	cancel: {
-		id: 'routes.app.settings_.test-data.cancel',
-		defaultMessage: 'Cancel',
-		description: 'Label for cancel button.',
-	},
 	create: {
-		id: 'routes.app.settings_.test-data.create',
+		id: 'routes.app.settings.test-data.create',
 		defaultMessage: 'Create',
 		description: 'Label for create button.',
 	},
 	coordinatesSelectionHint: {
-		id: 'routes.app.settings_.test-data.coordinatesSelectionHint',
+		id: 'routes.app.settings.test-data.coordinatesSelectionHint',
 		defaultMessage:
 			'Set the coordinates by clicking on the map or dragging the location marker.',
 		description: 'Instructions displayed for coordinates selection inputs.',
 	},
 	createTrack: {
-		id: 'routes.app.settings_.test-data.createTrack',
+		id: 'routes.app.settings.test-data.createTrack',
 		defaultMessage: 'Create track',
 		description: 'Label for toggle to create track when creating test data.',
 	},
 	observationCreateSuccess: {
-		id: 'routes.app.settings_.test-data.observationCreateSuccess',
+		id: 'routes.app.settings.test-data.observationCreateSuccess',
 		defaultMessage:
 			'Created {count, plural, one {# observation} other {# observations}}.',
 		description: 'Message displayed when observation creation succeeds.',
 	},
 	trackCreateSuccess: {
-		id: 'routes.app.settings_.test-data.trackCreateSuccess',
+		id: 'routes.app.settings.test-data.trackCreateSuccess',
 		defaultMessage: 'Created {count, plural, one {# track} other {# tracks}}.',
 		description: 'Message displayed when track creation succeeds.',
 	},

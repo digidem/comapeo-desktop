@@ -1,19 +1,27 @@
 import { useMemo } from 'react'
-import { useTheme, type TypographyVariant } from '@mui/material/styles'
+import { useTheme, type TypographyVariants } from '@mui/material/styles'
 
 export function useIconSizeBasedOnTypography({
-	typographyVariant,
+	variant,
 	multiplier = 1,
 }: {
-	typographyVariant: TypographyVariant
+	variant: keyof Pick<
+		TypographyVariants,
+		| 'bodyCopy'
+		| 'cardHeader'
+		| 'detailCopy'
+		| 'heroHeader'
+		| 'heroSubheading'
+		| 'pageTitle'
+		| 'sectionLabel'
+	>
 	multiplier?: number
 }) {
 	const theme = useTheme()
 
-	const fontSize = theme.typography[typographyVariant].fontSize
-	const lineHeight = theme.typography[typographyVariant].lineHeight
+	const fontSize = theme.typography[variant].fontSize
 
 	return useMemo(() => {
-		return `calc(${fontSize} * ${lineHeight} * ${multiplier})`
-	}, [fontSize, lineHeight, multiplier])
+		return `calc(${fontSize} * ${multiplier})`
+	}, [fontSize, multiplier])
 }

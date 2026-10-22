@@ -1,7 +1,5 @@
-import { hexToRgb } from '@mui/material/styles'
 import { expect } from '@playwright/test'
 
-import { COMAPEO_BLUE } from '../../../../src/renderer/src/colors.ts'
 import {
 	setup,
 	simulateCreateProject,
@@ -30,7 +28,7 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 		})
 
 		await page
-			.getByRole('button', {
+			.getByRole('link', {
 				name: `Go to project ${projectParams.projectName}.`,
 				exact: true,
 			})
@@ -49,20 +47,28 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 			await teamNavLink.click()
 
 			// Assert nav rail state
-			await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+			await expect(teamNavLink).toHaveAttribute('aria-current', 'page')
 		}
 
 		/// Main
+
+		/// Header
 		{
-			await expect(
-				main.getByRole('heading', { name: 'Team', exact: true }),
-			).toBeVisible()
+			const header = main.locator('header')
 
 			await expect(
-				main.getByRole('link', { name: 'Invite Device', exact: true }),
+				header.getByRole('heading', { name: 'Team', exact: true }),
 			).toBeVisible()
 
-			/// Coordinators list
+			await expect(header.getByText(/[\d | No]+ member[s]*/)).toBeVisible()
+
+			await expect(
+				header.getByRole('link', { name: 'Invite Devices', exact: true }),
+			).toBeVisible()
+		}
+
+		/// Coordinators list
+		{
 			await expect(
 				main.getByRole('heading', { name: 'Coordinators', exact: true }),
 			).toBeVisible()
@@ -86,8 +92,10 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 			await expect(
 				ownDeviceListItem.getByText('This device', { exact: true }),
 			).toBeVisible()
+		}
 
-			/// Participants list
+		/// Participants list
+		{
 			await expect(
 				main.getByRole('heading', { name: 'Participants', exact: true }),
 			).toBeVisible()
@@ -104,13 +112,17 @@ test('index', async ({ appInfo, projectParams, userParams }) => {
 					exact: true,
 				}),
 			).toBeVisible()
+		}
 
-			/// Remote archives list
+		/// Remote archives list
+		{
 			await expect(
 				main.getByRole('heading', { name: 'Remote Archives', exact: true }),
 			).not.toBeVisible()
+		}
 
-			/// Past collaborators list
+		/// Past collaborators list
+		{
 			await expect(
 				main.getByRole('heading', { name: 'Past Collaborators', exact: true }),
 			).not.toBeVisible()
@@ -142,7 +154,7 @@ test.describe('collaborator info', () => {
 			})
 
 			await page
-				.getByRole('button', {
+				.getByRole('link', {
 					name: `Go to project ${projectParams.projectName}.`,
 					exact: true,
 				})
@@ -168,35 +180,51 @@ test.describe('collaborator info', () => {
 					.click()
 
 				// Assert nav rail state
-				await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+				await expect(teamNavLink).toHaveAttribute('aria-current', 'page')
 			}
 
 			/// Main
 
-			await expect(
-				main.getByRole('heading', { name: 'This Device', exact: true }),
-			).toBeVisible()
+			/// Header
+			{
+				const header = main.locator('header')
 
-			await expect(
-				main.getByRole('heading', { name: userParams.deviceName, exact: true }),
-			).toBeVisible()
+				await expect(
+					header.getByRole('heading', { name: 'This Device', exact: true }),
+				).toBeVisible()
 
-			await expect(main.getByText('Coordinator', { exact: true })).toBeVisible()
+				await expect(
+					header.getByRole('button', { name: 'Go back.', exact: true }),
+				).toBeVisible()
+			}
 
-			//// Other displayed collaborator info
-			// TODO: Check for displayed device ID
+			/// Info
+			{
+				await expect(
+					main.getByText(userParams.deviceName, { exact: true }),
+				).toBeVisible()
 
-			// TODO: Ideally check for the actual values
-			const dateAdded = main.getByText(/^Added on .+/)
-			await expect(dateAdded).toBeVisible()
-			const dateAddedTime = dateAdded.getByRole('time')
-			await expect(dateAddedTime).not.toBeEmpty()
-			await expect(dateAddedTime).toHaveAttribute('datetime')
+				await expect(
+					main.getByText('Coordinator', { exact: true }),
+				).toBeVisible()
+
+				//// Other displayed collaborator info
+				// TODO: Check for displayed device ID
+
+				// TODO: Ideally check for the actual values
+				const dateAdded = main.getByText(/^Added on .+/)
+				await expect(dateAdded).toBeVisible()
+				const dateAddedTime = dateAdded.getByRole('time')
+				await expect(dateAddedTime).not.toBeEmpty()
+				await expect(dateAddedTime).toHaveAttribute('datetime')
+			}
 
 			/// Actions
-			await expect(
-				main.getByRole('button', { name: 'Leave Project', exact: true }),
-			).toBeVisible()
+			{
+				await expect(
+					main.getByRole('button', { name: 'Leave Project', exact: true }),
+				).toBeVisible()
+			}
 		} finally {
 			// 3. Cleanup
 			await electronApp.close()
@@ -225,8 +253,7 @@ test.describe('leave project', () => {
 			})
 
 			await page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('button', {
+				.getByRole('link', {
 					name: `Go to project ${projectParams.projectName}.`,
 					exact: true,
 				})
@@ -252,7 +279,7 @@ test.describe('leave project', () => {
 					.click()
 
 				// Assert nav rail state
-				await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+				await expect(teamNavLink).toHaveAttribute('aria-current', 'page')
 
 				await main
 					.getByRole('button', { name: 'Leave Project', exact: true })
@@ -357,23 +384,12 @@ test.describe('leave project', () => {
 			}
 
 			// Assert left project is no longer referenced on home page
-			{
-				await expect(
-					page
-						.getByRole('navigation', { name: 'App navigation', exact: true })
-						.getByRole('button', {
-							name: `Go to project ${projectParams.projectName}.`,
-							exact: true,
-						}),
-				).not.toBeVisible()
-
-				await expect(
-					main.getByRole('link', {
-						name: `Go to project ${projectParams.projectName}.`,
-						exact: true,
-					}),
-				).not.toBeVisible()
-			}
+			await expect(
+				main.getByRole('link', {
+					name: `Go to project ${projectParams.projectName}.`,
+					exact: true,
+				}),
+			).not.toBeVisible()
 		} finally {
 			// 3. Cleanup
 			await electronApp.close()

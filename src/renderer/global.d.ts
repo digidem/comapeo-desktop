@@ -1,6 +1,4 @@
-import type { MessageDescriptor } from 'react-intl'
-
-import { type RuntimeApi } from '../preload/runtime.js'
+import type { RuntimeApi } from '../preload/runtime.js'
 
 declare global {
 	// Make changes here whenever you expose new things in the preload/ using exposeInMainWorld
@@ -65,6 +63,5 @@ declare global {
 declare module '@tanstack/react-router' {
 	interface StaticDataRouteOption {
 		onboardingStepNumber?: 1 | 2
-		getNavTitle?: () => MessageDescriptor
 	}
 }

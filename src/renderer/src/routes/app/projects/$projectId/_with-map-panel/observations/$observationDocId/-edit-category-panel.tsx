@@ -1,0 +1,346 @@
+import { Suspense } from 'react'
+import {
+	useManyDocs,
+	usePresetsSelection,
+	useSingleDocByDocId,
+	useUpdateDocument,
+} from '@comapeo/core-react'
+import type { Observation, Preset } from '@comapeo/core/schema.js'
+import Box from '@mui/material/Box'
+import ButtonBase from '@mui/material/ButtonBase'
+import CircularProgress from '@mui/material/CircularProgress'
+import IconButton from '@mui/material/IconButton'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+import {
+	useIsMutating,
+	useMutation,
+	useSuspenseQuery,
+} from '@tanstack/react-query'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
+
+import { BLACK_00, BLUE_05 } from '../../../../../../../../../shared/colors.ts'
+import {
+	CategoryIconContainer,
+	CategoryIconImage,
+} from '../../../../../../../components/category-icon.tsx'
+import { DecentDialog } from '../../../../../../../components/decent-dialog.tsx'
+import { ErrorDialogContent } from '../../../../../../../components/error-dialog.tsx'
+import { Icon } from '../../../../../../../components/icon.tsx'
+import { useIconSizeBasedOnTypography } from '../../../../../../../hooks/icon.ts'
+import { getLocaleStateQueryOptions } from '../../../../../../../lib/queries/app-settings.ts'
+import { createGlobalMutationsKey } from '../../../../../../../lib/queries/global-mutations.ts'
+
+const UPDATE_OBSERVATION_CATEGORY_MUTATION_KEY = createGlobalMutationsKey([
+	'observations',
+	'category',
+	'update',
+])
+
+export function EditCategoryPanel({
+	projectId,
+	observationDocId,
+	onClose,
+}: {
+	projectId: string
+	observationDocId: string
+	onClose: (success: boolean) => void
+}) {
+	const intl = useIntl()
+
+	const iconSize = useIconSizeBasedOnTypography({
+		variant: 'pageTitle',
+		multiplier: 1.25,
+	})
+
+	const isCategoryUpdatePending =
+		useIsMutating({
+			mutationKey: UPDATE_OBSERVATION_CATEGORY_MUTATION_KEY,
+			exact: true,
+		}) > 0
+
+	return (
+		<Stack direction="column" sx={{ flex: 1, overflow: 'auto' }}>
+			<Stack
+				component="header"
+				direction="row"
+				sx={{
+					alignItems: 'center',
+					borderBottom: `1px solid ${BLUE_05}`,
+					gap: 4,
+					padding: 4,
+				}}
+			>
+				<IconButton
+					aria-disabled={isCategoryUpdatePending}
+					aria-label={intl.formatMessage(
+						m.editCategoryPanelCloseAccessibleLabel,
+					)}
+					onClick={() => {
+						if (isCategoryUpdatePending) {
+							return
+						}
+
+						onClose(false)
+					}}
+				>
+					<Icon name="material-close" size={iconSize} />
+				</IconButton>
+
+				<Typography variant="pageTitle">
+					{intl.formatMessage(m.editCategoryPanelTitle)}
+				</Typography>
+			</Stack>
+
+			<Box
+				sx={{
+					display: 'flex',
+					flex: 1,
+					flexDirection: 'column',
+					overflow: 'auto',
+				}}
+			>
+				<Suspense
+					fallback={
+						<Box
+							sx={{
+								display: 'grid',
+								flex: 1,
+								placeItems: 'center',
+								padding: 10,
+							}}
+						>
+							<CircularProgress />
+						</Box>
+					}
+				>
+					<CategoriesList
+						projectId={projectId}
+						observationDocId={observationDocId}
+						onSuccess={() => {
+							onClose(true)
+						}}
+					/>
+				</Suspense>
+			</Box>
+		</Stack>
+	)
+}
+
+function CategoriesList({
+	projectId,
+	observationDocId,
+	onSuccess,
+}: {
+	projectId: string
+	observationDocId: string
+	onSuccess: () => void
+}) {
+	const intl = useIntl()
+
+	const { data: lang } = useSuspenseQuery({
+		...getLocaleStateQueryOptions(),
+		select: ({ value }) => value,
+	})
+
+	const selectableCategories = usePresetsSelection({
+		projectId,
+		dataType: 'observation',
+		lang,
+	})
+
+	const { data: allCategories } = useManyDocs({
+		projectId,
+		docType: 'preset',
+		lang,
+	})
+
+	const { data: observation } = useSingleDocByDocId({
+		projectId,
+		docId: observationDocId,
+		docType: 'observation',
+	})
+
+	const updateObservation = useUpdateDocument({
+		docType: 'observation',
+		projectId,
+	})
+
+	const updateObservationCategory = useMutation({
+		mutationKey: UPDATE_OBSERVATION_CATEGORY_MUTATION_KEY,
+		mutationFn: async ({ category }: { category: Preset }) => {
+			// NOTE: For calculating updated tags, use the category that the observation document references,
+			// not the "best matching" category derived from the tags. This is because the existing tags are set by
+			// the referenced category on the document, not by the match that we use tag-based heuristics for.
+			const currentCategory = observation.presetRef
+				? allCategories.find((c) => c.docId === observation.presetRef?.docId)
+				: undefined
+
+			let newTags: Observation['tags']
+
+			if (currentCategory) {
+				newTags = { ...category.tags, ...category.addTags }
+
+				// Apply tags from new category and remove tags from previous category
+				for (const [key, value] of Object.entries(observation.tags)) {
+					const tagWasFromPreviousPreset =
+						currentCategory.tags[key] === value ||
+						currentCategory.addTags[key] === value
+
+					const shouldRemoveTag = category.removeTags[key] === value
+
+					// Only keep tags that were not from the previous category and are not removed by the new category
+					if (!tagWasFromPreviousPreset && !shouldRemoveTag) {
+						newTags[key] = value
+					}
+				}
+			} else {
+				newTags = { ...observation.tags, ...category.tags, ...category.addTags }
+			}
+
+			return updateObservation.mutateAsync({
+				versionId: observation.versionId,
+				value: {
+					...observation,
+					presetRef: { docId: category.docId, versionId: category.versionId },
+					tags: newTags,
+				},
+			})
+		},
+	})
+
+	const categoryIconSize = useIconSizeBasedOnTypography({
+		variant: 'bodyCopy',
+		multiplier: 2.5,
+	})
+
+	return (
+		<>
+			<Box
+				sx={{
+					alignItems: 'self-start',
+					display: 'grid',
+					gridTemplateColumns: `repeat(auto-fill, minmax(120px, 33%))`,
+					justifyContent: 'space-around',
+					justifyItems: 'center',
+					padding: 6,
+				}}
+			>
+				{selectableCategories.map((category) => {
+					return (
+						<ButtonBase
+							key={category.docId}
+							onClick={() => {
+								if (updateObservationCategory.status === 'pending') {
+									return
+								}
+
+								updateObservationCategory.mutate(
+									{ category },
+									{
+										onSuccess: () => {
+											onSuccess()
+										},
+									},
+								)
+							}}
+							sx={{
+								borderRadius: 2,
+								':hover, :focus': {
+									background: (theme) => theme.alpha(BLUE_05, 0.2),
+									transition: (theme) =>
+										theme.transitions.create('background-color'),
+								},
+							}}
+						>
+							<Stack
+								direction="column"
+								sx={{ alignItems: 'center', gap: 2, padding: 4 }}
+							>
+								<CategoryIconContainer
+									applyBoxShadow
+									color={category.color || BLACK_00}
+								>
+									{category.iconRef?.docId ? (
+										<CategoryIconImage
+											altText={intl.formatMessage(
+												m.editCategoryPanelCategoryIconAltText,
+												{
+													name: category.name,
+												},
+											)}
+											iconDocumentId={category.iconRef.docId}
+											projectId={projectId}
+											imageStyle={{ width: categoryIconSize, aspectRatio: 1 }}
+										/>
+									) : (
+										<Icon
+											name="material-symbols-indeterminate-question-box"
+											size={categoryIconSize}
+										/>
+									)}
+								</CategoryIconContainer>
+
+								<Typography
+									sx={{
+										fontWeight: (theme) => theme.typography.fontWeightMedium,
+										textAlign: 'center',
+									}}
+								>
+									{category.name}
+								</Typography>
+							</Stack>
+						</ButtonBase>
+					)
+				})}
+			</Box>
+
+			<DecentDialog
+				fullWidth
+				maxWidth="sm"
+				value={
+					updateObservationCategory.status === 'error'
+						? updateObservationCategory.error
+						: null
+				}
+			>
+				{(error) => (
+					<ErrorDialogContent
+						errorMessage={error.toString()}
+						onClose={() => {
+							updateObservationCategory.reset()
+						}}
+					/>
+				)}
+			</DecentDialog>
+		</>
+	)
+}
+
+const m = defineMessages<{
+	readonly editCategoryPanelCloseAccessibleLabel: NoMessageValues
+	readonly editCategoryPanelTitle: NoMessageValues
+	readonly editCategoryPanelCategoryIconAltText: { readonly name: MessageValue }
+}>({
+	editCategoryPanelCloseAccessibleLabel: {
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.editCategoryPanelCloseAccessibleLabel',
+		defaultMessage: 'Close.',
+		description: 'Accessible label for button to close edit category panel.',
+	},
+	editCategoryPanelTitle: {
+		id: '$1.routes.app.projects.$projectId.observations.$observationDocId.editCategoryPanelTitle',
+		defaultMessage: 'Change Category',
+		description: 'Title for edit category panel.',
+	},
+	editCategoryPanelCategoryIconAltText: {
+		id: 'routes.app.projects.$projectId.observations.$observationDocId.editCategoryPanelCategoryIconAltText',
+		defaultMessage: 'Icon for {name} category',
+		description:
+			'Accessible text for icon image displayed for category (used for accessibility tools).',
+	},
+})

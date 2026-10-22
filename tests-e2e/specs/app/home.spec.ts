@@ -1,7 +1,5 @@
-import { hexToRgb } from '@mui/material/styles'
 import { expect } from '@playwright/test'
 
-import { COMAPEO_BLUE } from '../../../src/renderer/src/colors.ts'
 import {
 	setup,
 	simulateCreateProject,
@@ -11,7 +9,7 @@ import {
 
 test.describe.configure({ mode: 'parallel' })
 
-test('join project', async ({ appInfo, userParams }) => {
+test('initial page after onboarding', async ({ appInfo, userParams }) => {
 	const { launchApp, cleanup } = await setup()
 	const electronApp = await launchApp({ appInfo })
 
@@ -23,35 +21,47 @@ test('join project', async ({ appInfo, userParams }) => {
 
 		// 2. Main tests
 
-		await page
-			.getByRole('main')
-			.getByRole('button', { name: 'Join a Project', exact: true })
-			.click()
+		const main = page.getByRole('main')
 
-		// Join project dialog assertions
+		// Header section
 		{
-			const dialog = page.getByRole('dialog')
+			const header = main.locator('header')
 
 			await expect(
-				dialog.getByRole('button', { name: 'Go back', exact: true }),
+				header.getByRole('heading', { name: 'All Projects', exact: true }),
 			).toBeVisible()
 
 			await expect(
-				dialog.getByRole('heading', { name: 'Join a Project', exact: true }),
+				header.getByText('Most Recent', { exact: true }),
 			).toBeVisible()
 
 			await expect(
-				dialog.getByText(
-					'Coordinate with your team to receive a project invitation.',
+				header.getByRole('link', { name: 'Start New Project', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				header.getByRole('link', { name: 'CoMapeo Settings', exact: true }),
+			).toBeVisible()
+		}
+
+		// Main panel section
+		{
+			await expect(
+				main.getByText(`${userParams.deviceName} is ready!`, { exact: true }),
+			).toBeVisible()
+
+			await expect(
+				main.getByText(
+					'Coordinate with a team to join them or start a new project.',
 					{ exact: true },
 				),
 			).toBeVisible()
 
-			// TODO: Simulate invites being received
-
-			await dialog.getByRole('button', { name: 'Go back', exact: true }).click()
-
-			await expect(dialog).not.toBeVisible()
+			await expect(main.getByRole('list').getByRole('listitem')).toHaveText([
+				'Map anywhere and everywhere',
+				'Securely share with others',
+				'Own and control your data',
+			])
 		}
 	} finally {
 		// 3. Cleanup
@@ -74,7 +84,7 @@ test('create project', async ({ appInfo, projectParams, userParams }) => {
 
 		await page
 			.getByRole('main')
-			.getByRole('button', { name: 'Start New Project', exact: true })
+			.getByRole('link', { name: 'Start New Project', exact: true })
 			.click()
 
 		// Start new project dialog assertions
@@ -152,44 +162,6 @@ test('create project', async ({ appInfo, projectParams, userParams }) => {
 				pathname: '/app/projects/:projectId',
 			}).test({ pathname: url.hash.slice(1) })
 		})
-
-		// App nav after project creation assertions
-		{
-			const appNav = page.getByRole('navigation', {
-				name: 'App navigation',
-				exact: true,
-			})
-
-			await expect(
-				appNav.getByRole('button', {
-					name: `Show info for project ${projectParams.projectName}.`,
-					exact: true,
-				}),
-			).toBeVisible()
-
-			await appNav.getByRole('link', { name: 'Home', exact: true }).click()
-
-			await expect(
-				appNav.getByRole('button', {
-					name: `Go to project ${projectParams.projectName}.`,
-					exact: true,
-				}),
-			).toBeVisible()
-		}
-
-		// Project card on home page assertions
-		{
-			const projectCard = page.getByRole('main').getByRole('link', {
-				name: `Go to project ${projectParams.projectName}`,
-			})
-
-			await expect(projectCard).toHaveCount(1)
-
-			await expect(projectCard).toHaveCSS(
-				'border-color',
-				hexToRgb(COMAPEO_BLUE),
-			)
-		}
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()
@@ -197,7 +169,7 @@ test('create project', async ({ appInfo, projectParams, userParams }) => {
 	}
 })
 
-test('additional projects section', async ({
+test('listed project sections', async ({
 	appInfo,
 	projectParams,
 	userParams,
@@ -221,31 +193,29 @@ test('additional projects section', async ({
 		// 2. Main tests
 		const main = page.getByRole('main')
 
-		// Additional projects row assertions
+		const sections = main.locator('section')
+
+		// Assertions for listed projects after creating first project
 		{
-			await expect(
-				main.getByRole('heading', { name: 'Additional Projects', exact: true }),
-			).toBeVisible()
+			await expect(sections).toHaveCount(1)
+
+			const currentProjectSection = sections.nth(0)
 
 			await expect(
-				main.getByText('Ordered by most recently created', { exact: true }),
+				currentProjectSection.getByRole('heading', {
+					name: 'Current Project',
+					exact: true,
+				}),
 			).toBeVisible()
 
-			await main
-				.getByRole('link', { name: 'Show as list', exact: true })
-				.hover()
+			const projectCard01 = currentProjectSection.getByRole('link', {
+				name: `Go to project ${projectName01}.`,
+				exact: true,
+			})
 
-			await expect(
-				page.getByRole('tooltip', { name: 'Show as list', exact: true }),
-			).toBeVisible()
+			await expect(projectCard01).toBeVisible()
 
-			await main
-				.getByRole('link', { name: 'Show as grid', exact: true })
-				.hover()
-
-			await expect(
-				page.getByRole('tooltip', { name: 'Show as grid', exact: true }),
-			).toBeVisible()
+			await expect(projectCard01).toHaveAttribute('data-current', 'true')
 		}
 
 		const projectName02 = `${projectParams.projectName} 02`
@@ -255,31 +225,45 @@ test('additional projects section', async ({
 			projectName: projectName02,
 		})
 
-		// Project card assertions after creation of second project.
+		// Assertions for listed projects after creating second project
 		{
-			const projectCard01 = main.getByRole('link', {
-				name: `Go to project ${projectName01}.`,
-				exact: true,
-			})
+			await expect(sections).toHaveCount(2)
 
-			await expect(projectCard01).not.toHaveCSS(
-				'border-color',
-				hexToRgb(COMAPEO_BLUE),
-			)
+			const currentProjectSection = sections.nth(0)
+			const otherProjectsSection = sections.nth(1)
 
-			const projectCard02 = main.getByRole('link', {
+			await expect(
+				currentProjectSection.getByRole('heading', {
+					name: 'Current Project',
+					exact: true,
+				}),
+			).toBeVisible()
+
+			await expect(
+				otherProjectsSection.getByRole('heading', {
+					name: 'Other Projects',
+					exact: true,
+				}),
+			).toBeVisible()
+
+			const projectCard02 = currentProjectSection.getByRole('link', {
 				name: `Go to project ${projectName02}.`,
 				exact: true,
 			})
 
-			await expect(projectCard02).toHaveCSS(
-				'border-color',
-				hexToRgb(COMAPEO_BLUE),
-			)
-		}
+			await expect(projectCard02).toBeVisible()
 
-		await main.getByRole('link', { name: 'Show as list', exact: true }).click()
-		await main.getByRole('link', { name: 'Show as grid', exact: true }).click()
+			await expect(projectCard02).toHaveAttribute('data-current', 'true')
+
+			const projectCard01 = otherProjectsSection.getByRole('link', {
+				name: `Go to project ${projectName01}.`,
+				exact: true,
+			})
+
+			await expect(projectCard01).toBeVisible()
+
+			await expect(projectCard01).not.toHaveAttribute('data-current')
+		}
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()
@@ -320,8 +304,7 @@ test.skip('initial page when re-opening app', async ({
 		})
 
 		await page
-			.getByRole('navigation', { name: 'App navigation', exact: true })
-			.getByRole('button', {
+			.getByRole('link', {
 				name: `Go to project ${projectParams.projectName}.`,
 				exact: true,
 			})

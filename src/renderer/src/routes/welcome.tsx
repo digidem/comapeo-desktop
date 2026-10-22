@@ -1,13 +1,9 @@
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
-import Grid from '@mui/material/Grid'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { alpha, useTheme } from '@mui/material/styles'
-import useMediaQuery from '@mui/material/useMediaQuery'
 import { createFileRoute } from '@tanstack/react-router'
 import {
 	defineMessages,
@@ -16,7 +12,7 @@ import {
 	type NoMessageValues,
 } from 'react-intl'
 
-import { BLACK, BLUE_GREY, DARK_COMAPEO_BLUE } from '../colors.ts'
+import { BLACK_00, BLUE_01, BLUE_05 } from '../../../shared/colors.ts'
 import { Icon } from '../components/icon.tsx'
 import { Blue, Bold, Orange } from '../components/intl-rich-text.tsx'
 import { ButtonLink } from '../components/link.tsx'
@@ -26,121 +22,106 @@ export const Route = createFileRoute('/welcome')({
 	component: RouteComponent,
 })
 
-const LIST_BACKGROUND_COLOR = alpha(BLACK, 0.4)
-
 function RouteComponent() {
 	const intl = useIntl()
-
-	const theme = useTheme()
-
-	const viewportIsNarrow = useMediaQuery(theme.breakpoints.down('md'))
 
 	return (
 		<Box
 			sx={{
-				height: '100%',
-				bgcolor: DARK_COMAPEO_BLUE,
-				flexDirection: 'column',
-				display: 'flex',
-				justifyContent: 'center',
 				alignItems: 'center',
+				background: BLUE_01,
 				backgroundImage: `url("${topographicPrintURL}")`,
-				backgroundRepeat: 'no-repeat',
 				backgroundPosition: 'center',
+				backgroundRepeat: 'no-repeat',
 				backgroundSize: 'contain',
+				display: 'flex',
+				flexDirection: 'column',
+				height: '100%',
+				justifyContent: 'center',
 			}}
 		>
-			<Container maxWidth="lg" sx={{ overflow: 'auto', padding: 5 }}>
-				<Stack sx={{ display: 'flex', alignItems: 'center', gap: 25 }}>
-					<Grid container spacing={10} sx={{ justifyContent: 'center' }}>
-						<Grid
-							container
-							size={viewportIsNarrow ? 8 : 5}
-							sx={{
-								alignItems: 'center',
-								textAlign: viewportIsNarrow ? 'center' : undefined,
-							}}
-						>
-							<Stack spacing={5}>
-								<Typography
-									component="h1"
-									variant="bannerTitle"
-									color="textInverted"
-									sx={{ fontWeight: 'inherit' }}
-								>
-									{intl.formatMessage(m.comapeoDesktop, {
-										b: Bold,
-										blue: Blue,
-										orange: Orange,
-									})}
-								</Typography>
-
-								<Typography
-									component="p"
-									variant="bannerSubtitle"
-									color="textInverted"
-								>
-									{intl.formatMessage(m.appDescription)}
-								</Typography>
-							</Stack>
-						</Grid>
-						<Grid size={viewportIsNarrow ? 8 : 5} container>
-							<Stack
+			<Container maxWidth="md" sx={{ overflow: 'auto', padding: 6 }}>
+				<Stack
+					direction="column"
+					sx={{
+						display: 'flex',
+						alignItems: 'center',
+						gap: 25,
+					}}
+				>
+					<Stack direction="row" sx={{ flexWrap: 'wrap', gap: 10 }}>
+						<Stack direction="column" sx={{ flex: 1, gap: 5 }}>
+							<Typography
+								component="h1"
+								color="textInverted"
 								sx={{
-									display: 'flex',
-									justifyContent: 'center',
-									paddingX: 5,
-									paddingY: 6,
-									borderRadius: 2,
-									bgcolor: LIST_BACKGROUND_COLOR,
-									borderColor: BLUE_GREY,
-									borderWidth: 1,
-									borderStyle: 'solid',
+									fontSize: '6rem',
+									fontWeight: (theme) => theme.typography.fontWeightRegular,
 								}}
 							>
-								<List>
-									<ListItem sx={{ gap: 5 }}>
-										<Icon name="openmoji-world-map" />
-										<ListItemText
-											slotProps={{ primary: { color: 'textInverted' } }}
-										>
-											{intl.formatMessage(m.mapAnywhere)}
-										</ListItemText>
-									</ListItem>
-									<ListItem sx={{ gap: 5 }}>
-										<Icon name="openmoji-handshake-medium-skin-tone" />
-										<ListItemText
-											slotProps={{ primary: { color: 'textInverted' } }}
-										>
-											{intl.formatMessage(m.collaborate)}
-										</ListItemText>
-									</ListItem>
-									<ListItem sx={{ gap: 5 }}>
-										<Icon name="openmoji-locked-with-key" />
-										<ListItemText
-											slotProps={{ primary: { color: 'textInverted' } }}
-										>
-											{intl.formatMessage(m.ownData)}
-										</ListItemText>
-									</ListItem>
-									<ListItem sx={{ gap: 5 }}>
-										<Icon name="openmoji-raised-fist-medium-skin-tone" />
-										<ListItemText
-											slotProps={{ primary: { color: 'textInverted' } }}
-										>
-											{intl.formatMessage(m.designedFor)}
-										</ListItemText>
-									</ListItem>
-								</List>
-							</Stack>
-						</Grid>
-					</Grid>
+								{intl.formatMessage(m.comapeoDesktop, {
+									b: Bold,
+									blue: Blue,
+									orange: Orange,
+								})}
+							</Typography>
+
+							<Typography
+								color="textInverted"
+								sx={{
+									fontSize: '1.5rem',
+									fontWeight: (theme) => theme.typography.fontWeightMedium,
+								}}
+							>
+								{intl.formatMessage(m.appDescription)}
+							</Typography>
+						</Stack>
+
+						<Stack
+							component={List}
+							direction="column"
+							sx={{
+								background: (theme) => theme.alpha(BLACK_00, 0.4),
+								border: `1px solid ${BLUE_05}`,
+								borderRadius: 2,
+								color: (theme) => theme.palette.text.inverted,
+								flex: 1,
+								gap: 4,
+								justifyContent: 'center',
+								padding: 6,
+								minWidth: 300,
+							}}
+						>
+							<ListItem sx={{ gap: 5 }}>
+								<Icon name="openmoji-world-map" />
+
+								{intl.formatMessage(m.mapAnywhere)}
+							</ListItem>
+
+							<ListItem sx={{ gap: 5 }}>
+								<Icon name="openmoji-handshake-medium-skin-tone" />
+
+								{intl.formatMessage(m.collaborate)}
+							</ListItem>
+
+							<ListItem sx={{ gap: 5 }}>
+								<Icon name="openmoji-locked-with-key" />
+
+								{intl.formatMessage(m.ownData)}
+							</ListItem>
+
+							<ListItem sx={{ gap: 5 }}>
+								<Icon name="openmoji-raised-fist-medium-skin-tone" />
+
+								{intl.formatMessage(m.designedFor)}
+							</ListItem>
+						</Stack>
+					</Stack>
 
 					<ButtonLink
 						to="/onboarding/data-and-privacy"
 						fullWidth
 						variant="contained"
-						sx={{ maxWidth: 400 }}
 					>
 						{intl.formatMessage(m.getStarted)}
 					</ButtonLink>
@@ -197,7 +178,7 @@ const m = defineMessages<{
 	},
 	comapeoDesktop: {
 		id: '$1.routes.welcome.comapeoDesktop',
-		defaultMessage: '<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>',
+		defaultMessage: '<orange>Co</orange><b>Mapeo</b> <blue>Desktop</blue>',
 		description: 'Name of app displayed in welcome page.',
 	},
 })

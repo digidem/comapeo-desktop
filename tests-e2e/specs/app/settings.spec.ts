@@ -1,10 +1,13 @@
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { hexToRgb } from '@mui/material/styles'
 import { expect } from '@playwright/test'
 
-import { DARK_COMAPEO_BLUE } from '../../../src/renderer/src/colors.ts'
-import { setup, simulateOnboarding, test } from '../utils.ts'
+import {
+	setup,
+	simulateCreateProject,
+	simulateOnboarding,
+	test,
+} from '../utils.ts'
 
 const ASSETS_DIR = fileURLToPath(new URL('../../assets', import.meta.url))
 
@@ -27,236 +30,80 @@ test('index', async ({ appInfo, userParams }) => {
 
 		/// Navigation
 		{
-			const settingsNavLink = page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('link', { name: 'Settings', exact: true })
+			const settingsNavLink = page.getByRole('link', {
+				name: 'CoMapeo Settings',
+				exact: true,
+			})
 
 			await settingsNavLink.click()
 		}
 
-		/// Main
 		const main = page.getByRole('main')
 
-		await expect(
-			main.getByRole('heading', { name: 'CoMapeo Settings', exact: true }),
-		).toBeVisible()
-
-		//// General section
-		await expect(
-			main.getByRole('heading', { name: 'General', exact: true }),
-		).toBeVisible()
-
-		const settingsItems = main
-			.getByRole('listitem')
-			.filter({ has: page.getByRole('link') })
-
-		await expect(settingsItems).toHaveCount(5)
-
-		//// Device name settings item
+		/// Header
 		{
-			const deviceNameSettingsItem = settingsItems.first()
+			const header = main.locator('header')
 
 			await expect(
-				deviceNameSettingsItem.getByRole('link', {
-					name: 'Go to device name settings.',
-					exact: true,
-				}),
-			).toBeVisible()
-
-			await expect(
-				deviceNameSettingsItem.getByText(userParams.deviceName, {
-					exact: true,
-				}),
-			).toBeVisible()
-
-			await expect(
-				deviceNameSettingsItem.getByText('Edit', { exact: true }),
+				header.getByRole('heading', { name: 'CoMapeo Settings', exact: true }),
 			).toBeVisible()
 		}
 
-		//// Language settings item
+		/// Settings sections
 		{
-			const languageSettingsItem = settingsItems.nth(1)
+			const settingsSections = main
+				.locator('section')
+				.filter({ has: page.locator('h2') })
+
+			await expect(settingsSections).toHaveCount(6)
 
 			await expect(
-				languageSettingsItem.getByRole('link', {
-					name: 'Go to language settings.',
+				settingsSections
+					.nth(0)
+					.getByRole('heading', { name: 'Device Name', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				settingsSections
+					.nth(1)
+					.getByRole('heading', { name: 'Language', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				settingsSections
+					.nth(2)
+					.getByRole('heading', { name: 'Coordinate System', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				settingsSections
+					.nth(3)
+					.getByRole('heading', { name: 'Unit System', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				settingsSections.nth(4).getByRole('heading', {
+					name: 'CoMapeo respects your privacy and autonomy',
 					exact: true,
 				}),
 			).toBeVisible()
 
 			await expect(
-				languageSettingsItem.getByText(
-					// TODO: The result of this will vary based on system language preferences.
-					/^English.*/,
-				),
-			).toBeVisible()
-		}
-
-		//// Coordinate system settings item
-		{
-			const coordinateSystemSettingsItem = settingsItems.nth(2)
-
-			await expect(
-				coordinateSystemSettingsItem.getByRole('link', {
-					name: 'Go to coordinate system settings.',
-					exact: true,
-				}),
+				settingsSections
+					.nth(5)
+					.getByRole('heading', { name: 'About CoMapeo', exact: true }),
 			).toBeVisible()
 
-			await expect(
-				coordinateSystemSettingsItem.getByText('UTM Coordinates', {
-					exact: true,
-				}),
-			).toBeVisible()
-		}
+			/// About CoMapeo section
+			{
+				await expect(
+					main.getByRole('heading', { name: 'About CoMapeo', exact: true }),
+				).toBeVisible()
 
-		//// Unit system settings item
-		{
-			const unitSystemSettingsItem = settingsItems.nth(3)
-
-			await expect(
-				unitSystemSettingsItem.getByRole('link', {
-					name: 'Go to unit system settings.',
-					exact: true,
-				}),
-			).toBeVisible()
-
-			await expect(
-				unitSystemSettingsItem.getByText('Metric System', { exact: true }),
-			).toBeVisible()
-		}
-
-		//// Background map settings item
-		{
-			const backgroundMapSettingsItem = settingsItems.nth(4)
-
-			await expect(
-				backgroundMapSettingsItem.getByRole('link', {
-					name: 'Go to background map settings.',
-					exact: true,
-				}),
-			).toBeVisible()
-
-			await expect(
-				backgroundMapSettingsItem.getByText('Default Background', {
-					exact: true,
-				}),
-			).toBeVisible()
-		}
-
-		/// Data and Privacy section
-		{
-			await expect(
-				main.getByRole('heading', {
-					name: 'Data & Privacy',
-					exact: true,
-				}),
-			).toBeVisible()
-
-			await expect(
-				main.getByText('CoMapeo respects your privacy and autonomy', {
-					exact: true,
-				}),
-			).toBeVisible()
-
-			// TODO: Assert behavior of `Learn More` button
-			await expect(
-				main.getByRole('link', { name: 'Learn More', exact: true }),
-			).toBeVisible()
-
-			//// Diagnostic Information section
-			await expect(
-				main.getByRole('heading', {
-					name: 'Diagnostic Information',
-					exact: true,
-				}),
-			).toBeVisible()
-
-			await expect(
-				main.getByText(
-					'Anonymized information about your device, app crashes, errors and performance helps Awana Digital improve the app and fix errors.',
-					{ exact: true },
-				),
-			).toBeVisible()
-
-			await expect(
-				main
-					.getByRole('listitem')
-					.getByText(
-						'This never includes any of your data or personal information.',
-						{ exact: true },
-					),
-			).toBeVisible()
-
-			await expect(
-				main
-					.getByRole('listitem')
-					.getByText(
-						'You can opt-out of sharing diagnostic information at any time.',
-						{ exact: true },
-					),
-			).toBeVisible()
-
-			const diagnosticCheckbox = main.getByRole('checkbox', {
-				name: 'Share Diagnostic Information',
-				exact: true,
-			})
-
-			await expect(diagnosticCheckbox).toHaveJSProperty('checked', true)
-			await diagnosticCheckbox.click()
-			await expect(diagnosticCheckbox).toHaveJSProperty('checked', false)
-		}
-
-		/// App Usage section
-		{
-			await expect(
-				main.getByRole('heading', { name: 'App Usage', exact: true }),
-			).toBeVisible()
-
-			await expect(
-				main.getByText(
-					'Share how you use CoMapeo with Awana Digital — no information you share can be used to track you.',
-					{ exact: true },
-				),
-			).toBeVisible()
-
-			await expect(
-				main
-					.getByRole('listitem')
-					.getByText(
-						'ID numbers are scrambled randomly and changed every month. ID numbers are scrambled randomly and changed every month.',
-						{ exact: true },
-					),
-			).toBeVisible()
-
-			await expect(
-				main
-					.getByRole('listitem')
-					.getByText('CoMapeo never stores IP addresses.', { exact: true }),
-			).toBeVisible()
-
-			const appUsageCheckbox = main.getByRole('checkbox', {
-				name: 'Share App Usage',
-				exact: true,
-			})
-
-			await expect(appUsageCheckbox).toHaveJSProperty('checked', false)
-			await appUsageCheckbox.click()
-			await expect(appUsageCheckbox).toHaveJSProperty('checked', true)
-			await appUsageCheckbox.click()
-			await expect(appUsageCheckbox).toHaveJSProperty('checked', false)
-		}
-
-		/// About CoMapeo section
-		{
-			await expect(
-				main.getByRole('heading', { name: 'About CoMapeo', exact: true }),
-			).toBeVisible()
-
-			await expect(
-				main.getByRole('heading', { name: 'CoMapeo Version', exact: true }),
-			).toBeVisible()
+				await expect(
+					main.getByRole('heading', { name: 'CoMapeo Version', exact: true }),
+				).toBeVisible()
+			}
 		}
 	} finally {
 		// 3. Cleanup
@@ -265,250 +112,162 @@ test('index', async ({ appInfo, userParams }) => {
 	}
 })
 
-test.describe('device name', () => {
-	test('base UI checks', async ({ appInfo, userParams }) => {
-		const { launchApp, cleanup } = await setup()
-		const electronApp = await launchApp({ appInfo })
+test('device name', async ({ appInfo, userParams }) => {
+	const { launchApp, cleanup } = await setup()
+	const electronApp = await launchApp({ appInfo })
 
-		try {
-			const page = await electronApp.firstWindow()
+	try {
+		const page = await electronApp.firstWindow()
 
-			// 1. Setup
-			await simulateOnboarding({
-				page,
-				deviceName: userParams.deviceName,
-			})
+		// 1. Setup
+		await simulateOnboarding({
+			page,
+			deviceName: userParams.deviceName,
+		})
 
-			// 2. Main tests
-			const main = page.getByRole('main')
+		await page
+			.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+			.click()
 
-			/// Navigation
-			{
-				// Navigate to device name settings page
-				const settingsNavLink = page
-					.getByRole('navigation', { name: 'App navigation', exact: true })
-					.getByRole('link', { name: 'Settings', exact: true })
+		// 2. Main tests
+		const main = page.getByRole('main')
 
-				await settingsNavLink.click()
+		const deviceNameSection = main.locator('section').filter({
+			has: page.getByRole('heading', { name: 'Device Name', exact: true }),
+		})
 
-				const deviceNameSettingsLink = main.getByRole('link', {
-					name: 'Go to device name settings.',
-					exact: true,
-				})
+		const deviceNameInput = deviceNameSection.getByRole('textbox', {
+			name: 'Device Name',
+			exact: true,
+		})
 
-				await expect(
-					deviceNameSettingsLink.getByText(userParams.deviceName),
-				).toBeVisible()
+		/// Input (initial state)
+		{
+			await expect(deviceNameInput).toHaveAttribute('readonly')
 
-				await deviceNameSettingsLink.click()
+			await expect(
+				deviceNameSection.getByText('Edit', { exact: true }),
+			).toBeVisible()
 
-				// Assert app nav bar state
-				await expect(settingsNavLink).toHaveCSS(
-					'background-color',
-					hexToRgb(DARK_COMAPEO_BLUE),
-				)
-			}
-
-			/// Main
-
-			// Subpage navigation
-			{
-				await expect(
-					main.getByRole('button', { name: 'Go back.', exact: true }),
-				).toBeVisible()
-
-				const breadcrumbNav = main.getByRole('navigation', {
-					name: 'breadcrumb',
-					exact: true,
-				})
-
-				const breadcrumbItems = breadcrumbNav
-					.getByRole('listitem')
-					.getByRole('link')
-
-				await expect(breadcrumbItems).toHaveCount(2)
-
-				await expect(breadcrumbItems.nth(0)).toHaveText('CoMapeo Settings')
-
-				await expect(breadcrumbItems.nth(1)).toHaveText('Device Name')
-				await expect(breadcrumbItems.nth(1)).toHaveAttribute(
-					'aria-current',
-					'page',
-				)
-			}
-
-			// Interactive elements
-			{
-				await expect(
-					main.getByRole('textbox', { name: 'Device Name', exact: true }),
-				).toBeVisible()
-
-				await expect(
-					main.getByRole('button', { name: 'Cancel', exact: true }),
-				).toBeVisible()
-
-				await expect(
-					main.getByRole('button', { name: 'Save', exact: true }),
-				).toBeVisible()
-			}
-		} finally {
-			// 3. Cleanup
-			await electronApp.close()
-			cleanup()
+			await expect(deviceNameInput).toHaveValue(userParams.deviceName)
 		}
-	})
 
-	test('form behavior', async ({ appInfo, userParams }) => {
-		const { launchApp, cleanup } = await setup()
-		const electronApp = await launchApp({ appInfo })
+		// Start editing via mouse interaction
+		await deviceNameInput.click()
 
-		try {
-			const page = await electronApp.firstWindow()
+		/// Input (initial edit state)
+		{
+			await expect(deviceNameInput).not.toHaveAttribute('readonly')
 
-			// 1. Setup
-			await simulateOnboarding({
-				page,
-				deviceName: userParams.deviceName,
-			})
+			await expect(deviceNameInput).toHaveValue(userParams.deviceName)
 
-			const main = page.getByRole('main')
+			await expect(
+				deviceNameSection.getByText('Edit', { exact: true }),
+			).not.toBeVisible()
 
-			await page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('link', { name: 'Settings', exact: true })
-				.click()
+			await expect(
+				deviceNameSection.locator('output[name="character-count"]'),
+			).toHaveText(`${userParams.deviceName.length}/60`)
+
+			await expect(
+				deviceNameSection.getByRole('button', { name: 'Save', exact: true }),
+			).toBeVisible()
+
+			await expect(
+				deviceNameSection.getByRole('button', { name: 'Cancel', exact: true }),
+			).toBeVisible()
+		}
+
+		/// Input (invalid state, too long)
+		{
+			const invalidDeviceName = Array(100).fill('a').join('')
+
+			await deviceNameInput.fill(invalidDeviceName)
+
+			await expect(
+				deviceNameSection.getByText('Too long, try a shorter name.', {
+					exact: true,
+				}),
+			).toBeVisible()
+
+			await expect(
+				deviceNameSection.locator('output[name="character-count"]'),
+			).toHaveText(`${invalidDeviceName.length}/60`)
 
 			await main
-				.getByRole('link', {
-					name: 'Go to device name settings.',
-					exact: true,
-				})
+				.getByRole('button', { name: 'Save', exact: true })
+				.click({ force: true })
+		}
+
+		/// Input (invalid state, empty)
+		{
+			await deviceNameInput.fill('')
+
+			await expect(
+				deviceNameSection.getByText('Enter a Device Name', { exact: true }),
+			).toBeVisible()
+
+			await expect(
+				deviceNameSection.locator('output[name="character-count"]'),
+			).toHaveText('0/60')
+		}
+
+		/// Restoration of input initial state when navigating away without saving
+		{
+			//  Clicking external navigation control
+			await main
+				.locator('header')
+				.getByRole('button', { name: 'Go back.', exact: true })
 				.click()
 
-			// 2. Main tests
-			const deviceNameInput = main.getByRole('textbox', {
-				name: 'Device Name',
-				exact: true,
-			})
+			const discardEditsDialog = page.getByRole('dialog')
 
-			//// Input (initial state)
-			{
-				await expect(deviceNameInput).toHaveValue(userParams.deviceName)
+			await expect(
+				discardEditsDialog.getByRole('heading', {
+					name: 'Discard Edits?',
+					exact: true,
+				}),
+			).toBeVisible()
 
-				await expect(main.locator('output[name="character-count"]')).toHaveText(
-					`${userParams.deviceName.length}/60`,
-				)
-			}
+			await expect(
+				discardEditsDialog.getByRole('button', {
+					name: 'Cancel',
+					exact: true,
+				}),
+			).toBeVisible()
 
-			//// Input (invalid state, too long)
-			{
-				const invalidDeviceName = Array(100).fill('a').join('')
+			await discardEditsDialog
+				.getByRole('button', { name: 'Yes, Discard', exact: true })
+				.click()
 
-				await deviceNameInput.fill(invalidDeviceName)
+			await page
+				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+				.click()
 
-				await expect(
-					page.getByText('Too long, try a shorter name.', { exact: true }),
-				).toBeVisible()
-
-				await expect(page.locator('output[name="character-count"]')).toHaveText(
-					`${invalidDeviceName.length}/60`,
-				)
-
-				const currentUrl = page.url()
-
-				await main
-					.getByRole('button', { name: 'Save', exact: true })
-					.click({ force: true })
-
-				expect(page.url()).toStrictEqual(currentUrl)
-
-				//// Input (invalid state, empty)
-				await deviceNameInput.fill('')
-
-				await expect(
-					page.getByText('Enter a Device Name', { exact: true }),
-				).toBeVisible()
-
-				await expect(page.locator('output[name="character-count"]')).toHaveText(
-					'0/60',
-				)
-			}
-
-			//// Restoration of input initial state when navigating away without saving
-			{
-				//  Clicking external navigation control
-				await main
-					.getByRole('navigation', { name: 'breadcrumb', exact: true })
-					.getByRole('link', { name: 'CoMapeo Settings', exact: true })
-					.click()
-
-				const discardEditsDialog = page.getByRole('dialog')
-
-				await expect(
-					discardEditsDialog.getByRole('heading', {
-						name: 'Discard Edits?',
-						exact: true,
-					}),
-				).toBeVisible()
-
-				await expect(
-					discardEditsDialog.getByRole('button', {
-						name: 'Cancel',
-						exact: true,
-					}),
-				).toBeVisible()
-
-				await discardEditsDialog
-					.getByRole('button', { name: 'Yes, Discard', exact: true })
-					.click()
-
-				await page
-					.getByRole('link', {
-						name: 'Go to device name settings.',
-						exact: true,
-					})
-					.click()
-
-				await expect(deviceNameInput).toHaveValue(userParams.deviceName)
-
-				// Clicking cancel button on page
-				await main.getByRole('button', { name: 'Cancel', exact: true }).click()
-
-				await page
-					.getByRole('link', {
-						name: 'Go to device name settings.',
-						exact: true,
-					})
-					.click()
-
-				await expect(deviceNameInput).toHaveValue(userParams.deviceName)
-			}
-
-			//// Saving updated device name
-			{
-				const updatedUserParams = {
-					deviceName: 'Desktop e2e Updated',
-				}
-
-				await deviceNameInput.fill(updatedUserParams.deviceName)
-
-				await main.getByRole('button', { name: 'Save', exact: true }).click()
-
-				await expect(
-					main
-						.getByRole('link', {
-							name: 'Go to device name settings.',
-							exact: true,
-						})
-						.getByText(updatedUserParams.deviceName),
-				).toBeVisible()
-			}
-		} finally {
-			// 3. Cleanup
-			await electronApp.close()
-			cleanup()
+			await expect(deviceNameInput).toHaveValue(userParams.deviceName)
 		}
-	})
+
+		// Start editing via keyboard interaction
+		await deviceNameInput.focus()
+		await page.keyboard.press('Enter')
+
+		/// Saving updated device name
+		{
+			const updatedUserParams = { deviceName: 'Desktop e2e Updated' }
+
+			await deviceNameInput.fill(updatedUserParams.deviceName)
+
+			await deviceNameSection
+				.getByRole('button', { name: 'Save', exact: true })
+				.click()
+
+			await expect(deviceNameInput).toHaveValue(updatedUserParams.deviceName)
+		}
+	} finally {
+		// 3. Cleanup
+		await electronApp.close()
+		cleanup()
+	}
 })
 
 test('language', async ({ appInfo, userParams }) => {
@@ -524,80 +283,49 @@ test('language', async ({ appInfo, userParams }) => {
 			deviceName: userParams.deviceName,
 		})
 
+		await page
+			.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+			.click()
+
 		// 2. Main tests
 		const main = page.getByRole('main')
 
-		/// Navigation
+		const languageSection = main.locator('section').filter({
+			has: page.getByRole('heading', { name: 'Language', exact: true }),
+		})
+
+		const selectTrigger = languageSection.getByRole('combobox')
+
+		const languagesMenu = page
+			.getByRole('presentation')
+			.getByRole('listbox', { name: 'Language', exact: true })
+
+		const languagesMenuOptions = languagesMenu.getByRole('option')
+
+		/// Initial state
 		{
-			// Navigate to language settings page
-			const settingsNavLink = page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('link', { name: 'Settings', exact: true })
-
-			await settingsNavLink.click()
-
-			const languageSettingsLink = main.getByRole('link', {
-				name: 'Go to language settings.',
-				exact: true,
-			})
-
+			// TODO: The result of this will vary based on system language preferences.
 			await expect(
-				languageSettingsLink.getByText(
-					// TODO: The result of this will vary based on system language preferences.
-					/^English.*/,
-				),
+				selectTrigger
+					.getByText(/^Follow System Preference/)
+					.or(selectTrigger.getByText(/^English/)),
 			).toBeVisible()
 
-			await languageSettingsLink.click()
+			await selectTrigger.click()
 
-			// Assert app nav bar state
-			await expect(settingsNavLink).toHaveCSS(
-				'background-color',
-				hexToRgb(DARK_COMAPEO_BLUE),
+			await expect(languagesMenu).toBeVisible()
+
+			await expect(languagesMenuOptions.nth(0)).toHaveAccessibleName(
+				'Follow System Preference',
 			)
-		}
-
-		/// Main
-
-		// Subpage navigation
-		{
-			await expect(
-				main.getByRole('button', { name: 'Go back.', exact: true }),
-			).toBeVisible()
-
-			const breadcrumbNav = main.getByRole('navigation', {
-				name: 'breadcrumb',
-				exact: true,
-			})
-
-			const breadcrumbItems = breadcrumbNav
-				.getByRole('listitem')
-				.getByRole('link')
-
-			await expect(breadcrumbItems).toHaveCount(2)
-
-			await expect(breadcrumbItems.nth(0)).toHaveText('CoMapeo Settings')
-
-			await expect(breadcrumbItems.nth(1)).toHaveText('Language')
-			await expect(breadcrumbItems.nth(1)).toHaveAttribute(
-				'aria-current',
-				'page',
+			await expect(languagesMenuOptions.nth(0)).toHaveAttribute(
+				'aria-selected',
+				'true',
 			)
-		}
-
-		const radioGroup = main.getByRole('radiogroup')
-
-		//// Initial state
-		{
-			await expect(radioGroup).toHaveAccessibleName('Language')
-
-			const systemPreferencesOption = radioGroup.getByRole('radio', {
-				name: 'Follow system preferences',
-				exact: true,
-				checked: true,
-			})
-
-			await expect(systemPreferencesOption).toHaveValue('system')
+			await expect(languagesMenuOptions.nth(0)).toHaveAttribute(
+				'data-value',
+				'system',
+			)
 
 			const allLanguages = (
 				await import('../../../languages.json', {
@@ -618,91 +346,77 @@ test('language', async ({ appInfo, userParams }) => {
 				// multiple language variants that we actually support.
 				const baseTag = languageCode.split('-')[0]!
 
-				const { nativeName, englishName } =
+				const { nativeName } =
 					allLanguages[baseTag as keyof typeof allLanguages]!
 
-				const option = radioGroup.getByRole('radio', {
-					name: `${nativeName} ${englishName}`,
+				const option = languagesMenuOptions.filter({
+					hasNotText: 'Follow System Preference',
+					hasText: nativeName,
 				})
 
-				await expect(option).toHaveValue(languageCode)
-				await expect(option).toHaveJSProperty('checked', false)
+				await expect(option).toHaveAccessibleName(nativeName)
+				await expect(option).toHaveAttribute('data-value', languageCode)
+				await expect(option).toHaveAttribute('aria-selected', 'false')
 			}
 		}
 
-		//// Updating selected value
+		/// Updating selected value
 		{
-			const portugueseOption = radioGroup.getByRole('radio', {
-				name: 'Portuguese',
+			const portugueseOption = languagesMenuOptions.filter({
+				hasText: 'Portuguese',
 			})
+
 			await portugueseOption.click()
-			await expect(portugueseOption).toHaveJSProperty('checked', true)
+
+			await expect(languagesMenu).not.toBeVisible()
 
 			await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR')
 
-			await expect(
-				main
-					.getByRole('navigation', {
-						// TODO: Will need to update when translation is added
-						name: 'breadcrumb',
-						exact: true,
-					})
-					.getByRole('link', { name: 'Idioma', exact: true }),
-			).toBeVisible()
-
-			await expect(radioGroup).toHaveAccessibleName('Idioma')
+			await expect(selectTrigger).toHaveText('Português')
 
 			await expect(
-				radioGroup.getByRole('radio', {
-					name: 'Seguir preferências do sistema',
+				main.locator('header').getByRole('heading', {
+					name: 'Configurações do CoMapeo',
 					exact: true,
 				}),
 			).toBeVisible()
-
-			await main
-				.getByRole('navigation', { name: 'breadcrumb', exact: true })
-				.getByRole('link', { name: 'Configurações do CoMapeo', exact: true })
-				.click()
-
-			const languageSettingsLink = main.getByRole('link', {
-				name: 'Vá para as configurações de idioma.',
-				exact: true,
-			})
-
-			await expect(
-				languageSettingsLink.getByText('Português', { exact: true }),
-			).toBeVisible()
-
-			await languageSettingsLink.click()
 		}
 
-		//// Returning to language settings page and restoring selection
+		/// Restore language selection
 		{
-			await expect(
-				radioGroup.getByRole('radio', { name: 'Portuguese', checked: true }),
-			).toBeVisible()
+			await selectTrigger.click()
 
-			let systemPreferencesOption = radioGroup.getByRole('radio', {
-				name: 'Seguir preferências do sistema',
-				exact: true,
+			await expect(languagesMenu).toBeVisible()
+
+			const portugueseOption = languagesMenuOptions.filter({
+				hasText: 'Portuguese',
 			})
 
-			await expect(systemPreferencesOption).toHaveJSProperty('checked', false)
+			await expect(portugueseOption).toHaveAttribute('aria-selected', 'true')
+
+			const systemPreferencesOption = languagesMenuOptions.nth(0)
+
+			await expect(systemPreferencesOption).toHaveAttribute(
+				'aria-selected',
+				'false',
+			)
+
 			await systemPreferencesOption.click()
 
-			systemPreferencesOption = radioGroup.getByRole('radio', {
-				name: 'Follow system preferences',
-				exact: true,
-			})
+			await expect(languagesMenu).not.toBeVisible()
 
-			await expect(systemPreferencesOption).toHaveJSProperty('checked', true)
+			await expect(page.locator('html')).toHaveAttribute(
+				'lang',
+				// TODO: The result of this will vary based on system language preferences.
+				/^(en$|en-)/,
+			)
 
-			await expect(page.locator('html')).toHaveAttribute('lang', /^(en$|en-)/)
-
-			await main
-				.getByRole('navigation', { name: 'breadcrumb', exact: true })
-				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
-				.click()
+			// TODO: The result of this will vary based on system language preferences.
+			await expect(
+				selectTrigger
+					.getByText(/^Follow System Preference/)
+					.or(selectTrigger.getByText(/^English/)),
+			).toBeVisible()
 		}
 	} finally {
 		// 3. Cleanup
@@ -724,72 +438,26 @@ test('coordinate system', async ({ appInfo, userParams }) => {
 			deviceName: userParams.deviceName,
 		})
 
+		await page
+			.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+			.click()
+
 		// 2. Main tests
 		const main = page.getByRole('main')
 
-		/// Navigation
-		{
-			// Navigate to coordinate system settings page
-			const settingsNavLink = page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('link', { name: 'Settings', exact: true })
-
-			await settingsNavLink.click()
-
-			const coordinateSystemSettingsLink = main.getByRole('link', {
-				name: 'Go to coordinate system settings.',
+		const coordinateSystemSection = main.locator('section').filter({
+			has: page.getByRole('heading', {
+				name: 'Coordinate System',
 				exact: true,
-			})
+			}),
+		})
 
-			await expect(
-				coordinateSystemSettingsLink.getByText('UTM Coordinates', {
-					exact: true,
-				}),
-			).toBeVisible()
-
-			await coordinateSystemSettingsLink.click()
-
-			// Assert app nav bar state
-			await expect(settingsNavLink).toHaveCSS(
-				'background-color',
-				hexToRgb(DARK_COMAPEO_BLUE),
-			)
-		}
-
-		/// Main
-
-		// Subpage navigation
-		{
-			await expect(
-				main.getByRole('button', { name: 'Go back.', exact: true }),
-			).toBeVisible()
-
-			const breadcrumbNav = main.getByRole('navigation', {
-				name: 'breadcrumb',
-				exact: true,
-			})
-
-			const breadcrumbItems = breadcrumbNav
-				.getByRole('listitem')
-				.getByRole('link')
-
-			await expect(breadcrumbItems).toHaveCount(2)
-
-			await expect(breadcrumbItems.nth(0)).toHaveText('CoMapeo Settings')
-
-			await expect(breadcrumbItems.nth(1)).toHaveText('Coordinate System')
-			await expect(breadcrumbItems.nth(1)).toHaveAttribute(
-				'aria-current',
-				'page',
-			)
-		}
-
-		const radioGroup = main.getByRole('radiogroup', {
+		const radioGroup = coordinateSystemSection.getByRole('radiogroup', {
 			name: 'Coordinate System',
 			exact: true,
 		})
 
-		//// Initial state
+		/// Initial state
 		{
 			const utmOption = radioGroup.getByRole('radio', {
 				name: 'UTM (Universal Transverse Mercator)',
@@ -810,33 +478,19 @@ test('coordinate system', async ({ appInfo, userParams }) => {
 			await expect(uncheckedOptions.last()).toHaveValue('dms')
 		}
 
-		//// Updating selected value
+		/// Updating selected value
 		{
 			const ddOption = radioGroup.getByRole('radio', {
 				name: 'DD (Decimal Degrees)',
 				exact: true,
 			})
+
 			await ddOption.click()
+
 			await expect(ddOption).toHaveJSProperty('checked', true)
-
-			await main
-				.getByRole('navigation', { name: 'breadcrumb', exact: true })
-				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
-				.click()
-
-			const coordinateSystemSettingsLink = main.getByRole('link', {
-				name: 'Go to coordinate system settings.',
-				exact: true,
-			})
-			await expect(
-				coordinateSystemSettingsLink.getByText('DD Coordinates', {
-					exact: true,
-				}),
-			).toBeVisible()
-			await coordinateSystemSettingsLink.click()
 		}
 
-		//// Return to coordinate system settings page and restore selection
+		/// Restore selection
 		{
 			await expect(
 				main.getByRole('radio', {
@@ -850,13 +504,10 @@ test('coordinate system', async ({ appInfo, userParams }) => {
 				name: 'UTM (Universal Transverse Mercator)',
 				exact: true,
 			})
-			await utmOption.click()
-			await expect(utmOption).toHaveJSProperty('checked', true)
 
-			await main
-				.getByRole('navigation', { name: 'breadcrumb', exact: true })
-				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
-				.click()
+			await utmOption.click()
+
+			await expect(utmOption).toHaveJSProperty('checked', true)
 		}
 	} finally {
 		// 3. Cleanup
@@ -878,135 +529,73 @@ test('unit system', async ({ appInfo, userParams }) => {
 			deviceName: userParams.deviceName,
 		})
 
+		await page
+			.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+			.click()
+
 		// 2. Main tests
 		const main = page.getByRole('main')
 
-		/// Navigation
-		{
-			// Navigate to coordinate system settings page
-			const settingsNavLink = page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('link', { name: 'Settings', exact: true })
+		const unitSystemSection = main.locator('section').filter({
+			has: page.getByRole('heading', { name: 'Unit System', exact: true }),
+		})
 
-			await settingsNavLink.click()
-
-			const unitSystemSettingsLink = main.getByRole('link', {
-				name: 'Go to unit system settings.',
-				exact: true,
-			})
-
-			await expect(
-				unitSystemSettingsLink.getByText('Metric System', {
-					exact: true,
-				}),
-			).toBeVisible()
-
-			await unitSystemSettingsLink.click()
-
-			// Assert app nav bar state
-			await expect(settingsNavLink).toHaveCSS(
-				'background-color',
-				hexToRgb(DARK_COMAPEO_BLUE),
-			)
-		}
-
-		/// Main
-
-		// Subpage navigation
-		{
-			await expect(
-				main.getByRole('button', { name: 'Go back.', exact: true }),
-			).toBeVisible()
-
-			const breadcrumbNav = main.getByRole('navigation', {
-				name: 'breadcrumb',
-				exact: true,
-			})
-
-			const breadcrumbItems = breadcrumbNav
-				.getByRole('listitem')
-				.getByRole('link')
-
-			await expect(breadcrumbItems).toHaveCount(2)
-
-			await expect(breadcrumbItems.nth(0)).toHaveText('CoMapeo Settings')
-
-			await expect(breadcrumbItems.nth(1)).toHaveText('Unit System')
-			await expect(breadcrumbItems.nth(1)).toHaveAttribute(
-				'aria-current',
-				'page',
-			)
-		}
-
-		const radioGroup = main.getByRole('radiogroup', {
+		const radioGroup = unitSystemSection.getByRole('radiogroup', {
 			name: 'Unit System',
 			exact: true,
 		})
 
-		//// Initial state
+		/// Initial state
 		{
 			const metricOption = radioGroup.getByRole('radio', {
 				name: 'Metric System',
 				exact: true,
 				checked: true,
 			})
+
 			await expect(metricOption).toHaveValue('metric')
 
 			const uncheckedOptions = radioGroup.getByRole('radio', { checked: false })
+
 			await expect(uncheckedOptions).toHaveCount(1)
+
 			await expect(uncheckedOptions.first()).toHaveAccessibleName(
 				'Imperial System',
 			)
+
 			await expect(uncheckedOptions.first()).toHaveValue('imperial')
 		}
 
-		//// Updating selected value
+		/// Updating selected value
 		{
 			const imperialOption = radioGroup.getByRole('radio', {
 				name: 'Imperial System',
 				exact: true,
 			})
+
 			await imperialOption.click()
+
 			await expect(imperialOption).toHaveJSProperty('checked', true)
-
-			await main
-				.getByRole('navigation', { name: 'breadcrumb', exact: true })
-				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
-				.click()
-
-			const unitSystemSettingsLink = main.getByRole('link', {
-				name: 'Go to unit system settings.',
-				exact: true,
-			})
-			await expect(
-				unitSystemSettingsLink.getByText('Imperial System', {
-					exact: true,
-				}),
-			).toBeVisible()
-			await unitSystemSettingsLink.click()
 		}
 
-		//// Return to coordinate system settings page and restore selection
+		/// Restore selection
 		{
 			await expect(
-				main.getByRole('radio', {
+				radioGroup.getByRole('radio', {
 					name: 'Imperial System',
 					exact: true,
 					checked: true,
 				}),
 			).toBeVisible()
 
-			const metricOption = main.getByRole('radio', {
+			const metricOption = unitSystemSection.getByRole('radio', {
 				name: 'Metric System',
 				exact: true,
 			})
-			await metricOption.click()
-			await expect(metricOption).toHaveJSProperty('checked', true)
 
-			await main
-				.getByRole('navigation', { name: 'breadcrumb', exact: true })
-				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
-				.click()
+			await metricOption.click()
+
+			await expect(metricOption).toHaveJSProperty('checked', true)
 		}
 	} finally {
 		// 3. Cleanup
@@ -1015,7 +604,7 @@ test('unit system', async ({ appInfo, userParams }) => {
 	}
 })
 
-test('background map', async ({ appInfo, userParams }) => {
+test('background map', async ({ appInfo, userParams, projectParams }) => {
 	const { launchApp, cleanup } = await setup()
 	const electronApp = await launchApp({ appInfo })
 
@@ -1028,64 +617,37 @@ test('background map', async ({ appInfo, userParams }) => {
 			deviceName: userParams.deviceName,
 		})
 
+		await simulateCreateProject({
+			page,
+			projectName: projectParams.projectName,
+		})
+
+		await page
+			.getByRole('link', {
+				name: `Go to project ${projectParams.projectName}.`,
+				exact: true,
+			})
+			.click()
+
+		await page
+			.getByRole('navigation', { name: 'Project navigation', exact: true })
+			.getByRole('link', { name: 'Background Map', exact: true })
+			.click()
+
 		// 2. Main tests
 		const main = page.getByRole('main')
 
-		/// Navigation
+		/// Header
 		{
-			// Navigate to background map settings page
-			const settingsNavLink = page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('link', { name: 'Settings', exact: true })
-
-			await settingsNavLink.click()
-
-			const backgroundMapSettingsLink = main.getByRole('link', {
-				name: 'Go to background map settings.',
-				exact: true,
-			})
+			const header = main.locator('header')
 
 			await expect(
-				backgroundMapSettingsLink.getByText('Default Background', {
-					exact: true,
-				}),
+				header.getByRole('button', { name: 'Go back.', exact: true }),
 			).toBeVisible()
 
-			await backgroundMapSettingsLink.click()
-
-			// Assert app nav bar state
-			await expect(settingsNavLink).toHaveCSS(
-				'background-color',
-				hexToRgb(DARK_COMAPEO_BLUE),
-			)
-		}
-
-		/// Main
-
-		// Subpage navigation
-		{
 			await expect(
-				main.getByRole('button', { name: 'Go back.', exact: true }),
+				header.getByRole('heading', { name: 'Background Map', exact: true }),
 			).toBeVisible()
-
-			const breadcrumbNav = main.getByRole('navigation', {
-				name: 'breadcrumb',
-				exact: true,
-			})
-
-			const breadcrumbItems = breadcrumbNav
-				.getByRole('listitem')
-				.getByRole('link')
-
-			await expect(breadcrumbItems).toHaveCount(2)
-
-			await expect(breadcrumbItems.nth(0)).toHaveText('CoMapeo Settings')
-
-			await expect(breadcrumbItems.nth(1)).toHaveText('Background Map')
-			await expect(breadcrumbItems.nth(1)).toHaveAttribute(
-				'aria-current',
-				'page',
-			)
 		}
 
 		await expect(
@@ -1096,10 +658,10 @@ test('background map', async ({ appInfo, userParams }) => {
 		).toBeVisible()
 
 		await expect(
-			main.getByText('Accepted file types are .smp', { exact: true }),
+			main.getByText('Accepted file type: .smp', { exact: true }),
 		).toBeVisible()
 
-		//// Choose file (cancelled)
+		/// Choose file (cancelled)
 		{
 			const chooseFileInput = main.getByLabel('Choose File', { exact: true })
 
@@ -1108,7 +670,7 @@ test('background map', async ({ appInfo, userParams }) => {
 			await expect(page.getByRole('dialog')).not.toBeVisible()
 		}
 
-		//// Choose file (bad file)
+		/// Choose file (bad file)
 		{
 			const chooseFileInput = main.getByLabel('Choose File', {
 				exact: true,
@@ -1127,7 +689,7 @@ test('background map', async ({ appInfo, userParams }) => {
 			await expect(dialog).not.toBeVisible()
 		}
 
-		//// Choose file (good file)
+		/// Choose file (good file)
 		{
 			const chooseFileInput = main.getByLabel('Choose File', { exact: true })
 
@@ -1149,37 +711,22 @@ test('background map', async ({ appInfo, userParams }) => {
 				main.getByRole('button', { name: 'Choose File', exact: true }),
 			).not.toBeVisible()
 
-			await expect(main.getByText('Map Name')).toBeVisible()
-			await expect(main.getByText('Date Added')).toBeVisible()
-
 			await expect(main.getByText('MapLibre')).toBeVisible()
 			await expect(main.getByText(/^\d MB$/)).toBeVisible()
 
 			// TODO: Ideally check for the actual values
-			const addedAt = main.getByRole('time')
-			await expect(addedAt).not.toBeEmpty()
-			await expect(addedAt).toHaveAttribute('datetime')
+			const dateAdded = main.getByText(/^Added on .+/)
+			await expect(dateAdded).toBeVisible()
+			const dateAddedTime = dateAdded.getByRole('time')
+			await expect(dateAddedTime).not.toBeEmpty()
+			await expect(dateAddedTime).toHaveAttribute('datetime')
 
 			await expect(
 				main.getByRole('button', { name: 'Remove Map', exact: true }),
 			).toBeVisible()
-
-			await main
-				.getByRole('navigation', { name: 'breadcrumb', exact: true })
-				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
-				.click()
-
-			const backgroundMapSettingsLink = main.getByRole('link', {
-				name: 'Go to background map settings.',
-				exact: true,
-			})
-			await expect(
-				backgroundMapSettingsLink.getByText('MapLibre', { exact: true }),
-			).toBeVisible()
-			await backgroundMapSettingsLink.click()
 		}
 
-		// Remove file
+		/// Remove file
 		{
 			await main
 				.getByRole('button', { name: 'Remove Map', exact: true })
@@ -1188,23 +735,137 @@ test('background map', async ({ appInfo, userParams }) => {
 			await expect(
 				main.getByRole('button', { name: 'Choose File', exact: true }),
 			).toBeVisible()
+
 			await expect(
-				main.getByText('Accepted file types are .smp', { exact: true }),
+				main.getByText('Accepted file type: .smp', { exact: true }),
 			).toBeVisible()
+		}
+	} finally {
+		// 3. Cleanup
+		await electronApp.close()
+		cleanup()
+	}
+})
 
-			await main
-				.getByRole('navigation', { name: 'breadcrumb', exact: true })
-				.getByRole('link', { name: 'CoMapeo Settings', exact: true })
-				.click()
+test('data and privacy section', async ({ appInfo, userParams }) => {
+	const { launchApp, cleanup } = await setup()
+	const electronApp = await launchApp({ appInfo })
 
-			await expect(
-				main
-					.getByRole('link', {
-						name: 'Go to background map settings.',
+	try {
+		const page = await electronApp.firstWindow()
+
+		// 1. Setup
+		await simulateOnboarding({
+			page,
+			deviceName: userParams.deviceName,
+		})
+
+		await page
+			.getByRole('link', { name: 'CoMapeo Settings', exact: true })
+			.click()
+
+		// 2. Main tests
+		const main = page.getByRole('main')
+
+		const dataAndPrivacySection = main.locator('section').filter({
+			has: page.getByRole('heading', {
+				name: 'CoMapeo respects your privacy and autonomy',
+				exact: true,
+			}),
+		})
+
+		// TODO: Assert behavior of `Learn More` link
+		await expect(
+			dataAndPrivacySection.getByRole('link', {
+				name: 'Learn More',
+				exact: true,
+			}),
+		).toBeVisible()
+
+		/// Diagnostic Information section
+		{
+			const diagnosticInformationSection = dataAndPrivacySection
+				.locator('section')
+				.filter({
+					has: page.getByRole('heading', {
+						name: 'Diagnostic Information',
 						exact: true,
-					})
-					.getByText('Default Background'),
+					}),
+				})
+
+			await expect(
+				diagnosticInformationSection.getByText(
+					'Anonymized information about your device, app crashes, errors and performance helps Awana Digital improve the app and fix errors.',
+					{ exact: true },
+				),
 			).toBeVisible()
+
+			await expect(
+				diagnosticInformationSection
+					.getByRole('listitem')
+					.getByText(
+						'This never includes any of your data or personal information.',
+						{ exact: true },
+					),
+			).toBeVisible()
+
+			await expect(
+				diagnosticInformationSection
+					.getByRole('listitem')
+					.getByText(
+						'You can opt-out of sharing diagnostic information at any time.',
+						{ exact: true },
+					),
+			).toBeVisible()
+
+			const diagnosticCheckbox = diagnosticInformationSection.getByRole(
+				'checkbox',
+				{ name: 'Share Diagnostic Information', exact: true },
+			)
+
+			await expect(diagnosticCheckbox).toHaveJSProperty('checked', true)
+			await diagnosticCheckbox.click()
+			await expect(diagnosticCheckbox).toHaveJSProperty('checked', false)
+		}
+
+		/// App Usage section
+		{
+			const appUsageSection = dataAndPrivacySection.locator('section').filter({
+				has: page.getByRole('heading', { name: 'App Usage', exact: true }),
+			})
+
+			await expect(
+				appUsageSection.getByText(
+					'Share how you use CoMapeo with Awana Digital — no information you share can be used to track you.',
+					{ exact: true },
+				),
+			).toBeVisible()
+
+			await expect(
+				appUsageSection
+					.getByRole('listitem')
+					.getByText(
+						'ID numbers are scrambled randomly and changed every month.',
+						{ exact: true },
+					),
+			).toBeVisible()
+
+			await expect(
+				appUsageSection
+					.getByRole('listitem')
+					.getByText('CoMapeo never stores IP addresses.', { exact: true }),
+			).toBeVisible()
+
+			const appUsageCheckbox = appUsageSection.getByRole('checkbox', {
+				name: 'Share App Usage',
+				exact: true,
+			})
+
+			await expect(appUsageCheckbox).toHaveJSProperty('checked', false)
+			await appUsageCheckbox.click()
+			await expect(appUsageCheckbox).toHaveJSProperty('checked', true)
+			await appUsageCheckbox.click()
+			await expect(appUsageCheckbox).toHaveJSProperty('checked', false)
 		}
 	} finally {
 		// 3. Cleanup

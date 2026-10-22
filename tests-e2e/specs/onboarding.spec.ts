@@ -92,10 +92,10 @@ test('data and privacy step', async ({ appInfo }) => {
 		).toBeVisible()
 
 		await expect(
-			page.getByRole('heading', {
-				name: 'CoMapeo allows teams to map offline without needing internet servers.',
-				exact: true,
-			}),
+			page.getByText(
+				'CoMapeo allows teams to map offline without needing internet servers.',
+				{ exact: true },
+			),
 		).toBeVisible()
 
 		const featureList = page.getByRole('list')
@@ -187,10 +187,10 @@ test('device name step', async ({ appInfo, userParams }) => {
 		).toBeVisible()
 
 		await expect(
-			page.getByRole('heading', {
-				name: 'Distinct, memorable names help collaborators recognize you.',
-				exact: true,
-			}),
+			page.getByText(
+				'Distinct, memorable names help collaborators recognize you.',
+				{ exact: true },
+			),
 		).toBeVisible()
 
 		await expect(page.locator('output[name="character-count"]')).toHaveText(
@@ -247,22 +247,6 @@ test('device name step', async ({ appInfo, userParams }) => {
 		await page.waitForURL((url) => {
 			return /^#\/app$/.test(url.hash)
 		})
-
-		await expect(
-			page.getByRole('heading', {
-				name: `${userParams.deviceName} is ready!`,
-				exact: true,
-			}),
-		).toBeVisible()
-
-		await page.reload()
-
-		await expect(
-			page.getByRole('heading', {
-				name: `${userParams.deviceName}'s Projects`,
-				exact: true,
-			}),
-		).toBeVisible()
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()

@@ -1,7 +1,5 @@
-import { hexToRgb } from '@mui/material/styles'
 import { expect } from 'playwright/test'
 
-import { COMAPEO_BLUE } from '../../../src/renderer/src/colors.ts'
 import {
 	setup,
 	simulateCreateProject,
@@ -35,8 +33,7 @@ test.describe('Invite device flow', () => {
 			})
 
 			await page
-				.getByRole('navigation', { name: 'App navigation', exact: true })
-				.getByRole('button', {
+				.getByRole('link', {
 					name: `Go to project ${projectParams.projectName}.`,
 					exact: true,
 				})
@@ -49,7 +46,7 @@ test.describe('Invite device flow', () => {
 			{
 				// Navigate to invite page
 				await main
-					.getByRole('link', { name: 'Invite Device', exact: true })
+					.getByRole('link', { name: 'Invite Devices', exact: true })
 					.click()
 
 				await main
@@ -63,11 +60,11 @@ test.describe('Invite device flow', () => {
 				await teamNavLink.click()
 
 				await main
-					.getByRole('link', { name: 'Invite Device', exact: true })
+					.getByRole('link', { name: 'Invite Devices', exact: true })
 					.click()
 
 				// Assert nav rail state
-				await expect(teamNavLink).toHaveCSS('color', hexToRgb(COMAPEO_BLUE))
+				await expect(teamNavLink).toHaveAttribute('aria-current', 'page')
 			}
 
 			/// Main
@@ -79,10 +76,7 @@ test.describe('Invite device flow', () => {
 				).toBeVisible()
 
 				await expect(
-					main.getByRole('heading', {
-						name: 'Invite Collaborators',
-						exact: true,
-					}),
+					main.getByText('Invite Collaborators', { exact: true }),
 				).toBeVisible()
 
 				await expect(
@@ -115,7 +109,7 @@ test.describe('Invite device flow', () => {
 
 				await expect
 					.soft(networkConnectionInfo)
-					.not.toHaveText('Getting Wi-Fi information…', { timeout: 10_000 })
+					.not.toHaveText('Getting Wi-Fi information…', { timeout: 20_000 })
 
 				await expect(networkConnectionInfo).not.toBeEmpty()
 

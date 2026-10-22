@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 
-import { BLUE_GREY } from '../../../colors.ts'
+import { BLUE_05 } from '../../../../../shared/colors.ts'
 import {
 	ListItemButtonLink,
 	type ListItemButtonLinkComponentProps,
@@ -21,19 +21,18 @@ export function ListRowLink({
 	return (
 		<ListItemButtonLink
 			{...linkProps}
-			disableGutters
 			disableTouchRipple
-			sx={{ borderRadius: 2, border: `1px solid ${BLUE_GREY}` }}
+			sx={{ border: `1px solid ${BLUE_05}`, borderRadius: 2 }}
 		>
 			<Stack
 				direction="row"
 				sx={{
-					flex: 1,
-					justifyContent: 'space-between',
 					alignItems: 'center',
+					flex: 1,
+					gap: 2,
+					justifyContent: 'space-between',
 					overflow: 'auto',
 					padding: 4,
-					gap: 2,
 				}}
 			>
 				<Stack
@@ -44,11 +43,11 @@ export function ListRowLink({
 
 					<Typography
 						sx={{
+							flex: 1,
+							fontWeight: (theme) => theme.typography.fontWeightMedium,
+							overflow: 'hidden',
 							textOverflow: 'ellipsis',
 							whiteSpace: 'nowrap',
-							overflow: 'hidden',
-							flex: 1,
-							fontWeight: 500,
 						}}
 					>
 						{label}
