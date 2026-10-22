@@ -148,7 +148,7 @@
 		"maplibre-gl": "6.15.0",
 		"media-chrome": "4.19.3",
 		"nano-staged": "1.0.2",
-		"npm-run-all2": "9.0.3",
+		"npm-run-all2": "9.0.4",
 		"oxc-transform-react": "0.152.0",
 		"patch-package": "8.0.1",
 		"playwright": "1.64.1",
