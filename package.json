@@ -88,7 +88,7 @@
 		"zustand": "5.0.16"
 	},
 	"devDependencies": {
-		"@comapeo/core-react": "12.0.5",
+		"@comapeo/core-react": "12.0.6",
 		"@electron-forge/cli": "8.0.1",
 		"@electron-forge/maker-deb": "8.0.1",
 		"@electron-forge/maker-dmg": "8.0.1",
