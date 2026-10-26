@@ -2,7 +2,6 @@ import type { KnipConfig } from 'knip'
 
 export default {
 	entry: [
-		'forge.config.ts',
 		'src/preload/main-window.js!',
 		'src/renderer/global.d.ts!',
 		'src/renderer/src/index.css!',
