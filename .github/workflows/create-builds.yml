@@ -158,6 +158,13 @@ jobs:
           echo "key_issuer=$KEY_ISSUER" >> "$GITHUB_OUTPUT"
           echo "key_path=$KEY_PATH" >> "$GITHUB_OUTPUT"
 
+        # NOTE: Workaround for stapling issue (https://github.com/actions/runner-images/issues/14924#issuecomment-6188826956)
+      - name: Work around stapling issue on macos-15-intel runner image
+        if: ${{ matrix.os.name == 'macos-intel' }}
+        run: |
+          echo "block return out quick proto udp from any to any port 443" | sudo pfctl -f -
+          sudo pfctl -E
+
       - name: Set up Windows code signing
         id: windows-signing-setup
         if: ${{ startsWith(matrix.os.name, 'windows') }}
