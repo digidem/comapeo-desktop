@@ -2,6 +2,7 @@ import type { KnipConfig } from 'knip'
 
 export default {
 	entry: [
+		'forge.config.ts',
 		'src/preload/main-window.js!',
 		'src/renderer/global.d.ts!',
 		'src/renderer/src/index.css!',
@@ -22,5 +23,9 @@ export default {
 	},
 	vite: {
 		config: ['src/renderer/vite.config.ts'],
+	},
+	'electron-forge': {
+		// NOTE: Disable loading of config file and use on static analysis instead (config file added to `entry`)
+		config: [],
 	},
 } satisfies KnipConfig
