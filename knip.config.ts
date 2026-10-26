@@ -24,4 +24,8 @@ export default {
 	vite: {
 		config: ['src/renderer/vite.config.ts'],
 	},
+	'electron-forge': {
+		// NOTE: Disable loading of config file and use on static analysis instead (config file added to `entry`)
+		config: [],
+	},
 } satisfies KnipConfig
