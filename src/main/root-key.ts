@@ -1,5 +1,6 @@
 import { randomBytes } from 'node:crypto'
 import type { SafeStorage } from 'electron/main'
+import { createDebug } from 'obug'
 import * as v from 'valibot'
 
 import {
@@ -17,6 +18,8 @@ type Encryption = {
 	getBackend: () =>
 		ReturnType<SafeStorage['getSelectedStorageBackend']> | undefined
 }
+
+const log = createDebug('comapeo:main:root-key')
 
 /**
  * Extracts the root key to use from persisted storage if possible based on the existence of
@@ -39,12 +42,16 @@ export function loadRootKey({
 
 	// NOTE: Already migrated to `rootKeyRecord`
 	if (rootKeyRecord) {
+		log('Using root key from existing root key record')
+
 		return decode(rootKeyRecord, encryption)
 	}
 
 	// NOTE: Handle legacy value that has yet to be migrated. Determined based on the format of value
 	// with the assumption that a ciphertext (v10/v11 prefix + AES block) can never be exactly 32 hex chars.
 	if (legacyRootKey) {
+		log('Using legacy root key field and migrating to root key record')
+
 		const record: RootKeyRecord = {
 			encrypted: !v.is(RootKeyAsHexSchema, legacyRootKey),
 			value: legacyRootKey,
@@ -59,6 +66,8 @@ export function loadRootKey({
 	}
 
 	// NOTE: Handle fresh install
+	log('Generating new root key')
+
 	const key = randomBytes(16).toString('hex')
 
 	const backend = encryption.getBackend()
@@ -67,12 +76,18 @@ export function loadRootKey({
 	let record: RootKeyRecord
 
 	if (shouldEncrypt) {
+		log('Using encrypted root key')
+
 		record = { encrypted: true, value: encryption.encrypt(key).toString('hex') }
 
 		if (backend) {
 			record.backend = backend
+
+			log('Backend used for root key encryption: %s', backend)
 		}
 	} else {
+		log('Using plain root key')
+
 		record = { encrypted: false, value: key }
 	}
 
