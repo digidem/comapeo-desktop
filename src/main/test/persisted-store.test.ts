@@ -6,8 +6,8 @@ import { join } from 'node:path'
 import * as v from 'valibot'
 import { describe, expect, test, vi, type TestContext } from 'vitest'
 
-import type { AppUsageMetrics } from '../shared/metrics.ts'
-import { daysToMilliseconds } from '../shared/time.ts'
+import type { AppUsageMetrics } from '../../shared/metrics.ts'
+import { daysToMilliseconds } from '../../shared/time.ts'
 import {
 	BASE_LANGUAGE_TO_REGIONAL_VARIANT,
 	CurrentStoreStateSchema,
@@ -19,7 +19,7 @@ import {
 	type PersistedStorageV2,
 	type PersistedStorageV3,
 	type RootKeyRecord,
-} from './persisted-store.ts'
+} from '../persisted-store.ts'
 
 test('default store state value', () => {
 	expect(v.getDefaults(CurrentStoreStateSchema)).toStrictEqual({
