@@ -342,12 +342,10 @@ describe('existing `rootKeyRecord`', () => {
 		const { encryption } = createFakeEncryption()
 
 		// NOTE: Simulates decrypting with the wrong key without throwing
-		encryption.decrypt.mockReturnValueOnce(
-			Promise.resolve({
-				result: '\u0000garbage\ufffd',
-				shouldReEncrypt: false,
-			}),
-		)
+		encryption.decrypt.mockResolvedValueOnce({
+			result: '\u0000garbage\ufffd',
+			shouldReEncrypt: false,
+		})
 
 		await expect(() =>
 			loadRootKey({
@@ -532,9 +530,10 @@ describe('legacy `rootKey` migration', () => {
 
 		const { encryption } = createFakeEncryption()
 
-		encryption.decrypt.mockReturnValueOnce(
-			Promise.resolve({ result: 'not-a-valid-key', shouldReEncrypt: false }),
-		)
+		encryption.decrypt.mockResolvedValueOnce({
+			result: 'not-a-valid-key',
+			shouldReEncrypt: false,
+		})
 
 		const persistedStore = createPersistedStore({ filePath })
 

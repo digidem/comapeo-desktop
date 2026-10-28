@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto'
-import { type DecryptStringAsyncReturnValue, type SafeStorage } from 'electron'
+import type { DecryptStringAsyncReturnValue, SafeStorage } from 'electron'
 import { createDebug } from 'obug'
 import * as v from 'valibot'
 
