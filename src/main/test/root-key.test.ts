@@ -12,8 +12,8 @@ import {
 	PersistedStorageV3Schema,
 	RootKeyAsHexSchema,
 	createPersistedStore,
+	type EncryptedRootKeyRecord,
 	type PersistedStorageV3,
-	type RootKeyRecord,
 } from '../persisted-store.ts'
 import { loadRootKey } from '../root-key.ts'
 
@@ -263,7 +263,7 @@ describe('existing `rootKeyRecord`', () => {
 
 		const exampleRootKey = randomBytes(16).toString('hex')
 
-		const record: RootKeyRecord = {
+		const record: EncryptedRootKeyRecord = {
 			encrypted: true,
 			value: fakeEncrypt(exampleRootKey).toString('hex'),
 			backend: 'gnome_libsecret',
@@ -698,7 +698,10 @@ describe('across launches', () => {
 
 		const exampleRootKey = randomBytes(16).toString('hex')
 
-		const recordBefore: RootKeyRecord = { encrypted: true, value: 'abcde123' }
+		const recordBefore: EncryptedRootKeyRecord = {
+			encrypted: true,
+			value: 'abcde123',
+		}
 
 		writeStorage(filePath, { rootKeyRecord: recordBefore })
 

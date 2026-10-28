@@ -5,8 +5,9 @@ import * as v from 'valibot'
 
 import {
 	RootKeyAsHexSchema,
+	type EncryptedRootKeyRecord,
 	type PersistedStore,
-	type RootKeyRecord,
+	type PlainTextRootKeyRecord,
 } from './persisted-store.ts'
 
 class RootKeyError extends Error {}
@@ -91,7 +92,10 @@ export async function loadRootKey({
 			log('Root key can be re-encrypted. Skipping for now.')
 		}
 
-		const record: RootKeyRecord = { encrypted: true, value: legacyRootKey }
+		const record: EncryptedRootKeyRecord = {
+			encrypted: true,
+			value: legacyRootKey,
+		}
 
 		// NOTE: Legacy `rootKey` is intentionally left in place for now
 		persistedStore.setState({ rootKeyRecord: record })
@@ -118,7 +122,7 @@ export async function loadRootKey({
 	if (!shouldEncrypt) {
 		log('Using plain root key')
 
-		const record: RootKeyRecord = { encrypted: false, value: key }
+		const record: PlainTextRootKeyRecord = { encrypted: false, value: key }
 
 		persistedStore.setState({ rootKeyRecord: record })
 
@@ -129,7 +133,7 @@ export async function loadRootKey({
 
 	const encrypted = await encryption.encrypt(key)
 
-	const record: RootKeyRecord = {
+	const record: EncryptedRootKeyRecord = {
 		encrypted: true,
 		value: encrypted.toString('hex'),
 	}

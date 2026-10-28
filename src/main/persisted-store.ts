@@ -53,18 +53,28 @@ export const RootKeyAsHexSchema = v.pipe(
 	v.length(32),
 )
 
+const EncryptedRootKeyRecord = v.object({
+	encrypted: v.literal(true),
+	value: StoredRootKeySchema,
+	backend: v.optional(v.string()),
+})
+
+const PlainTextRootKeyRecord = v.object({
+	encrypted: v.literal(false),
+	value: RootKeyAsHexSchema,
+})
+
 export const RootKeyRecordSchema = v.union([
-	v.object({
-		encrypted: v.literal(true),
-		value: StoredRootKeySchema,
-		backend: v.optional(v.string()),
-	}),
-	v.object({
-		encrypted: v.literal(false),
-		value: RootKeyAsHexSchema,
-	}),
+	EncryptedRootKeyRecord,
+	PlainTextRootKeyRecord,
 ])
 
+export type EncryptedRootKeyRecord = v.InferOutput<
+	typeof EncryptedRootKeyRecord
+>
+export type PlainTextRootKeyRecord = v.InferOutput<
+	typeof PlainTextRootKeyRecord
+>
 export type RootKeyRecord = v.InferOutput<typeof RootKeyRecordSchema>
 
 const StoreStateV3Schema = v.object({
