@@ -8,6 +8,7 @@ import {
 	type EncryptedRootKeyRecord,
 	type PersistedStore,
 	type PlainTextRootKeyRecord,
+	type RootKeyRecord,
 } from './persisted-store.ts'
 
 class RootKeyError extends Error {}
@@ -108,40 +109,16 @@ export async function loadRootKey({
 
 	const key = randomBytes(16).toString('hex')
 
-	const backend = encryption.getBackend()
+	const record = await encode(key, encryption)
 
-	if (backend === 'unknown') {
-		throw new RootKeyError(
-			'Cannot encrypt root key before app is ready (encryption backend is unknown)',
-		)
-	}
+	if (record.encrypted) {
+		log('Using encrypted root key')
 
-	const shouldEncrypt =
-		(await encryption.isAvailable()) && backend !== 'basic_text'
-
-	if (!shouldEncrypt) {
-		log('Using plain root key')
-
-		const record: PlainTextRootKeyRecord = { encrypted: false, value: key }
-
-		persistedStore.setState({ rootKeyRecord: record })
-
-		return key
-	}
-
-	log('Using encrypted root key')
-
-	const encrypted = await encryption.encrypt(key)
-
-	const record: EncryptedRootKeyRecord = {
-		encrypted: true,
-		value: encrypted.toString('hex'),
-	}
-
-	if (backend) {
-		record.backend = backend
-
-		log('Backend used for root key encryption: %s', backend)
+		if (record.backend) {
+			log('Backend used for root key encryption: %s', record.backend)
+		}
+	} else {
+		log('Using plain text root key')
 	}
 
 	persistedStore.setState({ rootKeyRecord: record })
@@ -175,4 +152,38 @@ async function decode(
 	}
 
 	return value
+}
+
+async function encode(
+	input: string,
+	encryption: Encryption,
+): Promise<RootKeyRecord> {
+	const backend = encryption.getBackend()
+
+	if (backend === 'unknown') {
+		throw new RootKeyError(
+			'Cannot encrypt root key before app is ready (encryption backend is unknown)',
+		)
+	}
+
+	const isAvailable = await encryption.isAvailable()
+
+	const shouldEncrypt = isAvailable && backend !== 'basic_text'
+
+	if (!shouldEncrypt) {
+		return { encrypted: false, value: input } satisfies PlainTextRootKeyRecord
+	}
+
+	const encrypted = await encryption.encrypt(input)
+
+	const record: EncryptedRootKeyRecord = {
+		encrypted: true,
+		value: encrypted.toString('hex'),
+	}
+
+	if (backend) {
+		record.backend = backend
+	}
+
+	return record
 }
