@@ -196,7 +196,22 @@ export async function start({
 
 					return safeStorage.getSelectedStorageBackend()
 				},
-				isAvailable: () => safeStorage.isAsyncEncryptionAvailable(),
+				isAvailable: async () => {
+					// NOTE: On macOS, `safeStorage.isAsyncEncryptionAvailable()`
+					// seems to misreport that encryption is available for unsigned packaged applications.
+					// We do not sign the app when packaging and running for internal builds (e.g. running e2e tests).
+					// https://github.com/electron/electron/issues/55433
+					if (
+						app.isPackaged &&
+						process.platform === 'darwin' &&
+						appConfig.appType === 'internal' &&
+						appConfig.isTestEnvironment
+					) {
+						return false
+					}
+
+					return safeStorage.isAsyncEncryptionAvailable()
+				},
 			},
 			persistedStore,
 		})
