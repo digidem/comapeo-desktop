@@ -28,7 +28,7 @@ describe('fresh install', () => {
 
 		const persistedStore = createPersistedStore({ filePath })
 
-		const key = loadRootKey({ encryption, persistedStore })
+		const key = await loadRootKey({ encryption, persistedStore })
 
 		expect(key).toStrictEqual(expect.schemaMatching(RootKeyAsHexSchema))
 
@@ -46,8 +46,12 @@ describe('fresh install', () => {
 			'stored value is not the raw key',
 		).not.toStrictEqual(key)
 
+		const { result: decryptedKey } = await encryption.decrypt(
+			Buffer.from(rootKeyRecord!.value, 'hex'),
+		)
+
 		expect(
-			encryption.decrypt(Buffer.from(rootKeyRecord!.value, 'hex')),
+			decryptedKey,
 			'stored value decrypts to the returned key',
 		).toStrictEqual(key)
 
@@ -64,7 +68,7 @@ describe('fresh install', () => {
 
 		const persistedStore = createPersistedStore({ filePath })
 
-		const key = loadRootKey({ encryption, persistedStore })
+		const key = await loadRootKey({ encryption, persistedStore })
 
 		const { rootKeyRecord } = persistedStore.getState()
 
@@ -73,9 +77,11 @@ describe('fresh install', () => {
 			value: expect.any(String),
 		})
 
-		expect(
-			encryption.decrypt(Buffer.from(rootKeyRecord!.value, 'hex')),
-		).toStrictEqual(key)
+		const { result: decrypted } = await encryption.decrypt(
+			Buffer.from(rootKeyRecord!.value, 'hex'),
+		)
+
+		expect(decrypted).toStrictEqual(key)
 
 		expect(encryption.encrypt).toHaveBeenCalledTimes(1)
 	})
@@ -87,7 +93,7 @@ describe('fresh install', () => {
 
 		const persistedStore = createPersistedStore({ filePath })
 
-		const key = loadRootKey({ encryption, persistedStore })
+		const key = await loadRootKey({ encryption, persistedStore })
 
 		expect(key).toStrictEqual(expect.schemaMatching(RootKeyAsHexSchema))
 
@@ -109,7 +115,7 @@ describe('fresh install', () => {
 
 		const persistedStore = createPersistedStore({ filePath })
 
-		const key = loadRootKey({ encryption, persistedStore })
+		const key = await loadRootKey({ encryption, persistedStore })
 
 		expect(persistedStore.getState().rootKeyRecord).toStrictEqual({
 			encrypted: false,
@@ -125,11 +131,11 @@ describe('fresh install', () => {
 
 		const { encryption } = createFakeEncryption()
 
-		const keyA = loadRootKey({
+		const keyA = await loadRootKey({
 			encryption,
 			persistedStore: createPersistedStore({ filePath: first.filePath }),
 		})
-		const keyB = loadRootKey({
+		const keyB = await loadRootKey({
 			encryption,
 			persistedStore: createPersistedStore({ filePath: second.filePath }),
 		})
@@ -144,7 +150,7 @@ describe('fresh install', () => {
 
 		const persistedStore = createPersistedStore({ filePath })
 
-		loadRootKey({ encryption, persistedStore })
+		await loadRootKey({ encryption, persistedStore })
 
 		const storage = readStorage(filePath)
 
@@ -168,9 +174,9 @@ describe('fresh install', () => {
 
 		const persistedStore = createPersistedStore({ filePath })
 
-		expect(() => loadRootKey({ encryption, persistedStore })).toThrow(
-			'encrypt failed',
-		)
+		await expect(() =>
+			loadRootKey({ encryption, persistedStore }),
+		).rejects.toThrow('encrypt failed')
 
 		expect(persistedStore.getState().rootKeyRecord).toBeUndefined()
 
@@ -190,7 +196,7 @@ describe('existing `rootKeyRecord`', () => {
 
 		const { encryption } = createFakeEncryption({ available: false })
 
-		const key = loadRootKey({
+		const key = await loadRootKey({
 			encryption,
 			persistedStore: createPersistedStore({ filePath }),
 		})
@@ -217,7 +223,7 @@ describe('existing `rootKeyRecord`', () => {
 
 		const { encryption } = createFakeEncryption()
 
-		const key = loadRootKey({
+		const key = await loadRootKey({
 			encryption,
 			persistedStore: createPersistedStore({ filePath }),
 		})
@@ -242,7 +248,7 @@ describe('existing `rootKeyRecord`', () => {
 
 		const persistedStore = createPersistedStore({ filePath })
 
-		const key = loadRootKey({ encryption, persistedStore })
+		const key = await loadRootKey({ encryption, persistedStore })
 
 		expect(key).toStrictEqual(exampleRootKey)
 
@@ -269,9 +275,9 @@ describe('existing `rootKeyRecord`', () => {
 
 		const persistedStore = createPersistedStore({ filePath })
 
-		expect(() => loadRootKey({ encryption, persistedStore })).toThrow(
-			/encryption is not available/,
-		)
+		await expect(() =>
+			loadRootKey({ encryption, persistedStore }),
+		).rejects.toThrow(/encryption is not available/)
 
 		expect(encryption.decrypt).not.toHaveBeenCalled()
 
@@ -302,9 +308,9 @@ describe('existing `rootKeyRecord`', () => {
 
 		let err: Error
 
-		expect(() => {
+		await expect(async () => {
 			try {
-				loadRootKey({
+				await loadRootKey({
 					encryption,
 					persistedStore: createPersistedStore({ filePath }),
 				})
@@ -316,7 +322,7 @@ describe('existing `rootKeyRecord`', () => {
 
 				throw new Error('Thrown value is not an Error', { cause: reason })
 			}
-		}).toThrow('Failed to decrypt root key')
+		}).rejects.toThrow('Failed to decrypt root key')
 
 		expect(err!.cause).toStrictEqual(cause)
 	})
@@ -336,14 +342,19 @@ describe('existing `rootKeyRecord`', () => {
 		const { encryption } = createFakeEncryption()
 
 		// NOTE: Simulates decrypting with the wrong key without throwing
-		encryption.decrypt.mockReturnValueOnce('\u0000garbage\ufffd')
+		encryption.decrypt.mockReturnValueOnce(
+			Promise.resolve({
+				result: '\u0000garbage\ufffd',
+				shouldReEncrypt: false,
+			}),
+		)
 
-		expect(() =>
+		await expect(() =>
 			loadRootKey({
 				encryption,
 				persistedStore: createPersistedStore({ filePath }),
 			}),
-		).toThrow(/unexpected format/)
+		).rejects.toThrow(/unexpected format/)
 	})
 })
 
@@ -362,7 +373,7 @@ describe('legacy `rootKey` migration', () => {
 
 		const persistedStore = createPersistedStore({ filePath })
 
-		const key = loadRootKey({ encryption, persistedStore })
+		const key = await loadRootKey({ encryption, persistedStore })
 
 		expect(key).toStrictEqual(exampleRootKey)
 
@@ -385,7 +396,7 @@ describe('legacy `rootKey` migration', () => {
 
 		const { encryption } = createFakeEncryption({ available: false })
 
-		const key = loadRootKey({
+		const key = await loadRootKey({
 			encryption,
 			persistedStore: createPersistedStore({ filePath }),
 		})
@@ -411,7 +422,7 @@ describe('legacy `rootKey` migration', () => {
 
 		const persistedStore = createPersistedStore({ filePath })
 
-		const key = loadRootKey({ encryption, persistedStore })
+		const key = await loadRootKey({ encryption, persistedStore })
 
 		expect(key).toStrictEqual(exampleRootKey)
 
@@ -436,7 +447,7 @@ describe('legacy `rootKey` migration', () => {
 
 		const persistedStore = createPersistedStore({ filePath })
 
-		loadRootKey({ encryption, persistedStore })
+		await loadRootKey({ encryption, persistedStore })
 
 		expect(persistedStore.getState().rootKey).toStrictEqual(legacyCiphertext)
 
@@ -467,9 +478,9 @@ describe('legacy `rootKey` migration', () => {
 
 		const persistedStore = createPersistedStore({ filePath })
 
-		expect(() => loadRootKey({ encryption, persistedStore })).toThrow(
-			/encryption is not available/,
-		)
+		await expect(() =>
+			loadRootKey({ encryption, persistedStore }),
+		).rejects.toThrow(/encryption is not available/)
 
 		expect(encryption.encrypt).not.toHaveBeenCalled()
 
@@ -501,9 +512,9 @@ describe('legacy `rootKey` migration', () => {
 
 		const persistedStore = createPersistedStore({ filePath })
 
-		expect(() => loadRootKey({ encryption, persistedStore })).toThrow(
-			'Failed to decrypt root key',
-		)
+		await expect(() =>
+			loadRootKey({ encryption, persistedStore }),
+		).rejects.toThrow('Failed to decrypt root key')
 
 		expect(persistedStore.getState().rootKeyRecord).toBeUndefined()
 
@@ -521,13 +532,15 @@ describe('legacy `rootKey` migration', () => {
 
 		const { encryption } = createFakeEncryption()
 
-		encryption.decrypt.mockReturnValueOnce('not-a-valid-key')
+		encryption.decrypt.mockReturnValueOnce(
+			Promise.resolve({ result: 'not-a-valid-key', shouldReEncrypt: false }),
+		)
 
 		const persistedStore = createPersistedStore({ filePath })
 
-		expect(() => loadRootKey({ encryption, persistedStore })).toThrow(
-			/unexpected format/,
-		)
+		await expect(() =>
+			loadRootKey({ encryption, persistedStore }),
+		).rejects.toThrow(/unexpected format/)
 
 		expect(persistedStore.getState().rootKeyRecord).toBeUndefined()
 	})
@@ -541,9 +554,9 @@ describe('legacy `rootKey` migration', () => {
 
 		const persistedStore = createPersistedStore({ filePath })
 
-		expect(() => loadRootKey({ encryption, persistedStore })).toThrow(
-			'Failed to decrypt root key',
-		)
+		await expect(() =>
+			loadRootKey({ encryption, persistedStore }),
+		).rejects.toThrow('Failed to decrypt root key')
 
 		expect(persistedStore.getState().rootKeyRecord).toBeUndefined()
 	})
@@ -555,17 +568,17 @@ describe('across launches', () => {
 
 		const { encryption } = createFakeEncryption()
 
-		const first = loadRootKey({
+		const first = await loadRootKey({
 			encryption,
 			persistedStore: createPersistedStore({ filePath }),
 		})
 
-		const second = loadRootKey({
+		const second = await loadRootKey({
 			encryption,
 			persistedStore: createPersistedStore({ filePath }),
 		})
 
-		const third = loadRootKey({
+		const third = await loadRootKey({
 			encryption,
 			persistedStore: createPersistedStore({ filePath }),
 		})
@@ -591,12 +604,12 @@ describe('across launches', () => {
 
 		const { encryption } = createFakeEncryption()
 
-		const first = loadRootKey({
+		const first = await loadRootKey({
 			encryption,
 			persistedStore: createPersistedStore({ filePath }),
 		})
 
-		const second = loadRootKey({
+		const second = await loadRootKey({
 			encryption,
 			persistedStore: createPersistedStore({ filePath }),
 		})
@@ -617,7 +630,7 @@ describe('across launches', () => {
 			backend: 'gnome_libsecret',
 		})
 
-		const key = loadRootKey({
+		const keyBefore = await loadRootKey({
 			encryption,
 			persistedStore: createPersistedStore({ filePath }),
 		})
@@ -629,12 +642,12 @@ describe('across launches', () => {
 		// Later launch: keyring not available (e.g. locked, no secret service, different desktop env)
 		state.available = false
 
-		expect(() =>
+		await expect(() =>
 			loadRootKey({
 				encryption,
 				persistedStore: createPersistedStore({ filePath }),
 			}),
-		).toThrow(/encryption is not available/)
+		).rejects.toThrow(/encryption is not available/)
 
 		expect(
 			readStorage(filePath).state.rootKeyRecord,
@@ -644,12 +657,12 @@ describe('across launches', () => {
 		// Keyring becomes available again: the original key is recovered
 		state.available = true
 
-		expect(
-			loadRootKey({
-				encryption,
-				persistedStore: createPersistedStore({ filePath }),
-			}),
-		).toStrictEqual(key)
+		const keyAfter = await loadRootKey({
+			encryption,
+			persistedStore: createPersistedStore({ filePath }),
+		})
+
+		expect(keyAfter).toStrictEqual(keyBefore)
 	})
 
 	test('plaintext key is not affected by encryption becoming available later', async (t) => {
@@ -657,7 +670,7 @@ describe('across launches', () => {
 
 		const { encryption, state } = createFakeEncryption({ available: false })
 
-		const key = loadRootKey({
+		const key = await loadRootKey({
 			encryption,
 			persistedStore: createPersistedStore({ filePath }),
 		})
@@ -666,7 +679,7 @@ describe('across launches', () => {
 		state.available = true
 		state.backend = 'gnome_libsecret'
 
-		const second = loadRootKey({
+		const second = await loadRootKey({
 			encryption,
 			persistedStore: createPersistedStore({ filePath }),
 		})
@@ -677,6 +690,37 @@ describe('across launches', () => {
 			encryption.decrypt,
 			'does not try to decrypt plaintext',
 		).not.toHaveBeenCalled()
+	})
+
+	// TODO: Enable when re-encryption of stored key handled explicitly.
+	test.skip('replaces the ciphertext when re-encryption should occur', async (t) => {
+		const { filePath } = await setup(t)
+
+		const exampleRootKey = randomBytes(16).toString('hex')
+
+		const recordBefore: RootKeyRecord = { encrypted: true, value: 'abcde123' }
+
+		writeStorage(filePath, { rootKeyRecord: recordBefore })
+
+		const { encryption } = createFakeEncryption()
+
+		encryption.decrypt.mockReturnValueOnce(
+			Promise.resolve({ result: exampleRootKey, shouldReEncrypt: true }),
+		)
+
+		const key = await loadRootKey({
+			encryption,
+			persistedStore: createPersistedStore({ filePath }),
+		})
+
+		expect(encryption.encrypt).toHaveBeenCalledOnce()
+
+		expect(
+			readStorage(filePath).state.rootKeyRecord,
+			'stored record is replaced or regenerated',
+		).not.toStrictEqual(recordBefore)
+
+		expect(key).toStrictEqual(exampleRootKey)
 	})
 })
 
@@ -713,12 +757,17 @@ function fakeEncrypt(input: string): Buffer {
 	return Buffer.from(`v11${input}`, 'utf-8')
 }
 
-function fakeDecrypt(input: Buffer): string {
+function fakeDecrypt(input: Buffer): {
+	result: string
+	shouldReEncrypt: boolean
+} {
 	const decoded = input.toString('utf-8')
+
 	if (!decoded.startsWith('v11')) {
 		throw new Error('Unable to decrypt: unrecognized ciphertext')
 	}
-	return decoded.slice(3)
+
+	return { result: decoded.slice(3), shouldReEncrypt: false }
 }
 
 function createFakeEncryption(initial?: {
@@ -731,10 +780,10 @@ function createFakeEncryption(initial?: {
 	}
 
 	const encryption = {
-		isAvailable: vi.fn(() => state.available),
+		isAvailable: vi.fn(async () => state.available),
 		getBackend: vi.fn(() => state.backend),
-		encrypt: vi.fn((input: string) => fakeEncrypt(input)),
-		decrypt: vi.fn((input: Buffer) => fakeDecrypt(input)),
+		encrypt: vi.fn(async (input: string) => fakeEncrypt(input)),
+		decrypt: vi.fn(async (input: Buffer) => fakeDecrypt(input)),
 	}
 
 	return { encryption, state }

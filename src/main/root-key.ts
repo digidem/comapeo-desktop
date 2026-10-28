@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto'
-import type { SafeStorage } from 'electron/main'
+import { type DecryptStringAsyncReturnValue, type SafeStorage } from 'electron'
 import { createDebug } from 'obug'
 import * as v from 'valibot'
 
@@ -12,9 +12,9 @@ import {
 class RootKeyError extends Error {}
 
 type Encryption = {
-	encrypt: (input: string) => Buffer
-	decrypt: (input: Buffer) => string
-	isAvailable: () => boolean
+	encrypt: (input: string) => Promise<Buffer>
+	decrypt: (input: Buffer) => Promise<DecryptStringAsyncReturnValue>
+	isAvailable: () => Promise<boolean>
 	getBackend: () =>
 		ReturnType<SafeStorage['getSelectedStorageBackend']> | undefined
 }
@@ -29,40 +29,74 @@ const log = createDebug('comapeo:main:root-key')
  *
  * If neither exist, generates and persists a new key.
  *
+ * This should only be called after the app is ready (`'ready'` event has been emitted).
+ *
  * @returns Root key as hexidecimal string
  */
-export function loadRootKey({
+export async function loadRootKey({
 	encryption,
 	persistedStore,
 }: {
 	encryption: Encryption
 	persistedStore: PersistedStore
-}): string {
+}): Promise<string> {
 	const { rootKey: legacyRootKey, rootKeyRecord } = persistedStore.getState()
 
 	// NOTE: Already migrated to `rootKeyRecord`
 	if (rootKeyRecord) {
 		log('Using root key from existing root key record')
 
-		return decode(rootKeyRecord, encryption)
+		if (!rootKeyRecord.encrypted) {
+			return rootKeyRecord.value
+		}
+
+		const { result: decodedRootKey, shouldReEncrypt } = await decode(
+			rootKeyRecord.value,
+			encryption,
+		)
+
+		if (shouldReEncrypt) {
+			// TODO: Handle re-encryption
+			log('Root key can be re-encrypted. Skipping for now.')
+		}
+
+		return decodedRootKey
 	}
 
 	// NOTE: Handle legacy value that has yet to be migrated. Determined based on the format of value
 	// with the assumption that a ciphertext (v10/v11 prefix + AES block) can never be exactly 32 hex chars.
 	if (legacyRootKey) {
-		log('Using legacy root key field and migrating to root key record')
+		log('Using legacy root key field and will migrate to root key record')
 
-		const record: RootKeyRecord = {
-			encrypted: !v.is(RootKeyAsHexSchema, legacyRootKey),
-			value: legacyRootKey,
+		if (v.is(RootKeyAsHexSchema, legacyRootKey)) {
+			log('Migrating plain text legacy root key')
+
+			const record = { encrypted: false, value: legacyRootKey }
+
+			// NOTE: Legacy `rootKey` is intentionally left in place for now
+			persistedStore.setState({ rootKeyRecord: record })
+
+			return legacyRootKey
 		}
 
-		const key = decode(record, encryption)
+		log('Migrating encrypted legacy root key')
+
+		const { result: decryptedRootKey, shouldReEncrypt } = await decode(
+			legacyRootKey,
+			encryption,
+		)
+
+		if (shouldReEncrypt) {
+			// TODO: Handle re-encryption
+			log('Root key can be re-encrypted. Skipping for now.')
+		}
+
+		const record: RootKeyRecord = { encrypted: true, value: legacyRootKey }
 
 		// NOTE: Legacy `rootKey` is intentionally left in place for now
 		persistedStore.setState({ rootKeyRecord: record })
 
-		return key
+		return decryptedRootKey
 	}
 
 	// NOTE: Handle fresh install
@@ -71,24 +105,39 @@ export function loadRootKey({
 	const key = randomBytes(16).toString('hex')
 
 	const backend = encryption.getBackend()
-	const shouldEncrypt = encryption.isAvailable() && backend !== 'basic_text'
 
-	let record: RootKeyRecord
+	if (backend === 'unknown') {
+		throw new RootKeyError(
+			'Cannot encrypt root key before app is ready (encryption backend is unknown)',
+		)
+	}
 
-	if (shouldEncrypt) {
-		log('Using encrypted root key')
+	const shouldEncrypt =
+		(await encryption.isAvailable()) && backend !== 'basic_text'
 
-		record = { encrypted: true, value: encryption.encrypt(key).toString('hex') }
-
-		if (backend) {
-			record.backend = backend
-
-			log('Backend used for root key encryption: %s', backend)
-		}
-	} else {
+	if (!shouldEncrypt) {
 		log('Using plain root key')
 
-		record = { encrypted: false, value: key }
+		const record: RootKeyRecord = { encrypted: false, value: key }
+
+		persistedStore.setState({ rootKeyRecord: record })
+
+		return key
+	}
+
+	log('Using encrypted root key')
+
+	const encrypted = await encryption.encrypt(key)
+
+	const record: RootKeyRecord = {
+		encrypted: true,
+		value: encrypted.toString('hex'),
+	}
+
+	if (backend) {
+		record.backend = backend
+
+		log('Backend used for root key encryption: %s', backend)
 	}
 
 	persistedStore.setState({ rootKeyRecord: record })
@@ -96,29 +145,30 @@ export function loadRootKey({
 	return key
 }
 
-function decode(record: RootKeyRecord, encryption: Encryption): string {
-	if (!record.encrypted) {
-		return record.value
-	}
+async function decode(
+	input: string,
+	encryption: Encryption,
+): Promise<DecryptStringAsyncReturnValue> {
+	const encryptionIsAvailable = await encryption.isAvailable()
 
-	if (!encryption.isAvailable()) {
+	if (!encryptionIsAvailable) {
 		throw new RootKeyError(
 			'Root key is encrypted but encryption is not available',
 		)
 	}
 
-	let key: string
+	let value: DecryptStringAsyncReturnValue
 
 	try {
-		key = encryption.decrypt(Buffer.from(record.value, 'hex'))
+		value = await encryption.decrypt(Buffer.from(input, 'hex'))
 	} catch (cause) {
 		throw new RootKeyError('Failed to decrypt root key', { cause })
 	}
 
 	// NOTE: A wrong key can decrypt "successfully" to an invalid value
-	if (!v.is(RootKeyAsHexSchema, key)) {
+	if (!v.is(RootKeyAsHexSchema, value.result)) {
 		throw new RootKeyError('Decrypted root key has unexpected format')
 	}
 
-	return key
+	return value
 }

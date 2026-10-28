@@ -180,13 +180,14 @@ export async function start({
 
 		await app.whenReady()
 
-		const rootKey = loadRootKey({
+		// NOTE: Must be called after the app is ready
+		const rootKey = await loadRootKey({
 			encryption: {
 				decrypt: (input) => {
-					return safeStorage.decryptString(input)
+					return safeStorage.decryptStringAsync(input)
 				},
 				encrypt: (input) => {
-					return safeStorage.encryptString(input)
+					return safeStorage.encryptStringAsync(input)
 				},
 				getBackend: () => {
 					if (process.platform !== 'linux') {
@@ -195,7 +196,7 @@ export async function start({
 
 					return safeStorage.getSelectedStorageBackend()
 				},
-				isAvailable: () => safeStorage.isEncryptionAvailable(),
+				isAvailable: () => safeStorage.isAsyncEncryptionAvailable(),
 			},
 			persistedStore,
 		})
