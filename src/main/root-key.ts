@@ -52,17 +52,33 @@ export async function loadRootKey({
 			return rootKeyRecord.value
 		}
 
-		const { result: decodedRootKey, shouldReEncrypt } = await decode(
+		const { result: decryptedRootKey, shouldReEncrypt } = await decode(
 			rootKeyRecord.value,
 			encryption,
 		)
 
 		if (shouldReEncrypt) {
-			// TODO: Handle re-encryption
-			log('Root key can be re-encrypted. Skipping for now.')
+			log('Re-encrypting root key')
+
+			const record = await encode(decryptedRootKey, encryption)
+
+			if (record.encrypted) {
+				log('Using encrypted root key')
+
+				if (record.backend) {
+					log('Backend used for root key encryption: %s', record.backend)
+				}
+			} else {
+				log('Using plain text root key')
+			}
+
+			// NOTE: Legacy `rootKey` is intentionally left in place for now
+			persistedStore.setState({ rootKeyRecord: record })
+
+			return decryptedRootKey
 		}
 
-		return decodedRootKey
+		return decryptedRootKey
 	}
 
 	// NOTE: Handle legacy value that has yet to be migrated. Determined based on the format of value
@@ -89,8 +105,24 @@ export async function loadRootKey({
 		)
 
 		if (shouldReEncrypt) {
-			// TODO: Handle re-encryption
-			log('Root key can be re-encrypted. Skipping for now.')
+			log('Re-encrypting root key')
+
+			const record = await encode(decryptedRootKey, encryption)
+
+			if (record.encrypted) {
+				log('Using encrypted root key')
+
+				if (record.backend) {
+					log('Backend used for root key encryption: %s', record.backend)
+				}
+			} else {
+				log('Using plain text root key')
+			}
+
+			// NOTE: Legacy `rootKey` is intentionally left in place for now
+			persistedStore.setState({ rootKeyRecord: record })
+
+			return decryptedRootKey
 		}
 
 		const record: EncryptedRootKeyRecord = {

@@ -692,12 +692,12 @@ describe('across launches', () => {
 		).not.toHaveBeenCalled()
 	})
 
-	// TODO: Enable when re-encryption of stored key handled explicitly.
-	test.skip('replaces the ciphertext when re-encryption should occur', async (t) => {
+	test('replaces the root key record ciphertext when re-encryption should occur', async (t) => {
 		const { filePath } = await setup(t)
 
 		const exampleRootKey = randomBytes(16).toString('hex')
 
+		// Simulate the original ciphertext being derived from a different encryption setup.
 		const recordBefore: EncryptedRootKeyRecord = {
 			encrypted: true,
 			value: 'abcde123',
@@ -707,9 +707,10 @@ describe('across launches', () => {
 
 		const { encryption } = createFakeEncryption()
 
-		encryption.decrypt.mockReturnValueOnce(
-			Promise.resolve({ result: exampleRootKey, shouldReEncrypt: true }),
-		)
+		encryption.decrypt.mockResolvedValueOnce({
+			result: exampleRootKey,
+			shouldReEncrypt: true,
+		})
 
 		const key = await loadRootKey({
 			encryption,
@@ -724,6 +725,47 @@ describe('across launches', () => {
 		).not.toStrictEqual(recordBefore)
 
 		expect(key).toStrictEqual(exampleRootKey)
+	})
+
+	test('replaces the legacy root key ciphertext when re-encryption should occur', async (t) => {
+		const { filePath } = await setup(t)
+
+		const exampleRootKey = randomBytes(16).toString('hex')
+
+		// Simulate the original ciphertext being derived from a different encryption setup.
+		const legacyCiphertext = 'abc123'
+
+		writeStorage(filePath, { rootKey: legacyCiphertext })
+
+		const { encryption } = createFakeEncryption()
+
+		encryption.decrypt.mockResolvedValueOnce({
+			result: exampleRootKey,
+			shouldReEncrypt: true,
+		})
+
+		const key = await loadRootKey({
+			encryption,
+			persistedStore: createPersistedStore({ filePath }),
+		})
+
+		expect(encryption.encrypt).toHaveBeenCalledOnce()
+
+		const storedRecord = readStorage(filePath).state.rootKeyRecord
+
+		expect(
+			storedRecord.value,
+			'stored record is replaced or regenerated',
+		).not.toStrictEqual(legacyCiphertext)
+
+		expect(
+			fakeDecrypt(Buffer.from(storedRecord.value, 'hex')).result,
+			'stored value corresponds to original root key',
+		).toStrictEqual(exampleRootKey)
+
+		expect(key, 'loaded root key is the original root key').toStrictEqual(
+			exampleRootKey,
+		)
 	})
 })
 
