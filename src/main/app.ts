@@ -462,6 +462,11 @@ function initMainWindow({
 	}
 
 	const updateMainWindowMinimumSize = debounce({ delay: 500 }, () => {
+		if (mainWindow.isDestroyed()) {
+			log('Main window is destroyed. Skipping minimum size update.')
+			return
+		}
+
 		updateWindowMinimumSize(mainWindow)
 	})
 
