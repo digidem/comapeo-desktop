@@ -1,4 +1,3 @@
-import { randomBytes } from 'node:crypto'
 import { copyFile, mkdir, rm } from 'node:fs/promises'
 import { basename, isAbsolute, join, relative } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -36,6 +35,7 @@ import { messages } from './messages.ts'
 import { createAppDiagnosticsMetricsScheduler } from './metrics/app-diagnostics-metrics.ts'
 import { DeviceDiagnosticsMetrics } from './metrics/device-diagnostics-metrics.ts'
 import type { PersistedStore } from './persisted-store.ts'
+import { loadRootKey } from './root-key.ts'
 
 const log = createDebug('comapeo:main:app')
 
@@ -180,7 +180,41 @@ export async function start({
 
 		await app.whenReady()
 
-		const rootKey = loadRootKey({ persistedStore })
+		// NOTE: Must be called after the app is ready
+		const rootKey = await loadRootKey({
+			encryption: {
+				decrypt: (input) => {
+					return safeStorage.decryptStringAsync(input)
+				},
+				encrypt: (input) => {
+					return safeStorage.encryptStringAsync(input)
+				},
+				getBackend: () => {
+					if (process.platform !== 'linux') {
+						return undefined
+					}
+
+					return safeStorage.getSelectedStorageBackend()
+				},
+				isAvailable: async () => {
+					// NOTE: On macOS, `safeStorage.isAsyncEncryptionAvailable()`
+					// seems to misreport that encryption is available for unsigned packaged applications.
+					// We do not sign the app when packaging and running for internal builds (e.g. running e2e tests).
+					// https://github.com/electron/electron/issues/55433
+					if (
+						app.isPackaged &&
+						process.platform === 'darwin' &&
+						appConfig.appType === 'internal' &&
+						appConfig.isTestEnvironment
+					) {
+						return false
+					}
+
+					return safeStorage.isAsyncEncryptionAvailable()
+				},
+			},
+			persistedStore,
+		})
 
 		const logsDirectory = app.getPath('logs')
 
@@ -550,36 +584,6 @@ function initMainWindow({
 	APP_STATE.browserWindows.set(mainWindow, { type: 'main' })
 
 	return mainWindow
-}
-
-/**
- * @returns Root key as hexidecimal string
- */
-function loadRootKey({ persistedStore }: { persistedStore: PersistedStore }) {
-	const canEncrypt = safeStorage.isEncryptionAvailable()
-
-	const storedRootKey = persistedStore.getState().rootKey
-
-	if (!storedRootKey) {
-		const rootKey = randomBytes(16).toString('hex')
-
-		if (canEncrypt) {
-			persistedStore.setState({
-				rootKey: safeStorage.encryptString(rootKey).toString('hex'),
-			})
-		} else {
-			persistedStore.setState({ rootKey })
-		}
-
-		return rootKey
-	}
-
-	// TODO: Consumer needs to handle case when decryption fails?
-	const rootKey = canEncrypt
-		? safeStorage.decryptString(Buffer.from(storedRootKey, 'hex'))
-		: storedRootKey
-
-	return rootKey
 }
 
 function createAppContextMenu({
