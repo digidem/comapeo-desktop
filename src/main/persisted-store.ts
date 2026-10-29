@@ -26,6 +26,7 @@ export const StoreStateV1Schema = v.object({
 		languageTag: null,
 		useSystemPreferences: true,
 	}),
+	// NOTE: Deprecated in favor of rootKeyRecord
 	rootKey: v.optional(v.string()),
 	sentryUser: v.optional(
 		v.object({
@@ -43,9 +44,43 @@ export const StoreStateV2Schema = v.object({
 	onboardedAt: v.optional(v.pipe(v.number(), v.gtValue(0))),
 })
 
+const StoredRootKeySchema = v.pipe(v.string(), v.hexadecimal())
+
+// NOTE: Hex representation of 16 byte root key as-is has length of 32
+export const RootKeyAsHexSchema = v.pipe(
+	v.string(),
+	v.hexadecimal(),
+	v.length(32),
+)
+
+const EncryptedRootKeyRecord = v.object({
+	encrypted: v.literal(true),
+	value: StoredRootKeySchema,
+	backend: v.optional(v.string()),
+})
+
+const PlainTextRootKeyRecord = v.object({
+	encrypted: v.literal(false),
+	value: RootKeyAsHexSchema,
+})
+
+export const RootKeyRecordSchema = v.union([
+	EncryptedRootKeyRecord,
+	PlainTextRootKeyRecord,
+])
+
+export type EncryptedRootKeyRecord = v.InferOutput<
+	typeof EncryptedRootKeyRecord
+>
+export type PlainTextRootKeyRecord = v.InferOutput<
+	typeof PlainTextRootKeyRecord
+>
+export type RootKeyRecord = v.InferOutput<typeof RootKeyRecordSchema>
+
 const StoreStateV3Schema = v.object({
 	...StoreStateV2Schema.entries,
 	unitSystem: v.optional(UnitSystemSchema, 'metric'),
+	rootKeyRecord: v.fallback(v.optional(RootKeyRecordSchema), undefined),
 })
 
 export const CurrentStoreStateSchema = StoreStateV3Schema
