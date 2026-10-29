@@ -3,7 +3,7 @@
 import * as path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import formatJs from '@formatjs/unplugin/vite'
-import { sentryVitePlugin } from '@sentry/vite-plugin'
+import { sentryVitePlugin } from '@sentry/bundler-plugins/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
