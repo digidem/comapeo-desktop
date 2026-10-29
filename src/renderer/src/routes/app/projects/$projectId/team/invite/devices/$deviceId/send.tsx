@@ -401,7 +401,9 @@ function InvitePending({
 					/>
 
 					<PanelBody>
-						<Typography sx={{ textAlign: 'center' }}>
+						<Typography
+							sx={{ fontVariantNumeric: 'tabular-nums', textAlign: 'center' }}
+						>
 							{intl.formatMessage(m.timeSinceSent, {
 								time: getFormattedDuration(
 									Math.round((currentTimestamp - sentAt) / 1000),
