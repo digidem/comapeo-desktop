@@ -448,9 +448,9 @@ describe('root key record', () => {
 		expect(store.getState().rootKeyRecord).toBeUndefined()
 	})
 
-	// Guards against the failure mode where one bad field fails the whole-file parse,
+	// NOTE: Accounts for case where one bad field fails the whole-file parse,
 	// which resets the store and silently discards the legacy key.
-	describe('malformed record does not reset the store', () => {
+	describe('malformed root key record does not reset the store', () => {
 		const legacyRootKey = randomBytes(16).toString('hex')
 
 		const malformedRecords = {
