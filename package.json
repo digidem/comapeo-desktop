@@ -72,7 +72,7 @@
 		"@comapeo/ipc": "11.0.0",
 		"@comapeo/map-server": "3.1.0",
 		"@formatjs/intl": "6.1.4",
-		"@homebridge/ciao": "1.3.12",
+		"@homebridge/ciao": "1.4.0",
 		"@sentry/electron": "8.3.0",
 		"atomically": "2.1.1",
 		"electron-context-menu": "5.1.0",
