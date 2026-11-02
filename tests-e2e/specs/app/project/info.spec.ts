@@ -344,13 +344,13 @@ test.describe('project info settings', () => {
 
 				await expect(
 					discardEditsDialog.getByRole('button', {
-						name: 'Cancel',
+						name: 'Keep Editing',
 						exact: true,
 					}),
 				).toBeVisible()
 
 				await discardEditsDialog
-					.getByRole('button', { name: 'Yes, Discard', exact: true })
+					.getByRole('button', { name: 'Discard & Continue', exact: true })
 					.click()
 
 				await projectInfoTrigger.click()
@@ -484,7 +484,7 @@ test.describe('project info settings', () => {
 
 			await page
 				.getByRole('dialog')
-				.getByRole('button', { name: 'Yes, Discard', exact: true })
+				.getByRole('button', { name: 'Discard & Continue', exact: true })
 				.click()
 
 			await projectInfoTrigger.click()
