@@ -262,6 +262,20 @@ test('device name', async ({ appInfo, userParams }) => {
 				.click()
 
 			await expect(deviceNameInput).toHaveValue(updatedUserParams.deviceName)
+
+			/// Covers regression case where attempting to leave page after editing and saving device name
+			/// causes the discard edits dialog to unexpectedly appear.
+			await main
+				.locator('header')
+				.getByRole('button', { name: 'Go back.', exact: true })
+				.click()
+
+			await expect(
+				page.getByRole('dialog').getByRole('heading', {
+					name: 'Discard Edits?',
+					exact: true,
+				}),
+			).not.toBeVisible()
 		}
 	} finally {
 		// 3. Cleanup
