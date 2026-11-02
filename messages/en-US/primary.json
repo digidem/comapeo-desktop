@@ -5,11 +5,11 @@
   },
   "$1.components.discard-edits-dialog.cancelButton": {
     "description": "Text for button to cancel action.",
-    "message": "Cancel"
+    "message": "Keep Editing"
   },
   "$1.components.discard-edits-dialog.confirmButton": {
     "description": "Text for button to confirm discarding changes.",
-    "message": "Yes, Discard"
+    "message": "Discard & Continue"
   },
   "$1.components.discard-edits-dialog.title": {
     "description": "Title of dialog displayed when trying to leave page while editing observation.",

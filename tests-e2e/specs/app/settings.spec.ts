@@ -231,13 +231,13 @@ test('device name', async ({ appInfo, userParams }) => {
 
 			await expect(
 				discardEditsDialog.getByRole('button', {
-					name: 'Cancel',
+					name: 'Keep Editing',
 					exact: true,
 				}),
 			).toBeVisible()
 
 			await discardEditsDialog
-				.getByRole('button', { name: 'Yes, Discard', exact: true })
+				.getByRole('button', { name: 'Discard & Continue', exact: true })
 				.click()
 
 			await page
