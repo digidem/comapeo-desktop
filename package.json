@@ -144,7 +144,7 @@
 		"eslint-plugin-react-refresh": "0.5.7",
 		"globals": "17.14.0",
 		"husky": "9.1.7",
-		"knip": "6.43.0",
+		"knip": "6.44.1",
 		"maplibre-gl": "6.16.0",
 		"media-chrome": "4.19.4",
 		"nano-staged": "1.0.2",
