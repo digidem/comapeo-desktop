@@ -32,6 +32,7 @@ import {
 	createFileRoute,
 	notFound,
 	useChildMatches,
+	useRouter,
 } from '@tanstack/react-router'
 import {
 	defineMessages,
@@ -40,6 +41,7 @@ import {
 	type NoMessageValues,
 } from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
+import * as v from 'valibot'
 
 import {
 	BLACK_03,
@@ -72,7 +74,12 @@ import {
 	createGlobalMutationsKey,
 } from '../../../../lib/queries/global-mutations.ts'
 
+const SearchParamsSchema = v.object({
+	showProjectInfo: v.optional(v.boolean()),
+})
+
 export const Route = createFileRoute('/app/projects/$projectId')({
+	validateSearch: SearchParamsSchema,
 	beforeLoad: async ({ context, params }) => {
 		const { clientApi, queryClient } = context
 		const { projectId } = params
@@ -631,11 +638,26 @@ const SELECT_AND_IMPORT_CATEGORY_MUTATION_KEY = createGlobalMutationsKey([
 ])
 
 function ProjectInfoTabButton({ projectId }: { projectId: string }) {
-	const [showProjectInfoDialog, setShowProjectInfoDialog] = useState<
-		true | null
-	>(null)
-
 	const intl = useIntl()
+
+	const router = useRouter()
+
+	function setShowInfoDialog(shouldShow: boolean) {
+		router.navigate({
+			to: '.',
+			replace: true,
+			search: ({ showProjectInfo, ...rest }) => {
+				return shouldShow ? { ...rest, showProjectInfo: true } : { ...rest }
+			},
+			mask: { to: '.', unmaskOnReload: true },
+		})
+	}
+
+	const showInfoDialog = Route.useSearch({
+		select: (state) => {
+			return state.showProjectInfo ? true : null
+		},
+	})
 
 	const { data: projectSettings } = useProjectSettings({ projectId })
 
@@ -697,7 +719,7 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 							name: displayedProjectName,
 						})}
 						onClick={() => {
-							setShowProjectInfoDialog(true)
+							setShowInfoDialog(true)
 						}}
 						sx={{
 							background: projectSettings.projectColor || WHITE_00,
@@ -718,7 +740,7 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 				</Tooltip>
 			</Box>
 
-			<DecentDialog fullWidth maxWidth="sm" value={showProjectInfoDialog}>
+			<DecentDialog fullWidth maxWidth="sm" value={showInfoDialog}>
 				{() => (
 					<Stack direction="column" sx={{ overflow: 'auto' }}>
 						<Stack
@@ -770,7 +792,7 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 													return
 												}
 
-												setShowProjectInfoDialog(null)
+												setShowInfoDialog(false)
 											}}
 											variant="text"
 											sx={{ marginInlineStart: -3 }}
@@ -844,7 +866,7 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 												return
 											}
 
-											setShowProjectInfoDialog(null)
+											setShowInfoDialog(false)
 										}}
 										variant="text"
 									>
@@ -1028,7 +1050,7 @@ function ProjectInfoTabButton({ projectId }: { projectId: string }) {
 										return
 									}
 
-									setShowProjectInfoDialog(null)
+									setShowInfoDialog(false)
 								}}
 								startIcon={<Icon name="material-symbols-cancel" />}
 								variant="outlined"
