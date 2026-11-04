@@ -157,7 +157,7 @@
   },
   "$1.routes.app.index.getStartedDescription": {
     "description": "Description text for get started panel.",
-    "message": "Coordinate with a team to join them or start a new project."
+    "message": "This device has no projects. Coordinate with a team to join them or start a new project."
   },
   "$1.routes.app.index.getStartedMapAnywhereDetail": {
     "description": "Detail about mapping in get started panel.",
@@ -183,13 +183,9 @@
     "description": "Title text for left project dialog.",
     "message": "This device has left the project {name}."
   },
-  "$1.routes.app.index.mostRecent": {
-    "description": "Text for describing order of listed projects in all projects page.",
-    "message": "Most Recent"
-  },
   "$1.routes.app.index.pageTitle": {
     "description": "Title of home page.",
-    "message": "All Projects"
+    "message": "Projects"
   },
   "$1.routes.app.index.projectActionDialogGoBack": {
     "description": "Text for button to close project join/create dialog.",
