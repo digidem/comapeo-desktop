@@ -144,8 +144,14 @@ function RouteComponent() {
 			}
 
 			router.navigate({
-				to: '/app/projects/$projectId/settings',
+				to: '/app/projects/$projectId',
 				params: { projectId },
+				search: { showProjectInfo: true },
+				mask: {
+					to: '/app/projects/$projectId',
+					params: { projectId },
+					unmaskOnReload: true,
+				},
 				replace: true,
 				ignoreBlocker: true,
 			})
@@ -184,7 +190,7 @@ function RouteComponent() {
 							}
 
 							router.navigate({
-								to: '/app/projects/$projectId/settings',
+								to: '/app/projects/$projectId',
 								params: { projectId },
 								replace: true,
 							})
