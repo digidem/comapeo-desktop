@@ -26,7 +26,6 @@ import {
 	BLACK_03,
 	BLUE_03,
 	BLUE_05,
-	BLUE_06,
 	GREEN_00,
 	ORANGE_00,
 	WHITE_00,
@@ -136,32 +135,14 @@ function RouteComponent() {
 						borderBottom: `1px solid ${BLUE_05}`,
 						flexWrap: 'wrap',
 						gap: 6,
+						justifyContent: 'space-between',
 						paddingBlock: 4,
 						paddingInline: 6,
 					}}
 				>
-					<Stack direction="row" sx={{ alignItems: 'center', flex: 1, gap: 4 }}>
-						<Typography variant="pageTitle">
-							{intl.formatMessage(m.pageTitle)}
-						</Typography>
-
-						<Box
-							sx={{
-								background: BLUE_06,
-								borderRadius: 2,
-								paddingBlock: 1,
-								paddingInline: 2,
-							}}
-						>
-							<Typography
-								color="textSecondary"
-								variant="detailCopy"
-								sx={{ whiteSpace: 'nowrap' }}
-							>
-								{intl.formatMessage(m.mostRecent)}
-							</Typography>
-						</Box>
-					</Stack>
+					<Typography variant="pageTitle">
+						{intl.formatMessage(m.pageTitle)}
+					</Typography>
 
 					<Stack direction="row" sx={{ flexWrap: 'wrap', gap: 2 }}>
 						<ButtonLink
@@ -603,7 +584,6 @@ const m = defineMessages<{
 	readonly projectCardLinkAccessibleLabel: { readonly name: MessageValue }
 	readonly projectCardRoleCoordinator: NoMessageValues
 	readonly projectCardRoleParticipant: NoMessageValues
-	readonly mostRecent: NoMessageValues
 	readonly getStartedTitle: { readonly name: MessageValue }
 	readonly getStartedDescription: NoMessageValues
 	readonly getStartedMapAnywhereDetail: NoMessageValues
@@ -614,7 +594,7 @@ const m = defineMessages<{
 }>({
 	pageTitle: {
 		id: '$1.routes.app.index.pageTitle',
-		defaultMessage: 'All Projects',
+		defaultMessage: 'Projects',
 		description: 'Title of home page.',
 	},
 	startNewProject: {
@@ -648,12 +628,6 @@ const m = defineMessages<{
 		defaultMessage: 'Participant',
 		description: 'Displayed name of participant role on project card.',
 	},
-	mostRecent: {
-		id: '$1.routes.app.index.mostRecent',
-		defaultMessage: 'Most Recent',
-		description:
-			'Text for describing order of listed projects in all projects page.',
-	},
 	getStartedTitle: {
 		id: '$1.routes.app.index.getStartedTitle',
 		defaultMessage: '{name} is ready!',
@@ -662,7 +636,7 @@ const m = defineMessages<{
 	getStartedDescription: {
 		id: '$1.routes.app.index.getStartedDescription',
 		defaultMessage:
-			'Coordinate with a team to join them or start a new project.',
+			'This device has no projects. Coordinate with a team to join them or start a new project.',
 		description: 'Description text for get started panel.',
 	},
 	getStartedMapAnywhereDetail: {

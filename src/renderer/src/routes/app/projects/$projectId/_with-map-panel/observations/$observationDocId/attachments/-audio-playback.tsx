@@ -41,6 +41,7 @@ const StyledMediaTimeRange = styled(MediaTimeRange)(() => ({
 
 const StyledMediaTimeDisplay = styled(MediaTimeDisplay)(() => ({
 	'--media-font-weight': 500,
+	fontVariantNumeric: 'tabular-nums',
 }))
 
 export function AudioPlayback({ src, lang }: { src: string; lang: string }) {

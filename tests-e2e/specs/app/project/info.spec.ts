@@ -114,6 +114,12 @@ test('project info modal', async ({ appInfo, projectParams, userParams }) => {
 				categoriesListItem.getByRole('button', { name: 'Update', exact: true }),
 			).toBeVisible()
 		}
+
+		/// Persistence behavior: modal does not survive page reloads
+		{
+			await page.reload()
+			await expect(projectInfoDialog).not.toBeVisible()
+		}
 	} finally {
 		// 3. Cleanup
 		await electronApp.close()
@@ -305,8 +311,6 @@ test.describe('project info settings', () => {
 
 			await main.getByRole('button', { name: 'Go back.', exact: true }).click()
 
-			await projectInfoTrigger.click()
-
 			await projectInfoDialog
 				.getByRole('link', { name: 'Edit Info', exact: true })
 				.click()
@@ -344,16 +348,14 @@ test.describe('project info settings', () => {
 
 				await expect(
 					discardEditsDialog.getByRole('button', {
-						name: 'Cancel',
+						name: 'Keep Editing',
 						exact: true,
 					}),
 				).toBeVisible()
 
 				await discardEditsDialog
-					.getByRole('button', { name: 'Yes, Discard', exact: true })
+					.getByRole('button', { name: 'Discard & Continue', exact: true })
 					.click()
-
-				await projectInfoTrigger.click()
 
 				await projectInfoDialog
 					.getByRole('link', { name: 'Edit Info', exact: true })
@@ -484,10 +486,8 @@ test.describe('project info settings', () => {
 
 			await page
 				.getByRole('dialog')
-				.getByRole('button', { name: 'Yes, Discard', exact: true })
+				.getByRole('button', { name: 'Discard & Continue', exact: true })
 				.click()
-
-			await projectInfoTrigger.click()
 
 			await projectInfoDialog
 				.getByRole('link', { name: 'Edit Info', exact: true })
@@ -520,8 +520,6 @@ test.describe('project info settings', () => {
 
 				// Check relevant changes are reflected in project info modal
 				{
-					await projectInfoTrigger.click()
-
 					await expect(
 						projectInfoDialog.getByText(updatedProjectParams.projectName, {
 							exact: true,

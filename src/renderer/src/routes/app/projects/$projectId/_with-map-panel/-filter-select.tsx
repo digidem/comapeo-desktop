@@ -102,6 +102,7 @@ export function FilterSelect({
 					</Typography>
 
 					<Icon
+						aria-hidden
 						name="material-expand-more-rounded"
 						sx={{ transform: open ? 'rotate(180deg)' : undefined }}
 						htmlColor={BLACK_02}
@@ -132,7 +133,7 @@ export function FilterSelect({
 						mouseEvent="onPointerDown"
 						onClickAway={(event) => {
 							if (
-								event.target instanceof HTMLElement &&
+								event.target instanceof Node &&
 								anchorElement?.contains(event.target)
 							) {
 								return
