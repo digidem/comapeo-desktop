@@ -29,7 +29,7 @@
 		},
 		"packageManager": {
 			"name": "npm",
-			"version": "^11.21.1",
+			"version": "^11.21.2",
 			"onFail": "warn"
 		}
 	},
