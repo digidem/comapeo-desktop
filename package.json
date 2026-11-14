@@ -169,7 +169,7 @@
 	},
 	"overrides": {
 		"@electron-forge/shared-types": {
-			"tar": "7.5.22"
+			"tar": "7.5.23"
 		},
 		"@electron/windows-sign": "2.1.0",
 		"better-sqlite3": "13.0.3",
