@@ -31,7 +31,7 @@ export default defineConfig((configEnv) => {
 		build: {
 			outDir: path.join(PROJECT_ROOT_DIR, 'dist/renderer'),
 			emptyOutDir: true,
-			sourcemap: true,
+			sourcemap: 'hidden',
 		},
 		define: {
 			__APP_TYPE__: JSON.stringify(configEnv.mode),
@@ -66,6 +66,9 @@ export default defineConfig((configEnv) => {
 				project: process.env.SENTRY_PROJECT,
 				authToken: process.env.SENTRY_AUTH_TOKEN,
 				telemetry: false,
+				sourcemaps: {
+					filesToDeleteAfterUpload: ['./**/*.map'],
+				},
 			}),
 		],
 		test: {},
