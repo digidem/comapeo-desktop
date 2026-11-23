@@ -23,7 +23,7 @@ Instead of exiting the process on republishing errors, we emit events that allow
 
 ## electron-installer-redhat
 
-### [Fix rpm installer creation when using rpm >=4.20](./electron-installer-redhat+4.0.0+001+fix-rpm-installer-creation.patch)
+### [Fix rpm installer creation when using rpm >=4.20](../patches-linux/electron-installer-redhat+4.0.0+001+fix-rpm-installer-creation.patch)
 
 Upstream issue: https://github.com/electron-userland/electron-installer-redhat/issues/343
 
