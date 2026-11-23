@@ -63,7 +63,7 @@ const SearchParamsSchema = v.object({
 			}),
 		]),
 	),
-	projectAction: v.optional(v.union([v.literal('create')])),
+	projectAction: v.optional(v.picklist(['create'])),
 })
 
 export const Route = createFileRoute('/app/')({

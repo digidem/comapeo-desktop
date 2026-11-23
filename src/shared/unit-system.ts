@@ -1,8 +1,5 @@
 import * as v from 'valibot'
 
-export const UnitSystemSchema = v.union([
-	v.literal('metric'),
-	v.literal('imperial'),
-])
+export const UnitSystemSchema = v.picklist(['metric', 'imperial'])
 
 export type UnitSystem = v.InferOutput<typeof UnitSystemSchema>

@@ -10,9 +10,7 @@ const SUPPORTED_LANGUAGE_TAGS = Object.keys(
 	languages,
 ) as Array<SupportedLanguageTag>
 
-export const SupportedLanguageTagSchema = v.union(
-	SUPPORTED_LANGUAGE_TAGS.map((t) => v.literal(t)),
-)
+export const SupportedLanguageTagSchema = v.picklist(SUPPORTED_LANGUAGE_TAGS)
 
 export type LocaleSource = 'selected' | 'system' | 'fallback'
 
