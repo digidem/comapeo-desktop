@@ -52,7 +52,7 @@ import { createGlobalMutationsKey } from '../../../../../../../../lib/queries/gl
 import { getFormattedDuration } from '../../../../../../../../lib/time.ts'
 
 const ReviewInvitationSearchSchema = v.object({
-	role: v.union([v.literal('participant'), v.literal('coordinator')]),
+	role: v.picklist(['participant', 'coordinator']),
 })
 
 export const Route = createFileRoute(

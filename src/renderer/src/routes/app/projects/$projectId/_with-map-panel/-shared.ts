@@ -23,9 +23,9 @@ export type CategoriesFilterOption = {
 export const NOT_CATEGORY_FILTER_ID = '__NO_CATEGORY__' as const
 
 export const HighlightedDocumentSchema = v.object({
-	type: v.union([v.literal('observation'), v.literal('track')]),
+	type: v.picklist(['observation', 'track']),
 	docId: v.string(),
-	from: v.union([v.literal('map'), v.literal('list')]),
+	from: v.picklist(['map', 'list']),
 })
 
 export type HighlightedDocument = v.InferInput<typeof HighlightedDocumentSchema>
@@ -38,8 +38,7 @@ export const DateSearchParamsSchema = v.union([
 				return typeof input === 'string' ? /^\d+d$/.test(input) : false
 			}),
 			// TODO: Support other units (day)
-			v.literal('same-month'),
-			v.literal('same-year'),
+			v.picklist(['same-month', 'same-year']),
 		]),
 	}),
 	// TODO: Potentially allow start or end to be optional

@@ -45,21 +45,16 @@ const {
 } = v.parse(
 	v.object({
 		APP_TYPE: v.optional(
-			v.union(
-				[
-					v.literal('development'),
-					v.literal('internal'),
-					v.literal('release-candidate'),
-					v.literal('production'),
-				],
+			v.picklist(
+				['development', 'internal', 'release-candidate', 'production'],
 				"APP_TYPE env variable must be 'development', 'internal', 'release-candidate', or 'production'",
 			),
 			'development',
 		),
 		ASAR: v.optional(
 			v.pipe(
-				v.union(
-					[v.literal('true'), v.literal('false')],
+				v.picklist(
+					['true', 'false'],
 					"ASAR env variable must be 'true' or 'false'",
 				),
 				v.transform((v) => v === 'true'),
@@ -70,8 +65,8 @@ const {
 		COMAPEO_DIAGNOSTICS_METRICS_URL: v.optional(v.pipe(v.string(), v.url())),
 		COMAPEO_TEST: v.optional(
 			v.pipe(
-				v.union(
-					[v.literal('true'), v.literal('false')],
+				v.picklist(
+					['true', 'false'],
 					"ASAR env variable must be 'true' or 'false'",
 				),
 				v.transform((v) => v === 'true'),
