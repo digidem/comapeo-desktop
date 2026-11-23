@@ -34,7 +34,7 @@
 		}
 	},
 	"scripts": {
-		"postinstall": "patch-package",
+		"postinstall": "patch-package && node scripts/apply-conditional-patches.ts",
 		"prepare": "husky",
 		"start": "run-s --print-name --node-run intl forge:start",
 		"forge:start": "electron-forge start",
