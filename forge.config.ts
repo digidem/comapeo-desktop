@@ -135,7 +135,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase<CoMapeoDesktopForgePluginConf
 			preStart: [this.#initViteDevServer],
 			resolveForgeConfig: [this.#updatePackagerConfig],
 			postStart: [this.#hookViteDevServer],
-			prePackage: [this.#buildRender],
+			prePackage: [this.#buildRenderer],
 			packageAfterCopy: [this.#moveBuiltRendererApp],
 		}
 	}
@@ -274,7 +274,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase<CoMapeoDesktopForgePluginConf
 	/**
 	 * Builds the renderer app with Vite (similar to `node --run vite:build`).
 	 */
-	#buildRender: ForgeHookFn<'prePackage'> = async () => {
+	#buildRenderer: ForgeHookFn<'prePackage'> = async () => {
 		if (APP_TYPE === 'development') {
 			throw new Error(
 				"Cannot package app with APP_TYPE environment variable set to 'development'. You probably should use 'internal' instead.",
