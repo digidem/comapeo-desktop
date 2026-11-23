@@ -40,10 +40,10 @@ export const Route = createFileRoute(
 
 const DOWNLOAD_DATA_MUTATION_KEY = createGlobalMutationsKey(['download-data'])
 
-const DataToDownloadSchema = v.union([
-	v.literal('observations'),
-	v.literal('observations-with-media'),
-	v.literal('tracks'),
+const DataToDownloadSchema = v.picklist([
+	'observations',
+	'observations-with-media',
+	'tracks',
 ])
 
 type DataToDownload = v.InferOutput<typeof DataToDownloadSchema>

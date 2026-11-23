@@ -9,11 +9,11 @@ export const AppConfigSchema = v.object({
 	/** Indicates the application ID e.g. `app.comapeo` */
 	appId: v.string(),
 	/** Indicates the app type */
-	appType: v.union([
-		v.literal('development'),
-		v.literal('internal'),
-		v.literal('release-candidate'),
-		v.literal('production'),
+	appType: v.picklist([
+		'development',
+		'internal',
+		'release-candidate',
+		'production',
 	]),
 	/** Indicates the app version */
 	appVersion: v.string(),

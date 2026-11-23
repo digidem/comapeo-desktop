@@ -44,11 +44,7 @@ import { AudioPlayback } from './-audio-playback.tsx'
 const BlobIdSchema = v.variant('type', [
 	v.object({
 		type: v.literal('photo'),
-		variant: v.union([
-			v.literal('original'),
-			v.literal('preview'),
-			v.literal('thumbnail'),
-		]),
+		variant: v.picklist(['original', 'preview', 'thumbnail']),
 		driveId: v.string(),
 		name: v.string(),
 	}),
