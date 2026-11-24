@@ -5,6 +5,7 @@ import {
 } from '@formatjs/intl'
 
 export const messages = defineMessages<{
+	readonly aboutPanelCredits: NoMessageValues
 	readonly contextMenuCopy: NoMessageValues
 	readonly contextMenuCopyImage: NoMessageValues
 	readonly contextMenuCopyImageAddress: NoMessageValues
@@ -20,6 +21,12 @@ export const messages = defineMessages<{
 	readonly fatalErrorDescriptionGeneric: NoMessageValues
 	readonly fatalErrorDescriptionCoreService: NoMessageValues
 }>({
+	aboutPanelCredits: {
+		id: '$1.main.app.aboutPanelCredits',
+		defaultMessage:
+			'Co-designed with Indigenous People worldwide. Built by Awana Digital.',
+		description: 'Credits in about panel.',
+	},
 	contextMenuCopy: {
 		id: '$1.main.app.contextMenuCopy',
 		defaultMessage: 'Copy',

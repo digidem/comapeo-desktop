@@ -89,7 +89,11 @@ export async function start({
 			})
 		}
 
-		app.setAboutPanelOptions({ applicationVersion: appConfig.appVersion })
+		app.setAboutPanelOptions({
+			applicationVersion: appConfig.appVersion,
+			credits: intlManager.intl.formatMessage(messages.aboutPanelCredits),
+			website: 'https://comapeo.app',
+		})
 
 		// Quit when all windows are closed, except on macOS. There, it's common
 		// for applications and their menu bar to stay active until the user quits
@@ -124,9 +128,15 @@ export async function start({
 		intlManager.on('locale-state', () => {
 			disposeAppContextMenu()
 
+			// NOTE: Update context menu
 			disposeAppContextMenu = createAppContextMenu({
 				appType: appConfig.appType,
 				intlManager,
+			})
+
+			// NOTE: Update about panel
+			app.setAboutPanelOptions({
+				credits: intlManager.intl.formatMessage(messages.aboutPanelCredits),
 			})
 		})
 

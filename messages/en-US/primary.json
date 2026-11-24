@@ -55,6 +55,10 @@
     "description": "Button text for try again button.",
     "message": "Try Again"
   },
+  "$1.main.app.aboutPanelCredits": {
+    "description": "Credits in about panel.",
+    "message": "Co-designed with Indigenous People worldwide. Built by Awana Digital."
+  },
   "$1.main.app.contextMenuCopy": {
     "description": "Context menu item label for copying text",
     "message": "Copy"
