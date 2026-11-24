@@ -10,11 +10,16 @@ import {
 	useChildMatches,
 	useRouter,
 } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 
-import { COMAPEO_BLUE, DARK_COMAPEO_BLUE, WHITE } from '../../colors'
-import { Icon } from '../../components/icon'
-import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo'
+import { BLUE_01, WHITE_00 } from '../../../../shared/colors.ts'
+import { Icon } from '../../components/icon.tsx'
+import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo.ts'
 
 export const Route = createFileRoute('/onboarding')({
 	beforeLoad: async ({ context }) => {
@@ -36,9 +41,9 @@ export const Route = createFileRoute('/onboarding')({
 })
 
 function RouteComponent() {
-	const router = useRouter()
+	const intl = useIntl()
 
-	const { formatMessage: t } = useIntl()
+	const router = useRouter()
 
 	const currentRoute = useChildMatches({
 		select: (matches) => {
@@ -49,13 +54,12 @@ function RouteComponent() {
 	const stepNumber = currentRoute.staticData?.onboardingStepNumber
 
 	return (
-		<Box sx={{ bgcolor: DARK_COMAPEO_BLUE, padding: 5, height: '100%' }}>
+		<Box sx={{ background: BLUE_01, padding: 5, height: '100%' }}>
 			<Container
 				maxWidth="md"
-				component={Box}
 				sx={{
-					height: '100%',
 					display: 'grid',
+					height: '100%',
 					gridTemplateRows: 'auto minmax(0, 1fr)',
 					rowGap: 5,
 				}}
@@ -92,26 +96,23 @@ function RouteComponent() {
 								}
 							}}
 							// TODO: Ideally update the theme appropriately instead
-							sx={{ color: WHITE }}
+							sx={{ color: WHITE_00 }}
 						>
-							{t(m.goBack)}
+							{intl.formatMessage(m.goBack)}
 						</Button>
 					</Box>
 
 					<Stack direction="row" sx={{ alignItems: 'center', gap: 4 }}>
 						<StepIndicator
 							isActive={stepNumber === 1}
-							label={t(m.step, { value: 1 })}
+							label={intl.formatMessage(m.step, { value: 1 })}
 						/>
 
-						<Divider
-							aria-hidden="true"
-							sx={{ minWidth: 20, maxWidth: 40, backgroundColor: COMAPEO_BLUE }}
-						/>
+						<Divider aria-hidden="true" sx={{ minWidth: 20, maxWidth: 40 }} />
 
 						<StepIndicator
 							isActive={stepNumber === 2}
-							label={t(m.step, { value: 2 })}
+							label={intl.formatMessage(m.step, { value: 2 })}
 						/>
 					</Stack>
 				</Stack>
@@ -134,19 +135,19 @@ function StepIndicator({
 	return (
 		<Box
 			sx={{
+				alignItems: 'center',
+				alignSelf: 'stretch',
+				background: isActive ? WHITE_00 : undefined,
+				borderRadius: 6,
 				display: 'flex',
 				flexDirection: 'row',
-				alignItems: 'center',
 				justifyContent: 'center',
-				alignSelf: 'stretch',
-				bgcolor: isActive ? WHITE : undefined,
-				borderRadius: 6,
-				paddingX: 10,
+				paddingInline: 10,
 			}}
 		>
 			<Typography
 				color={isActive ? 'textPrimary' : 'textInverted'}
-				sx={{ fontWeight: 'bold' }}
+				sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
 			>
 				{label}
 			</Typography>
@@ -154,7 +155,10 @@ function StepIndicator({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly goBack: NoMessageValues
+	readonly step: { readonly value: MessageValue }
+}>({
 	goBack: {
 		id: '$1.routes.onboarding.route.goBack',
 		defaultMessage: 'Go back',

@@ -2,87 +2,40 @@ import { useId, useMemo, useState } from 'react'
 import { useCreateProject } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
-import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
-import { useSelector } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
 import { draw } from 'radashi'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageTag,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 import * as v from 'valibot'
 
 import {
-	DARKER_ORANGE,
-	GREEN,
-	PROJECT_BLUE,
-	PROJECT_GREEN,
-	PROJECT_GREY,
-	PROJECT_ORANGE,
-	PROJECT_RED,
-	WHITE,
-} from '../../colors.ts'
+	ORANGE_00,
+	PROJECT_COLORS,
+	WHITE_00,
+} from '../../../../shared/colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
+import { DecentTextField } from '../../components/decent-text-field.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
+import { Bold } from '../../components/intl-rich-text.tsx'
 import { useAppForm } from '../../hooks/forms.ts'
 import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
 import { PROJECT_NAME_MAX_LENGTH_GRAPHEMES } from '../../lib/constants.ts'
 import { setAppUsageMetricsMutationOptions } from '../../lib/queries/app-settings.ts'
 import { createProjectNameSchema } from '../../lib/validators/project.ts'
-
-export function JoinProjectDialogContent({ onBack }: { onBack: () => void }) {
-	const { formatMessage: t } = useIntl()
-
-	return (
-		<Stack direction="column" sx={{ flex: 1 }}>
-			<Box sx={{ padding: 2 }}>
-				<Button
-					variant="text"
-					startIcon={<Icon name="material-arrow-back" />}
-					aria-disabled={!onBack}
-					onClick={onBack}
-				>
-					{t(m.projectActionDialogGoBack)}
-				</Button>
-			</Box>
-
-			<Divider variant="fullWidth" />
-
-			<Stack
-				direction="column"
-				sx={{
-					gap: 10,
-					justifyContent: 'center',
-					textAlign: 'center',
-					flex: 1,
-					padding: 6,
-					overflow: 'auto',
-				}}
-			>
-				<Box>
-					<Box>
-						<Icon
-							name="material-people-filled"
-							htmlColor={DARKER_ORANGE}
-							size={120}
-						/>
-					</Box>
-
-					<Typography variant="h1" sx={{ fontWeight: 500 }}>
-						{t(m.joinProjectDialogTitle)}
-					</Typography>
-				</Box>
-
-				<Typography>{t(m.joinProjectDialogDescription)}</Typography>
-			</Stack>
-		</Stack>
-	)
-}
 
 export function StartProjectDialogContent({
 	onProjectCreated,
@@ -91,17 +44,19 @@ export function StartProjectDialogContent({
 	onProjectCreated: (projectId: string) => void
 	onBack: () => void
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
-	const formId = `project-name-${useId()}`
+	const componentId = useId()
+	const formId = `${componentId}-project-name-form`
+	const labelId = `${componentId}-label`
 
 	const createProject = useCreateProject()
 
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
 	const onChangeSchema = useMemo(() => {
-		const maxLengthError = t(m.projectNameMaxLengthError)
-		const minLengthError = t(m.projectNameMinLengthError)
+		const maxLengthError = intl.formatMessage(m.projectNameMaxLengthError)
+		const minLengthError = intl.formatMessage(m.projectNameMinLengthError)
 
 		return v.object({
 			projectName: createProjectNameSchema({
@@ -110,7 +65,7 @@ export function StartProjectDialogContent({
 				maxLengthError,
 			}),
 		})
-	}, [t])
+	}, [intl])
 
 	const form = useAppForm({
 		defaultValues: { projectName: '' },
@@ -123,11 +78,11 @@ export function StartProjectDialogContent({
 				projectId = await createProject.mutateAsync({
 					name: projectName,
 					projectColor: draw([
-						PROJECT_BLUE,
-						PROJECT_GREEN,
-						PROJECT_GREY,
-						PROJECT_ORANGE,
-						PROJECT_RED,
+						PROJECT_COLORS.BLUE,
+						PROJECT_COLORS.GREEN,
+						PROJECT_COLORS.GREY,
+						PROJECT_COLORS.ORANGE,
+						PROJECT_COLORS.RED,
 					]),
 				})
 			} catch (err) {
@@ -139,51 +94,57 @@ export function StartProjectDialogContent({
 		},
 	})
 
-	const isSubmitting = useSelector(form.store, (state) => state.isSubmitting)
+	const heroIconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 4,
+	})
 
 	return (
 		<Stack direction="column" sx={{ flex: 1 }}>
-			<Box sx={{ padding: 2 }}>
+			<Box sx={{ padding: 4 }}>
 				<Button
 					variant="text"
 					startIcon={<Icon name="material-arrow-back" />}
 					aria-disabled={!onBack}
 					onClick={onBack}
 				>
-					{t(m.projectActionDialogGoBack)}
+					{intl.formatMessage(m.projectActionDialogGoBack)}
 				</Button>
 			</Box>
 
-			<Divider variant="fullWidth" />
+			<Divider />
 
 			<Stack
 				direction="column"
 				sx={{ flex: 1, padding: 6, gap: 10, overflow: 'auto' }}
 			>
-				<Stack
+				<Container
+					component={Stack}
+					maxWidth="sm"
 					direction="column"
-					sx={{
-						gap: 10,
-						justifyContent: 'center',
-						textAlign: 'center',
-						flex: 1,
-					}}
+					sx={{ flex: 1, gap: 10 }}
 				>
-					<Box>
+					<Stack direction="column" sx={{ alignItems: 'center' }}>
 						<Box>
 							<Icon
 								name="material-manage-accounts-filled"
-								htmlColor={DARKER_ORANGE}
-								size={120}
+								htmlColor={ORANGE_00}
+								size={heroIconSize}
 							/>
 						</Box>
 
-						<Typography variant="h1" sx={{ fontWeight: 500 }}>
-							{t(m.startProjectDialogTitle)}
+						<Typography
+							component="h1"
+							variant="heroHeader"
+							sx={{ textAlign: 'center' }}
+						>
+							{intl.formatMessage(m.startProjectDialogTitle)}
 						</Typography>
-					</Box>
+					</Stack>
 
-					<Typography>{t(m.startProjectDialogDescription)}</Typography>
+					<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
+						{intl.formatMessage(m.startProjectDialogDescription)}
+					</Typography>
 
 					<Box
 						component="form"
@@ -197,78 +158,104 @@ export function StartProjectDialogContent({
 						}}
 					>
 						<form.AppField name="projectName">
-							{(field) => (
-								<TextField
-									id={field.name}
-									required
-									fullWidth
-									autoFocus
-									label={t(m.projectNameInputLabel)}
-									value={field.state.value}
-									error={!field.state.meta.isValid}
-									onChange={(event) => {
-										field.handleChange(event.target.value)
-									}}
-									slotProps={{ input: { style: { backgroundColor: WHITE } } }}
-									sx={{ maxWidth: (theme) => theme.breakpoints.values.sm }}
-									onBlur={field.handleBlur}
-									helperText={
-										<Stack
-											component="span"
-											direction="row"
-											sx={{ justifyContent: 'space-between' }}
-										>
-											<Box component="span">
-												{field.state.meta.errors[0]?.message}
-											</Box>
-											<Box
-												component="output"
-												htmlFor={field.name}
-												name="character-count"
+							{(field) => {
+								const inputId = `${componentId}-input`
+								const errorTextId = `${componentId}-error-text`
+
+								return (
+									<DecentTextField
+										aria-describedby={
+											field.state.meta.isValid ? undefined : errorTextId
+										}
+										error={!field.state.meta.isValid}
+										fullWidth
+										helperText={
+											<Stack
+												component="span"
+												direction="row"
+												sx={{
+													color: (theme) =>
+														field.state.meta.isValid
+															? theme.palette.text.secondary
+															: theme.palette.error.main,
+													justifyContent: 'space-between',
+												}}
 											>
-												<form.Subscribe
-													selector={(state) =>
-														v._getGraphemeCount(state.values.projectName)
-													}
+												<Typography
+													id={errorTextId}
+													color="inherit"
+													component="span"
+													variant="detailCopy"
 												>
-													{(count) =>
-														t(m.characterCount, {
-															count,
-															max: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
-														})
-													}
-												</form.Subscribe>
-											</Box>
-										</Stack>
-									}
-								/>
-							)}
+													{field.state.meta.errors[0]?.message}
+												</Typography>
+
+												<Typography
+													color="inherit"
+													component="output"
+													htmlFor={inputId}
+													name="character-count"
+													variant="detailCopy"
+												>
+													<form.Subscribe
+														selector={(state) =>
+															v._getGraphemeCount(state.values.projectName)
+														}
+													>
+														{(count) =>
+															intl.formatMessage(m.characterCount, {
+																count,
+																max: PROJECT_NAME_MAX_LENGTH_GRAPHEMES,
+															})
+														}
+													</form.Subscribe>
+												</Typography>
+											</Stack>
+										}
+										id={inputId}
+										label={intl.formatMessage(m.projectNameInputLabel)}
+										onBlur={field.handleBlur}
+										onChange={(event) => {
+											field.handleChange(event.target.value)
+										}}
+										required
+										slotProps={{
+											input: {
+												'aria-labelledby': labelId,
+												style: { background: WHITE_00 },
+											},
+										}}
+										value={field.state.value}
+									/>
+								)
+							}}
 						</form.AppField>
 					</Box>
-				</Stack>
+				</Container>
 
-				<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-					<form.Subscribe selector={(state) => [state.canSubmit]}>
-						{([canSubmit]) => (
+				<Stack direction="row" sx={{ justifyContent: 'center' }}>
+					<form.Subscribe
+						selector={(state) => [state.canSubmit, state.isSubmitting]}
+					>
+						{([canSubmit, isSubmitting]) => (
 							<Button
-								fullWidth
-								form={formId}
-								variant="contained"
-								type="submit"
 								aria-disabled={!canSubmit || isSubmitting}
+								form={formId}
+								fullWidth
 								// TODO: Maybe use spin-delay?
 								loading={isSubmitting}
 								loadingPosition="start"
-								sx={{ maxWidth: 400 }}
 								startIcon={
 									<Icon name="material-check-circle-outline-rounded" />
 								}
+								type="submit"
+								variant="contained"
 							>
-								{t(m.createProjectButton)}
+								{intl.formatMessage(m.createProjectButton)}
 							</Button>
 						)}
 					</form.Subscribe>
-				</Box>
+				</Stack>
 			</Stack>
 
 			<DecentDialog
@@ -298,7 +285,12 @@ export function LeftProjectDialogContent({
 	onClose: () => void
 	projectName?: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
+
+	const iconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 4,
+	})
 
 	return (
 		<Stack direction="column">
@@ -307,42 +299,45 @@ export function LeftProjectDialogContent({
 					<Box>
 						<Icon
 							name="material-symbols-waving-hand"
-							htmlColor={DARKER_ORANGE}
-							size="96px"
+							htmlColor={ORANGE_00}
+							size={iconSize}
 						/>
 					</Box>
 
 					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center' }}
+						component="h1"
+						variant="heroHeader"
+						sx={{ textAlign: 'center' }}
 					>
-						{t(m.leftProjectDialogTitle, { name: projectName || '' })}
+						{intl.formatMessage(m.leftProjectDialogTitle, {
+							name: projectName || '',
+						})}
 					</Typography>
 				</Stack>
 			</Stack>
 
 			<Box
 				sx={{
-					position: 'sticky',
-					right: 0,
-					left: 0,
-					top: 0,
 					bottom: 0,
 					display: 'flex',
 					flexDirection: 'row',
 					justifyContent: 'center',
+					left: 0,
 					padding: 6,
+					position: 'sticky',
+					right: 0,
+					top: 0,
 				}}
 			>
 				<Button
 					fullWidth
-					variant="outlined"
 					onClick={() => {
 						onClose()
 					}}
-					sx={{ maxWidth: 400 }}
+					startIcon={<Icon name="material-symbols-cancel" />}
+					variant="outlined"
 				>
-					{t(m.leftProjectDialogCloseButton)}
+					{intl.formatMessage(m.leftProjectDialogCloseButton)}
 				</Button>
 			</Box>
 		</Stack>
@@ -356,8 +351,6 @@ export function AppUsageConsentDialogContent({
 	deviceName?: string
 	onClose: () => void
 }) {
-	const { formatMessage: t } = useIntl()
-
 	const [contentToDisplay, setContentToDisplay] = useState<
 		'interstitial' | 'success'
 	>('interstitial')
@@ -373,66 +366,7 @@ export function AppUsageConsentDialogContent({
 		)
 	}
 
-	return (
-		<Stack direction="column">
-			<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
-				<Stack direction="column" sx={{ gap: 6, alignItems: 'center' }}>
-					<Box>
-						<Icon
-							name="material-check-circle-rounded"
-							htmlColor={GREEN}
-							size="96px"
-						/>
-					</Box>
-
-					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center', textWrap: 'balance' }}
-					>
-						{t(m.appUsageConsentSuccessTitle)}
-					</Typography>
-
-					<Typography sx={{ textAlign: 'center', textWrap: 'balance' }}>
-						{deviceName
-							? t(m.appUsageConsentSuccessDescription, { deviceName })
-							: t(m.appUsageConsentSuccessDescriptionNoDeviceName)}
-					</Typography>
-
-					<Typography
-						variant="body2"
-						sx={{ textAlign: 'center', textWrap: 'balance' }}
-					>
-						{t(m.appUsageConsentSuccessDetailsChangeSetting)}
-					</Typography>
-				</Stack>
-			</Stack>
-
-			<Box
-				sx={{
-					position: 'sticky',
-					right: 0,
-					left: 0,
-					top: 0,
-					bottom: 0,
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'center',
-					padding: 6,
-				}}
-			>
-				<Button
-					fullWidth
-					variant="outlined"
-					onClick={() => {
-						onClose()
-					}}
-					sx={{ maxWidth: 400 }}
-				>
-					{t(m.appUsageConsentSuccessCloseButton)}
-				</Button>
-			</Box>
-		</Stack>
-	)
+	return <AppUsageSuccess deviceName={deviceName} onClose={onClose} />
 }
 
 function AppUsageInterstitial({
@@ -442,9 +376,7 @@ function AppUsageInterstitial({
 	onClose: () => void
 	onProceed: () => void
 }) {
-	const { formatMessage: t } = useIntl()
-
-	const iconSize = useIconSizeBasedOnTypography({ typographyVariant: 'body1' })
+	const intl = useIntl()
 
 	const setAppUsageMetrics = useMutation(setAppUsageMetricsMutationOptions())
 
@@ -452,6 +384,16 @@ function AppUsageInterstitial({
 		setAppUsageMetrics.status === 'pending',
 		{ delay: 100 },
 	)
+
+	const heroIconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 4,
+	})
+
+	const listItemIconSize = useIconSizeBasedOnTypography({
+		variant: 'bodyCopy',
+		multiplier: 1,
+	})
 
 	return (
 		<Stack direction="column">
@@ -461,95 +403,88 @@ function AppUsageInterstitial({
 						<Box>
 							<Icon
 								name="noun-project-checklist"
-								htmlColor={DARKER_ORANGE}
-								size="96px"
+								htmlColor={ORANGE_00}
+								size={heroIconSize}
 							/>
 						</Box>
 
 						<Typography
-							variant="h1"
-							sx={{ fontWeight: 500, textAlign: 'center', textWrap: 'balance' }}
+							component="h1"
+							variant="heroHeader"
+							sx={{ textAlign: 'center', textWrap: 'balance' }}
 						>
-							{t(m.appUsageConsentInterstitialTitle)}
+							{intl.formatMessage(m.appUsageConsentInterstitialTitle)}
 						</Typography>
 					</Stack>
 
-					<Typography sx={{ textAlign: 'center', textWrap: 'balance' }}>
-						{t(m.appUsageConsentInterstitialDescription)}
+					<Typography
+						variant="heroSubheading"
+						sx={{ textAlign: 'center', textWrap: 'balance' }}
+					>
+						{intl.formatMessage(m.appUsageConsentInterstitialDescription)}
 					</Typography>
 
-					<List disablePadding sx={{ paddingInline: 10 }}>
-						<Stack direction="column" sx={{ gap: 4 }}>
-							<ListItem
-								sx={{ gap: 2, alignItems: 'stretch' }}
-								disableGutters
-								disablePadding
-							>
-								<Icon
-									name="openmoji-puzzle-piece"
-									size={iconSize}
-									sx={{ alignSelf: 'baseline' }}
-								/>
+					<Stack
+						component={List}
+						direction="column"
+						sx={{
+							color: (theme) => theme.palette.text.secondary,
+							gap: 4,
+							paddingInline: 10,
+						}}
+					>
+						<ListItem sx={{ gap: 2, alignItems: 'stretch' }}>
+							<Icon
+								name="openmoji-puzzle-piece"
+								size={listItemIconSize}
+								sx={{ alignSelf: 'baseline' }}
+							/>
 
-								<Typography color="textSecondary">
-									{t(m.appUsageConsentInterstitialDetailsIdNumbers)}
-								</Typography>
-							</ListItem>
+							{intl.formatMessage(
+								m.appUsageConsentInterstitialDetailsIdNumbers,
+							)}
+						</ListItem>
 
-							<ListItem
-								sx={{ gap: 2, alignItems: 'stretch' }}
-								disableGutters
-								disablePadding
-							>
-								<Icon
-									name="openmoji-cross-mark"
-									size={iconSize}
-									sx={{ alignSelf: 'baseline' }}
-								/>
+						<ListItem sx={{ gap: 2, alignItems: 'stretch' }}>
+							<Icon
+								name="openmoji-cross-mark"
+								size={listItemIconSize}
+								sx={{ alignSelf: 'baseline' }}
+							/>
 
-								<Typography color="textSecondary">
-									{t(m.appUsageConsentInterstitialDetailsIpAddresses)}
-								</Typography>
-							</ListItem>
+							{intl.formatMessage(
+								m.appUsageConsentInterstitialDetailsIpAddresses,
+							)}
+						</ListItem>
 
-							<ListItem
-								sx={{ gap: 2, alignItems: 'stretch' }}
-								disableGutters
-								disablePadding
-							>
-								<Icon
-									name="openmoji-switch"
-									size={iconSize}
-									sx={{ alignSelf: 'baseline' }}
-								/>
+						<ListItem sx={{ gap: 2, alignItems: 'stretch' }}>
+							<Icon
+								name="openmoji-switch"
+								size={listItemIconSize}
+								sx={{ alignSelf: 'baseline' }}
+							/>
 
-								<Typography color="textSecondary">
-									{t(m.appUsageConsentInterstitialDetailsTurnOffAnytime)}
-								</Typography>
-							</ListItem>
-						</Stack>
-					</List>
+							{intl.formatMessage(
+								m.appUsageConsentInterstitialDetailsTurnOffAnytime,
+							)}
+						</ListItem>
+					</Stack>
 				</Stack>
 			</Stack>
 
-			<Box
+			<Stack
+				direction="row"
 				sx={{
-					position: 'sticky',
-					right: 0,
-					left: 0,
-					top: 0,
-					bottom: 0,
-					display: 'flex',
-					flexDirection: 'row',
+					alignItems: 'center',
+					flexWrap: 'wrap',
+					gap: 4,
 					justifyContent: 'center',
 					padding: 6,
-					gap: 4,
 				}}
 			>
 				<Button
-					fullWidth
-					variant="outlined"
 					aria-disabled={setAppUsageMetrics.status === 'pending'}
+					fullWidth
 					onClick={() => {
 						if (setAppUsageMetrics.status === 'pending') {
 							return
@@ -561,15 +496,14 @@ function AppUsageInterstitial({
 						})
 						onClose()
 					}}
-					sx={{ maxWidth: 400 }}
+					variant="outlined"
 				>
-					{t(m.appUsageConsentInterstitialDenyButton)}
+					{intl.formatMessage(m.appUsageConsentInterstitialDenyButton)}
 				</Button>
 
 				<Button
-					fullWidth
-					variant="contained"
 					aria-disabled={setAppUsageMetrics.status === 'pending'}
+					fullWidth
 					loading={isActionVisiblyPending}
 					loadingPosition="start"
 					onClick={() => {
@@ -586,31 +520,117 @@ function AppUsageInterstitial({
 							},
 						)
 					}}
-					sx={{ maxWidth: 400 }}
+					variant="contained"
 				>
-					{t(m.appUsageConsentInterstitialAllowButton)}
+					{intl.formatMessage(m.appUsageConsentInterstitialAllowButton)}
 				</Button>
-			</Box>
+			</Stack>
 		</Stack>
 	)
 }
 
-const m = defineMessages({
+function AppUsageSuccess({
+	deviceName,
+	onClose,
+}: {
+	deviceName: string | undefined
+	onClose: () => void
+}) {
+	const intl = useIntl()
+
+	const heroIconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 4,
+	})
+
+	return (
+		<Stack direction="column">
+			<Stack direction="column" sx={{ flex: 1, gap: 10, padding: 20 }}>
+				<Stack direction="column" sx={{ gap: 20 }}>
+					<Stack direction="column" sx={{ alignItems: 'center', gap: 6 }}>
+						<Icon
+							name="material-check-circle-rounded"
+							color="success"
+							size={heroIconSize}
+						/>
+
+						<Typography
+							variant="heroHeader"
+							sx={{ textAlign: 'center', textWrap: 'balance' }}
+						>
+							{intl.formatMessage(m.appUsageConsentSuccessTitle)}
+						</Typography>
+
+						<Typography
+							variant="heroSubheading"
+							sx={{ textAlign: 'center', textWrap: 'balance' }}
+						>
+							{deviceName
+								? intl.formatMessage(m.appUsageConsentSuccessDescription, {
+										b: Bold,
+										deviceName,
+									})
+								: intl.formatMessage(
+										m.appUsageConsentSuccessDescriptionNoDeviceName,
+									)}
+						</Typography>
+					</Stack>
+
+					<Typography sx={{ textAlign: 'center', textWrap: 'balance' }}>
+						{intl.formatMessage(m.appUsageConsentSuccessDetailsChangeSetting)}
+					</Typography>
+				</Stack>
+			</Stack>
+
+			<Stack direction="row" sx={{ justifyContent: 'center', padding: 6 }}>
+				<Button
+					fullWidth
+					onClick={() => {
+						onClose()
+					}}
+					variant="outlined"
+				>
+					{intl.formatMessage(m.appUsageConsentSuccessCloseButton)}
+				</Button>
+			</Stack>
+		</Stack>
+	)
+}
+
+const m = defineMessages<{
+	readonly projectActionDialogGoBack: NoMessageValues
+	readonly startProjectDialogTitle: NoMessageValues
+	readonly startProjectDialogDescription: NoMessageValues
+	readonly projectNameInputLabel: NoMessageValues
+	readonly projectNameMinLengthError: NoMessageValues
+	readonly projectNameMaxLengthError: NoMessageValues
+	readonly createProjectButton: NoMessageValues
+	readonly characterCount: {
+		readonly count: MessageValue
+		readonly max: MessageValue
+	}
+	readonly leftProjectDialogTitle: { readonly name: MessageValue }
+	readonly leftProjectDialogCloseButton: NoMessageValues
+	readonly appUsageConsentInterstitialTitle: NoMessageValues
+	readonly appUsageConsentInterstitialDescription: NoMessageValues
+	readonly appUsageConsentInterstitialDetailsIdNumbers: NoMessageValues
+	readonly appUsageConsentInterstitialDetailsIpAddresses: NoMessageValues
+	readonly appUsageConsentInterstitialDetailsTurnOffAnytime: NoMessageValues
+	readonly appUsageConsentInterstitialDenyButton: NoMessageValues
+	readonly appUsageConsentInterstitialAllowButton: NoMessageValues
+	readonly appUsageConsentSuccessTitle: NoMessageValues
+	readonly appUsageConsentSuccessDescription: {
+		readonly b: MessageTag
+		readonly deviceName: MessageValue
+	}
+	readonly appUsageConsentSuccessDescriptionNoDeviceName: NoMessageValues
+	readonly appUsageConsentSuccessDetailsChangeSetting: NoMessageValues
+	readonly appUsageConsentSuccessCloseButton: NoMessageValues
+}>({
 	projectActionDialogGoBack: {
 		id: '$1.routes.app.index.projectActionDialogGoBack',
 		defaultMessage: 'Go back',
 		description: 'Text for button to close project join/create dialog.',
-	},
-	joinProjectDialogTitle: {
-		id: '$1.routes.app.index.joinProjectDialogTitle',
-		defaultMessage: 'Join a Project',
-		description: 'Title of dialog shown for joining a project.',
-	},
-	joinProjectDialogDescription: {
-		id: '$1.routes.app.index.joinProjectDialogDescription',
-		defaultMessage:
-			'Coordinate with your team to receive a project invitation.',
-		description: 'Description of dialog shown for joining a project.',
 	},
 	startProjectDialogTitle: {
 		id: '$1.routes.app.index.startProjectDialogTitle',

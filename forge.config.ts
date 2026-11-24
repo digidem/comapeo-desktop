@@ -45,21 +45,16 @@ const {
 } = v.parse(
 	v.object({
 		APP_TYPE: v.optional(
-			v.union(
-				[
-					v.literal('development'),
-					v.literal('internal'),
-					v.literal('release-candidate'),
-					v.literal('production'),
-				],
+			v.picklist(
+				['development', 'internal', 'release-candidate', 'production'],
 				"APP_TYPE env variable must be 'development', 'internal', 'release-candidate', or 'production'",
 			),
 			'development',
 		),
 		ASAR: v.optional(
 			v.pipe(
-				v.union(
-					[v.literal('true'), v.literal('false')],
+				v.picklist(
+					['true', 'false'],
 					"ASAR env variable must be 'true' or 'false'",
 				),
 				v.transform((v) => v === 'true'),
@@ -70,8 +65,8 @@ const {
 		COMAPEO_DIAGNOSTICS_METRICS_URL: v.optional(v.pipe(v.string(), v.url())),
 		COMAPEO_TEST: v.optional(
 			v.pipe(
-				v.union(
-					[v.literal('true'), v.literal('false')],
+				v.picklist(
+					['true', 'false'],
 					"ASAR env variable must be 'true' or 'false'",
 				),
 				v.transform((v) => v === 'true'),
@@ -135,7 +130,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase<CoMapeoDesktopForgePluginConf
 			preStart: [this.#initViteDevServer],
 			resolveForgeConfig: [this.#updatePackagerConfig],
 			postStart: [this.#hookViteDevServer],
-			prePackage: [this.#buildRender],
+			prePackage: [this.#buildRenderer],
 			packageAfterCopy: [this.#moveBuiltRendererApp],
 		}
 	}
@@ -230,7 +225,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase<CoMapeoDesktopForgePluginConf
 
 		const ignoresToAppend = [
 			// Unnecessary directories
-			/^\/(\.github|\.husky|data|docs|logs|messages|patches|\.tanstack|\.vscode|scripts|tests-e2e)/,
+			/^\/(\.github|\.husky|data|docs|logs|messages|patches|patches-linux|\.tanstack|\.vscode|scripts|tests-e2e)/,
 			/^\/node_modules\/\.cache/,
 			/^\/node_modules\/\.vite/,
 			// Unnecessary files
@@ -274,7 +269,7 @@ class CoMapeoDesktopForgePlugin extends PluginBase<CoMapeoDesktopForgePluginConf
 	/**
 	 * Builds the renderer app with Vite (similar to `node --run vite:build`).
 	 */
-	#buildRender: ForgeHookFn<'prePackage'> = async () => {
+	#buildRenderer: ForgeHookFn<'prePackage'> = async () => {
 		if (APP_TYPE === 'development') {
 			throw new Error(
 				"Cannot package app with APP_TYPE environment variable set to 'development'. You probably should use 'internal' instead.",

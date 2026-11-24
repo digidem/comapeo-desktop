@@ -1,7 +1,11 @@
 import { useState } from 'react'
-import { Box, ButtonBase, Collapse, Stack, Typography } from '@mui/material'
+import Box from '@mui/material/Box'
+import ButtonBase from '@mui/material/ButtonBase'
+import Collapse from '@mui/material/Collapse'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 
-import { BLUE_GREY, DARK_GREY, LIGHT_GREY } from '../colors.ts'
+import { BLACK_02, BLACK_03, BLUE_05 } from '../../../shared/colors.ts'
 import { Icon } from './icon.tsx'
 
 export function AdvancedErrorDetails({
@@ -22,7 +26,7 @@ export function AdvancedErrorDetails({
 				}}
 				sx={{
 					':hover, :focus': {
-						backgroundColor: (theme) => theme.alpha(BLUE_GREY, 0.2),
+						backgroundColor: (theme) => theme.alpha(BLUE_05, 0.2),
 						transition: (theme) => theme.transitions.create('background-color'),
 					},
 					borderRadius: 2,
@@ -43,7 +47,7 @@ export function AdvancedErrorDetails({
 						name={
 							advancedExpanded ? 'material-expand-less' : 'material-expand-more'
 						}
-						htmlColor={DARK_GREY}
+						htmlColor={BLACK_02}
 					/>
 				</Stack>
 			</ButtonBase>
@@ -51,17 +55,16 @@ export function AdvancedErrorDetails({
 			<Collapse in={advancedExpanded}>
 				<Box
 					sx={{
-						bgcolor: LIGHT_GREY,
-						padding: 4,
-						border: `1px solid ${BLUE_GREY}`,
+						backgroundColor: BLACK_03,
+						border: `1px solid ${BLUE_05}`,
+						borderRadius: 2,
 						maxHeight: 300,
 						overflow: 'auto',
-						borderRadius: 2,
+						padding: 4,
 					}}
 				>
 					<Typography
 						component="pre"
-						variant="body2"
 						sx={{
 							fontFamily: 'monospace',
 							overflowWrap: 'break-word',

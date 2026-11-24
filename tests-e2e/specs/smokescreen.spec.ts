@@ -23,3 +23,17 @@ test('app opens', async ({ appInfo }) => {
 		cleanup()
 	}
 })
+
+test('app closes and reopens', async ({ appInfo }) => {
+	const { launchApp, cleanup } = await setup()
+	let electronApp = await launchApp({ appInfo })
+
+	try {
+		await electronApp.close()
+
+		electronApp = await launchApp({ appInfo })
+	} finally {
+		await electronApp.close()
+		cleanup()
+	}
+})

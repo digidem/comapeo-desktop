@@ -14,12 +14,19 @@ import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageTag,
+	type NoMessageValues,
+} from 'react-intl'
 
-import { BLUE_GREY, DARK_GREY, LIGHT_GREY } from '../../colors.ts'
+import { BLACK_03, BLUE_05 } from '../../../../shared/colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
+import { Bold, Break } from '../../components/intl-rich-text.tsx'
+import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
 import {
 	getDiagnosticsEnabledQueryOptions,
 	setDiagnosticsEnabledMutationOptions,
@@ -39,7 +46,7 @@ export const Route = createFileRoute('/onboarding/privacy-policy')({
 })
 
 function RouteComponent() {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const setDiagnosticsEnabledMutation = useMutation(
 		setDiagnosticsEnabledMutationOptions(),
@@ -54,14 +61,14 @@ function RouteComponent() {
 			<Stack
 				direction="column"
 				sx={{
+					background: BLACK_03,
+					borderRadius: 2,
 					display: 'flex',
-					justifyContent: 'space-between',
 					flex: 1,
 					gap: 10,
-					bgcolor: LIGHT_GREY,
-					padding: 10,
-					borderRadius: 2,
+					justifyContent: 'space-between',
 					overflow: 'auto',
+					padding: 10,
 				}}
 			>
 				<Container
@@ -71,162 +78,192 @@ function RouteComponent() {
 					sx={{ gap: 10 }}
 				>
 					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center' }}
+						component="h1"
+						variant="heroHeader"
+						sx={{ textAlign: 'center' }}
 					>
-						{t(m.title)}
+						{intl.formatMessage(m.title)}
 					</Typography>
 
 					<Stack direction="column" sx={{ gap: 3 }}>
 						<Box
 							sx={{
-								border: `1px solid ${BLUE_GREY}`,
-								bgcolor: LIGHT_GREY,
+								background: BLACK_03,
+								border: `1px solid ${BLUE_05}`,
 								borderRadius: 2,
 								padding: 5,
 							}}
 						>
-							<Typography variant="body1" sx={{ fontWeight: 400 }}>
-								{t(m.description)}
+							<Typography variant="heroSubheading">
+								{intl.formatMessage(m.description)}
 							</Typography>
 						</Box>
 
 						<CustomAccordion
-							label={t(m.aboutAwanaDigital)}
-							description={t(m.aboutAwanaDigitalDescription)}
+							label={intl.formatMessage(m.aboutAwanaDigital)}
+							description={intl.formatMessage(m.aboutAwanaDigitalDescription)}
 						/>
 
 						<CustomAccordion
-							label={t(m.openSource)}
-							description={t(m.openSourceDescription)}
+							label={intl.formatMessage(m.openSource)}
+							description={intl.formatMessage(m.openSourceDescription, {
+								br: Break,
+							})}
 						/>
 					</Stack>
 
 					<Stack direction="column" sx={{ gap: 10 }}>
-						<Typography variant="h2" sx={{ fontWeight: 500 }}>
-							{t(m.comapeoDataPrivacy)}
+						<Typography component="h2" variant="sectionLabel">
+							{intl.formatMessage(m.comapeoDataPrivacy)}
 						</Typography>
 
 						<QuestionAnswerItem
 							icon={<Icon name="openmoji-red-circle" />}
-							title={t(m.privateByDefault)}
-							description={t(m.privateByDefaultDescription)}
+							title={intl.formatMessage(m.privateByDefault)}
+							description={intl.formatMessage(m.privateByDefaultDescription, {
+								br: Break,
+							})}
 						/>
 
 						<QuestionAnswerItem
 							icon={<Icon name="openmoji-bust-in-silhouette" />}
-							title={t(m.noPII)}
-							description={t(m.noPIIDescription)}
+							title={intl.formatMessage(m.noPII)}
+							description={intl.formatMessage(m.noPIIDescription, {
+								br: Break,
+							})}
 						/>
 
 						<QuestionAnswerItem
 							icon={<Icon name="openmoji-locked-with-key" />}
-							title={t(m.control)}
-							description={t(m.controlDescription)}
+							title={intl.formatMessage(m.control)}
+							description={intl.formatMessage(m.controlDescription, {
+								br: Break,
+							})}
 						/>
 
-						<Divider sx={{ backgroundColor: BLUE_GREY }} />
+						<Divider />
 
-						<Typography variant="h2" sx={{ fontWeight: 500 }}>
-							{t(m.dataCollection)}
+						<Typography component="h2" variant="sectionLabel">
+							{intl.formatMessage(m.dataCollection)}
 						</Typography>
 
 						<QuestionAnswerItem
 							icon={<Icon name="openmoji-bar-chart" />}
-							title={t(m.whatIsCollected)}
-							description={t(m.whatIsCollectedDescription)}
+							title={intl.formatMessage(m.whatIsCollected)}
+							description={intl.formatMessage(m.whatIsCollectedDescription, {
+								br: Break,
+							})}
 						>
 							<Stack
 								direction="column"
 								sx={{
-									border: `1px solid ${BLUE_GREY}`,
+									border: `1px solid ${BLUE_05}`,
 									borderRadius: 2,
 									gap: 5,
-									paddingY: 5,
+									paddingBlock: 5,
 								}}
 							>
 								<Stack
 									component="section"
 									direction="column"
-									sx={{ paddingX: 5, gap: 3 }}
+									sx={{ paddingInline: 5, gap: 3 }}
 								>
-									<Typography variant="h3">{t(m.diagnostics)}</Typography>
-
-									<List
+									<Typography
+										component="h3"
 										sx={{
-											listStyleType: 'disc',
-											paddingX: 8,
-											color: DARK_GREY,
+											fontWeight: (theme) => theme.typography.fontWeightMedium,
 										}}
 									>
-										<ListItem sx={{ display: 'list-item' }} disablePadding>
-											{t(m.crashData)}
+										{intl.formatMessage(m.diagnostics)}
+									</Typography>
+
+									<Stack
+										component={List}
+										direction="column"
+										sx={{
+											color: (theme) => theme.palette.text.secondary,
+											gap: 4,
+											listStyleType: 'disc',
+											paddingInline: 8,
+										}}
+									>
+										<ListItem sx={{ display: 'list-item' }}>
+											{intl.formatMessage(m.crashData, { b: Bold })}
 										</ListItem>
 
-										<ListItem sx={{ display: 'list-item' }} disablePadding>
-											{t(m.appErrors)}
+										<ListItem sx={{ display: 'list-item' }}>
+											{intl.formatMessage(m.appErrors, { b: Bold })}
 										</ListItem>
 
-										<ListItem sx={{ display: 'list-item' }} disablePadding>
-											{t(m.performanceData)}
+										<ListItem sx={{ display: 'list-item' }}>
+											{intl.formatMessage(m.performanceData, { b: Bold })}
 										</ListItem>
 
-										<ListItem sx={{ display: 'list-item' }} disablePadding>
-											{t(m.deviceInfo)}
+										<ListItem sx={{ display: 'list-item' }}>
+											{intl.formatMessage(m.deviceInfo, { b: Bold })}
 										</ListItem>
 
-										<ListItem sx={{ display: 'list-item' }} disablePadding>
-											{t(m.appInfo)}
+										<ListItem sx={{ display: 'list-item' }}>
+											{intl.formatMessage(m.appInfo, { b: Bold })}
 										</ListItem>
-									</List>
+									</Stack>
 								</Stack>
 
-								<Divider sx={{ backgroundColor: BLUE_GREY }} />
+								<Divider />
 
 								<Stack
 									component="section"
 									direction="column"
-									sx={{ paddingX: 5, gap: 3 }}
+									sx={{ paddingInline: 5, gap: 3 }}
 								>
-									<Typography variant="h3">{t(m.appUsage)}</Typography>
-
-									<List
+									<Typography
+										component="h3"
 										sx={{
-											listStyleType: 'disc',
-											paddingX: 8,
-											color: DARK_GREY,
+											fontWeight: (theme) => theme.typography.fontWeightMedium,
 										}}
 									>
-										<ListItem sx={{ display: 'list-item' }} disablePadding>
-											{t(m.country)}
+										{intl.formatMessage(m.appUsage)}
+									</Typography>
+
+									<Stack
+										component={List}
+										direction="column"
+										sx={{
+											color: (theme) => theme.palette.text.tertiary,
+											gap: 4,
+											listStyleType: 'disc',
+											paddingInline: 8,
+										}}
+									>
+										<ListItem sx={{ display: 'list-item' }}>
+											{intl.formatMessage(m.country, { b: Bold })}
 										</ListItem>
-									</List>
+									</Stack>
 								</Stack>
 							</Stack>
 						</QuestionAnswerItem>
 
 						<QuestionAnswerItem
 							icon={<Icon name="openmoji-wrench" />}
-							title={t(m.whyIsThisDataCollected)}
-							description={t(m.whyIsThisDataCollectedDescription)}
+							title={intl.formatMessage(m.whyIsThisDataCollected)}
+							description={intl.formatMessage(
+								m.whyIsThisDataCollectedDescription,
+								{ br: Break },
+							)}
 						/>
 
 						<QuestionAnswerItem
 							icon={<Icon name="openmoji-raised-hand-medium-skin-tone" />}
-							title={t(m.whatIsNotCollected)}
-							description={t(m.whatIsNotCollectedDescription)}
+							title={intl.formatMessage(m.whatIsNotCollected)}
+							description={intl.formatMessage(m.whatIsNotCollectedDescription)}
 						/>
 
-						<Divider sx={{ backgroundColor: BLUE_GREY }} />
-
-						<Typography variant="h2" sx={{ fontWeight: 500 }}>
-							{t(m.dataCollection)}
-						</Typography>
+						<Divider />
 
 						<Stack
 							direction="column"
 							sx={{
-								border: `1px solid ${BLUE_GREY}`,
+								border: `1px solid ${BLUE_05}`,
 								borderRadius: 2,
 								gap: 5,
 								padding: 5,
@@ -242,7 +279,7 @@ function RouteComponent() {
 											},
 										})
 									}}
-									label={t(m.shareDiagnosticInformation)}
+									label={intl.formatMessage(m.shareDiagnosticInformation)}
 									labelPlacement="start"
 									sx={{ margin: 0, justifyContent: 'space-between' }}
 								/>
@@ -279,15 +316,25 @@ function QuestionAnswerItem({
 	description,
 	icon,
 	title,
-}: PropsWithChildren<{ description: string; icon: ReactNode; title: string }>) {
+}: PropsWithChildren<{
+	description: ReactNode
+	icon: ReactNode
+	title: string
+}>) {
 	return (
-		<Stack component="section" direction="column" sx={{ gap: 10 }}>
+		<Stack component="section" direction="column" sx={{ gap: 6 }}>
 			<Stack direction="row" sx={{ alignItems: 'center', gap: 2 }}>
 				{icon}
-				<Typography variant="h3">{title}</Typography>
+
+				<Typography
+					component="h3"
+					sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
+				>
+					{title}
+				</Typography>
 			</Stack>
 
-			<Typography sx={{ color: DARK_GREY }}>{description}</Typography>
+			<Typography color="textTertiary">{description}</Typography>
 
 			{children}
 		</Stack>
@@ -299,25 +346,30 @@ function CustomAccordion({
 	description,
 }: {
 	label: string
-	description: string
+	description: ReactNode
 }) {
 	const [expanded, setExpanded] = useState(false)
+
+	const iconSize = useIconSizeBasedOnTypography({
+		variant: 'bodyCopy',
+		multiplier: 2,
+	})
 
 	return (
 		<Stack
 			sx={{
+				border: `1px solid ${BLUE_05}`,
 				borderRadius: 2,
-				border: `1px solid ${BLUE_GREY}`,
-				paddingX: 5,
-				paddingY: 2,
+				paddingInline: 5,
+				paddingBlock: 2,
 			}}
 		>
 			<Stack
 				direction="row"
 				sx={{
+					alignItems: 'center',
 					display: 'flex',
 					justifyContent: 'space-between',
-					alignItems: 'center',
 				}}
 			>
 				<Typography>{label}</Typography>
@@ -330,20 +382,51 @@ function CustomAccordion({
 				>
 					<Icon
 						name={expanded ? 'material-expand-less' : 'material-expand-more'}
-						sx={{ color: BLUE_GREY, fontSize: `4rem` }}
+						size={iconSize}
 					/>
 				</IconButton>
 			</Stack>
+
 			<Collapse in={expanded}>
 				<Box sx={{ paddingBottom: 5 }}>
-					<Typography sx={{ color: DARK_GREY }}>{description}</Typography>
+					<Typography color="textTertiary">{description}</Typography>
 				</Box>
 			</Collapse>
 		</Stack>
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly title: NoMessageValues
+	readonly description: NoMessageValues
+	readonly aboutAwanaDigital: NoMessageValues
+	readonly aboutAwanaDigitalDescription: NoMessageValues
+	readonly openSource: NoMessageValues
+	readonly openSourceDescription: { readonly br: MessageTag }
+	readonly comapeoDataPrivacy: NoMessageValues
+	readonly privateByDefault: NoMessageValues
+	readonly privateByDefaultDescription: { readonly br: MessageTag }
+	readonly noPII: NoMessageValues
+	readonly noPIIDescription: { readonly br: MessageTag }
+	readonly control: NoMessageValues
+	readonly controlDescription: { readonly br: MessageTag }
+	readonly dataCollection: NoMessageValues
+	readonly whatIsCollected: NoMessageValues
+	readonly whatIsCollectedDescription: { readonly br: MessageTag }
+	readonly diagnostics: NoMessageValues
+	readonly crashData: { readonly b: MessageTag }
+	readonly appErrors: { readonly b: MessageTag }
+	readonly performanceData: { readonly b: MessageTag }
+	readonly deviceInfo: { readonly b: MessageTag }
+	readonly appInfo: { readonly b: MessageTag }
+	readonly appUsage: NoMessageValues
+	readonly country: { readonly b: MessageTag }
+	readonly whyIsThisDataCollected: NoMessageValues
+	readonly whyIsThisDataCollectedDescription: { readonly br: MessageTag }
+	readonly whatIsNotCollected: NoMessageValues
+	readonly whatIsNotCollectedDescription: NoMessageValues
+	readonly shareDiagnosticInformation: NoMessageValues
+}>({
 	title: {
 		id: '$1.routes.onboarding.privacy-policy.title',
 		defaultMessage: 'Privacy Policy',

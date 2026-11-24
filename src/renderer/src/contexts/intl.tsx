@@ -2,15 +2,12 @@ import {
 	useDeferredValue,
 	useEffect,
 	useMemo,
-	type ComponentProps,
 	type PropsWithChildren,
 	type ReactNode,
 } from 'react'
-import {
-	LocalizationProvider,
-	type PickersLocaleText,
-} from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import type { PickersLocaleText } from '@mui/x-date-pickers/locales'
 import {
 	queryOptions,
 	useSuspenseQueries,
@@ -22,6 +19,8 @@ import {
 	IntlProvider as ReactIntlProvider,
 	defineMessages,
 	useIntl,
+	type MessageValue,
+	type NoMessageValues,
 } from 'react-intl'
 import { is } from 'valibot'
 
@@ -30,26 +29,8 @@ import {
 	SupportedLanguageTagSchema,
 	type SupportedLanguageTag,
 } from '../../../shared/intl.ts'
-import { CORNFLOWER_BLUE, ORANGE } from '../colors.ts'
 import { getLocaleStateQueryOptions } from '../lib/queries/app-settings.ts'
 import { getTranslatedMessagesQueryOptions } from '../lib/queries/intl.ts'
-
-const RICH_TEXT_MAPPINGS: ComponentProps<
-	typeof ReactIntlProvider
->['defaultRichTextElements'] = {
-	b: (parts) => {
-		return <b>{parts}</b>
-	},
-	orange: (parts) => {
-		return <span style={{ color: ORANGE }}>{parts}</span>
-	},
-	blue: (parts) => {
-		return <span style={{ color: CORNFLOWER_BLUE }}>{parts}</span>
-	},
-	br: () => {
-		return <br />
-	},
-}
 
 const DATE_FN_LOCALES = import.meta.glob<Locale>(['./*.js', '!./cdn.*'], {
 	base: '/../../node_modules/date-fns/locale/',
@@ -115,7 +96,6 @@ export function IntlProvider({ children }: PropsWithChildren) {
 			messages={combinedMessages}
 			locale={persistedLocale}
 			defaultLocale={DEFAULT_LANGUAGE_TAG}
-			defaultRichTextElements={RICH_TEXT_MAPPINGS}
 		>
 			<DatePickersLocalizationProvider>
 				{children}
@@ -368,7 +348,28 @@ function getLocaleTextOverride(
 }
 
 // NOTE: Defaults come from https://github.com/mui/mui-x/blob/master/packages/x-date-pickers/src/locales/enUS.ts
-const m = defineMessages({
+const m = defineMessages<{
+	readonly previousMonth: NoMessageValues
+	readonly nextMonth: NoMessageValues
+	readonly openPreviousView: NoMessageValues
+	readonly openNextView: NoMessageValues
+	readonly calendarViewYearSwitchingButtonAriaLabel: NoMessageValues
+	readonly calendarViewCalendarSwitchingButtonAriaLabel: NoMessageValues
+	readonly openDatePickerDialogue: NoMessageValues
+	readonly openDatePickerDialogueSelected: {
+		readonly formattedDate: MessageValue
+	}
+	readonly fieldClearLabel: NoMessageValues
+	readonly year: NoMessageValues
+	readonly month: NoMessageValues
+	readonly day: NoMessageValues
+	readonly weekDay: NoMessageValues
+	readonly hours: NoMessageValues
+	readonly minutes: NoMessageValues
+	readonly seconds: NoMessageValues
+	readonly meridiem: NoMessageValues
+	readonly empty: NoMessageValues
+}>({
 	// Calendar navigation
 	previousMonth: {
 		id: 'intl.date-pickers.previousMonth',

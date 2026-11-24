@@ -1,10 +1,10 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { defineMessages, useIntl } from 'react-intl'
+import { defineMessages, useIntl, type MessageTag } from 'react-intl'
 
+import { BLUE_02 } from '../../../shared/colors.ts'
 import { TITLE_BAR_HEIGHT } from '../lib/constants.ts'
-
-const TITLE_BAR_COLOR = '#2348B2'
+import { Blue, Bold, Orange } from './intl-rich-text.tsx'
 
 export function AppTitleBar({
 	platform,
@@ -13,31 +13,40 @@ export function AppTitleBar({
 	platform: NodeJS.Platform
 	testId?: string
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	return (
 		<Box
 			data-testid={testId}
 			sx={{
-				// NOTE: macOS has the window controls on the left side by default.
 				alignItems: 'center',
 				appRegion: 'drag',
-				bgcolor: TITLE_BAR_COLOR,
+				background: BLUE_02,
 				display: 'flex',
+				flexDirection: 'row',
 				height: TITLE_BAR_HEIGHT,
+				// NOTE: macOS has the window controls on the left side by default.
 				justifyContent: platform === 'darwin' ? 'flex-end' : undefined,
-				paddingX: 6,
+				paddingInline: 6,
 				position: 'relative',
 				WebkitAppRegion: 'drag',
 				zIndex: (theme) => theme.zIndex.tooltip + 1,
 			}}
 		>
-			<Typography color="textInverted">{t(m.appName)}</Typography>
+			<Typography color="textInverted">
+				{intl.formatMessage(m.appName, { b: Bold, orange: Orange, blue: Blue })}
+			</Typography>
 		</Box>
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly appName: {
+		readonly b: MessageTag
+		readonly blue: MessageTag
+		readonly orange: MessageTag
+	}
+}>({
 	appName: {
 		id: '$1.components.app-title-bar.appName',
 		defaultMessage: '<b><orange>Co</orange>Mapeo</b> <blue>Desktop</blue>',

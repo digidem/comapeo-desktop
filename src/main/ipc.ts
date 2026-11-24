@@ -115,7 +115,7 @@ export function setUpMainIPC({
 	ipcMain.handle('settings:appUsageMetrics:set', (_event, value) => {
 		v.assert(
 			v.object({
-				status: v.union([v.literal('disabled'), v.literal('enabled')]),
+				status: v.picklist(['disabled', 'enabled']),
 				shouldBumpAskCount: v.boolean(),
 			}),
 			value,

@@ -10,4 +10,4 @@ const FALLBACK_TITLE_BAR_HEIGHT_PX = 40
 // - https://github.com/WICG/window-controls-overlay/blob/main/explainer.md#css-environment-variables
 export const TITLE_BAR_HEIGHT = `env(titlebar-area-height, ${FALLBACK_TITLE_BAR_HEIGHT_PX}px)`
 
-export const DIALOG_CONTAINER_ID = 'dialog-container' as const
+export const PORTAL_CONTAINER_ID = 'portal-container' as const

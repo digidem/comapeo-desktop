@@ -1,22 +1,28 @@
-import { useMemo } from 'react'
+import { useId, useMemo } from 'react'
 import { useOwnDeviceInfo, useSetOwnDeviceInfo } from '@comapeo/core-react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
-import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import * as v from 'valibot'
 
-import { DARKER_ORANGE, LIGHT_GREY, WHITE } from '../../colors.ts'
+import { BLACK_03, ORANGE_00, WHITE_00 } from '../../../../shared/colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
+import { DecentTextField } from '../../components/decent-text-field.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
 import { useAppForm } from '../../hooks/forms.ts'
+import { useIconSizeBasedOnTypography } from '../../hooks/icon.ts'
 import { COMAPEO_CORE_REACT_ROOT_QUERY_KEY } from '../../lib/comapeo.ts'
 import { DEVICE_NAME_MAX_LENGTH_GRAPHEMES } from '../../lib/constants.ts'
 import { setOnboardedAtMutationOptions } from '../../lib/queries/user.ts'
@@ -39,9 +45,9 @@ export const Route = createFileRoute('/onboarding/device-name')({
 })
 
 function RouteComponent() {
-	const router = useRouter()
+	const intl = useIntl()
 
-	const { formatMessage: t } = useIntl()
+	const router = useRouter()
 
 	const { data: deviceInfo } = useOwnDeviceInfo()
 	const setOwnDeviceInfo = useSetOwnDeviceInfo()
@@ -51,15 +57,15 @@ function RouteComponent() {
 	// TODO: We want to provide translated error messages that can be rendered directly
 	// Probably not ideal do this reactively but can address later
 	const deviceNameSchema = useMemo(() => {
-		const maxLengthError = t(m.maxLengthError)
-		const minLengthError = t(m.minLengthError)
+		const maxLengthError = intl.formatMessage(m.maxLengthError)
+		const minLengthError = intl.formatMessage(m.minLengthError)
 
 		return createDeviceNameSchema({
 			maxBytesError: maxLengthError,
 			maxLengthError,
 			minLengthError,
 		})
-	}, [t])
+	}, [intl])
 
 	const form = useAppForm({
 		defaultValues: { deviceName: deviceInfo.name ? deviceInfo.name : '' },
@@ -78,27 +84,32 @@ function RouteComponent() {
 				captureException(err)
 			}
 
-			await router.navigate({
-				to: '/app',
-				search: { fromFlow: { name: 'onboarding' } },
-				mask: { to: '/app', unmaskOnReload: true },
-			})
+			await router.navigate({ to: '/app' })
 		},
 	})
+
+	const iconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 4,
+	})
+
+	const componentId = useId()
+	const formId = `${componentId}-device-name-form`
+	const labelId = `${componentId}-label`
 
 	return (
 		<>
 			<Stack
 				direction="column"
 				sx={{
+					background: BLACK_03,
+					borderRadius: 2,
 					display: 'flex',
-					justifyContent: 'space-between',
 					flex: 1,
 					gap: 10,
-					bgcolor: LIGHT_GREY,
-					padding: 10,
-					borderRadius: 2,
+					justifyContent: 'space-between',
 					overflow: 'auto',
+					padding: 10,
 				}}
 			>
 				<Container
@@ -111,29 +122,27 @@ function RouteComponent() {
 						<Box sx={{ alignSelf: 'center' }}>
 							<Icon
 								name="material-symbols-computer"
-								htmlColor={DARKER_ORANGE}
-								size={80}
+								htmlColor={ORANGE_00}
+								size={iconSize}
 							/>
 						</Box>
 
 						<Typography
-							variant="h1"
-							sx={{ fontWeight: 500, textAlign: 'center' }}
+							component="h1"
+							variant="heroHeader"
+							sx={{ textAlign: 'center' }}
 						>
-							{t(m.title)}
+							{intl.formatMessage(m.title)}
 						</Typography>
 					</Stack>
 
-					<Typography
-						variant="h2"
-						sx={{ fontWeight: 400, textAlign: 'center' }}
-					>
-						{t(m.description)}
+					<Typography variant="heroSubheading" sx={{ textAlign: 'center' }}>
+						{intl.formatMessage(m.description)}
 					</Typography>
 
 					<Box
 						component="form"
-						id="device-name-form"
+						id={formId}
 						noValidate
 						autoComplete="off"
 						onSubmit={(event) => {
@@ -147,51 +156,77 @@ function RouteComponent() {
 						}}
 					>
 						<form.AppField name="deviceName">
-							{(field) => (
-								<TextField
-									id={field.name}
-									required
-									fullWidth
-									autoFocus
-									label={t(m.deviceName)}
-									value={field.state.value}
-									error={!field.state.meta.isValid}
-									onChange={(event) => {
-										field.handleChange(event.target.value)
-									}}
-									slotProps={{ input: { style: { backgroundColor: WHITE } } }}
-									onBlur={field.handleBlur}
-									helperText={
-										<Stack
-											component="span"
-											direction="row"
-											sx={{ justifyContent: 'space-between' }}
-										>
-											<Box component="span">
-												{field.state.meta.errors[0]?.message}
-											</Box>
-											<Box
-												component="output"
-												htmlFor={field.name}
-												name="character-count"
+							{(field) => {
+								const inputId = `${componentId}-input`
+								const errorTextId = `${componentId}-error-text`
+
+								return (
+									<DecentTextField
+										aria-describedby={
+											field.state.meta.isValid ? undefined : errorTextId
+										}
+										error={!field.state.meta.isValid}
+										fullWidth
+										helperText={
+											<Stack
+												component="span"
+												direction="row"
+												sx={{
+													color: (theme) =>
+														field.state.meta.isValid
+															? theme.palette.text.secondary
+															: theme.palette.error.main,
+													justifyContent: 'space-between',
+												}}
 											>
-												<form.Subscribe
-													selector={(state) =>
-														v._getGraphemeCount(state.values.deviceName)
-													}
+												<Typography
+													id={errorTextId}
+													color="inherit"
+													variant="detailCopy"
 												>
-													{(count) =>
-														t(m.characterCount, {
-															count,
-															max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
-														})
-													}
-												</form.Subscribe>
-											</Box>
-										</Stack>
-									}
-								/>
-							)}
+													{field.state.meta.errors[0]?.message}
+												</Typography>
+
+												<Typography
+													color="inherit"
+													component="output"
+													htmlFor={inputId}
+													name="character-count"
+													variant="detailCopy"
+												>
+													<form.Subscribe
+														selector={(state) =>
+															v._getGraphemeCount(state.values.deviceName)
+														}
+													>
+														{(count) =>
+															intl.formatMessage(m.characterCount, {
+																count,
+																max: DEVICE_NAME_MAX_LENGTH_GRAPHEMES,
+															})
+														}
+													</form.Subscribe>
+												</Typography>
+											</Stack>
+										}
+										id={inputId}
+										label={intl.formatMessage(m.deviceName)}
+										name={field.name}
+										onBlur={field.handleBlur}
+										onChange={(event) => {
+											field.handleChange(event.target.value)
+										}}
+										required
+										slotProps={{
+											input: {
+												'aria-labelledby': labelId,
+												sx: { background: WHITE_00 },
+											},
+										}}
+										value={field.state.value}
+									/>
+								)
+							}}
 						</form.AppField>
 					</Box>
 				</Container>
@@ -200,14 +235,13 @@ function RouteComponent() {
 					<form.Subscribe selector={(state) => state.canSubmit}>
 						{(canSubmit) => (
 							<Button
-								fullWidth
-								form="device-name-form"
-								variant="contained"
-								type="submit"
 								aria-disabled={!canSubmit}
-								sx={{ maxWidth: 400 }}
+								form={formId}
+								fullWidth
+								type="submit"
+								variant="contained"
 							>
-								{t(m.addName)}
+								{intl.formatMessage(m.addName)}
 							</Button>
 						)}
 					</form.Subscribe>
@@ -234,7 +268,18 @@ function RouteComponent() {
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly title: NoMessageValues
+	readonly description: NoMessageValues
+	readonly deviceName: NoMessageValues
+	readonly minLengthError: NoMessageValues
+	readonly maxLengthError: NoMessageValues
+	readonly addName: NoMessageValues
+	readonly characterCount: {
+		readonly count: MessageValue
+		readonly max: MessageValue
+	}
+}>({
 	title: {
 		id: '$1.routes.onboarding.device-name.title',
 		defaultMessage: 'Name Your Device',

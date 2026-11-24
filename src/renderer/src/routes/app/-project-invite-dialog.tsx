@@ -5,14 +5,23 @@ import {
 	useManyInvites,
 	useRejectInvite,
 } from '@comapeo/core-react'
-import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import CircularProgress from '@mui/material/CircularProgress'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 import { captureException } from '@sentry/react'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 import { useSpinDelay } from 'spin-delay'
 
-import { BLUE_GREY, DARK_GREY, GREEN } from '../../colors.ts'
+import { BLUE_05 } from '../../../../shared/colors.ts'
 import { DecentDialog } from '../../components/decent-dialog.tsx'
 import { ErrorDialogContent } from '../../components/error-dialog.tsx'
 import { Icon } from '../../components/icon.tsx'
@@ -177,15 +186,15 @@ export function ProjectInviteDialog() {
 }
 
 function ProjectInviteDialogContent(props: DialogContentProps) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
 
 	const inviteDetailsIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'h3',
+		variant: 'cardHeader',
 		multiplier: 2,
 	})
 
 	const additionalProjectsIconSize = useIconSizeBasedOnTypography({
-		typographyVariant: 'body2',
+		variant: 'detailCopy',
 		multiplier: 1.5,
 	})
 
@@ -224,15 +233,15 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 
 										onAccept()
 									}}
-									sx={{ flex: 1, maxWidth: 400 }}
 									variant="contained"
 								>
-									{t(m.projectInviteAccept)}
+									{intl.formatMessage(m.projectInviteAccept)}
 								</Button>
 							}
 							secondary={
 								<Button
 									aria-disabled={isActionPending}
+									fullWidth
 									onClick={() => {
 										if (isActionPending) {
 											return
@@ -240,20 +249,19 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 
 										onReject()
 									}}
-									sx={{ flex: 1, maxWidth: 400 }}
 									variant="outlined"
 								>
-									{t(m.projectInviteDecline)}
+									{intl.formatMessage(m.projectInviteDecline)}
 								</Button>
 							}
 						/>
 					}
 					details={
-						<InviteDetails
+						<InviteDetailsCard
 							color={invite.projectColor}
 							title={invite.projectName}
-							description={t(m.projectInviteDescription, {
-								role: invite.roleName?.toLowerCase(),
+							description={intl.formatMessage(m.projectInviteDescription, {
+								role: invite.roleName?.toLowerCase() || 'participant',
 							})}
 							icon={
 								<Icon
@@ -262,13 +270,12 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 											? 'material-manage-accounts-filled'
 											: 'material-people-filled'
 									}
-									htmlColor={DARK_GREY}
 									size={inviteDetailsIconSize}
 								/>
 							}
 						/>
 					}
-					title={t(m.projectInviteTitle)}
+					title={intl.formatMessage(m.projectInviteTitle)}
 				/>
 			)
 		}
@@ -290,10 +297,9 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 									onClick={() => {
 										onCloseAcceptedInvite()
 									}}
-									sx={{ flex: 1, maxWidth: 400 }}
 									variant="contained"
 								>
-									{t(m.projectJoinedNextInvite)}
+									{intl.formatMessage(m.projectJoinedNextInvite)}
 								</Button>
 							),
 							secondary: (
@@ -307,11 +313,8 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 										size={additionalProjectsIconSize}
 									/>
 
-									<Typography
-										variant="body2"
-										sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-									>
-										{t(m.projectInviteAdditionalInvitesCount, {
+									<Typography variant="sectionLabel">
+										{intl.formatMessage(m.projectInviteAdditionalInvitesCount, {
 											inviteCount: remainingInvites.length,
 										})}
 									</Typography>
@@ -325,10 +328,9 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 									onClick={() => {
 										onViewProject({ projectId, remainingInvites })
 									}}
-									sx={{ flex: 1, maxWidth: 400 }}
 									variant="contained"
 								>
-									{t(m.projectJoinedViewProject)}
+									{intl.formatMessage(m.projectJoinedViewProject)}
 								</Button>
 							),
 							secondary: (
@@ -337,10 +339,10 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 									onClick={() => {
 										onCloseAcceptedInvite()
 									}}
-									sx={{ flex: 1, maxWidth: 400 }}
+									startIcon={<Icon name="material-symbols-cancel" />}
 									variant="outlined"
 								>
-									{t(m.projectJoinedCloseDialog)}
+									{intl.formatMessage(m.projectJoinedCloseDialog)}
 								</Button>
 							),
 						}
@@ -349,24 +351,25 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 				<InviteContainer
 					actions={<InviteActions {...dynamicActionsProps} />}
 					details={
-						<InviteDetails
+						<InviteDetailsCard
 							color={invite.projectColor}
-							description={t(m.projectJoinedDetailsDescription, {
-								projectName: invite.projectName,
-							})}
+							description={intl.formatMessage(
+								m.projectJoinedDetailsDescription,
+								{ projectName: invite.projectName },
+							)}
 							icon={
 								<Icon
+									color="success"
 									name="material-check-circle-rounded"
-									htmlColor={GREEN}
 									size={inviteDetailsIconSize}
 								/>
 							}
-							title={t(m.projectJoinedDetailsTitle)}
+							title={intl.formatMessage(m.projectJoinedDetailsTitle)}
 						/>
 					}
 					title={
 						<>
-							{t(m.projectJoinedTitle)}
+							{intl.formatMessage(m.projectJoinedTitle)}
 							{
 								/* // eslint-disable-next-line formatjs/no-literal-string-in-jsx */
 								' — '
@@ -374,10 +377,9 @@ function ProjectInviteDialogContent(props: DialogContentProps) {
 							<Typography
 								component="span"
 								variant="inherit"
-								color="textSecondary"
 								sx={{ fontWeight: 'normal' }}
 							>
-								{t(
+								{intl.formatMessage(
 									remainingInvites.length > 0
 										? m.projectJoinedAdditionalInvitesWaiting
 										: m.projectJoinedNoAdditionalInvitesWaiting,
@@ -406,12 +408,7 @@ function InviteContainer({
 	return (
 		<Stack direction="column" sx={{ flex: 1, gap: 6, padding: 6 }}>
 			<Stack direction="column" sx={{ gap: 2 }}>
-				<Typography
-					variant="body2"
-					sx={{ fontWeight: 500, textTransform: 'uppercase' }}
-				>
-					{title}
-				</Typography>
+				<Typography variant="sectionLabel">{title}</Typography>
 
 				{details}
 			</Stack>
@@ -421,7 +418,7 @@ function InviteContainer({
 	)
 }
 
-function InviteDetails({
+function InviteDetailsCard({
 	color,
 	description,
 	icon,
@@ -436,24 +433,24 @@ function InviteDetails({
 		<Stack
 			direction="column"
 			sx={{
+				background: color,
+				border: `1px solid ${BLUE_05}`,
+				borderRadius: 2,
+				boxShadow: (theme) => theme.shadows[2],
 				flex: 1,
 				gap: 6,
-				borderRadius: 2,
 				padding: 6,
-				bgcolor: color,
-				boxShadow: (theme) => theme.shadows[2],
-				border: `1px solid ${BLUE_GREY}`,
 			}}
 		>
-			<Stack direction="row" sx={{ gap: 6, alignItems: 'center' }}>
-				{icon}
+			<Stack direction="row" sx={{ alignItems: 'center', gap: 6 }}>
+				<Box sx={{ color: (theme) => theme.palette.text.secondary }}>
+					{icon}
+				</Box>
 
-				<Stack direction="column" sx={{ gap: 1 }}>
-					<Typography component="p" variant="h1" sx={{ fontWeight: 500 }}>
-						{title}
-					</Typography>
+				<Stack direction="column" sx={{ gap: 2 }}>
+					<Typography variant="cardHeader">{title}</Typography>
 
-					<Typography color="textSecondary">{description}</Typography>
+					<Typography>{description}</Typography>
 				</Stack>
 			</Stack>
 		</Stack>
@@ -483,7 +480,7 @@ function InviteActions({
 					top: 0,
 				}}
 			>
-				<CircularProgress disableShrink size={24} />
+				<CircularProgress />
 			</Box>
 
 			<Stack
@@ -505,7 +502,28 @@ function InviteActions({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly projectInviteTitle: NoMessageValues
+	readonly projectInviteDescription: { readonly role: string }
+	readonly projectInviteDecline: NoMessageValues
+	readonly projectInviteAccept: NoMessageValues
+	readonly projectJoinedTitle: NoMessageValues
+	readonly projectJoinedAdditionalInvitesWaiting: NoMessageValues
+	readonly projectJoinedNoAdditionalInvitesWaiting: NoMessageValues
+	readonly projectJoinedDetailsTitle: NoMessageValues
+	readonly projectJoinedDetailsDescription: {
+		readonly projectName: MessageValue
+	}
+	readonly projectJoinedAdditionalInvitesCount: {
+		readonly inviteCount: number | bigint
+	}
+	readonly projectJoinedNextInvite: NoMessageValues
+	readonly projectJoinedCloseDialog: NoMessageValues
+	readonly projectJoinedViewProject: NoMessageValues
+	readonly projectInviteAdditionalInvitesCount: {
+		readonly inviteCount: number | bigint
+	}
+}>({
 	projectInviteTitle: {
 		id: '$1.routes.app.route.projectInviteTitle',
 		defaultMessage: "You've been invited to…",

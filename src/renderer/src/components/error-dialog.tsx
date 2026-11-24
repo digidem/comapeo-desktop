@@ -1,10 +1,14 @@
+import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import ButtonBase from '@mui/material/ButtonBase'
+import Collapse from '@mui/material/Collapse'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { defineMessages, useIntl } from 'react-intl'
 
-import { AdvancedErrorDetails } from './advanced-error-details.tsx'
+import { BLACK_02, BLACK_03, BLUE_05 } from '../../../shared/colors.ts'
+import { useIconSizeBasedOnTypography } from '../hooks/icon.ts'
 import { Icon } from './icon.tsx'
 
 export function ErrorDialogContent({
@@ -14,45 +18,111 @@ export function ErrorDialogContent({
 	errorMessage: string
 	onClose: () => void
 }) {
-	const { formatMessage: t } = useIntl()
+	const intl = useIntl()
+
+	const [advancedExpanded, setAdvancedExpanded] = useState(false)
+
+	const errorIconSize = useIconSizeBasedOnTypography({
+		variant: 'heroHeader',
+		multiplier: 3,
+	})
 
 	return (
-		<Stack direction="column">
-			<Stack direction="column" sx={{ gap: 10, flex: 1, padding: 20 }}>
+		<Stack direction="column" sx={{ overflow: 'auto' }}>
+			<Stack
+				direction="column"
+				sx={{ flex: 1, gap: 10, overflow: 'auto', padding: 20 }}
+			>
 				<Stack direction="column" sx={{ alignItems: 'center', gap: 4 }}>
-					<Icon name="material-error" color="error" size={72} />
+					<Icon name="material-error" color="error" size={errorIconSize} />
 
 					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center' }}
+						component="h1"
+						variant="heroHeader"
+						sx={{ textAlign: 'center' }}
 					>
-						{t(m.somethingWentWrong)}
+						{intl.formatMessage(m.somethingWentWrong)}
 					</Typography>
 				</Stack>
 
-				<AdvancedErrorDetails
-					errorMessage={errorMessage}
-					title={t(m.advanced)}
-				/>
+				<Stack direction="column" sx={{ flex: 1, gap: 2 }}>
+					<ButtonBase
+						disableRipple
+						onClick={() => {
+							setAdvancedExpanded((prev) => !prev)
+						}}
+						sx={{
+							':hover, :focus': {
+								background: (theme) => theme.alpha(BLUE_05, 0.2),
+								transition: (theme) =>
+									theme.transitions.create('background-color'),
+							},
+							padding: 2,
+							borderRadius: 2,
+						}}
+					>
+						<Stack
+							direction="row"
+							sx={{
+								alignItems: 'center',
+								flex: 1,
+								justifyContent: 'space-between',
+								'&::marker': { content: 'none' },
+							}}
+						>
+							<Typography>{intl.formatMessage(m.advanced)}</Typography>
+
+							<Icon
+								name={
+									advancedExpanded
+										? 'material-expand-less'
+										: 'material-expand-more'
+								}
+								htmlColor={BLACK_02}
+							/>
+						</Stack>
+					</ButtonBase>
+
+					<Collapse in={advancedExpanded}>
+						<Box
+							sx={{
+								background: BLACK_03,
+								border: `1px solid ${BLUE_05}`,
+								borderRadius: 2,
+								maxHeight: 300,
+								overflow: 'auto',
+								padding: 4,
+							}}
+						>
+							<Typography
+								component="pre"
+								variant="detailCopy"
+								sx={{ overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}
+							>
+								{errorMessage}
+							</Typography>
+						</Box>
+					</Collapse>
+				</Stack>
 			</Stack>
+
 			<Box
 				sx={{
-					position: 'sticky',
-					bottom: 0,
 					display: 'flex',
+					flexDirection: 'row',
 					justifyContent: 'center',
 					padding: 6,
 				}}
 			>
 				<Button
 					fullWidth
-					variant="outlined"
 					onClick={() => {
 						onClose()
 					}}
-					sx={{ maxWidth: 400, alignSelf: 'center' }}
+					startIcon={<Icon name="material-symbols-cancel" />}
+					variant="outlined"
 				>
-					{t(m.close)}
+					{intl.formatMessage(m.close)}
 				</Button>
 			</Box>
 		</Stack>

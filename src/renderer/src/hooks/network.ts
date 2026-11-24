@@ -2,7 +2,11 @@ import { useEffect, useRef, useSyncExternalStore } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { isEqual } from 'radashi'
 
-import { getWifiConnectionsOptions } from '../lib/queries/system'
+import type {
+	BrowserNetInfo,
+	NetworkInformationReadableFields,
+} from '../lib/network.ts'
+import { getWifiConnectionsOptions } from '../lib/queries/system.ts'
 
 function createNetworkChangeSubscriber(callback: () => void) {
 	window.addEventListener('online', callback, { passive: true })
@@ -42,15 +46,6 @@ export function useNetworkConnectionChangeListener() {
 			unsubscribe()
 		}
 	}, [queryClient])
-}
-
-type NetworkInformationReadableFields = Pick<
-	NetworkInformation,
-	'type' | 'effectiveType' | 'downlink' | 'downlinkMax' | 'rtt' | 'saveData'
->
-
-export type BrowserNetInfo = NetworkInformationReadableFields & {
-	online: boolean
 }
 
 export function useBrowserNetInfo(): BrowserNetInfo {

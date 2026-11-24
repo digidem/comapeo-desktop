@@ -26,6 +26,8 @@ export default defineConfig(
 			// Configuration of this depends on translation platform being used.
 			// In this case, Crowdin has comprehensive support (https://support.crowdin.com/icu-message-syntax/).
 			'formatjs/blocklist-elements': ['error', []],
+			// TODO: Look into eventually enabling (https://formatjs.github.io/docs/react-intl/upgrade-guide-12.x)
+			'formatjs/enforce-message-types': ['error', { generateTypes: true }],
 		},
 	},
 	{
@@ -96,6 +98,12 @@ export default defineConfig(
 						types: ['MapeoClientApi', 'MapeoProjectApi'],
 					},
 				},
+			],
+			// NOTE: Disallow barrel imports for @material/ui
+			// https://mui.com/material-ui/guides/minimizing-bundle-size/#enforce-best-practices-with-eslint
+			'no-restricted-imports': [
+				'error',
+				{ patterns: [{ regex: '^@mui/[^/]+$' }] },
 			],
 			'react-hooks/incompatible-library': 'error',
 		},

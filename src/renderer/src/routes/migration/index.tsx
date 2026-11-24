@@ -1,17 +1,14 @@
 import { useEffect, useId, type ReactNode } from 'react'
-import {
-	Alert,
-	Box,
-	Button,
-	CircularProgress,
-	Container,
-	LinearProgress,
-	List,
-	Stack,
-	Typography,
-} from '@mui/material'
+import Alert from '@mui/material/Alert'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import CircularProgress from '@mui/material/CircularProgress'
+import Container from '@mui/material/Container'
+import LinearProgress from '@mui/material/LinearProgress'
+import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 import { keyframes } from '@mui/material/styles'
 import {
 	useMutation,
@@ -19,9 +16,19 @@ import {
 	useSuspenseQuery,
 } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { defineMessages, useIntl } from 'react-intl'
+import {
+	defineMessages,
+	useIntl,
+	type MessageValue,
+	type NoMessageValues,
+} from 'react-intl'
 
-import { BLUE_GREY, DARKER_ORANGE, GREEN, WHITE } from '../../colors.ts'
+import {
+	BLUE_05,
+	GREEN_00,
+	ORANGE_00,
+	WHITE_00,
+} from '../../../../shared/colors.ts'
 import { AdvancedErrorDetails } from '../../components/advanced-error-details.tsx'
 import { Icon } from '../../components/icon.tsx'
 import { bytesToMegabytes } from '../../lib/bytes-to-megabytes.ts'
@@ -97,9 +104,14 @@ function RouteComponent() {
 
 	return (
 		<Box
-			sx={{ bgcolor: WHITE, display: 'flex', height: '100%', overflow: 'auto' }}
+			sx={{
+				backgroundColor: WHITE_00,
+				display: 'flex',
+				height: '100%',
+				overflow: 'auto',
+			}}
 		>
-			<Container disableGutters maxWidth="sm" sx={{ display: 'flex', flex: 1 }}>
+			<Container maxWidth="sm" sx={{ display: 'flex', flex: 1 }}>
 				{panel}
 			</Container>
 		</Box>
@@ -168,31 +180,23 @@ function ErrorPanel({
 					</Stack>
 
 					<List
-						disablePadding
-						sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+						sx={{
+							color: (theme) => theme.palette.text.secondary,
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 4,
+						}}
 					>
-						<ListItem
-							disableGutters
-							disablePadding
-							sx={{ alignItems: 'center', gap: 5 }}
-						>
+						<ListItem sx={{ alignItems: 'center', gap: 5 }}>
 							<Icon name="openmoji-no-entry" size="40px" />
 
-							<ListItemText slotProps={{ primary: { color: 'textSecondary' } }}>
-								{intl.formatMessage(m.updateStoppedDetail)}
-							</ListItemText>
+							{intl.formatMessage(m.updateStoppedDetail)}
 						</ListItem>
 
-						<ListItem
-							disableGutters
-							disablePadding
-							sx={{ alignItems: 'center', gap: 5 }}
-						>
+						<ListItem sx={{ alignItems: 'center', gap: 5 }}>
 							<Icon name="openmoji-safety" size="40px" />
 
-							<ListItemText slotProps={{ primary: { color: 'textSecondary' } }}>
-								{intl.formatMessage(m.dataSafetyDetail)}
-							</ListItemText>
+							{intl.formatMessage(m.dataSafetyDetail)}
 						</ListItem>
 					</List>
 
@@ -253,40 +257,32 @@ function NeedsSpacePanel({ spaceNeeded }: { spaceNeeded: number }) {
 			}
 			details={
 				<List
-					disablePadding
-					sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+					sx={{
+						color: (theme) => theme.palette.text.secondary,
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 4,
+					}}
 				>
-					<ListItem
-						disableGutters
-						disablePadding
-						sx={{ alignItems: 'center', gap: 5 }}
-					>
+					<ListItem sx={{ alignItems: 'center', gap: 5 }}>
 						<Icon name="openmoji-save" size="40px" />
 
-						<ListItemText slotProps={{ primary: { color: 'textSecondary' } }}>
-							{intl.formatMessage(m.notEnoughSpaceSpaceRequiredDetail, {
-								value:
-									spaceNeededMb >= 1000
-										? intl.formatMessage(m.spaceRequiredGb, {
-												value: spaceNeededMb / 1_000,
-											})
-										: intl.formatMessage(m.spaceRequiredMb, {
-												value: spaceNeededMb,
-											}),
-							})}
-						</ListItemText>
+						{intl.formatMessage(m.notEnoughSpaceSpaceRequiredDetail, {
+							value:
+								spaceNeededMb >= 1000
+									? intl.formatMessage(m.spaceRequiredGb, {
+											value: spaceNeededMb / 1_000,
+										})
+									: intl.formatMessage(m.spaceRequiredMb, {
+											value: spaceNeededMb,
+										}),
+						})}
 					</ListItem>
 
-					<ListItem
-						disableGutters
-						disablePadding
-						sx={{ alignItems: 'center', gap: 5 }}
-					>
+					<ListItem sx={{ alignItems: 'center', gap: 5 }}>
 						<Icon name="openmoji-safety" size="40px" />
 
-						<ListItemText slotProps={{ primary: { color: 'textSecondary' } }}>
-							{intl.formatMessage(m.dataSafetyDetail)}
-						</ListItemText>
+						{intl.formatMessage(m.dataSafetyDetail)}
 					</ListItem>
 				</List>
 			}
@@ -294,7 +290,7 @@ function NeedsSpacePanel({ spaceNeeded }: { spaceNeeded: number }) {
 			icon={
 				<Box
 					sx={{
-						backgroundColor: DARKER_ORANGE,
+						backgroundColor: ORANGE_00,
 						borderRadius: '50%',
 						display: 'flex',
 						padding: 6,
@@ -302,7 +298,7 @@ function NeedsSpacePanel({ spaceNeeded }: { spaceNeeded: number }) {
 				>
 					<Icon
 						name="material-symbols-deployed-code-update"
-						htmlColor={WHITE}
+						htmlColor={WHITE_00}
 						size="64px"
 					/>
 				</Box>
@@ -335,7 +331,7 @@ function InProgressPanel({
 			details={
 				total === 0 ? (
 					<Box sx={{ display: 'grid', placeItems: 'center' }}>
-						<CircularProgress variant="indeterminate" disableShrink size={40} />
+						<CircularProgress variant="indeterminate" size={40} />
 					</Box>
 				) : (
 					<Stack direction="column" sx={{ gap: 6 }}>
@@ -356,39 +352,28 @@ function InProgressPanel({
 						</Stack>
 
 						<List
-							disablePadding
-							sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+							sx={{
+								color: (theme) => theme.palette.text.secondary,
+								display: 'flex',
+								flexDirection: 'column',
+								gap: 4,
+							}}
 						>
-							<ListItem
-								disableGutters
-								disablePadding
-								sx={{ alignItems: 'center', gap: 5 }}
-							>
+							<ListItem sx={{ alignItems: 'center', gap: 5 }}>
 								<Icon name="openmoji-save" size="40px" />
 
-								<ListItemText
-									id={progressId}
-									slotProps={{ primary: { color: 'textSecondary' } }}
-								>
+								<span id={progressId}>
 									{intl.formatMessage(m.inProgressProjectDetail, {
 										current,
 										total,
 									})}
-								</ListItemText>
+								</span>
 							</ListItem>
 
-							<ListItem
-								disableGutters
-								disablePadding
-								sx={{ alignItems: 'center', gap: 5 }}
-							>
+							<ListItem sx={{ alignItems: 'center', gap: 5 }}>
 								<Icon name="openmoji-safety" size="40px" />
 
-								<ListItemText
-									slotProps={{ primary: { color: 'textSecondary' } }}
-								>
-									{intl.formatMessage(m.dataSafetyDetail)}
-								</ListItemText>
+								{intl.formatMessage(m.dataSafetyDetail)}
 							</ListItem>
 						</List>
 					</Stack>
@@ -398,7 +383,7 @@ function InProgressPanel({
 			icon={
 				<Box
 					sx={{
-						backgroundColor: DARKER_ORANGE,
+						backgroundColor: ORANGE_00,
 						borderRadius: '50%',
 						display: 'flex',
 						padding: 6,
@@ -406,7 +391,7 @@ function InProgressPanel({
 				>
 					<Icon
 						name="material-symbols-deployed-code-update"
-						htmlColor={WHITE}
+						htmlColor={WHITE_00}
 						size={64}
 					/>
 				</Box>
@@ -436,21 +421,20 @@ function SuccessPanel() {
 				<Stack direction="column" sx={{ alignItems: 'center', gap: 6 }}>
 					<Icon
 						name="material-check-circle-rounded"
-						htmlColor={GREEN}
+						htmlColor={GREEN_00}
 						size="128px"
 					/>
 
 					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center', textWrap: 'balance' }}
+						variant="heroHeader"
+						sx={{ textAlign: 'center', textWrap: 'balance' }}
 					>
 						{intl.formatMessage(m.successTitle)}
 					</Typography>
 
 					<Typography
-						component="p"
-						variant="h2"
-						sx={{ fontWeight: 400, textAlign: 'center', textWrap: 'balance' }}
+						variant="heroSubheading"
+						sx={{ textAlign: 'center', textWrap: 'balance' }}
 					>
 						{intl.formatMessage(m.successDescription)}
 					</Typography>
@@ -510,9 +494,16 @@ function MigrationPanelLayout({
 				<Alert
 					severity="warning"
 					icon={<Icon name="material-warning-rounded" />}
-					sx={{ border: `1px solid ${BLUE_GREY}`, borderRadius: 2 }}
+					sx={{
+						alignItems: 'center',
+						border: `1px solid ${BLUE_05}`,
+						borderRadius: 2,
+					}}
 				>
-					<Typography color="textPrimary" sx={{ fontWeight: 500 }}>
+					<Typography
+						color="textPrimary"
+						sx={{ fontWeight: (theme) => theme.typography.fontWeightMedium }}
+					>
 						{warning}
 					</Typography>
 				</Alert>
@@ -521,16 +512,15 @@ function MigrationPanelLayout({
 					{icon}
 
 					<Typography
-						variant="h1"
-						sx={{ fontWeight: 500, textAlign: 'center', textWrap: 'balance' }}
+						variant="heroHeader"
+						sx={{ textAlign: 'center', textWrap: 'balance' }}
 					>
 						{title}
 					</Typography>
 
 					<Typography
-						component="p"
-						variant="h2"
-						sx={{ fontWeight: 400, textAlign: 'center', textWrap: 'balance' }}
+						variant="heroSubheading"
+						sx={{ textAlign: 'center', textWrap: 'balance' }}
 					>
 						{description}
 					</Typography>
@@ -550,7 +540,33 @@ function MigrationPanelLayout({
 	)
 }
 
-const m = defineMessages({
+const m = defineMessages<{
+	readonly doNotCloseAppWarning: NoMessageValues
+	readonly freeUpSpaceWarning: NoMessageValues
+	readonly inProgressTitle: NoMessageValues
+	readonly inProgressDescription: NoMessageValues
+	readonly inProgressProjectDetail: {
+		readonly current: number | bigint
+		readonly total: number | bigint
+	}
+	readonly notEnoughSpaceTitle: NoMessageValues
+	readonly notEnoughSpaceDescription: NoMessageValues
+	readonly spaceRequiredMb: { readonly value: number | bigint }
+	readonly spaceRequiredGb: { readonly value: number | bigint }
+	readonly notEnoughSpaceSpaceRequiredDetail: { readonly value: MessageValue }
+	readonly migrationErrorTitle: NoMessageValues
+	readonly migrationErrorDescription: NoMessageValues
+	readonly progressStopped: NoMessageValues
+	readonly tryAgain: NoMessageValues
+	readonly updateStoppedDetail: NoMessageValues
+	readonly openSettings: NoMessageValues
+	readonly continue: NoMessageValues
+	readonly dataSafetyDetail: NoMessageValues
+	readonly successTitle: NoMessageValues
+	readonly successDescription: NoMessageValues
+	readonly startUsingComapeoButton: NoMessageValues
+	readonly advanced: NoMessageValues
+}>({
 	doNotCloseAppWarning: {
 		id: '$1.routes.migration.index.doNotCloseAppWarning',
 		defaultMessage: 'Do not close app while updating!',
