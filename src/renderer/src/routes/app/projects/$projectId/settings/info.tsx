@@ -104,12 +104,12 @@ function RouteComponent() {
 			projectColor: v.union([
 				v.pipe(
 					createProjectColorSchema(),
-					v.union([
-						v.literal(PROJECT_COLORS.BLUE),
-						v.literal(PROJECT_COLORS.GREEN),
-						v.literal(PROJECT_COLORS.GREY),
-						v.literal(PROJECT_COLORS.ORANGE),
-						v.literal(PROJECT_COLORS.RED),
+					v.picklist([
+						PROJECT_COLORS.BLUE,
+						PROJECT_COLORS.GREEN,
+						PROJECT_COLORS.GREY,
+						PROJECT_COLORS.ORANGE,
+						PROJECT_COLORS.RED,
 					]),
 				),
 				v.null(),
@@ -144,8 +144,14 @@ function RouteComponent() {
 			}
 
 			router.navigate({
-				to: '/app/projects/$projectId/settings',
+				to: '/app/projects/$projectId',
 				params: { projectId },
+				search: { showProjectInfo: true },
+				mask: {
+					to: '/app/projects/$projectId',
+					params: { projectId },
+					unmaskOnReload: true,
+				},
 				replace: true,
 				ignoreBlocker: true,
 			})
@@ -184,7 +190,7 @@ function RouteComponent() {
 							}
 
 							router.navigate({
-								to: '/app/projects/$projectId/settings',
+								to: '/app/projects/$projectId',
 								params: { projectId },
 								replace: true,
 							})

@@ -22,7 +22,7 @@ export const DateFilterSchema = v.variant('type', [
 	),
 	v.object({
 		type: v.literal('same'),
-		unit: v.union([v.literal('month'), v.literal('year')]),
+		unit: v.picklist(['month', 'year']),
 	}),
 	v.object({
 		type: v.literal('relative'),
@@ -48,7 +48,7 @@ const CodecMappings = {
 	},
 	use_active_project_id_for_initial_route: {
 		deserialize: v.pipe(
-			v.union([v.literal('true'), v.literal('false')]),
+			v.picklist(['true', 'false']),
 			v.transform((input) => {
 				return input === 'true'
 			}),

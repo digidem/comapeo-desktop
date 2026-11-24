@@ -231,13 +231,13 @@ test('device name', async ({ appInfo, userParams }) => {
 
 			await expect(
 				discardEditsDialog.getByRole('button', {
-					name: 'Cancel',
+					name: 'Keep Editing',
 					exact: true,
 				}),
 			).toBeVisible()
 
 			await discardEditsDialog
-				.getByRole('button', { name: 'Yes, Discard', exact: true })
+				.getByRole('button', { name: 'Discard & Continue', exact: true })
 				.click()
 
 			await page
@@ -262,6 +262,20 @@ test('device name', async ({ appInfo, userParams }) => {
 				.click()
 
 			await expect(deviceNameInput).toHaveValue(updatedUserParams.deviceName)
+
+			/// Covers regression case where attempting to leave page after editing and saving device name
+			/// causes the discard edits dialog to unexpectedly appear.
+			await main
+				.locator('header')
+				.getByRole('button', { name: 'Go back.', exact: true })
+				.click()
+
+			await expect(
+				page.getByRole('dialog').getByRole('heading', {
+					name: 'Discard Edits?',
+					exact: true,
+				}),
+			).not.toBeVisible()
 		}
 	} finally {
 		// 3. Cleanup

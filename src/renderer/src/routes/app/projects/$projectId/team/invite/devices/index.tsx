@@ -66,7 +66,7 @@ function RouteComponent() {
 						}
 
 						router.navigate({
-							to: '/app/projects/$projectId/settings',
+							to: '/app/projects/$projectId/team/invite',
 							params: { projectId },
 							replace: true,
 						})

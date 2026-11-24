@@ -14,9 +14,7 @@ const SUPPORTED_LANGUAGE_TAGS = Object.keys(
 	SUPPORTED_LANGUAGES,
 ) as Array<SupportedLanguageTag>
 
-const SupportedLanguageTagSchema = v.union(
-	SUPPORTED_LANGUAGE_TAGS.map((t) => v.literal(t)),
-)
+const SupportedLanguageTagSchema = v.picklist(SUPPORTED_LANGUAGE_TAGS)
 
 const PROJECT_ROOT = fileURLToPath(new URL('..', import.meta.url))
 const MESSAGES_DIR = join(PROJECT_ROOT, 'messages')

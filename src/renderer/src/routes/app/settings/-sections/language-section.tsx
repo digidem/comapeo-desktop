@@ -99,10 +99,7 @@ export function LanguageSection({
 					labelId={labelId}
 					onChange={(event) => {
 						const parsedValue = v.parse(
-							v.union([
-								v.pipe(v.literal('system')),
-								SupportedLanguageTagSchema,
-							]),
+							v.union([v.literal('system'), SupportedLanguageTagSchema]),
 							event.target.value,
 						)
 

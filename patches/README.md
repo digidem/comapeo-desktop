@@ -20,3 +20,11 @@ Terminating the start command UI left the app running. Issue is already fixed up
 ### [Do not exit the process on republishing errors](./@homebridge+ciao+1.3.12+001+handle-republish-errors.patch)
 
 Instead of exiting the process on republishing errors, we emit events that allow graceful error handling to occur in consuming application code. See description in https://github.com/gmaclennan/ciao/pull/1 for more details.
+
+## electron-installer-redhat
+
+### [Fix rpm installer creation when using rpm >=4.20](../patches-linux/electron-installer-redhat+4.0.0+001+fix-rpm-installer-creation.patch)
+
+Upstream issue: https://github.com/electron-userland/electron-installer-redhat/issues/343
+
+Syntax used in module spec is incompatible with rpm >= 4.20. Latest GitHub action runner at time of writing ([`ubuntu-26.04`](https://github.com/actions/runner-images/blob/6d72cf29b31dca29cc53e9d4046505fbdfd32210/images/ubuntu/Ubuntu2604-Readme.md)) updates `rpm` to use version `6.0.1-1build1`, resulting in a failure to create the installer.

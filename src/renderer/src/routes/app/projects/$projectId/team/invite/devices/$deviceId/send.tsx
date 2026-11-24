@@ -52,7 +52,7 @@ import { createGlobalMutationsKey } from '../../../../../../../../lib/queries/gl
 import { getFormattedDuration } from '../../../../../../../../lib/time.ts'
 
 const ReviewInvitationSearchSchema = v.object({
-	role: v.union([v.literal('participant'), v.literal('coordinator')]),
+	role: v.picklist(['participant', 'coordinator']),
 })
 
 export const Route = createFileRoute(
@@ -401,7 +401,9 @@ function InvitePending({
 					/>
 
 					<PanelBody>
-						<Typography sx={{ textAlign: 'center' }}>
+						<Typography
+							sx={{ fontVariantNumeric: 'tabular-nums', textAlign: 'center' }}
+						>
 							{intl.formatMessage(m.timeSinceSent, {
 								time: getFormattedDuration(
 									Math.round((currentTimestamp - sentAt) / 1000),

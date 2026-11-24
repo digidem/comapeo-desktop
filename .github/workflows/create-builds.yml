@@ -68,7 +68,7 @@ jobs:
       contents: read
     steps:
       - name: Create GitHub App Token
-        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        uses: actions/create-github-app-token@f418cff399f7aef4c2f0ad47e25ca7a6abbdd6fc # v3.4.0
         id: app-token
         with:
           client-id: ${{ vars.RELEASE_BOT_CLIENT_ID }}
@@ -158,13 +158,6 @@ jobs:
           echo "key_issuer=$KEY_ISSUER" >> "$GITHUB_OUTPUT"
           echo "key_path=$KEY_PATH" >> "$GITHUB_OUTPUT"
 
-        # NOTE: Workaround for stapling issue (https://github.com/actions/runner-images/issues/14924#issuecomment-6188826956)
-      - name: Work around stapling issue on macos-15-intel runner image
-        if: ${{ matrix.os.name == 'macos-intel' }}
-        run: |
-          echo "block return out quick proto udp from any to any port 443" | sudo pfctl -f -
-          sudo pfctl -E
-
       - name: Set up Windows code signing
         id: windows-signing-setup
         if: ${{ startsWith(matrix.os.name, 'windows') }}
@@ -193,9 +186,9 @@ jobs:
 
           # Install SignTool and Artifact Signing dlib package
           ## https://www.nuget.org/packages/Microsoft.Windows.SDK.BuildTools
-          nuget install Microsoft.Windows.SDK.BuildTools -ExcludeVersion -Version 10.0.28000.2705 -OutputDirectory "$output_dir"
+          nuget install Microsoft.Windows.SDK.BuildTools -ExcludeVersion -Version 10.0.28000.2957 -OutputDirectory "$output_dir"
           ## https://www.nuget.org/packages/Microsoft.ArtifactSigning.Client
-          nuget install Microsoft.ArtifactSigning.Client -ExcludeVersion -Version 1.0.146 -OutputDirectory "$output_dir"
+          nuget install Microsoft.ArtifactSigning.Client -ExcludeVersion -Version 1.0.151 -OutputDirectory "$output_dir"
 
           # Set relevant outputs for subsequent job steps
           "dlib_path=$output_dir\Microsoft.ArtifactSigning.Client\bin\x64\Azure.CodeSigning.Dlib.dll" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append

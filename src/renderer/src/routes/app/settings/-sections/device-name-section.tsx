@@ -326,7 +326,7 @@ export function DeviceNameSection({
 				)}
 			</DecentDialog>
 
-			<form.Subscribe selector={(state) => state.isDirty}>
+			<form.Subscribe selector={(state) => state.isDirty && !state.isSubmitted}>
 				{(shouldBlock) => (
 					<Block
 						withResolver

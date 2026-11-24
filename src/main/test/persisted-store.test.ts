@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto'
 import { readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { mkdtemp } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
@@ -5,8 +6,8 @@ import { join } from 'node:path'
 import * as v from 'valibot'
 import { describe, expect, test, vi, type TestContext } from 'vitest'
 
-import type { AppUsageMetrics } from '../shared/metrics.ts'
-import { daysToMilliseconds } from '../shared/time.ts'
+import type { AppUsageMetrics } from '../../shared/metrics.ts'
+import { daysToMilliseconds } from '../../shared/time.ts'
 import {
 	BASE_LANGUAGE_TO_REGIONAL_VARIANT,
 	CurrentStoreStateSchema,
@@ -17,7 +18,8 @@ import {
 	type PersistedStorageV1,
 	type PersistedStorageV2,
 	type PersistedStorageV3,
-} from './persisted-store.ts'
+	type RootKeyRecord,
+} from '../persisted-store.ts'
 
 test('default store state value', () => {
 	expect(v.getDefaults(CurrentStoreStateSchema)).toStrictEqual({
@@ -28,6 +30,7 @@ test('default store state value', () => {
 		locale: { languageTag: null, useSystemPreferences: true },
 		onboardedAt: undefined,
 		rootKey: undefined,
+		rootKeyRecord: undefined,
 		sentryUser: { id: expect.any(String), idMonth: expect.any(String) },
 		metricsDeviceId: expect.any(String),
 		unitSystem: 'metric',
@@ -355,6 +358,152 @@ describe('locale migration', () => {
 			})
 		})
 	}
+})
+
+describe('root key record', () => {
+	test('valid encrypted record round-trips through storage', async (t) => {
+		const { filePath } = await setup(t)
+
+		const validEncryptedValue = Buffer.from(
+			'some-random-key',
+			'utf-8',
+		).toString('hex')
+
+		const rootKeyRecord: RootKeyRecord = {
+			encrypted: true,
+			value: validEncryptedValue,
+			backend: 'gnome_libsecret',
+		}
+
+		let store = createPersistedStore({ filePath })
+
+		store.setState({ rootKeyRecord })
+
+		const storage = JSON.parse(readFileSync(filePath, 'utf-8'))
+
+		expect(storage).toStrictEqual(
+			expect.schemaMatching(PersistedStorageV3Schema),
+		)
+
+		expect(storage.state.rootKeyRecord).toStrictEqual(rootKeyRecord)
+
+		// Simulates the next app launch
+		store = createPersistedStore({ filePath })
+		expect(store.getState().rootKeyRecord).toStrictEqual(rootKeyRecord)
+	})
+
+	test('valid plaintext record round-trips through storage', async (t) => {
+		const { filePath } = await setup(t)
+
+		const legacyRootKey = randomBytes(16).toString('hex')
+
+		const rootKeyRecord: RootKeyRecord = {
+			encrypted: false,
+			value: legacyRootKey,
+		}
+
+		let store = createPersistedStore({ filePath })
+
+		store.setState({ rootKeyRecord })
+
+		store = createPersistedStore({ filePath })
+
+		expect(store.getState().rootKeyRecord).toStrictEqual(rootKeyRecord)
+	})
+
+	test('legacy rootKey is preserved alongside a record', async (t) => {
+		const { filePath } = await setup(t)
+
+		let store = createPersistedStore({ filePath })
+
+		const legacyRootKey = randomBytes(16).toString('hex')
+
+		store.setState({
+			rootKey: legacyRootKey,
+			rootKeyRecord: { encrypted: false, value: legacyRootKey },
+		})
+
+		store = createPersistedStore({ filePath })
+
+		expect(store.getState().rootKey).toStrictEqual(legacyRootKey)
+	})
+
+	test('v3 storage without a record keeps the legacy rootKey', async (t) => {
+		const { filePath } = await setup(t)
+
+		const legacyRootKey = randomBytes(16).toString('hex')
+
+		const initialStorage: PersistedStorageV3 = {
+			version: 3,
+			state: {
+				...v.getDefaults(CurrentStoreStateSchema),
+				rootKey: legacyRootKey,
+			},
+		}
+		writeFileSync(filePath, JSON.stringify(initialStorage), 'utf-8')
+
+		const store = createPersistedStore({ filePath })
+
+		expect(store.getState().rootKey).toStrictEqual(legacyRootKey)
+		expect(store.getState().rootKeyRecord).toBeUndefined()
+	})
+
+	// NOTE: Accounts for case where one bad field fails the whole-file parse,
+	// which resets the store and silently discards the legacy key.
+	describe('malformed root key record does not reset the store', () => {
+		const legacyRootKey = randomBytes(16).toString('hex')
+
+		const malformedRecords = {
+			'wrong type for encrypted': { encrypted: 'yes', value: 'deadbeef' },
+			'missing value': { encrypted: true },
+			'plaintext with invalid key format': {
+				encrypted: false,
+				value: 'not-a-valid-key',
+			},
+			'encrypted with non-hex value': { encrypted: true, value: 'zzzz' },
+			'not an object': 'garbage',
+		}
+
+		for (const [name, malformedRecord] of Object.entries(malformedRecords)) {
+			test(name, async (t) => {
+				const { filePath } = await setup(t)
+
+				writeFileSync(
+					filePath,
+					JSON.stringify({
+						version: 3,
+						state: {
+							...v.getDefaults(CurrentStoreStateSchema),
+							rootKey: legacyRootKey,
+							activeProjectId: 'test-project',
+							rootKeyRecord: malformedRecord,
+						},
+					}),
+					'utf-8',
+				)
+
+				const store = createPersistedStore({ filePath })
+
+				expect(
+					store.getState().rootKeyRecord,
+					'malformed record is dropped',
+				).toBeUndefined()
+				expect(store.getState().rootKey, 'legacy rootKey is not lost').toBe(
+					legacyRootKey,
+				)
+				expect(
+					store.getState().activeProjectId,
+					'rest of the state is not reset',
+				).toBe('test-project')
+
+				const storage = JSON.parse(readFileSync(filePath, 'utf-8'))
+				expect(storage).toStrictEqual(
+					expect.schemaMatching(PersistedStorageV3Schema),
+				)
+				expect(storage.state.rootKey).toBe(legacyRootKey)
+			})
+		}
+	})
 })
 
 async function setup(t: TestContext) {

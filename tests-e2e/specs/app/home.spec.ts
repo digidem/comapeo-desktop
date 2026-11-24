@@ -28,11 +28,7 @@ test('initial page after onboarding', async ({ appInfo, userParams }) => {
 			const header = main.locator('header')
 
 			await expect(
-				header.getByRole('heading', { name: 'All Projects', exact: true }),
-			).toBeVisible()
-
-			await expect(
-				header.getByText('Most Recent', { exact: true }),
+				header.getByRole('heading', { name: 'Projects', exact: true }),
 			).toBeVisible()
 
 			await expect(
@@ -52,7 +48,7 @@ test('initial page after onboarding', async ({ appInfo, userParams }) => {
 
 			await expect(
 				main.getByText(
-					'Coordinate with a team to join them or start a new project.',
+					'This device has no projects. Coordinate with a team to join them or start a new project.',
 					{ exact: true },
 				),
 			).toBeVisible()

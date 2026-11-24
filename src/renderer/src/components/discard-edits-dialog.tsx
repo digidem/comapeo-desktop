@@ -54,7 +54,7 @@ export function DiscardEditsDialogContent({
 					onClick={() => {
 						onCancel()
 					}}
-					startIcon={<Icon name="material-symbols-cancel" />}
+					startIcon={<Icon name="material-edit-filled" />}
 					variant="outlined"
 				>
 					{intl.formatMessage(m.cancelButton)}
@@ -85,12 +85,12 @@ const m = defineMessages({
 	},
 	cancelButton: {
 		id: '$1.components.discard-edits-dialog.cancelButton',
-		defaultMessage: 'Cancel',
+		defaultMessage: 'Keep Editing',
 		description: 'Text for button to cancel action.',
 	},
 	confirmButton: {
 		id: '$1.components.discard-edits-dialog.confirmButton',
-		defaultMessage: 'Yes, Discard',
+		defaultMessage: 'Discard & Continue',
 		description: 'Text for button to confirm discarding changes.',
 	},
 })
