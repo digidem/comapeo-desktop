@@ -1,0 +1,25 @@
+name: Bump first-party dep
+
+# Opens (or adds to) a rolling PR bumping a just-published first-party package.
+# Triggered by a repository_dispatch from that package's release workflow, e.g.
+# update-apps.yml in digidem/comapeo-core.
+on:
+  repository_dispatch:
+    types: [first-party-release]
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package to bump (e.g. @comapeo/core)'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  bump:
+    uses: digidem/actions-bump-first-party-dep/.github/workflows/bump.yml@46899f397a5c3268b31d2b1776d8de044e0a484e # v1
+    with:
+      package: ${{ github.event.client_payload.package || inputs.package }}
+      node-version-file: '.nvmrc'
+    secrets:
+      PR_BOT_PRIVATE_KEY: ${{ secrets.PR_BOT_PRIVATE_KEY }}
